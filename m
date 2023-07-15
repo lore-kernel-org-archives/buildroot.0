@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A94CDC0015E
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 15:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD979C001B0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 16:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31E3660776;
-	Sat, 15 Jul 2023 15:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31E3660776
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3EE16403AF;
+	Sat, 15 Jul 2023 16:22:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EE16403AF
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l5WeRqVtiin9; Sat, 15 Jul 2023 16:22:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0522400E5;
+	Sat, 15 Jul 2023 16:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0522400E5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D8201BF2F0
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 16:22:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46996607C9
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 16:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46996607C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vb72QLU4jBbQ; Sat, 15 Jul 2023 15:49:31 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04DCC60777;
-	Sat, 15 Jul 2023 15:49:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04DCC60777
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F22EA1BF408
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 15:49:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB0B740948
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 15:49:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB0B740948
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ebI6C9NwUPrH for <buildroot@lists.busybox.net>;
- Sat, 15 Jul 2023 15:49:26 +0000 (UTC)
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6SCMbXLVb428 for <buildroot@lists.busybox.net>;
+ Sat, 15 Jul 2023 16:22:01 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0346640947
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9702B607B5
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0346640947
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 15:49:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9702B607B5
+ for <buildroot@buildroot.org>; Sat, 15 Jul 2023 16:22:00 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0896.dip0.t-ipconnect.de [91.58.8.150])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3B66CA4C04DB;
- Sat, 15 Jul 2023 17:49:23 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60116)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 99558A4C0354;
+ Sat, 15 Jul 2023 18:21:56 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:43792)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qKhWM-00022u-2W;
- Sat, 15 Jul 2023 17:49:23 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qKi1q-0007gO-02;
+ Sat, 15 Jul 2023 18:21:56 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 15 Jul 2023 17:49:22 +0200
-Message-Id: <20230715154922.3711825-1-bernd@kuhls.net>
+Date: Sat, 15 Jul 2023 18:21:53 +0200
+Message-Id: <20230715162153.2712220-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1689436163;
- bh=ciBVV8WenHUY7pNrLQp/M7xnLoYAu21DGiI3mtFM/9c=;
+ s=kas202306131828; t=1689438116;
+ bh=5qnhZqgM970sVdwAo4kbEdX18h4JAwhYikhgbw8CMVc=;
  h=From:To:Cc:Subject:Date:From;
- b=VVbAbKVAHiXnXAA8yRjLQryOtuTIWdxqSQswayIJTO/1VidvG4MCbNvcDSzlGycNS
- LwYKxz8J51gdqNCztWZqm24XPfSKzF+DPt3fPlyM1gdvIPahofV5Qw/mfoWpq5Rd3a
- z5C3y1ZwH1t9Jwd3ARJOW8ZDOhJEw70Az8Px/uCCpLR8wMlyDG6tJ57vyQmEpFDT+W
- zFMgru86+UUA15v9Zi5aNW6i4JEOX2ELT/ZQR7tA8bqqFNJucoyeaWOGtqyDpEcdhD
- JJWECfP2moEztQFXMABDxpP1z2Dh3/poOX2Ww5+SyIDiv0r3RE8MbuKv84OCwbfM4O
- IOqVikhgfhiow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=lVd75B6KPHQ2QCEbLo81XHm75O62y0EBufIGGbg1ueeHCp9MFhB7V2wymFQbC4+uQ
+ mhcA9c1iRqQByuoCiwKg8yl8tGfBDL9k/VyrR8yYO1V10lKQsikVr8EoBU/TV5nbgH
+ 8FWxabrnLuTtkbXuv7uFGkI2vBqYig/1Rivbx359xxRGIOIHtAAmCS6h7KiemX2mny
+ /aSOANl6VeTz7YKrw3tgDCyL0wnlyFnjY0wSKx7pylnCppWXq3HJezRpVtn3SIYx6f
+ Z0QCW/sDZQJ5qJyca5u27jDAFV38Q5iIGvN+q+e/k2YOzqrKaNZ2A4q2vVPJeUm2Xu
+ ak8WrA+Oor1tw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=VVbAbKVA
-Subject: [Buildroot] [PATCH v3 20/20] package/erlang: bump version to 26.0.2
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=lVd75B6K
+Subject: [Buildroot] [PATCH v4 1/1] package/erlang: bump version to 26.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,8 +89,15 @@ https://github.com/erlang/otp/commit/bd0865ff86f06bba13a99e38db5d1f0a124e5cb3
 
 Removed all patches.
 
+CVE-2021-29221 does not need to be ignored anymore, the latest broken
+version was 23.2.3.
+
+Removed ERLANG_REMOVE_SSL_DEPS hook, bug was fixed upstream:
+https://github.com/erlang/otp/commit/f03feee7e3b1ffb4f5d90b1a030eb760b5dc60c0
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
+v4: more cleanups (CVE, SSL_DEPS)
 v3: removed patches from .checkpackageignore
 v2: added dependency to wchar
 
@@ -100,14 +107,14 @@ v2: added dependency to wchar
  ...0003-crypto-Fixes-for-LibreSSL-3-5-0.patch | 30 --------
  package/erlang/Config.in                      |  6 +-
  package/erlang/erlang.hash                    |  4 +-
- package/erlang/erlang.mk                      | 13 +---
- 7 files changed, 8 insertions(+), 164 deletions(-)
+ package/erlang/erlang.mk                      | 23 +-----
+ 7 files changed, 8 insertions(+), 174 deletions(-)
  delete mode 100644 package/erlang/0001-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch
  delete mode 100644 package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch
  delete mode 100644 package/erlang/0003-crypto-Fixes-for-LibreSSL-3-5-0.patch
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index a762d8e98b..ae90976e12 100644
+index a7bf69be39..bec95a8dc9 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
 @@ -413,9 +413,6 @@ package/empty/0001-respect-LDFLAGS.patch Upstream
@@ -320,7 +327,7 @@ index 338545a0ba..9fc5a6eabf 100644
  # Hash for license file
  sha256  809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0  LICENSE.txt
 diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index ac2c204a49..71cca737a3 100644
+index ac2c204a49..98aef29686 100644
 --- a/package/erlang/erlang.mk
 +++ b/package/erlang/erlang.mk
 @@ -5,7 +5,7 @@
@@ -332,10 +339,20 @@ index ac2c204a49..71cca737a3 100644
  ERLANG_SITE = \
  	https://github.com/erlang/otp/releases/download/OTP-$(ERLANG_VERSION)
  ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
-@@ -27,18 +27,9 @@ define ERLANG_REMOVE_SSL_DEPS
- endef
- ERLANG_POST_PATCH_HOOKS += ERLANG_REMOVE_SSL_DEPS
+@@ -17,28 +17,9 @@ ERLANG_CPE_ID_VENDOR = erlang
+ ERLANG_CPE_ID_PRODUCT = erlang\/otp
+ ERLANG_INSTALL_STAGING = YES
  
+-# windows specific issue: https://nvd.nist.gov/vuln/detail/CVE-2021-29221
+-ERLANG_IGNORE_CVES += CVE-2021-29221
+-
+-# Remove the leftover deps directory from the ssl app
+-# See https://bugs.erlang.org/browse/ERL-1168
+-define ERLANG_REMOVE_SSL_DEPS
+-	rm -rf $(@D)/lib/ssl/src/deps
+-endef
+-ERLANG_POST_PATCH_HOOKS += ERLANG_REMOVE_SSL_DEPS
+-
 -# Patched erts/aclocal.m4
 -define ERLANG_RUN_AUTOCONF
 -	cd $(@D) && PATH=$(BR_PATH) ./otp_build autoconf
