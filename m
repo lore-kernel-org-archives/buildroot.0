@@ -4,77 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51F4BEB64DC
-	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 10:25:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 656E0EB64DC
+	for <buildroot@archiver.kernel.org>; Sat, 15 Jul 2023 14:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9415460B1A;
-	Sat, 15 Jul 2023 10:25:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9415460B1A
+	by smtp3.osuosl.org (Postfix) with ESMTP id A834E608A6;
+	Sat, 15 Jul 2023 14:39:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A834E608A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BYhFSYsg4n7J; Sat, 15 Jul 2023 10:25:16 +0000 (UTC)
+	with ESMTP id KUNtsJlJiqVX; Sat, 15 Jul 2023 14:39:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C86F860A99;
-	Sat, 15 Jul 2023 10:25:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C86F860A99
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23D961BF301
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 10:25:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFB7960864;
+	Sat, 15 Jul 2023 14:39:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFB7960864
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E6351BF476
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 14:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A53E60A99
- for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 10:25:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A53E60A99
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51D3140131
+ for <buildroot@lists.busybox.net>; Sat, 15 Jul 2023 14:39:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51D3140131
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3WQMEe6drtFF for <buildroot@lists.busybox.net>;
- Sat, 15 Jul 2023 10:25:11 +0000 (UTC)
-X-Greylist: delayed 00:07:25 by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D42360A4F
-Received: from zimbra.gangsto.cz (pyroxene.gangsto.org [78.46.142.91])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6D42360A4F
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 10:25:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by zimbra.gangsto.cz (Postfix) with ESMTP id 73B376A6A8
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 12:17:43 +0200 (CEST)
-Received: from zimbra.gangsto.cz ([127.0.0.1])
- by localhost (zimbra.gangsto.cz [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id BeJxy7rnNHYl for <buildroot@buildroot.org>;
- Sat, 15 Jul 2023 12:17:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
- by zimbra.gangsto.cz (Postfix) with ESMTP id AEB8B6A6A7
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 12:17:40 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.gangsto.cz AEB8B6A6A7
-X-Virus-Scanned: amavisd-new at gangsto.cz
-Received: from zimbra.gangsto.cz ([127.0.0.1])
- by localhost (zimbra.gangsto.cz [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id QblPr0MkHJM9 for <buildroot@buildroot.org>;
- Sat, 15 Jul 2023 12:17:40 +0200 (CEST)
-Received: from audun-yoga.localnet (unknown [136.158.100.109])
- by zimbra.gangsto.cz (Postfix) with ESMTPSA id 1D4CB6B658
- for <buildroot@buildroot.org>; Sat, 15 Jul 2023 12:17:39 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Sat, 15 Jul 2023 18:17:36 +0800
-Message-ID: <14204500.ZvbfcPJBoq@audun-yoga>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xBdxD5SVLP70 for <buildroot@lists.busybox.net>;
+ Sat, 15 Jul 2023 14:39:25 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB051400CF
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AB051400CF
+ for <buildroot@buildroot.org>; Sat, 15 Jul 2023 14:39:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C0302240004;
+ Sat, 15 Jul 2023 14:39:20 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qKgQZ-007x9m-MS; Sat, 15 Jul 2023 16:39:19 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20230714162339.1907504-1-bernd@kuhls.net>
+ <20230714232518.6ed70c07@windsurf>
+Date: Sat, 15 Jul 2023 16:39:19 +0200
+In-Reply-To: <20230714232518.6ed70c07@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Fri, 14 Jul 2023 23:25:18 +0200")
+Message-ID: <87fs5pfdd4.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=gangsto.org; 
- s=19307520-F6A0-11EC-9341-E84B7535AF77; t=1689416260;
- bh=D4KCdK7ZzMyhXEF6NvQ/woIRX4byqAR2nsRyNVGa2pw=;
- h=From:To:Date:Message-ID:MIME-Version;
- b=bb4IALS/03i+0JFQb7brOlLH6WqPj8/mF0SEm1Aj805qBnPjH5MlmfN6PiX6yKebi
- VUSZJ4p/5s20RSGoXBMxEd8xA504CaMHDnGHOMcrpgtbu5nA31uYs8OK8RkErbcfm0
- pWFxpdVXpFecgV98kDjzbeFH5yEFuMHhr/MrFxrVgjaxp1N+6xuJbgKLgKrOSPb/1y
- qpMUDtdcTyX0XUJ6K9EGIGM7KB0uQp/oPMJ/5a63NAf+s9Ef6U+JGC22NCjlhsb3Wl
- agfz9RGB90tgdtWEmbYR/EnxOlmDLSw4+5dZLDI44IuU4KaKkFaK7dDJHjnnZTOBUm
- gUnsHtD/1WpGA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gangsto.org header.i=@gangsto.org
- header.a=rsa-sha256 header.s=19307520-F6A0-11EC-9341-E84B7535AF77
- header.b=bb4IALS/
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: optionally include
- zfs graphdriver
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/libopenssl: bump version to
+ 3.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,62 +65,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Audun-Marius_Gangst=C3=B8_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: Audun-Marius =?ISO-8859-1?Q?Gangst=F8?= <audun@gangsto.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: Bernd Kuhls <bernd@kuhls.net>, Danny Wood <danny@rotronics.co.uk>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Since zfs is in buildroot now, I thought it would be good to enable the =
+ > Hello,
+ > On Fri, 14 Jul 2023 18:23:39 +0200
+ > Bernd Kuhls <bernd@kuhls.net> wrote:
 
-graphdriver in docker-engine.
+ >> From: Danny Wood <danny@rotronics.co.uk>
+ >> 
+ >> Rebase patches onto new version
+ >> 
+ >> Remove 0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch,
+ >> 0006-Add-support-for-io_pgetevents_time64-syscall.patch, and
+ >> 0007-Fixup-support-for-io_pgetevents_time64-syscall.patch as these are
+ >> already applied upstream
+ >> 
+ >> Downloaded from
+ >> https://lists.buildroot.org/pipermail/buildroot/2023-June/669230.html
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Thank you
+ > How much build testing was done with this version bump? I know OpenSSL
+ > 3.x breaks a few APIs compared to OpenSSL 1.x.
 
+ > Could you do a test build with a significant number of packages using
+ > OpenSSL in Buildroot, to assess the damage caused by this version bump,
+ > and provide the defconfig used for this verification?
 
-Signed-off-by: Audun-Marius Gangst=F8 <audun@gangsto.org>
----
- package/docker-engine/docker-engine.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Danny already stated that he had built a significant amount of packages
+(and provided an update to mariadb to fix a compatibility issue). Given
+that our move to 3.x is long overdue (E.G. 1.1.1 goes EOL in September),
+I think the best approach is just merging this as soon as possible and
+then fix up any fallout before 2023.08.
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/
-docker-engine.mk
-index f904793a..0647a560 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -23,7 +23,7 @@ DOCKER_ENGINE_LDFLAGS =3D \
-        -X $(DOCKER_ENGINE_GOMOD)/dockerversion.InitCommitID=3D"" \
-        -X $(DOCKER_ENGINE_GOMOD)/dockerversion.Version=3D"$
-(DOCKER_ENGINE_VERSION)"
- =
-
--DOCKER_ENGINE_TAGS =3D cgo exclude_graphdriver_zfs
-+DOCKER_ENGINE_TAGS =3D cgo
- DOCKER_ENGINE_BUILD_TARGETS =3D cmd/dockerd cmd/docker-proxy
- =
-
- ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
-@@ -56,6 +56,12 @@ else
- DOCKER_ENGINE_TAGS +=3D exclude_graphdriver_vfs
- endif
- =
-
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_ZFS),y)
-+DOCKER_ENGINE_DEPENDENCIES +=3D zfs
-+else
-+DOCKER_ENGINE_TAGS +=3D exclude_graphdriver_zfs
-+endif
-+
- # create the go.mod file with language version go1.19
- # remove the conflicting vendor/modules.txt
- # https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-
-
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
