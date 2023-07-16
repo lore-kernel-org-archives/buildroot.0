@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DABA0EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 16:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C17EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 16:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64FCE60B9B;
-	Sun, 16 Jul 2023 16:01:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64FCE60B9B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 162EC60BBA;
+	Sun, 16 Jul 2023 16:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 162EC60BBA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QFvi1REOxMPl; Sun, 16 Jul 2023 16:01:10 +0000 (UTC)
+	with ESMTP id 9dFDDLlJ0_3i; Sun, 16 Jul 2023 16:01:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 907CD60B8B;
-	Sun, 16 Jul 2023 16:01:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 907CD60B8B
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCABF60E32;
+	Sun, 16 Jul 2023 16:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCABF60E32
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1AC5A1BF35B
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:01:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A02BB1BF35B
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 012FB60B8B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48BF860B13
  for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:01:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 012FB60B8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48BF860B13
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id emVRapQlrUoa for <buildroot@lists.busybox.net>;
+ with ESMTP id uMV5U7ckpfcA for <buildroot@lists.busybox.net>;
  Sun, 16 Jul 2023 16:01:07 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26D1760B13
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7531C60B6F
  for <buildroot@buildroot.org>; Sun, 16 Jul 2023 16:01:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26D1760B13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7531C60B6F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1445E86B16; Sun, 16 Jul 2023 16:01:07 +0000 (UTC)
+ id 65A5086B16; Sun, 16 Jul 2023 16:01:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 17:59:08 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 9af2e541e301892f7edb66179cf3160b4081a060
-X-Git-Newrev: 0741fd01fa2f76a89f45b9b8a99aac508dbd128b
+Date: Sun, 16 Jul 2023 17:58:40 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 22c14e41b4203866df45b9dcf4b28289a6653773
+X-Git-Newrev: ca87e434b2f240c43f6cb6d9a94cc51004693c2a
 X-Patchwork-Hint: ignore
-Message-Id: <20230716160107.1445E86B16@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/agentpp: fix
+Message-Id: <20230716160107.65A5086B16@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/agentpp: fix
  build error due to type mismatch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0741fd01fa2f76a89f45b9b8a99aac508dbd128b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ca87e434b2f240c43f6cb6d9a94cc51004693c2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 This was supposedly fixed by commit 5f06ecf5e151 ("package/agentpp:
 security bump to version 4.6.0") but has kept happening so far.
