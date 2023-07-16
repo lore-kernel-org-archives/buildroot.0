@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A33E7EB64DA
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 09:07:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 162ACEB64DA
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 09:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B09C81B69;
-	Sun, 16 Jul 2023 09:07:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B09C81B69
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE27981BB2;
+	Sun, 16 Jul 2023 09:10:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE27981BB2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wVz8lJMac5Pi; Sun, 16 Jul 2023 09:07:02 +0000 (UTC)
+	with ESMTP id hpNH5uU89mn0; Sun, 16 Jul 2023 09:10:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76BF1817A4;
-	Sun, 16 Jul 2023 09:07:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76BF1817A4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0F8731BF33E
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 09:07:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6641981865;
+	Sun, 16 Jul 2023 09:09:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6641981865
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B6B501BF33E
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 09:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB2524095C
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 09:06:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB2524095C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 90BD381882
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 09:09:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90BD381882
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HpTJj-djThVK for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 09:06:58 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B94F44094B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B94F44094B
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 09:06:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B8257FF804;
- Sun, 16 Jul 2023 09:06:54 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qKxiP-00CrB5-Po; Sun, 16 Jul 2023 11:06:53 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CGfeymvEURfA for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 09:09:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C544081865
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 09:09:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C544081865
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B5869837E5; Sun, 16 Jul 2023 09:09:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20230626170444.8EEF084AC1@busybox.osuosl.org>
-Date: Sun, 16 Jul 2023 11:06:52 +0200
-In-Reply-To: <20230626170444.8EEF084AC1@busybox.osuosl.org> (Yann E. MORIN's
- message of "Mon, 26 Jun 2023 19:01:45 +0200")
-Message-ID: <87jzv0cjir.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [git commit] configs/hifive_unleashed: Update to
- use OpenSBI 1.2
+To: buildroot@buildroot.org
+Date: Sun, 16 Jul 2023 10:06:11 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 8375841e0b30a7ce8a22f656867f5d37c2fe2420
+X-Git-Newrev: 5f07925767271269dcba95da5c14db25b2aa62d4
+X-Patchwork-Hint: ignore
+Message-Id: <20230716090944.B5869837E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] configs/hifive_unleashed:
+ Update to use OpenSBI 1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5f07925767271269dcba95da5c14db25b2aa62d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=02f6d77fbda975d01e16da0b4a031776bc1a94d2
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since the rest of RISC-V boards have been switched to use OpenSBI
+1.2, let's update hifive_unleashed to use OpenSBI 1.2 too.
 
- > Since the rest of RISC-V boards have been switched to use OpenSBI
- > 1.2, let's update hifive_unleashed to use OpenSBI 1.2 too.
+Resolves: https://bugs.busybox.net/show_bug.cgi?id=15658
+Signed-off-by: Bin Meng <bmeng@tinylab.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 02f6d77fbda975d01e16da0b4a031776bc1a94d2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/hifive_unleashed_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Resolves: https://bugs.busybox.net/show_bug.cgi?id=15658
- > Signed-off-by: Bin Meng <bmeng@tinylab.org>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2023.05.x to fix the build issue, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
+index 2b6ee6c08e..0440b14ba5 100644
+--- a/configs/hifive_unleashed_defconfig
++++ b/configs/hifive_unleashed_defconfig
+@@ -38,7 +38,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ # Bootloader
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
+-BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="0.9"
++BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
+ BR2_TARGET_OPENSBI_PLAT="generic"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
