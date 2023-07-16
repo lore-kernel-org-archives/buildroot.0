@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98C84EB64DA
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 06:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D257EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 06:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 53F9481E10;
-	Sun, 16 Jul 2023 06:22:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53F9481E10
+	by smtp1.osuosl.org (Postfix) with ESMTP id E52A181E04;
+	Sun, 16 Jul 2023 06:22:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E52A181E04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OJh4b31mzIdy; Sun, 16 Jul 2023 06:22:27 +0000 (UTC)
+	with ESMTP id QsJyB4Jbj-a0; Sun, 16 Jul 2023 06:22:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8953E81BA9;
-	Sun, 16 Jul 2023 06:22:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8953E81BA9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2825181BA9;
+	Sun, 16 Jul 2023 06:22:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2825181BA9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A8141BF322
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:21:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D9B01BF322
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A75660737
+ by smtp3.osuosl.org (Postfix) with ESMTP id 306E660739
  for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A75660737
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 306E660739
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SfuNjAH9s62l for <buildroot@lists.busybox.net>;
+ with ESMTP id c05P-k4XIlzp for <buildroot@lists.busybox.net>;
  Sun, 16 Jul 2023 06:21:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E638560739
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0368660A6F
  for <buildroot@buildroot.org>; Sun, 16 Jul 2023 06:21:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E638560739
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0368660A6F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D180D87034; Sun, 16 Jul 2023 06:21:08 +0000 (UTC)
+ id DE60E87031; Sun, 16 Jul 2023 06:21:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 08:04:57 +0200
+Date: Sun, 16 Jul 2023 08:05:54 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: b8b36712ef1d1ebf18f80d8e993d9f96be3ea6a9
-X-Git-Newrev: 2851e8ed7ffd5035433027ca67e23a875e2b27e0
+X-Git-Oldrev: 2851e8ed7ffd5035433027ca67e23a875e2b27e0
+X-Git-Newrev: b32591f5f56d3aeb1c63cf65ed101936de313428
 X-Patchwork-Hint: ignore
-Message-Id: <20230716062108.D180D87034@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/audit: bump
- version to 3.1.1
+Message-Id: <20230716062108.DE60E87031@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/dbus: security
+ bump to version 1.2.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2851e8ed7ffd5035433027ca67e23a875e2b27e0
+commit: https://git.buildroot.net/buildroot/commit/?id=b32591f5f56d3aeb1c63cf65ed101936de313428
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Changelog:
-https://github.com/linux-audit/audit-userspace/blob/v3.1.1/ChangeLog
+Fixes the following security issues:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+- CVE-2023-34969: Fix an assertion failure in dbus-daemon when a privileged
+  Monitoring connection (dbus-monitor, busctl monitor, gdbus monitor or
+  similar) is active, and a message from the bus driver cannot be delivered
+  to a client connection due to <deny> rules or outgoing message quota.
+  This is a denial of service if triggered maliciously by a local attacker.
+
+- Fix an incorrect assertion that could be used to crash dbus-daemon or
+  other users of DBusServer prior to authentication, if libdbus was compiled
+  with assertions enabled.
+
+For details, see the NEWS file:
+https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit afbc2f47fb0bd820e5a98e14c2271f016b9fdce4)
+(cherry picked from commit 52ae2a4e1d10da4ea46bc730db69a40d79eb835a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 87c00ec241..310b0a0f6a 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,4 +1,4 @@
- #Locally computed
--sha256  b5cf3cdabb2786c08b1de3599a3b1a547e55f7a9f9c1eb2078f5b44cf44e8378  audit-3.1.tar.gz
-+sha256  46e46b37623cce09e6ee134e78d668afc34f4e1c870c853ef12e4193078cfe87  audit-3.1.1.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 252f5865b5..e77e06bd6b 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 17c70004ba..0e48d4dafd 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.24.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.28.tar.gz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  bc42d196c1756ac520d61bf3ccd6f42013617def45dd1e591a6091abf51dca38  dbus-1.12.24.tar.gz
++sha256  9da1e3f2b73f75eec0a9e4509d64be43909d1f2853fe809528a0a53984d76420  dbus-1.12.28.tar.gz
  
--AUDIT_VERSION = 3.1
-+AUDIT_VERSION = 3.1.1
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- AUDIT_LICENSE_FILES = COPYING COPYING.LIB
+ # Locally calculated
+ sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index b3a79c431d..99d2c4301c 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating dbus, check if there are changes in session.conf and
+ # system.conf, and update the versions in the dbus-broker package accordingly.
+-DBUS_VERSION = 1.12.24
++DBUS_VERSION = 1.12.28
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
