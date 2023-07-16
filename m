@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D257EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 06:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A78CBEB64DA
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 06:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E52A181E04;
-	Sun, 16 Jul 2023 06:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E52A181E04
+	by smtp1.osuosl.org (Postfix) with ESMTP id 529B881C40;
+	Sun, 16 Jul 2023 06:22:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 529B881C40
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QsJyB4Jbj-a0; Sun, 16 Jul 2023 06:22:40 +0000 (UTC)
+	with ESMTP id 9U92WGBvkbHG; Sun, 16 Jul 2023 06:22:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2825181BA9;
-	Sun, 16 Jul 2023 06:22:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2825181BA9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D9B01BF322
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:21:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 918D981E1E;
+	Sun, 16 Jul 2023 06:22:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 918D981E1E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8ABE71BF322
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:22:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 306E660739
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 306E660739
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64F7340489
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:22:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64F7340489
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c05P-k4XIlzp for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 06:21:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d66THGSvmY69 for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 06:22:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0368660A6F
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 06:21:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0368660A6F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6BAF40354
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 06:22:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6BAF40354
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE60E87031; Sun, 16 Jul 2023 06:21:08 +0000 (UTC)
+ id A64F2870E1; Sun, 16 Jul 2023 06:22:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 08:05:54 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 2851e8ed7ffd5035433027ca67e23a875e2b27e0
-X-Git-Newrev: b32591f5f56d3aeb1c63cf65ed101936de313428
+Date: Sun, 16 Jul 2023 08:00:48 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: d2ebcac1075acc478f5f0b338a8dcff3739181e5
+X-Git-Newrev: 474354c08df492c94ca9b607f0355d89e4d2466b
 X-Patchwork-Hint: ignore
-Message-Id: <20230716062108.DE60E87031@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/dbus: security
- bump to version 1.2.28
+Message-Id: <20230716062213.A64F2870E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python-dbus-fast:
+ drop python-async-timeout dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b32591f5f56d3aeb1c63cf65ed101936de313428
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=474354c08df492c94ca9b607f0355d89e4d2466b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes the following security issues:
+async-timeout dependency was dropped upstream for Python 3.11 (see [1]).
 
-- CVE-2023-34969: Fix an assertion failure in dbus-daemon when a privileged
-  Monitoring connection (dbus-monitor, busctl monitor, gdbus monitor or
-  similar) is active, and a message from the bus driver cannot be delivered
-  to a client connection due to <deny> rules or outgoing message quota.
-  This is a denial of service if triggered maliciously by a local attacker.
+[1] https://github.com/Bluetooth-Devices/dbus-fast/commit/1b5c9e1cb94d19925776d91196cf1b657264c494
 
-- Fix an incorrect assertion that could be used to crash dbus-daemon or
-  other users of DBusServer prior to authentication, if libdbus was compiled
-  with assertions enabled.
-
-For details, see the NEWS file:
-https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 52ae2a4e1d10da4ea46bc730db69a40d79eb835a)
+(cherry picked from commit d39ca323887c7cf4222e00fa42c2c3cd7bb8e95e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-dbus-fast/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 17c70004ba..0e48d4dafd 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.24.tar.gz.asc
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.28.tar.gz.asc
- # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
--sha256  bc42d196c1756ac520d61bf3ccd6f42013617def45dd1e591a6091abf51dca38  dbus-1.12.24.tar.gz
-+sha256  9da1e3f2b73f75eec0a9e4509d64be43909d1f2853fe809528a0a53984d76420  dbus-1.12.28.tar.gz
- 
- # Locally calculated
- sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index b3a79c431d..99d2c4301c 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -6,7 +6,7 @@
- 
- # When updating dbus, check if there are changes in session.conf and
- # system.conf, and update the versions in the dbus-broker package accordingly.
--DBUS_VERSION = 1.12.24
-+DBUS_VERSION = 1.12.28
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+diff --git a/package/python-dbus-fast/Config.in b/package/python-dbus-fast/Config.in
+index c9562fecfa..b7168106d7 100644
+--- a/package/python-dbus-fast/Config.in
++++ b/package/python-dbus-fast/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_DBUS_FAST
+ 	bool "python-dbus-fast"
+ 	select BR2_PACKAGE_HOST_PYTHON_CYTHON
+ 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
+-	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
+ 	help
+ 	  A faster version of dbus-next, a DBus library for Python with
+ 	  asyncio support.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
