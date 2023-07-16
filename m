@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19F35C001DC
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 06:29:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EE53EB64DA
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 07:17:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96E3581514;
-	Sun, 16 Jul 2023 06:29:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96E3581514
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94DF081BF5;
+	Sun, 16 Jul 2023 07:17:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94DF081BF5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9bSyCczCPnXB; Sun, 16 Jul 2023 06:29:08 +0000 (UTC)
+	with ESMTP id TzfbrPaevxRg; Sun, 16 Jul 2023 07:17:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDC728141C;
-	Sun, 16 Jul 2023 06:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDC728141C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 779C61BF322
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:29:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D92B781BC6;
+	Sun, 16 Jul 2023 07:17:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D92B781BC6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F9F71BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 07:17:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5EDD5813E7
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EDD5813E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 152AD409DF
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 07:17:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 152AD409DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 22VspaAGb4j8 for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 06:29:05 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 411078141C
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 411078141C
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 06:29:05 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8CFEBE0005;
- Sun, 16 Jul 2023 06:29:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qKvFe-008nV9-LI; Sun, 16 Jul 2023 08:29:02 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B8YNokmbnoJZ for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 07:17:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D85F3409C3
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 07:17:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D85F3409C3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C479A86CC4; Sun, 16 Jul 2023 07:17:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20230606181148.454747-1-bernd.kuhls@t-online.de>
- <877crp1n0s.fsf@48ers.dk>
-Date: Sun, 16 Jul 2023 08:29:02 +0200
-In-Reply-To: <877crp1n0s.fsf@48ers.dk> (Peter Korsgaard's message of "Tue, 27
- Jun 2023 07:40:03 +0200")
-Message-ID: <87r0p8cqtt.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/dav1d: bump version to
- 1.2.1
+To: buildroot@buildroot.org
+Date: Sun, 16 Jul 2023 08:24:08 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: bf495325c1e3d2ab0184ebafeceac07b4797be39
+X-Git-Newrev: 8375841e0b30a7ce8a22f656867f5d37c2fe2420
+X-Patchwork-Hint: ignore
+Message-Id: <20230716071722.C479A86CC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/dav1d: bump
+ version to 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8375841e0b30a7ce8a22f656867f5d37c2fe2420
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Release notes:
- >> https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+Release notes:
+https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 199301a6d59af20f6a7bb6da0d22bffb64baaea4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dav1d/dav1d.hash | 4 ++--
+ package/dav1d/dav1d.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Committed, thanks.
-
- > I see that 1.2.0 fixed
- > https://security-tracker.debian.org/tracker/CVE-2023-32570, so I'll
- > backport both to 2023.02.x.
-
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index 1af699dbe3..68757060bf 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,4 +1,4 @@
+-# From https://download.videolan.org/pub/videolan/dav1d/1.2.0/dav1d-1.2.0.tar.xz.sha256
+-sha256  231bed8bc1bb28a41d88da6b4c2c118de84b92e5f1d67caffa1b7f81aaea8c6e  dav1d-1.2.0.tar.xz
++# From https://download.videolan.org/pub/videolan/dav1d/1.2.1/dav1d-1.2.1.tar.xz.sha256
++sha256  4e33eb61ec54c768a16da0cf8fa0928b4c4593f5f804a3c887d4a21c318340b2  dav1d-1.2.1.tar.xz
+ # Locally computed
+ sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index f8d4464cd4..670a81d1c8 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DAV1D_VERSION = 1.2.0
++DAV1D_VERSION = 1.2.1
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
+ DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
