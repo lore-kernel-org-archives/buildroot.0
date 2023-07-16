@@ -4,66 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70A01EB64DA
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 08:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A33E7EB64DA
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 09:07:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1653D81BA9;
-	Sun, 16 Jul 2023 08:55:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1653D81BA9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B09C81B69;
+	Sun, 16 Jul 2023 09:07:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B09C81B69
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q-dZroVdrqPJ; Sun, 16 Jul 2023 08:55:50 +0000 (UTC)
+	with ESMTP id wVz8lJMac5Pi; Sun, 16 Jul 2023 09:07:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C7288177C;
-	Sun, 16 Jul 2023 08:55:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C7288177C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11C531BF372
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:55:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76BF1817A4;
+	Sun, 16 Jul 2023 09:07:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76BF1817A4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F8731BF33E
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 09:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFB8A40354
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:55:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFB8A40354
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB2524095C
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 09:06:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB2524095C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jYy57mNU4i60 for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 08:55:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HpTJj-djThVK for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 09:06:58 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAD6840297
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EAD6840297
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 08:55:46 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CB6DEA4C029A;
- Sun, 16 Jul 2023 10:55:44 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42904)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qKxXc-0002Nw-1t;
- Sun, 16 Jul 2023 10:55:44 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 10:55:44 +0200
-Message-Id: <20230716085544.3685087-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B94F44094B
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B94F44094B
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 09:06:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B8257FF804;
+ Sun, 16 Jul 2023 09:06:54 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qKxiP-00CrB5-Po; Sun, 16 Jul 2023 11:06:53 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20230626170444.8EEF084AC1@busybox.osuosl.org>
+Date: Sun, 16 Jul 2023 11:06:52 +0200
+In-Reply-To: <20230626170444.8EEF084AC1@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Mon, 26 Jun 2023 19:01:45 +0200")
+Message-ID: <87jzv0cjir.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1689497744;
- bh=U/wWHHXsPusUNP2/YV7ARdB7oNF5Vgym9rGDQWb42y4=;
- h=From:To:Cc:Subject:Date:From;
- b=bq1uQH0bAlkwB6/cSD3r84wyOBuwufHnpFcCGBkFvziAxzls/cLUycgjoHSjyFyPv
- ikxC/ASIwsNK8hTOqEB/D0THlNkFIlV1dg8JhsOWVOIVe3PyWELmheWNFdDWI0OuxV
- uh8kuo2Y9kLXZimLRTd8nLYo7/7bgmuhFzvUYbCTvm0kL1di30iurXRRfMDLvQSkqh
- dmUa0FGk/1fZWijMSg53Lsz3GQWJuwuF8HWQPzM1nmbOor3AEhCwHp4Au8uwwtqUC9
- cBucyxlkfvq9UFVCwTS8pHGqdQd+dGoGm/lsypORBEc37TNTAUOLvyEEaK8z+AWses
- 6coOZXW+ywnaQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=bq1uQH0b
-Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump version to 0.3.74
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [git commit] configs/hifive_unleashed: Update to
+ use OpenSBI 1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,47 +64,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/NEWS
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/pipewire/pipewire.hash | 2 +-
- package/pipewire/pipewire.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=02f6d77fbda975d01e16da0b4a031776bc1a94d2
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-index 0e027aaa55..98de073bdb 100644
---- a/package/pipewire/pipewire.hash
-+++ b/package/pipewire/pipewire.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  c78c95cdff2774418f0a9468e94a1b2800761d322f13104df6501e1a0dc92558  pipewire-0.3.65.tar.bz2
-+sha256  b30d886b87aa8c055af6d6c7261d1d04336f3a75221c31afe1ea8ba86184bf70  pipewire-0.3.74.tar.bz2
- sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
- sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index ecf4a035ec..bb173972aa 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PIPEWIRE_VERSION = 0.3.65
-+PIPEWIRE_VERSION = 0.3.74
- PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
- PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
- PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+ > Since the rest of RISC-V boards have been switched to use OpenSBI
+ > 1.2, let's update hifive_unleashed to use OpenSBI 1.2 too.
+
+ > Resolves: https://bugs.busybox.net/show_bug.cgi?id=15658
+ > Signed-off-by: Bin Meng <bmeng@tinylab.org>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2023.05.x to fix the build issue, thanks.
+
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
