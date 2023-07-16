@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64574EB64DA
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 06:23:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFA9CEB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 06:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20883813B2;
-	Sun, 16 Jul 2023 06:23:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20883813B2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9DEFC811E7;
+	Sun, 16 Jul 2023 06:23:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DEFC811E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nA7EUHovy0Dj; Sun, 16 Jul 2023 06:23:42 +0000 (UTC)
+	with ESMTP id HAGS6pDauGkO; Sun, 16 Jul 2023 06:23:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2495681366;
-	Sun, 16 Jul 2023 06:23:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2495681366
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADA79813B1;
+	Sun, 16 Jul 2023 06:23:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADA79813B1
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 107D31BF322
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:22:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1FF0F1BF322
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91D8981DFE
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91D8981DFE
+ by smtp1.osuosl.org (Postfix) with ESMTP id A154081BA9
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 06:22:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A154081BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tENYpkzS9Xne for <buildroot@lists.busybox.net>;
+ with ESMTP id JjnLaH6_9UNg for <buildroot@lists.busybox.net>;
  Sun, 16 Jul 2023 06:22:14 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02F7B81E0C
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 06:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02F7B81E0C
+ by smtp1.osuosl.org (Postfix) with ESMTP id D875D81B9D
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 06:22:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D875D81B9D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB0A3870EC; Sun, 16 Jul 2023 06:22:13 +0000 (UTC)
+ id B160B870E5; Sun, 16 Jul 2023 06:22:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 08:18:38 +0200
+Date: Sun, 16 Jul 2023 08:06:02 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ecf53c5e0fea0f64288981826500c83e46ae96f1
-X-Git-Newrev: a65eb8c871ad7bd17ead79035bccb97838f6d0be
+X-Git-Oldrev: 474354c08df492c94ca9b607f0355d89e4d2466b
+X-Git-Newrev: 19fc429a864be5234305bf093d4f3fd234da52d5
 X-Patchwork-Hint: ignore
-Message-Id: <20230716062213.DB0A3870EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/tiff: security
- bump to version 4.5.1
+Message-Id: <20230716062213.B160B870E5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/dbus: security
+ bump to version 1.2.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,101 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a65eb8c871ad7bd17ead79035bccb97838f6d0be
+commit: https://git.buildroot.net/buildroot/commit/?id=19fc429a864be5234305bf093d4f3fd234da52d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Fixes the following security issues:
 
-- CVE-2023-1916: A flaw was found in tiffcrop, a program distributed by the
-  libtiff package.  A specially crafted tiff file can lead to an
-  out-of-bounds read in the extractImageSection function in
-  tools/tiffcrop.c, resulting in a denial of service and limited information
-  disclosure.  This issue affects libtiff versions 4.x.
+- CVE-2023-34969: Fix an assertion failure in dbus-daemon when a privileged
+  Monitoring connection (dbus-monitor, busctl monitor, gdbus monitor or
+  similar) is active, and a message from the bus driver cannot be delivered
+  to a client connection due to <deny> rules or outgoing message quota.
+  This is a denial of service if triggered maliciously by a local attacker.
 
-- CVE-2023-25434: libtiff 4.5.0 is vulnerable to Buffer Overflow via
-  extractContigSamplesBytes() at /libtiff/tools/tiffcrop.c:3215.
+- Fix an incorrect assertion that could be used to crash dbus-daemon or
+  other users of DBusServer prior to authentication, if libdbus was compiled
+  with assertions enabled.
 
-- CVE-2023-26965: loadImage() in tools/tiffcrop.c in LibTIFF through 4.5.0
-  has a heap-based use after free via a crafted TIFF image
-
-Drop the now upstream
-0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch.
+For details, see the NEWS file:
+https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cb496970c0c7117f9f00d8495e234871f2bae4c1)
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 52ae2a4e1d10da4ea46bc730db69a40d79eb835a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...p-Correct-simple-copy-paste-error-Fix-488.patch | 28 ----------------------
- package/tiff/tiff.hash                             |  2 +-
- package/tiff/tiff.mk                               |  5 +---
- 3 files changed, 2 insertions(+), 33 deletions(-)
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch b/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
-deleted file mode 100644
-index 73c0d10ffc..0000000000
---- a/package/tiff/0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 97d65859bc29ee334012e9c73022d8a8e55ed586 Mon Sep 17 00:00:00 2001
--From: Su Laus <sulau@freenet.de>
--Date: Sat, 21 Jan 2023 15:58:10 +0000
--Subject: [PATCH] tiffcrop: Correct simple copy paste error. Fix #488.
--
--[Retrieved from:
--https://gitlab.com/libtiff/libtiff/-/commit/97d65859bc29ee334012e9c73022d8a8e55ed586]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- tools/tiffcrop.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tools/tiffcrop.c b/tools/tiffcrop.c
--index 14fa18da..7db69883 100644
----- a/tools/tiffcrop.c
--+++ b/tools/tiffcrop.c
--@@ -8591,7 +8591,7 @@ static int processCropSelections(struct image_data *image,
--                     cropsize + NUM_BUFF_OVERSIZE_BYTES);
--             else
--             {
---                prev_cropsize = seg_buffs[0].size;
--+                prev_cropsize = seg_buffs[i].size;
--                 if (prev_cropsize < cropsize)
--                 {
--                     next_buff = _TIFFrealloc(
---- 
--GitLab
--
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 73732892a5..0fa503a02a 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c7a1d9296649233979fa3eacffef3fa024d73d05d589cb622727b5b08c423464  tiff-4.5.0.tar.gz
-+sha256  d7f38b6788e4a8f5da7940c5ac9424f494d8a79eba53d555f4a507167dca5e2b  tiff-4.5.1.tar.gz
- sha256  0780558a8bfba0af1160ec1ff11ade4f41c0d7deafd6ecfc796b492a788e380d  LICENSE.md
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index f9754a4b49..0006f461a0 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 17c70004ba..0e48d4dafd 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.24.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.28.tar.gz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  bc42d196c1756ac520d61bf3ccd6f42013617def45dd1e591a6091abf51dca38  dbus-1.12.24.tar.gz
++sha256  9da1e3f2b73f75eec0a9e4509d64be43909d1f2853fe809528a0a53984d76420  dbus-1.12.28.tar.gz
  
--TIFF_VERSION = 4.5.0
-+TIFF_VERSION = 4.5.1
- TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = LICENSE.md
-@@ -12,9 +12,6 @@ TIFF_CPE_ID_VENDOR = libtiff
- TIFF_CPE_ID_PRODUCT = libtiff
- TIFF_INSTALL_STAGING = YES
+ # Locally calculated
+ sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index b3a79c431d..99d2c4301c 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -6,7 +6,7 @@
  
--# 0001-tiffcrop-Correct-simple-copy-paste-error-Fix-488.patch
--TIFF_IGNORE_CVES += CVE-2022-48281
--
- # webp has a (optional) dependency on tiff, so we can't have webp
- # support in tiff, or that would create a circular dependency.
- TIFF_CONF_OPTS = \
+ # When updating dbus, check if there are changes in session.conf and
+ # system.conf, and update the versions in the dbus-broker package accordingly.
+-DBUS_VERSION = 1.12.24
++DBUS_VERSION = 1.12.28
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
