@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 874C1EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 16:22:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3402EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 16:22:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3092E40141;
-	Sun, 16 Jul 2023 16:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3092E40141
+	by smtp2.osuosl.org (Postfix) with ESMTP id 866F64047D;
+	Sun, 16 Jul 2023 16:22:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 866F64047D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ssAiRtUlP0Aw; Sun, 16 Jul 2023 16:22:10 +0000 (UTC)
+	with ESMTP id VtF0I8EoC42G; Sun, 16 Jul 2023 16:22:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 56963405E9;
-	Sun, 16 Jul 2023 16:22:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56963405E9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5A7D11BF2F8
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:21:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1DE2400FF;
+	Sun, 16 Jul 2023 16:22:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1DE2400FF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C2F61BF2F8
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 215D640903
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:21:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 215D640903
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55E8281831
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:22:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E8281831
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VrwStU0buTGN for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 16:21:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I7PT4OJKbIQM for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 16:22:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1079408F6
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 16:21:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1079408F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9059F817EB
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 16:22:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9059F817EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0D8C86E8E; Sun, 16 Jul 2023 16:21:41 +0000 (UTC)
+ id 7FDE986EFC; Sun, 16 Jul 2023 16:22:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 18:17:20 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 76dd7489f23d96f739116c5cf9a425d20a76d57b
-X-Git-Newrev: 095d4bbdafd35becbc143cc1caf18c88fabe8f73
+Date: Sun, 16 Jul 2023 18:17:44 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: d69773edb42e89cb3abe078df3d85aebb163ba6a
+X-Git-Newrev: f5315e59bdb59469573becc1bd80402cd3dbdf08
 X-Patchwork-Hint: ignore
-Message-Id: <20230716162141.C0D8C86E8E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/rygel: fix
+Message-Id: <20230716162248.7FDE986EFC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/rygel: fix
  Config.in comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=095d4bbdafd35becbc143cc1caf18c88fabe8f73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f5315e59bdb59469573becc1bd80402cd3dbdf08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Move the comment out of the if-clause and include the python3 dependency
 
