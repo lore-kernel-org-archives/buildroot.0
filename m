@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4527BC0015E
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 20:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD45EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 20:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF7706058C;
-	Sun, 16 Jul 2023 20:13:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF7706058C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62F3160D88;
+	Sun, 16 Jul 2023 20:13:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62F3160D88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m-I15-DiLarj; Sun, 16 Jul 2023 20:13:22 +0000 (UTC)
+	with ESMTP id mZzhpb76dJz8; Sun, 16 Jul 2023 20:13:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 28ECD60BEC;
-	Sun, 16 Jul 2023 20:13:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28ECD60BEC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 86FE61BF365
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94BF260DDF;
+	Sun, 16 Jul 2023 20:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94BF260DDF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B41B91BF8B4
  for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 20:13:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 60E2C8174A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A57A40183
  for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 20:13:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60E2C8174A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A57A40183
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NXK3xRA7waBz for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3shFCSHEgL2P for <buildroot@lists.busybox.net>;
  Sun, 16 Jul 2023 20:13:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8DA0981749
+ by smtp4.osuosl.org (Postfix) with ESMTP id 984AB400C6
  for <buildroot@buildroot.org>; Sun, 16 Jul 2023 20:13:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DA0981749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 984AB400C6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DF1887114; Sun, 16 Jul 2023 20:13:18 +0000 (UTC)
+ id 8795687116; Sun, 16 Jul 2023 20:13:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 22:03:24 +0200
+Date: Sun, 16 Jul 2023 22:06:22 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 4808ca56c9de0f5929f1588ab0aca1392cce2b56
-X-Git-Newrev: 20969cb303541937d22754ad6ecbb7cfe9edba76
+X-Git-Oldrev: 20969cb303541937d22754ad6ecbb7cfe9edba76
+X-Git-Newrev: 607450ac62d2b258164baa130915eb0701c575f6
 X-Patchwork-Hint: ignore
-Message-Id: <20230716201318.7DF1887114@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pkgconf: fix
- download URL
+Message-Id: <20230716201318.8795687116@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python-pyicu: fix
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,60 +58,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1964431112249561474=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1964431112249561474==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=20969cb303541937d22754ad6ecbb7cfe9edba76
+commit: https://git.buildroot.net/buildroot/commit/?id=607450ac62d2b258164baa130915eb0701c575f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Due to problems with the registrar (dynadot) [1], the dereferenced.org
-domain got stolen and is up for auction. While sorting that out, the
-official download site has changed to a different domain [2]. Update
-PKGCONF_SITE to the new location.
+Fixes:
+http://autobuild.buildroot.net/results/977/977c043615603dd3541e23b81c5f11374606aff6/
 
-There's an upstream bug to track the issue [3].
+Set environment variables to cross-compile friendly values, this prevents
+icu-config picking up host libraries:
+https://gitlab.pyicu.org/main/pyicu/-/blob/main/setup.py#L89
+https://gitlab.pyicu.org/main/pyicu/-/blob/main/setup.py#L179
+https://gitlab.pyicu.org/main/pyicu/-/blob/main/setup.py#L216
 
-[1] https://social.treehouse.systems/@ariadne/110643909699308207
-[2] https://github.com/pkgconf/pkgconf/commit/437c2a3218bfcb1cae7fa38a4ccd0cb29575ff07
-[3] https://github.com/pkgconf/pkgconf/issues/302
+This follows the upstream build docs:
+https://gitlab.pyicu.org/main/pyicu#building-pyicu
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=15673
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit ef95ec920cbae32e5a525d887b7a279440d96f11)
+(cherry picked from commit c15e60c106bc852a4cd1f987357580e70e6c28ef)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkgconf/pkgconf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-pyicu/python-pyicu.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index e9587fae6b..1d73b691e1 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/python-pyicu/python-pyicu.mk b/package/python-pyicu/python-pyicu.mk
+index 512b2f857f..53e4a15c4f 100644
+--- a/package/python-pyicu/python-pyicu.mk
++++ b/package/python-pyicu/python-pyicu.mk
+@@ -12,4 +12,10 @@ PYTHON_PYICU_LICENSE_FILES = LICENSE
+ PYTHON_PYICU_DEPENDENCIES = icu
+ PYTHON_PYICU_SETUP_TYPE = setuptools
  
- PKGCONF_VERSION = 1.6.3
--PKGCONF_SITE = https://distfiles.dereferenced.org/pkgconf
-+PKGCONF_SITE = https://distfiles.ariadne.space/pkgconf
- PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.xz
- PKGCONF_LICENSE = pkgconf license
- PKGCONF_LICENSE_FILES = COPYING
-
---===============1964431112249561474==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++PYTHON_PYICU_ENV += \
++	ICU_VERSION="`$(PKG_CONFIG_HOST_BINARY) icu-i18n --modversion`" \
++	PYICU_CFLAGS="`$(PKG_CONFIG_HOST_BINARY) icu-i18n --variable=CXXFLAGS`" \
++	PYICU_LFLAGS="`$(PKG_CONFIG_HOST_BINARY) icu-i18n --libs-only-L` \
++		`$(PKG_CONFIG_HOST_BINARY) icu-i18n --libs-only-l`"
++
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1964431112249561474==--
