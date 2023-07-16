@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B26ADEB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 15:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67B51EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 16:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 022AC60BBA;
-	Sun, 16 Jul 2023 15:56:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 022AC60BBA
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4B0C60B9B;
+	Sun, 16 Jul 2023 16:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4B0C60B9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dslRNY98xBtO; Sun, 16 Jul 2023 15:56:50 +0000 (UTC)
+	with ESMTP id olIQNEV2r3XU; Sun, 16 Jul 2023 16:00:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8738E60B92;
-	Sun, 16 Jul 2023 15:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8738E60B92
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3596060B6F;
+	Sun, 16 Jul 2023 16:00:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3596060B6F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 987401BF35B
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 15:56:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EE8831BF35B
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DCD140930
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 15:56:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DCD140930
+ by smtp4.osuosl.org (Postfix) with ESMTP id D52CA4097A
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:00:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D52CA4097A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jmMfgP9PTH0U for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 15:56:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 703C34060F
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 15:56:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 703C34060F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C06E8692A; Sun, 16 Jul 2023 15:56:40 +0000 (UTC)
+ with ESMTP id 87XE5tr9w4P0 for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 16:00:08 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 283594017C
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 283594017C
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 16:00:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D5DDA20007;
+ Sun, 16 Jul 2023 16:00:03 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qL4AE-00CxuV-Ol; Sun, 16 Jul 2023 18:00:02 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 17:52:34 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 55ea70d56dfeb05aee5bef63950683de51fdb85a
-X-Git-Newrev: 22c14e41b4203866df45b9dcf4b28289a6653773
-X-Patchwork-Hint: ignore
-Message-Id: <20230716155640.5C06E8692A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/freetype: bump
- version to 2.13.1
+To: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+References: <20230626162057.562236-1-luca.ceresoli@bootlin.com>
+Date: Sun, 16 Jul 2023 18:00:02 +0200
+In-Reply-To: <20230626162057.562236-1-luca.ceresoli@bootlin.com> (Luca
+ Ceresoli via buildroot's message of "Mon, 26 Jun 2023 18:20:57 +0200")
+Message-ID: <87a5vvdeyl.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/agentpp: fix build error due to
+ type mismatch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,54 +64,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22c14e41b4203866df45b9dcf4b28289a6653773
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Luca" == Luca Ceresoli via buildroot <buildroot@buildroot.org> writes:
 
-Release notes:
-https://sourceforge.net/projects/freetype/files/freetype2/2.13.1/
+ > This was supposedly fixed by commit 5f06ecf5e151 ("package/agentpp:
+ > security bump to version 4.6.0") but has kept happening so far.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 22c6344c71d6a88fc5492dc4b911b581cdcd9480)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > No public place for contributions, thus this patch has been sent to private
+ > e-mail.
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 60eb8dbb1d..ea03526c99 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.0/
--sha1  6393c1451c2f1c5f83aed5ea92d280af078e27d9  freetype-2.13.0.tar.xz
--sha256  5ee23abd047636c24b2d43c6625dcafc66661d1aca64dec9e0d05df29592624c  freetype-2.13.0.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.1/
-+sha1  af9b6b754320a0526179f166e3f8cffce78526ca  freetype-2.13.1.tar.xz
-+sha256  ea67e3b019b1104d1667aa274f5dc307d8cbd606b399bc32df308a77f1a564bf  freetype-2.13.1.tar.xz
- 
- # Locally calculated
- sha256  2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 4d7c4cd0d5..c6bc0673f6 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.13.0
-+FREETYPE_VERSION = 2.13.1
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/e8abd6bdc62a028955915706b03d72239786c703/
+ >   http://autobuild.buildroot.net/results/24441fb679fbf5f913c9b6431c98aec596ead587/
+
+ > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
