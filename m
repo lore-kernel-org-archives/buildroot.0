@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4895AEB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 16:02:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E316EEB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 16:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E94FB60BB3;
-	Sun, 16 Jul 2023 16:02:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E94FB60BB3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 855C460BCD;
+	Sun, 16 Jul 2023 16:03:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 855C460BCD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vAjor5tZL0MY; Sun, 16 Jul 2023 16:02:09 +0000 (UTC)
+	with ESMTP id 6ZerZHgK3xpi; Sun, 16 Jul 2023 16:03:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3889360BFD;
-	Sun, 16 Jul 2023 16:02:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3889360BFD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7274E1BF35B
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:02:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81A8160BAA;
+	Sun, 16 Jul 2023 16:03:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81A8160BAA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B9CF1BF35B
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:03:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CC95405CF
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:02:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CC95405CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id E566440315
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 16:03:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E566440315
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id USxaG0fLCFCG for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 16:02:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E0BD4057F
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4E0BD4057F
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 16:02:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 29814C0006;
- Sun, 16 Jul 2023 16:02:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qL4CB-00Cy2p-3n; Sun, 16 Jul 2023 18:02:03 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vWgP6G7gpvjW for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 16:03:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1896402DC
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 16:03:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1896402DC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9E0E786B6A; Sun, 16 Jul 2023 16:03:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230619181458.1596060-1-bernd@kuhls.net>
-Date: Sun, 16 Jul 2023 18:02:03 +0200
-In-Reply-To: <20230619181458.1596060-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Mon, 19 Jun 2023 20:14:57 +0200")
-Message-ID: <875y6jdev8.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/syslog-ng: disable python
- support
+To: buildroot@buildroot.org
+Date: Sun, 16 Jul 2023 18:00:49 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: ca87e434b2f240c43f6cb6d9a94cc51004693c2a
+X-Git-Newrev: fb5ced59149369d88ded2c44905b8a71dc8597a5
+X-Patchwork-Hint: ignore
+Message-Id: <20230716160313.9E0E786B6A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/syslog-ng:
+ disable python support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,29 +57,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Chris Packham <judge.packham@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fb5ced59149369d88ded2c44905b8a71dc8597a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > Upstream added a list of python modules declared as runtime dependencies
- > https://github.com/syslog-ng/syslog-ng/commit/f18345d2a16aea1a95d891ebb24a4ace9c652621
- > most of them with fixed (and outdated) versions.
+Upstream added a list of python modules declared as runtime dependencies
+https://github.com/syslog-ng/syslog-ng/commit/f18345d2a16aea1a95d891ebb24a4ace9c652621
+most of them with fixed (and outdated) versions.
 
- > Disable python support for the time being.
+Disable python support for the time being.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/436/436e90bb1f77143b05cb98df78934555bbb7df35/
+Fixes:
+http://autobuild.buildroot.net/results/436/436e90bb1f77143b05cb98df78934555bbb7df35/
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 227c42b8c3e0fada026e17a2b6e8d0d7a4450a3f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/syslog-ng/syslog-ng.mk | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-Committed to 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 1c4cec6adb..ecc8eeddce 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -16,7 +16,8 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ # We're patching configure.ac
+ SYSLOG_NG_AUTORECONF = YES
+ SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
+-	--disable-java --disable-java-modules --disable-mongodb
++	--disable-java --disable-java-modules --disable-mongodb \
++	--disable-python
+ SYSLOG_NG_CFLAGS = $(TARGET_CFLAGS)
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101915),y)
+@@ -39,15 +40,6 @@ else
+ SYSLOG_NG_CONF_OPTS += --disable-linux-caps
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-SYSLOG_NG_DEPENDENCIES += python3
+-SYSLOG_NG_CONF_OPTS += \
+-	--enable-python \
+-	--with-python=$(PYTHON3_VERSION_MAJOR)
+-else
+-SYSLOG_NG_CONF_OPTS += --disable-python
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBESMTP),y)
+ SYSLOG_NG_DEPENDENCIES += libesmtp
+ SYSLOG_NG_CONF_OPTS += --enable-smtp
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
