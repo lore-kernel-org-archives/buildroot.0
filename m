@@ -1,51 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A0D8C001B0
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 17:51:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3F6FC0015E
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 20:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BDE104074E;
-	Sun, 16 Jul 2023 17:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDE104074E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F6C860C1D;
+	Sun, 16 Jul 2023 20:05:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F6C860C1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MFvC5u8S5r95; Sun, 16 Jul 2023 17:51:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Sd1v80r_ITLy; Sun, 16 Jul 2023 20:05:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD6D440644;
-	Sun, 16 Jul 2023 17:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD6D440644
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 156911BF955
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 17:50:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 687F960BEB;
+	Sun, 16 Jul 2023 20:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 687F960BEB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 157831BF365
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 20:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFD734090F
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 17:50:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFD734090F
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2E7F60BEB
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 20:05:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2E7F60BEB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VhbTpY_UrE-v for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 17:50:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2224408E4
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 17:50:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2224408E4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C129487104; Sun, 16 Jul 2023 17:50:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oLDc7I5lEA32 for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 20:05:49 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6786E60AF1
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6786E60AF1
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 20:05:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7BCD0E0002;
+ Sun, 16 Jul 2023 20:05:46 +0000 (UTC)
+Message-ID: <f7360ea5-bde6-f924-dba8-718e35c8d170@korsgaard.com>
+Date: Sun, 16 Jul 2023 22:05:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>,
+ buildroot@buildroot.org
+References: <20230703091001.12573-1-sebastien.szymanski@armadeus.com>
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 19:43:31 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2927ab2135001b9bfb88143c150cc92b809fbb25
-X-Git-Newrev: 0a45615f653bb100381e18d48050f848e314f735
-X-Patchwork-Hint: ignore
-Message-Id: <20230716175050.C129487104@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/haproxy: fix
- build on aarch64
+In-Reply-To: <20230703091001.12573-1-sebastien.szymanski@armadeus.com>
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkgconf: fix broken URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +62,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a45615f653bb100381e18d48050f848e314f735
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
-
-Fixes:
-http://autobuild.buildroot.net/results/07c/07ccb8c45c709a4b6ed32aafa33cd04e74174b11/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7fde35212c49f0d6e274cbcb6f3f5c871bf13398)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...c-atomic.h-may-need-compiler.h-on-ARMv8.2.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
-
-diff --git a/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch b/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch
-new file mode 100644
-index 0000000000..b3b1f732ab
---- /dev/null
-+++ b/package/haproxy/0001-BUILD-atomic-atomic.h-may-need-compiler.h-on-ARMv8.2.patch
-@@ -0,0 +1,36 @@
-+From 5ab3c61932af7619518169da744ba6346f060405 Mon Sep 17 00:00:00 2001
-+From: Willy Tarreau <w@1wt.eu>
-+Date: Thu, 8 Dec 2022 08:32:57 +0100
-+Subject: [PATCH] BUILD: atomic: atomic.h may need compiler.h on ARMv8.2-a
-+
-+We get a build error in ncbuf.c when building for ARMv8.2-a because ncbuf
-+has minimal includes and among them bug.h which includes atomic.h. Atomic.h
-+may use "forceinline" without including compiler.h, hence the build error.
-+It was verified that adding it doesn't inflate the total headers.
-+
-+Since all other C files include api.h which already covers this, there's
-+no real need to bapkport this. The issue was already there in 2.3 though.
-+
-+Upstream: https://git.haproxy.org/?p=haproxy.git;a=commitdiff;h=5ab3c61932af7619518169da744ba6346f060405#patch1
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ include/haproxy/atomic.h |    2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/haproxy/atomic.h b/include/haproxy/atomic.h
-+index f60be95..7e3c826 100644
-+--- a/include/haproxy/atomic.h
-++++ b/include/haproxy/atomic.h
-+@@ -23,6 +23,8 @@
-+ #ifndef _HAPROXY_ATOMIC_H
-+ #define _HAPROXY_ATOMIC_H
-+ 
-++#include <haproxy/compiler.h>
-++
-+ /* A few notes for the macros and functions here:
-+  *  - this file is painful to edit, most operations exist in 3 variants,
-+  *    no-thread, threads with gcc<4.7, threads with gcc>=4.7. Be careful when
-+-- 
-+1.7.10.4
-+
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMDMvMDcvMjAyMyAxMS4xMCwgU8OpYmFzdGllbiBTenltYW5za2kgd3JvdGU6Cj4gUmVsZWFz
+ZSB0YXJiYWxsIGxvY2F0aW9uIGhhcyBjaGFuZ2VkIFsxXSwgdXBkYXRlIFBLR0NPTkZfU0lURS4K
+PiAKPiBbMV0gaHR0cHM6Ly9naXRodWIuY29tL3BrZ2NvbmYvcGtnY29uZi9jb21taXQvNDM3YzJh
+MzIxOGJmY2IxY2FlN2ZhMzhhNGNjZDBjYjI5NTc1ZmYwNwo+IAo+IFNpZ25lZC1vZmYtYnk6IFPD
+qWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KCkNv
+bW1pdHRlZCB0byAyMDIzLjAyLnggYW5kIDIwMjMuMDUueCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0
+ZXIgS29yc2dhYXJkCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
