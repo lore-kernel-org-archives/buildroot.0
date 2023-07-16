@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EE53EB64DA
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 07:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1938EB64DA
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 07:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94DF081BF5;
-	Sun, 16 Jul 2023 07:17:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94DF081BF5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 18F1B408FC;
+	Sun, 16 Jul 2023 07:28:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18F1B408FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TzfbrPaevxRg; Sun, 16 Jul 2023 07:17:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HYyulNu7t7DG; Sun, 16 Jul 2023 07:28:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D92B781BC6;
-	Sun, 16 Jul 2023 07:17:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D92B781BC6
+	by smtp4.osuosl.org (Postfix) with ESMTP id C27414090D;
+	Sun, 16 Jul 2023 07:28:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C27414090D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2F9F71BF2CC
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 07:17:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 638BF1BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 07:28:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 152AD409DF
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 07:17:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 152AD409DF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BA88408AF
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 07:28:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA88408AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B8YNokmbnoJZ for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 07:17:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D85F3409C3
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 07:17:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D85F3409C3
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C479A86CC4; Sun, 16 Jul 2023 07:17:22 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ with ESMTP id UUOWRG_54d0j for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 07:28:38 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CBD340508
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0CBD340508
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 07:28:37 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 670C1A4C0285
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 09:28:34 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:32934)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qKwBG-0004D7-0O
+ for buildroot@buildroot.org; Sun, 16 Jul 2023 09:28:34 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 08:24:08 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: bf495325c1e3d2ab0184ebafeceac07b4797be39
-X-Git-Newrev: 8375841e0b30a7ce8a22f656867f5d37c2fe2420
-X-Patchwork-Hint: ignore
-Message-Id: <20230716071722.C479A86CC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/dav1d: bump
- version to 1.2.1
+Date: Sun, 16 Jul 2023 09:28:33 +0200
+Message-Id: <20230716072833.2117113-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: --
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1689492514;
+ bh=fqNw+lM+umBWxL/dUUWfVzDy2rob4K67Jwxfz9F/1hc=;
+ h=From:To:Subject:Date:From;
+ b=lpo+H1P5Jb3XWRmItGVTSw3IfdGOp/BadCwhlmt1lLsJM1ZWmEV83X/QGD+ODJnrx
+ Z6BqqN55XdvNl+LZhk8pWpgK4yvI7FNILr+eMpYvaC0X7X81OG64msnmxONDjKlVec
+ YkwMUuWN+0dKBO3y/wZF4PxNJNSIqjKCX3ST4h5PTaV71kr9jx2OtzWr5/QyXLuWPT
+ ip87O650vaHhs/bTV/Ux6kR3+laTRHj5QrXwG2swFFOtKyw3Cx/zt0rCNAG6guKSg3
+ XNQqnrnh1KEAB9y0qPLdH7B6g+t67cBB2JFI16j9BQG4nml1Zjqy6fYxfMlu9O10g8
+ YbI+BlMMWUnwg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=lpo+H1P5
+Subject: [Buildroot] [PATCH 1/1] support/dependencies/dependencies.sh:
+ require IPC::Cmd perl package for libopenssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +76,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8375841e0b30a7ce8a22f656867f5d37c2fe2420
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+Fixes:
+http://autobuild.buildroot.net/results/b85/b85b64162b3889d96c713030b46401e3e0a9a4e2/
+http://autobuild.buildroot.net/results/fea/fea92e9c2a87a317675a7d0610c2ee467a373b69/
 
-Release notes:
-https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+Since the bump to 3.0.9 with buildroot commit
+3c66f65a6a549930870f2c0d98abb5ca9321d2a5 the configure script of
+(host-)libopenssl needs the FindBin perl module on the host:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 199301a6d59af20f6a7bb6da0d22bffb64baaea4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Can't locate IPC/Cmd.pm in @INC (you may need to install the IPC::Cmd
+module) (@INC contains: /home/buildroot/autobuild/instance-1/output-1/
+build/host-libopenssl-3.0.9/util/perl /home/buildroot/autobuild/instance
+-1/output-1/host/lib/perl /usr/local/lib64/perl5/5.36 /usr/local/share/
+perl5/5.36 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl
+/usr/lib64/perl5 /usr/share/perl5 /home/buildroot/autobuild/instance-1/
+output-1/build/host-libopenssl-3.0.9/external/perl/Text-Template-1.56/
+lib) at /home/buildroot/autobuild/instance-1/output-1/build/host-lib
+openssl-3.0.9/util/perl/OpenSSL/config.pm line 19.
+BEGIN failed--compilation aborted at /home/buildroot/autobuild/instance
+-1/output-1/build/host-libopenssl-3.0.9/util/perl/OpenSSL/config.pm line
+19.
+
+As this is needed for both libopenssl and host-libopenssl (which does not
+have a corresponding config symbol in the .config), we have to require it
+unconditionally.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/dav1d/dav1d.hash | 4 ++--
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/dependencies/dependencies.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 1af699dbe3..68757060bf 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,4 +1,4 @@
--# From https://download.videolan.org/pub/videolan/dav1d/1.2.0/dav1d-1.2.0.tar.xz.sha256
--sha256  231bed8bc1bb28a41d88da6b4c2c118de84b92e5f1d67caffa1b7f81aaea8c6e  dav1d-1.2.0.tar.xz
-+# From https://download.videolan.org/pub/videolan/dav1d/1.2.1/dav1d-1.2.1.tar.xz.sha256
-+sha256  4e33eb61ec54c768a16da0cf8fa0928b4c4593f5f804a3c887d4a21c318340b2  dav1d-1.2.1.tar.xz
- # Locally computed
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index f8d4464cd4..670a81d1c8 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 58f44c8723..6e7d067ccd 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -280,6 +280,7 @@ required_perl_modules="$required_perl_modules English" # Used by host-libxml-par
+ required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by host-libxml-parser-perl
+ required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
+ required_perl_modules="$required_perl_modules FindBin" # Used by (host-)libopenssl
++required_perl_modules="$required_perl_modules IPC::Cmd" # Used by (host-)libopenssl
  
--DAV1D_VERSION = 1.2.0
-+DAV1D_VERSION = 1.2.1
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
- DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+ if grep -q ^BR2_PACKAGE_MOSH=y $BR2_CONFIG ; then
+     required_perl_modules="$required_perl_modules diagnostics"
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
