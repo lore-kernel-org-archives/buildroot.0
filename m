@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08DAEEB64DA
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 08:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70A01EB64DA
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 08:55:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B479C81761;
-	Sun, 16 Jul 2023 08:54:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B479C81761
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1653D81BA9;
+	Sun, 16 Jul 2023 08:55:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1653D81BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KAHUK4QVLawG; Sun, 16 Jul 2023 08:54:19 +0000 (UTC)
+	with ESMTP id Q-dZroVdrqPJ; Sun, 16 Jul 2023 08:55:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF18181759;
-	Sun, 16 Jul 2023 08:54:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF18181759
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6541F1BF372
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:54:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C7288177C;
+	Sun, 16 Jul 2023 08:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C7288177C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11C531BF372
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 475F581759
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:54:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 475F581759
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFB8A40354
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFB8A40354
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3nl4CaL-aAU2 for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 08:54:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jYy57mNU4i60 for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 08:55:47 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C0B481757
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAD6840297
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5C0B481757
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 08:54:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EAD6840297
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 08:55:46 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 88971A4C029A
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 10:54:13 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39028)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CB6DEA4C029A;
+ Sun, 16 Jul 2023 10:55:44 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42904)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qKxW9-00027u-0w
- for buildroot@buildroot.org; Sun, 16 Jul 2023 10:54:13 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qKxXc-0002Nw-1t;
+ Sun, 16 Jul 2023 10:55:44 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 10:54:13 +0200
-Message-Id: <20230716085413.3684644-1-bernd@kuhls.net>
+Date: Sun, 16 Jul 2023 10:55:44 +0200
+Message-Id: <20230716085544.3685087-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1689497653;
- bh=eJp0aNBZydgqF/3itHntJI1nv0rC/LQvDdplm3H0SEw=;
- h=From:To:Subject:Date:From;
- b=RkO6GqErM6zIEQ1F+BfjlyPHpQaPFPEud9KXlFBn8JGf3M9c2iEF7j/wiVLtlSmrf
- 8M8bGgFveMyv/3Up6Un8tBqLpnIXxGQaI3xa3kvCkHj57AeSfZYK0fwFZM1EUJNqm3
- eb2TSW3M/VeCQgmSmw2j3YxArCA6+yGCHREXwpLBeBvSY4UrAbsqbx8xYtSovjlHZX
- vHaBGWD2SAb/Kt6uNdKfi6gBSowHpnEWNdTA5ePj6/7lUBOZ71s41aLvviUfmYB717
- YyTuC71LzSlgvpVkgLQ3dt0k/XMMYd+oO7c9uPL/+1WGWRM7GRX0Ve0ELHahI8gEYo
- QUCWbkR98K0jA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202306131828; t=1689497744;
+ bh=U/wWHHXsPusUNP2/YV7ARdB7oNF5Vgym9rGDQWb42y4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bq1uQH0bAlkwB6/cSD3r84wyOBuwufHnpFcCGBkFvziAxzls/cLUycgjoHSjyFyPv
+ ikxC/ASIwsNK8hTOqEB/D0THlNkFIlV1dg8JhsOWVOIVe3PyWELmheWNFdDWI0OuxV
+ uh8kuo2Y9kLXZimLRTd8nLYo7/7bgmuhFzvUYbCTvm0kL1di30iurXRRfMDLvQSkqh
+ dmUa0FGk/1fZWijMSg53Lsz3GQWJuwuF8HWQPzM1nmbOor3AEhCwHp4Au8uwwtqUC9
+ cBucyxlkfvq9UFVCwTS8pHGqdQd+dGoGm/lsypORBEc37TNTAUOLvyEEaK8z+AWses
+ 6coOZXW+ywnaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=RkO6GqEr
-Subject: [Buildroot] [PATCH 1/1] package/vulkan-headers: bump version to
- 1.3.257
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=bq1uQH0b
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: bump version to 0.3.74
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,39 +75,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Changelog:
+https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/NEWS
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/vulkan-headers/vulkan-headers.hash | 2 +-
- package/vulkan-headers/vulkan-headers.mk   | 2 +-
+ package/pipewire/pipewire.hash | 2 +-
+ package/pipewire/pipewire.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vulkan-headers/vulkan-headers.hash b/package/vulkan-headers/vulkan-headers.hash
-index c43736405c..cf213d8b52 100644
---- a/package/vulkan-headers/vulkan-headers.hash
-+++ b/package/vulkan-headers/vulkan-headers.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 0e027aaa55..98de073bdb 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  7239108c372f1fbe365bd8d1610ca2bb4e72b73b2151f2551bf9df54dd539639  vulkan-headers-1.2.203.tar.gz
-+sha256  e3ee02eff07ebcdb0ddfd06366d986c889f3392b6c4d79615bb06aefc1fda900  vulkan-headers-1.3.257.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/vulkan-headers/vulkan-headers.mk b/package/vulkan-headers/vulkan-headers.mk
-index 13cae1e685..c42b005abe 100644
---- a/package/vulkan-headers/vulkan-headers.mk
-+++ b/package/vulkan-headers/vulkan-headers.mk
+-sha256  c78c95cdff2774418f0a9468e94a1b2800761d322f13104df6501e1a0dc92558  pipewire-0.3.65.tar.bz2
++sha256  b30d886b87aa8c055af6d6c7261d1d04336f3a75221c31afe1ea8ba86184bf70  pipewire-0.3.74.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index ecf4a035ec..bb173972aa 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VULKAN_HEADERS_VERSION = 1.2.203
-+VULKAN_HEADERS_VERSION = 1.3.257
- VULKAN_HEADERS_SITE = $(call github,KhronosGroup,Vulkan-Headers,v$(VULKAN_HEADERS_VERSION))
- VULKAN_HEADERS_LICENSE = Apache-2.0
- VULKAN_HEADERS_LICENSE_FILES = LICENSE.txt
+-PIPEWIRE_VERSION = 0.3.65
++PIPEWIRE_VERSION = 0.3.74
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
 -- 
 2.39.2
 
