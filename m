@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E72ECEB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 17:51:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 776B9EB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 17:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4537440144;
-	Sun, 16 Jul 2023 17:51:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4537440144
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2889340498;
+	Sun, 16 Jul 2023 17:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2889340498
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zcDJR6c8Znf5; Sun, 16 Jul 2023 17:51:07 +0000 (UTC)
+	with ESMTP id is8D-O92VZMK; Sun, 16 Jul 2023 17:51:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6745E40498;
-	Sun, 16 Jul 2023 17:51:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6745E40498
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E65751BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2319D408BF;
+	Sun, 16 Jul 2023 17:51:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2319D408BF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E843B1BF8C7
  for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 17:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB5544092D
+ by smtp3.osuosl.org (Postfix) with ESMTP id C206960B9B
  for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 17:50:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB5544092D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C206960B9B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ajnlFnlO-M9p for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 17:50:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ShBn9MPLupIz for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 17:50:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F191B4090F
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB94E60B27
  for <buildroot@buildroot.org>; Sun, 16 Jul 2023 17:50:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F191B4090F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB94E60B27
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E11B087108; Sun, 16 Jul 2023 17:50:50 +0000 (UTC)
+ id CBC0387106; Sun, 16 Jul 2023 17:50:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 19:46:52 +0200
+Date: Sun, 16 Jul 2023 19:43:36 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: bfc4e616e37626d16b229f48a6a6e211b3a64320
-X-Git-Newrev: 4808ca56c9de0f5929f1588ab0aca1392cce2b56
+X-Git-Oldrev: 0a45615f653bb100381e18d48050f848e314f735
+X-Git-Newrev: 44d6104ece3a4cd8093a985f4b4390d1b27c4223
 X-Patchwork-Hint: ignore
-Message-Id: <20230716175050.E11B087108@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/{binutils,
- gdb}: switch to https urls for archives hashes
+Message-Id: <20230716175050.CBC0387106@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/haproxy: bump
+ version to 2.6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4808ca56c9de0f5929f1588ab0aca1392cce2b56
+commit: https://git.buildroot.net/buildroot/commit/?id=44d6104ece3a4cd8093a985f4b4390d1b27c4223
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-FTP urls doesn't work anymore with Firefox [1] and Google Chrome [2],
-switch to https urls.
+Changelog: http://www.haproxy.org/download/2.6/src/CHANGELOG
 
-[1] https://blog.mozilla.org/addons/2020/04/13/what-to-expect-for-the-upcoming-deprecation-of-ftp-in-firefox/
-[2] https://chromestatus.com/feature/6246151319715840
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bd17127b4aea85893f3697753745b5498aa27c7a)
+(cherry picked from commit f43f9c6ea67536e0052cd1974ac2a7a48524c7d4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/binutils.hash | 2 +-
- package/gdb/gdb.hash           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 1a8574de92..5d45813b5a 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -1,4 +1,4 @@
--# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
-+# From https://gcc.gnu.org/pub/binutils/releases/sha512.sum
- sha512  5c11aeef6935860a6819ed3a3c93371f052e52b4bdc5033da36037c1544d013b7f12cb8d561ec954fe7469a68f1b66f1a3cd53d5a3af7293635a90d69edd15e7  binutils-2.37.tar.xz
- sha512  8bf0b0d193c9c010e0518ee2b2e5a830898af206510992483b427477ed178396cd210235e85fd7bd99a96fc6d5eedbeccbd48317a10f752b7336ada8b2bb826d  binutils-2.38.tar.xz
- sha512  68e038f339a8c21faa19a57bbc447a51c817f47c2e06d740847c6e9cc3396c025d35d5369fa8c3f8b70414757c89f0e577939ddc0d70f283182504920f53b0a3  binutils-2.39.tar.xz
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 04c7d02d2f..36e2685a25 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -1,4 +1,4 @@
--# From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
-+# From https://gcc.gnu.org/pub/gdb/releases/sha512.sum
- sha512  3653762ac008e065c37cd641653184c9ff7ce51ee2222ade1122bec9d6cc64dffd4fb74888ef11ac1942064a08910e96b7865112ad37f4602eb0a16bed074caa  gdb-10.2.tar.xz
- sha512  07e9026423438049b11f4f784d57401ece4e940570f613bd6958b3714fe7fbc2c048470bcce3e7d7d9f93331cdf3881d30dcc964cb113a071143a02b28e5b127  gdb-11.2.tar.xz
- sha512  425568d2e84672177d0fb87b1ad7daafdde097648d605e30cf0656970f66adc6a82ca2d83375ea4be583e9683a340e5bfdf5819668ddf66728200141ae50ff2d  gdb-12.1.tar.xz
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index f5540ee44a..20048da7ec 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.9.tar.gz.sha256
+-sha256  f01a1c5f465dc1b5cd175d0b28b98beb4dfe82b5b5b63ddcc68d1df433641701  haproxy-2.6.9.tar.gz
++# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.14.tar.gz.sha256
++sha256  bd3dd9fa60391ca09e1225e1ac3163e45be83c3f54f2fd76a30af289cc6e4fd4  haproxy-2.6.14.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 012c1dfdb6..2b8920efa6 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HAPROXY_VERSION_MAJOR = 2.6
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).9
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
