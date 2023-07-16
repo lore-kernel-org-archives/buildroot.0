@@ -4,86 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42261EB64DA
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 08:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A71F3EB64DA
+	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 08:53:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E93E81363;
-	Sun, 16 Jul 2023 08:39:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E93E81363
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3569681C40;
+	Sun, 16 Jul 2023 08:53:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3569681C40
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ghH3mXvQuXUb; Sun, 16 Jul 2023 08:39:14 +0000 (UTC)
+	with ESMTP id J7djpt4PlZij; Sun, 16 Jul 2023 08:53:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE69C81339;
-	Sun, 16 Jul 2023 08:39:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE69C81339
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C321A1BF372
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:39:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81B7681BA9;
+	Sun, 16 Jul 2023 08:53:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81B7681BA9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 626601BF372
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:53:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA1EA81339
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:39:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA1EA81339
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48F7C605B3
+ for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 08:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48F7C605B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XbWYnPuVNZ1f for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 08:39:10 +0000 (UTC)
-X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB3A81331
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFB3A81331
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 08:39:10 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id
- e9e14a558f8ab-3487d75e4c5so4214855ab.0
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 01:39:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689496749; x=1692088749;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=JGjxoiP8PdOn3fOAMiMOh3CSS+zVlsnaoOhFrpTJ/WA=;
- b=CERxF1lOOa1h//G1Aq98KBVYroh3rozCxWUdgNOsKZM8CCAoJA/y7Qg+dp7+ttM2l1
- RzFrt58ez95DH0q0K6+s70BaFlBsmtmgaqcRNGAHm/AJE4wFeOIFNlWkmS777aKemZ9R
- lgPEr0hi7jB61J/0dDb9cNgB48vzGfIdGLMlg9PYY8xCoiZ0h3oH+12nFlO5HnLgfPxL
- hDXZNWAoWbKQf1vETOw/eNdlVZ9TzFgRHD/guEsu5Jqywz3KrNwnr/+peMYYZy3Ze78L
- UYAf8oxrljqTETUPX7Hvc6XY4xbtZa/7+gsMrR4GkK54S4fZa59B8Lq4aOgQMTqurW5p
- 9SBQ==
-X-Gm-Message-State: ABy/qLZSJGkkoNmKAoxt3KE8gWeiDtpDtZUbuFPreDj4ydnL3084KJgk
- AurtmuwUF/GvNb/UiXyEUUa4yXqVamA=
-X-Google-Smtp-Source: APBJJlHZuQsKST7QQ2Fqbny6IIAQ38mQPfgutmOwmt/tsBNr9yVGWiin5YGoNsoTNBEP+hYw+LQyiw==
-X-Received: by 2002:a6b:6809:0:b0:786:25a3:ef30 with SMTP id
- d9-20020a6b6809000000b0078625a3ef30mr9494479ioc.7.1689496749248; 
- Sun, 16 Jul 2023 01:39:09 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-225-212.hlrn.qwest.net.
- [71.218.225.212]) by smtp.gmail.com with ESMTPSA id
- a5-20020a029985000000b0042b2a16f6b1sm3727271jal.176.2023.07.16.01.39.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Jul 2023 01:39:08 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7k5X4CWC8t_y for <buildroot@lists.busybox.net>;
+ Sun, 16 Jul 2023 08:53:04 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E74C5605BA
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E74C5605BA
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 08:53:03 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 66B2BA4C00F6;
+ Sun, 16 Jul 2023 10:53:00 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35072)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qKxUy-0001um-0V;
+ Sun, 16 Jul 2023 10:53:00 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 02:39:00 -0600
-Message-Id: <20230716083900.745225-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 16 Jul 2023 10:52:59 +0200
+Message-Id: <20230716085259.3684479-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689496749; x=1692088749;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JGjxoiP8PdOn3fOAMiMOh3CSS+zVlsnaoOhFrpTJ/WA=;
- b=k8qFGvnnWJsfzFg6wRVsYaQKEarUP9q92DQ6R7a97rKOtAQemZ3w8MU2tK+k0WloMW
- MVj8XcPqzWzMS+Wffq7aCYXPn/iNkjib8cykhJVsmUlrhWaz4SKEtp07BSP62LaW/Zvu
- zPu+uPIpXEuxwx0ZuQR6T2V2YgqQtgD1QfdWeT6iPQ59cSod3et6i9Fkcf0jpNZJyeQC
- VkS8OUiPq0qVw4QMppEpo70IIWHZiuB7C73KcQsrG6krr/VJh5wsMIxSDRBX0I2Ah+AN
- E5Dft9S6DlHQExEs4Ns2eLVKG6yfXV7iAKFScJQSBAgjkZywIyJRIWpvuV97Vb1qkPt+
- hvmg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=k8qFGvnn
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: set DTC path when
- BR2_TARGET_UBOOT_NEEDS_DTC
+ d=kuhls.net; 
+ s=kas202306131828; t=1689497580;
+ bh=egOYxlsOHsXnmRtlxIsFbTCbSaOm1unnqURXvYDMrgk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=uKQpLKw3/tSdJEuEzuvBpbf2YTOli5fGy4zkYxOOI5IknGeCevnX7oncQm5WEl9wS
+ qZyrqngsSTiIhuVVWJmFLWElkrGAH5hgmfkKSXjZ5D42wb8d8+RmWXfjVHL+4H8cze
+ Hm2CehbBAKRwprJUn4O4tjntIPdjT2JfBIAVXSQ7ixGtcfiLed7l+RnYPV7ZE0P3Nz
+ S1GGiu5eQBKFPJtFve0HiDDs3wrSLIyBwqDx/XKC/ubkMJRCVCaFfvD/9ky4uHxhwQ
+ QOed7nFGAvh9hAAvp/aGdC5Kheu1Y2Ph4MGSyxW6IC87tKYk8WZqsUt5Mgl0EOPRZo
+ VSUcHZub6O6fA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=uKQpLKw3
+Subject: [Buildroot] [PATCH 1/1] package/pipewire: remove optional
+ dependency to vulkan
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,31 +82,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In order for host-dtc to get picked up properly we need to set
-the DTC path passed to the build explicitly.
+Fixes:
+http://autobuild.buildroot.net/results/8b4/8b4d12de72a1407e74bd9b9b79f4e01ae86510ba/
 
-See:
-https://github.com/u-boot/u-boot/blob/v2023.07.02/Makefile#L420
+vulkan.pc is provided by the package vulkan-loader which is not
+part of buildroot yet.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- boot/uboot/uboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pipewire/pipewire.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4eae8e95c3..1a6e70a792 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -209,6 +209,7 @@ endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
-+UBOOT_MAKE_OPTS += DTC=$(HOST_DIR)/bin/dtc
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index ecf4a035ec..d6bd2434bf 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -30,6 +30,7 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dvideoconvert=enabled \
+ 	-Dvideotestsrc=enabled \
+ 	-Dvolume=enabled \
++	-Dvulkan=disabled \
+ 	-Dsession-managers=[] \
+ 	-Dlegacy-rtkit=false \
+ 	-Davb=disabled \
+@@ -180,12 +181,6 @@ else
+ PIPEWIRE_CONF_OPTS += -Dlibusb=disabled
  endif
  
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
+-ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
+-PIPEWIRE_CONF_OPTS += -Dvulkan=enabled
+-PIPEWIRE_DEPENDENCIES += mesa3d
+-else
+-PIPEWIRE_CONF_OPTS += -Dvulkan=disabled
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+ PIPEWIRE_CONF_OPTS += -Dpw-cat=enabled -Dsndfile=enabled
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
