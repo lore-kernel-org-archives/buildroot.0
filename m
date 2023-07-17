@@ -4,84 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71976EB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 04:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCCEDC0015E
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 04:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF81440968;
-	Mon, 17 Jul 2023 04:10:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF81440968
+	by smtp4.osuosl.org (Postfix) with ESMTP id 413C140978;
+	Mon, 17 Jul 2023 04:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 413C140978
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rjzwYo2PKwNv; Mon, 17 Jul 2023 04:10:57 +0000 (UTC)
+	with ESMTP id CzkDgMYGMBn9; Mon, 17 Jul 2023 04:11:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 238AA4096A;
-	Mon, 17 Jul 2023 04:10:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 238AA4096A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E2CF1BF373
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAA3D4099E;
+	Mon, 17 Jul 2023 04:11:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAA3D4099E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CF6C11BF955
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 04:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7277C4096A
+ by smtp3.osuosl.org (Postfix) with ESMTP id A55EB60E6A
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 04:10:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7277C4096A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A55EB60E6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YpXvPJfcoF_z for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 04:10:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QGjzF5MKqXqa for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 04:10:53 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0459A40968
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0459A40968
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 04:10:51 +0000 (UTC)
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-1bb1baf55f5so19977865ad.0
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 21:10:51 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2D6360E63
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com
+ [IPv6:2607:f8b0:4864:20::435])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F2D6360E63
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 04:10:52 +0000 (UTC)
+Received: by mail-pf1-x435.google.com with SMTP id
+ d2e1a72fcca58-6689430d803so2665232b3a.0
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 21:10:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689567051; x=1692159051;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=NU8Ou4/YSbn1HKElWrebJzpveZdBFQXjS0bxUS91FVg=;
- b=DmWEfru/v5ZZP3/iLHi3VBfj1+5iaQozjzAPeCH8VL2pOj0mTp+Nf3xs+O7v5uFz1l
- MiYv9hpP/Lfec/cFwp/RihyfNb2rO+fVUIdNEKyWZE+N795xqnwaRCEVMheRdXmm6Yg8
- eEqOqfxPqc3Sk7Im9b7BD8AOuIbUefVeS/2vk7KfjzEOSoV8gbLOPzhk9QPQ3QXjNSVX
- 214pVResY4VO4zA+QWWVHDj56UpGa6T9HONw5MaFr9FNEi3IdOJhNK553CLK/iSPGA8u
- S/ewS1nGZ2f3wPxzHLyQsv5bGlrgCa1KucaM5gBavf1YwW5HyqX7yEFzXr/RG5cdLFsL
- +mTg==
-X-Gm-Message-State: ABy/qLZn1JWs+rsbMSYonOd/GV5kTl2NUdv9a1lomj9oPE0Ax2PFicny
- sDdd+usLriPHyWnR41lQFjT+YO98j/TV75G99zhlmw==
-X-Google-Smtp-Source: APBJJlF83lQMLSnTKcR2y/E24HeHKpsU4eIqJBlia/JzJKo8zs2NKOue9f7Rklk563+/1hwuobVI0g==
-X-Received: by 2002:a17:902:c40c:b0:1b8:862:74ee with SMTP id
- k12-20020a170902c40c00b001b8086274eemr13374999plk.11.1689567050670; 
- Sun, 16 Jul 2023 21:10:50 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1689567052; x=1692159052;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=RjRorvczpNLsRrk1vTVLfTPEU07N1Pn2TvsMef/rQUs=;
+ b=Tw7HRv5G+luB7ZW6o+/mNM8h9nBwD7hBcCEAzxpf19oSWmX4iGzjLkbN/1jMBXfsG8
+ ext7fdBOybGIs3x3U6rjGBUkIoGRy9wzxNAZFdsHybqALH9vYV42iPikZqYBRyTVr3EB
+ +Ky09bI8SVqhUnbyN6pD2P3WstcJaqx9RfmFmlgU5wqwVoRiIeoJMO6eNW7MIJPk0Dyh
+ umRgYLN2lTyMv5cz6ZOOu4EiX+uUGAYoZrS8dVWMUXu6RbTOzPw8KzlysbfZmGB/ZC9L
+ Q+0COhhCS3KgVyCNTyTcHD99PbIbiRzqQvxqPT6MGU/AiL2gGwxY4cVvkYRrFSPXP/6v
+ ZBdg==
+X-Gm-Message-State: ABy/qLa6vL/2CvHKktZ+3vWUp9vIOoUoZo8RZfpuLh7wIVchufDAhxqO
+ GkKiv4+49cYahm6GeCHLRU++/Vf7USi7Tr4KzKx6qQ==
+X-Google-Smtp-Source: APBJJlHrrO9vHj+cQP1t6KGsnNhuyfpXlB/MmUO1Z5/aU4nmQJd2IdIMI8t4Cm5TqrmL87fhRL9Bmg==
+X-Received: by 2002:a05:6a20:394d:b0:134:7708:49c5 with SMTP id
+ r13-20020a056a20394d00b00134770849c5mr4489377pzg.36.1689567051957; 
+ Sun, 16 Jul 2023 21:10:51 -0700 (PDT)
 Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
  [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- t18-20020a170902d21200b001b1c4d875f5sm11628976ply.44.2023.07.16.21.10.49
+ t18-20020a170902d21200b001b1c4d875f5sm11628976ply.44.2023.07.16.21.10.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Jul 2023 21:10:50 -0700 (PDT)
+ Sun, 16 Jul 2023 21:10:51 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sun, 16 Jul 2023 21:10:46 -0700
-Message-ID: <20230717041047.1510851-1-christian@aperture.us>
+Date: Sun, 16 Jul 2023 21:10:47 -0700
+Message-ID: <20230717041047.1510851-2-christian@aperture.us>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230717041047.1510851-1-christian@aperture.us>
+References: <20230717041047.1510851-1-christian@aperture.us>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1689567051; x=1692159051;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NU8Ou4/YSbn1HKElWrebJzpveZdBFQXjS0bxUS91FVg=;
- b=Y+7dkm9JJhYuKtWNI5s+BdUBjK/R7B7EitQCH0T7u3RWyyJu+FdoeciwEW3M20mjDd
- H653i+0BqPbwx+IGn2DFfabRbZu9cXe2pLWfFcB6sf9658MOBUMqfy7t5CVpKO0SIBiq
- V0yawyyPVE0sp32OekSEn2pEftTqYxWdFokwrsrW/TI/h/DpekfA9a0H9LKzo2fNuRvF
- UqTLzXyn4kpj9cbJcatGzwlZqG2uRXXni06HV+/1vCaozlk9A4wmaVDC7NKYFoGtGkzW
- IbkRuZ1zvW5M09pEsT5O8Txt3oE97cy0tk8cwwcjxmrAVuSHPu6hRoH0ZNiIcpsaXp6G
- Mlug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=aperture.us; s=google; t=1689567052; x=1692159052;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=RjRorvczpNLsRrk1vTVLfTPEU07N1Pn2TvsMef/rQUs=;
+ b=Sbd9Keb5Ap4g91o9k8sJclYysCWUnJPemYnQ6qFEWZsNkZDe1M2TAWqPdw8hVu5c9a
+ ImWD7BfvS1OwzruMHrTsKNjoAENdKHVv+LvSYb95CkK+PpxmtIb5BQxrG3Her5SCV12r
+ 9wHym21h3IgYhpUbJotTCC6Y47sXFT/Bl6uLoZK2lrl76/JJ/2tJ/PXngiLUay3UBsFo
+ atC8jDxUODb1uusW2AnnSzqoWfOMe+eyrkqtYsm+eq18hVhGUWoWT3eio7/61MEWj99S
+ dtRgAMXEX8/wxPQ5noChq4pwEyhLBBY815htEEPDwCdeclfIu/RAQ6tWvxCOUm0rbdUO
+ zlxg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=Y+7dkm9J
-Subject: [Buildroot] [PATCH v1 1/2] package/docker-engine: backport fix for
+ header.a=rsa-sha256 header.s=google header.b=Sbd9Keb5
+Subject: [Buildroot] [PATCH v1 2/2] package/docker-cli: backport fix for
  host header check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -122,27 +125,29 @@ The upstream PR has been merged and will be included in v24.0.5.
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
- ...dummy-hostname-to-use-for-local-conn.patch | 174 ++++++++++++++++++
- ...a-dummy-hostname-for-local-connectio.patch |  69 +++++++
- 2 files changed, 243 insertions(+)
- create mode 100644 package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch
- create mode 100644 package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch
+ ...ackport-fix-for-go-Host-header-check.patch | 270 ++++++++++++++++++
+ 1 file changed, 270 insertions(+)
+ create mode 100644 package/docker-cli/0001-backport-fix-for-go-Host-header-check.patch
 
-diff --git a/package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch b/package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch
+diff --git a/package/docker-cli/0001-backport-fix-for-go-Host-header-check.patch b/package/docker-cli/0001-backport-fix-for-go-Host-header-check.patch
 new file mode 100644
-index 0000000000..c5f8d1eb71
+index 0000000000..2d16fd6df2
 --- /dev/null
-+++ b/package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch
-@@ -0,0 +1,174 @@
-+From 8ced4331e5e3a6760465a8ce2bd42c66d3232c96 Mon Sep 17 00:00:00 2001
++++ b/package/docker-cli/0001-backport-fix-for-go-Host-header-check.patch
+@@ -0,0 +1,270 @@
++From 4dc783e2bdf414761ef7c209b435d0a30f17c858 Mon Sep 17 00:00:00 2001
 +From: Sebastiaan van Stijn <github@gone.nl>
-+Date: Wed, 12 Jul 2023 14:15:38 +0200
-+Subject: [PATCH] client: define a "dummy" hostname to use for local
-+ connections
++Date: Sat, 15 Jul 2023 02:22:10 +0200
++Subject: [PATCH] backport fix for go Host header check
 +
 +Go 1.20.6 and 1.19.11 include a security check of the http Host header:
 +    
 +  https://github.com/golang/go/issues/60374
++
++docker-cli fails this check:
++
++  $ docker exec -it ctr bash
++  http: invalid Host header
 +
 +This is a backported patch to fix this issue.
 +
@@ -158,55 +163,166 @@ index 0000000000..c5f8d1eb71
 +For local communications (npipe://, unix://), the hostname is not used,
 +but we need valid and meaningful hostname.
 +
-+The current code used the client's `addr` as hostname in some cases, which
-+could contain the path for the unix-socket (`/var/run/docker.sock`), which
-+gets rejected by go1.20.6 and go1.19.11 because of a security fix for
-+[CVE-2023-29406 ][1], which was implemented in  https://go.dev/issue/60374.
++The current code used the socket path as hostname, which gets rejected by
++go1.20.6 and go1.19.11 because of a security fix for [CVE-2023-29406 ][1],
++which was implemented in  https://go.dev/issue/60374.
 +
 +Prior versions go Go would clean the host header, and strip slashes in the
 +process, but go1.20.6 and go1.19.11 no longer do, and reject the host
 +header.
-+
-+This patch introduces a `DummyHost` const, and uses this dummy host for
-+cases where we don't need an actual hostname.
-+
-+Before this patch (using go1.20.6):
-+
-+    make GO_VERSION=1.20.6 TEST_FILTER=TestAttach test-integration
-+    === RUN   TestAttachWithTTY
-+        attach_test.go:46: assertion failed: error is not nil: http: invalid Host header
-+    --- FAIL: TestAttachWithTTY (0.11s)
-+    === RUN   TestAttachWithoutTTy
-+        attach_test.go:46: assertion failed: error is not nil: http: invalid Host header
-+    --- FAIL: TestAttachWithoutTTy (0.02s)
-+    FAIL
-+
-+With this patch applied:
-+
-+    make GO_VERSION=1.20.6 TEST_FILTER=TestAttach test-integration
-+    INFO: Testing against a local daemon
-+    === RUN   TestAttachWithTTY
-+    --- PASS: TestAttachWithTTY (0.12s)
-+    === RUN   TestAttachWithoutTTy
-+    --- PASS: TestAttachWithoutTTy (0.02s)
-+    PASS
-+
-+[1]: https://github.com/advisories/GHSA-f8f7-69v5-w4vx
-+
-+Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
-+(cherry picked from commit 92975f0c11f0566cc3c36659f5e3bb9faf5cb176)
-+Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
 +---
-+ client/client.go       | 30 ++++++++++++++++++++++++++++++
-+ client/hijack.go       |  6 +++++-
-+ client/request.go      | 10 ++++------
-+ client/request_test.go |  4 ++--
-+ 4 files changed, 41 insertions(+), 9 deletions(-)
++ vendor.mod                                    | 16 +++++-----
++ vendor.sum                                    | 32 +++++++++----------
++ .../github.com/docker/docker/client/client.go | 30 +++++++++++++++++
++ .../github.com/docker/docker/client/hijack.go |  6 +++-
++ .../docker/docker/client/request.go           | 10 +++---
++ 6 files changed, 72 insertions(+), 40 deletions(-)
 +
-+diff --git a/client/client.go b/client/client.go
++diff --git a/vendor.mod b/vendor.mod
++index 93b252033b..ed4f4e8050 100644
++--- a/vendor.mod
+++++ b/vendor.mod
++@@ -10,7 +10,7 @@ require (
++ 	github.com/containerd/containerd v1.6.21
++ 	github.com/creack/pty v1.1.18
++ 	github.com/docker/distribution v2.8.2+incompatible
++-	github.com/docker/docker v24.0.2+incompatible
+++	github.com/docker/docker v24.0.5-0.20230714235725-36e9e796c6fc+incompatible // 24.0 branch
++ 	github.com/docker/docker-credential-helpers v0.7.0
++ 	github.com/docker/go-connections v0.4.0
++ 	github.com/docker/go-units v0.5.0
++@@ -23,24 +23,24 @@ require (
++ 	github.com/mitchellh/mapstructure v1.3.2
++ 	github.com/moby/buildkit v0.11.6
++ 	github.com/moby/patternmatcher v0.5.0
++-	github.com/moby/swarmkit/v2 v2.0.0-20230406225228-75e92ce14ff7
+++	github.com/moby/swarmkit/v2 v2.0.0-20230531205928-01bb7a41396b
++ 	github.com/moby/sys/sequential v0.5.0
++ 	github.com/moby/sys/signal v0.7.0
++ 	github.com/moby/term v0.5.0
++ 	github.com/morikuni/aec v1.0.0
++ 	github.com/opencontainers/go-digest v1.0.0
++-	github.com/opencontainers/image-spec v1.1.0-rc2.0.20221005185240-3a7f492d3f1b
+++	github.com/opencontainers/image-spec v1.1.0-rc3
++ 	github.com/pkg/errors v0.9.1
++-	github.com/sirupsen/logrus v1.9.0
+++	github.com/sirupsen/logrus v1.9.3
++ 	github.com/spf13/cobra v1.7.0
++ 	github.com/spf13/pflag v1.0.5
++ 	github.com/theupdateframework/notary v0.7.1-0.20210315103452-bf96a202a09a
++ 	github.com/tonistiigi/go-rosetta v0.0.0-20200727161949-f79598599c5d
++ 	github.com/xeipuuv/gojsonschema v1.2.0
++ 	golang.org/x/sync v0.1.0
++-	golang.org/x/sys v0.6.0
++-	golang.org/x/term v0.6.0
++-	golang.org/x/text v0.8.0
+++	golang.org/x/sys v0.8.0
+++	golang.org/x/term v0.8.0
+++	golang.org/x/text v0.9.0
++ 	gopkg.in/yaml.v2 v2.4.0
++ 	gotest.tools/v3 v3.4.0
++ )
++@@ -71,7 +71,7 @@ require (
++ 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
++ 	go.etcd.io/etcd/raft/v3 v3.5.6 // indirect
++ 	golang.org/x/crypto v0.2.0 // indirect
++-	golang.org/x/net v0.8.0 // indirect
+++	golang.org/x/net v0.10.0 // indirect
++ 	golang.org/x/time v0.3.0 // indirect
++ 	google.golang.org/genproto v0.0.0-20220706185917-7780775163c4 // indirect
++ 	google.golang.org/grpc v1.50.1 // indirect
++diff --git a/vendor.sum b/vendor.sum
++index 15bc7cd703..3f8fbc6294 100644
++--- a/vendor.sum
+++++ b/vendor.sum
++@@ -96,8 +96,8 @@ github.com/denisenkom/go-mssqldb v0.0.0-20191128021309-1d7a30a10f73/go.mod h1:xb
++ github.com/docker/distribution v2.7.1+incompatible/go.mod h1:J2gT2udsDAN96Uj4KfcMRqY0/ypR+oyYUYmja8H+y+w=
++ github.com/docker/distribution v2.8.2+incompatible h1:T3de5rq0dB1j30rp0sA2rER+m322EBzniBPB6ZIzuh8=
++ github.com/docker/distribution v2.8.2+incompatible/go.mod h1:J2gT2udsDAN96Uj4KfcMRqY0/ypR+oyYUYmja8H+y+w=
++-github.com/docker/docker v24.0.2+incompatible h1:eATx+oLz9WdNVkQrr0qjQ8HvRJ4bOOxfzEo8R+dA3cg=
++-github.com/docker/docker v24.0.2+incompatible/go.mod h1:eEKB0N0r5NX/I1kEveEz05bcu8tLC/8azJZsviup8Sk=
+++github.com/docker/docker v24.0.5-0.20230714235725-36e9e796c6fc+incompatible h1:sdGvA1bxu/1J51gAs1XU0bZC+2WxncYnI210as3c6g8=
+++github.com/docker/docker v24.0.5-0.20230714235725-36e9e796c6fc+incompatible/go.mod h1:eEKB0N0r5NX/I1kEveEz05bcu8tLC/8azJZsviup8Sk=
++ github.com/docker/docker-credential-helpers v0.7.0 h1:xtCHsjxogADNZcdv1pKUHXryefjlVRqWqIhk/uXJp0A=
++ github.com/docker/docker-credential-helpers v0.7.0/go.mod h1:rETQfLdHNT3foU5kuNkFR1R1V12OJRRO5lzt2D1b5X0=
++ github.com/docker/go v1.5.1-1.0.20160303222718-d30aec9fd63c h1:lzqkGL9b3znc+ZUgi7FlLnqjQhcXxkNM/quxIjBVMD0=
++@@ -273,8 +273,8 @@ github.com/moby/buildkit v0.11.6 h1:VYNdoKk5TVxN7k4RvZgdeM4GOyRvIi4Z8MXOY7xvyUs=
++ github.com/moby/buildkit v0.11.6/go.mod h1:GCqKfHhz+pddzfgaR7WmHVEE3nKKZMMDPpK8mh3ZLv4=
++ github.com/moby/patternmatcher v0.5.0 h1:YCZgJOeULcxLw1Q+sVR636pmS7sPEn1Qo2iAN6M7DBo=
++ github.com/moby/patternmatcher v0.5.0/go.mod h1:hDPoyOpDY7OrrMDLaYoY3hf52gNCR/YOUYxkhApJIxc=
++-github.com/moby/swarmkit/v2 v2.0.0-20230406225228-75e92ce14ff7 h1:h6NclNly6/B9N4IdM5pcBaq/LkNLuaCmE7B44Vj+pb0=
++-github.com/moby/swarmkit/v2 v2.0.0-20230406225228-75e92ce14ff7/go.mod h1:P/ha3F7UZMmuUvqrHw9cZK/BjktSngQIgRPiairNHTc=
+++github.com/moby/swarmkit/v2 v2.0.0-20230531205928-01bb7a41396b h1:w07xyBXYTrihwBqCkuXPLqcQ1a2guqXlRIocU+e9K7A=
+++github.com/moby/swarmkit/v2 v2.0.0-20230531205928-01bb7a41396b/go.mod h1:Z5i5At5g0zU+ZBWb/95yVwDeNQX8BZmei9ZoYvoVD7g=
++ github.com/moby/sys/sequential v0.5.0 h1:OPvI35Lzn9K04PBbCLW0g4LcFAJgHsvXsRyewg5lXtc=
++ github.com/moby/sys/sequential v0.5.0/go.mod h1:tH2cOOs5V9MlPiXcQzRC+eEyab644PWKGRYaaV5ZZlo=
++ github.com/moby/sys/signal v0.7.0 h1:25RW3d5TnQEoKvRbEKUGay6DCQ46IxAVTT9CUMgmsSI=
++@@ -301,8 +301,8 @@ github.com/onsi/gomega v1.9.0/go.mod h1:Ho0h+IUsWyvy1OpqCwxlQ/21gkhVunqlU8fDGcoT
++ github.com/opencontainers/go-digest v1.0.0 h1:apOUWs51W5PlhuyGyz9FCeeBIOUDA/6nW8Oi/yOhh5U=
++ github.com/opencontainers/go-digest v1.0.0/go.mod h1:0JzlMkj0TRzQZfJkVvzbP0HBR3IKzErnv2BNG4W4MAM=
++ github.com/opencontainers/image-spec v1.0.1/go.mod h1:BtxoFyWECRxE4U/7sNtV5W15zMzWCbyJoFRP3s7yZA0=
++-github.com/opencontainers/image-spec v1.1.0-rc2.0.20221005185240-3a7f492d3f1b h1:YWuSjZCQAPM8UUBLkYUk1e+rZcvWHJmFb6i6rM44Xs8=
++-github.com/opencontainers/image-spec v1.1.0-rc2.0.20221005185240-3a7f492d3f1b/go.mod h1:3OVijpioIKYWTqjiG0zfF6wvoJ4fAXGbjdZuI2NgsRQ=
+++github.com/opencontainers/image-spec v1.1.0-rc3 h1:fzg1mXZFj8YdPeNkRXMg+zb88BFV0Ys52cJydRwBkb8=
+++github.com/opencontainers/image-spec v1.1.0-rc3/go.mod h1:X4pATf0uXsnn3g5aiGIsVnJBR4mxhKzfwmvK/B2NTm8=
++ github.com/opencontainers/runc v1.1.7 h1:y2EZDS8sNng4Ksf0GUYNhKbTShZJPJg1FiXJNH/uoCk=
++ github.com/opencontainers/runc v1.1.7/go.mod h1:CbUumNnWCuTGFukNXahoo/RFBZvDAgRh/smNYNOhA50=
++ github.com/opentracing/opentracing-go v1.1.0 h1:pWlfV3Bxv7k65HYwkikxat0+s3pV4bsqf19k25Ur8rU=
++@@ -357,8 +357,8 @@ github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6Mwd
++ github.com/sirupsen/logrus v1.6.0/go.mod h1:7uNnSEd1DgxDLC74fIahvMZmmYsHGZGEOFrfsX/uA88=
++ github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
++ github.com/sirupsen/logrus v1.8.1/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
++-github.com/sirupsen/logrus v1.9.0 h1:trlNQbNUG3OdDrDil03MCb1H2o9nJ1x4/5LYw7byDE0=
++-github.com/sirupsen/logrus v1.9.0/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
+++github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
+++github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
++ github.com/spf13/cast v0.0.0-20150508191742-4d07383ffe94 h1:JmfC365KywYwHB946TTiQWEb8kqPY+pybPLoGE9GgVk=
++ github.com/spf13/cast v0.0.0-20150508191742-4d07383ffe94/go.mod h1:r2rcYCSwa1IExKTDiTfzaxqT2FNHs8hODu4LnUfgKEg=
++ github.com/spf13/cobra v0.0.1/go.mod h1:1l0Ry5zgKvJasoi3XT1TypsSe7PqH0Sj9dhYf7v3XqQ=
++@@ -482,8 +482,8 @@ golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4/go.mod h1:p54w0d4576C0XHj96b
++ golang.org/x/net v0.0.0-20210525063256-abc453219eb5/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=
++ golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=
++ golang.org/x/net v0.0.0-20220225172249-27dd8689420f/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=
++-golang.org/x/net v0.8.0 h1:Zrh2ngAOFYneWTAIAPethzeaQLuHwhuBkuV6ZiRnUaQ=
++-golang.org/x/net v0.8.0/go.mod h1:QVkue5JL9kW//ek3r6jTKnTFis1tRmNAW2P1shuFdJc=
+++golang.org/x/net v0.10.0 h1:X2//UzNDwYmtCLn7To6G58Wr6f5ahEAQgKNzv9Y951M=
+++golang.org/x/net v0.10.0/go.mod h1:0qNGK6F8kojg2nk9dLZ2mShWaEBan6FAoqfSigmmuDg=
++ golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
++ golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
++ golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
++@@ -553,13 +553,13 @@ golang.org/x/sys v0.0.0-20211025201205-69cdffdb9359/go.mod h1:oPkhp1MJrh7nUepCBc
++ golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
++ golang.org/x/sys v0.0.0-20220114195835-da31bd327af9/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
++ golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
++-golang.org/x/sys v0.6.0 h1:MVltZSvRTcU2ljQOhs94SXPftV6DCNnZViHeQps87pQ=
++-golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+++golang.org/x/sys v0.8.0 h1:EBmGv8NaZBZTWvrbjNoL6HVt+IVy3QDQpJs7VRIw3tU=
+++golang.org/x/sys v0.8.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
++ golang.org/x/term v0.0.0-20201117132131-f5c789dd3221/go.mod h1:Nr5EML6q2oocZ2LXRh80K7BxOlk5/8JxuGnuhpl+muw=
++ golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
++ golang.org/x/term v0.0.0-20210927222741-03fcf44c2211/go.mod h1:jbD1KX2456YbFQfuXm/mYQcufACuNUgVhRMnK/tPxf8=
++-golang.org/x/term v0.6.0 h1:clScbb1cHjoCkyRbWwBEUZ5H/tIFu5TAXIqaZD0Gcjw=
++-golang.org/x/term v0.6.0/go.mod h1:m6U89DPEgQRMq3DNkDClhWw02AUbt2daBVO4cn4Hv9U=
+++golang.org/x/term v0.8.0 h1:n5xxQn2i3PC0yLAbjTpNT85q/Kgzcr2gIoX9OrJUols=
+++golang.org/x/term v0.8.0/go.mod h1:xPskH00ivmX89bAKVGSKKtLOWNx2+17Eiy94tnKShWo=
++ golang.org/x/text v0.0.0-20170915032832-14c0d48ead0c/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
++ golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
++ golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
++@@ -568,8 +568,8 @@ golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
++ golang.org/x/text v0.3.5/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
++ golang.org/x/text v0.3.6/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
++ golang.org/x/text v0.3.7/go.mod h1:u+2+/6zg+i71rQMx5EYifcz6MCKuco9NR6JIITiCfzQ=
++-golang.org/x/text v0.8.0 h1:57P1ETyNKtuIjB4SRd15iJxuhj8Gc416Y78H3qgMh68=
++-golang.org/x/text v0.8.0/go.mod h1:e1OnstbJyHTd6l/uOt8jFFHp6TRDWZR/bV3emEE/zU8=
+++golang.org/x/text v0.9.0 h1:2sjJmO8cDvYveuX97RDLsxlyUxLl+GHoLxBiRdHllBE=
+++golang.org/x/text v0.9.0/go.mod h1:e1OnstbJyHTd6l/uOt8jFFHp6TRDWZR/bV3emEE/zU8=
++ golang.org/x/time v0.0.0-20181108054448-85acf8d2951c/go.mod h1:tRJNPiyCQ0inRvYxbN9jk5I+vvW/OXSQhTDSoE431IQ=
++ golang.org/x/time v0.0.0-20190308202827-9d24e82272b4/go.mod h1:tRJNPiyCQ0inRvYxbN9jk5I+vvW/OXSQhTDSoE431IQ=
++ golang.org/x/time v0.0.0-20191024005414-555d28b269f0/go.mod h1:tRJNPiyCQ0inRvYxbN9jk5I+vvW/OXSQhTDSoE431IQ=
++diff --git a/vendor/github.com/docker/docker/client/client.go b/vendor/github.com/docker/docker/client/client.go
 +index 1c081a51ae..54fa36cca8 100644
-+--- a/client/client.go
-++++ b/client/client.go
++--- a/vendor/github.com/docker/docker/client/client.go
+++++ b/vendor/github.com/docker/docker/client/client.go
 +@@ -56,6 +56,36 @@ import (
 + 	"github.com/pkg/errors"
 + )
@@ -244,10 +360,10 @@ index 0000000000..c5f8d1eb71
 + // ErrRedirect is the error returned by checkRedirect when the request is non-GET.
 + var ErrRedirect = errors.New("unexpected redirect in response")
 + 
-+diff --git a/client/hijack.go b/client/hijack.go
++diff --git a/vendor/github.com/docker/docker/client/hijack.go b/vendor/github.com/docker/docker/client/hijack.go
 +index 6bdacab10a..4dcaaca4c5 100644
-+--- a/client/hijack.go
-++++ b/client/hijack.go
++--- a/vendor/github.com/docker/docker/client/hijack.go
+++++ b/vendor/github.com/docker/docker/client/hijack.go
 +@@ -64,7 +64,11 @@ func fallbackDial(proto, addr string, tlsConfig *tls.Config) (net.Conn, error) {
 + }
 + 
@@ -261,10 +377,10 @@ index 0000000000..c5f8d1eb71
 + 	req.Header.Set("Connection", "Upgrade")
 + 	req.Header.Set("Upgrade", proto)
 + 
-+diff --git a/client/request.go b/client/request.go
++diff --git a/vendor/github.com/docker/docker/client/request.go b/vendor/github.com/docker/docker/client/request.go
 +index c799095c12..bcedcf3bd9 100644
-+--- a/client/request.go
-++++ b/client/request.go
++--- a/vendor/github.com/docker/docker/client/request.go
+++++ b/vendor/github.com/docker/docker/client/request.go
 +@@ -96,16 +96,14 @@ func (cli *Client) buildRequest(method, path string, body io.Reader, headers hea
 + 		return nil, err
 + 	}
@@ -286,100 +402,6 @@ index 0000000000..c5f8d1eb71
 + 	if expectedPayload && req.Header.Get("Content-Type") == "" {
 + 		req.Header.Set("Content-Type", "text/plain")
 + 	}
-+diff --git a/client/request_test.go b/client/request_test.go
-+index 6e5a6e81f2..50b09d954c 100644
-+--- a/client/request_test.go
-++++ b/client/request_test.go
-+@@ -29,12 +29,12 @@ func TestSetHostHeader(t *testing.T) {
-+ 	}{
-+ 		{
-+ 			"unix:///var/run/docker.sock",
-+-			"docker",
-++			DummyHost,
-+ 			"/var/run/docker.sock",
-+ 		},
-+ 		{
-+ 			"npipe:////./pipe/docker_engine",
-+-			"docker",
-++			DummyHost,
-+ 			"//./pipe/docker_engine",
-+ 		},
-+ 		{
-+-- 
-+2.41.0
-+
-diff --git a/package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch b/package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch
-new file mode 100644
-index 0000000000..5bd8682927
---- /dev/null
-+++ b/package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch
-@@ -0,0 +1,69 @@
-+From 09306e7eb3c26ade69ef1e4c99d5b1fd9c0b7364 Mon Sep 17 00:00:00 2001
-+From: Sebastiaan van Stijn <github@gone.nl>
-+Date: Wed, 12 Jul 2023 15:07:59 +0200
-+Subject: [PATCH] pkg/plugins: use a dummy hostname for local connections
-+
-+For local communications (npipe://, unix://), the hostname is not used,
-+but we need valid and meaningful hostname.
-+
-+The current code used the socket path as hostname, which gets rejected by
-+go1.20.6 and go1.19.11 because of a security fix for [CVE-2023-29406 ][1],
-+which was implemented in  https://go.dev/issue/60374.
-+
-+Prior versions go Go would clean the host header, and strip slashes in the
-+process, but go1.20.6 and go1.19.11 no longer do, and reject the host
-+header.
-+
-+Before this patch, tests would fail on go1.20.6:
-+
-+    === FAIL: pkg/authorization TestAuthZRequestPlugin (15.01s)
-+    time="2023-07-12T12:53:45Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 1s"
-+    time="2023-07-12T12:53:46Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 2s"
-+    time="2023-07-12T12:53:48Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 4s"
-+    time="2023-07-12T12:53:52Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 8s"
-+        authz_unix_test.go:82: Failed to authorize request Post "http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq": http: invalid Host header
-+
-+[1]: https://github.com/advisories/GHSA-f8f7-69v5-w4vx
-+
-+Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
-+(cherry picked from commit 6b7705d5b29e226a24902a8dcc488836faaee33c)
-+Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
-+---
-+ pkg/plugins/client.go | 14 ++++++++++++--
-+ 1 file changed, 12 insertions(+), 2 deletions(-)
-+
-+diff --git a/pkg/plugins/client.go b/pkg/plugins/client.go
-+index 752fecd0ae..e683eb777d 100644
-+--- a/pkg/plugins/client.go
-++++ b/pkg/plugins/client.go
-+@@ -18,6 +18,12 @@ import (
-+ 
-+ const (
-+ 	defaultTimeOut = 30
-++
-++	// dummyHost is a hostname used for local communication.
-++	//
-++	// For local communications (npipe://, unix://), the hostname is not used,
-++	// but we need valid and meaningful hostname.
-++	dummyHost = "plugin.moby.localhost"
-+ )
-+ 
-+ func newTransport(addr string, tlsConfig *tlsconfig.Options) (transport.Transport, error) {
-+@@ -44,8 +50,12 @@ func newTransport(addr string, tlsConfig *tlsconfig.Options) (transport.Transpor
-+ 		return nil, err
-+ 	}
-+ 	scheme := httpScheme(u)
-+-
-+-	return transport.NewHTTPTransport(tr, scheme, socket), nil
-++	hostName := u.Host
-++	if hostName == "" || u.Scheme == "unix" || u.Scheme == "npipe" {
-++		// Override host header for non-tcp connections.
-++		hostName = dummyHost
-++	}
-++	return transport.NewHTTPTransport(tr, scheme, hostName), nil
-+ }
-+ 
-+ // NewClient creates a new plugin client (http).
 +-- 
 +2.41.0
 +
