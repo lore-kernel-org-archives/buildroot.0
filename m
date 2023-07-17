@@ -4,47 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46ED0EB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 15:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C07F8C001B0
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 15:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0B3281EC7;
-	Mon, 17 Jul 2023 15:06:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0B3281EC7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CF4581EC3;
+	Mon, 17 Jul 2023 15:18:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CF4581EC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B-FHDPZlzNGD; Mon, 17 Jul 2023 15:06:51 +0000 (UTC)
+	with ESMTP id 2QpGifegV3cn; Mon, 17 Jul 2023 15:18:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4DBF81EB6;
-	Mon, 17 Jul 2023 15:06:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4DBF81EB6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82FA681EB9;
+	Mon, 17 Jul 2023 15:18:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82FA681EB9
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79F431BF341
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 15:06:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A29601BF341
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 15:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 616A640A5A
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 15:06:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 616A640A5A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D1CC40A67
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 15:18:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D1CC40A67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sg0GlzlJ8v70 for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 15:06:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9576C40181
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 15:06:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9576C40181
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F3148732C; Mon, 17 Jul 2023 15:06:48 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 17:06:21 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 50ceb24bb6cf133fb61d534dc633cef5cd443a5c
-X-Git-Newrev: 7814dbce1580c51f62255105ae572da2c42f2eb4
-X-Patchwork-Hint: ignore
-Message-Id: <20230717150648.7F3148732C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] Update for 2023.05.1
+ with ESMTP id bm233kq5HkCQ for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 15:18:05 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CB8840181
+Received: from mail.femto-st.fr (lifc.univ-fcomte.fr [194.57.88.66])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0CB8840181
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 15:18:04 +0000 (UTC)
+Received: from x230 ([194.167.45.227]) (authenticated bits=0)
+ by mail.femto-st.fr (8.15.2/8.15.2/Debian-22) with ESMTPSA id 36HFI0vc001026
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+ Mon, 17 Jul 2023 17:18:00 +0200
+Date: Mon, 17 Jul 2023 17:17:42 +0200
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20230717171742.457b0500@x230>
+In-Reply-To: <20230710202503.0219463b@windsurf>
+References: <20230626070536.311268-1-gwenj@trabucayre.com>
+ <20230626070536.311268-2-gwenj@trabucayre.com>
+ <503759ef-8263-e971-cfdb-5d2d2c395c27@mind.be>
+ <20230707105851.0a3f3244@x230>
+ <1d33ec42-4e85-70ed-b93a-18eeeb6ff0db@mind.be>
+ <20230710202503.0219463b@windsurf>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.84 on 194.57.88.66
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/gnuradio: fix gnuradio
+ python libraries for cross-compile
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,90 +66,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7814dbce1580c51f62255105ae572da2c42f2eb4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+Thomas, Arnout, all
+Sorry for delay, was away for a correct/stable connection.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 31 +++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 34 insertions(+), 3 deletions(-)
+On Mon, 10 Jul 2023 20:25:03 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/CHANGES b/CHANGES
-index fec806a215..937b50ea7d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,34 @@
-+2023.05.1, released July 17th, 2023
-+
-+	Important / security related fixes.
-+
-+	Defconfigs: Chiliboard, mx53loco: fix build on hosts without
-+	openssl development headers.
-+	Nitrogen*: fix build on hosts without openssl or pylibfdt.
-+	Hifive unleased: Bump OpenSBI to 1.2 to fix a build issue.
-+	Raspberrypi: Handle DTB overlays for all variants
-+
-+	Updated/fixed packages: agentpp, alsa-plugins, assimp, audit,
-+	bind, busybox, c-ares, check, cups, dav1d, dbus, fftw,
-+	fluidsynth, freetype, fwts, ghostscript, gnupg2, gnuradio,
-+	graphicsmagick, gupnp, haproxy, heimdal, hwdata, jhead, kodi,
-+	libcap, libgcrypt, libgpg-error, libgtk3, libmdbx, libxslt,
-+	mesa3d, mesa3d-demos, mpir, nodejs, php, pkgconf,
-+	python-cryptography, python-dbus-fast, python-django,
-+	python-docker, python-pyicu, python-requests, python3, qemu,
-+	qt6, quickjs, rtl8192eu, samba4, sconeserver, syslog-ng,
-+	taglib, tiff, wine, wireshark, xdriver_xf86-video-dummy,
-+	xlib_libX11,
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#15643: ERROR: No hash found for linux-6.3.8.tar.xz
-+	#15658: hifive_unleashed_defconfig: Linker errors in opensbi-0.9
-+	#15661: mx53loco_defconfig: Dependency on OpenSSL missing
-+	#15664: Can't compile mesa3d with v3d driver
-+	#15673: PKGCONF_SITE in pkgconf.mk points to parked domain
-+	#15682: pkgconf: no longer able to download source from...
-+
- 2023.05, released June 7th, 2023
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 3187791d9b..dbf13c1e07 100644
---- a/Makefile
-+++ b/Makefile
-@@ -90,9 +90,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2023.05
-+export BR2_VERSION := 2023.05.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1686172000
-+BR2_VERSION_EPOCH = 1689606300
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index eaac13e32b..12da353f2e 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2023.05'
-+RELEASE='2023.05.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+> Hello Gwenhael,
+> 
+> On Fri, 7 Jul 2023 11:44:21 +0200
+> Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > > In fact I see I have missed to explain in my message this issue is
+> > > related to pybind.
+> > > If PYTHON_MODULE_EXTENSION is unset, .cmake uses a python script
+> > > containing sysconfig.get_config_var('EXT_SUFFIX')
+> > > This one return .cpython-311-x86_64-linux-gnu.so, because host-python is
+> > > used.    
+> > 
+> >   Ah, in that case the environment variable you need is 
+> > _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)"
+> > This will make sure the sysconfig that gets used is the one for the target 
+> > instead of for the host.
+> > 
+> >   It's quite likely that you need all of PKG_PYTHON_ENV to be present in
+> > the environment.  
+> 
+> Have you had the chance to test this suggestion from Arnout?
+> 
+Adding:
+GNURADIO_CONF_ENV += _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
+    PYTHONPATH=$(PYTHON3_PATH)
+Do the job.
+Thanks. I have to redo my patch
+> Thomas
+
+Gwen
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
