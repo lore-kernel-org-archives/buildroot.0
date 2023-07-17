@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96EBAEB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 13:17:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CDE9EB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 13:17:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 513C160B23;
-	Mon, 17 Jul 2023 13:17:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 513C160B23
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6FCA60AFE;
+	Mon, 17 Jul 2023 13:17:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6FCA60AFE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ut3vTxpwDeBQ; Mon, 17 Jul 2023 13:17:25 +0000 (UTC)
+	with ESMTP id p5udMqoXli8J; Mon, 17 Jul 2023 13:17:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8764E60B8A;
-	Mon, 17 Jul 2023 13:17:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8764E60B8A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D2DE1BF2BD
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5BD660F19;
+	Mon, 17 Jul 2023 13:17:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5BD660F19
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 65BEE1BF955
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 13:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44AC6818D4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E4224150C
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 13:17:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44AC6818D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E4224150C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ofzC-S1kBffs for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P8guIbWq8qYV for <buildroot@lists.busybox.net>;
  Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 558DF81970
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33411414D1
  for <buildroot@buildroot.org>; Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 558DF81970
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33411414D1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 438F9872F2; Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
+ id 1DD41872EE; Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 15:04:36 +0200
+Date: Mon, 17 Jul 2023 14:57:28 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7f8805c1a698fcf4cf8b62d037c6a8076bd8ab5e
-X-Git-Newrev: 8b26a893f567422d56de9ac4edf7310ddb6d8954
+X-Git-Oldrev: 3d613b21b08ff709d218de7fab0a2d9443932c17
+X-Git-Newrev: f2f7a1901a91b0fe6e2200b37aa6be0f7fc42a73
 X-Patchwork-Hint: ignore
-Message-Id: <20230717131709.438F9872F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/mesa3d-demos:
- needs C++
+Message-Id: <20230717131709.1DD41872EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/busybox: bump
+ version to 1.36.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,57 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b26a893f567422d56de9ac4edf7310ddb6d8954
+commit: https://git.buildroot.net/buildroot/commit/?id=f2f7a1901a91b0fe6e2200b37aa6be0f7fc42a73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Reference:
-https://gitlab.freedesktop.org/mesa/demos/-/blob/main/meson.build#L21
-
-Fixes:
-http://autobuild.buildroot.net/results/90e/90e98fa0f37462cadea0fcbff9feabad5554587d/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c1a7079a2387738044dd76105267d6477418df48)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a7e4f557f5c5874c84d6ae2e28d752603e18ab3f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-demos/Config.in | 6 ++++++
- package/piglit/Config.in       | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/busybox/busybox.hash | 4 ++--
+ package/busybox/busybox.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-demos/Config.in b/package/mesa3d-demos/Config.in
-index b716cf5799..7848bb6faf 100644
---- a/package/mesa3d-demos/Config.in
-+++ b/package/mesa3d-demos/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MESA3D_DEMOS
- 	bool "mesa3d-demos"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES \
- 		|| BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBOPENVG
- 	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XORG7 && BR2_PACKAGE_HAS_LIBGL
-@@ -10,3 +11,8 @@ config BR2_PACKAGE_MESA3D_DEMOS
- 	  OpenGL demos from the Mesa 3D project.
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 6d1c36906d..6eba365ecc 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,5 +1,5 @@
+-# From https://busybox.net/downloads/busybox-1.35.0.tar.bz2.sha256
+-sha256  542750c8af7cb2630e201780b4f99f3dcceeb06f505b479ec68241c1e6af61a5  busybox-1.36.0.tar.bz2
++# From https://busybox.net/downloads/busybox-1.36.1.tar.bz2.sha256
++sha256  b8cc24c9574d809e7279c3be349795c5d5ceb6fdf19ca709f80cde50e47de314  busybox-1.36.1.tar.bz2
+ # Locally computed
+ sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+ sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index fd4f3c17c5..eb5e7ad922 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://mesa3d.org
-+
-+comment "mesa3d-demos needs a toolchain with C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES \
-+		|| BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBOPENVG
-diff --git a/package/piglit/Config.in b/package/piglit/Config.in
-index 5e957a555a..22d1c7c28e 100644
---- a/package/piglit/Config.in
-+++ b/package/piglit/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_PIGLIT
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
--	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
-+	depends on BR2_INSTALL_LIBSTDCPP # mesa3d-demos, python-numpy
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBPNG
+-BUSYBOX_VERSION = 1.36.0
++BUSYBOX_VERSION = 1.36.1
+ BUSYBOX_SITE = https://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
