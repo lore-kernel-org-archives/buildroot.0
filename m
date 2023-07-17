@@ -1,51 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E48C9EB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 11:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46FB6EB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 11:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EE6081E1E;
-	Mon, 17 Jul 2023 11:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EE6081E1E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Dim4gmvGEA5z; Mon, 17 Jul 2023 11:09:53 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D97CC81E4F;
-	Mon, 17 Jul 2023 11:09:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D97CC81E4F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07CC51BF352
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:09:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2D6640142
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2D6640142
+	by smtp2.osuosl.org (Postfix) with ESMTP id C23C0405A7;
+	Mon, 17 Jul 2023 11:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C23C0405A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id plkHD57-iK9t for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 11:09:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AA3440108
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 11:09:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AA3440108
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 487048714B; Mon, 17 Jul 2023 11:09:13 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Y9OjIwdPWY6F; Mon, 17 Jul 2023 11:50:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0AE0C400EF;
+	Mon, 17 Jul 2023 11:50:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AE0C400EF
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A11FD1BF352
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:50:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B1A760A5F
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B1A760A5F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6S6A_lxtDfO2 for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 11:50:36 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 268956068B
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 268956068B
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 11:50:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BCFB460002;
+ Mon, 17 Jul 2023 11:50:33 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qLMkL-00DNJx-0V; Mon, 17 Jul 2023 13:50:33 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 12:56:22 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: eaada7c96bb26bf60aea96a4e45bfdd318bb7bf6
-X-Git-Newrev: 62aac0da49efa958aa4f8bed102de7f8b0e5a28a
-X-Patchwork-Hint: ignore
-Message-Id: <20230717110913.487048714B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/taglib: bump to
- version 1.13.1
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230702144829.3356214-1-bernd@kuhls.net>
+ <20230703200327.GJ2510@scaer> <20230703200618.GK2510@scaer>
+Date: Mon, 17 Jul 2023 13:50:32 +0200
+In-Reply-To: <20230703200618.GK2510@scaer> (Yann E. MORIN's message of "Mon, 3
+ Jul 2023 22:06:18 +0200")
+Message-ID: <87r0p6ah9z.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] libgcrypt: disable assembly for i386
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,53 +64,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62aac0da49efa958aa4f8bed102de7f8b0e5a28a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Release notes:
-https://mail.kde.org/pipermail/taglib-devel/2023-July/003066.html
+ > Bernd, All,
+ > On 2023-07-03 22:03 +0200, Yann E. MORIN spake thusly:
+ >> On 2023-07-02 16:48 +0200, Bernd Kuhls spake thusly:
+ >> > Fixes:
+ >> > http://autobuild.buildroot.net/results/3df/3df96fe36802d8c6ac5487bf3d7d7b6c97591d5e/
+ >> > 
+ >> > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ >> > ---
+ >> >  package/libgcrypt/libgcrypt.mk | 4 ++--
+ >> >  1 file changed, 2 insertions(+), 2 deletions(-)
+ >> > 
+ >> > diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+ >> > index 4fffe5360e..bd7b1aa091 100644
+ >> > --- a/package/libgcrypt/libgcrypt.mk
+ >> > +++ b/package/libgcrypt/libgcrypt.mk
+ >> > @@ -21,8 +21,8 @@ LIBGCRYPT_CONF_OPTS = \
+ >> >  	$(if $(BR2_OPTIMIZE_0),--disable-ppc-crypto-support,) \
+ >> >  	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ >> >  
+ >> > -# Libgcrypt doesn't support assembly for coldfire
+ >> > -ifeq ($(BR2_m68k_cf),y)
+ >> > +# Libgcrypt doesn't support assembly for coldfire & i386
+ >> 
+ >> This is relatively weird, especially, since they do have upstream commit
+ >> that try to make it work on "old CPUs":
+ >> 
+ >> a5d126c61cc0  configure: fix avx512 check for i386
+ >> f01d4b7a601f  mpi/longlong.h: i386: use tzcnt instruction for trailing zeros
+ >> 
+ >> So maybe this is a bug that should be reported and fixed upstream?
 
-Changelog:
-https://taglib.org/#taglib-1131-release---jul-1-2023
+ > Anyway: applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 261c5894b0a83f738322daa0de96cd668e1f2f9a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/taglib/taglib.hash | 2 +-
- package/taglib/taglib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed to 2023.02.x and 2023.05.x, thanks.
 
-diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
-index 7d1b2e8422..e83aa451f3 100644
---- a/package/taglib/taglib.hash
-+++ b/package/taglib/taglib.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  58f08b4db3dc31ed152c04896ee9172d22052bc7ef12888028c01d8b1d60ade0  taglib-1.13.tar.gz
-+sha256  c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b  taglib-1.13.1.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index c687891002..9bdf05b85d 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TAGLIB_VERSION = 1.13
-+TAGLIB_VERSION = 1.13.1
- TAGLIB_SITE = http://taglib.github.io/releases
- TAGLIB_INSTALL_STAGING = YES
- TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
