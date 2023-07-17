@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E4BDEB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 11:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F41DEB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 11:08:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37A6481DF9;
-	Mon, 17 Jul 2023 11:07:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37A6481DF9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57E1F81E0B;
+	Mon, 17 Jul 2023 11:08:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57E1F81E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h2L4oTQo5T9H; Mon, 17 Jul 2023 11:07:53 +0000 (UTC)
+	with ESMTP id RwHXT7t1loC6; Mon, 17 Jul 2023 11:08:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7541181D4D;
-	Mon, 17 Jul 2023 11:07:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7541181D4D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 940A981D4D;
+	Mon, 17 Jul 2023 11:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 940A981D4D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 638941BF352
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:07:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6762B1BF955
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B06D60B8A
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:07:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B06D60B8A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E02960BDF
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 11:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E02960BDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H3SR8njAwYv7 for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 11:07:48 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AFDA60B69
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2AFDA60B69
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 11:07:47 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C1AABE0008;
- Mon, 17 Jul 2023 11:07:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qLM4t-00DMgd-O1; Mon, 17 Jul 2023 13:07:43 +0200
+ with ESMTP id EkxyhyvxDlcI for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 11:08:07 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B858D60B69
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 11:08:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B858D60B69
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A3F318713E; Mon, 17 Jul 2023 11:08:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20230702122236.1113430-1-m.niestroj@grinn-global.com>
- <20230703220339.62e71e11@windsurf>
-Date: Mon, 17 Jul 2023 13:07:43 +0200
-In-Reply-To: <20230703220339.62e71e11@windsurf> (Thomas Petazzoni via
- buildroot's message of "Mon, 3 Jul 2023 22:03:39 +0200")
-Message-ID: <87y1jeaj9c.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] configs/chiliboard: uboot needs openssl
+To: buildroot@buildroot.org
+Date: Mon, 17 Jul 2023 12:56:15 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 607450ac62d2b258164baa130915eb0701c575f6
+X-Git-Newrev: c25ec8829c582d8a1de54ff726157c77d24b9a73
+X-Patchwork-Hint: ignore
+Message-Id: <20230717110807.A3F318713E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/taglib: bump to
+ version 1.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,37 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c25ec8829c582d8a1de54ff726157c77d24b9a73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > On Sun,  2 Jul 2023 14:22:35 +0200
- > Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+Release notes:
+https://mail.kde.org/pipermail/taglib-devel/2023-July/003066.html
 
- >> Fixes uboot build errors:
- >> 
- >> In file included from tools/imagetool.h:24,
- >> from tools/aisimage.c:7:
- >> include/image.h:1383:12: fatal error: openssl/evp.h: No such file or directory
- >> 1383 | #  include <openssl/evp.h>
- >> |
- >> 
- >> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
- >> ---
- >> configs/grinn_chiliboard_defconfig | 1 +
- >> 1 file changed, 1 insertion(+)
+Changelog:
+https://taglib.org/#taglib-1131-release---jul-1-2023
 
- > Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 261c5894b0a83f738322daa0de96cd668e1f2f9a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/taglib/taglib.hash | 2 +-
+ package/taglib/taglib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
+index 7d1b2e8422..e83aa451f3 100644
+--- a/package/taglib/taglib.hash
++++ b/package/taglib/taglib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  58f08b4db3dc31ed152c04896ee9172d22052bc7ef12888028c01d8b1d60ade0  taglib-1.13.tar.gz
++sha256  c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b  taglib-1.13.1.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index c687891002..9bdf05b85d 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TAGLIB_VERSION = 1.13
++TAGLIB_VERSION = 1.13.1
+ TAGLIB_SITE = http://taglib.github.io/releases
+ TAGLIB_INSTALL_STAGING = YES
+ TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
