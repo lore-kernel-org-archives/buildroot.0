@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43EF4EB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 12:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 990E6EB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 12:15:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED55240232;
-	Mon, 17 Jul 2023 12:14:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED55240232
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F2DD4064E;
+	Mon, 17 Jul 2023 12:15:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F2DD4064E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VAr4hkA8sPsR; Mon, 17 Jul 2023 12:14:47 +0000 (UTC)
+	with ESMTP id uk5V8ymyH5GC; Mon, 17 Jul 2023 12:14:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2837B40A5C;
-	Mon, 17 Jul 2023 12:14:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2837B40A5C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 88E0740A54;
+	Mon, 17 Jul 2023 12:14:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88E0740A54
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D5D221BF34C
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:14:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1CB3E1BF34C
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:14:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B01A981426
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB87380D1B
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:14:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B01A981426
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB87380D1B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EqcJ7xCtgbAh for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 12:14:18 +0000 (UTC)
+ with ESMTP id RDa9W02ojbaW for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 12:14:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D2B7D80D1B
+ by smtp1.osuosl.org (Postfix) with ESMTP id E314681414
  for <buildroot@buildroot.org>; Mon, 17 Jul 2023 12:14:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2B7D80D1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E314681414
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBC0E87168; Mon, 17 Jul 2023 12:14:18 +0000 (UTC)
+ id CEECE87165; Mon, 17 Jul 2023 12:14:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 14:11:58 +0200
+Date: Mon, 17 Jul 2023 14:13:35 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 36482bd6137041d8f4442311844e19439f160e6b
-X-Git-Newrev: 19424402c558699a979fc8df8be121e16efa7e14
+X-Git-Oldrev: 2356a40fad365527395ea97166a57c6e0bf82298
+X-Git-Newrev: 3d613b21b08ff709d218de7fab0a2d9443932c17
 X-Patchwork-Hint: ignore
-Message-Id: <20230717121418.BBC0E87168@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/samba4: bump
- version to 4.18.3
+Message-Id: <20230717121418.CEECE87165@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] board/raspberrypi: handle
+ dtb overlays for all variants
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19424402c558699a979fc8df8be121e16efa7e14
+commit: https://git.buildroot.net/buildroot/commit/?id=3d613b21b08ff709d218de7fab0a2d9443932c17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Release notes: https://www.samba.org/samba/history/samba-4.18.3.html
+Most rpi defconfigs use dtb overlays, but not rpi0 / rpi2 - Making it harder
+to use overlays on those boards as the genimage files have to be tweaked.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+To fix this, create the rpi-firmware/overlays directory in the post-build
+script if needed and unconditionally include it in the genimage files so
+rpi0/rpi2 works consistently with the other variants.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit adfdeb1f82544466c5948f4c42e1eccd3ab0f72c)
+(cherry picked from commit 6021f3678b44d43da7057e3135da842cde1ffa05)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/raspberrypi/genimage-raspberrypi0.cfg | 1 +
+ board/raspberrypi/genimage-raspberrypi2.cfg | 1 +
+ board/raspberrypi/post-build.sh             | 3 +++
+ 3 files changed, 5 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 20390fb6b4..05563d00cf 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.18.2.tar.asc
--sha256  5bf87e179616cd12a52d85fb8b26eec709f13709a2b67fe42b1fb0213f7e8106  samba-4.18.2.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.18.3.tar.asc
-+sha256  c67e1453165a3918ffffad600236ca3966b47bde4798e89ae600ae3903ccc32c  samba-4.18.3.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4489c28d2b..75938e21a8 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.18.2
-+SAMBA4_VERSION = 4.18.3
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
+index 1fa3f5096f..313f85f651 100644
+--- a/board/raspberrypi/genimage-raspberrypi0.cfg
++++ b/board/raspberrypi/genimage-raspberrypi0.cfg
+@@ -7,6 +7,7 @@ image boot.vfat {
+ 			"rpi-firmware/config.txt",
+ 			"rpi-firmware/fixup.dat",
+ 			"rpi-firmware/start.elf",
++			"rpi-firmware/overlays",
+ 			"zImage"
+ 		}
+ 	}
+diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
+index acd23e7ca8..dad9275537 100644
+--- a/board/raspberrypi/genimage-raspberrypi2.cfg
++++ b/board/raspberrypi/genimage-raspberrypi2.cfg
+@@ -7,6 +7,7 @@ image boot.vfat {
+ 			"rpi-firmware/config.txt",
+ 			"rpi-firmware/fixup.dat",
+ 			"rpi-firmware/start.elf",
++			"rpi-firmware/overlays",
+ 			"zImage"
+ 		}
+ 	}
+diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+index 5e5eb71100..b24256fcea 100755
+--- a/board/raspberrypi/post-build.sh
++++ b/board/raspberrypi/post-build.sh
+@@ -9,3 +9,6 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
+ 	sed -i '/GENERIC_SERIAL/a\
+ tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
+ fi
++
++# exnsure overlays exists for genimage
++mkdir -p "${BINARIES_DIR}/rpi-firmware/overlays"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
