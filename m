@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D567C0015E
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 13:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96EBAEB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 13:17:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F067D60D53;
-	Mon, 17 Jul 2023 13:17:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F067D60D53
+	by smtp3.osuosl.org (Postfix) with ESMTP id 513C160B23;
+	Mon, 17 Jul 2023 13:17:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 513C160B23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5pXE3XwFrqqC; Mon, 17 Jul 2023 13:17:13 +0000 (UTC)
+	with ESMTP id Ut3vTxpwDeBQ; Mon, 17 Jul 2023 13:17:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A36860A5F;
-	Mon, 17 Jul 2023 13:17:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A36860A5F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 391E21BF2BD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8764E60B8A;
+	Mon, 17 Jul 2023 13:17:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8764E60B8A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D2DE1BF2BD
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 13:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10909605B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44AC6818D4
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 13:17:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10909605B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44AC6818D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iDFYMQZsLXHE for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ofzC-S1kBffs for <buildroot@lists.busybox.net>;
  Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4C05060AFE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 558DF81970
  for <buildroot@buildroot.org>; Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C05060AFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 558DF81970
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A3DA872F1; Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
+ id 438F9872F2; Mon, 17 Jul 2023 13:17:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 15:03:56 +0200
+Date: Mon, 17 Jul 2023 15:04:36 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 747f62053c52a54ba2b603f3909371e3bd993809
-X-Git-Newrev: 7f8805c1a698fcf4cf8b62d037c6a8076bd8ab5e
+X-Git-Oldrev: 7f8805c1a698fcf4cf8b62d037c6a8076bd8ab5e
+X-Git-Newrev: 8b26a893f567422d56de9ac4edf7310ddb6d8954
 X-Patchwork-Hint: ignore
-Message-Id: <20230717131709.3A3DA872F1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] utils/genrandconfig:
- disable cramfs images
+Message-Id: <20230717131709.438F9872F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/mesa3d-demos:
+ needs C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f8805c1a698fcf4cf8b62d037c6a8076bd8ab5e
+commit: https://git.buildroot.net/buildroot/commit/?id=8b26a893f567422d56de9ac4edf7310ddb6d8954
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fixes build error:
-
-  warning: estimate of required size (upper bound) is 1374MB, but
-  maximum image size is 272MB, we might die prematurely
-  mkcramfs: filesystem too big
+Reference:
+https://gitlab.freedesktop.org/mesa/demos/-/blob/main/meson.build#L21
 
 Fixes:
-http://autobuild.buildroot.net/results/d47/d47f9b462707dffe1b6665f143701303b04e2adc/
+http://autobuild.buildroot.net/results/90e/90e98fa0f37462cadea0fcbff9feabad5554587d/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit af5ccec266dbb7925ac12622f379dacb20087ddd)
+(cherry picked from commit c1a7079a2387738044dd76105267d6477418df48)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ package/mesa3d-demos/Config.in | 6 ++++++
+ package/piglit/Config.in       | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 2b0baedf31..0938260c1b 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -512,6 +512,9 @@ def fixup_config(sysinfo, configfile):
-         configlines.remove('BR2_TARGET_OPTEE_OS=y\n')
-         configlines.remove('BR2_TARGET_OPTEE_OS_PLATFORM=""\n')
+diff --git a/package/mesa3d-demos/Config.in b/package/mesa3d-demos/Config.in
+index b716cf5799..7848bb6faf 100644
+--- a/package/mesa3d-demos/Config.in
++++ b/package/mesa3d-demos/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MESA3D_DEMOS
+ 	bool "mesa3d-demos"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES \
+ 		|| BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBOPENVG
+ 	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XORG7 && BR2_PACKAGE_HAS_LIBGL
+@@ -10,3 +11,8 @@ config BR2_PACKAGE_MESA3D_DEMOS
+ 	  OpenGL demos from the Mesa 3D project.
  
-+    if 'BR2_TARGET_ROOTFS_CRAMFS=y\n' in configlines:
-+        configlines.remove('BR2_TARGET_ROOTFS_CRAMFS=y\n')
+ 	  http://mesa3d.org
 +
-     if 'BR2_TARGET_ROOTFS_EXT2=y\n' in configlines and \
-        'BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n' in configlines:
-         configlines.remove('BR2_TARGET_ROOTFS_EXT2_SIZE="60M"\n')
++comment "mesa3d-demos needs a toolchain with C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES \
++		|| BR2_PACKAGE_HAS_LIBEGL || BR2_PACKAGE_HAS_LIBOPENVG
+diff --git a/package/piglit/Config.in b/package/piglit/Config.in
+index 5e957a555a..22d1c7c28e 100644
+--- a/package/piglit/Config.in
++++ b/package/piglit/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_PIGLIT
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
+-	depends on BR2_INSTALL_LIBSTDCPP # python-numpy
++	depends on BR2_INSTALL_LIBSTDCPP # mesa3d-demos, python-numpy
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+ 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_LIBPNG
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
