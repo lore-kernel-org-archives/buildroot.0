@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C40EEEB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 12:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD0CEB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 12:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B1B140A66;
-	Mon, 17 Jul 2023 12:16:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B1B140A66
+	by smtp2.osuosl.org (Postfix) with ESMTP id D81F1405D1;
+	Mon, 17 Jul 2023 12:16:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D81F1405D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xMKGYLLTzy0l; Mon, 17 Jul 2023 12:16:02 +0000 (UTC)
+	with ESMTP id QiEmbnlgbMJr; Mon, 17 Jul 2023 12:16:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9A9A140A7B;
-	Mon, 17 Jul 2023 12:16:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A9A140A7B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C9521BF95C
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:15:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1DF7940A67;
+	Mon, 17 Jul 2023 12:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DF7940A67
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 390101BF860
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:15:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2368480EB8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E20660B45
  for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:15:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2368480EB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E20660B45
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7_tavYrqd1Jy for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EW5NNGkU6O1J for <buildroot@lists.busybox.net>;
  Mon, 17 Jul 2023 12:15:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AACB81414
+ by smtp3.osuosl.org (Postfix) with ESMTP id 37ED460C2C
  for <buildroot@buildroot.org>; Mon, 17 Jul 2023 12:15:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AACB81414
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37ED460C2C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3AC5E87185; Mon, 17 Jul 2023 12:15:28 +0000 (UTC)
+ id 283488717B; Mon, 17 Jul 2023 12:15:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 14:13:41 +0200
+Date: Mon, 17 Jul 2023 14:03:11 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ed716fc0c656ea4bf1d468c46b5992ba911f0663
-X-Git-Newrev: a5c2bafb4ffcdb8df389ef1282a7cb69726f7279
+X-Git-Oldrev: ae7b3485986a1f495e6a932777be2c7a607edcdf
+X-Git-Newrev: cd4e89f76d25749cd654cb115e5112ba0878a19d
 X-Patchwork-Hint: ignore
-Message-Id: <20230717121528.3AC5E87185@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] board/raspberrypi: handle
- dtb overlays for all variants
+Message-Id: <20230717121528.283488717B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/gnuradio: fix
+ build with python-pybind > 2.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5c2bafb4ffcdb8df389ef1282a7cb69726f7279
+commit: https://git.buildroot.net/buildroot/commit/?id=cd4e89f76d25749cd654cb115e5112ba0878a19d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Most rpi defconfigs use dtb overlays, but not rpi0 / rpi2 - Making it harder
-to use overlays on those boards as the genimage files have to be tweaked.
+Since commit 0e82c360942907f5a2f379e64e0d211aaff80774 (and since release
+2.10.1), a new variable called PYBIND11_PYTHONLIBS_OVERWRITE was introduced
+and set to ON by default.
 
-To fix this, create the rpi-firmware/overlays directory in the post-build
-script if needed and unconditionally include it in the genimage files so
-rpi0/rpi2 works consistently with the other variants.
+According to comment before this option:
+"Overwrite cached values read from Python library (classic search). Turn off if
+cross-compiling and manually setting these values."
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6021f3678b44d43da7057e3135da842cde1ffa05)
+In buildroot's context this option must be disabled to keep variables
+provided by buildroot and lib/app.
+
+Fixes:
+- http://autobuild.buildroot.net/results/7423df5db5237d94bb49e32698828d4fe470e39b/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 11aa7ac8fa3a21dc2476dd09539ea3cf3e48f03d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/genimage-raspberrypi0.cfg | 1 +
- board/raspberrypi/genimage-raspberrypi2.cfg | 1 +
- board/raspberrypi/post-build.sh             | 3 +++
- 3 files changed, 5 insertions(+)
+ package/gnuradio/gnuradio.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/board/raspberrypi/genimage-raspberrypi0.cfg b/board/raspberrypi/genimage-raspberrypi0.cfg
-index 1fa3f5096f..313f85f651 100644
---- a/board/raspberrypi/genimage-raspberrypi0.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi0.cfg
-@@ -7,6 +7,7 @@ image boot.vfat {
- 			"rpi-firmware/config.txt",
- 			"rpi-firmware/fixup.dat",
- 			"rpi-firmware/start.elf",
-+			"rpi-firmware/overlays",
- 			"zImage"
- 		}
- 	}
-diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
-index acd23e7ca8..dad9275537 100644
---- a/board/raspberrypi/genimage-raspberrypi2.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi2.cfg
-@@ -7,6 +7,7 @@ image boot.vfat {
- 			"rpi-firmware/config.txt",
- 			"rpi-firmware/fixup.dat",
- 			"rpi-firmware/start.elf",
-+			"rpi-firmware/overlays",
- 			"zImage"
- 		}
- 	}
-diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
-index 5e5eb71100..b24256fcea 100755
---- a/board/raspberrypi/post-build.sh
-+++ b/board/raspberrypi/post-build.sh
-@@ -9,3 +9,6 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
- 	sed -i '/GENERIC_SERIAL/a\
- tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
- fi
-+
-+# exnsure overlays exists for genimage
-+mkdir -p "${BINARIES_DIR}/rpi-firmware/overlays"
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index d9218b533d..1453b78493 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -116,6 +116,9 @@ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+ GNURADIO_DEPENDENCIES += python3 python-pybind \
+ 	host-python-numpy host-python-packaging
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
++# mandatory to avoid pybind11 to overwrite variables provided
++# by gnuradio and buildroot
++GNURADIO_CONF_OPTS += -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF
+ # mandatory to install python modules in site-packages and to use
+ # correct path for python libraries
+ GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
