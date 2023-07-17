@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E1C2EB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 14:34:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46ED0EB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 15:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1751181E9F;
-	Mon, 17 Jul 2023 14:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1751181E9F
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0B3281EC7;
+	Mon, 17 Jul 2023 15:06:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0B3281EC7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 05hGxpHXtWFa; Mon, 17 Jul 2023 14:34:11 +0000 (UTC)
+	with ESMTP id B-FHDPZlzNGD; Mon, 17 Jul 2023 15:06:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 364A081E9A;
-	Mon, 17 Jul 2023 14:34:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 364A081E9A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E65801BF304
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 14:33:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4DBF81EB6;
+	Mon, 17 Jul 2023 15:06:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4DBF81EB6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 79F431BF341
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 15:06:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDE3880FA7
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 14:33:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDE3880FA7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 616A640A5A
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 15:06:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 616A640A5A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O-LpiJrh9fs6 for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 14:33:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Sg0GlzlJ8v70 for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 15:06:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C287E80E83
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 14:33:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C287E80E83
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9576C40181
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 15:06:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9576C40181
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF20187321; Mon, 17 Jul 2023 14:33:53 +0000 (UTC)
+ id 7F3148732C; Mon, 17 Jul 2023 15:06:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 16:32:34 +0200
+Date: Mon, 17 Jul 2023 17:06:21 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: f445c6355817e7aedc8bdea1263d5cd74c54c789
-X-Git-Newrev: 50ceb24bb6cf133fb61d534dc633cef5cd443a5c
+X-Git-Oldrev: 50ceb24bb6cf133fb61d534dc633cef5cd443a5c
+X-Git-Newrev: 7814dbce1580c51f62255105ae572da2c42f2eb4
 X-Patchwork-Hint: ignore
-Message-Id: <20230717143353.AF20187321@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/dahdi-linux: fix
- build with kernel < 6.3
+Message-Id: <20230717150648.7F3148732C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] Update for 2023.05.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,125 +62,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50ceb24bb6cf133fb61d534dc633cef5cd443a5c
+commit: https://git.buildroot.net/buildroot/commit/?id=7814dbce1580c51f62255105ae572da2c42f2eb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Buildroot commit 840b5527466502f02b86c95f9bf95557d35c8571 added a patch
-from upstream bug tracker which fixes build with kernel >= 6.3 but broke
-the build with earlier kernels.
-
-This patch adds additional code for compatibility with kernel < 6.3.
-
-Fixes:
-http://autobuild.buildroot.net/results/c8c/c8c51153d3a61842d57a2a4be3dc75ec9964e41c/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 353c06849bc9f9549f0cabefa74c915ce98ae528)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-16.patch => 0005-Fix-build-on-Linux-6.3.patch} | 40 ++++++++++++++--------
- 1 file changed, 25 insertions(+), 15 deletions(-)
+ CHANGES                  | 31 +++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 34 insertions(+), 3 deletions(-)
 
-diff --git a/package/dahdi-linux/0005-drivers-dahdi-fix-build-with-clang-16.patch b/package/dahdi-linux/0005-Fix-build-on-Linux-6.3.patch
-similarity index 75%
-rename from package/dahdi-linux/0005-drivers-dahdi-fix-build-with-clang-16.patch
-rename to package/dahdi-linux/0005-Fix-build-on-Linux-6.3.patch
-index 535e1628c9..f2ac4d2dc3 100644
---- a/package/dahdi-linux/0005-drivers-dahdi-fix-build-with-clang-16.patch
-+++ b/package/dahdi-linux/0005-Fix-build-on-Linux-6.3.patch
-@@ -1,4 +1,4 @@
--From d51c10dae5a06709983b929fc6f9fb18eec41951 Mon Sep 17 00:00:00 2001
-+From c4969d756eac041758856b99a1084158c06beb7e Mon Sep 17 00:00:00 2001
- From: Brahmajit Das <brahmajit.xyz@gmail.com>
- Date: Thu, 22 Jun 2023 15:52:18 +0000
- Subject: [PATCH] drivers/dahdi: fix build with clang-16
-@@ -31,15 +31,16 @@ Signed-off-by: Brahmajit Das <brahmajit.xyz@gmail.com>
+diff --git a/CHANGES b/CHANGES
+index fec806a215..937b50ea7d 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,34 @@
++2023.05.1, released July 17th, 2023
++
++	Important / security related fixes.
++
++	Defconfigs: Chiliboard, mx53loco: fix build on hosts without
++	openssl development headers.
++	Nitrogen*: fix build on hosts without openssl or pylibfdt.
++	Hifive unleased: Bump OpenSBI to 1.2 to fix a build issue.
++	Raspberrypi: Handle DTB overlays for all variants
++
++	Updated/fixed packages: agentpp, alsa-plugins, assimp, audit,
++	bind, busybox, c-ares, check, cups, dav1d, dbus, fftw,
++	fluidsynth, freetype, fwts, ghostscript, gnupg2, gnuradio,
++	graphicsmagick, gupnp, haproxy, heimdal, hwdata, jhead, kodi,
++	libcap, libgcrypt, libgpg-error, libgtk3, libmdbx, libxslt,
++	mesa3d, mesa3d-demos, mpir, nodejs, php, pkgconf,
++	python-cryptography, python-dbus-fast, python-django,
++	python-docker, python-pyicu, python-requests, python3, qemu,
++	qt6, quickjs, rtl8192eu, samba4, sconeserver, syslog-ng,
++	taglib, tiff, wine, wireshark, xdriver_xf86-video-dummy,
++	xlib_libX11,
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#15643: ERROR: No hash found for linux-6.3.8.tar.xz
++	#15658: hifive_unleashed_defconfig: Linker errors in opensbi-0.9
++	#15661: mx53loco_defconfig: Dependency on OpenSSL missing
++	#15664: Can't compile mesa3d with v3d driver
++	#15673: PKGCONF_SITE in pkgconf.mk points to parked domain
++	#15682: pkgconf: no longer able to download source from...
++
+ 2023.05, released June 7th, 2023
  
- Upstream: https://github.com/asterisk/dahdi-linux/pull/21
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 3187791d9b..dbf13c1e07 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
  
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: updated patch for compatibility with kernel < 6.3]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-- drivers/dahdi/dahdi-sysfs.c    | 8 ++++----
-- drivers/dahdi/wctc4xxp/base.c  | 2 +-
-- drivers/dahdi/xpp/xbus-sysfs.c | 2 +-
-- 3 files changed, 6 insertions(+), 6 deletions(-)
-+ drivers/dahdi/dahdi-sysfs.c    | 12 ++++++++++--
-+ drivers/dahdi/wctc4xxp/base.c  |  2 +-
-+ drivers/dahdi/xpp/xbus-sysfs.c |  4 ++++
-+ 3 files changed, 15 insertions(+), 3 deletions(-)
+ # Set and export the version string
+-export BR2_VERSION := 2023.05
++export BR2_VERSION := 2023.05.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1686172000
++BR2_VERSION_EPOCH = 1689606300
  
- diff --git a/drivers/dahdi/dahdi-sysfs.c b/drivers/dahdi/dahdi-sysfs.c
--index ca29ddba..0c5bd982 100644
-+index ca29ddba..38236929 100644
- --- a/drivers/dahdi/dahdi-sysfs.c
- +++ b/drivers/dahdi/dahdi-sysfs.c
- @@ -47,7 +47,7 @@ static int span_match(struct device *dev, struct device_driver *driver)
-@@ -51,16 +52,19 @@ index ca29ddba..0c5bd982 100644
-  {
-  	return dev_get_drvdata(dev);
-  }
--@@ -68,7 +68,7 @@ static inline struct dahdi_span *dev_to_span(struct device *dev)
-+@@ -68,7 +68,11 @@ static inline struct dahdi_span *dev_to_span(struct device *dev)
-  			return err;				\
-  	} while (0)
-  
---static int span_uevent(struct device *dev, struct kobj_uevent_env *kenv)
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
-+ static int span_uevent(struct device *dev, struct kobj_uevent_env *kenv)
-++#else
- +static int span_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
-++#endif
-  {
-  	struct dahdi_span *span;
-  
--@@ -415,7 +415,7 @@ static struct {
-+@@ -415,7 +419,7 @@ static struct {
-  	unsigned int clean_chardev:1;
-  } should_cleanup;
-  
-@@ -69,12 +73,15 @@ index ca29ddba..0c5bd982 100644
-  {
-  	return container_of(dev, struct dahdi_device, dev);
-  }
--@@ -438,7 +438,7 @@ static inline struct dahdi_device *to_ddev(struct device *dev)
-+@@ -438,7 +442,11 @@ static inline struct dahdi_device *to_ddev(struct device *dev)
-  			return err;				\
-  	} while (0)
-  
---static int device_uevent(struct device *dev, struct kobj_uevent_env *kenv)
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
-+ static int device_uevent(struct device *dev, struct kobj_uevent_env *kenv)
-++#else
- +static int device_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
-++#endif
-  {
-  	struct dahdi_device *ddev;
-  
-@@ -92,15 +99,18 @@ index ec6fc436..db70ea7e 100644
-  #	ifdef HAVE_NET_DEVICE_OPS
-  	netdev->netdev_ops = &wctc4xxp_netdev_ops;
- diff --git a/drivers/dahdi/xpp/xbus-sysfs.c b/drivers/dahdi/xpp/xbus-sysfs.c
--index d8c11dc3..29ad3619 100644
-+index d8c11dc3..11b3ed3e 100644
- --- a/drivers/dahdi/xpp/xbus-sysfs.c
- +++ b/drivers/dahdi/xpp/xbus-sysfs.c
--@@ -418,7 +418,7 @@ static int astribank_match(struct device *dev, struct device_driver *driver)
-+@@ -418,7 +418,11 @@ static int astribank_match(struct device *dev, struct device_driver *driver)
-  			return err;				\
-  	} while (0)
-  
---static int astribank_uevent(struct device *dev, struct kobj_uevent_env *kenv)
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 3, 0)
-+ static int astribank_uevent(struct device *dev, struct kobj_uevent_env *kenv)
-++#else
- +static int astribank_uevent(const struct device *dev, struct kobj_uevent_env *kenv)
-++#endif
-  {
-  	xbus_t *xbus;
-  	extern char *initdir;
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index eaac13e32b..12da353f2e 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2023.05'
++RELEASE='2023.05.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
