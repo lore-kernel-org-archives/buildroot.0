@@ -1,72 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE8FEEB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 20:12:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7525EB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 21:08:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6520E81E44;
-	Mon, 17 Jul 2023 20:12:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6520E81E44
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D29A40590;
+	Mon, 17 Jul 2023 21:08:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D29A40590
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HxmxUeHM57ej; Mon, 17 Jul 2023 20:12:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GvJOxathxY_y; Mon, 17 Jul 2023 21:08:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91BB481E3C;
-	Mon, 17 Jul 2023 20:12:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91BB481E3C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E1901BF2C5
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 20:12:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F27A840857;
+	Mon, 17 Jul 2023 21:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F27A840857
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CDD061BF2C1
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 21:08:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 26F6D60EAA
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 20:12:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26F6D60EAA
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7F644015A
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 21:08:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7F644015A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sDb_pKiODuxL for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 20:12:01 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC3BF60D75
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AC3BF60D75
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 20:12:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E16FFF806;
- Mon, 17 Jul 2023 20:11:57 +0000 (UTC)
-Date: Mon, 17 Jul 2023 22:11:55 +0200
-To: Ignacy =?UTF-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-Message-ID: <20230717221155.6f06a5fd@windsurf>
-In-Reply-To: <20230717140932.s3yxrzyqdjf2ljcd@zenon.in.qult.net>
-References: <20230714090804.kaid6vdlxiubf632@zenon.in.qult.net>
- <20230714121834.22742681@windsurf>
- <20230717140932.s3yxrzyqdjf2ljcd@zenon.in.qult.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689624717;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=KKu9AmALbphqRej1CeTgAQoP9hyHGOiJAPlRzkvaL7s=;
- b=So2s8PtN+2Iiq3moj0N1Q8XOiU0B1F9ISN3yXEoG4j6T3qFzTFshhKVRre0D4OdGjJPBX0
- dFR7eoilLvvVxKIic77cz5gQGPKUTbB96s+OlvNh/ogq0KiNieWOQ1xrYA1reeSMhQvhGm
- LRkZbY1mdWixnscMQ/iZdspxh0ii9koQ2m5e1wx+EcoHK13ySp0zdB9xNxUcp60DQhhxQx
- PtdLdLPCTQoJOmebcDj7Yt7v/7QU99pMldvmTKmLJ/c2MCWYXuMEwiSe0MfpOkQJ6OMAtd
- /hERgRADvlivT+kEHGYrATVGCanHoyWXCuteJQB60UrM6HO2PrrgbmyCjq0TFA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=So2s8PtN
-Subject: Re: [Buildroot] [PATCH] package/elfutils: enable building with
- musl-based toolchains
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id w_5fJGdLjMti for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 21:08:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B9C8405D4
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 21:08:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B9C8405D4
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EBE188739A; Mon, 17 Jul 2023 21:08:35 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 17 Jul 2023 23:07:52 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: eb62b3fc914621a84c616a72de27549f33427511
+X-Git-Newrev: dc7000f0de50a21355198d6ce814143a9d5af582
+X-Patchwork-Hint: ignore
+Message-Id: <20230717210835.EBE188739A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] Update for 2023.02.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,44 +56,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSWduYWN5LAoKT24gTW9uLCAxNyBKdWwgMjAyMyAxNjowOTozMiArMDIwMApJZ25hY3kg
-R2F3xJlkemtpIDxpZ25hY3kuZ2F3ZWR6a2lAZ3JlZW4tY29tbXVuaWNhdGlvbnMuZnI+IHdyb3Rl
-OgoKPiBTdXJlLiAgSSBzdGFydGVkIGhhdmluZyBhIGxvb2sgYW5kIHN0dW1ibGVkIHVwb24gYW4g
-aXNzdWUgd2hpbGUKPiB0ZXN0LXBrZydpbmcgbGliYnBmLiAgQXNpZGUgZnJvbSBtYW55IHRvb2xj
-aGFpbnMganVzdCBiZWluZyBza2lwcGVkCj4gKHN1cHBvc2VkbHkgYmVjYXVzZSBvZiB0aGVpciBs
-YWNrIG9mIHRoZSBtaW5pbXVtIGtlcm5lbCBoZWFkZXJzCj4gdmVyc2lvbiksIGl0IHN1Y2NlZWRl
-ZCB3aXRoIHRob3NlIGdsaWJjIGFuZCBtdXNsIHRvb2xjaGFpbnMgdGhhdCBpdAo+IGRpZG4ndCBz
-a2lwLCBhbmQgZmFpbGVkIHdpdGggYnItbWlwczY0LW42NC1mdWxsLiAgVGhlIGxhdHRlciBpcyBi
-YXNlZAo+IG9uIHVDbGliYyB2MS4wLjM2IGFuZCBpdCB0dXJucyBvdXQgdUNsaWJjIHByaW9yIHRv
-IHYxLjAuMzggaGFzIG5vCj4gd29ya2luZyBkZWZpbml0aW9uIG9mIEZfRFVQRkRfQ0xPRVhFQywg
-cmVxdWlyZWQgYnkgbGliYnBmLgoKUGxlYXNlIG5vdGUgdGhhdCB0aGlzIGlzIGEgc2VwYXJhdGUg
-cHJvYmxlbSwgdW5yZWxhdGVkIHRvIHlvdXIgZWZmb3J0Cm9mIG1ha2luZyBlbGZ1dGlscyBidWls
-ZGFibGUgd2l0aCBtdXNsLiBUaGVyZWZvcmUsIHdlIHdpbGwgbm90IHJlcXVpcmUKeW91IHRvIGZp
-eCBhbGwgb3RoZXIgdW5yZWxhdGVkIHByb2JsZW1zLiBPZiBjb3Vyc2UsIGlmIHlvdSB3YW50IHRv
-CnRhY2tsZSBhbmQgc29sdmUgdGhvc2UgdW5yZWxhdGVkIHByb2JsZW1zOiBncmVhdCEgQnV0IGRv
-bid0IGZlZWwgbGlrZQp5b3UgaGF2ZSB0bzogaWYgdGhleSBhcmUgdW5yZWxhdGVkLCB3ZSBhcmUg
-bm90IGdvaW5nIHRvIG1ha2Ugc29sdmluZwp0aGVtIGEgcmVxdWlyZW1lbnQgb2YgbWVyZ2luZyB5
-b3VyIHBhdGNoZXMgcmVsYXRlZCB0byBlbGZ1dGlscy9tdXNsLgoKPiBOb3cgSSBoYXZlIHRoZSBm
-b2xsb3dpbmcgcHJvYmxlbTogaG93IGNhbiBJIGRldGVybWluZSwgZnJvbSB0aGUKPiBDb25maWcu
-aW4ncyBwb2ludC1vZi12aWV3LCB0aGF0IHRoZSB1Q2xpYmMgdXNlZCBieSB0aGUgdG9vbGNoYWlu
-IGlzCj4gdG9vIG9sZD8gIFRoZXJlIGFyZSB2YXJpYWJsZSB0aGF0IGFyZSBzZXQgd2hlbiB0aGUg
-dG9vbGNoYWluIGlzCj4gdWNsaWJjLWJhc2VkLCBidXQgaW4gdGhpcyBjYXNlIEkgaGF2ZQo+IEJS
-Ml9UT09MQ0hBSU5fRVhURVJOQUxfQ1VTVE9NX1VDTElCQz15IGFuZCBubyB3YXkgdG8ga25vdyB0
-aGUgYWN0dWFsCj4gdmVyc2lvbi4gIEZvcmJpZGRpbmcgbGliYnBmIGFzIHNvb24gYXMKPiBCUjJf
-VE9PTENIQUlOX0VYVEVSTkFMX0NVU1RPTV9VQ0xJQkM9eSBzZWVtcyBvdmVya2lsbC4KCkFybm91
-dCByZXBsaWVkIG9uIHRoYXQsIGFuZCBnZW5lcmFsbHkgc3BlYWtpbmcgd2UgZG9uJ3QgcmVhbGx5
-IGNhcmUKYW55bW9yZSBhYm91dCAidG9vIG9sZCB1Q2xpYmMiLCBJIHdvdWxkIHByb2JhYmx5IG5v
-dCBib3RoZXIgdHJ5aW5nIHRvCnN1cHBvcnQgYWxsIG9sZCB1Q2xpYmMgdG9vbGNoYWlucy4KClRo
-b21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJl
-ZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jv
-b3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=dc7000f0de50a21355198d6ce814143a9d5af582
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                  | 24 ++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 3b2199f447..b5cb5e7665 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,27 @@
++2023.02.3, released July 17th, 2023
++
++	Important / security related fixes.
++
++	Defconfigs: Chiliboard: fix build on hosts without openssl
++	development headers.
++	Nitrogen*: fix build on hosts without openssl or pylibfdt.
++	Raspberrypi: Handle DTB overlays for all variants
++
++	Updated/fixed packages: agentpp, alsa-plugins, assimp, bind,
++	busybox, dbus, c-ares, check, dav1d, fluidsynth, fftw, fwts,
++	ghostscript, gnupg2, gnuradio, gupnp, haproxy, heimdal,
++	hwdata, jhead, libcap, libgcrypt, libgpg-error, libgtk3,
++	libxslt, mesa3d-demos, mpir, nodejs, php, pkgconf,
++	python-cryptography, python-dbus-fast, python-django,
++	python-pyicu, python-requests, python3, qt6, quickjs,
++	sconeserver, taglib, tiff, wireshark, xdriver_xf86-video-dummy
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#15643: ERROR: No hash found for linux-6.3.8.tar.xz
++	#15673: PKGCONF_SITE in pkgconf.mk points to parked domain
++	#15682: pkgconf: no longer able to download source from...
++
+ 2023.02.2, released June 16th, 2023
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 7fcd9e6bcb..7309fd9976 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2023.02.2
++export BR2_VERSION := 2023.02.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1686923000
++BR2_VERSION_EPOCH = 1689628000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 5bc7a2c012..250766fb1d 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2023.02.2'
++RELEASE='2023.02.3'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
