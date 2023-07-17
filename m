@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD0CEB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 12:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68434C0015E
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 12:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D81F1405D1;
-	Mon, 17 Jul 2023 12:16:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D81F1405D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1BA1D400EF;
+	Mon, 17 Jul 2023 12:29:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BA1D400EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QiEmbnlgbMJr; Mon, 17 Jul 2023 12:16:15 +0000 (UTC)
+	with ESMTP id CIiygpAnxYmg; Mon, 17 Jul 2023 12:29:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1DF7940A67;
-	Mon, 17 Jul 2023 12:16:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DF7940A67
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 390101BF860
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:15:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4153040159;
+	Mon, 17 Jul 2023 12:29:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4153040159
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 38F1D1BF34C
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:29:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E20660B45
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:15:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E20660B45
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12C8C81326
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 12:29:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C8C81326
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EW5NNGkU6O1J for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 12:15:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37ED460C2C
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 12:15:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37ED460C2C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 283488717B; Mon, 17 Jul 2023 12:15:28 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lh9NZZDyhrp0 for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 12:29:20 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7328681320
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7328681320
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 12:29:20 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 910F8A4C0931
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 14:29:16 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:55028)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qLNLo-0007M2-08
+ for buildroot@buildroot.org; Mon, 17 Jul 2023 14:29:16 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 17 Jul 2023 14:03:11 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ae7b3485986a1f495e6a932777be2c7a607edcdf
-X-Git-Newrev: cd4e89f76d25749cd654cb115e5112ba0878a19d
-X-Patchwork-Hint: ignore
-Message-Id: <20230717121528.283488717B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gnuradio: fix
- build with python-pybind > 2.10.0
+Date: Mon, 17 Jul 2023 14:29:15 +0200
+Message-Id: <20230717122915.3548507-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: +++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1689596956;
+ bh=nOqg8pAOI63rK/jk6XfFf7kMPIdhdo4+c0Xl8sGAI10=;
+ h=From:To:Subject:Date:From;
+ b=a1M2XGpkyEF4STAnYzFYAe3s4VP+8bto2CObI+JaD/5KnocvUE1bDALH3PNcb8dxy
+ 3C8fQxgzK6yQliTrxUhSHmWCraoCJ9O2xasTrh3TFR6q25H/L7pd0QM4l151KGOHLs
+ sUXFHT2CcsYD70mxS51BkDvZkKQhHFY5nodfx4zx4bDoFPq1yS2nXa+LOm/9xUgJAX
+ lrkSiyz7pKk00apGvK1pvU4rPvFJjK/a5/r4gAFtlKodVLZzUs4fUxYv2KEf/0UNmg
+ jL7YVqZc9oy6loNifgTVy74K2eGRE0xDnlMA5JCJyiJ4gDIW/gXe6yPLnlpM4C/QyK
+ ZsRXbJao8ORtA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=a1M2XGpk
+Subject: [Buildroot] [PATCH 1/1] package/transmission: fix gtk dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +75,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd4e89f76d25749cd654cb115e5112ba0878a19d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+Buildroot commit 80793107a65d95f8dfd0317a726d3a737c78ef67 forgot to add
+packages needed for gtk support:
+https://github.com/transmission/transmission/blob/main/CMakeLists.txt#L40
 
-Since commit 0e82c360942907f5a2f379e64e0d211aaff80774 (and since release
-2.10.1), a new variable called PYBIND11_PYTHONLIBS_OVERWRITE was introduced
-and set to ON by default.
-
-According to comment before this option:
-"Overwrite cached values read from Python library (classic search). Turn off if
-cross-compiling and manually setting these values."
-
-In buildroot's context this option must be disabled to keep variables
-provided by buildroot and lib/app.
-
-Fixes:
-- http://autobuild.buildroot.net/results/7423df5db5237d94bb49e32698828d4fe470e39b/
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 11aa7ac8fa3a21dc2476dd09539ea3cf3e48f03d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/gnuradio/gnuradio.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/transmission/Config.in       | 2 ++
+ package/transmission/transmission.mk | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index d9218b533d..1453b78493 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -116,6 +116,9 @@ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
- GNURADIO_DEPENDENCIES += python3 python-pybind \
- 	host-python-numpy host-python-packaging
- GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
-+# mandatory to avoid pybind11 to overwrite variables provided
-+# by gnuradio and buildroot
-+GNURADIO_CONF_OPTS += -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF
- # mandatory to install python modules in site-packages and to use
- # correct path for python libraries
- GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
+diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+index 84bd85eeff..d6567c6452 100644
+--- a/package/transmission/Config.in
++++ b/package/transmission/Config.in
+@@ -38,6 +38,8 @@ config BR2_PACKAGE_TRANSMISSION_DAEMON
+ config BR2_PACKAGE_TRANSMISSION_GTK
+ 	bool "transmission-gtk"
+ 	depends on BR2_PACKAGE_LIBGTK3 && BR2_SYSTEM_ENABLE_NLS
++	select BR2_PACKAGE_GLIBMM
++	select BR2_PACKAGE_GTKMM3
+ 	help
+ 	  Install transmission GTK-based GUI interface.
+ 
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index f3a200ced3..b2d554e742 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -74,7 +74,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
+ TRANSMISSION_CONF_OPTS += -DENABLE_GTK=ON
+-TRANSMISSION_DEPENDENCIES += libgtk3
++TRANSMISSION_DEPENDENCIES += glibmm gtkmm3 libgtk3
+ else
+ TRANSMISSION_CONF_OPTS += -DENABLE_GTK=OFF
+ endif
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
