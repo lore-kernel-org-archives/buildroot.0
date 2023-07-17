@@ -1,72 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A528EEB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 16 Jul 2023 21:38:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71976EB64DC
+	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 04:10:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AA0960DFC;
-	Sun, 16 Jul 2023 21:38:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AA0960DFC
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF81440968;
+	Mon, 17 Jul 2023 04:10:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF81440968
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rhGp-Lut9RtV; Sun, 16 Jul 2023 21:38:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rjzwYo2PKwNv; Mon, 17 Jul 2023 04:10:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C22760E24;
-	Sun, 16 Jul 2023 21:38:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C22760E24
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BF46E1BF861
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 21:38:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 238AA4096A;
+	Mon, 17 Jul 2023 04:10:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 238AA4096A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E2CF1BF373
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 04:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98B1B8174A
- for <buildroot@lists.busybox.net>; Sun, 16 Jul 2023 21:38:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98B1B8174A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7277C4096A
+ for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 04:10:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7277C4096A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rL7cNfl8jCYa for <buildroot@lists.busybox.net>;
- Sun, 16 Jul 2023 21:38:06 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE2A881746
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DE2A881746
- for <buildroot@buildroot.org>; Sun, 16 Jul 2023 21:38:05 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8CC0A1BF204;
- Sun, 16 Jul 2023 21:38:02 +0000 (UTC)
-Date: Sun, 16 Jul 2023 23:38:01 +0200
-To: Baruch Siach <baruch@tkos.co.il>
-Message-ID: <20230716233801.20454e60@windsurf>
-In-Reply-To: <87lefkwl12.fsf@tarshish>
-References: <20230611233619.128038-1-grzegorz@blach.pl>
- <20230611233619.128038-6-grzegorz@blach.pl>
- <20230712230206.359c037e@windsurf> <87lefkwl12.fsf@tarshish>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YpXvPJfcoF_z for <buildroot@lists.busybox.net>;
+ Mon, 17 Jul 2023 04:10:52 +0000 (UTC)
+X-Greylist: whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0459A40968
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
+ [IPv6:2607:f8b0:4864:20::632])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0459A40968
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 04:10:51 +0000 (UTC)
+Received: by mail-pl1-x632.google.com with SMTP id
+ d9443c01a7336-1bb1baf55f5so19977865ad.0
+ for <buildroot@buildroot.org>; Sun, 16 Jul 2023 21:10:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1689567051; x=1692159051;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=NU8Ou4/YSbn1HKElWrebJzpveZdBFQXjS0bxUS91FVg=;
+ b=DmWEfru/v5ZZP3/iLHi3VBfj1+5iaQozjzAPeCH8VL2pOj0mTp+Nf3xs+O7v5uFz1l
+ MiYv9hpP/Lfec/cFwp/RihyfNb2rO+fVUIdNEKyWZE+N795xqnwaRCEVMheRdXmm6Yg8
+ eEqOqfxPqc3Sk7Im9b7BD8AOuIbUefVeS/2vk7KfjzEOSoV8gbLOPzhk9QPQ3QXjNSVX
+ 214pVResY4VO4zA+QWWVHDj56UpGa6T9HONw5MaFr9FNEi3IdOJhNK553CLK/iSPGA8u
+ S/ewS1nGZ2f3wPxzHLyQsv5bGlrgCa1KucaM5gBavf1YwW5HyqX7yEFzXr/RG5cdLFsL
+ +mTg==
+X-Gm-Message-State: ABy/qLZn1JWs+rsbMSYonOd/GV5kTl2NUdv9a1lomj9oPE0Ax2PFicny
+ sDdd+usLriPHyWnR41lQFjT+YO98j/TV75G99zhlmw==
+X-Google-Smtp-Source: APBJJlF83lQMLSnTKcR2y/E24HeHKpsU4eIqJBlia/JzJKo8zs2NKOue9f7Rklk563+/1hwuobVI0g==
+X-Received: by 2002:a17:902:c40c:b0:1b8:862:74ee with SMTP id
+ k12-20020a170902c40c00b001b8086274eemr13374999plk.11.1689567050670; 
+ Sun, 16 Jul 2023 21:10:50 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ t18-20020a170902d21200b001b1c4d875f5sm11628976ply.44.2023.07.16.21.10.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 16 Jul 2023 21:10:50 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Sun, 16 Jul 2023 21:10:46 -0700
+Message-ID: <20230717041047.1510851-1-christian@aperture.us>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689543484;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ea/ZcHzoyWRLfcnbtWp/8Z2vryskpvzI6QR0EPG7xsA=;
- b=R6lfZECVJ4ak140envpaNpz75kk+XPel5Va1X9ty0ggoSTyBo7Y+FonFhMb06FSX+0VQuX
- 7dVbKhTk3+Zz/iKFKPEEnQvHVEJHL5D+/0YjrzQoQM1EjNVVzL+Zt8L6ASeh7FzRg0NmCh
- Z6yuhGYtYMMjdERPw/e3tHaO+T3sGAF2qC+TO8s5107vArP3+9X1f416XDI6ZGpq+l5NFv
- U0yggs9aA0vjLmbANxKUNtd+kNFPzCpFAvQ2okN9PyAKdBT2sO2qJdJ0eYn3/f6rhuZi6q
- 4JgzhUGKZsO8EncKtJ2WAuFgG27/jf5EPrIRqQUG1+JjmpNk6P5fLcWM1Qs+fQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=R6lfZECV
-Subject: Re: [Buildroot] [PATCH 6/6] package/python-rpi-ws281x: bump to
- version 5.0.0
+ d=aperture.us; s=google; t=1689567051; x=1692159051;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=NU8Ou4/YSbn1HKElWrebJzpveZdBFQXjS0bxUS91FVg=;
+ b=Y+7dkm9JJhYuKtWNI5s+BdUBjK/R7B7EitQCH0T7u3RWyyJu+FdoeciwEW3M20mjDd
+ H653i+0BqPbwx+IGn2DFfabRbZu9cXe2pLWfFcB6sf9658MOBUMqfy7t5CVpKO0SIBiq
+ V0yawyyPVE0sp32OekSEn2pEftTqYxWdFokwrsrW/TI/h/DpekfA9a0H9LKzo2fNuRvF
+ UqTLzXyn4kpj9cbJcatGzwlZqG2uRXXni06HV+/1vCaozlk9A4wmaVDC7NKYFoGtGkzW
+ IbkRuZ1zvW5M09pEsT5O8Txt3oE97cy0tk8cwwcjxmrAVuSHPu6hRoH0ZNiIcpsaXp6G
+ Mlug==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
+ header.a=rsa-sha256 header.s=google header.b=Y+7dkm9J
+Subject: [Buildroot] [PATCH v1 1/2] package/docker-engine: backport fix for
+ host header check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,31 +94,298 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 13 Jul 2023 06:24:08 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Go 1.20.6 and 1.19.11 include a security check of the http Host header:
 
-> Not in current master as of commit 587d392df7d1
-> ("support/testing/tests/package/test_shadow: fix flake8 warning").
+  https://github.com/golang/go/issues/60374
 
-Indeed! Thanks a lot for spotting this mistake, I've now pushed the
-commit.
+docker-cli does not satisfy this check:
 
-Best regards,
+  $ docker exec -it ctr bash
+  http: invalid Host header
 
-Thomas
+This is a backported patch to fix this issue:
+
+Issue: https://github.com/moby/moby/issues/45935
+Upstream PR: https://github.com/moby/moby/pull/45942
+
+The upstream PR has been merged and will be included in v24.0.5.
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ ...dummy-hostname-to-use-for-local-conn.patch | 174 ++++++++++++++++++
+ ...a-dummy-hostname-for-local-connectio.patch |  69 +++++++
+ 2 files changed, 243 insertions(+)
+ create mode 100644 package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch
+ create mode 100644 package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch
+
+diff --git a/package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch b/package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch
+new file mode 100644
+index 0000000000..c5f8d1eb71
+--- /dev/null
++++ b/package/docker-engine/0001-client-define-a-dummy-hostname-to-use-for-local-conn.patch
+@@ -0,0 +1,174 @@
++From 8ced4331e5e3a6760465a8ce2bd42c66d3232c96 Mon Sep 17 00:00:00 2001
++From: Sebastiaan van Stijn <github@gone.nl>
++Date: Wed, 12 Jul 2023 14:15:38 +0200
++Subject: [PATCH] client: define a "dummy" hostname to use for local
++ connections
++
++Go 1.20.6 and 1.19.11 include a security check of the http Host header:
++    
++  https://github.com/golang/go/issues/60374
++
++This is a backported patch to fix this issue.
++
++Issue: https://github.com/moby/moby/issues/45935
++Upstream PR: https://github.com/moby/moby/pull/45942
++
++The upstream PR has been merged and will be included in v24.0.5.
++
++Signed-off-by: Christian Stewart <christian@aperture.us>
++
++---
++
++For local communications (npipe://, unix://), the hostname is not used,
++but we need valid and meaningful hostname.
++
++The current code used the client's `addr` as hostname in some cases, which
++could contain the path for the unix-socket (`/var/run/docker.sock`), which
++gets rejected by go1.20.6 and go1.19.11 because of a security fix for
++[CVE-2023-29406 ][1], which was implemented in  https://go.dev/issue/60374.
++
++Prior versions go Go would clean the host header, and strip slashes in the
++process, but go1.20.6 and go1.19.11 no longer do, and reject the host
++header.
++
++This patch introduces a `DummyHost` const, and uses this dummy host for
++cases where we don't need an actual hostname.
++
++Before this patch (using go1.20.6):
++
++    make GO_VERSION=1.20.6 TEST_FILTER=TestAttach test-integration
++    === RUN   TestAttachWithTTY
++        attach_test.go:46: assertion failed: error is not nil: http: invalid Host header
++    --- FAIL: TestAttachWithTTY (0.11s)
++    === RUN   TestAttachWithoutTTy
++        attach_test.go:46: assertion failed: error is not nil: http: invalid Host header
++    --- FAIL: TestAttachWithoutTTy (0.02s)
++    FAIL
++
++With this patch applied:
++
++    make GO_VERSION=1.20.6 TEST_FILTER=TestAttach test-integration
++    INFO: Testing against a local daemon
++    === RUN   TestAttachWithTTY
++    --- PASS: TestAttachWithTTY (0.12s)
++    === RUN   TestAttachWithoutTTy
++    --- PASS: TestAttachWithoutTTy (0.02s)
++    PASS
++
++[1]: https://github.com/advisories/GHSA-f8f7-69v5-w4vx
++
++Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
++(cherry picked from commit 92975f0c11f0566cc3c36659f5e3bb9faf5cb176)
++Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
++---
++ client/client.go       | 30 ++++++++++++++++++++++++++++++
++ client/hijack.go       |  6 +++++-
++ client/request.go      | 10 ++++------
++ client/request_test.go |  4 ++--
++ 4 files changed, 41 insertions(+), 9 deletions(-)
++
++diff --git a/client/client.go b/client/client.go
++index 1c081a51ae..54fa36cca8 100644
++--- a/client/client.go
+++++ b/client/client.go
++@@ -56,6 +56,36 @@ import (
++ 	"github.com/pkg/errors"
++ )
++ 
+++// DummyHost is a hostname used for local communication.
+++//
+++// It acts as a valid formatted hostname for local connections (such as "unix://"
+++// or "npipe://") which do not require a hostname. It should never be resolved,
+++// but uses the special-purpose ".localhost" TLD (as defined in [RFC 2606, Section 2]
+++// and [RFC 6761, Section 6.3]).
+++//
+++// [RFC 7230, Section 5.4] defines that an empty header must be used for such
+++// cases:
+++//
+++//	If the authority component is missing or undefined for the target URI,
+++//	then a client MUST send a Host header field with an empty field-value.
+++//
+++// However, [Go stdlib] enforces the semantics of HTTP(S) over TCP, does not
+++// allow an empty header to be used, and requires req.URL.Scheme to be either
+++// "http" or "https".
+++//
+++// For further details, refer to:
+++//
+++//   - https://github.com/docker/engine-api/issues/189
+++//   - https://github.com/golang/go/issues/13624
+++//   - https://github.com/golang/go/issues/61076
+++//   - https://github.com/moby/moby/issues/45935
+++//
+++// [RFC 2606, Section 2]: https://www.rfc-editor.org/rfc/rfc2606.html#section-2
+++// [RFC 6761, Section 6.3]: https://www.rfc-editor.org/rfc/rfc6761#section-6.3
+++// [RFC 7230, Section 5.4]: https://datatracker.ietf.org/doc/html/rfc7230#section-5.4
+++// [Go stdlib]: https://github.com/golang/go/blob/6244b1946bc2101b01955468f1be502dbadd6807/src/net/http/transport.go#L558-L569
+++const DummyHost = "api.moby.localhost"
+++
++ // ErrRedirect is the error returned by checkRedirect when the request is non-GET.
++ var ErrRedirect = errors.New("unexpected redirect in response")
++ 
++diff --git a/client/hijack.go b/client/hijack.go
++index 6bdacab10a..4dcaaca4c5 100644
++--- a/client/hijack.go
+++++ b/client/hijack.go
++@@ -64,7 +64,11 @@ func fallbackDial(proto, addr string, tlsConfig *tls.Config) (net.Conn, error) {
++ }
++ 
++ func (cli *Client) setupHijackConn(ctx context.Context, req *http.Request, proto string) (net.Conn, string, error) {
++-	req.Host = cli.addr
+++	req.URL.Host = cli.addr
+++	if cli.proto == "unix" || cli.proto == "npipe" {
+++		// Override host header for non-tcp connections.
+++		req.Host = DummyHost
+++	}
++ 	req.Header.Set("Connection", "Upgrade")
++ 	req.Header.Set("Upgrade", proto)
++ 
++diff --git a/client/request.go b/client/request.go
++index c799095c12..bcedcf3bd9 100644
++--- a/client/request.go
+++++ b/client/request.go
++@@ -96,16 +96,14 @@ func (cli *Client) buildRequest(method, path string, body io.Reader, headers hea
++ 		return nil, err
++ 	}
++ 	req = cli.addHeaders(req, headers)
+++	req.URL.Scheme = cli.scheme
+++	req.URL.Host = cli.addr
++ 
++ 	if cli.proto == "unix" || cli.proto == "npipe" {
++-		// For local communications, it doesn't matter what the host is. We just
++-		// need a valid and meaningful host name. (See #189)
++-		req.Host = "docker"
+++		// Override host header for non-tcp connections.
+++		req.Host = DummyHost
++ 	}
++ 
++-	req.URL.Host = cli.addr
++-	req.URL.Scheme = cli.scheme
++-
++ 	if expectedPayload && req.Header.Get("Content-Type") == "" {
++ 		req.Header.Set("Content-Type", "text/plain")
++ 	}
++diff --git a/client/request_test.go b/client/request_test.go
++index 6e5a6e81f2..50b09d954c 100644
++--- a/client/request_test.go
+++++ b/client/request_test.go
++@@ -29,12 +29,12 @@ func TestSetHostHeader(t *testing.T) {
++ 	}{
++ 		{
++ 			"unix:///var/run/docker.sock",
++-			"docker",
+++			DummyHost,
++ 			"/var/run/docker.sock",
++ 		},
++ 		{
++ 			"npipe:////./pipe/docker_engine",
++-			"docker",
+++			DummyHost,
++ 			"//./pipe/docker_engine",
++ 		},
++ 		{
++-- 
++2.41.0
++
+diff --git a/package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch b/package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch
+new file mode 100644
+index 0000000000..5bd8682927
+--- /dev/null
++++ b/package/docker-engine/0002-pkg-plugins-use-a-dummy-hostname-for-local-connectio.patch
+@@ -0,0 +1,69 @@
++From 09306e7eb3c26ade69ef1e4c99d5b1fd9c0b7364 Mon Sep 17 00:00:00 2001
++From: Sebastiaan van Stijn <github@gone.nl>
++Date: Wed, 12 Jul 2023 15:07:59 +0200
++Subject: [PATCH] pkg/plugins: use a dummy hostname for local connections
++
++For local communications (npipe://, unix://), the hostname is not used,
++but we need valid and meaningful hostname.
++
++The current code used the socket path as hostname, which gets rejected by
++go1.20.6 and go1.19.11 because of a security fix for [CVE-2023-29406 ][1],
++which was implemented in  https://go.dev/issue/60374.
++
++Prior versions go Go would clean the host header, and strip slashes in the
++process, but go1.20.6 and go1.19.11 no longer do, and reject the host
++header.
++
++Before this patch, tests would fail on go1.20.6:
++
++    === FAIL: pkg/authorization TestAuthZRequestPlugin (15.01s)
++    time="2023-07-12T12:53:45Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 1s"
++    time="2023-07-12T12:53:46Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 2s"
++    time="2023-07-12T12:53:48Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 4s"
++    time="2023-07-12T12:53:52Z" level=warning msg="Unable to connect to plugin: //tmp/authz2422457390/authz-test-plugin.sock/AuthZPlugin.AuthZReq: Post \"http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq\": http: invalid Host header, retrying in 8s"
++        authz_unix_test.go:82: Failed to authorize request Post "http://%2F%2Ftmp%2Fauthz2422457390%2Fauthz-test-plugin.sock/AuthZPlugin.AuthZReq": http: invalid Host header
++
++[1]: https://github.com/advisories/GHSA-f8f7-69v5-w4vx
++
++Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
++(cherry picked from commit 6b7705d5b29e226a24902a8dcc488836faaee33c)
++Signed-off-by: Sebastiaan van Stijn <github@gone.nl>
++---
++ pkg/plugins/client.go | 14 ++++++++++++--
++ 1 file changed, 12 insertions(+), 2 deletions(-)
++
++diff --git a/pkg/plugins/client.go b/pkg/plugins/client.go
++index 752fecd0ae..e683eb777d 100644
++--- a/pkg/plugins/client.go
+++++ b/pkg/plugins/client.go
++@@ -18,6 +18,12 @@ import (
++ 
++ const (
++ 	defaultTimeOut = 30
+++
+++	// dummyHost is a hostname used for local communication.
+++	//
+++	// For local communications (npipe://, unix://), the hostname is not used,
+++	// but we need valid and meaningful hostname.
+++	dummyHost = "plugin.moby.localhost"
++ )
++ 
++ func newTransport(addr string, tlsConfig *tlsconfig.Options) (transport.Transport, error) {
++@@ -44,8 +50,12 @@ func newTransport(addr string, tlsConfig *tlsconfig.Options) (transport.Transpor
++ 		return nil, err
++ 	}
++ 	scheme := httpScheme(u)
++-
++-	return transport.NewHTTPTransport(tr, scheme, socket), nil
+++	hostName := u.Host
+++	if hostName == "" || u.Scheme == "unix" || u.Scheme == "npipe" {
+++		// Override host header for non-tcp connections.
+++		hostName = dummyHost
+++	}
+++	return transport.NewHTTPTransport(tr, scheme, hostName), nil
++ }
++ 
++ // NewClient creates a new plugin client (http).
++-- 
++2.41.0
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
