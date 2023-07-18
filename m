@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08884EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60648EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:26:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62B2B417A9;
-	Tue, 18 Jul 2023 21:22:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62B2B417A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4F96417B4;
+	Tue, 18 Jul 2023 21:26:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4F96417B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PRdGLDRH3Js1; Tue, 18 Jul 2023 21:22:19 +0000 (UTC)
+	with ESMTP id EfnZjW2YI-4U; Tue, 18 Jul 2023 21:26:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44B86417B7;
-	Tue, 18 Jul 2023 21:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44B86417B7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5CA3D1BF350
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:22:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE2E0417AE;
+	Tue, 18 Jul 2023 21:26:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE2E0417AE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E2411BF350
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 097D760B74
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 097D760B74
+ by smtp2.osuosl.org (Postfix) with ESMTP id 342B141496
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:26:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 342B141496
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J9DoEb2tDQyb for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 21:22:09 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 009E560B4C
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 009E560B4C
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 21:22:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B5C321C0003;
- Tue, 18 Jul 2023 21:22:05 +0000 (UTC)
-Date: Tue, 18 Jul 2023 23:22:03 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230718232203.545fd22c@windsurf>
-In-Reply-To: <20230716131205.4009092-1-bernd@kuhls.net>
-References: <20230716131205.4009092-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689715326;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+NqoarjyikEm82diT+gq3qW7PvEbVjZmCMHvUP6EDwY=;
- b=I0qGN24MibHFFachNCvsYEhh9l5lKdapj2E16ucEObHvYXghiL2e8NiiylFHwc50dJqgcS
- U1RQHAc2dE5kMyceG0RbENZ3Pel8rV3m+BbnZbal0vANQdVzQKx9RXAS8r9yhR2DntFNAA
- XkckwcS6uRP32k1LO5ojviZWxSzaW1tRBx3eQQWLEHTwKj99t5qVOxGuXfw5X7LWQ622EM
- aoJRNihFobXCdE1OMYvIa7ktjG2fVP8TGsLBc19AMTQ6rS3WjjQRoSkYrrO4YXWM4nWkJT
- dlYM8amnyWYBsNoV/KwdtTB+Csamq86htXfgJoY0YHPReBlkVW9SKd3R0+WaXA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=I0qGN24M
-Subject: Re: [Buildroot] [PATCH 1/1] package/resiprocate: fix build with
- OpenSSL 3.x
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GnS4JcnrNwKK for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 21:26:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AF8A40280
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 21:26:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AF8A40280
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 57D478746A; Tue, 18 Jul 2023 21:26:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 18 Jul 2023 23:23:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 70a40164122050877c59cbbb8f4be389b95e269e
+X-Git-Newrev: 6a7c9332402d019181ef1b6b02a9e5d84c6463c7
+X-Patchwork-Hint: ignore
+Message-Id: <20230718212645.57D478746A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pipewire: bump version to 0.3.74
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,34 +57,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 16 Jul 2023 15:12:05 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6a7c9332402d019181ef1b6b02a9e5d84c6463c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Backport upstream commits needed for compatibility with OpenSSL 3.x.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  ...t-disable-use-of-legacy-OpenSSL-memo.patch | 39 +++++++++++++++++++
->  ...l-fix-typo-in-preprocessor-condition.patch | 26 +++++++++++++
->  ...Security-cxx-remove-deprecated-OpenS.patch | 27 +++++++++++++
->  3 files changed, 92 insertions(+)
->  create mode 100644 package/resiprocate/0002-rutil-OpenSSLInit-disable-use-of-legacy-OpenSSL-memo.patch
->  create mode 100644 package/resiprocate/0003-rutil-fix-typo-in-preprocessor-condition.patch
->  create mode 100644 package/resiprocate/0004-resip-stack-ssl-Security-cxx-remove-deprecated-OpenS.patch
+Changelog:
+https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/NEWS
 
-Applied to master, thanks.
+Added optional dependency to opus, disabled features with missing
+dependencies in buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pipewire/pipewire.hash |  2 +-
+ package/pipewire/pipewire.mk   | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 0e027aaa55..98de073bdb 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  c78c95cdff2774418f0a9468e94a1b2800761d322f13104df6501e1a0dc92558  pipewire-0.3.65.tar.bz2
++sha256  b30d886b87aa8c055af6d6c7261d1d04336f3a75221c31afe1ea8ba86184bf70  pipewire-0.3.74.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index d6bd2434bf..9d32da7c72 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIPEWIRE_VERSION = 0.3.65
++PIPEWIRE_VERSION = 0.3.74
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -35,6 +35,8 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dlegacy-rtkit=false \
+ 	-Davb=disabled \
+ 	-Dlibcanberra=disabled \
++	-Dlibmysofa=disabled \
++	-Dlibffado=disabled \
+ 	-Dflatpak=disabled
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+@@ -189,6 +191,13 @@ else
+ PIPEWIRE_CONF_OPTS += -Dpw-cat=disabled -Dsndfile=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPUS),y)
++PIPEWIRE_CONF_OPTS += -Dopus=enabled
++PIPEWIRE_DEPENDENCIES += opus
++else
++PIPEWIRE_CONF_OPTS += -Dopus=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
+ PIPEWIRE_CONF_OPTS += -Dlibpulse=enabled
+ PIPEWIRE_DEPENDENCIES += pulseaudio
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
