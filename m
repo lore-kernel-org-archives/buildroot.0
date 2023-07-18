@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87668EB64DD
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:05:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12379EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:05:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4692E61026;
-	Tue, 18 Jul 2023 21:05:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4692E61026
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9699160C2E;
+	Tue, 18 Jul 2023 21:05:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9699160C2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OBPobL7ECTzX; Tue, 18 Jul 2023 21:05:02 +0000 (UTC)
+	with ESMTP id 9tnmhdY1x-xJ; Tue, 18 Jul 2023 21:05:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40F856103F;
-	Tue, 18 Jul 2023 21:05:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40F856103F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E2F231BF350
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:04:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7EED60C19;
+	Tue, 18 Jul 2023 21:05:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7EED60C19
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D5DC1BF350
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C49D40650
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:04:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C49D40650
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83D3B81F74
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:05:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83D3B81F74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0Jdh_LHMYgA1 for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 21:04:33 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B11440621
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 21:04:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B11440621
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26CE487416; Tue, 18 Jul 2023 21:04:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 18 Jul 2023 23:03:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 873306199e55a9cfd5bd64c8ad9b526cf25a1466
-X-Git-Newrev: 5f5ecb551f6e9e99732588a01cc1fd2eb952b56f
-X-Patchwork-Hint: ignore
-Message-Id: <20230718210433.26CE487416@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/misc/gitlab-ci.yml.in: add stage
- explicitely to each jobs
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4TvVsIgwjeoa for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 21:05:40 +0000 (UTC)
+X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59DE781F4A
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59DE781F4A
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 21:05:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D033440002;
+ Tue, 18 Jul 2023 21:05:36 +0000 (UTC)
+Date: Tue, 18 Jul 2023 23:05:34 +0200
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230718230534.2b66a4d5@windsurf>
+In-Reply-To: <20230717213359.106368-1-romain.naour@gmail.com>
+References: <20230717213359.106368-1-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689714337;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LmJ7KyjeVhy/c7edZy3dMpIGBkFL2Q59miWWTu9Udls=;
+ b=X6eO6mNCS5G1EhhOSRKpRjfHzN9OntGD97wJCehYrZyG6rk+OBglWpUpyZvzETzL4Hv7N+
+ /MQyE8JCR7mc8gTsz+3eMJ8UT0sjvCZyRLuiTkhFQjbVHSXko/h3AMCPE5zJBNI+kT9JCV
+ sLQ4EaGhTDaJYUpxhGjiY2Abqvuwa4KEFeYwj2dbG7O+gLIMndBDXYySCdIjswM+E80Ees
+ WCQkA+1QTHBlXHIaQRqp4oRuAsdIoIUVYxxyc9arTUuVHEnoLUtEsI58VSOJ6RskURJewH
+ XveL5KRMyqqolEdzug3yZ4uy3/cbIw/WK/8C2pmT9+OEymKj+1NS47qrD3Ac/g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=X6eO6mNC
+Subject: Re: [Buildroot] [PATCH 1/3] support/run-tests: add a mode to only
+ download emulator builtin binaries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,105 +78,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f5ecb551f6e9e99732588a01cc1fd2eb952b56f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 17 Jul 2023 23:33:57 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-"stages" is curently not defined in the .gitlab-ci.yml file,
-so the default pipeline stages are:
+> Currently, emulator builtin binaries are downloaded after the rootfs
+> build by each tests running the emulator (Qemu) on armv5 or armv7.
+> 
+> Due to download quota on the server hosting theses binaries [1]
+> some GitLab jobs are failing due to "Connection reset by peer" [2]:
+> 
+>   ConnectionResetError: [Errno 104] Connection reset by peer
+> 
+> In a follow up commit, we'll add the possibility to download only once
+> all emulator builtin binaries to pass them as build artifacts.
+> 
+> As such, we will need to make sure that run-tests only download theses
+> binaries, and that it does not run the testsuite.
+> 
+> Add such a mode, with a new option, --prepare-only.
+> 
+> [1] http://autobuild.buildroot.net/artefacts
+> [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/4409032417
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  support/testing/run-tests | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 
-    .pre
-    build
-    test
-    deploy
-    .post
+Thanks, series applied. I'm not an expert in Gitlab CI sorcery, so I
+trust you that it is the right way of doing things :-)
 
-Since any jobs specify a stage, all jobs are assigned the "test"
-stage [1]. All other stages defined by default are not used in the
-gitlab-ci pipeline, they remain hidden.
-
-In order to introduce a new custom stage, add the "test" stage
-explicitely.
-
-[1] https://docs.gitlab.com/ee/ci/yaml/#stages
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/misc/gitlab-ci.yml.in | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index cbb6e555ce..d8d6b3f410 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -1,27 +1,36 @@
-+stages:
-+  - test
-+
- before_script:
-   - git config --global --add safe.directory ${CI_PROJECT_DIR}
- 
- .check-check-package_base:
-+    stage: test
-     script:
-         - python3 -m pytest -v utils/checkpackagelib/
- 
- .check-check-symbol_base:
-+    stage: test
-     script:
-         - python3 -m pytest -v utils/checksymbolslib/
- 
- .check-DEVELOPERS_base:
-+    stage: test
-     script:
-         - utils/get-developers -v
- 
- .check-package_base:
-+    stage: test
-     script:
-         - make check-package
- 
- .check-symbol_base:
-+    stage: test
-     script:
-         - utils/check-symbols
- 
- .defconfig_check:
-+    stage: test
-     script:
-         - DEFCONFIG_NAME=$(echo ${CI_JOB_NAME} | sed -e 's,_check$,,g')
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-@@ -42,6 +51,7 @@ before_script:
-       }
- 
- .defconfig_base:
-+    stage: test
-     script:
-         - DEFCONFIG_NAME=${CI_JOB_NAME}
-         - OUTPUT_DIR=output
-@@ -69,6 +79,7 @@ before_script:
-             - runtime-test.log
- 
- .runtime_test_base:
-+    stage: test
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-@@ -86,7 +97,7 @@ before_script:
-             - test-output/*/images/*
- 
- .test_pkg:
--    stage: build
-+    stage: test
-     script:
-         - OUTPUT_DIR=${CI_JOB_NAME}
-         - echo "Configure Buildroot for ${OUTPUT_DIR}"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
