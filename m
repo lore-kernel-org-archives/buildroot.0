@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFC0BEB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 20:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 300B6EB64DD
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 20:58:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62F5B60C19;
-	Tue, 18 Jul 2023 20:58:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62F5B60C19
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB7B861037;
+	Tue, 18 Jul 2023 20:58:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB7B861037
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id flG-n0E_kKUU; Tue, 18 Jul 2023 20:57:59 +0000 (UTC)
+	with ESMTP id e-0lSydbwjF8; Tue, 18 Jul 2023 20:58:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1E4A60AB9;
-	Tue, 18 Jul 2023 20:57:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1E4A60AB9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A40D61BF350
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:57:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1782C60B4C;
+	Tue, 18 Jul 2023 20:58:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1782C60B4C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E8001BF350
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:58:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76B4160AB9
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:57:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76B4160AB9
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF57E81F75
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:58:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF57E81F75
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JSlCs8WkQGWc for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 20:57:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A1A5606C6
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 20:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A1A5606C6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8769A873FF; Tue, 18 Jul 2023 20:57:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 18 Jul 2023 22:57:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d6bbf4bae81826e6756e62fc0e974777b8e3d92
-X-Git-Newrev: ed20a4eccd7dd665cb7997537f170391b417c5e7
-X-Patchwork-Hint: ignore
-Message-Id: <20230718205756.8769A873FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pipewire: remove optional
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c2I2WhxruyVl for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 20:58:06 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D835781F74
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D835781F74
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 20:58:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ECBD8FF802;
+ Tue, 18 Jul 2023 20:58:03 +0000 (UTC)
+Date: Tue, 18 Jul 2023 22:58:02 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230718225802.4368f233@windsurf>
+In-Reply-To: <20230716085259.3684479-1-bernd@kuhls.net>
+References: <20230716085259.3684479-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689713884;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=tYyZhhmOHMsHFT4FoHDQOIV3m4+JxBhMERrNkRK58rg=;
+ b=mRunQGwCDbv6lTXpISg2mnR+lw/8IirSapTWJqSh66L9kzzbhrk2wGKvU4UPk4gqP+s+Cb
+ jc7+U/pQQoxxI6y73CtFx5kPXk0F6pwLWmEjDwWVkU5qpinm7BfyzSlY8N7bOIO6NBv3yM
+ R0hBgDmbv0Q01V4tfVXheMY9hbNUoi279Ba1f2Ir3Tfsmsizlu8idj1IrUHXWhFSe5W0zV
+ w6ZQkCKg00ifYeVUxqiUrlrEaZrfpsT+mHt95Bf/KBZEWQsF6ostRfEq+aKOJmSbths3M4
+ RAfct8WHE/nLDpoH4uu7c+0INVu/XJnv4eHMGJ3OagTDJRvfDsZtX5tH4UiU5Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mRunQGwC
+Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: remove optional
  dependency to vulkan
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,52 +78,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed20a4eccd7dd665cb7997537f170391b417c5e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 16 Jul 2023 10:52:59 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/8b4/8b4d12de72a1407e74bd9b9b79f4e01ae86510ba/
+> Fixes:
+> http://autobuild.buildroot.net/results/8b4/8b4d12de72a1407e74bd9b9b79f4e01ae86510ba/
+> 
+> vulkan.pc is provided by the package vulkan-loader which is not
+> part of buildroot yet.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/pipewire/pipewire.mk | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
 
-vulkan.pc is provided by the package vulkan-loader which is not
-part of buildroot yet.
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pipewire/pipewire.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index ecf4a035ec..d6bd2434bf 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -30,6 +30,7 @@ PIPEWIRE_CONF_OPTS += \
- 	-Dvideoconvert=enabled \
- 	-Dvideotestsrc=enabled \
- 	-Dvolume=enabled \
-+	-Dvulkan=disabled \
- 	-Dsession-managers=[] \
- 	-Dlegacy-rtkit=false \
- 	-Davb=disabled \
-@@ -180,12 +181,6 @@ else
- PIPEWIRE_CONF_OPTS += -Dlibusb=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
--PIPEWIRE_CONF_OPTS += -Dvulkan=enabled
--PIPEWIRE_DEPENDENCIES += mesa3d
--else
--PIPEWIRE_CONF_OPTS += -Dvulkan=disabled
--endif
- 
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- PIPEWIRE_CONF_OPTS += -Dpw-cat=enabled -Dsndfile=enabled
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
