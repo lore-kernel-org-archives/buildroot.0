@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 446FCEB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:06:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E72AFEB64DD
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:06:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F12A060DF9;
-	Tue, 18 Jul 2023 21:06:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F12A060DF9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85FC361025;
+	Tue, 18 Jul 2023 21:06:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85FC361025
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5WZdeY1NhYyA; Tue, 18 Jul 2023 21:06:20 +0000 (UTC)
+	with ESMTP id ADxhognQQdQa; Tue, 18 Jul 2023 21:06:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4563060C19;
-	Tue, 18 Jul 2023 21:06:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4563060C19
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A463B1BF350
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD3D461006;
+	Tue, 18 Jul 2023 21:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD3D461006
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B0EBA1BF8C7
  for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E1F881F75
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A68160C19
  for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:06:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E1F881F75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A68160C19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Im2U9irHW4fR for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mCQf_jVUaFOb for <buildroot@lists.busybox.net>;
  Tue, 18 Jul 2023 21:06:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA14381F74
+ by smtp3.osuosl.org (Postfix) with ESMTP id C052060B4C
  for <buildroot@buildroot.org>; Tue, 18 Jul 2023 21:06:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA14381F74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C052060B4C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A72D287426; Tue, 18 Jul 2023 21:06:16 +0000 (UTC)
+ id AF24787427; Tue, 18 Jul 2023 21:06:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 18 Jul 2023 23:05:54 +0200
+Date: Tue, 18 Jul 2023 23:05:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40fa607e5172159d9d54e6a6acc140d864240bc9
-X-Git-Newrev: ab4f923f3291f39939d494b6ac49a5758144684c
+X-Git-Oldrev: ab4f923f3291f39939d494b6ac49a5758144684c
+X-Git-Newrev: 1cf3291ac8d0df8dae549e67ac6cc1564b2bf2a0
 X-Patchwork-Hint: ignore
-Message-Id: <20230718210616.A72D287426@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-rotas: bump to version 0.2.2
+Message-Id: <20230718210616.AF24787427@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-livr: bump to version 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +63,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab4f923f3291f39939d494b6ac49a5758144684c
+commit: https://git.buildroot.net/buildroot/commit/?id=1cf3291ac8d0df8dae549e67ac6cc1564b2bf2a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 diff COPYRIGHT:
@@ -73,33 +73,33 @@ diff COPYRIGHT:
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-rotas/lua-rotas.hash | 4 ++--
- package/lua-rotas/lua-rotas.mk   | 2 +-
+ package/lua-livr/lua-livr.hash | 4 ++--
+ package/lua-livr/lua-livr.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
-index 037844e9f7..cb8d48c0ea 100644
---- a/package/lua-rotas/lua-rotas.hash
-+++ b/package/lua-rotas/lua-rotas.hash
+diff --git a/package/lua-livr/lua-livr.hash b/package/lua-livr/lua-livr.hash
+index fe9876909d..314f1d2bf8 100644
+--- a/package/lua-livr/lua-livr.hash
++++ b/package/lua-livr/lua-livr.hash
 @@ -1,3 +1,3 @@
  # computed by luarocks/buildroot
--sha256  a947026be3552cbf676a0cef36a618111712257d306cbd9d340ed8895a4cbd2b  lua-rotas-0.2.1-1.src.rock
--sha256  ac8bb87b7b5e803ae27510b9c6fd284f1b00e741258bc59fc78d3bc107d96fbb  lua-Rotas-0.2.1/COPYRIGHT
-+sha256  601d0fe9cb57e4c2fd22352c6e0f064888edc428e32f0cb7ddbdc9650f21d8d9  lua-rotas-0.2.2-1.src.rock
-+sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.2.2/COPYRIGHT
-diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
-index 84d6c9a582..5c9b2caacb 100644
---- a/package/lua-rotas/lua-rotas.mk
-+++ b/package/lua-rotas/lua-rotas.mk
+-sha256  e2f39316b8a1e66420c56e8ddc9ce4c0118c1a240582f2ba52d7627da6dfb76d  lua-livr-0.2.2-1.src.rock
+-sha256  69fd426251454ea43a8068e58ac25d882922372de6b22e249bb56e00ea2cd834  lua-LIVR-0.2.2/COPYRIGHT
++sha256  531c4d56e2ef7906a6075e61fafee9ea265dc1a62698b966f5fc2f3abda23084  lua-livr-0.3.0-1.src.rock
++sha256  c6c2ca8e29b8e3b0558b046ffcbd4a5c31800bdca4520002ed4af76985f82d7d  lua-LIVR-0.3.0/COPYRIGHT
+diff --git a/package/lua-livr/lua-livr.mk b/package/lua-livr/lua-livr.mk
+index 3f114c725e..fb835a1f90 100644
+--- a/package/lua-livr/lua-livr.mk
++++ b/package/lua-livr/lua-livr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_ROTAS_VERSION = 0.2.1-1
-+LUA_ROTAS_VERSION = 0.2.2-1
- LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
- LUA_ROTAS_LICENSE = MIT
- LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
+-LUA_LIVR_VERSION = 0.2.2-1
++LUA_LIVR_VERSION = 0.3.0-1
+ LUA_LIVR_NAME_UPSTREAM = lua-LIVR
+ LUA_LIVR_LICENSE = MIT
+ LUA_LIVR_LICENSE_FILES = $(LUA_LIVR_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
