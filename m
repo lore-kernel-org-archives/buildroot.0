@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3005EB64DD
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 22:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0322FEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 22:20:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D21860FE0;
-	Tue, 18 Jul 2023 22:18:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D21860FE0
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAA5060A80;
+	Tue, 18 Jul 2023 22:20:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAA5060A80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mCRL9WR97T8c; Tue, 18 Jul 2023 22:18:40 +0000 (UTC)
+	with ESMTP id fRxXobKTykQv; Tue, 18 Jul 2023 22:20:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DEB96103B;
-	Tue, 18 Jul 2023 22:18:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DEB96103B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 135111BF2CA
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 22:18:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93ECE60B65;
+	Tue, 18 Jul 2023 22:20:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93ECE60B65
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CE5801BF2CA
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 22:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF23B6104B
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 22:18:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF23B6104B
+ by smtp2.osuosl.org (Postfix) with ESMTP id B554740253
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 22:20:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B554740253
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mN1yepu7j7fr for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 22:18:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZDccxn802mBI for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 22:20:48 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D4DC36105B
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 22:18:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4DC36105B
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98F8F41497
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 22:20:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98F8F41497
 Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0A954A4C024D
- for <buildroot@buildroot.org>; Wed, 19 Jul 2023 00:18:32 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51698)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C9F79A4C032D
+ for <buildroot@buildroot.org>; Wed, 19 Jul 2023 00:20:46 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41152)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qLt1b-0001VR-2d
- for buildroot@buildroot.org; Wed, 19 Jul 2023 00:18:31 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qLt3m-0001tD-1g
+ for buildroot@buildroot.org; Wed, 19 Jul 2023 00:20:46 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 19 Jul 2023 00:18:31 +0200
-Message-Id: <20230718221831.3070494-1-bernd@kuhls.net>
+Date: Wed, 19 Jul 2023 00:20:46 +0200
+Message-Id: <20230718222046.3692098-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1689718712;
- bh=MBbsWPq7eR5MwEv2pvuxeGwMClA7FAaViHhRRJpBTRQ=;
+ s=kas202306131828; t=1689718846;
+ bh=y6TGnweOw10XmcWT/6qXPlkDZ9jk/qUewFoBUylsGlw=;
  h=From:To:Subject:Date:From;
- b=sFp6gWqdRgpdVKPAoceX9rlg0w3yfh7997u3Nqro2aaECeAGBaPTkT/w2wLOoMjik
- KWwrc/p4iMzIZ1KUoXqwnjzh5+Iawq4UF9773NAD3aIQnv8BgcwWVo0r3VxDFcxmds
- ZfXlK0AKshZOD7Gl05rHLNlBZcC3JlgXZcc23SPtB0Fc/OkSaxLp3T5HWYzg4BAK2x
- G69a4IqvrD0kxICfumhhUjlUvOPfl2fv1UuOBXYzIG7lVB9QpBN8CnWf+5DU5L6JPi
- CZBDTl7mzH8bwyWlxe5N5g9kpwVdXbjSiBtZ0yXnWfVOmPwKj4czkbux8+Z9vQtEJ5
- 8uo1O2yO3byKA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=vDC1Q3jAxG9j1dSpJKZ1XvxwRf9mFcgyBYI6/i3E0ucCGjerF+86yzHrfxlwM6oG6
+ vdFTOUpQlpSy1vEXBTwXa5MobxvyfAwgxsSCAc7Ka7GuwrTItevqaoGLfOmvvKza0T
+ Ub4C62CqDQFHlpM52+nnO4f5KUcsnUOY7SzxzKUHwCLvc5tUzH6Am3pzMu6L42Vu9m
+ aWQXP3QPVX88WNM4Su/OYXjo2Fyaw4E571M2vVAsYSz+AJP8COPZpUX2W+XugxuvHS
+ g/eTvPio3VmXsTsqdynyXO2C5S1YkUL6nQS8n7kmQ/WENgxRMOXwQl26IuYCFBFy5v
+ 3DwE86jYr3Kdw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=sFp6gWqd
-Subject: [Buildroot] [PATCH 1/1] package/kodi: disable clang support
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=vDC1Q3jA
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: bump
+ version to 20.3.11-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,29 +80,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When present kodi tries to use the target binary of clang-format
-https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindClangFormat.cmake
-causing a build error.
-
-To fix the problem disable clang-format support.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi/kodi.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 561f0d2e3a..4fe6ea46cc 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -78,6 +78,7 @@ KODI_CONF_OPTS += \
- 	-DENABLE_INTERNAL_SPDLOG=OFF \
- 	-DKODI_DEPENDSBUILD=OFF \
- 	-DENABLE_GOLD=OFF \
-+	-DCLANG_FORMAT_EXECUTABLE=OFF \
- 	-DHOST_CAN_EXECUTE_TARGET=FALSE \
- 	-DNATIVEPREFIX=$(HOST_DIR) \
- 	-DDEPENDS_PATH=$(STAGING_DIR)/usr \
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 63f34d7460..b29a0af148 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  db972656dc42ce1e443b8aed8d410feb5093603b9c2beb3875eb6fafa3c9f3a9  kodi-inputstream-adaptive-20.3.8-Nexus.tar.gz
++sha256  ed266d2a51efcd0952cfacc8549350282dce07f7c0e885eeb41d662f123e12a6  kodi-inputstream-adaptive-20.3.11-Nexus.tar.gz
+ sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
+ sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
+ sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index ea150f1201..6b11532b0e 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.8-Nexus
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 20.3.11-Nexus
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
+ 	BSD-2-Clause-Views \
 -- 
 2.39.2
 
