@@ -1,72 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5816BEB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 18:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E328EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 20:38:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 985FB416F8;
-	Tue, 18 Jul 2023 18:44:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 985FB416F8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5146460D62;
+	Tue, 18 Jul 2023 20:38:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5146460D62
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dK69_B4oMzYu; Tue, 18 Jul 2023 18:44:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id BDkNzWRSJmlc; Tue, 18 Jul 2023 20:38:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DFBC4177F;
-	Tue, 18 Jul 2023 18:44:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DFBC4177F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7833A60BFB;
+	Tue, 18 Jul 2023 20:38:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7833A60BFB
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6EA4D1BF333
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 18:44:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C87A1BF350
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:38:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55A1C4032A
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 18:44:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55A1C4032A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 200884054B
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:38:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 200884054B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XLvJl8foD1sS for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 18:44:45 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB89D40004
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB89D40004
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 18:44:45 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id ECA0AA4C0FE9
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 20:44:31 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54128)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qLpgV-0006Zb-2F
- for buildroot@buildroot.org; Tue, 18 Jul 2023 20:44:31 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Tue, 18 Jul 2023 20:44:29 +0200
-Message-Id: <20230718184429.2444591-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230718184429.2444591-1-bernd@kuhls.net>
-References: <20230718184429.2444591-1-bernd@kuhls.net>
+ with ESMTP id EXmq5rXnxyVj for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 20:38:02 +0000 (UTC)
+X-Greylist: domain auto-whitelisted by SQLgrey-1.8.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD20D4032A
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD20D4032A
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 20:38:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5802F240003;
+ Tue, 18 Jul 2023 20:37:58 +0000 (UTC)
+Date: Tue, 18 Jul 2023 22:37:56 +0200
+To: Cherniaev Andrei <dungeonlords789@naver.com>
+Message-ID: <20230718223756.7788399d@windsurf>
+In-Reply-To: <20230716110038.16200-1-dungeonlords789@naver.com>
+References: <20230716110038.16200-1-dungeonlords789@naver.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1689705871;
- bh=JHOxFnQmlLQaQQeX/NLjsbJ9b3KKYvq6yDTMWW289W8=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=GS8FKleJ4CWyqvtGhAz5fXBYPqSJGCCIHQIB0Bi4y172FnJ2vlAc8ow1JjNqno7fr
- kPA+QfjDjvh36ycGfQiWC16BIwTBtwjPA4fcP63VOrpaYc1l7qo2iCZYwasgF9n0rH
- AtsGO1t1zmnOJnzd5wn3aea+zJm2XqhDkkN5thZ5u7zfRLifI8wGYYzzk4961fq/cy
- I969ysPVtk57iJlErK0vevPFZxUJY7YCr8hdc9ADpn2rQmvh1mKFn29+SSsCZ4Ludi
- 3aPPr95wpm8fp8MIWdMBn0yuSAMy1YzkvpT5UhYK9l/yPROmxGV2s2JF2sBBWr0tGb
- y9gYSenO/LC3w==
+ d=bootlin.com; s=gm1; t=1689712678;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/3lFSeJb8zaSOAUbtPpmaoL97m0+Q1aLJf7I28NG+Oo=;
+ b=EqXyK6y52o5jmYOoOguf0aWDmAgJD41U/ewKMpjqG6glfnQcFM49qf89SvEJUv+3L9JQnP
+ 6gU4il68mgb/JoyMyz+Yxs2EJOaQ7RUJAfVm123+stuInwLwHwFKLHnOWXp5x0rOH390Yk
+ LLBl66s2fhda/hdFKHpp+TNcGORSV538nwp4j1ARMvOMv9PRKMIr9CGjh8u702vP5QtFbB
+ KAWXFppsG56e+Xe0WEOf7hCWk0JlxAuNvPRevR317OBa1KJyqL6G3KTbvCz9ImI7vZ/BR1
+ G+hYQ5/4dXjB+6I7t/rNo40YixVJ+lXgnCekm7nbXwIvbiOwvhFCf7SJCohlDg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=GS8FKleJ
-Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-zattoo: bump version to
- 20.3.12-Nexus
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EqXyK6y5
+Subject: Re: [Buildroot] [PATCH 1/1] arch/Config.in.x86: add MMX instruction
+ set capability for Geode CPU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,42 +76,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bagasdotme@gmail.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Andrei,
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index 9939c6f73b..c7a248622b 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  68aa0a3af4f10396c866b0da225928033d0bbf980b8884c944dd1829e013435d  kodi-pvr-zattoo-20.3.10-Nexus.tar.gz
-+sha256  db206571c4e8a9f85c349dfabe71c3c3a9da51dafdc84ebc995b79db3544f7ec  kodi-pvr-zattoo-20.3.12-Nexus.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 53153f8f59..04b34da91b 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_ZATTOO_VERSION = 20.3.10-Nexus
-+KODI_PVR_ZATTOO_VERSION = 20.3.12-Nexus
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+Thanks for your patch! See some comments below.
+
+On Sun, 16 Jul 2023 20:00:38 +0900
+Cherniaev Andrei <dungeonlords789@naver.com> wrote:
+
+> From: AndreiCherniaev <dungeonlords789@naver.com>
+> 
+> Currently, there is no MMX support for modern GEODE processors in Buildroot.
+> Yet, some packages like ffmpeg can leverage it when the package is built.
+> 
+> Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
+
+Could you please adjust your git configuration so that the From: field
+value and the Signed-off-by: field value are matching?
+
+> ---
+>  arch/Config.in.x86 | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+> index c770ae3ffe..595db48d91 100644
+> --- a/arch/Config.in.x86
+> +++ b/arch/Config.in.x86
+> @@ -521,11 +521,10 @@ config BR2_x86_steamroller
+>  	select BR2_X86_CPU_HAS_SSE4
+>  	select BR2_X86_CPU_HAS_SSE42
+>  config BR2_x86_geode
+> -	bool "geode"
+> -	# Don't include MMX support because there several variant of geode
+> -	# processor, some with MMX support, some without.
+> -	# See: http://en.wikipedia.org/wiki/Geode_%28processor%29
+> -	depends on !BR2_x86_64
+> +        bool "geode"
+> +        depends on !BR2_x86_64
+> +        help
+> +          see also BR2_x86_geode_with_MMX
+
+Please don't change the indentation. Also, please keep the comment,
+but adapt it to the new reality. The help text that you have added is
+not very useful, just don't add a help text in this case.
+
+>  config BR2_x86_c3
+>  	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
+>  	depends on !BR2_x86_64
+> @@ -633,5 +632,16 @@ config BR2_READELF_ARCH_NAME
+>  	default "Intel 80386"			if BR2_i386
+>  	default "Advanced Micro Devices X86-64" if BR2_x86_64
+>  
+> +config BR2_x86_geode_with_MMX
+
+This should go inside the choice...endchoice to select the CPU variant,
+i.e it should be treated as another CPU variant.
+
+Please name the option BR2_x86_geode_mmx
+
+> +        bool "GEODE with MMX"
+
+	   bool "geode with MMX"
+
+> +        depends on BR2_x86_geode
+
+Drop this, not relevant once it is part of the choice...endchoice of
+CPU variants.
+
+> +        default n
+
+Not needed, a boolean is already disabled by default.
+
+> +        select BR2_X86_CPU_HAS_MMX
+> +        help
+> +          there several variant of geode processor,
+> +          some with MMX support, some without.
+> +          See: http://en.wikipedia.org/wiki/Geode_%28processor%29
+> +          And decide can you use MMX or not
+
+Either convert that into a comment, or if it's a help text, there
+should also be a help text for the Geode without MMX option, and it
+should probably be something like this:
+
+	  There are several variants of the Geode processors, some
+	  supporting MMX instructions, some not. See
+	  https://en.wikipedia.org/wiki/Geode_%28processor%29 to
+	  determine if your particular Geode processor supports MMX or
+	  not.
+
+Could you adjust your patch according to those suggestions and send a
+new iteration?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
