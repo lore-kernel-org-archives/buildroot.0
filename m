@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07E82EB64DD
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 20:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E046EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 20:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A67E660D58;
-	Tue, 18 Jul 2023 20:59:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A67E660D58
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA81F6103F;
+	Tue, 18 Jul 2023 20:59:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA81F6103F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XFfIJ4gQLsjK; Tue, 18 Jul 2023 20:59:31 +0000 (UTC)
+	with ESMTP id 5Sqt8zEr-QJA; Tue, 18 Jul 2023 20:59:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C171B6103B;
-	Tue, 18 Jul 2023 20:59:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C171B6103B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BBE0B1BF20B
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:59:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1B3C61026;
+	Tue, 18 Jul 2023 20:59:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1B3C61026
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E4EF1BF20B
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:59:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A11A64162C
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:59:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A11A64162C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36F8F40589
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 20:59:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36F8F40589
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 02OqXBPz2c4Z for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 20:59:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Agcz44HDW7F2 for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 20:59:40 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A0EB41625
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE99840280
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A0EB41625
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 20:59:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE99840280
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 20:59:39 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D27A6A4C0FE9;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F359CA4C0FEA;
  Tue, 18 Jul 2023 22:59:10 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50096)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qLrmo-0004Rb-1m;
+ (envelope-from <bernd@kuhls.net>) id 1qLrmo-0004Rb-27;
  Tue, 18 Jul 2023 22:59:10 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jul 2023 22:59:09 +0200
-Message-Id: <20230718205910.2667726-2-bernd@kuhls.net>
+Date: Tue, 18 Jul 2023 22:59:10 +0200
+Message-Id: <20230718205910.2667726-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230718205910.2667726-1-bernd@kuhls.net>
 References: <20230718205910.2667726-1-bernd@kuhls.net>
@@ -54,18 +54,19 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1689713950;
- bh=ZwzPSA8fU5lFO6AatWoSbnR7DhUmkC4E9iPRfXY6tuk=;
+ bh=zVCgk+jRAYwSjx3iJ+048MepuFS2vjKMTmmYYiu0HL8=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=t+BrwiX4AohYxoPKojLEbKd3KU6tdNSoKmAOCYuYKKPxmZ3jseRcOZ5BuRF6SJgFk
- t2uJbJQXcSpmjsbM+Fdd+6Edb4UNwWC1xBRmA6xhrmD0PamYeUm6FzZy92vrg7BugE
- Hq8okdka/USshiz4tY06z0PG3WITcggtyZnyLgYZqyx5/Dj9cXClizff3oXpXy2yav
- 6mxPf/h3mw0tkxS5ptFcpsJi2XW9vewJsKfCZFtnF5BZ6M7ySTURcDBmEPXOorIm0y
- yjBSzMZsDPY0C2+dqxhMMTqJFHkRs5+erjtX5z3RCzEoVA6qTJydrW8CWuG1jM/R7U
- IrILmZbvvXBgQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=xIz49BZq8zgmTRzf8MhLDa+DAV31bfpBPdzmevyQZqC+DtBmur529/1Vr5MwTwYla
+ C/ob78fMvjeQFgwpbRUQ8/oxB7Fus/6ZrmBIvUXZygeOhu3nU9+YkRdWpxttSBGI/j
+ iyqcrTNA7rmc/xO5w+AJ1vb/CdfZquZ8oY/oCcYUpuRetRifhsfM401KPvTpa5Fh0u
+ 5dvcU35sNF3RGGhvO0Lg+p0AoIAzWzfyjK66Yd+NN+RrPJ5HXvbSMqhIhfpOGRAFUR
+ c+has8DDCQnekkgQlJPlSxjHIKyxIKQTNBvLt5P/hJZ/q4uWJ25SlVQw8qX5fckYu4
+ HKglvowXX1AHA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=t+BrwiX4
-Subject: [Buildroot] [PATCH v2 2/3] package/kodi: needs host-cmake >= 3.24
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=xIz49BZq
+Subject: [Buildroot] [PATCH 3/3] package/kodi: fix filenames of kodi host
+ utils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,114 +84,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building kodi with cmake version 3.22.3 provided by buildroot is broken
+The variables WITH_JSONSCHEMABUILDER & WITH_TEXTUREPACKER are defined as
+directories:
+https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindJsonSchemaBuilder.cmake
+https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindTexturePacker.cmake
 
--- Found Python3: /home/buildroot/br6/output/per-package/kodi/host/x86_
-   64-buildroot-linux-gnu/sysroot/usr/include/python3.11 (found suitable
-    exact version "3.11.4") found components: Development Development.
-    Module Development.Embed
--- Could NOT find Python3 (missing: Interpreter) (Required is exact
-     version "3.11")
-    Reason given by package:
-        Interpreter: Cannot run the interpreter "/home/buildroot/br6/
-        output/per-package/kodi/host/x86_64-buildroot-linux-gnu/sysroot/
-        usr/bin/python3"
+and during configure kodi searches these directories for usable binaries
+with the name scheme.
 
-CMake Error at cmake/scripts/common/Macros.cmake:432 (message):
-  PYTHON enabled but not found
-Call Stack (most recent call first):
-  CMakeLists.txt:214 (core_optional_dep)
+${APP_NAME_LC}-JsonSchemaBuilder
+${APP_NAME_LC}-TexturePacker
 
-using this defconfig
-
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_FORCE_HOST_BUILD=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_PY_ONLY=y
-BR2_PACKAGE_HOST_CMAKE=y
-
-due to "BR2_FORCE_HOST_BUILD=y".
-
-The cmake version provided by my distro is 3.25.1 which works fine.
-
-Adding "CMAKE_FIND_DEBUG_MODE TRUE" to the "find_package(Python3 [...]"
-call in Kodi's cmake/modules/FindPython.cmake and comparing the logfile
-of both cmake versions shows that 3.25.1 adds
-
-    CMAKE_FIND_USE_INSTALL_PREFIX: 1
-
-while searching for python3.
-
-This option was introduced in cmake 3.24:
-https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_USE_INSTALL_PREFIX.html
-
-After introducing this fix it turns out that
-0002-cmake-modules-fix-python-detection.patch is not needed anymore so
-we remove this patch.
+which translates to kodi-JsonSchemaBuilder and kodi-TexturePacker.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v2: removed 0002-cmake-modules-fix-python-detection.patch
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.mk                                     | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
- ...2-cmake-modules-fix-python-detection.patch | 28 -------------------
- package/kodi/Config.in                        |  1 +
- 2 files changed, 1 insertion(+), 28 deletions(-)
- delete mode 100644 package/kodi/0002-cmake-modules-fix-python-detection.patch
-
-diff --git a/package/kodi/0002-cmake-modules-fix-python-detection.patch b/package/kodi/0002-cmake-modules-fix-python-detection.patch
-deleted file mode 100644
-index fcf35b25b2..0000000000
---- a/package/kodi/0002-cmake-modules-fix-python-detection.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From c29c1e762e126fdb46a19fc15bcb465cf1cd6c76 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 7 May 2023 11:18:00 +0200
--Subject: [PATCH] cmake/modules: fix python detection
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
--Upstream: https://github.com/xbmc/xbmc/pull/23230
-----
-- cmake/modules/FindPython.cmake | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
--index 782c0f51f6..a013cccf80 100644
----- a/cmake/modules/FindPython.cmake
--+++ b/cmake/modules/FindPython.cmake
--@@ -60,7 +60,7 @@ endif()
-- 
-- find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Development)
-- if(CORE_SYSTEM_NAME STREQUAL linux)
---  if(HOST_CAN_EXECUTE_TARGET)
--+  if(HOST_CAN_EXECUTE_TARGET OR DEFINED PYTHON_EXECUTABLE)
--     find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Interpreter)
--   else()
--     find_package(Python3 COMPONENTS Interpreter)
---- 
--2.25.1
--
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 710add0568..6b68e6d504 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -66,6 +66,7 @@ menuconfig BR2_PACKAGE_KODI
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on !BR2_PACKAGE_PYTHON3_PYC_ONLY
- 	select BR2_NEEDS_HOST_JAVA
-+	select BR2_HOST_CMAKE_AT_LEAST_3_24
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_GPL
- 	select BR2_PACKAGE_FFMPEG_POSTPROC
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 569bde8cd2..e017aa8d9c 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -20,7 +20,7 @@ HOST_KODI_JSONSCHEMABUILDER_CONF_OPTS = \
+ define HOST_KODI_JSONSCHEMABUILDER_INSTALL_CMDS
+ 	$(INSTALL) -m 755 -D \
+ 		$(@D)/tools/depends/native/JsonSchemaBuilder/JsonSchemaBuilder \
+-		$(HOST_DIR)/bin/JsonSchemaBuilder
++		$(HOST_DIR)/bin/kodi-JsonSchemaBuilder
+ endef
+ 
+ $(eval $(host-cmake-package))
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 44eba85d75..c0bc767dd4 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -35,7 +35,7 @@ HOST_KODI_TEXTUREPACKER_CONF_OPTS += \
+ define HOST_KODI_TEXTUREPACKER_INSTALL_CMDS
+ 	$(INSTALL) -m 755 -D \
+ 		$(@D)/tools/depends/native/TexturePacker/TexturePacker \
+-		$(HOST_DIR)/bin/TexturePacker
++		$(HOST_DIR)/bin/kodi-TexturePacker
+ endef
+ 
+ $(eval $(host-cmake-package))
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 7cbc1df40a..561f0d2e3a 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -87,8 +87,8 @@ KODI_CONF_OPTS += \
+ 	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	-DPYTHON_PATH=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
+ 	-DPYTHON_VER=$(PYTHON3_VERSION_MAJOR) \
+-	-DWITH_JSONSCHEMABUILDER=$(HOST_DIR)/bin/JsonSchemaBuilder \
+-	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/TexturePacker \
++	-DWITH_JSONSCHEMABUILDER=$(HOST_DIR)/bin/ \
++	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/ \
+ 	-DLIBDVDCSS_URL=$(KODI_DL_DIR)/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
+ 	-DLIBDVDNAV_URL=$(KODI_DL_DIR)/kodi-libdvdnav-$(KODI_LIBDVDNAV_VERSION).tar.gz \
+ 	-DLIBDVDREAD_URL=$(KODI_DL_DIR)/kodi-libdvdread-$(KODI_LIBDVDREAD_VERSION).tar.gz
 -- 
 2.39.2
 
