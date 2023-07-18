@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12379EB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:05:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 446FCEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 21:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9699160C2E;
-	Tue, 18 Jul 2023 21:05:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9699160C2E
+	by smtp3.osuosl.org (Postfix) with ESMTP id F12A060DF9;
+	Tue, 18 Jul 2023 21:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F12A060DF9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9tnmhdY1x-xJ; Tue, 18 Jul 2023 21:05:43 +0000 (UTC)
+	with ESMTP id 5WZdeY1NhYyA; Tue, 18 Jul 2023 21:06:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7EED60C19;
-	Tue, 18 Jul 2023 21:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7EED60C19
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4563060C19;
+	Tue, 18 Jul 2023 21:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4563060C19
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9D5DC1BF350
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:05:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A463B1BF350
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83D3B81F74
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:05:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83D3B81F74
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E1F881F75
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 21:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E1F881F75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4TvVsIgwjeoa for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 21:05:40 +0000 (UTC)
-X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59DE781F4A
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 59DE781F4A
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 21:05:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D033440002;
- Tue, 18 Jul 2023 21:05:36 +0000 (UTC)
-Date: Tue, 18 Jul 2023 23:05:34 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230718230534.2b66a4d5@windsurf>
-In-Reply-To: <20230717213359.106368-1-romain.naour@gmail.com>
-References: <20230717213359.106368-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689714337;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LmJ7KyjeVhy/c7edZy3dMpIGBkFL2Q59miWWTu9Udls=;
- b=X6eO6mNCS5G1EhhOSRKpRjfHzN9OntGD97wJCehYrZyG6rk+OBglWpUpyZvzETzL4Hv7N+
- /MQyE8JCR7mc8gTsz+3eMJ8UT0sjvCZyRLuiTkhFQjbVHSXko/h3AMCPE5zJBNI+kT9JCV
- sLQ4EaGhTDaJYUpxhGjiY2Abqvuwa4KEFeYwj2dbG7O+gLIMndBDXYySCdIjswM+E80Ees
- WCQkA+1QTHBlXHIaQRqp4oRuAsdIoIUVYxxyc9arTUuVHEnoLUtEsI58VSOJ6RskURJewH
- XveL5KRMyqqolEdzug3yZ4uy3/cbIw/WK/8C2pmT9+OEymKj+1NS47qrD3Ac/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=X6eO6mNC
-Subject: Re: [Buildroot] [PATCH 1/3] support/run-tests: add a mode to only
- download emulator builtin binaries
+ with ESMTP id Im2U9irHW4fR for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 21:06:16 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA14381F74
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 21:06:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA14381F74
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A72D287426; Tue, 18 Jul 2023 21:06:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 18 Jul 2023 23:05:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 40fa607e5172159d9d54e6a6acc140d864240bc9
+X-Git-Newrev: ab4f923f3291f39939d494b6ac49a5758144684c
+X-Patchwork-Hint: ignore
+Message-Id: <20230718210616.A72D287426@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-rotas: bump to version 0.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,47 +57,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 17 Jul 2023 23:33:57 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ab4f923f3291f39939d494b6ac49a5758144684c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Currently, emulator builtin binaries are downloaded after the rootfs
-> build by each tests running the emulator (Qemu) on armv5 or armv7.
-> 
-> Due to download quota on the server hosting theses binaries [1]
-> some GitLab jobs are failing due to "Connection reset by peer" [2]:
-> 
->   ConnectionResetError: [Errno 104] Connection reset by peer
-> 
-> In a follow up commit, we'll add the possibility to download only once
-> all emulator builtin binaries to pass them as build artifacts.
-> 
-> As such, we will need to make sure that run-tests only download theses
-> binaries, and that it does not run the testsuite.
-> 
-> Add such a mode, with a new option, --prepare-only.
-> 
-> [1] http://autobuild.buildroot.net/artefacts
-> [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/4409032417
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  support/testing/run-tests | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+diff COPYRIGHT:
+-Copyright (C) 2018-2021 Francois Perrad.
++Copyright (C) 2018-2023 Francois Perrad.
 
-Thanks, series applied. I'm not an expert in Gitlab CI sorcery, so I
-trust you that it is the right way of doing things :-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-rotas/lua-rotas.hash | 4 ++--
+ package/lua-rotas/lua-rotas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
+index 037844e9f7..cb8d48c0ea 100644
+--- a/package/lua-rotas/lua-rotas.hash
++++ b/package/lua-rotas/lua-rotas.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  a947026be3552cbf676a0cef36a618111712257d306cbd9d340ed8895a4cbd2b  lua-rotas-0.2.1-1.src.rock
+-sha256  ac8bb87b7b5e803ae27510b9c6fd284f1b00e741258bc59fc78d3bc107d96fbb  lua-Rotas-0.2.1/COPYRIGHT
++sha256  601d0fe9cb57e4c2fd22352c6e0f064888edc428e32f0cb7ddbdc9650f21d8d9  lua-rotas-0.2.2-1.src.rock
++sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.2.2/COPYRIGHT
+diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
+index 84d6c9a582..5c9b2caacb 100644
+--- a/package/lua-rotas/lua-rotas.mk
++++ b/package/lua-rotas/lua-rotas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_ROTAS_VERSION = 0.2.1-1
++LUA_ROTAS_VERSION = 0.2.2-1
+ LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
+ LUA_ROTAS_LICENSE = MIT
+ LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
