@@ -1,85 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D48BDEB64DC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 00:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C7C6EB64DA
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 07:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 61350400C1;
-	Tue, 18 Jul 2023 00:01:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61350400C1
+	by smtp1.osuosl.org (Postfix) with ESMTP id F06C8812F3;
+	Tue, 18 Jul 2023 07:29:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F06C8812F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QBU5qEQj7ShP; Tue, 18 Jul 2023 00:01:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HXcoaJqWqpK3; Tue, 18 Jul 2023 07:29:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1231A40908;
-	Tue, 18 Jul 2023 00:01:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1231A40908
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D76A81449;
+	Tue, 18 Jul 2023 07:29:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D76A81449
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 995BA1BF388
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 00:01:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C37A81BF27E
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 07:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 714A9403ED
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 00:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 714A9403ED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A00540990
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 07:29:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A00540990
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fr3U3cJpnqLL for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 00:01:25 +0000 (UTC)
+ with ESMTP id xZvMi-_AgW9i for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 07:29:11 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60C50403CC
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 60C50403CC
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 00:01:25 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-4fbb281eec6so8059218e87.1
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 17:01:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 076114029B
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com
+ [IPv6:2607:f8b0:4864:20::e2e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 076114029B
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 07:29:10 +0000 (UTC)
+Received: by mail-vs1-xe2e.google.com with SMTP id
+ ada2fe7eead31-44523d9fd18so1302995137.0
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 00:29:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689638483; x=1692230483;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=AxzWoYaH3Cv0+TYir0g8W2KtTUc1WrGHNdJBm+Q90lw=;
- b=UV2ZwcTVjdCJnT1cbnluiqhjH2nyYN4Kt8p2ewE7PwK3BE0+/1ttO9ia3rOsrkwiZu
- VyfBE0+COt9I1URQ16eQ9VLhHsFxNppbaAYn/LULSZHeUhLk6vw010eE34ezkY9s5/Uy
- OFj/Bo8sGOkkqLimhExEIlckHcD8oxG+JUUXcxGM1FHexP4WsEu7ujT4YioLTSdEIaBz
- kbsluAlcyWFiNofh6Q2Lx0tCIH5viUJpjyizS9qi496qpzdqKuHgbw7iHX9eCuE6elGZ
- URDJjSmEJuZcdyXvAslwr0rVrzYHPFmSgfCRyu1r1rihkkO4F4Wh9z2zpCdoZ80N6lLG
- WslQ==
-X-Gm-Message-State: ABy/qLbGcOVKxOwWVxtoVcGR09ctRtAi4tV6qevLsxSmCsvobd6UzQV5
- s4uR3fA8r8DtnH1WgLnfpqLzN1feHl7MuZv0zh0=
-X-Google-Smtp-Source: APBJJlGULa1Svi2A2nKYw0AMcgAvV29ZYAjHAPPLbApvmlqRNDFOKZS1wxZNlBHUZfcdp1v+JR13xddmS/fCK8jeQx4=
-X-Received: by 2002:a05:6512:3a88:b0:4fb:925f:8be1 with SMTP id
- q8-20020a0565123a8800b004fb925f8be1mr10792993lfu.45.1689638482678; Mon, 17
- Jul 2023 17:01:22 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1689665349; x=1692257349;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gdyIoZi0zCzP/a8qqvoTmnDX/64N1cib57OPc1x/fwg=;
+ b=JRUvlV0kj8ql0v5YYDSuuVql6GmSchg+0SECuXsuaz6gxMS2btWhfEX7qZYOIanzGp
+ 8g2UyeUY0bOVE12GlWkl/kTmDkLawoJE40RMzTU37Dynhm+NIEH9V1Gs8fiIonyh7gri
+ YHXqaEA2Xt7cYbGCM4RG8Z13nfee8nu4iAXlg2o+oWeRhdwpyG0LeKO+1hUmwX177+pV
+ VmEW4+v2cAZDF3qbNXc0FqYDwKB3ev4YOFxyCl8P3pGKZ1QmOZsH/d4FH5YZRY77X3JK
+ blXmJnWqvsplKde0sFgJKhvopd3XWCf1grUI0z3ckciiGfIjwKrAQpzSPiqH5NwsODxj
+ kKNA==
+X-Gm-Message-State: ABy/qLZ6IZUx+ecej2zY6rdb+AgcxpaBXXWIK3ZvC5mWf+Ne2DeQMwTQ
+ Yv2UNI8yuPyGYGcvnDh6uFP+w+8uaga7ODyzqSw=
+X-Google-Smtp-Source: APBJJlH5bg44wrvd5oggEBJUftSsQ6mVooZUMFw/W9+j2FJ2J56zTkZCzQM1dKgP5VJN8m30jje/3v/Ie5Vshwkz74k=
+X-Received: by 2002:a05:6102:48d:b0:443:5632:66de with SMTP id
+ n13-20020a056102048d00b00443563266demr5263978vsa.16.1689665349103; Tue, 18
+ Jul 2023 00:29:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615134315.494330-1-sebastian.weyer@smile.fr>
-In-Reply-To: <20230615134315.494330-1-sebastian.weyer@smile.fr>
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 17 Jul 2023 17:01:11 -0700
-Message-ID: <CAFSsvmo0v8CwRXK=Qve0NLa_iCLTL3zpVBaYd9KiKTGwhEGwvQ@mail.gmail.com>
-To: Sebastian Weyer <sebastian.weyer@smile.fr>
+References: <20230715151554.4664586D5C@busybox.osuosl.org>
+In-Reply-To: <20230715151554.4664586D5C@busybox.osuosl.org>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Tue, 18 Jul 2023 17:28:42 +1000
+Message-ID: <CAKmqyKP4WTcY5wJJeO7XdZ4uHCUc1ow-0QOn=B32GFSWM0ifSg@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689638483; x=1692230483;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=AxzWoYaH3Cv0+TYir0g8W2KtTUc1WrGHNdJBm+Q90lw=;
- b=eB1zL8NyKd63DEygn1xTb4rr5vACAIK5t/3Ambo16scA2IrOgphD7gzA0GtqHUloEF
- 2aYB8APhxGtuX+ZRC5lvNxUMb1ikHOMkgiBIdMjqtkaeJwXFqE1fdamwudfgeCLCYp7/
- mCbe6AWJOAkJHx6OKkQkM5lEcR9efWY8IrAnhWZOZv/ByN9ptnOlnqPaLIreD/VvSs45
- AbeBwDbjbwv2i12+7hmqwk8dYqUyVAVuXa+c+T59+XzOT5+2JJjJ0/d8wswevLDkIBya
- h2xd6EjvEnoQ8aoX/kqSgZ5cRr6o6DBuAJm0GQ7XGeR7fmVsQnb5FLgBQfe+OtFT0Lx8
- 11OQ==
+ d=gmail.com; s=20221208; t=1689665349; x=1692257349;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gdyIoZi0zCzP/a8qqvoTmnDX/64N1cib57OPc1x/fwg=;
+ b=j15ddNWoExXiQMQ7v+kmRHhNz20d3ILXU7sDN0w6x4Jj9+oSVIu0eb/8Yhy2KV2BJu
+ m1+YIJ8YlH4w+sE+FGC7tnCLp9/XMaipbBfBJd8C5WbdD7ZYeJiVCsl73IYEdpdsljtg
+ a7/Lue3pJY7vXOz5fO4HRQqWcWobefqbOLQa+7pC21KQwUtHRseYQi48TxUZ7K0SY6Tb
+ R2eJIXOIWKvzcCc3+1jEahwhM4+UAZ0xh7TeONoc7vKYKOk9L6cWOd9iAlw2G4fgdHQD
+ egxFMLHsVnmAG+8OdzZo+A9DqLGzTNt+ymGPpxFBTcfw1OV9ZlLtPHFg0jnfAqg3ZcUo
+ KgOg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=eB1zL8Ny
-Subject: Re: [Buildroot] [PATCH v4 00/10] group llvm projects and bump to
- version 15.0.3
+ header.a=rsa-sha256 header.s=20221208 header.b=j15ddNWo
+Subject: Re: [Buildroot] [git commit] package/libopenssl: bump version to
+ 3.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,346 +93,328 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============6311803681924627803=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6311803681924627803==
-Content-Type: multipart/alternative; boundary="0000000000008f18490600b79de0"
-
---0000000000008f18490600b79de0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hey Sebastian!
-
-Thanks for the patch series! I can't see anything wrong with it so:
-
-Tested-by: Adam Duskett <aduskett@gmail.com>
-
-
-On Thu, Jun 15, 2023 at 6:44=E2=80=AFAM Sebastian Weyer <sebastian.weyer@sm=
-ile.fr>
-wrote:
-
-> This series attempts two things:
-> - Move the different llvm subprojects into one folder
-> and share version and site information.
->
-> - Bump the version to the latest 15.0.3
->
-> Starting with version 12 different subprojects added
-> dependencies or sources that would be available when
-> building from the "monorepo". These have been added
-> as new host packages.
->
-> This update is needed in order to be able to use some packages in the
-> future as for example mesa3d's RustiCL.
->
-> v4:
-> - change some inaccurate commit messages
-> - bump spirv-llvm-translator version at the same time as other llvm
->   packages
-> - remove package/llvm/0002-Add-missing-cstdint-header-to-Signals.h.patch
->   as it has been integrated in the newer version
->
-> v3:
-> - move libclc before llvm 15.0.3 version bump commit
-> - force llvm-cmake and llvm-libunwind version to 15.0.3 since
->   LLVM_PROJECT_VERSION is still at 11.1.0
-> - Keep cp as install command since there is no CMakefiles.txt
-> - llvm, clang, lld: keep LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN since
->   this option is still used to check C++17 compiler support:
->   llvm/cmake/modules/CheckCompilerVersion.cmake
->
->
-> Changes v1 -> v2:
-> - Rebased onto current master
-> - Bump to 15.0.3 instead of 15.0.1
-> - llvm: use CMAKE_HOST_C_COMPILER instead of HOSTCC
-> - libclc: Add missing change to package/Config.in
->
-> Lang Daniel (10):
->   package/llvm-project: new group for llvm packages
->   package/llvm: move to llvm-project folder
->   package/lld: move to llvm-project subfolder
->   package/clang: move to llvm-project subfolder
->   package/compiler-rt: move to llvm-project subfolder
->   package/libclc: move to llvm-project subfolder
->   package/llvm-project/llvm-cmake: new package
->   package/llvm-project/llvm-libunwind: new package
->   package/llvm-project: bump to version 15.0.3
->   DEVELOPERS: add Daniel Lang for llvm-project
->
->  DEVELOPERS                                    | 19 ++++++-----
->  package/Config.in                             |  8 ++---
->  package/Config.in.host                        |  2 +-
->  ...hains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch |  0
->  package/{ =3D> llvm-project}/clang/Config.in    | 10 +++---
->  package/{ =3D> llvm-project}/clang/clang.hash   |  2 +-
->  package/{ =3D> llvm-project}/clang/clang.mk     | 15 +++-----
->  .../{ =3D> llvm-project}/compiler-rt/Config.in  |  6 ++--
->  .../compiler-rt/compiler-rt.hash              |  2 +-
->  .../compiler-rt/compiler-rt.mk                |  9 +++--
->  .../0001-support-out-of-tree-build.patch      |  0
->  package/{ =3D> llvm-project}/libclc/Config.in   |  6 ++--
->  package/{ =3D> llvm-project}/libclc/libclc.hash |  2 +-
->  package/{ =3D> llvm-project}/libclc/libclc.mk   |  4 +--
->  package/{ =3D> llvm-project}/lld/Config.in.host |  6 ++--
->  package/{ =3D> llvm-project}/lld/lld.hash       |  2 +-
->  package/{ =3D> llvm-project}/lld/lld.mk         | 13 ++-----
->  .../llvm-project/llvm-cmake/llvm-cmake.hash   |  2 ++
->  package/llvm-project/llvm-cmake/llvm-cmake.mk | 17 ++++++++++
->  .../llvm-libunwind/llvm-libunwind.hash        |  3 ++
->  .../llvm-libunwind/llvm-libunwind.mk          | 18 ++++++++++
->  package/llvm-project/llvm-project.mk          | 11 ++++++
->  package/{ =3D> llvm-project}/llvm/Config.in     | 10 +++---
->  package/{ =3D> llvm-project}/llvm/llvm.hash     |  2 +-
->  package/{ =3D> llvm-project}/llvm/llvm.mk       | 27 ++++++++-------
->  .../llvm/0001-nfc-Fix-missing-include.patch   | 24 -------------
->  ...-missing-cstdint-header-to-Signals.h.patch | 34 -------------------
->  package/mesa3d/Config.in                      | 10 +++---
->  .../spirv-llvm-translator.hash                |  2 +-
->  .../spirv-llvm-translator.mk                  |  4 +--
->  30 files changed, 126 insertions(+), 144 deletions(-)
->  rename package/{ =3D>
-> llvm-project}/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX=
--in-.patch
-> (100%)
->  rename package/{ =3D> llvm-project}/clang/Config.in (82%)
->  rename package/{ =3D> llvm-project}/clang/clang.hash (52%)
->  rename package/{ =3D> llvm-project}/clang/clang.mk (89%)
->  rename package/{ =3D> llvm-project}/compiler-rt/Config.in (87%)
->  rename package/{ =3D> llvm-project}/compiler-rt/compiler-rt.hash (50%)
->  rename package/{ =3D> llvm-project}/compiler-rt/compiler-rt.mk (82%)
->  rename package/{ =3D>
-> llvm-project}/libclc/0001-support-out-of-tree-build.patch (100%)
->  rename package/{ =3D> llvm-project}/libclc/Config.in (73%)
->  rename package/{ =3D> llvm-project}/libclc/libclc.hash (51%)
->  rename package/{ =3D> llvm-project}/libclc/libclc.mk (92%)
->  rename package/{ =3D> llvm-project}/lld/Config.in.host (74%)
->  rename package/{ =3D> llvm-project}/lld/lld.hash (52%)
->  rename package/{ =3D> llvm-project}/lld/lld.mk (61%)
->  create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.hash
->  create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.mk
->  create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.ha=
-sh
->  create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.mk
->  create mode 100644 package/llvm-project/llvm-project.mk
->  rename package/{ =3D> llvm-project}/llvm/Config.in (88%)
->  rename package/{ =3D> llvm-project}/llvm/llvm.hash (52%)
->  rename package/{ =3D> llvm-project}/llvm/llvm.mk (94%)
->  delete mode 100644 package/llvm/0001-nfc-Fix-missing-include.patch
->  delete mode 100644
-> package/llvm/0002-Add-missing-cstdint-header-to-Signals.h.patch
->
-> --
-> 2.34.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---0000000000008f18490600b79de0
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hey Sebastian!=C2=A0<div><br></div><div>Thanks for the pat=
-ch series! I can&#39;t see anything wrong with it so:</div><div><br></div><=
-div><pre class=3D"gmail-content" style=3D"box-sizing:border-box;overflow:au=
-to;font-family:Menlo,Monaco,Consolas,&quot;Courier New&quot;,monospace;font=
--size:13px;padding:9.5px;margin-top:0px;margin-bottom:10px;line-height:14.3=
-px;color:rgb(51,51,51);word-break:break-all;border:0px;border-radius:0px"><=
-span class=3D"gmail-tested-by" style=3D"box-sizing:border-box">Tested-by: A=
-dam Duskett &lt;<a href=3D"mailto:aduskett@gmail.com">aduskett@gmail.com</a=
->&gt;</span></pre></div></div><br><div class=3D"gmail_quote"><div dir=3D"lt=
-r" class=3D"gmail_attr">On Thu, Jun 15, 2023 at 6:44=E2=80=AFAM Sebastian W=
-eyer &lt;<a href=3D"mailto:sebastian.weyer@smile.fr">sebastian.weyer@smile.=
-fr</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margi=
-n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
-">This series attempts two things:<br>
-- Move the different llvm subprojects into one folder<br>
-and share version and site information.<br>
-<br>
-- Bump the version to the latest 15.0.3<br>
-<br>
-Starting with version 12 different subprojects added<br>
-dependencies or sources that would be available when<br>
-building from the &quot;monorepo&quot;. These have been added<br>
-as new host packages.<br>
-<br>
-This update is needed in order to be able to use some packages in the<br>
-future as for example mesa3d&#39;s RustiCL.<br>
-<br>
-v4:<br>
-- change some inaccurate commit messages<br>
-- bump spirv-llvm-translator version at the same time as other llvm<br>
-=C2=A0 packages<br>
-- remove package/llvm/0002-Add-missing-cstdint-header-to-Signals.h.patch<br=
->
-=C2=A0 as it has been integrated in the newer version<br>
-<br>
-v3:<br>
-- move libclc before llvm 15.0.3 version bump commit<br>
-- force llvm-cmake and llvm-libunwind version to 15.0.3 since<br>
-=C2=A0 LLVM_PROJECT_VERSION is still at 11.1.0<br>
-- Keep cp as install command since there is no CMakefiles.txt<br>
-- llvm, clang, lld: keep LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN since<br>
-=C2=A0 this option is still used to check C++17 compiler support:<br>
-=C2=A0 llvm/cmake/modules/CheckCompilerVersion.cmake<br>
-<br>
-<br>
-Changes v1 -&gt; v2:<br>
-- Rebased onto current master<br>
-- Bump to 15.0.3 instead of 15.0.1<br>
-- llvm: use CMAKE_HOST_C_COMPILER instead of HOSTCC<br>
-- libclc: Add missing change to package/Config.in<br>
-<br>
-Lang Daniel (10):<br>
-=C2=A0 package/llvm-project: new group for llvm packages<br>
-=C2=A0 package/llvm: move to llvm-project folder<br>
-=C2=A0 package/lld: move to llvm-project subfolder<br>
-=C2=A0 package/clang: move to llvm-project subfolder<br>
-=C2=A0 package/compiler-rt: move to llvm-project subfolder<br>
-=C2=A0 package/libclc: move to llvm-project subfolder<br>
-=C2=A0 package/llvm-project/llvm-cmake: new package<br>
-=C2=A0 package/llvm-project/llvm-libunwind: new package<br>
-=C2=A0 package/llvm-project: bump to version 15.0.3<br>
-=C2=A0 DEVELOPERS: add Daniel Lang for llvm-project<br>
-<br>
-=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 19 +++=
-+++-----<br>
-=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 8 ++---<br>
-=C2=A0package/Config.in.host=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 +-<br>
-=C2=A0...hains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch |=C2=A0 0<br>
-=C2=A0package/{ =3D&gt; llvm-project}/clang/Config.in=C2=A0 =C2=A0 | 10 +++=
----<br>
-=C2=A0package/{ =3D&gt; llvm-project}/clang/clang.hash=C2=A0 =C2=A0|=C2=A0 =
-2 +-<br>
-=C2=A0package/{ =3D&gt; llvm-project}/clang/<a href=3D"http://clang.mk" rel=
-=3D"noreferrer" target=3D"_blank">clang.mk</a>=C2=A0 =C2=A0 =C2=A0| 15 +++-=
-----<br>
-=C2=A0.../{ =3D&gt; llvm-project}/compiler-rt/Config.in=C2=A0 |=C2=A0 6 ++-=
--<br>
-=C2=A0.../compiler-rt/compiler-rt.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 |=C2=A0 2 +-<br>
-=C2=A0.../compiler-rt/<a href=3D"http://compiler-rt.mk" rel=3D"noreferrer" =
-target=3D"_blank">compiler-rt.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 |=C2=A0 9 +++--<br>
-=C2=A0.../0001-support-out-of-tree-build.patch=C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
-0<br>
-=C2=A0package/{ =3D&gt; llvm-project}/libclc/Config.in=C2=A0 =C2=A0|=C2=A0 =
-6 ++--<br>
-=C2=A0package/{ =3D&gt; llvm-project}/libclc/libclc.hash |=C2=A0 2 +-<br>
-=C2=A0package/{ =3D&gt; llvm-project}/libclc/<a href=3D"http://libclc.mk" r=
-el=3D"noreferrer" target=3D"_blank">libclc.mk</a>=C2=A0 =C2=A0|=C2=A0 4 +--=
-<br>
-=C2=A0package/{ =3D&gt; llvm-project}/lld/Config.in.host |=C2=A0 6 ++--<br>
-=C2=A0package/{ =3D&gt; llvm-project}/lld/lld.hash=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 2 +-<br>
-=C2=A0package/{ =3D&gt; llvm-project}/lld/<a href=3D"http://lld.mk" rel=3D"=
-noreferrer" target=3D"_blank">lld.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=
- 13 ++-----<br>
-=C2=A0.../llvm-project/llvm-cmake/llvm-cmake.hash=C2=A0 =C2=A0|=C2=A0 2 ++<=
-br>
-=C2=A0package/llvm-project/llvm-cmake/<a href=3D"http://llvm-cmake.mk" rel=
-=3D"noreferrer" target=3D"_blank">llvm-cmake.mk</a> | 17 ++++++++++<br>
-=C2=A0.../llvm-libunwind/llvm-libunwind.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
-=C2=A0 3 ++<br>
-=C2=A0.../llvm-libunwind/<a href=3D"http://llvm-libunwind.mk" rel=3D"norefe=
-rrer" target=3D"_blank">llvm-libunwind.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 | 18 ++++++++++<br>
-=C2=A0package/llvm-project/<a href=3D"http://llvm-project.mk" rel=3D"norefe=
-rrer" target=3D"_blank">llvm-project.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 | 11 ++++++<br>
-=C2=A0package/{ =3D&gt; llvm-project}/llvm/Config.in=C2=A0 =C2=A0 =C2=A0| 1=
-0 +++---<br>
-=C2=A0package/{ =3D&gt; llvm-project}/llvm/llvm.hash=C2=A0 =C2=A0 =C2=A0|=
-=C2=A0 2 +-<br>
-=C2=A0package/{ =3D&gt; llvm-project}/llvm/<a href=3D"http://llvm.mk" rel=
-=3D"noreferrer" target=3D"_blank">llvm.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0| 2=
-7 ++++++++-------<br>
-=C2=A0.../llvm/0001-nfc-Fix-missing-include.patch=C2=A0 =C2=A0| 24 --------=
------<br>
-=C2=A0...-missing-cstdint-header-to-Signals.h.patch | 34 ------------------=
--<br>
-=C2=A0package/mesa3d/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 10 +++---<br>
-=C2=A0.../spirv-llvm-translator.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 |=C2=A0 2 +-<br>
-=C2=A0.../<a href=3D"http://spirv-llvm-translator.mk" rel=3D"noreferrer" ta=
-rget=3D"_blank">spirv-llvm-translator.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 4 +--<br>
-=C2=A030 files changed, 126 insertions(+), 144 deletions(-)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/clang/0001-lib-Driver-ToolChai=
-ns-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch (100%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/clang/Config.in (82%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/clang/clang.hash (52%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/clang/<a href=3D"http://clang.=
-mk" rel=3D"noreferrer" target=3D"_blank">clang.mk</a> (89%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/compiler-rt/Config.in (87%)<br=
->
-=C2=A0rename package/{ =3D&gt; llvm-project}/compiler-rt/compiler-rt.hash (=
-50%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/compiler-rt/<a href=3D"http://=
-compiler-rt.mk" rel=3D"noreferrer" target=3D"_blank">compiler-rt.mk</a> (82=
-%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/0001-support-out-of-tre=
-e-build.patch (100%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/Config.in (73%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/libclc.hash (51%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/<a href=3D"http://libcl=
-c.mk" rel=3D"noreferrer" target=3D"_blank">libclc.mk</a> (92%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/lld/Config.in.host (74%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/lld/lld.hash (52%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/lld/<a href=3D"http://lld.mk" =
-rel=3D"noreferrer" target=3D"_blank">lld.mk</a> (61%)<br>
-=C2=A0create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.hash<br=
->
-=C2=A0create mode 100644 package/llvm-project/llvm-cmake/<a href=3D"http://=
-llvm-cmake.mk" rel=3D"noreferrer" target=3D"_blank">llvm-cmake.mk</a><br>
-=C2=A0create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind=
-.hash<br>
-=C2=A0create mode 100644 package/llvm-project/llvm-libunwind/<a href=3D"htt=
-p://llvm-libunwind.mk" rel=3D"noreferrer" target=3D"_blank">llvm-libunwind.=
-mk</a><br>
-=C2=A0create mode 100644 package/llvm-project/<a href=3D"http://llvm-projec=
-t.mk" rel=3D"noreferrer" target=3D"_blank">llvm-project.mk</a><br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/llvm/Config.in (88%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/llvm/llvm.hash (52%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/llvm/<a href=3D"http://llvm.mk=
-" rel=3D"noreferrer" target=3D"_blank">llvm.mk</a> (94%)<br>
-=C2=A0delete mode 100644 package/llvm/0001-nfc-Fix-missing-include.patch<br=
->
-=C2=A0delete mode 100644 package/llvm/0002-Add-missing-cstdint-header-to-Si=
-gnals.h.patch<br>
-<br>
---<br>
-2.34.1<br>
-_______________________________________________<br>
-buildroot mailing list<br>
-<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
-droot.org</a><br>
-<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
-oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
-uildroot</a><br>
-</blockquote></div>
-
---0000000000008f18490600b79de0--
-
---===============6311803681924627803==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6311803681924627803==--
+T24gU3VuLCBKdWwgMTYsIDIwMjMgYXQgMToxNuKAr0FNIFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJA
+a29yc2dhYXJkLmNvbT4gd3JvdGU6Cj4KPiBjb21taXQ6IGh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5u
+ZXQvYnVpbGRyb290L2NvbW1pdC8/aWQ9M2M2NmY2NWE2YTU0OTkzMDg3MGYyYzBkOThhYmI1Y2E5
+MzIxZDJhNQo+IGJyYW5jaDogaHR0cHM6Ly9naXQuYnVpbGRyb290Lm5ldC9idWlsZHJvb3QvY29t
+bWl0Lz9pZD1yZWZzL2hlYWRzL21hc3Rlcgo+Cj4gUmViYXNlIHBhdGNoZXMgb250byBuZXcgdmVy
+c2lvbgo+Cj4gUmVtb3ZlIDAwMDUtY3J5cHRvLXBlcmxhc20tcHBjLXhsYXRlLnBsLWFkZC1saW51
+eDY0djItZmxhdm91ci5wYXRjaCwKPiAwMDA2LUFkZC1zdXBwb3J0LWZvci1pb19wZ2V0ZXZlbnRz
+X3RpbWU2NC1zeXNjYWxsLnBhdGNoLCBhbmQKPiAwMDA3LUZpeHVwLXN1cHBvcnQtZm9yLWlvX3Bn
+ZXRldmVudHNfdGltZTY0LXN5c2NhbGwucGF0Y2ggYXMgdGhlc2UgYXJlCj4gYWxyZWFkeSBhcHBs
+aWVkIHVwc3RyZWFtCj4KPiBVcGRhdGVkIGxpY2Vuc2UgYWZ0ZXIgc3dpdGNoIHRvIEFwYWNoZSBs
+aWNlbnNlOgo+IGh0dHBzOi8vd3d3Lm9wZW5zc2wub3JnL2Jsb2cvYmxvZy8yMDIxLzA2LzE3L09w
+ZW5TU0wzLjBSZWxlYXNlQ2FuZGlkYXRlLwo+Cj4gW0Jlcm5kOiBmaXhlZCBsaWNlbnNlIGZpbGUv
+aGFzaF0KPgo+IFNpZ25lZC1vZmYtYnk6IERhbm55IFdvb2QgPGRhbm55QHJvdHJvbmljcy5jby51
+az4KPiBTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVybmRAa3VobHMubmV0Pgo+IFtQZXRl
+cjogdXBkYXRlIC5jaGVja3BhY2thZ2VpZ25vcmVdCj4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgS29y
+c2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPgo+IC0tLQo+ICAuY2hlY2twYWNrYWdlaWdub3Jl
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAzIC0KPiAgLi4udGltZS1idWlsZGlu
+Zy1tYW5wYWdlcy1pZi13ZS1yZS1ub3QtZ29pbmcucGF0Y2ggfCAgOCArLQo+ICAuLi5yb2R1Y2li
+bGUtYnVpbGQtZG8tbm90LWxlYWstY29tcGlsZXItcGF0aC5wYXRjaCB8ICA4ICstCj4gIC4uLmhl
+LU9QRU5TU0xfTk9fTUFEVklTRS10by1kaXNhYmxlLWNhbGwtdG8tLnBhdGNoIHwgIDIgKy0KPiAg
+Li4uZXJsYXNtLXBwYy14bGF0ZS5wbC1hZGQtbGludXg2NHYyLWZsYXZvdXIucGF0Y2ggfCA2NCAt
+LS0tLS0tLS0tLS0tLQo+ICAuLi4tc3VwcG9ydC1mb3ItaW9fcGdldGV2ZW50c190aW1lNjQtc3lz
+Y2FsbC5wYXRjaCB8IDYxIC0tLS0tLS0tLS0tLS0tCj4gIC4uLi1zdXBwb3J0LWZvci1pb19wZ2V0
+ZXZlbnRzX3RpbWU2NC1zeXNjYWxsLnBhdGNoIHwgOTggLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+
+ICBwYWNrYWdlL2xpYm9wZW5zc2wvbGlib3BlbnNzbC5oYXNoICAgICAgICAgICAgICAgICB8ICA0
+ICstCj4gIHBhY2thZ2UvbGlib3BlbnNzbC9saWJvcGVuc3NsLm1rICAgICAgICAgICAgICAgICAg
+IHwgIDYgKy0KPiAgOSBmaWxlcyBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAyNDAgZGVsZXRp
+b25zKC0pCgpUaGlzIGRvZXNuJ3Qgc2VlbSB0byBpbmNsdWRlIHRoZSBsaWJjcnlwdG8gaW5jbHVk
+ZXMsIHN1Y2ggYXMKaW5jbHVkZS9jcnlwdG8vZWguaCwgYXQgbGVhc3Qgbm90IHRoYXQgSSBjYW4g
+ZmlndXJlIG91dAoKQWxpc3RhaXIKCj4KPiBkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2FnZWlnbm9y
+ZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiBpbmRleCBhNzYyZDhlOThiLi5hN2JmNjliZTM5IDEw
+MDY0NAo+IC0tLSBhLy5jaGVja3BhY2thZ2VpZ25vcmUKPiArKysgYi8uY2hlY2twYWNrYWdlaWdu
+b3JlCj4gQEAgLTc5MCw5ICs3OTAsNiBAQCBwYWNrYWdlL2xpYm9kYi1teXNxbC8wMDAyLW1hcmlh
+ZGItRlRCRlMtZml4LnBhdGNoIFVwc3RyZWFtCj4gIHBhY2thZ2UvbGlib3BlbnNzbC8wMDAxLURv
+bnQtd2FzdGUtdGltZS1idWlsZGluZy1tYW5wYWdlcy1pZi13ZS1yZS1ub3QtZ29pbmcucGF0Y2gg
+VXBzdHJlYW0KPiAgcGFja2FnZS9saWJvcGVuc3NsLzAwMDItUmVwcm9kdWNpYmxlLWJ1aWxkLWRv
+LW5vdC1sZWFrLWNvbXBpbGVyLXBhdGgucGF0Y2ggVXBzdHJlYW0KPiAgcGFja2FnZS9saWJvcGVu
+c3NsLzAwMDQtQ29uZmlndXJlLXVzZS1FTEZ2Mi1BQkktb24tc29tZS1wcGM2NC1iaWctZW5kaWFu
+LXN5cy5wYXRjaCBVcHN0cmVhbQo+IC1wYWNrYWdlL2xpYm9wZW5zc2wvMDAwNS1jcnlwdG8tcGVy
+bGFzbS1wcGMteGxhdGUucGwtYWRkLWxpbnV4NjR2Mi1mbGF2b3VyLnBhdGNoIFVwc3RyZWFtCj4g
+LXBhY2thZ2UvbGlib3BlbnNzbC8wMDA2LUFkZC1zdXBwb3J0LWZvci1pb19wZ2V0ZXZlbnRzX3Rp
+bWU2NC1zeXNjYWxsLnBhdGNoIFVwc3RyZWFtCj4gLXBhY2thZ2UvbGlib3BlbnNzbC8wMDA3LUZp
+eHVwLXN1cHBvcnQtZm9yLWlvX3BnZXRldmVudHNfdGltZTY0LXN5c2NhbGwucGF0Y2ggVXBzdHJl
+YW0KPiAgcGFja2FnZS9saWJvcGluZy8wMDAxLWZpeC11dGY4LXN1cHBvcnQucGF0Y2ggVXBzdHJl
+YW0KPiAgcGFja2FnZS9saWJvcGluZy8wMDAyLU9wZW4tcmF3LXNvY2tldHMtd2hlbi1hZGRpbmct
+aG9zdHMtbm90LXdoZW4tZG9pbmctdGgucGF0Y2ggVXBzdHJlYW0KPiAgcGFja2FnZS9saWJvcGlu
+Zy8wMDAzLUZpeC1jb21waWxlLWJyZWFrLXdpdGgtR0NDLTctYnVmZmVyLW92ZXJmbG93LXdpdGgt
+c25wcmludGYucGF0Y2ggVXBzdHJlYW0KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJvcGVuc3Ns
+LzAwMDEtRG9udC13YXN0ZS10aW1lLWJ1aWxkaW5nLW1hbnBhZ2VzLWlmLXdlLXJlLW5vdC1nb2lu
+Zy5wYXRjaCBiL3BhY2thZ2UvbGlib3BlbnNzbC8wMDAxLURvbnQtd2FzdGUtdGltZS1idWlsZGlu
+Zy1tYW5wYWdlcy1pZi13ZS1yZS1ub3QtZ29pbmcucGF0Y2gKPiBpbmRleCA2NTI3YmMyM2ExLi5l
+ZDQ1OTBkZDU1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGlib3BlbnNzbC8wMDAxLURvbnQtd2Fz
+dGUtdGltZS1idWlsZGluZy1tYW5wYWdlcy1pZi13ZS1yZS1ub3QtZ29pbmcucGF0Y2gKPiArKysg
+Yi9wYWNrYWdlL2xpYm9wZW5zc2wvMDAwMS1Eb250LXdhc3RlLXRpbWUtYnVpbGRpbmctbWFucGFn
+ZXMtaWYtd2UtcmUtbm90LWdvaW5nLnBhdGNoCj4gQEAgLTE5LDE0ICsxOSwxNCBAQCBkaWZmIC0t
+Z2l0IGEvQ29uZmlndXJhdGlvbnMvdW5peC1NYWtlZmlsZS50bXBsIGIvQ29uZmlndXJhdGlvbnMv
+dW5peC1NYWtlZmlsZS50bQo+ICBpbmRleCA0MGNmMmMzLi43NzdkOWNhIDEwMDY0NAo+ICAtLS0g
+YS9Db25maWd1cmF0aW9ucy91bml4LU1ha2VmaWxlLnRtcGwKPiAgKysrIGIvQ29uZmlndXJhdGlv
+bnMvdW5peC1NYWtlZmlsZS50bXBsCj4gLUBAIC00OTEsNyArNDkxLDcgQEAgbGlzdC10ZXN0czoK
+PiArQEAgLTU0Niw3ICs1NDYsNyBAQCBsaXN0LXRlc3RzOgo+ICAgICAgICAgQGVjaG8gIlRlc3Rz
+IGFyZSBub3Qgc3VwcG9ydGVkIHdpdGggeW91ciBjaG9zZW4gQ29uZmlndXJlIG9wdGlvbnMiCj4g
+ICAgICAgICBAIDogey0gb3V0cHV0X29uKCkgaWYgISRkaXNhYmxlZHt0ZXN0c307ICIiIC19Cj4K
+PiAtLWluc3RhbGw6IGluc3RhbGxfc3cgaW5zdGFsbF9zc2xkaXJzIGluc3RhbGxfZG9jcwo+IC0r
+aW5zdGFsbDogaW5zdGFsbF9zdyBpbnN0YWxsX3NzbGRpcnMKPiArLWluc3RhbGw6IGluc3RhbGxf
+c3cgaW5zdGFsbF9zc2xkaXJzIGluc3RhbGxfZG9jcyB7LSAkZGlzYWJsZWR7Zmlwc30gPyAiIiA6
+ICJpbnN0YWxsX2ZpcHMiIC19Cj4gKytpbnN0YWxsOiBpbnN0YWxsX3N3IGluc3RhbGxfc3NsZGly
+cyB7LSAkZGlzYWJsZWR7Zmlwc30gPyAiIiA6ICJpbnN0YWxsX2ZpcHMiIC19Cj4KPiAtIHVuaW5z
+dGFsbDogdW5pbnN0YWxsX2RvY3MgdW5pbnN0YWxsX3N3Cj4gKyB1bmluc3RhbGw6IHVuaW5zdGFs
+bF9kb2NzIHVuaW5zdGFsbF9zdyB7LSAkZGlzYWJsZWR7Zmlwc30gPyAiIiA6ICJ1bmluc3RhbGxf
+ZmlwcyIgLX0KPgo+ICAtLQo+ICAyLjE2LjMKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJvcGVu
+c3NsLzAwMDItUmVwcm9kdWNpYmxlLWJ1aWxkLWRvLW5vdC1sZWFrLWNvbXBpbGVyLXBhdGgucGF0
+Y2ggYi9wYWNrYWdlL2xpYm9wZW5zc2wvMDAwMi1SZXByb2R1Y2libGUtYnVpbGQtZG8tbm90LWxl
+YWstY29tcGlsZXItcGF0aC5wYXRjaAo+IGluZGV4IDgyMGMyYWRkZjEuLmVhMjZhMzEwNzUgMTAw
+NjQ0Cj4gLS0tIGEvcGFja2FnZS9saWJvcGVuc3NsLzAwMDItUmVwcm9kdWNpYmxlLWJ1aWxkLWRv
+LW5vdC1sZWFrLWNvbXBpbGVyLXBhdGgucGF0Y2gKPiArKysgYi9wYWNrYWdlL2xpYm9wZW5zc2wv
+MDAwMi1SZXByb2R1Y2libGUtYnVpbGQtZG8tbm90LWxlYWstY29tcGlsZXItcGF0aC5wYXRjaAo+
+IEBAIC0xNSwxNSArMTUsMTUgQEAgZGlmZiAtLWdpdCBhL2NyeXB0by9idWlsZC5pbmZvIGIvY3J5
+cHRvL2J1aWxkLmluZm8KPiAgaW5kZXggMmM2MTljNi4uNDljYTZhYiAxMDA2NDQKPiAgLS0tIGEv
+Y3J5cHRvL2J1aWxkLmluZm8KPiAgKysrIGIvY3J5cHRvL2J1aWxkLmluZm8KPiAtQEAgLTEwLDcg
+KzEwLDcgQEAgRVhUUkE9ICAuLi9tcy91cGxpbmsteDg2LnBsIC4uL21zL3VwbGluay5jIC4uL21z
+L2FwcGxpbmsuYyBcCj4gLSAgICAgICAgIHBwY2NwdWlkLnBsIHBhcmlzY2lkLnBsIGFscGhhY3B1
+aWQucGwgYXJtNjRjcHVpZC5wbCBhcm12NGNwdWlkLnBsCj4gK0BAIC0xMTEsNyArMTExLDcgQEAg
+RVhUUkE9ICAuLi9tcy91cGxpbmsteDg2LnBsIC4uL21zL3VwbGluay5jIC4uL21zL2FwcGxpbmsu
+YyBcCj4KPiArIERFUEVORFtpbmZvLm9dPWJ1aWxkaW5mLmgKPiAgIERFUEVORFtjdmVyc2lvbi5v
+XT1idWlsZGluZi5oCj4gIC1HRU5FUkFURVtidWlsZGluZi5oXT0uLi91dGlsL21rYnVpbGRpbmYu
+cGwgIiQoQ0MpICQoTElCX0NGTEFHUykgJChDUFBGTEFHU19RKSIgIiQoUExBVEZPUk0pIgo+ICAr
+R0VORVJBVEVbYnVpbGRpbmYuaF09Li4vdXRpbC9ta2J1aWxkaW5mLnBsICIkJChiYXNlbmFtZSAk
+KENDKSkgJChMSUJfQ0ZMQUdTKSAkKENQUEZMQUdTX1EpIiAiJChQTEFURk9STSkiCj4gLSBERVBF
+TkRbYnVpbGRpbmYuaF09Li4vY29uZmlnZGF0YS5wbQo+Cj4gLSBHRU5FUkFURVt1cGxpbmsteDg2
+LnNdPS4uL21zL3VwbGluay14ODYucGwgJChQRVJMQVNNX1NDSEVNRSkKPiArIEdFTkVSQVRFW3Vw
+bGluay14ODYuU109Li4vbXMvdXBsaW5rLXg4Ni5wbAo+ICsgR0VORVJBVEVbdXBsaW5rLXg4Nl82
+NC5zXT0uLi9tcy91cGxpbmsteDg2XzY0LnBsCj4gIC0tCj4gIDIuMjAuMQo+Cj4gZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvbGlib3BlbnNzbC8wMDAzLUludHJvZHVjZS10aGUtT1BFTlNTTF9OT19NQURW
+SVNFLXRvLWRpc2FibGUtY2FsbC10by0ucGF0Y2ggYi9wYWNrYWdlL2xpYm9wZW5zc2wvMDAwMy1J
+bnRyb2R1Y2UtdGhlLU9QRU5TU0xfTk9fTUFEVklTRS10by1kaXNhYmxlLWNhbGwtdG8tLnBhdGNo
+Cj4gaW5kZXggZWY0MGIwMzUzYS4uNDI1YWRlYTVkOCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xp
+Ym9wZW5zc2wvMDAwMy1JbnRyb2R1Y2UtdGhlLU9QRU5TU0xfTk9fTUFEVklTRS10by1kaXNhYmxl
+LWNhbGwtdG8tLnBhdGNoCj4gKysrIGIvcGFja2FnZS9saWJvcGVuc3NsLzAwMDMtSW50cm9kdWNl
+LXRoZS1PUEVOU1NMX05PX01BRFZJU0UtdG8tZGlzYWJsZS1jYWxsLXRvLS5wYXRjaAo+IEBAIC0x
+Myw3ICsxMyw3IEBAIGRpZmYgLS1naXQgYS9jcnlwdG8vbWVtX3NlYy5jIGIvY3J5cHRvL21lbV9z
+ZWMuYwo+ICBpbmRleCA5ZTBmNjcwLi4zMmM3MjgyIDEwMDY0NAo+ICAtLS0gYS9jcnlwdG8vbWVt
+X3NlYy5jCj4gICsrKyBiL2NyeXB0by9tZW1fc2VjLmMKPiAtQEAgLTQ5MSw3ICs0OTEsNyBAQCBz
+dGF0aWMgaW50IHNoX2luaXQoc2l6ZV90IHNpemUsIGludCBtaW5zaXplKQo+ICtAQCAtNTU3LDcg
+KzU1Nyw3IEBAIHN0YXRpYyBpbnQgc2hfaW5pdChzaXplX3Qgc2l6ZSwgaW50IG1pbnNpemUpCj4g
+ICAgICAgaWYgKG1sb2NrKHNoLmFyZW5hLCBzaC5hcmVuYV9zaXplKSA8IDApCj4gICAgICAgICAg
+IHJldCA9IDI7Cj4gICAjZW5kaWYKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJvcGVuc3NsLzAw
+MDUtY3J5cHRvLXBlcmxhc20tcHBjLXhsYXRlLnBsLWFkZC1saW51eDY0djItZmxhdm91ci5wYXRj
+aCBiL3BhY2thZ2UvbGlib3BlbnNzbC8wMDA1LWNyeXB0by1wZXJsYXNtLXBwYy14bGF0ZS5wbC1h
+ZGQtbGludXg2NHYyLWZsYXZvdXIucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBp
+bmRleCAzMGJkZGMyM2RlLi4wMDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9saWJvcGVuc3NsLzAw
+MDUtY3J5cHRvLXBlcmxhc20tcHBjLXhsYXRlLnBsLWFkZC1saW51eDY0djItZmxhdm91ci5wYXRj
+aAo+ICsrKyAvZGV2L251bGwKPiBAQCAtMSw2NCArMCwwIEBACj4gLUZyb20gMDdhMGJiZGQxNzlh
+NTI5MDc0ODVmZDc5M2YwZGYzMWMwOTc0NDdhZiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiAt
+RnJvbTogQW5keSBQb2x5YWtvdiA8YXBwcm9Ab3BlbnNzbC5vcmc+Cj4gLURhdGU6IFN1biwgNSBN
+YXkgMjAxOSAxODoyNTo1MCArMDIwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIGNyeXB0by9wZXJsYXNt
+L3BwYy14bGF0ZS5wbDogYWRkIGxpbnV4NjR2MiBmbGF2b3VyCj4gLU1JTUUtVmVyc2lvbjogMS4w
+Cj4gLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+IC1Db250ZW50LVRy
+YW5zZmVyLUVuY29kaW5nOiA4Yml0Cj4gLQo+IC1UaGlzIGlzIGEgYmlnIGVuZGlhbiBFTEZ2MiBj
+b25maWd1cmF0aW9uLiBFTEZ2MiB3YXMgYWxyZWFkeSBiZWluZwo+IC11c2VkIGZvciBsaXR0bGUg
+ZW5kaWFuLCBhbmQgYmlnIGVuZGlhbiB3YXMgdHJhZGl0aW9uYWxseSBFTEZ2MQo+IC1idXQgdGhl
+cmUgYXJlIHByYWN0aWNhbCBjb25maWd1cmF0aW9ucyB0aGF0IHVzZSBFTEZ2MiB3aXRoIGJpZwo+
+IC1lbmRpYW4gbm93YWRheXMgKEFkw6lsaWUgTGludXgsIFZvaWQgTGludXgsIHBvc3NpYmx5IEdl
+bnRvbywgZXRjLikKPiAtCj4gLVJldmlld2VkLWJ5OiBQYXVsIERhbGUgPHBhdWwuZGFsZUBvcmFj
+bGUuY29tPgo+IC1SZXZpZXdlZC1ieTogUmljaGFyZCBMZXZpdHRlIDxsZXZpdHRlQG9wZW5zc2wu
+b3JnPgo+IC0oTWVyZ2VkIGZyb20gaHR0cHM6Ly9naXRodWIuY29tL29wZW5zc2wvb3BlbnNzbC9w
+dWxsLzg4ODMpCj4gLVNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgRmF6aW8gPHZmYXppb0B4ZXMtaW5j
+LmNvbT4KPiAtLS0tCj4gLSBjcnlwdG8vcGVybGFzbS9wcGMteGxhdGUucGwgfCA4ICsrKystLS0t
+Cj4gLSAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQo+IC0K
+PiAtZGlmZiAtLWdpdCBhL2NyeXB0by9wZXJsYXNtL3BwYy14bGF0ZS5wbCBiL2NyeXB0by9wZXJs
+YXNtL3BwYy14bGF0ZS5wbAo+IC1pbmRleCBkMjIwYzYyNDViLi5lZWM4MmI4ZDQ4IDEwMDc1NQo+
+IC0tLS0gYS9jcnlwdG8vcGVybGFzbS9wcGMteGxhdGUucGwKPiAtKysrIGIvY3J5cHRvL3Blcmxh
+c20vcHBjLXhsYXRlLnBsCj4gLUBAIC00OSw3ICs0OSw3IEBAIG15ICRnbG9ibCA9IHN1YiB7Cj4g
+LSAgICAgICAvb3N4LyAgICAgICAgICAgJiYgZG8geyAkbmFtZSA9ICJfJG5hbWUiOwo+IC0gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgbGFzdDsKPiAtICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB9Owo+IC0tICAgICAgL2xpbnV4LiooMzJ8NjRsZSkvCj4gLSsgICAgICAvbGludXgu
+KigzMnw2NChsZXx2MikpLwo+IC0gICAgICAgICAgICAgICAgICAgICAgICYmIGRvIHsgJHJldCAu
+PSAiLmdsb2JsICRuYW1lIjsKPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmICgh
+JCR0eXBlKSB7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgJHJldCAuPSAi
+XG4udHlwZSAgICAkbmFtZSxcQGZ1bmN0aW9uIjsKPiAtQEAgLTgwLDcgKzgwLDcgQEAgbXkgJGds
+b2JsID0gc3ViIHsKPiAtIH07Cj4gLSBteSAkdGV4dCA9IHN1YiB7Cj4gLSAgICAgbXkgJHJldCA9
+ICgkZmxhdm91ciA9fiAvYWl4LykgPyAiLmNzZWN0XHQudGV4dFtQUl0sNyIgOiAiLnRleHQiOwo+
+IC0tICAgICRyZXQgPSAiLmFiaXZlcnNpb24gICAgICAgMlxuIi4kcmV0ICAgICAgIGlmICgkZmxh
+dm91ciA9fiAvbGludXguKjY0bGUvKTsKPiAtKyAgICAkcmV0ID0gIi5hYml2ZXJzaW9uICAgICAg
+IDJcbiIuJHJldCAgICAgICBpZiAoJGZsYXZvdXIgPX4gL2xpbnV4Lio2NChsZXx2MikvKTsKPiAt
+ICAgICAkcmV0Owo+IC0gfTsKPiAtIG15ICRtYWNoaW5lID0gc3ViIHsKPiAtQEAgLTE4Niw3ICsx
+ODYsNyBAQCBteSAkdm1yID0gc3ViIHsKPiAtCj4gLSAjIFNvbWUgQUJJcyBzcGVjaWZ5IHZyc2F2
+ZSwgc3BlY2lhbC1wdXJwb3NlIHJlZ2lzdGVyICMyNTYsIGFzIHJlc2VydmVkCj4gLSAjIGZvciBz
+eXN0ZW0gdXNlLgo+IC0tbXkgJG5vX3Zyc2F2ZSA9ICgkZmxhdm91ciA9fiAvYWl4fGxpbnV4NjRs
+ZS8pOwo+IC0rbXkgJG5vX3Zyc2F2ZSA9ICgkZmxhdm91ciA9fiAvYWl4fGxpbnV4NjQobGV8djIp
+Lyk7Cj4gLSBteSAkbXRzcHIgPSBzdWIgewo+IC0gICAgIG15ICgkZiwkaWR4LCRyYSkgPSBAXzsK
+PiAtICAgICBpZiAoJGlkeCA9PSAyNTYgJiYgJG5vX3Zyc2F2ZSkgewo+IC1AQCAtMzE4LDcgKzMx
+OCw3IEBAIHdoaWxlKCRsaW5lPTw+KSB7Cj4gLSAgICAgICBpZiAoJGxhYmVsKSB7Cj4gLSAgICAg
+ICAgICAgbXkgJHhsYXRlZCA9ICgkR0xPQkFMU3skbGFiZWx9IG9yICRsYWJlbCk7Cj4gLSAgICAg
+ICAgICAgcHJpbnQgIiR4bGF0ZWQ6IjsKPiAtLSAgICAgICAgICBpZiAoJGZsYXZvdXIgPX4gL2xp
+bnV4Lio2NGxlLykgewo+IC0rICAgICAgICAgIGlmICgkZmxhdm91ciA9fiAvbGludXguKjY0KGxl
+fHYyKS8pIHsKPiAtICAgICAgICAgICAgICAgaWYgKCRUWVBFU3skbGFiZWx9ID1+IC9mdW5jdGlv
+bi8pIHsKPiAtICAgICAgICAgICAgICAgICAgIHByaW50ZiAiXG4ubG9jYWxlbnRyeSAgICAgICAl
+cywwXG4iLCR4bGF0ZWQ7Cj4gLSAgICAgICAgICAgICAgIH0KPiAtLS0KPiAtMi4yNS4wCj4gLQo+
+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYm9wZW5zc2wvMDAwNi1BZGQtc3VwcG9ydC1mb3ItaW9f
+cGdldGV2ZW50c190aW1lNjQtc3lzY2FsbC5wYXRjaCBiL3BhY2thZ2UvbGlib3BlbnNzbC8wMDA2
+LUFkZC1zdXBwb3J0LWZvci1pb19wZ2V0ZXZlbnRzX3RpbWU2NC1zeXNjYWxsLnBhdGNoCj4gZGVs
+ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMGY1OWZhNjQ4ZS4uMDAwMDAwMDAwMAo+IC0t
+LSBhL3BhY2thZ2UvbGlib3BlbnNzbC8wMDA2LUFkZC1zdXBwb3J0LWZvci1pb19wZ2V0ZXZlbnRz
+X3RpbWU2NC1zeXNjYWxsLnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDYxICswLDAgQEAK
+PiAtRnJvbSA1YjVlMjk4NWYzNTVjOGU5OWMxOTZkOWNlNWQwMmMxNWJlYmFkZmJjIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQo+IC1Gcm9tOiBBbGlzdGFpciBGcmFuY2lzIDxhbGlzdGFpci5mcmFu
+Y2lzQHdkYy5jb20+Cj4gLURhdGU6IFRodSwgMjkgQXVnIDIwMTkgMTM6NTY6MjEgLTA3MDAKPiAt
+U3ViamVjdDogW1BBVENIXSBBZGQgc3VwcG9ydCBmb3IgaW9fcGdldGV2ZW50c190aW1lNjQgc3lz
+Y2FsbAo+IC0KPiAtMzItYml0IGFyY2hpdGVjdHVyZXMgdGhhdCBhcmUgeTIwMzggc2FmZSBkb24n
+dCBpbmNsdWRlIHN5c2NhbGxzIHRoYXQgdXNlCj4gLTMyLWJpdCB0aW1lX3QuIEluc3RlYWQgdGhl
+c2UgYXJjaGl0ZWN0dXJlcyBoYXZlIHN1ZmZpeGVkIHN5c2NhbGxzIHRoYXQKPiAtYWx3YXlzIHVz
+ZSBhIDY0LWJpdCB0aW1lX3QuIEluIHRoZSBjYXNlIG9mIHRoZSBpb19nZXRldmVudHMgc3lzY2Fs
+bCB0aGUKPiAtc3lzY2FsbCBoYXMgYmVlbiByZXBsYWNlZCB3aXRoIHRoZSBpb19wZ2V0ZXZlbnRz
+X3RpbWU2NCBzeXNjYWxsIGluc3RlYWQuCj4gLQo+IC1UaGlzIHBhdGNoIGNoYW5nZXMgdGhlIGlv
+X2dldGV2ZW50cygpIGZ1bmN0aW9uIHRvIHVzZSB0aGUgY29ycmVjdAo+IC1zeXNjYWxsIGJhc2Vk
+IG9uIHRoZSBhdmFsaWFibGUgc3lzY2FsbHMgYW5kIHRoZSB0aW1lX3Qgc2l6ZS4gV2Ugd2lsbAo+
+IC1vbmx5IHVzZSB0aGUgbmV3IDY0LWJpdCB0aW1lX3Qgc3lzY2FsbCBpZiB0aGUgYXJjaGl0ZWN0
+dXJlIGlzIHVzaW5nIGEKPiAtNjQtYml0IHRpbWVfdC4gVGhpcyBpcyB0byBhdm9pZCBoYXZpbmcg
+dG8gZGVhbCB3aXRoIDMyLzY0LWJpdAo+IC1jb252ZXJzaW9ucyBhbmQgcmVseWluZyBvbiBhIDY0
+LWJpdCB0aW1lc3BlYyBzdHJ1Y3Qgb24gMzItYml0IHRpbWVfdAo+IC1wbGF0Zm9ybXMuIEFzIG9m
+IExpbnV4IDUuMyB0aGVyZSBhcmUgbm8gMzItYml0IHRpbWVfdCBhcmNoaXRlY3R1cmVzCj4gLXdp
+dGhvdXQgX19OUl9pb19nZXRldmVudHMuIEluIHRoZSBmdXR1cmUgaWYgYSAzMi1iaXQgdGltZV90
+IGFyY2hpdGVjdHVyZQo+IC13YW50cyB0byB1c2UgdGhlIDY0LWJpdCBzeXNjYWxscyB3ZSBjYW4g
+aGFuZGxlIHRoZSBjb252ZXJzaW9uLgo+IC0KPiAtVGhpcyBmaXhlcyBidWlsZCBmYWlsdXJlcyBv
+biAzMi1iaXQgUklTQy1WLgo+IC0KPiAtU2lnbmVkLW9mZi1ieTogQWxpc3RhaXIgRnJhbmNpcyA8
+YWxpc3RhaXIuZnJhbmNpc0B3ZGMuY29tPgo+IC0KPiAtUmV2aWV3ZWQtYnk6IFJpY2hhcmQgTGV2
+aXR0ZSA8bGV2aXR0ZUBvcGVuc3NsLm9yZz4KPiAtUmV2aWV3ZWQtYnk6IFBhdWwgRGFsZSA8cGF1
+bC5kYWxlQG9yYWNsZS5jb20+Cj4gLShNZXJnZWQgZnJvbSBodHRwczovL2dpdGh1Yi5jb20vb3Bl
+bnNzbC9vcGVuc3NsL3B1bGwvOTgxOSkKPiAtLS0tCj4gLSBlbmdpbmVzL2VfYWZhbGcuYyB8IDE2
+ICsrKysrKysrKysrKysrKysKPiAtIDEgZmlsZSBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspCj4g
+LQo+IC1kaWZmIC0tZ2l0IGEvZW5naW5lcy9lX2FmYWxnLmMgYi9lbmdpbmVzL2VfYWZhbGcuYwo+
+IC1pbmRleCBkYWNiZTM1OGNiLi45OTUxNmNiMWJiIDEwMDY0NAo+IC0tLS0gYS9lbmdpbmVzL2Vf
+YWZhbGcuYwo+IC0rKysgYi9lbmdpbmVzL2VfYWZhbGcuYwo+IC1AQCAtMTI1LDcgKzEyNSwyMyBA
+QCBzdGF0aWMgb3NzbF9pbmxpbmUgaW50IGlvX2dldGV2ZW50cyhhaW9fY29udGV4dF90IGN0eCwg
+bG9uZyBtaW4sIGxvbmcgbWF4LAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0
+cnVjdCBpb19ldmVudCAqZXZlbnRzLAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHN0cnVjdCB0aW1lc3BlYyAqdGltZW91dCkKPiAtIHsKPiAtKyNpZiBkZWZpbmVkKF9fTlJfaW9f
+Z2V0ZXZlbnRzKQo+IC0gICAgIHJldHVybiBzeXNjYWxsKF9fTlJfaW9fZ2V0ZXZlbnRzLCBjdHgs
+IG1pbiwgbWF4LCBldmVudHMsIHRpbWVvdXQpOwo+IC0rI2VsaWYgZGVmaW5lZChfX05SX2lvX3Bn
+ZXRldmVudHNfdGltZTY0KQo+IC0rICAgIC8qIExldCdzIG9ubHkgc3VwcG9ydCB0aGUgNjQgc3Vm
+Zml4IHN5c2NhbGxzIGZvciA2NC1iaXQgdGltZV90Lgo+IC0rICAgICAqIFRoaXMgc2ltcGxpZmll
+cyB0aGUgY29kZSBmb3IgdXMgYXMgd2UgZG9uJ3QgbmVlZCB0byB1c2UgYSA2NC1iaXQKPiAtKyAg
+ICAgKiB2ZXJzaW9uIG9mIHRpbWVzcGVjIHdpdGggYSAzMi1iaXQgdGltZV90IGFuZCBoYW5kbGUg
+Y29udmVydGluZwo+IC0rICAgICAqIGJldHdlZW4gNjQtYml0IGFuZCAzMi1iaXQgdGltZXMgYW5k
+IGNoZWNrIGZvciBvdmVyZmxvd3MuCj4gLSsgICAgICovCj4gLSsgICAgaWYgKHNpemVvZih0aW1l
+b3V0LT50dl9zZWMpID09IDgpCj4gLSsgICAgICAgIHJldHVybiBzeXNjYWxsKF9fTlJfaW9fcGdl
+dGV2ZW50c190aW1lNjQsIGN0eCwgbWluLCBtYXgsIGV2ZW50cywgdGltZW91dCwgTlVMTCk7Cj4g
+LSsgICAgZWxzZSB7Cj4gLSsgICAgICAgIGVycm5vID0gRU5PU1lTOwo+IC0rICAgICAgICByZXR1
+cm4gLTE7Cj4gLSsgICAgfQo+IC0rI2Vsc2UKPiAtKyMgZXJyb3IgIldlIHJlcXVpcmUgZWl0aGVy
+IHRoZSBpb19nZXRldmVudHMgc3lzY2FsbCBvciBfX05SX2lvX3BnZXRldmVudHNfdGltZTY0LiIK
+PiAtKyNlbmRpZgo+IC0gfQo+IC0KPiAtIHN0YXRpYyB2b2lkIGFmYWxnX3dhaXRmZF9jbGVhbnVw
+KEFTWU5DX1dBSVRfQ1RYICpjdHgsIGNvbnN0IHZvaWQgKmtleSwKPiAtLS0KPiAtMi4yNS4xCj4g
+LQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYm9wZW5zc2wvMDAwNy1GaXh1cC1zdXBwb3J0LWZv
+ci1pb19wZ2V0ZXZlbnRzX3RpbWU2NC1zeXNjYWxsLnBhdGNoIGIvcGFja2FnZS9saWJvcGVuc3Ns
+LzAwMDctRml4dXAtc3VwcG9ydC1mb3ItaW9fcGdldGV2ZW50c190aW1lNjQtc3lzY2FsbC5wYXRj
+aAo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDdiMDAzZTQ4MzYuLjAwMDAwMDAw
+MDAKPiAtLS0gYS9wYWNrYWdlL2xpYm9wZW5zc2wvMDAwNy1GaXh1cC1zdXBwb3J0LWZvci1pb19w
+Z2V0ZXZlbnRzX3RpbWU2NC1zeXNjYWxsLnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDk4
+ICswLDAgQEAKPiAtRnJvbSBlNTQ5OWEzY2FjMWU4MjNjM2UwNjk3ZTg2NjdlOTUyMzE3YjcwY2M4
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+IC1Gcm9tOiBBbGlzdGFpciBGcmFuY2lzIDxhbGlz
+dGFpci5mcmFuY2lzQHdkYy5jb20+Cj4gLURhdGU6IFRodSwgNCBNYXIgMjAyMSAxMjoxMDoxMSAt
+MDUwMAo+IC1TdWJqZWN0OiBbUEFUQ0hdIEZpeHVwIHN1cHBvcnQgZm9yIGlvX3BnZXRldmVudHNf
+dGltZTY0IHN5c2NhbGwKPiAtCj4gLVRoaXMgaXMgYSBmaXh1cCBmb3IgdGhlIG9yaWdpbmFsIGNv
+bW1pdCA1YjVlMjk4NWYzNTVjOGU5OWMxOTZkOWNlNWQwMmMxNWJlYmFkZmJjCj4gLSJBZGQgc3Vw
+cG9ydCBmb3IgaW9fcGdldGV2ZW50c190aW1lNjQgc3lzY2FsbCIgdGhhdCBkaWRuJ3QgY29ycmVj
+dGx5Cj4gLXdvcmsgZm9yIDMyLWJpdCBhcmNoaXRlY3V0cmVzIHdpdGggYSA2NC1iaXQgdGltZV90
+IHRoYXQgYXJlbid0IFJJU0MtVi4KPiAtCj4gLUZvciBhIGZ1bGwgZGlzY3Vzc2lvbiBvZiB0aGUg
+aXNzdWUgc2VlOgo+IC1odHRwczovL2dpdGh1Yi5jb20vb3BlbnNzbC9vcGVuc3NsL2NvbW1pdC81
+YjVlMjk4NWYzNTVjOGU5OWMxOTZkOWNlNWQwMmMxNWJlYmFkZmJjCj4gLQo+IC1TaWduZWQtb2Zm
+LWJ5OiBBbGlzdGFpciBGcmFuY2lzIDxhbGlzdGFpci5mcmFuY2lzQHdkYy5jb20+Cj4gLQo+IC1S
+ZXZpZXdlZC1ieTogVG9tYXMgTXJheiA8dG9tYXNAb3BlbnNzbC5vcmc+Cj4gLVJldmlld2VkLWJ5
+OiBQYXVsIERhbGUgPHBhdWxpQG9wZW5zc2wub3JnPgo+IC0oTWVyZ2VkIGZyb20gaHR0cHM6Ly9n
+aXRodWIuY29tL29wZW5zc2wvb3BlbnNzbC9wdWxsLzE0NDMyKQo+IC0tLS0KPiAtIGVuZ2luZXMv
+ZV9hZmFsZy5jIHwgNTUgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0t
+LS0tLS0KPiAtIDEgZmlsZSBjaGFuZ2VkLCA0MiBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMo
+LSkKPiAtCj4gLWRpZmYgLS1naXQgYS9lbmdpbmVzL2VfYWZhbGcuYyBiL2VuZ2luZXMvZV9hZmFs
+Zy5jCj4gLWluZGV4IDk0ODBkN2MyNGIuLjRlOWQ2N2RiMmQgMTAwNjQ0Cj4gLS0tLSBhL2VuZ2lu
+ZXMvZV9hZmFsZy5jCj4gLSsrKyBiL2VuZ2luZXMvZV9hZmFsZy5jCj4gLUBAIC0xMjEsMjcgKzEy
+MSw1NiBAQCBzdGF0aWMgb3NzbF9pbmxpbmUgaW50IGlvX3JlYWQoYWlvX2NvbnRleHRfdCBjdHgs
+IGxvbmcgbiwgc3RydWN0IGlvY2IgKippb2NiKQo+IC0gICAgIHJldHVybiBzeXNjYWxsKF9fTlJf
+aW9fc3VibWl0LCBjdHgsIG4sIGlvY2IpOwo+IC0gfQo+IC0KPiAtKy8qIEEgdmVyc2lvbiBvZiAn
+c3RydWN0IHRpbWVzcGVjJyB3aXRoIDMyLWJpdCB0aW1lX3QgYW5kIG5hbm9zZWNvbmRzLiAgKi8K
+PiAtK3N0cnVjdCBfX3RpbWVzcGVjMzIKPiAtK3sKPiAtKyAgX19rZXJuZWxfbG9uZ190IHR2X3Nl
+YzsKPiAtKyAgX19rZXJuZWxfbG9uZ190IHR2X25zZWM7Cj4gLSt9Owo+IC0rCj4gLSBzdGF0aWMg
+b3NzbF9pbmxpbmUgaW50IGlvX2dldGV2ZW50cyhhaW9fY29udGV4dF90IGN0eCwgbG9uZyBtaW4s
+IGxvbmcgbWF4LAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBpb19l
+dmVudCAqZXZlbnRzLAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCB0
+aW1lc3BlYyAqdGltZW91dCkKPiAtIHsKPiAtKyNpZiBkZWZpbmVkKF9fTlJfaW9fcGdldGV2ZW50
+c190aW1lNjQpCj4gLSsgICAgLyogQ2hlY2sgaWYgd2UgYXJlIGEgMzItYml0IGFyY2hpdGVjdHVy
+ZSB3aXRoIGEgNjQtYml0IHRpbWVfdCAqLwo+IC0rICAgIGlmIChzaXplb2YoKnRpbWVvdXQpICE9
+IHNpemVvZihzdHJ1Y3QgX190aW1lc3BlYzMyKSkgewo+IC0rICAgICAgICBpbnQgcmV0ID0gc3lz
+Y2FsbChfX05SX2lvX3BnZXRldmVudHNfdGltZTY0LCBjdHgsIG1pbiwgbWF4LCBldmVudHMsCj4g
+LSsgICAgICAgICAgICAgICAgICAgICAgICAgIHRpbWVvdXQsIE5VTEwpOwo+IC0rICAgICAgICBp
+ZiAocmV0ID09IDAgfHwgZXJybm8gIT0gRU5PU1lTKQo+IC0rICAgICAgICAgICAgcmV0dXJuIHJl
+dDsKPiAtKyAgICB9Cj4gLSsjZW5kaWYKPiAtKwo+IC0gI2lmIGRlZmluZWQoX19OUl9pb19nZXRl
+dmVudHMpCj4gLS0gICAgcmV0dXJuIHN5c2NhbGwoX19OUl9pb19nZXRldmVudHMsIGN0eCwgbWlu
+LCBtYXgsIGV2ZW50cywgdGltZW91dCk7Cj4gLS0jZWxpZiBkZWZpbmVkKF9fTlJfaW9fcGdldGV2
+ZW50c190aW1lNjQpCj4gLS0gICAgLyogTGV0J3Mgb25seSBzdXBwb3J0IHRoZSA2NCBzdWZmaXgg
+c3lzY2FsbHMgZm9yIDY0LWJpdCB0aW1lX3QuCj4gLS0gICAgICogVGhpcyBzaW1wbGlmaWVzIHRo
+ZSBjb2RlIGZvciB1cyBhcyB3ZSBkb24ndCBuZWVkIHRvIHVzZSBhIDY0LWJpdAo+IC0tICAgICAq
+IHZlcnNpb24gb2YgdGltZXNwZWMgd2l0aCBhIDMyLWJpdCB0aW1lX3QgYW5kIGhhbmRsZSBjb252
+ZXJ0aW5nCj4gLS0gICAgICogYmV0d2VlbiA2NC1iaXQgYW5kIDMyLWJpdCB0aW1lcyBhbmQgY2hl
+Y2sgZm9yIG92ZXJmbG93cy4KPiAtLSAgICAgKi8KPiAtLSAgICBpZiAoc2l6ZW9mKHRpbWVvdXQt
+PnR2X3NlYykgPT0gOCkKPiAtLSAgICAgICAgcmV0dXJuIHN5c2NhbGwoX19OUl9pb19wZ2V0ZXZl
+bnRzX3RpbWU2NCwgY3R4LCBtaW4sIG1heCwgZXZlbnRzLCB0aW1lb3V0LCBOVUxMKTsKPiAtKyAg
+ICBpZiAoc2l6ZW9mKCp0aW1lb3V0KSA9PSBzaXplb2Yoc3RydWN0IF9fdGltZXNwZWMzMikpCj4g
+LSsgICAgICAgIC8qCj4gLSsgICAgICAgICAqIHRpbWVfdCBtYXRjaGVzIG91ciBhcmNoaXRlY3R1
+cmUgbGVuZ3RoLCB3ZSBjYW4ganVzdCB1c2UKPiAtKyAgICAgICAgICogX19OUl9pb19nZXRldmVu
+dHMKPiAtKyAgICAgICAgICovCj4gLSsgICAgICAgIHJldHVybiBzeXNjYWxsKF9fTlJfaW9fZ2V0
+ZXZlbnRzLCBjdHgsIG1pbiwgbWF4LCBldmVudHMsIHRpbWVvdXQpOwo+IC0gICAgIGVsc2Ugewo+
+IC0tICAgICAgICBlcnJubyA9IEVOT1NZUzsKPiAtLSAgICAgICAgcmV0dXJuIC0xOwo+IC0rICAg
+ICAgICAvKgo+IC0rICAgICAgICAgKiBXZSBkb24ndCBoYXZlIF9fTlJfaW9fcGdldGV2ZW50c190
+aW1lNjQsIGJ1dCB3ZSBhcmUgdXNpbmcgYQo+IC0rICAgICAgICAgKiA2NC1iaXQgdGltZV90IG9u
+IGEgMzItYml0IGFyY2hpdGVjdHVyZS4gSWYgd2UgY2FuIGZpdCB0aGUKPiAtKyAgICAgICAgICog
+dGltZW91dCB2YWx1ZSBpbiBhIDMyLWJpdCB0aW1lX3QsIHRoZW4gbGV0J3MgZG8gdGhhdAo+IC0r
+ICAgICAgICAgKiBhbmQgdGhlbiB1c2UgdGhlIF9fTlJfaW9fZ2V0ZXZlbnRzIHN5c2NhbGwuCj4g
+LSsgICAgICAgICAqLwo+IC0rICAgICAgICBpZiAodGltZW91dCAmJiB0aW1lb3V0LT50dl9zZWMg
+PT0gKGxvbmcpdGltZW91dC0+dHZfc2VjKSB7Cj4gLSsgICAgICAgICAgICBzdHJ1Y3QgX190aW1l
+c3BlYzMyIHRzMzI7Cj4gLSsKPiAtKyAgICAgICAgICAgIHRzMzIudHZfc2VjID0gKF9fa2VybmVs
+X2xvbmdfdCkgdGltZW91dC0+dHZfc2VjOwo+IC0rICAgICAgICAgICAgdHMzMi50dl9uc2VjID0g
+KF9fa2VybmVsX2xvbmdfdCkgdGltZW91dC0+dHZfbnNlYzsKPiAtKwo+IC0rICAgICAgICAgICAg
+cmV0dXJuIHN5c2NhbGwoX19OUl9pb19nZXRldmVudHMsIGN0eCwgbWluLCBtYXgsIGV2ZW50cywg
+dHMzMik7Cj4gLSsgICAgICAgIH0gZWxzZSB7Cj4gLSsgICAgICAgICAgICByZXR1cm4gc3lzY2Fs
+bChfX05SX2lvX2dldGV2ZW50cywgY3R4LCBtaW4sIG1heCwgZXZlbnRzLCBOVUxMKTsKPiAtKyAg
+ICAgICAgfQo+IC0gICAgIH0KPiAtLSNlbHNlCj4gLS0jIGVycm9yICJXZSByZXF1aXJlIGVpdGhl
+ciB0aGUgaW9fZ2V0ZXZlbnRzIHN5c2NhbGwgb3IgX19OUl9pb19wZ2V0ZXZlbnRzX3RpbWU2NC4i
+Cj4gLSAjZW5kaWYKPiAtKwo+IC0rICAgIGVycm5vID0gRU5PU1lTOwo+IC0rICAgIHJldHVybiAt
+MTsKPiAtIH0KPiAtCj4gLSBzdGF0aWMgdm9pZCBhZmFsZ193YWl0ZmRfY2xlYW51cChBU1lOQ19X
+QUlUX0NUWCAqY3R4LCBjb25zdCB2b2lkICprZXksCj4gLS0tCj4gLTIuMjUuMQo+IC0KPiBkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9saWJvcGVuc3NsL2xpYm9wZW5zc2wuaGFzaCBiL3BhY2thZ2UvbGli
+b3BlbnNzbC9saWJvcGVuc3NsLmhhc2gKPiBpbmRleCA3MDg5MjZkZTgwLi5kZGJhNWYyMDQ5IDEw
+MDY0NAo+IC0tLSBhL3BhY2thZ2UvbGlib3BlbnNzbC9saWJvcGVuc3NsLmhhc2gKPiArKysgYi9w
+YWNrYWdlL2xpYm9wZW5zc2wvbGlib3BlbnNzbC5oYXNoCj4gQEAgLTEsNSArMSw1IEBACj4gICMg
+RnJvbSBodHRwczovL3d3dy5vcGVuc3NsLm9yZy9zb3VyY2Uvb3BlbnNzbC0xLjEuMXUudGFyLmd6
+LnNoYTI1Ngo+IC1zaGEyNTYgIGUyZjhkODRiNTIzZWVjZDA2YzdiZTc2MjY4MzAzNzAzMDBmYmNj
+MTUzODZiZjUxNDJkNzI3NThmNjk2M2ViYzYgIG9wZW5zc2wtMS4xLjF1LnRhci5nego+ICtzaGEy
+NTYgIGViMWFiMDQ3ODE0NzQzNjBmNzdjMzE4YWI4OWQ4YzVhMDNhYmMzOGU2M2Q2NWE2MDNjYWJi
+ZjFiMDBhMWRjOTAgIG9wZW5zc2wtMy4wLjkudGFyLmd6Cj4KPiAgIyBMaWNlbnNlIGZpbGVzCj4g
+LXNoYTI1NiAgYzMyOTEzYjMzMjUyZTcxMTkwYWYyMDY2ZjA4MTE1YzY5YmM5ZmRkYWRmM2JmMjky
+OTZlMjBjODM1Mzg5ODQxYyAgTElDRU5TRQo+ICtzaGEyNTYgIDdkNTQ1MGNiMmQxNDI2NTFiOGFm
+YTMxNWI1ZjIzOGVmYzgwNWRhZDgyN2Q5MWJhMzY3ZDg1MTZiYzlkNDllN2EgIExJQ0VOU0UudHh0
+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlib3BlbnNzbC9saWJvcGVuc3NsLm1rIGIvcGFja2Fn
+ZS9saWJvcGVuc3NsL2xpYm9wZW5zc2wubWsKPiBpbmRleCBjZDNiYTNkZjMwLi43YTRlMGRmY2Ey
+IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGlib3BlbnNzbC9saWJvcGVuc3NsLm1rCj4gKysrIGIv
+cGFja2FnZS9saWJvcGVuc3NsL2xpYm9wZW5zc2wubWsKPiBAQCAtNCwxMSArNCwxMSBAQAo+ICAj
+Cj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4KPiAtTElCT1BFTlNTTF9WRVJTSU9OID0gMS4x
+LjF1Cj4gK0xJQk9QRU5TU0xfVkVSU0lPTiA9IDMuMC45Cj4gIExJQk9QRU5TU0xfU0lURSA9IGh0
+dHBzOi8vd3d3Lm9wZW5zc2wub3JnL3NvdXJjZQo+ICBMSUJPUEVOU1NMX1NPVVJDRSA9IG9wZW5z
+c2wtJChMSUJPUEVOU1NMX1ZFUlNJT04pLnRhci5nego+IC1MSUJPUEVOU1NMX0xJQ0VOU0UgPSBP
+cGVuU1NMIG9yIFNTTGVheQo+IC1MSUJPUEVOU1NMX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4g
+K0xJQk9QRU5TU0xfTElDRU5TRSA9IEFwYWNoZS0yLjAKPiArTElCT1BFTlNTTF9MSUNFTlNFX0ZJ
+TEVTID0gTElDRU5TRS50eHQKPiAgTElCT1BFTlNTTF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAg
+TElCT1BFTlNTTF9ERVBFTkRFTkNJRVMgPSB6bGliCj4gIEhPU1RfTElCT1BFTlNTTF9ERVBFTkRF
+TkNJRVMgPSBob3N0LXpsaWIKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
