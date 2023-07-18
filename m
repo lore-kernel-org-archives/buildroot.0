@@ -4,84 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CD14EB64DC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Jul 2023 23:42:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D48BDEB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 00:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B02D3400C1;
-	Mon, 17 Jul 2023 23:42:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B02D3400C1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 61350400C1;
+	Tue, 18 Jul 2023 00:01:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61350400C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id l8chJxTHWRdH; Mon, 17 Jul 2023 23:42:25 +0000 (UTC)
+	with ESMTP id QBU5qEQj7ShP; Tue, 18 Jul 2023 00:01:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F6FA40908;
-	Mon, 17 Jul 2023 23:42:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F6FA40908
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C5CAB1BF31C
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 23:42:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1231A40908;
+	Tue, 18 Jul 2023 00:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1231A40908
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 995BA1BF388
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 00:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98DC660B01
- for <buildroot@lists.busybox.net>; Mon, 17 Jul 2023 23:42:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98DC660B01
+ by smtp4.osuosl.org (Postfix) with ESMTP id 714A9403ED
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 00:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 714A9403ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GGxQF5cZcycc for <buildroot@lists.busybox.net>;
- Mon, 17 Jul 2023 23:42:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fr3U3cJpnqLL for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 00:01:25 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57B616068B
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com
- [IPv6:2001:4860:4864:20::33])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 57B616068B
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 23:42:22 +0000 (UTC)
-Received: by mail-oa1-x33.google.com with SMTP id
- 586e51a60fabf-1b0156a1c49so3834107fac.0
- for <buildroot@buildroot.org>; Mon, 17 Jul 2023 16:42:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60C50403CC
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 60C50403CC
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 00:01:25 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-4fbb281eec6so8059218e87.1
+ for <buildroot@buildroot.org>; Mon, 17 Jul 2023 17:01:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689637341; x=1692229341;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=C7yau7//uYS7KX3y2RHu/vZvogWxxtiUsdcXri4ipkA=;
- b=Yrb3SBANQ5P7YUEEsW4568I6YdvOg9kDTjThnpMYsC8A0tnbIFjj5wggTM4mhIM+Rh
- 969KMKh/7fFAfvIcYj3aozJubIDuXHy63nAHvyCL1n567BURILB+Cnu4mcnf4UiGnbUu
- JPmBm49K+kNTKMl3ORQjErgM00ugKfch75Mj9x+i0FpD3lY1vlAYq3Am4sp9Ie9Kk+du
- XbQrNFxSVrKbQugPwWJbgNsuMljwjJ1FEPEbddTrzpEIBoa+blHqXTVAEr+h6dHpH3ku
- fbe4Vvf3P6iC9+B4Auxt3ATdlsEyCq6lAq9JIdn5pwvbdaLJE0RhmkYkvYfE5StISzHN
- k2PQ==
-X-Gm-Message-State: ABy/qLZVHog9ihgPqjC9OtZsb4nkDxS9rU+RBpcZQOjvIZHIBcXzqSaq
- JT0YFI3uIvOuJgJihreaXPx3Eq4iLPqxp55+s5Q=
-X-Google-Smtp-Source: APBJJlH1mCoRG8z4N4cR8Vy5XS8Ivma8ojZUyQ9JyK+FUrmc/S0/yQMMNgegUy9qK4yZM168hzQ3msDUJm1TTOhgfxk=
-X-Received: by 2002:a05:6870:3513:b0:1b4:66e6:cf62 with SMTP id
- k19-20020a056870351300b001b466e6cf62mr13653592oah.20.1689637341159; Mon, 17
- Jul 2023 16:42:21 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1689638483; x=1692230483;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=AxzWoYaH3Cv0+TYir0g8W2KtTUc1WrGHNdJBm+Q90lw=;
+ b=UV2ZwcTVjdCJnT1cbnluiqhjH2nyYN4Kt8p2ewE7PwK3BE0+/1ttO9ia3rOsrkwiZu
+ VyfBE0+COt9I1URQ16eQ9VLhHsFxNppbaAYn/LULSZHeUhLk6vw010eE34ezkY9s5/Uy
+ OFj/Bo8sGOkkqLimhExEIlckHcD8oxG+JUUXcxGM1FHexP4WsEu7ujT4YioLTSdEIaBz
+ kbsluAlcyWFiNofh6Q2Lx0tCIH5viUJpjyizS9qi496qpzdqKuHgbw7iHX9eCuE6elGZ
+ URDJjSmEJuZcdyXvAslwr0rVrzYHPFmSgfCRyu1r1rihkkO4F4Wh9z2zpCdoZ80N6lLG
+ WslQ==
+X-Gm-Message-State: ABy/qLbGcOVKxOwWVxtoVcGR09ctRtAi4tV6qevLsxSmCsvobd6UzQV5
+ s4uR3fA8r8DtnH1WgLnfpqLzN1feHl7MuZv0zh0=
+X-Google-Smtp-Source: APBJJlGULa1Svi2A2nKYw0AMcgAvV29ZYAjHAPPLbApvmlqRNDFOKZS1wxZNlBHUZfcdp1v+JR13xddmS/fCK8jeQx4=
+X-Received: by 2002:a05:6512:3a88:b0:4fb:925f:8be1 with SMTP id
+ q8-20020a0565123a8800b004fb925f8be1mr10792993lfu.45.1689638482678; Mon, 17
+ Jul 2023 17:01:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAOLWrZ-zYdgpvg-UUrHb8-Y+dfSauONGxf+Uynjj0d7XQ2HFYQ@mail.gmail.com>
- <43b3c8f2-17f0-fe13-5421-49abb44f2481@mind.be>
- <CAOLWrZ-2fNdKRwKzgeENfD=-x7CWbUwxE-1M3cnMqPapHUiEMg@mail.gmail.com>
-In-Reply-To: <CAOLWrZ-2fNdKRwKzgeENfD=-x7CWbUwxE-1M3cnMqPapHUiEMg@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 17 Jul 2023 17:42:09 -0600
-Message-ID: <CADvTj4oJM5=Ng0G6TMYpBk=7_TBX24Y-_CgASeMMxXzgENF9dw@mail.gmail.com>
-To: Andreas <andreasembbuild@gmail.com>
+References: <20230615134315.494330-1-sebastian.weyer@smile.fr>
+In-Reply-To: <20230615134315.494330-1-sebastian.weyer@smile.fr>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 17 Jul 2023 17:01:11 -0700
+Message-ID: <CAFSsvmo0v8CwRXK=Qve0NLa_iCLTL3zpVBaYd9KiKTGwhEGwvQ@mail.gmail.com>
+To: Sebastian Weyer <sebastian.weyer@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689637341; x=1692229341;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=C7yau7//uYS7KX3y2RHu/vZvogWxxtiUsdcXri4ipkA=;
- b=XzPV/tOUzTLhgYdGEbZIA+H66J2Y9+KgrHP2/MxFJ9yKVibd8GTBOlT2BJI+VTvXlQ
- j4lwKgio3O+fTj6cEOgcb1q14eV71/Kpv4SJaXrQS/KZ5gufF4wsTyVB5QZCb8ZF9uZH
- 2y1V+ESv7+nsq1AIdPrB0H/iWktwT804FQZVqjuCJp2PTBI2Ly5dGs5m+OqEfvF5ruWK
- iLlVDPxSQ+9H6VsEZJ170v26C77wY1qnSNEcEz5Q4zqyUfb32I72O4YzFb39siKweRSV
- 6yWjfrDaUDE7QL2rhXAe+oV3QuBKVt5++z2RpUyeUlgp5rCy3boVY9vgNc1RG8Sm1H6m
- Azog==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20221208; t=1689638483; x=1692230483;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=AxzWoYaH3Cv0+TYir0g8W2KtTUc1WrGHNdJBm+Q90lw=;
+ b=eB1zL8NyKd63DEygn1xTb4rr5vACAIK5t/3Ambo16scA2IrOgphD7gzA0GtqHUloEF
+ 2aYB8APhxGtuX+ZRC5lvNxUMb1ikHOMkgiBIdMjqtkaeJwXFqE1fdamwudfgeCLCYp7/
+ mCbe6AWJOAkJHx6OKkQkM5lEcR9efWY8IrAnhWZOZv/ByN9ptnOlnqPaLIreD/VvSs45
+ AbeBwDbjbwv2i12+7hmqwk8dYqUyVAVuXa+c+T59+XzOT5+2JJjJ0/d8wswevLDkIBya
+ h2xd6EjvEnoQ8aoX/kqSgZ5cRr6o6DBuAJm0GQ7XGeR7fmVsQnb5FLgBQfe+OtFT0Lx8
+ 11OQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=XzPV/tOU
-Subject: Re: [Buildroot] Missing dependencies
+ header.a=rsa-sha256 header.s=20221208 header.b=eB1zL8Ny
+Subject: Re: [Buildroot] [PATCH v4 00/10] group llvm projects and bump to
+ version 15.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,115 +92,346 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6311803681924627803=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBKdWwgMTcsIDIwMjMgYXQgOTo0OOKAr0FNIEFuZHJlYXMgPGFuZHJlYXNlbWJidWls
-ZEBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gSGkgQXJub3V0LAo+Cj4gVGhhbmtzIGZvciB0aGUgcXVp
-Y2sgcmVzcG9uc2UuIEkgYW0gaW5kZWVkIHN0aWxsIG9uIHB5dGhvbiAzLjEwLjYgaGVyZS4gSSB0
-aGluayB1cGdyYWRpbmcgbWlnaHQgYmUgYSBtYWpvciBleGVyY2lzZS4gSXQgcmVxdWlyZXMgbW9y
-ZSB0aGFuIGp1c3QgY2hhbmdpbmcgdGhlIHZlcnNpb24gaW4gcGFja2FnZXMvcHl0aG9uMy5tayBk
-b2Vzbid0IGl0PyBEbyBJIG5lZWQgdG8gaGF2ZSB0aGUgc2FtZSBweXRob24gdmVyc2lvbiBhbHNv
-IG9uIHRoZSBob3N0IHN5c3RlbT8gSSBhbSBjdXJyZW50bHkgcnVubmluZyBidWlsZHJvb3Qgb24g
-YSBVYnVudHUgMjIuMDQgVk0uCgpZb3Ugc2hvdWxkIGp1c3QgdXBkYXRlIGJ1aWxkcm9vdCBpdHNl
-bGYsIG5ld2VyIHZlcnNpb25zIHVzZSBweXRob24KMy4xMSBzbyB1cGRhdGluZwpidWlsZHJvb3Qg
-d2lsbCBwdWxsIHRoYXQgaW4gYWxvbmcgd2l0aCBhbnkgcmVxdWlyZWQgY2hhbmdlcy4gV2hhdAp2
-ZXJzaW9uIG9mIGJ1aWxkcm9vdAphcmUgeW91IGFjdHVhbGx5IHVzaW5nIHJpZ2h0IG5vdz8gVGhl
-IGluc3RhbGxlZCB2ZXJzaW9uIG9mIHB5dGhvbiBvbgp5b3VyIGJ1aWxkIGhvc3QKc3lzdGVtIHNo
-b3VsZG4ndCBtYXR0ZXIgYXMgYnVpbGRyb290IHdpbGwgYnVpbGQgYSBzZXBhcmF0ZQpob3N0LXB5
-dGhvbjMgZm9yIGNyb3NzCmNvbXBpbGF0aW9uLgoKPgo+Cj4gQW0gTW8uLCAxNy4gSnVsaSAyMDIz
-IHVtIDE3OjE5IFVociBzY2hyaWViIEFybm91dCBWYW5kZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5i
-ZT46Cj4+Cj4+Cj4+Cj4+IE9uIDE3LzA3LzIwMjMgMTY6MTAsIEFuZHJlYXMgd3JvdGU6Cj4+ID4g
-SGksCj4+ID4KPj4gPiBJIGFtIG5ldyB0byBidWlsZHJvb3QgYW5kIEkgYW0gdHJ5aW5nIHRvIGJ1
-aWxkIHRoZSBwYWNrYWdlCj4+ID4gcHl0aG9uLWhhdGNobGluZy0xLjE4LjAuIEhvd2V2ZXIgaXQg
-ZmFpbHMgd2l0aCB0aGUgZm9sbG93aW5nIG1lc3NhZ2U6Cj4+ID4KPj4gPiAqIEdldHRpbmcgZGVw
-ZW5kZW5jaWVzIGZvciB3aGVlbC4uLgo+PiA+Cj4+ID4gRVJST1IgTWlzc2luZyBkZXBlbmRlbmNp
-ZXM6Cj4+ID4gdG9tbGk+PTEuMi4yOyBweXRob25fdmVyc2lvbiA8ICczLjExJwo+Pgo+PiAgIFRo
-YXQncyByZWFsbHkgd2VpcmQuLi4gVGhpcyBsaW5lIG1lYW5zIHRoYXQgaXQgZGVwZW5kcyBvbiB0
-b21saSwgYnV0IG9ubHkgZm9yCj4+IFB5dGhvbi0zLjEwIG9yIGxvd2VyLiBTaW5jZSB3ZSdyZSB1
-c2luZyBQeXRob24gMy4xMS40LCB0aGlzIGRlcGVuZGVuY3kgc2hvdWxkbid0Cj4+IHRyaWdnZXIg
-YXQgYWxsLi4uIFlvdSdyZSBub3QgdXNpbmcgYW4gb2xkIEJ1aWxkcm9vdCB2ZXJzaW9uIHRoYXQg
-c3RpbGwgdXNlcwo+PiAzLjEwLCBhcmUgeW91Pwo+Pgo+Pgo+PiA+IG1ha2U6ICoqKiBbcGFja2Fn
-ZS9wa2ctZ2VuZXJpYy5tazoyOTMgPGh0dHA6Ly9wa2ctZ2VuZXJpYy5tazoyOTM+Ogo+PiA+IC9i
-dWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3B5dGhvbi1oYXRjaGxpbmctMS4xOC4wLy5zdGFtcF9idWls
-dF0gRXJyb3IgMQo+PiA+Cj4+ID4gVGhlIHB5dGhvbi1oYXRjaGxpbmcubWsgPGh0dHA6Ly9weXRo
-b24taGF0Y2hsaW5nLm1rPiBmaWxlIGxvb2tzIGFzIGZvbGxvd3M6Cj4+ID4gIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKPj4gPiAjCj4+ID4gIyBweXRob24taGF0Y2hsaW5nCj4+ID4gIwo+PiA+ICMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4+ID4KPj4gPiBQWVRIT05fSEFUQ0hMSU5HX1ZFUlNJT04g
-PSAxLjE4LjAKPj4KPj4gICBFcm0sIHB5dGhvbi1oYXRjaGxpbmcgd2FzIGFkZGVkIHRvIEJ1aWxk
-cm9vdCBpbiBjb21taXQKPj4gNjI2YzViZWRhYTdlMTQ2MWRkMzc0NzU2MmI5YzA0ZGQ0MDcxM2M4
-MywgaW4gMjAyMi4xMS4gSGF2ZSB5b3UgdHJpZWQganVzdAo+PiB1cGRhdGluZyB0aGUgZXhpc3Rp
-bmcgcGFja2FnZSAoYW5kIHNlbmRpbmcgdGhlIHBhdGNoIHVwc3RyZWFtIHRvIHVzLCBvZiBjb3Vy
-c2UpPwo+Pgo+PiAgIFdlIG9ubHkgaGF2ZSBhIGhvc3QgcGFja2FnZSBmb3IgaXQsIGJlY2F1c2Ug
-aXQncyBhIHBlcDUxNyBzbyBub3JtYWxseSBub3QKPj4gdXNlZnVsIG9uIHRoZSB0YXJnZXQuIFdo
-eSBkbyB5b3UgbmVlZCB0aGUgdGFyZ2V0IHBhY2thZ2U/Cj4KPgo+IExldCBtZSBkb3VibGUgY2hl
-Y2sgYnV0IHlvdSBtaWdodCBiZSBjb3JyZWN0IHRoYXQgSSBkbyBub3QgbmVlZCBpdCBvbiB0aGUg
-dGFyZ2V0LgoKWWVhaCwgaXQgZG9lc24ndCByZWFsbHkgbWFrZSBzZW5zZSB0byBoYXZlIGEgdGFy
-Z2V0IHB5dGhvbi1oYXRjaGxpbmcgcGFja2FnZSBpbgpidWlsZHJvb3QgZnJvbSBteSB1bmRlcnN0
-YW5kaW5nLgoKV2h5IGFyZSB5b3UgdHJ5aW5nIHRvIGFkZCB0aGlzIHBhY2thZ2U/IElzIGl0IGEg
-ZGVwZW5kZW5jeSBmb3IgYQpkaWZmZXJlbnQgcGFja2FnZQp5b3UgYXJlIHRyeWluZyB0byBhZGQg
-b3Igc29tZXRoaW5nPwoKPj4KPj4KPj4gPiBQWVRIT05fSEFUQ0hMSU5HX1NPVVJDRSA9IGhhdGNo
-bGluZy0kKFBZVEhPTl9IQVRDSExJTkdfVkVSU0lPTikudGFyLmd6Cj4+ID4gUFlUSE9OX0hBVENI
-TElOR19TSVRFID0KPj4gPiBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMv
-ZTMvNTcvODdkYTJjNWFkYzE3Mzk1MGViZTlmMWFjY2U0ZDVmMmNkMGE5NjA3ODM5OTJmZDQ4Nzlh
-ODk5YTBiNjM3Cj4+ID4gUFlUSE9OX0hBVENITElOR19TRVRVUF9UWVBFID0gcGVwNTE3Cj4+ID4g
-UFlUSE9OX0hBVENITElOR19MSUNFTlNFID0gTUlUCj4+ID4gUFlUSE9OX0hBVENITElOR19MSUNF
-TlNFX0ZJTEVTID0gTElDRU5TRS50eHQKPj4gPgo+PiA+IFBZVEhPTl9IQVRDSExJTkdfREVQRU5E
-RU5DSUVTID0gXAo+PiA+IHB5dGhvbi10b21saSBcCj4+Cj4+ICAgSSB0aGluayB0aGUgcHJvYmxl
-bSBpcyB0aGF0IHBlcDUxNyBjaGVja3MgZm9yIHRoZSBwcmVzZW5jZSBvZiB0b21saSBpbiB0aGUK
-Pj4gX2hvc3RfIGRpcmVjdG9yeS4gU28geW91J2QgbmVlZCB0byBhZGQgYSBkZXBlbmRlbmN5IG9u
-IGhvc3QtcHl0aG9uLXRvbWxpIGhlcmUuCj4+IEphbWVzIGlzIG1vcmUgYXdhcmUgb2YgdGhlc2Ug
-dGhpbmdzIHNvIEkgcHV0IGhpbSBpbiBDYy4KPgo+Cj4gSSB3aWxsIGZpcnN0IHRyeSB0byBhZGQg
-dGhlIGhvc3QgZGVwZW5kZW5jeSBhcyB5b3Ugc3VnZ2VzdGVkIGJlbG93IGFuZCBzZWUgd2hhdCBo
-YXBwZW5zLgoKSSB0aG91Z2h0IG91ciBwZXA1MTcgaW5mcmFzdHJ1Y3R1cmUgcHJpb3IgdG8gdXBk
-YXRpbmcgdG8gcHl0aG9uIDMuMTEgd291bGQgcHVsbAppbiBob3N0LXB5dGhvbi10b21saSBhdXRv
-bWF0aWNhbGx5KGR1ZSB0byBpdCBiZWluZyBhIGhvc3QtcHl0aG9uLWZsaXQgZGVwZW5kZW5jeQpw
-cmlvciB0byBweXRob24gMy4xMSkuIEknbSBub3Qgc3VyZSBob3cgeW91IGNvdWxkIGJlIGdldHRp
-bmcgYSBtaXNzaW5nCnRvbWxpIGVycm9yCmxpa2UgdGhpcyBpbiB0aGUgZmlyc3QgcGxhY2UgYXMg
-d2UgZGlkbid0IHJlbW92ZSBob3N0LXB5dGhvbi10b21saQpmcm9tIG91ciBwZXA1MTcKaW5mcmFz
-dHJ1Y3R1cmUgZGVwZW5kZW5jeSB0cmVlIHByaW9yIHRvIHB5dGhvbiBiZWluZyB1cGRhdGVkIHRv
-IHZlcnNpb24gMy4xMS4KCj4KPj4KPj4KPj4gPiBweXRob24tZWRpdGFibGVzIFwKPj4gPiBweXRo
-b24tcGFja2FnaW5nIFwKPj4gPiBweXRob24tcGF0aHNwZWMgXAo+PiA+IHB5dGhvbi1wbHVnZ3kg
-XAo+PiA+IHB5dGhvbi10cm92ZS1jbGFzc2lmaWVycwo+PiA+IEhPU1RfUFlUSE9OX0hBVENITElO
-R19ERVBFTkRFTkNJRVMgPSBcCj4+ID4gaG9zdC1weXRob24tdG9tbGkgXAo+PiA+IGhvc3QtcHl0
-aG9uLWVkaXRhYmxlcyBcCj4+ID4gaG9zdC1weXRob24tcGFja2FnaW5nIFwKPj4gPiBob3N0LXB5
-dGhvbi1wYXRoc3BlYyBcCj4+ID4gaG9zdC1weXRob24tcGx1Z2d5IFwKPj4gPiBob3N0LXB5dGhv
-bi10cm92ZS1jbGFzc2lmaWVycwo+PiA+Cj4+ID4gJChldmFsICQocHl0aG9uLXBhY2thZ2UpKQo+
-PiA+ICQoZXZhbCAkKGhvc3QtcHl0aG9uLXBhY2thZ2UpKQo+PiA+Cj4+ID4gSSBkbyBoYXZlIGEg
-cHl0aG9uLXRvbWxpLm1rIDxodHRwOi8vcHl0aG9uLXRvbWxpLm1rPiBmaWxlIHRoZXJlZm9yZSBJ
-IGFtCj4+ID4gY29uZnVzZWQgd2h5IEkgYW0gc2VlaW5nIHRoaXMgZXJyb3IuIElmIEkgcmVtb3Zl
-IHRoZSB0b21saSBkZXBlbmRlbmN5IGZyb20gdGhlCj4+ID4gcHlwcm9qZWN0LnRvbWwgZmlsZSBp
-biBoYXRjaGxpbmcgKGluIG91dHB1dC9idWlsZC9weXRob24taGF0Y2hsaW5nLTEuMTguMCkKPj4g
-PiBtYW51YWxseSBpdCBjb250aW5vdWVzIHRoZSBidWlsZC4KPj4gPgo+PiA+IGRlcGVuZGVuY2ll
-cyA9IFsKPj4gPiAgICAiZWRpdGFibGVzPj0wLjMiLAo+PiA+ICAgICJwYWNrYWdpbmc+PTIxLjMi
-LAo+PiA+ICAgICJwYXRoc3BlYz49MC4xMC4xIiwKPj4gPiAgICAicGx1Z2d5Pj0xLjAuMCIsCj4+
-ID4gICAgInRvbWxpPj0xLjIuMjsgcHl0aG9uX3ZlcnNpb24gPCAnMy4xMSciLAo+PiA+ICAgICJ0
-cm92ZS1jbGFzc2lmaWVycyIsCj4+ID4gXQo+PiA+Cj4+ID4gTXkgaW1wcmVzc2lvbiBpcyB0aGF0
-IG15IGN1cnJlbnQgYnVpbGRyb290IHNldHVwIGhhcyBhIHByb2JsZW0gdG8gcHJvcGVybHkKPj4g
-PiBpbnRlcnByZXQgdGhlIGxpbmUgYCAidG9tbGk+PTEuMi4yOyBweXRob25fdmVyc2lvbiA8ICcz
-LjExJyJgIG1heWJlIGJlY2F1c2Ugb2YKPj4gPiBhbiBvdXRkYXRlZCBwYWNrYWdlIHRoYXQgSSBh
-bSBub3QgYXdhcmUgb2YuCj4+Cj4+ICAgSSB0aGluayB0aGlzIHdheSBvZiBleHByZXNzaW5nIHZl
-cnNpb24tZGVwZW5kZW50IGRlcGVuZGVuY2llcyBpcyBhbHJlYWR5Cj4+IHByZXR0eSBvbGQsIGFu
-ZCBjZXJ0YWlubHkgcHJlZGF0ZXMgdGhlIHBlcDUxNyBpbmZyYXN0cnVjdHVyZSBpbiBCdWlsZHJv
-b3QsIHNvCj4+IEknZCBiZSBzdXJwcmlzZWQgaWYgdGhpcyB3ZXJlIHRoZSBjYXNlLgo+Cj4KPiBX
-ZWxsIHRoYXQgaXMgaG93IHRoZSBkZXBlbmRlbmN5IGlzIGRlZmluZWQgaW4gaGF0Y2hsaW5nIGRl
-ZmluZWQgaXQgKHNlZSBoZXJlIGh0dHBzOi8vZ2l0aHViLmNvbS9weXBhL2hhdGNoL2Jsb2IvbWFz
-dGVyL2JhY2tlbmQvcHlwcm9qZWN0LnRvbWwpCgpZZWFoLCBpdCBzaG91bGQgd29yayBmaW5lLCB3
-ZSBkaWRuJ3QgaGF2ZSB0byBhZGQgYSBob3N0LXB5dGhvbi10b21saSBkZXBlbmRlbmN5CndoZW4g
-SSBhZGRlZCBob3N0LXB5dGhvbi1oYXRjaGxpbmcuCgpodHRwczovL2dpdGh1Yi5jb20vYnVpbGRy
-b290L2J1aWxkcm9vdC9jb21taXQvNjI2YzViZWRhYTdlMTQ2MWRkMzc0NzU2MmI5YzA0ZGQ0MDcx
-M2M4MwoKPgo+Pgo+PiAgIFJlZ2FyZHMsCj4+ICAgQXJub3V0Cj4+Cj4+ID4gQW55IGlkZWEgaG93
-IHRvIGFkZHJlc3MgdGhpcyBpc3N1ZQo+PiA+IGFuZCBob3cgdG8gZGVidWcgc3VjaCBhbiBlcnJv
-ciBpbiBidWlsZHJvb3QgaW4gZnV0dXJlPyBJIGFscmVhZHkgY2hlY2tlZCB0aGUKPj4gPiBtYW51
-YWwsIGVzcGVjaWFsbHkgdGhlIHNlY3Rpb24gZm9yIHB5dGhvbiBwYWNrYWdlcy4KPj4gPgo+PiA+
-IFJlZ2FyZHMsCj4+ID4gQW5kcmVhcwo+PiA+Cj4+ID4KPj4gPiBfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-Pj4gPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+PiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+--===============6311803681924627803==
+Content-Type: multipart/alternative; boundary="0000000000008f18490600b79de0"
+
+--0000000000008f18490600b79de0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hey Sebastian!
+
+Thanks for the patch series! I can't see anything wrong with it so:
+
+Tested-by: Adam Duskett <aduskett@gmail.com>
+
+
+On Thu, Jun 15, 2023 at 6:44=E2=80=AFAM Sebastian Weyer <sebastian.weyer@sm=
+ile.fr>
+wrote:
+
+> This series attempts two things:
+> - Move the different llvm subprojects into one folder
+> and share version and site information.
+>
+> - Bump the version to the latest 15.0.3
+>
+> Starting with version 12 different subprojects added
+> dependencies or sources that would be available when
+> building from the "monorepo". These have been added
+> as new host packages.
+>
+> This update is needed in order to be able to use some packages in the
+> future as for example mesa3d's RustiCL.
+>
+> v4:
+> - change some inaccurate commit messages
+> - bump spirv-llvm-translator version at the same time as other llvm
+>   packages
+> - remove package/llvm/0002-Add-missing-cstdint-header-to-Signals.h.patch
+>   as it has been integrated in the newer version
+>
+> v3:
+> - move libclc before llvm 15.0.3 version bump commit
+> - force llvm-cmake and llvm-libunwind version to 15.0.3 since
+>   LLVM_PROJECT_VERSION is still at 11.1.0
+> - Keep cp as install command since there is no CMakefiles.txt
+> - llvm, clang, lld: keep LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN since
+>   this option is still used to check C++17 compiler support:
+>   llvm/cmake/modules/CheckCompilerVersion.cmake
+>
+>
+> Changes v1 -> v2:
+> - Rebased onto current master
+> - Bump to 15.0.3 instead of 15.0.1
+> - llvm: use CMAKE_HOST_C_COMPILER instead of HOSTCC
+> - libclc: Add missing change to package/Config.in
+>
+> Lang Daniel (10):
+>   package/llvm-project: new group for llvm packages
+>   package/llvm: move to llvm-project folder
+>   package/lld: move to llvm-project subfolder
+>   package/clang: move to llvm-project subfolder
+>   package/compiler-rt: move to llvm-project subfolder
+>   package/libclc: move to llvm-project subfolder
+>   package/llvm-project/llvm-cmake: new package
+>   package/llvm-project/llvm-libunwind: new package
+>   package/llvm-project: bump to version 15.0.3
+>   DEVELOPERS: add Daniel Lang for llvm-project
+>
+>  DEVELOPERS                                    | 19 ++++++-----
+>  package/Config.in                             |  8 ++---
+>  package/Config.in.host                        |  2 +-
+>  ...hains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch |  0
+>  package/{ =3D> llvm-project}/clang/Config.in    | 10 +++---
+>  package/{ =3D> llvm-project}/clang/clang.hash   |  2 +-
+>  package/{ =3D> llvm-project}/clang/clang.mk     | 15 +++-----
+>  .../{ =3D> llvm-project}/compiler-rt/Config.in  |  6 ++--
+>  .../compiler-rt/compiler-rt.hash              |  2 +-
+>  .../compiler-rt/compiler-rt.mk                |  9 +++--
+>  .../0001-support-out-of-tree-build.patch      |  0
+>  package/{ =3D> llvm-project}/libclc/Config.in   |  6 ++--
+>  package/{ =3D> llvm-project}/libclc/libclc.hash |  2 +-
+>  package/{ =3D> llvm-project}/libclc/libclc.mk   |  4 +--
+>  package/{ =3D> llvm-project}/lld/Config.in.host |  6 ++--
+>  package/{ =3D> llvm-project}/lld/lld.hash       |  2 +-
+>  package/{ =3D> llvm-project}/lld/lld.mk         | 13 ++-----
+>  .../llvm-project/llvm-cmake/llvm-cmake.hash   |  2 ++
+>  package/llvm-project/llvm-cmake/llvm-cmake.mk | 17 ++++++++++
+>  .../llvm-libunwind/llvm-libunwind.hash        |  3 ++
+>  .../llvm-libunwind/llvm-libunwind.mk          | 18 ++++++++++
+>  package/llvm-project/llvm-project.mk          | 11 ++++++
+>  package/{ =3D> llvm-project}/llvm/Config.in     | 10 +++---
+>  package/{ =3D> llvm-project}/llvm/llvm.hash     |  2 +-
+>  package/{ =3D> llvm-project}/llvm/llvm.mk       | 27 ++++++++-------
+>  .../llvm/0001-nfc-Fix-missing-include.patch   | 24 -------------
+>  ...-missing-cstdint-header-to-Signals.h.patch | 34 -------------------
+>  package/mesa3d/Config.in                      | 10 +++---
+>  .../spirv-llvm-translator.hash                |  2 +-
+>  .../spirv-llvm-translator.mk                  |  4 +--
+>  30 files changed, 126 insertions(+), 144 deletions(-)
+>  rename package/{ =3D>
+> llvm-project}/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX=
+-in-.patch
+> (100%)
+>  rename package/{ =3D> llvm-project}/clang/Config.in (82%)
+>  rename package/{ =3D> llvm-project}/clang/clang.hash (52%)
+>  rename package/{ =3D> llvm-project}/clang/clang.mk (89%)
+>  rename package/{ =3D> llvm-project}/compiler-rt/Config.in (87%)
+>  rename package/{ =3D> llvm-project}/compiler-rt/compiler-rt.hash (50%)
+>  rename package/{ =3D> llvm-project}/compiler-rt/compiler-rt.mk (82%)
+>  rename package/{ =3D>
+> llvm-project}/libclc/0001-support-out-of-tree-build.patch (100%)
+>  rename package/{ =3D> llvm-project}/libclc/Config.in (73%)
+>  rename package/{ =3D> llvm-project}/libclc/libclc.hash (51%)
+>  rename package/{ =3D> llvm-project}/libclc/libclc.mk (92%)
+>  rename package/{ =3D> llvm-project}/lld/Config.in.host (74%)
+>  rename package/{ =3D> llvm-project}/lld/lld.hash (52%)
+>  rename package/{ =3D> llvm-project}/lld/lld.mk (61%)
+>  create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.hash
+>  create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.mk
+>  create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.ha=
+sh
+>  create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind.mk
+>  create mode 100644 package/llvm-project/llvm-project.mk
+>  rename package/{ =3D> llvm-project}/llvm/Config.in (88%)
+>  rename package/{ =3D> llvm-project}/llvm/llvm.hash (52%)
+>  rename package/{ =3D> llvm-project}/llvm/llvm.mk (94%)
+>  delete mode 100644 package/llvm/0001-nfc-Fix-missing-include.patch
+>  delete mode 100644
+> package/llvm/0002-Add-missing-cstdint-header-to-Signals.h.patch
+>
+> --
+> 2.34.1
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+--0000000000008f18490600b79de0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hey Sebastian!=C2=A0<div><br></div><div>Thanks for the pat=
+ch series! I can&#39;t see anything wrong with it so:</div><div><br></div><=
+div><pre class=3D"gmail-content" style=3D"box-sizing:border-box;overflow:au=
+to;font-family:Menlo,Monaco,Consolas,&quot;Courier New&quot;,monospace;font=
+-size:13px;padding:9.5px;margin-top:0px;margin-bottom:10px;line-height:14.3=
+px;color:rgb(51,51,51);word-break:break-all;border:0px;border-radius:0px"><=
+span class=3D"gmail-tested-by" style=3D"box-sizing:border-box">Tested-by: A=
+dam Duskett &lt;<a href=3D"mailto:aduskett@gmail.com">aduskett@gmail.com</a=
+>&gt;</span></pre></div></div><br><div class=3D"gmail_quote"><div dir=3D"lt=
+r" class=3D"gmail_attr">On Thu, Jun 15, 2023 at 6:44=E2=80=AFAM Sebastian W=
+eyer &lt;<a href=3D"mailto:sebastian.weyer@smile.fr">sebastian.weyer@smile.=
+fr</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margi=
+n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
+">This series attempts two things:<br>
+- Move the different llvm subprojects into one folder<br>
+and share version and site information.<br>
+<br>
+- Bump the version to the latest 15.0.3<br>
+<br>
+Starting with version 12 different subprojects added<br>
+dependencies or sources that would be available when<br>
+building from the &quot;monorepo&quot;. These have been added<br>
+as new host packages.<br>
+<br>
+This update is needed in order to be able to use some packages in the<br>
+future as for example mesa3d&#39;s RustiCL.<br>
+<br>
+v4:<br>
+- change some inaccurate commit messages<br>
+- bump spirv-llvm-translator version at the same time as other llvm<br>
+=C2=A0 packages<br>
+- remove package/llvm/0002-Add-missing-cstdint-header-to-Signals.h.patch<br=
+>
+=C2=A0 as it has been integrated in the newer version<br>
+<br>
+v3:<br>
+- move libclc before llvm 15.0.3 version bump commit<br>
+- force llvm-cmake and llvm-libunwind version to 15.0.3 since<br>
+=C2=A0 LLVM_PROJECT_VERSION is still at 11.1.0<br>
+- Keep cp as install command since there is no CMakefiles.txt<br>
+- llvm, clang, lld: keep LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN since<br>
+=C2=A0 this option is still used to check C++17 compiler support:<br>
+=C2=A0 llvm/cmake/modules/CheckCompilerVersion.cmake<br>
+<br>
+<br>
+Changes v1 -&gt; v2:<br>
+- Rebased onto current master<br>
+- Bump to 15.0.3 instead of 15.0.1<br>
+- llvm: use CMAKE_HOST_C_COMPILER instead of HOSTCC<br>
+- libclc: Add missing change to package/Config.in<br>
+<br>
+Lang Daniel (10):<br>
+=C2=A0 package/llvm-project: new group for llvm packages<br>
+=C2=A0 package/llvm: move to llvm-project folder<br>
+=C2=A0 package/lld: move to llvm-project subfolder<br>
+=C2=A0 package/clang: move to llvm-project subfolder<br>
+=C2=A0 package/compiler-rt: move to llvm-project subfolder<br>
+=C2=A0 package/libclc: move to llvm-project subfolder<br>
+=C2=A0 package/llvm-project/llvm-cmake: new package<br>
+=C2=A0 package/llvm-project/llvm-libunwind: new package<br>
+=C2=A0 package/llvm-project: bump to version 15.0.3<br>
+=C2=A0 DEVELOPERS: add Daniel Lang for llvm-project<br>
+<br>
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 19 +++=
++++-----<br>
+=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 8 ++---<br>
+=C2=A0package/Config.in.host=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 2 +-<br>
+=C2=A0...hains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch |=C2=A0 0<br>
+=C2=A0package/{ =3D&gt; llvm-project}/clang/Config.in=C2=A0 =C2=A0 | 10 +++=
+---<br>
+=C2=A0package/{ =3D&gt; llvm-project}/clang/clang.hash=C2=A0 =C2=A0|=C2=A0 =
+2 +-<br>
+=C2=A0package/{ =3D&gt; llvm-project}/clang/<a href=3D"http://clang.mk" rel=
+=3D"noreferrer" target=3D"_blank">clang.mk</a>=C2=A0 =C2=A0 =C2=A0| 15 +++-=
+----<br>
+=C2=A0.../{ =3D&gt; llvm-project}/compiler-rt/Config.in=C2=A0 |=C2=A0 6 ++-=
+-<br>
+=C2=A0.../compiler-rt/compiler-rt.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 |=C2=A0 2 +-<br>
+=C2=A0.../compiler-rt/<a href=3D"http://compiler-rt.mk" rel=3D"noreferrer" =
+target=3D"_blank">compiler-rt.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 |=C2=A0 9 +++--<br>
+=C2=A0.../0001-support-out-of-tree-build.patch=C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
+0<br>
+=C2=A0package/{ =3D&gt; llvm-project}/libclc/Config.in=C2=A0 =C2=A0|=C2=A0 =
+6 ++--<br>
+=C2=A0package/{ =3D&gt; llvm-project}/libclc/libclc.hash |=C2=A0 2 +-<br>
+=C2=A0package/{ =3D&gt; llvm-project}/libclc/<a href=3D"http://libclc.mk" r=
+el=3D"noreferrer" target=3D"_blank">libclc.mk</a>=C2=A0 =C2=A0|=C2=A0 4 +--=
+<br>
+=C2=A0package/{ =3D&gt; llvm-project}/lld/Config.in.host |=C2=A0 6 ++--<br>
+=C2=A0package/{ =3D&gt; llvm-project}/lld/lld.hash=C2=A0 =C2=A0 =C2=A0 =C2=
+=A0|=C2=A0 2 +-<br>
+=C2=A0package/{ =3D&gt; llvm-project}/lld/<a href=3D"http://lld.mk" rel=3D"=
+noreferrer" target=3D"_blank">lld.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=
+ 13 ++-----<br>
+=C2=A0.../llvm-project/llvm-cmake/llvm-cmake.hash=C2=A0 =C2=A0|=C2=A0 2 ++<=
+br>
+=C2=A0package/llvm-project/llvm-cmake/<a href=3D"http://llvm-cmake.mk" rel=
+=3D"noreferrer" target=3D"_blank">llvm-cmake.mk</a> | 17 ++++++++++<br>
+=C2=A0.../llvm-libunwind/llvm-libunwind.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
+=C2=A0 3 ++<br>
+=C2=A0.../llvm-libunwind/<a href=3D"http://llvm-libunwind.mk" rel=3D"norefe=
+rrer" target=3D"_blank">llvm-libunwind.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 | 18 ++++++++++<br>
+=C2=A0package/llvm-project/<a href=3D"http://llvm-project.mk" rel=3D"norefe=
+rrer" target=3D"_blank">llvm-project.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 | 11 ++++++<br>
+=C2=A0package/{ =3D&gt; llvm-project}/llvm/Config.in=C2=A0 =C2=A0 =C2=A0| 1=
+0 +++---<br>
+=C2=A0package/{ =3D&gt; llvm-project}/llvm/llvm.hash=C2=A0 =C2=A0 =C2=A0|=
+=C2=A0 2 +-<br>
+=C2=A0package/{ =3D&gt; llvm-project}/llvm/<a href=3D"http://llvm.mk" rel=
+=3D"noreferrer" target=3D"_blank">llvm.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0| 2=
+7 ++++++++-------<br>
+=C2=A0.../llvm/0001-nfc-Fix-missing-include.patch=C2=A0 =C2=A0| 24 --------=
+-----<br>
+=C2=A0...-missing-cstdint-header-to-Signals.h.patch | 34 ------------------=
+-<br>
+=C2=A0package/mesa3d/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 10 +++---<br>
+=C2=A0.../spirv-llvm-translator.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 |=C2=A0 2 +-<br>
+=C2=A0.../<a href=3D"http://spirv-llvm-translator.mk" rel=3D"noreferrer" ta=
+rget=3D"_blank">spirv-llvm-translator.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 4 +--<br>
+=C2=A030 files changed, 126 insertions(+), 144 deletions(-)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/0001-lib-Driver-ToolChai=
+ns-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch (100%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/Config.in (82%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/clang.hash (52%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/<a href=3D"http://clang.=
+mk" rel=3D"noreferrer" target=3D"_blank">clang.mk</a> (89%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/compiler-rt/Config.in (87%)<br=
+>
+=C2=A0rename package/{ =3D&gt; llvm-project}/compiler-rt/compiler-rt.hash (=
+50%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/compiler-rt/<a href=3D"http://=
+compiler-rt.mk" rel=3D"noreferrer" target=3D"_blank">compiler-rt.mk</a> (82=
+%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/0001-support-out-of-tre=
+e-build.patch (100%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/Config.in (73%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/libclc.hash (51%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/libclc/<a href=3D"http://libcl=
+c.mk" rel=3D"noreferrer" target=3D"_blank">libclc.mk</a> (92%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/lld/Config.in.host (74%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/lld/lld.hash (52%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/lld/<a href=3D"http://lld.mk" =
+rel=3D"noreferrer" target=3D"_blank">lld.mk</a> (61%)<br>
+=C2=A0create mode 100644 package/llvm-project/llvm-cmake/llvm-cmake.hash<br=
+>
+=C2=A0create mode 100644 package/llvm-project/llvm-cmake/<a href=3D"http://=
+llvm-cmake.mk" rel=3D"noreferrer" target=3D"_blank">llvm-cmake.mk</a><br>
+=C2=A0create mode 100644 package/llvm-project/llvm-libunwind/llvm-libunwind=
+.hash<br>
+=C2=A0create mode 100644 package/llvm-project/llvm-libunwind/<a href=3D"htt=
+p://llvm-libunwind.mk" rel=3D"noreferrer" target=3D"_blank">llvm-libunwind.=
+mk</a><br>
+=C2=A0create mode 100644 package/llvm-project/<a href=3D"http://llvm-projec=
+t.mk" rel=3D"noreferrer" target=3D"_blank">llvm-project.mk</a><br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/llvm/Config.in (88%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/llvm/llvm.hash (52%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/llvm/<a href=3D"http://llvm.mk=
+" rel=3D"noreferrer" target=3D"_blank">llvm.mk</a> (94%)<br>
+=C2=A0delete mode 100644 package/llvm/0001-nfc-Fix-missing-include.patch<br=
+>
+=C2=A0delete mode 100644 package/llvm/0002-Add-missing-cstdint-header-to-Si=
+gnals.h.patch<br>
+<br>
+--<br>
+2.34.1<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div>
+
+--0000000000008f18490600b79de0--
+
+--===============6311803681924627803==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6311803681924627803==--
