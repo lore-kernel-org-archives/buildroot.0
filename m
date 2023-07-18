@@ -4,83 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6B7EB64DA
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 08:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E41AEB64DA
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 08:44:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED19260AD1;
-	Tue, 18 Jul 2023 08:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED19260AD1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58BB960AEA;
+	Tue, 18 Jul 2023 08:44:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58BB960AEA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EtElbu744w0m; Tue, 18 Jul 2023 08:18:16 +0000 (UTC)
+	with ESMTP id VyIjZk4EIUBr; Tue, 18 Jul 2023 08:44:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3975D60AEA;
-	Tue, 18 Jul 2023 08:18:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3975D60AEA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12E6160B15;
+	Tue, 18 Jul 2023 08:44:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12E6160B15
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E50C1BF271
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 08:18:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EBE31BF271
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 08:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2572B60AEA
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 08:18:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2572B60AEA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 769FB60B15
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 08:44:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 769FB60B15
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AY_h8ZHRyHvP for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 08:18:11 +0000 (UTC)
+ with ESMTP id pYbbP9h-FABO for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 08:44:35 +0000 (UTC)
 X-Greylist: whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0F8860AD1
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C0F8860AD1
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 08:18:10 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-3fbea14706eso49447545e9.2
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 01:18:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB34F60AEA
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
+ [IPv6:2607:f8b0:4864:20::32e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EB34F60AEA
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 08:44:34 +0000 (UTC)
+Received: by mail-ot1-x32e.google.com with SMTP id
+ 46e09a7af769-6b9c98ab654so2426093a34.0
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 01:44:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689668289; x=1692260289;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CZ62LBPRBFuzCWg+aqSIdvBdXTLDdkYbAhMTGEhfngU=;
- b=T1CrrzqzSbptOUFvI9cbEbIabBwrPC4ApyL4+RP7HLxNVpf28c2pr//NYJNcInHeKL
- n1CHS3A/5UgvtsHQUEIw2IKTKJbxTdidYxxyqoZauPwfdmiGnjNBWXbl4Iqk/3eu6Uir
- 9pdNckXywwa6GFGDYFIh6/rFA6AnJmhdHkLOEjHuq70KTpWjRno24XAq+nRC1WoJn/Bk
- VwnnR5I/ldjdxIJCI2Vi/vXkQhmEcNG+WjdcIsh72v0gkoAOq4OjSipzraaaimB7Gu76
- yRVR2Y4YIMOrvAmxPRyVnqxeS+vgt9JMYV4fSr8SZUNBlJTNlDycexrMGxGerNVpUN+N
- dxLQ==
-X-Gm-Message-State: ABy/qLZGbgfr9fkivWqCh9mL0eTZQx087vTmH/wdIu4nJIPCmCcgOYzH
- cx0nTDNA3PiOfHZax2EJGcHS+Pm9Nypr+8hp6lI=
-X-Google-Smtp-Source: APBJJlHx1HVRisllLukSjf5c5YAQjix4gIcz3iZcJfpy+iHro8WoRd2XYYqWCs6u0oY6/+xpPM8xFz3WbGC2P3s0jUk=
-X-Received: by 2002:a1c:7c08:0:b0:3fb:e356:b60d with SMTP id
- x8-20020a1c7c08000000b003fbe356b60dmr1298048wmc.38.1689668288356; Tue, 18 Jul
- 2023 01:18:08 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1689669873; x=1692261873;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=YPpds9Apx9OWB6HNR5cfKpp2GyGOEBJHplylvCCTJgo=;
+ b=JR13hVEK+49ARFy3szGRwHNJP6Mb/Jx1FhHJKPlzcFEA3f7DiA0p2z5BbV+n0mcx3P
+ xrpULvsvct7v96jBE77oCSIFkesKKKZzYQVMZqdA1gCpPy34MwlWJ6EMy5vslqYnEKal
+ VeVTO8GMqMB/5YaG+AcMRVFPgZ+V5LpKZZ6MA55y/byOnvyG9BAQOqP8qCpzWjAQ4Ezz
+ smPBUtv0l10+UDlZD4Ozc0hil3x6oPf3u8baE3hUQ5+f63LpAujA/DqrebJtKw8Af+Ni
+ zRoizNdS/sKoVgTsDJEe2DhmAsslVRWpRgEMxQ+eFXFPBPaDBSzMTFmTRt6p2Q40KCid
+ uWlw==
+X-Gm-Message-State: ABy/qLbBcoQHa2A8dVKmCOgDtRab7TzKEjgGtH9Jm6PWhxei7HbNHC2s
+ wPgD9dX78Z0ekXcLKaOANvzrKnWCfZTyKieApE7czN0epGg=
+X-Google-Smtp-Source: APBJJlHbcGieWCGrof/c0w9mbeVfcHlxq9lshHzAI5I43JyMnPWi5Eoh4y85FkTnTF/0FhpftmK3PmTKwkWKdr+Bc3A=
+X-Received: by 2002:a05:6870:d0c1:b0:1b0:41da:daa1 with SMTP id
+ k1-20020a056870d0c100b001b041dadaa1mr16097303oaa.53.1689669873494; Tue, 18
+ Jul 2023 01:44:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAOLWrZ-zYdgpvg-UUrHb8-Y+dfSauONGxf+Uynjj0d7XQ2HFYQ@mail.gmail.com>
  <43b3c8f2-17f0-fe13-5421-49abb44f2481@mind.be>
  <CAOLWrZ-2fNdKRwKzgeENfD=-x7CWbUwxE-1M3cnMqPapHUiEMg@mail.gmail.com>
  <CADvTj4oJM5=Ng0G6TMYpBk=7_TBX24Y-_CgASeMMxXzgENF9dw@mail.gmail.com>
-In-Reply-To: <CADvTj4oJM5=Ng0G6TMYpBk=7_TBX24Y-_CgASeMMxXzgENF9dw@mail.gmail.com>
-From: Andreas <andreasembbuild@gmail.com>
-Date: Tue, 18 Jul 2023 10:17:56 +0200
-Message-ID: <CAOLWrZ8m1eM0K+5su-Skgfia-TeD1d9c5q20+_zxJ0E6wWKhTg@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
+ <CAOLWrZ8m1eM0K+5su-Skgfia-TeD1d9c5q20+_zxJ0E6wWKhTg@mail.gmail.com>
+In-Reply-To: <CAOLWrZ8m1eM0K+5su-Skgfia-TeD1d9c5q20+_zxJ0E6wWKhTg@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 18 Jul 2023 02:44:21 -0600
+Message-ID: <CADvTj4pQqWZWSsCsQ-JLe57+Jdtyv9UciF5umkCejG_6bt=3Tg@mail.gmail.com>
+To: Andreas <andreasembbuild@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689668289; x=1692260289;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=CZ62LBPRBFuzCWg+aqSIdvBdXTLDdkYbAhMTGEhfngU=;
- b=P7achNDcLv8hQmiFibMF+DnDKPHABNAVdji3jkdyNWBjOupKTcU6Yo5ZRzdscLtVjP
- OdpaE57B3S0crk6gioMR/Q8KUBaoKcauVueLMQigk8cpOhV694JP/QjuewG2iuXbUA9v
- I16vHFGRHpXQa5OKjbDtmWib6kyFOXy8EQmt6vfonThnUKCVjlQlGmRKiNUUTACYT4XW
- fKqHim5CDoHuSlIvUBh2F9PYKoGKD1wUPIqxniJv4IT5FUinFNgrQHA3+xKOXoGznMWM
- SA6q4sNStRbL/7/6Bt06hC5zFh/n0JqksDhTKy6q0G+isKz+J4/vWf02sUuPVjXGHgo1
- uzbw==
+ d=gmail.com; s=20221208; t=1689669873; x=1692261873;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=YPpds9Apx9OWB6HNR5cfKpp2GyGOEBJHplylvCCTJgo=;
+ b=a+r4iFyoxjK10uCM3BxS2qzq6/5rKs1XpdF3ylnssC/2P+i28X/D2VZSNOI7NFMF9d
+ 7SoGepQSSlDKOkb8k2GA5zBMWhsyRpJG5l0W/q8FiGL3BrYWaZDVoV+NsE58QUQGS+eF
+ LXUhOCn/+vju2M6Q7VZ/qHuAza47ZiUotkkXhnP8dI59haTYVuLolJHvDbkg+nRNzEyv
+ vZIs1VCdOBGYZ7QEAGWWmYAqvEcoJuFEFiCadrHG2L5g8u2wrg2xa2xeQl4aSXiQDGSR
+ nYKMeFmQfBGDA1hmI90j2j3gDB+vNf1nyWsdPJzOp6BIrFp5ePFSRdwEpox4K/wxpT2B
+ nlHg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=P7achNDc
+ header.a=rsa-sha256 header.s=20221208 header.b=a+r4iFyo
 Subject: Re: [Buildroot] Missing dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -94,706 +96,220 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2981505881962978365=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2981505881962978365==
-Content-Type: multipart/alternative; boundary="0000000000001da62e0600be8ee9"
-
---0000000000001da62e0600be8ee9
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Dear James,
-
-Am Di., 18. Juli 2023 um 01:42 Uhr schrieb James Hilliard <
-james.hilliard1@gmail.com>:
-
-> On Mon, Jul 17, 2023 at 9:48=E2=80=AFAM Andreas <andreasembbuild@gmail.co=
-m> wrote:
-> >
-> > Hi Arnout,
-> >
-> > Thanks for the quick response. I am indeed still on python 3.10.6 here.
-> I think upgrading might be a major exercise. It requires more than just
-> changing the version in packages/python3.mk doesn't it? Do I need to have
-> the same python version also on the host system? I am currently running
-> buildroot on a Ubuntu 22.04 VM.
->
-> You should just update buildroot itself, newer versions use python
-> 3.11 so updating
-> buildroot will pull that in along with any required changes. What
-> version of buildroot
-> are you actually using right now? The installed version of python on
-> your build host
-> system shouldn't matter as buildroot will build a separate
-> host-python3 for cross
-> compilation.
->
-
-I migrated a big existing system from buildroot 2018.11.1 to 2022.02.4 to
-have a modern python (3.10 instead of 3.7) for new, additional applications
-that requires 3.10+. I can try to jump to sth more recent I guess 2023.x
-that has python 3.11. Here I am just worried that some packages that I need
-are not yet fully compatible or maybe buggy.
-
-Ok thanks for the info that is good news.
-
-
-
-> >
-> >
-> > Am Mo., 17. Juli 2023 um 17:19 Uhr schrieb Arnout Vandecappelle <
-> arnout@mind.be>:
-> >>
-> >>
-> >>
-> >> On 17/07/2023 16:10, Andreas wrote:
-> >> > Hi,
-> >> >
-> >> > I am new to buildroot and I am trying to build the package
-> >> > python-hatchling-1.18.0. However it fails with the following message=
-:
-> >> >
-> >> > * Getting dependencies for wheel...
-> >> >
-> >> > ERROR Missing dependencies:
-> >> > tomli>=3D1.2.2; python_version < '3.11'
-> >>
-> >>   That's really weird... This line means that it depends on tomli, but
-> only for
-> >> Python-3.10 or lower. Since we're using Python 3.11.4, this dependency
-> shouldn't
-> >> trigger at all... You're not using an old Buildroot version that still
-> uses
-> >> 3.10, are you?
-> >>
-> >>
-> >> > make: *** [package/pkg-generic.mk:293 <http://pkg-generic.mk:293>:
-> >> > /buildroot/output/build/python-hatchling-1.18.0/.stamp_built] Error =
-1
-> >> >
-> >> > The python-hatchling.mk <http://python-hatchling.mk> file looks as
-> follows:
-> >> >
-> #########################################################################=
-#######
-> >> > #
-> >> > # python-hatchling
-> >> > #
-> >> >
-> #########################################################################=
-#######
-> >> >
-> >> > PYTHON_HATCHLING_VERSION =3D 1.18.0
-> >>
-> >>   Erm, python-hatchling was added to Buildroot in commit
-> >> 626c5bedaa7e1461dd3747562b9c04dd40713c83, in 2022.11. Have you tried
-> just
-> >> updating the existing package (and sending the patch upstream to us, o=
-f
-> course)?
-> >>
-> >>   We only have a host package for it, because it's a pep517 so normall=
-y
-> not
-> >> useful on the target. Why do you need the target package?
-> >
-> >
-> > Let me double check but you might be correct that I do not need it on
-> the target.
->
-> Yeah, it doesn't really make sense to have a target python-hatchling
-> package in
-> buildroot from my understanding.
->
-> Why are you trying to add this package? Is it a dependency for a
-> different package
-> you are trying to add or something?
->
-
-Why I am trying to add this package is because I need ipykernel installed.
-Checking the dependencies on my system gave me that tree:
-
-hatchling=3D=3D1.12.2
-=E2=94=9C=E2=94=80=E2=94=80 editables [required: >=3D0.3, installed: 0.4]
-=E2=94=9C=E2=94=80=E2=94=80 packaging [required: >=3D21.3, installed: 21.3]
-=E2=94=9C=E2=94=80=E2=94=80 pathspec [required: >=3D0.10.1, installed: 0.11=
-.1]
-=E2=94=9C=E2=94=80=E2=94=80 pluggy [required: >=3D1.0.0, installed: 1.2.0]
-=E2=94=94=E2=94=80=E2=94=80 tomli [required: >=3D1.2.2, installed: 2.0.1]
-
-=E2=94=9C=E2=94=80=E2=94=80 ipykernel [required: Any, installed: 6.24.0]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 comm [required: >=3D0.1.1, installe=
-d: 0.1.3]
-=E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [required: >=
-=3D5.3, installed: 5.9.0]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 debugpy [required: >=3D1.6.5, insta=
-lled: 1.6.7]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 ipython [required: >=3D7.23.1, inst=
-alled: 8.14.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 backcall [required: Any=
-, installed: 0.2.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 decorator [required: An=
-y, installed: 5.1.1]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 jedi [required: >=3D0.1=
-6, installed: 0.18.2]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 parso [requ=
-ired: >=3D0.8.0,<0.9.0, installed: 0.8.3]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 matplotlib-inline [requ=
-ired: Any, installed: 0.1.6]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [=
-required: Any, installed: 5.9.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 pexpect [required: >4.3=
-, installed: 4.8.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 pickleshare [required: =
-Any, installed: 0.7.5]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 prompt-toolkit [require=
-d: >=3D3.0.30,<3.1.0,!=3D3.0.37, installed:
-3.0.39]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 wcwidth [re=
-quired: Any, installed: 0.2.6]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 Pygments [required: >=
-=3D2.4.0, installed: 2.15.1]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 stack-data [required: A=
-ny, installed: 0.6.2]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 asttokens [=
-required: >=3D2.1.0, installed: 2.2.1]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80=
- six [required: Any, installed: 1.16.0]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 executing [=
-required: >=3D1.2.0, installed: 1.2.0]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 pure-eval [=
-required: Any, installed: 0.2.2]
-=E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [required: >=
-=3D5, installed: 5.9.0]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 jupyter-client [required: >=3D6.1.1=
-2, installed: 8.3.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 jupyter-core [required:=
- >=3D4.12,!=3D5.0.*, installed: 5.3.1]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 platformdir=
-s [required: >=3D2.5, installed: 3.8.1]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [=
-required: >=3D5.3, installed: 5.9.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 python-dateutil [requir=
-ed: >=3D2.8.2, installed: 2.8.2]
-=E2=94=82   =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 six [requir=
-ed: >=3D1.5, installed: 1.16.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 pyzmq [required: >=3D23=
-.0, installed: 25.1.0]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 tornado [required: >=3D=
-6.2, installed: 6.3.2]
-=E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [required: >=
-=3D5.3, installed: 5.9.0]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 jupyter-core [required: >=3D4.12,!=
-=3D5.0.*, installed: 5.3.1]
-=E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 platformdirs [required:=
- >=3D2.5, installed: 3.8.1]
-=E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [required: >=
-=3D5.3, installed: 5.9.0]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 matplotlib-inline [required: >=3D0.=
-1, installed: 0.1.6]
-=E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [required: An=
-y, installed: 5.9.0]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 nest-asyncio [required: Any, instal=
-led: 1.5.6]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 packaging [required: Any, installed=
-: 21.3]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 psutil [required: Any, installed: 5=
-.9.5]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 pyzmq [required: >=3D20, installed:=
- 25.1.0]
-=E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 tornado [required: >=3D6.1, install=
-ed: 6.3.2]
-=E2=94=82   =E2=94=94=E2=94=80=E2=94=80 traitlets [required: >=3D5.4.0, ins=
-talled: 5.9.0]
-
-Actually I am also not sure why the system is asking me for hatchling as
-the package itself does not directly depend on it. However, for sure I need
-packaging and pyparsing. But maybe the problem is that I made a mistake and
-try to build both on the host and target system and what I actually need to
-do is use the host-python-hatchling for the PYTHON_*_DEPENDENCIES =3D
-host-pyhton-hatchling  instead of the target one.
-
-
-> >>
-> >>
-> >> > PYTHON_HATCHLING_SOURCE =3D hatchling-$(PYTHON_HATCHLING_VERSION).ta=
-r.gz
-> >> > PYTHON_HATCHLING_SITE =3D
-> >> >
-> https://files.pythonhosted.org/packages/e3/57/87da2c5adc173950ebe9f1acce4=
-d5f2cd0a960783992fd4879a899a0b637
-> >> > PYTHON_HATCHLING_SETUP_TYPE =3D pep517
-> >> > PYTHON_HATCHLING_LICENSE =3D MIT
-> >> > PYTHON_HATCHLING_LICENSE_FILES =3D LICENSE.txt
-> >> >
-> >> > PYTHON_HATCHLING_DEPENDENCIES =3D \
-> >> > python-tomli \
-> >>
-> >>   I think the problem is that pep517 checks for the presence of tomli
-> in the
-> >> _host_ directory. So you'd need to add a dependency on
-> host-python-tomli here.
-> >> James is more aware of these things so I put him in Cc.
-> >
-> >
-> > I will first try to add the host dependency as you suggested below and
-> see what happens.
->
-> I thought our pep517 infrastructure prior to updating to python 3.11 woul=
-d
-> pull
-> in host-python-tomli automatically(due to it being a host-python-flit
-> dependency
-> prior to python 3.11). I'm not sure how you could be getting a missing
-> tomli error
-> like this in the first place as we didn't remove host-python-tomli
-> from our pep517
-> infrastructure dependency tree prior to python being updated to version
-> 3.11.
->
->
-I may have missed some files during the migration that is now causing the
-problem. Which are the folders in buildroot that deal with the python
-infrastructure I should check?
-
-
-> >
-> >>
-> >>
-> >> > python-editables \
-> >> > python-packaging \
-> >> > python-pathspec \
-> >> > python-pluggy \
-> >> > python-trove-classifiers
-> >> > HOST_PYTHON_HATCHLING_DEPENDENCIES =3D \
-> >> > host-python-tomli \
-> >> > host-python-editables \
-> >> > host-python-packaging \
-> >> > host-python-pathspec \
-> >> > host-python-pluggy \
-> >> > host-python-trove-classifiers
-> >> >
-> >> > $(eval $(python-package))
-> >> > $(eval $(host-python-package))
-> >> >
-> >> > I do have a python-tomli.mk <http://python-tomli.mk> file therefore
-> I am
-> >> > confused why I am seeing this error. If I remove the tomli dependenc=
-y
-> from the
-> >> > pyproject.toml file in hatchling (in
-> output/build/python-hatchling-1.18.0)
-> >> > manually it continoues the build.
-> >> >
-> >> > dependencies =3D [
-> >> >    "editables>=3D0.3",
-> >> >    "packaging>=3D21.3",
-> >> >    "pathspec>=3D0.10.1",
-> >> >    "pluggy>=3D1.0.0",
-> >> >    "tomli>=3D1.2.2; python_version < '3.11'",
-> >> >    "trove-classifiers",
-> >> > ]
-> >> >
-> >> > My impression is that my current buildroot setup has a problem to
-> properly
-> >> > interpret the line ` "tomli>=3D1.2.2; python_version < '3.11'"` mayb=
-e
-> because of
-> >> > an outdated package that I am not aware of.
-> >>
-> >>   I think this way of expressing version-dependent dependencies is
-> already
-> >> pretty old, and certainly predates the pep517 infrastructure in
-> Buildroot, so
-> >> I'd be surprised if this were the case.
-> >
-> >
-> > Well that is how the dependency is defined in hatchling defined it (see
-> here https://github.com/pypa/hatch/blob/master/backend/pyproject.toml)
->
-> Yeah, it should work fine, we didn't have to add a host-python-tomli
-> dependency
-> when I added host-python-hatchling.
->
->
-> https://github.com/buildroot/buildroot/commit/626c5bedaa7e1461dd3747562b9=
-c04dd40713c83
-
-
-Thanks I will checkout this link.
-FYA prior adding the ipykernel package everything built just fine telling
-me that my migration should be OK and its just these packages that
-challenge me.
-
-Regrads,
-Andreas
-
-
->
-> >
-> >>
-> >>   Regards,
-> >>   Arnout
-> >>
-> >> > Any idea how to address this issue
-> >> > and how to debug such an error in buildroot in future? I already
-> checked the
-> >> > manual, especially the section for python packages.
-> >> >
-> >> > Regards,
-> >> > Andreas
-> >> >
-> >> >
-> >> > _______________________________________________
-> >> > buildroot mailing list
-> >> > buildroot@buildroot.org
-> >> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-
---0000000000001da62e0600be8ee9
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Dear James,</div><br><div class=3D"gmail_=
-quote"><div dir=3D"ltr" class=3D"gmail_attr">Am Di., 18. Juli 2023 um 01:42=
-=C2=A0Uhr schrieb James Hilliard &lt;<a href=3D"mailto:james.hilliard1@gmai=
-l.com">james.hilliard1@gmail.com</a>&gt;:<br></div><blockquote class=3D"gma=
-il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
-04,204);padding-left:1ex">On Mon, Jul 17, 2023 at 9:48=E2=80=AFAM Andreas &=
-lt;<a href=3D"mailto:andreasembbuild@gmail.com" target=3D"_blank">andreasem=
-bbuild@gmail.com</a>&gt; wrote:<br>
-&gt;<br>
-&gt; Hi Arnout,<br>
-&gt;<br>
-&gt; Thanks for the quick response. I am indeed still on python 3.10.6 here=
-. I think upgrading might be a major exercise. It requires more than just c=
-hanging the version in packages/<a href=3D"http://python3.mk" rel=3D"norefe=
-rrer" target=3D"_blank">python3.mk</a> doesn&#39;t it? Do I need to have th=
-e same python version also on the host system? I am currently running build=
-root on a Ubuntu 22.04 VM.<br>
-<br>
-You should just update buildroot itself, newer versions use python<br>
-3.11 so updating<br>
-buildroot will pull that in along with any required changes. What<br>
-version of buildroot<br>
-are you actually using right now? The installed version of python on<br>
-your build host<br>
-system shouldn&#39;t matter as buildroot will build a separate<br>
-host-python3 for cross<br>
-compilation.<br></blockquote><div><br></div><div>I migrated a big existing =
-system from buildroot 2018.11.1 to 2022.02.4 to have a modern python (3.10 =
-instead of 3.7) for new, additional applications that requires 3.10+. I can=
- try to jump to sth more recent I guess 2023.x that has python 3.11. Here I=
- am just worried that some packages that I need are not yet fully compatibl=
-e or maybe buggy.=C2=A0</div><div><br></div><div>Ok thanks for the info tha=
-t is good news.</div><div><br></div><div>=C2=A0</div><blockquote class=3D"g=
-mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
-,204,204);padding-left:1ex">
-&gt;<br>
-&gt;<br>
-&gt; Am Mo., 17. Juli 2023 um 17:19 Uhr schrieb Arnout Vandecappelle &lt;<a=
- href=3D"mailto:arnout@mind.be" target=3D"_blank">arnout@mind.be</a>&gt;:<b=
-r>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; On 17/07/2023 16:10, Andreas wrote:<br>
-&gt;&gt; &gt; Hi,<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; I am new to buildroot and I am trying to build the package<br=
->
-&gt;&gt; &gt; python-hatchling-1.18.0. However it fails with the following =
-message:<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; * Getting dependencies for wheel...<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; ERROR Missing dependencies:<br>
-&gt;&gt; &gt; tomli&gt;=3D1.2.2; python_version &lt; &#39;3.11&#39;<br>
-&gt;&gt;<br>
-&gt;&gt;=C2=A0 =C2=A0That&#39;s really weird... This line means that it dep=
-ends on tomli, but only for<br>
-&gt;&gt; Python-3.10 or lower. Since we&#39;re using Python 3.11.4, this de=
-pendency shouldn&#39;t<br>
-&gt;&gt; trigger at all... You&#39;re not using an old Buildroot version th=
-at still uses<br>
-&gt;&gt; 3.10, are you?<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; &gt; make: *** [package/<a href=3D"http://pkg-generic.mk:293" rel=
-=3D"noreferrer" target=3D"_blank">pkg-generic.mk:293</a> &lt;<a href=3D"htt=
-p://pkg-generic.mk:293" rel=3D"noreferrer" target=3D"_blank">http://pkg-gen=
-eric.mk:293</a>&gt;:<br>
-&gt;&gt; &gt; /buildroot/output/build/python-hatchling-1.18.0/.stamp_built]=
- Error 1<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; The <a href=3D"http://python-hatchling.mk" rel=3D"noreferrer"=
- target=3D"_blank">python-hatchling.mk</a> &lt;<a href=3D"http://python-hat=
-chling.mk" rel=3D"noreferrer" target=3D"_blank">http://python-hatchling.mk<=
-/a>&gt; file looks as follows:<br>
-&gt;&gt; &gt; #############################################################=
-###################<br>
-&gt;&gt; &gt; #<br>
-&gt;&gt; &gt; # python-hatchling<br>
-&gt;&gt; &gt; #<br>
-&gt;&gt; &gt; #############################################################=
-###################<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; PYTHON_HATCHLING_VERSION =3D 1.18.0<br>
-&gt;&gt;<br>
-&gt;&gt;=C2=A0 =C2=A0Erm, python-hatchling was added to Buildroot in commit=
-<br>
-&gt;&gt; 626c5bedaa7e1461dd3747562b9c04dd40713c83, in 2022.11. Have you tri=
-ed just<br>
-&gt;&gt; updating the existing package (and sending the patch upstream to u=
-s, of course)?<br>
-&gt;&gt;<br>
-&gt;&gt;=C2=A0 =C2=A0We only have a host package for it, because it&#39;s a=
- pep517 so normally not<br>
-&gt;&gt; useful on the target. Why do you need the target package?<br>
-&gt;<br>
-&gt;<br>
-&gt; Let me double check but you might be correct that I do not need it on =
-the target.<br>
-<br>
-Yeah, it doesn&#39;t really make sense to have a target python-hatchling pa=
-ckage in<br>
-buildroot from my understanding.<br>
-<br>
-Why are you trying to add this package? Is it a dependency for a<br>
-different package<br>
-you are trying to add or something?<br></blockquote><div><br></div><div>Why=
- I am trying to add this package is because I need ipykernel installed. Che=
-cking the dependencies on my system gave me that tree:</div><div><br></div>=
-<div>hatchling=3D=3D1.12.2<br>=E2=94=9C=E2=94=80=E2=94=80 editables [requir=
-ed: &gt;=3D0.3, installed: 0.4]<br>=E2=94=9C=E2=94=80=E2=94=80 packaging [r=
-equired: &gt;=3D21.3, installed: 21.3]<br>=E2=94=9C=E2=94=80=E2=94=80 paths=
-pec [required: &gt;=3D0.10.1, installed: 0.11.1]<br>=E2=94=9C=E2=94=80=E2=
-=94=80 pluggy [required: &gt;=3D1.0.0, installed: 1.2.0]<br>=E2=94=94=E2=94=
-=80=E2=94=80 tomli [required: &gt;=3D1.2.2, installed: 2.0.1]<br></div><div=
->=C2=A0</div><div>=E2=94=9C=E2=94=80=E2=94=80 ipykernel [required: Any, ins=
-talled: 6.24.0]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 comm [requi=
-red: &gt;=3D0.1.1, installed: 0.1.3]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =
-=E2=94=94=E2=94=80=E2=94=80 traitlets [required: &gt;=3D5.3, installed: 5.9=
-.0]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 debugpy [required: &gt;=
-=3D1.6.5, installed: 1.6.7]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80=
- ipython [required: &gt;=3D7.23.1, installed: 8.14.0]<br>=E2=94=82 =C2=A0 =
-=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 backcall [required: Any, insta=
-lled: 0.2.0]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=
-=80 decorator [required: Any, installed: 5.1.1]<br>=E2=94=82 =C2=A0 =E2=94=
-=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 jedi [required: &gt;=3D0.16, install=
-ed: 0.18.2]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=94=
-=E2=94=80=E2=94=80 parso [required: &gt;=3D0.8.0,&lt;0.9.0, installed: 0.8.=
-3]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 matplot=
-lib-inline [required: Any, installed: 0.1.6]<br>=E2=94=82 =C2=A0 =E2=94=82 =
-=C2=A0 =E2=94=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 traitlets [required: An=
-y, installed: 5.9.0]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=
-=80=E2=94=80 pexpect [required: &gt;4.3, installed: 4.8.0]<br>=E2=94=82 =C2=
-=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 pickleshare [required: Any=
-, installed: 0.7.5]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=
-=E2=94=80 prompt-toolkit [required: &gt;=3D3.0.30,&lt;3.1.0,!=3D3.0.37, ins=
-talled: 3.0.39]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=
-=94=94=E2=94=80=E2=94=80 wcwidth [required: Any, installed: 0.2.6]<br>=E2=
-=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 Pygments [requir=
-ed: &gt;=3D2.4.0, installed: 2.15.1]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =
-=E2=94=9C=E2=94=80=E2=94=80 stack-data [required: Any, installed: 0.6.2]<br=
->=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=
-=94=80 asttokens [required: &gt;=3D2.1.0, installed: 2.2.1]<br>=E2=94=82 =
-=C2=A0 =E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=94=E2=94=
-=80=E2=94=80 six [required: Any, installed: 1.16.0]<br>=E2=94=82 =C2=A0 =E2=
-=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 executing [requi=
-red: &gt;=3D1.2.0, installed: 1.2.0]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =
-=E2=94=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 pure-eval [required: Any, inst=
-alled: 0.2.2]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=
-=80 traitlets [required: &gt;=3D5, installed: 5.9.0]<br>=E2=94=82 =C2=A0 =
-=E2=94=9C=E2=94=80=E2=94=80 jupyter-client [required: &gt;=3D6.1.12, instal=
-led: 8.3.0]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=
-=80 jupyter-core [required: &gt;=3D4.12,!=3D5.0.*, installed: 5.3.1]<br>=E2=
-=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80=
- platformdirs [required: &gt;=3D2.5, installed: 3.8.1]<br>=E2=94=82 =C2=A0 =
-=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 traitlets [re=
-quired: &gt;=3D5.3, installed: 5.9.0]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =
-=E2=94=9C=E2=94=80=E2=94=80 python-dateutil [required: &gt;=3D2.8.2, instal=
-led: 2.8.2]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=94=
-=E2=94=80=E2=94=80 six [required: &gt;=3D1.5, installed: 1.16.0]<br>=E2=94=
-=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 pyzmq [required: &g=
-t;=3D23.0, installed: 25.1.0]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=
-=9C=E2=94=80=E2=94=80 tornado [required: &gt;=3D6.2, installed: 6.3.2]<br>=
-=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 traitlets [re=
-quired: &gt;=3D5.3, installed: 5.9.0]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=
-=80=E2=94=80 jupyter-core [required: &gt;=3D4.12,!=3D5.0.*, installed: 5.3.=
-1]<br>=E2=94=82 =C2=A0 =E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 platfor=
-mdirs [required: &gt;=3D2.5, installed: 3.8.1]<br>=E2=94=82 =C2=A0 =E2=94=
-=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 traitlets [required: &gt;=3D5.3, ins=
-talled: 5.9.0]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 matplotlib-i=
-nline [required: &gt;=3D0.1, installed: 0.1.6]<br>=E2=94=82 =C2=A0 =E2=94=
-=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 traitlets [required: Any, installed:=
- 5.9.0]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 nest-asyncio [requi=
-red: Any, installed: 1.5.6]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80=
- packaging [required: Any, installed: 21.3]<br>=E2=94=82 =C2=A0 =E2=94=9C=
-=E2=94=80=E2=94=80 psutil [required: Any, installed: 5.9.5]<br>=E2=94=82 =
-=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 pyzmq [required: &gt;=3D20, installed: 2=
-5.1.0]<br>=E2=94=82 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 tornado [required: &=
-gt;=3D6.1, installed: 6.3.2]<br>=E2=94=82 =C2=A0 =E2=94=94=E2=94=80=E2=94=
-=80 traitlets [required: &gt;=3D5.4.0, installed: 5.9.0]<br></div><div><br>=
-</div><div>Actually I am also not sure why the system is asking me for hatc=
-hling as the package itself does not directly depend on it. However, for su=
-re I need packaging and pyparsing. But maybe the problem is that I made a m=
-istake and try to build both on the host and target system and what I actua=
-lly need to do is use the host-python-hatchling for the=C2=A0PYTHON_*_DEPEN=
-DENCIES =3D host-pyhton-hatchling=C2=A0 instead of the target one.</div><di=
-v><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
-.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; &gt; PYTHON_HATCHLING_SOURCE =3D hatchling-$(PYTHON_HATCHLING_VERS=
-ION).tar.gz<br>
-&gt;&gt; &gt; PYTHON_HATCHLING_SITE =3D<br>
-&gt;&gt; &gt; <a href=3D"https://files.pythonhosted.org/packages/e3/57/87da=
-2c5adc173950ebe9f1acce4d5f2cd0a960783992fd4879a899a0b637" rel=3D"noreferrer=
-" target=3D"_blank">https://files.pythonhosted.org/packages/e3/57/87da2c5ad=
-c173950ebe9f1acce4d5f2cd0a960783992fd4879a899a0b637</a><br>
-&gt;&gt; &gt; PYTHON_HATCHLING_SETUP_TYPE =3D pep517<br>
-&gt;&gt; &gt; PYTHON_HATCHLING_LICENSE =3D MIT<br>
-&gt;&gt; &gt; PYTHON_HATCHLING_LICENSE_FILES =3D LICENSE.txt<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; PYTHON_HATCHLING_DEPENDENCIES =3D \<br>
-&gt;&gt; &gt; python-tomli \<br>
-&gt;&gt;<br>
-&gt;&gt;=C2=A0 =C2=A0I think the problem is that pep517 checks for the pres=
-ence of tomli in the<br>
-&gt;&gt; _host_ directory. So you&#39;d need to add a dependency on host-py=
-thon-tomli here.<br>
-&gt;&gt; James is more aware of these things so I put him in Cc.<br>
-&gt;<br>
-&gt;<br>
-&gt; I will first try to add the host dependency as you suggested below and=
- see what happens.<br>
-<br>
-I thought our pep517 infrastructure prior to updating to python 3.11 would =
-pull<br>
-in host-python-tomli automatically(due to it being a host-python-flit depen=
-dency<br>
-prior to python 3.11). I&#39;m not sure how you could be getting a missing<=
-br>
-tomli error<br>
-like this in the first place as we didn&#39;t remove host-python-tomli<br>
-from our pep517<br>
-infrastructure dependency tree prior to python being updated to version 3.1=
-1.<br>
-<br></blockquote><div><br></div><div>I may have missed some files during th=
-e migration that is now causing the problem. Which are the folders in build=
-root that deal with the python infrastructure I should check?</div><div>=C2=
-=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
-x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-&gt;<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; &gt; python-editables \<br>
-&gt;&gt; &gt; python-packaging \<br>
-&gt;&gt; &gt; python-pathspec \<br>
-&gt;&gt; &gt; python-pluggy \<br>
-&gt;&gt; &gt; python-trove-classifiers<br>
-&gt;&gt; &gt; HOST_PYTHON_HATCHLING_DEPENDENCIES =3D \<br>
-&gt;&gt; &gt; host-python-tomli \<br>
-&gt;&gt; &gt; host-python-editables \<br>
-&gt;&gt; &gt; host-python-packaging \<br>
-&gt;&gt; &gt; host-python-pathspec \<br>
-&gt;&gt; &gt; host-python-pluggy \<br>
-&gt;&gt; &gt; host-python-trove-classifiers<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; $(eval $(python-package))<br>
-&gt;&gt; &gt; $(eval $(host-python-package))<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; I do have a <a href=3D"http://python-tomli.mk" rel=3D"norefer=
-rer" target=3D"_blank">python-tomli.mk</a> &lt;<a href=3D"http://python-tom=
-li.mk" rel=3D"noreferrer" target=3D"_blank">http://python-tomli.mk</a>&gt; =
-file therefore I am<br>
-&gt;&gt; &gt; confused why I am seeing this error. If I remove the tomli de=
-pendency from the<br>
-&gt;&gt; &gt; pyproject.toml file in hatchling (in output/build/python-hatc=
-hling-1.18.0)<br>
-&gt;&gt; &gt; manually it continoues the build.<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; dependencies =3D [<br>
-&gt;&gt; &gt;=C2=A0 =C2=A0 &quot;editables&gt;=3D0.3&quot;,<br>
-&gt;&gt; &gt;=C2=A0 =C2=A0 &quot;packaging&gt;=3D21.3&quot;,<br>
-&gt;&gt; &gt;=C2=A0 =C2=A0 &quot;pathspec&gt;=3D0.10.1&quot;,<br>
-&gt;&gt; &gt;=C2=A0 =C2=A0 &quot;pluggy&gt;=3D1.0.0&quot;,<br>
-&gt;&gt; &gt;=C2=A0 =C2=A0 &quot;tomli&gt;=3D1.2.2; python_version &lt; &#3=
-9;3.11&#39;&quot;,<br>
-&gt;&gt; &gt;=C2=A0 =C2=A0 &quot;trove-classifiers&quot;,<br>
-&gt;&gt; &gt; ]<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; My impression is that my current buildroot setup has a proble=
-m to properly<br>
-&gt;&gt; &gt; interpret the line ` &quot;tomli&gt;=3D1.2.2; python_version =
-&lt; &#39;3.11&#39;&quot;` maybe because of<br>
-&gt;&gt; &gt; an outdated package that I am not aware of.<br>
-&gt;&gt;<br>
-&gt;&gt;=C2=A0 =C2=A0I think this way of expressing version-dependent depen=
-dencies is already<br>
-&gt;&gt; pretty old, and certainly predates the pep517 infrastructure in Bu=
-ildroot, so<br>
-&gt;&gt; I&#39;d be surprised if this were the case.<br>
-&gt;<br>
-&gt;<br>
-&gt; Well that is how the dependency is defined in hatchling defined it (se=
-e here <a href=3D"https://github.com/pypa/hatch/blob/master/backend/pyproje=
-ct.toml" rel=3D"noreferrer" target=3D"_blank">https://github.com/pypa/hatch=
-/blob/master/backend/pyproject.toml</a>)<br>
-<br>
-Yeah, it should work fine, we didn&#39;t have to add a host-python-tomli de=
-pendency<br>
-when I added host-python-hatchling.<br>
-<br>
-<a href=3D"https://github.com/buildroot/buildroot/commit/626c5bedaa7e1461dd=
-3747562b9c04dd40713c83" rel=3D"noreferrer" target=3D"_blank">https://github=
-.com/buildroot/buildroot/commit/626c5bedaa7e1461dd3747562b9c04dd40713c83</a=
-></blockquote><div><br></div><div>Thanks I will checkout this link.=C2=A0</=
-div><div>FYA prior adding the ipykernel package everything built just fine =
-telling me that my migration should be OK and its just these packages that =
-challenge me.</div><div>=C2=A0</div><div>Regrads,</div><div>Andreas</div><d=
-iv><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px =
-0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
-<br>
-&gt;<br>
-&gt;&gt;<br>
-&gt;&gt;=C2=A0 =C2=A0Regards,<br>
-&gt;&gt;=C2=A0 =C2=A0Arnout<br>
-&gt;&gt;<br>
-&gt;&gt; &gt; Any idea how to address this issue<br>
-&gt;&gt; &gt; and how to debug such an error in buildroot in future? I alre=
-ady checked the<br>
-&gt;&gt; &gt; manual, especially the section for python packages.<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; Regards,<br>
-&gt;&gt; &gt; Andreas<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; _______________________________________________<br>
-&gt;&gt; &gt; buildroot mailing list<br>
-&gt;&gt; &gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">=
-buildroot@buildroot.org</a><br>
-&gt;&gt; &gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/build=
-root" rel=3D"noreferrer" target=3D"_blank">https://lists.buildroot.org/mail=
-man/listinfo/buildroot</a><br>
-</blockquote></div></div>
-
---0000000000001da62e0600be8ee9--
-
---===============2981505881962978365==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2981505881962978365==--
+T24gVHVlLCBKdWwgMTgsIDIwMjMgYXQgMjoxOOKAr0FNIEFuZHJlYXMgPGFuZHJlYXNlbWJidWls
+ZEBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gRGVhciBKYW1lcywKPgo+IEFtIERpLiwgMTguIEp1bGkg
+MjAyMyB1bSAwMTo0MiBVaHIgc2NocmllYiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQx
+QGdtYWlsLmNvbT46Cj4+Cj4+IE9uIE1vbiwgSnVsIDE3LCAyMDIzIGF0IDk6NDjigK9BTSBBbmRy
+ZWFzIDxhbmRyZWFzZW1iYnVpbGRAZ21haWwuY29tPiB3cm90ZToKPj4gPgo+PiA+IEhpIEFybm91
+dCwKPj4gPgo+PiA+IFRoYW5rcyBmb3IgdGhlIHF1aWNrIHJlc3BvbnNlLiBJIGFtIGluZGVlZCBz
+dGlsbCBvbiBweXRob24gMy4xMC42IGhlcmUuIEkgdGhpbmsgdXBncmFkaW5nIG1pZ2h0IGJlIGEg
+bWFqb3IgZXhlcmNpc2UuIEl0IHJlcXVpcmVzIG1vcmUgdGhhbiBqdXN0IGNoYW5naW5nIHRoZSB2
+ZXJzaW9uIGluIHBhY2thZ2VzL3B5dGhvbjMubWsgZG9lc24ndCBpdD8gRG8gSSBuZWVkIHRvIGhh
+dmUgdGhlIHNhbWUgcHl0aG9uIHZlcnNpb24gYWxzbyBvbiB0aGUgaG9zdCBzeXN0ZW0/IEkgYW0g
+Y3VycmVudGx5IHJ1bm5pbmcgYnVpbGRyb290IG9uIGEgVWJ1bnR1IDIyLjA0IFZNLgo+Pgo+PiBZ
+b3Ugc2hvdWxkIGp1c3QgdXBkYXRlIGJ1aWxkcm9vdCBpdHNlbGYsIG5ld2VyIHZlcnNpb25zIHVz
+ZSBweXRob24KPj4gMy4xMSBzbyB1cGRhdGluZwo+PiBidWlsZHJvb3Qgd2lsbCBwdWxsIHRoYXQg
+aW4gYWxvbmcgd2l0aCBhbnkgcmVxdWlyZWQgY2hhbmdlcy4gV2hhdAo+PiB2ZXJzaW9uIG9mIGJ1
+aWxkcm9vdAo+PiBhcmUgeW91IGFjdHVhbGx5IHVzaW5nIHJpZ2h0IG5vdz8gVGhlIGluc3RhbGxl
+ZCB2ZXJzaW9uIG9mIHB5dGhvbiBvbgo+PiB5b3VyIGJ1aWxkIGhvc3QKPj4gc3lzdGVtIHNob3Vs
+ZG4ndCBtYXR0ZXIgYXMgYnVpbGRyb290IHdpbGwgYnVpbGQgYSBzZXBhcmF0ZQo+PiBob3N0LXB5
+dGhvbjMgZm9yIGNyb3NzCj4+IGNvbXBpbGF0aW9uLgo+Cj4KPiBJIG1pZ3JhdGVkIGEgYmlnIGV4
+aXN0aW5nIHN5c3RlbSBmcm9tIGJ1aWxkcm9vdCAyMDE4LjExLjEgdG8gMjAyMi4wMi40IHRvIGhh
+dmUgYSBtb2Rlcm4gcHl0aG9uICgzLjEwIGluc3RlYWQgb2YgMy43KSBmb3IgbmV3LCBhZGRpdGlv
+bmFsIGFwcGxpY2F0aW9ucyB0aGF0IHJlcXVpcmVzIDMuMTArLiBJIGNhbiB0cnkgdG8ganVtcCB0
+byBzdGggbW9yZSByZWNlbnQgSSBndWVzcyAyMDIzLnggdGhhdCBoYXMgcHl0aG9uIDMuMTEuIEhl
+cmUgSSBhbSBqdXN0IHdvcnJpZWQgdGhhdCBzb21lIHBhY2thZ2VzIHRoYXQgSSBuZWVkIGFyZSBu
+b3QgeWV0IGZ1bGx5IGNvbXBhdGlibGUgb3IgbWF5YmUgYnVnZ3kuCgpJdCdzIHByb2JhYmx5IGVh
+c2llciB0byBnZXQgbmV3IHB5dGhvbiBwYWNrYWdlcyB3b3JraW5nIGluIDIwMjMueCBpbiBnZW5l
+cmFsLgoKPgo+IE9rIHRoYW5rcyBmb3IgdGhlIGluZm8gdGhhdCBpcyBnb29kIG5ld3MuCj4KPgo+
+Pgo+PiA+Cj4+ID4KPj4gPiBBbSBNby4sIDE3LiBKdWxpIDIwMjMgdW0gMTc6MTkgVWhyIHNjaHJp
+ZWIgQXJub3V0IFZhbmRlY2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPjoKPj4gPj4KPj4gPj4KPj4g
+Pj4KPj4gPj4gT24gMTcvMDcvMjAyMyAxNjoxMCwgQW5kcmVhcyB3cm90ZToKPj4gPj4gPiBIaSwK
+Pj4gPj4gPgo+PiA+PiA+IEkgYW0gbmV3IHRvIGJ1aWxkcm9vdCBhbmQgSSBhbSB0cnlpbmcgdG8g
+YnVpbGQgdGhlIHBhY2thZ2UKPj4gPj4gPiBweXRob24taGF0Y2hsaW5nLTEuMTguMC4gSG93ZXZl
+ciBpdCBmYWlscyB3aXRoIHRoZSBmb2xsb3dpbmcgbWVzc2FnZToKPj4gPj4gPgo+PiA+PiA+ICog
+R2V0dGluZyBkZXBlbmRlbmNpZXMgZm9yIHdoZWVsLi4uCj4+ID4+ID4KPj4gPj4gPiBFUlJPUiBN
+aXNzaW5nIGRlcGVuZGVuY2llczoKPj4gPj4gPiB0b21saT49MS4yLjI7IHB5dGhvbl92ZXJzaW9u
+IDwgJzMuMTEnCj4+ID4+Cj4+ID4+ICAgVGhhdCdzIHJlYWxseSB3ZWlyZC4uLiBUaGlzIGxpbmUg
+bWVhbnMgdGhhdCBpdCBkZXBlbmRzIG9uIHRvbWxpLCBidXQgb25seSBmb3IKPj4gPj4gUHl0aG9u
+LTMuMTAgb3IgbG93ZXIuIFNpbmNlIHdlJ3JlIHVzaW5nIFB5dGhvbiAzLjExLjQsIHRoaXMgZGVw
+ZW5kZW5jeSBzaG91bGRuJ3QKPj4gPj4gdHJpZ2dlciBhdCBhbGwuLi4gWW91J3JlIG5vdCB1c2lu
+ZyBhbiBvbGQgQnVpbGRyb290IHZlcnNpb24gdGhhdCBzdGlsbCB1c2VzCj4+ID4+IDMuMTAsIGFy
+ZSB5b3U/Cj4+ID4+Cj4+ID4+Cj4+ID4+ID4gbWFrZTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmlj
+Lm1rOjI5MyA8aHR0cDovL3BrZy1nZW5lcmljLm1rOjI5Mz46Cj4+ID4+ID4gL2J1aWxkcm9vdC9v
+dXRwdXQvYnVpbGQvcHl0aG9uLWhhdGNobGluZy0xLjE4LjAvLnN0YW1wX2J1aWx0XSBFcnJvciAx
+Cj4+ID4+ID4KPj4gPj4gPiBUaGUgcHl0aG9uLWhhdGNobGluZy5tayA8aHR0cDovL3B5dGhvbi1o
+YXRjaGxpbmcubWs+IGZpbGUgbG9va3MgYXMgZm9sbG93czoKPj4gPj4gPiAjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIwo+PiA+PiA+ICMKPj4gPj4gPiAjIHB5dGhvbi1oYXRjaGxpbmcKPj4gPj4gPiAj
+Cj4+ID4+ID4gIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPj4gPj4gPgo+PiA+PiA+IFBZVEhPTl9I
+QVRDSExJTkdfVkVSU0lPTiA9IDEuMTguMAo+PiA+Pgo+PiA+PiAgIEVybSwgcHl0aG9uLWhhdGNo
+bGluZyB3YXMgYWRkZWQgdG8gQnVpbGRyb290IGluIGNvbW1pdAo+PiA+PiA2MjZjNWJlZGFhN2Ux
+NDYxZGQzNzQ3NTYyYjljMDRkZDQwNzEzYzgzLCBpbiAyMDIyLjExLiBIYXZlIHlvdSB0cmllZCBq
+dXN0Cj4+ID4+IHVwZGF0aW5nIHRoZSBleGlzdGluZyBwYWNrYWdlIChhbmQgc2VuZGluZyB0aGUg
+cGF0Y2ggdXBzdHJlYW0gdG8gdXMsIG9mIGNvdXJzZSk/Cj4+ID4+Cj4+ID4+ICAgV2Ugb25seSBo
+YXZlIGEgaG9zdCBwYWNrYWdlIGZvciBpdCwgYmVjYXVzZSBpdCdzIGEgcGVwNTE3IHNvIG5vcm1h
+bGx5IG5vdAo+PiA+PiB1c2VmdWwgb24gdGhlIHRhcmdldC4gV2h5IGRvIHlvdSBuZWVkIHRoZSB0
+YXJnZXQgcGFja2FnZT8KPj4gPgo+PiA+Cj4+ID4gTGV0IG1lIGRvdWJsZSBjaGVjayBidXQgeW91
+IG1pZ2h0IGJlIGNvcnJlY3QgdGhhdCBJIGRvIG5vdCBuZWVkIGl0IG9uIHRoZSB0YXJnZXQuCj4+
+Cj4+IFllYWgsIGl0IGRvZXNuJ3QgcmVhbGx5IG1ha2Ugc2Vuc2UgdG8gaGF2ZSBhIHRhcmdldCBw
+eXRob24taGF0Y2hsaW5nIHBhY2thZ2UgaW4KPj4gYnVpbGRyb290IGZyb20gbXkgdW5kZXJzdGFu
+ZGluZy4KPj4KPj4gV2h5IGFyZSB5b3UgdHJ5aW5nIHRvIGFkZCB0aGlzIHBhY2thZ2U/IElzIGl0
+IGEgZGVwZW5kZW5jeSBmb3IgYQo+PiBkaWZmZXJlbnQgcGFja2FnZQo+PiB5b3UgYXJlIHRyeWlu
+ZyB0byBhZGQgb3Igc29tZXRoaW5nPwo+Cj4KPiBXaHkgSSBhbSB0cnlpbmcgdG8gYWRkIHRoaXMg
+cGFja2FnZSBpcyBiZWNhdXNlIEkgbmVlZCBpcHlrZXJuZWwgaW5zdGFsbGVkLiBDaGVja2luZyB0
+aGUgZGVwZW5kZW5jaWVzIG9uIG15IHN5c3RlbSBnYXZlIG1lIHRoYXQgdHJlZToKPgo+IGhhdGNo
+bGluZz09MS4xMi4yCj4g4pSc4pSA4pSAIGVkaXRhYmxlcyBbcmVxdWlyZWQ6ID49MC4zLCBpbnN0
+YWxsZWQ6IDAuNF0KPiDilJzilIDilIAgcGFja2FnaW5nIFtyZXF1aXJlZDogPj0yMS4zLCBpbnN0
+YWxsZWQ6IDIxLjNdCj4g4pSc4pSA4pSAIHBhdGhzcGVjIFtyZXF1aXJlZDogPj0wLjEwLjEsIGlu
+c3RhbGxlZDogMC4xMS4xXQo+IOKUnOKUgOKUgCBwbHVnZ3kgW3JlcXVpcmVkOiA+PTEuMC4wLCBp
+bnN0YWxsZWQ6IDEuMi4wXQo+IOKUlOKUgOKUgCB0b21saSBbcmVxdWlyZWQ6ID49MS4yLjIsIGlu
+c3RhbGxlZDogMi4wLjFdCj4KPiDilJzilIDilIAgaXB5a2VybmVsIFtyZXF1aXJlZDogQW55LCBp
+bnN0YWxsZWQ6IDYuMjQuMF0KPiDilIIgICDilJzilIDilIAgY29tbSBbcmVxdWlyZWQ6ID49MC4x
+LjEsIGluc3RhbGxlZDogMC4xLjNdCj4g4pSCICAg4pSCICAg4pSU4pSA4pSAIHRyYWl0bGV0cyBb
+cmVxdWlyZWQ6ID49NS4zLCBpbnN0YWxsZWQ6IDUuOS4wXQo+IOKUgiAgIOKUnOKUgOKUgCBkZWJ1
+Z3B5IFtyZXF1aXJlZDogPj0xLjYuNSwgaW5zdGFsbGVkOiAxLjYuN10KPiDilIIgICDilJzilIDi
+lIAgaXB5dGhvbiBbcmVxdWlyZWQ6ID49Ny4yMy4xLCBpbnN0YWxsZWQ6IDguMTQuMF0KPiDilIIg
+ICDilIIgICDilJzilIDilIAgYmFja2NhbGwgW3JlcXVpcmVkOiBBbnksIGluc3RhbGxlZDogMC4y
+LjBdCj4g4pSCICAg4pSCICAg4pSc4pSA4pSAIGRlY29yYXRvciBbcmVxdWlyZWQ6IEFueSwgaW5z
+dGFsbGVkOiA1LjEuMV0KPiDilIIgICDilIIgICDilJzilIDilIAgamVkaSBbcmVxdWlyZWQ6ID49
+MC4xNiwgaW5zdGFsbGVkOiAwLjE4LjJdCj4g4pSCICAg4pSCICAg4pSCICAg4pSU4pSA4pSAIHBh
+cnNvIFtyZXF1aXJlZDogPj0wLjguMCw8MC45LjAsIGluc3RhbGxlZDogMC44LjNdCj4g4pSCICAg
+4pSCICAg4pSc4pSA4pSAIG1hdHBsb3RsaWItaW5saW5lIFtyZXF1aXJlZDogQW55LCBpbnN0YWxs
+ZWQ6IDAuMS42XQo+IOKUgiAgIOKUgiAgIOKUgiAgIOKUlOKUgOKUgCB0cmFpdGxldHMgW3JlcXVp
+cmVkOiBBbnksIGluc3RhbGxlZDogNS45LjBdCj4g4pSCICAg4pSCICAg4pSc4pSA4pSAIHBleHBl
+Y3QgW3JlcXVpcmVkOiA+NC4zLCBpbnN0YWxsZWQ6IDQuOC4wXQo+IOKUgiAgIOKUgiAgIOKUnOKU
+gOKUgCBwaWNrbGVzaGFyZSBbcmVxdWlyZWQ6IEFueSwgaW5zdGFsbGVkOiAwLjcuNV0KPiDilIIg
+ICDilIIgICDilJzilIDilIAgcHJvbXB0LXRvb2xraXQgW3JlcXVpcmVkOiA+PTMuMC4zMCw8My4x
+LjAsIT0zLjAuMzcsIGluc3RhbGxlZDogMy4wLjM5XQo+IOKUgiAgIOKUgiAgIOKUgiAgIOKUlOKU
+gOKUgCB3Y3dpZHRoIFtyZXF1aXJlZDogQW55LCBpbnN0YWxsZWQ6IDAuMi42XQo+IOKUgiAgIOKU
+giAgIOKUnOKUgOKUgCBQeWdtZW50cyBbcmVxdWlyZWQ6ID49Mi40LjAsIGluc3RhbGxlZDogMi4x
+NS4xXQo+IOKUgiAgIOKUgiAgIOKUnOKUgOKUgCBzdGFjay1kYXRhIFtyZXF1aXJlZDogQW55LCBp
+bnN0YWxsZWQ6IDAuNi4yXQo+IOKUgiAgIOKUgiAgIOKUgiAgIOKUnOKUgOKUgCBhc3R0b2tlbnMg
+W3JlcXVpcmVkOiA+PTIuMS4wLCBpbnN0YWxsZWQ6IDIuMi4xXQo+IOKUgiAgIOKUgiAgIOKUgiAg
+IOKUgiAgIOKUlOKUgOKUgCBzaXggW3JlcXVpcmVkOiBBbnksIGluc3RhbGxlZDogMS4xNi4wXQo+
+IOKUgiAgIOKUgiAgIOKUgiAgIOKUnOKUgOKUgCBleGVjdXRpbmcgW3JlcXVpcmVkOiA+PTEuMi4w
+LCBpbnN0YWxsZWQ6IDEuMi4wXQo+IOKUgiAgIOKUgiAgIOKUgiAgIOKUlOKUgOKUgCBwdXJlLWV2
+YWwgW3JlcXVpcmVkOiBBbnksIGluc3RhbGxlZDogMC4yLjJdCj4g4pSCICAg4pSCICAg4pSU4pSA
+4pSAIHRyYWl0bGV0cyBbcmVxdWlyZWQ6ID49NSwgaW5zdGFsbGVkOiA1LjkuMF0KPiDilIIgICDi
+lJzilIDilIAganVweXRlci1jbGllbnQgW3JlcXVpcmVkOiA+PTYuMS4xMiwgaW5zdGFsbGVkOiA4
+LjMuMF0KPiDilIIgICDilIIgICDilJzilIDilIAganVweXRlci1jb3JlIFtyZXF1aXJlZDogPj00
+LjEyLCE9NS4wLiosIGluc3RhbGxlZDogNS4zLjFdCj4g4pSCICAg4pSCICAg4pSCICAg4pSc4pSA
+4pSAIHBsYXRmb3JtZGlycyBbcmVxdWlyZWQ6ID49Mi41LCBpbnN0YWxsZWQ6IDMuOC4xXQo+IOKU
+giAgIOKUgiAgIOKUgiAgIOKUlOKUgOKUgCB0cmFpdGxldHMgW3JlcXVpcmVkOiA+PTUuMywgaW5z
+dGFsbGVkOiA1LjkuMF0KPiDilIIgICDilIIgICDilJzilIDilIAgcHl0aG9uLWRhdGV1dGlsIFty
+ZXF1aXJlZDogPj0yLjguMiwgaW5zdGFsbGVkOiAyLjguMl0KPiDilIIgICDilIIgICDilIIgICDi
+lJTilIDilIAgc2l4IFtyZXF1aXJlZDogPj0xLjUsIGluc3RhbGxlZDogMS4xNi4wXQo+IOKUgiAg
+IOKUgiAgIOKUnOKUgOKUgCBweXptcSBbcmVxdWlyZWQ6ID49MjMuMCwgaW5zdGFsbGVkOiAyNS4x
+LjBdCj4g4pSCICAg4pSCICAg4pSc4pSA4pSAIHRvcm5hZG8gW3JlcXVpcmVkOiA+PTYuMiwgaW5z
+dGFsbGVkOiA2LjMuMl0KPiDilIIgICDilIIgICDilJTilIDilIAgdHJhaXRsZXRzIFtyZXF1aXJl
+ZDogPj01LjMsIGluc3RhbGxlZDogNS45LjBdCj4g4pSCICAg4pSc4pSA4pSAIGp1cHl0ZXItY29y
+ZSBbcmVxdWlyZWQ6ID49NC4xMiwhPTUuMC4qLCBpbnN0YWxsZWQ6IDUuMy4xXQo+IOKUgiAgIOKU
+giAgIOKUnOKUgOKUgCBwbGF0Zm9ybWRpcnMgW3JlcXVpcmVkOiA+PTIuNSwgaW5zdGFsbGVkOiAz
+LjguMV0KPiDilIIgICDilIIgICDilJTilIDilIAgdHJhaXRsZXRzIFtyZXF1aXJlZDogPj01LjMs
+IGluc3RhbGxlZDogNS45LjBdCj4g4pSCICAg4pSc4pSA4pSAIG1hdHBsb3RsaWItaW5saW5lIFty
+ZXF1aXJlZDogPj0wLjEsIGluc3RhbGxlZDogMC4xLjZdCj4g4pSCICAg4pSCICAg4pSU4pSA4pSA
+IHRyYWl0bGV0cyBbcmVxdWlyZWQ6IEFueSwgaW5zdGFsbGVkOiA1LjkuMF0KPiDilIIgICDilJzi
+lIDilIAgbmVzdC1hc3luY2lvIFtyZXF1aXJlZDogQW55LCBpbnN0YWxsZWQ6IDEuNS42XQo+IOKU
+giAgIOKUnOKUgOKUgCBwYWNrYWdpbmcgW3JlcXVpcmVkOiBBbnksIGluc3RhbGxlZDogMjEuM10K
+PiDilIIgICDilJzilIDilIAgcHN1dGlsIFtyZXF1aXJlZDogQW55LCBpbnN0YWxsZWQ6IDUuOS41
+XQo+IOKUgiAgIOKUnOKUgOKUgCBweXptcSBbcmVxdWlyZWQ6ID49MjAsIGluc3RhbGxlZDogMjUu
+MS4wXQo+IOKUgiAgIOKUnOKUgOKUgCB0b3JuYWRvIFtyZXF1aXJlZDogPj02LjEsIGluc3RhbGxl
+ZDogNi4zLjJdCj4g4pSCICAg4pSU4pSA4pSAIHRyYWl0bGV0cyBbcmVxdWlyZWQ6ID49NS40LjAs
+IGluc3RhbGxlZDogNS45LjBdCj4KPiBBY3R1YWxseSBJIGFtIGFsc28gbm90IHN1cmUgd2h5IHRo
+ZSBzeXN0ZW0gaXMgYXNraW5nIG1lIGZvciBoYXRjaGxpbmcgYXMgdGhlIHBhY2thZ2UgaXRzZWxm
+IGRvZXMgbm90IGRpcmVjdGx5IGRlcGVuZCBvbiBpdC4gSG93ZXZlciwgZm9yIHN1cmUgSSBuZWVk
+IHBhY2thZ2luZyBhbmQgcHlwYXJzaW5nLiBCdXQgbWF5YmUgdGhlIHByb2JsZW0gaXMgdGhhdCBJ
+IG1hZGUgYSBtaXN0YWtlIGFuZCB0cnkgdG8gYnVpbGQgYm90aCBvbiB0aGUgaG9zdCBhbmQgdGFy
+Z2V0IHN5c3RlbSBhbmQgd2hhdCBJIGFjdHVhbGx5IG5lZWQgdG8gZG8gaXMgdXNlIHRoZSBob3N0
+LXB5dGhvbi1oYXRjaGxpbmcgZm9yIHRoZSBQWVRIT05fKl9ERVBFTkRFTkNJRVMgPSBob3N0LXB5
+aHRvbi1oYXRjaGxpbmcgIGluc3RlYWQgb2YgdGhlIHRhcmdldCBvbmUuCgpJdCdzIGEgYnVpbGQg
+ZGVwZW5kZW5jeSwgc28geW91IGp1c3QgbmVlZCBob3N0LXB5dGhvbi1oYXRjaGxpbmcsIG5vdAp0
+YXJnZXQgcHl0aG9uLWhhdGNobGluZzoKaHR0cHM6Ly9naXRodWIuY29tL2lweXRob24vaXB5a2Vy
+bmVsL2Jsb2IvdjYuMjQuMC9weXByb2plY3QudG9tbCNMMgoKPgo+Pgo+PiA+Pgo+PiA+Pgo+PiA+
+PiA+IFBZVEhPTl9IQVRDSExJTkdfU09VUkNFID0gaGF0Y2hsaW5nLSQoUFlUSE9OX0hBVENITElO
+R19WRVJTSU9OKS50YXIuZ3oKPj4gPj4gPiBQWVRIT05fSEFUQ0hMSU5HX1NJVEUgPQo+PiA+PiA+
+IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy9lMy81Ny84N2RhMmM1YWRj
+MTczOTUwZWJlOWYxYWNjZTRkNWYyY2QwYTk2MDc4Mzk5MmZkNDg3OWE4OTlhMGI2MzcKPj4gPj4g
+PiBQWVRIT05fSEFUQ0hMSU5HX1NFVFVQX1RZUEUgPSBwZXA1MTcKPj4gPj4gPiBQWVRIT05fSEFU
+Q0hMSU5HX0xJQ0VOU0UgPSBNSVQKPj4gPj4gPiBQWVRIT05fSEFUQ0hMSU5HX0xJQ0VOU0VfRklM
+RVMgPSBMSUNFTlNFLnR4dAo+PiA+PiA+Cj4+ID4+ID4gUFlUSE9OX0hBVENITElOR19ERVBFTkRF
+TkNJRVMgPSBcCj4+ID4+ID4gcHl0aG9uLXRvbWxpIFwKPj4gPj4KPj4gPj4gICBJIHRoaW5rIHRo
+ZSBwcm9ibGVtIGlzIHRoYXQgcGVwNTE3IGNoZWNrcyBmb3IgdGhlIHByZXNlbmNlIG9mIHRvbWxp
+IGluIHRoZQo+PiA+PiBfaG9zdF8gZGlyZWN0b3J5LiBTbyB5b3UnZCBuZWVkIHRvIGFkZCBhIGRl
+cGVuZGVuY3kgb24gaG9zdC1weXRob24tdG9tbGkgaGVyZS4KPj4gPj4gSmFtZXMgaXMgbW9yZSBh
+d2FyZSBvZiB0aGVzZSB0aGluZ3Mgc28gSSBwdXQgaGltIGluIENjLgo+PiA+Cj4+ID4KPj4gPiBJ
+IHdpbGwgZmlyc3QgdHJ5IHRvIGFkZCB0aGUgaG9zdCBkZXBlbmRlbmN5IGFzIHlvdSBzdWdnZXN0
+ZWQgYmVsb3cgYW5kIHNlZSB3aGF0IGhhcHBlbnMuCj4+Cj4+IEkgdGhvdWdodCBvdXIgcGVwNTE3
+IGluZnJhc3RydWN0dXJlIHByaW9yIHRvIHVwZGF0aW5nIHRvIHB5dGhvbiAzLjExIHdvdWxkIHB1
+bGwKPj4gaW4gaG9zdC1weXRob24tdG9tbGkgYXV0b21hdGljYWxseShkdWUgdG8gaXQgYmVpbmcg
+YSBob3N0LXB5dGhvbi1mbGl0IGRlcGVuZGVuY3kKPj4gcHJpb3IgdG8gcHl0aG9uIDMuMTEpLiBJ
+J20gbm90IHN1cmUgaG93IHlvdSBjb3VsZCBiZSBnZXR0aW5nIGEgbWlzc2luZwo+PiB0b21saSBl
+cnJvcgo+PiBsaWtlIHRoaXMgaW4gdGhlIGZpcnN0IHBsYWNlIGFzIHdlIGRpZG4ndCByZW1vdmUg
+aG9zdC1weXRob24tdG9tbGkKPj4gZnJvbSBvdXIgcGVwNTE3Cj4+IGluZnJhc3RydWN0dXJlIGRl
+cGVuZGVuY3kgdHJlZSBwcmlvciB0byBweXRob24gYmVpbmcgdXBkYXRlZCB0byB2ZXJzaW9uIDMu
+MTEuCj4+Cj4KPiBJIG1heSBoYXZlIG1pc3NlZCBzb21lIGZpbGVzIGR1cmluZyB0aGUgbWlncmF0
+aW9uIHRoYXQgaXMgbm93IGNhdXNpbmcgdGhlIHByb2JsZW0uIFdoaWNoIGFyZSB0aGUgZm9sZGVy
+cyBpbiBidWlsZHJvb3QgdGhhdCBkZWFsIHdpdGggdGhlIHB5dGhvbiBpbmZyYXN0cnVjdHVyZSBJ
+IHNob3VsZCBjaGVjaz8KCldlbGwgdGhlIG1ha2VmaWxlIGZvciBvdXIgcHl0aG9uIGluZnJhc3Ry
+dWN0dXJlIGlzIGhlcmUsIGFsdGhvdWdoIHlvdQpwcm9iYWJseSBkb24ndCB3YW50CnRvIGJlIGNo
+YW5naW5nIHN0dWZmIHRoZXJlIHVubGVzcyB5b3Uga25vdyB3aGF0IHlvdSBhcmUgZG9pbmcgYXMg
+aXQncwpyYXRoZXIgY29tcGxleDoKaHR0cHM6Ly9naXRodWIuY29tL2J1aWxkcm9vdC9idWlsZHJv
+b3QvYmxvYi9tYXN0ZXIvcGFja2FnZS9wa2ctcHl0aG9uLm1rCgo+Cj4+Cj4+ID4KPj4gPj4KPj4g
+Pj4KPj4gPj4gPiBweXRob24tZWRpdGFibGVzIFwKPj4gPj4gPiBweXRob24tcGFja2FnaW5nIFwK
+Pj4gPj4gPiBweXRob24tcGF0aHNwZWMgXAo+PiA+PiA+IHB5dGhvbi1wbHVnZ3kgXAo+PiA+PiA+
+IHB5dGhvbi10cm92ZS1jbGFzc2lmaWVycwo+PiA+PiA+IEhPU1RfUFlUSE9OX0hBVENITElOR19E
+RVBFTkRFTkNJRVMgPSBcCj4+ID4+ID4gaG9zdC1weXRob24tdG9tbGkgXAo+PiA+PiA+IGhvc3Qt
+cHl0aG9uLWVkaXRhYmxlcyBcCj4+ID4+ID4gaG9zdC1weXRob24tcGFja2FnaW5nIFwKPj4gPj4g
+PiBob3N0LXB5dGhvbi1wYXRoc3BlYyBcCj4+ID4+ID4gaG9zdC1weXRob24tcGx1Z2d5IFwKPj4g
+Pj4gPiBob3N0LXB5dGhvbi10cm92ZS1jbGFzc2lmaWVycwo+PiA+PiA+Cj4+ID4+ID4gJChldmFs
+ICQocHl0aG9uLXBhY2thZ2UpKQo+PiA+PiA+ICQoZXZhbCAkKGhvc3QtcHl0aG9uLXBhY2thZ2Up
+KQo+PiA+PiA+Cj4+ID4+ID4gSSBkbyBoYXZlIGEgcHl0aG9uLXRvbWxpLm1rIDxodHRwOi8vcHl0
+aG9uLXRvbWxpLm1rPiBmaWxlIHRoZXJlZm9yZSBJIGFtCj4+ID4+ID4gY29uZnVzZWQgd2h5IEkg
+YW0gc2VlaW5nIHRoaXMgZXJyb3IuIElmIEkgcmVtb3ZlIHRoZSB0b21saSBkZXBlbmRlbmN5IGZy
+b20gdGhlCj4+ID4+ID4gcHlwcm9qZWN0LnRvbWwgZmlsZSBpbiBoYXRjaGxpbmcgKGluIG91dHB1
+dC9idWlsZC9weXRob24taGF0Y2hsaW5nLTEuMTguMCkKPj4gPj4gPiBtYW51YWxseSBpdCBjb250
+aW5vdWVzIHRoZSBidWlsZC4KPj4gPj4gPgo+PiA+PiA+IGRlcGVuZGVuY2llcyA9IFsKPj4gPj4g
+PiAgICAiZWRpdGFibGVzPj0wLjMiLAo+PiA+PiA+ICAgICJwYWNrYWdpbmc+PTIxLjMiLAo+PiA+
+PiA+ICAgICJwYXRoc3BlYz49MC4xMC4xIiwKPj4gPj4gPiAgICAicGx1Z2d5Pj0xLjAuMCIsCj4+
+ID4+ID4gICAgInRvbWxpPj0xLjIuMjsgcHl0aG9uX3ZlcnNpb24gPCAnMy4xMSciLAo+PiA+PiA+
+ICAgICJ0cm92ZS1jbGFzc2lmaWVycyIsCj4+ID4+ID4gXQo+PiA+PiA+Cj4+ID4+ID4gTXkgaW1w
+cmVzc2lvbiBpcyB0aGF0IG15IGN1cnJlbnQgYnVpbGRyb290IHNldHVwIGhhcyBhIHByb2JsZW0g
+dG8gcHJvcGVybHkKPj4gPj4gPiBpbnRlcnByZXQgdGhlIGxpbmUgYCAidG9tbGk+PTEuMi4yOyBw
+eXRob25fdmVyc2lvbiA8ICczLjExJyJgIG1heWJlIGJlY2F1c2Ugb2YKPj4gPj4gPiBhbiBvdXRk
+YXRlZCBwYWNrYWdlIHRoYXQgSSBhbSBub3QgYXdhcmUgb2YuCj4+ID4+Cj4+ID4+ICAgSSB0aGlu
+ayB0aGlzIHdheSBvZiBleHByZXNzaW5nIHZlcnNpb24tZGVwZW5kZW50IGRlcGVuZGVuY2llcyBp
+cyBhbHJlYWR5Cj4+ID4+IHByZXR0eSBvbGQsIGFuZCBjZXJ0YWlubHkgcHJlZGF0ZXMgdGhlIHBl
+cDUxNyBpbmZyYXN0cnVjdHVyZSBpbiBCdWlsZHJvb3QsIHNvCj4+ID4+IEknZCBiZSBzdXJwcmlz
+ZWQgaWYgdGhpcyB3ZXJlIHRoZSBjYXNlLgo+PiA+Cj4+ID4KPj4gPiBXZWxsIHRoYXQgaXMgaG93
+IHRoZSBkZXBlbmRlbmN5IGlzIGRlZmluZWQgaW4gaGF0Y2hsaW5nIGRlZmluZWQgaXQgKHNlZSBo
+ZXJlIGh0dHBzOi8vZ2l0aHViLmNvbS9weXBhL2hhdGNoL2Jsb2IvbWFzdGVyL2JhY2tlbmQvcHlw
+cm9qZWN0LnRvbWwpCj4+Cj4+IFllYWgsIGl0IHNob3VsZCB3b3JrIGZpbmUsIHdlIGRpZG4ndCBo
+YXZlIHRvIGFkZCBhIGhvc3QtcHl0aG9uLXRvbWxpIGRlcGVuZGVuY3kKPj4gd2hlbiBJIGFkZGVk
+IGhvc3QtcHl0aG9uLWhhdGNobGluZy4KPj4KPj4gaHR0cHM6Ly9naXRodWIuY29tL2J1aWxkcm9v
+dC9idWlsZHJvb3QvY29tbWl0LzYyNmM1YmVkYWE3ZTE0NjFkZDM3NDc1NjJiOWMwNGRkNDA3MTNj
+ODMKPgo+Cj4gVGhhbmtzIEkgd2lsbCBjaGVja291dCB0aGlzIGxpbmsuCj4gRllBIHByaW9yIGFk
+ZGluZyB0aGUgaXB5a2VybmVsIHBhY2thZ2UgZXZlcnl0aGluZyBidWlsdCBqdXN0IGZpbmUgdGVs
+bGluZyBtZSB0aGF0IG15IG1pZ3JhdGlvbiBzaG91bGQgYmUgT0sgYW5kIGl0cyBqdXN0IHRoZXNl
+IHBhY2thZ2VzIHRoYXQgY2hhbGxlbmdlIG1lLgoKU28gaXB5a2VybmVsIHNlZW1zIHRvIGhhdmUg
+YSBwcmV0dHkgbGFyZ2UgZGVwZW5kZW5jeSB0cmVlLCBJJ2QKcmVjb21tZW5kIHN1Ym1pdHRpbmcK
+cGF0Y2hlcyBhZGRpbmcgaXQgdG8gdXBzdHJlYW0gYnVpbGRyb290IHRvIHNpbXBsaWZ5IG1pZ3Jh
+dGlvbnMgaW4gdGhlCmZ1dHVyZSBhcyBpdCBzaG91bGQKdGhlbiBiZW5lZml0IGZyb20gY29tbXVu
+aXR5IHRlc3RpbmcuCgo+Cj4gUmVncmFkcywKPiBBbmRyZWFzCj4KPj4KPj4KPj4gPgo+PiA+Pgo+
+PiA+PiAgIFJlZ2FyZHMsCj4+ID4+ICAgQXJub3V0Cj4+ID4+Cj4+ID4+ID4gQW55IGlkZWEgaG93
+IHRvIGFkZHJlc3MgdGhpcyBpc3N1ZQo+PiA+PiA+IGFuZCBob3cgdG8gZGVidWcgc3VjaCBhbiBl
+cnJvciBpbiBidWlsZHJvb3QgaW4gZnV0dXJlPyBJIGFscmVhZHkgY2hlY2tlZCB0aGUKPj4gPj4g
+PiBtYW51YWwsIGVzcGVjaWFsbHkgdGhlIHNlY3Rpb24gZm9yIHB5dGhvbiBwYWNrYWdlcy4KPj4g
+Pj4gPgo+PiA+PiA+IFJlZ2FyZHMsCj4+ID4+ID4gQW5kcmVhcwo+PiA+PiA+Cj4+ID4+ID4KPj4g
+Pj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+
+PiA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPj4gPj4gPiBidWlsZHJvb3RAYnVpbGRyb290Lm9y
+Zwo+PiA+PiA+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
