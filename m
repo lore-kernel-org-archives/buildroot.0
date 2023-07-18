@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE73EB64DA
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 13:59:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89A22EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 16:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8192402AF;
-	Tue, 18 Jul 2023 13:59:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8192402AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23A3541744;
+	Tue, 18 Jul 2023 16:23:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23A3541744
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VEhGQeEWYX5D; Tue, 18 Jul 2023 13:59:21 +0000 (UTC)
+	with ESMTP id H0oGzfqY_UNX; Tue, 18 Jul 2023 16:23:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BACB5401D0;
-	Tue, 18 Jul 2023 13:59:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BACB5401D0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6A5531BF20B
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 13:59:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0752641740;
+	Tue, 18 Jul 2023 16:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0752641740
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 506BA1BF46D
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 16:23:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 432D460BE4
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 13:59:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 432D460BE4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28AE041740
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 16:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28AE041740
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q729pfYJF7dO for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 13:59:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5nK_p93inaog for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 16:23:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CB6660BBD
- for <buildroot@uclibc.org>; Tue, 18 Jul 2023 13:59:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CB6660BBD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C6DF4173B
+ for <buildroot@uclibc.org>; Tue, 18 Jul 2023 16:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C6DF4173B
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 58FC5825E2; Tue, 18 Jul 2023 13:59:17 +0000 (UTC)
+ id 1744586B7D; Tue, 18 Jul 2023 16:23:01 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Tue, 18 Jul 2023 13:59:16 +0000
+Date: Tue, 18 Jul 2023 16:23:00 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2023.05.1
+X-Bugzilla-Component: Outdated package
+X-Bugzilla-Version: 2023.02.3
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: glscene2010@gmail.com
+X-Bugzilla-Who: jkoch@outrider.ai
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -56,13 +56,13 @@ X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone attachments.created
-Message-ID: <bug-15700-163@https.bugs.busybox.net/>
+ target_milestone
+Message-ID: <bug-15703-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15700] New: ./include/mount-api-utils.h:11:10:
- fatal error: linux/mount.h: No such file
+Subject: [Buildroot] [Bug 15703] New: Resolve sgdisk UUID warning in
+ gptfdisk package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,45 +79,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15700
+https://bugs.busybox.net/show_bug.cgi?id=15703
 
-            Bug ID: 15700
-           Summary: ./include/mount-api-utils.h:11:10: fatal error:
-                    linux/mount.h: No such file
+            Bug ID: 15703
+           Summary: Resolve sgdisk UUID warning in gptfdisk package
            Product: buildroot
-           Version: 2023.05.1
+           Version: 2023.02.3
           Hardware: All
                 OS: Linux
             Status: NEW
           Severity: normal
           Priority: P5
-         Component: Other
+         Component: Outdated package
           Assignee: unassigned@buildroot.uclibc.org
-          Reporter: glscene2010@gmail.com
+          Reporter: jkoch@outrider.ai
                 CC: buildroot@uclibc.org
   Target Milestone: ---
 
-Created attachment 9625
-  --> https://bugs.busybox.net/attachment.cgi?id=9625&action=edit
-Buildroot with util-linux config examples and logs
+When using any option that generates a random UUID using sgdisk (e.g. sgdisk -G
+/dev/sda) you are presented with the warning:
+Warning! Unable to generate a proper UUID! Creating an improper one as a last
+resort! Windows 7 may crash if you save this partition table!
 
-In my .config file I use
-BR2_PACKAGE_UTIL_LINUX=y
-because of it I have build fail on old kernels (4.19.269; 5.4.179). On kernel
-5.10.19 and 6.1.26 works ok.
-Looks like old kernel should use old util-linux (more old then v2.39)?
+This appears to stem from a change in libuuid where a #define was changed:
+https://github.com/util-linux/util-linux/commit/10f5f79485964ab52272ebe79c3b0047b1f84d82
 
-Steps to Reproduce:
-git clone https://git.buildroot.net/buildroot && cd buildroot
-[Put my files to buildroot/configs/]
-make clean
-make pc_x86_bios_defconfig_4_19_269
-make
-
-Build Date & Hardware
-I use last buildroot from git (a89a632833dca00beb7443ef540571b281703ae1).
-18 Jul 2023. Ubuntu 22 5.19.0-46-generic
-See my config files and corresponding logs.
+Upstream gptfdisk has resolved this issue on 2022-04-16 (and a few others
+since) but these patches haven't yet made it into the buildroot package.
+Upstream commit:
+https://sourceforge.net/p/gptfdisk/code/ci/6a8416cbd12d55f882bb751993b94f72d338d96f/
 
 -- 
 You are receiving this mail because:
