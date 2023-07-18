@@ -4,66 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15876EB64DD
-	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 18:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7E40EB64DC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Jul 2023 18:33:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B421D4015E;
-	Tue, 18 Jul 2023 18:33:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B421D4015E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72EC34015E;
+	Tue, 18 Jul 2023 18:33:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72EC34015E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2VI0ncKldq_T; Tue, 18 Jul 2023 18:33:13 +0000 (UTC)
+	with ESMTP id W-WwcrRFvQvh; Tue, 18 Jul 2023 18:33:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 586304010C;
-	Tue, 18 Jul 2023 18:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 586304010C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42A8E4023F;
+	Tue, 18 Jul 2023 18:33:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A8E4023F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1004D1BF333
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 18:33:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BBDB61BF333
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 18:33:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDC5E405A0
- for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 18:33:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDC5E405A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95D6740491
+ for <buildroot@lists.busybox.net>; Tue, 18 Jul 2023 18:33:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95D6740491
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E9hcxRcOYwM1 for <buildroot@lists.busybox.net>;
- Tue, 18 Jul 2023 18:33:08 +0000 (UTC)
+ with ESMTP id IkxQVqbKs09v for <buildroot@lists.busybox.net>;
+ Tue, 18 Jul 2023 18:33:20 +0000 (UTC)
 X-Greylist: from auto-whitelisted by SQLgrey-1.8.0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4381414B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A2E940328
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D4381414B7
- for <buildroot@buildroot.org>; Tue, 18 Jul 2023 18:33:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9A2E940328
+ for <buildroot@buildroot.org>; Tue, 18 Jul 2023 18:33:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C0DC3A4C0FE1;
- Tue, 18 Jul 2023 20:32:38 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id CEA08A4C0FEB;
+ Tue, 18 Jul 2023 20:32:39 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:42438)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qLpV0-0004TJ-1l;
+ (envelope-from <bernd@kuhls.net>) id 1qLpV0-0004TJ-2A;
  Tue, 18 Jul 2023 20:32:38 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 18 Jul 2023 20:32:35 +0200
-Message-Id: <20230718183238.688311-1-bernd@kuhls.net>
+Date: Tue, 18 Jul 2023 20:32:37 +0200
+Message-Id: <20230718183238.688311-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230718183238.688311-1-bernd@kuhls.net>
+References: <20230718183238.688311-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1689705158;
- bh=yb5Peyg+qTBrmVJDEPBUTKqbLGSLgwscz5vWvISJvjY=;
- h=From:To:Cc:Subject:Date:From;
- b=gqrfVR4WbxzCF4RwPEbhwtO2eCdYcU7UkCm6cpoUUyvAFYOOt55UXwfos0w2bMyb0
- 21vJA6IJaSbt3f33PpkdrKIQKUoAtuF9kQ2lrql7GCZgZTbYRVXURM8HwWu88MFR+a
- xje3BUU70kTyweKEf2/tPqpVMEFyaDgiclzjpVL7fKMTGDyMl3ApeG+Csbl5Fn4g5L
- sQCcqjkrwLKzuhS3hh7fh+bhQrUM95Jgr1AJ26rJSebyqi/9DyjwaPlwkIVuUcuIww
- fECm9S1eDGJ818chGagYfllWtZiNpv7BGeChThiW8rZ6QrZf1tlHl/9k5SZQMyevyR
- /dqyALemDFcNQ==
+ s=kas202306131828; t=1689705159;
+ bh=lGCRQF2uJJGeDs7s4NSlXKk4NdXlUXdHu+1h6z6p+JE=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=NEaBDtBSa5+lzWLDFZlTuxQHPePM1Q+eabKfSJnIjq74ix88KOSw2TyMUOILbB8q2
+ 4sunyQ8nHqNIakRoxcCUPwG2Wmex70Sg1YisvmBVN/vyUbEB22RVe3ldhAToL36KuA
+ i8AF5tleB7IKBORPlwQGcKRgPFouqR8RjSq98wNovmQ/6UjgnCyiCUvv658ws5i2yl
+ BKDdPJwQoQxdQXFjDnrinhUUHilv1pvwtiq70W8vr1VnLnS+uG3HBPTQDXsKpJ9Sg7
+ wouZ0A+3x+7u8jPtglOCVOGBx5X4h7xaQCarr3zxZiXYACKzJKTOMYHAm+KZE4I8bQ
+ xtu4Qmbp/CzsQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=gqrfVR4W
-Subject: [Buildroot] [PATCH v2 1/4] package/libwpe: bump version to 1.15.1
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=NEaBDtBS
+Subject: [Buildroot] [PATCH v2 3/4] package/webkitgtk: bump version to 2.40.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,50 +83,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed md5 hash.
-
-Release notes:
-1.14.1
-- https://lists.webkit.org/pipermail/webkit-wpe/2023-February/000574.html
-1.15.1
-- https://lists.webkit.org/pipermail/webkit-wpe/2023-May/000595.html
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 v2: no changes
 
- package/libwpe/libwpe.hash | 7 +++----
- package/libwpe/libwpe.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 7 +++----
+ package/webkitgtk/webkitgtk.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-index 28b7685b93..226b4f3295 100644
---- a/package/libwpe/libwpe.hash
-+++ b/package/libwpe/libwpe.hash
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 3bc521e445..756ac13ec2 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
 @@ -1,7 +1,6 @@
--# From https://wpewebkit.org/releases/libwpe-1.14.0.tar.xz.sums
--md5  f9737912975f979f9e4e01eec174a271  libwpe-1.14.0.tar.xz
--sha1  7a5d51c99254fc14ffcbcca9e8550cc7940fe871  libwpe-1.14.0.tar.xz
--sha256  c073305bbac5f4402cc1c8a4753bfa3d63a408901f86182051eaa5a75dd89c00  libwpe-1.14.0.tar.xz
-+# From https://wpewebkit.org/releases/libwpe-1.15.1.tar.xz.sums
-+sha1  0082ceb475175bfecd1172f2c0b292824d31561b  libwpe-1.15.1.tar.xz
-+sha256  14d36a93a05ab7ada9bec581720b8057336fe681bbbe59bda7d50cb8f3eba3a6  libwpe-1.15.1.tar.xz
+-# From https://webkitgtk.org/releases/webkitgtk-2.38.6.tar.xz.sums
+-md5  a50290fdc80842b1ae8be1e1147b5679  webkitgtk-2.38.6.tar.xz
+-sha1  4dfb3d96f621fc633ff347e083e429893551fb26  webkitgtk-2.38.6.tar.xz
+-sha256  1c614c9589389db1a79ea9ba4293bbe8ac3ab0a2234cac700935fae0724ad48b  webkitgtk-2.38.6.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.40.3.tar.xz.sums
++sha1  74ee7241f2add46897019e22bd4f8e19e09027bb  webkitgtk-2.40.3.tar.xz
++sha256  cc0aa83f40dbc64c1c6ae42ec6b85af4be2a9dbf524cfcb95f89a367fb5098dd  webkitgtk-2.40.3.tar.xz
  
  # Hashes for license files:
- sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-index e7b3ce9eaf..f8c6b0fc76 100644
---- a/package/libwpe/libwpe.mk
-+++ b/package/libwpe/libwpe.mk
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index dd17b46e67..56277a0a0a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBWPE_VERSION = 1.14.0
-+LIBWPE_VERSION = 1.15.1
- LIBWPE_SITE = https://wpewebkit.org/releases
- LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- LIBWPE_INSTALL_STAGING = YES
+-WEBKITGTK_VERSION = 2.38.6
++WEBKITGTK_VERSION = 2.40.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+@@ -13,7 +13,7 @@ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-APPLE \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+ WEBKITGTK_CPE_ID_VENDOR = webkitgtk
+-WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf \
++WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
+ 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+ WEBKITGTK_CONF_OPTS = \
+@@ -24,6 +24,7 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_SPELLCHECK=ON \
+ 	-DENABLE_WEB_RTC=OFF \
+ 	-DPORT=GTK \
++	-DUSE_AVIF=OFF \
+ 	-DUSE_LIBHYPHEN=OFF \
+ 	-DUSE_OPENJPEG=ON \
+ 	-DUSE_SOUP2=ON \
 -- 
 2.39.2
 
