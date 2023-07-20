@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA86EEB64DD
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:10:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25E03EB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:10:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 664586128E;
-	Thu, 20 Jul 2023 21:10:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 664586128E
+	by smtp3.osuosl.org (Postfix) with ESMTP id D38F0607B0;
+	Thu, 20 Jul 2023 21:10:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D38F0607B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tLXJI8_8OcEl; Thu, 20 Jul 2023 21:10:35 +0000 (UTC)
+	with ESMTP id AzpvWkZaBs_3; Thu, 20 Jul 2023 21:10:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 96D146129E;
-	Thu, 20 Jul 2023 21:10:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96D146129E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98C781BF980
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1158860806;
+	Thu, 20 Jul 2023 21:10:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1158860806
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BA5091BF982
  for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7246041E2E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 950B682B21
  for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7246041E2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 950B682B21
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 26pze5fY2HWt for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LN-PTqUYhbAr for <buildroot@lists.busybox.net>;
  Thu, 20 Jul 2023 21:10:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E54C41DB0
+ by smtp1.osuosl.org (Postfix) with ESMTP id C45AF82ADD
  for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E54C41DB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C45AF82ADD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 676FC8742E; Thu, 20 Jul 2023 21:10:19 +0000 (UTC)
+ id B49FB874A8; Thu, 20 Jul 2023 21:10:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Jul 2023 23:07:39 +0200
+Date: Thu, 20 Jul 2023 23:07:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d8291fde5ee19fd475953f41d9c519e817554d6b
-X-Git-Newrev: 4c24761f77f18b53008201cb53cb0fdd82143103
+X-Git-Oldrev: 6e20bcb1b009cc9de8c35d452993fc680a1f8435
+X-Git-Newrev: c04fb64a77832344d4cf615388251225be5c87f8
 X-Patchwork-Hint: ignore
-Message-Id: <20230720211019.676FC8742E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/erlang-eimp: bump version to 1.0.22
+Message-Id: <20230720211019.B49FB874A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-p1-oauth2: bump version to
+ 0.6.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c24761f77f18b53008201cb53cb0fdd82143103
+commit: https://git.buildroot.net/buildroot/commit/?id=c04fb64a77832344d4cf615388251225be5c87f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog:
-https://github.com/processone/eimp/blob/master/CHANGELOG.md
+https://github.com/processone/p1_oauth2/blob/master/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-eimp/erlang-eimp.hash | 2 +-
- package/erlang-eimp/erlang-eimp.mk   | 2 +-
+ package/erlang-p1-oauth2/erlang-p1-oauth2.hash | 2 +-
+ package/erlang-p1-oauth2/erlang-p1-oauth2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-eimp/erlang-eimp.hash b/package/erlang-eimp/erlang-eimp.hash
-index 5845815c60..26e8addd2d 100644
---- a/package/erlang-eimp/erlang-eimp.hash
-+++ b/package/erlang-eimp/erlang-eimp.hash
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
+index 7a0304e86a..ac87485d5b 100644
+--- a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  25e4e1178280d6fb98ee5e582ade393f7c5404c546638bcde86a6ebcb6757d90  erlang-eimp-1.0.21.tar.gz
-+sha256  7023b86bc7cf3551fd876a1361ceb2443bdf1c1be9f98a4d9a9a90eda3353b51  erlang-eimp-1.0.22.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-eimp/erlang-eimp.mk b/package/erlang-eimp/erlang-eimp.mk
-index 27bb2203c2..68d0d9e9ed 100644
---- a/package/erlang-eimp/erlang-eimp.mk
-+++ b/package/erlang-eimp/erlang-eimp.mk
+-sha256  625e6d96a212cc2cf8a63c36ee698072791d85acbaae18e5820ba144cdaca869  erlang-p1-oauth2-0.6.10.tar.gz
++sha256  2a33d96ab007b77759f48613a65794351569e7d2d800700b71e50448eed0e3b8  erlang-p1-oauth2-0.6.11.tar.gz
+ sha256  0ecddd0a5e35b7fcdab451f54c5bb688fac8365cdf6b0da0ac64b7895a0770f3  LICENSE
+diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
+index 50ac9fbda5..b01a391963 100644
+--- a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
++++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_EIMP_VERSION = 1.0.21
-+ERLANG_EIMP_VERSION = 1.0.22
- ERLANG_EIMP_SITE = $(call github,processone,eimp,$(ERLANG_EIMP_VERSION))
- ERLANG_EIMP_LICENSE = Apache-2.0
- ERLANG_EIMP_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_OAUTH2_VERSION = 0.6.10
++ERLANG_P1_OAUTH2_VERSION = 0.6.11
+ ERLANG_P1_OAUTH2_SITE = $(call github,processone,p1_oauth2,$(ERLANG_P1_OAUTH2_VERSION))
+ ERLANG_P1_OAUTH2_LICENSE = MIT
+ ERLANG_P1_OAUTH2_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
