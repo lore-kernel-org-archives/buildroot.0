@@ -4,69 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4882C0015E
-	for <buildroot@archiver.kernel.org>; Wed, 19 Jul 2023 22:01:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7CE2C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 02:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D17A404B4;
-	Wed, 19 Jul 2023 22:01:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D17A404B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47504405BF;
+	Thu, 20 Jul 2023 02:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47504405BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mqi2c4lqp_-0; Wed, 19 Jul 2023 22:01:42 +0000 (UTC)
+	with ESMTP id tmCknCVXR_wx; Thu, 20 Jul 2023 02:13:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DD624063C;
-	Wed, 19 Jul 2023 22:01:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DD624063C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B23D41BF34E
- for <buildroot@lists.busybox.net>; Wed, 19 Jul 2023 22:01:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 34A2E400D2;
+	Thu, 20 Jul 2023 02:13:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34A2E400D2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 579751BF296
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 02:13:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8AC1080B34
- for <buildroot@lists.busybox.net>; Wed, 19 Jul 2023 22:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AC1080B34
+ by smtp4.osuosl.org (Postfix) with ESMTP id 364F64049F
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 02:13:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 364F64049F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XYliPrfsNCYG for <buildroot@lists.busybox.net>;
- Wed, 19 Jul 2023 22:01:38 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC93680B22
- for <buildroot@buildroot.org>; Wed, 19 Jul 2023 22:01:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC93680B22
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id A76BB13F8AA;
- Thu, 20 Jul 2023 00:01:32 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:60844])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 20 Jul 2023 00:01:32 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cq0hS6OR8b9k for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 02:13:06 +0000 (UTC)
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6C12D41B3E
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 02:13:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C12D41B3E
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-4fdd7d09576so423699e87.0
+ for <buildroot@buildroot.org>; Wed, 19 Jul 2023 19:13:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1689819184; x=1692411184;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=n7Ug25qkndWKoe8EwApZEpNH4lfwmkLXRfnX/kRZT50=;
+ b=GXKQrSfRIIkN03h30jH//bdwDVZGefDyHRp7OZ58srCKtUGL33Fza9JzszQN1X163m
+ VO9Kqn9xOTRdzMLrRiiygKw+QYrIMYH9SypolIxgP4XjKiC3+LqpzG8QDyABt0QZisuK
+ g8arx+aWfTdmZE3V4/Ee5FUrnHysKlZ2XfS3Pnv3fpeLYe57TyvEvMGM4wRwNe4gKsuW
+ Jx5Z/5vvC37Gb1o/XjzG17lApey3uA+WkXQa44T/JZEPPVqeikW3c8gMNadKh2W/DGJC
+ +mryi4YS8gZYH6xfvyHyW97StugQXZ9qGtP0SUqivJIi9QWPAFm/UjfFKABVwi2Ns8Zc
+ bVHQ==
+X-Gm-Message-State: ABy/qLay1qCb5Pz+7U9bI8sneLezdpptUgKbw2aj1OeWCLcKhDCnA44U
+ 643R9wYnEknLICb0/JVYuwj+f1cN6ZcP9ciENro=
+X-Google-Smtp-Source: APBJJlGFuf5vWwWZaYu4tXrahoqA1qsj3QmljescxUYpf6s03zQEC3rtdtRW2JMoEzVW3a8YrVPvoZi7fHEcqypLneA=
+X-Received: by 2002:a19:4341:0:b0:4ef:ed49:fcc2 with SMTP id
+ m1-20020a194341000000b004efed49fcc2mr1055737lfj.26.1689819183263; Wed, 19 Jul
+ 2023 19:13:03 -0700 (PDT)
 MIME-Version: 1.0
-Date: Thu, 20 Jul 2023 00:01:32 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <5bc01545-1fda-3cc0-1b56-922d29b55996@smile.fr>
-References: <20230530200728.12239-1-ju.o@free.fr> <ZHicLZXBbEKasztN@debian>
- <5bc01545-1fda-3cc0-1b56-922d29b55996@smile.fr>
-User-Agent: Webmail Free/1.6.1
-Message-ID: <fc5db520f19d5bcdca9faba0b9be88fd@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1689804094;
- bh=PedJGG3a2cmkcsKlb2UNaiIc/Wqpy4p+v/AU4Wziavo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=rlH5Uv+zlQW+2aoMekDHqLKLZGg6kKwUlDw1OZcFomEVPJtk/aL8NDPZX6srS1GtZ
- 0GDS+OPbpP+QyPkjGUYpbFov0JQlw+bAo9zElaPBxzkB3bpB79cGcKUaz8oRvR1iJs
- iWcsnNqws1HR1zab2JKUqz90OpmUDPiSZbJKCUuldG/Hv238cG/k56dHl2HwqKrjHd
- 6eMpowaK8wGZQ8x/Ke/xsuXLIMljA8Xgwv7eUQSoRFE8m6u/iAkz5/gfmVsQoVGLiB
- GKSgA8+AK6G4p/xiXvGRDfm7O46g43BhUmeTboOqeBj7ylZqpSyQsp1vftOVomobTc
- G991WcUnr84FQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=rlH5Uv+z
-Subject: Re: [Buildroot] [PATCH 1/3] boot/edk2: bump to version
- edk2-stable202305
+References: <CAFSsvmqOZCu+nRz4Ym-h1zHV53BEgdGkLahXpaiDu=-T17qNpA@mail.gmail.com>
+ <20230717183817.GA1080294@scaer> <20230717191652.GB1080294@scaer>
+ <CAFSsvmoK-GD-Vn9f1D2ANKGnU=eVRbhCFygpszChyBVawXdQ-A@mail.gmail.com>
+ <CAFSsvmrujPQneF4QLQXBYP12HAER=9BLzQmUeDLCvi-L97=3Kw@mail.gmail.com>
+In-Reply-To: <CAFSsvmrujPQneF4QLQXBYP12HAER=9BLzQmUeDLCvi-L97=3Kw@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 19 Jul 2023 19:12:52 -0700
+Message-ID: <CAFSsvmpqsgr3gczTX1S7TgJzjYGHtRysLaw-CjjTKLG21S2xHg@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, 
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1689819184; x=1692411184;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=n7Ug25qkndWKoe8EwApZEpNH4lfwmkLXRfnX/kRZT50=;
+ b=WDf8L7o+mY4OFuQgpVAOmRY/i5RYQoLW+suAOrB0ckgg8lcm5NRfwN/0GlThQyN9u/
+ FXAENVYezOj1nU/ZbeACNibn88H1oClKaYdWvHX/RRjuwEea5s6mQ0m0bttfqBM75C7O
+ zJjPxFsHmbs18zsJfBx5d0qnYNATaNpCDgH79ea1mhTWsIz74f3M75OvcsAVw2lk6c/6
+ luASXbvNwrmbDjPVPQe2Yjbwzr3UPj37fPf5Je9ZQyFLFgdYxKofc2as9veMKUtmA1f0
+ On0m+KiHU2mLYTHGtFCtxvm9eE5Dn4rPlBFcCBEEK9yhYHzS+myvLVcQcDYu8UOLNY1U
+ Uibg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=WDf8L7o+
+Subject: Re: [Buildroot] Flutter-engine package help wanted.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,100 +93,240 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Luca Ceresoli <luca@lucaceresoli.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============3804255476930399971=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgUm9tYWluLCBBbGwsCgpPbiAxOC8wNy8yMDIzIDIzOjU3LCBSb21haW4gTmFvdXIgd3JvdGU6
-Cj4gSGVsbG8gSnVsaWVuLCBWaW5jZW50LCBBbGwsCj4gCj4gTGUgMDEvMDYvMjAyMyDDoCAxNToy
-NSwgVmluY2VudCBTdGVobMOpIGEgw6ljcml0wqA6Cj4+IE9uIFR1ZSwgTWF5IDMwLCAyMDIzIGF0
-IDEwOjA3OjI2UE0gKzAyMDAsIEp1bGllbiBPbGl2YWluIHdyb3RlOgo+Pj4gRm9yIGNoYW5nZSBs
-b2cgc2luY2UgdmVyc2lvbiBlZGsyLXN0YWJsZTIwMjIwOCwgc2VlOgo+Pj4gLSBodHRwczovL2dp
-dGh1Yi5jb20vdGlhbm9jb3JlL2VkazIvcmVsZWFzZXMvdGFnL2VkazItc3RhYmxlMjAyMjExCj4+
-PiAtIGh0dHBzOi8vZ2l0aHViLmNvbS90aWFub2NvcmUvZWRrMi9yZWxlYXNlcy90YWcvZWRrMi1z
-dGFibGUyMDIzMDIKPj4+IC0gaHR0cHM6Ly9naXRodWIuY29tL3RpYW5vY29yZS9lZGsyL3JlbGVh
-c2VzL3RhZy9lZGsyLXN0YWJsZTIwMjMwNQo+Pj4gCj4+PiBUaGUgbWFpbiBtb3RpdmF0aW9uIG9m
-IHRoaXMgYnVtcCBpcyB0aGUgUklTQy1WIFFFTVUgVmlydCBzdXBwb3J0Cj4+PiBpbnRyb2R1Y2Vk
-IGluIGVkazItc3RhYmxlMjAyMzAyIChub3QgeWV0IHN1cHBvcnRlZCBpbiBCdWlsZHJvb3QpLgo+
-Pj4gCj4+PiBDYzogRGljayBPbHNzb24gPGhpQHNlbnppbGxhLmlvPgo+Pj4gQ2M6IFZpbmNlbnQg
-U3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNvbT4KPj4+IFNpZ25lZC1vZmYtYnk6IEp1bGll
-biBPbGl2YWluIDxqdS5vQGZyZWUuZnI+Cj4+PiAtLS0KPj4+IFBhdGNoIHNlcmllcyB0ZXN0ZWQg
-b24gYnJhbmNoIG1hc3RlciBhdCBjb21taXQgYzc2NWFjOSB3aXRoIGNvbW1hbmRzOgo+Pj4gCj4+
-PiAgICAgdXRpbHMvZG9ja2VyLXJ1biBtYWtlIGNoZWNrLXBhY2thZ2UKPj4+ICAgICAuLi4KPj4+
-ICAgICAwIHdhcm5pbmdzIGdlbmVyYXRlZAo+Pj4gCj4+PiAgICAgc3VwcG9ydC90ZXN0aW5nL3J1
-bi10ZXN0cyBcCj4+PiAgICAgICAgIC1kIGRsIC1vIG91dHB1dF9mb2xkZXIgXAo+Pj4gICAgICAg
-ICB0ZXN0cy5ib290LnRlc3RfZWRrMgo+Pj4gICAgIC4uLgo+Pj4gICAgIE9LCj4+PiAKPj4+ICAg
-ICBtYWtlIHFlbXVfYWFyY2g2NF9zYnNhX2RlZmNvbmZpZwo+Pj4gICAgIG1ha2UKPj4+ICAgICAu
-Li4KPj4+ICAgICBvdXRwdXQvaW1hZ2VzL3N0YXJ0LXFlbXUuc2gKPj4+ICAgICAuLi4KPj4+ICAg
-ICBidWlsZHJvb3QgbG9naW46Cj4+IAo+PiBIaSBKdWxpZW4sCj4+IAo+PiBUaGFua3MgZm9yIHRo
-b3NlIHBhdGNoZXMhCj4+IAo+PiBJIGRpZCB0ZXN0IHRoZSBmb2xsb3dpbmcgb24gbXkgc2lkZSB3
-aXRob3V0IGlzc3VlOgo+PiAKPj4gICBxZW11X2FhcmNoNjRfc2JzYV9kZWZjb25maWcKPj4gICB0
-ZXN0cy5ib290LnRlc3RfZWRrMi5UZXN0RWRrMgo+PiAgIHRlc3RzLmJvb3QudGVzdF9ncnViLlRl
-c3RHcnViQUFyY2g2NEVGSQo+PiAgIHRlc3RzLmJvb3QudGVzdF9ncnViLlRlc3RHcnViWDg2NjRF
-RkkKPj4gICB0ZXN0cy5ib290LnRlc3RfZ3J1Yi5UZXN0R3J1YmkzODZFRkkKPj4gICB0ZXN0cy5m
-cy50ZXN0X2lzbzk2NjAuVGVzdElzbzk2NjBHcnViMkVGSQo+PiAgIHRlc3RzLmZzLnRlc3RfaXNv
-OTY2MC5UZXN0SXNvOTY2MEdydWIySHlicmlkCj4gCj4gVGhhbmtzIGZvciB0ZXN0aW5nIGJ1dCBz
-b21lIHRlc3QgaW4gZ2l0bGFiLWNpIGRvZXNuJ3QgYm9vdCBzaW5jZSB0aGlzIAo+IHBhdGNoIGhh
-cwo+IGJlZW4gYXBwbGllZDoKPiAKPiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9i
-dWlsZHJvb3QvLS9qb2JzLzQ2NjQ4NDU4NjUKPiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290
-Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzQ2NjQ4NDU4NjEKPiBodHRwczovL2dpdGxhYi5jb20vYnVp
-bGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzQ2NjQ4NDU3NzcKPiBodHRwczovL2dpdGxhYi5j
-b20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9qb2JzLzQ2NjQ4NDU3NzMKPiAKPiAiU3lzdGVt
-RXJyb3I6IFN5c3RlbSBkb2VzIG5vdCBib290Igo+IAo+IEkgcmVwcm9kdWNlZCBsb2NhbGx5IHdp
-dGggInRlc3RzLmJvb3QudGVzdF9ncnViLlRlc3RHcnViWDg2NjRFRkkiIHRoZW4gCj4gSQo+IHJl
-dmVydGVkIHRoaXMgY29tbWl0IHRvIGJvb3QgY29ycmVjdGx5Lgo+IAo+IFRoZXJlIGlzIG5vIHVz
-ZWZ1bCBsb2csIHRoZSBpbWFnZSBqdXN0IGhhbmcuCj4gCj4gQ2FuIHlvdSBoYXZlIGEgbG9vaz8K
-CkJlZm9yZSBzZW5kaW5nIHRoaXMgcGF0Y2gsIEkgaW5pdGlhbGx5IHN1Y2Nlc3NmdWxseSByYW4g
-dGhvc2UgdGVzdHMKdXNpbmcgYSBxZW11IGF0IHY4LjAuMCAoMjAyMy0wNC0xOSksIHNhbWUgYXMg
-QnVpbGRyb290IGhvc3QtcWVtdSBhdAp0aGF0IHRpbWUuCgpJIG5vdyByZXByb2R1Y2UgdGhvc2Ug
-aXNzdWVzIHdpdGggdGhlIEJ1aWxkcm9vdCBkb2NrZXIgaW1hZ2UgdXNpbmcKdXRpbHMvZG9ja2Vy
-LXJ1biwgd2hpY2ggaW5jbHVkZXMgcWVtdSB2NS4yLjAgKDIwMjAtMTItMDgpLgoKQWZ0ZXIgYmlz
-ZWN0aW5nLCBJIGZvdW5kIHRoYXQgcWVtdSBjb21taXQ6Cmh0dHBzOi8vZ2l0bGFiLmNvbS9xZW11
-LXByb2plY3QvcWVtdS8tL2NvbW1pdC82YTNhYTAxNGM1NDUzNWQwYWM2NzUxNmIxMGVhMTc3Nzhi
-YmFmZmZkCmZpeGVzIHRob3NlIGlzc3Vlcy4gSXQncyBpbmNsdWRlZCBpbiBRRW11IHY3LjIuMSAo
-MjAyMy0wNC0wNSkuIFdoZW4KdXNpbmcgYSBRRW11IHZlcnNpb24gaW5jbHVkaW5nIHRoaXMgY29t
-bWl0LCB0aGUgdGVzdCB3b3Jrcy4KClVwZGF0aW5nIHN1cHBvcnQvZG9ja2VyL0RvY2tlcmZpbGUg
-dG8gdXNlCiJGUk9NIGRlYmlhbjpib29rd29ybS0yMDIzMDcwMyIgYWxzbyBmaXhlcyB0aG9zZSB0
-ZXN0cywgYXMgaXQgaW5jbHVkZXMKcWVtdS1zeXN0ZW0teDg2XzY0IHY3LjIuMiAoMjAyMy0wNC0y
-MykuCgpJIGJlbGlldmUgZWRrMi1zdGFibGUyMDIzMDUgaXMgY29ycmVjdCBhbmQgdGhlIGlzc3Vl
-IGlzIG1vcmUgb24gdGhlCnFlbXUgNS4yLjAgc2lkZSwgaW5jbHVkZWQgaW4gdGhlIEJ1aWxkcm9v
-dCBEb2NrZXIgaW1hZ2UuCgpJJ20gbm90IHN1cmUgaWYgaXQncyB0aGUgcmlnaHQgdGltZSB0byB1
-cGRhdGUgdGhlIEJ1aWxkcm9vdCBEb2NrZXIKaW1hZ2UgZnJvbSBEZWJpYW4gMTEgdG8gMTIuIEkg
-YWxzbyBkaWQgbm90IHRlc3RlZCB3aGF0IG90aGVyIGlzc3VlcwpzdWNoIGFuIHVwZGF0ZSB3b3Vs
-ZCBpbnRyb2R1Y2UuCgpTbyB0aGUgb3B0aW9ucyBJIHNlZSByaWdodCBub3cgYXJlOgoKMS4gZGlz
-YWJsZSB0aGUgdGVzdCB1bnRpbCB0aGUgQnVpbGRyb290IERvY2tlciBpbWFnZSBpcwp1cGRhdGVk
-LAoKMi4gb3IgZGlyZWN0bHkgdXBkYXRlIHRoZSBEb2NrZXIgaW1hZ2Ugc29vbiwKCjMuIG9yIHdl
-IGNvdWxkIGV2ZW50dWFsbHkgaW52ZXN0aWdhdGUgdG8gcGF0Y2ggZWRrMiB0byBhdm9pZAp0cmln
-Z2VyaW5nIHRoaXMgaXNzdWUuCgpBbnkgY29tbWVudHMgb3Igc3VnZ2VzdGlvbnM/CgpCZXN0IHJl
-Z2FyZHMsCgpKdWxpZW4uCgoKPiAKPiBCZXN0IHJlZ2FyZHMsCj4gUm9tYWluCj4gCj4gCj4+IAo+
-PiBGZWVsIGZyZWUgdG8gYWRkIChvciBub3QpOgo+PiAKPj4gICBUZXN0ZWQtYnk6IFZpbmNlbnQg
-U3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNvbT4KPiAKPiAKPiAKPj4gCj4+IEJlc3QgcmVn
-YXJkcywKPj4gVmluY2VudC4KPj4gCj4+PiAtLS0KPj4+ICBib290L2VkazIvZWRrMi5oYXNoIHwg
-MiArLQo+Pj4gIGJvb3QvZWRrMi9lZGsyLm1rICAgfCAyICstCj4+PiAgMiBmaWxlcyBjaGFuZ2Vk
-LCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4+PiAKPj4+IGRpZmYgLS1naXQgYS9i
-b290L2VkazIvZWRrMi5oYXNoIGIvYm9vdC9lZGsyL2VkazIuaGFzaAo+Pj4gaW5kZXggOTRlZTIy
-ZGRjNC4uMzRkNGIxMGUyOSAxMDA2NDQKPj4+IC0tLSBhL2Jvb3QvZWRrMi9lZGsyLmhhc2gKPj4+
-ICsrKyBiL2Jvb3QvZWRrMi9lZGsyLmhhc2gKPj4+IEBAIC0xLDMgKzEsMyBAQAo+Pj4gICMgTG9j
-YWxseSBjYWxjdWxhdGVkCj4+PiAtc2hhMjU2ICAKPj4+IGMxMDUyMGYyNjk1NTdkNTY2ZTM1ZmU4
-MTA0MTQxYWEyODY1ZjkwODVhZDJiM2EzMGFhZThhN2U3OGEzY2E1YWEgIAo+Pj4gZWRrMi1lZGsy
-LXN0YWJsZTIwMjIwOC1icjEudGFyLmd6Cj4+PiArc2hhMjU2ICAKPj4+IGNhNTUzNTE5MTNlNjI1
-OGViZDhjMDgxMDZmMzY5YWM3MTA3M2Q5Y2ZhYTgwNDI3ZmM1ZjEzMWIwNmQ4MDg5NDAgIAo+Pj4g
-ZWRrMi1lZGsyLXN0YWJsZTIwMjMwNS1icjEudGFyLmd6Cj4+PiAgc2hhMjU2ICAKPj4+IDUwY2Uy
-MGM5Y2ZkYjBlMTllZTM0ZmUwYTUxZmMwYWZlOTYxZjc0MzY5N2IwNjgzNTlhYjJmODYyYjQ5NGRm
-ODAgIAo+Pj4gTGljZW5zZS50eHQKPj4+IGRpZmYgLS1naXQgYS9ib290L2VkazIvZWRrMi5tayBi
-L2Jvb3QvZWRrMi9lZGsyLm1rCj4+PiBpbmRleCBmYjZiOWEzMjgwLi4zOTliZDM0NmVmIDEwMDY0
-NAo+Pj4gLS0tIGEvYm9vdC9lZGsyL2VkazIubWsKPj4+ICsrKyBiL2Jvb3QvZWRrMi9lZGsyLm1r
-Cj4+PiBAQCAtNCw3ICs0LDcgQEAKPj4+ICAjCj4+PiAgCj4+PiAjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIwo+Pj4gCj4+PiAtRURLMl9WRVJTSU9OID0gZWRrMi1zdGFibGUyMDIyMDgKPj4+ICtFREsy
-X1ZFUlNJT04gPSBlZGsyLXN0YWJsZTIwMjMwNQo+Pj4gIEVESzJfU0lURSA9IGh0dHBzOi8vZ2l0
-aHViLmNvbS90aWFub2NvcmUvZWRrMgo+Pj4gIEVESzJfU0lURV9NRVRIT0QgPSBnaXQKPj4+ICBF
-REsyX0xJQ0VOU0UgPSBCU0QtMi1DbGF1c2UtUGF0ZW50Cj4+PiAtLQo+Pj4gMi40MC4xCj4+PiAK
-Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gYnVp
-bGRyb290IG1haWxpbmcgbGlzdAo+PiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+PiBodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============3804255476930399971==
+Content-Type: multipart/alternative; boundary="0000000000002737d50600e1b053"
+
+--0000000000002737d50600e1b053
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+All;
+
+The https://gitlab.com/aduskett/buildroot-flutter.git  project is now
+updated a nearly completed
+flutter-engine package. I do have one concern found in the .mk file
+(
+https://gitlab.com/aduskett/buildroot-flutter/-/tree/flutter-dev/package/fl=
+utter-engine
+)
+
+Any help on
+https://gitlab.com/aduskett/buildroot-flutter/-/blob/flutter-dev/package/fl=
+utter-engine/flutter-engine.mk#L216
+would be much appreciated!
+
+Adam
+
+
+On Tue, Jul 18, 2023 at 7:04=E2=80=AFPM Adam Duskett <aduskett@gmail.com> w=
+rote:
+
+> All;
+>
+> I updated the above buildroot repository on the flutter-dev branch, and n=
+ow
+> compiling flutter works with one manual step that I need to resolve.
+>
+> While compiling, it seems like the LDPATHS for one third-party module can=
+'t
+> find libgcc.a, crtbeginS.o, and crtendS.o. These libraries, of course, ar=
+e
+> found in the toolchains directory. If I manually create symlinks to those
+> files in the staging/lib directory, flutter-engine compiles successfully
+> without warning.
+>
+> Feel free to review the flutter-engine package and give compiling a try:
+> ```
+> git clone https://gitlab.com/aduskett/buildroot-flutter.git -b flutter-de=
+v
+> cd buildroot-flutter
+> make flutter_defconfig
+> make flutter-engine
+> ```
+>
+> Any thoughts on the LDPATH issue?
+>
+> Thanks!
+>
+> Adam
+>
+>
+> On Mon, Jul 17, 2023 at 12:33=E2=80=AFPM Adam Duskett <aduskett@gmail.com=
+> wrote:
+>
+>> Thanks for the reply! I am going through your notes on the repository no=
+w!
+>>
+>> As for needing the .git dirs, indeed. I found someone who wants to make
+>> the yocto tarball reproducible.
+>> In the end he gave up:
+>> https://github.com/meta-flutter/meta-flutter/issues/271
+>>
+>>
+>> On Mon, Jul 17, 2023 at 12:16=E2=80=AFPM Yann E. MORIN <yann.morin.1998@=
+free.fr>
+>> wrote:
+>>
+>>> Adam, All,
+>>>
+>>> Folloing our discussion on IRC, it turns out that I got it partly
+>>> (mostly) wrong.
+>>>
+>>> On 2023-07-17 20:38 +0200, Yann E. MORIN spake thusly:
+>>> > On 2023-07-14 20:02 -0700, Adam Duskett spake thusly:
+>>>
+>>> So, we do not need to download anything from the flutter repo; we just
+>>> need a file, .gclient, that contains directives for gclient to perform
+>>> the actual download.
+>>>
+>>> As an aside, gclient is like repo (another google tool, I guess), right=
+?
+>>>
+>>> So, basically, what you did in your .mk looks like I would have done,
+>>> except no using _DL_DIR as a scratch-dir to do the download, but in a
+>>> sub-dir of the package dir (see my previous reply).
+>>>
+>>> Finally: gclient runs git-clone, we can't have stability in that, it's
+>>> not reproducible.
+>>>
+>>> If the .git dirs really need to be present at configure/build time,
+>>> we're borked, we can't hash the generated tarball.
+>>>
+>>> Regards,
+>>> Yann E. MORIN.
+>>>
+>>> --
+>>>
+>>> .-----------------.--------------------.------------------.------------=
+--------.
+>>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+>>> conspiracy: |
+>>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>>>        |
+>>> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There
+>>> is no  |
+>>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>>>  conspiracy.  |
+>>>
+>>> '------------------------------^-------^------------------^------------=
+--------'
+>>>
+>>
+
+--0000000000002737d50600e1b053
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>All;=C2=A0</div><div><br></div>The=C2=A0<a href=3D"ht=
+tps://gitlab.com/aduskett/buildroot-flutter.git" target=3D"_blank">https://=
+gitlab.com/aduskett/buildroot-flutter.git</a>=C2=A0 project is now updated =
+a nearly completed<div>flutter-engine package. I do have one concern found =
+in the .mk file</div><div>(<a href=3D"https://gitlab.com/aduskett/buildroot=
+-flutter/-/tree/flutter-dev/package/flutter-engine">https://gitlab.com/adus=
+kett/buildroot-flutter/-/tree/flutter-dev/package/flutter-engine</a>)</div>=
+<div><br></div><div>Any help on=C2=A0<a href=3D"https://gitlab.com/aduskett=
+/buildroot-flutter/-/blob/flutter-dev/package/flutter-engine/flutter-engine=
+.mk#L216">https://gitlab.com/aduskett/buildroot-flutter/-/blob/flutter-dev/=
+package/flutter-engine/flutter-engine.mk#L216</a></div><div>would be much a=
+ppreciated!</div><div><br></div><div>Adam</div><div><br></div></div><br><di=
+v class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Jul 1=
+8, 2023 at 7:04=E2=80=AFPM Adam Duskett &lt;<a href=3D"mailto:aduskett@gmai=
+l.com">aduskett@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmai=
+l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
+4,204);padding-left:1ex"><div dir=3D"ltr"><div>All;</div><div><br></div><di=
+v>I updated the above buildroot repository on the flutter-dev branch, and n=
+ow<br>compiling flutter works with one manual step that I need to resolve.<=
+br><br>While compiling, it seems like the LDPATHS for one third-party modul=
+e can&#39;t<br>find libgcc.a, crtbeginS.o, and crtendS.o. These libraries, =
+of course, are<br>found in the toolchains directory. If I manually create s=
+ymlinks to those<br>files in the staging/lib directory, flutter-engine comp=
+iles successfully<br>without warning.<br></div><div><br></div><div>Feel fre=
+e to review the flutter-engine package and give compiling a try:</div><div>=
+```<br></div><div>git clone <a href=3D"https://gitlab.com/aduskett/buildroo=
+t-flutter.git" target=3D"_blank">https://gitlab.com/aduskett/buildroot-flut=
+ter.git</a> -b flutter-dev</div><div>cd buildroot-flutter</div><div>make fl=
+utter_defconfig</div><div>make flutter-engine</div><div>``` <br></div><div>=
+<br>Any thoughts on the LDPATH issue?<br><br>Thanks!<br><br>Adam</div><div>=
+<br></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_at=
+tr">On Mon, Jul 17, 2023 at 12:33=E2=80=AFPM Adam Duskett &lt;<a href=3D"ma=
+ilto:aduskett@gmail.com" target=3D"_blank">aduskett@gmail.com</a>&gt; wrote=
+:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.=
+8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"lt=
+r"><div>Thanks for the reply! I am going through your notes on the reposito=
+ry now!</div><div><br></div><div>As for needing the .git dirs, indeed. I fo=
+und someone who wants to make the yocto tarball reproducible.</div><div>In =
+the end he gave up:=C2=A0<a href=3D"https://github.com/meta-flutter/meta-fl=
+utter/issues/271" target=3D"_blank">https://github.com/meta-flutter/meta-fl=
+utter/issues/271</a></div><div><br></div><br><div class=3D"gmail_quote"><di=
+v dir=3D"ltr" class=3D"gmail_attr">On Mon, Jul 17, 2023 at 12:16=E2=80=AFPM=
+ Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr" target=3D"_bl=
+ank">yann.morin.1998@free.fr</a>&gt; wrote:<br></div><blockquote class=3D"g=
+mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
+,204,204);padding-left:1ex">Adam, All,<br>
+<br>
+Folloing our discussion on IRC, it turns out that I got it partly<br>
+(mostly) wrong.<br>
+<br>
+On 2023-07-17 20:38 +0200, Yann E. MORIN spake thusly:<br>
+&gt; On 2023-07-14 20:02 -0700, Adam Duskett spake thusly:<br>
+<br>
+So, we do not need to download anything from the flutter repo; we just<br>
+need a file, .gclient, that contains directives for gclient to perform<br>
+the actual download.<br>
+<br>
+As an aside, gclient is like repo (another google tool, I guess), right?<br=
+>
+<br>
+So, basically, what you did in your .mk looks like I would have done,<br>
+except no using _DL_DIR as a scratch-dir to do the download, but in a<br>
+sub-dir of the package dir (see my previous reply).<br>
+<br>
+Finally: gclient runs git-clone, we can&#39;t have stability in that, it&#3=
+9;s<br>
+not reproducible.<br>
+<br>
+If the .git dirs really need to be present at configure/build time,<br>
+we&#39;re borked, we can&#39;t hash the generated tarball.<br>
+<br>
+Regards,<br>
+Yann E. MORIN.<br>
+<br>
+-- <br>
+.-----------------.--------------------.------------------.----------------=
+----.<br>
+|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
+Erics&#39; conspiracy: |<br>
+| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
+=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
+| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
+ =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
+| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
+ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
+|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
+&#39;------------------------------^-------^------------------^------------=
+--------&#39;<br>
+</blockquote></div></div>
+</blockquote></div></div>
+</blockquote></div>
+
+--0000000000002737d50600e1b053--
+
+--===============3804255476930399971==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3804255476930399971==--
