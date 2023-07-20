@@ -1,52 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA7F2EB64DA
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 19:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBBCEC001DC
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31D3D82333;
-	Thu, 20 Jul 2023 19:12:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31D3D82333
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F52E606AA;
+	Thu, 20 Jul 2023 21:58:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F52E606AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B7bM-pExoJZO; Thu, 20 Jul 2023 19:12:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mu3KG1WKzXNa; Thu, 20 Jul 2023 21:58:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FF3382330;
-	Thu, 20 Jul 2023 19:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FF3382330
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F07CE1BF5A9
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 19:12:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93EF960640;
+	Thu, 20 Jul 2023 21:58:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93EF960640
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E53F71BF5AD
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:57:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D72AC82330
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 19:12:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D72AC82330
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DB2340220
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:57:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DB2340220
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lM9hpAWMJb7U for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 19:12:54 +0000 (UTC)
-X-Greylist: delayed 309 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 20 Jul 2023 19:12:54 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A0928232F
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0A0928232F
- for <buildroot@uclibc.org>; Thu, 20 Jul 2023 19:12:53 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qMZ02-0004HA-Sw
- for buildroot@uclibc.org; Thu, 20 Jul 2023 21:07:42 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Thu, 20 Jul 2023 21:00:54 +0200
-Message-ID: <pan$86c9$5fa777aa$e5fc1042$fce28aaf@ID-313208.user.individual.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6C9IUSVGkOLW for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 21:57:58 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7DF0340191
+ for <buildroot@uclibc.org>; Thu, 20 Jul 2023 21:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DF0340191
+Received: from relay3-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::223])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id BE897D21F7
+ for <buildroot@uclibc.org>; Thu, 20 Jul 2023 21:06:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8D98360003;
+ Thu, 20 Jul 2023 21:06:39 +0000 (UTC)
+Date: Thu, 20 Jul 2023 23:06:38 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230720230638.5eba8786@windsurf>
+In-Reply-To: <pan$86c9$5fa777aa$e5fc1042$fce28aaf@ID-313208.user.individual.net>
 References: <20230615134315.494330-1-sebastian.weyer__49449.699586124$1686836642$gmane$org@smile.fr>
-Mime-Version: 1.0
-User-Agent: Pan/0.148 (Chamechaude; a70bd74)
+ <pan$86c9$5fa777aa$e5fc1042$fce28aaf@ID-313208.user.individual.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689887200;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=YOxpvYHg71DJ6cgF6s+zBid32qyxBPAachzKe0Rsd/g=;
+ b=Ig0j4tHswou1cKtfbmHU9cImSFQNzlGrbA9bCJsZhHu6F25A4mtqNXMsZOKaP+NVqlpQ/J
+ 1uLgPvu4XSoUA4jvz+XViSXdPvR4zxaXahjpe6kx+daUPvQR67OGGbJmRYFna2zRUTm/YZ
+ HR0j7K+O3cjmQQQ0pQOSKtbb6sa1TJwgqqZyZwQJwfh2DCN8dEb6oZ4aFWrcv1GlTvSYO0
+ Deg/YtWxO3BPmD1uutOHdxL9c6uGi2+I/xivUiWYzjOB3NOh9Hdmkeler194DUSmi8xKWe
+ 5WO9kuSU7Oj2Os66SGPbIewT4vLTrH1v86wcDPcUeQXoEMMKYDdXNSKGQwhSlA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Ig0j4tHs
 Subject: Re: [Buildroot] [PATCH v4 00/10] group llvm projects and bump to
  version 15.0.3
 X-BeenThere: buildroot@buildroot.org
@@ -60,26 +78,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@uclibc.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Thu, 15 Jun 2023 15:43:04 +0200 schrieb Sebastian Weyer:
+Hello Bernd,
 
-> This series attempts two things:
-> - Move the different llvm subprojects into one folder
+On Thu, 20 Jul 2023 21:00:54 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Hi Sebastian,
+> quoting the user manual:
+> http://buildroot.uclibc.org/downloads/manual/
+> manual.html#_package_directory
+> 
+> "New subdirectories are discouraged, however."
 
-quoting the user manual:
-http://buildroot.uclibc.org/downloads/manual/
-manual.html#_package_directory
+Correct, with one exception: when a reasonable number of packages share
+some common variables, especially the version variable. It's the case
+for qt5, but it's also the case for those llvm-project packages, in
+which case we tend to accept having a subdirectory.
 
-"New subdirectories are discouraged, however."
+Best regards,
 
-Regards, Bernd
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
