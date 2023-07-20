@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BEFEB64DD
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A972AEB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5B06612C1;
-	Thu, 20 Jul 2023 21:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5B06612C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63B3E607CE;
+	Thu, 20 Jul 2023 21:00:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63B3E607CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9KQHX_ChUMae; Thu, 20 Jul 2023 21:00:18 +0000 (UTC)
+	with ESMTP id SF_9s1pPhCQ8; Thu, 20 Jul 2023 21:00:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E884E612B9;
-	Thu, 20 Jul 2023 21:00:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E884E612B9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 847221BF20B
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 20:59:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F2B2612B6;
+	Thu, 20 Jul 2023 21:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F2B2612B6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CE2B1BF20B
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 20:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59C3641E55
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0545641738
  for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 20:59:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59C3641E55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0545641738
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bhHS6QtnInrR for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ItVeaIbBLBrB for <buildroot@lists.busybox.net>;
  Thu, 20 Jul 2023 20:59:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5909141E35
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D09F4175F
  for <buildroot@buildroot.org>; Thu, 20 Jul 2023 20:59:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5909141E35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D09F4175F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 44D488749A; Thu, 20 Jul 2023 20:59:36 +0000 (UTC)
+ id 0988A87496; Thu, 20 Jul 2023 20:59:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Jul 2023 22:41:57 +0200
+Date: Thu, 20 Jul 2023 22:39:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2d7d00ba550bb9498df4e56976a4af30ac095d23
-X-Git-Newrev: b4c8785ca22dbff0fbcfc373e1cbe2cd6a9b629e
+X-Git-Oldrev: f6eaf60e8087cb2d6c251fa17757014114946c5c
+X-Git-Newrev: 2bef68f3b0c684d640dd64711ec5ea3fbcfd0334
 X-Patchwork-Hint: ignore
-Message-Id: <20230720205936.44D488749A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/llvm-project/llvm-libunwind: new
- package
+Message-Id: <20230720205936.0988A87496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm: move to llvm-project folder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +63,116 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4c8785ca22dbff0fbcfc373e1cbe2cd6a9b629e
+commit: https://git.buildroot.net/buildroot/commit/?id=2bef68f3b0c684d640dd64711ec5ea3fbcfd0334
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Starting with version 15, lld needs the llvm implementation
-of libunwind, therefore it is added as a host package.
+To make updating easier, move llvm into the llvm-project folder
+and use the defined information.
 
 Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../llvm-project/llvm-libunwind/llvm-libunwind.hash    |  3 +++
- package/llvm-project/llvm-libunwind/llvm-libunwind.mk  | 18 ++++++++++++++++++
- 2 files changed, 21 insertions(+)
+ .checkpackageignore                                                | 2 +-
+ DEVELOPERS                                                         | 6 +++---
+ package/Config.in                                                  | 2 +-
+ package/{ => llvm-project}/llvm/0001-nfc-Fix-missing-include.patch | 0
+ package/{ => llvm-project}/llvm/Config.in                          | 0
+ package/{ => llvm-project}/llvm/llvm.hash                          | 0
+ package/{ => llvm-project}/llvm/llvm.mk                            | 5 ++---
+ 7 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-new file mode 100644
-index 0000000000..86775f5dba
---- /dev/null
-+++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  0ab6e07bf05359e242e9ea80e4089b819914867fa997a715e324e584bcfdf114  libunwind-15.0.3.src.tar.xz
-+sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
-diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.mk b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
-new file mode 100644
-index 0000000000..825e1beac0
---- /dev/null
-+++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# llvm-libunwind
-+#
-+################################################################################
-+
-+LLVM_LIBUNWIND_VERSION = 15.0.3
-+LLVM_LIBUNWIND_SITE = $(LLVM_PROJECT_SITE)
-+LLVM_LIBUNWIND_SOURCE = libunwind-$(LLVM_LIBUNWIND_VERSION).src.tar.xz
-+LLVM_LIBUNWIND_LICENSE = Apache-2.0 with exceptions
-+LLVM_LIBUNWIND_LICENSE_FILES = LICENSE.TXT
-+LLVM_LIBUNWIND_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+HOST_LLVM_LIBUNWIND_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH="$(HOST_DIR)/lib/cmake/llvm" \
-+	-DLIBUNWIND_INSTALL_HEADERS=ON
-+
-+$(eval $(host-cmake-package))
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0c2a882135..55d2985707 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -881,7 +881,7 @@ package/lite/0002-no-tests.patch Sob Upstream
+ package/lite/0003-pkg-config.patch Sob Upstream
+ package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch Upstream
+ package/lldpd/S60lldpd Indent Shellcheck Variables
+-package/llvm/0001-nfc-Fix-missing-include.patch Upstream
++package/llvm-project/llvm/0001-nfc-Fix-missing-include.patch Upstream
+ package/lm-sensors/0001-static-build.patch Upstream
+ package/lm-sensors/0002-no-host-ldconfig.patch Upstream
+ package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch Upstream
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f2908fabc5..8ccecc248e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1634,7 +1634,7 @@ F:	package/earlyoom/
+ F:	package/gconf/
+ F:	package/libnss/
+ F:	package/lld/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ F:	package/python-cython/
+ F:	package/python-pycups/
+ F:	package/python-raven/
+@@ -2545,7 +2545,7 @@ F:	package/libgta/
+ F:	package/libiec61850/
+ F:	package/libspatialindex/
+ F:	package/linux-syscall-support/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ F:	package/lugaru/
+ F:	package/mcelog/
+ F:	package/mesa3d/
+@@ -2955,7 +2955,7 @@ N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+ F:	package/clang/
+ F:	package/clinfo/
+ F:	package/libclc/
+-F:	package/llvm/
++F:	package/llvm-project/llvm/
+ 
+ N:	Vanya Sergeev <vsergeev@gmail.com>
+ F:	package/lua-periphery/
+diff --git a/package/Config.in b/package/Config.in
+index 57d3646566..0e9f7c35e8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2130,7 +2130,7 @@ comment "linux-pam plugins"
+ 	source "package/libpam-tacplus/Config.in"
+ endif
+ 	source "package/liquid-dsp/Config.in"
+-	source "package/llvm/Config.in"
++	source "package/llvm-project/llvm/Config.in"
+ 	source "package/lttng-libust/Config.in"
+ 	source "package/matio/Config.in"
+ 	source "package/mpc/Config.in"
+diff --git a/package/llvm/0001-nfc-Fix-missing-include.patch b/package/llvm-project/llvm/0001-nfc-Fix-missing-include.patch
+similarity index 100%
+rename from package/llvm/0001-nfc-Fix-missing-include.patch
+rename to package/llvm-project/llvm/0001-nfc-Fix-missing-include.patch
+diff --git a/package/llvm/Config.in b/package/llvm-project/llvm/Config.in
+similarity index 100%
+rename from package/llvm/Config.in
+rename to package/llvm-project/llvm/Config.in
+diff --git a/package/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
+similarity index 100%
+rename from package/llvm/llvm.hash
+rename to package/llvm-project/llvm/llvm.hash
+diff --git a/package/llvm/llvm.mk b/package/llvm-project/llvm/llvm.mk
+similarity index 98%
+rename from package/llvm/llvm.mk
+rename to package/llvm-project/llvm/llvm.mk
+index 977c0a08c2..1adad17b16 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm-project/llvm/llvm.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-# LLVM, Clang and lld should be version bumped together
+-LLVM_VERSION = 11.1.0
+-LLVM_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_VERSION)
++LLVM_VERSION = $(LLVM_PROJECT_VERSION)
++LLVM_SITE = $(LLVM_PROJECT_SITE)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = Apache-2.0 with exceptions
+ LLVM_LICENSE_FILES = LICENSE.TXT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
