@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 880F5EB64DA
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11535EB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:32:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41782612BC;
-	Thu, 20 Jul 2023 21:31:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41782612BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABDAF612A2;
+	Thu, 20 Jul 2023 21:32:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABDAF612A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KfGIHoHdknBr; Thu, 20 Jul 2023 21:31:18 +0000 (UTC)
+	with ESMTP id Kci_sZp3Hwz2; Thu, 20 Jul 2023 21:32:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A666612A3;
-	Thu, 20 Jul 2023 21:31:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A666612A3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 862421BF4D8
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:30:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9883607C9;
+	Thu, 20 Jul 2023 21:32:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9883607C9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D4E3A1BF4D8
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:32:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60532404DD
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:30:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60532404DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE80B41E33
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:32:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE80B41E33
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1ox1686ZWwIg for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 21:30:51 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0AF7A4049D
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:30:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AF7A4049D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D7A8C1BF207;
- Thu, 20 Jul 2023 21:30:48 +0000 (UTC)
-Date: Thu, 20 Jul 2023 23:30:47 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230720233047.11e3c641@windsurf>
-In-Reply-To: <20230720053915.34294-1-bernd@kuhls.net>
-References: <20230720053915.34294-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689888649;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8a9mIrOSTgf0Ha51w+9g3l141nCFBnTHAg3KA8zpZ3Q=;
- b=pMSqC6n15BUBgAIXtozi2pEZBjTGMtYVoJnER6PRNBwSCbSgQL7Z12XuSZZQDbCwPsdGeR
- gxaaVDQTpexl8Tkl0jDTb4JvKh2JzhFoSBc7vlfGPm/6JyStmNFHF9H3U5QXGcqt4IxLeB
- QV1wtrr07P3aHDXNVFuxyDw/toPTt42ezdSqmDXt/rjYAaEPFuMD0qYnWThwxxWUBAkG9u
- 0ELrvH08JH2k44MWvh8i1oy6NJjz17VIPDJ+SleACR4ch/rjKaesq8yfuAF7dd46P0k3jo
- qrT39ezQBYNDwCwitm6hZO7xO5q81BZAK8+RZMrD/6n7E3lvkU80ORGEgeWXqQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pMSqC6n1
-Subject: Re: [Buildroot] [PATCH 1/2] {linux, linux-headers}: bump 6.{1,
- 4}.x series
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id llKcOK8rScF5 for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 21:32:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EADB441E32
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:32:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EADB441E32
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D5853874F7; Thu, 20 Jul 2023 21:32:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 20 Jul 2023 23:31:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cd8028b2201816db11ad9f55b34fea459de81a04
+X-Git-Newrev: 65f79438ef8d0d10319e453a776e8d8196fd2c44
+X-Patchwork-Hint: ignore
+Message-Id: <20230720213239.D5853874F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 22.3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +58,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 20 Jul 2023 07:39:14 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=65f79438ef8d0d10319e453a776e8d8196fd2c44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  linux/Config.in                      | 2 +-
->  linux/linux.hash                     | 4 ++--
->  package/linux-headers/Config.in.host | 4 ++--
->  3 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index 82da96f6b1..c164c78300 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  49b9e40c75a5e3859f5166a2543f333bb8c618f433ca495965e0c13cd6525273  intel-gmmlib-22.3.7.tar.gz
++sha256  62d2f8333f1da3361952546a83dd40d1eb23d8bddacf67a160e63f565b68b5a6  intel-gmmlib-22.3.9.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 1ccb49a390..c637b8a5b4 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_GMMLIB_VERSION = 22.3.7
++INTEL_GMMLIB_VERSION = 22.3.9
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
