@@ -4,85 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52161EB64DA
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 23:37:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4187EB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 23:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E972B405BC;
-	Thu, 20 Jul 2023 23:37:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E972B405BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id AA5C240519;
+	Thu, 20 Jul 2023 23:37:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA5C240519
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oIGnutx3V5xi; Thu, 20 Jul 2023 23:37:24 +0000 (UTC)
+	with ESMTP id pR8OcN3agoHU; Thu, 20 Jul 2023 23:37:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4A6C41733;
-	Thu, 20 Jul 2023 23:37:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4A6C41733
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A1AF1BF39A
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 23:36:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 767A24051B;
+	Thu, 20 Jul 2023 23:37:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 767A24051B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C42651BF39A
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 23:37:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33E4A405E3
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 23:36:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33E4A405E3
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA2908229D
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 23:37:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA2908229D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R2aUtl4Bqagx for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 23:36:54 +0000 (UTC)
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
- [IPv6:2607:f8b0:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8FB4440519
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 23:36:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FB4440519
-Received: by mail-pg1-x532.google.com with SMTP id
- 41be03b00d2f7-55af0a816e4so739948a12.1
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 16:36:54 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wy-U5GW5g5ml for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 23:37:47 +0000 (UTC)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 24C3882284
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 23:37:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24C3882284
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-997c4107d62so196734866b.0
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 16:37:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689896213; x=1690501013;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=CHdQ+/x58IcJ1emsfrbp94ATnMLDwlBF3lQ22akVWjI=;
- b=WillYSNxzzjXte92jTwQgOJLVxP9y+RDMKPwrY+wW2gf//uD8o0O0tD8mifCWibQxp
- quZ7M03RobHqrw0Q+yPFYTjRhBTanfJEX7lw8NaYL3HVcwMO0TwH1GIN+4aDjyQWIQwE
- hbJSYW2e5X2255iOwc1vqKv9mkgYZ+6LS6UwAxeQe5+oFuLVLA1ti7ddF2CHJlIcOsoU
- PjOFspTN3rCOkOT5fKWCveLd+6Xdv8sp5p8+JAEgfgMizfZAEDTa3rqzDRtiIvKwEekW
- B7oQwJChsDKJcPUscwLJJm3Tx06y3fTrR2QMc4yxD24ZyzDnqo22mlNS77qroDopxpYB
- s5Sg==
-X-Gm-Message-State: ABy/qLbQPFpJ1LWEOrlz9VZBgZAqdLmqREndaw+Y4AvRxXhHI4W35F0F
- wK1qQYo2h2M9IKGPhn1jNSMFYteKA9n1d0HYfyg7Rg==
-X-Google-Smtp-Source: APBJJlGN7mdod9N/I+0NfF/z0IZS/WhIKU0Rb9fBq6Df7UJ8/CU1Q/ZSWIY0G2v9trErCr9lcCE2rQ==
-X-Received: by 2002:a05:6a20:3207:b0:12c:de85:94eb with SMTP id
- hl7-20020a056a20320700b0012cde8594ebmr273504pzc.17.1689896213613; 
- Thu, 20 Jul 2023 16:36:53 -0700 (PDT)
-Received: from fedora.amarulasolutions.com ([2601:603:217f:25e0::99d])
- by smtp.gmail.com with ESMTPSA id
- d3-20020a170902cec300b001b89b7e208fsm1981790plg.88.2023.07.20.16.36.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 20 Jul 2023 16:36:53 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu, 20 Jul 2023 16:36:28 -0700
-Message-ID: <20230720233629.1642220-3-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230720233629.1642220-1-adam.duskett@amarulasolutions.com>
-References: <20230720233629.1642220-1-adam.duskett@amarulasolutions.com>
+ d=1e100.net; s=20221208; t=1689896265; x=1690501065;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=f+YmKx4BkMFQSapYimausCzcD8PGruz37aEN4RlqJcE=;
+ b=I3YZ2Hk1UzG8onYQ+NFC2sgCQ4DvyWCVrKXYaKgiwDpdq5GCCCj5EHn8EijCAc9rny
+ aN3N0AgXXAg+y8tevO6mqt6ogMEkWP9l7oRGi+P2gxMcdvxWI53HWMCLQAcg/ctCwTdM
+ Swpu2/jHsUoz4Ts1F+AMXOlEChoClAkM5XRKgt/I6zD4+i+byKrxiec6lOPKHQ3rlcDi
+ nFjWqShSmf48J+6XG+0+U7iuv7Nu3gj0RJxprw3QJ0KoPBJDRHgklpvaRw3Dn81sYByZ
+ SAtYCKI1MG+8rL67u/M9z2LCUibYj3bOcFzbDrHWIHDnJDJKOvekBvGayWVMjuO890dv
+ Zrww==
+X-Gm-Message-State: ABy/qLaBi1LRHAHsUArOAakHApPqgVvJJsV/0hxhlc8ChgHQUD9GVPrc
+ JyLjvvLm6TlMxHa/brOWE6MJqdUNmHuJxmPwaGUQzWTj9ndI1EVT5lc=
+X-Google-Smtp-Source: APBJJlHjzX7XjBBLTT5poYsLFu2MW+rJMMa8upsKBtwU5vwbemr6g/kcQQCF8JwrWECTRx7MOsv5JZJ3cPW7VHoAMdg=
+X-Received: by 2002:a17:906:d7:b0:997:c0c7:6f4e with SMTP id
+ 23-20020a17090600d700b00997c0c76f4emr150244eji.74.1689896264933; Thu, 20 Jul
+ 2023 16:37:44 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230720233629.1642220-1-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20230720233629.1642220-1-adam.duskett@amarulasolutions.com>
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Thu, 20 Jul 2023 16:37:34 -0700
+Message-ID: <CAHDQB6N5V0EB1ZFWQBGK1fb6KTo+bPq6esnRX-_7+bzcOzRqXw@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1689896213; x=1690501013;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=CHdQ+/x58IcJ1emsfrbp94ATnMLDwlBF3lQ22akVWjI=;
- b=i8jZ+U7AfPFLU6Urg1A/RLB/LkZ/CO6zRMkYyr4rDMNTUuGGl1AYkr5zlGXTn7uU14
- mv1+TS+dW57JFd+w051GE4OVTOMfrI4Bxzxh6JGUMWQUJ/C1nb0HJFHtLk7tiKebObGj
- qwJ4M252W3Scpr/NumJiVoieyv0qZ9d/DBYLk=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1689896265; x=1690501065;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=f+YmKx4BkMFQSapYimausCzcD8PGruz37aEN4RlqJcE=;
+ b=BxJJh7yjIqLdWv/sQ7jvzRqRQPeD78LP0sbwt6aYhs+JrRjdE43AuFaFT9aIDCTNMr
+ w4fpaBAJ6qzdAlvJ/X/fd9kzUV1XSrjhRFLvOlPB0qLQti8gxMZodpihaFPQrNzuJFgZ
+ jbnDe3reY/gU3zBy9jWf3m4wY4HY/Bx4FXGto=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=i8jZ+U7A
-Subject: [Buildroot] [PATCH vRFC 2/3] package/depot-tools: new package
+ header.b=BxJJh7yj
+Subject: Re: [Buildroot] [PATCH vRFC 0/3] Initial flutter packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,196 +87,363 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
  Michael Trimarchi <michael@amarulasolutions.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+ Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: multipart/mixed; boundary="===============5894523607984924241=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Chromium and Chromium OS use a package of scripts called
-depot_tools to manage checkouts and code reviews. This package
-also includes the gclient utility.
+--===============5894523607984924241==
+Content-Type: multipart/alternative; boundary="00000000000094379b0600f3a2d0"
 
-gclient is a Python script to manage a workspace of modular dependencies that
-are each checked out independently from different subversion or git
-repositories. Features include:
+--00000000000094379b0600f3a2d0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-  - Dependencies can be specified on a per-OS basis.
-  - Dependencies can be specified relative to their parent dependency.
-  - Variables can be used to abstract concepts.
-  - Hooks can be specified to be run after a checkout.
-  - .gclient and DEPS are Python scripts. You can hack in easily or add
-     additional configuration data.
+Sorry about sending this patchset twice, I forgot to sign up for the
+mailing list under my Amarula email address. :)
 
-.gclient file: It's the primary file. It is, in fact, a Python script. It
-specifies the following variables:
+Adam Duskett
 
-  - solutions: an array of dictionaries specifying the projects that will be
-               fetched.
-  - hooks: additional hooks to be run when this meta checkout is synced.
-  - target_os: an optional array of (target) operating systems to fetch
-               OS-specific dependencies for.
-  - cache_dir: Primarily for bots, multiple working sets use a single git
-               cache.
+Senior Embedded Systems Developer
 
-gclient is necessary for checking out the flutter-engine source code, as the
-release tarballs provided on the flutter-engine github are in no state to
-compile. Google expects the use of gclient to download a source directory
-structure suitable to build the Flutter engine.
+M. +1208-515-8102
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- DEVELOPERS                                    |  3 ++
- package/Config.in.host                        |  1 +
- .../0001-Disable-ninjalog-upload.patch        | 35 +++++++++++++++++++
- package/depot-tools/Config.in.host            | 10 ++++++
- package/depot-tools/depot-tools.hash          |  3 ++
- package/depot-tools/depot-tools.mk            | 33 +++++++++++++++++
- 6 files changed, 85 insertions(+)
- create mode 100644 package/depot-tools/0001-Disable-ninjalog-upload.patch
- create mode 100644 package/depot-tools/Config.in.host
- create mode 100644 package/depot-tools/depot-tools.hash
- create mode 100644 package/depot-tools/depot-tools.mk
+adam.duskett@amarulasolutions.com
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 43058cedf9..38db2dd345 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -26,6 +26,9 @@
- #   infrastructure, and will be CC'ed on all patches that add or
- #   modify packages that use this infrastructure.
- 
-+N:	Adam Duskett <adam.duskett@amarulasolutions.com>
-+F:	package/depot-tools
-+
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
- 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 9addc88522..6eb5d5be1d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -18,6 +18,7 @@ menu "Host utilities"
- 	source "package/cryptsetup/Config.in.host"
- 	source "package/dbus-python/Config.in.host"
- 	source "package/delve/Config.in.host"
-+	source "package/depot-tools/Config.in.host"
- 	source "package/dfu-util/Config.in.host"
- 	source "package/dos2unix/Config.in.host"
- 	source "package/dosfstools/Config.in.host"
-diff --git a/package/depot-tools/0001-Disable-ninjalog-upload.patch b/package/depot-tools/0001-Disable-ninjalog-upload.patch
-new file mode 100644
-index 0000000000..55fd78247f
---- /dev/null
-+++ b/package/depot-tools/0001-Disable-ninjalog-upload.patch
-@@ -0,0 +1,35 @@
-+From eeea6ad620b88a81a4b05d49f32a375b4bbcef36 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Thu, 13 Jul 2023 15:50:25 -0700
-+Subject: [PATCH] Disable ninjalog upload
-+
-+Google doesn't need the ninja logs.
-+
-+Upstream: buildroot-specific.
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ autoninja | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/autoninja b/autoninja
-+index 06d45d1..354a2f1 100755
-+--- a/autoninja
-++++ b/autoninja
-+@@ -30,12 +30,12 @@ if eval "$command"; then
-+   fi
-+ 
-+   # Collect ninjalog from googler.
-+-  python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
-++  # python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
-+   exit
-+ fi
-+ 
-+ # Collect ninjalog from googler.
-+-python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
-++# python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
-+ 
-+ # Return an error code of 1 so that if a developer types:
-+ # "autoninja chrome && chrome" then chrome won't run if the build fails.
-+-- 
-+2.41.0
-+
-diff --git a/package/depot-tools/Config.in.host b/package/depot-tools/Config.in.host
-new file mode 100644
-index 0000000000..935331dedb
---- /dev/null
-+++ b/package/depot-tools/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_DEPOT_TOOLS
-+	bool "host depot-tools"
-+	select BR2_PACKAGE_HOST_PYTHON3
-+	select BR2_PACKAGE_HOST_PYTHON3_SSL
-+	select BR2_PACKAGE_HOST_PYTHON_SIX
-+	help
-+	  Chromium and Chromium OS use a package of scripts called
-+	  depot_tools to manage checkouts and code reviews.
-+
-+	  https://www.chromium.org/developers/how-tos/install-depot-tools/
-diff --git a/package/depot-tools/depot-tools.hash b/package/depot-tools/depot-tools.hash
-new file mode 100644
-index 0000000000..2109096901
---- /dev/null
-+++ b/package/depot-tools/depot-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  8e0bccdd6b1231f58d5453dc14a5e1d195295ac8d466dec34961e951e946b50b  depot-tools-4e87f5bfe244e903f712408ea68dc3c3a6fe2d00-br1.tar.gz
-+sha256  984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  LICENSE
-diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
-new file mode 100644
-index 0000000000..906340016c
---- /dev/null
-+++ b/package/depot-tools/depot-tools.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# depot-tools
-+#
-+################################################################################
-+
-+DEPOT_TOOLS_VERSION = 4e87f5bfe244e903f712408ea68dc3c3a6fe2d00
-+DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
-+DEPOT_TOOLS_SITE_METHOD = git
-+DEPOT_TOOLS_LICENSE = Chromium
-+DEPOT_TOOLS_LICENSE_FILES = LICENSE
-+DEPOT_TOOLS_CPE_ID_VENDOR = google
-+HOST_DEPOT_TOOLS_DEPENDENCIES = \
-+	host-python3 \
-+	host-python-httplib2 \
-+	host-python-pyparsing \
-+	host-python-six
-+
-+define HOST_DEPOT_TOOLS_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/share/depot_tools
-+	cp -dprf $(@D)/* $(HOST_DIR)/share/depot_tools/
-+endef
-+
-+# Helper wrapper to make using gclient easier.
-+DEPOT_TOOLS_GCLIENT=\
-+	PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
-+	LD_LIBRARY_PATH=$(HOST_DIR)/lib \
-+	PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
-+	DEPOT_TOOLS_UPDATE=0 \
-+	PYTHONDONTWRITEBYTECODE=1 \
-+	$(HOST_DIR)/share/depot_tools/gclient.py
-+
-+$(eval $(host-generic-package))
--- 
-2.41.0
+__________________________________
+
+
+Amarula Solutions BV
+
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+
+T. +31 (0)85 111 9170
+info@amarulasolutions.com
+
+www.amarulasolutions.com
+
+
+
+On Thu, Jul 20, 2023 at 4:36=E2=80=AFPM Adam Duskett <
+adam.duskett@amarulasolutions.com> wrote:
+
+> Preface: Thank you for all the help, thoughts and insight for this initia=
+l
+> RFC of the flutter-engine library. There are many other flutter packages
+> that
+> need to be ported, but this is the largest hurdle to overcome.
+>
+> There are many issues with the flutter-engine package:
+>
+> - The release tarballs from https://github.com/flutter/engine are in no
+> state
+>   to compile. They are only for the use of gclient to download a source
+>   directory structure suitable to build the Flutter engine! If you
+> download,
+>   extract and attempt to run `./tools/gn --no-goma
+> --no-prebuilt-dart-sdk`, you
+>   receive the error message:
+>   `No such file or directory: 'flutter/flutter/third_party/gn/gn.'
+>
+>   But wait! Wasn't the gn binary just called? No, that's a wrapper in the
+>   Flutter source tree that formats arguments to call the real gn binary.
+>   The real gn is not provided in the tarball but is downloaded via gclien=
+t
+>   (among many other supporting repositories.)
+>
+>   Even worse, the flutter repository depends on the .git dirs being
+> present.
+>   (https://github.com/meta-flutter/meta-flutter/issues/271) This
+> dependency
+>   means it is not possible to create a reproducible tarball from the
+> downloaded
+>   sources, which is why there is no .hash file provided.
+>
+>   I have asked the flutter project to release full tarballs suitable for
+>   compiling here: https://github.com/flutter/flutter/issues/130734
+>
+> - The clang toolchain wrapper does not work properly, resulting in the
+> immediate
+>   errors of:
+>     -Wl,-z,now: 'linker' input unused
+>     -Wl,-z,relro: 'linker' input unused
+>   The solution is to use clang.br_real and clang++.br_real.
+>
+> - If using per_package builds, flutter-engine tries to use the host
+> /usr/bin/ld
+>   instead of the one provided by the compiler, resulting in linking error=
+s.
+>   As such, if BR2_PER_PACKAGE_DIRECTORIES is enabled, we search for the l=
+d
+>   provided by the compiler in the host directory and set the path
+> accordingly.
+>
+> - libtessellator.so (built by flutter) requires three files:
+>   crtbeginS.o crtendS.o libgcc.a. However, the toolchain path isn't
+> referenced
+>   when linking. The solution is to copy those three files to the staging
+> lib
+>   directory before building.
+>
+> Tested with:
+>   - Debian 11 and 12
+>   - Ubuntu 18.04, 20.04, and 22.04
+>   - Fedora 38
+>   - Per package directory enabled and disabled
+>   - x86_64, arm64
+>
+> Adam Duskett (3):
+>   package/python-httplib2: add host variant
+>   package/depot-tools: new package
+>   package/flutter-engine: new package
+>
+>  DEVELOPERS                                    |   4 +
+>  package/Config.in                             |   1 +
+>  package/Config.in.host                        |   1 +
+>  .../0001-Disable-ninjalog-upload.patch        |  35 +++
+>  package/depot-tools/Config.in.host            |  10 +
+>  package/depot-tools/depot-tools.hash          |   3 +
+>  package/depot-tools/depot-tools.mk            |  33 ++
+>  .../0001-disable-pre-canned-sysroot.patch     |  32 ++
+>  .../0002-remove-explicit-x11-dependency.patch |  33 ++
+>  .../0003-disable-undefined-version.patch      |  32 ++
+>  ...onfig.py-do-not-prepend-sysroot-path.patch |  34 +++
+>  package/flutter-engine/Config.in              |  93 ++++++
+>  package/flutter-engine/flutter-engine.mk      | 286 ++++++++++++++++++
+>  package/flutter-engine/gclient                |  16 +
+>  package/python-httplib2/python-httplib2.mk    |   1 +
+>  15 files changed, 614 insertions(+)
+>  create mode 100644 package/depot-tools/0001-Disable-ninjalog-upload.patc=
+h
+>  create mode 100644 package/depot-tools/Config.in.host
+>  create mode 100644 package/depot-tools/depot-tools.hash
+>  create mode 100644 package/depot-tools/depot-tools.mk
+>  create mode 100644
+> package/flutter-engine/0001-disable-pre-canned-sysroot.patch
+>  create mode 100644
+> package/flutter-engine/0002-remove-explicit-x11-dependency.patch
+>  create mode 100644
+> package/flutter-engine/0003-disable-undefined-version.patch
+>  create mode 100644
+> package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.pat=
+ch
+>  create mode 100644 package/flutter-engine/Config.in
+>  create mode 100644 package/flutter-engine/flutter-engine.mk
+>  create mode 100644 package/flutter-engine/gclient
+>
+> --
+> 2.41.0
+>
+>
+
+--00000000000094379b0600f3a2d0
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Sorry about sending this patchset twice, I forgot to sign =
+up for the mailing list under my Amarula email address. :)<br clear=3D"all"=
+><div><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gma=
+il_signature"><div dir=3D"ltr"><span><p dir=3D"ltr" style=3D"line-height:1.=
+7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size=
+:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);background-color:trans=
+parent;vertical-align:baseline;white-space:pre-wrap">Adam Duskett</span></p=
+><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;marg=
+in-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&=
+quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-alig=
+n:baseline;white-space:pre-wrap">Senior Embedded Systems Developer</span></=
+p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;mar=
+gin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono=
+&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-ali=
+gn:baseline;white-space:pre-wrap">M. +1208-515-8102</span></p><p dir=3D"ltr=
+" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"=
+><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospac=
+e;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;whi=
+te-space:pre-wrap"><a href=3D"mailto:adam.duskett@amarulasolutions.com" tar=
+get=3D"_blank">adam.duskett@amarulasolutions.com</a></span></p><p dir=3D"lt=
+r" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt=
+"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospa=
+ce;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;wh=
+ite-space:pre-wrap">__________________________________</span></p><p dir=3D"=
+ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0=
+pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monos=
+pace;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;=
+white-space:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:=
+Ubuntu,sans-serif;color:rgb(0,0,0);background-color:transparent;vertical-al=
+ign:baseline;white-space:pre-wrap">Amarula Solutions BV</span></p><p dir=3D=
+"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:=
+0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,mono=
+space;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline=
+;white-space:pre-wrap">Joop Geesinkweg 125, 1114 AB, Amsterdam, NL</span></=
+p><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;mar=
+gin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono=
+&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-ali=
+gn:baseline;white-space:pre-wrap">T. +31 (0)85 111 9170</span><span style=
+=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
+0,0,0);background-color:transparent;vertical-align:baseline;white-space:pre=
+-wrap"><br></span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mo=
+no&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-a=
+lign:baseline;white-space:pre-wrap"><a href=3D"mailto:info@amarulasolutions=
+.com" target=3D"_blank">info@amarulasolutions.com</a></span></p><p dir=3D"l=
+tr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0p=
+t"><a href=3D"http://www.amarulasolutions.com/" target=3D"_blank"><span sty=
+le=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rg=
+b(0,0,0);background-color:transparent;vertical-align:baseline;white-space:p=
+re-wrap">www.amarulasolutions.com</span></a></p><div><br></div></span></div=
+></div></div><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr=
+" class=3D"gmail_attr">On Thu, Jul 20, 2023 at 4:36=E2=80=AFPM Adam Duskett=
+ &lt;<a href=3D"mailto:adam.duskett@amarulasolutions.com">adam.duskett@amar=
+ulasolutions.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
+style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
+dding-left:1ex">Preface: Thank you for all the help, thoughts and insight f=
+or this initial<br>
+RFC of the flutter-engine library. There are many other flutter packages th=
+at<br>
+need to be ported, but this is the largest hurdle to overcome.<br>
+<br>
+There are many issues with the flutter-engine package:<br>
+<br>
+- The release tarballs from <a href=3D"https://github.com/flutter/engine" r=
+el=3D"noreferrer" target=3D"_blank">https://github.com/flutter/engine</a> a=
+re in no state<br>
+=C2=A0 to compile. They are only for the use of gclient to download a sourc=
+e<br>
+=C2=A0 directory structure suitable to build the Flutter engine! If you dow=
+nload,<br>
+=C2=A0 extract and attempt to run `./tools/gn --no-goma --no-prebuilt-dart-=
+sdk`, you<br>
+=C2=A0 receive the error message:<br>
+=C2=A0 `No such file or directory: &#39;flutter/flutter/third_party/gn/gn.&=
+#39;<br>
+<br>
+=C2=A0 But wait! Wasn&#39;t the gn binary just called? No, that&#39;s a wra=
+pper in the<br>
+=C2=A0 Flutter source tree that formats arguments to call the real gn binar=
+y.<br>
+=C2=A0 The real gn is not provided in the tarball but is downloaded via gcl=
+ient<br>
+=C2=A0 (among many other supporting repositories.)<br>
+<br>
+=C2=A0 Even worse, the flutter repository depends on the .git dirs being pr=
+esent.<br>
+=C2=A0 (<a href=3D"https://github.com/meta-flutter/meta-flutter/issues/271"=
+ rel=3D"noreferrer" target=3D"_blank">https://github.com/meta-flutter/meta-=
+flutter/issues/271</a>) This dependency<br>
+=C2=A0 means it is not possible to create a reproducible tarball from the d=
+ownloaded<br>
+=C2=A0 sources, which is why there is no .hash file provided.<br>
+<br>
+=C2=A0 I have asked the flutter project to release full tarballs suitable f=
+or<br>
+=C2=A0 compiling here: <a href=3D"https://github.com/flutter/flutter/issues=
+/130734" rel=3D"noreferrer" target=3D"_blank">https://github.com/flutter/fl=
+utter/issues/130734</a><br>
+<br>
+- The clang toolchain wrapper does not work properly, resulting in the imme=
+diate<br>
+=C2=A0 errors of:<br>
+=C2=A0 =C2=A0 -Wl,-z,now: &#39;linker&#39; input unused<br>
+=C2=A0 =C2=A0 -Wl,-z,relro: &#39;linker&#39; input unused<br>
+=C2=A0 The solution is to use clang.br_real and clang++.br_real.<br>
+<br>
+- If using per_package builds, flutter-engine tries to use the host /usr/bi=
+n/ld<br>
+=C2=A0 instead of the one provided by the compiler, resulting in linking er=
+rors.<br>
+=C2=A0 As such, if BR2_PER_PACKAGE_DIRECTORIES is enabled, we search for th=
+e ld<br>
+=C2=A0 provided by the compiler in the host directory and set the path acco=
+rdingly.<br>
+<br>
+- libtessellator.so (built by flutter) requires three files:<br>
+=C2=A0 crtbeginS.o crtendS.o libgcc.a. However, the toolchain path isn&#39;=
+t referenced<br>
+=C2=A0 when linking. The solution is to copy those three files to the stagi=
+ng lib<br>
+=C2=A0 directory before building.<br>
+<br>
+Tested with:<br>
+=C2=A0 - Debian 11 and 12<br>
+=C2=A0 - Ubuntu 18.04, 20.04, and 22.04<br>
+=C2=A0 - Fedora 38<br>
+=C2=A0 - Per package directory enabled and disabled<br>
+=C2=A0 - x86_64, arm64<br>
+<br>
+Adam Duskett (3):<br>
+=C2=A0 package/python-httplib2: add host variant<br>
+=C2=A0 package/depot-tools: new package<br>
+=C2=A0 package/flutter-engine: new package<br>
+<br>
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
+=C2=A04 +<br>
+=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A01 +<br>
+=C2=A0package/Config.in.host=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A01 +<br>
+=C2=A0.../0001-Disable-ninjalog-upload.patch=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
+=C2=A0 35 +++<br>
+=C2=A0package/depot-tools/Config.in.host=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 |=C2=A0 10 +<br>
+=C2=A0package/depot-tools/depot-tools.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 |=C2=A0 =C2=A03 +<br>
+=C2=A0package/depot-tools/<a href=3D"http://depot-tools.mk" rel=3D"noreferr=
+er" target=3D"_blank">depot-tools.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 |=C2=A0 33 ++<br>
+=C2=A0.../0001-disable-pre-canned-sysroot.patch=C2=A0 =C2=A0 =C2=A0|=C2=A0 =
+32 ++<br>
+=C2=A0.../0002-remove-explicit-x11-dependency.patch |=C2=A0 33 ++<br>
+=C2=A0.../0003-disable-undefined-version.patch=C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
+32 ++<br>
+=C2=A0...onfig.py-do-not-prepend-sysroot-path.patch |=C2=A0 34 +++<br>
+=C2=A0package/flutter-engine/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 |=C2=A0 93 ++++++<br>
+=C2=A0package/flutter-engine/<a href=3D"http://flutter-engine.mk" rel=3D"no=
+referrer" target=3D"_blank">flutter-engine.mk</a>=C2=A0 =C2=A0 =C2=A0 | 286=
+ ++++++++++++++++++<br>
+=C2=A0package/flutter-engine/gclient=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 |=C2=A0 16 +<br>
+=C2=A0package/python-httplib2/<a href=3D"http://python-httplib2.mk" rel=3D"=
+noreferrer" target=3D"_blank">python-httplib2.mk</a>=C2=A0 =C2=A0 |=C2=A0 =
+=C2=A01 +<br>
+=C2=A015 files changed, 614 insertions(+)<br>
+=C2=A0create mode 100644 package/depot-tools/0001-Disable-ninjalog-upload.p=
+atch<br>
+=C2=A0create mode 100644 package/depot-tools/Config.in.host<br>
+=C2=A0create mode 100644 package/depot-tools/depot-tools.hash<br>
+=C2=A0create mode 100644 package/depot-tools/<a href=3D"http://depot-tools.=
+mk" rel=3D"noreferrer" target=3D"_blank">depot-tools.mk</a><br>
+=C2=A0create mode 100644 package/flutter-engine/0001-disable-pre-canned-sys=
+root.patch<br>
+=C2=A0create mode 100644 package/flutter-engine/0002-remove-explicit-x11-de=
+pendency.patch<br>
+=C2=A0create mode 100644 package/flutter-engine/0003-disable-undefined-vers=
+ion.patch<br>
+=C2=A0create mode 100644 package/flutter-engine/0004-pkg-config.py-do-not-p=
+repend-sysroot-path.patch<br>
+=C2=A0create mode 100644 package/flutter-engine/Config.in<br>
+=C2=A0create mode 100644 package/flutter-engine/<a href=3D"http://flutter-e=
+ngine.mk" rel=3D"noreferrer" target=3D"_blank">flutter-engine.mk</a><br>
+=C2=A0create mode 100644 package/flutter-engine/gclient<br>
+<br>
+-- <br>
+2.41.0<br>
+<br>
+</blockquote></div>
+
+--00000000000094379b0600f3a2d0--
+
+--===============5894523607984924241==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5894523607984924241==--
