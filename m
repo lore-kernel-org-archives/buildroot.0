@@ -4,47 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11535EB64DA
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:32:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D91EB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABDAF612A2;
-	Thu, 20 Jul 2023 21:32:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABDAF612A2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DC0F61289;
+	Thu, 20 Jul 2023 21:33:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DC0F61289
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Kci_sZp3Hwz2; Thu, 20 Jul 2023 21:32:43 +0000 (UTC)
+	with ESMTP id JZHKoaChNO-b; Thu, 20 Jul 2023 21:33:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9883607C9;
-	Thu, 20 Jul 2023 21:32:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9883607C9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D4E3A1BF4D8
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:32:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81A6A611F7;
+	Thu, 20 Jul 2023 21:33:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81A6A611F7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CF5C1BF4D8
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE80B41E33
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:32:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE80B41E33
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06417611F7
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06417611F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id llKcOK8rScF5 for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 21:32:40 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EADB441E32
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:32:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EADB441E32
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5853874F7; Thu, 20 Jul 2023 21:32:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 20 Jul 2023 23:31:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd8028b2201816db11ad9f55b34fea459de81a04
-X-Git-Newrev: 65f79438ef8d0d10319e453a776e8d8196fd2c44
-X-Patchwork-Hint: ignore
-Message-Id: <20230720213239.D5853874F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
- 22.3.9
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yKuj0_oj4_-N for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 21:33:43 +0000 (UTC)
+X-Greylist: delayed 661 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 20 Jul 2023 21:33:43 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62511611F1
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 62511611F1
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:33:43 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::228])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id A27EBC72B7
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:21:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 271E51BF205;
+ Thu, 20 Jul 2023 21:21:49 +0000 (UTC)
+Date: Thu, 20 Jul 2023 23:21:48 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230720232148.277f7bac@windsurf>
+In-Reply-To: <20230720175319.151079-1-bernd@kuhls.net>
+References: <20230720175319.151079-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689888110;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BOIu0yE5lUrDmi48SjlzTiI5SR3iskccm+u04/X69iw=;
+ b=BDCfxajmKF/vWc2p9TYOmknrq8VnlH6HputTkpylRAaP2SOTV22sMBp55KgfKPS6qnFWZA
+ yKwZ2EPxohT5O9KjolpeV+05Rlqrtm7Vqyj6OWmCF9sNJNh6sL48bUJ5yrCudQXE9iDmeP
+ doDVVcxPZJNA0uEmnqbPKTnguQWpkh6+xkvc92lbXlYjfkyYbPFHtd4S3zKpUW/R5ybtCr
+ HC/C+mOyEu218OWgNfQwOVqeW4WLIufAL9xUyVrG3O8Q8oF9qV97bpVvic/inJConktc+4
+ UJzajFx4pGXmldFYvpGAGFGvaY5/7trkIlvTHy4tl78jou3/+pFwX4m6PbE0dA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BDCfxajm
+Subject: Re: [Buildroot] [PATCH 1/2] package/openssl: statically-linked
+ openssl does not provide threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +81,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f79438ef8d0d10319e453a776e8d8196fd2c44
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 20 Jul 2023 19:53:18 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Add blind option to mark availability of threads, needed for tor.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/openssl/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index 82da96f6b1..c164c78300 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  49b9e40c75a5e3859f5166a2543f333bb8c618f433ca495965e0c13cd6525273  intel-gmmlib-22.3.7.tar.gz
-+sha256  62d2f8333f1da3361952546a83dd40d1eb23d8bddacf67a160e63f565b68b5a6  intel-gmmlib-22.3.9.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index 1ccb49a390..c637b8a5b4 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_GMMLIB_VERSION = 22.3.7
-+INTEL_GMMLIB_VERSION = 22.3.9
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+Meh, I don't like this very much :-/ But I admit I don't (at this time)
+have a much better proposal. Reverting the problematic change from
+OpenSSL? But wait, according to the issue you're pointing
+(https://github.com/openssl/openssl/issues/14574), it's an OpenSSL
+1.1.x issue that won't be fixed because OpenSSL 1.1.x is in maintenance
+mode only. But now we're using OpenSSL 3.x so surely this issue needs
+to be fixed? If that's the case, a revert of the change seems in order
+for now?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
