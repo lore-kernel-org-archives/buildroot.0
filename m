@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A97EEB64DA
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:12:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1FFDEB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30C6A612E5;
-	Thu, 20 Jul 2023 21:12:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30C6A612E5
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA4EE60A87;
+	Thu, 20 Jul 2023 21:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA4EE60A87
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HAxUuVQhxf7o; Thu, 20 Jul 2023 21:12:28 +0000 (UTC)
+	with ESMTP id RTLxaFLqOjkd; Thu, 20 Jul 2023 21:12:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AE8A612E1;
-	Thu, 20 Jul 2023 21:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AE8A612E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id E612B612D2;
+	Thu, 20 Jul 2023 21:12:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E612B612D2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4CBDF1BF4D8
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:10:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 209571BF4D8
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA43961289
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA43961289
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4102E6128E
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4102E6128E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C9wKRE4lms9B for <buildroot@lists.busybox.net>;
+ with ESMTP id hW2-S0lwY5_E for <buildroot@lists.busybox.net>;
  Thu, 20 Jul 2023 21:10:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3B2F61290
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:10:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3B2F61290
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1747361298
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1747361298
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF4DB8749D; Thu, 20 Jul 2023 21:10:19 +0000 (UTC)
+ id 15A5E8742E; Thu, 20 Jul 2023 21:10:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Jul 2023 23:07:53 +0200
+Date: Thu, 20 Jul 2023 23:07:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce7a5c6f90c52b974cf452773a586804e3180136
-X-Git-Newrev: 2154782c6427ca5062ba23c5047767891c514580
+X-Git-Oldrev: ec0498a49c2fd34d6407479a6f589538a5872ceb
+X-Git-Newrev: 6b87f6e017265a412800695bb18e99f0ddbc4928
 X-Patchwork-Hint: ignore
-Message-Id: <20230720211019.DF4DB8749D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/erlang-p1-stun: bump version to
- 1.2.7
+Message-Id: <20230720211020.15A5E8742E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-p1-yaml: bump version to
+ 1.0.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2154782c6427ca5062ba23c5047767891c514580
+commit: https://git.buildroot.net/buildroot/commit/?id=6b87f6e017265a412800695bb18e99f0ddbc4928
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/processone/stun/blob/master/CHANGELOG.md
+Changelog:
+https://github.com/processone/fast_yaml/blob/master/CHANGELOG.md
+[1.0.36 just updated a github workflow file]
+
+Removed paths added by upstream
+https://github.com/processone/fast_yaml/commit/de7687901d1c89b9b03dcfb5a44d1af5edb2d95c
+which break cross-builds.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-stun/erlang-p1-stun.hash | 2 +-
- package/erlang-p1-stun/erlang-p1-stun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/erlang-p1-yaml/erlang-p1-yaml.hash | 2 +-
+ package/erlang-p1-yaml/erlang-p1-yaml.mk   | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.hash b/package/erlang-p1-stun/erlang-p1-stun.hash
-index aef122b4a6..49e1963ff0 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.hash
-+++ b/package/erlang-p1-stun/erlang-p1-stun.hash
+diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.hash b/package/erlang-p1-yaml/erlang-p1-yaml.hash
+index 89123dfd83..0138f82047 100644
+--- a/package/erlang-p1-yaml/erlang-p1-yaml.hash
++++ b/package/erlang-p1-yaml/erlang-p1-yaml.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  f9b82949b54778a4b766dca5509eef4475e1dbc165a449974dbd0cc54c6f84a2  erlang-p1-stun-1.0.47.tar.gz
-+sha256  d7e9d3d591a88a91abf053c068f7152495e37d17f4c9ac58992c544d6f8f5e86  erlang-p1-stun-1.2.7.tar.gz
+-sha256  6d5c823dd895b736b98325d88893a63c054964d7bde9a8e150fc4df5f4165065  erlang-p1-yaml-1.0.32.tar.gz
++sha256  6794470ef35fb3985c4e9aa0ed8d3a0b44e7a5c7bf4c5a1efbeca42060db6806  erlang-p1-yaml-1.0.36.tar.gz
  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
-index ce117e20b5..7438bd2186 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.mk b/package/erlang-p1-yaml/erlang-p1-yaml.mk
+index 6acb6fe059..17f4910ee1 100644
+--- a/package/erlang-p1-yaml/erlang-p1-yaml.mk
++++ b/package/erlang-p1-yaml/erlang-p1-yaml.mk
+@@ -4,10 +4,17 @@
  #
  ################################################################################
  
--ERLANG_P1_STUN_VERSION = 1.0.47
-+ERLANG_P1_STUN_VERSION = 1.2.7
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = Apache-2.0
- ERLANG_P1_STUN_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_YAML_VERSION = 1.0.32
++ERLANG_P1_YAML_VERSION = 1.0.36
+ ERLANG_P1_YAML_SITE = $(call github,processone,fast_yaml,$(ERLANG_P1_YAML_VERSION))
+ ERLANG_P1_YAML_LICENSE = Apache-2.0
+ ERLANG_P1_YAML_LICENSE_FILES = LICENSE.txt
+ ERLANG_P1_YAML_DEPENDENCIES = libyaml erlang-p1-utils
+ 
++define ERLANG_P1_YAML_REMOVE_PATHS
++	$(SED) "s/ -I\/usr\/local\/include//" $(@D)/rebar.config
++	$(SED) "s/ -L\/usr\/local\/lib//" $(@D)/rebar.config
++endef
++
++ERLANG_P1_YAML_POST_PATCH_HOOKS = ERLANG_P1_YAML_REMOVE_PATHS
++
+ $(eval $(rebar-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
