@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B6C5EB64DA
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 17:31:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C69F7EB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 17:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3026D80BF0;
-	Thu, 20 Jul 2023 17:31:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3026D80BF0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 770A280BF1;
+	Thu, 20 Jul 2023 17:32:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 770A280BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7HLLRzm5-Svd; Thu, 20 Jul 2023 17:31:51 +0000 (UTC)
+	with ESMTP id DC-AwCK2JH75; Thu, 20 Jul 2023 17:32:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6ADEE82036;
-	Thu, 20 Jul 2023 17:31:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ADEE82036
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F21A91BF5DA
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 17:31:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27D9582897;
+	Thu, 20 Jul 2023 17:32:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27D9582897
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 168451BF5DA
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 17:31:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D868F416FA
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 17:31:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D868F416FA
+ by smtp1.osuosl.org (Postfix) with ESMTP id B16D482141
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 17:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B16D482141
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PGQQtHiUxkN1 for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 17:31:43 +0000 (UTC)
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 759AA416C4
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 17:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 759AA416C4
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-4fdd31bf179so1693666e87.2
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 10:31:43 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CvDrtu3RclKC for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 17:31:51 +0000 (UTC)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
+ [IPv6:2a00:1450:4864:20::22b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 26C148204D
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 17:31:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26C148204D
+Received: by mail-lj1-x22b.google.com with SMTP id
+ 38308e7fff4ca-2b703caf344so15452531fa.1
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 10:31:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689874301; x=1690479101;
+ d=1e100.net; s=20221208; t=1689874309; x=1690479109;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=JxtVFl6FVJdV1ia7EyhG3Xz6cR5L4jiGqkNRZbvGwSI=;
- b=FYJMN9JpGbVVlY4hNjFTDX7jWH3k38eG5fp+YhOnFqNIR4NBcryPimsVc71SW+aOWT
- LhNchiX9ZdNMgE1XONKHKFTrLX4xSkXeBT+3GNbY+VSZ3gjEhpo355xViryBoOQKSFp5
- A56xAcpII0rxvnLbo9xMOA8oCYLzzAxjm3xrQz5UJ58gei1WQkU7+tezZ0SWd7AdYtzj
- RKAJ4zm2NbR3BtNIAGdLOPvDJlv0zyhBGOSwV0s3pjC82PoltpfXfeI1ZN5SSc+TLw7J
- 0S6Zx580Utk89Q/3q5X95sCYC55PIy3DzUXNXmFIDxfK7pNOhg/IrCAJV1AfQFdo3/Of
- Uu/A==
-X-Gm-Message-State: ABy/qLatHB2nB5VSmFqJZ2qj/MEJwSQ+kyG2vk5ETOnmt4+4c1LJKmpj
- 9NFi3OZ8tgniyG6B/bQ9g/o/kTVtSeCUswqtJ6SeGbtEdmYNBQ==
-X-Google-Smtp-Source: APBJJlFU7pDUnWC5baxQ1gTCEPxwRPK1Jd6fewXfCjY35dXyoZxJ5FH9thrpHOCDhZa87JHajNDBzvZW98IQcqmVLbk=
-X-Received: by 2002:a05:6512:3282:b0:4fb:be3c:d8b7 with SMTP id
- p2-20020a056512328200b004fbbe3cd8b7mr2499408lfe.51.1689874301125; Thu, 20 Jul
- 2023 10:31:41 -0700 (PDT)
+ bh=IPrTonSKqE8ntvoRuFq2EWsTNjPpiDchuUt47eNU1pI=;
+ b=FR01NxzM83qYAMd/ZvJPOIl9VoLA55rgjIMmd9MwgXiNEe3NG8FMTAcoliBUxTLkPs
+ jtG5t226fUbeDZvKb//LzKZOkvoW31mmeNsKYBT46t6LUzm5+tAtuhDORsloim7Zammb
+ 6rO0g8OJkFPlhdYkvK/cPOCqP7jw5GVTEBifo/uYDvxUOOlDeftq5MjF0UCCpLdS1Wvh
+ lY4Um0wsfpKiLpwYrh8mWhl2R/msR/3cOzPZUnDUJgBaKTRkLnmVa/C8mbmFFtxYnc7H
+ uGfmkvaXA+5aQTkb3j/RnmtVC2rvUQ1m/H7mq4lYdr5R2fmHbqF9I+JIMN50A4FfkWW7
+ a2Mw==
+X-Gm-Message-State: ABy/qLZTfSLQ0h6PSzio8JGRxKm7LiiTSHLjTARwVzm6uVaCwc6+lHqb
+ jrVKyhAyy2LUsmIGQ5fXQKCjkexSAj+wwsIiMCw=
+X-Google-Smtp-Source: APBJJlGqlmOLbUCdC92KwhXE5xzB1MUwMDAX4oudAligfdQyXvNvd6MCmZW44qR7y9eoUnMWp0/K5LaY8L4UpKKEUX8=
+X-Received: by 2002:a2e:9947:0:b0:2b6:9dd5:7a5 with SMTP id
+ r7-20020a2e9947000000b002b69dd507a5mr3038207ljj.12.1689874308745; Thu, 20 Jul
+ 2023 10:31:48 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230615134315.494330-1-sebastian.weyer@smile.fr>
- <20230615134315.494330-4-sebastian.weyer@smile.fr>
-In-Reply-To: <20230615134315.494330-4-sebastian.weyer@smile.fr>
+ <20230615134315.494330-5-sebastian.weyer@smile.fr>
+In-Reply-To: <20230615134315.494330-5-sebastian.weyer@smile.fr>
 From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 20 Jul 2023 10:31:29 -0700
-Message-ID: <CAFSsvmqWSbZaw+zrB0A2jWy4WDRCRc7J611=Hci8ke9+CJax3w@mail.gmail.com>
+Date: Thu, 20 Jul 2023 10:31:37 -0700
+Message-ID: <CAFSsvmrWPEVCKY3XtYiCme9u-pQL=omX62=i+NuGVRzEXGiMQw@mail.gmail.com>
 To: Sebastian Weyer <sebastian.weyer@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689874301; x=1690479101;
+ d=gmail.com; s=20221208; t=1689874309; x=1690479109;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=JxtVFl6FVJdV1ia7EyhG3Xz6cR5L4jiGqkNRZbvGwSI=;
- b=XYvQdtFr/UyP2sHjMMNDdOsdvexnFDZoVv0FPAWuDCW4Oi+pWlVdBGOIMPF3MJ4fFy
- 6lCHnizaF6tizhY879pTd+clo/OtWPFJURfz2n/2AclvT0vbroViSLTWQt/NJYGrC7qo
- zlr2ImDtVMtBV0A3RhjBOO3HLiryMNqb/sRnckGi5MFKk9mL6+D1bqzF73cB0w9c84NR
- VIC+L8Au6rHum3ngyZbEmn+aFsHdGWGypVrM9Ryr9g2471Y6V/u3op05SSKOyI5kxM4T
- PgJO6OMjdURIAQz7G1JWmi6CSJPa6jCFJIULfInldgSc7bAE1VXZcZc2TICTbywRIdqz
- Ejug==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=IPrTonSKqE8ntvoRuFq2EWsTNjPpiDchuUt47eNU1pI=;
+ b=W5YsgFcE0EaaeZnCFZHoj9tgj+nKg+peOE6z8O5NNA6kk3WLm9bEUBJW0r2qUF55Us
+ Ju7rGG6g3OTUBqbsZ3ahRsxlcqd9+/kCyNqFPsUFdL0TYiuiKQU86V+o4c68IBAYLsIv
+ uUzo6JfMxuD3lDxM3e9yIjirSnF7SAXhbz0AKfUVjEDEf/lFLbm7MEyYbvTzT6snyG+W
+ pdDtGutCRALzAJ7iGQYG3IJoMAdVBWj2XJ/R6Mr2WOjzkdj51rY82iq4Ts7S6Q6g6kmN
+ VW9C3PUhhBlFUlea+cUG/FGnJYWIaRO27ttmmqLV9ENyQtyb01TPoWGAFQ22mFw1jh0c
+ zrVA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=XYvQdtFr
-Subject: Re: [Buildroot] [PATCH v4 03/10] package/lld: move to llvm-project
- subfolder
+ header.a=rsa-sha256 header.s=20221208 header.b=W5YsgFcE
+Subject: Re: [Buildroot] [PATCH v4 04/10] package/clang: move to
+ llvm-project subfolder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,104 +92,167 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Joseph Kogut <joseph.kogut@gmail.com>, Lang Daniel <d.lang@abatec.at>,
- Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1656510350460222104=="
+ buildroot@buildroot.org, Romain Naour <romain.naour@smile.fr>,
+ Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Content-Type: multipart/mixed; boundary="===============5616902910586627583=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1656510350460222104==
-Content-Type: multipart/alternative; boundary="0000000000006f0cf70600ee8526"
+--===============5616902910586627583==
+Content-Type: multipart/alternative; boundary="000000000000e34bc90600ee8560"
 
---0000000000006f0cf70600ee8526
+--000000000000e34bc90600ee8560
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-On Thu, Jun 15, 2023 at 6:44=E2=80=AFAM Sebastian Weyer <sebastian.weyer@sm=
+On Thu, Jun 15, 2023 at 6:45=E2=80=AFAM Sebastian Weyer <sebastian.weyer@sm=
 ile.fr>
 wrote:
 
 > From: Lang Daniel <d.lang@abatec.at>
 >
-> To make version bumping easier, move lld to a new llvm-project subfolder
+> To make version bumping easier, move clang to a new llvm-project subfolde=
+r
 > and specify site and version for the project.
 >
 > Signed-off-by: Daniel Lang <d.lang@abatec.at>
-> Reviewed-by: Romain Naour <romain.naour@smile.fr>
 > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 > Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 > ---
-> v4: change inaccuracy in commit message (move llvm -> move lld)
+> v4: change inaccuracy in commit message (move llvm -> move clang)
+>
+> v3: move "package/llvm-project/clang/Config.in" entry in package/Config.i=
+n
 > ---
->  DEVELOPERS                                    | 2 +-
->  package/Config.in.host                        | 2 +-
->  package/{ =3D> llvm-project}/lld/Config.in.host | 0
->  package/{ =3D> llvm-project}/lld/lld.hash       | 0
->  package/{ =3D> llvm-project}/lld/lld.mk         | 5 ++---
->  5 files changed, 4 insertions(+), 5 deletions(-)
->  rename package/{ =3D> llvm-project}/lld/Config.in.host (100%)
->  rename package/{ =3D> llvm-project}/lld/lld.hash (100%)
->  rename package/{ =3D> llvm-project}/lld/lld.mk (87%)
+>  DEVELOPERS                                                 | 6 +++---
+>  package/Config.in                                          | 2 +-
+>  ...-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch | 0
+>  package/{ =3D> llvm-project}/clang/Config.in                 | 0
+>  package/{ =3D> llvm-project}/clang/clang.hash                | 0
+>  package/{ =3D> llvm-project}/clang/clang.mk                  | 7 +++----
+>  6 files changed, 7 insertions(+), 8 deletions(-)
+>  rename package/{ =3D>
+> llvm-project}/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX=
+-in-.patch
+> (100%)
+>  rename package/{ =3D> llvm-project}/clang/Config.in (100%)
+>  rename package/{ =3D> llvm-project}/clang/clang.hash (100%)
+>  rename package/{ =3D> llvm-project}/clang/clang.mk (96%)
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index c4273c5f85..befafff1d0 100644
+> index befafff1d0..1fb8295a7a 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1638,7 +1638,7 @@ F:        package/clang/
+> @@ -1634,10 +1634,10 @@ F:
+> support/testing/tests/package/test_python_aexpect.py
+>
+>  N:     Joseph Kogut <joseph.kogut@gmail.com>
+>  F:     package/at-spi2-core/
+> -F:     package/clang/
 >  F:     package/earlyoom/
 >  F:     package/gconf/
 >  F:     package/libnss/
-> -F:     package/lld/
-> +F:     package/llvm-project/lld/
+> +F:     package/llvm-project/clang/
+>  F:     package/llvm-project/lld/
 >  F:     package/llvm-project/llvm/
 >  F:     package/python-cython/
->  F:     package/python-pycups/
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index dcadbfdfc1..9addc88522 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -51,7 +51,7 @@ menu "Host utilities"
->         source "package/jsmin/Config.in.host"
->         source "package/kmod/Config.in.host"
->         source "package/libp11/Config.in.host"
-> -       source "package/lld/Config.in.host"
-> +       source "package/llvm-project/lld/Config.in.host"
->         source "package/lpc3250loader/Config.in.host"
->         source "package/lttng-babeltrace/Config.in.host"
->         source "package/lzma-alone/Config.in.host"
-> diff --git a/package/lld/Config.in.host
-> b/package/llvm-project/lld/Config.in.host
+> @@ -2519,7 +2519,6 @@ F:        package/alure/
+>  F:     package/aubio/
+>  F:     package/binutils/
+>  F:     package/bullet/
+> -F:     package/clang/
+>  F:     package/clinfo/
+>  F:     package/efl/
+>  F:     package/enet/
+> @@ -2538,6 +2537,7 @@ F:        package/libgta/
+>  F:     package/libiec61850/
+>  F:     package/libspatialindex/
+>  F:     package/linux-syscall-support/
+> +F:     package/llvm-project/clang/
+>  F:     package/llvm-project/llvm/
+>  F:     package/lugaru/
+>  F:     package/mcelog/
+> @@ -2946,9 +2946,9 @@ F:        package/gettext-tiny/
+>  F:     package/tinyssh/
+>
+>  N:     Valentin Korenblit <valentinkorenblit@gmail.com>
+> -F:     package/clang/
+>  F:     package/clinfo/
+>  F:     package/libclc/
+> +F:     package/llvm-project/clang/
+>  F:     package/llvm-project/llvm/
+>
+>  N:     Vanya Sergeev <vsergeev@gmail.com>
+> diff --git a/package/Config.in b/package/Config.in
+> index dffffc195b..7f2f045c87 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2023,7 +2023,6 @@ menu "Other"
+>         source "package/catch2/Config.in"
+>         source "package/cctz/Config.in"
+>         source "package/cereal/Config.in"
+> -       source "package/clang/Config.in"
+>         source "package/cmocka/Config.in"
+>         source "package/compiler-rt/Config.in"
+>         source "package/cppcms/Config.in"
+> @@ -2128,6 +2127,7 @@ comment "linux-pam plugins"
+>         source "package/libpam-tacplus/Config.in"
+>  endif
+>         source "package/liquid-dsp/Config.in"
+> +       source "package/llvm-project/clang/Config.in"
+>         source "package/llvm-project/llvm/Config.in"
+>         source "package/lttng-libust/Config.in"
+>         source "package/matio/Config.in"
+> diff --git
+> a/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-=
+.patch
+> b/package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTA=
+LL_PREFIX-in-.patch
 > similarity index 100%
-> rename from package/lld/Config.in.host
-> rename to package/llvm-project/lld/Config.in.host
-> diff --git a/package/lld/lld.hash b/package/llvm-project/lld/lld.hash
+> rename from
+> package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.p=
+atch
+> rename to
+> package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL=
+_PREFIX-in-.patch
+> diff --git a/package/clang/Config.in b/package/llvm-project/clang/Config.=
+in
 > similarity index 100%
-> rename from package/lld/lld.hash
-> rename to package/llvm-project/lld/lld.hash
-> diff --git a/package/lld/lld.mk b/package/llvm-project/lld/lld.mk
-> similarity index 87%
-> rename from package/lld/lld.mk
-> rename to package/llvm-project/lld/lld.mk
-> index 4bf903cda0..46ec3b13ff 100644
-> --- a/package/lld/lld.mk
-> +++ b/package/llvm-project/lld/lld.mk
-> @@ -4,9 +4,8 @@
+> rename from package/clang/Config.in
+> rename to package/llvm-project/clang/Config.in
+> diff --git a/package/clang/clang.hash
+> b/package/llvm-project/clang/clang.hash
+> similarity index 100%
+> rename from package/clang/clang.hash
+> rename to package/llvm-project/clang/clang.hash
+> diff --git a/package/clang/clang.mk b/package/llvm-project/clang/clang.mk
+> similarity index 96%
+> rename from package/clang/clang.mk
+> rename to package/llvm-project/clang/clang.mk
+> index 3c75f8d6b1..0943e21a8c 100644
+> --- a/package/clang/clang.mk
+> +++ b/package/llvm-project/clang/clang.mk
+> @@ -4,10 +4,9 @@
 >  #
 >
 >  ########################################################################=
 ########
 >
 > -# LLVM, Clang and lld should be version bumped together
-> -LLD_VERSION =3D 11.1.0
-> -LLD_SITE =3D
-> https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLD_VERS=
-ION)
-> +LLD_VERSION =3D $(LLVM_PROJECT_VERSION)
-> +LLD_SITE =3D $(LLVM_PROJECT_SITE)
->  LLD_SOURCE =3D lld-$(LLD_VERSION).src.tar.xz
->  LLD_LICENSE =3D Apache-2.0 with exceptions
->  LLD_LICENSE_FILES =3D LICENSE.TXT
+> -CLANG_VERSION_MAJOR =3D 11
+> -CLANG_VERSION =3D $(CLANG_VERSION_MAJOR).1.0
+> -CLANG_SITE =3D
+> https://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VE=
+RSION)
+> +CLANG_VERSION_MAJOR =3D $(LLVM_PROJECT_VERSION_MAJOR)
+> +CLANG_VERSION =3D $(LLVM_PROJECT_VERSION)
+> +CLANG_SITE =3D $(LLVM_PROJECT_SITE)
+>  CLANG_SOURCE =3D clang-$(CLANG_VERSION).src.tar.xz
+>  CLANG_LICENSE =3D Apache-2.0 with exceptions
+>  CLANG_LICENSE_FILES =3D LICENSE.TXT
 > --
 > 2.34.1
 >
@@ -199,124 +262,182 @@ ION)
 > https://lists.buildroot.org/mailman/listinfo/buildroot
 >
 
---0000000000006f0cf70600ee8526
+--000000000000e34bc90600ee8560
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 <div dir=3D"ltr">Tested-by: Adam Duskett &lt;<a href=3D"mailto:adam.duskett=
 @amarulasolutions.com" target=3D"_blank">adam.duskett@amarulasolutions.com<=
 /a>&gt;<br></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"g=
-mail_attr">On Thu, Jun 15, 2023 at 6:44=E2=80=AFAM Sebastian Weyer &lt;<a h=
+mail_attr">On Thu, Jun 15, 2023 at 6:45=E2=80=AFAM Sebastian Weyer &lt;<a h=
 ref=3D"mailto:sebastian.weyer@smile.fr">sebastian.weyer@smile.fr</a>&gt; wr=
 ote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
  0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">From: Lang =
 Daniel &lt;<a href=3D"mailto:d.lang@abatec.at" target=3D"_blank">d.lang@aba=
 tec.at</a>&gt;<br>
 <br>
-To make version bumping easier, move lld to a new llvm-project subfolder<br=
->
+To make version bumping easier, move clang to a new llvm-project subfolder<=
+br>
 and specify site and version for the project.<br>
 <br>
 Signed-off-by: Daniel Lang &lt;<a href=3D"mailto:d.lang@abatec.at" target=
 =3D"_blank">d.lang@abatec.at</a>&gt;<br>
-Reviewed-by: Romain Naour &lt;<a href=3D"mailto:romain.naour@smile.fr" targ=
-et=3D"_blank">romain.naour@smile.fr</a>&gt;<br>
 Signed-off-by: Romain Naour &lt;<a href=3D"mailto:romain.naour@smile.fr" ta=
 rget=3D"_blank">romain.naour@smile.fr</a>&gt;<br>
 Signed-off-by: Sebastian Weyer &lt;<a href=3D"mailto:sebastian.weyer@smile.=
 fr" target=3D"_blank">sebastian.weyer@smile.fr</a>&gt;<br>
 ---<br>
-v4: change inaccuracy in commit message (move llvm -&gt; move lld)<br>
+v4: change inaccuracy in commit message (move llvm -&gt; move clang)<br>
+<br>
+v3: move &quot;package/llvm-project/clang/Config.in&quot; entry in package/=
+Config.in<br>
 ---<br>
 =C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 2 +-<b=
-r>
-=C2=A0package/Config.in.host=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 2 +-<br>
-=C2=A0package/{ =3D&gt; llvm-project}/lld/Config.in.host | 0<br>
-=C2=A0package/{ =3D&gt; llvm-project}/lld/lld.hash=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0| 0<br>
-=C2=A0package/{ =3D&gt; llvm-project}/lld/<a href=3D"http://lld.mk" rel=3D"=
-noreferrer" target=3D"_blank">lld.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=
- 5 ++---<br>
-=C2=A05 files changed, 4 insertions(+), 5 deletions(-)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/lld/Config.in.host (100%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/lld/lld.hash (100%)<br>
-=C2=A0rename package/{ =3D&gt; llvm-project}/lld/<a href=3D"http://lld.mk" =
-rel=3D"noreferrer" target=3D"_blank">lld.mk</a> (87%)<br>
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 6 +++---<br>
+=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 | 2 +-<br>
+=C2=A0...-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch | 0<br>
+=C2=A0package/{ =3D&gt; llvm-project}/clang/Config.in=C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 0<br>
+=C2=A0package/{ =3D&gt; llvm-project}/clang/clang.hash=C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 0<br>
+=C2=A0package/{ =3D&gt; llvm-project}/clang/<a href=3D"http://clang.mk" rel=
+=3D"noreferrer" target=3D"_blank">clang.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 7 +++----<br>
+=C2=A06 files changed, 7 insertions(+), 8 deletions(-)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/0001-lib-Driver-ToolChai=
+ns-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch (100%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/Config.in (100%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/clang.hash (100%)<br>
+=C2=A0rename package/{ =3D&gt; llvm-project}/clang/<a href=3D"http://clang.=
+mk" rel=3D"noreferrer" target=3D"_blank">clang.mk</a> (96%)<br>
 <br>
 diff --git a/DEVELOPERS b/DEVELOPERS<br>
-index c4273c5f85..befafff1d0 100644<br>
+index befafff1d0..1fb8295a7a 100644<br>
 --- a/DEVELOPERS<br>
 +++ b/DEVELOPERS<br>
-@@ -1638,7 +1638,7 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 package/clang/<br>
+@@ -1634,10 +1634,10 @@ F:=C2=A0 =C2=A0 =C2=A0 support/testing/tests/packag=
+e/test_python_aexpect.py<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Joseph Kogut &lt;<a href=3D"mailto:joseph.kogut=
+@gmail.com" target=3D"_blank">joseph.kogut@gmail.com</a>&gt;<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/at-spi2-core/<br>
+-F:=C2=A0 =C2=A0 =C2=A0package/clang/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0package/earlyoom/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0package/gconf/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libnss/<br>
--F:=C2=A0 =C2=A0 =C2=A0package/lld/<br>
-+F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/lld/<br>
++F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/clang/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/lld/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/llvm/<br>
 =C2=A0F:=C2=A0 =C2=A0 =C2=A0package/python-cython/<br>
-=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/python-pycups/<br>
-diff --git a/package/Config.in.host b/package/Config.in.host<br>
-index dcadbfdfc1..9addc88522 100644<br>
---- a/package/Config.in.host<br>
-+++ b/package/Config.in.host<br>
-@@ -51,7 +51,7 @@ menu &quot;Host utilities&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/jsmin/Config.in.host&quot;=
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/kmod/Config.in.host&quot;<=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/libp11/Config.in.host&quot=
-;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/lld/Config.in.host&quot;<b=
+@@ -2519,7 +2519,6 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 package/alure/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/aubio/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/binutils/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/bullet/<br>
+-F:=C2=A0 =C2=A0 =C2=A0package/clang/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/clinfo/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/efl/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/enet/<br>
+@@ -2538,6 +2537,7 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 package/libgta/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libiec61850/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libspatialindex/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/linux-syscall-support/<br>
++F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/clang/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/llvm/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/lugaru/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/mcelog/<br>
+@@ -2946,9 +2946,9 @@ F:=C2=A0 =C2=A0 =C2=A0 =C2=A0 package/gettext-tiny/<b=
 r>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/llvm-project/lld/Config.in=
-.host&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/lpc3250loader/Config.in.ho=
-st&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/lttng-babeltrace/Config.in=
-.host&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/lzma-alone/Config.in.host&=
-quot;<br>
-diff --git a/package/lld/Config.in.host b/package/llvm-project/lld/Config.i=
-n.host<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/tinyssh/<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Valentin Korenblit &lt;<a href=3D"mailto:valent=
+inkorenblit@gmail.com" target=3D"_blank">valentinkorenblit@gmail.com</a>&gt=
+;<br>
+-F:=C2=A0 =C2=A0 =C2=A0package/clang/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/clinfo/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/libclc/<br>
++F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/clang/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/llvm-project/llvm/<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Vanya Sergeev &lt;<a href=3D"mailto:vsergeev@gm=
+ail.com" target=3D"_blank">vsergeev@gmail.com</a>&gt;<br>
+diff --git a/package/Config.in b/package/Config.in<br>
+index dffffc195b..7f2f045c87 100644<br>
+--- a/package/Config.in<br>
++++ b/package/Config.in<br>
+@@ -2023,7 +2023,6 @@ menu &quot;Other&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/catch2/Config.in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/cctz/Config.in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/cereal/Config.in&quot;<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/clang/Config.in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/cmocka/Config.in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/compiler-rt/Config.in&quot=
+;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/cppcms/Config.in&quot;<br>
+@@ -2128,6 +2127,7 @@ comment &quot;linux-pam plugins&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/libpam-tacplus/Config.in&q=
+uot;<br>
+=C2=A0endif<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/liquid-dsp/Config.in&quot;=
+<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0source &quot;package/llvm-project/clang/Config.=
+in&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/llvm-project/llvm/Config.i=
+n&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/lttng-libust/Config.in&quo=
+t;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 source &quot;package/matio/Config.in&quot;<br>
+diff --git a/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_P=
+REFIX-in-.patch b/package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu=
+-Use-GCC_INSTALL_PREFIX-in-.patch<br>
 similarity index 100%<br>
-rename from package/lld/Config.in.host<br>
-rename to package/llvm-project/lld/Config.in.host<br>
-diff --git a/package/lld/lld.hash b/package/llvm-project/lld/lld.hash<br>
+rename from package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PR=
+EFIX-in-.patch<br>
+rename to package/llvm-project/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC=
+_INSTALL_PREFIX-in-.patch<br>
+diff --git a/package/clang/Config.in b/package/llvm-project/clang/Config.in=
+<br>
 similarity index 100%<br>
-rename from package/lld/lld.hash<br>
-rename to package/llvm-project/lld/lld.hash<br>
-diff --git a/package/lld/<a href=3D"http://lld.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">lld.mk</a> b/package/llvm-project/lld/<a href=3D"http://lld.mk=
-" rel=3D"noreferrer" target=3D"_blank">lld.mk</a><br>
-similarity index 87%<br>
-rename from package/lld/<a href=3D"http://lld.mk" rel=3D"noreferrer" target=
-=3D"_blank">lld.mk</a><br>
-rename to package/llvm-project/lld/<a href=3D"http://lld.mk" rel=3D"norefer=
-rer" target=3D"_blank">lld.mk</a><br>
-index 4bf903cda0..46ec3b13ff 100644<br>
---- a/package/lld/<a href=3D"http://lld.mk" rel=3D"noreferrer" target=3D"_b=
-lank">lld.mk</a><br>
-+++ b/package/llvm-project/lld/<a href=3D"http://lld.mk" rel=3D"noreferrer"=
- target=3D"_blank">lld.mk</a><br>
-@@ -4,9 +4,8 @@<br>
+rename from package/clang/Config.in<br>
+rename to package/llvm-project/clang/Config.in<br>
+diff --git a/package/clang/clang.hash b/package/llvm-project/clang/clang.ha=
+sh<br>
+similarity index 100%<br>
+rename from package/clang/clang.hash<br>
+rename to package/llvm-project/clang/clang.hash<br>
+diff --git a/package/clang/<a href=3D"http://clang.mk" rel=3D"noreferrer" t=
+arget=3D"_blank">clang.mk</a> b/package/llvm-project/clang/<a href=3D"http:=
+//clang.mk" rel=3D"noreferrer" target=3D"_blank">clang.mk</a><br>
+similarity index 96%<br>
+rename from package/clang/<a href=3D"http://clang.mk" rel=3D"noreferrer" ta=
+rget=3D"_blank">clang.mk</a><br>
+rename to package/llvm-project/clang/<a href=3D"http://clang.mk" rel=3D"nor=
+eferrer" target=3D"_blank">clang.mk</a><br>
+index 3c75f8d6b1..0943e21a8c 100644<br>
+--- a/package/clang/<a href=3D"http://clang.mk" rel=3D"noreferrer" target=
+=3D"_blank">clang.mk</a><br>
++++ b/package/llvm-project/clang/<a href=3D"http://clang.mk" rel=3D"norefer=
+rer" target=3D"_blank">clang.mk</a><br>
+@@ -4,10 +4,9 @@<br>
 =C2=A0#<br>
 =C2=A0#####################################################################=
 ###########<br>
 <br>
 -# LLVM, Clang and lld should be version bumped together<br>
--LLD_VERSION =3D 11.1.0<br>
--LLD_SITE =3D <a href=3D"https://github.com/llvm/llvm-project/releases/down=
-load/llvmorg-$(LLD_VERSION)" rel=3D"noreferrer" target=3D"_blank">https://g=
-ithub.com/llvm/llvm-project/releases/download/llvmorg-$(LLD_VERSION)</a><br=
->
-+LLD_VERSION =3D $(LLVM_PROJECT_VERSION)<br>
-+LLD_SITE =3D $(LLVM_PROJECT_SITE)<br>
-=C2=A0LLD_SOURCE =3D lld-$(LLD_VERSION).src.tar.xz<br>
-=C2=A0LLD_LICENSE =3D Apache-2.0 with exceptions<br>
-=C2=A0LLD_LICENSE_FILES =3D LICENSE.TXT<br>
+-CLANG_VERSION_MAJOR =3D 11<br>
+-CLANG_VERSION =3D $(CLANG_VERSION_MAJOR).1.0<br>
+-CLANG_SITE =3D <a href=3D"https://github.com/llvm/llvm-project/releases/do=
+wnload/llvmorg-$(CLANG_VERSION)" rel=3D"noreferrer" target=3D"_blank">https=
+://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VERSION)<=
+/a><br>
++CLANG_VERSION_MAJOR =3D $(LLVM_PROJECT_VERSION_MAJOR)<br>
++CLANG_VERSION =3D $(LLVM_PROJECT_VERSION)<br>
++CLANG_SITE =3D $(LLVM_PROJECT_SITE)<br>
+=C2=A0CLANG_SOURCE =3D clang-$(CLANG_VERSION).src.tar.xz<br>
+=C2=A0CLANG_LICENSE =3D Apache-2.0 with exceptions<br>
+=C2=A0CLANG_LICENSE_FILES =3D LICENSE.TXT<br>
 -- <br>
 2.34.1<br>
 <br>
@@ -329,9 +450,9 @@ oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
 uildroot</a><br>
 </blockquote></div>
 
---0000000000006f0cf70600ee8526--
+--000000000000e34bc90600ee8560--
 
---===============1656510350460222104==
+--===============5616902910586627583==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -342,4 +463,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1656510350460222104==--
+--===============5616902910586627583==--
