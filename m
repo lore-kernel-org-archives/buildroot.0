@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 190CAC0015E
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:31:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 880F5EB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:31:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2244612CB;
-	Thu, 20 Jul 2023 21:31:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2244612CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41782612BC;
+	Thu, 20 Jul 2023 21:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41782612BC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3JCdza5JPpXj; Thu, 20 Jul 2023 21:31:06 +0000 (UTC)
+	with ESMTP id KfGIHoHdknBr; Thu, 20 Jul 2023 21:31:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02B5C612A3;
-	Thu, 20 Jul 2023 21:31:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02B5C612A3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EAA451BF982
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:30:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A666612A3;
+	Thu, 20 Jul 2023 21:31:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A666612A3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 862421BF4D8
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C390C41E26
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:30:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C390C41E26
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60532404DD
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:30:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60532404DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ynvwo4jnsQqB for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 21:30:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF48541E13
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF48541E13
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE410874F0; Thu, 20 Jul 2023 21:30:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 20 Jul 2023 23:29:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 83651e1833f3f1845132800ed286bf91321e54a9
-X-Git-Newrev: 566e00adea17196dff8e041e36c9349ab6075e0f
-X-Patchwork-Hint: ignore
-Message-Id: <20230720213037.AE410874F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: bump version to 8.2.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1ox1686ZWwIg for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 21:30:51 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0AF7A4049D
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 21:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AF7A4049D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D7A8C1BF207;
+ Thu, 20 Jul 2023 21:30:48 +0000 (UTC)
+Date: Thu, 20 Jul 2023 23:30:47 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230720233047.11e3c641@windsurf>
+In-Reply-To: <20230720053915.34294-1-bernd@kuhls.net>
+References: <20230720053915.34294-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689888649;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8a9mIrOSTgf0Ha51w+9g3l141nCFBnTHAg3KA8zpZ3Q=;
+ b=pMSqC6n15BUBgAIXtozi2pEZBjTGMtYVoJnER6PRNBwSCbSgQL7Z12XuSZZQDbCwPsdGeR
+ gxaaVDQTpexl8Tkl0jDTb4JvKh2JzhFoSBc7vlfGPm/6JyStmNFHF9H3U5QXGcqt4IxLeB
+ QV1wtrr07P3aHDXNVFuxyDw/toPTt42ezdSqmDXt/rjYAaEPFuMD0qYnWThwxxWUBAkG9u
+ 0ELrvH08JH2k44MWvh8i1oy6NJjz17VIPDJ+SleACR4ch/rjKaesq8yfuAF7dd46P0k3jo
+ qrT39ezQBYNDwCwitm6hZO7xO5q81BZAK8+RZMrD/6n7E3lvkU80ORGEgeWXqQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=pMSqC6n1
+Subject: Re: [Buildroot] [PATCH 1/2] {linux, linux-headers}: bump 6.{1,
+ 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=566e00adea17196dff8e041e36c9349ab6075e0f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 20 Jul 2023 07:39:14 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Changelog: https://curl.se/changes.html#8_2_0
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  linux/Config.in                      | 2 +-
+>  linux/linux.hash                     | 4 ++--
+>  package/linux-headers/Config.in.host | 4 ++--
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Both applied, thanks!
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 18b2dbfd86..f606735c0f 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.1.2.tar.xz.asc
-+# https://curl.se/download/curl-8.2.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz
-+sha256  2859ec79e2cd96e976a99493547359b8001af1d1e21f3a3a3b846544ef54500f  curl-8.2.0.tar.xz
- sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 2be3415cb8..d0bf6ccead 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 8.1.2
-+LIBCURL_VERSION = 8.2.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
