@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5214C0015E
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 20:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F23AEB64DA
+	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 20:59:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 666866125F;
-	Thu, 20 Jul 2023 20:28:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 666866125F
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5EDD612B8;
+	Thu, 20 Jul 2023 20:59:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5EDD612B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aj0Z3JUmsuUA; Thu, 20 Jul 2023 20:28:35 +0000 (UTC)
+	with ESMTP id Ql27pvv5n3cI; Thu, 20 Jul 2023 20:59:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABEA66125D;
-	Thu, 20 Jul 2023 20:28:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABEA66125D
+	by smtp3.osuosl.org (Postfix) with ESMTP id D1047612CB;
+	Thu, 20 Jul 2023 20:59:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1047612CB
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D40B01BF59D
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 20:28:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 109321BF20B
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 20:59:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD768404FE
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 20:28:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD768404FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8A8441756
+ for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 20:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8A8441756
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qz00TUoOXPsc for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 20:28:32 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ED5284013F
- for <buildroot@buildroot.org>; Thu, 20 Jul 2023 20:28:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED5284013F
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 01F2AA4C042C;
- Thu, 20 Jul 2023 22:28:30 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42676)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qMaGD-00027u-2a;
- Thu, 20 Jul 2023 22:28:29 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTP id 7E4vk0uEKyfu for <buildroot@lists.busybox.net>;
+ Thu, 20 Jul 2023 20:59:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1275241738
+ for <buildroot@buildroot.org>; Thu, 20 Jul 2023 20:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1275241738
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F1EDA8747E; Thu, 20 Jul 2023 20:59:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 20 Jul 2023 22:28:29 +0200
-Message-Id: <20230720202829.2568063-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1689884910;
- bh=ZzxdAG2ZwGakXViAkTpYQJS1CAMRMo/iO75iEvcNwRk=;
- h=From:To:Cc:Subject:Date:From;
- b=tK8+AD/Mm75Y8h7R9lpRu1+4I9UGraBCBqZaYOgLBC6mvNsGdAVeTGBUab93Sr+gx
- DW/T9lFBE0zpH6P5wCDG6GgohxbhDcFfQ0d+FtT4w3zx0o2hp5vlTAGFdcj3YFpgbO
- n1zPVYTmjI85Yvb8bilU32FCxSiIuSTmPTFWNIvfacokO7yrBiuYYU1JHCOoAaoifL
- Gb2gmnnl7h7IFoeDbL4/N8dSL8zjmYlri7RIO7wi/QYa6IilcxMAlU4R4Zj7wpDrx7
- NHqNxPKaFjbalNHkJXw+PCw8/xY9yyvEFgoOdS44AbNmcitZpCYPxrLDpZLQuagAnT
- O/2v9CF2oq1eQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=tK8+AD/M
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix comment
+Date: Thu, 20 Jul 2023 22:36:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 157089d34d06712b67f42b083bcfb16a9bdee1f0
+X-Git-Newrev: f6eaf60e8087cb2d6c251fa17757014114946c5c
+X-Patchwork-Hint: ignore
+Message-Id: <20230720205935.F1EDA8747E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm-project: new group for llvm
+ packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,30 +56,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jianhui Zhao <zhaojh329@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=f6eaf60e8087cb2d6c251fa17757014114946c5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+To make updating easier in the future, group all llvm projects in
+one subfolder and define some variables for all of them.
+
+Introduce LLVM_PROJECT_VERSION_MAJOR to be used by the clang package
+in a followup change.
+
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+Tested-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuhttpd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS                           |  1 +
+ package/llvm-project/llvm-project.mk | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/libuhttpd/Config.in b/package/libuhttpd/Config.in
-index a552a88f0c..d89f4541b6 100644
---- a/package/libuhttpd/Config.in
-+++ b/package/libuhttpd/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_LIBUHTTPD
- 
- comment "libuhttpd needs a toolchain w/ gcc >= 4.9"
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--- 
-2.39.2
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 405ccd645a..f2908fabc5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -660,6 +660,7 @@ F:	package/glibmm2_66/
+ F:	package/gtkmm3/
+ F:	package/libsigc/
+ F:	package/libsigc2/
++F:	package/llvm-project/
+ F:	package/paho-mqtt-cpp/
+ F:	package/pangomm/
+ F:	package/pangomm2_46/
+diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
+new file mode 100644
+index 0000000000..747a6f5647
+--- /dev/null
++++ b/package/llvm-project/llvm-project.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# llvm-project
++#
++################################################################################
++
++LLVM_PROJECT_VERSION_MAJOR = 11
++LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).1.0
++LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
++
++include $(sort $(wildcard package/llvm-project/*/*.mk))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
