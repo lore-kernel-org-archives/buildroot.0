@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 552EAEB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 21:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBBE6C0015E
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 21:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E48E5402A7;
-	Fri, 21 Jul 2023 21:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E48E5402A7
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3BF641862;
+	Fri, 21 Jul 2023 21:22:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3BF641862
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pRmob4a1S436; Fri, 21 Jul 2023 21:21:53 +0000 (UTC)
+	with ESMTP id 7m76iTkFb7OM; Fri, 21 Jul 2023 21:22:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 348AE4013C;
-	Fri, 21 Jul 2023 21:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 348AE4013C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 93BF91BF82F
+	by smtp2.osuosl.org (Postfix) with ESMTP id BED7A4186B;
+	Fri, 21 Jul 2023 21:22:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BED7A4186B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 97DCF1BF983
  for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 21:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 798234092B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EAA64013C
  for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 21:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 798234092B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EAA64013C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pcY4B-WD1isL for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l92Y34bzVsDk for <buildroot@lists.busybox.net>;
  Fri, 21 Jul 2023 21:21:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A011408E1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C9E440128
  for <buildroot@buildroot.org>; Fri, 21 Jul 2023 21:21:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A011408E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C9E440128
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 654A187542; Fri, 21 Jul 2023 21:21:49 +0000 (UTC)
+ id 7ADA187543; Fri, 21 Jul 2023 21:21:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 21 Jul 2023 23:21:04 +0200
+Date: Fri, 21 Jul 2023 23:21:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bc3ab165ea2647cbc025c08e19730918ae92487d
-X-Git-Newrev: 6c78b787fbed4c8059592264436dc1ddd03f4a78
+X-Git-Oldrev: 6c78b787fbed4c8059592264436dc1ddd03f4a78
+X-Git-Newrev: 975cba201c7e6dd7e8ebd49423c5ed3fab477507
 X-Patchwork-Hint: ignore
-Message-Id: <20230721212149.654A187542@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
- 20.3.13-Nexus
+Message-Id: <20230721212149.7ADA187543@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-peripheral-joystick: bump
+ version to 20.1.10-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c78b787fbed4c8059592264436dc1ddd03f4a78
+commit: https://git.buildroot.net/buildroot/commit/?id=975cba201c7e6dd7e8ebd49423c5ed3fab477507
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index 9939c6f73b..e14491f192 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index ea22c603ac..6a128604b0 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  68aa0a3af4f10396c866b0da225928033d0bbf980b8884c944dd1829e013435d  kodi-pvr-zattoo-20.3.10-Nexus.tar.gz
-+sha256  5a2fa7655b3c62912341f453a98df81fa47e53c3c54a4e9bea47a4a85f4d2a20  kodi-pvr-zattoo-20.3.13-Nexus.tar.gz
+-sha256  b1b379e7eb24a16702745c78a57b2f246a013becf5c2daf7579651cbf2188b82  kodi-peripheral-joystick-20.1.9-Nexus.tar.gz
++sha256  b72277358df77ed79a0e7f3ae7e9799d02692fb30408cf6e5325ce7e5a34f597  kodi-peripheral-joystick-20.1.10-Nexus.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 53153f8f59..94cc9f2a05 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index a8c2502420..e55c92b121 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_ZATTOO_VERSION = 20.3.10-Nexus
-+KODI_PVR_ZATTOO_VERSION = 20.3.13-Nexus
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.9-Nexus
++KODI_PERIPHERAL_JOYSTICK_VERSION = 20.1.10-Nexus
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
