@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FE47EB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 20:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A0C2EB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 20:56:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DA624185A;
-	Fri, 21 Jul 2023 20:55:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DA624185A
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8FF74185B;
+	Fri, 21 Jul 2023 20:56:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8FF74185B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id emvUB_Eac0BA; Fri, 21 Jul 2023 20:55:25 +0000 (UTC)
+	with ESMTP id mIyPBgnXZocq; Fri, 21 Jul 2023 20:56:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4922F4055E;
-	Fri, 21 Jul 2023 20:55:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4922F4055E
+	by smtp2.osuosl.org (Postfix) with ESMTP id C86094055E;
+	Fri, 21 Jul 2023 20:56:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C86094055E
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 870031BF299
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:55:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F0671BF299
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A3CB61012
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A3CB61012
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38FE461012
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:56:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38FE461012
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ml5C2JFd30jC for <buildroot@lists.busybox.net>;
- Fri, 21 Jul 2023 20:55:21 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0DB8960D88
- for <buildroot@buildroot.org>; Fri, 21 Jul 2023 20:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DB8960D88
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1C0FF40003;
- Fri, 21 Jul 2023 20:55:18 +0000 (UTC)
-Date: Fri, 21 Jul 2023 22:55:16 +0200
-To: Alexander Shiyan <eagle.alexander923@gmail.com>
-Message-ID: <20230721225516.06eb14e0@windsurf>
-In-Reply-To: <20230721063755.315887-1-eagle.alexander923@gmail.com>
-References: <20230721063755.315887-1-eagle.alexander923@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689972918;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=6cm8osErO/JIrCEXPfTyWIt5AR6m0hXfAdyMcSmXbtg=;
- b=WHPhsfLoyQw5p/ePN+SpzIuHW6u386dkjwSHzFZwe4GfMhyNEW3gBbrXCBoEFkBc5YUIaX
- opiXEOf7COAb43RZK1NauMni2wKL8Z2VT7uejueNj3ceFjy0hEkr3Bk8uZH1bwiDsvZ7JZ
- Dpta8qnE5K6TZTontyBvOJa9mXbcLJ2DQYpte7LtnA2XlTJcoLOgatKBvQgVlCvUb7EwRi
- E0FGlaE4TYb36c38Sky8W0qEkP46kAa6oX4pAyimT7gs3nznYTpiYmMgijhTnJ2xYLLxqq
- JKe5gRwQG71CBpVgdrUFf79LS/24XLhBqoxviLbdh2GFWagxJiXD9ypVu82M1A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WHPhsfLo
-Subject: Re: [Buildroot] [PATCH] boot/barebox: Fix building of internal
- scripts
+ with ESMTP id 8b0HoztGo96i for <buildroot@lists.busybox.net>;
+ Fri, 21 Jul 2023 20:56:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D16E60D88
+ for <buildroot@buildroot.org>; Fri, 21 Jul 2023 20:56:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D16E60D88
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3E6488750E; Fri, 21 Jul 2023 20:56:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 21 Jul 2023 22:56:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 65f79438ef8d0d10319e453a776e8d8196fd2c44
+X-Git-Newrev: e356dada43183f658b8dab1b3d83c94e3cac2ad5
+X-Patchwork-Hint: ignore
+Message-Id: <20230721205651.3E6488750E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libuhttpd: add upstream patch to
+ fix openssl3 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,68 +58,150 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexander,
+commit: https://git.buildroot.net/buildroot/commit/?id=e356dada43183f658b8dab1b3d83c94e3cac2ad5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Jul 2023 09:37:55 +0300
-Alexander Shiyan <eagle.alexander923@gmail.com> wrote:
+Removed unneeded patches and replace them with an upstream commit.
 
-> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-> index 3961c69c56..9a8291c944 100644
-> --- a/boot/barebox/Config.in
-> +++ b/boot/barebox/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_TARGET_BAREBOX
->  	bool "Barebox"
-> +	select BR2_PACKAGE_HOST_PKGCONF
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-CMakeLists.txt-remove-Werror-from-CFLAGS.patch | 38 ----------------------
+ .../0002-compatibility-for-openssl-3.0.patch       | 31 ++++++++++++++++++
+ ...-CMakeLists.txt-remove-Werror-from-CFLAGS.patch | 38 ----------------------
+ 3 files changed, 31 insertions(+), 76 deletions(-)
 
-Strictly speaking, this is not needed.
-
-However, one issue with your patch is that you don't add host-pkgconf
-in BAREBOX_DEPENDENCIES, so there is nothing that ensures host-pkgconf
-will be built before barebox.
-
-Another issue is that Barebox is looking for host OpenSSL, and you have
-no guarantee that OpenSSL is installed system-wide on the build
-machine. Therefore, a dependency on host-openssl is also needed. I
-think this calls for an option like BR2_TARGET_UBOOT_NEEDS_OPENSSL, but
-for Barebox.
-
-> +# In order to compile some barebox target tools we need to use pkg-config,
-> +# so lets always use CONFIGURATOR_MAKE_ENV wrapper.
-> +	$$($(1)_CONFIGURATOR_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
->  	$$($(1)_BUILD_CUSTOM_ENV)
->  endef
-
-I don't think <pkg>_CONFIGURATOR_MAKE_ENV is intended to be used here.
-It is indeed to be used for the steps related to the configuration of
-kconfig-package, to run make menuconfig, make xconfig, etc.
-
-In U-Boot, we're doing this:
-
-        $(TARGET_CONFIGURE_OPTS) \
-                PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-                PKG_CONFIG_SYSROOT_DIR="/" \
-                PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-                PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-                PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
-                $(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
-                $(UBOOT_MAKE_TARGET)
-
-So probably we need something similar here.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch b/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
+deleted file mode 100644
+index 01f66f42d9..0000000000
+--- a/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From a7d47180777366b9ee374ee1fe0f1a155a02160b Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Thu, 20 Jul 2023 22:14:16 +0200
+-Subject: [PATCH] CMakeLists.txt: remove -Werror from CFLAGS
+-
+-Build is broken with OpenSSL 3.0, see buildroot autobuilder logs:
+-http://autobuild.buildroot.net/results/c09/c09c77e399e9ee410995a91a22306897eca667d1/build-end.log
+-
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:
+- In function 'ssl_last_error_string':
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:143:9:
+- error: 'ERR_peek_error_line_data' is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+-
+-cc1: all warnings being treated as errors
+-
+-Upstream: https://github.com/zhaojh329/libuhttpd/pull/22
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 6fb9651..64f506c 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -7,7 +7,7 @@ include(CheckLibraryExists)
+- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+- 
+- add_definitions(-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64)
+--add_compile_options(-O -Wall -Werror --std=gnu99)
+-+add_compile_options(-O -Wall --std=gnu99)
+- 
+- option(BUILD_STATIC "Build static library" OFF)
+- 
+--- 
+-2.39.2
+-
+diff --git a/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch b/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch
+new file mode 100644
+index 0000000000..484d472bad
+--- /dev/null
++++ b/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch
+@@ -0,0 +1,31 @@
++From d93e6426ec1d8c019bd302e4599f3b91ba95fb3b Mon Sep 17 00:00:00 2001
++From: Jianhui Zhao <zhaojh329@gmail.com>
++Date: Fri, 29 Apr 2022 23:47:31 +0800
++Subject: [PATCH] compatibility for openssl >= 3.0
++
++Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
++
++Upstream: https://github.com/zhaojh329/ssl/commit/d93e6426ec1d8c019bd302e4599f3b91ba95fb3b
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ openssl.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/openssl.c b/openssl.c
++index 278bab5..2169db1 100644
++--- a/src/ssl/openssl.c
+++++ b/src/ssl/openssl.c
++@@ -139,8 +139,11 @@ const char *ssl_last_error_string(char *buf, int len)
++ 
++     if (ssl_err_code == SSL_ERROR_SSL) {
++         int used;
++-
+++#if OPENSSL_VERSION_MAJOR < 3
++         ssl_err_code = ERR_peek_error_line_data(&file, &line, &data, &flags);
+++#else
+++        ssl_err_code = ERR_peek_error_all(&file, &line, NULL, &data, &flags);
+++#endif
++         ERR_error_string_n(ssl_err_code, buf, len);
++ 
++         used = strlen(buf);
+diff --git a/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch b/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
+deleted file mode 100644
+index 8e370e0a80..0000000000
+--- a/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From b22667f1054ea85c4dc3bdca5b7c84aeb0a801bc Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Thu, 20 Jul 2023 22:22:05 +0200
+-Subject: [PATCH] CMakeLists.txt: remove -Werror from CFLAGS
+-
+-Build is broken with OpenSSL 3.0, see buildroot autobuilder logs:
+-http://autobuild.buildroot.net/results/c09/c09c77e399e9ee410995a91a22306897eca667d1/build-end.log
+-
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:
+- In function 'ssl_last_error_string':
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:143:9:
+- error: 'ERR_peek_error_line_data' is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+-
+-cc1: all warnings being treated as errors
+-
+-Upstream: https://github.com/zhaojh329/ssl/pull/6
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 36488c7..98585b5 100644
+---- a/src/ssl/CMakeLists.txt
+-+++ b/src/ssl/CMakeLists.txt
+-@@ -78,7 +78,7 @@ if(SSL_SUPPORT)
+- 
+-     add_library(xssl STATIC ${SSL_SRC})
+-     target_compile_definitions(xssl PRIVATE ${SSL_DEFINE})
+--    target_compile_options(xssl PRIVATE -O -Wall -Werror --std=gnu99 -fPIC)
+-+    target_compile_options(xssl PRIVATE -O -Wall --std=gnu99 -fPIC)
+-     target_include_directories(xssl PRIVATE ${SSL_INC})
+-     target_link_libraries(xssl PRIVATE ${SSL_LIBS})
+- 
+--- 
+-2.39.2
+-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
