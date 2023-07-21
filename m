@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA5B5EB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 18:07:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE41FEB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 18:47:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4DBB883B14;
-	Fri, 21 Jul 2023 18:07:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DBB883B14
+	by smtp3.osuosl.org (Postfix) with ESMTP id 685D0610C9;
+	Fri, 21 Jul 2023 18:47:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 685D0610C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Xg9WLBYDo-84; Fri, 21 Jul 2023 18:07:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 70z6fCLASljk; Fri, 21 Jul 2023 18:47:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7A0B83A73;
-	Fri, 21 Jul 2023 18:07:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7A0B83A73
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BD9E6070A;
+	Fri, 21 Jul 2023 18:47:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BD9E6070A
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A447F1BF5B4
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:07:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 764381BF5B4
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 871BD83B12
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:07:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 871BD83B12
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55BED83B0F
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:47:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55BED83B0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sfXoyjAvy7QX for <buildroot@lists.busybox.net>;
- Fri, 21 Jul 2023 18:07:07 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 130B183A49
- for <buildroot@buildroot.org>; Fri, 21 Jul 2023 18:07:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 130B183A49
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3F9FBA4C0EEA
- for <buildroot@buildroot.org>; Fri, 21 Jul 2023 20:06:40 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43658)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qMuWV-0003kU-0S
- for buildroot@buildroot.org; Fri, 21 Jul 2023 20:06:39 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Fri, 21 Jul 2023 20:06:38 +0200
-Message-Id: <20230721180638.215414-3-bernd@kuhls.net>
+ with ESMTP id nc9wdzncb1mP for <buildroot@lists.busybox.net>;
+ Fri, 21 Jul 2023 18:47:51 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4C5DE83B05
+ for <buildroot@busybox.net>; Fri, 21 Jul 2023 18:47:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C5DE83B05
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-99357737980so351815366b.2
+ for <buildroot@busybox.net>; Fri, 21 Jul 2023 11:47:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1689965269; x=1690570069;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=03K0yQd5TC+R1336mkhJGlI1q4l8CmN22PD3KtvXBqg=;
+ b=Xtwa3S46/+ulUvB57q5Qz5zRHG5S7Rd74tIYSX/ZaPbDyxSTvUl5Jr6Q+LMpS7kcHE
+ 2k8TMmWpNPVy+TVvphNDF+BX8UOmOp/LSIQp+YYsl/b/6Tx2Z0TYi1BDhk57dnw4/Ata
+ Zp1zFF5mEvxGgkxhJGuccwjq2jJwi56ybxws+2+acbSZSaaX1g09QL9DNtfDK5cpKfwO
+ Wke925eDxi5FSuQLCDNV6wCwpalbyiHbIpa7DWFClgXmB7S7kXJ64e88+Y9tblIHJ61z
+ V3HxHU3cL4tclwgVTMaoq0DtUwexAl70OjeDbOmq437m8AmMogXuiC5XnwLQq72u489M
+ QPqg==
+X-Gm-Message-State: ABy/qLZuD2YpQ+5DvCu9yj40nT7Y0H3V03r+VkaYucpxwXk+XfC0eMvt
+ Yx8BUMODOGjQL/0fK8GQbX1JOkZ9QOQ=
+X-Google-Smtp-Source: APBJJlFFkq1orCur4tGGs2UISAQahxCJJCbLF4VSrZGHJVdwJf8dJYcBMwWZhaH/AAUqMJHoE1YVeA==
+X-Received: by 2002:a17:906:224c:b0:993:e752:1a70 with SMTP id
+ 12-20020a170906224c00b00993e7521a70mr2634680ejr.19.1689965269210; 
+ Fri, 21 Jul 2023 11:47:49 -0700 (PDT)
+Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ e27-20020a170906045b00b0098e38d2e584sm2523781eja.43.2023.07.21.11.47.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 21 Jul 2023 11:47:48 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Fri, 21 Jul 2023 20:47:44 +0200
+Message-Id: <20230721184744.819031-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230721180638.215414-1-bernd@kuhls.net>
-References: <20230721180638.215414-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1689962800;
- bh=32znutWYam5T7ADMcE+2TvbdRogQIG89rNmi1/BWuNM=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=VGVojMa4uLz96dLW37GP0BilVMagJBujUYF9AACJuAe+f17uB7+IqoPP0FvLUOQtf
- 6N/nPwmCi8oMWwx2MSkzOkFrFVC2RLsKjSXHEyt1IDVSsJ3vQNI9nloQb1bO6y707p
- 0HmxhjfycedP3/+13DozkrAb1dsLmGESUZO5uGsfA1wI7oFOMzAAAuAQj3y5/k8lNU
- sEJfxqPoJl1bygYyQZM3I9+fHPYQvpoL3p8L2EsLnA+vaG1IRNTEYRwnlQt+25phxf
- HCwgmLBjxo9/fFURJT4vqg6ETUpHLUPWOe0N9tTwgydavSMTWDDIB8fAkeHzPLI7ZX
- QaIgGJnygCBBA==
+ d=gmail.com; s=20221208; t=1689965269; x=1690570069;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=03K0yQd5TC+R1336mkhJGlI1q4l8CmN22PD3KtvXBqg=;
+ b=nEIkTpuBr07dyRSACXuIdjsMHOp3pp5P5ooP09ytn3RysHtN2EQJNdGqKsqBLlXiJi
+ DzGGOx/rAQFxcugJiKfJ9EGLfMqzUqXqi/mSLF9JzWSJiIKsEuT9WCW6EaGSOLCPaVcT
+ a9hjRSQdg7Vsix8OaRHOuWAtLQiUdqEq9t0yU9PJ8VumbUlY5NtPxIpWoJDehz/HrQsl
+ XsvuVj52zC+zcE126o8w/VBe4ARt/wL4QwvMDZTF4k4jjOnjS8xPkZuNYpQVol/Q2NHx
+ IyekSCk8Fhm4KNB3RIqJBe6l6uQEywpbNx0snTzccUvBzgsj6/7uTZC8MJ+jPDl5Ipuk
+ R72w==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=VGVojMa4
-Subject: [Buildroot] [PATCH 3/3] package/libopenssl: enable threads on
- static builds
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=nEIkTpuB
+Subject: [Buildroot] [PATCH] package/janet: bump to version 1.29.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,66 +98,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Revert upstream commit as proposed on the upstream bugtracker.
+remove merged patch
 
-Fixes:
-http://autobuild.buildroot.net/results/b8e/b8efae5bf6ac3b51e8443951ef1dd88824af3f2b/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0006-Revert-Fix-static-builds.patch       | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/libopenssl/0006-Revert-Fix-static-builds.patch
+ .../0001-Update-for-more-minimal-builds.patch | 29 -------------------
+ package/janet/janet.hash                      |  2 +-
+ package/janet/janet.mk                        |  2 +-
+ 3 files changed, 2 insertions(+), 31 deletions(-)
+ delete mode 100644 package/janet/0001-Update-for-more-minimal-builds.patch
 
-diff --git a/package/libopenssl/0006-Revert-Fix-static-builds.patch b/package/libopenssl/0006-Revert-Fix-static-builds.patch
-new file mode 100644
-index 0000000000..2bc0b961eb
---- /dev/null
-+++ b/package/libopenssl/0006-Revert-Fix-static-builds.patch
-@@ -0,0 +1,43 @@
-+From 847a7b744e31b9f57d2a3de495187db1dc0ee6d7 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Fri, 21 Jul 2023 19:30:40 +0200
-+Subject: [PATCH] Revert "Fix -static builds"
-+
-+This reverts commit cfd7225fbb9507b2e443a494459bdaab5236d29d.
-+
-+Upstream: https://github.com/openssl/openssl/issues/14574#issuecomment-817209126
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Configure | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/Configure b/Configure
-+index 2c17f4186b..94cab4c3c4 100755
-+--- a/Configure
-++++ b/Configure
-+@@ -1438,10 +1438,6 @@ foreach (keys %useradd) {
-+ # At this point, we can forget everything about %user and %useradd,
-+ # because it's now all been merged into the corresponding $config entry
-+ 
-+-if (grep { $_ =~ /(?:^|\s)-static(?:\s|$)/ } @{$config{LDFLAGS}}) {
-+-    disable('static', 'pic', 'threads');
-+-}
-+-
-+ # Allow overriding the build file name
-+ $config{build_file} = env('BUILDFILE') || $target{build_file} || "Makefile";
-+ 
-+@@ -1728,6 +1724,10 @@ if ($strict_warnings)
-+                 }
-+         }
-+ 
-++if (grep { $_ =~ /(?:^|\s)-static(?:\s|$)/ } @{$config{LDFLAGS}}) {
-++    disable('static', 'pic', 'threads');
-++}
-++
-+ $config{CFLAGS} = [ map { $_ eq '--ossl-strict-warnings'
-+                               ? @strict_warnings_collection
-+                               : ( $_ ) }
-+-- 
-+2.39.2
-+
+diff --git a/package/janet/0001-Update-for-more-minimal-builds.patch b/package/janet/0001-Update-for-more-minimal-builds.patch
+deleted file mode 100644
+index ba36a9beb..000000000
+--- a/package/janet/0001-Update-for-more-minimal-builds.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 746ff5307d309536984b648460e7b5c5dac44453 Mon Sep 17 00:00:00 2001
+-From: Calvin Rose <calsrose@gmail.com>
+-Date: Sun, 12 Feb 2023 12:14:11 -0600
+-Subject: [PATCH] Update for more minimal builds.
+-
+-[Retrieved (and backported) from:
+-https://github.com/janet-lang/janet/commit/746ff5307d309536984b648460e7b5c5dac44453]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/core/ffi.c   | 4 ++++
+- src/core/marsh.c | 2 ++
+- 2 files changed, 6 insertions(+)
+-
+-diff --git a/src/core/ffi.c b/src/core/ffi.c
+-index 45a498c7..b453f1f6 100644
+---- a/src/core/ffi.c
+-+++ b/src/core/ffi.c
+-@@ -1311,7 +1311,11 @@ JANET_CORE_FN(cfun_ffi_jitfn,
+-     size_t alloc_size = ((size_t) bytes.len + FFI_PAGE_MASK) & ~FFI_PAGE_MASK;
+- 
+- #ifdef JANET_FFI_JIT
+-+#ifdef JANET_EV
+-     JanetFFIJittedFn *fn = janet_abstract_threaded(&janet_type_ffijit, sizeof(JanetFFIJittedFn));
+-+#else
+-+    JanetFFIJittedFn *fn = janet_abstract(&janet_type_ffijit, sizeof(JanetFFIJittedFn));
+-+#endif
+-     fn->function_pointer = NULL;
+-     fn->size = 0;
+- #ifdef JANET_WINDOWS
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+index 47e0de4a0..15eaafc48 100644
+--- a/package/janet/janet.hash
++++ b/package/janet/janet.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  c95dab93e8e4ebcab5c293d5ee448fb43ab8bd2f6391fd66a6ca92fe1ec72c03  janet-1.26.0.tar.gz
++sha256  2ac3f69842f3e805a8d072a9e36f207f6287f063654c51cb3cd2b6e73b1cadf6  janet-1.29.1.tar.gz
+ 
+ # Locally calculated
+ sha256  95fca700e8dce9699248e7cc80ac88ce2357874c8352cd2be4d18f183dc9710b  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index db1eb2a5c..9c87ba79f 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANET_VERSION = 1.26.0
++JANET_VERSION = 1.29.1
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
 -- 
 2.39.2
 
