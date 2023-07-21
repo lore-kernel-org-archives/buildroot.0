@@ -4,52 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 635CDEB64DC
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 13:10:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 332ECEB64DC
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 15:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E00FE61307;
-	Fri, 21 Jul 2023 13:10:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E00FE61307
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8300B61408;
+	Fri, 21 Jul 2023 15:17:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8300B61408
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pWYz_R2IHXBr; Fri, 21 Jul 2023 13:10:17 +0000 (UTC)
+	with ESMTP id 6ieZ30yfgHyw; Fri, 21 Jul 2023 15:17:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF1AC612FE;
-	Fri, 21 Jul 2023 13:10:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF1AC612FE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 523701BF284
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 13:10:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79640613FD;
+	Fri, 21 Jul 2023 15:17:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79640613FD
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 678051BF23C
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 15:17:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B9ED612FE
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 13:10:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B9ED612FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 35E1641FA6
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 15:17:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35E1641FA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 42ajGmKBd0g2 for <buildroot@lists.busybox.net>;
- Fri, 21 Jul 2023 13:10:12 +0000 (UTC)
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5EAD612FB
- for <buildroot@buildroot.org>; Fri, 21 Jul 2023 13:10:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5EAD612FB
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2F011FB;
- Fri, 21 Jul 2023 06:10:54 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.57.31.144])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 853193F6C4;
- Fri, 21 Jul 2023 06:10:10 -0700 (PDT)
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l0pRIc6aOObI for <buildroot@lists.busybox.net>;
+ Fri, 21 Jul 2023 15:17:04 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1887641F8C
+ for <buildroot@buildroot.org>; Fri, 21 Jul 2023 15:17:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1887641F8C
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A9ABEA4C032D;
+ Fri, 21 Jul 2023 17:16:57 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35592)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qMrsH-0008DP-15;
+ Fri, 21 Jul 2023 17:16:57 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 21 Jul 2023 15:09:59 +0200
-Message-Id: <20230721130959.899919-1-vincent.stehle@arm.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230719125309.723762-1-vincent.stehle@arm.com>
-References: <20230719125309.723762-1-vincent.stehle@arm.com>
+Date: Fri, 21 Jul 2023 17:16:57 +0200
+Message-Id: <20230721151657.3457086-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] boot/arm-trusted-firmware: add patch to fix
- fiptool link
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1689952617;
+ bh=iZXYTK1KWV+S5wnRaCN7/eb4d9WySVsKGosso6zVKDk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=iK+lhnX7v/KKQkIb8fVsHULtvKcg2o2lbk6DYhMI1lPOpZeqgFxBM4yrNROOniISo
+ BOkr2d2q9Se+YqKEBLkkvpg8zurcRXmkRJL1dtbz0H2N46s0DJ3Vc2KwLEiwpycBwi
+ gWtdEo2zMcsY6maleic0VjsnYS9ZT6+IdEbKoyxPJ6SyIHQEHn4d/ouG2/gewD5uKe
+ fbA/0NbQzfFk1UkF9y3MvS9byWylFkQj+W4LaR/X9WxpHgnpAUaPK3K/pK9/nCfm5c
+ JZ2UmSvErS88JGBLjoonpNEngf2bJIyH1tddA1fyA8/R2Ycm5qzJwcdmQHdOulzeD9
+ SvMDRaGSjmG/A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=iK+lhnX7
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: add upstream patch to
+ fix openssl3 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,110 +75,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Jianhui Zhao <zhaojh329@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiBidWlsZGluZyBhIGZpcCBmaXJtd2FyZSAoQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJN
-V0FSRV9GSVA9eSksIHRoZQpURi1BIGJ1aWxkIHJlY2lwZSBzdGFydHMgYnkgYnVpbGRpbmcgdGhl
-IGhvc3QgcHJvZ3JhbSBmaXB0b29sIHdpdGggdGhlCnByb3BlciBidWlsZCBlbnZpcm9ubWVudCB2
-YXJpYWJsZXMuIFRoZW4gdGhlIG1haW4gVEYtQSB0YXJnZXQgZmlybXdhcmUKYnVpbGQgc3RlcCB0
-YWtlcyBwbGFjZSwgd2l0aCB0aGUgZXhwZWN0YXRpb24gdGhhdCB0aGUgZmlwdG9vbCBwcm9ncmFt
-IHdpbGwKYmUgdXNlZCB1bmRlciB0aGUgaG9vZCBpZiBuZWNlc3NhcnkuCgpJbiBURi1BLCB0aGUg
-YnVpbGQgcmVjaXBlIGZvciB0aGUgaG9zdCBwcm9ncmFtIGZpcHRvb2wgaGFzIHN1YnRseSBjaGFu
-Z2VkCmFmdGVyIHYyLjcsIGluIGNvbW1pdCBjZjJkZDE3ZGRkYTIgKCJyZWZhY3RvcihzZWN1cml0
-eSk6IGFkZCBPcGVuU1NMIDEueApjb21wYXRpYmlsaXR5IikuIFRoaXMgY2hhbmdlIGhhcyB0aGUg
-ZWZmZWN0IHRvIGZvcmNlIHJlLWxpbmtpbmcgZmlwdG9vbAplYWNoIHRpbWUuCgpJZiB3ZSB0cnkg
-dG8gYnVpbGQgd2l0aCBCdWlsZHJvb3QgYSBmaXAgZmlybXdhcmUgd2l0aCBhIFRGLUEgdmVyc2lv
-biBhZnRlcgp2Mi43IGNvbXByaXNpbmcgdGhlIGFmb3JlbWVudGlvbmVkIGNoYW5nZSwgdGhlIGZp
-cHRvb2wgcHJvZ3JhbSBpcyBmb3JjaWJseQpyZS1saW5rZWQgZHVyaW5nIHRoZSBtYWluIGZpcm13
-YXJlIGJ1aWxkIHN0ZXAuIFRoaXMgaGFwcGVucyB3aXRob3V0IHRoZQpwcm9wZXIgYnVpbGQgZW52
-aXJvbm1lbnQgdmFyaWFibGVzIGFuZCBjb25zZXF1ZW50bHksIGlmIG9wZW5zc2wgaXMgbm90Cmlu
-c3RhbGxlZCBvbiB0aGUgaG9zdCwgdGhlIGxpYmNyeXB0byBzaGFyZWQgbGlicmFyeSB3aWxsIG5v
-dCBiZSBmb3VuZCBieQp0aGUgbGlua2VyIGFuZCB0aGUgbGluayB3aWxsIGZhaWwgd2l0aCB0aGUg
-Zm9sbG93aW5nIGVycm9yOgoKICAvdXNyL2Jpbi9sZDogY2Fubm90IGZpbmQgLWxjcnlwdG86IE5v
-IHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKCkEgcGF0Y2ggaGFzIGJlZW4gaW50ZWdyYXRlZCBpbnRv
-IFRGLUEgdG8gYXZvaWQgcmUtbGlua2luZyBmaXB0b29sIHdoZW4gbm90Cm5lY2Vzc2FyeSwgd2hp
-Y2ggc2hvdWxkIHNvbHZlIHRoZSBwcm9ibGVtIHN0YXJ0aW5nIHdpdGggdmVyc2lvbiB2Mi4xMC4g
-QWRkCnRoYXQgcGF0Y2ggaW4gQnVpbGRyb290IGZvciB2ZXJzaW9ucyB2Mi44IGFuZCB2Mi45LCB0
-byByZXBhaXIgdGhlIGJ1aWxkIGluCnRoZSBjYXNlcyBkZXNjcmliZWQgYWJvdmUuCgpGaXhlczoK
-CiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy80NjY0
-ODQ1NzY3CgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFy
-bS5jb20+CkNjOiBEaWNrIE9sc3NvbiA8aGlAc2VuemlsbGEuaW8+CkNjOiBTZXJnZXkgTWF0eXVr
-ZXZpY2ggPGdlb21hdHNpQGdtYWlsLmNvbT4KLS0tCkNoYW5nZXMgdjEgLT4gdjI6CiAgLSBBZGQg
-Rml4ZXM6IG1lbnRpb24gICAoc3VnZ2VzdGVkIGJ5IFRob21hcykKCiAuLi4xLWJ1aWxkLXRvb2xz
-LWF2b2lkLXVubmVjZXNzYXJ5LWxpbmsucGF0Y2ggfCA3NyArKysrKysrKysrKysrKysrKysrCiAu
-Li4xLWJ1aWxkLXRvb2xzLWF2b2lkLXVubmVjZXNzYXJ5LWxpbmsucGF0Y2ggfCAgMSArCiAyIGZp
-bGVzIGNoYW5nZWQsIDc4IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib290L2Fy
-bS10cnVzdGVkLWZpcm13YXJlL3YyLjgvMDAwMS1idWlsZC10b29scy1hdm9pZC11bm5lY2Vzc2Fy
-eS1saW5rLnBhdGNoCiBjcmVhdGUgbW9kZSAxMjAwMDAgYm9vdC9hcm0tdHJ1c3RlZC1maXJtd2Fy
-ZS92Mi45LzAwMDEtYnVpbGQtdG9vbHMtYXZvaWQtdW5uZWNlc3NhcnktbGluay5wYXRjaAoKZGlm
-ZiAtLWdpdCBhL2Jvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvdjIuOC8wMDAxLWJ1aWxkLXRvb2xz
-LWF2b2lkLXVubmVjZXNzYXJ5LWxpbmsucGF0Y2ggYi9ib290L2FybS10cnVzdGVkLWZpcm13YXJl
-L3YyLjgvMDAwMS1idWlsZC10b29scy1hdm9pZC11bm5lY2Vzc2FyeS1saW5rLnBhdGNoCm5ldyBm
-aWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjllMGVhNzQyNDgKLS0tIC9kZXYvbnVs
-bAorKysgYi9ib290L2FybS10cnVzdGVkLWZpcm13YXJlL3YyLjgvMDAwMS1idWlsZC10b29scy1h
-dm9pZC11bm5lY2Vzc2FyeS1saW5rLnBhdGNoCkBAIC0wLDAgKzEsNzcgQEAKK0Zyb20gYWE1N2Nl
-NjMyYzYyOWZlNzJmZjQxN2UyNjFlMGY1YmZkOGRiNmJhYiBNb24gU2VwIDE3IDAwOjAwOjAwIDIw
-MDEKK0Zyb206ID0/VVRGLTg/cT9WaW5jZW50PTIwU3RlaGw9QzM9QTk/PSA8dmluY2VudC5zdGVo
-bGVAYXJtLmNvbT4KK0RhdGU6IFR1ZSwgNCBKdWwgMjAyMyAxNjoxNDowMiArMDIwMAorU3ViamVj
-dDogW1BBVENIXSBidWlsZCh0b29scyk6IGF2b2lkIHVubmVjZXNzYXJ5IGxpbmsKK01JTUUtVmVy
-c2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRl
-bnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworSW4gdGhlaXIgcmVzcGVjdGl2ZSBtYWtlZmls
-ZXMsIGNlcnRfY3JlYXRlLCBlbmNyeXB0X2Z3IGFuZCBmaXB0b29sCitkZXBlbmQgb24gdGhlIC0t
-b3BlbnNzbCBwaG9ueSB0YXJnZXQgYXMgYSBwcmVyZXF1aXNpdGUuIFRoaXMgZm9yY2VzCit0aG9z
-ZSB0b29scyB0byBiZSByZS1saW5rZWQgZWFjaCB0aW1lLgorCitNb3ZlIHRoZSBkZXBlbmRlbmNp
-ZXMgb24gdGhlIC0tb3BlbnNzbCB0YXJnZXQgZnJvbSB0aGUgdG9vbHMgdG8gdGhlaXIKK21ha2Vm
-aWxlcyBhbGwgdGFyZ2V0cywgdG8gYXZvaWQgdW5uZWNlc3NhcnkgbGlua2luZyB3aGlsZSBwcmVz
-ZXJ2aW5nIHRoZQorT3BlblNTTCB2ZXJzaW9uIHByaW50aW5nIGRvbmUgaW4gdGhlIC0tb3BlbnNz
-bCB0YXJnZXRzIHdoZW4gaW4gZGVidWcuCisKK0ZpeGVzOiBjZjJkZDE3ZGRkYTIgKCJyZWZhY3Rv
-cihzZWN1cml0eSk6IGFkZCBPcGVuU1NMIDEueCBjb21wYXRpYmlsaXR5IikKK1NpZ25lZC1vZmYt
-Ynk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNvbT4KK0NoYW5nZS1JZDog
-STk4YTNhYjMwZjM2ZGZmYzI1M2NlY2FhZjNhNTdkMjcxMjUyMjEzNWQKK1Vwc3RyZWFtOiBodHRw
-czovL2dpdC50cnVzdGVkZmlybXdhcmUub3JnL1RGLUEvdHJ1c3RlZC1maXJtd2FyZS1hLmdpdC9j
-b21taXQvP2lkPWFhNTdjZTYzMmM2MjlmZTcyZmY0MTdlMjYxZTBmNWJmZDhkYjZiYWIKKy0tLQor
-IHRvb2xzL2NlcnRfY3JlYXRlL01ha2VmaWxlIHwgNCArKy0tCisgdG9vbHMvZW5jcnlwdF9mdy9N
-YWtlZmlsZSAgfCA0ICsrLS0KKyB0b29scy9maXB0b29sL01ha2VmaWxlICAgICB8IDQgKystLQor
-IDMgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQorCitkaWZm
-IC0tZ2l0IGEvdG9vbHMvY2VydF9jcmVhdGUvTWFrZWZpbGUgYi90b29scy9jZXJ0X2NyZWF0ZS9N
-YWtlZmlsZQoraW5kZXggMDQyZTg0NDYyNi4uYjkxMWQxOWQyYiAxMDA2NDQKKy0tLSBhL3Rvb2xz
-L2NlcnRfY3JlYXRlL01ha2VmaWxlCisrKysgYi90b29scy9jZXJ0X2NyZWF0ZS9NYWtlZmlsZQor
-QEAgLTg1LDkgKzg1LDkgQEAgSE9TVENDID89IGdjYworIAorIC5QSE9OWTogYWxsIGNsZWFuIHJl
-YWxjbGVhbiAtLW9wZW5zc2wKKyAKKy1hbGw6ICR7QklOQVJZfQorK2FsbDogLS1vcGVuc3NsICR7
-QklOQVJZfQorIAorLSR7QklOQVJZfTogLS1vcGVuc3NsICR7T0JKRUNUU30gTWFrZWZpbGUKKysk
-e0JJTkFSWX06ICR7T0JKRUNUU30gTWFrZWZpbGUKKyAJQGVjaG8gIiAgSE9TVExEICAkQCIKKyAJ
-QGVjaG8gJ2NvbnN0IGNoYXIgYnVpbGRfbXNnW10gPSAiQnVpbHQgOiAiX19USU1FX18iLCAiX19E
-QVRFX187IFwKKyAgICAgICAgICAgICAgICAgY29uc3QgY2hhciBwbGF0Zm9ybV9tc2dbXSA9ICIk
-e1BMQVRfTVNHfSI7JyB8IFwKK2RpZmYgLS1naXQgYS90b29scy9lbmNyeXB0X2Z3L01ha2VmaWxl
-IGIvdG9vbHMvZW5jcnlwdF9mdy9NYWtlZmlsZQoraW5kZXggMjkzOWIxNDJiZS4uOTI0ZTVmZWJh
-YiAxMDA2NDQKKy0tLSBhL3Rvb2xzL2VuY3J5cHRfZncvTWFrZWZpbGUKKysrKyBiL3Rvb2xzL2Vu
-Y3J5cHRfZncvTWFrZWZpbGUKK0BAIC02NSw5ICs2NSw5IEBAIEhPU1RDQyA/PSBnY2MKKyAKKyAu
-UEhPTlk6IGFsbCBjbGVhbiByZWFsY2xlYW4gLS1vcGVuc3NsCisgCistYWxsOiAke0JJTkFSWX0K
-KythbGw6IC0tb3BlbnNzbCAke0JJTkFSWX0KKyAKKy0ke0JJTkFSWX06IC0tb3BlbnNzbCAke09C
-SkVDVFN9IE1ha2VmaWxlCisrJHtCSU5BUll9OiAke09CSkVDVFN9IE1ha2VmaWxlCisgCUBlY2hv
-ICIgIEhPU1RMRCAgJEAiCisgCUBlY2hvICdjb25zdCBjaGFyIGJ1aWxkX21zZ1tdID0gIkJ1aWx0
-IDogIl9fVElNRV9fIiwgIl9fREFURV9fOycgfCBcCisgICAgICAgICAgICAgICAgICR7SE9TVEND
-fSAtYyAke0hPU1RDQ0ZMQUdTfSAteGMgLSAtbyBzcmMvYnVpbGRfbXNnLm8KK2RpZmYgLS1naXQg
-YS90b29scy9maXB0b29sL01ha2VmaWxlIGIvdG9vbHMvZmlwdG9vbC9NYWtlZmlsZQoraW5kZXgg
-MmViZWUzMzkzMS4uNGJkZWJkOTIzNSAxMDA2NDQKKy0tLSBhL3Rvb2xzL2ZpcHRvb2wvTWFrZWZp
-bGUKKysrKyBiL3Rvb2xzL2ZpcHRvb2wvTWFrZWZpbGUKK0BAIC02OCw5ICs2OCw5IEBAIERFUFMg
-Oj0gJChwYXRzdWJzdCAlLm8sJS5kLCQoT0JKRUNUUykpCisgCisgLlBIT05ZOiBhbGwgY2xlYW4g
-ZGlzdGNsZWFuIC0tb3BlbnNzbAorIAorLWFsbDogJHtQUk9KRUNUfQorK2FsbDogLS1vcGVuc3Ns
-ICR7UFJPSkVDVH0KKyAKKy0ke1BST0pFQ1R9OiAtLW9wZW5zc2wgJHtPQkpFQ1RTfSBNYWtlZmls
-ZQorKyR7UFJPSkVDVH06ICR7T0JKRUNUU30gTWFrZWZpbGUKKyAJQGVjaG8gIiAgSE9TVExEICAk
-QCIKKyAJJHtRfSR7SE9TVENDfSAke09CSkVDVFN9IC1vICRAICR7TERMSUJTfQorIAlAJHtFQ0hP
-X0JMQU5LX0xJTkV9CistLSAKKzIuMjUuMQorCmRpZmYgLS1naXQgYS9ib290L2FybS10cnVzdGVk
-LWZpcm13YXJlL3YyLjkvMDAwMS1idWlsZC10b29scy1hdm9pZC11bm5lY2Vzc2FyeS1saW5rLnBh
-dGNoIGIvYm9vdC9hcm0tdHJ1c3RlZC1maXJtd2FyZS92Mi45LzAwMDEtYnVpbGQtdG9vbHMtYXZv
-aWQtdW5uZWNlc3NhcnktbGluay5wYXRjaApuZXcgZmlsZSBtb2RlIDEyMDAwMAppbmRleCAwMDAw
-MDAwMDAwLi5lNDE0YjQ2ZTBmCi0tLSAvZGV2L251bGwKKysrIGIvYm9vdC9hcm0tdHJ1c3RlZC1m
-aXJtd2FyZS92Mi45LzAwMDEtYnVpbGQtdG9vbHMtYXZvaWQtdW5uZWNlc3NhcnktbGluay5wYXRj
-aApAQCAtMCwwICsxIEBACisuLi92Mi44LzAwMDEtYnVpbGQtdG9vbHMtYXZvaWQtdW5uZWNlc3Nh
-cnktbGluay5wYXRjaApcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKLS0gCjIuNDAuMQoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Removed unneeded patches and replace them with an upstream commit.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+Sorry, saw the upstream fix too late.
+
+ ...eLists.txt-remove-Werror-from-CFLAGS.patch | 38 -------------------
+ .../0002-compatibility-for-openssl-3.0.patch  | 31 +++++++++++++++
+ ...eLists.txt-remove-Werror-from-CFLAGS.patch | 38 -------------------
+ 3 files changed, 31 insertions(+), 76 deletions(-)
+ delete mode 100644 package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
+ create mode 100644 package/libuhttpd/0002-compatibility-for-openssl-3.0.patch
+ delete mode 100644 package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
+
+diff --git a/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch b/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
+deleted file mode 100644
+index 01f66f42d9..0000000000
+--- a/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From a7d47180777366b9ee374ee1fe0f1a155a02160b Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Thu, 20 Jul 2023 22:14:16 +0200
+-Subject: [PATCH] CMakeLists.txt: remove -Werror from CFLAGS
+-
+-Build is broken with OpenSSL 3.0, see buildroot autobuilder logs:
+-http://autobuild.buildroot.net/results/c09/c09c77e399e9ee410995a91a22306897eca667d1/build-end.log
+-
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:
+- In function 'ssl_last_error_string':
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:143:9:
+- error: 'ERR_peek_error_line_data' is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+-
+-cc1: all warnings being treated as errors
+-
+-Upstream: https://github.com/zhaojh329/libuhttpd/pull/22
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 6fb9651..64f506c 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -7,7 +7,7 @@ include(CheckLibraryExists)
+- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+- 
+- add_definitions(-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64)
+--add_compile_options(-O -Wall -Werror --std=gnu99)
+-+add_compile_options(-O -Wall --std=gnu99)
+- 
+- option(BUILD_STATIC "Build static library" OFF)
+- 
+--- 
+-2.39.2
+-
+diff --git a/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch b/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch
+new file mode 100644
+index 0000000000..484d472bad
+--- /dev/null
++++ b/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch
+@@ -0,0 +1,31 @@
++From d93e6426ec1d8c019bd302e4599f3b91ba95fb3b Mon Sep 17 00:00:00 2001
++From: Jianhui Zhao <zhaojh329@gmail.com>
++Date: Fri, 29 Apr 2022 23:47:31 +0800
++Subject: [PATCH] compatibility for openssl >= 3.0
++
++Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
++
++Upstream: https://github.com/zhaojh329/ssl/commit/d93e6426ec1d8c019bd302e4599f3b91ba95fb3b
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ openssl.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/openssl.c b/openssl.c
++index 278bab5..2169db1 100644
++--- a/src/ssl/openssl.c
+++++ b/src/ssl/openssl.c
++@@ -139,8 +139,11 @@ const char *ssl_last_error_string(char *buf, int len)
++ 
++     if (ssl_err_code == SSL_ERROR_SSL) {
++         int used;
++-
+++#if OPENSSL_VERSION_MAJOR < 3
++         ssl_err_code = ERR_peek_error_line_data(&file, &line, &data, &flags);
+++#else
+++        ssl_err_code = ERR_peek_error_all(&file, &line, NULL, &data, &flags);
+++#endif
++         ERR_error_string_n(ssl_err_code, buf, len);
++ 
++         used = strlen(buf);
+diff --git a/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch b/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
+deleted file mode 100644
+index 8e370e0a80..0000000000
+--- a/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From b22667f1054ea85c4dc3bdca5b7c84aeb0a801bc Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Thu, 20 Jul 2023 22:22:05 +0200
+-Subject: [PATCH] CMakeLists.txt: remove -Werror from CFLAGS
+-
+-Build is broken with OpenSSL 3.0, see buildroot autobuilder logs:
+-http://autobuild.buildroot.net/results/c09/c09c77e399e9ee410995a91a22306897eca667d1/build-end.log
+-
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:
+- In function 'ssl_last_error_string':
+-/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:143:9:
+- error: 'ERR_peek_error_line_data' is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+-
+-cc1: all warnings being treated as errors
+-
+-Upstream: https://github.com/zhaojh329/ssl/pull/6
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 36488c7..98585b5 100644
+---- a/src/ssl/CMakeLists.txt
+-+++ b/src/ssl/CMakeLists.txt
+-@@ -78,7 +78,7 @@ if(SSL_SUPPORT)
+- 
+-     add_library(xssl STATIC ${SSL_SRC})
+-     target_compile_definitions(xssl PRIVATE ${SSL_DEFINE})
+--    target_compile_options(xssl PRIVATE -O -Wall -Werror --std=gnu99 -fPIC)
+-+    target_compile_options(xssl PRIVATE -O -Wall --std=gnu99 -fPIC)
+-     target_include_directories(xssl PRIVATE ${SSL_INC})
+-     target_link_libraries(xssl PRIVATE ${SSL_LIBS})
+- 
+--- 
+-2.39.2
+-
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
