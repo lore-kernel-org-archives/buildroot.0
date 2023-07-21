@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A0C2EB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 20:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67CC0C0015E
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 20:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8FF74185B;
-	Fri, 21 Jul 2023 20:56:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8FF74185B
+	by smtp2.osuosl.org (Postfix) with ESMTP id E87A340128;
+	Fri, 21 Jul 2023 20:59:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E87A340128
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mIyPBgnXZocq; Fri, 21 Jul 2023 20:56:56 +0000 (UTC)
+	with ESMTP id Ty_tSDlC4_XF; Fri, 21 Jul 2023 20:59:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C86094055E;
-	Fri, 21 Jul 2023 20:56:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C86094055E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F0671BF299
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:56:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35A4E41863;
+	Fri, 21 Jul 2023 20:59:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35A4E41863
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DD601BF20B
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38FE461012
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:56:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38FE461012
+ by smtp4.osuosl.org (Postfix) with ESMTP id 652C741FCF
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 20:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 652C741FCF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8b0HoztGo96i for <buildroot@lists.busybox.net>;
- Fri, 21 Jul 2023 20:56:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D16E60D88
- for <buildroot@buildroot.org>; Fri, 21 Jul 2023 20:56:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D16E60D88
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E6488750E; Fri, 21 Jul 2023 20:56:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 21 Jul 2023 22:56:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65f79438ef8d0d10319e453a776e8d8196fd2c44
-X-Git-Newrev: e356dada43183f658b8dab1b3d83c94e3cac2ad5
-X-Patchwork-Hint: ignore
-Message-Id: <20230721205651.3E6488750E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libuhttpd: add upstream patch to
- fix openssl3 build
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wpCXyumZHPC7 for <buildroot@lists.busybox.net>;
+ Fri, 21 Jul 2023 20:59:35 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 039D941FCD
+ for <buildroot@buildroot.org>; Fri, 21 Jul 2023 20:59:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 039D941FCD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 223EC20003;
+ Fri, 21 Jul 2023 20:59:30 +0000 (UTC)
+Date: Fri, 21 Jul 2023 22:59:29 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230721225929.4990609f@windsurf>
+In-Reply-To: <20230721151657.3457086-1-bernd@kuhls.net>
+References: <20230721151657.3457086-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1689973171;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=QC8Z+MiykrMVts6F44m/C7hqW9MLoV+yGSJzEGkwP3E=;
+ b=l8IWWWJrGzTOyFkuUNmN8wzE18O2oCPmTknvnQHLk/UuJolA81SCfgUn99BF9+hr61tZ5E
+ eyOjp3EjDuyTzt6Vdr2mQXlI/oPaaRfk14D9frajqmpJ8mhiVkmONt6gzRjMgdlViHJo7P
+ CE/nrWB97DienolGBCv2l0pcPhL9VhVGPTFelzD2fsHDUD/IyOHcrfh2lX+fxg7Pd7C7pl
+ 8dSsyWQuQym+d6IfBhNmNoSEFH4fh94Dh68hkNYs/depxWUeSmowDFBwZP8EVOKi96PhDa
+ Q9CkURRXx2Ei2Cgkf9Bru3pot5UTpIhQM9oAvCzZHEdEoRvDYbzf4CTJp+la4A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=l8IWWWJr
+Subject: Re: [Buildroot] [PATCH 1/1] package/libuhttpd: add upstream patch
+ to fix openssl3 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,150 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Jianhui Zhao <zhaojh329@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e356dada43183f658b8dab1b3d83c94e3cac2ad5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 21 Jul 2023 17:16:57 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Removed unneeded patches and replace them with an upstream commit.
+> Removed unneeded patches and replace them with an upstream commit.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+> Sorry, saw the upstream fix too late.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-CMakeLists.txt-remove-Werror-from-CFLAGS.patch | 38 ----------------------
- .../0002-compatibility-for-openssl-3.0.patch       | 31 ++++++++++++++++++
- ...-CMakeLists.txt-remove-Werror-from-CFLAGS.patch | 38 ----------------------
- 3 files changed, 31 insertions(+), 76 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch b/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
-deleted file mode 100644
-index 01f66f42d9..0000000000
---- a/package/libuhttpd/0002-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From a7d47180777366b9ee374ee1fe0f1a155a02160b Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Thu, 20 Jul 2023 22:14:16 +0200
--Subject: [PATCH] CMakeLists.txt: remove -Werror from CFLAGS
--
--Build is broken with OpenSSL 3.0, see buildroot autobuilder logs:
--http://autobuild.buildroot.net/results/c09/c09c77e399e9ee410995a91a22306897eca667d1/build-end.log
--
--/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:
-- In function 'ssl_last_error_string':
--/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:143:9:
-- error: 'ERR_peek_error_line_data' is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
--
--cc1: all warnings being treated as errors
--
--Upstream: https://github.com/zhaojh329/libuhttpd/pull/22
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 6fb9651..64f506c 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -7,7 +7,7 @@ include(CheckLibraryExists)
-- list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-- 
-- add_definitions(-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64)
---add_compile_options(-O -Wall -Werror --std=gnu99)
--+add_compile_options(-O -Wall --std=gnu99)
-- 
-- option(BUILD_STATIC "Build static library" OFF)
-- 
---- 
--2.39.2
--
-diff --git a/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch b/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch
-new file mode 100644
-index 0000000000..484d472bad
---- /dev/null
-+++ b/package/libuhttpd/0002-compatibility-for-openssl-3.0.patch
-@@ -0,0 +1,31 @@
-+From d93e6426ec1d8c019bd302e4599f3b91ba95fb3b Mon Sep 17 00:00:00 2001
-+From: Jianhui Zhao <zhaojh329@gmail.com>
-+Date: Fri, 29 Apr 2022 23:47:31 +0800
-+Subject: [PATCH] compatibility for openssl >= 3.0
-+
-+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-+
-+Upstream: https://github.com/zhaojh329/ssl/commit/d93e6426ec1d8c019bd302e4599f3b91ba95fb3b
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ openssl.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/openssl.c b/openssl.c
-+index 278bab5..2169db1 100644
-+--- a/src/ssl/openssl.c
-++++ b/src/ssl/openssl.c
-+@@ -139,8 +139,11 @@ const char *ssl_last_error_string(char *buf, int len)
-+ 
-+     if (ssl_err_code == SSL_ERROR_SSL) {
-+         int used;
-+-
-++#if OPENSSL_VERSION_MAJOR < 3
-+         ssl_err_code = ERR_peek_error_line_data(&file, &line, &data, &flags);
-++#else
-++        ssl_err_code = ERR_peek_error_all(&file, &line, NULL, &data, &flags);
-++#endif
-+         ERR_error_string_n(ssl_err_code, buf, len);
-+ 
-+         used = strlen(buf);
-diff --git a/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch b/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
-deleted file mode 100644
-index 8e370e0a80..0000000000
---- a/package/libuhttpd/0003-CMakeLists.txt-remove-Werror-from-CFLAGS.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From b22667f1054ea85c4dc3bdca5b7c84aeb0a801bc Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Thu, 20 Jul 2023 22:22:05 +0200
--Subject: [PATCH] CMakeLists.txt: remove -Werror from CFLAGS
--
--Build is broken with OpenSSL 3.0, see buildroot autobuilder logs:
--http://autobuild.buildroot.net/results/c09/c09c77e399e9ee410995a91a22306897eca667d1/build-end.log
--
--/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:
-- In function 'ssl_last_error_string':
--/home/autobuild/autobuild/instance-2/output-1/build/libuhttpd-3.14.1/src/ssl/openssl.c:143:9:
-- error: 'ERR_peek_error_line_data' is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
--
--cc1: all warnings being treated as errors
--
--Upstream: https://github.com/zhaojh329/ssl/pull/6
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 36488c7..98585b5 100644
----- a/src/ssl/CMakeLists.txt
--+++ b/src/ssl/CMakeLists.txt
--@@ -78,7 +78,7 @@ if(SSL_SUPPORT)
-- 
--     add_library(xssl STATIC ${SSL_SRC})
--     target_compile_definitions(xssl PRIVATE ${SSL_DEFINE})
---    target_compile_options(xssl PRIVATE -O -Wall -Werror --std=gnu99 -fPIC)
--+    target_compile_options(xssl PRIVATE -O -Wall --std=gnu99 -fPIC)
--     target_include_directories(xssl PRIVATE ${SSL_INC})
--     target_link_libraries(xssl PRIVATE ${SSL_LIBS})
-- 
---- 
--2.39.2
--
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
