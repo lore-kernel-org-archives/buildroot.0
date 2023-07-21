@@ -4,85 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C9DEB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 18:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 798FCC0015E
+	for <buildroot@archiver.kernel.org>; Fri, 21 Jul 2023 18:48:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D65BC6070A;
-	Fri, 21 Jul 2023 18:48:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D65BC6070A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23FE961423;
+	Fri, 21 Jul 2023 18:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23FE961423
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dPSj-nYcK9PS; Fri, 21 Jul 2023 18:48:08 +0000 (UTC)
+	with ESMTP id Y9Yf7bYZrqKr; Fri, 21 Jul 2023 18:48:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CDE16141C;
-	Fri, 21 Jul 2023 18:48:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CDE16141C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60E8061425;
+	Fri, 21 Jul 2023 18:48:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60E8061425
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D5D011BF5B4
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:47:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 22CC81BF5B4
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF72483B0F
- for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:47:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF72483B0F
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0A3383B0F
+ for <buildroot@lists.busybox.net>; Fri, 21 Jul 2023 18:48:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A3383B0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u6LD7HzvbaoK for <buildroot@lists.busybox.net>;
- Fri, 21 Jul 2023 18:47:58 +0000 (UTC)
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE01883B05
- for <buildroot@busybox.net>; Fri, 21 Jul 2023 18:47:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE01883B05
-Received: by mail-lf1-x12c.google.com with SMTP id
- 2adb3069b0e04-4f95bf5c493so3679895e87.3
- for <buildroot@busybox.net>; Fri, 21 Jul 2023 11:47:57 -0700 (PDT)
+ with ESMTP id QQsthZE4HiZG for <buildroot@lists.busybox.net>;
+ Fri, 21 Jul 2023 18:48:09 +0000 (UTC)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 89F2B83B05
+ for <buildroot@busybox.net>; Fri, 21 Jul 2023 18:48:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89F2B83B05
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-51e5e4c6026so2988713a12.0
+ for <buildroot@busybox.net>; Fri, 21 Jul 2023 11:48:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1689965276; x=1690570076;
+ d=1e100.net; s=20221208; t=1689965288; x=1690570088;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=4orZlF8tF2SLfzLUgXjfCVhaVHUv7mkDw66WCEjvrE8=;
- b=GyX/08ORj8CAU5KXf56DTX7ooLW990uSdFWwxKGg/IKFCSCOCd29WtL44jvidlFN69
- k07p8L0i/78c79ppSkvZB7/1CV6BvF1WnbVOs9pYwJpFBiqWBEhJawBghsH2pIeYQdIf
- i1cBIxE0pNMD6BJCclkUpCPM2PjcgDXhyHHDinV6LUwNfeDX/f0QWMHNCothge6zC66J
- oByacOSVcFODjMemfM/TUAnDc9o+B+hdv7LC/XCWHXoljKWitAUgNgCQ2Z2mIzVjPp4O
- D62cL686RQBlP1o4Q+tcQ8z2U/t2xnntb1wTsqpyP7CsGgeuz/uo884u9GUYATZOcwAm
- J4Ag==
-X-Gm-Message-State: ABy/qLa6RRc5gU8WP4AB1MbXTQSxMdGGO0Kwf8fsrKkBNmnShB+NsVKr
- 7PsVPrI5E/XSdNiP0gkUsQIqjv9l8XQ=
-X-Google-Smtp-Source: APBJJlEZigaEo7+Sw6nrEmm3sREc2/xT1ZiQsd2YhZLzdVKkoDitBP6BVlHi6pj0bsMKs/51DYURZA==
-X-Received: by 2002:a19:384d:0:b0:4f8:67f0:7253 with SMTP id
- d13-20020a19384d000000b004f867f07253mr1490994lfj.49.1689965275471; 
- Fri, 21 Jul 2023 11:47:55 -0700 (PDT)
+ bh=2igWm7Rk0oFPPtFHlYJEd5dPF15VDX6BkYluJ6mxR6A=;
+ b=GKOD34dD5Ke4A8DeijsQnWsTpCrLx/j/qSZR/MMItG2JjdQbEdVlOnCDGHIH0DJsAs
+ zQs8tQ5hVP9X3sksCUc3LKZ+2uF+cieRQ8BPu0pgyMfGgKsm5uA482Y829dLxbv2AA1O
+ KGymX0DdQrwJHizzpZWZPEHkEu5QrWDpHw25xdaokYVYJqKVcfns9FnFXi+jtmBXDKqL
+ hQmEAMTWGqqj9qqzRYxCxzd8l9ueKgf6seSu98pp364aWiy9lPy291xYAmlNWVprA9hD
+ B8wqu9rrRC4L2LL71opEKUEgvbSdnwoekonWd1YjGWeFKMwBAjYezEQZ+i9+9Ko451Hv
+ CfvA==
+X-Gm-Message-State: ABy/qLaDETZd9+qlG3hiFLpiVH4fmlZM8JX1tWQNrzrOwdE6Dd6WuygG
+ C8LZqwPpvLUROcsHUQPpS9sCkUjdndQ=
+X-Google-Smtp-Source: APBJJlE/v8CTlpTBOEGk4v7cL8RP7Gla2TvxOGu83fysgdI5VDdzd5ZiROZs1Ee+Hhe8RH2M1drNkg==
+X-Received: by 2002:a05:6402:6c6:b0:51d:d568:fa4e with SMTP id
+ n6-20020a05640206c600b0051dd568fa4emr1914727edy.41.1689965287625; 
+ Fri, 21 Jul 2023 11:48:07 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- l9-20020a170906230900b0099b7247efbcsm589117eja.8.2023.07.21.11.47.54
+ w20-20020a50fa94000000b0051e26c7a154sm2423641edr.18.2023.07.21.11.48.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 21 Jul 2023 11:47:55 -0700 (PDT)
+ Fri, 21 Jul 2023 11:48:07 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Fri, 21 Jul 2023 20:47:52 +0200
-Message-Id: <20230721184752.819052-1-francois.perrad@gadz.org>
+Date: Fri, 21 Jul 2023 20:48:04 +0200
+Message-Id: <20230721184804.819073-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1689965276; x=1690570076;
+ d=gmail.com; s=20221208; t=1689965288; x=1690570088;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4orZlF8tF2SLfzLUgXjfCVhaVHUv7mkDw66WCEjvrE8=;
- b=sKCRRLcQ18GYLOWOPHVeU5XchFYKWLmWPzQljD4HAeq8n7dl0f/lnIYtwG6F2kL9Bs
- 78l1mlujBztuVzCMNNLxnQjm8P7+liHiMh4/9DlXhCdOejQmzd8C+IyWE1lPpFxY5Y+8
- E3kcJ73V1DNU9g7DnoBo6E9PiGifnr1S1Kgjfs/r81rltqDPioiDbCNEkJzoaBbhyjiY
- ukBf9O8Rpy29MoxL1Nb11eiIqdexHRKnlCQgZbDqHgEwwx+YfaBZSjzVJmlkffvpHLpR
- KPsFOiYiZ1vTih5t4sNUARekq8QU+XjEoHh415cqzk2LMoFcFnc6Da2UOnY2a9NFf1hG
- b6tw==
+ bh=2igWm7Rk0oFPPtFHlYJEd5dPF15VDX6BkYluJ6mxR6A=;
+ b=CSPj/lFGKEKkX+tkCg7H9vLzcz1IP4ximSSuSHMsrQRfqtwaFJ5++9LR2VQIL8AoP1
+ KzHy/3YdQ5zDdoHsc++FYRCCNc2aySx83DdfoTm8YKQmGzjD8tAMA7BFcAPj6f+6rIe9
+ tTjvllpgUvWXsZTnM9NpAJ/LFA1CS9cAbVd92wDNsxSmiFpXodK3XYmGiaJPvrww0iUR
+ +jGH1fCZmPVb9Evy9q/IoF4ad44awMXuMxaztOYLgPiniK6f3TZ7TKVF9ziw7cpf5Sun
+ XZq5fx/IPAQmKZciX28IbWXMzho5ob7bKxXT6gHLSJGU3rmZkl0hRNBC7eIjytWv7VMs
+ cTRA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=sKCRRLcQ
-Subject: [Buildroot] [PATCH] package/luajit: bump to version
- 8635cbabf3094c4d8bd00578c7d812bea87bb2d3
+ header.a=rsa-sha256 header.s=20221208 header.b=CSPj/lFG
+Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2023.06
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,34 +100,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luajit/luajit.hash | 2 +-
- package/luajit/luajit.mk   | 2 +-
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index c655e9931..049f8c2fc 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  aa354d1265814db5a1ee9dfff6049e19b148e1fd818f1ecfa4fcf2b19f6e4dd9  luajit-d0e88930ddde28ff662503f9f20facf34f7265aa.tar.gz
-+sha256  835035b244c3dc3d3d19bdd5ac623af90b84207e6330fb78f9fa51d6e200d760  luajit-8635cbabf3094c4d8bd00578c7d812bea87bb2d3.tar.gz
- 
- # Locally calculated
- sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 09bde3590..2a27aa505 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index e56ecfe65..7d113694f 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  67e214d44d5f626787ca7f04424043a639308a43a7777b6fa41926b7240e0dc5  MoarVM-2023.02.tar.gz
++sha256  143f92510eaa3452c712e4aae9f44d84cd078f16517b40252bab7dd5e224ecdb  MoarVM-2023.06.tar.gz
+ sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 6ac2468f5..8f568f4b4 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAJIT_VERSION = d0e88930ddde28ff662503f9f20facf34f7265aa
-+LUAJIT_VERSION = 8635cbabf3094c4d8bd00578c7d812bea87bb2d3
- LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
+-MOARVM_VERSION = 2023.02
++MOARVM_VERSION = 2023.06
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
 -- 
 2.39.2
 
