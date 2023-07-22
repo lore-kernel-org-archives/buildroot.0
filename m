@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0D76C001DC
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 21:24:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F143C001DC
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 21:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 97FB581E97;
-	Sat, 22 Jul 2023 21:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97FB581E97
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED32883336;
+	Sat, 22 Jul 2023 21:24:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED32883336
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BcaSkAyOijml; Sat, 22 Jul 2023 21:24:17 +0000 (UTC)
+	with ESMTP id t45Qxv0IDVyY; Sat, 22 Jul 2023 21:24:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52D5E83336;
-	Sat, 22 Jul 2023 21:24:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52D5E83336
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A08771BF869
+	by smtp1.osuosl.org (Postfix) with ESMTP id D177483547;
+	Sat, 22 Jul 2023 21:24:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D177483547
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BE8921BF59F
  for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 21:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77A16408D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97C09415DE
  for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 21:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77A16408D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97C09415DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sgKm6-fZrCUu for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 14twUtOpmYYz for <buildroot@lists.busybox.net>;
  Sat, 22 Jul 2023 21:24:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4415840500
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B725415DD
  for <buildroot@buildroot.org>; Sat, 22 Jul 2023 21:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4415840500
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B725415DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33129821BA; Sat, 22 Jul 2023 21:24:01 +0000 (UTC)
+ id 29312821B9; Sat, 22 Jul 2023 21:24:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 22 Jul 2023 23:23:49 +0200
+Date: Sat, 22 Jul 2023 23:23:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 37894a5ca805920e0855671fc33b69207a050d67
-X-Git-Newrev: 598bfea96d9114ede3d04926f56d24e7b57db8af
+X-Git-Oldrev: d06e610d582e3be4b20f9939e5cab6765b7fb69a
+X-Git-Newrev: 37894a5ca805920e0855671fc33b69207a050d67
 X-Patchwork-Hint: ignore
-Message-Id: <20230722212401.33129821BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tpm2-tss: security bump version to
- 3.2.2
+Message-Id: <20230722212401.29312821B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bitwise: update for 0.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,65 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=598bfea96d9114ede3d04926f56d24e7b57db8af
+commit: https://git.buildroot.net/buildroot/commit/?id=37894a5ca805920e0855671fc33b69207a050d67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2023-22745.
-
-Changelog:
-https://github.com/tpm2-software/tpm2-tss/blob/3.2.x/CHANGELOG.md
-
-Changed the ac_cv_prog variables due to an upstream commit which changed
-the detection of groupadd/useradd:
-https://github.com/tpm2-software/tpm2-tss/commit/7fde604383c62fc764a1e060dff48fc06f79860b
-
-Buildroot commit a85f5f2a412db894fdf548e10d12e7c56eda9107 bumped
-tpm2-pkcs11 to 1.8.0 which includes a commit bumping the required
-version of tpm2-tss to >= 3.2
-https://github.com/tpm2-software/tpm2-pkcs11/commit/940b661e330cac0ecc7d4db5d3626ef828ecdda8
-
-Fixes:
-http://autobuild.buildroot.net/results/6fd/6fddfee6f852ce835c5d1178e6913b6ab1b3fe50/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/bitwise/bitwise.hash | 2 +-
+ package/bitwise/bitwise.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index b6eb3c1f97..c9fa4e6ae0 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
+diff --git a/package/bitwise/bitwise.hash b/package/bitwise/bitwise.hash
+index c8daa0aa64..9da1a4c0c5 100644
+--- a/package/bitwise/bitwise.hash
++++ b/package/bitwise/bitwise.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8900a6603f74310b749b65f23c3461cde6e2a23a5f61058b21004c25f9cf19e8  tpm2-tss-3.1.0.tar.gz
-+sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 060883c377..10d605fc65 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
+ # Locally calculated
+-sha256  f524f794188a10defc4df673d8cf0b3739f93e58e93aff0cdb8a99fbdcca2ffb  bitwise-v0.43.tar.gz
++sha256  806271fa5bf31de0600315e8720004a8f529954480e991ca84a9868dc1cae97e  bitwise-v0.50.tar.gz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/bitwise/bitwise.mk b/package/bitwise/bitwise.mk
+index 33d8f6776b..5bce92fcf7 100644
+--- a/package/bitwise/bitwise.mk
++++ b/package/bitwise/bitwise.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TPM2_TSS_VERSION = 3.1.0
-+TPM2_TSS_VERSION = 3.2.2
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
-@@ -26,7 +26,8 @@ TPM2_TSS_CONF_OPTS = \
- 	ac_cv_prog_result_setfacl=yes \
- 	ac_cv_prog_systemd_sysusers=no \
- 	ac_cv_prog_systemd_tmpfiles=no \
--	ac_cv_prog_result_useradd=yes \
-+	ac_cv_prog_useradd=yes \
-+	ac_cv_prog_groupadd=yes \
- 	--with-crypto=ossl \
- 	--disable-doxygen-doc \
- 	--disable-defaultflags
+-BITWISE_VERSION = 0.43
++BITWISE_VERSION = 0.50
+ BITWISE_SITE = https://github.com/mellowcandle/bitwise/releases/download/v$(BITWISE_VERSION)
+ BITWISE_SOURCE = bitwise-v$(BITWISE_VERSION).tar.gz
+ BITWISE_DEPENDENCIES = ncurses readline
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
