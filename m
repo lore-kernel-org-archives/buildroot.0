@@ -1,84 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01F86EB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 09:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8590AEB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 10:28:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 843F3409DD;
-	Sat, 22 Jul 2023 09:48:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 843F3409DD
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2uLHye-DbvlP; Sat, 22 Jul 2023 09:48:57 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50B57409AC;
-	Sat, 22 Jul 2023 09:48:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50B57409AC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 440EF1BF37C
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 09:48:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D5D7401C9
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 09:48:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D5D7401C9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00A3540467;
+	Sat, 22 Jul 2023 10:28:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00A3540467
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AMhMoYbfkr_3 for <buildroot@lists.busybox.net>;
- Sat, 22 Jul 2023 09:48:54 +0000 (UTC)
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com
- [IPv6:2001:4860:4864:20::2a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2CC1940012
- for <buildroot@buildroot.org>; Sat, 22 Jul 2023 09:48:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CC1940012
-Received: by mail-oa1-x2a.google.com with SMTP id
- 586e51a60fabf-1b06a46e1a9so2113050fac.2
- for <buildroot@buildroot.org>; Sat, 22 Jul 2023 02:48:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690019333; x=1690624133;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=imaQ8TPpNaLcpsYpXtfZcPveLT0VE5qL4B+Rwta6aU8=;
- b=hSTqUc0fdZiP9MMN5ZXtA/yZ19g4iCrq5/9fuwnjwIcjQQ7d3YyiOhRaH2Ya7XyBcu
- f3iWoWktUpzQYx1lPXS53q1F+XtL7D11JEXIgFaOsuyeLoCP7TV4SqcryF6IzBuNNw91
- zVEBiSwg8DLdetuRb4JbqAEaVTzFs/5kTcVrQ6AKT03uykTY5hLwJLVkbXApPx+Xxzw+
- P5M1RopTGZ6RKKUrGHt4l661lejmRLIFQfu9PsVUgLGP28ExKg5ldCRjKG1pkXiGvfJj
- MrHRUc/aAxV6gJnxkGqPoV0pzl3SA/IyKG/fMZ1rW96eDbzt25JiZhIXwDDoP9mI2lV0
- aFTw==
-X-Gm-Message-State: ABy/qLaiFTNmLvt4nTVZOQs41MCe8mpk4deqKoY88lqfbHrbSekc+fsn
- NbyiEqvSv9WaBKYbbJzuYzcEEzQCfeTVJ40ORYSlpXroFD8=
-X-Google-Smtp-Source: APBJJlHohk/0D2yEoNQHHXeL7/gqzKXcHxPvAUGTrSrJRGO2UhufkqFPdt42pQop5uTtOVgofPjsjWea9cd2HEu+cGQ=
-X-Received: by 2002:a05:6871:554:b0:1b0:21ef:6e1a with SMTP id
- t20-20020a056871055400b001b021ef6e1amr4600353oal.40.1690019333003; Sat, 22
- Jul 2023 02:48:53 -0700 (PDT)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2hOVB-lfssLb; Sat, 22 Jul 2023 10:28:57 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 28432401A4;
+	Sat, 22 Jul 2023 10:28:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28432401A4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 454041BF5A5
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 10:28:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B01E60B2A
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 10:28:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B01E60B2A
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fodVa1tjkBUu for <buildroot@lists.busybox.net>;
+ Sat, 22 Jul 2023 10:28:53 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E2B7A60760
+ for <buildroot@buildroot.org>; Sat, 22 Jul 2023 10:28:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2B7A60760
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 8288F5FFAC;
+ Sat, 22 Jul 2023 12:28:46 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:48782])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 22 Jul 2023 12:28:46 +0200
 MIME-Version: 1.0
-References: <CAOLWrZ-zemgtEsJKLJXeA7tiaPCHeR4wZGT01_e0+bkCS0pjuA@mail.gmail.com>
-In-Reply-To: <CAOLWrZ-zemgtEsJKLJXeA7tiaPCHeR4wZGT01_e0+bkCS0pjuA@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 22 Jul 2023 03:48:40 -0600
-Message-ID: <CADvTj4oRw=YOWqW5CsAKCrfCng_fu+ED5KfUfMCju_=oGhBbgg@mail.gmail.com>
-To: Andreas <andreasembbuild@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690019333; x=1690624133;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=imaQ8TPpNaLcpsYpXtfZcPveLT0VE5qL4B+Rwta6aU8=;
- b=RL1Hr3nMLxKQFskB2ChLf7bQfDqBhFJoxuUX8lRWrNk9yBJ60vc51iFVeCZN9w9CWp
- kD64FehB8AoFKvYMCa6cKARraLKEyeNSi3lnM+t6GxG8HUE1U6KEmuXpiwLK8z7OSAu7
- hvvh94A0bdydJrTIjPgzPb0RaTIvQLwNZN7ZakW7Ufx9wh0BYZ+CAV1EjjYVan1hD+lu
- DuREHVCWL5S/Yj5gBgZ1a1H4uOlBe3JpOrljG/izW/4jXOnLcwCdoRGOrTf7WGg9zuUL
- UWZ1EOGaiaaxfCDGLamAOR+urx18ZZ1+b5O6gVp36tAp1EEvOH3CEeyQ4gJn8TjiukrL
- NXnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=RL1Hr3nM
-Subject: Re: [Buildroot] Support for package python-rpds-py
+Date: Sat, 22 Jul 2023 12:28:46 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20230721231207.70275816@windsurf>
+References: <1689767858-17206-1-git-send-email-gwenj@trabucayre.com>
+ <20230721231207.70275816@windsurf>
+User-Agent: Webmail Free/1.6.1
+Message-ID: <8f11cf6cadb890b13b9955fc22d37894@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690021729;
+ bh=JahylDtNBm/M+z4XJ1ZJ/y+KF6hBN9eCFWZ/KYCZn5o=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=V/0ozMFnIrQQtsimIAH32gWy1YIR3ab/E7KAUKhdbLkWN+yQNho42Yyc5jYha5rln
+ A370jmSjXDPA/vxrsqs1Uk8Befzkag7zX2ByDrhEoYq/trjUffGftziO2Yrmid6z9E
+ 31IaB7fXNR1LmpeQtqnLbEBHEJ/SM/IozrHlb+pWsdxz8hV2B/rcQ0MzmB6q/ZP97z
+ T8ZzYxxy7E0Bje4dTl+G7m30gaPuCrK5F0cMa2jB14jkl4AD2ZTGn5hB/HlZQAKyKs
+ Hqug+JGpSIMtNiOrxS+wXLq4jcdHEJP8AanA3iRnSmeG7PYUZ24NEYVvYSi34KcCiv
+ Qkce5O10wkLig==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=V/0ozMFn
+Subject: Re: [Buildroot] [PATCH v3] package/gnuradio: fix gnuradio python
+ libraries for cross-compile
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,62 +78,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCBKdWwgMjIsIDIwMjMgYXQgMzozNeKAr0FNIEFuZHJlYXMgPGFuZHJlYXNlbWJidWls
-ZEBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gSGksCj4KPiBJIG5lZWQgdGhlIHBhY2thZ2UgcHl0aG9u
-LXJwZHMtcHkgdGhhdCBpcyBhIGRlcGVuZGVuY3kgb2YgdGhlIHJlZmVyZW5jaW5nIHBhY2thZ2Ug
-YW5kIGRlcGVuZHMgaXRzZWxmIG9uIHB5dGhvbi1tYXR1cmluLgo+IEkgY29uZmlndXJlZCBpdCBh
-cyBmb2xsb3dzOgo+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIwo+ICMgcHl0aG9uLXJwZHMt
-cHkKPiAjCj4gIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPgo+IFBZVEhPTl9SUERTX1BZX1ZFUlNJ
-T04gPSAwLjguMTAKPiBQWVRIT05fUlBEU19QWV9TT1VSQ0UgPSBycGRzX3B5LSQoUFlUSE9OX1JQ
-RFNfUFlfVkVSU0lPTikudGFyLmd6Cj4gUFlUSE9OX1JQRFNfUFlfU0lURSA9IGh0dHBzOi8vZmls
-ZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy9lNi9mZS83ZDA3YmMwOGNjZTJjY2FlMmM3ZTVj
-OTZkOWIzOTc2YzRlMWZhNWUyNDg5ODlkY2EwYTU4YmM3NjI4ZjgKPiBQWVRIT05fUlBEU19QWV9T
-RVRVUF9UWVBFID0gcGVwNTE3Cj4gUFlUSE9OX1JQRFNfUFlfTElDRU5TRSA9IE1JVAo+IFBZVEhP
-Tl9SUERTX1BZX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4gUFlUSE9OX1JQRFNfUFlfREVQRU5E
-RU5DSUVTID0gaG9zdC1weXRob24tbWF0dXJpbgo+Cj4gJChldmFsICQocHl0aG9uLXBhY2thZ2Up
-KQoKWW91IGFyZW4ndCBzZXR0aW5nIHNvbWUgc3R1ZmYgbGlrZSB0aGUgZW52IGNvcnJlY3RseSwg
-c2VlCnB5dGhvbi1vcmpzb24gYXMgYW4gZXhhbXBsZToKaHR0cHM6Ly9naXRodWIuY29tL2J1aWxk
-cm9vdC9idWlsZHJvb3QvYmxvYi8yMDIzLjA1LjEvcGFja2FnZS9weXRob24tb3Jqc29uL3B5dGhv
-bi1vcmpzb24ubWsKCj4KPiBUaGUgb25lIGZvciBtYXR1cmluIGxvb2tzIGFzIGZvbGxvd3M6Cj4K
-PiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICMKPiAjIHB5dGhvbi1tYXR1cmluCj4gIwo+ICMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4KPiBQWVRIT05fTUFUVVJJTl9WRVJTSU9OID0gMS4wLjAK
-PiBQWVRIT05fTUFUVVJJTl9TT1VSQ0UgPSBtYXR1cmluLSQoUFlUSE9OX01BVFVSSU5fVkVSU0lP
-TikudGFyLmd6Cj4gUFlUSE9OX01BVFVSSU5fU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9z
-dGVkLm9yZy9wYWNrYWdlcy8xYy9kZS81ZjU2Yjc3MTc5NTk1YmE1Mjc4NmVlZGIwODFmYzZiMGYx
-ZDBhNDQ5NmJjNzc2NjBlOGZlYWJkNjA3ZWMKPiBQWVRIT05fTUFUVVJJTl9TRVRVUF9UWVBFID0g
-c2V0dXB0b29scwo+IFBZVEhPTl9NQVRVUklOX0xJQ0VOU0UgPSBNSVQgT1IgQXBhY2hlLTIuMAo+
-IFBZVEhPTl9NQVRVUklOX0xJQ0VOU0VfRklMRVMgPSBsaWNlbnNlLWFwYWNoZSBsaWNlbnNlLW1p
-dAo+IEhPU1RfUFlUSE9OX01BVFVSSU5fREVQRU5ERU5DSUVTID0gXAo+IGhvc3QtcHl0aG9uLXNl
-dHVwdG9vbHMtcnVzdCBcCj4gaG9zdC1ydXN0Ywo+IEhPU1RfUFlUSE9OX01BVFVSSU5fRU5WID0g
-XAo+ICQoSE9TVF9QS0dfQ0FSR09fRU5WKSBcCj4gUFlPM19DUk9TU19MSUJfRElSPSIkKEhPU1Rf
-RElSKS9saWIvcHl0aG9uJChQWVRIT04zX1ZFUlNJT05fTUFKT1IpIgo+ICMgV2UgbmVlZCB0byB2
-ZW5kb3IgdGhlIENhcmdvIGNyYXRlcyBhdCBkb3dubG9hZCB0aW1lCj4gUFlUSE9OX01BVFVSSU5f
-RE9XTkxPQURfUE9TVF9QUk9DRVNTID0gY2FyZ28KPiBQWVRIT05fTUFUVVJJTl9ET1dOTE9BRF9E
-RVBFTkRFTkNJRVMgPSBob3N0LXJ1c3RjCj4gSE9TVF9QWVRIT05fTUFUVVJJTl9ETF9FTlYgPSAk
-KEhPU1RfUEtHX0NBUkdPX0VOVikKPgo+ICQoZXZhbCAkKGhvc3QtcHl0aG9uLXBhY2thZ2UpKQo+
-Cj4gU28gZmFyIHNvIGdvLiBIb3dldmVyLCBJIGdldCB0aGUgZm9sbG93aW5nIGVycm9yIGZvciBp
-bnN0YWxsaW5nIGl0IG9uIHRoZSB0YXJnZXQ6Cj4KPiBFUlJPUjogYXJjaGl0ZWN0dXJlIGZvciAi
-L3Vzci9saWIvcHl0aG9uMy4xMC9zaXRlLXBhY2thZ2VzL3JwZHMvcnBkcy5jcHl0aG9uLTMxMC1h
-cm0tbGludXgtZ251ZWFiaWhmLnNvIiBpcyAiQWR2YW5jZWQgTWljcm8gRGV2aWNlcyBYODYtNjQi
-LCBzaG91bGQgYmUgIkFSTSIuCj4KPiBXaGF0IGNvdWxkIGJlIHRoZSBjYXVzZSBvZiB0aGUgZXJy
-b3IgYW5kIGhvdyBjYW4gSSBwcmV2ZW50IGl0Pwo+IEZvciBzb21lIG1vcmUgb3ZlcmFsbCBjb250
-ZXh0IEkgdHJ5IHRvIGNvbXBpbGUgdGhlIHBhY2thZ2UgcHl0aG9uLW5vdGVib29rIG5vdGVib29r
-PT02LjUuNCwgdGhhdCBpdHNlbGYgZGVwZW5kcyBvbiBpcHl0aG9uIGFuZCBpcHlrZXJuZWwgd2hp
-Y2ggcmVxdWlyZSBqdXB5dGVybGFiLXdpZGdldHMgYW5kIGp1cHl0ZXJsYWItcHlnbWVudHMgdGhh
-dCB0aHJvdyBhIHNpbWlsYXIgZXJyb3IuCj4KPiBLaW5kIFJlZ2FyZHMsCj4gQW5kcmVhcwo+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290
-IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Thomas, Gwenhael,
+
+On 21/07/2023 23:12, Thomas Petazzoni wrote:
+> On Wed, 19 Jul 2023 13:57:38 +0200
+> Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+> 
+>> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>> 
+>> By default, module libraries have a suffix based on cpython version + 
+>> host
+>> architecture: this is fine for a native compile when these libraries 
+>> are used on
+>> the same computer (or similar computers). But when target architecture 
+>> is not
+>> the same python is unable to find libraries due to the wrong suffix 
+>> and produces
+>> unclear errors messages:
+>> 
+>> # python3
+>> Python 3.11.3 (main, Jun 19 2023, 14:15:44) [GCC 11.4.0] on linux
+>> Type "help", "copyright", "credits" or "license" for more information.
+>> >>> from gnuradio import blocks
+>> Traceback (most recent call last):
+>>   File 
+>> "/home/xxx/buildroot/output/build/gnuradio-3.10.4.0/gr-blocks/python/blocks/__init__.py", 
+>> line 18, in <module>
+>> ModuleNotFoundError: No module named 'gnuradio.blocks.blocks_python'
+>> 
+>> During handling of the above exception, another exception occurred:
+>> 
+>> Traceback (most recent call last):
+>>   File "<stdin>", line 1, in <module>
+>>   File 
+>> "/home/xxx/buildroot/output/build/gnuradio-3.10.4.0/gr-blocks/python/blocks/__init__.py", 
+>> line 22, in <module>
+>> ModuleNotFoundError: No module named 'gnuradio.blocks.blocks_python'
+>> >>>
+>> 
+>> By adding 
+>> _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" at 
+>> configure time, sysconfig will
+>> return correct informations (target architecture) instead of host 
+>> architecture.
+>> 
+>> Signed-off-by: Gwenhael Goavec-Merou 
+>> <gwenhael.goavec-merou@trabucayre.com>
+>> ---
+>> Changes v2 -> v3:
+>> - replaces PYTHON_MODULE_EXTENSION by _PYTHON_SYSCONFIGDATA_NAME env 
+>> (arnout)
+>> Changes v1 -> v2:
+>> - replaces patch by PYTHON_MODULE_EXTENSION option (result is the same
+>>   but less "noisy")
+>> ---
+>>  package/gnuradio/gnuradio.mk | 4 ++++
+>>  1 file changed, 4 insertions(+)
+> 
+> Not a show-stopper to merge this patch, but would it be possible to add
+> a runtime test-case for gnuradio Python modules in support/testing/ ?
+> I'm sure if you provide enough details to Julien Olivain (in cc), he
+> will be able to help you add this test.
+
+I'm already comfortable with Gnuradio development, so I'm willing to
+write such a test. I'll send a proposal in the coming days...
+
+Thanks for the suggestion!
+
+> 
+> Thanks!
+> 
+> Thomas
+
+Best regards,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
