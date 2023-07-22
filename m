@@ -1,49 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0AD1C001DC
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 21:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 147D6C001DC
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 21:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 783EB60EE8;
-	Sat, 22 Jul 2023 21:07:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 783EB60EE8
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6718832C7;
+	Sat, 22 Jul 2023 21:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6718832C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ybOlpjRdg6gg; Sat, 22 Jul 2023 21:07:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id vDkyU5XyUiIq; Sat, 22 Jul 2023 21:07:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F03E160F0C;
-	Sat, 22 Jul 2023 21:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F03E160F0C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95CBD832D8;
+	Sat, 22 Jul 2023 21:07:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95CBD832D8
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 26DA11BF59F
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 21:06:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 350E71BF59F
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 21:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA3F9410C1
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 21:06:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA3F9410C1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CF91410C1
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 21:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CF91410C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GLe_SJLaYY77 for <buildroot@lists.busybox.net>;
- Sat, 22 Jul 2023 21:06:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE29E4109F
- for <buildroot@buildroot.org>; Sat, 22 Jul 2023 21:06:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE29E4109F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C32BD81F7D; Sat, 22 Jul 2023 21:06:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 22 Jul 2023 23:00:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6bedfdf6917ab7e4fb6d692f2e17eaff09b136a8
-X-Git-Newrev: 651835dbd7c68f3873a63b4f70c9aca9769c019e
-X-Patchwork-Hint: ignore
-Message-Id: <20230722210646.C32BD81F7D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: adjust comments
+ with ESMTP id OnrnnZmx2CZB for <buildroot@lists.busybox.net>;
+ Sat, 22 Jul 2023 21:07:36 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3A0C54109F
+ for <buildroot@buildroot.org>; Sat, 22 Jul 2023 21:07:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A0C54109F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E189BFF803;
+ Sat, 22 Jul 2023 21:07:32 +0000 (UTC)
+Date: Sat, 22 Jul 2023 23:07:31 +0200
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Message-ID: <20230722230731.7a47ed7d@windsurf>
+In-Reply-To: <CAEpB38PEOYRLS3x-V3y55H_yDcNqoJOeB72tyX7tNK7pGkixMQ@mail.gmail.com>
+References: <CAEpB38PEOYRLS3x-V3y55H_yDcNqoJOeB72tyX7tNK7pGkixMQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690060053;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AOvY0BYLI7pyCryPEIWTu3EjV/O8sFkyiiaKNqilX+A=;
+ b=DqtL7DjXfJTNnG75nh/hrgXECf3mbZLRXYtKEIvQRMlIrYNnltHma3ynKaRKSNIdji4N8a
+ VO1IXKq2yZKBTFoWxKSysZAvWChHmGCEu5OcEX8uy64Mn08pE4bYp23FUc/xB2GRRh0VfR
+ ecIYMEoDrh50U5Xj26TN25xmyXS+K5XHIcNasP8dyYYEBDRqz/Dy8eGnkCiomIloonDzbU
+ UG9+MmRpwIQhBt8yQ2sTjtvGCtKWZd0jMFmdbGvq2KPtjlx8400GFwrnOfoUOQlytF+ngX
+ srBo3B8RxRkdfLjOtL6PVb2HzCIir8H1z8MYOqF83t/QLCWhUQ5lwzw3IVeyKA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DqtL7DjX
+Subject: Re: [Buildroot] Go 1.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +76,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=651835dbd7c68f3873a63b4f70c9aca9769c019e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Christian,
 
-Adjust comments in the Go package to improve clarity:
+On Fri, 21 Jul 2023 21:11:35 -0700
+Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
 
-Config.in.host:
+> I'd like to request an update on why we have not yet merged the go 1.20
+> series.
+> 
+> Many modules now require go 1.20 to work properly and this is already
+> potentially causing some issues today.
 
- - Add comment mentioning list of supported architectures.
+This is your lucky day: I had quite a lot of dead time today while
+traveling, and one of the things I did was to review your patch series.
+I've now applied PATCH 1/4 to PATCH 3/4. I will reply to them, and also
+to PATCH 4/4 that I haven't applied for the moment.
 
-go.mk:
+Best regards,
 
- - Reword comment re: copying src/ to host/
-   - the previously linked issue is not relevant.
-   - instead: mention that src/ is needed for stdlib.
- - Adjust comment re: adjusting file timestamps.
-   - mention this is needed to avoid rebuilding stdlib
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/go/Config.in.host | 2 ++
- package/go/go.mk          | 7 +++----
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 90a54f0da6..b87b862cec 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE2_ARCH_SUPPORTS
-+	# See https://go.dev/doc/install/source#environment
-+	# See src/go/build/syslist.go for the list of supported architectures
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
- 		|| BR2_mips64 || BR2_mips64el || BR2_riscv || BR2_s390x
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 94c90877d1..2a3b7825b7 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -154,12 +154,11 @@ define HOST_GO_INSTALL_CMDS
- 	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_ROOT)/pkg/
- 	cp -a $(@D)/pkg/tool $(HOST_GO_ROOT)/pkg/
- 
--	# There is a known issue which requires the go sources to be installed
--	# https://golang.org/issue/2775
-+	# The Go sources must be installed to the host/ tree for the Go stdlib.
- 	cp -a $(@D)/src $(HOST_GO_ROOT)/
- 
--	# Set all file timestamps to prevent the go compiler from rebuilding any
--	# built in packages when programs are built.
-+	# Set file timestamps to prevent the Go compiler from rebuilding the stdlib
-+	# when compiling other programs.
- 	find $(HOST_GO_ROOT) -type f -exec touch -r $(@D)/bin/go {} \;
- endef
- 
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
