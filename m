@@ -4,69 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8590AEB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 10:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E29F7EB64DA
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 16:17:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00A3540467;
-	Sat, 22 Jul 2023 10:28:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00A3540467
+	by smtp2.osuosl.org (Postfix) with ESMTP id 293F340181;
+	Sat, 22 Jul 2023 16:17:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 293F340181
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2hOVB-lfssLb; Sat, 22 Jul 2023 10:28:57 +0000 (UTC)
+	with ESMTP id R3LAlDGPoMxi; Sat, 22 Jul 2023 16:17:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28432401A4;
-	Sat, 22 Jul 2023 10:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28432401A4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CC4740ACB;
+	Sat, 22 Jul 2023 16:17:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CC4740ACB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 454041BF5A5
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 10:28:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9B8761BF3A3
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 16:17:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B01E60B2A
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 10:28:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B01E60B2A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7459C61455
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 16:17:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7459C61455
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fodVa1tjkBUu for <buildroot@lists.busybox.net>;
- Sat, 22 Jul 2023 10:28:53 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E2B7A60760
- for <buildroot@buildroot.org>; Sat, 22 Jul 2023 10:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2B7A60760
-Received: from webmail.free.fr (unknown [172.20.246.2])
+ with ESMTP id zCO01CvtvSnO for <buildroot@lists.busybox.net>;
+ Sat, 22 Jul 2023 16:17:19 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0CDF66144B
+ for <buildroot@buildroot.org>; Sat, 22 Jul 2023 16:17:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CDF66144B
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 8288F5FFAC;
- Sat, 22 Jul 2023 12:28:46 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:48782])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 22 Jul 2023 12:28:46 +0200
-MIME-Version: 1.0
-Date: Sat, 22 Jul 2023 12:28:46 +0200
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B7F7B13F892;
+ Sat, 22 Jul 2023 18:17:14 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20230721231207.70275816@windsurf>
-References: <1689767858-17206-1-git-send-email-gwenj@trabucayre.com>
- <20230721231207.70275816@windsurf>
-User-Agent: Webmail Free/1.6.1
-Message-ID: <8f11cf6cadb890b13b9955fc22d37894@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Date: Sat, 22 Jul 2023 18:17:08 +0200
+Message-ID: <20230722161708.402598-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1690021729;
- bh=JahylDtNBm/M+z4XJ1ZJ/y+KF6hBN9eCFWZ/KYCZn5o=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=V/0ozMFnIrQQtsimIAH32gWy1YIR3ab/E7KAUKhdbLkWN+yQNho42Yyc5jYha5rln
- A370jmSjXDPA/vxrsqs1Uk8Befzkag7zX2ByDrhEoYq/trjUffGftziO2Yrmid6z9E
- 31IaB7fXNR1LmpeQtqnLbEBHEJ/SM/IozrHlb+pWsdxz8hV2B/rcQ0MzmB6q/ZP97z
- T8ZzYxxy7E0Bje4dTl+G7m30gaPuCrK5F0cMa2jB14jkl4AD2ZTGn5hB/HlZQAKyKs
- Hqug+JGpSIMtNiOrxS+wXLq4jcdHEJP8AanA3iRnSmeG7PYUZ24NEYVvYSi34KcCiv
- Qkce5O10wkLig==
+ d=free.fr; s=smtp-20201208; t=1690042636;
+ bh=RGbMYvEQovHgIYO5DCSMtb/WmVE+3jTopcDNlFElTE8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=KcdUX2QD5INpS+s4rMw/eAPVc9aa8owV/1ER654stGYtWdlOSGBJOG9l07QwnGzC7
+ T2UmAvg3f8HI59S/Q0/7YCxcPA9piC33oxFzCEVbzFSxavGNs25oh69Sn+aXIiOVN8
+ yKjIJ6ExakNXa8P/7lZFc0w3YQruEnIsN6Nw1oE5hc7DUfQ+s6tYsj/0NUVmDxu1Rr
+ JlBCx3PWrNKy5mDkl555vptGSQYzHNLnlnoLcYt9SETnu+XgEaGjclkusFyE7mNJNv
+ C25wXEYyUdDedNFYiuc3xJUT96eHTZn+MctBR+sIJNbrUAwLoMD4Wah8IWdAmXW9Mx
+ 86Jb5mQo9nVCg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=V/0ozMFn
-Subject: Re: [Buildroot] [PATCH v3] package/gnuradio: fix gnuradio python
- libraries for cross-compile
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=KcdUX2QD
+Subject: [Buildroot] [PATCH 1/1]
+ support/testing/tests/package/test_gnuradio.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,88 +71,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
- buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Gwenhael,
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+This test was suggested by Thomas in [1].
+This test fails without the patch proposed in [2].
 
-On 21/07/2023 23:12, Thomas Petazzoni wrote:
-> On Wed, 19 Jul 2023 13:57:38 +0200
-> Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
-> 
->> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->> 
->> By default, module libraries have a suffix based on cpython version + 
->> host
->> architecture: this is fine for a native compile when these libraries 
->> are used on
->> the same computer (or similar computers). But when target architecture 
->> is not
->> the same python is unable to find libraries due to the wrong suffix 
->> and produces
->> unclear errors messages:
->> 
->> # python3
->> Python 3.11.3 (main, Jun 19 2023, 14:15:44) [GCC 11.4.0] on linux
->> Type "help", "copyright", "credits" or "license" for more information.
->> >>> from gnuradio import blocks
->> Traceback (most recent call last):
->>   File 
->> "/home/xxx/buildroot/output/build/gnuradio-3.10.4.0/gr-blocks/python/blocks/__init__.py", 
->> line 18, in <module>
->> ModuleNotFoundError: No module named 'gnuradio.blocks.blocks_python'
->> 
->> During handling of the above exception, another exception occurred:
->> 
->> Traceback (most recent call last):
->>   File "<stdin>", line 1, in <module>
->>   File 
->> "/home/xxx/buildroot/output/build/gnuradio-3.10.4.0/gr-blocks/python/blocks/__init__.py", 
->> line 22, in <module>
->> ModuleNotFoundError: No module named 'gnuradio.blocks.blocks_python'
->> >>>
->> 
->> By adding 
->> _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" at 
->> configure time, sysconfig will
->> return correct informations (target architecture) instead of host 
->> architecture.
->> 
->> Signed-off-by: Gwenhael Goavec-Merou 
->> <gwenhael.goavec-merou@trabucayre.com>
->> ---
->> Changes v2 -> v3:
->> - replaces PYTHON_MODULE_EXTENSION by _PYTHON_SYSCONFIGDATA_NAME env 
->> (arnout)
->> Changes v1 -> v2:
->> - replaces patch by PYTHON_MODULE_EXTENSION option (result is the same
->>   but less "noisy")
->> ---
->>  package/gnuradio/gnuradio.mk | 4 ++++
->>  1 file changed, 4 insertions(+)
-> 
-> Not a show-stopper to merge this patch, but would it be possible to add
-> a runtime test-case for gnuradio Python modules in support/testing/ ?
-> I'm sure if you provide enough details to Julien Olivain (in cc), he
-> will be able to help you add this test.
+[1] https://lists.buildroot.org/pipermail/buildroot/2023-July/670933.html
+[2] https://patchwork.ozlabs.org/project/buildroot/patch/1689767858-17206-1-git-send-email-gwenj@trabucayre.com/
+---
+ DEVELOPERS                                    |  2 +
+ .../testing/tests/package/test_gnuradio.py    | 42 ++++++++++++
+ .../rootfs-overlay/root/test_gnuradio.py      | 68 +++++++++++++++++++
+ 3 files changed, 112 insertions(+)
+ create mode 100644 support/testing/tests/package/test_gnuradio.py
+ create mode 100755 support/testing/tests/package/test_gnuradio/rootfs-overlay/root/test_gnuradio.py
 
-I'm already comfortable with Gnuradio development, so I'm willing to
-write such a test. I'll send a proposal in the coming days...
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 01050ebf59..ced22151a5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1740,6 +1740,8 @@ F:	support/testing/tests/package/test_ddrescue/
+ F:	support/testing/tests/package/test_dos2unix.py
+ F:	support/testing/tests/package/test_gawk.py
+ F:	support/testing/tests/package/test_gnupg2.py
++F:	support/testing/tests/package/test_gnuradio.py
++F:	support/testing/tests/package/test_gnuradio/
+ F:	support/testing/tests/package/test_gzip.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
+diff --git a/support/testing/tests/package/test_gnuradio.py b/support/testing/tests/package/test_gnuradio.py
+new file mode 100644
+index 0000000000..1fc0479d21
+--- /dev/null
++++ b/support/testing/tests/package/test_gnuradio.py
+@@ -0,0 +1,42 @@
++import os
++
++import infra.basetest
++
++
++class TestGnuradio(infra.basetest.BRTest):
++    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
++    # not include: BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
++    # needed by gnuradio
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.39"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_GNURADIO=y
++        BR2_PACKAGE_GNURADIO_BLOCKS=y
++        BR2_PACKAGE_GNURADIO_PYTHON=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_ROOTFS_OVERLAY="{}"
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """.format(
++           # overlay to add a gnuradio python test script
++           infra.filepath("tests/package/test_gnuradio/rootfs-overlay"))
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "256M", "-initrd", img])
++        self.emulator.login()
++
++        self.assertRunOk("/root/test_gnuradio.py", timeout=30)
+diff --git a/support/testing/tests/package/test_gnuradio/rootfs-overlay/root/test_gnuradio.py b/support/testing/tests/package/test_gnuradio/rootfs-overlay/root/test_gnuradio.py
+new file mode 100755
+index 0000000000..4b63674533
+--- /dev/null
++++ b/support/testing/tests/package/test_gnuradio/rootfs-overlay/root/test_gnuradio.py
+@@ -0,0 +1,68 @@
++#! /usr/bin/env python3
++
++from gnuradio import blocks
++from gnuradio import gr
++
++INPUT_LENGTH = 100
++MUL_CONST = 3
++ADD_CONST = 5
++
++
++def compute_expected_data(input_data):
++    # demux input
++    even = input_data[::2]
++    odd = input_data[1::2]
++
++    # multiply "even" list by MUL_CONST
++    even = [x * MUL_CONST for x in even]
++
++    # add 5 to all "odd" elements
++    odd = [y + ADD_CONST for y in odd]
++
++    # mux the two lists
++    mux = [v for t in zip(even, odd) for v in t]
++
++    return mux
++
++
++def main():
++
++    gr.log.info("Starting Buildroot Test for GNU Radio " + gr.version())
++
++    input_data = list(range(INPUT_LENGTH))
++
++    tb = gr.top_block()
++
++    # Create Gnuradio Blocks
++    src = blocks.vector_source_i(input_data)
++    demux = blocks.deinterleave(gr.sizeof_int)
++    mul = blocks.multiply_const_ii(MUL_CONST)
++    add = blocks.add_const_ii(ADD_CONST)
++    mux = blocks.interleave(gr.sizeof_int)
++    sink = blocks.vector_sink_i()
++
++    # Create connection in top block
++    tb.connect(src, demux)
++    tb.connect((demux, 0), mul)
++    tb.connect((demux, 1), add)
++    tb.connect(mul, (mux, 0))
++    tb.connect(add, (mux, 1))
++    tb.connect(mux, sink)
++
++    tb.run()
++
++    gnuradio_data = sink.data()
++    expected_data = compute_expected_data(input_data)
++
++    # For easy debugging
++    if gnuradio_data != expected_data:
++        print("Gnuradio output:", gnuradio_data)
++        print("Expected output:", expected_data)
++
++    assert gnuradio_data == expected_data
++
++    gr.log.info("Test PASSED")
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.41.0
 
-Thanks for the suggestion!
-
-> 
-> Thanks!
-> 
-> Thomas
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
