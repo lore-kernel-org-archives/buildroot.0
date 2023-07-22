@@ -1,69 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 005D7EB64DA
-	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 08:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48102EB64DC
+	for <buildroot@archiver.kernel.org>; Sat, 22 Jul 2023 09:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 724EF83638;
-	Sat, 22 Jul 2023 08:03:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 724EF83638
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FFC341906;
+	Sat, 22 Jul 2023 09:35:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FFC341906
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yy1np25PobjG; Sat, 22 Jul 2023 08:03:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fPqMX91-OV7n; Sat, 22 Jul 2023 09:35:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CCF383595;
-	Sat, 22 Jul 2023 08:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CCF383595
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F8F81BF2A5
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 08:03:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 043FA4190B;
+	Sat, 22 Jul 2023 09:35:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 043FA4190B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C50B41BF37C
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 09:35:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11C10822BF
- for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 08:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11C10822BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id A5CFA401C9
+ for <buildroot@lists.busybox.net>; Sat, 22 Jul 2023 09:35:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5CFA401C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qN0ieIrnx0oc for <buildroot@lists.busybox.net>;
- Sat, 22 Jul 2023 08:03:18 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D1AF082281
- for <buildroot@buildroot.org>; Sat, 22 Jul 2023 08:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1AF082281
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4E82BA4C066D
- for <buildroot@buildroot.org>; Sat, 22 Jul 2023 10:03:14 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:43252)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qN7a6-0002zE-05
- for buildroot@buildroot.org; Sat, 22 Jul 2023 10:03:14 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sat, 22 Jul 2023 10:03:13 +0200
-Message-Id: <20230722080313.3515304-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hDi28L6AiEYZ for <buildroot@lists.busybox.net>;
+ Sat, 22 Jul 2023 09:35:38 +0000 (UTC)
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com
+ [IPv6:2607:f8b0:4864:20::234])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 603DF40012
+ for <buildroot@buildroot.org>; Sat, 22 Jul 2023 09:35:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 603DF40012
+Received: by mail-oi1-x234.google.com with SMTP id
+ 5614622812f47-3a36b309524so2070670b6e.3
+ for <buildroot@buildroot.org>; Sat, 22 Jul 2023 02:35:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1690018537; x=1690623337;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=6J4N/aohoT++1Ee9eueaqn63Pu4hTIKLbAeh8AfDzEU=;
+ b=G9vrxXdauvzu0WBdVDAldUWofeUZy/oSLXEFJ0JL7J5U/3zex2VuBdHT8DZ/vQae2z
+ wO0tyFKXDexE1Fkgbaq+z0ghL6NIGM8xpOOxrsuuAVBq1msb0+aab0m88bUAIY/FlFLf
+ sVG6XUz7t0+vM4MPdFr/67nPapiW2tAiJ+Qo7Dsn8jmD/avYasmzuf+o1NmHmvecdO8d
+ IyB3/xPel9Os7rkhzcL7s5UfLWV3vJij1OCyZXernFLMKbCiI5W/LBHKCkx8lZ40PB0v
+ l8ClFliLBKo4LtG/faYcS1Ig3gNaGAfW8Kqq9PTqiVQm7jDkNUjNHupGXc3kPJ5/wG/k
+ YMVQ==
+X-Gm-Message-State: ABy/qLZhWba6fD565sllsMEIZ0zbTyG/l2xg8uDzxMey948Cskb8NIC4
+ R12UZm6z7pVd6BgFwHOAkbrS1vnmDZFjn3tGHV+WWZ9udos=
+X-Google-Smtp-Source: APBJJlF+lYnUXSCc6O7kRAy2uGE/qganERjdGddOQ+ZdrVgMIKrlQKyb24ysur9NvJk270LrB3PEIxPqB1A5r6D8ltk=
+X-Received: by 2002:a05:6808:199:b0:3a1:dd1b:a97a with SMTP id
+ w25-20020a056808019900b003a1dd1ba97amr5104202oic.31.1690018537102; Sat, 22
+ Jul 2023 02:35:37 -0700 (PDT)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+From: Andreas <andreasembbuild@gmail.com>
+Date: Sat, 22 Jul 2023 11:35:26 +0200
+Message-ID: <CAOLWrZ-zemgtEsJKLJXeA7tiaPCHeR4wZGT01_e0+bkCS0pjuA@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1690012994;
- bh=068yNHLgwAcciMpNsfx2uThcOyA+RLzsJxWjOdiP4Qs=;
- h=From:To:Subject:Date:From;
- b=eFSJNcsOeALPDJ8up7fOr893+GFnBFJZP7bu1u6ycU0aBSaRpqVhKEULEc/pEClVe
- /h1sTmTNBXFYvgRNfPhJnK7Gkcxw2zaZ5Qf4QIGCbdMISt0dOd4SU6Dg9L/xveGQTi
- UvYrbvdg/Co/k7M2synShHxZS3lj28KrcqmwTtLOkl0wP80V8acV3um3DG/LH7qnBp
- l0gMI5syQUne6tb//fPm3/SgXV7smGTKUMNjTv8Pq2EBNFjWggoV8fl8uzOS9y8nZB
- Xk5K1Fk0SaapvS7ku0gZ1xmiAdYVhnSI2sbcL+eF52uXZeZAHKvJTFvWjE/o/zCVLN
- rJaGbqYunJIxw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=eFSJNcsO
-Subject: [Buildroot] [PATCH 1/1] package/tpm2-tss: security bump version to
- 3.2.2
+ d=gmail.com; s=20221208; t=1690018537; x=1690623337;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=6J4N/aohoT++1Ee9eueaqn63Pu4hTIKLbAeh8AfDzEU=;
+ b=h2QJeKO9PgyuczKlxsXSTbrNodSLOdlWj1Su8TqXZMINvSinIU8xTR1P+ZIvpzo/rA
+ EQ1vPwm+0iKg1sLs8dfQnNnbR0lZn5q0akwQYTe609dOi3r5BhgdosFE4fKQPU0ieOBL
+ df0Vwzy8AXIcpv/uX2R3L5xGacAAjky7w+ii6F2DtCQtNArCKk8HENX5GplrseAoEoJ6
+ niqyGkkMnWo3dVTu7cuTiSxJTtENHb6migcXLKdNw5UwNYg48MEQdS1BogeK54tIm2Fd
+ OSvg0AUrE5eYtpEocjl4qzrzLKrfefA3C2C4U/jRS9Bfeyrm6vmErkRdcz9ZaUCvjf+A
+ bZmw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=h2QJeKO9
+Subject: [Buildroot] Support for package python-rpds-py
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,70 +86,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3338937344351684016=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2023-22745.
+--===============3338937344351684016==
+Content-Type: multipart/alternative; boundary="0000000000009160460601101a9d"
 
-Changelog:
-https://github.com/tpm2-software/tpm2-tss/blob/3.2.x/CHANGELOG.md
+--0000000000009160460601101a9d
+Content-Type: text/plain; charset="UTF-8"
 
-Changed the ac_cv_prog variables due to an upstream commit which changed
-the detection of groupadd/useradd:
-https://github.com/tpm2-software/tpm2-tss/commit/7fde604383c62fc764a1e060dff48fc06f79860b
+Hi,
 
-Buildroot commit a85f5f2a412db894fdf548e10d12e7c56eda9107 bumped
-tpm2-pkcs11 to 1.8.0 which includes a commit bumping the required
-version of tpm2-tss to >= 3.2
-https://github.com/tpm2-software/tpm2-pkcs11/commit/940b661e330cac0ecc7d4db5d3626ef828ecdda8
+I need the package python-rpds-py that is a dependency of the referencing
+package and depends itself on python-maturin.
+I configured it as follows:
+################################################################################
+#
+# python-rpds-py
+#
+################################################################################
 
-Fixes:
-http://autobuild.buildroot.net/results/6fd/6fddfee6f852ce835c5d1178e6913b6ab1b3fe50/
+PYTHON_RPDS_PY_VERSION = 0.8.10
+PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
+PYTHON_RPDS_PY_SITE =
+https://files.pythonhosted.org/packages/e6/fe/7d07bc08cce2ccae2c7e5c96d9b3976c4e1fa5e248989dca0a58bc7628f8
+PYTHON_RPDS_PY_SETUP_TYPE = pep517
+PYTHON_RPDS_PY_LICENSE = MIT
+PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
+PYTHON_RPDS_PY_DEPENDENCIES = host-python-maturin
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+$(eval $(python-package))
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index b6eb3c1f97..c9fa4e6ae0 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8900a6603f74310b749b65f23c3461cde6e2a23a5f61058b21004c25f9cf19e8  tpm2-tss-3.1.0.tar.gz
-+sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 060883c377..10d605fc65 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TPM2_TSS_VERSION = 3.1.0
-+TPM2_TSS_VERSION = 3.2.2
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
-@@ -26,7 +26,8 @@ TPM2_TSS_CONF_OPTS = \
- 	ac_cv_prog_result_setfacl=yes \
- 	ac_cv_prog_systemd_sysusers=no \
- 	ac_cv_prog_systemd_tmpfiles=no \
--	ac_cv_prog_result_useradd=yes \
-+	ac_cv_prog_useradd=yes \
-+	ac_cv_prog_groupadd=yes \
- 	--with-crypto=ossl \
- 	--disable-doxygen-doc \
- 	--disable-defaultflags
--- 
-2.39.2
+The one for maturin looks as follows:
+
+################################################################################
+#
+# python-maturin
+#
+################################################################################
+
+PYTHON_MATURIN_VERSION = 1.0.0
+PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
+PYTHON_MATURIN_SITE =
+https://files.pythonhosted.org/packages/1c/de/5f56b77179595ba52786eedb081fc6b0f1d0a4496bc77660e8feabd607ec
+PYTHON_MATURIN_SETUP_TYPE = setuptools
+PYTHON_MATURIN_LICENSE = MIT OR Apache-2.0
+PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
+HOST_PYTHON_MATURIN_DEPENDENCIES = \
+host-python-setuptools-rust \
+host-rustc
+HOST_PYTHON_MATURIN_ENV = \
+$(HOST_PKG_CARGO_ENV) \
+PYO3_CROSS_LIB_DIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)"
+# We need to vendor the Cargo crates at download time
+PYTHON_MATURIN_DOWNLOAD_POST_PROCESS = cargo
+PYTHON_MATURIN_DOWNLOAD_DEPENDENCIES = host-rustc
+HOST_PYTHON_MATURIN_DL_ENV = $(HOST_PKG_CARGO_ENV)
+
+$(eval $(host-python-package))
+
+So far so go. However, I get the following error for installing it on the
+target:
+
+ERROR: architecture for "/usr/lib/python3.10/site-packages/rpds/
+rpds.cpython-310-arm-linux-gnueabihf.so" is "Advanced Micro Devices
+X86-64", should be "ARM".
+
+What could be the cause of the error and how can I prevent it?
+For some more overall context I try to compile the package
+python-notebook notebook==6.5.4, that itself depends on ipython and
+ipykernel which require jupyterlab-widgets and jupyterlab-pygments that
+throw a similar error.
+
+Kind Regards,
+Andreas
+
+--0000000000009160460601101a9d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>I need the package python-rpds-py t=
+hat is a dependency of the referencing package and depends itself on python=
+-maturin.</div><div>I configured it as follows:</div><div>#################=
+###############################################################<br>#<br># p=
+ython-rpds-py<br>#<br>#####################################################=
+###########################<br><br>PYTHON_RPDS_PY_VERSION =3D 0.8.10<br>PYT=
+HON_RPDS_PY_SOURCE =3D rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz<br>PYTHON_R=
+PDS_PY_SITE =3D <a href=3D"https://files.pythonhosted.org/packages/e6/fe/7d=
+07bc08cce2ccae2c7e5c96d9b3976c4e1fa5e248989dca0a58bc7628f8" target=3D"_blan=
+k">https://files.pythonhosted.org/packages/e6/fe/7d07bc08cce2ccae2c7e5c96d9=
+b3976c4e1fa5e248989dca0a58bc7628f8</a><br>PYTHON_RPDS_PY_SETUP_TYPE =3D pep=
+517<br>PYTHON_RPDS_PY_LICENSE =3D MIT<br>PYTHON_RPDS_PY_LICENSE_FILES =3D L=
+ICENSE<br>PYTHON_RPDS_PY_DEPENDENCIES =3D host-python-maturin<br><br>$(eval=
+ $(python-package))<br></div><div><br></div><div>The one for maturin looks =
+as follows:</div><div><br></div><div>######################################=
+##########################################<br>#<br># python-maturin<br>#<br=
+>##########################################################################=
+######<br><br>PYTHON_MATURIN_VERSION =3D 1.0.0<br>PYTHON_MATURIN_SOURCE =3D=
+ maturin-$(PYTHON_MATURIN_VERSION).tar.gz<br>PYTHON_MATURIN_SITE =3D <a hre=
+f=3D"https://files.pythonhosted.org/packages/1c/de/5f56b77179595ba52786eedb=
+081fc6b0f1d0a4496bc77660e8feabd607ec" target=3D"_blank">https://files.pytho=
+nhosted.org/packages/1c/de/5f56b77179595ba52786eedb081fc6b0f1d0a4496bc77660=
+e8feabd607ec</a><br>PYTHON_MATURIN_SETUP_TYPE =3D setuptools<br>PYTHON_MATU=
+RIN_LICENSE =3D MIT OR Apache-2.0<br>PYTHON_MATURIN_LICENSE_FILES =3D licen=
+se-apache license-mit<br>HOST_PYTHON_MATURIN_DEPENDENCIES =3D \<br>	host-py=
+thon-setuptools-rust \<br>	host-rustc<br>HOST_PYTHON_MATURIN_ENV =3D \<br>	=
+$(HOST_PKG_CARGO_ENV) \<br>	PYO3_CROSS_LIB_DIR=3D&quot;$(HOST_DIR)/lib/pyth=
+on$(PYTHON3_VERSION_MAJOR)&quot;<br># We need to vendor the Cargo crates at=
+ download time<br>PYTHON_MATURIN_DOWNLOAD_POST_PROCESS =3D cargo<br>PYTHON_=
+MATURIN_DOWNLOAD_DEPENDENCIES =3D host-rustc<br>HOST_PYTHON_MATURIN_DL_ENV =
+=3D $(HOST_PKG_CARGO_ENV)<br><br>$(eval $(host-python-package))<br></div><d=
+iv><br></div><div>So far so go. However, I get the following error for inst=
+alling it on the target:</div><div><br></div><div>ERROR: architecture for &=
+quot;/usr/lib/python3.10/site-packages/rpds/<a href=3D"http://rpds.cpython-=
+310-arm-linux-gnueabihf.so" target=3D"_blank">rpds.cpython-310-arm-linux-gn=
+ueabihf.so</a>&quot; is &quot;Advanced Micro Devices X86-64&quot;, should b=
+e &quot;ARM&quot;.=C2=A0<br></div><div><br></div><div>What could be the cau=
+se of the error and how can I prevent it?</div><div>For some more overall c=
+ontext I try to compile the package python-notebook=C2=A0notebook=3D=3D6.5.=
+4, that itself depends on ipython and ipykernel which require jupyterlab-wi=
+dgets and jupyterlab-pygments that throw a similar error.</div><div><br></d=
+iv><div>Kind Regards,</div><div>Andreas</div></div>
+
+--0000000000009160460601101a9d--
+
+--===============3338937344351684016==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3338937344351684016==--
