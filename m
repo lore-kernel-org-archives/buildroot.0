@@ -4,69 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBBCEC001DC
-	for <buildroot@archiver.kernel.org>; Thu, 20 Jul 2023 21:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3E8DC001DF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 16:25:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F52E606AA;
-	Thu, 20 Jul 2023 21:58:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F52E606AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6523960BB3;
+	Sun, 23 Jul 2023 16:25:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6523960BB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mu3KG1WKzXNa; Thu, 20 Jul 2023 21:58:02 +0000 (UTC)
+	with ESMTP id f9-rIMQaA0Ea; Sun, 23 Jul 2023 16:25:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93EF960640;
-	Thu, 20 Jul 2023 21:58:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93EF960640
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E53F71BF5AD
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:57:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A82CE60BA1;
+	Sun, 23 Jul 2023 16:25:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A82CE60BA1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A97A1BF345
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 16:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DB2340220
- for <buildroot@lists.busybox.net>; Thu, 20 Jul 2023 21:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DB2340220
+ by smtp4.osuosl.org (Postfix) with ESMTP id 233CE409A5
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 16:25:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 233CE409A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6C9IUSVGkOLW for <buildroot@lists.busybox.net>;
- Thu, 20 Jul 2023 21:57:58 +0000 (UTC)
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7DF0340191
- for <buildroot@uclibc.org>; Thu, 20 Jul 2023 21:57:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DF0340191
-Received: from relay3-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::223])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id BE897D21F7
- for <buildroot@uclibc.org>; Thu, 20 Jul 2023 21:06:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8D98360003;
- Thu, 20 Jul 2023 21:06:39 +0000 (UTC)
-Date: Thu, 20 Jul 2023 23:06:38 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230720230638.5eba8786@windsurf>
-In-Reply-To: <pan$86c9$5fa777aa$e5fc1042$fce28aaf@ID-313208.user.individual.net>
-References: <20230615134315.494330-1-sebastian.weyer__49449.699586124$1686836642$gmane$org@smile.fr>
- <pan$86c9$5fa777aa$e5fc1042$fce28aaf@ID-313208.user.individual.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1689887200;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YOxpvYHg71DJ6cgF6s+zBid32qyxBPAachzKe0Rsd/g=;
- b=Ig0j4tHswou1cKtfbmHU9cImSFQNzlGrbA9bCJsZhHu6F25A4mtqNXMsZOKaP+NVqlpQ/J
- 1uLgPvu4XSoUA4jvz+XViSXdPvR4zxaXahjpe6kx+daUPvQR67OGGbJmRYFna2zRUTm/YZ
- HR0j7K+O3cjmQQQ0pQOSKtbb6sa1TJwgqqZyZwQJwfh2DCN8dEb6oZ4aFWrcv1GlTvSYO0
- Deg/YtWxO3BPmD1uutOHdxL9c6uGi2+I/xivUiWYzjOB3NOh9Hdmkeler194DUSmi8xKWe
- 5WO9kuSU7Oj2Os66SGPbIewT4vLTrH1v86wcDPcUeQXoEMMKYDdXNSKGQwhSlA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ig0j4tHs
-Subject: Re: [Buildroot] [PATCH v4 00/10] group llvm projects and bump to
- version 15.0.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TuY4KOm5D9XD for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 16:25:11 +0000 (UTC)
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9FF8040997
+ for <buildroot@uclibc.org>; Sun, 23 Jul 2023 16:25:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FF8040997
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qNbtN-0008O1-6f
+ for buildroot@uclibc.org; Sun, 23 Jul 2023 18:25:09 +0200
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Sun, 23 Jul 2023 18:24:58 +0200
+Message-ID: <pan$58f88$61abb096$1792a0c5$f6b1dd6d@ID-313208.user.individual.net>
+References: <20230723074303.603364-1-bernd@kuhls.net>
+ <20230723152533.GH2503916__38229.4022989058$1690125967$gmane$org@scaer>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/piglit: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,37 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@uclibc.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+Hi Yann,
 
-On Thu, 20 Jul 2023 21:00:54 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Am Sun, 23 Jul 2023 17:25:33 +0200 schrieb Yann E. MORIN:
 
-> quoting the user manual:
-> http://buildroot.uclibc.org/downloads/manual/
-> manual.html#_package_directory
+> It is not unknown. A bit of searhing around turns up:
+
+at least it was unknown for me ;) Thanks for the insight.
+
+> Yet...
 > 
-> "New subdirectories are discouraged, however."
+>> as it seems unrelated to the piglit version which was last bumped in
+>> 2020 with commit 9061fd7bf6855431939bdace7e3091d4e1c48e53.
+>> 
+>> Fixes:
+>> http://autobuild.buildroot.net/results/ed3/
+ed3c5806458efdb9db78732d3709e1d6ec441bcb/
+> 
+> This build failure is from 2022-10-04, almost a year ago now. Since
+> then, we haven't had such a failure again...
+> 
+[...]
+> Do you have a defconfig that still exhibit the issue?
 
-Correct, with one exception: when a reasonable number of packages share
-some common variables, especially the version variable. It's the case
-for qt5, but it's also the case for those llvm-project packages, in
-which case we tend to accept having a subdirectory.
+Yes, the one from the autobuilder error mentioned above. A couple of 
+minutes ago I could reproduce the build error with that defconfig.
 
-Best regards,
+> Do you know why the autobuilders no longer report that issue?
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Just guessing: The dependencies of piglit are so complicated (waffle + glx 
+& co.) that random defconfigs seldomly produce a defconfig with piglit 
+enabled, especially since https://git.busybox.net/buildroot/commit/utils/
+genrandconfig?id=0e64537917a5b27565b8c479fda83508a6da7b86
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
