@@ -1,71 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AF25C001B0
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 08:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 636FFC001DC
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 09:15:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5BCC60BA2;
-	Sun, 23 Jul 2023 08:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5BCC60BA2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85F2441517;
+	Sun, 23 Jul 2023 09:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85F2441517
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UodSUqtYqznJ; Sun, 23 Jul 2023 08:32:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tfmOzeugj-Sm; Sun, 23 Jul 2023 09:15:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 061D960C16;
-	Sun, 23 Jul 2023 08:32:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 061D960C16
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C76F31BF471
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 08:32:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F02C4151A;
+	Sun, 23 Jul 2023 09:14:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F02C4151A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D21C1BF589
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 09:14:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE31283196
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 08:32:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE31283196
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6BEA64151A
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 09:14:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BEA64151A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XSvki_OCqf8Z for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 08:32:08 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BCE9E83192
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 08:32:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCE9E83192
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 30FC3A4C0C73
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 10:31:53 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:53572)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qNUVM-0002Jp-36
- for buildroot@buildroot.org; Sun, 23 Jul 2023 10:31:53 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 23 Jul 2023 10:31:52 +0200
-Message-Id: <20230723083152.3147145-2-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230723083152.3147145-1-bernd@kuhls.net>
-References: <20230723083152.3147145-1-bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id erPGo_ACX_cd for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 09:14:56 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9E31841517
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 09:14:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E31841517
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0BD46FF804;
+ Sun, 23 Jul 2023 09:14:51 +0000 (UTC)
+Date: Sun, 23 Jul 2023 11:14:49 +0200
+To: Dmitry Rokosov via buildroot <buildroot@buildroot.org>
+Message-ID: <20230723111449.7120549c@windsurf>
+In-Reply-To: <20230609113415.13856-1-ddrokosov@sberdevices.ru>
+References: <20230609113415.13856-1-ddrokosov@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1690101113;
- bh=lzuK+MkrzPkONNlJiTL9oN8aUXtwXdLAjuGHb8Y60jc=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=x9cQhcA01f3cquYZ2dp/ABtXiwH2u8wJHjw2zp7gDUlZe5HSir/50lDwhQoufh6Ue
- QRZpm4K78+Ag98/G98nr0a2keyC0twRH1NM2pWio0I3oteNHmtuDomOg8FD3XOEGgb
- RK4HQ2xN3O+1vUAvYobjpWpBZTVXfHbT7Di2GsutzyPnxOJto7GTiKW7hsGtR/Hde8
- c5ETNeXBu9s1ADAsk5AwtO9uSeRSJSW04TNha0oe8sWZSaRjXTJfyrQ6S1+7VZkhjm
- BcGQOjoYd2fRcW1wdtSiNSLhSsCY+tUbaQIg38iU4V5b244lWlDVL76oOgB8nriJks
- UKu/0ixVTe7ag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=x9cQhcA0
-Subject: [Buildroot] [PATCH v2 2/2] package/transmission: fix gtk
- dependencies
+ d=bootlin.com; s=gm1; t=1690103692;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=iooGcIY+wzHapiqvl2rqBs3GzyrzNW0tSh9MZi4OVRE=;
+ b=HCzJqno0l8mblapSficzLgAsR8Hnpkz0KOaC1h6fG6FRHD2oi4Sb9yU3MqPVZFL+GId5J8
+ JuUXSnmNfua2GO9zYOlgUeOG2yFwA/ANlUlAdRb2/R9ajPAzhAmjhGVRAyZ4XKd39Gi3ll
+ ZYKA0E5XB3lso5ZwI6Nu1LQZXLPEDgyJUb71iwqgKOawC1buL3XoR6D8fHX+U7kHi+1XoZ
+ nozWdX6J3m/3mx9ep7bsc0JZYTflJlbjyCCn4cVqUQ2JdOrB9C359k/jiBomV47gN9vcSe
+ zmZtcNudIgXcRJekQODhNRpAMongl5w/wuQar14BlyIU98i4Imb2vQC9Dec74Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HCzJqno0
+Subject: Re: [Buildroot] [PATCH v1] package/linux-tools: introduce linux mm
+ tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,62 +75,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: rockosov@gmail.com, Herve Codina <herve.codina@bootlin.com>,
+ sdfw_system_team@sberdevices.ru, kernel@sberdevices.ru,
+ Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Buildroot commit 80793107a65d95f8dfd0317a726d3a737c78ef67 forgot to add
-packages needed for gtk support:
-https://github.com/transmission/transmission/blob/main/CMakeLists.txt#L40
+Hello Dmitry,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: removed unneeded glibmm, added gtkmm3 dependencies (Thomas)
+On Fri, 9 Jun 2023 14:34:15 +0300
+Dmitry Rokosov via buildroot <buildroot@buildroot.org> wrote:
 
- package/transmission/Config.in       | 8 +++++++-
- package/transmission/transmission.mk | 2 +-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+> This toolset was designed to facilitate the testing, monitoring, and
+> tracing of various things with virtual memory, pages, and slab objects.
+> It is an invaluable resource for identifying and analyzing
+> memory-related issues, such as leaks and bottlenecks, and can greatly
+> enhance one's understanding of memory utilization within a system.
+> 
+> The mm toolset includes:
+>     - page_owner_sort: userspace helper to sort the output of
+>       /sys/kernel/debug/page_owner, which helps to know who allocates
+>       the page from kernel context
+>     - slabinfo: the tool which gets reports about slabs, for example
+>       show empty slabs, modify of slab debug options at runtime, display
+>       all information about a slabcache
+>     - page-types: a handy tool for querying page flags
+> 
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 
-diff --git a/package/transmission/Config.in b/package/transmission/Config.in
-index fd4c897497..7ac18ae6d9 100644
---- a/package/transmission/Config.in
-+++ b/package/transmission/Config.in
-@@ -37,11 +37,17 @@ config BR2_PACKAGE_TRANSMISSION_DAEMON
- 
- config BR2_PACKAGE_TRANSMISSION_GTK
- 	bool "transmission-gtk"
-+	depends on !BR2_nios2 # gtkmm3
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pangomm, libgtk3 -> pango -> harfbuzz -> gtkmm3
-+	depends on BR2_INSTALL_LIBSTDCPP # glibmm, libpangomm -> glibmm/pango -> gtkmm3
-+	depends on BR2_USE_WCHAR # *mm/libgtk3 -> libglib2 -> gtkmm3
- 	depends on BR2_PACKAGE_LIBGTK3 && BR2_SYSTEM_ENABLE_NLS
-+	select BR2_PACKAGE_GTKMM3
- 	help
- 	  Install transmission GTK-based GUI interface.
- 
--comment "transmission-gtk needs NLS enabled"
-+comment "transmission-gtk needs libgtk3 and a toolchain with NLS enabled"
-+	depends on !BR2_nios2
- 	depends on BR2_PACKAGE_LIBGTK3 && !BR2_SYSTEM_ENABLE_NLS
- endif
- 
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index f3a200ced3..26deeefa34 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -74,7 +74,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
- TRANSMISSION_CONF_OPTS += -DENABLE_GTK=ON
--TRANSMISSION_DEPENDENCIES += libgtk3
-+TRANSMISSION_DEPENDENCIES += gtkmm3 libgtk3
- else
- TRANSMISSION_CONF_OPTS += -DENABLE_GTK=OFF
- endif
+Thanks for your patch, and sorry for the delay to get back to you with
+a review.
+
+
+> diff --git a/package/linux-tools/linux-tool-mm.mk.in b/package/linux-tools/linux-tool-mm.mk.in
+> new file mode 100644
+> index 000000000000..a59f1c46ff97
+> --- /dev/null
+> +++ b/package/linux-tools/linux-tool-mm.mk.in
+> @@ -0,0 +1,59 @@
+> +################################################################################
+> +#
+> +# mm
+> +#
+> +################################################################################
+> +
+> +LINUX_TOOLS += mm
+> +
+> +MM_MAKE_OPTS = $(LINUX_MAKE_FLAGS) CC="$(TARGET_CC)"
+> +
+> +KVER = $(shell echo $(LINUX_VERSION_PROBED))
+> +KVER_MAJOR = $(word 1,$(subst ., ,$(KVER)))
+> +KVER_MINOR = $(word 2,$(subst ., ,$(KVER)))
+
+All variables in a package must be prefixed with the package name.
+Indeed, all variables in Buildroot are global, so if you define KVER
+and another package defines KVER, they will conflict.
+
+> +
+> +# For the first time tools/vm was introduced in the 3.4 kernel version
+> +KVER_MAJOR_MIN = 3
+> +KVER_MINOR_MIN = 4
+> +
+> +# Starting from 6.3 kernel version mm tools are located at tools/mm folder
+> +# instead of tools/vm
+> +KVER_MAJOR_MM = 6
+> +KVER_MINOR_MM = 3
+> +
+> +define MM_BUILD_CMDS
+> +	$(Q)if [ $(KVER_MAJOR) -lt $(KVER_MAJOR_MIN) ] || \
+> +		[ $(KVER_MAJOR) -eq $(KVER_MAJOR_MIN) -a \
+> +		  $(KVER_MINOR) -lt $(KVER_MINOR_MIN) ]; then \
+> +		echo -n "Your kernel version $(KVER_MAJOR).$(KVER_MINOR) is "; \
+> +		echo "too old and doesn't have the mm tools." ; \
+> +		echo -n "At least $(KVER_MAJOR_MIN).$(KVER_MINOR_MIN) "; \
+> +		echo "kernel must be used." ; \
+> +		exit 1 ; \
+> +	fi
+
+I think this is not the approach we should take here, because it's not
+the approach taken by the other makefiles in package/linux-tools/.
+Rather than testing the kernel version, we test the presence/absence of
+a Makefile.
+
+So something along the lines of:
+
+        $(Q)if test -f $(LINUX_DIR)/tools/vm/Makefile ; then \
+		MM_SUBDIR=vm
+        elif test -f $(LINUX_DIR)/tools/mm/Makefile ; then \
+		MM_SUBDIR=m
+	else \
+                echo "Your kernel version is too old and does not have the mm tool." ; \
+                echo "At least kernel 3.4 must be used." ; \
+                exit 1 ; \
+        fi ; \
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools \
+		$(MM_MAKE_OPTS) $${MM_SUBDIR}
+
+or something along those lines. And of course, ditto for the install
+step.
+
+Could you rework your patch accordingly?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
