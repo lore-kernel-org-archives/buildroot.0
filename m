@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46CB9C001DE
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 17:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE121C001DF
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 17:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B26C9409C9;
-	Sun, 23 Jul 2023 17:11:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B26C9409C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BB35409EA;
+	Sun, 23 Jul 2023 17:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BB35409EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6YSpEpDfKl08; Sun, 23 Jul 2023 17:11:36 +0000 (UTC)
+	with ESMTP id GyFC3v-WJSpv; Sun, 23 Jul 2023 17:16:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2779409B0;
-	Sun, 23 Jul 2023 17:11:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2779409B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F2E851BF5B5
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:11:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24A7A409EB;
+	Sun, 23 Jul 2023 17:16:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A7A409EB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A3E61BF5B5
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2453B40168
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 16:15:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2453B40168
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2337060A8D
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:16:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2337060A8D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BJG8Qq11ig_5 for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 16:15:31 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 117734018B
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 16:15:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 117734018B
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:46bc:e175:93d0:2fb4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 664055FFA5;
- Sun, 23 Jul 2023 18:15:26 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Jul 2023 18:15:26 +0200
-Date: Sun, 23 Jul 2023 18:15:26 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230723161526.GK2503916@scaer>
-References: <20230721202757.15824-1-ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0gdzNt5XIqH4 for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 17:16:06 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2C56460A66
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 17:16:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C56460A66
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6BB21A4C077F
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 19:16:03 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:37134)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qNcgd-0000WV-0b
+ for buildroot@buildroot.org; Sun, 23 Jul 2023 19:16:03 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 23 Jul 2023 19:16:03 +0200
+Message-Id: <20230723171603.1123429-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230721202757.15824-1-ju.o@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1690128928;
- bh=fJImSXZqw8TXY4vf5Lk/dL+Vdc3iu8HqH65UtR3xEWY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Mj4uc3E5KZckZcr6bkihlUg6noFAtdrbbUOgZjrKopXjRS54qSlGL8JmpspyPoFfz
- WxurdV/Y2dM1oODEQYdhuYSziSF5QwX/RtvbbNnaQkk0l5NpDLUBrRZVpdU4pObtXm
- dPi4HqYm37sEQfAAFcrMIHSgkWSlb+X9IASD1Yp5uetZil349FNQjEORp3KTCkTbFN
- 8IOxzuhL03dF4QXONq1l5JcFOpApbWhwcDjLzbB/2JawOPuFuA2mS8sSVdhT4qESDy
- 8xrHRzbnWQ7TpdFzstdFuaTlpbymGEBtuOfYc1zQEl8Ea7u1QOeTMINRMY05AF92kt
- i+spcQ3MnHQyg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Mj4uc3E5
-Subject: Re: [Buildroot] [PATCH 1/1] boot/edk2: introduce a new
- _OVMF_DEBUG_ON_SERIAL option
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1690132563;
+ bh=rxYoMn1OkQGgOVPNovEgdFcXUFAtr/ojHKZmVd+eHrc=;
+ h=From:To:Subject:Date:From;
+ b=SWHdiTHphkWyi8SaY3rLPG1AfFXVHt8L7SEZjMBZmlyvKZw30SldHgo4FZ53bhI38
+ +yOicJr4BRo1BC9HouYMHPali61dQ9QMxMvYFokDcL5UVyDuTeYlvG+qsbzvxLExtA
+ w+6MgNnedOIC5oE+d4Q2fdTiiwKI979SirzXET23e3h5bAfPHbzMpCjgvUPp15TWUO
+ i+9XqCZ6jkJWWBpmaunpiVndi/fTtl4kGbH9o0tE5O6y4+UWctya/Lq3yks1yoJAug
+ NwhhzgcRYcZ9I6Fet0pIWJElrs4ikKvcv0lTvGMD0MBVFSJXlXUzbVVtef3fzlXAll
+ j6NU7z+0oON0A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=SWHdiTHp
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.15.x / 6.{1,
+ 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,120 +75,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-On 2023-07-21 22:27 +0200, Julien Olivain spake thusly:
-> When EDK2 OVMF is built with debug, messages are printed to
-> IO port 0x402. Those messages are not shown in the normal
-> Qemu emulated serial port. Enabling this option will print
-> debug messages on the emulated serial port, potentially
-> mixing messages with UEFI serial console output.
-> 
-> See OVMF README:
-> https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
-> 
-> This option has been useful to debug problems such as [1], in which the
-> emulator was hanging at startup without any log. Enabling this option
-> show the debug message on the console, before hanging:
-> 
->     ...
->     PlatformCpuCountBugCheck: Present=0 Possible=1
->     PlatformCpuCountBugCheck: Broken CPU hotplug register block found. Update QEMU to version 8+, or
->     PlatformCpuCountBugCheck: to a stable release with commit dab30fbef389 backported. Refer to
->     PlatformCpuCountBugCheck: <https://bugzilla.tianocore.org/show_bug.cgi?id=4250>.
->     ...
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2023-July/670807.html
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  boot/edk2/Config.in | 15 +++++++++++++++
->  boot/edk2/edk2.mk   |  6 ++++++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
-> index 855a62f70b..bed503b168 100644
-> --- a/boot/edk2/Config.in
-> +++ b/boot/edk2/Config.in
-> @@ -108,6 +108,21 @@ comment "QEMU SBSA depends on ATF not using EDK2 as BL33"
->  
->  endchoice
->  
-> +config BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL
-> +	bool "OVMF Debug on Serial"
-> +	depends on BR2_ENABLE_DEBUG
-> +	depends on BR2_TARGET_EDK2_PLATFORM_OVMF_I386 || \
-> +		BR2_TARGET_EDK2_PLATFORM_OVMF_X64
-
-Since it depends on OVMF32/64 here....
-
-[--SNIP--]
-> diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
-> index 399bd346ef..1ed22d87da 100644
-> --- a/boot/edk2/edk2.mk
-> +++ b/boot/edk2/edk2.mk
-> @@ -55,6 +55,9 @@ EDK2_DEPENDENCIES += host-nasm
->  EDK2_PACKAGE_NAME = OvmfPkg
->  EDK2_PLATFORM_NAME = OvmfPkgIa32
->  EDK2_BUILD_DIR = OvmfIa32
-> +ifeq ($(BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL),y)
-> +EDK2_BUILD_OPTS += -DDEBUG_ON_SERIAL_PORT=TRUE
-> +endif
-
-It is superfluous to have it duplicated here...
-
->  else ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_X64),y)
->  EDK2_ARCH = X64
-> @@ -62,6 +65,9 @@ EDK2_DEPENDENCIES += host-nasm
->  EDK2_PACKAGE_NAME = OvmfPkg
->  EDK2_PLATFORM_NAME = OvmfPkgX64
->  EDK2_BUILD_DIR = OvmfX64
-> +ifeq ($(BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL),y)
-> +EDK2_BUILD_OPTS += -DDEBUG_ON_SERIAL_PORT=TRUE
-> +endif
-
-... and here.
-
-So I moved it to the DEBUG test toward the beginning.
-
-I also wondered why you did not also explicitly disabled it with
--DDEBUG_ON_SERIAL_PORT=FALSE (or =OFF or whatev'). But a cursory look at
-the edk2 code seems to imply that the value is not tested, only that it
-has been set.
-
-Applied to master after fixing the above issues, thanks.
-
-Furthermore, the documentation suggest just setting it with
--DDEBUG_ON_SERIAL_PORT without passing a value, so could you please
-check that part and submit an follw-up patch is the =TRUE is indeed
-superfluous (since I forgot to check that before I pushed)?
-
-Regards,
-Yann E. MORIN.
-
->  else ifeq ($(BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU),y)
->  EDK2_ARCH = AARCH64
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 1ab65cf266..87d1a81915 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.4.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 7541ae9123..c80fcf5eff 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  9cbc4a2be714a4d154e1312c9f33ded91174907c8b15ee936ad27002ac75ff2a  linux-6.4.4.tar.xz
+-sha256  4cddee22fdf657138a06af653492f67cd3a4762c04a34725534bd200d99085b8  linux-6.1.39.tar.xz
++sha256  374e2c07463c51dfd71204b7fac3b73c7f973550ae019b74e9f2b815b28de9b7  linux-6.4.5.tar.xz
++sha256  43eafc2197a07dcdcff7a7ef79ac7502061f7c564744e51626bf5fa2e22587f0  linux-6.1.40.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  6499089eae6b271063cb3e873ab7f4ba0543cfb21dcc9c54d9bcf5357db683f6  linux-5.15.120.tar.xz
++sha256  07e0cebdb00d25459683e9c330a0576349b8c5e5f2abf053b864f9909151c31d  linux-5.15.121.tar.xz
+ sha256  1e60296a135d272bb7ce645f6ae68fbd4ffd1972cb4b82c38c6faa1172481be3  linux-5.10.186.tar.xz
+ sha256  dc5458462c6edbe3473fc6dee80fbe0841df7c177fe0546c2f131e5918f5351d  linux-5.4.249.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6eb7b3577b..ca841d6114 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -404,9 +404,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.19.288"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.249"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.186"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.120"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.39"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.4.4"		if BR2_KERNEL_HEADERS_6_4
++	default "5.15.121"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.40"	if BR2_KERNEL_HEADERS_6_1
++	default "6.4.5"		if BR2_KERNEL_HEADERS_6_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
