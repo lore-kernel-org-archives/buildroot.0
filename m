@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 617C5C001DE
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 16:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05DE5C001DE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 17:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E17A360BAF;
-	Sun, 23 Jul 2023 16:11:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E17A360BAF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7909660BBD;
+	Sun, 23 Jul 2023 17:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7909660BBD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mPp7Egticqc4; Sun, 23 Jul 2023 16:11:54 +0000 (UTC)
+	with ESMTP id U9_tciLj5cZT; Sun, 23 Jul 2023 17:03:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D02B60BAA;
-	Sun, 23 Jul 2023 16:11:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D02B60BAA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9DD7E1BF345
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 16:11:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B2BD660899;
+	Sun, 23 Jul 2023 17:03:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2BD660899
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 008481BF345
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:03:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 771B460BAA
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 16:11:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 771B460BAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD3C440995
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:03:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD3C440995
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tnr9--t9VM3f for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 16:11:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86D1F60B6A
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 16:11:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86D1F60B6A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74743827D6; Sun, 23 Jul 2023 16:11:50 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YkFnPMal7lka for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 17:03:43 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9EED340994
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 17:03:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EED340994
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D9578A4C045F
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 19:03:38 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47370)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qNcUc-0006ob-2B
+ for buildroot@buildroot.org; Sun, 23 Jul 2023 19:03:38 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jul 2023 18:11:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 15cc8d1e453d8c9e20389c8908c024f03f826388
-X-Git-Newrev: 8e9c8e624f7a3a29c4887cc2e2c0c2e775baf86a
-X-Patchwork-Hint: ignore
-Message-Id: <20230723161150.74743827D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/edk2: introduce a new
- _OVMF_DEBUG_ON_SERIAL option
+Date: Sun, 23 Jul 2023 19:03:38 +0200
+Message-Id: <20230723170338.833265-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1690131818;
+ bh=gvM2wvcvTHPjG16j77ezvoNA8neK6iOm1Zq8JvN04uM=;
+ h=From:To:Subject:Date:From;
+ b=gwPY9Lg+kIyiq1FgrxVUiDiRuCCaJ9B/j3J6VuUUL2Xx9MRlZ1J5vao8rSQ9q58ej
+ mRsUDGzHI/n3TWr4oXOz9f3vyzlwoFmk3PE2iIAwsds2qtmjXEq6EUWoz1+s6Y4rwA
+ 5TVeoNA4O+uygKaEzjINpZh9ZVNVy9syBX8+58OC0Nmge12vrh5/LoWFpwtUHEf7Qz
+ EDLg4qpoaqSivs1K/ZsJVazJ+n9jesYodJg5Sx1VMQa0O6iTwp+vAIDneclv2PIet+
+ g0pKVTQbqp7jQwj/C9Eo4vNhfePfg/e4WEfgnegWNISQ6b/VqEL7Cw68+YSzdgFzFm
+ Dh0L5Gbwh+22Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=gwPY9Lg+
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove Bernd Kuhls from pixman
+ & vnstat
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,92 +75,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e9c8e624f7a3a29c4887cc2e2c0c2e775baf86a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When EDK2 OVMF is built with debug, messages are printed to
-IO port 0x402. Those messages are not shown in the normal
-Qemu emulated serial port. Enabling this option will print
-debug messages on the emulated serial port, potentially
-mixing messages with UEFI serial console output.
-
-See OVMF README:
-https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
-
-This option has been useful to debug problems such as [1], in which the
-emulator was hanging at startup without any log. Enabling this option
-show the debug message on the console, before hanging:
-
-    ...
-    PlatformCpuCountBugCheck: Present=0 Possible=1
-    PlatformCpuCountBugCheck: Broken CPU hotplug register block found. Update QEMU to version 8+, or
-    PlatformCpuCountBugCheck: to a stable release with commit dab30fbef389 backported. Refer to
-    PlatformCpuCountBugCheck: <https://bugzilla.tianocore.org/show_bug.cgi?id=4250>.
-    ...
-
-[1] http://lists.busybox.net/pipermail/buildroot/2023-July/670807.html
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Tested-by: Romain Naour <romain.naour@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- boot/edk2/Config.in | 15 +++++++++++++++
- boot/edk2/edk2.mk   |  7 +++++++
- 2 files changed, 22 insertions(+)
+ DEVELOPERS | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
-index 855a62f70b..bed503b168 100644
---- a/boot/edk2/Config.in
-+++ b/boot/edk2/Config.in
-@@ -108,6 +108,21 @@ comment "QEMU SBSA depends on ATF not using EDK2 as BL33"
- 
- endchoice
- 
-+config BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL
-+	bool "OVMF Debug on Serial"
-+	depends on BR2_ENABLE_DEBUG
-+	depends on BR2_TARGET_EDK2_PLATFORM_OVMF_I386 || \
-+		BR2_TARGET_EDK2_PLATFORM_OVMF_X64
-+	help
-+	  When EDK2 OVMF is built with debug, messages are printed to
-+	  IO port 0x402. Those messages are not shown in the normal
-+	  Qemu emulated serial port. Enabling this option will print
-+	  debug messages on the emulated serial port, potentially
-+	  mixing messages with UEFI serial console output.
-+
-+	  See OVMF README:
-+	  https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
-+
- config BR2_TARGET_EDK2_FD_NAME
- 	string
- 	default "OVMF" if BR2_TARGET_EDK2_PLATFORM_OVMF_I386
-diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
-index 399bd346ef..95cbe415ef 100644
---- a/boot/edk2/edk2.mk
-+++ b/boot/edk2/edk2.mk
-@@ -16,8 +16,15 @@ EDK2_INSTALL_IMAGES = YES
- 
- ifeq ($(BR2_ENABLE_DEBUG),y)
- EDK2_BUILD_TYPE = DEBUG
-+ifeq ($(BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL),y)
-+# DEBUG_ON_SERIAL_PORT is only tested to be set, so don't disable it, as
-+# it would still be set.
-+EDK2_BUILD_OPTS += -DDEBUG_ON_SERIAL_PORT=TRUE
-+endif
- else
- EDK2_BUILD_TYPE = RELEASE
-+# DEBUG_ON_SERIAL_PORT is only valid in debug builds, so useless to set
-+# it (enabled or disabled) on a relase build.
- endif
- 
- # Build system notes.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0ff2dde38e..a7600e8fd5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -447,7 +447,6 @@ F:	package/perl-timedate/
+ F:	package/perl-uri/
+ F:	package/perl-www-robotrules/
+ F:	package/php/
+-F:	package/pixman/
+ F:	package/pngquant/
+ F:	package/pppd/
+ F:	package/privoxy/
+@@ -479,7 +478,6 @@ F:	package/transmission/
+ F:	package/tvheadend/
+ F:	package/unixodbc/
+ F:	package/vlc/
+-F:	package/vnstat/
+ F:	package/wget/
+ F:	package/wireless-regdb/
+ F:	package/wireless_tools/
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
