@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC539C001DC
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 09:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8D5BC001DE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 09:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF248409F4;
-	Sun, 23 Jul 2023 09:59:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF248409F4
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6C28409FD;
+	Sun, 23 Jul 2023 09:59:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C28409FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PKCms_6rfnYQ; Sun, 23 Jul 2023 09:59:35 +0000 (UTC)
+	with ESMTP id OOvuzgXY1DCE; Sun, 23 Jul 2023 09:59:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7989409F8;
-	Sun, 23 Jul 2023 09:59:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7989409F8
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 75DF41BF20B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8329240A01;
+	Sun, 23 Jul 2023 09:59:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8329240A01
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C15F71BF20B
  for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 09:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EFE360B2B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A8F6409F8
  for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 09:59:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EFE360B2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A8F6409F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TANiSq0uVPN6 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Q5mnStrz8fMH for <buildroot@lists.busybox.net>;
  Sun, 23 Jul 2023 09:59:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B38160B15
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E98A40A01
  for <buildroot@buildroot.org>; Sun, 23 Jul 2023 09:59:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B38160B15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E98A40A01
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 599798262B; Sun, 23 Jul 2023 09:59:32 +0000 (UTC)
+ id 7033C8262D; Sun, 23 Jul 2023 09:59:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 23 Jul 2023 11:59:07 +0200
+Date: Sun, 23 Jul 2023 11:59:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0721f4e71a8100c8856ccbf5292c14c99d42ce36
-X-Git-Newrev: 249efb46fcf35058505d23ae65ba395c5c51545e
+X-Git-Oldrev: 249efb46fcf35058505d23ae65ba395c5c51545e
+X-Git-Newrev: 72520986963140a314097c5a7d68dc4b2c55358c
 X-Patchwork-Hint: ignore
-Message-Id: <20230723095932.599798262B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: use the system
- provided LuaJIT
+Message-Id: <20230723095932.7033C8262D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: drop cxx handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,101 +63,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=249efb46fcf35058505d23ae65ba395c5c51545e
+commit: https://git.buildroot.net/buildroot/commit/?id=72520986963140a314097c5a7d68dc4b2c55358c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Luajit was not used at all when it was selected, instead fluent-bit
-recompiled it without taking care of the complexities that were
-handled in the luajit package. Fix this by linking dynamically to the
-buildroot provided version.
+Fluent-bit is written in pure c, so drop any cxx handling. Only the wasm
+part needs c++, but that one doesn't need the fixes which are now dropped.
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...d-use-the-system-provided-LuaJIT-if-found.patch | 62 ++++++++++++++++++++++
- package/fluent-bit/fluent-bit.mk                   |  1 +
- 2 files changed, 63 insertions(+)
+ package/fluent-bit/fluent-bit.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch b/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch
-new file mode 100644
-index 0000000000..9f6f4d0ebb
---- /dev/null
-+++ b/package/fluent-bit/0001-build-use-the-system-provided-LuaJIT-if-found.patch
-@@ -0,0 +1,62 @@
-+From 4f8eb7bb5a39d83374806928b7a5b622136ef055 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Fri, 28 Apr 2023 10:25:16 +0200
-+Subject: [PATCH] build: use the system provided LuaJIT if found
-+
-+e.g. buildroot has logic to build luajit,
-+so if pkg_check_modules can find a suitable version,
-+then use that one if -DFLB_PREFER_SYSTEM_LIBS=Yes.
-+
-+Upstream: https://github.com/fluent/fluent-bit/pull/7286
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ CMakeLists.txt     | 12 +++++++++++-
-+ src/CMakeLists.txt |  2 +-
-+ 2 files changed, 12 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 9af783c79..0601b7c18 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -123,6 +123,7 @@ option(FLB_TESTS_INTERNAL_FUZZ "Enable internal fuzz tests"    No)
-+ option(FLB_TESTS_OSSFUZZ       "Enable OSS-Fuzz build"         No)
-+ option(FLB_MTRACE              "Enable mtrace support"         No)
-+ option(FLB_POSIX_TLS           "Force POSIX thread storage"    No)
-++option(FLB_PREFER_SYSTEM_LIBS  "Prefer system installed libraries" No)
-+ option(FLB_INOTIFY             "Enable inotify support"       Yes)
-+ option(FLB_SQLDB               "Enable SQL embedded DB"       Yes)
-+ option(FLB_HTTP_SERVER         "Enable HTTP Server"           Yes)
-+@@ -1003,7 +1004,16 @@ endif()
-+ # LuaJIT (Scripting Support)
-+ # ==========================
-+ if(FLB_LUAJIT)
-+-  include(cmake/luajit.cmake)
-++  if(FLB_PREFER_SYSTEM_LIBS)
-++    find_package(PkgConfig)
-++    pkg_check_modules(LUAJIT luajit>=2.1.0)
-++  endif()
-++  if(LUAJIT_FOUND)
-++    include_directories(${LUAJIT_INCLUDE_DIRS})
-++  else()
-++    include(cmake/luajit.cmake)
-++    set(LUAJIT_LIBRARIES "libluajit")
-++  endif()
-+   FLB_DEFINITION(FLB_HAVE_LUAJIT)
-+ endif()
-+ 
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 06a206dd4..8b66ddd22 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -220,7 +220,7 @@ endif()
-+ if(FLB_LUAJIT)
-+   set(extra_libs
-+     ${extra_libs}
-+-    "libluajit")
-++    ${LUAJIT_LIBRARIES})
-+ endif()
-+ 
-+ if(FLB_SQLDB)
-+-- 
-+2.34.1
-+
 diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 6cfa601614..b26ec2b0b6 100644
+index b26ec2b0b6..cd8f347768 100644
 --- a/package/fluent-bit/fluent-bit.mk
 +++ b/package/fluent-bit/fluent-bit.mk
-@@ -20,6 +20,7 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_RELEASE=Yes \
- 	-DFLB_EXAMPLES=No \
- 	-DFLB_CHUNK_TRACE=No \
-+	-DFLB_PREFER_SYSTEM_LIBS=Yes \
- 	-DFLB_BACKTRACE=No
+@@ -13,7 +13,6 @@ FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
+ FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml openssl
  
- ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
+ FLUENT_BIT_CFLAGS = $(TARGET_CFLAGS)
+-FLUENT_BIT_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_DEBUG=No \
+@@ -49,13 +48,11 @@ FLUENT_BIT_CONF_OPTS += \
+ # Fix multiple definition of `mk_tls_*'.
+ # https://github.com/fluent/fluent-bit/issues/5537
+ FLUENT_BIT_CFLAGS += -fcommon
+-FLUENT_BIT_CXXFLAGS += -fcommon
+ 
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+ # large file support.
+ # https://bugzilla.redhat.com/show_bug.cgi?id=574992
+ FLUENT_BIT_CFLAGS += -U_FILE_OFFSET_BITS
+-FLUENT_BIT_CXXFLAGS += -U_FILE_OFFSET_BITS
+ 
+ ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+ FLUENT_BIT_DEPENDENCIES += libexecinfo
+@@ -74,8 +71,7 @@ endif
+ 
+ FLUENT_BIT_CONF_OPTS += \
+ 	-DCMAKE_EXE_LINKER_FLAGS="$(FLUENT_BIT_LDFLAGS)" \
+-	-DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)" \
+-	-DCMAKE_CXX_FLAGS="$(FLUENT_BIT_CXXFLAGS)"
++	-DCMAKE_C_FLAGS="$(FLUENT_BIT_CFLAGS)"
+ 
+ define FLUENT_BIT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/fluent-bit/S99fluent-bit \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
