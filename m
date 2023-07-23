@@ -1,70 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53376C001B0
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 15:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 617C5C001DE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 16:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE912408EC;
-	Sun, 23 Jul 2023 15:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE912408EC
+	by smtp3.osuosl.org (Postfix) with ESMTP id E17A360BAF;
+	Sun, 23 Jul 2023 16:11:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E17A360BAF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MVFTi7a7ZSgY; Sun, 23 Jul 2023 15:43:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mPp7Egticqc4; Sun, 23 Jul 2023 16:11:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C92F2408AA;
-	Sun, 23 Jul 2023 15:43:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C92F2408AA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D02B60BAA;
+	Sun, 23 Jul 2023 16:11:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D02B60BAA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4894D1BF28A
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 15:43:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9DD7E1BF345
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 16:11:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 219BC60B6A
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 15:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 219BC60B6A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 771B460BAA
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 16:11:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 771B460BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JtvylYJFqzGh for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 15:43:12 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 297C060B2F
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 15:43:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 297C060B2F
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:46bc:e175:93d0:2fb4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 7DA9B5FF9A;
- Sun, 23 Jul 2023 17:43:08 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 23 Jul 2023 17:43:08 +0200
-Date: Sun, 23 Jul 2023 17:43:08 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230723154308.GJ2503916@scaer>
-References: <20230721212545.2371188-1-bernd@kuhls.net>
- <20230721212545.2371188-2-bernd@kuhls.net>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230721212545.2371188-2-bernd@kuhls.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1690126990;
- bh=NkYmzuWbWCKqSYMT7ULeQRQ4/f/VC0JO4PikTvBjndA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MoDwUgjMElZqGeh7EO/y0OmlF5GjiB7SpN0+Go32QWjUx3itmVq1UoFw2hpb5Yo9g
- 2yqVzLtSrx5IytfaGQxg9o3noG6VS7TgKGUkKJEpWeUPYGGfYJIbFitj98jrHu9m/M
- eSCXkP2KBLBWDCty/pxmCBByYWQoH5/2o+JZ/eBBbykO7u6LHOzTn0g8qB2Jx6S98i
- PfkiMKvtJIpuvf00jEtuzzIoqkLA5WB6DwYKLawaOCxAO96YqoHfrjuWormOiyg1YI
- vGfv/D+s00dRWETdM5KFgxffh9MiXXbr1mqVL6sJcC4Np5QqKBKGVF2qF6yH2glQYk
- i+uVNpKWGzUWg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MoDwUgjM
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/mariadb: needs pcre2
+ with ESMTP id Tnr9--t9VM3f for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 16:11:50 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86D1F60B6A
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 16:11:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86D1F60B6A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 74743827D6; Sun, 23 Jul 2023 16:11:50 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 23 Jul 2023 18:11:30 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 15cc8d1e453d8c9e20389c8908c024f03f826388
+X-Git-Newrev: 8e9c8e624f7a3a29c4887cc2e2c0c2e775baf86a
+X-Patchwork-Hint: ignore
+Message-Id: <20230723161150.74743827D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/edk2: introduce a new
+ _OVMF_DEBUG_ON_SERIAL option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,87 +57,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=8e9c8e624f7a3a29c4887cc2e2c0c2e775baf86a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Peter K. for backports.
+When EDK2 OVMF is built with debug, messages are printed to
+IO port 0x402. Those messages are not shown in the normal
+Qemu emulated serial port. Enabling this option will print
+debug messages on the emulated serial port, potentially
+mixing messages with UEFI serial console output.
 
-On 2023-07-21 23:25 +0200, Bernd Kuhls spake thusly:
-> Upstream added the possibility to build with system-provided pcre2
-> https://github.com/MariaDB/server/commit/016bd4fc5fff311dc4091b3b7329cd980dbaa14b
+See OVMF README:
+https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
 
-This commit dates back to 2014, and we introduced mariadb in Buildroot
-in 2016, so the possibility to use a system-provided pcre2 was already
-present in Buildroot.
+This option has been useful to debug problems such as [1], in which the
+emulator was hanging at startup without any log. Enabling this option
+show the debug message on the console, before hanging:
 
-Peter:
-    So, this commit should be backported to stable branches.
+    ...
+    PlatformCpuCountBugCheck: Present=0 Possible=1
+    PlatformCpuCountBugCheck: Broken CPU hotplug register block found. Update QEMU to version 8+, or
+    PlatformCpuCountBugCheck: to a stable release with commit dab30fbef389 backported. Refer to
+    PlatformCpuCountBugCheck: <https://bugzilla.tianocore.org/show_bug.cgi?id=4250>.
+    ...
 
-Applied to master, thanks.
+[1] http://lists.busybox.net/pipermail/buildroot/2023-July/670807.html
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Tested-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/edk2/Config.in | 15 +++++++++++++++
+ boot/edk2/edk2.mk   |  7 +++++++
+ 2 files changed, 22 insertions(+)
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-> v2: no changes
-> 
->  package/mariadb/mariadb.mk | 4 +++-
->  package/mysql/Config.in    | 1 +
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-> index a9cd9c9516..a2701643e1 100644
-> --- a/package/mariadb/mariadb.mk
-> +++ b/package/mariadb/mariadb.mk
-> @@ -21,12 +21,14 @@ MARIADB_DEPENDENCIES = \
->  	fmt \
->  	ncurses \
->  	openssl \
-> +	pcre2 \
->  	zlib \
->  	libaio \
->  	libxml2
->  
->  MARIADB_CONF_OPTS += \
-> -	-DWITH_FMT=system
-> +	-DWITH_FMT=system \
-> +	-DWITH_PCRE=system
->  
->  # use bundled GPL-2.0+ licensed readline as package/readline is GPL-3.0+
->  MARIADB_CONF_OPTS += -DWITH_READLINE=ON
-> diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-> index 8212d0fd3f..8942e55a45 100644
-> --- a/package/mysql/Config.in
-> +++ b/package/mysql/Config.in
-> @@ -25,6 +25,7 @@ config BR2_PACKAGE_MARIADB
->  	select BR2_PACKAGE_FMT
->  	select BR2_PACKAGE_NCURSES
->  	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_PCRE2
->  	select BR2_PACKAGE_HAS_MYSQL
->  	help
->  	  MariaDB is one of the most popular database servers in the
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+index 855a62f70b..bed503b168 100644
+--- a/boot/edk2/Config.in
++++ b/boot/edk2/Config.in
+@@ -108,6 +108,21 @@ comment "QEMU SBSA depends on ATF not using EDK2 as BL33"
+ 
+ endchoice
+ 
++config BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL
++	bool "OVMF Debug on Serial"
++	depends on BR2_ENABLE_DEBUG
++	depends on BR2_TARGET_EDK2_PLATFORM_OVMF_I386 || \
++		BR2_TARGET_EDK2_PLATFORM_OVMF_X64
++	help
++	  When EDK2 OVMF is built with debug, messages are printed to
++	  IO port 0x402. Those messages are not shown in the normal
++	  Qemu emulated serial port. Enabling this option will print
++	  debug messages on the emulated serial port, potentially
++	  mixing messages with UEFI serial console output.
++
++	  See OVMF README:
++	  https://github.com/tianocore/edk2/blob/master/OvmfPkg/README
++
+ config BR2_TARGET_EDK2_FD_NAME
+ 	string
+ 	default "OVMF" if BR2_TARGET_EDK2_PLATFORM_OVMF_I386
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 399bd346ef..95cbe415ef 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -16,8 +16,15 @@ EDK2_INSTALL_IMAGES = YES
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ EDK2_BUILD_TYPE = DEBUG
++ifeq ($(BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL),y)
++# DEBUG_ON_SERIAL_PORT is only tested to be set, so don't disable it, as
++# it would still be set.
++EDK2_BUILD_OPTS += -DDEBUG_ON_SERIAL_PORT=TRUE
++endif
+ else
+ EDK2_BUILD_TYPE = RELEASE
++# DEBUG_ON_SERIAL_PORT is only valid in debug builds, so useless to set
++# it (enabled or disabled) on a relase build.
+ endif
+ 
+ # Build system notes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
