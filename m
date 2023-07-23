@@ -4,82 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F079DC001DC
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 11:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 438EAC001B0
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 11:30:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96D7B40AA2;
-	Sun, 23 Jul 2023 11:24:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96D7B40AA2
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3DD140AA1;
+	Sun, 23 Jul 2023 11:30:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3DD140AA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rrqMKqx-Kxdp; Sun, 23 Jul 2023 11:24:55 +0000 (UTC)
+	with ESMTP id rG3dhvOydaHj; Sun, 23 Jul 2023 11:30:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D74A840A96;
-	Sun, 23 Jul 2023 11:24:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D74A840A96
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 001561BF3B9
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 11:24:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB41B40A96;
+	Sun, 23 Jul 2023 11:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB41B40A96
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EEEE11BF3B9
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 11:30:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CDF3681E86
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 11:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDF3681E86
+ by smtp4.osuosl.org (Postfix) with ESMTP id C63B7409AC
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 11:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C63B7409AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gNgRUqhEXaI1 for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 11:24:52 +0000 (UTC)
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6ECA181E81
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 11:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ECA181E81
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2b9540031acso47538811fa.3
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 04:24:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690111490; x=1690716290;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=y2bDWChMY3upBydfQg/5hAsm4en68AjXUtNBDVCiY7M=;
- b=LyyAZzy4rpu+mnTZxUB6Yyvuw27eOt8rSmug21axZzUR7ScjIUoiHYBV6ZQkKxXjCH
- 182mNTOHXpfrSYxD5q8GgiVVM8nNfTRKjTGfSXNrnpLa58X7vOexqwJ2JOiFUaQgQjIg
- JCvMA43eWTUnqO1XgzsQaSF7lvQaNGMV1a8fY0oWARHYSesAYdKfwSzxZ2vMghEah8zB
- k/9wpaI3QkUPYJrOfZRKs71/3gUT9vulYangGnrIvFRxf9KQg87RUe/Ikox9AV6dC+7r
- D2iPxZbPFTXjZCFf+ofRtPcOdvdHI0UIVgIC5EtdFKpOA52PrlRuxxKQy3yyc++wL0Tx
- 2Jlw==
-X-Gm-Message-State: ABy/qLZJwipQDBx/2y2H7ME/5XYSOQNeqmRPr6Lg2BM0stWynnVHhmLm
- D12WCeBju71Zf0Rd4z1gVJqx8ffENrIbdOrZHJU=
-X-Google-Smtp-Source: APBJJlH6Xn6pYWvZdIySFvq7f17+rpQ0dWi6ifumUkOkMYCq+uI+JcrCl2NmG2kVtFswX7nIgaBZfHf5OaEhk6rww90=
-X-Received: by 2002:a05:6512:553:b0:4fb:89e3:5ac6 with SMTP id
- h19-20020a056512055300b004fb89e35ac6mr3277886lfl.62.1690111489678; Sun, 23
- Jul 2023 04:24:49 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r3SDqE74Kh0T for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 11:30:47 +0000 (UTC)
+X-Greylist: delayed 601 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 23 Jul 2023 11:30:46 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9EED40988
+Received: from cvsmtppost07.nm.naver.com (cvsmtppost07.nm.naver.com
+ [114.111.35.154])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D9EED40988
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 11:30:46 +0000 (UTC)
+X-Originating-IP: 125.132.232.68
+Received: from cvsendbo025.nm ([10.112.18.59])
+ by cvsmtppost07.nm.naver.com with ESMTP id JDy39asNT+WKxYkAnIeucQ
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 11:20:43 -0000
+X-Session-ID: 4iKb2ElNSRO3oMAQmbPaew
+X-Originating-IP: 125.132.232.68
+X-Works-Send-Opt: xeYZjAJYjHmlKxu/FoJYKxgXKBwkx0eFjAu=
+X-Works-Smtp-Source: XdnXKAglFoJZ+HmZFA2/+6E=
+Received: from linux.. ([125.132.232.68])
+ by cvnsmtp010.nm.naver.com with ESMTP id 4iKb2ElNSRO3oMAQmbPaew
+ for <multiple recipients>
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+ Sun, 23 Jul 2023 11:20:42 -0000
+From: Cherniaev Andrei <dungeonlords789@naver.com>
+To: buildroot@buildroot.org
+Date: Sun, 23 Jul 2023 20:20:22 +0900
+Message-Id: <20230723112022.15074-1-dungeonlords789@naver.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230717091727.2658078-1-yegorslists@googlemail.com>
- <20230718231951.349b78e0@windsurf>
-In-Reply-To: <20230718231951.349b78e0@windsurf>
-Date: Sun, 23 Jul 2023 13:24:38 +0200
-Message-ID: <CAGm1_ku3nCqe7L0wRQCPLGTnifQYbD7ZD0DQdgk0r8xR9uZ01A@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20221208; t=1690111490; x=1690716290;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=y2bDWChMY3upBydfQg/5hAsm4en68AjXUtNBDVCiY7M=;
- b=XaX+Da8iNI8UqIPgGpQZhe2DHSQ+NQorvYNxE0MSApl4ssL0l78fsJ9UOXlxAM+IxU
- kQXpcMpcdJc92UJElO8rFvSXZgu3Dd2NeqbbwlbIQAFAQaaQZhCWWV/0WdEKWLfW18kQ
- Tv5Fpm+bwjiew7P4ZvtDFloCDelVJ82e/PPSwTHfzrisdnI1qQt+C8hfDpzyNy5Td7Ac
- KYPS3oGw7lP74+DlRmvsGaLJMnCV8/tzeFdaWSaGCHyRYgVUHIoIUxY07qi5SCR1uf1s
- bDz6Ma0GnvOxdh4yQfXLCK3j1kgaCESsf5mNwLL/82oQS0NussK+f9PpgKqAI7/SYoUh
- 99XA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20221208 header.b=XaX+Da8i
-Subject: Re: [Buildroot] [PATCH] package/python-pysmb: add the missing
- runtime dependency
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=naver.com; s=s20171208; 
+ t=1690111243; bh=unA8eHArkCu5VX9zBgu+b77nJl/6q5guxPx2sZ3iTds=;
+ h=From:To:Subject:Date:Message-Id:From:Subject:Feedback-ID:
+ X-Works-Security;
+ b=AUUaDnDqkr9L2C+5jaeIullbiUav2tq7r6aG/mlV+M98HJFxEpvvUBVRL+rPR4ZvA
+ iMKBjxPNYm5e7PbZxz4YXWKFEwTL8nn8eIAdac8iUIgs4NOqwDdqtoMZEOJNOj5xVK
+ DTV1bbyIwx9PL14hGzOhJ/UHuPleVC5fnYpEsQDnu49b37jhTGuyQ3QHpgOdWV0mKh
+ WO/HR/Inbe9nKYsaaT1y4k/+smfaTOtzSTR6Y7xTHrlCsSynnGtqCRTmuhBiytTo17
+ jue2NL8fKMp0YAaZp1kSijgKcoFYPUAA61voRMGmiroH3sHtWEIfqPygzTSZUuCBPy
+ HQia4Rcvrk4tg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=naver.com header.i=@naver.com
+ header.a=rsa-sha256 header.s=s20171208 header.b=AUUaDnDq
+Subject: [Buildroot] [PATCH 1/1] arch/Config.in.x86: add MMX instruction set
+ capability for Geode CPU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,28 +83,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: james.hilliard1@gmail.com, Asaf Kahlon <asafka7@gmail.com>,
- yegorslists--- via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Cherniaev Andrei <dungeonlords789@naver.com>, bagasdotme@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKT24gVHVlLCBKdWwgMTgsIDIwMjMgYXQgMTE6MTnigK9QTSBUaG9tYXMgUGV0
-YXp6b25pCjx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPgo+IE9uIE1vbiwg
-MTcgSnVsIDIwMjMgMTE6MTc6MjcgKzAyMDAKPiB5ZWdvcnNsaXN0cy0tLSB2aWEgYnVpbGRyb290
-IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cj4KPiA+IEZyb206IFllZ29yIFllZnJl
-bW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KPiA+Cj4gPiBweXRob24tdHFkbSBkZXBl
-bmRlbmN5IHdhcyBpbnRyb2R1Y2VkIGluIDEuMi45Lgo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IFll
-Z29yIFllZnJlbW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KPiA+IC0tLQo+ID4gIHBh
-Y2thZ2UvcHl0aG9uLXB5c21iL0NvbmZpZy5pbiB8IDEgKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAx
-IGluc2VydGlvbigrKQo+Cj4gQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4gV2VpcmQgdGhhdCB0
-aGlzIGRlcGVuZGVuY3kgd2FzIG1hZGUgYQo+IG1hbmRhdG9yeSBkZXBlbmRlbmN5LCBpdCdzIGFw
-cGFyZW50bHkgb25seSB1c2VkIHRvIGRpc3BsYXkgc29tZSBmYW5jeQo+IHByb2dyZXNzIGJhcnMu
-Li4gc29mdHdhcmUgaXMgZ2V0dGluZyBibG9hdGVkIGF0IGEgdmVyeSBoaWdoIHNwZWVkIDovCgpJ
-IHRvdGFsbHkgYWdyZWUgd2l0aCB5b3UgOi0oIEkndmUgc2VudCBhIHRlc3QgZm9yIHRoZSBweXNt
-YiBwYWNrYWdlLgoKWWVnb3IKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Currently, there is no MMX support for modern GEODE processors in Buildroot.
+Yet, some packages like ffmpeg can leverage it when the package is built.
+
+Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
+---
+ arch/Config.in.x86 | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index c770ae3ffe..288d274b0e 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -521,11 +521,24 @@ config BR2_x86_steamroller
+ 	select BR2_X86_CPU_HAS_SSE4
+ 	select BR2_X86_CPU_HAS_SSE42
+ config BR2_x86_geode
+-	bool "geode"
+-	# Don't include MMX support because there several variant of geode
+-	# processor, some with MMX support, some without.
+-	# See: http://en.wikipedia.org/wiki/Geode_%28processor%29
++	bool "geode (no mmx)"
++	help
++	  For several variant of geode which have not MMX support.
++	  See
++	  https://en.wikipedia.org/wiki/Geode_%28processor%29 to
++	  determine if your particular Geode processor supports MMX or
++	  not.
++	depends on !BR2_x86_64
++config BR2_x86_geode_mmx
++	bool "geode (with mmx)"
++	help
++	  For several variant of geode which have MMX support.
++	  See
++	  https://en.wikipedia.org/wiki/Geode_%28processor%29 to
++	  determine if your particular Geode processor supports MMX or
++	  not.
+ 	depends on !BR2_x86_64
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_c3
+ 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
+ 	depends on !BR2_x86_64
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
