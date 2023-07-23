@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE121C001DF
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 17:16:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56C9CC001DE
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 17:22:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BB35409EA;
-	Sun, 23 Jul 2023 17:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BB35409EA
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEB25410C0;
+	Sun, 23 Jul 2023 17:22:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEB25410C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GyFC3v-WJSpv; Sun, 23 Jul 2023 17:16:09 +0000 (UTC)
+	with ESMTP id wXf9evz7TpSA; Sun, 23 Jul 2023 17:22:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24A7A409EB;
-	Sun, 23 Jul 2023 17:16:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A7A409EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6AAF410B1;
+	Sun, 23 Jul 2023 17:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6AAF410B1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4A3E61BF5B5
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:16:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67B461BF5B5
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:22:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2337060A8D
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:16:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2337060A8D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E31B60A8D
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 17:22:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E31B60A8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0gdzNt5XIqH4 for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 17:16:06 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2C56460A66
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 17:16:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C56460A66
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6BB21A4C077F
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 19:16:03 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37134)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qNcgd-0000WV-0b
- for buildroot@buildroot.org; Sun, 23 Jul 2023 19:16:03 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTP id 3JS29vKr_Bap for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 17:22:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8846260A66
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 17:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8846260A66
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 756E882811; Sun, 23 Jul 2023 17:22:42 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 23 Jul 2023 19:16:03 +0200
-Message-Id: <20230723171603.1123429-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1690132563;
- bh=rxYoMn1OkQGgOVPNovEgdFcXUFAtr/ojHKZmVd+eHrc=;
- h=From:To:Subject:Date:From;
- b=SWHdiTHphkWyi8SaY3rLPG1AfFXVHt8L7SEZjMBZmlyvKZw30SldHgo4FZ53bhI38
- +yOicJr4BRo1BC9HouYMHPali61dQ9QMxMvYFokDcL5UVyDuTeYlvG+qsbzvxLExtA
- w+6MgNnedOIC5oE+d4Q2fdTiiwKI979SirzXET23e3h5bAfPHbzMpCjgvUPp15TWUO
- i+9XqCZ6jkJWWBpmaunpiVndi/fTtl4kGbH9o0tE5O6y4+UWctya/Lq3yks1yoJAug
- NwhhzgcRYcZ9I6Fet0pIWJElrs4ikKvcv0lTvGMD0MBVFSJXlXUzbVVtef3fzlXAll
- j6NU7z+0oON0A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=SWHdiTHp
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.15.x / 6.{1,
+Date: Sun, 23 Jul 2023 19:22:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8e9c8e624f7a3a29c4887cc2e2c0c2e775baf86a
+X-Git-Newrev: 15aae1902a3d47caa29bfb997a82a72194c79396
+X-Patchwork-Hint: ignore
+Message-Id: <20230723172242.756E882811@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.15.x / 6.{1,
  4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -75,12 +57,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=15aae1902a3d47caa29bfb997a82a72194c79396
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  linux/Config.in                      | 2 +-
  linux/linux.hash                     | 6 +++---
@@ -133,9 +120,6 @@ index 6eb7b3577b..ca841d6114 100644
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
  	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.39.2
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
