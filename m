@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6681AC001DE
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 10:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB987C001B0
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 10:29:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86BA64159D;
-	Sun, 23 Jul 2023 10:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86BA64159D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4407641517;
+	Sun, 23 Jul 2023 10:29:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4407641517
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PU5OmZkiBqRn; Sun, 23 Jul 2023 10:28:58 +0000 (UTC)
+	with ESMTP id hNYKkh90QRJV; Sun, 23 Jul 2023 10:29:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69CD4410D5;
-	Sun, 23 Jul 2023 10:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69CD4410D5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30DDC41511;
+	Sun, 23 Jul 2023 10:29:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30DDC41511
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AFCB61BF5EA
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 10:28:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 686E01BF5EA
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 10:29:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AEE541512
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 10:28:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AEE541512
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CFE041505
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 10:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CFE041505
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id StxrjTP9TB26 for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 10:28:46 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4956141369
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 10:28:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4956141369
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B496B60002;
- Sun, 23 Jul 2023 10:28:42 +0000 (UTC)
-Date: Sun, 23 Jul 2023 12:28:40 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230723122840.2470921d@windsurf>
-In-Reply-To: <20230715063639.1508174-1-bernd@kuhls.net>
-References: <20230715063639.1508174-1-bernd@kuhls.net>
+ with ESMTP id CRZ_giv2O2TL for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 10:29:00 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02338410D5
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 10:28:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02338410D5
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DAB3DC0004;
+ Sun, 23 Jul 2023 10:28:56 +0000 (UTC)
+Date: Sun, 23 Jul 2023 12:28:54 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230723122854.1d40abe3@windsurf>
+In-Reply-To: <20230715085058.103311-1-ju.o@free.fr>
+References: <20230715085058.103311-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690108124;
+ d=bootlin.com; s=gm1; t=1690108137;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=3l2HL5kEw3gYyCx04DXs/EAclKZ7XGADH8/VrthcMkc=;
- b=M02pdJHwwMaeLPGoxOBew9kh79eo8xggTCDTyzfsJcKRiqFwTrCtg9ZSddN7R8QVFSIR1N
- +YEpZvbxDclfSCah0EVB7W8xgX78Il/rEnZz5nBEl0h8URpOkjq4iCnZAau+qQ1XEw6mVx
- wGhzr7utYyAxK3M4D6Cfcryp/uM7Bx/YVmxCFeY6dq9m+8MMhjCtVXHyx5i6dRNRKu/C44
- A+EBEbkDmuK0xx7m/C64RMvLaeO/vHwDC0NX86LajwsL1/6BUlSi0VgHlTtJnDyQjhbauG
- /4M6N5L4J9B9mOUNBJfSYqqrJnxfJ711368CUqZoeFCihhliVkmAtG+QLlVIbg==
+ bh=pZZGW1246snSPPkLQRJGUPpStettzq7E6GHBB7BvliA=;
+ b=MiUapcFTkgmbIS5/V05Mz6Y3aFb4h5N0mlZ6ylYkqwXazQeXeu64fQc5f8qxubZNnbAu6g
+ qOVVk1EiBYWCjd4UxTHOMt60H2lObYEZkyxL/7JptGROSJNbQVHrm/p6xa+ilr5W7cXr+C
+ EftiomS4onZCUM3gUxJ/lYNDyIumtKKTor8RrBgDQhAn6to6UI/p73z1YPaE7VDGSRShU3
+ SGRbRoCdVdDVQjE8/Jj/DznBSTLN4zXtyazZryb5xxWxVJVIrZEYvjxC/AdEuK7a7IaBN6
+ xbrrtXt5vulUT4uIYW08EjP2rcM7Oue1hrk+l8tH7XUuOCuxpTSAwbenQ6ZmFQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=M02pdJHw
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5/qt5{webview,
- x11extras}: fix hashes
+ header.s=gm1 header.b=MiUapcFT
+Subject: Re: [Buildroot] [PATCH 1/1]
+ support/testing/tests/package/test_lzip.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,26 +77,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Julien Corjon <corjon.j@ecagroup.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 15 Jul 2023 08:36:39 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Sat, 15 Jul 2023 10:50:58 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Buildroot commit 6b23dff9e71786191797d3b41ce80afe659f0396 forgot to
-> update the hashes.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/qt5/qt5webview/qt5webview.hash     | 2 +-
->  package/qt5/qt5x11extras/qt5x11extras.hash | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  DEVELOPERS                                 |  1 +
+>  support/testing/tests/package/test_lzip.py | 12 ++++++++++++
+>  2 files changed, 13 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_lzip.py
 
 Applied to master, thanks.
 
