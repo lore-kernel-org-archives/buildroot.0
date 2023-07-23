@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 652D0C001B0
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 07:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0777C001B0
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 08:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E435060B1D;
-	Sun, 23 Jul 2023 07:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E435060B1D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B81D60C01;
+	Sun, 23 Jul 2023 08:32:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B81D60C01
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tcyYXE59oTYX; Sun, 23 Jul 2023 07:48:28 +0000 (UTC)
+	with ESMTP id mx5u35wj7VfL; Sun, 23 Jul 2023 08:31:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24D5960687;
-	Sun, 23 Jul 2023 07:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D5960687
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 877A81BF3DA
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 07:48:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EC7960BAC;
+	Sun, 23 Jul 2023 08:31:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EC7960BAC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A120B1BF471
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 08:31:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 421FE40484
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 07:48:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 421FE40484
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A5B383196
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 08:31:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A5B383196
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2-1HB2k-5IO8 for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 07:48:24 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3848440168
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 07:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3848440168
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AF90C40003;
- Sun, 23 Jul 2023 07:48:20 +0000 (UTC)
-Date: Sun, 23 Jul 2023 09:48:18 +0200
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230723094818.1d6d19f4@windsurf>
-In-Reply-To: <20230706171834.1065129-1-vfazio@gmail.com>
-References: <20230706171834.1065129-1-vfazio@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eBH-TkikF6Tv for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 08:31:55 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 86A7683192
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 08:31:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86A7683192
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 22436A4C07EA
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 10:31:53 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53572)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qNUVM-0002Jp-2y
+ for buildroot@buildroot.org; Sun, 23 Jul 2023 10:31:52 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 23 Jul 2023 10:31:51 +0200
+Message-Id: <20230723083152.3147145-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690098501;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=EBW8h2u10QmxPNzGLcsVSZfqVTYe7pfWA+mYrL+fBqU=;
- b=dMAaT6l6/xgMJd6yIN7+bq35vpCxpINuMiTtPVRRf6eyqtZO7HVme1oSZ3LjxVb8zpyvFv
- 40wuHDFb0OARqU58TN3Ijcv1t+ik/u/B556RnXoTHYoJ4BackDMfOfxseKIiZpwOMrsNzZ
- UMOquYSZtJRvb3+xnBU95mdmzWydf0cN31NNym+BYdVu2tc2k9JBtKm5iDP48aNEiQyZ7S
- 1mLljj4rdLoOlGDjMHinMSSB3Pg8XXQrAPXNkpo+jMj9b0rNt8y2qJclodVTKKMAT/ak93
- YX2KcFNH7z5ING3jTytUhefWY2PhE0VULrwhM4XaHa4gausgVl7WhH473c3TLA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dMAaT6l6
-Subject: Re: [Buildroot] [PATCH 1/3]
- toolchain/toolchain-external/toolchain-external-bootlin: flag OpenMP
- support
+ d=kuhls.net; 
+ s=kas202306131828; t=1690101113;
+ bh=g5NpjwOAAgPsLtmgqJlYGa0WdXJjuNo1d01uZsR4zNI=;
+ h=From:To:Subject:Date:From;
+ b=dOvL38oslEI8Ml61ISEtbAHfv1rEqwUSzsHvLBGFHsS4NZptwblAQQcZXidYOVIuS
+ hBtm2OGvse/kw4bztTYg2s/WVTIXHFsdNvhos8qiA9VtZdCbqQ2Bb/CQCOJBTjNPnP
+ CohfMM23WL7exw2J4xks13/YpUlVOCmjpDEZRyfpO7keNHxZGQQGvi7/0r1p3MX5rL
+ wmL299AtUBA3r2B742VKMv98GwXfZrRF7Y0T6NjCCtiShTomR8emdFLsx89o3yVWmm
+ 2vXP+eU/bnYObkU7F9YH2lI12fsA7dRH+8B7ae+gSaAJSDpEP69rbd/4HQVBEsMSmA
+ Yqiyo4/UYLQDA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=dOvL38os
+Subject: [Buildroot] [PATCH 1/2] package/transmission: fix comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,45 +74,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  6 Jul 2023 12:18:32 -0500
-Vincent Fazio <vfazio@gmail.com> wrote:
+The wrong condition was added with buildroot commit
+80793107a65d95f8dfd0317a726d3a737c78ef67.
 
-> Due to a bug in the upstream toolchain builder's fragment generator [0],
-> gen-bootlin-toolchains is not aware that OpenMP was enabled for all
-> 2022.08 toolchains.
-> 
-> OpenMP support needs to be flagged so the proper libraries get copied
-> into the resultant filesystem to avoid missing dependencies [1].
-> 
-> [0]: https://github.com/bootlin/toolchains-builder/issues/60
-> [1]: https://bugs.busybox.net/show_bug.cgi?id=15634
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> ---
->  .../Config.in.options                         | 187 ++++++++++++++++++
->  1 file changed, 187 insertions(+)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/transmission/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks, I have applied the series. For PATCH 1/3, I have reworked the
-commit log, because in fact what I did is that I fixed the bogus
-fragments on toolchains.bootlin.com, then applied your commit, ran
-gen-bootlin-toolchains, and verified that the results were identical.
-
-Thomas
+diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+index 84bd85eeff..fd4c897497 100644
+--- a/package/transmission/Config.in
++++ b/package/transmission/Config.in
+@@ -49,4 +49,4 @@ comment "transmission needs a toolchain w/ dynamic library, threads, C++, gcc >=
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
