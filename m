@@ -1,86 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C41FC001B0
-	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 18:33:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1FC8C001B0
+	for <buildroot@archiver.kernel.org>; Sun, 23 Jul 2023 19:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8722081BB2;
-	Sun, 23 Jul 2023 18:33:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8722081BB2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F6D640517;
+	Sun, 23 Jul 2023 19:53:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F6D640517
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JQ4qs7HV2xgY; Sun, 23 Jul 2023 18:33:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1SgIUDnWAdUc; Sun, 23 Jul 2023 19:53:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B096B81BBD;
-	Sun, 23 Jul 2023 18:33:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B096B81BBD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 593281BF59E
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 18:33:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FCB7404C9;
+	Sun, 23 Jul 2023 19:53:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FCB7404C9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 243E41BF591
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 19:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E53160A8A
- for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 18:33:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E53160A8A
+ by smtp2.osuosl.org (Postfix) with ESMTP id F23E040004
+ for <buildroot@lists.busybox.net>; Sun, 23 Jul 2023 19:53:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F23E040004
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iW-AcRPk6yaX for <buildroot@lists.busybox.net>;
- Sun, 23 Jul 2023 18:33:12 +0000 (UTC)
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com
- [IPv6:2607:f8b0:4864:20::531])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D3A4560A63
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 18:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A4560A63
-Received: by mail-pg1-x531.google.com with SMTP id
- 41be03b00d2f7-557790487feso2572553a12.0
- for <buildroot@buildroot.org>; Sun, 23 Jul 2023 11:33:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690137192; x=1690741992;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=gDlhtWqRE5t1FuZvsqD9nTl3sT1vAMz+dTzUBBechCs=;
- b=ZDC21jYYYoodjAjmUQRmn3vtjKSnWyioLwPYTUP2TMO2uxexHnrReG01g2p2aFcmXJ
- 2YZqO12tJCZ/i1DuiMz9903tq9cYk3kIjGeZFmw9JKkClA2QFOcOS47+dAxof1J0JGd3
- 9D1SEPGOZDzyaxYPolsXzyPiWpHiwtoGc7gLApXZh8tXI6+zZEjndJoyizRaMHLvW8bS
- J5UZCCfykP/yPT/mebyMUmSb1YKNfdohJCAXNXrvcV75x8FH/j3Ne7pS7DovOAVV0ZRT
- txopwiEilfrBo6WOhYf6dkQ2RVElFjCDAB9auLkxc0isETTEBBtcW2ViyOco2q6RoQwE
- L2NQ==
-X-Gm-Message-State: ABy/qLZR2OeXZ7OlDcLcv6iTdC27phfQhx3lZPTMvT9Cp/kI1KFrOgag
- r2MmbkK7KGTFiAz1iCsF4I2v3H5MBX4vsT49lsQ=
-X-Google-Smtp-Source: APBJJlGzqkvD+Ed/oiFz1mPTVRyFjl/ANdrFasmQ88POpZZJDQriWZdQsDcH+8Wp6lvFWXNhARC4vAmK6PtqLxYgZoo=
-X-Received: by 2002:a17:90b:30f:b0:268:1e51:3496 with SMTP id
- ay15-20020a17090b030f00b002681e513496mr210463pjb.21.1690137191874; Sun, 23
- Jul 2023 11:33:11 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nWJ3a8vwjUBU for <buildroot@lists.busybox.net>;
+ Sun, 23 Jul 2023 19:53:06 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 372F9404F9
+ for <buildroot@buildroot.org>; Sun, 23 Jul 2023 19:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 372F9404F9
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:22c7:ca40:1a2e:1362])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id CE11B5FFA9;
+ Sun, 23 Jul 2023 21:52:56 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 23 Jul 2023 21:52:56 +0200
+Date: Sun, 23 Jul 2023 21:52:56 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20230723195256.GB3544423@scaer>
+References: <20230720233629.1642220-1-adam.duskett@amarulasolutions.com>
+ <20230720233629.1642220-3-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
-References: <20230721063755.315887-1-eagle.alexander923@gmail.com>
- <20230721225516.06eb14e0@windsurf>
-In-Reply-To: <20230721225516.06eb14e0@windsurf>
-From: Alexander Shiyan <eagle.alexander923@gmail.com>
-Date: Sun, 23 Jul 2023 21:33:00 +0300
-Message-ID: <CAP1tNvT=gQ6kDsV=63D7rdbAGXrfqzsmswQNafDJJAy8W6xa9w@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690137192; x=1690741992;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=gDlhtWqRE5t1FuZvsqD9nTl3sT1vAMz+dTzUBBechCs=;
- b=P4Qdikc7OfWO5zHDPtkjeGpuSgmYkElLGWxvi2hvdoIdP6rBX5M/siMJYEF6joIat1
- ik1CwWkfg+5PAp71sfBT/uR/Ae6EXpFXGpZZ+RyaJrpt2QHH5HNjzLl1VbVMNARkaT3Q
- VqpRgcgiy5FUPR6stPQFhvJ6MB+bDIa51SnwGqzgYVX1s1w0R/q+ZqOOP0z04h02udU8
- fHOoAcdjDwe2Q/QKRzZ0VwQCfwCzZt85T4klOYQCLUTMxRl3THBcFdMPNs24eG53/mXI
- dFmFNuIRLMYV7+OKRGfIWpylq3YsuI9UJlttX21QCuqK30gxYedJywMAWMmDupXBCkzL
- zOYg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=P4Qdikc7
-Subject: Re: [Buildroot] [PATCH] boot/barebox: Fix building of internal
- scripts
+Content-Disposition: inline
+In-Reply-To: <20230720233629.1642220-3-adam.duskett@amarulasolutions.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690141983;
+ bh=y5qsSEcAsrVmXVB2KHYpe6Mt4d3hvW0lh94DQmHnT3U=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=UO2d45kGzsGPJT4khERc6HosJMt8EmoAN0wkgdsh6TVSiSL+HL64SJYLWHl5O9f4Y
+ B6FvuMwFbNUKk5vwqbceecBi61FN/FH86uEz5ZOSDrbkbYAgt6krEHgn0hMkEHQwAI
+ YB7H8ueSMno4/Nz4pRcPPcvrRZf/fHtKASxgh9fAl6x+3AMV4Kq9hSG8QnqDkptQAI
+ /dmQHExSK/hm6lPRRL5diyKvYWxIXHkNC9KYGcOpPRQQIvmLBJSMadBZUUqEZG7XIF
+ sy7D2mGQahQfwRzVM8NiX1vtSyjPZYEOUykUagMVlmgAF5LC7L41BQpC04C36r1AdW
+ wCLV+w/RvONmw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=UO2d45kG
+Subject: Re: [Buildroot] [PATCH vRFC 2/3] package/depot-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,51 +76,175 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhhbmtzIGZvciB0aGUgY29tbWVudHMsIEkgd2lsbCBkbyB2Mi4KCtC/0YIsIDIxINC40Y7Quy4g
-MjAyM+KAr9CzLiDQsiAyMzo1NSwgVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBi
-b290bGluLmNvbT46Cj4KPiBIZWxsbyBBbGV4YW5kZXIsCj4KPiBPbiBGcmksIDIxIEp1bCAyMDIz
-IDA5OjM3OjU1ICswMzAwCj4gQWxleGFuZGVyIFNoaXlhbiA8ZWFnbGUuYWxleGFuZGVyOTIzQGdt
-YWlsLmNvbT4gd3JvdGU6Cj4KPiA+IGRpZmYgLS1naXQgYS9ib290L2JhcmVib3gvQ29uZmlnLmlu
-IGIvYm9vdC9iYXJlYm94L0NvbmZpZy5pbgo+ID4gaW5kZXggMzk2MWM2OWM1Ni4uOWE4MjkxYzk0
-NCAxMDA2NDQKPiA+IC0tLSBhL2Jvb3QvYmFyZWJveC9Db25maWcuaW4KPiA+ICsrKyBiL2Jvb3Qv
-YmFyZWJveC9Db25maWcuaW4KPiA+IEBAIC0xLDUgKzEsNiBAQAo+ID4gIGNvbmZpZyBCUjJfVEFS
-R0VUX0JBUkVCT1gKPiA+ICAgICAgIGJvb2wgIkJhcmVib3giCj4gPiArICAgICBzZWxlY3QgQlIy
-X1BBQ0tBR0VfSE9TVF9QS0dDT05GCj4KPiBTdHJpY3RseSBzcGVha2luZywgdGhpcyBpcyBub3Qg
-bmVlZGVkLgo+Cj4gSG93ZXZlciwgb25lIGlzc3VlIHdpdGggeW91ciBwYXRjaCBpcyB0aGF0IHlv
-dSBkb24ndCBhZGQgaG9zdC1wa2djb25mCj4gaW4gQkFSRUJPWF9ERVBFTkRFTkNJRVMsIHNvIHRo
-ZXJlIGlzIG5vdGhpbmcgdGhhdCBlbnN1cmVzIGhvc3QtcGtnY29uZgo+IHdpbGwgYmUgYnVpbHQg
-YmVmb3JlIGJhcmVib3guCj4KPiBBbm90aGVyIGlzc3VlIGlzIHRoYXQgQmFyZWJveCBpcyBsb29r
-aW5nIGZvciBob3N0IE9wZW5TU0wsIGFuZCB5b3UgaGF2ZQo+IG5vIGd1YXJhbnRlZSB0aGF0IE9w
-ZW5TU0wgaXMgaW5zdGFsbGVkIHN5c3RlbS13aWRlIG9uIHRoZSBidWlsZAo+IG1hY2hpbmUuIFRo
-ZXJlZm9yZSwgYSBkZXBlbmRlbmN5IG9uIGhvc3Qtb3BlbnNzbCBpcyBhbHNvIG5lZWRlZC4gSQo+
-IHRoaW5rIHRoaXMgY2FsbHMgZm9yIGFuIG9wdGlvbiBsaWtlIEJSMl9UQVJHRVRfVUJPT1RfTkVF
-RFNfT1BFTlNTTCwgYnV0Cj4gZm9yIEJhcmVib3guCj4KPiA+ICsjIEluIG9yZGVyIHRvIGNvbXBp
-bGUgc29tZSBiYXJlYm94IHRhcmdldCB0b29scyB3ZSBuZWVkIHRvIHVzZSBwa2ctY29uZmlnLAo+
-ID4gKyMgc28gbGV0cyBhbHdheXMgdXNlIENPTkZJR1VSQVRPUl9NQUtFX0VOViB3cmFwcGVyLgo+
-ID4gKyAgICAgJCQoJCgxKV9DT05GSUdVUkFUT1JfTUFLRV9FTlYpICQkKE1BS0UpICQkKCQoMSlf
-TUFLRV9GTEFHUykgLUMgJCQoQEQpCj4gPiAgICAgICAkJCgkKDEpX0JVSUxEX0NVU1RPTV9FTlYp
-Cj4gPiAgZW5kZWYKPgo+IEkgZG9uJ3QgdGhpbmsgPHBrZz5fQ09ORklHVVJBVE9SX01BS0VfRU5W
-IGlzIGludGVuZGVkIHRvIGJlIHVzZWQgaGVyZS4KPiBJdCBpcyBpbmRlZWQgdG8gYmUgdXNlZCBm
-b3IgdGhlIHN0ZXBzIHJlbGF0ZWQgdG8gdGhlIGNvbmZpZ3VyYXRpb24gb2YKPiBrY29uZmlnLXBh
-Y2thZ2UsIHRvIHJ1biBtYWtlIG1lbnVjb25maWcsIG1ha2UgeGNvbmZpZywgZXRjLgo+Cj4gSW4g
-VS1Cb290LCB3ZSdyZSBkb2luZyB0aGlzOgo+Cj4gICAgICAgICAkKFRBUkdFVF9DT05GSUdVUkVf
-T1BUUykgXAo+ICAgICAgICAgICAgICAgICBQS0dfQ09ORklHPSIkKFBLR19DT05GSUdfSE9TVF9C
-SU5BUlkpIiBcCj4gICAgICAgICAgICAgICAgIFBLR19DT05GSUdfU1lTUk9PVF9ESVI9Ii8iIFwK
-PiAgICAgICAgICAgICAgICAgUEtHX0NPTkZJR19BTExPV19TWVNURU1fQ0ZMQUdTPTEgXAo+ICAg
-ICAgICAgICAgICAgICBQS0dfQ09ORklHX0FMTE9XX1NZU1RFTV9MSUJTPTEgXAo+ICAgICAgICAg
-ICAgICAgICBQS0dfQ09ORklHX0xJQkRJUj0iJChIT1NUX0RJUikvbGliL3BrZ2NvbmZpZzokKEhP
-U1RfRElSKS9zaGFyZS9wa2djb25maWciIFwKPiAgICAgICAgICAgICAgICAgJChVQk9PVF9NQUtF
-KSAtQyAkKEBEKSAkKFVCT09UX01BS0VfT1BUUykgXAo+ICAgICAgICAgICAgICAgICAkKFVCT09U
-X01BS0VfVEFSR0VUKQo+Cj4gU28gcHJvYmFibHkgd2UgbmVlZCBzb21ldGhpbmcgc2ltaWxhciBo
-ZXJlLgo+Cj4gQmVzdCByZWdhcmRzLAo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMgUGV0YXp6b25p
-LCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCj4gRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBl
-bmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKPiBodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Adam, All,
+
+On 2023-07-20 16:36 -0700, Adam Duskett spake thusly:
+> Chromium and Chromium OS use a package of scripts called
+> depot_tools to manage checkouts and code reviews. This package
+> also includes the gclient utility.
+> 
+> gclient is a Python script to manage a workspace of modular dependencies that
+> are each checked out independently from different subversion or git
+> repositories. Features include:
+> 
+>   - Dependencies can be specified on a per-OS basis.
+>   - Dependencies can be specified relative to their parent dependency.
+>   - Variables can be used to abstract concepts.
+>   - Hooks can be specified to be run after a checkout.
+>   - .gclient and DEPS are Python scripts. You can hack in easily or add
+>      additional configuration data.
+> 
+> .gclient file: It's the primary file. It is, in fact, a Python script. It
+> specifies the following variables:
+> 
+>   - solutions: an array of dictionaries specifying the projects that will be
+>                fetched.
+>   - hooks: additional hooks to be run when this meta checkout is synced.
+>   - target_os: an optional array of (target) operating systems to fetch
+>                OS-specific dependencies for.
+>   - cache_dir: Primarily for bots, multiple working sets use a single git
+>                cache.
+> 
+> gclient is necessary for checking out the flutter-engine source code, as the
+> release tarballs provided on the flutter-engine github are in no state to
+> compile. Google expects the use of gclient to download a source directory
+> structure suitable to build the Flutter engine.
+
+Thanks for this very detailed commit log.
+
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[--SNIP--]
+> diff --git a/package/depot-tools/0001-Disable-ninjalog-upload.patch b/package/depot-tools/0001-Disable-ninjalog-upload.patch
+> new file mode 100644
+> index 0000000000..55fd78247f
+> --- /dev/null
+> +++ b/package/depot-tools/0001-Disable-ninjalog-upload.patch
+> @@ -0,0 +1,35 @@
+> +From eeea6ad620b88a81a4b05d49f32a375b4bbcef36 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <aduskett@gmail.com>
+> +Date: Thu, 13 Jul 2023 15:50:25 -0700
+> +Subject: [PATCH] Disable ninjalog upload
+> +
+> +Google doesn't need the ninja logs.
+> +
+> +Upstream: buildroot-specific.
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> +---
+> + autoninja | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/autoninja b/autoninja
+> +index 06d45d1..354a2f1 100755
+> +--- a/autoninja
+> ++++ b/autoninja
+> +@@ -30,12 +30,12 @@ if eval "$command"; then
+> +   fi
+> + 
+> +   # Collect ninjalog from googler.
+> +-  python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
+> ++  # python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
+
+Don't comment lines out, just remove them (with the associated comment
+while at it).
+
+> +   exit
+> + fi
+> + 
+> + # Collect ninjalog from googler.
+> +-python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
+> ++# python3 "$(dirname -- "$0")/ninjalog_uploader_wrapper.py" --cmd $command
+
+Ditto.
+
+[--SNIP--]
+> diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
+> new file mode 100644
+> index 0000000000..906340016c
+> --- /dev/null
+> +++ b/package/depot-tools/depot-tools.mk
+> @@ -0,0 +1,33 @@
+> +################################################################################
+> +#
+> +# depot-tools
+> +#
+> +################################################################################
+> +
+> +DEPOT_TOOLS_VERSION = 4e87f5bfe244e903f712408ea68dc3c3a6fe2d00
+> +DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
+> +DEPOT_TOOLS_SITE_METHOD = git
+> +DEPOT_TOOLS_LICENSE = Chromium
+
+The license in the LICENSE file looks suspiciously like it is in fact a
+BSD-3-Clause:
+    https://spdx.org/licenses/BSD-3-Clause.html
+
+> +DEPOT_TOOLS_LICENSE_FILES = LICENSE
+> +DEPOT_TOOLS_CPE_ID_VENDOR = google
+> +HOST_DEPOT_TOOLS_DEPENDENCIES = \
+> +	host-python3 \
+> +	host-python-httplib2 \
+> +	host-python-pyparsing \
+> +	host-python-six
+> +
+> +define HOST_DEPOT_TOOLS_INSTALL_CMDS
+> +	mkdir -p $(HOST_DIR)/share/depot_tools
+> +	cp -dprf $(@D)/* $(HOST_DIR)/share/depot_tools/
+> +endef
+> +
+> +# Helper wrapper to make using gclient easier.
+> +DEPOT_TOOLS_GCLIENT=\
+
+Spaces on both sides of the equal sign.
+
+> +	PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
+> +	LD_LIBRARY_PATH=$(HOST_DIR)/lib \
+
+Ick. Why do we need to set LD_LIBRARY_PATH?
+
+> +	PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
+
+PYTHONPATH=$(PYTHON3_PATH)
+
+Why do we need to force it?
+
+> +	DEPOT_TOOLS_UPDATE=0 \
+> +	PYTHONDONTWRITEBYTECODE=1 \
+
+Why do we need PYTHONDONTWRITEBYTECODE=1? I have it in my environment to
+avoid littering repositories, indeed, but why do we need to force it for
+gclient?
+
+Regards,
+Yann E. MORIN.
+
+> +	$(HOST_DIR)/share/depot_tools/gclient.py
+> +
+> +$(eval $(host-generic-package))
+> -- 
+> 2.41.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
