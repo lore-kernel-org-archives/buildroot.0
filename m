@@ -4,91 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E379EB64DD
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 19:17:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01FBBEB64DD
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 19:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2F1141860;
-	Mon, 24 Jul 2023 19:17:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2F1141860
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6746F4023B;
+	Mon, 24 Jul 2023 19:38:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6746F4023B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yDhOFfuMF9vl; Mon, 24 Jul 2023 19:17:54 +0000 (UTC)
+	with ESMTP id NNh5BpPHt0I2; Mon, 24 Jul 2023 19:38:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 196E641862;
-	Mon, 24 Jul 2023 19:17:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 196E641862
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 044811BF3C3
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4285D401C9;
+	Mon, 24 Jul 2023 19:38:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4285D401C9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DE3781BF3C3
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D13AE41855
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D13AE41855
+ by smtp2.osuosl.org (Postfix) with ESMTP id C531B4016B
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:38:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C531B4016B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VjkSDMArtgqu for <buildroot@lists.busybox.net>;
- Mon, 24 Jul 2023 19:16:46 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 48FBB41846
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 19:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48FBB41846
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-3fd190065a7so38157025e9.2
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 12:16:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690226204; x=1690831004;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=f7P8en46smQI84nGiH1F4o8v+SnMn/zvw+Cwg2sy9kc=;
- b=Lh7GHo1HDwZBnQobvCDw2O08qVqmJ7Uu/KUXnX6HKkTFCy5pSlhQ8ePMSI6BauzVlG
- nOvCp47wRVsO4u/+45Bsn6h41gBz4hurijgkBTH5b9QbxE3lqWeAA5Dv5uqKetCHIYob
- TF072vtf5FgwMRj3tEQH/9tdY3J0UtCb4uqmrmh9MsUPTa9dNGnU07/PqnI0G9r/uHaM
- Kg2YVXNjacl6D6BHLX5bypQRf4PMWP00zE/sLyvQQuuQVdtDVNAqHkmGEJcNRTYWiqTG
- SK6kehXQ50TRIK5EIHq2uMp8g1hzZWTevv/Zf7JeafZX6ffxTjyRj0tdDcN/qbQIjN9F
- Zt+A==
-X-Gm-Message-State: ABy/qLbhK6YCSDJYJYoeVXSF+jRgZmmW5JlHDRJBSBuJV4/Ey4uv1yBQ
- UlK0c0GpCq3tq1c151WpJX6POzopMq258A==
-X-Google-Smtp-Source: APBJJlG8LDeYjWvtUjW0QR+be6oTOnZJ0zlyL66WmZxJ1CNA9FsfrJSOmAR/9aCsK/DqiMliQ3CwoQ==
-X-Received: by 2002:a05:600c:22c3:b0:3f9:b430:199b with SMTP id
- 3-20020a05600c22c300b003f9b430199bmr8567859wmg.15.1690226203734; 
- Mon, 24 Jul 2023 12:16:43 -0700 (PDT)
-Received: from effi.fritz.box
- (p200300d197289500922b34fffe35b24f.dip0.t-ipconnect.de.
- [2003:d1:9728:9500:922b:34ff:fe35:b24f])
- by smtp.gmail.com with ESMTPSA id
- v4-20020a05600c214400b003fa973e6612sm13652513wml.44.2023.07.24.12.16.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jul 2023 12:16:43 -0700 (PDT)
-From: stefan.nickl@gmail.com
-X-Google-Original-From: Stefan.Nickl@gmail.com
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q4iaetuZt5Ia for <buildroot@lists.busybox.net>;
+ Mon, 24 Jul 2023 19:38:07 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 812E54011B
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 19:38:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 812E54011B
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id D734513F8C4;
+ Mon, 24 Jul 2023 21:38:00 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jul 2023 21:16:38 +0200
-Message-ID: <20230724191638.637054-6-Stefan.Nickl@gmail.com>
+Date: Mon, 24 Jul 2023 21:37:53 +0200
+Message-ID: <20230724193753.8490-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230724191638.637054-1-Stefan.Nickl@gmail.com>
-References: <20230724191638.637054-1-Stefan.Nickl@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690226204; x=1690831004;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=f7P8en46smQI84nGiH1F4o8v+SnMn/zvw+Cwg2sy9kc=;
- b=dKRRcVsPZ0PDSWzY1iaA0CMjksDPeodCYsft1x0NKBz2kGVaoLp89E0GXn94skjLRy
- TaRrNgx0p6g1+uyjoYkTNh9ZdOsBNoLgKD9dz/wNtSyz9A85wppn8Rd4meK0HJXeQUig
- A2SGHErppHKoBlTEiUxA9i0ONUxS1SJ7HZQovc+3AzuCFFPEciyg2t6EuyZLgKdGcmx9
- s75MnB2a3uxs8pr19zyIYYi2KHFCHjkz3rxIR9fsaNI0HLuGFr3qyoY/VK+iSneb3dn+
- j6QOJOjbBDVm+csu3y1rr7zJJYmKEussmhcj1G/fnWEC6gab+AfFB89avSGMA6NisfGV
- 7bOQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=dKRRcVsP
-Subject: [Buildroot] [PATCH v2 5/5] Add
- BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690227484;
+ bh=TPRw8Pb0rXXRAO870VeKHukmp5JY+K3YWpK1QBDFG94=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZjuEE3Yo5dR0X4XYzZPIMcZGV25nSyyKX4GLtlPtVStvo9o20onygiPm1Wfzp8gvd
+ 055LWo5oCpfpvwwyaOxgyJBaHAgOohmbHk8qUtzS5byu9XqbZbOzykP45kzUJuKTPC
+ yYZp57iUf5eKcDLffvjuMn6KNrIHCk8eI9LJZwpl0u9Y9vsQJUWzZh33jBJtetXqFG
+ 3pJXl8l0hC6eKmKKE+23sbYXeeDca0PKfCCKS1yp7UF1yoX7oxBZH1CIkVP6Eg6ke3
+ 8k3mRoEI8KBPNGT5k7T5wnYkBXfPxAkyWoWxgErCLcr+vgsInysyllAXfQ4ZtYixp2
+ PhQ5i1DQWNwLg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZjuEE3Yo
+Subject: [Buildroot] [PATCH 1/1] package/python-gnupg: bump to version 0.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,151 +70,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Maeva Manuel <maeva.manuel@oss.nxp.com>, Charles Hardin <ckhardin@gmail.com>,
- Fabio Estevam <festevam@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Stefan Nickl <Stefan.Nickl@gmail.com>
+For change log, see:
+https://github.com/vsajip/python-gnupg/releases/tag/0.5.1
 
-Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+This commit also adds a comment about the archive being checked with the
+PGP signature published by the package author.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/freescale/common/imx/imx8-bootloader-prepare.sh    | 2 ++
- board/freescale/common/imx/post-image.sh                 | 2 ++
- package/freescale-imx/Config.in                          | 7 ++++++-
- package/freescale-imx/firmware-imx/Config.in             | 1 +
- package/freescale-imx/imx-sc-firmware/Config.in          | 3 ++-
- package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk | 4 ++++
- package/freescale-imx/imx-seco/Config.in                 | 6 ++++--
- 7 files changed, 21 insertions(+), 4 deletions(-)
+Patch tested on master branch at commit f359791 with commands:
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index ace0f6d6..7ebf15b6 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -63,6 +63,8 @@ main ()
- 		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
- 		if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
- 			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	        elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y$" ${BR2_CONFIG}; then
-+			${HOST_DIR}/bin/mkimage_imx8 -soc DXL -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8dxl-evk-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 		else
- 			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 		fi
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index d36f8291..c359ef60 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -46,6 +46,8 @@ genimage_type()
- 		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
-+	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
- 		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		    echo "genimage.cfg.template_no_boot_part_spl"
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 13d611b6..fe3f2659 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -57,6 +57,10 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+    utils/docker-run make check-package
+    ...
+    0 warnings generated
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+        tests.package.test_python_gnupg
+    ...
+    OK
+---
+ package/python-gnupg/python-gnupg.hash | 7 +++++--
+ package/python-gnupg/python-gnupg.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-gnupg/python-gnupg.hash b/package/python-gnupg/python-gnupg.hash
+index 7886ff7dae..d52b634b8d 100644
+--- a/package/python-gnupg/python-gnupg.hash
++++ b/package/python-gnupg/python-gnupg.hash
+@@ -1,5 +1,8 @@
+ # md5, sha256 from https://pypi.org/pypi/python-gnupg/json
+-md5  19cc1aef3a612b7b5f13e388260e65d4  python-gnupg-0.5.0.tar.gz
+-sha256  70758e387fc0e0c4badbcb394f61acbe68b34970a8fed7e0f7c89469fe17912a  python-gnupg-0.5.0.tar.gz
++# also checked PGP signature from:
++# https://bitbucket.org/vinay.sajip/python-gnupg/downloads/python-gnupg-0.5.1.tar.gz.asc
++# with key: 9147B477339A9B86
++md5  c5d99c5f0456f8cbf69324ec5e6acaff  python-gnupg-0.5.1.tar.gz
++sha256  5674bad4e93876c0b0d3197e314d7f942d39018bf31e2b833f6788a6813c3fb8  python-gnupg-0.5.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4104ca980dbca7603fc553078378eb14566a76f819d033d7bff89fd6a97e181b  LICENSE.txt
+diff --git a/package/python-gnupg/python-gnupg.mk b/package/python-gnupg/python-gnupg.mk
+index b51ac61892..f582f4cdb7 100644
+--- a/package/python-gnupg/python-gnupg.mk
++++ b/package/python-gnupg/python-gnupg.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 	bool "imx8x"
-+
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
-+	bool "imx8dxl"
-+
- endchoice
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
-@@ -100,7 +104,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 0c1913e2..087ddef8 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -34,6 +34,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME
- 	default "imx6"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
- 	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 
- config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
- 	bool
-diff --git a/package/freescale-imx/imx-sc-firmware/Config.in b/package/freescale-imx/imx-sc-firmware/Config.in
-index 4932e62d..016f9739 100644
---- a/package/freescale-imx/imx-sc-firmware/Config.in
-+++ b/package/freescale-imx/imx-sc-firmware/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_IMX_SC_FIRMWARE
- 	bool "imx-sc-firmware"
- 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 	help
- 	  System Control Unit Firmware blobs for the Freescale i.MX8
- 	  SoCs.
-diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-index 3452e8b0..55b6fb00 100644
---- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-+++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-@@ -25,6 +25,10 @@ define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
- 	cp $(@D)/mx8qx-mek-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-mek-scfw-tcm.bin
- 	cp $(@D)/mx8qx-val-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-val-scfw-tcm.bin
- endef
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL),y)
-+define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
-+	cp $(@D)/mx8dxl-evk-scfw-tcm.bin $(BINARIES_DIR)/
-+endef
- else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
- define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
- 	cp $(@D)/mx8qm-*-scfw-tcm.bin $(BINARIES_DIR)/
-diff --git a/package/freescale-imx/imx-seco/Config.in b/package/freescale-imx/imx-seco/Config.in
-index 41f84446..7abdd7eb 100644
---- a/package/freescale-imx/imx-seco/Config.in
-+++ b/package/freescale-imx/imx-seco/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_IMX_SECO
- 	bool "imx-seco"
- 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 	help
- 	  Firmware file for the i.MX8 and i.MX8X Security Controller.
- 
-@@ -14,6 +15,7 @@ choice
- 	prompt "i.MX Seco Firmware Release"
- 	default BR2_PACKAGE_IMX_SECO_MX8QMB0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
- 	default BR2_PACKAGE_IMX_SECO_MX8QXC0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+	default BR2_PACKAGE_IMX_SECO_MX8DXLB0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 	help
- 	  Select the appropriate ahab container image to install
- 	  to match the iMX asics revision.
-@@ -30,7 +32,7 @@ config BR2_PACKAGE_IMX_SECO_MX8DXLA1
- 
- config BR2_PACKAGE_IMX_SECO_MX8DXLB0
- 	bool "imx-seco-mx8dxlb0"
--	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 
- config BR2_PACKAGE_IMX_SECO_MX8QMB0
- 	bool "imx-seco-mx8qmb0"
+-PYTHON_GNUPG_VERSION = 0.5.0
+-PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/e3/5c/5ff9877001616912a74f4377cd5f80925b31a678087800beae5b28bdb80e
++PYTHON_GNUPG_VERSION = 0.5.1
++PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/98/62/7737485f44bd4d7d904f4094372f4119195865b29f119fa51a98e121a13a
+ PYTHON_GNUPG_LICENSE = BSD-3-Clause
+ PYTHON_GNUPG_LICENSE_FILES = LICENSE.txt
+ PYTHON_GNUPG_CPE_ID_VENDOR = python
 -- 
 2.41.0
 
