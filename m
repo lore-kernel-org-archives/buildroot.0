@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04A3CC001DF
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 19:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E379EB64DD
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 19:17:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5C5B41868;
-	Mon, 24 Jul 2023 19:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5C5B41868
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2F1141860;
+	Mon, 24 Jul 2023 19:17:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2F1141860
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LJ4LdG4j5cCF; Mon, 24 Jul 2023 19:17:40 +0000 (UTC)
+	with ESMTP id yDhOFfuMF9vl; Mon, 24 Jul 2023 19:17:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BA4F41855;
-	Mon, 24 Jul 2023 19:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BA4F41855
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E4EE21BF3C3
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 196E641862;
+	Mon, 24 Jul 2023 19:17:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 196E641862
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 044811BF3C3
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BE221404B9
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE221404B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id D13AE41855
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D13AE41855
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bAkWsN5ZhA9Z for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VjkSDMArtgqu for <buildroot@lists.busybox.net>;
  Mon, 24 Jul 2023 19:16:46 +0000 (UTC)
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B71B64016B
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 19:16:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B71B64016B
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-3fbca8935bfso38269775e9.3
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 12:16:45 -0700 (PDT)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 48FBB41846
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 19:16:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48FBB41846
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3fd190065a7so38157025e9.2
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 12:16:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690226203; x=1690831003;
+ d=1e100.net; s=20221208; t=1690226204; x=1690831004;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=BZCIIhN0oam1x/2AxobvHxWCvi0CUWQZrhJ0SYbw03k=;
- b=k80ORbfZsfODidTswJm0YzTb0ik0fUDP8Ctz0AkmKlSKewoTEgdMrp2SdMQ++bWRYJ
- OVnwcWxbRv1lGY86vgShN9WHRUjXfrSqwIOXh3M0Bjcl5A4eILh1AQTru93IB7uepAQu
- C0+BNnYhROIN1iijuzNBKz4oUfVNrA+gS+ABEpdvrPDY7co5nXG7DdEC5FFw53RVrBXA
- t2ACdBjoRKR0D8ScfjX60whmIAa7pZwxaq9rmV33e1dnzQ2wd6Zp/WyqOiI/P+fOLnly
- f0OuB+Prdvfzs30KN9gecAhVHtcieGTgKjxpmTcQ1A8JtSlDcyvw4NFjhOrPrX/rawLV
- eRYg==
-X-Gm-Message-State: ABy/qLbJv4mHGyiNMnRjekfg9lrqDNGMquN9ipqDVaR8Dk5vqAcj3Iq+
- SAFhNy9Oo6q9ugk6dKYfopBzxvayI/rdxA==
-X-Google-Smtp-Source: APBJJlGq2qllur8zxT1cELWTtCKoXXE7PdVZtVdHhH771p1PnxW6i0tTLi9r7Qel+FLQFnechcdQMA==
-X-Received: by 2002:a05:600c:204:b0:3fb:8284:35b0 with SMTP id
- 4-20020a05600c020400b003fb828435b0mr7470972wmi.30.1690226203119; 
+ bh=f7P8en46smQI84nGiH1F4o8v+SnMn/zvw+Cwg2sy9kc=;
+ b=Lh7GHo1HDwZBnQobvCDw2O08qVqmJ7Uu/KUXnX6HKkTFCy5pSlhQ8ePMSI6BauzVlG
+ nOvCp47wRVsO4u/+45Bsn6h41gBz4hurijgkBTH5b9QbxE3lqWeAA5Dv5uqKetCHIYob
+ TF072vtf5FgwMRj3tEQH/9tdY3J0UtCb4uqmrmh9MsUPTa9dNGnU07/PqnI0G9r/uHaM
+ Kg2YVXNjacl6D6BHLX5bypQRf4PMWP00zE/sLyvQQuuQVdtDVNAqHkmGEJcNRTYWiqTG
+ SK6kehXQ50TRIK5EIHq2uMp8g1hzZWTevv/Zf7JeafZX6ffxTjyRj0tdDcN/qbQIjN9F
+ Zt+A==
+X-Gm-Message-State: ABy/qLbhK6YCSDJYJYoeVXSF+jRgZmmW5JlHDRJBSBuJV4/Ey4uv1yBQ
+ UlK0c0GpCq3tq1c151WpJX6POzopMq258A==
+X-Google-Smtp-Source: APBJJlG8LDeYjWvtUjW0QR+be6oTOnZJ0zlyL66WmZxJ1CNA9FsfrJSOmAR/9aCsK/DqiMliQ3CwoQ==
+X-Received: by 2002:a05:600c:22c3:b0:3f9:b430:199b with SMTP id
+ 3-20020a05600c22c300b003f9b430199bmr8567859wmg.15.1690226203734; 
  Mon, 24 Jul 2023 12:16:43 -0700 (PDT)
 Received: from effi.fritz.box
  (p200300d197289500922b34fffe35b24f.dip0.t-ipconnect.de.
  [2003:d1:9728:9500:922b:34ff:fe35:b24f])
  by smtp.gmail.com with ESMTPSA id
- v4-20020a05600c214400b003fa973e6612sm13652513wml.44.2023.07.24.12.16.42
+ v4-20020a05600c214400b003fa973e6612sm13652513wml.44.2023.07.24.12.16.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jul 2023 12:16:42 -0700 (PDT)
+ Mon, 24 Jul 2023 12:16:43 -0700 (PDT)
 From: stefan.nickl@gmail.com
 X-Google-Original-From: Stefan.Nickl@gmail.com
 To: buildroot@buildroot.org
-Date: Mon, 24 Jul 2023 21:16:37 +0200
-Message-ID: <20230724191638.637054-5-Stefan.Nickl@gmail.com>
+Date: Mon, 24 Jul 2023 21:16:38 +0200
+Message-ID: <20230724191638.637054-6-Stefan.Nickl@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230724191638.637054-1-Stefan.Nickl@gmail.com>
 References: <20230724191638.637054-1-Stefan.Nickl@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690226203; x=1690831003;
+ d=gmail.com; s=20221208; t=1690226204; x=1690831004;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=BZCIIhN0oam1x/2AxobvHxWCvi0CUWQZrhJ0SYbw03k=;
- b=mS8mQLuxdQmIr1/ml7WN1puIOk3dOvxtPCbNbv/o9zdj27aU9pLsCtqcz66lU0OY2x
- g0uv39QZk+IUpe9dc4O8OPHGaEpax4WjagieXqzHlhWzVp5oaZr7QOnZC1XN3CmJqvFw
- qg5fZukBWmAOrZKrh8pdo5yNFlxMRYcgZtXONYgkIip7UH47m+TEAJdCwHReMaiaqBXz
- YJBppZJUq6BcBY1hkIAnZtbNseJLYjBVi4rw9t2+u+m0jITFGhElWRMrzRujJcNE5wBR
- mqaVHlJcixdf8UQaTuJAYB2UbtdfpSvOMOrh7WycNPsEaRDi9ksW/x0HsXmtLu7zmHDo
- oo/A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=f7P8en46smQI84nGiH1F4o8v+SnMn/zvw+Cwg2sy9kc=;
+ b=dKRRcVsPZ0PDSWzY1iaA0CMjksDPeodCYsft1x0NKBz2kGVaoLp89E0GXn94skjLRy
+ TaRrNgx0p6g1+uyjoYkTNh9ZdOsBNoLgKD9dz/wNtSyz9A85wppn8Rd4meK0HJXeQUig
+ A2SGHErppHKoBlTEiUxA9i0ONUxS1SJ7HZQovc+3AzuCFFPEciyg2t6EuyZLgKdGcmx9
+ s75MnB2a3uxs8pr19zyIYYi2KHFCHjkz3rxIR9fsaNI0HLuGFr3qyoY/VK+iSneb3dn+
+ j6QOJOjbBDVm+csu3y1rr7zJJYmKEussmhcj1G/fnWEC6gab+AfFB89avSGMA6NisfGV
+ 7bOQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=mS8mQLux
-Subject: [Buildroot] [PATCH v2 4/5] configs/freescale_imx8dxlevk: new
- defconfig
+ header.a=rsa-sha256 header.s=20221208 header.b=dKRRcVsP
+Subject: [Buildroot] [PATCH v2 5/5] Add
+ BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,132 +113,138 @@ From: Stefan Nickl <Stefan.Nickl@gmail.com>
 
 Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
 ---
- board/freescale/imx8dxlevk/readme.txt  | 69 ++++++++++++++++++++++++++
- configs/freescale_imx8dxlevk_defconfig | 39 +++++++++++++++
- 2 files changed, 108 insertions(+)
- create mode 100644 board/freescale/imx8dxlevk/readme.txt
- create mode 100644 configs/freescale_imx8dxlevk_defconfig
+ board/freescale/common/imx/imx8-bootloader-prepare.sh    | 2 ++
+ board/freescale/common/imx/post-image.sh                 | 2 ++
+ package/freescale-imx/Config.in                          | 7 ++++++-
+ package/freescale-imx/firmware-imx/Config.in             | 1 +
+ package/freescale-imx/imx-sc-firmware/Config.in          | 3 ++-
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk | 4 ++++
+ package/freescale-imx/imx-seco/Config.in                 | 6 ++++--
+ 7 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/board/freescale/imx8dxlevk/readme.txt b/board/freescale/imx8dxlevk/readme.txt
-new file mode 100644
-index 00000000..33ceb669
---- /dev/null
-+++ b/board/freescale/imx8dxlevk/readme.txt
-@@ -0,0 +1,69 @@
-+******************************
-+Freescale i.MX8DXL WEVK board
-+******************************
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index ace0f6d6..7ebf15b6 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -63,6 +63,8 @@ main ()
+ 		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
+ 		if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
+ 			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
++	        elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y$" ${BR2_CONFIG}; then
++			${HOST_DIR}/bin/mkimage_imx8 -soc DXL -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8dxl-evk-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 		else
+ 			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 		fi
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index d36f8291..c359ef60 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -46,6 +46,8 @@ genimage_type()
+ 		echo "genimage.cfg.template_imx8"
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
+ 		echo "genimage.cfg.template_imx8"
++	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y$" ${BR2_CONFIG}; then
++		echo "genimage.cfg.template_imx8"
+ 	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
+ 		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+ 		    echo "genimage.cfg.template_no_boot_part_spl"
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index 13d611b6..fe3f2659 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -57,6 +57,10 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+ 	bool "imx8x"
 +
-+This file documents the Buildroot support for the Freescale i.MX8DXL WEVK
-+board.
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
++	bool "imx8dxl"
 +
-+Build
-+=====
-+
-+First, configure Buildroot for the i.MX8DXL WEVK board:
-+
-+  make freescale_imx8dxlevk_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in output/images/ the following files:
-+  - ahab-container.img
-+  - bl31.bin
-+  - boot.vfat
-+  - Image
-+  - imx8-boot-sd.bin
-+  - imx8dxl-evk.dtb
-+  - mkimg.commit
-+  - mx8dxl-ddr3-evk-scfw-tcm.bin
-+  - mx8dxl-evk-scfw-tcm.bin
-+  - mx8dxl-phantom-mek-scfw-tcm.bin
-+  - mx8dxl-val-scfw-tcm.bin
-+  - rootfs.ext2
-+  - rootfs.ext4
-+  - rootfs.tar
-+  - sdcard.img
-+  - u-boot-atf.bin
-+  - u-boot.bin
-+  - u-boot-hash.bin
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a SD card. Launch the following
-+command as root:
-+
-+  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/common/imx/genimage.cfg.template_imx8.
-+
-+Boot the i.MX8DXL WEVK board
-+============================
-+
-+To boot your newly created system:
-+- insert the SD card in the SD slot of the board;
-+- Configure the boot switch as follows:
-+SW1:	ON	ON	OFF	OFF
-+- put a micro USB cable into the Debug USB Port and connect using a terminal
-+  emulator at 115200 bps, 8n1;
-+- power on the board.
-+
-+Enjoy!
-diff --git a/configs/freescale_imx8dxlevk_defconfig b/configs/freescale_imx8dxlevk_defconfig
-new file mode 100644
-index 00000000..bf59e644
---- /dev/null
-+++ b/configs/freescale_imx8dxlevk_defconfig
-@@ -0,0 +1,39 @@
-+BR2_aarch64=y
-+BR2_cortex_a35=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8dxl-evk.dtb"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.1.22-2.0.0)/linux-imx-lf-6.1.22-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8dxl-evk"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_PACKAGE_IMX_SC_FIRMWARE=y
-+BR2_PACKAGE_IMX_SECO=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.1.22-2.0.0)/imx-atf-lf-6.1.22-2.0.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8dxl"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.1.22-2.0.0)/uboot-imx-lf-6.1.22-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8dxl_evk"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ endchoice
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+@@ -100,7 +104,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+ 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+ 
+ source "package/freescale-imx/imx-alsa-plugins/Config.in"
+ source "package/freescale-imx/imx-codec/Config.in"
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 0c1913e2..087ddef8 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -34,6 +34,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME
+ 	default "imx6"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ 	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+ 	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+ 
+ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
+ 	bool
+diff --git a/package/freescale-imx/imx-sc-firmware/Config.in b/package/freescale-imx/imx-sc-firmware/Config.in
+index 4932e62d..016f9739 100644
+--- a/package/freescale-imx/imx-sc-firmware/Config.in
++++ b/package/freescale-imx/imx-sc-firmware/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_IMX_SC_FIRMWARE
+ 	bool "imx-sc-firmware"
+ 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+ 	help
+ 	  System Control Unit Firmware blobs for the Freescale i.MX8
+ 	  SoCs.
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+index 3452e8b0..55b6fb00 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+@@ -25,6 +25,10 @@ define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/mx8qx-mek-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-mek-scfw-tcm.bin
+ 	cp $(@D)/mx8qx-val-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-val-scfw-tcm.bin
+ endef
++else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL),y)
++define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
++	cp $(@D)/mx8dxl-evk-scfw-tcm.bin $(BINARIES_DIR)/
++endef
+ else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
+ define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/mx8qm-*-scfw-tcm.bin $(BINARIES_DIR)/
+diff --git a/package/freescale-imx/imx-seco/Config.in b/package/freescale-imx/imx-seco/Config.in
+index 41f84446..7abdd7eb 100644
+--- a/package/freescale-imx/imx-seco/Config.in
++++ b/package/freescale-imx/imx-seco/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_IMX_SECO
+ 	bool "imx-seco"
+ 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
+-		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+ 	help
+ 	  Firmware file for the i.MX8 and i.MX8X Security Controller.
+ 
+@@ -14,6 +15,7 @@ choice
+ 	prompt "i.MX Seco Firmware Release"
+ 	default BR2_PACKAGE_IMX_SECO_MX8QMB0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+ 	default BR2_PACKAGE_IMX_SECO_MX8QXC0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++	default BR2_PACKAGE_IMX_SECO_MX8DXLB0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+ 	help
+ 	  Select the appropriate ahab container image to install
+ 	  to match the iMX asics revision.
+@@ -30,7 +32,7 @@ config BR2_PACKAGE_IMX_SECO_MX8DXLA1
+ 
+ config BR2_PACKAGE_IMX_SECO_MX8DXLB0
+ 	bool "imx-seco-mx8dxlb0"
+-	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
++	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+ 
+ config BR2_PACKAGE_IMX_SECO_MX8QMB0
+ 	bool "imx-seco-mx8qmb0"
 -- 
 2.41.0
 
