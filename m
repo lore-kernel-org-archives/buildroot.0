@@ -4,61 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A44DFEB64DD
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 20:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1CCBEB64DD
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 21:06:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A4C68138E;
-	Mon, 24 Jul 2023 20:48:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A4C68138E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89E3A81801;
+	Mon, 24 Jul 2023 21:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89E3A81801
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LnDBzwlCoOSD; Mon, 24 Jul 2023 20:48:52 +0000 (UTC)
+	with ESMTP id Nt0vYvlHAMZZ; Mon, 24 Jul 2023 21:06:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4ED928140A;
-	Mon, 24 Jul 2023 20:48:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ED928140A
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4423817B0;
+	Mon, 24 Jul 2023 21:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4423817B0
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C38951BF5B4
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 20:48:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5F0651BF2FB
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 21:06:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D0A86080A
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 20:48:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D0A86080A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3809B60AC1
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 21:06:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3809B60AC1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Jw2xbyLzr01B for <buildroot@lists.busybox.net>;
- Mon, 24 Jul 2023 20:48:48 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 342A6606C6
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 20:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 342A6606C6
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id C5E4013F89D;
- Mon, 24 Jul 2023 22:48:42 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id pM07hIx9gAJR for <buildroot@lists.busybox.net>;
+ Mon, 24 Jul 2023 21:06:30 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BBB8460A89
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 21:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBB8460A89
+Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A4298A4C00BA
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 23:06:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47012)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qO2l6-0001v0-0t
+ for buildroot@buildroot.org; Mon, 24 Jul 2023 23:06:26 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jul 2023 22:48:35 +0200
-Message-ID: <20230724204835.385678-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Date: Mon, 24 Jul 2023 23:06:24 +0200
+Message-Id: <20230724210624.1802155-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1690231725;
- bh=coqehi7phGXoDBOtY/iy11CGz0gddu8UAXnlcHU9Iro=;
- h=From:To:Cc:Subject:Date:From;
- b=p8YKFYJSDSnAVu1gu9EZrS9jZ+4TNN/SvZmeBJjJpk82zJRK0juz8/LLKwWHYlwHC
- OFhPTAdXYk5seaKeXhHfjzeXaAbFmNPEYEdaylXZhQO0Y6nXbBBJxVg3DMlbrAMocU
- qXUIWj5pNCbq0C2hniP7iGklbgCEVQwkpp67VhIGifqKDJJRfHhWvHcgUwKm03c7M1
- LL4+6cjyFr+9gk79Y7nS+ZLyVP1k+dyKuR+bivRnRCHRojoigP4WycbHFY7yXw1uIi
- pvc2n2tdRzvFNwXppPzfKr+qwkZhe26yvLWJ0WMaTl6127X5fPwYNLMZkdEVxmbmC/
- xgiXuKxRTXF0g==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1690232786;
+ bh=eswPly7zPPfmaGjjK7WRSj/a41QbiLXN3DEHP09+s3I=;
+ h=From:To:Subject:Date:From;
+ b=ESV/To02mk8vWrOfUkwzScCou6RrbN9i/GpKaVb9S3PTMq4zB5teb9FFRelEccA6f
+ 91GPtUOZ6fLvgazgkHRGR62movVfAk+/mWgvmJdHPifCvfyX4JdaCcwOSwOli+NUoQ
+ bbq/hCaw8dZFbq1Uw1TjDjkoT4xz3c0TsVyQHyjPNyNU84JwLUPvH8GiwGw5+nAHhw
+ 8+W21GvftlDdCp0p1dIoM7YazdYfG9jh8cXFU8wc7wAecmgsPSlNCAHC5J6foDjSd6
+ ++ZAMoQMMpEZSzTix8amX8TSIfxeaNs1d25vlzGTrIYVJpATVN0418+4ApO9gy1hSO
+ zhD+OWB5eK8/w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=p8YKFYJS
-Subject: [Buildroot] [PATCH 1/1] package/poco: bump version to 1.12.4
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=ESV/To02
+Subject: [Buildroot] [PATCH 1/1] {linux,
+ linux-headers}: security bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,128 +75,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://github.com/pocoproject/poco/blob/poco-1.12.4-release/CHANGELOG
+Fixes Zenbleed (CVE-2023-20593): https://lwn.net/Articles/939101/
 
-This commit also drop the package patch, which was included upstream in
-version 1.12.3:
-https://github.com/pocoproject/poco/commit/3884c734c261231c34f59e56cde7ae02945b4dae
-
-The file .checkpackageignore is also updated to reflect this patch
-removal.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Tested on master branch at commit f359791 with commands:
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-    utils/docker-run make check-package
-    ...
-    0 warnings generated
-
-    utils/test-pkg -p poco
-    ...
-    6 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- .checkpackageignore                           |  1 -
- ...optional-JSON-support-for-MySQL-3753.patch | 45 -------------------
- package/poco/poco.hash                        |  2 +-
- package/poco/poco.mk                          |  2 +-
- 4 files changed, 2 insertions(+), 48 deletions(-)
- delete mode 100644 package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b9265ae2e4..e95465f58f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1178,7 +1178,6 @@ package/pkcs11-helper/0001-openssl-libressl-3-5-0-does-not-have-DSA_meth_set1_na
- package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch Upstream
- package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch Upstream
- package/pkgconf/pkg-config.in Shellcheck
--package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch Sob Upstream
- package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch Upstream
- package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch Upstream
- package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch Upstream
-diff --git a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch b/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
-deleted file mode 100644
-index ba2f073a59..0000000000
---- a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 3884c734c261231c34f59e56cde7ae02945b4dae Mon Sep 17 00:00:00 2001
--From: Hernan Martinez <hernan.c.martinez@gmail.com>
--Date: Tue, 16 Aug 2022 23:07:25 -0500
--Subject: [PATCH] Fix optional JSON support for MySQL (#3753)
--
--* Fix optional JSON support for MySQL
--
--* Fix optional JSON support for MySQLTest
-----
-- Data/MySQL/src/ResultMetadata.cpp      | 2 ++
-- Data/MySQL/testsuite/src/MySQLTest.cpp | 2 ++
-- 2 files changed, 4 insertions(+)
--
--diff --git a/Data/MySQL/src/ResultMetadata.cpp b/Data/MySQL/src/ResultMetadata.cpp
--index 61b49dd54..adb5dae84 100644
----- a/Data/MySQL/src/ResultMetadata.cpp
--+++ b/Data/MySQL/src/ResultMetadata.cpp
--@@ -133,8 +133,10 @@ namespace
-- 		case MYSQL_TYPE_LONG_BLOB:
-- 		case MYSQL_TYPE_BLOB:
-- 			return Poco::Data::MetaColumn::FDT_BLOB;
--+#ifdef POCO_MYSQL_JSON
-- 		case MYSQL_TYPE_JSON:
-- 			return Poco::Data::MetaColumn::FDT_JSON;
--+#endif
-- 		default:
-- 			return Poco::Data::MetaColumn::FDT_UNKNOWN;
-- 		}
--diff --git a/Data/MySQL/testsuite/src/MySQLTest.cpp b/Data/MySQL/testsuite/src/MySQLTest.cpp
--index 80a3683b1..2a286d35e 100644
----- a/Data/MySQL/testsuite/src/MySQLTest.cpp
--+++ b/Data/MySQL/testsuite/src/MySQLTest.cpp
--@@ -976,7 +976,9 @@ CppUnit::Test* MySQLTest::suite()
-- 	CppUnit_addTest(pSuite, MySQLTest, testBLOBStmt);
-- 	CppUnit_addTest(pSuite, MySQLTest, testLongBLOB);
-- 	CppUnit_addTest(pSuite, MySQLTest, testLongTEXT);
--+#ifdef POCO_MYSQL_JSON
-- 	CppUnit_addTest(pSuite, MySQLTest, testJSON);
--+#endif
-- 	CppUnit_addTest(pSuite, MySQLTest, testUnsignedInts);
-- 	CppUnit_addTest(pSuite, MySQLTest, testFloat);
-- 	CppUnit_addTest(pSuite, MySQLTest, testDouble);
---- 
--2.37.2
--
-diff --git a/package/poco/poco.hash b/package/poco/poco.hash
-index eea3e2494a..9a7981171a 100644
---- a/package/poco/poco.hash
-+++ b/package/poco/poco.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  30442ccb097a0074133f699213a59d6f8c77db5b2c98a7c1ad9c5eeb3a2b06f3  poco-1.12.2.tar.gz
-+sha256  71ef96c35fced367d6da74da294510ad2c912563f12cd716ab02b6ed10a733ef  poco-1.12.4.tar.gz
- sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index d078faa8e5..2d0233a8ce 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 87d1a81915..c8b0d4c5a4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--POCO_VERSION = 1.12.2
-+POCO_VERSION = 1.12.4
- POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
- POCO_LICENSE = BSL-1.0
- POCO_LICENSE_FILES = LICENSE
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.4.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index c80fcf5eff..a1773ca64b 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  374e2c07463c51dfd71204b7fac3b73c7f973550ae019b74e9f2b815b28de9b7  linux-6.4.5.tar.xz
+-sha256  43eafc2197a07dcdcff7a7ef79ac7502061f7c564744e51626bf5fa2e22587f0  linux-6.1.40.tar.xz
++sha256  e1ecc496efc48aaf25a6607a4b8e52d574d6f67a2b0aa1664087d301d3515ea4  linux-6.4.6.tar.xz
++sha256  312809a78eea052a08a6580f47b2ed8dd28e5633461d6731febaf3cb1e570bb7  linux-6.1.41.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  07e0cebdb00d25459683e9c330a0576349b8c5e5f2abf053b864f9909151c31d  linux-5.15.121.tar.xz
+-sha256  1e60296a135d272bb7ce645f6ae68fbd4ffd1972cb4b82c38c6faa1172481be3  linux-5.10.186.tar.xz
+-sha256  dc5458462c6edbe3473fc6dee80fbe0841df7c177fe0546c2f131e5918f5351d  linux-5.4.249.tar.xz
++sha256  38755801cd1ce229a8c0a0536d29aa37acea8a8aa13fa438e19fbf9d6293342d  linux-5.15.122.tar.xz
++sha256  f69454210b3e9e00e8b8368aaa897d4ca59f8be3b85399a2fcaecbf17af98bbb  linux-5.10.187.tar.xz
++sha256  0f5b8876526062bf5e346f6b9dde88be873761ee33cf3b8a1586d7d109a091fb  linux-5.4.250.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  33ebd0c445b58c814428558496b65a192410f000096b0e2e6f5d813ecd95e3eb  linux-4.19.288.tar.xz
++sha256  118f7411793868db8dcb043cdc82e9ac6f722fbec8dcdde30b07889d941aa3b3  linux-4.19.289.tar.xz
+ sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ca841d6114..03c99c08cc 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -401,12 +401,12 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.288"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.249"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.186"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.121"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.40"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.4.5"		if BR2_KERNEL_HEADERS_6_4
++	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.250"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.187"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.122"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.41"	if BR2_KERNEL_HEADERS_6_1
++	default "6.4.6"		if BR2_KERNEL_HEADERS_6_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
