@@ -4,65 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 592EBEB64DD
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 20:44:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A44DFEB64DD
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 20:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC57081E16;
-	Mon, 24 Jul 2023 20:44:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC57081E16
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A4C68138E;
+	Mon, 24 Jul 2023 20:48:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A4C68138E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0VaguTAEX-mM; Mon, 24 Jul 2023 20:44:48 +0000 (UTC)
+	with ESMTP id LnDBzwlCoOSD; Mon, 24 Jul 2023 20:48:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B876481E23;
-	Mon, 24 Jul 2023 20:44:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B876481E23
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C1E961BF5B4
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 20:44:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4ED928140A;
+	Mon, 24 Jul 2023 20:48:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ED928140A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C38951BF5B4
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 20:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B6D540165
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 20:44:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B6D540165
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D0A86080A
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 20:48:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D0A86080A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 92adDxbGj_F7 for <buildroot@lists.busybox.net>;
- Mon, 24 Jul 2023 20:44:44 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 099FF400AC
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 20:44:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 099FF400AC
-Received: from fli4l.lan.fli4l (p54a1b341.dip0.t-ipconnect.de [84.161.179.65])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E2519A4C00BA
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 22:44:39 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41634)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qO2Q3-0006d3-0y
- for buildroot@buildroot.org; Mon, 24 Jul 2023 22:44:39 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jw2xbyLzr01B for <buildroot@lists.busybox.net>;
+ Mon, 24 Jul 2023 20:48:48 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 342A6606C6
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 20:48:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 342A6606C6
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id C5E4013F89D;
+ Mon, 24 Jul 2023 22:48:42 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 24 Jul 2023 22:44:39 +0200
-Message-Id: <20230724204439.1526127-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Mon, 24 Jul 2023 22:48:35 +0200
+Message-ID: <20230724204835.385678-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Spamd-Bar: /
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1690231479;
- bh=uCvx+6bhHvgoPC+vd+ePlqYdB2Sir3vdlNgsi1r0IDc=;
- h=From:To:Subject:Date:From;
- b=gRT1Wjbr7aoibo5N1HxiWyEl2x0Zm4t7/nXk9nh/qhfwG//wDWNh7trVITuv8odLV
- +GMBCqhRiHVgJn4/IvkpOUkfC10ZTjj8KXlwHQQx4APQ0QwQxJywoHopOcdXKVdXq1
- 22J+xEHXuL4vb7uBen/TdWR6VgoBG7VLtQL1gd+gBigiEUk4SjHvt4Ia7adosHHqp+
- 1Jt7pfjqpyD7LlVfpqriQYPvihOLgYdoELn11hht8625sdUm44/vZwpalZNyrFKpQZ
- 4VpKj0Ed7DivNyZO/qGk7yjDatap2IPU+7QJqH70X+3MaTY0CupUZicUx4wmNR8DKK
- PxYIY1oQKcgTg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=gRT1Wjbr
-Subject: [Buildroot] [PATCH 1/1] package/opensc: disable tests
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690231725;
+ bh=coqehi7phGXoDBOtY/iy11CGz0gddu8UAXnlcHU9Iro=;
+ h=From:To:Cc:Subject:Date:From;
+ b=p8YKFYJSDSnAVu1gu9EZrS9jZ+4TNN/SvZmeBJjJpk82zJRK0juz8/LLKwWHYlwHC
+ OFhPTAdXYk5seaKeXhHfjzeXaAbFmNPEYEdaylXZhQO0Y6nXbBBJxVg3DMlbrAMocU
+ qXUIWj5pNCbq0C2hniP7iGklbgCEVQwkpp67VhIGifqKDJJRfHhWvHcgUwKm03c7M1
+ LL4+6cjyFr+9gk79Y7nS+ZLyVP1k+dyKuR+bivRnRCHRojoigP4WycbHFY7yXw1uIi
+ pvc2n2tdRzvFNwXppPzfKr+qwkZhe26yvLWJ0WMaTl6127X5fPwYNLMZkdEVxmbmC/
+ xgiXuKxRTXF0g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=p8YKFYJS
+Subject: [Buildroot] [PATCH 1/1] package/poco: bump version to 1.12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,121 +70,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/50b/50b6962ccd884a91391d13ee75852dd0e9ea1a84/
+For change log, see:
+https://github.com/pocoproject/poco/blob/poco-1.12.4-release/CHANGELOG
 
-This error only occurs when building with BR2_SHARED_STATIC_LIBS=y, it
-fails for src/tests/fuzzing/fuzz_pkcs15init which is only available when
-static linking is enabled:
-https://github.com/OpenSC/OpenSC/blob/master/src/tests/fuzzing/Makefile.am#L14
+This commit also drop the package patch, which was included upstream in
+version 1.12.3:
+https://github.com/pocoproject/poco/commit/3884c734c261231c34f59e56cde7ae02945b4dae
 
-The upstream build system has no support to extract the correct ldflags
-for libatomic.so provided by libcrypto.pc. Because we do not need the
-tests anyway we just disable them to "fix" the build error for us.
+The file .checkpackageignore is also updated to reflect this patch
+removal.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...onfigure-add-option-to-disable-tests.patch | 67 +++++++++++++++++++
- package/opensc/opensc.mk                      |  4 +-
- 2 files changed, 70 insertions(+), 1 deletion(-)
- create mode 100644 package/opensc/0003-configure-add-option-to-disable-tests.patch
+Tested on master branch at commit f359791 with commands:
 
-diff --git a/package/opensc/0003-configure-add-option-to-disable-tests.patch b/package/opensc/0003-configure-add-option-to-disable-tests.patch
-new file mode 100644
-index 0000000000..29342026c1
---- /dev/null
-+++ b/package/opensc/0003-configure-add-option-to-disable-tests.patch
-@@ -0,0 +1,67 @@
-+From 3c3ed2ecbf31d41b6e5406da55971b9d9eaa3388 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Mon, 24 Jul 2023 22:28:11 +0200
-+Subject: [PATCH] configure: add option to disable tests
-+
-+Upstream: https://github.com/OpenSC/OpenSC/pull/2822
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac    | 9 +++++++++
-+ src/Makefile.am | 6 +++++-
-+ 2 files changed, 14 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0a90445b..9b7543da 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -272,6 +272,13 @@ AC_ARG_ENABLE(
-+ 	[enable_doc="no"]
-+ )
-+ 
-++AC_ARG_ENABLE(
-++	[tests],
-++	[AS_HELP_STRING([--enable-tests],[enable tests @<:@enabled@:>@])],
-++	,
-++	[enable_tests="yes"]
-++)
-++
-+ AC_ARG_ENABLE(
-+ 	[dnie-ui],
-+ 	[AS_HELP_STRING([--enable-dnie-ui],[enable use of external user interface program to request DNIe pin@<:@disabled@:>@])],
-+@@ -1119,6 +1126,7 @@ AM_CONDITIONAL([ENABLE_NOTIFY], [test "${enable_notify}" = "yes"])
-+ AM_CONDITIONAL([ENABLE_CRYPTOTOKENKIT], [test "${enable_cryptotokenkit}" = "yes"])
-+ AM_CONDITIONAL([ENABLE_OPENCT], [test "${enable_openct}" = "yes"])
-+ AM_CONDITIONAL([ENABLE_DOC], [test "${enable_doc}" = "yes"])
-++AM_CONDITIONAL([ENABLE_TESTS], [test "${enable_tests}" = "yes"])
-+ AM_CONDITIONAL([WIN32], [test "${WIN32}" = "yes"])
-+ AM_CONDITIONAL([CYGWIN], [test "${CYGWIN}" = "yes"])
-+ AM_CONDITIONAL([ENABLE_MINIDRIVER], [test "${enable_minidriver}" = "yes"])
-+@@ -1213,6 +1221,7 @@ XSL stylesheets:         ${xslstylesheetsdir}
-+ 
-+ man support:             ${enable_man}
-+ doc support:             ${enable_doc}
-++tests:                   ${enable_tests}
-+ thread locking support:  ${enable_thread_locking}
-+ zlib support:            ${enable_zlib}
-+ readline support:        ${enable_readline}
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 3ce465bf..bf71b61f 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -3,7 +3,11 @@ EXTRA_DIST = Makefile.mak
-+ 
-+ # Order IS important
-+ SUBDIRS = common scconf ui pkcs15init sm \
-+-		  libopensc pkcs11 tools minidriver tests
-++		  libopensc pkcs11 tools minidriver
-++
-++if ENABLE_TESTS
-++SUBDIRS += tests
-++endif
-+ 
-+ if ENABLE_SM
-+ SUBDIRS += smm
-+-- 
-+2.39.2
-+
-diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-index 253b6b26f8..32f0fdaa8b 100644
---- a/package/opensc/opensc.mk
-+++ b/package/opensc/opensc.mk
-@@ -9,8 +9,10 @@ OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSIO
- OPENSC_LICENSE = LGPL-2.1+
- OPENSC_LICENSE_FILES = COPYING
- OPENSC_CPE_ID_VENDOR = opensc_project
-+# 0003-configure-add-option-to-disable-tests.patch
-+OPENSC_AUTORECONF = YES
- OPENSC_DEPENDENCIES = openssl pcsc-lite
- OPENSC_INSTALL_STAGING = YES
--OPENSC_CONF_OPTS = --disable-cmocka --disable-strict
-+OPENSC_CONF_OPTS = --disable-cmocka --disable-strict --disable-tests
+    utils/docker-run make check-package
+    ...
+    0 warnings generated
+
+    utils/test-pkg -p poco
+    ...
+    6 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ .checkpackageignore                           |  1 -
+ ...optional-JSON-support-for-MySQL-3753.patch | 45 -------------------
+ package/poco/poco.hash                        |  2 +-
+ package/poco/poco.mk                          |  2 +-
+ 4 files changed, 2 insertions(+), 48 deletions(-)
+ delete mode 100644 package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b9265ae2e4..e95465f58f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1178,7 +1178,6 @@ package/pkcs11-helper/0001-openssl-libressl-3-5-0-does-not-have-DSA_meth_set1_na
+ package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch Upstream
+ package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch Upstream
+ package/pkgconf/pkg-config.in Shellcheck
+-package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch Sob Upstream
+ package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch Upstream
+ package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch Upstream
+ package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch Upstream
+diff --git a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch b/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
+deleted file mode 100644
+index ba2f073a59..0000000000
+--- a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 3884c734c261231c34f59e56cde7ae02945b4dae Mon Sep 17 00:00:00 2001
+-From: Hernan Martinez <hernan.c.martinez@gmail.com>
+-Date: Tue, 16 Aug 2022 23:07:25 -0500
+-Subject: [PATCH] Fix optional JSON support for MySQL (#3753)
+-
+-* Fix optional JSON support for MySQL
+-
+-* Fix optional JSON support for MySQLTest
+----
+- Data/MySQL/src/ResultMetadata.cpp      | 2 ++
+- Data/MySQL/testsuite/src/MySQLTest.cpp | 2 ++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/Data/MySQL/src/ResultMetadata.cpp b/Data/MySQL/src/ResultMetadata.cpp
+-index 61b49dd54..adb5dae84 100644
+---- a/Data/MySQL/src/ResultMetadata.cpp
+-+++ b/Data/MySQL/src/ResultMetadata.cpp
+-@@ -133,8 +133,10 @@ namespace
+- 		case MYSQL_TYPE_LONG_BLOB:
+- 		case MYSQL_TYPE_BLOB:
+- 			return Poco::Data::MetaColumn::FDT_BLOB;
+-+#ifdef POCO_MYSQL_JSON
+- 		case MYSQL_TYPE_JSON:
+- 			return Poco::Data::MetaColumn::FDT_JSON;
+-+#endif
+- 		default:
+- 			return Poco::Data::MetaColumn::FDT_UNKNOWN;
+- 		}
+-diff --git a/Data/MySQL/testsuite/src/MySQLTest.cpp b/Data/MySQL/testsuite/src/MySQLTest.cpp
+-index 80a3683b1..2a286d35e 100644
+---- a/Data/MySQL/testsuite/src/MySQLTest.cpp
+-+++ b/Data/MySQL/testsuite/src/MySQLTest.cpp
+-@@ -976,7 +976,9 @@ CppUnit::Test* MySQLTest::suite()
+- 	CppUnit_addTest(pSuite, MySQLTest, testBLOBStmt);
+- 	CppUnit_addTest(pSuite, MySQLTest, testLongBLOB);
+- 	CppUnit_addTest(pSuite, MySQLTest, testLongTEXT);
+-+#ifdef POCO_MYSQL_JSON
+- 	CppUnit_addTest(pSuite, MySQLTest, testJSON);
+-+#endif
+- 	CppUnit_addTest(pSuite, MySQLTest, testUnsignedInts);
+- 	CppUnit_addTest(pSuite, MySQLTest, testFloat);
+- 	CppUnit_addTest(pSuite, MySQLTest, testDouble);
+--- 
+-2.37.2
+-
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index eea3e2494a..9a7981171a 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  30442ccb097a0074133f699213a59d6f8c77db5b2c98a7c1ad9c5eeb3a2b06f3  poco-1.12.2.tar.gz
++sha256  71ef96c35fced367d6da74da294510ad2c912563f12cd716ab02b6ed10a733ef  poco-1.12.4.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index d078faa8e5..2d0233a8ce 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-POCO_VERSION = 1.12.2
++POCO_VERSION = 1.12.4
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
