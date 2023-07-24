@@ -4,87 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC631EB64DD
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 19:16:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F0DAEB64DD
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 19:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 69E1D41835;
-	Mon, 24 Jul 2023 19:16:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69E1D41835
+	by smtp4.osuosl.org (Postfix) with ESMTP id D536441854;
+	Mon, 24 Jul 2023 19:17:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D536441854
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PKuwzwCUE_Pe; Mon, 24 Jul 2023 19:16:46 +0000 (UTC)
+	with ESMTP id gE4PnG7xQ5JR; Mon, 24 Jul 2023 19:16:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41A6541855;
-	Mon, 24 Jul 2023 19:16:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41A6541855
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB4AF1BF3C3
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F7BD41856;
+	Mon, 24 Jul 2023 19:16:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F7BD41856
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5568E1BF3C3
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C430F6103E
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C430F6103E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A80F41854
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 19:16:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A80F41854
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cey3XMN7z_2L for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id s83cy352_pjV for <buildroot@lists.busybox.net>;
  Mon, 24 Jul 2023 19:16:43 +0000 (UTC)
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B4C4F60AB3
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 19:16:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4C4F60AB3
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-3fbd33a57ddso38313425e9.1
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 12:16:42 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2A6D641835
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 19:16:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A6D641835
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-3110ab7110aso4327839f8f.3
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 12:16:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690226200; x=1690831000;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=GMOlWXPhFl7JBHMyVNPDnBUpxumnlaiMmaboBCPzAX4=;
- b=KmMjbVsJ1sWkFhJhQ1nb4g/cb+JVBbr/PV+7yFPjfD0IWQOczevFaWYbGDBIhA6RDu
- MOJrmiV8ZXd+1irzG866nSPEs43Cb3bO19AztT0g/MHM3oL2AYQeQuc5Jt0ITbikXBY3
- f12KrchUqZMkWDcunCSVc/p603gCLGMYqKp4DO8QCv8WjGZ+nozQRYxll2QP35EAZEBG
- 2vjpUfdzzmlxyuNMebmH9SimRWA22bA7QIK5TtR3dLt9HG5uY47QCt3KXE6XNJ//xh2T
- gMn1asvlpWzSmjRQDh/Z2T5f9jW6/TqI1zp17uI/3O8P32sndFnH6LQ96rn5cfJWaEMM
- hN6A==
-X-Gm-Message-State: ABy/qLaQVue8gwUs0nelPk8ik4dJczFLaS5PLqQWrVSaToP7TWkA5Km3
- WXRYJYfu1+P3k7MXexk3gEKB3B2Sscv3Gg==
-X-Google-Smtp-Source: APBJJlGis3HFtKKsmETiB66qzVMkqIqZBaYeveuIqfhLHO6CjrgA6ObZInVP0FkaZo8ACnjOwJp2nA==
-X-Received: by 2002:a05:600c:2242:b0:3fb:b5dc:dab1 with SMTP id
- a2-20020a05600c224200b003fbb5dcdab1mr7119253wmm.39.1690226200022; 
+ d=1e100.net; s=20221208; t=1690226201; x=1690831001;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=evU+T+WKbhkBoEWvO/60imqYKcKPv0urPpUh7UONqls=;
+ b=Y4SojFbJskNoE5l5R5xd/vglq01yE1OllPgJUsPtVFEW44tOh2Ye4km7cQXCdGvsQp
+ SgHF1u4c/mbabynXTZSO4wezJYdljL52qGgDtAfHPgEpkIVvtEqYODjvnYIYJmhEDGBz
+ UHyR4nB6a083CVm9oGQV4Tba0SOLjpk7gehIjTO4UYM6OyeRCmfjGBXh23l1NUAE5za+
+ OpderAb8ge763ANX661YQK4EdbKSH2aB3+dLIGKbK2gHgAEptl2ScngDbNgut7kTlFQU
+ aILNlQ2Y+SaETAaG0bGo4keD1J8jpfIPx1ZT5V5545ZQlalsxvkmERpjDwErV+BSE0Ci
+ 3B5w==
+X-Gm-Message-State: ABy/qLaBqvkgrLZACSzz5I2vv5JVYEl6P5mUsnwByK0UROYUDC9uGe/G
+ lwiJSUnhPUseAVO0LsSRi3rtd6bTXmy7Pg==
+X-Google-Smtp-Source: APBJJlFMUPdujjBQJO4IXaai7joHYDid6Ro9iWCF0kPpje9E6eHijgxHqlHHX7Gfn/AqkEUi4YD91w==
+X-Received: by 2002:a5d:45c1:0:b0:30a:ec3b:58d8 with SMTP id
+ b1-20020a5d45c1000000b0030aec3b58d8mr8038315wrs.3.1690226200723; 
  Mon, 24 Jul 2023 12:16:40 -0700 (PDT)
 Received: from effi.fritz.box
  (p200300d197289500922b34fffe35b24f.dip0.t-ipconnect.de.
  [2003:d1:9728:9500:922b:34ff:fe35:b24f])
  by smtp.gmail.com with ESMTPSA id
- v4-20020a05600c214400b003fa973e6612sm13652513wml.44.2023.07.24.12.16.39
+ v4-20020a05600c214400b003fa973e6612sm13652513wml.44.2023.07.24.12.16.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jul 2023 12:16:39 -0700 (PDT)
+ Mon, 24 Jul 2023 12:16:40 -0700 (PDT)
 From: stefan.nickl@gmail.com
 X-Google-Original-From: Stefan.Nickl@gmail.com
 To: buildroot@buildroot.org
-Date: Mon, 24 Jul 2023 21:16:33 +0200
-Message-ID: <20230724191638.637054-1-Stefan.Nickl@gmail.com>
+Date: Mon, 24 Jul 2023 21:16:34 +0200
+Message-ID: <20230724191638.637054-2-Stefan.Nickl@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230724191638.637054-1-Stefan.Nickl@gmail.com>
+References: <20230724191638.637054-1-Stefan.Nickl@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690226200; x=1690831000;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GMOlWXPhFl7JBHMyVNPDnBUpxumnlaiMmaboBCPzAX4=;
- b=hMn8XCsQ0IQnwIHDV7IEqIVDK8YQnmIbrv+w/eiDEMnwU72ICH1PmHc0nzM6dyNOND
- SorWNpzC6UXzyPhAxqgJ0Cy4ygwzGPDApWGoDcO/FVT9hS70LkbzsyFr7Xndz0qOQcHt
- OF5eO1JeQ2Unu1sXJPzDsoVm+sxhKggJku2dEOaOf/R6t2W66alBRAvTFmDThlG5uraz
- GqQ4DW6C7lgEExY/RoUuo9vicyRji7Kf9f3eUKTBYiNNl6DJcThyqjcIHbyf0jk3cc05
- rIwiUcqQCf4jHwIetHw1uk6IwxMoiX+JckMl7Xzuj7Qd2JNDP/bg3bRt+W1EvuYipJA9
- 9zlw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20221208; t=1690226201; x=1690831001;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=evU+T+WKbhkBoEWvO/60imqYKcKPv0urPpUh7UONqls=;
+ b=RR+OF1eOEtCgFm0c3zq52eR178m1R5CMlVM/Jlip5OhJUtw0PFr4rcg5VarWRkwofA
+ 9A8EHVdPzSH/3EKpesGT8h+Rw2sxZh9OTFeYPhvXPyy2CVtoWiujlnYS7Keg/vPS2VeH
+ BHb/UzloRptvpGkgKsbLXc0xROPvYsq+CnURjJzxPqgmBlMh46aoXllN4aDZZN881rHe
+ wj3cFF1HwTNaz0cSKsNXHoveNv6IoxqcNyh5SkPhIQK1jxz36P6jdq4M1jRjlg7U02AL
+ W/CZ4uz5BsP+LOYx/WRNmwPpt7keOQ2MFx7sT53YE6JP7lzwbO0sFfZovO66F9Pwu9Iw
+ 8a/g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=hMn8XCsQ
-Subject: [Buildroot] [PATCH v2 0/5] Add FREESCALE_IMX_PLATFORM_IMX8DXL
+ header.a=rsa-sha256 header.s=20221208 header.b=RR+OF1eO
+Subject: [Buildroot] [PATCH v2 1/5] package/freescale-imx/firmware-imx: bump
+ version to 8.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,50 +111,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Stefan Nickl <Stefan.Nickl@gmail.com>
 
-> Also, please run "make legal-info", to make sure the license
-> information is still correct.
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I updated the licenses as well. The actual content changes appear
-inconsequential, but I am not a lawyer.
-
-> Are these firmware files new in 1.15.0, or were they already present in
-> 1.8.0 ?
-
-mx8dxl-evk-scfw-tcm.bin was already present in 1.8.0. Interestingly the
-one from 1.15.0 is only a quarter the size.
-
-> How can this work if BR2_PACKAGE_IMX_SECO_MX8DXLB0 is not defined?
-
-I reckon it gets defined from this line, which I adapted from the
-MX8QXC0 line just above it:
-
-default BR2_PACKAGE_IMX_SECO_MX8DXLB0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
-
-Stefan Nickl (5):
-  package/freescale-imx/firmware-imx: bump version to 8.20
-  package/freescale-imx/imx-seco: bump version to 5.9.0
-  package/freescale-imx/imx-sc-firmware: bump version to 1.15.0
-  configs/freescale_imx8dxlevk: new defconfig
-  Add BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
-
- .../common/imx/imx8-bootloader-prepare.sh     |  2 +
- board/freescale/common/imx/post-image.sh      |  2 +
- board/freescale/imx8dxlevk/readme.txt         | 69 +++++++++++++++++++
- configs/freescale_imx8dxlevk_defconfig        | 39 +++++++++++
- package/freescale-imx/Config.in               |  7 +-
- package/freescale-imx/firmware-imx/Config.in  |  1 +
- .../firmware-imx/firmware-imx.hash            |  6 +-
- .../firmware-imx/firmware-imx.mk              |  2 +-
- .../freescale-imx/imx-sc-firmware/Config.in   |  3 +-
- .../imx-sc-firmware/imx-sc-firmware.hash      |  6 +-
- .../imx-sc-firmware/imx-sc-firmware.mk        |  6 +-
- package/freescale-imx/imx-seco/Config.in      |  6 +-
- package/freescale-imx/imx-seco/imx-seco.hash  |  6 +-
- package/freescale-imx/imx-seco/imx-seco.mk    |  2 +-
- 14 files changed, 141 insertions(+), 16 deletions(-)
- create mode 100644 board/freescale/imx8dxlevk/readme.txt
- create mode 100644 configs/freescale_imx8dxlevk_defconfig
-
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index eb0c387a..0b3561a9 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  937e196476b8e95b4b7f2501a14c8326d8a0649f8a3f9228b72373770a08deb3  firmware-imx-8.15.bin
+-sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  COPYING
+-sha256  30f61825583b4c26d29a798ad7e4c8ef2f2f390b1e964af302d2dc40e93cb0a4  EULA
++sha256  f6dc6a5c8fd9b913a15360d3ccd53d188db05a08a8594c518e57622478c72383  firmware-imx-8.20.bin
++sha256  913ba38d4be97361c3d0fa9bf2f6dbe7b1c0c41213dd268fb6738db9704dbe32  COPYING
++sha256  4fd8bb45a2ec22117d20cfea84370e2a3a2cd99e8e177138bed0938137b1aeb3  EULA
+ sha256  40d02f6d6b4e94d9307529408f372f5a9908cf3d156ec533a4e54274b40f271e  SCR.txt
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 4cceb670..66ef8c39 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FIRMWARE_IMX_VERSION = 8.15
++FIRMWARE_IMX_VERSION = 8.20
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ 
 -- 
 2.41.0
 
