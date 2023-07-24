@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4CDDC001DF
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 18:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F7B3EB64DD
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 18:24:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AE29417EF;
-	Mon, 24 Jul 2023 18:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AE29417EF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3CF06106A;
+	Mon, 24 Jul 2023 18:24:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3CF06106A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wukYgAXGdmLh; Mon, 24 Jul 2023 18:00:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2IbX4FKaluxO; Mon, 24 Jul 2023 18:24:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 045D6417E9;
-	Mon, 24 Jul 2023 18:00:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 045D6417E9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 003496102D;
+	Mon, 24 Jul 2023 18:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 003496102D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5AA9D1BF964
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 18:00:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EDB461BF3DE
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 18:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33A0781FE4
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 18:00:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33A0781FE4
+ by smtp1.osuosl.org (Postfix) with ESMTP id C766D82004
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 18:24:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C766D82004
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BnNtQj7Ks_zh for <buildroot@lists.busybox.net>;
- Mon, 24 Jul 2023 18:00:32 +0000 (UTC)
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BA36E81FE2
- for <buildroot@busybox.net>; Mon, 24 Jul 2023 18:00:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA36E81FE2
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-3fc0aecf15bso45787525e9.1
- for <buildroot@busybox.net>; Mon, 24 Jul 2023 11:00:31 -0700 (PDT)
+ with ESMTP id bgodARvMD5hV for <buildroot@lists.busybox.net>;
+ Mon, 24 Jul 2023 18:24:44 +0000 (UTC)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D39CE81F6A
+ for <buildroot@busybox.net>; Mon, 24 Jul 2023 18:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D39CE81F6A
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-3172144c084so4261473f8f.1
+ for <buildroot@busybox.net>; Mon, 24 Jul 2023 11:24:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690221630; x=1690826430;
+ d=1e100.net; s=20221208; t=1690223082; x=1690827882;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=MKM4rMiIljXholZE5GsW8YgSQsf9OpTx/PBLuBGapWA=;
- b=HsT2CPm9z3bt3I4S/q74k1ZLFezsJBpFbAekehjevK+kbowUB5YXgD3P15xKm4aFDu
- 84xJNmDxlzmMqkUyYXRYAxSrVq+NfwjhshB8MXKO7DLWm5rbG0hBrYaN5fKo+cncRXNK
- Hg9IIzN3gdEfdqnTEx4/y1oMquthguBfV3fon6+a1sLVMdhOrCDHn/SMoYwDeeLoYMcM
- dEPPGXGmKj5K7bMLOxTsKJyMcYbthJsfze+EoazHZ1/dsFqaFfP4tz8WEOQlkDDhfmZf
- 8xC6rvvtN10BuBPMzfpzN4fB7TapMQUSxEDDi1RWvPLptcdjbZ8uQIAIdBL/pb6UTwc/
- +Npw==
-X-Gm-Message-State: ABy/qLYtJ9kDVkpmBCfQtXlgX8i68uJ8rLOjJgYRPDYbENndxse0o5hq
- zCe/d9nPBIFkjYhcvH1ThguqlyS58vk=
-X-Google-Smtp-Source: APBJJlHrXMKofkZnoyHHuthPIC3/o6jsHXKf/VeWQUt9/SMTP4iJQy8V650/83yXrluNHzihmlhL/w==
-X-Received: by 2002:a1c:750f:0:b0:3fd:2d35:b96a with SMTP id
- o15-20020a1c750f000000b003fd2d35b96amr5336659wmc.39.1690221629560; 
- Mon, 24 Jul 2023 11:00:29 -0700 (PDT)
+ bh=DmR73IkeTWwGqG4pqsdzT6zBCVFvKOftLkv2jvrzOXo=;
+ b=PjtDCGAGw8BYP+U8sjRkkMnyjQgWLgDQPWP/g05806XhjVKd1BS/gOxkPruISwYKbk
+ 6IIqllUflHWZ9IhVA4NLMQjaJxRFc6YK6c80uyRlunxH49Fn0O3yrXWIVuLEdzGfEWv3
+ E+o+tXTzoXvJdsPSYX4rELGP+BwdadKlT3HcSB0j0cJ4UA6gF5wVLeWUhRUirRzPHZhl
+ tnX5IQ/icbiDBpKDWMclJ8t9FyxmDJhqbBTa/qvHwOqOPBwTWb1mwZVE3t1WMYGtcZx+
+ AJAhuI916CZZImz2mPc3G1KA4+wLVK4p0OOMmamnWpr/SPA4Er8kO8d/7WmBftbQwIPc
+ KeoA==
+X-Gm-Message-State: ABy/qLbtUMW7veNcpRyQkxkPzAdqCpIzCLpX+5WWgxW9uAG4hvSxZmKZ
+ Zfxw4upKV5EEFxopO3kNXxYf2qbMxD0=
+X-Google-Smtp-Source: APBJJlFQjjPbzlyFaQdzPk2Nij9/Il9anVPM9B2a/JHTougFteTzvH0bBc6x2+PxB16zpmc6Gx9hfw==
+X-Received: by 2002:a5d:54c3:0:b0:317:52d2:d196 with SMTP id
+ x3-20020a5d54c3000000b0031752d2d196mr4102954wrv.33.1690223081714; 
+ Mon, 24 Jul 2023 11:24:41 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- g5-20020a5d5545000000b0031437ec7ec1sm13710646wrw.2.2023.07.24.11.00.28
+ x13-20020a5d60cd000000b0030ada01ca78sm13711603wrt.10.2023.07.24.11.24.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Jul 2023 11:00:29 -0700 (PDT)
+ Mon, 24 Jul 2023 11:24:41 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Mon, 24 Jul 2023 20:00:23 +0200
-Message-Id: <20230724180023.884565-1-francois.perrad@gadz.org>
+Date: Mon, 24 Jul 2023 20:24:37 +0200
+Message-Id: <20230724182437.889823-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690221630; x=1690826430;
+ d=gmail.com; s=20221208; t=1690223082; x=1690827882;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=MKM4rMiIljXholZE5GsW8YgSQsf9OpTx/PBLuBGapWA=;
- b=HEAV8YgbRUffPGAxISDI17fnCdJ0kTRbDzVVh9i3EEkSdR+NhQ0tk/aBuF49ux21xG
- rlp74IiPE3p/HQGyUqap8e+jtxwDxh3KyepvxIaTyntBTfj5Iv2ytYeo6x1usqt3iDIJ
- YhUj7mivJA0hU+7KoITrzbx9zj4EwOi4ucPLERr3i9eqaPJFZbpuziGvUScSoHi5wZwr
- oDkfUOaqXLvpA+qnFEaT2YDqxwJPu/LXTar734dV0wK4iTn4wtRpNDv9lgqkAJnf2P8V
- JDRlayGydu9u1bNFcJgUAbM7ilywZlTbkrCK31XXb9Xok138HfT6jJ4QFU7Xg4j98ENt
- CoTQ==
+ bh=DmR73IkeTWwGqG4pqsdzT6zBCVFvKOftLkv2jvrzOXo=;
+ b=qTJGAVJQKXfdsy8Wf40xG5foclU9IPzgRfO1tjMPZyvOSE4vskAoovHNaAUwxsW7D4
+ PG7OskBxwU+wvttFKVZv0FvdJWZg/25oXSI/ROGTC6qUPQvmTkGCO9r1pLlikL4/mBJW
+ yqjJ5I3JfOLl/SFiSDhi0M5xeGNYbNlJYLdzgL3vPOqSgZewoyjOcr685NCZlT01E0CS
+ a1Djz+FMYoJRLrLS9bd6QQ5KigBfGpVG/7x2Zkfo3yJIy/txp1v49R5ZBgZZvv4JXi9q
+ d5vBR4gJY7ymbhW7AiEKNRICqySLmhdwNgQTvJdgq+nwytL9ZOzBYtYjzondWIUNxmZt
+ mhjg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=HEAV8Ygb
-Subject: [Buildroot] [PATCH] package/fakeroot: bump to version 1.32.1
+ header.a=rsa-sha256 header.s=20221208 header.b=qTJGAVJQ
+Subject: [Buildroot] [PATCH] package/open62541: bump to version 1.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,37 +100,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/fakeroot/fakeroot.hash | 4 ++--
- package/fakeroot/fakeroot.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/open62541/open62541.hash | 2 +-
+ package/open62541/open62541.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-index 5c50c83e1..5e7b6af94 100644
---- a/package/fakeroot/fakeroot.hash
-+++ b/package/fakeroot/fakeroot.hash
-@@ -1,4 +1,4 @@
--# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.30.1-1.dsc
--sha256  32ebb1f421aca0db7141c32a8c104eb95d2b45c393058b9435fbf903dd2b6a75  fakeroot_1.30.1.orig.tar.gz
-+# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.32.1-1.dsc
-+sha256  c072b0f65bafc4cc5b6112f7c61185f5170ce4cb0c410d1681c1af4a183e94e6  fakeroot_1.32.1.orig.tar.gz
- # License files, locally calculated
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 20c75d696..1a0ad70c1 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+index 09002436e..2e650a125 100644
+--- a/package/open62541/open62541.hash
++++ b/package/open62541/open62541.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9a7955ba01e12dbd327e534c25288f4918d275031394c804943a7e45ba903621  open62541-v1.3.4-br1.tar.gz
++sha256  372fd6b2d78823d3f9e8279f78fb43b6af2501603675450a194d2bac65925ca1  open62541-v1.3.6-br1.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index 2c0e3b17f..672fb17be 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FAKEROOT_VERSION = 1.30.1
-+FAKEROOT_VERSION = 1.32.1
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
--FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20221120T030258Z/pool/main/f/fakeroot
-+FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20230724T160429Z/pool/main/f/fakeroot
- 
- HOST_FAKEROOT_DEPENDENCIES = host-acl
- # Force capabilities detection off
+-OPEN62541_VERSION = v1.3.4
++OPEN62541_VERSION = v1.3.6
+ OPEN62541_SITE_METHOD = git
+ OPEN62541_SITE = https://github.com/open62541/open62541.git
+ OPEN62541_GIT_SUBMODULES = YES
 -- 
 2.39.2
 
