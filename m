@@ -4,74 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F182AC0015E
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 12:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 296AEC001B0
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 13:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A61660F31;
-	Mon, 24 Jul 2023 12:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A61660F31
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E19660F8C;
+	Mon, 24 Jul 2023 13:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E19660F8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v0Byxt2vTRNZ; Mon, 24 Jul 2023 12:10:26 +0000 (UTC)
+	with ESMTP id chE4NQOG2lj3; Mon, 24 Jul 2023 13:10:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8A6B60EE8;
-	Mon, 24 Jul 2023 12:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8A6B60EE8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 143261BF255
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 12:10:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9286360F68;
+	Mon, 24 Jul 2023 13:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9286360F68
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D30331BF488
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 13:10:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1E2C81F40
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 12:10:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1E2C81F40
+ by smtp3.osuosl.org (Postfix) with ESMTP id A565C60F68
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 13:10:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A565C60F68
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4vaxOtQGhYZS for <buildroot@lists.busybox.net>;
- Mon, 24 Jul 2023 12:10:23 +0000 (UTC)
-X-Greylist: delayed 1485 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 24 Jul 2023 12:10:22 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9733A81F43
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e29pUOE2V5NA for <buildroot@lists.busybox.net>;
+ Mon, 24 Jul 2023 13:10:22 +0000 (UTC)
+X-Greylist: delayed 1687 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 24 Jul 2023 13:10:21 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A529A60E27
 Received: from mx1.sonologic.net (mx1.sonologic.nl
  [IPv6:2a01:4f8:121:43cd::1:9])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9733A81F43
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 12:10:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A529A60E27
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 13:10:21 +0000 (UTC)
 Received-SPF: pass (mx1.sonologic.net: authenticated connection)
  receiver=mx1.sonologic.net; client-ip=178.63.120.221; helo=[10.1.3.45];
- envelope-from=gmc@sonologic.nl;
+ envelope-from=kmartens@sonologic.se;
  x-software=spfmilter 2.001 http://www.acme.com/software/spfmilter/ with
  libspf2-1.2.11; 
 Received: from [10.1.3.45] (portal.sonologic.net [178.63.120.221])
  (authenticated bits=0)
- by mx1.sonologic.net (8.17.1/8.16.1) with ESMTPSA id 36OBjWUZ049743
+ by mx1.sonologic.net (8.17.1/8.16.1) with ESMTPSA id 36OCg92P052832
  (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
- Mon, 24 Jul 2023 11:45:34 GMT (envelope-from gmc@sonologic.nl)
+ Mon, 24 Jul 2023 12:42:11 GMT (envelope-from kmartens@sonologic.se)
 X-Authentication-Warning: mx1.sonologic.net: Host portal.sonologic.net
  [178.63.120.221] claimed to be [10.1.3.45]
-Message-ID: <29639eb3-843d-e26d-681e-403da6c3e146@sonologic.nl>
-Date: Mon, 24 Jul 2023 13:45:32 +0200
+Message-ID: <eee5a213-c0d0-c400-227e-fe3df1c941a4@sonologic.se>
+Date: Mon, 24 Jul 2023 14:42:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Content-Language: en-GB
+From: Koen Martens <kmartens@sonologic.se>
 To: buildroot@buildroot.org
-From: Koen Martens <gmc@sonologic.nl>
+Content-Language: en-GB
+Organization: Sonologic AB
 X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4
- (mx1.sonologic.net [178.63.120.202]); Mon, 24 Jul 2023 11:45:35 +0000 (UTC)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=sonologic.nl; s=dkim; 
- t=1690199135; bh=xdI37FBPn6psDJSXtGXXmSypmCT1MURGLlofGoeRcxE=;
- h=Date:To:Cc:From:Subject;
- b=SkPNIvkdMD0GVIrpsKv4LVtc5qiaC+eL8+a0O4naJIsr4O5s4chqX2nk71XisHG1o
- qJb70V/tKGlmcqYe4FEoESHxJ+NvuduJfSfRhIL430vfEOFPeN0JlkWolpMygLis1W
- mwpar8vwyCSt5moz3+JO2zZ1P2LNqhXjucIEOf6DOmw5VDtG8CKP9HtwDBkPfl0gRv
- YE9JZy/OxMyA0zaTthZm9Vw1FKwmsUrUW6rVoxMDEUPPkT3JEJWe1JKNeCninNk+QP
- wdQzxqqSr+OPfMnFs9jeRXveWhxJI6QYUzPgJBx56XCC4keqMj0PxFixkIkkA+vZKY
- JkWYPNQ6pDEdg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=sonologic.nl header.i=@sonologic.nl
- header.a=rsa-sha256 header.s=dkim header.b=SkPNIvkd
+ (mx1.sonologic.net [178.63.120.202]); Mon, 24 Jul 2023 12:42:11 +0000 (UTC)
 Subject: [Buildroot] [PATCH 1/1] package/capnproto: bump version to 0.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -110,8 +98,8 @@ IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCgotQ0FQTlBST1RPX1ZFUlNJT04gPSAwLjEw
 LjMKK0NBUE5QUk9UT19WRVJTSU9OID0gMC4xMC40CiDCoENBUE5QUk9UT19TSVRFID0gJChjYWxs
 IGdpdGh1YixjYXBucHJvdG8sY2FwbnByb3RvLHYkKENBUE5QUk9UT19WRVJTSU9OKSkKIMKgQ0FQ
 TlBST1RPX0xJQ0VOU0UgPSBNSVQKIMKgQ0FQTlBST1RPX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNF
-Ci0tIAoyLjM0LjEKCi0tIApTb2Z0d2FyZSBhcmNoaXRlY3R1cmUgJiBlbmdpbmVlcmluZzogaHR0
-cHM6Ly93d3cuc29ub2xvZ2ljLnNlLwpTY2ktZmk6IGh0dHBzOi8vd3d3LmtvZW5tYXJ0ZW5zLm5s
-LwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+CgotLSAKU29mdHdhcmUgYXJjaGl0ZWN0dXJlICYgZW5naW5lZXJpbmc6IGh0dHBzOi8vd3d3LnNv
+bm9sb2dpYy5zZS8KU2NpLWZpOiBodHRwczovL3d3dy5rb2VubWFydGVucy5ubC8KCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
