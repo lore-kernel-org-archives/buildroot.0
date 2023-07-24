@@ -1,62 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C54D2C0015E
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 15:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB7DEC001B0
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 17:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FD4781E11;
-	Mon, 24 Jul 2023 15:45:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FD4781E11
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SdDHTn8KpvdP; Mon, 24 Jul 2023 15:45:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79E8781BBD;
-	Mon, 24 Jul 2023 15:45:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79E8781BBD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB8E21BF379
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 15:44:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84A5040443
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 15:44:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84A5040443
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B1364031E;
+	Mon, 24 Jul 2023 17:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B1364031E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ofvOYY7bvJgG for <buildroot@lists.busybox.net>;
- Mon, 24 Jul 2023 15:44:58 +0000 (UTC)
-X-Greylist: delayed 317 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 24 Jul 2023 15:44:57 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D84D941461
-Received: from mx.msync.work (mx.msync.work [62.182.159.68])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D84D941461
- for <buildroot@buildroot.org>; Mon, 24 Jul 2023 15:44:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1D9F3A3FFE; Mon, 24 Jul 2023 15:39:33 +0000 (UTC)
-To: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Jul 2023 18:38:47 +0300
-Message-Id: <20230724153846.156586-1-adeep@lexina.in>
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5T8gBPlEdwPN; Mon, 24 Jul 2023 17:01:26 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 27CB9404F1;
+	Mon, 24 Jul 2023 17:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27CB9404F1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0D8A81BF42D
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 17:01:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D9C666106D
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 17:01:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9C666106D
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vUsmZFjQDgym for <buildroot@lists.busybox.net>;
+ Mon, 24 Jul 2023 17:01:21 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A06896062F
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 17:01:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A06896062F
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2CF2713F87F;
+ Mon, 24 Jul 2023 19:01:16 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 24 Jul 2023 19:01:09 +0200
+Message-ID: <20230724170109.6853-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lexina.in; s=dkim; 
- t=1690213177; h=from:subject:date:message-id:to:mime-version:
- content-transfer-encoding; bh=+hgr3GnPMOHBC0CEDFcwBVQHfkPFsh/jh7b9Bu+SEWY=;
- b=OENwCg18boUfm6glJ88I3e1DAUA9YqxoRVYORc+WmzwpnMGd2QxdbsztvOZEzRo1lZzad1
- EKvYZQdVeoOx2rbvk9jc4c17mKUaxJJjh4RbFmwb9KWjKPLRSZNnZB+sljdnu6hIa4d61+
- 3fpdPsT6MwrbfcXFpGiEdYcDximyH4s+LabhF7hpaUnKp+cBe1GTO3b8hy/anaWhbQnxfO
- MbfpcekHD0CyzWPdlNr340RI6gH6+qET6vPKhtLq55BDY6RIZAkBxpqonEq3Ypjkluba5e
- riE1rtKvA077daZOtqYEgrfA/dCJyzla1HX42CQ/E7sMXxJOGrB0AFl5RNFp7Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=lexina.in header.i=@lexina.in
- header.a=rsa-sha256 header.s=dkim header.b=OENwCg18
-Subject: [Buildroot] [PATCH] package/rtl8822cs: Bump driver version
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690218077;
+ bh=58y6oy/eCVVPQByauZT4az+Vm1nkdSr2DObqttFctP4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=lieHJ/pt4uyrKbP1njAZNrl3IIkBp/0itzXNWHKUHUn2O7GOf4qXy7kNwzxu6e+zg
+ NQpkyDK5cQcmx/zS9YHEUbD4lF7ZicjO9ZDs+RGEfOKAxEP559XUVb5mnECkeYZPgt
+ J7yy5c3mRP4A7cnbq5peqJBW+knGqTDLFPeAVgIlCt6tIX8TjWeaOCOGCJWHJypsth
+ y9k/LoHBDwujhnftFD+BjbKy8sKM3UUAIQt9AI4paEO5HsIo5Q/CeVLn7hZ73m+Ja3
+ LOOb4dZaAxiqVm0hsitkxaGaxMK5C6RRJ9wg6TJEM261lgEU8RMJT4435Sej5HrpUR
+ h8BmCaF9pmxKw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lieHJ/pt
+Subject: [Buildroot] [PATCH 1/1] package/iperf3: security bump to version
+ 3.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,46 +71,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Viacheslav Bocharov via buildroot <buildroot@buildroot.org>
-Reply-To: Viacheslav Bocharov <adeep@lexina.in>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump driver version. Fix build failures:
- sparc http://autobuild.buildroot.net/results/1773c307641fc7a04f1095325c7bfd44d58d3180
- sparc64 http://autobuild.buildroot.net/results/5bcb9d334add7d80f23f0585e67010d27aa8ef1f
+For change log, see:
+https://github.com/esnet/iperf/blob/3.14/RELNOTES.md#iperf-314-2023-07-07
 
-Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
+Fixes CVE-2023-38403:
+https://www.cve.org/CVERecord?id=CVE-2023-38403
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rtl8822cs/rtl8822cs.hash | 2 +-
- package/rtl8822cs/rtl8822cs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iperf3/iperf3.hash | 4 ++--
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
-index c1ff470b27..aa3c86ce80 100644
---- a/package/rtl8822cs/rtl8822cs.hash
-+++ b/package/rtl8822cs/rtl8822cs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  8ac5bc4d3fcec98eb06276552ffab020dd799a58bce6629cf55127c2ee1a89e6  rtl8822cs-b51ab22fffdbe4a8cbb88fcc04b00aa2ca87d0f3.tar.gz
-+sha256  666b5312c372664b115d29fc2b2974244b0512db27ffa1c810fae30d1c714063  rtl8822cs-758d861bfa4d18d39e4297c550fd684c9817eb0d.tar.gz
-diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
-index 8c6c34ccbc..2db769aa69 100644
---- a/package/rtl8822cs/rtl8822cs.mk
-+++ b/package/rtl8822cs/rtl8822cs.mk
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index b2c89df98a..02ada0dcc6 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.13.tar.gz.sha256
+-sha256  bee427aeb13d6a2ee22073f23261f63712d82befaa83ac8cb4db5da4c2bdc865  iperf-3.13.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.14.tar.gz.sha256
++sha256  723fcc430a027bc6952628fa2a3ac77584a1d0bd328275e573fc9b206c155004  iperf-3.14.tar.gz
+ # Locally computed
+ sha256  35aa7c4618b9884d6faa9b43a4e70291b35ea9f89329d5d33becd852e85221b0  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 129319d78a..c00b16ce61 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8822CS_VERSION = b51ab22fffdbe4a8cbb88fcc04b00aa2ca87d0f3
-+RTL8822CS_VERSION = 758d861bfa4d18d39e4297c550fd684c9817eb0d
- RTL8822CS_SITE = $(call github,jethome-ru,rtl88x2cs,$(RTL8822CS_VERSION))
- RTL8822CS_LICENSE = GPL-2.0
- 
+-IPERF3_VERSION = 3.13
++IPERF3_VERSION = 3.14
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
 -- 
-2.34.1
+2.41.0
 
 _______________________________________________
 buildroot mailing list
