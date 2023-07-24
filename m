@@ -4,62 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30893C0015E
-	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 07:46:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 784CDC001B0
+	for <buildroot@archiver.kernel.org>; Mon, 24 Jul 2023 08:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E0D64057F;
-	Mon, 24 Jul 2023 07:46:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E0D64057F
+	by smtp2.osuosl.org (Postfix) with ESMTP id D66B94060C;
+	Mon, 24 Jul 2023 08:04:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D66B94060C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Gc4a-MeKTWMa; Mon, 24 Jul 2023 07:46:47 +0000 (UTC)
+	with ESMTP id BD_7eMfOnvN4; Mon, 24 Jul 2023 08:04:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD7C540124;
-	Mon, 24 Jul 2023 07:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD7C540124
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F6BE1BF4E2
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 07:46:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E27E740575;
+	Mon, 24 Jul 2023 08:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E27E740575
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 48A741BF3A9
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 08:04:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7905181D21
- for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 07:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7905181D21
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F08440575
+ for <buildroot@lists.busybox.net>; Mon, 24 Jul 2023 08:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F08440575
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U2G-PP6fNza7 for <buildroot@lists.busybox.net>;
- Mon, 24 Jul 2023 07:46:43 +0000 (UTC)
-X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 24 Jul 2023 07:46:43 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56DA081D18
-Received: from smtprelay07.ispgateway.de (smtprelay07.ispgateway.de
- [134.119.228.97])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 56DA081D18
- for <buildroot@busybox.net>; Mon, 24 Jul 2023 07:46:43 +0000 (UTC)
-Received: from [91.21.124.27] (helo=mail.go-sys.de)
- by smtprelay07.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.94.2)
- (envelope-from <mf@go-sys.de>) id 1qNqCE-0005T3-Sk
- for buildroot@busybox.net; Mon, 24 Jul 2023 09:41:34 +0200
-Received: from mail.go-sys.de (192.168.1.9) by mail.go-sys.de (192.168.1.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 24 Jul
- 2023 09:41:34 +0200
-Received: from go-sys.de (192.168.1.149) by mail.go-sys.de (192.168.1.9) with
- Microsoft SMTP Server id 15.1.2507.27 via Frontend Transport;
- Mon, 24 Jul 2023 09:41:34 +0200
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 24 Jul 2023 09:41:33 +0200
-Message-ID: <20230724074133.14288-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MExhtg6r45RF for <buildroot@lists.busybox.net>;
+ Mon, 24 Jul 2023 08:04:27 +0000 (UTC)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4183D403E0
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 08:04:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4183D403E0
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-4fb77f21c63so5980493e87.2
+ for <buildroot@buildroot.org>; Mon, 24 Jul 2023 01:04:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1690185865; x=1690790665;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PbWKtBIQKakGDHRPn5lZ8PsFlDPpElTbh/Auuhu3KUg=;
+ b=InbEuPZupxt0MK6uyWVgaIRYL6aqp1hb5Se58pQMPKL3tx979wrDa7ILdv2BFcqddm
+ M4SgtJVmC4XlHay+5p1qTJI+p68W6r+fCo4F65v/pQYJXSSeazCIHflN+PxK6wS/EcGv
+ UzleeiVFJeoiF1uaHpjAhgPUM1SvJMzzQy2KG5vIOd7tyWa+7u0s9iGgrSaq8NFLiurj
+ H+dNVJ1NcsONg9FwXhlVjpoyXGq+KRimko66Y43nY8QvsKEC64NRu+DSywBu88WfLJni
+ OFMwmw5IQB9k8iZRCcAJEhdOYVqdpq09GdzdVTGNomfwLtRqcGNf/kH82ThyyufGY9ar
+ ITng==
+X-Gm-Message-State: ABy/qLaQ7FyFEJoerauRcm1DUlFpuhiBRrLYjYYQgpBCZ18NSjwoUO7Y
+ SKU0GS1jYZf/VQBB0vs3R62+LZSsvHk=
+X-Google-Smtp-Source: APBJJlE4vBi/Kt4R6pajd7FP9Xh6FnKLrCYtOZD0JH3DncaYZIubgnIaI2kReiqo8XyiXpyV0nwVjw==
+X-Received: by 2002:a19:8c1c:0:b0:4f3:80a3:b40a with SMTP id
+ o28-20020a198c1c000000b004f380a3b40amr4646521lfd.69.1690185864402; 
+ Mon, 24 Jul 2023 01:04:24 -0700 (PDT)
+Received: from localhost.localdomain ([188.243.23.53])
+ by smtp.gmail.com with ESMTPSA id
+ ep8-20020a056512484800b004fa53431073sm2082480lfb.131.2023.07.24.01.04.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 24 Jul 2023 01:04:23 -0700 (PDT)
+From: Alexander Shiyan <eagle.alexander923@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 24 Jul 2023 11:04:09 +0300
+Message-Id: <20230724080409.29778-1-eagle.alexander923@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-C2ProcessedOrg: 5fa85167-cd6f-46be-bafe-19070fe3dac3
-X-CrossPremisesHeadersFilteredBySendConnector: mail.go-sys.de
-X-OrganizationHeadersPreserved: mail.go-sys.de
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.28.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1690185865; x=1690790665;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PbWKtBIQKakGDHRPn5lZ8PsFlDPpElTbh/Auuhu3KUg=;
+ b=dUCwx7AokAc394/ZN1IOS07IcsOk3XuWLXNE+XpuCHW0sC9o8nso8BhTu+9Su9Oaki
+ aKqFcXxA0tPTXBJUzRHULQwbEKBUlk+GsjDUm1bC5hFPGvZUuAgyswl8U1M4tW5jffuU
+ DJgoqDdu7aBcYjo2GMy1GoPukOEw+ZrAxQoWyIWfoUM9BMUtUuFhDB043ovjw/KMOhyg
+ CHysAIqkxyXw/QXVGekMpiP1KCiefLrSdHcJebp7N5EdQVwLTIdhVSxDxouCAZYo8zH9
+ rjyFTW6wWuXRjLNnvrJB5QCOzEJ6qMomUCc7DkKqyX4Y4K87V78nKtfuVQ/e0mzL4s9c
+ Bemw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=dUCwx7Ao
+Subject: [Buildroot] [PATCH v2] boot/barebox: Fix building of internal
+ scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,44 +94,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
+Cc: Alexander Shiyan <eagle.alexander923@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Some barebox targets need to use internal scripts, for example rockchip64
+uses scripts/rkimage which requires the pkg-config package to look up the
+openssl options. Because buildroot hides the host pkg-config tool, the
+scripts cannot be built correctly.
+To solve this problem, let's use the pkg-config host environment and add
+BR2_TARGET_BAREBOX_NEEDS_OPENSSL and BR2_TARGET_BAREBOX_NEEDS_LIBUSB options
+if barebox scripts should use the openssl or libusb host libraries.
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 0c7bdf7fa1..4b2e4d9cd3 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.26.5.tar.gz.sig
--sha256  ad8fea3da1be64c83c45b1d363a6b4ba8fd60f5bde3b23ec73855709ec5eabf7  SDL2-2.26.5.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.28.1.tar.gz.sig
-+sha256  4977ceba5c0054dbe6c2f114641aced43ce3bf2b41ea64b6a372d6ba129cb15d  SDL2-2.28.1.tar.gz
- # Locally calculated
- sha256  9928507f684c1965d07f2b6ef4b4723d5efc2f6b4ab731f743a413c51c319927  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 5f2e1e0ed1..ce42aee4e8 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+  HOSTCC  scripts/rkimage
+Package openssl was not found in the pkg-config search path.
+Perhaps you should add the directory containing `openssl.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'openssl', required by 'virtual:world', not found
+/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: /tmp/ccN8Xyaj.o: in function `main':
+rkimage.c:(.text.startup+0x218): undefined reference to `SHA256_Init'
+/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: rkimage.c:(.text.startup+0x22b): undefined reference to `SHA256_Update'
+/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: rkimage.c:(.text.startup+0x23e): undefined reference to `SHA256_Final'
+/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: rkimage.c:(.text.startup+0x253): undefined reference to `SHA256_Init'
+/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: rkimage.c:(.text.startup+0x265): undefined reference to `SHA256_Update'
+/usr/lib/gcc/x86_64-pc-linux-gnu/12/../../../../x86_64-pc-linux-gnu/bin/ld: rkimage.c:(.text.startup+0x275): undefined reference to `SHA256_Final'
+collect2: error: ld returned 1 exit status
+make[2]: *** [scripts/Makefile.host:107: scripts/rkimage] Error 1
+make[1]: *** [Makefile:976: scripts] Error 2
+
+Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
+---
+ boot/barebox/Config.in  | 12 ++++++++++++
+ boot/barebox/barebox.mk | 14 ++++++++++++++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 3961c69c56..dba4a1a8d6 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -54,6 +54,18 @@ config BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR
  
--SDL2_VERSION = 2.26.5
-+SDL2_VERSION = 2.28.1
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+ 	  Most users may leave this empty
+ 
++config BR2_TARGET_BAREBOX_NEEDS_OPENSSL
++	bool "Barebox needs OpenSSL"
++	help
++	  Select this option if your Barebox board configuration
++	  requires OpenSSL to be available on the host.
++
++config BR2_TARGET_BAREBOX_NEEDS_LIBUSB
++	bool "Barebox needs LibUSB"
++	help
++	  Select this option if your Barebox board configuration
++	  requires libUSB to be available on the host.
++
+ if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index d7bcafe436..ead159a0f9 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -43,6 +43,14 @@ ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
+ $(1)_LICENSE_FILES = COPYING
+ endif
+ 
++ifeq ($(BR2_TARGET_BAREBOX_NEEDS_OPENSSL),y)
++BAREBOX_DEPENDENCIES += host-openssl
++endif
++
++ifeq ($(BR2_TARGET_BAREBOX_NEEDS_LIBUSB),y)
++BAREBOX_DEPENDENCIES += host-libusb
++endif
++
+ $(1)_CUSTOM_EMBEDDED_ENV_PATH = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))
+ 
+ ifneq ($$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+@@ -73,6 +81,12 @@ endif
+ 
+ $(1)_MAKE_FLAGS = ARCH=$$($(1)_ARCH) CROSS_COMPILE="$$(TARGET_CROSS)"
+ $(1)_MAKE_ENV = $$(TARGET_MAKE_ENV)
++$(1)_MAKE_ENV += \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+ 
+ ifeq ($$(BR2_REPRODUCIBLE),y)
+ $(1)_MAKE_ENV += \
 -- 
-2.20.1
+2.39.1
 
 _______________________________________________
 buildroot mailing list
