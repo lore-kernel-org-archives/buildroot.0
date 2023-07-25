@@ -4,85 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86EC6C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 13:51:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF9BFC0015E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 13:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3056681FCD;
-	Tue, 25 Jul 2023 13:51:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3056681FCD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B5EA81F35;
+	Tue, 25 Jul 2023 13:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B5EA81F35
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0n9jlYGer-Zz; Tue, 25 Jul 2023 13:51:20 +0000 (UTC)
+	with ESMTP id J9WV3vlGOn46; Tue, 25 Jul 2023 13:51:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3998481FC6;
-	Tue, 25 Jul 2023 13:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3998481FC6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 711D81BF84C
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA15681FC2;
+	Tue, 25 Jul 2023 13:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA15681FC2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A96521BF980
  for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5517481FC6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 835444052B
  for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:51:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5517481FC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 835444052B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PywFEZKuZQXE for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 13:51:15 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7C79081F06
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 13:51:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C79081F06
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-3fba8e2aa52so54947175e9.1
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 06:51:15 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fZ195DitfMVl for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 13:51:16 +0000 (UTC)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B0D764016F
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 13:51:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0D764016F
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3163eb69487so4321485f8f.1
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 06:51:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690293073; x=1690897873;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=0uD4/HQVRti48pA7sF++7kTPu4VD7hStEvyJexuGPgQ=;
- b=P2ktnB2dcouzqItmiq2EAmGupqs/HpscAwrIi+PnBrMCjxDMcwTLcNJRVPWTdaUGkf
- 3umpPSPO4dMHZ1Xmk05EGtzzPdnNl/KAbPJbx2o3MJn2YePBGDFmwPy9WK/5wOAyw3+M
- djNNt/8xUMFW6Tdg7lPQGeOgPXKldBNBnlkfJILD1kOeuBDGwT7XqR55j+n5suXFhzcK
- MItN/4JSbezWfZAFm81NJniGcmN+/OzBzaJja9GhVyHGlXDLqWbH7EF+n0ABdEunwwMn
- wahb0hnjDiEKbzHSH5m49ut5MrkcEBvcVWNxT66HyHEENXgLNWBUQRRT7KC1DYaR8asC
- JmFA==
-X-Gm-Message-State: ABy/qLaXbHteR9AjlNt7fs+oQTzUoeugsiBEOYWqBotvm4LlA0nrmNRl
- QSO2wUIO2DJI8Z3TrvwVoSEjZ0CvdYCsWkWYafY=
-X-Google-Smtp-Source: APBJJlHe4lGZ+ZbPjUw1wf+nHJSWdMm5Zgk18DycCG597ivgCP5wZy1oy+fZM3mdR6IZnfJnAZIsaQ==
-X-Received: by 2002:a05:600c:2814:b0:3fc:92:73d6 with SMTP id
- m20-20020a05600c281400b003fc009273d6mr10667816wmb.11.1690293073347; 
- Tue, 25 Jul 2023 06:51:13 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1690293074; x=1690897874;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Uk1+PO7qspyE+Cjn5Si2hQ2uuDamV3ibu7rxTApBNKc=;
+ b=hCg30I2tRQJ0uWo7EULVtUVIr632wnRuWXLZkaTcl5mGjzMlOVY4tNwSqcproennJ8
+ U529MzePPjjTunCe1K8nDs/kqQMQ3YkJmRXO6GkgHg21nBnkY4uUc3mZmqUIq6IUiPR5
+ t860kFe7Q7ccRJ4JF4tmvDbCkc7sTXuXD1wPaenQpxGjgBkRxuRE8FLop2rGCL+SnSun
+ /mbGm2HBgp1PxRLn9LRs+WLtYMct4zkk8LPK3MUUZm9wRWqmtCqIvWiX+OuoAPEQ/qKC
+ XWhB/ySb+G47PkyK5ryMKtN44/Dg0tKaop9eE2ZrQujsjv/EQ0YxsWLsv2Ptr+0JSQM4
+ 6mvw==
+X-Gm-Message-State: ABy/qLZ9oMO4ZuJjg+/Cnpq8b8GQkL76b+z51D12j95DiLK03wRbS2wf
+ UcKh98gJv7LUzeo5wmNirJo1A6h2r0OUcMIPQQI=
+X-Google-Smtp-Source: APBJJlFJsac8XQroDAey0Oy/EssRZyZFZDEoIdtTJeEroyujQk+TEYtdPdzZ5HwXsPGbSP6sq/sbaQ==
+X-Received: by 2002:a05:6000:1082:b0:314:c6b:b9a2 with SMTP id
+ y2-20020a056000108200b003140c6bb9a2mr2145051wrw.13.1690293074491; 
+ Tue, 25 Jul 2023 06:51:14 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:5384:6b50:e537:2825:8aee:d1db])
  by smtp.gmail.com with ESMTPSA id
- y16-20020a5d6150000000b00313e59cb371sm16604581wrt.12.2023.07.25.06.51.13
+ y16-20020a5d6150000000b00313e59cb371sm16604581wrt.12.2023.07.25.06.51.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 06:51:13 -0700 (PDT)
+ Tue, 25 Jul 2023 06:51:14 -0700 (PDT)
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 15:50:55 +0200
-Message-Id: <20230725135105.536310-1-sebastian.weyer@smile.fr>
+Date: Tue, 25 Jul 2023 15:50:56 +0200
+Message-Id: <20230725135105.536310-2-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230725135105.536310-1-sebastian.weyer@smile.fr>
+References: <20230725135105.536310-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690293073; x=1690897873;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0uD4/HQVRti48pA7sF++7kTPu4VD7hStEvyJexuGPgQ=;
- b=Vb3LUgNRf3gWC5PTYq2rFJ7v7FQrrye1hff0MKgxLlz+w9RWG/l5lwmJVdli/j2ndz
- vJ+IGii8CJK4MHZOE64VfUAAjHksA5+DsWbc2FNpuUEG0Qck9CVzFyfbp1RNZ6Ddx/h4
- KWuMunEBwx8zDNqVJk71Mz0g2hCS5n3JnwRAHIGyok2BD5XDEFx+MfHQBSR14YJmgy7f
- l+L3RAS0AAf8SmO3GtWWnvhDu6obTGt3gR8JsPh0JolMCmHZafAaBl5TNnDo+K38LnfF
- fwvKOcTW0yw6rn9HvHZqMl2XRIRHfxrD1PutWqhqpL6PHlLqDuK+D9Ck92e5NhrZ93VE
- vShg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690293074; x=1690897874;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Uk1+PO7qspyE+Cjn5Si2hQ2uuDamV3ibu7rxTApBNKc=;
+ b=IkdWo+2efIZLV5tFqx/Yb+9yIAzII1oSHnLfEMZ0TyxVM4v5WXmjL2uQkdkZePIBxr
+ qNT+kGeokMKAekR7TDH+WFnb34qNRyp62NHEER3rGmMNR577DnrLxZKf6H3JfWVNEpob
+ 7BZ+dHz2f/YS5H30MwuBZGJ99tPHiOUw4cSWtGjLf2GFUjCN4AmAghHEqs3KzwABA/1m
+ HBuVMYqIJx0tJY6JRs1S54yMxry+pSqhZhphVZzBq0lrPH+FxL3r9ik6BUyORlyCG1+X
+ W8oJ387nYufRvYQbsDLdd8oD/DiyKgurSSTiBHa7ub25iYI43u81gaRRnnoZdMW+iEt0
+ iSKA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
  header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=Vb3LUgNR
-Subject: [Buildroot] [PATCH 0/9] Add support for Rusticl in mesa3d
+ header.s=20221208 header.b=IkdWo+2e
+Subject: [Buildroot] [PATCH 1/9] package/rust-bindgen: new host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,97 +97,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@smile.fr>,
+ Sebastian Weyer <sebastian.weyer@smile.fr>
+Content-Type: multipart/mixed; boundary="===============1981152768742212607=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series of patches adds everything necessary to be able to compile
-Rusticl inside of mesa3d. It was successfully tested on a Khadas VIM3
-board with a Mali-G52 GPU using mesa's Gallium panfrost driver. The
-requirements can be found on its documentation website[1].
+--===============1981152768742212607==
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 
-We need opencl-icd-loader as an additional package since the Rusticl
-library will be installed as libRusticlOpenCL.so. The opencl-icd-loader
-package will provide a libOpenCL.so file that can capture the OpenCL API
-calls and forward them to the correct implementation. The available
-OpenCL providers can be configured by creating a file in
-/etc/OpenCL/vendors/[2]. In order to build this package we also need the
-C language OpenCL headers which are not yet included in Buildroot since
-for now we only have the C++ headers (opencl-clhpp).
+From: Romain Naour <romain.naour@smile.fr>
 
-The package opencl-icd-loader is included as a dependency in mesa3d as
-it needs to be present in the sysroot before packages depending on
-libopencl are built.
+host-rust-bindgen will be required to build several different rust-based
+packages, including a Linux kernel with rust modules and mesa3d's
+rusticl which is the rust-based implementation of OpenCL.
 
-We need to make the Rust compiler known to the meson infrastructure
-since it will abort the build of a Rust package if it isn't found. We
-also need to add support for cross compilation in the
-cross-compilation.conf.in template file and add a regex so that the
-compiler and linker are properly inserted.
+The Cargo.toml file at the project root is a "virtual manifest". Since
+we only want to install rust-bindgen, we can specify RUST_BINDGEN_SUBDIR
+= bindgen-cli to use the Cargo.toml from this directory.
 
-[1] https://docs.mesa3d.org/rusticl.html
-[2] https://github.com/KhronosGroup/OpenCL-ICD-Loader#registering-icds
-
-Romain Naour (7):
-  package/rust-bindgen: new host package
-  package/llvm-project/llvm: add llvm dump support
-  package/pkg-meson.mk: add rust cross-compiler support
-  package/spirv-headers: new package
-  package/spirv-tools: new package
-  package/spirv-llvm-translator: add target variant to provide
-    LLVMSPIRVLib
-  package/mesa3d: add experimental RustiCL support
-
-Sebastian Weyer (2):
-  package/opencl-headers: new package
-  package/opencl-icd-loader: new package
-
- DEVELOPERS                                    |  5 +++
- package/Config.in                             |  5 +++
- package/llvm-project/llvm/Config.in           |  6 +++
- package/llvm-project/llvm/llvm.mk             |  7 ++++
- package/mesa3d/Config.in                      | 19 ++++++++-
- package/mesa3d/mesa3d.mk                      | 20 ++++++++-
- package/opencl-headers/Config.in              |  7 ++++
- package/opencl-headers/opencl-headers.hash    |  3 ++
- package/opencl-headers/opencl-headers.mk      | 42 +++++++++++++++++++
- package/opencl-icd-loader/Config.in           | 12 ++++++
- .../opencl-icd-loader/opencl-icd-loader.hash  |  3 ++
- .../opencl-icd-loader/opencl-icd-loader.mk    | 19 +++++++++
- package/pkg-meson.mk                          | 13 ++++++
- package/rust-bindgen/rust-bindgen.hash        |  3 ++
- package/rust-bindgen/rust-bindgen.mk          | 17 ++++++++
- package/spirv-headers/Config.in               |  6 +++
- package/spirv-headers/spirv-headers.hash      |  2 +
- package/spirv-headers/spirv-headers.mk        | 15 +++++++
- package/spirv-llvm-translator/Config.in       | 22 ++++++++++
- .../spirv-llvm-translator.mk                  | 13 +++++-
- package/spirv-tools/Config.in                 | 12 ++++++
- package/spirv-tools/spirv-tools.hash          |  2 +
- package/spirv-tools/spirv-tools.mk            | 22 ++++++++++
- support/misc/cross-compilation.conf.in        |  2 +
- 24 files changed, 274 insertions(+), 3 deletions(-)
- create mode 100644 package/opencl-headers/Config.in
- create mode 100644 package/opencl-headers/opencl-headers.hash
- create mode 100644 package/opencl-headers/opencl-headers.mk
- create mode 100644 package/opencl-icd-loader/Config.in
- create mode 100644 package/opencl-icd-loader/opencl-icd-loader.hash
- create mode 100644 package/opencl-icd-loader/opencl-icd-loader.mk
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+---
+v2:
+    - remove comment explaining deprecated command line options from
+      rust-bindgen.mk
+    - Add rust-bindgen under Sebastian WEYER in DEVELOPERS file
+---
+ DEVELOPERS                             |  3 +++
+ package/rust-bindgen/rust-bindgen.hash |  3 +++
+ package/rust-bindgen/rust-bindgen.mk   | 17 +++++++++++++++++
+ 3 files changed, 23 insertions(+)
  create mode 100644 package/rust-bindgen/rust-bindgen.hash
  create mode 100644 package/rust-bindgen/rust-bindgen.mk
- create mode 100644 package/spirv-headers/Config.in
- create mode 100644 package/spirv-headers/spirv-headers.hash
- create mode 100644 package/spirv-headers/spirv-headers.mk
- create mode 100644 package/spirv-llvm-translator/Config.in
- create mode 100644 package/spirv-tools/Config.in
- create mode 100644 package/spirv-tools/spirv-tools.hash
- create mode 100644 package/spirv-tools/spirv-tools.mk
 
---
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c690f1dac7..c9ac202de6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2602,6 +2602,9 @@ F:	support/misc/toolchainfile.cmake.in
+ N:	Sam Voss <sam.voss@gmail.com>
+ F:	package/ripgrep/
+ 
++N:	Sebastian Weyer <sebastian.weyer@smile.fr>
++F:	package/rust-bindgen
++
+ N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	package/mmc-utils/
+ F:	package/python-flask-jsonrpc/
+diff --git a/package/rust-bindgen/rust-bindgen.hash b/package/rust-bindgen/rust-bindgen.hash
+new file mode 100644
+index 0000000000..fe94bbc096
+--- /dev/null
++++ b/package/rust-bindgen/rust-bindgen.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  e1cdbaa8e0ed96f647e49807aecfc44d9239d438c2b1c084edb9a3cca0b1f68f  rust-bindgen-0.65.1.tar.gz
++sha256  c23953d9deb0a3312dbeaf6c128a657f3591acee45067612fa68405eaa4525db  LICENSE
+diff --git a/package/rust-bindgen/rust-bindgen.mk b/package/rust-bindgen/rust-bindgen.mk
+new file mode 100644
+index 0000000000..117198f407
+--- /dev/null
++++ b/package/rust-bindgen/rust-bindgen.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# rust-bindgen
++#
++################################################################################
++
++RUST_BINDGEN_VERSION = 0.65.1
++RUST_BINDGEN_SITE = $(call github,rust-lang,rust-bindgen,v$(RUST_BINDGEN_VERSION))
++RUST_BINDGEN_LICENSE = BSD-3-clause
++RUST_BINDGEN_LICENSE_FILES = LICENSE
++
++# The Cargo.toml at the root directory is an "virtual manifest".
++# Since we only want to build and install bindgen use the Cargo.toml
++# from the bindgen-cli subdirectory.
++RUST_BINDGEN_SUBDIR = bindgen-cli
++
++$(eval $(host-cargo-package))
+-- 
 2.34.1
+
+
+--===============1981152768742212607==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1981152768742212607==--
