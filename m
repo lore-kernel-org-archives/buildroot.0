@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D9BAC0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 14:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E8A0C0015E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 14:08:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC51A813A0;
-	Tue, 25 Jul 2023 14:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC51A813A0
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7BA981746;
+	Tue, 25 Jul 2023 14:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7BA981746
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MAoUCgR0t5iN; Tue, 25 Jul 2023 14:04:16 +0000 (UTC)
+	with ESMTP id c9vW1NdvEkpW; Tue, 25 Jul 2023 14:08:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26A3E81462;
-	Tue, 25 Jul 2023 14:04:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26A3E81462
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 26F6F1BF84C
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:04:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30F7A813F4;
+	Tue, 25 Jul 2023 14:08:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30F7A813F4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9AA3E1BF588
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F180C81463
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:04:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F180C81463
+ by smtp2.osuosl.org (Postfix) with ESMTP id 749B940B91
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:08:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 749B940B91
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BjALPKshI_VM for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 14:04:13 +0000 (UTC)
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 012B381462
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 14:04:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 012B381462
-Received: by mail-il1-x130.google.com with SMTP id
- e9e14a558f8ab-348ddac3a09so3049415ab.1
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 07:04:12 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pWkc0C_XoBkv for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 14:08:05 +0000 (UTC)
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 80B564016F
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 14:08:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80B564016F
+Received: by mail-il1-x131.google.com with SMTP id
+ e9e14a558f8ab-348dfefd1a4so3538745ab.1
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 07:08:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690293851; x=1690898651;
+ d=1e100.net; s=20221208; t=1690294084; x=1690898884;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7o7/Gy14jYFJNJVFqulkVnZ3m3hGeRKmxBA44URytTU=;
- b=aKuMaJigNpITW6RBMVjtzJ4vsLKdQXAPrUq6gV3xZFyZcKs8njv4zac4x5UTMVA9O3
- GJBZxOQH2xPejiCk1JaQqwGj5g9kxAcd9/kDrzwFBhO0vtvSG/2ut0Oh+cVlo0200RuR
- ipg95fKqiQArJqXUKkqNBB6UZvL2SwzyDhzbsJxfgf18Rz8cVuu+RCSB+Qn8t7ZtuY4q
- b+kaPXnfUnrpSgUKdticbH5l3E4AJp9LrNaIpUF4T2weSw75uhynV4tY+c2fvhxHRrGE
- ywu6y2YXCzavMH1vp+MrGVlAtyVhnKCkgiFXI9P8kfhIh9m95/wZ8+5pwXBamYZzLKGH
- Nt5g==
-X-Gm-Message-State: ABy/qLaPjqzEdDLKpInRWcQV/49SNbaXQlsRuOzmnxOJ2YScTnTH7U6K
- UpFeMlWhvPMfwEDyYYYoEF2SLFDS6BQ=
-X-Google-Smtp-Source: APBJJlE3YuAfLp+talNvACqP0WiFADiK5VC/vO4B/u+pC4JGwRV0DjHicwURBWM2YE6V4qkAKLIvXA==
-X-Received: by 2002:a05:6e02:2197:b0:345:fe2d:56f with SMTP id
- j23-20020a056e02219700b00345fe2d056fmr1604729ila.14.1690293851596; 
- Tue, 25 Jul 2023 07:04:11 -0700 (PDT)
+ bh=PCH0vjQd6jfz4uVDHlsSXerO4WrklPULkLOFiuxTq34=;
+ b=ftHvKQHNbuympWRB79mcSQeyzDmqZYPPPY8ZlO0gZm5rtqPbR+PsTcpcZQ55DnIywp
+ cd0Ux+CbEqzYWxjHP2Un085+AghFYkdRFMrVSpjSu1DXHf8viys8TM+9H/cideES3oEp
+ gCC+Ps9+uBKu+Mg92cV1WbcKFJWFaaKN4hDDSBI1ze6I4O0z2Qr7WeYJ6+cd9zMzfZsD
+ mvOCq1ImCMIqkAgELlwZcuxytq5VWj0vDX9dQUHuzjXkg+jXUPFXbfBDrX7JplLsIif/
+ GPiXzkU5Wo/RhFWqRLzfbKt015I8bpPjmKEaoqVVJ7jDXieUDHcsP6naQYo6rmhuI6dZ
+ ziwg==
+X-Gm-Message-State: ABy/qLarQcw9wk22kHiOv26DvS1TSQKumj4hrrm7Om7vCmHoHFSogZST
+ 2la0RPZtk9UZIvSJcU50RApv3WHZseY=
+X-Google-Smtp-Source: APBJJlFtmQ29ouFkWrLQMv5/gDZyFTv3PV1FVNawQ3LY+B/QhajcUBKUjvakiByqlaudYPoT45GIHQ==
+X-Received: by 2002:a05:6e02:1a87:b0:346:5bd7:4a17 with SMTP id
+ k7-20020a056e021a8700b003465bd74a17mr3608668ilv.17.1690294083973; 
+ Tue, 25 Jul 2023 07:08:03 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-156-134.hlrn.qwest.net.
  [71.33.156.134]) by smtp.gmail.com with ESMTPSA id
- t13-20020a92ca8d000000b00348d652a6b4sm1169355ilo.48.2023.07.25.07.04.11
+ u12-20020a056e02080c00b0033e62b47a49sm3741790ilm.41.2023.07.25.07.08.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 07:04:11 -0700 (PDT)
+ Tue, 25 Jul 2023 07:08:03 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 08:04:09 -0600
-Message-Id: <20230725140409.306444-1-james.hilliard1@gmail.com>
+Date: Tue, 25 Jul 2023 08:08:01 -0600
+Message-Id: <20230725140801.310910-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690293851; x=1690898651;
+ d=gmail.com; s=20221208; t=1690294084; x=1690898884;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7o7/Gy14jYFJNJVFqulkVnZ3m3hGeRKmxBA44URytTU=;
- b=CMvqtauN8PHGE+6EBAaC539Za6baqU43EcRC/6ual0wWJuWFIp30pINvqQmHejg26s
- uO0wQT6ep7TOfJ38ifBmeP/j6a6bCn2HcRpGGmvWSU5741Jri3b4yLix8g9bcypXrrc0
- ElOZtpzBb1uWCi/TOM2YHGyob6bggwjrXmFJxSuMfuOE6PIsm57M84wo2DiYZBs/LzlL
- sNwCfCvzLPRr5N5b6hREa9F3s/r2t+60GBcsYYgglkSAd+GDthJlEwVG17aKrjrqfKjA
- v8SYO69jsK71BOcUqvo5m3xKpqQDX+o/73QMFqhDO9KL/qZNfvNOtqrF0ibxtqxYzpaF
- G0IA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=PCH0vjQd6jfz4uVDHlsSXerO4WrklPULkLOFiuxTq34=;
+ b=SLaugpXERTpJNJ+mGTRegIKamoJfYAqwCZIAEh1doCwrbkYMxgGR3/f7HP8I9ugRrM
+ J07XbrnUJkQoIeFMzZuqJVp+NEAqLoltWhh9f/hd0xSaeq7mSjdF9wHwRBTqw/9M9Mrr
+ LRy7H84lX1O/EO4zrXkd392CHiMSt+zQC2giEbKOaLMyASP5cSXmbJg6ZYg95Yy+v2uO
+ MgHHcGATNeTzIg4WFWnvwiW0if1DwEEY256/IqN6gq4c6JmmbOQHQIQZh4UhGLo9VxdI
+ anwj6HoPP509001RvAvl1RUXa6PPQNBHsGyOzjfrmAyGWJupkdVds+EJgxbHBYbkKVfn
+ 3hPA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=CMvqtauN
-Subject: [Buildroot] [PATCH 1/1] package/python-pydyf: bump to version 0.7.0
+ header.a=rsa-sha256 header.s=20221208 header.b=SLaugpXE
+Subject: [Buildroot] [PATCH 1/1] package/python-pyyaml: bump to version 6.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,7 +93,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Geoffrey Ragot <geoffreyragot@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -101,38 +102,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pydyf/python-pydyf.hash | 4 ++--
- package/python-pydyf/python-pydyf.mk   | 4 ++--
+ package/python-pyyaml/python-pyyaml.hash | 4 ++--
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pydyf/python-pydyf.hash b/package/python-pydyf/python-pydyf.hash
-index c01270be50..4e52429dfe 100644
---- a/package/python-pydyf/python-pydyf.hash
-+++ b/package/python-pydyf/python-pydyf.hash
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index f8b5332565..e1f9412c30 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydyf/json
--md5  6f06b2c08717e25f17de043a02b71062  pydyf-0.6.0.tar.gz
--sha256  b44a38855d7e47b740b3cd31ab63a2f5b9b2793931d50b0ccaed3bb7b86912fc  pydyf-0.6.0.tar.gz
-+md5  52a772655c1398e7b60d22e930e13094  pydyf-0.7.0.tar.gz
-+sha256  a5a88cb06e5beb64a1ef2147ee879b0e5139f5fdb827fda2fcf14a018c7b11e6  pydyf-0.7.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/PyYAML/json
+-md5  1d19c798f25e58e3e582f0f8c977dbb8  PyYAML-6.0.tar.gz
+-sha256  68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2  PyYAML-6.0.tar.gz
++md5  c9246277af2d9a13b7018af267a0831a  PyYAML-6.0.1.tar.gz
++sha256  bfdf460b1736c775f2ba9f6a92bca30bc2095067b8a9d77876d1fad6cc3b4a43  PyYAML-6.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  75461e438973e1ba0f93a7de9e3fe5b2f49e1ab49251d392878a9cdae8ce7e47  LICENSE
-diff --git a/package/python-pydyf/python-pydyf.mk b/package/python-pydyf/python-pydyf.mk
-index 8d8cf56889..d941a00a9f 100644
---- a/package/python-pydyf/python-pydyf.mk
-+++ b/package/python-pydyf/python-pydyf.mk
+ sha256  8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4  LICENSE
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 067af8ea7d..846c57df4f 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDYF_VERSION = 0.6.0
-+PYTHON_PYDYF_VERSION = 0.7.0
- PYTHON_PYDYF_SOURCE = pydyf-$(PYTHON_PYDYF_VERSION).tar.gz
--PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/9d/c5/d5e4536968c36c0838459b5c482b9228e9aae839847837623d0d04576ba0
-+PYTHON_PYDYF_SITE = https://files.pythonhosted.org/packages/28/ec/b6b327f2a249a83022501b2f57844ca05b2b26e0cadf28648ea5c0f72aa6
- PYTHON_PYDYF_SETUP_TYPE = flit
- PYTHON_PYDYF_LICENSE = BSD-3-Clause
- PYTHON_PYDYF_LICENSE_FILES = LICENSE
+-PYTHON_PYYAML_VERSION = 6.0
++PYTHON_PYYAML_VERSION = 6.0.1
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/36/2b/61d51a2c4f25ef062ae3f74576b01638bebad5e045f747ff12643df63844
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/cd/e5/af35f7ea75cf72f2cd079c95ee16797de7cd71f29ea7c68ae5ce7be1eda0
+ PYTHON_PYYAML_SETUP_TYPE = setuptools
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
