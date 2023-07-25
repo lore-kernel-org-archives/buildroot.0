@@ -4,65 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89C0AEB64DD
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 18:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E46DC001DF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 20:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 154EC610F2;
-	Tue, 25 Jul 2023 18:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 154EC610F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3374561105;
+	Tue, 25 Jul 2023 20:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3374561105
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YKWsZ1SVJk5l; Tue, 25 Jul 2023 18:43:46 +0000 (UTC)
+	with ESMTP id rN-RPKIUW1HL; Tue, 25 Jul 2023 20:16:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61FA3610E4;
-	Tue, 25 Jul 2023 18:43:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61FA3610E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82F9A60FB8;
+	Tue, 25 Jul 2023 20:16:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82F9A60FB8
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D521A1BF376
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 18:43:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 85E411BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 20:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABCBC610AA
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 18:43:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABCBC610AA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F39260FB8
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 20:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F39260FB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SDby8inwCi_N for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 18:43:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA9F8605E9
- for <buildroot@uclibc.org>; Tue, 25 Jul 2023 18:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA9F8605E9
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id D72C18289C; Tue, 25 Jul 2023 18:43:41 +0000 (UTC)
-From: bugzilla@busybox.net
+ with ESMTP id ednm562Uqf66 for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 20:16:09 +0000 (UTC)
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 576B4607FE
+ for <buildroot@uclibc.org>; Tue, 25 Jul 2023 20:16:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 576B4607FE
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qOORy-0005yw-GD
+ for buildroot@uclibc.org; Tue, 25 Jul 2023 22:16:06 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Tue, 25 Jul 2023 18:43:41 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bernd@kuhls.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15709-163-3qDVq26EnY@https.bugs.busybox.net/>
-In-Reply-To: <bug-15709-163@https.bugs.busybox.net/>
-References: <bug-15709-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15709] Building BR2_PACKAGE_LIBOPENSSL_BIN=y
- broken with defconfig bootlin-armv7m-uclibc
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Tue, 25 Jul 2023 22:15:23 +0200
+Message-ID: <pan$b58c7$f99db15c$e0313694$f9bdff83@ID-313208.user.individual.net>
+References: <20230725185004.3276758-1-bernd@kuhls.net>
+ <20230725194243.GJ3544423__43987.0509597071$1690314195$gmane$org@scaer>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+Subject: Re: [Buildroot] [PATCH 1/1] package/libopenssl: fix configure
+ option for libatomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,14 +64,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15709
+Hi Yann,
 
---- Comment #1 from Bernd Kuhls <bernd@kuhls.net> ---
-The same error occurs with the defconfig bootlin-m68k-5208-uclibc.
+> This is not fixing an actual build failure, but is really just a cleanup
+> fix, right?
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+yes, its only a cleanup, it does not fix any bug/build error.
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
