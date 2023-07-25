@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE272C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 17:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E345C001DE
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 17:32:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C74B607D0;
-	Tue, 25 Jul 2023 17:10:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C74B607D0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8243360769;
+	Tue, 25 Jul 2023 17:32:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8243360769
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c_0mo2djnQed; Tue, 25 Jul 2023 17:10:23 +0000 (UTC)
+	with ESMTP id 3ISEYfuCnBxH; Tue, 25 Jul 2023 17:32:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BA13610B6;
-	Tue, 25 Jul 2023 17:10:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BA13610B6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B0211BF317
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:10:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7762160F6F;
+	Tue, 25 Jul 2023 17:32:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7762160F6F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C55171BF317
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:32:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E2C2610B6
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E2C2610B6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F9E181F0D
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:32:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F9E181F0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IIyDkZ1J9oM4 for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 17:10:18 +0000 (UTC)
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B2887607D0
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 17:10:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2887607D0
-Received: by mail-il1-x12c.google.com with SMTP id
- e9e14a558f8ab-346129c9512so218965ab.1
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 10:10:18 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3mrs-0kZsCGl for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 17:32:19 +0000 (UTC)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0CE3E81F08
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 17:32:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CE3E81F08
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-317716a4622so400661f8f.1
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 10:32:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690305017; x=1690909817;
+ d=1e100.net; s=20221208; t=1690306337; x=1690911137;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7IqRNJJmQASOZa6vjdWRFBVVTe6ylLr5LssIpBclviw=;
- b=E+wUBLTuuHBqQhxCE6y1ze8hh07Xvic23KmI6avaX2EVaS3E6vbv4cKfdWU2VCv7NV
- ZeVtS+LC/ux9ecCPEfssVNPRmmwDbJA7jf8p2hLla2jPU3Fyt44I6YvRPU9oCpppnOU2
- VFZzADuQ5g0lVz6KiOtszVwrIO2zkUNVW+gOIfZNMEE9qUBODh55uRaem49eqWdKKu3X
- bJ8MDzdBwAYFcpRfLWFkzPiPub3bMgvJzPOB4mogPIQlXCL8sP7owxgQbh175aoj+IaG
- ViMmfVe5eEgEfRxvFStgGctz3gK0Nz1O2p5EVC74Gfubd/XxTwwVExVciof8OT+PXrLf
- 9jtg==
-X-Gm-Message-State: ABy/qLYSy/AqQCqBjP95wou2jeMRVyhB5nZ6Fj74vsiPWqVTqf1Rd3ut
- zJqt+NMaA0pcSzGzuH18Ns6xKcSrp5A=
-X-Google-Smtp-Source: APBJJlEVYdcjMpbyXAg7TbcxjUT8AhhABP3iNBi5NzZztSdcldbljDVseC/IVaD4rQDeDB61iocqdg==
-X-Received: by 2002:a92:c56d:0:b0:348:d683:36bf with SMTP id
- b13-20020a92c56d000000b00348d68336bfmr1807518ilj.12.1690305017077; 
- Tue, 25 Jul 2023 10:10:17 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-156-134.hlrn.qwest.net.
- [71.33.156.134]) by smtp.gmail.com with ESMTPSA id
- a4-20020a02ac04000000b0042b068d921esm1157254jao.16.2023.07.25.10.10.16
+ bh=eicuXxK9IO7g4vCxBgrLGdKXR83B0NNUUtnYx2o+Ku0=;
+ b=cbh2DruNfwKnifalHwUKtPtlR7dUhldCdPRA95P72JWehGTi1UqE0r4FQg/JoQcryj
+ SyVrh/PeaZnSS4DCODd2Y6z0pj04d2fxjmeSISxXR0v/dOVTKa3n2z8ECKrMI1fSN/Ix
+ 607nWqSMGyhix8UVsqdLmdsvQRVHnNr8U8+r3cIuxH0iSXRRKFooDw5Qycu3t/UMkWsd
+ t9iFW/ODIV4YeSBzJjH9kZAWj2hsaXEL58n6IZ0lAKf/3jDNYrBTYlnDUJC8wJgCEnCc
+ O6PftFjoskqcSY6b4EFRW3kAiLc8CklH5OYTJAslfz2W47uND5kHF5TXnAPfp7qNxrft
+ RFcw==
+X-Gm-Message-State: ABy/qLb/3xpMUmOt4ptiUPC22jQusv5onx4mGsDpblG8XM9PH5pdeeUY
+ RMLce7BFICv8XgE1xatrd10xbOxoeR1pyNao2Rk=
+X-Google-Smtp-Source: APBJJlEh8sDRHogmQw4ByF8uG4zimvcJ4nJHgIRN8CvP0OeNyNEGNfG8dHlm16MlL8ah5+B5CrNXXQ==
+X-Received: by 2002:a05:6000:506:b0:316:d887:624a with SMTP id
+ a6-20020a056000050600b00316d887624amr9463319wrf.15.1690306336731; 
+ Tue, 25 Jul 2023 10:32:16 -0700 (PDT)
+Received: from localhost.localdomain ([2001:861:5384:6b50:e537:2825:8aee:d1db])
+ by smtp.gmail.com with ESMTPSA id
+ q4-20020a5d61c4000000b00316eb7770b8sm11721541wrv.5.2023.07.25.10.31.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 10:10:16 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Tue, 25 Jul 2023 10:31:08 -0700 (PDT)
+From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 11:10:08 -0600
-Message-Id: <20230725171008.1559503-1-james.hilliard1@gmail.com>
+Date: Tue, 25 Jul 2023 19:30:52 +0200
+Message-Id: <20230725173102.543874-1-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690305017; x=1690909817;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690306337; x=1690911137;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7IqRNJJmQASOZa6vjdWRFBVVTe6ylLr5LssIpBclviw=;
- b=mkTbG3ZFZ1HPiFg3jcMOZi6g+CYgzCZZ+hwnI9c7zYvzckhU54Knro2B28atnQyRg9
- NrNbBbFAFYefBBZD89kNHMLSj4WnNQ4sAnKByYsLda01ZSFU2d1XTobX1XdaPv2j9nYt
- HRDErzMgAQ4fDLIbiIzS1G/u55WMt3FxCNqbzoVuA0TFonNT+dSgaK/AL3urLB/3kcNF
- zDFpTpCZBH4igQuvL7cpCzBTX7Qf14hXdx99mUkzB5K+M+AfdyrYRLj0NYKOYbhk2Stk
- faISyGBDu+YMzfVpTVUPb8c6T88I8QmozfwAotdzJCoin3zWMxJhCjtAfbAwd6fJfZ2S
- uy0A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=mkTbG3ZF
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: drop NEON build fix patch
+ bh=eicuXxK9IO7g4vCxBgrLGdKXR83B0NNUUtnYx2o+Ku0=;
+ b=xF5axdvSZFG9CKaBQqq4ZBoGzL6KNFltRnaDyGJkRdDII3ahjUJVTauwf6xTthrhDr
+ uavI5Tp8Hx56zS+YhjmWMj8SdXAdt6pwat3LpMlt6A80DHgvEyTuJpojxYpEu9MhEIpr
+ bpjbuhMprLexFPhqIxvLyZfJD/EPbV90XG18OwcEPISiF0ZLizwI08eZvu2gpFtXJFEx
+ Mw0499ye5yJMludhTrTdqKvzB99Wgtn26tnH8M8YMep2XTcucmaelxiLCItxn8HJnjlp
+ s3tcDNnJSkOSnR9a36CBfAbHe7OiZJmKejzTS/2EVVbCOIN/gVuqbh2TEdoeXeIc7UPe
+ ERgw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
+ header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=xF5axdvS
+Subject: [Buildroot] [PATCH v2 0/9] Add support for Rusticl in mesa3d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,357 +94,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Sebastian Weyer <sebastian.weyer@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch is already upstream and no longer applies.
+This series of patches adds everything necessary to be able to compile
+Rusticl inside of mesa3d. It was successfully tested on a Khadas VIM3
+board with a Mali-G52 GPU using mesa's Gallium panfrost driver. The
+requirements can be found on its documentation website[1].
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...cpp-fails-to-build-NEON-fast-path-se.patch | 328 ------------------
- 1 file changed, 328 deletions(-)
- delete mode 100644 package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
+We need opencl-icd-loader as an additional package since the Rusticl
+library will be installed as libRusticlOpenCL.so. The opencl-icd-loader
+package will provide a libOpenCL.so file that can capture the OpenCL API
+calls and forward them to the correct implementation. The available
+OpenCL providers can be configured by creating a file in
+/etc/OpenCL/vendors/[2]. In order to build this package we also need the
+C language OpenCL headers which are not yet included in Buildroot since
+for now we only have the C++ headers (opencl-clhpp).
 
-diff --git a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch b/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-deleted file mode 100644
-index ea1676abb6..0000000000
---- a/package/wpewebkit/0001-FELightningNEON.cpp-fails-to-build-NEON-fast-path-se.patch
-+++ /dev/null
-@@ -1,328 +0,0 @@
--From da159b0150cba0e5e5251e4cc6a090440f73cb7c Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Thu, 2 Jun 2022 11:19:06 +0300
--Subject: [PATCH] FELightningNEON.cpp fails to build, NEON fast path seems
-- unused https://bugs.webkit.org/show_bug.cgi?id=241182
--
--Reviewed by NOBODY (OOPS!).
--
--Move the NEON fast path for the SVG lighting filter effects into
--FELightingSoftwareApplier, and arrange to actually use them by
--forwarding calls to applyPlatformGeneric() into applyPlatformNeon().
--
--Some changes were needed to adapt platformApplyNeon() to the current
--state of filters after r286140. This was not detected because the code
--bitrotted due to it being guarded with CPU(ARM_TRADITIONAL), which does
--not get used much these days: CPU(ARM_THUMB2) is more common. It should
--be possible to use the NEON fast paths also in Thumb mode, but that is
--left for a follow-up fix.
--
--* Source/WebCore/Sources.txt:
--* Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp:
--(WebCore::FELightingSoftwareApplier::platformApplyNeonWorker):
--(WebCore::FELightingSoftwareApplier::getPowerCoefficients):
--(WebCore::FELighting::platformApplyNeonWorker): Deleted.
--(WebCore::FELighting::getPowerCoefficients): Deleted.
--* Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h:
--(WebCore::FELightingSoftwareApplier::applyPlatformNeon):
--(WebCore::FELighting::platformApplyNeon): Deleted.
--* Source/WebCore/platform/graphics/filters/DistantLightSource.h:
--* Source/WebCore/platform/graphics/filters/FELighting.h:
--* Source/WebCore/platform/graphics/filters/PointLightSource.h:
--* Source/WebCore/platform/graphics/filters/SpotLightSource.h:
--* Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h:
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[Upstream status: https://bugs.webkit.org/show_bug.cgi?id=241182]
-----
-- Source/WebCore/Sources.txt                    |  1 +
-- .../cpu/arm/filters/FELightingNEON.cpp        |  4 +-
-- .../graphics/cpu/arm/filters/FELightingNEON.h | 54 +++++++++----------
-- .../graphics/filters/DistantLightSource.h     |  4 ++
-- .../platform/graphics/filters/FELighting.h    |  7 ---
-- .../graphics/filters/PointLightSource.h       |  4 ++
-- .../graphics/filters/SpotLightSource.h        |  4 ++
-- .../software/FELightingSoftwareApplier.h      | 16 ++++++
-- 8 files changed, 58 insertions(+), 36 deletions(-)
--
--diff --git a/Source/WebCore/Sources.txt b/Source/WebCore/Sources.txt
--index 8ce3510fe1a8..efd56bcb8746 100644
----- a/Source/WebCore/Sources.txt
--+++ b/Source/WebCore/Sources.txt
--@@ -2136,6 +2136,7 @@ platform/graphics/WebMResourceClient.cpp
-- platform/graphics/WOFFFileFormat.cpp
-- platform/graphics/WidthIterator.cpp
-- platform/graphics/cpu/arm/filters/FEBlendNeonApplier.cpp
--+platform/graphics/cpu/arm/filters/FELightingNEON.cpp
-- platform/graphics/displaylists/DisplayList.cpp
-- platform/graphics/displaylists/DisplayListDrawingContext.cpp
-- platform/graphics/displaylists/DisplayListItems.cpp
--diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
--index f6ff8c20a5a8..42a97ffc5372 100644
----- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
--+++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.cpp
--@@ -49,7 +49,7 @@ short* feLightingConstantsForNeon()
--     return s_FELightingConstantsForNeon;
-- }
-- 
---void FELighting::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
--+void FELightingSoftwareApplier::platformApplyNeonWorker(FELightingPaintingDataForNeon* parameters)
-- {
--     neonDrawLighting(parameters);
-- }
--@@ -464,7 +464,7 @@ TOSTRING(neonDrawLighting) ":" NL
--     "b .lightStrengthCalculated" NL
-- ); // NOLINT
-- 
---int FELighting::getPowerCoefficients(float exponent)
--+int FELightingSoftwareApplier::getPowerCoefficients(float exponent)
-- {
--     // Calling a powf function from the assembly code would require to save
--     // and reload a lot of NEON registers. Since the base is in range [0..1]
--diff --git a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
--index b17c603d40d3..c6d17f573eca 100644
----- a/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
--+++ b/Source/WebCore/platform/graphics/cpu/arm/filters/FELightingNEON.h
--@@ -24,14 +24,15 @@
--  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
--  */
-- 
---#ifndef FELightingNEON_h
---#define FELightingNEON_h
--+#pragma once
-- 
-- #if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
-- 
---#include "FELighting.h"
--+#include "FELightingSoftwareApplier.h"
--+#include "ImageBuffer.h"
-- #include "PointLightSource.h"
-- #include "SpotLightSource.h"
--+#include <wtf/ObjectIdentifier.h>
-- #include <wtf/ParallelJobs.h>
-- 
-- namespace WebCore {
--@@ -93,14 +94,14 @@ extern "C" {
-- void neonDrawLighting(FELightingPaintingDataForNeon*);
-- }
-- 
---inline void FELighting::platformApplyNeon(const LightingData& data, const LightSource::PaintingData& paintingData)
--+inline void FELightingSoftwareApplier::applyPlatformNeon(const FELightingSoftwareApplier::LightingData& data, const LightSource::PaintingData& paintingData)
-- {
---    alignas(16) FELightingFloatArgumentsForNeon floatArguments;
---    FELightingPaintingDataForNeon neonData = {
---        data.pixels->data(),
--+    WebCore::FELightingFloatArgumentsForNeon alignas(16) floatArguments;
--+    WebCore::FELightingPaintingDataForNeon neonData = {
--+        data.pixels->bytes(),
--         1,
---        data.widthDecreasedByOne - 1,
---        data.heightDecreasedByOne - 1,
--+        data.width - 2,
--+        data.height - 2,
--         0,
--         0,
--         0,
--@@ -111,23 +112,23 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
--     // Set light source arguments.
--     floatArguments.constOne = 1;
-- 
---    auto color = m_lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
--+    auto color = data.lightingColor.toColorTypeLossy<SRGBA<uint8_t>>().resolved();
-- 
--     floatArguments.colorRed = color.red;
--     floatArguments.colorGreen = color.green;
--     floatArguments.colorBlue = color.blue;
--     floatArguments.padding4 = 0;
-- 
---    if (m_lightSource->type() == LS_POINT) {
--+    if (data.lightSource->type() == LS_POINT) {
--         neonData.flags |= FLAG_POINT_LIGHT;
---        PointLightSource& pointLightSource = static_cast<PointLightSource&>(m_lightSource.get());
--+        const auto& pointLightSource = *static_cast<const PointLightSource*>(data.lightSource);
--         floatArguments.lightX = pointLightSource.position().x();
--         floatArguments.lightY = pointLightSource.position().y();
--         floatArguments.lightZ = pointLightSource.position().z();
--         floatArguments.padding2 = 0;
---    } else if (m_lightSource->type() == LS_SPOT) {
--+    } else if (data.lightSource->type() == LS_SPOT) {
--         neonData.flags |= FLAG_SPOT_LIGHT;
---        SpotLightSource& spotLightSource = static_cast<SpotLightSource&>(m_lightSource.get());
--+        const auto& spotLightSource = *static_cast<const SpotLightSource*>(data.lightSource);
--         floatArguments.lightX = spotLightSource.position().x();
--         floatArguments.lightY = spotLightSource.position().y();
--         floatArguments.lightZ = spotLightSource.position().z();
--@@ -145,7 +146,7 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
--         if (spotLightSource.specularExponent() == 1)
--             neonData.flags |= FLAG_CONE_EXPONENT_IS_1;
--     } else {
---        ASSERT(m_lightSource->type() == LS_DISTANT);
--+        ASSERT(data.lightSource->type() == LS_DISTANT);
--         floatArguments.lightX = paintingData.initialLightingData.lightVector.x();
--         floatArguments.lightY = paintingData.initialLightingData.lightVector.y();
--         floatArguments.lightZ = paintingData.initialLightingData.lightVector.z();
--@@ -155,38 +156,39 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
--     // Set lighting arguments.
--     floatArguments.surfaceScale = data.surfaceScale;
--     floatArguments.minusSurfaceScaleDividedByFour = -data.surfaceScale / 4;
---    if (m_lightingType == FELighting::DiffuseLighting)
---        floatArguments.diffuseConstant = m_diffuseConstant;
--+    if (data.filterType == FilterEffect::Type::FEDiffuseLighting)
--+        floatArguments.diffuseConstant = data.diffuseConstant;
--     else {
--         neonData.flags |= FLAG_SPECULAR_LIGHT;
---        floatArguments.diffuseConstant = m_specularConstant;
---        neonData.specularExponent = getPowerCoefficients(m_specularExponent);
---        if (m_specularExponent == 1)
--+        floatArguments.diffuseConstant = data.specularConstant;
--+        neonData.specularExponent = getPowerCoefficients(data.specularExponent);
--+        if (data.specularExponent == 1)
--             neonData.flags |= FLAG_SPECULAR_EXPONENT_IS_1;
--     }
--     if (floatArguments.diffuseConstant == 1)
--         neonData.flags |= FLAG_DIFFUSE_CONST_IS_1;
-- 
---    int optimalThreadNumber = ((data.widthDecreasedByOne - 1) * (data.heightDecreasedByOne - 1)) / s_minimalRectDimension;
--+    static constexpr int minimalRectDimension = 100 * 100; // Empirical data limit for parallel jobs
--+    int optimalThreadNumber = ((data.width - 2) * (data.height - 2)) / minimalRectDimension;
--     if (optimalThreadNumber > 1) {
--         // Initialize parallel jobs
---        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&WebCore::FELighting::platformApplyNeonWorker, optimalThreadNumber);
--+        ParallelJobs<FELightingPaintingDataForNeon> parallelJobs(&FELightingSoftwareApplier::platformApplyNeonWorker, optimalThreadNumber);
-- 
--         // Fill the parameter array
--         int job = parallelJobs.numberOfJobs();
--         if (job > 1) {
--             int yStart = 1;
---            int yStep = (data.heightDecreasedByOne - 1) / job;
--+            int yStep = (data.height - 2) / job;
--             for (--job; job >= 0; --job) {
--                 FELightingPaintingDataForNeon& params = parallelJobs.parameter(job);
--                 params = neonData;
--                 params.yStart = yStart;
---                params.pixels += (yStart - 1) * (data.widthDecreasedByOne + 1) * 4;
--+                params.pixels += (yStart - 1) * data.width * 4;
--                 if (job > 0) {
--                     params.absoluteHeight = yStep;
--                     yStart += yStep;
--                 } else
---                    params.absoluteHeight = data.heightDecreasedByOne - yStart;
--+                    params.absoluteHeight = (data.height - 1) - yStart;
--             }
--             parallelJobs.execute();
--             return;
--@@ -199,5 +201,3 @@ inline void FELighting::platformApplyNeon(const LightingData& data, const LightS
-- } // namespace WebCore
-- 
-- #endif // CPU(ARM_NEON) && COMPILER(GCC_COMPATIBLE)
+The package opencl-icd-loader is included as a dependency in mesa3d as
+it needs to be present in the sysroot before packages depending on
+libopencl are built.
+
+We need to make the Rust compiler known to the meson infrastructure
+since it will abort the build of a Rust package if it isn't found. We
+also need to add support for cross compilation in the
+cross-compilation.conf.in template file and add a regex so that the
+compiler and linker are properly inserted.
+
+[1] https://docs.mesa3d.org/rusticl.html
+[2] https://github.com/KhronosGroup/OpenCL-ICD-Loader#registering-icds
+
+v2: remove "experimental" from final commit header since rusticl is not
+experimental
+
+Romain Naour (7):
+  package/rust-bindgen: new host package
+  package/llvm-project/llvm: add llvm dump support
+  package/pkg-meson.mk: add rust cross-compiler support
+  package/spirv-headers: new package
+  package/spirv-tools: new package
+  package/spirv-llvm-translator: add target variant to provide
+    LLVMSPIRVLib
+  package/mesa3d: add RustiCL support
+
+Sebastian Weyer (2):
+  package/opencl-headers: new package
+  package/opencl-icd-loader: new package
+
+ DEVELOPERS                                    |  5 +++
+ package/Config.in                             |  5 +++
+ package/llvm-project/llvm/Config.in           |  6 +++
+ package/llvm-project/llvm/llvm.mk             |  7 ++++
+ package/mesa3d/Config.in                      | 19 ++++++++-
+ package/mesa3d/mesa3d.mk                      | 20 ++++++++-
+ package/opencl-headers/Config.in              |  7 ++++
+ package/opencl-headers/opencl-headers.hash    |  3 ++
+ package/opencl-headers/opencl-headers.mk      | 42 +++++++++++++++++++
+ package/opencl-icd-loader/Config.in           | 12 ++++++
+ .../opencl-icd-loader/opencl-icd-loader.hash  |  3 ++
+ .../opencl-icd-loader/opencl-icd-loader.mk    | 19 +++++++++
+ package/pkg-meson.mk                          | 13 ++++++
+ package/rust-bindgen/rust-bindgen.hash        |  3 ++
+ package/rust-bindgen/rust-bindgen.mk          | 17 ++++++++
+ package/spirv-headers/Config.in               |  6 +++
+ package/spirv-headers/spirv-headers.hash      |  2 +
+ package/spirv-headers/spirv-headers.mk        | 15 +++++++
+ package/spirv-llvm-translator/Config.in       | 22 ++++++++++
+ .../spirv-llvm-translator.mk                  | 13 +++++-
+ package/spirv-tools/Config.in                 | 12 ++++++
+ package/spirv-tools/spirv-tools.hash          |  2 +
+ package/spirv-tools/spirv-tools.mk            | 22 ++++++++++
+ support/misc/cross-compilation.conf.in        |  2 +
+ 24 files changed, 274 insertions(+), 3 deletions(-)
+ create mode 100644 package/opencl-headers/Config.in
+ create mode 100644 package/opencl-headers/opencl-headers.hash
+ create mode 100644 package/opencl-headers/opencl-headers.mk
+ create mode 100644 package/opencl-icd-loader/Config.in
+ create mode 100644 package/opencl-icd-loader/opencl-icd-loader.hash
+ create mode 100644 package/opencl-icd-loader/opencl-icd-loader.mk
+ create mode 100644 package/rust-bindgen/rust-bindgen.hash
+ create mode 100644 package/rust-bindgen/rust-bindgen.mk
+ create mode 100644 package/spirv-headers/Config.in
+ create mode 100644 package/spirv-headers/spirv-headers.hash
+ create mode 100644 package/spirv-headers/spirv-headers.mk
+ create mode 100644 package/spirv-llvm-translator/Config.in
+ create mode 100644 package/spirv-tools/Config.in
+ create mode 100644 package/spirv-tools/spirv-tools.hash
+ create mode 100644 package/spirv-tools/spirv-tools.mk
+
 --
---#endif // FELightingNEON_h
--diff --git a/Source/WebCore/platform/graphics/filters/DistantLightSource.h b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
--index 0660143fc1cf..2b1e86d99fa4 100644
----- a/Source/WebCore/platform/graphics/filters/DistantLightSource.h
--+++ b/Source/WebCore/platform/graphics/filters/DistantLightSource.h
--@@ -25,6 +25,10 @@
-- #include "LightSource.h"
-- #include <wtf/Ref.h>
-- 
--+namespace WTF {
--+class TextStream;
--+} // namespace WTF
--+
-- namespace WebCore {
-- 
-- class DistantLightSource : public LightSource {
--diff --git a/Source/WebCore/platform/graphics/filters/FELighting.h b/Source/WebCore/platform/graphics/filters/FELighting.h
--index 0c073bc13f8c..e0db00545c17 100644
----- a/Source/WebCore/platform/graphics/filters/FELighting.h
--+++ b/Source/WebCore/platform/graphics/filters/FELighting.h
--@@ -35,8 +35,6 @@
-- 
-- namespace WebCore {
-- 
---struct FELightingPaintingDataForNeon;
---
-- class FELighting : public FilterEffect {
-- public:
--     const Color& lightingColor() const { return m_lightingColor; }
--@@ -67,11 +65,6 @@ protected:
-- 
--     std::unique_ptr<FilterEffectApplier> createSoftwareApplier() const override;
-- 
---#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
---    static int getPowerCoefficients(float exponent);
---    inline void platformApplyNeon(const LightingData&, const LightSource::PaintingData&);
---#endif
---
--     Color m_lightingColor;
--     float m_surfaceScale;
--     float m_diffuseConstant;
--diff --git a/Source/WebCore/platform/graphics/filters/PointLightSource.h b/Source/WebCore/platform/graphics/filters/PointLightSource.h
--index 126b3b2350f6..d906db21aa9c 100644
----- a/Source/WebCore/platform/graphics/filters/PointLightSource.h
--+++ b/Source/WebCore/platform/graphics/filters/PointLightSource.h
--@@ -26,6 +26,10 @@
-- #include "LightSource.h"
-- #include <wtf/Ref.h>
-- 
--+namespace WTF {
--+class TextStream;
--+} // namespace WTF
--+
-- namespace WebCore {
-- 
-- class PointLightSource : public LightSource {
--diff --git a/Source/WebCore/platform/graphics/filters/SpotLightSource.h b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
--index 641b205f986d..64380d9b6eb8 100644
----- a/Source/WebCore/platform/graphics/filters/SpotLightSource.h
--+++ b/Source/WebCore/platform/graphics/filters/SpotLightSource.h
--@@ -26,6 +26,10 @@
-- #include "LightSource.h"
-- #include <wtf/Ref.h>
-- 
--+namespace WTF {
--+class TextStream;
--+} // namespace WTF
--+
-- namespace WebCore {
-- 
-- class SpotLightSource : public LightSource {
--diff --git a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
--index c974d92115ff..e2896660cfbd 100644
----- a/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
--+++ b/Source/WebCore/platform/graphics/filters/software/FELightingSoftwareApplier.h
--@@ -36,6 +36,7 @@
-- namespace WebCore {
-- 
-- class FELighting;
--+struct FELightingPaintingDataForNeon;
-- 
-- class FELightingSoftwareApplier final : public FilterEffectConcreteApplier<FELighting> {
--     WTF_MAKE_FAST_ALLOCATED;
--@@ -132,8 +133,23 @@ private:
-- 
--     static void applyPlatformGenericPaint(const LightingData&, const LightSource::PaintingData&, int startY, int endY);
--     static void applyPlatformGenericWorker(ApplyParameters*);
--+
--+#if CPU(ARM_NEON) && CPU(ARM_TRADITIONAL) && COMPILER(GCC_COMPATIBLE)
--+    static int getPowerCoefficients(float exponent);
--+    static void platformApplyNeonWorker(FELightingPaintingDataForNeon*);
--+    inline static void applyPlatformNeon(const LightingData&, const LightSource::PaintingData&);
--+
--+    inline static void applyPlatformGeneric(const LightingData& data, const LightSource::PaintingData& paintingData)
--+    {
--+        applyPlatformNeon(data, paintingData);
--+    }
--+#else
--     static void applyPlatformGeneric(const LightingData&, const LightSource::PaintingData&);
--+#endif
--+
--     static void applyPlatform(const LightingData&);
-- };
-- 
-- } // namespace WebCore
--+
--+#include "FELightingNEON.h"
---- 
--2.37.3
--
--- 
 2.34.1
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
