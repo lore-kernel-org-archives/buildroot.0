@@ -1,88 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C71A5C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 13:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AC5AC0015E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 13:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CE83418A2;
-	Tue, 25 Jul 2023 13:41:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CE83418A2
+	by smtp1.osuosl.org (Postfix) with ESMTP id D951B81F06;
+	Tue, 25 Jul 2023 13:45:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D951B81F06
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tAixErdzcpiG; Tue, 25 Jul 2023 13:45:47 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 215B881FC1;
+	Tue, 25 Jul 2023 13:45:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 215B881FC1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4713E1BF84C
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:45:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D106418A3
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:45:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D106418A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UFy8vnTv1e3I; Tue, 25 Jul 2023 13:41:11 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4166B418A3;
-	Tue, 25 Jul 2023 13:41:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4166B418A3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B73841BF84C
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:41:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9D54E60F90
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:41:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D54E60F90
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8jseVELHtA4u for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 13:41:07 +0000 (UTC)
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
- [IPv6:2607:f8b0:4864:20::134])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C476660F75
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 13:41:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C476660F75
-Received: by mail-il1-x134.google.com with SMTP id
- e9e14a558f8ab-348de515667so5028295ab.1
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 06:41:07 -0700 (PDT)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8ZDNDyNXZirX for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 13:45:43 +0000 (UTC)
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
+ [IPv6:2607:f8b0:4864:20::d34])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 08923418A2
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 13:45:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08923418A2
+Received: by mail-io1-xd34.google.com with SMTP id
+ ca18e2360f4ac-783698a37beso307629639f.0
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 06:45:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690292466; x=1690897266;
+ d=1e100.net; s=20221208; t=1690292741; x=1690897541;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=p7zGmvigM1NV7eo1Gp4ESa7nR7cXkT2Za1zfMVD2Wvc=;
- b=CNQv6oYQveBYKg/oLgGPzDGM2A2Qv76Ook4qkOhS+TyoxbVmh7MLyilpD907oSMe4G
- g/ee0v8Aq3pdgOHOvSUQGsHyb+sTEP/tdZKTyq/2sGh3l3QlzEozDevXDgOHxu+vVGWk
- PoPeN6yEpci6VQnLLdNvpbU32LFNuuhTb6QVRVoYYXxoJeQ+2gv9366hrA6SMfityjHE
- fYQeRQlMJOnxhdutG6ORXAiLjcNTeVtnqH/P820C6GTnuTcBJcIR1aifB/GTEwIUWrUV
- HPjeAWwgUgOh9xFaOjGds0tf8pjG8Qxrso6XzfAzY6OXLnnnSC2eV5uRceg7Tq0sUC9l
- nGtQ==
-X-Gm-Message-State: ABy/qLYO4ssjzpPX23XujtggVr32tAluPO7wRc8geGlIIbOvnGNjE9Bh
- vT+CWav+9o6YlXFVX9vr6/VvvVTaRpE=
-X-Google-Smtp-Source: APBJJlE+/9mVAulPkleB7jgtqOUAQRj6o9aIQC02d0L/B9Ljx/JooJhMP3ZO3ECktPh2IALQJS+Phw==
-X-Received: by 2002:a05:6e02:e06:b0:348:d1b4:e566 with SMTP id
- a6-20020a056e020e0600b00348d1b4e566mr2473576ilk.22.1690292466379; 
- Tue, 25 Jul 2023 06:41:06 -0700 (PDT)
+ bh=anF+LelZ8UOxkVj1tyl9mn8r5NxoD+DWKHKaDa6kxRA=;
+ b=RIUdTiTwYet1LGpfyZ0zgxEyxD5X0SIr6QtjLZHeU2vk91t6HBT2tYwQFwYSgbZ1Ql
+ z/SYWC9SoiFzKFUH1U1c4UeqH+HWOcYzugJwsaz8D0mXIdujJuLgSpCgOxhMkitk5p0i
+ iBeH9UwP8CbI2foTDOEtGXyRfHTP6bx+xlQUp92gxaTJDtikD4TN8w83YUehCvoUafkl
+ qMn29j4BH/Toa3e2K1MakihSg1BCM+YE7MK84tSV1T6aT1P/NdzcDO17tiIq94xB/TZO
+ p+pQXtBRKw3J5eCKlqQOgF9X2S8YOjg2p1J+68w6hx+5toCJwSYucumlJoETCDowyIrI
+ JDlA==
+X-Gm-Message-State: ABy/qLanKLxIFwxmhbiCFXaMxfh7vzlf/MSVVGDjMsmqSVIw7h/j7T3h
+ /YS9V+quPL/IkvS6v0M6iRLB+VJqjO8=
+X-Google-Smtp-Source: APBJJlE6YvcgcYlVNO/IjP746EhbaVfU8rD+x+Lh1/xJfUDzk3ajyTOipsKybXoPY8YQOgGB//doSw==
+X-Received: by 2002:a5e:a601:0:b0:783:5452:e335 with SMTP id
+ q1-20020a5ea601000000b007835452e335mr2882448ioi.6.1690292741639; 
+ Tue, 25 Jul 2023 06:45:41 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-156-134.hlrn.qwest.net.
  [71.33.156.134]) by smtp.gmail.com with ESMTPSA id
- s16-20020a92d910000000b003425eeb2e17sm3734466iln.26.2023.07.25.06.41.05
+ g17-20020a02cd11000000b0042b326ed1ebsm3728163jaq.48.2023.07.25.06.45.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 06:41:05 -0700 (PDT)
+ Tue, 25 Jul 2023 06:45:40 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 07:41:02 -0600
-Message-Id: <20230725134102.277216-1-james.hilliard1@gmail.com>
+Date: Tue, 25 Jul 2023 07:45:39 -0600
+Message-Id: <20230725134539.279482-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690292466; x=1690897266;
+ d=gmail.com; s=20221208; t=1690292741; x=1690897541;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=p7zGmvigM1NV7eo1Gp4ESa7nR7cXkT2Za1zfMVD2Wvc=;
- b=rYfsAXMxdV+B2GtoYEJPwiW6cyH4vGBGu4gy5IJEGOPd/YmVOhoL5CSzfQwZ00V6sf
- mBcZJNcDwJZ6dtbmzAlie9Y1Y5FMgZdbwgm7SV7ZdweNADah+Mic17Z1CiKSK4ruImNe
- KwRSKpHe47fjEmb3PYFGVsIsViaBvisj/AOOoBiCqGfBYXvukikjatPIYuVi/rhPucqF
- hokCYV9JbyKy/ohZ/x4DAqm9N4+vRm7PAEDEtEjg/Hij/Bfz0ULyWWDrv8+EVWUFhbL1
- a+Tymg7a0iAIYgnw10xyRI+cLJF3lCFrkHxnjLi4M9anO+WQCmT5Bb6wHjwlA6rKIZiZ
- dhxA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=anF+LelZ8UOxkVj1tyl9mn8r5NxoD+DWKHKaDa6kxRA=;
+ b=fASEqiBepLy88NmmCzAszCpNAsIwS3WuaJMcyaHQF4RQyvYTrHw7AG1OitrUK7g3kJ
+ E1wWqRgPJIMxeffoEcDFVLHDtsrFNovnplgUerryJTlqFJyF3jzPwWHGUzNgdMr3BUzO
+ TZGBVvQMa2kWriEGNfuUN/nw8xsvwwROxGgwfmyRAqg7OpS1RuT+Wh6W5a56FfT/VGII
+ NgZvvEB6lUB3ukzCDfScnriTFn+AD8y8aG5g0x+IImP3CQXRw6APw7Wehfw4Eq+ScuUs
+ DbAGqO7mw+cSR5/GHVBFhF8SygWmc2sEeY1trvYqZsY1/HTKPeSXNkC2VpGEKcorlXl6
+ FRpw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=rYfsAXMx
-Subject: [Buildroot] [PATCH 1/1] package/python-fonttools: bump to version
- 4.41.1
+ header.a=rsa-sha256 header.s=20221208 header.b=fASEqiBe
+Subject: [Buildroot] [PATCH 1/1] package/python-frozenlist: bump to version
+ 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,53 +100,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Switch from zip to tar.gz download.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-fonttools/python-fonttools.hash |  4 ++--
- package/python-fonttools/python-fonttools.mk   | 12 +++---------
- 2 files changed, 5 insertions(+), 11 deletions(-)
+ package/python-frozenlist/python-frozenlist.hash | 4 ++--
+ package/python-frozenlist/python-frozenlist.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-fonttools/python-fonttools.hash b/package/python-fonttools/python-fonttools.hash
-index 4b4751dc82..84119d3346 100644
---- a/package/python-fonttools/python-fonttools.hash
-+++ b/package/python-fonttools/python-fonttools.hash
+diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
+index 04a3a44e89..466dd6931b 100644
+--- a/package/python-frozenlist/python-frozenlist.hash
++++ b/package/python-frozenlist/python-frozenlist.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fonttools/json
--md5  f4775967d29b0da2f29ba499eed34f88  fonttools-4.38.0.zip
--sha256  2bb244009f9bf3fa100fc3ead6aeb99febe5985fa20afbfbaa2f8946c2fbdaf1  fonttools-4.38.0.zip
-+md5  34d9fb935c3eaf5d2bd3572d88613bd2  fonttools-4.41.1.tar.gz
-+sha256  e16a9449f21a93909c5be2f5ed5246420f2316e94195dbfccb5238aaa38f9751  fonttools-4.41.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/frozenlist/json
+-md5  14e9ffd849c6a1dfa3c6b1fb1ff77b14  frozenlist-1.3.3.tar.gz
+-sha256  58bcc55721e8a90b88332d6cd441261ebb22342e238296bb330968952fbb3a6a  frozenlist-1.3.3.tar.gz
++md5  4a14df2fe30853d9e18f73002493a860  frozenlist-1.4.0.tar.gz
++sha256  09163bdf0b2907454042edb19f887c6d33806adc71fbd54afc14908bfdc22251  frozenlist-1.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  6787208f83f659ccbc2223b2fde952ffa6f7e8aca62f1a8a2bf5bc51bb1b2383  LICENSE
-diff --git a/package/python-fonttools/python-fonttools.mk b/package/python-fonttools/python-fonttools.mk
-index d31d3a2889..2fe7f50115 100644
---- a/package/python-fonttools/python-fonttools.mk
-+++ b/package/python-fonttools/python-fonttools.mk
-@@ -4,19 +4,13 @@
+ sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
+index 88833b0465..10c6bc6314 100644
+--- a/package/python-frozenlist/python-frozenlist.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FONTTOOLS_VERSION = 4.38.0
--PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).zip
--PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/55/5c/a4a25cf6db42d113d8f626901bb156b2f7cf7c7564a6bbc7b5cd6f7cb484
-+PYTHON_FONTTOOLS_VERSION = 4.41.1
-+PYTHON_FONTTOOLS_SOURCE = fonttools-$(PYTHON_FONTTOOLS_VERSION).tar.gz
-+PYTHON_FONTTOOLS_SITE = https://files.pythonhosted.org/packages/e5/55/86c43d626bbe12fb384e61152ded4f76a280d30a022968c471f850cdb0d5
- PYTHON_FONTTOOLS_SETUP_TYPE = setuptools
- PYTHON_FONTTOOLS_LICENSE = MIT
- PYTHON_FONTTOOLS_LICENSE_FILES = LICENSE
- PYTHON_FONTTOOLS_DEPENDENCIES = host-python-cython
- PYTHON_FONTTOOLS_ENV = FONTTOOLS_WITH_CYTHON=1
- 
--define PYTHON_FONTTOOLS_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(PYTHON_FONTTOOLS_DL_DIR)/$(PYTHON_FONTTOOLS_SOURCE)
--	mv $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)/* $(@D)
--	$(RM) -r $(@D)/fonttools-$(PYTHON_FONTTOOLS_VERSION)
--endef
--
- $(eval $(python-package))
+-PYTHON_FROZENLIST_VERSION = 1.3.3
++PYTHON_FROZENLIST_VERSION = 1.4.0
+ PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
+-PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/e9/10/d629476346112b85c912527b9080944fd2c39a816c2225413dbc0bb6fcc0
++PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/8c/1f/49c96ccc87127682ba900b092863ef7c20302a2144b3185412a08480ca22
+ PYTHON_FROZENLIST_SETUP_TYPE = setuptools
+ PYTHON_FROZENLIST_LICENSE = Apache-2.0
+ PYTHON_FROZENLIST_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
