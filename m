@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA581C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 13:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83EE4C001DF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 13:52:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6943381FC2;
-	Tue, 25 Jul 2023 13:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6943381FC2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C64B81F06;
+	Tue, 25 Jul 2023 13:52:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C64B81F06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zGphBvYqHjFb; Tue, 25 Jul 2023 13:52:10 +0000 (UTC)
+	with ESMTP id pX8rVrSy38vM; Tue, 25 Jul 2023 13:52:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 846B481FCE;
-	Tue, 25 Jul 2023 13:52:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 846B481FCE
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 297ED1BF84C
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:51:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 519D681FC7;
+	Tue, 25 Jul 2023 13:52:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 519D681FC7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 69FE91BF84C
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:51:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03C8440B91
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:51:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03C8440B91
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43CFE81FC6
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 13:51:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43CFE81FC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ewS54-85ETDf for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 13:51:20 +0000 (UTC)
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E6E674016F
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 13:51:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E6E674016F
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-3fd2f298712so23919295e9.2
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 06:51:19 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xOsu6aVWCIQv for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 13:51:21 +0000 (UTC)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A5DA81FCE
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 13:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A5DA81FCE
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3144098df56so5225160f8f.2
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 06:51:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690293078; x=1690897878;
+ d=1e100.net; s=20221208; t=1690293079; x=1690897879;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Lb1D/FTfy+CErfn10D+Z7ayv8gKPsJFsdYPfluVxPA4=;
- b=RToEQFajcqOMRC1V4rMs6/qJ9QfwnOGh4uVQGoirHUvb0QFZsXKZ0CjqR+llGcMR2J
- /AX6MZXg3eqO3vEZ8zvjS1RjQhlpg2tkZgIgQhgpZBPwxUbjgucSu2c+PAvZo/ynQK8z
- BnpDNkEZTSU3B2ZPrw9o+yt/gIQ0TaB1v1zaL91BV90f7qPxnzq080hUis+GxWgkfoLa
- U3fdtswIuh+bRkF2epTFliRqQlURJ/GSJE+GmjfsXZ7ltYjReZUXS0UYVdn1obwbGHxa
- 6OxHHQZuTeKSyIqoulO2wUHMLktTWaylUQKikG/RfBO3wPUWBfwpaovn81GZ8PdI122p
- DOcw==
-X-Gm-Message-State: ABy/qLYXLrqAmMWhj+vpSC7yI7YhLYkdBcmoUFsfZwqBX5BAYjmDepVq
- 7Z0RoDyHRbTRLMBFXofFxjf4hHyI2nCpMtM7pz0=
-X-Google-Smtp-Source: APBJJlH4x+3tdbwpJe+ZoJzigsS18VOk6pIny2rP14hXfYIPI1TFfLdoujKJuVyMdyd+AL4+w0Hhjw==
-X-Received: by 2002:a5d:68ce:0:b0:311:3fdc:109d with SMTP id
- p14-20020a5d68ce000000b003113fdc109dmr8102021wrw.1.1690293077852; 
- Tue, 25 Jul 2023 06:51:17 -0700 (PDT)
+ bh=LWnybChdS3mnXne6M8VecegH2r2V2gs3uTxUvqBYt6k=;
+ b=LgL8b3cYqoL1QnHZ8mzaGo0HLnFVUc+zwWoh21Hu/mq+UEA1SOWi49c6h2kQijzEIY
+ KlIwHWve7fQPDi07Ji4BVf3h5dwU6HYWs+kWnbdgABoN0danbX4ozQJVMM0norA7l4t5
+ dhryRSyB0ejCAhM9AbQQPo472xOSx7me7pZImMJv0ZjA1Dbh/xEIx+j8o6SiqN5XIrHc
+ uHN+y9orlax7j/tbpq8fOaSAtoLV7Mu1NwH5/aMELJZ/19b/uNaCD+kTSABwuodEp3CY
+ b5m0Cnc2G/VblMxkF9PDp6tXn5lajMZJHtW0fpjkzmF0isDW/3uYp+V0YL3GJUHe8a4g
+ fOuA==
+X-Gm-Message-State: ABy/qLaEwsI2YDPj6W/LblcQjBGz1o70CZuMf2/MbAk6Kya5oLlJ0lfx
+ MUt5OIahRxk6TyCPJ4jZFfWU2d/ugDfVc1YDTPQ=
+X-Google-Smtp-Source: APBJJlH7DtBOZOpVOhy/kqc6103CXB8P6+GSJjgd5oD9Y9rIcbLsAjt380hH1hYNKfzhFASIC1ohPg==
+X-Received: by 2002:adf:d4ce:0:b0:317:3b13:94c3 with SMTP id
+ w14-20020adfd4ce000000b003173b1394c3mr8987122wrk.41.1690293078973; 
+ Tue, 25 Jul 2023 06:51:18 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:5384:6b50:e537:2825:8aee:d1db])
  by smtp.gmail.com with ESMTPSA id
- y16-20020a5d6150000000b00313e59cb371sm16604581wrt.12.2023.07.25.06.51.17
+ y16-20020a5d6150000000b00313e59cb371sm16604581wrt.12.2023.07.25.06.51.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 06:51:17 -0700 (PDT)
+ Tue, 25 Jul 2023 06:51:18 -0700 (PDT)
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 15:50:59 +0200
-Message-Id: <20230725135105.536310-5-sebastian.weyer@smile.fr>
+Date: Tue, 25 Jul 2023 15:51:00 +0200
+Message-Id: <20230725135105.536310-6-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230725135105.536310-1-sebastian.weyer@smile.fr>
 References: <20230725135105.536310-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690293078; x=1690897878;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690293079; x=1690897879;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Lb1D/FTfy+CErfn10D+Z7ayv8gKPsJFsdYPfluVxPA4=;
- b=nFtFIM0bCyDA99F6euVep9eEBG/LZbAZ6sgM4FoJ81lkWsDu2NjU8o45UM7gdlomRj
- aXpiPuMPaMg19yPuJmPB1wErXuVs+mmiIWaof5PPqssa+xm00OM82kpxcTzO7VpQN/qB
- QdYjsHpHYvqGlesWz8Tnzmlv+ji1faFBPPxFxw3LaZ6L89emQVp1a94MdFQ7R8bfmN8u
- LbFql0ClVi0ORJJNK8uP7brYl7rS1MEHSx+SrEI6pQ6lY0HRqAdgWmBW2j8PCUBrPJQV
- n3aJd0giuMImUPWFngpdM2mSRAvUuuJMeUZ12YHBA+N8+hEV+QcOAMI0eHgoPHm6HLbm
- SJog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=LWnybChdS3mnXne6M8VecegH2r2V2gs3uTxUvqBYt6k=;
+ b=Afa7tMw8epctYklDH1mAqk7LRhDajvnUKz8qBHtNZ4vWlptK88Bit8IZXxG0yh9pZH
+ gqY7Ghm2IB2JvhJ3bAIB2jdoz4exHAmkkPX5Lf7vSjUhc8+j3s//3o6ebWYaUZdPkAgF
+ QzDAOjbLhPA8xoXJBd2dXaWRRaeJg8ZRiBoroMuqVrErGil5CCjWmgO03O1eK/T+Fj6P
+ LrXY2hqfd7U76y2OxDbeQfIWugToZbhyurxbf7FxLIly4DKsBjtjgf+SRc4XI2dOmO2O
+ X/OikKwcKssZ9yyuEU+/puF9dgUvjKIKNBxQrTsktD0teQ+bDllzTLWUz2OIa4euqlVa
+ yn3g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
  header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=nFtFIM0b
-Subject: [Buildroot] [PATCH 4/9] package/spirv-headers: new package
+ header.s=20221208 header.b=Afa7tMw8
+Subject: [Buildroot] [PATCH 5/9] package/spirv-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,74 +106,86 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Romain Naour <romain.naour@smile.fr>
 
-These headers are required to build the pacakge spirv-tools which is
-requried by mesa3d for building rusticl:
+This package is required by mesa3d for building rusticl:
 
 https://docs.mesa3d.org/rusticl.html
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
 ---
- package/Config.in                        |  1 +
- package/spirv-headers/Config.in          |  6 ++++++
- package/spirv-headers/spirv-headers.hash |  2 ++
- package/spirv-headers/spirv-headers.mk   | 15 +++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/spirv-headers/Config.in
- create mode 100644 package/spirv-headers/spirv-headers.hash
- create mode 100644 package/spirv-headers/spirv-headers.mk
+ package/Config.in                    |  1 +
+ package/spirv-tools/Config.in        | 12 ++++++++++++
+ package/spirv-tools/spirv-tools.hash |  2 ++
+ package/spirv-tools/spirv-tools.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/spirv-tools/Config.in
+ create mode 100644 package/spirv-tools/spirv-tools.hash
+ create mode 100644 package/spirv-tools/spirv-tools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1e551d17c4..931b0cc21e 100644
+index 931b0cc21e..aa917264d7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -326,6 +326,7 @@ comment "Graphic applications"
- 	source "package/pngquant/Config.in"
+@@ -327,6 +327,7 @@ comment "Graphic applications"
  	source "package/qt5cinex/Config.in"
  	source "package/rrdtool/Config.in"
-+	source "package/spirv-headers/Config.in"
+ 	source "package/spirv-headers/Config.in"
++	source "package/spirv-tools/Config.in"
  	source "package/stellarium/Config.in"
  	source "package/sway/Config.in"
  	source "package/tesseract-ocr/Config.in"
-diff --git a/package/spirv-headers/Config.in b/package/spirv-headers/Config.in
+diff --git a/package/spirv-tools/Config.in b/package/spirv-tools/Config.in
 new file mode 100644
-index 0000000000..fd20f301d4
+index 0000000000..21b3852779
 --- /dev/null
-+++ b/package/spirv-headers/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_SPIRV_HEADERS
-+	bool "spirv-headers"
++++ b/package/spirv-tools/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_SPIRV_TOOLS
++	bool "spirv-tools"
++	depends on BR2_USE_WCHAR # python3
++	depends on BR2_USE_MMU # python3
++	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
++	depends on !BR2_STATIC_LIBS # python3
++	select BR2_PACKAGE_PYTHON3
 +	help
-+	  Machine-readable files for the SPIR-V Registry
++	  The SPIR-V Tools project provides an API and commands for
++	  processing SPIR-V modules.
 +
-+	  https://www.khronos.org/registry/spir-v
-diff --git a/package/spirv-headers/spirv-headers.hash b/package/spirv-headers/spirv-headers.hash
++	  https://github.com/KhronosGroup/SPIRV-Tools
+diff --git a/package/spirv-tools/spirv-tools.hash b/package/spirv-tools/spirv-tools.hash
 new file mode 100644
-index 0000000000..b83959f7a4
+index 0000000000..6861f543ea
 --- /dev/null
-+++ b/package/spirv-headers/spirv-headers.hash
++++ b/package/spirv-tools/spirv-tools.hash
 @@ -0,0 +1,2 @@
-+sha256  71668e18ef7b318b06f8c466f46abad965b2646eaa322594cd015c2ac87133e6  spirv-headers-1.3.246.1.tar.gz
-+sha256  9b243f6f0bf44e295ff411a0f7b7642d1d0dff7cdc42507e9f7206f439e51b5a  LICENSE
-diff --git a/package/spirv-headers/spirv-headers.mk b/package/spirv-headers/spirv-headers.mk
++sha256  645c4585c207cbdfda81a09f8ab180773c18df50fad9644d2d9a53b4464c692b  spirv-tools-1.3.246.1.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/spirv-tools/spirv-tools.mk b/package/spirv-tools/spirv-tools.mk
 new file mode 100644
-index 0000000000..11119ac6b2
+index 0000000000..758c01343c
 --- /dev/null
-+++ b/package/spirv-headers/spirv-headers.mk
-@@ -0,0 +1,15 @@
++++ b/package/spirv-tools/spirv-tools.mk
+@@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# spirv-headers
++# spirv-tools
 +#
 +################################################################################
 +
-+SPIRV_HEADERS_VERSION = 1.3.246.1
-+SPIRV_HEADERS_SITE = $(call github,KhronosGroup,SPIRV-Headers,sdk-$(SPIRV_HEADERS_VERSION))
-+SPIRV_HEADERS_LICENSE = MIT
-+SPIRV_HEADERS_LICENSE_FILES = LICENSE
++SPIRV_TOOLS_VERSION = 1.3.246.1
++SPIRV_TOOLS_SITE = $(call github,KhronosGroup,SPIRV-Tools,sdk-$(SPIRV_TOOLS_VERSION))
++SPIRV_TOOLS_LICENSE = Apache-2.0
++SPIRV_TOOLS_LICENSE_FILES = LICENSE
 +
-+SPIRV_HEADERS_INSTALL_STAGING = YES
-+SPIRV_HEADERS_INSTALL_TARGET = NO
++SPIRV_TOOLS_DEPENDENCIES = python3 spirv-headers
++
++SPIRV_TOOLS_INSTALL_STAGING = YES
++
++SPIRV_TOOLS_CONF_OPTS = \
++    -DSPIRV-Headers_SOURCE_DIR=${STAGING_DIR}/usr \
++    -DSPIRV_TOOLS_BUILD_STATIC=OFF \
++    -DBUILD_SHARED_LIBS=ON \
++    -DSPIRV_SKIP_TESTS=ON \
 +
 +$(eval $(cmake-package))
 -- 
