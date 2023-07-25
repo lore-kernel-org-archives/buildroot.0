@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 627E3C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 20:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6CFCC0015E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 20:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09E0960A6B;
-	Tue, 25 Jul 2023 20:03:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09E0960A6B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 496246111B;
+	Tue, 25 Jul 2023 20:03:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 496246111B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OAq2rJHpQnNF; Tue, 25 Jul 2023 20:03:29 +0000 (UTC)
+	with ESMTP id y_JMPZ2WZ-1R; Tue, 25 Jul 2023 20:03:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB50E6111D;
-	Tue, 25 Jul 2023 20:03:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB50E6111D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 307831BF82F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38B3C61145;
+	Tue, 25 Jul 2023 20:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38B3C61145
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C8D691BF82F
  for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 20:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D63F8404D5
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF15782125
  for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D63F8404D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF15782125
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id htDeBFHovy9S for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 20:02:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4j-mWJ0S4BfV for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D5F514014B
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 20:02:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5F514014B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2072C8211A
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2072C8211A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C141F82B98; Tue, 25 Jul 2023 20:02:32 +0000 (UTC)
+ id 1120382BA2; Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 21:51:07 +0200
+Date: Tue, 25 Jul 2023 21:57:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d6dec8df06a1ed8d1964e0ed5889d909ccdc2814
-X-Git-Newrev: 14c3e8c19dc345af65c5f7f17b6954ba5112f5dc
+X-Git-Oldrev: 7510e75abdd9f76cf1d9711cdcbd1ae238be16d4
+X-Git-Newrev: 126d827c66ecededf332e28d7ee4383cb87a9052
 X-Patchwork-Hint: ignore
-Message-Id: <20230725200232.C141F82B98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aioconsole: bump to version
- 0.6.2
+Message-Id: <20230725200233.1120382BA2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-frozenlist: bump to version
+ 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14c3e8c19dc345af65c5f7f17b6954ba5112f5dc
+commit: https://git.buildroot.net/buildroot/commit/?id=126d827c66ecededf332e28d7ee4383cb87a9052
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to formatting change:
-https://github.com/vxgmichel/aioconsole/commit/2b7fbb2a73f94154d6b10cf695c681fa1fdcf263
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-aioconsole/python-aioconsole.hash | 6 +++---
- package/python-aioconsole/python-aioconsole.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-frozenlist/python-frozenlist.hash | 4 ++--
+ package/python-frozenlist/python-frozenlist.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index 8770d55932..b8237ed76c 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
+diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
+index 04a3a44e89..466dd6931b 100644
+--- a/package/python-frozenlist/python-frozenlist.hash
++++ b/package/python-frozenlist/python-frozenlist.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  3e58234291434cb33cbb6396323918ad  aioconsole-0.6.1.tar.gz
--sha256  520313bc5d7ed6bea3baf072ce7e622479afd67c01b3fdcc076bc528da354f6f  aioconsole-0.6.1.tar.gz
-+md5  0f7e4db85113d1ffdc5f0fa1dc0a37de  aioconsole-0.6.2.tar.gz
-+sha256  bac11286f1062613d2523ceee1ba81c676cd269812b865b66b907448a7b5f63e  aioconsole-0.6.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/frozenlist/json
+-md5  14e9ffd849c6a1dfa3c6b1fb1ff77b14  frozenlist-1.3.3.tar.gz
+-sha256  58bcc55721e8a90b88332d6cd441261ebb22342e238296bb330968952fbb3a6a  frozenlist-1.3.3.tar.gz
++md5  4a14df2fe30853d9e18f73002493a860  frozenlist-1.4.0.tar.gz
++sha256  09163bdf0b2907454042edb19f887c6d33806adc71fbd54afc14908bfdc22251  frozenlist-1.4.0.tar.gz
  # Locally computed sha256 checksums
--sha256  fe3eea6c599e23a00c08c5f5cb2320c30adc8f8687db5fcec9b79a662c53ff6b  LICENSE
-+sha256  e1c0ad728983d8a57335e52cf1064f1affd1d454173d8cebd3ed8b4a72b48704  LICENSE
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index 5641254f5d..602564c290 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
+ sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
+index 88833b0465..10c6bc6314 100644
+--- a/package/python-frozenlist/python-frozenlist.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOCONSOLE_VERSION = 0.6.1
-+PYTHON_AIOCONSOLE_VERSION = 0.6.2
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/27/a2/4bbeecceb6786a058e92469686ae1b7d3a616b3f5b99e00b96c3064349e2
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/5f/14/e5c634fad6a95ffd602fbbd1aa107f05a8ffb79d33ec0d0477f3b137f8a9
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
- PYTHON_AIOCONSOLE_LICENSE_FILES = LICENSE
+-PYTHON_FROZENLIST_VERSION = 1.3.3
++PYTHON_FROZENLIST_VERSION = 1.4.0
+ PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
+-PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/e9/10/d629476346112b85c912527b9080944fd2c39a816c2225413dbc0bb6fcc0
++PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/8c/1f/49c96ccc87127682ba900b092863ef7c20302a2144b3185412a08480ca22
+ PYTHON_FROZENLIST_SETUP_TYPE = setuptools
+ PYTHON_FROZENLIST_LICENSE = Apache-2.0
+ PYTHON_FROZENLIST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
