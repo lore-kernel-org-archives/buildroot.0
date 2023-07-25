@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90D24C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 20:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9195EB64DD
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 20:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1412361159;
-	Tue, 25 Jul 2023 20:04:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1412361159
+	by smtp3.osuosl.org (Postfix) with ESMTP id A122B6115F;
+	Tue, 25 Jul 2023 20:04:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A122B6115F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K1yEi5ZBh623; Tue, 25 Jul 2023 20:04:06 +0000 (UTC)
+	with ESMTP id pNw7C6G0QwzT; Tue, 25 Jul 2023 20:04:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35BE161152;
-	Tue, 25 Jul 2023 20:04:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35BE161152
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD34E61156;
+	Tue, 25 Jul 2023 20:04:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD34E61156
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D74731BF980
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 20:02:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 244081BF82F
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 20:02:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE37461105
+ by smtp3.osuosl.org (Postfix) with ESMTP id F09696110B
  for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE37461105
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F09696110B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ELTZOoMCbE-L for <buildroot@lists.busybox.net>;
+ with ESMTP id QGLcIn9CYM_4 for <buildroot@lists.busybox.net>;
  Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3AFBB61112
+ by smtp3.osuosl.org (Postfix) with ESMTP id 325BF6110F
  for <buildroot@buildroot.org>; Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AFBB61112
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 325BF6110F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C34282B98; Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
+ id 22FBE82BC7; Tue, 25 Jul 2023 20:02:33 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 21:57:34 +0200
+Date: Tue, 25 Jul 2023 21:57:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2886004ad6065e4c3808a4ed63ef41d261e8c8c8
-X-Git-Newrev: 75ceac87d4051c0155e9ea82f1e7ba0af1b18ed1
+X-Git-Oldrev: d8498b4cea75c9a51aafee8890780055b2c03e50
+X-Git-Newrev: 2886004ad6065e4c3808a4ed63ef41d261e8c8c8
 X-Patchwork-Hint: ignore
-Message-Id: <20230725200233.2C34282B98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pybind: bump to version
- 2.11.1
+Message-Id: <20230725200233.22FBE82BC7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pillow: bump to version
+ 10.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75ceac87d4051c0155e9ea82f1e7ba0af1b18ed1
+commit: https://git.buildroot.net/buildroot/commit/?id=2886004ad6065e4c3808a4ed63ef41d261e8c8c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pybind/python-pybind.hash | 2 +-
- package/python-pybind/python-pybind.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pillow/python-pillow.hash | 4 ++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
-index 971eceaa07..9d2f43ce0d 100644
---- a/package/python-pybind/python-pybind.hash
-+++ b/package/python-pybind/python-pybind.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  5d8c4c5dda428d3a944ba3d2a5212cb988c2fae4670d58075a5a49075a6ca315  python-pybind-2.10.3.tar.gz
-+sha256  d475978da0cdc2d43b73f30910786759d593a9d8ee05b1b6846d1eb16c6d2e0c  python-pybind-2.11.1.tar.gz
- # License files, locally calculated
- sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-index 1fd106b981..5a5d120321 100644
---- a/package/python-pybind/python-pybind.mk
-+++ b/package/python-pybind/python-pybind.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 43bb824b6a..bca66a7436 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  ed80942ad1ade1aab0fcf3790d0be3ec  Pillow-9.5.0.tar.gz
+-sha256  bf548479d336726d7a0eceb6e767e179fbde37833ae42794602631a070d630f1  Pillow-9.5.0.tar.gz
++md5  2a8f327ba2250aad26ed101337c8fa56  Pillow-10.0.0.tar.gz
++sha256  9c82b5b3e043c7af0d95792d0d20ccf68f61a1fec6b3530e718b688422727396  Pillow-10.0.0.tar.gz
+ 
+ # Locally computed sha256 checksums
+ sha256  0fdb68ffb39062553be40be4e6eaea9700b4f5e870a720ae86b8925d67613ddd  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index b69d329cde..95a67f304e 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PYBIND_VERSION = 2.10.3
-+PYTHON_PYBIND_VERSION = 2.11.1
- PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
- PYTHON_PYBIND_LICENSE = BSD-3-Clause
- PYTHON_PYBIND_LICENSE_FILES = LICENSE
+-PYTHON_PILLOW_VERSION = 9.5.0
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/00/d5/4903f310765e0ff2b8e91ffe55031ac6af77d982f0156061e20a4d1a8b2d
++PYTHON_PILLOW_VERSION = 10.0.0
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/0f/8b/2ebaf9adcf4260c00f842154865f8730cf745906aa5dd499141fb6063e26
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
