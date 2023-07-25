@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56735C001DF
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 17:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A89C001DF
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 17:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11737610D0;
-	Tue, 25 Jul 2023 17:35:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11737610D0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9165E61139;
+	Tue, 25 Jul 2023 17:35:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9165E61139
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TjO6Qs-hSCg3; Tue, 25 Jul 2023 17:35:13 +0000 (UTC)
+	with ESMTP id a9q59ENXcsnB; Tue, 25 Jul 2023 17:35:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2423D610FD;
-	Tue, 25 Jul 2023 17:35:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2423D610FD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 613961BF317
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:34:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C9246112E;
+	Tue, 25 Jul 2023 17:35:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C9246112E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8670B1BF317
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:34:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3971C41574
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:34:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3971C41574
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60CAD8175A
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 17:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60CAD8175A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CIk3LCPmul30 for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 17:33:59 +0000 (UTC)
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 08B0C4026A
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 17:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08B0C4026A
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-3fbc0609cd6so47352285e9.1
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 10:33:58 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7y0Hhp5nPnYB for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 17:34:00 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B61F814B6
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 17:34:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B61F814B6
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-31771a876b5so362501f8f.3
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 10:34:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690306437; x=1690911237;
+ d=1e100.net; s=20221208; t=1690306438; x=1690911238;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=pVw6WYJkNdOST3COGbfot1xkPXG3CRqQObohebQU9xE=;
- b=CM//TmTcSjQO3zulhoj/9lBVJH0Sbkn7cT4Q3fdz3BphLL/qefa3ImIwq+ZpXTP/ex
- ze0P/6dCL1bRUQ3OxflLo+K5WbsRQ2TsPcuGljkAoOesCtK9nuZvT3WS/bvyVAqNGrAt
- CZHAhn/2mCRYaly0Y7ZE3BDRkWp4he+cQqW55EOsrAZm2hy+8GiRLHjKEnqgVnUHClLQ
- oyJVEwMNtQQcqz+kBicfGO5JE8rkWBpc3s+u9dnbzr76uz5eMK5rEBCa9e8NQXGs7IOG
- /qPu8yzAXv7GHMMWWX26XrSyh28Jd8Cvv97NcROoMFwBkPoaHWqCI+9vcZlmywjovn2S
- iznQ==
-X-Gm-Message-State: ABy/qLZSDbuvLh6ElBLS9btduh/aJqG4s3kF22QQzo4BpDaL4dbot9EW
- tZZMNIAfiYISNfm1Qhb2YNGU5svrDrNnn+i7J/c=
-X-Google-Smtp-Source: APBJJlH2Koc6H+OFPNBUmg0CqMBEfnbTswrKEZS7unZn2YlfTDHhETwBkZUew7nFa4kznqZ/nWGPjg==
-X-Received: by 2002:a5d:5591:0:b0:313:f0d7:a46 with SMTP id
- i17-20020a5d5591000000b00313f0d70a46mr8989882wrv.3.1690306436934; 
- Tue, 25 Jul 2023 10:33:56 -0700 (PDT)
+ bh=x3WaJipfOicE8rB0jC6MerdROqS5DRZTwznhkigFFCo=;
+ b=V33gpqzEIUL/OBNGm+XobXyqwmk3DNNGXn97Pd4MhzXIn8b/okpzAgdN808dFedTxH
+ MwszXLc0SCJJLqU9rq6pNh3mxd6bu+2rv18XNz5ORa1AeiwzVfWj343sKZp+i8VSw6bU
+ pVGLw26au5XiClAJuzpq+CxJWjn6aHm/NCz5Jffzf6qTzYVXlptr700wFmizrvffXsKn
+ 1lHAt+1w6sQSueCpt7bCgfKrg59mKbC7m3MbKB7LAQkWdOmx6PMvv9KmnN1NAdsFl4/U
+ SjexuWlNuNRr3Ci3kkDZnyb07aXcXjv/QzEYE7SMcICtASf5ROWF/Cw8CYBHKFVSdOBW
+ u7YQ==
+X-Gm-Message-State: ABy/qLZe83iGSDkkQCnCQD0xZBAim1Zr2KE6u99ckt8YXEc4yeErs88I
+ P508B7F3a/vRQRJQQH8nB6AhTFRxrV7B84ojuLI=
+X-Google-Smtp-Source: APBJJlHFUTs7Jw0n8sdwfqYGEeefH9BH2tgu1xHn2yraX1GN2Rnh97lXz3lJWCTVMLDrRrQAuFnQjQ==
+X-Received: by 2002:a5d:45c1:0:b0:314:49d2:aaab with SMTP id
+ b1-20020a5d45c1000000b0031449d2aaabmr10405840wrs.8.1690306438137; 
+ Tue, 25 Jul 2023 10:33:58 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:5384:6b50:e537:2825:8aee:d1db])
  by smtp.gmail.com with ESMTPSA id
- q4-20020a5d61c4000000b00316eb7770b8sm11721541wrv.5.2023.07.25.10.33.56
+ q4-20020a5d61c4000000b00316eb7770b8sm11721541wrv.5.2023.07.25.10.33.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 10:33:56 -0700 (PDT)
+ Tue, 25 Jul 2023 10:33:57 -0700 (PDT)
 From: Sebastian Weyer <sebastian.weyer@smile.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 19:31:00 +0200
-Message-Id: <20230725173102.543874-9-sebastian.weyer@smile.fr>
+Date: Tue, 25 Jul 2023 19:31:01 +0200
+Message-Id: <20230725173102.543874-10-sebastian.weyer@smile.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230725173102.543874-1-sebastian.weyer@smile.fr>
 References: <20230725173102.543874-1-sebastian.weyer@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690306437; x=1690911237;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690306438; x=1690911238;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=pVw6WYJkNdOST3COGbfot1xkPXG3CRqQObohebQU9xE=;
- b=2BJEIrKGjmzkmXkdVAj5aNsZzyQT3FYtswd8eH/yljyqQfiAUibuiZi4Hovy9FVQIV
- L6oDgS+wDsIezw+i7tWJc9XrW5Aj7v9PvTSP84TXWEJ+zZSNlw1EJ+7myNlAu9DYTZjl
- cqNN2bJgcht3nzSyRCcsXekZpviel7Ov2tn7/YdrDmwief8OOmP4UiwaucsulYqrURuw
- H4a/1AExp6LNwId9/fwlOUeRdl13v3G5sedk/Sl2Kk1SiihJQ/MvdwOMtigl7pXwsWcK
- GI3NEodm281iVI2sWwIMEdZNHpWDLTqeTH72PpuonEzAowYxiZYShnvguo7DZYCbJjad
- sNaw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=x3WaJipfOicE8rB0jC6MerdROqS5DRZTwznhkigFFCo=;
+ b=4xdzw1el+XT331Kc5xcYRYsEowYB5iNh6t64wfV8CzshtZfIjTVm7+eDs0ntEClNwt
+ kMxYZ1Ej6dWUTsx7jmd7KcXRHmCBx1H0p/YPu6SbrWG1EP0S7u1Zk6+Gr0sjglItwbmo
+ u4K/LTh1yB5Nb/Wd7ObACMb1SDaIHNL9ZOP/FCFcUshQi2EYkKmCIpTXbf/2Hqln3Lft
+ szIGSoZy844C3zqP9nJZy6TzkB1mEdkMjGgYBMVA5MVd84ESQfvTndaM9fdiW2iFP+25
+ 6zmr4npVogeKYhHcUpSanx9jOnXRGmOEqPQ7tpzW6J/KM0TQEiIgBOYn0P2azlfkhypE
+ BsgA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
  header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=2BJEIrKG
-Subject: [Buildroot] [PATCH v2 8/9] package/opencl-icd-loader: new package
+ header.s=20221208 header.b=4xdzw1el
+Subject: [Buildroot] [PATCH v2 9/9] package/mesa3d: add RustiCL support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,129 +97,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sebastian Weyer <sebastian.weyer@smile.fr>,
- Samuel Martin <s.martin49@gmail.com>
-Content-Type: multipart/mixed; boundary="===============4640229556735915790=="
+Cc: Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
+ Romain Naour <romain.naour@smile.fr>,
+ Sebastian Weyer <sebastian.weyer@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4640229556735915790==
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
-
-With this package it is possible to have multiple implementations of
-OpenCL at the same time. This package provides a libOpenCL.so file that
-captures the OpenCL API calls and forwards it to the correct
-implementation of OpenCL. OpenCL implementations can be manually
-registered by creating a file containing its full file path in
-/etc/OpenCL/vendors/<implementation>.icd[1]
-
-This package is required by certain OpenCL implementations, for example
-Mesa3D's implementation if it is not built in standalone mode.
-
-[1] https://github.com/KhronosGroup/OpenCL-ICD-Loader#registering-icds
-
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/opencl-icd-loader/Config.in           | 12 ++++++++++++
- .../opencl-icd-loader/opencl-icd-loader.hash  |  3 +++
- .../opencl-icd-loader/opencl-icd-loader.mk    | 19 +++++++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/opencl-icd-loader/Config.in
- create mode 100644 package/opencl-icd-loader/opencl-icd-loader.hash
- create mode 100644 package/opencl-icd-loader/opencl-icd-loader.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 38f46b4ac3..6af31d447e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2604,6 +2604,7 @@ F:	package/ripgrep/
- 
- N:	Sebastian Weyer <sebastian.weyer@smile.fr>
- F:	package/opencl-headers
-+F:	package/opencl-icd-loader
- F:	package/rust-bindgen
- 
- N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-diff --git a/package/Config.in b/package/Config.in
-index fc73cd1727..2b7446386b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1639,6 +1639,7 @@ menu "Graphics"
- 	source "package/menu-cache/Config.in"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencl-headers/Config.in"
-+	source "package/opencl-icd-loader/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
- 	source "package/opencv4-contrib/Config.in"
-diff --git a/package/opencl-icd-loader/Config.in b/package/opencl-icd-loader/Config.in
-new file mode 100644
-index 0000000000..405dc5401a
---- /dev/null
-+++ b/package/opencl-icd-loader/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_OPENCL_ICD_LOADER
-+	bool "OpenCL-ICD-Loader"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LIBOPENCL
-+	select BR2_PACKAGE_OPENCL_HEADERS
-+	help
-+	  OpenCL defines an Installable Client Driver (ICD) mechanism to
-+	  allow developers to build applications against an Installable
-+	  Client Driver loader (ICD loader) rather than linking their
-+	  applications against a specific OpenCL implementation.
-+
-+	  https://github.com/KhronosGroup/OpenCL-ICD-Loader
-diff --git a/package/opencl-icd-loader/opencl-icd-loader.hash b/package/opencl-icd-loader/opencl-icd-loader.hash
-new file mode 100644
-index 0000000000..d028e3d856
---- /dev/null
-+++ b/package/opencl-icd-loader/opencl-icd-loader.hash
-@@ -0,0 +1,3 @@
-+# locally generated
-+sha256  173bdc4f321d550b6578ad2aafc2832f25fbb36041f095e6221025f74134b876  OpenCL-ICD-Loader-2023.04.17.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/opencl-icd-loader/opencl-icd-loader.mk b/package/opencl-icd-loader/opencl-icd-loader.mk
-new file mode 100644
-index 0000000000..d3d94b9cb5
---- /dev/null
-+++ b/package/opencl-icd-loader/opencl-icd-loader.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# opencl-icd-loader
-+#
-+################################################################################
-+
-+OPENCL_ICD_LOADER_VERSION = 2023.04.17
-+OPENCL_ICD_LOADER_SOURCE = OpenCL-ICD-Loader-$(OPENCL_ICD_LOADER_VERSION).tar.gz
-+OPENCL_ICD_LOADER_SITE = $(call github,KhronosGroup,OpenCL-ICD-Loader,v$(OPENCL_ICD_LOADER_VERSION))
-+OPENCL_ICD_LOADER_LICENSE = Apache-2.0
-+OPENCL_ICD_LOADER_LICENSE_FILES = LICENSE
-+OPENCL_ICD_LOADER_INSTALL_STAGING = YES
-+
-+OPENCL_ICD_LOADER_DEPENDENCIES = opencl-headers
-+
-+OPENCL_ICD_LOADER_CONF_OPTS += -DOPENCL_ICD_LOADER_HEADERS_DIR=$(STAGING_DIR)/usr/include
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
--- 
-2.34.1
-
-
---===============4640229556735915790==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4640229556735915790==--
+RnJvbTogUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CgpUbyBidWlsZCBSdXN0
+aWNsIHlvdSBuZWVkIHRvIHNhdGlzZnkgdGhlIGZvbGxvd2luZyBidWlsZCBkZXBlbmRlbmNpZXM6
+CgogICAgcnVzdGMKICAgIHJ1c3RmbXQgKGhpZ2hseSByZWNvbW1lbmRlZCwgYnV0IG9ubHkgcmVx
+dWlyZWQgZm9yIENJIGJ1aWxkcyBvciB3aGVuIGF1dGhvcmluZyBwYXRjaGVzKQogICAgYmluZGdl
+bgogICAgTExWTSBidWlsdCB3aXRoIGxpYmNsYyBhbmQgLURMTFZNX0VOQUJMRV9EVU1QPU9OLgog
+ICAgU1BJUlYtVG9vbHMKICAgIFNQSVJWLUxMVk0tVHJhbnNsYXRvciBmb3IgYSBsaWJMTFZNU1BJ
+UlZMaWIuc28gbWF0Y2hpbmcgeW91ciB2ZXJzaW9uIG9mIExMVk0sIGkuZS4gaWYgeW914oCZcmUg
+dXNpbmcgTExWTSAxNSAobGliTExWTS5zby4xNSksIHRoZW4geW91IG5lZWQgYSBsaWJMTFZNU1BJ
+UlZMaWIuc28uMTUuCgpTZWU6Cmh0dHBzOi8vZG9jcy5tZXNhM2Qub3JnL3J1c3RpY2wuaHRtbAoK
+U2luY2UgcnVzdGljbCBpcyBhbiBpbXBsZW1lbnRhdGlvbiBvZiBPcGVuQ0wsIG1ha2UgaXQgYSBw
+cm92aWRlciBvZgpPcGVuQ0wuCgpXZSBuZWVkIHRvIHVzZSBvcGVuY2wtaWNkLWxvYWRlciBpbiBv
+cmRlciB0byBiZSBhYmxlIHRvIGNhcHR1cmUgQVBJCmNhbGxzIGFuZCBmb3J3YXJkIHRoZW0gdG8g
+dGhlIGNvcnJlY3QgaW1wbGVtZW50YXRpb24gb2YgT3BlbkNMIChSdXN0aUNMCmluIHRoaXMgY2Fz
+ZSkKCm9wZW5jbC1pY2QtbG9hZGVyIG5lZWRzIHRvIGJlIGluc3RhbGxlZCBpbiB0aGUgdG9vbGNo
+YWluJ3Mgc3lzcm9vdAphcyB3ZWxsIHRvIGJlIGFibGUgdG8gY29tcGlsZSBwYWNrYWdlcyBkZXBl
+bmRpbmcgb24gbGlib3BlbmNsIHNpbmNlCm90aGVyd2lzZSB0aGVyZSdzIG9ubHkgZm9yIGV4YW1w
+bGUgbGliUnVzdGlPcGVuQ0wuc28gYW5kIG5vCmxpYk9wZW5DTC5zbwoKU2lnbmVkLW9mZi1ieTog
+Um9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+ClNpZ25lZC1vZmYtYnk6IFNlYmFz
+dGlhbiBXZXllciA8c2ViYXN0aWFuLndleWVyQHNtaWxlLmZyPgotLS0KdjI6IGNoYW5nZSBjb21t
+aXQgaGVhZGVyIC0+IFJ1c3RpQ0wgc3VwcG9ydCBpcyBub3QgZXhwZXJpbWVudGFsCi0tLQogcGFj
+a2FnZS9tZXNhM2QvQ29uZmlnLmluIHwgMTkgKysrKysrKysrKysrKysrKysrLQogcGFja2FnZS9t
+ZXNhM2QvbWVzYTNkLm1rIHwgMjAgKysrKysrKysrKysrKysrKysrKy0KIDIgZmlsZXMgY2hhbmdl
+ZCwgMzcgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdl
+L21lc2EzZC9Db25maWcuaW4gYi9wYWNrYWdlL21lc2EzZC9Db25maWcuaW4KaW5kZXggYzdlZTJh
+OGRiMC4uNGM3MjU3MDlkMSAxMDA2NDQKLS0tIGEvcGFja2FnZS9tZXNhM2QvQ29uZmlnLmluCisr
+KyBiL3BhY2thZ2UvbWVzYTNkL0NvbmZpZy5pbgpAQCAtNTYsNiArNTYsMjMgQEAgY29uZmlnIEJS
+Ml9QQUNLQUdFX01FU0EzRF9PUEVOQ0wKIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCQ0xDCiAJc2Vs
+ZWN0IEJSMl9QQUNLQUdFX0hBU19MSUJPUEVOQ0wKIAorIyBsaWJjbGMgZGVwZW5kZW5jaWVzIGFy
+ZSBzYXRpc2ZpZWQgYnkKKyMgQlIyX1BBQ0tBR0VfTUVTQTNEX0xMVk0KK2NvbmZpZyBCUjJfUEFD
+S0FHRV9NRVNBM0RfUlVTVElDTAorCWJvb2wgIlJ1c3RpQ0wgKE9wZW5DTCkgc3VwcG9ydCIKKwlk
+ZXBlbmRzIG9uIEJSMl9QQUNLQUdFX01FU0EzRF9MTFZNCisJZGVwZW5kcyBvbiBCUjJfUEFDS0FH
+RV9IT1NUX1JVU1RDX1RBUkdFVF9BUkNIX1NVUFBPUlRTCisJZGVwZW5kcyBvbiBCUjJfUEFDS0FH
+RV9NRVNBM0RfR0FMTElVTV9EUklWRVJfUEFORlJPU1QKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfSE9T
+VF9SVVNUQworCXNlbGVjdCBCUjJfUEFDS0FHRV9MTFZNX1JUVEkKKwlzZWxlY3QgQlIyX1BBQ0tB
+R0VfQ0xBTkcKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTExWTV9EVU1QCisJc2VsZWN0IEJSMl9QQUNL
+QUdFX0xJQkNMQworCXNlbGVjdCBCUjJfUEFDS0FHRV9TUElSVl9UT09MUworCXNlbGVjdCBCUjJf
+UEFDS0FHRV9TUElSVl9MTFZNX1RSQU5TTEFUT1IKKwlzZWxlY3QgQlIyX1BBQ0tBR0VfSEFTX0xJ
+Qk9QRU5DTAorCXNlbGVjdCBCUjJfUEFDS0FHRV9PUEVOQ0xfSUNEX0xPQURFUgorCiAjIGluZm9y
+bSB0aGUgLm1rIGZpbGUgb2YgZ2FsbGl1bSwgZHJpLCBkcmkzIG9yIHZ1bGthbiBkcml2ZXIgc2Vs
+ZWN0aW9uCiBjb25maWcgQlIyX1BBQ0tBR0VfTUVTQTNEX0RSSTMKIAlib29sCkBAIC0zODcsNyAr
+NDA0LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1BST1ZJREVTX0xJQkdMRVMKIAlkZWZhdWx0ICJt
+ZXNhM2QiIGlmIEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOR0xfRVMgJiYgIUJSMl9QQUNLQUdFX0xJ
+QkdMVk5ECiAKIGNvbmZpZyBCUjJfUEFDS0FHRV9QUk9WSURFU19MSUJPUEVOQ0wKLQlkZWZhdWx0
+ICJtZXNhM2QiIGlmIEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOQ0wKKwlkZWZhdWx0ICJtZXNhM2Qi
+IGlmIEJSMl9QQUNLQUdFX01FU0EzRF9PUEVOQ0wgfHwgQlIyX1BBQ0tBR0VfTUVTQTNEX1JVU1RJ
+Q0wKIAogZW5kaWYgIyBCUjJfUEFDS0FHRV9NRVNBM0QKIApkaWZmIC0tZ2l0IGEvcGFja2FnZS9t
+ZXNhM2QvbWVzYTNkLm1rIGIvcGFja2FnZS9tZXNhM2QvbWVzYTNkLm1rCmluZGV4IDZmYTVjMWM2
+ODYuLjNjN2Q5MTliYjcgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbWVzYTNkL21lc2EzZC5taworKysg
+Yi9wYWNrYWdlL21lc2EzZC9tZXNhM2QubWsKQEAgLTU4LDE2ICs1OCwzNCBAQCBlbHNlCiBNRVNB
+M0RfQ09ORl9PUFRTICs9IC1EbGx2bT1kaXNhYmxlZAogZW5kaWYKIAotIyBEaXNhYmxlIG9wZW5j
+bC1pY2Q6IE9wZW5DTCBsaWIgd2lsbCBiZSBuYW1lZCBsaWJPcGVuQ0wgaW5zdGVhZCBvZgogIyBs
+aWJNZXNhT3BlbkNMIGFuZCBDTCBoZWFkZXJzIGFyZSBpbnN0YWxsZWQKIGlmZXEgKCQoQlIyX1BB
+Q0tBR0VfTUVTQTNEX09QRU5DTCkseSkKIE1FU0EzRF9QUk9WSURFUyArPSBsaWJvcGVuY2wKIE1F
+U0EzRF9ERVBFTkRFTkNJRVMgKz0gY2xhbmcgbGliY2xjCitpZmVxICgkKEJSMl9QQUNLQUdFX09Q
+RU5DTF9JQ0RfTE9BREVSKSx5KQorTUVTQTNEX0NPTkZfT1BUUyArPSAtRGdhbGxpdW0tb3BlbmNs
+PWljZAorTUVTQTNEX0RFUEVOREVOQ0lFUyArPSAgb3BlbmNsLWljZC1sb2FkZXIKKyMgRGlzYWJs
+ZSBvcGVuY2wtaWNkOiBPcGVuQ0wgbGliIHdpbGwgYmUgbmFtZWQgbGliT3BlbkNMIGluc3RlYWQg
+b2YKK2Vsc2UKIE1FU0EzRF9DT05GX09QVFMgKz0gLURnYWxsaXVtLW9wZW5jbD1zdGFuZGFsb25l
+CitlbmRpZgogZWxzZQogTUVTQTNEX0NPTkZfT1BUUyArPSAtRGdhbGxpdW0tb3BlbmNsPWRpc2Fi
+bGVkCiBlbmRpZgogCisjIC1EcnVzdF9zdGQ9MjAyMToga25vd24gbWVzb24gYnVnIChodHRwczov
+L2dpdGh1Yi5jb20vbWVzb25idWlsZC9tZXNvbi9pc3N1ZXMvMTA2NjQpCisjICBCeSBkZWZhdWx0
+IGRldmljZXMgYXJlIGRpc2FibGVkIGluIHJ1c3RpY2wuIElmIHlvdSB3YW50IHRvIGVuYWJsZSBh
+IGRldmljZSwKKyMgIHlvdSBuZWVkIHRvIHNldCB0aGUgZW52aXJvbm1lbnQgdmFyaWFibGUgUlVT
+VElDTF9FTkFCTEUgdG8gdGhlIGRyaXZlciB5b3UKKyMgIGFyZSB1c2luZworIyAgcmVmOiBodHRw
+czovL2RvY3MubWVzYTNkLm9yZy9lbnZ2YXJzLmh0bWwjZW52dmFyLVJVU1RJQ0xfRU5BQkxFCitp
+ZmVxICgkKEJSMl9QQUNLQUdFX01FU0EzRF9SVVNUSUNMKSx5KQorTUVTQTNEX1BST1ZJREVTICs9
+IGxpYm9wZW5jbAorTUVTQTNEX0RFUEVOREVOQ0lFUyArPSBob3N0LXJ1c3RjIGhvc3QtcnVzdC1i
+aW5kZ2VuIGNsYW5nIGxpYmNsYyBvcGVuY2wtaWNkLWxvYWRlciBzcGlydi10b29scyBzcGlydi1s
+bHZtLXRyYW5zbGF0b3IKK01FU0EzRF9DT05GX09QVFMgKz0gLURnYWxsaXVtLXJ1c3RpY2w9dHJ1
+ZSAtRHJ1c3Rfc3RkPTIwMjEKK2Vsc2UKK01FU0EzRF9DT05GX09QVFMgKz0gLURnYWxsaXVtLXJ1
+c3RpY2w9ZmFsc2UKK2VuZGlmCisKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTUVTQTNEX05FRURTX0VM
+RlVUSUxTKSx5KQogTUVTQTNEX0RFUEVOREVOQ0lFUyArPSBlbGZ1dGlscwogZW5kaWYKLS0gCjIu
+MzQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
