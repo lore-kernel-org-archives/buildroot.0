@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3101CC001DE
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 10:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CE7DC0015E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 10:32:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB51460F6F;
-	Tue, 25 Jul 2023 10:31:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB51460F6F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4143F60F1D;
+	Tue, 25 Jul 2023 10:32:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4143F60F1D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F82Hbm6yAdx0; Tue, 25 Jul 2023 10:31:58 +0000 (UTC)
+	with ESMTP id ZfxMmVJl4M5X; Tue, 25 Jul 2023 10:32:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 308DB60F19;
-	Tue, 25 Jul 2023 10:31:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 308DB60F19
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BA7260F3C;
+	Tue, 25 Jul 2023 10:32:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BA7260F3C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5425C1BF59A
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:31:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 735071BF59A
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B08181CAF
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:31:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B08181CAF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C38281CE7
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:32:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C38281CE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DNKFp6AaCiem for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 10:31:51 +0000 (UTC)
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9764981CE7
- for <buildroot@busybox.net>; Tue, 25 Jul 2023 10:31:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9764981CE7
-Received: by mail-lj1-x22d.google.com with SMTP id
- 38308e7fff4ca-2b97f34239cso46185461fa.3
- for <buildroot@busybox.net>; Tue, 25 Jul 2023 03:31:51 -0700 (PDT)
+ with ESMTP id N_KZwiJz_Omy for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 10:32:06 +0000 (UTC)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 38ADE81CAF
+ for <buildroot@busybox.net>; Tue, 25 Jul 2023 10:32:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38ADE81CAF
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-3175d5ca8dbso1782153f8f.2
+ for <buildroot@busybox.net>; Tue, 25 Jul 2023 03:32:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690281109; x=1690885909;
+ d=1e100.net; s=20221208; t=1690281124; x=1690885924;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=AqWTi41DY4CaEnphp9bVi2n0A2dvzfLs3Z6qzlDC3NE=;
- b=kTI3S3qJrGasEIPl1vEyV1xJTUPvKzs5cJYyr1o/jTJ+Sn0fCU0XLx/7iQM/DdXOwo
- 58+Jl1G1xJOeGMeCHTcGOtiqyJRKLA3lLmo7N1y5UshHvpQj1F2qM+TxholVg80evUfn
- HoWvN1+lWBLB2MpLWH+urLilNMc66UwgBYRT00coOZ3vVtvpEhk/MvjpYTOyJXayd0wc
- MZKVG1tinVWZL4h3XAxMwyDfco5PzXCVcelgSFtcvv1P0FDWZLR7C45UO48OgsrQ+PFt
- TVLGYlKpoZDLV4EOEpNQNkPCsNiSmsUIAo64B2Ksd89dUgb3htPUDjXCB0IDhzvYZxm1
- xDWg==
-X-Gm-Message-State: ABy/qLY+QVmEwatGx/94JmJTQI0CwqzaTtXm7HHrwUVkTaFHzj5qsy0a
- ccyKgMQF1Ql2XA72PG0lZ4Ik6U3EG8o=
-X-Google-Smtp-Source: APBJJlGapvD+8QgPV5xyxIvQdT12liAAIZbzeFktFHRXQOH18RMygv2lSs8R/h6HaRSrML45Ba9gNA==
-X-Received: by 2002:a2e:8906:0:b0:2b9:5791:88cc with SMTP id
- d6-20020a2e8906000000b002b9579188ccmr7966899lji.37.1690281108984; 
- Tue, 25 Jul 2023 03:31:48 -0700 (PDT)
+ bh=IiBfKazH2LKm6dzzHStjGTHpmJsskm/LAl/y9i+ejgQ=;
+ b=Lt0SxxDgQW+dYkRVVFq6PG+Z2uKLWxOxoKGAMFGVvXEvNFT/Pi8w0x/+VVU9wiQMjc
+ NKmtYbISE2lF546XFACB1BDtuH7nGsj0luN87aA5SLiGjaM+kSRGwRIxiDEyy9zdzuTL
+ abMCtNdy2qbZegPXiMVFyygJoZOQvZkx07wdBwaTBzf3+ZIeTXW/+LlvTTAOLkDXyMez
+ XbixBHkmjGWM5gL9nIXod2s+KIOAMhHvHA8Kqh2o0q414r1olgqeQ/F+pjfO5/wiopq8
+ zRsLMOXLOjXLUfW666VWQV/WE+RnOHfK82zC3ZaIj6sihg6oo91MKVLnQLfSGM8XIkae
+ oQoQ==
+X-Gm-Message-State: ABy/qLapK+Kiov2pvamzo9LBJOLPHiLAgFVClayYT0xPKfA8aJSWhVd9
+ wZEG4qsQrjib7GntWWF5fFuRp3Xndes=
+X-Google-Smtp-Source: APBJJlF3GDfojCG8ycxnSxgwMr1mOoAQEsbPO/lIK92/rcK/cpKFBS2jl3uyBxG/mlbjLCkopPyk9A==
+X-Received: by 2002:adf:fe4e:0:b0:30f:b7b4:3e55 with SMTP id
+ m14-20020adffe4e000000b0030fb7b43e55mr8505635wrs.19.1690281123555; 
+ Tue, 25 Jul 2023 03:32:03 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- o25-20020a1c7519000000b003fbaade0735sm16022723wmc.19.2023.07.25.03.31.48
+ o2-20020a5d4742000000b003063a92bbf5sm16040723wrs.70.2023.07.25.03.32.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 03:31:48 -0700 (PDT)
+ Tue, 25 Jul 2023 03:32:03 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Tue, 25 Jul 2023 12:31:40 +0200
-Message-Id: <20230725103140.941516-1-francois.perrad@gadz.org>
+Date: Tue, 25 Jul 2023 12:31:57 +0200
+Message-Id: <20230725103157.941537-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690281109; x=1690885909;
+ d=gmail.com; s=20221208; t=1690281124; x=1690885924;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=AqWTi41DY4CaEnphp9bVi2n0A2dvzfLs3Z6qzlDC3NE=;
- b=PfzzlJNVt96ljP4jc4ETnU7OD98BeQudUKZL9GfsWBbTodNoHgwaUtRt+FNnNVgOV4
- eMtJUVL3sXpUvZ1IpCNMOutMmTaC50K94o2pLax/16E2vx6j8AUaIKxEh5mLa/EW0gEI
- 3eVWZ8241D/DjYaaaSUHxDw0K1niW1uEVjVvp8WXk+nlEaLXDQy00YMwNsM7q8eS9+ek
- FvspJNC1+dO2ZAltAv8cw7++lnSJ8CAvb99fPjf8/GkL4kHdgGPPWHBJMDf/yiFzoxNS
- Yz/ZLwBHmPCUPSeURbeeoPfoeHUxL2LrGxXpeoNE7yo6GoeWnDtBjGjLZAVKfN+/nPhe
- RGyw==
+ bh=IiBfKazH2LKm6dzzHStjGTHpmJsskm/LAl/y9i+ejgQ=;
+ b=mhyHzoq7eHcG3Yi/0cwugwua1ELWFOL3A0qQHxCsk9qBlnJRg05AHdIfo+R8scd/89
+ pneB71QPYMJJEvihd/V6O0o4nB6q6sOMZOSOTNM/Ng1SdX9D2DmAu6UTs2a5fPMELcR7
+ i/qq5L/TFYcQ8UbXHW8murFUQYrNpn0pMiUOcYNFcHMs5GISrj5TI7vvOK6ChD6SJQsh
+ VOoHzwAULDn0X8KX/dU6+7yZEQ2NyBjfzlm4KZwcDeufKLLIEHT4qGupwwWjS/FamDVV
+ 7ZKwjNIZAgGAJXpiHJDR6wn1YR7MPRJ2Zi1HznMcODkatL2IXHHD6pc2+N29BrQ/w0/0
+ 8J9A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=PfzzlJNV
-Subject: [Buildroot] [PATCH] package/libubootenv: bump to version 0.3.4
+ header.a=rsa-sha256 header.s=20221208 header.b=mhyHzoq7
+Subject: [Buildroot] [PATCH] package/mbedtls: bump to 2.28.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,76 +100,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- ...MakeLists.txt-do-not-force-the-build-of-a-share.patch | 9 ++++-----
- package/libubootenv/libubootenv.hash                     | 2 +-
- package/libubootenv/libubootenv.mk                       | 4 ++--
- 3 files changed, 7 insertions(+), 8 deletions(-)
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-index 9040e1267..9c5438f30 100644
---- a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-+++ b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-@@ -29,7 +29,7 @@ diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
- index 4b71bc5..0b515f4 100644
- --- a/src/CMakeLists.txt
- +++ b/src/CMakeLists.txt
--@@ -12,18 +12,16 @@ SET(include_HEADERS
-+@@ -15,17 +15,15 @@ SET(include_HEADERS
-  
-  include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
-  
-@@ -40,16 +40,15 @@ index 4b71bc5..0b515f4 100644
- -ADD_LIBRARY(ubootenv_static STATIC ${libubootenv_SOURCES} ${include_HEADERS})
- -SET_TARGET_PROPERTIES(ubootenv_static PROPERTIES OUTPUT_NAME ubootenv)
-  add_executable(fw_printenv fw_printenv.c)
-- add_executable(fw_setenv fw_setenv.c)
-- target_link_libraries(ubootenv z)
-+ target_link_libraries(ubootenv z yaml)
-  target_link_libraries(fw_printenv ubootenv)
-- target_link_libraries(fw_setenv ubootenv)
-+ add_custom_target(fw_setenv ALL ${CMAKE_COMMAND} -E create_symlink fw_printenv fw_setenv)
-  
- -install (TARGETS ubootenv ubootenv_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
- +install (TARGETS ubootenv DESTINATION ${CMAKE_INSTALL_LIBDIR})
-  install (FILES libuboot.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-  install (TARGETS fw_printenv DESTINATION ${CMAKE_INSTALL_BINDIR})
-- install (TARGETS fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
-+ install (PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
- -- 
- 2.30.2
- 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 6863b7fcf..b881994bf 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 876cd7b77..a1d5d6e71 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.2:
+-sha256  bc55232bf71fd66045122ba9050a29ea7cb2e8f99b064a9e6334a82f715881a0  mbedtls-2.28.2.tar.gz
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.3:
++sha256  bdf7c5bbdc338da3edad89b2885d4f8668f9a6fffeba6ec17a60333e36dade6f mbedtls-2.28.3.tar.gz
  # Locally calculated
--sha256  8fc9498b557bbf4ae4d39a2dbd15a2ef44f8ea8de4686cc971c6788a65cd1ec0  libubootenv-0.3.3.tar.gz
-+sha256  78faadcfac67e50273e5d4e95e6cf6fee3d486ce9dc568d1fe25312271a88768  libubootenv-0.3.4.tar.gz
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index e841e0b84..b4c958810 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 7a605ac5b..8f09fd72a 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUBOOTENV_VERSION = 0.3.3
-+LIBUBOOTENV_VERSION = 0.3.4
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1+, MIT, CC0-1.0
- LIBUBOOTENV_LICENSE_FILES = LICENSES/CC0-1.0.txt \
-@@ -12,6 +12,6 @@ LIBUBOOTENV_LICENSE_FILES = LICENSES/CC0-1.0.txt \
- 	LICENSES/MIT.txt
- 
- LIBUBOOTENV_INSTALL_STAGING = YES
--LIBUBOOTENV_DEPENDENCIES = zlib
-+LIBUBOOTENV_DEPENDENCIES = libyaml zlib
- 
- $(eval $(cmake-package))
+-MBEDTLS_VERSION = 2.28.2
++MBEDTLS_VERSION = 2.28.3
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
 -- 
 2.39.2
 
