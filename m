@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C80B5C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 10:31:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CD7BC0015E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 10:31:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29F2060E4D;
-	Tue, 25 Jul 2023 10:31:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29F2060E4D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 385C960E65;
+	Tue, 25 Jul 2023 10:31:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 385C960E65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EUbHMoHyos1G; Tue, 25 Jul 2023 10:31:12 +0000 (UTC)
+	with ESMTP id ie6N-lFADyut; Tue, 25 Jul 2023 10:31:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64A9660E25;
-	Tue, 25 Jul 2023 10:31:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64A9660E25
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE13F60F27;
+	Tue, 25 Jul 2023 10:31:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE13F60F27
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ACADB1BF59A
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:31:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8BDED1BF59A
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:31:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 854C881CBA
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 854C881CBA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F24581D5A
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 10:31:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F24581D5A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uZnlBkm2LAVw for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 10:31:07 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 87F8E81CAF
- for <buildroot@busybox.net>; Tue, 25 Jul 2023 10:31:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87F8E81CAF
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-3fbc5d5746cso52651735e9.2
- for <buildroot@busybox.net>; Tue, 25 Jul 2023 03:31:07 -0700 (PDT)
+ with ESMTP id uVkH7b6BNk6X for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 10:31:37 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8637F81CBA
+ for <buildroot@busybox.net>; Tue, 25 Jul 2023 10:31:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8637F81CBA
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3fd190065a7so44601135e9.2
+ for <buildroot@busybox.net>; Tue, 25 Jul 2023 03:31:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690281065; x=1690885865;
+ d=1e100.net; s=20221208; t=1690281095; x=1690885895;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ocVpKxZlW2bqlOZ8vs8N3d5UH+SUPJgLpmQj4DbmLRA=;
- b=QfwaGvSb8RY1YBu8R/P1UYmLRJ1MfLG4hKd3sc9G3NTlsThhUPnrNizexvjoyAdWH4
- dCRIM0Jjx5XTjS+123fIFQXnX/Sf+mf2ipHrUeEFkSz0JlR0SCpRnLPx1kRJYvfjgpFg
- m375hMbn9453qL4erLZIEyQcJp3cP+C0c7YAuJdih9Tg9ILdZPYKfSi3Y4VxEd2M22g6
- UVQ7ZEh/WWMUGLYD2TQsPYKCewiTzmbiSrH5OzAAHzFnkQ7tfraxDaR/0t0Cvhq5cbCy
- AyABvR542WfaRAXI8yd8E7E9B+PodjGwl0W4euib+IeAwMJElXo5TdfrSxdwj3mWvbTC
- CxWw==
-X-Gm-Message-State: ABy/qLZ0ZbEzUGxVvSJ5unUeDq1G8brv4Oee5TDrw2PySOo+qvyQcYWm
- +S2HHPj7DTYgTM/TSF9ey8aa9gbgjMI=
-X-Google-Smtp-Source: APBJJlF9POox9tzU3OS0pXprJ8eXfXXoyBgEcj94WwFmFeQ4+K+sULkzsI4LS1C1JO7yo/sl4Kor2Q==
-X-Received: by 2002:a5d:484c:0:b0:317:6ea5:ab71 with SMTP id
- n12-20020a5d484c000000b003176ea5ab71mr666876wrs.30.1690281065423; 
- Tue, 25 Jul 2023 03:31:05 -0700 (PDT)
+ bh=Fq9+DFbkkx4wdLwz2KTnubvKMkXIFVyLDpSYmya4NsA=;
+ b=Y/v2Bfg/Q88BjOCXPOA/3BvoyxElLPDHXKt1gM/VSiwRaKTHaM1MAxZFpq5i1N4sXu
+ +BRABcR26FUVOBVsoM4Zg9ueTjTgSo0eCGzRmQ2JZtbRxqwl82Hosa4JJ6A4I8084Hs9
+ o7AzzHIkRz2BSKLhDs7B4jhZOPyHnU8UuLyK5gLgznpPa/6xWMUQII//cUWByxRJsATn
+ ItXwy+BqmfjJGloCTZ4L8iGNUQjZoe3KnIS7nTZbh1s5o4vmI6HGV50KxGc8mDZEA/+i
+ KaoqJRPLlcCUjIZJxD6uHQGmuijAonNveKAczSNi9l55pbAGjr1Plmyh7qGvrZAOrAbm
+ fGVA==
+X-Gm-Message-State: ABy/qLZaRCUaSGg9g6VsIU22jmonwOrsEduybIaQSRz3GbjQqkYf8fT9
+ 8cQScvgkduqLdzA3bMSOFDto2H77V5w=
+X-Google-Smtp-Source: APBJJlGoiFhIr4IYnt2TXWIQ68TfztVSz6cVHZZ/WZgB8zW6X6Kij0E6RPj9sljRRJ+3lOfny7YOYQ==
+X-Received: by 2002:a7b:c459:0:b0:3fd:2e59:b84c with SMTP id
+ l25-20020a7bc459000000b003fd2e59b84cmr7064302wmi.37.1690281095393; 
+ Tue, 25 Jul 2023 03:31:35 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- f12-20020adfe90c000000b0031758e7ba6dsm8137039wrm.40.2023.07.25.03.31.04
+ n23-20020a7bc5d7000000b003fc06169abdsm12889384wmk.2.2023.07.25.03.31.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 03:31:05 -0700 (PDT)
+ Tue, 25 Jul 2023 03:31:35 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Tue, 25 Jul 2023 12:30:53 +0200
-Message-Id: <20230725103053.941474-1-francois.perrad@gadz.org>
+Date: Tue, 25 Jul 2023 12:31:14 +0200
+Message-Id: <20230725103114.941495-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690281065; x=1690885865;
+ d=gmail.com; s=20221208; t=1690281095; x=1690885895;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ocVpKxZlW2bqlOZ8vs8N3d5UH+SUPJgLpmQj4DbmLRA=;
- b=LrJoLhD+pakt8eZ39LovKq2dzwoZDIARbqLZLK788uxUdb3vGeoLBwHp8HEBYirTat
- FrV+zbiJRqyDTMH7/LLh8IQm6ablIUQebg2h2ZizRo7WvyBBIZUQqjqwWLen/aalaXto
- ybGlq2cvj5yPF6bHiVJKp8gAMGnYqSUlAJg1CG43dt7KESLCb7yU/3GqU97keoNY7pVw
- fXYbKfD5Lwi1qMazCYf+OEAWfdD5ikvMyjPc9CNgxzaPen74TbTpkhy7uFcOKMd0Xi2I
- 8oGcghLgLOBvbdIhZx4gfN7Xoenc345dSSvbXMlSSkcRk+ru2dtUNJFkMyCnEJHye3JR
- aTZw==
+ bh=Fq9+DFbkkx4wdLwz2KTnubvKMkXIFVyLDpSYmya4NsA=;
+ b=s39xUeMA7VCX5v/Qnz6r/RDf02V76rrP1l7aKV3YLAtHWC5trkcKyisPZowvMxLPkm
+ UCQ+2a64fT8IVWm3RTp/0bvEiaX5f/se6+ltTFAIZbSkdfM+R+2ceyVDjC/RLkb7lrBY
+ 1Eee0gaUwX75SDftGSoabNxSLqGl9UdujRlZHFmVrCGP+aiWbNT932OBHvwsVoSD3vRe
+ y1/pnKrLcCnklomzjN0gzsGVUReDyyqo1vpA1lkFWv+vXsqHHUcdhSW3wVUmgnCiyGZ6
+ QsXd8vlNXGBpOryoD5NDH5Dt1wyLkSWdrbvla9uJh34r8cRGTkBd6M3g5Q6gBdasSFGS
+ lEaA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=LrJoLhD+
-Subject: [Buildroot] [PATCH] package/jpeg-turbo: bump to version 2.1.5
+ header.a=rsa-sha256 header.s=20221208 header.b=s39xUeMA
+Subject: [Buildroot] [PATCH] package/libatomic_ops: bump to version 7.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,46 +98,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENSE.md
--Copyright (C)2009-2022 D. R. Commander.  All Rights Reserved.<br>
-+Copyright (C)2009-2023 D. R. Commander.  All Rights Reserved.<br>
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 10 +++++-----
- package/jpeg-turbo/jpeg-turbo.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libatomic_ops/libatomic_ops.hash | 4 ++--
+ package/libatomic_ops/libatomic_ops.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 6e1278b48..a929ae4dc 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/2.1.4/
--sha1  5a355c08caa326cef7c2a61e062edfe8dd02ac07  libjpeg-turbo-2.1.4.tar.gz
--md5  3241b54016c445e5d8f0ebb0ad9294ed  libjpeg-turbo-2.1.4.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.1.5/
-+sha1  edab071e7c5bc12f98a2a7ae499bd6b312770849  libjpeg-turbo-2.1.5.tar.gz
-+md5  1c6e9f8550a82c6d4cd30b370c22a5fd  libjpeg-turbo-2.1.5.tar.gz
- # Locally computed
--sha256  d3ed26a1131a13686dfca4935e520eb7c90ae76fbc45d98bb50a8dc86230342b  libjpeg-turbo-2.1.4.tar.gz
--sha256  ee1eaf194d5924b6360af8a6ba6a4e1554037091f7505943300cdeec65f1aebb  LICENSE.md
-+sha256  bc12bc9dce55300c6bf4342bc233bcc26bd38bf289eedf147360d731c668ddaf  libjpeg-turbo-2.1.5.tar.gz
-+sha256  60c756742db3ad1913304e8b13f0e86e22e51adb50cc0b3333c163f7e45ceec1  LICENSE.md
- sha256  4b7b9f8c03bb8d60270dfd12684e70ab21e4abfd27e73905cd1a7c4cae6f5cdb  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index e5bc8e7cf..5e806156e 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
+diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
+index 32a0795a5..c6de93fb4 100644
+--- a/package/libatomic_ops/libatomic_ops.hash
++++ b/package/libatomic_ops/libatomic_ops.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  b4b0072bdb6780e2331db4fadba7e423fde25c71b1f0eb04859cc1eba59c2c2c  libatomic_ops-7.6.14.tar.gz
+-sha256  636c2bf07975765ab9aff17f7c9b6beb9540378f45b5a1b21691d14ea804f0ff  doc/LICENSING.txt
++sha256  68c5970b11297056c8e5c63a73f26621a8eb8c667a5fe9a2b3e3ff6c0fbb3177  libatomic_ops-7.8.0.tar.gz
++sha256  969294c9324b2d360ae2a08edd5ca6f9cd754cb71b71e56bee15d2f10bb10496  LICENSE
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 1b34d3b78..0c72b1725 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JPEG_TURBO_VERSION = 2.1.4
-+JPEG_TURBO_VERSION = 2.1.5
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
+-LIBATOMIC_OPS_VERSION = 7.6.14
++LIBATOMIC_OPS_VERSION = 7.8.0
+ LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,v$(LIBATOMIC_OPS_VERSION))
+ LIBATOMIC_OPS_AUTORECONF = YES
+ 
+@@ -15,7 +15,7 @@ LIBATOMIC_OPS_AUTORECONF = YES
+ # by the GNU General Public License. These are put into a separate
+ # library, libatomic_ops_gpl.a."
+ LIBATOMIC_OPS_LICENSE = MIT (main library) / GPL-2.0+ (gpl extension)
+-LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
++LIBATOMIC_OPS_LICENSE_FILES = COPYING LICENSE
+ LIBATOMIC_OPS_CPE_ID_VENDOR = libatomic_ops_project
+ 
+ LIBATOMIC_OPS_INSTALL_STAGING = YES
 -- 
 2.39.2
 
