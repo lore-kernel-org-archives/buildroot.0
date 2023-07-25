@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B006C0015E
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 14:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C024C0015E
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 14:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EB2781771;
-	Tue, 25 Jul 2023 14:13:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EB2781771
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2568381F30;
+	Tue, 25 Jul 2023 14:21:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2568381F30
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tU7MrkZcr1Hm; Tue, 25 Jul 2023 14:13:09 +0000 (UTC)
+	with ESMTP id qFhdBacWeBOV; Tue, 25 Jul 2023 14:21:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AD7681746;
-	Tue, 25 Jul 2023 14:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AD7681746
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 74A281BF588
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:13:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B7C581EA5;
+	Tue, 25 Jul 2023 14:21:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B7C581EA5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B8BC41BF588
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D25B40108
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:13:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D25B40108
+ by smtp1.osuosl.org (Postfix) with ESMTP id 926CE81EA5
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 14:21:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 926CE81EA5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9EcTX1vDOpeK for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 14:13:05 +0000 (UTC)
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 047484003A
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 14:13:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 047484003A
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-78847bb8940so286621939f.0
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 07:13:04 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T_MKhrhfnqpl for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 14:21:23 +0000 (UTC)
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A955E81CE7
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 14:21:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A955E81CE7
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-7835e5fa459so210047139f.2
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 07:21:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690294383; x=1690899183;
+ d=1e100.net; s=20221208; t=1690294882; x=1690899682;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Ynr+o023OgpHOM9muOe0qHUTjETZT03JWQ7dh92qc2k=;
- b=gIIvRD1DkTDPmrktBvtHvy1TWA3KphVkI4+RfW0yDMyUUGA/cqMUFwcVK++o/D7nWy
- EyT2vTW+u9UiohyqlRHwptIE+N3bRKnvUMxdZvgJXINcPdzs2HDIA+/9E+XLXNNcHhyi
- qgdBUF7F1BAILMmp4/XU9OHMi1OizhBOjixZZkpD70WoHXmYCTF7vM+CEreMVGiPVdgc
- mZk11qSxMyl+fWGUgSGuO/DARfYoB1M3MsyGjiDVmKCpbFVzVmkSgXbVCmU41r3hqtZQ
- A6WgR3WrPuOEnttbmjDvSZbSAghTOyCF/18RTcI2NDERUMTVt4UFzj8QlDw6hHVMBsEf
- J2aA==
-X-Gm-Message-State: ABy/qLZBCu++0xWuSFx1iKGAJlK8TaKNTotV8nyWj5K5VtHz4bn5zGOi
- mn5eZB4qi9akBJMvtvbrCFZ5vQ8GM3A=
-X-Google-Smtp-Source: APBJJlF2LTbIDJmyXJVk1Oi5jgMf+nt/4abu5v9s5GXf/BRgZHybiVxZld81IkOSnNHDrDt8DLSqvw==
-X-Received: by 2002:a5e:aa18:0:b0:780:ce72:ac55 with SMTP id
- s24-20020a5eaa18000000b00780ce72ac55mr3273524ioe.10.1690294383577; 
- Tue, 25 Jul 2023 07:13:03 -0700 (PDT)
+ bh=p8fcBo7tjGZ0Y9viKsZ9qruBOOd4ABedlcj66CMQsQU=;
+ b=kIfJaxzLiJlT8yqEXh9U4XiebmYkO680c/KQppuiY9NMqIQuicAP8JI0c+1vKWbfoy
+ /Yd4Ff+PPI/i4T53lQv3PvXstIgzk81XEkMF4/xKklSgf/PATbfkDx7N6mJtXrUKQyJx
+ advSKA3TvLpcky9ZmEiKlAlzjODSPLCYikwgQMtWR3glHCMHJEZ3lol+R5//qoP4uSX6
+ mQR5IZf2p3W5KHHEvbY+ThduNn9wT22EG3+TBF4ICYyGPvmnu4E2tznk11c85M97IRa+
+ gNju4wbpsjC+iJxPLzx1wdDcEDinaZfTX261cESfI/adJVvgqJ9bs8hm2mj5CF4GhYqF
+ V/Dg==
+X-Gm-Message-State: ABy/qLbIx39lNyIHJGKPRZz6pBnzPtz995hQiiPZQrVME39et+TXcRbp
+ 2eS/Zes8b2JLiWgPallXEj/2X9jvkyg=
+X-Google-Smtp-Source: APBJJlECc8VEceopULCVFoESUDY9O1oQo8tbEsbAE0fKOSR29/Hf2Mdqs+vT/BbwuAvanus6sWEzyA==
+X-Received: by 2002:a6b:e511:0:b0:787:8cf:7426 with SMTP id
+ y17-20020a6be511000000b0078708cf7426mr3409416ioc.6.1690294882272; 
+ Tue, 25 Jul 2023 07:21:22 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-156-134.hlrn.qwest.net.
  [71.33.156.134]) by smtp.gmail.com with ESMTPSA id
- e18-20020a056638021200b0042bae96eba7sm3614478jaq.7.2023.07.25.07.13.02
+ q28-20020a02cf1c000000b004290f6c15bfsm3684341jar.145.2023.07.25.07.21.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 07:13:03 -0700 (PDT)
+ Tue, 25 Jul 2023 07:21:21 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 08:13:01 -0600
-Message-Id: <20230725141301.313135-1-james.hilliard1@gmail.com>
+Date: Tue, 25 Jul 2023 08:21:20 -0600
+Message-Id: <20230725142120.318785-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690294383; x=1690899183;
+ d=gmail.com; s=20221208; t=1690294882; x=1690899682;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Ynr+o023OgpHOM9muOe0qHUTjETZT03JWQ7dh92qc2k=;
- b=EQ3d5i7PBF+5Ljy+vrGtRlmWJhmE3yKqa3LIQl/vnJ5DQJ36tJDa+CpTIyiM9M8NeS
- nPCU9JE5XUwBo3gXeX8vTOQZUQb+b4IE1QFrwthxOHnwjcdyql/V8MNEkaWDrAKsneL7
- T3mxvlBIDmGCnnGce5USGzF//Iz6YvzMj8IW/ti7QknEv0WDv2x0mvP1mJm6wtDLa6I+
- L3lnaKgPdA4OPRURsuxX4CscWIcwtk12gBKBq6Ft75plYE6uCm+12tWwim1weY2Bzd8i
- 3kqL9oHt8Zezk2ugvRsbUQ9r3ogr5nZnKQp7LIokrCvPPEwaHms7jwBhQD7MhVyMBrxJ
- QMsw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=p8fcBo7tjGZ0Y9viKsZ9qruBOOd4ABedlcj66CMQsQU=;
+ b=KG4/hiTwX8X54hPHXcwb7s3GS5RY+kBnojJLT1iLXCroVdpw3cEVDGVCG4se5Z/LUS
+ sxiZX3c1j6PgEH4psXu8hK2CB4e4tYE8jxDfNKbKDAB+VorkundMNG0tuMJIj5eRdYmw
+ X9s4MPojOQaPrP912yLtCgoAzxeRucCGXYrMoJxYWTnnyihV4hIhI1aZ+UIzFnmQwQyG
+ NlzMAnOcuIINR5ENq/lbjwc0yVFBc/86Fobi588v8Ehi8A0eKUldLB8VGeUEwj25chlu
+ eEokMfydJ9HeTznzU13lyaWBFthBu2H8qH8RuHJ0QoLopquA7CpL4/m0ci83cqgN7Tr0
+ 0k7A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=EQ3d5i7P
-Subject: [Buildroot] [PATCH 1/1] package/python-typing-extensions: bump to
- version 4.7.1
+ header.a=rsa-sha256 header.s=20221208 header.b=KG4/hiTw
+Subject: [Buildroot] [PATCH 1/1] package/python-urllib3: bump to version
+ 2.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,47 +94,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Migrate from setuptools to hatchling pep517 build backend.
+
+License hash changed due contributors change:
+https://github.com/urllib3/urllib3/commit/8e94754f85c59d826ac0604d0dd2a0b41874bb36
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../python-typing-extensions/python-typing-extensions.hash    | 4 ++--
- package/python-typing-extensions/python-typing-extensions.mk  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-urllib3/python-urllib3.hash | 6 +++---
+ package/python-urllib3/python-urllib3.mk   | 8 +++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
-index f9d1de5e28..fedb9e0446 100644
---- a/package/python-typing-extensions/python-typing-extensions.hash
-+++ b/package/python-typing-extensions/python-typing-extensions.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 963967332e..2da7abdf29 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typing_extensions/json
--md5  111a7d37292a241811502bd1b64032be  typing_extensions-4.6.3.tar.gz
--sha256  d91d5919357fe7f681a9f2b5b4cb2a5f1ef0a1e9f59c4d8ff0d3491e05c0ffd5  typing_extensions-4.6.3.tar.gz
-+md5  06e7fff4b1d51f8dc6f49b16e71de54e  typing_extensions-4.7.1.tar.gz
-+sha256  b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2  typing_extensions-4.7.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  38f7d1589aa9720101316d07fcbd05c8  urllib3-1.26.13.tar.gz
+-sha256  c083dd0dce68dbfbe1129d5271cb90f9447dea7d52097c6e0126120c521ddea8  urllib3-1.26.13.tar.gz
++md5  5d541b944febe50221e24c31cd6e887d  urllib3-2.0.4.tar.gz
++sha256  8d22f86aae8ef5e410d4f539fde9ce6b2113a001bb4d189e0aed70642d602b11  urllib3-2.0.4.tar.gz
  # Locally computed sha256 checksums
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
-index 2c07846154..9d41b0a6a5 100644
---- a/package/python-typing-extensions/python-typing-extensions.mk
-+++ b/package/python-typing-extensions/python-typing-extensions.mk
-@@ -4,9 +4,9 @@
+-sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
++sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 5868927440..7ff58d9a4a 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,14 +4,16 @@
  #
  ################################################################################
  
--PYTHON_TYPING_EXTENSIONS_VERSION = 4.6.3
-+PYTHON_TYPING_EXTENSIONS_VERSION = 4.7.1
- PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
--PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/42/56/cfaa7a5281734dadc842f3a22e50447c675a1c5a5b9f6ad8a07b467bffe7
-+PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/3c/8b/0111dd7d6c1478bf83baa1cab85c686426c7a6274119aceb2bd9d35395ad
- PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
- PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
- PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
+-PYTHON_URLLIB3_VERSION = 1.26.13
++PYTHON_URLLIB3_VERSION = 2.0.4
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/c2/51/32da03cf19d17d46cce5c731967bf58de9bd71db3a379932f53b094deda4
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/31/ab/46bec149bbd71a4467a3063ac22f4486ecd2ceb70ae8c70d5d8e4c2a7946
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
+ PYTHON_URLLIB3_CPE_ID_PRODUCT = urllib3
+-PYTHON_URLLIB3_SETUP_TYPE = setuptools
++PYTHON_URLLIB3_SETUP_TYPE = pep517
++PYTHON_URLLIB3_DEPENDENCIES = host-python-hatchling
++HOST_PYTHON_URLLIB3_DEPENDENCIES = host-python-hatchling
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
 2.34.1
 
