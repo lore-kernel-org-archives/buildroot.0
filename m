@@ -4,84 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF5F6C00528
-	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 16:16:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D78DC001DE
+	for <buildroot@archiver.kernel.org>; Tue, 25 Jul 2023 16:38:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 891AD40949;
-	Tue, 25 Jul 2023 16:16:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 891AD40949
+	by smtp2.osuosl.org (Postfix) with ESMTP id 92B1C40949;
+	Tue, 25 Jul 2023 16:38:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92B1C40949
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B6lYUgSatKpw; Tue, 25 Jul 2023 16:16:42 +0000 (UTC)
+	with ESMTP id mid8oolVuALw; Tue, 25 Jul 2023 16:38:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA13741566;
-	Tue, 25 Jul 2023 16:16:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA13741566
+	by smtp2.osuosl.org (Postfix) with ESMTP id 985E0405DB;
+	Tue, 25 Jul 2023 16:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 985E0405DB
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61F921BF83B
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 16:16:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D5FC1BF83B
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 16:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BD5F60AFB
- for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 16:16:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BD5F60AFB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 16FD860A4F
+ for <buildroot@lists.busybox.net>; Tue, 25 Jul 2023 16:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16FD860A4F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5IWT0s3UdrCR for <buildroot@lists.busybox.net>;
- Tue, 25 Jul 2023 16:16:38 +0000 (UTC)
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB9A960737
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 16:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB9A960737
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-5217ad95029so7570077a12.2
- for <buildroot@buildroot.org>; Tue, 25 Jul 2023 09:16:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690301796; x=1690906596;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=eKoYh0E+r8LyfDpzqr19bghoPDAmTJV4xnY9MwsanlI=;
- b=MW7W/0NQ4GVa6A/p6kbrx1mDSPkwn5w/yceAYvdidzthWWhWy4GE9lSJGXGZv+vj29
- 0ZnAHGyrCqNU4Jj0oKb93JYaqyiL827iIkRVqiesLvt4l83eIrThY0gh0YDzcAloOfLB
- D+fF2I1l7XdHqhoiB9L9RPl5q48iKVrU7f39qK+a4j2MZum0wb3VcAMK4tokH02wezOO
- A2v1S/k0EcKoK6EBQ3/lS0sMnkHC3tvWu/ZvOGudkJ7YK0Yn9DSgWHmmR4W7v6Ahep+w
- 0bRC6WlK4zcj1FtjEeqdD2r1f50BdafOPi8aGm4/4cAPf0ZN8dyF2Lhua508q7VD4o1o
- 6oPQ==
-X-Gm-Message-State: ABy/qLYJBdZhm3MFknETBgX4PNwz2YnIWOFABl7IRXhjxfK9+dPfFN+F
- fFhzSsNhREQBnCKFl+6VaIn8adz3oT0=
-X-Google-Smtp-Source: APBJJlGcVO5/48ZmzEeUhTcdZGPE0BAUZRobEvAoLD1gWqVRsaJ8LuGlIVF1Yj0YHCuO8VMcWSXj2A==
-X-Received: by 2002:aa7:d34d:0:b0:522:2aba:bb32 with SMTP id
- m13-20020aa7d34d000000b005222ababb32mr5166244edr.13.1690301795545; 
- Tue, 25 Jul 2023 09:16:35 -0700 (PDT)
-Received: from fedora.. (cpezg-94-253-129-196-cbl.xnet.hr. [94.253.129.196])
- by smtp.googlemail.com with ESMTPSA id
- c5-20020a056402100500b0051dd19d6d6esm7823949edu.73.2023.07.25.09.16.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Jul 2023 09:16:35 -0700 (PDT)
-From: Robert Marko <robimarko@gmail.com>
+ with ESMTP id nZEK9amN8_WE for <buildroot@lists.busybox.net>;
+ Tue, 25 Jul 2023 16:38:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 301F4605A9
+ for <buildroot@buildroot.org>; Tue, 25 Jul 2023 16:38:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 301F4605A9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1B077828EF; Tue, 25 Jul 2023 16:38:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 25 Jul 2023 18:16:33 +0200
-Message-ID: <20230725161633.791156-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690301796; x=1690906596;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=eKoYh0E+r8LyfDpzqr19bghoPDAmTJV4xnY9MwsanlI=;
- b=fILFiLJdUmEFRisxUoI+rjAXdHkHxQP6je1oydn2BWCh87VcAVW+262Ug5rdnfsn9a
- +s05xi6A9CAKa4W4DgP6Q3St510s5u4EFjRjHkNwqpVWmppWSwiOxs8Xen4iwfw81igt
- FBfEwlpKTkjlT+IQoF826mNsE3GWfWJyNt00vM2ZkK5LCpMT5VWcgRlLACPEeCmoOiBX
- w0xaV0jQqSc5oHD8/3HsTOi/3+NCpDk+aqYbegnVkNOH3c5JmrJj1wnQKuG5H+TCg+Oo
- UlcaibpEpFTu6WlRZbuTzhqhpHOQ4L43L/qCvBBzuLtm8qyW0ocXut2VNthDQ04nJtuR
- 3aBQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=fILFiLJd
-Subject: [Buildroot] [PATCH] package/mdio-tools: bump version to 1.3.0
+Date: Tue, 25 Jul 2023 18:38:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f3597910cfa47790047fe75d569a0755b4cdb73f
+X-Git-Newrev: 9b19030f3f7505af8c026cb63f0f4f509836d1e9
+X-Patchwork-Hint: ignore
+Message-Id: <20230725163842.1B077828EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: rework wasm handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,50 +55,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Marko <robimarko@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7730600871500757042=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Kernel 6.3 has split the C22 and C45 MDIO support and mdio-tools needed to
-be adapted to that.
+--===============7730600871500757042==
+Content-Type: text/plain
 
-So, now that new release with support for kernel 6.3 and later is available
-lets update to it.
+commit: https://git.buildroot.net/buildroot/commit/?id=9b19030f3f7505af8c026cb63f0f4f509836d1e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
+Fluent-bit isn't very great at supporting the various architectures,
+so help a little bit by defining the WAMR_BUILD_TARGET ourselves.
+
+Two failures for MIPS while executing ./utils/test-pkg:
+
+- sourcery-mips64:
+core/iwasm/common/arch/invokeNative_mips.s: Assembler messages:
+core/iwasm/common/arch/invokeNative_mips.s:58: Error: opcode not supported on this processor: mips64r2 (mips64r2) `ldc1 $f12,0($sp)'
+core/iwasm/common/arch/invokeNative_mips.s:59: Error: opcode not supported on this processor: mips64r2 (mips64r2) `ldc1 $f14,8($sp)'
+make[4]: *** [src/wasm/CMakeFiles/vmlib-static.dir/build.make:495: src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/common/arch/invokeNative_mips.s.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+
+- sourcery-mips:
+core/iwasm/common/arch/invokeNative_mips.s: Assembler messages:
+core/iwasm/common/arch/invokeNative_mips.s:58: Error: opcode not supported on this processor: mips32r2 (mips32r2) `ldc1 $f12,0($sp)'
+core/iwasm/common/arch/invokeNative_mips.s:59: Error: opcode not supported on this processor: mips32r2 (mips32r2) `ldc1 $f14,8($sp)'
+make[4]: *** [src/wasm/CMakeFiles/vmlib-static.dir/build.make:495: src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.1.1/core/iwasm/common/arch/invokeNative_mips.s.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+
+Which are fixed by setting the obscure flag "WAMR_BUILD_INVOKE_NATIVE_GENERAL".
+
+See https://github.com/bytecodealliance/wasm-micro-runtime/issues/625 for more info:
+“Hi, building the invokeNative_general.c explicitly is supported now, please pull the latest code and use
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mdio-tools/mdio-tools.hash | 2 +-
- package/mdio-tools/mdio-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fluent-bit/Config.in     | 20 +++++++++++++-------
+ package/fluent-bit/fluent-bit.mk | 12 +++++++++++-
+ 2 files changed, 24 insertions(+), 8 deletions(-)
 
-diff --git a/package/mdio-tools/mdio-tools.hash b/package/mdio-tools/mdio-tools.hash
-index 0111165f27..1a9d598923 100644
---- a/package/mdio-tools/mdio-tools.hash
-+++ b/package/mdio-tools/mdio-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c5e17431c62392f6c1da1ba4fb0a6f5918521509a377af74485851f93ff2a106  mdio-tools-1.2.0.tar.gz
-+sha256  d2ab71d92173053af41d754e9c229e1ead768b9f8b7f4947b3b87b84c4c5e360  mdio-tools-1.3.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mdio-tools/mdio-tools.mk b/package/mdio-tools/mdio-tools.mk
-index c4be54142e..fb8ec39f35 100644
---- a/package/mdio-tools/mdio-tools.mk
-+++ b/package/mdio-tools/mdio-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
+index bfdea895b0..9ffde5b315 100644
+--- a/package/fluent-bit/Config.in
++++ b/package/fluent-bit/Config.in
+@@ -13,15 +13,21 @@ config BR2_PACKAGE_FLUENT_BIT
  
--MDIO_TOOLS_VERSION = 1.2.0
-+MDIO_TOOLS_VERSION = 1.3.0
- MDIO_TOOLS_SITE = https://github.com/wkz/mdio-tools/releases/download/$(MDIO_TOOLS_VERSION)
- MDIO_TOOLS_LICENSE = GPL-2.0
- MDIO_TOOLS_LICENSE_FILES = COPYING
--- 
-2.41.0
+ if BR2_PACKAGE_FLUENT_BIT
+ 
++config BR2_PACKAGE_FLUENT_BIT_WASM_ARCH
++	string
++	default "AARCH64"    if BR2_aarch64 || BR2_aarch64be
++	default "ARC"        if BR2_arcle || BR2_arceb
++	default "ARM"        if BR2_arm || BR2_armeb
++	default "MIPS"       if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default "RISCV32"    if BR2_riscv && BR2_RISCV_32
++	default "RISCV64"    if BR2_riscv && BR2_RISCV_64
++	default "X86_32"     if BR2_i386
++	default "X86_64"     if BR2_x86_64
++	default "XTENSA"     if BR2_xtensa
++
+ config BR2_PACKAGE_FLUENT_BIT_WASM_ARCH_SUPPORTS
+ 	bool
+-	# see lib/wasm-micro-runtime-WAMR-1.1.1/README.md#supported-architectures-and-platforms
+-	default y if BR2_arc
+-	default y if BR2_arm || BR2_armeb
+-	default y if BR2_aarch64 || BR2_aarch64_be
+-	default y if BR2_i386 || BR2_x86_64
+-	default y if BR2_RISCV_64
+-	default y if BR2_xtensa
++	default y if BR2_PACKAGE_FLUENT_BIT_WASM_ARCH != ""
+ 
+ config BR2_PACKAGE_FLUENT_BIT_WASM
+ 	bool "wasm runtime support"
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index cd8f347768..1185860661 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -23,7 +23,17 @@ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_BACKTRACE=No
+ 
+ ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
+-FLUENT_BIT_CONF_OPTS += -DFLB_WASM=Yes
++FLUENT_BIT_WAMR_ARCH = $(call qstrip,$(BR2_PACKAGE_FLUENT_BIT_WASM_ARCH))
++
++# https://github.com/bytecodealliance/wasm-micro-runtime/issues/625
++# Fix unknown opcode 'ldc1', seen on mips32r2 and mips64r2.
++ifeq ($(FLUENT_BIT_WAMR_ARCH),MIPS)
++FLUENT_BIT_CONF_OPTS += \
++	-DWAMR_BUILD_INVOKE_NATIVE_GENERAL=1
++endif
++
++FLUENT_BIT_CONF_OPTS += -DFLB_WASM=Yes \
++	-DWAMR_BUILD_TARGET=$(FLUENT_BIT_WAMR_ARCH)
+ else
+ FLUENT_BIT_CONF_OPTS += -DFLB_WASM=No
+ endif
+
+--===============7730600871500757042==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7730600871500757042==--
