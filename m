@@ -4,81 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B739FC001DC
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 19:13:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6450CC0015E
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 19:32:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CA238143B;
-	Wed, 26 Jul 2023 19:13:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CA238143B
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8C2183993;
+	Wed, 26 Jul 2023 19:32:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8C2183993
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2iZN4rE3a_pV; Wed, 26 Jul 2023 19:13:36 +0000 (UTC)
+	with ESMTP id ntrDu3MSbOHe; Wed, 26 Jul 2023 19:32:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 916AF80F00;
-	Wed, 26 Jul 2023 19:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 916AF80F00
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 50AF11BF336
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 19:13:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 036C583981;
+	Wed, 26 Jul 2023 19:32:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 036C583981
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A27A01BF336
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 19:32:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FE90405DD
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 19:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FE90405DD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A4496129D
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 19:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A4496129D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2W5y104kQZO4 for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 19:13:31 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4664A4036E
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 19:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4664A4036E
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([213.147.165.148]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1N6sn7-1pokcw0bUd-018Jsp for <buildroot@buildroot.org>; Wed, 26 Jul 2023
- 21:13:29 +0200
-From: Daniel Lang <dalang@gmx.at>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u09PbIZND74e for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 19:32:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 81F9761215
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 19:32:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81F9761215
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6CB4B8353F; Wed, 26 Jul 2023 19:32:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 26 Jul 2023 21:11:58 +0200
-Message-ID: <20230726191158.24460-2-dalang@gmx.at>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-X-Provags-ID: V03:K1:yMWTtanIeIIF/4kwhPqr5l9mbYK7T7bUY2W0CPhkbIhRdnYHIVd
- iDkE1tsqhsC73GRjAjBW46H6iesyk973+BOoCW3jxHefmtYS5J90z24JNF1p88aTqIqm3z4
- C7M6WSnOmbXQPXFbmHPt0fVdEYU3mKzLvbO37Qkp0qoxOAd2pdNfD3CUGvu8EZ/IK0zrpYp
- 6iGlnViR5J/NLnM3a2tkg==
-UI-OutboundReport: notjunk:1;M01:P0:NMj8ppwv+Zw=;yuYGr5PoHMs3YHrZ5ZMuq968Xb9
- JPrB1/2m8TVt6w4tFiDbVHEZIy6zTz2pHcPuihXOZ6Ix6swOWy6lGT/ckdRBkOlKH2Ri7NDlD
- guclckleHPNt1+0xz2jD6ZliGJHrUo0/nZnaFBjVVIrfv3RUTPOiArtqOyW57K2TqFqZioBCI
- cXP+AVMSTp4mCyyhRuJhAzilzIUdAX3r35E3yuCnJv45nWvCe81tgEwXSDnKG3QL/KgsScjOe
- T7IkwR7tO4+sBtb8sfXBbZF8K+YEkoyzBF2LMz1sMTJd3E5mohAR1kHvcwRY0Pu18Kj3x/GzZ
- oOPs1DgDq8ccIMSnTdb4h3R+vIgfV1jwryuZDc9dahcnvxUYtsqnDnrdrUIHxueX642aS5vHi
- 0jjyOwETSclVZfLgVVFdN+AF1/n1cpOylE+21kOprUzTRka/yU/ORDKeyLuhkJZbjqNqH/sY/
- AXileywdFa66nw35AWkbP7sfziefYnJbhCF0IYYViIvnAH6Jmq3RJ/LSuMpxWor/z/gpsuM1Q
- hk6ZJSzQn24gOeHOprk4t7eQHMyMRMRh+JP1w1/kM6xHhLRTGg9/Yh/n7QUhyZWgdt6CBSvSx
- H3sIbrjgrWLSdp/o4XzEJCJxk8SIzEmwlHLFxxpmEuUXIwZ53ueFWUEAG+JBhwmwszMz1pYFA
- MH6leQoWu+JuY34tCXxisuGzT/LBZoURjGxuNNrYrDVt4aEPaCwFQ5dmclZ59cYCDfHZRZzoZ
- Gnl0CNNaC9y/2Q/JQbXx65wFWsecKKIV3e0pYmH5zra9DwjlTXknhj9MPivzpGdYpoWphcXTp
- UzF85e4lQ7zQ/bpSTuHCKf628220/wYPtTPQ6eKJ/pkK2JzXRXm3/B8FAExNcTloqqWN3PuiY
- oXLlGCUPkfj5pmOJuh4lH2tZEKU3X64BmiDsPZ3RuIdSvsCnxzLu2bbxjLnmQpz931SRi8zUv
- 1j5egRKotGYvErfGhcNg+3Mvgq4=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; 
- s=s31663417; t=1690398809; x=1691003609; i=dalang@gmx.at;
- bh=kLVxwoAU9v8+KczyvIwugj9KbeR3rGjTnPNwmj5Ff1s=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=qePm2Ehkw3+nPHxRTWTq5CP2jnQxmNWjWJgNjpzhA9WcyYALruy4obXQQg/8FtmlAlX1q0q
- ETl0Oy0FOYsnwwypp2bhS+wOsUZjIfIexOllwyZC8NJOB4h8/f7rw+vA2T2Brsvr7yMhQnRLx
- h74ozHfDSzEcP/HxqXhru07C3DN7VwfB5ot1/ndsfo3o1wxFxMKu3rFHRMkjaAVOjH1pq2eD9
- vTzOfL+wL369Ih2D6y4xO1R+irwypgPqn65ev5IFKA1MmU2s0e7u5KMpjVZKmNc+gahrd5OO/
- Ip80O2MGnrjubeWjdUUb18W6DQ6VlTFd11SLdYzt+qX7mxPPfZnA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=qePm2Ehk
-Subject: [Buildroot] [PATCH] package/llvm-project/llvm-libunwind: depends on
- host-llvm-cmake
+Date: Wed, 26 Jul 2023 21:27:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8af2c5ab83bab001853b23acf0356bbbc1bcf164
+X-Git-Newrev: 97cb975dd1d4f4e146898227940574bf96ae4843
+X-Patchwork-Hint: ignore
+Message-Id: <20230726193251.6CB4B8353F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: bump version to
+ 20230625
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,34 +57,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-- http://autobuild.buildroot.net/results/e3efaa66f1719db48780f7436f66b56c1f76fd82
+commit: https://git.buildroot.net/buildroot/commit/?id=97cb975dd1d4f4e146898227940574bf96ae4843
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
+Updated license hash due to various commits:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/llvm-project/llvm-libunwind/llvm-libunwind.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.mk b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
-index be9965a49a..b293c7ccc2 100644
---- a/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
-+++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.mk
-@@ -11,6 +11,7 @@ LLVM_LIBUNWIND_LICENSE = Apache-2.0 with exceptions
- LLVM_LIBUNWIND_LICENSE_FILES = LICENSE.TXT
- LLVM_LIBUNWIND_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 55178ba8f8..25b6d018a1 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  8b1acfa16f1ee94732a6acb50d9d6c835cf53af11068bd89ed207bbe04a1e951  linux-firmware-20230515.tar.xz
++sha256  87597111c0d4b71b31e53cb85a92c386921b84c825a402db8c82e0e86015500d  linux-firmware-20230625.tar.xz
  
-+HOST_LLVM_LIBUNWIND_DEPENDENCIES = host-llvm-cmake
- HOST_LLVM_LIBUNWIND_CONF_OPTS += \
- 	-DCMAKE_MODULE_PATH="$(HOST_DIR)/lib/cmake/llvm" \
- 	-DLIBUNWIND_INSTALL_HEADERS=ON
--- 
-2.41.0
-
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -35,6 +35,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  d41a4f4e4230e27d9dfd83b49d2ec839792d80cc559b0bb2b1112adbb0916e6b  WHENCE
++sha256  cb91afd4cf763c316d3cb6acc20a63a58d3c7e7b3ff03f254285a4414aeb76f9  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 068de3859e..01718fa1e0 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 20230515
++LINUX_FIRMWARE_VERSION = 20230625
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
