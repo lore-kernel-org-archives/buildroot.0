@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AE7AC001DF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:43:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3706AC001DF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06B83612C4;
-	Wed, 26 Jul 2023 21:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06B83612C4
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1DE9612BD;
+	Wed, 26 Jul 2023 21:45:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1DE9612BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mihS2cUiHqEQ; Wed, 26 Jul 2023 21:43:12 +0000 (UTC)
+	with ESMTP id W-UPYO0_l96U; Wed, 26 Jul 2023 21:45:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C93D612C0;
-	Wed, 26 Jul 2023 21:43:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C93D612C0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8873E1BF980
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:43:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06FDE607C7;
+	Wed, 26 Jul 2023 21:45:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06FDE607C7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CBBE1BF980
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62532612C0
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62532612C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24B4B41E73
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:45:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24B4B41E73
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z2cN_gRtrYrS for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 21:43:08 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2AC67612B8
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AC67612B8
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oRMty-g-8eaJ for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 21:45:55 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 01AD241E6A
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:45:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01AD241E6A
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:89e8:4a89:fcd4:1b18])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 58A595FF67;
- Wed, 26 Jul 2023 23:43:00 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id D9F2F5FFA3;
+ Wed, 26 Jul 2023 23:45:46 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 26 Jul 2023 23:43:00 +0200
-Date: Wed, 26 Jul 2023 23:43:00 +0200
+ Wed, 26 Jul 2023 23:45:46 +0200
+Date: Wed, 26 Jul 2023 23:45:46 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Message-ID: <20230726214300.GD3544423@scaer>
+Message-ID: <20230726214546.GE3544423@scaer>
 References: <20230726180433.7561-1-kilian.zinnecker@mail.de>
- <20230726180433.7561-3-kilian.zinnecker@mail.de>
+ <20230726180433.7561-4-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230726180433.7561-3-kilian.zinnecker@mail.de>
+In-Reply-To: <20230726180433.7561-4-kilian.zinnecker@mail.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1690407786;
- bh=+mAmjpsGmGT7G/tUKlaIJ/4A75nzOa0H4sFVMIQBWnk=;
+ d=free.fr; s=smtp-20201208; t=1690407953;
+ bh=QvdA13lcgB0AUac9EirgY9Rw32tWlv2ePvfrMQxX5Us=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=NB8nr0qON2vIXIOpIWNCchjqQq/KT2dEgg/pfiLvDPvsnzRIj3vky/CBd9vJXfaLp
- MgwqCVHvByQGf55uC0h2qmh9QsD41pHMBhmBmeV29OTSPLEW5B0tQks7enNxkd2BYi
- l5pThQhyr2w5Cxmhj2mtvBm2chVyGljvtvW7ROUsd6wZlmhllbLGiPxkMFVlcuaM2y
- iP7jkfBUtiB6Wxdgdr+VoTw0tcfL79vaUI6EEnCd4QEk4VJzEfQzxDMOWligVQj+Mu
- XmMyvfFr43+Dltzr/kOCRItXz1IA+Ejuya+ad039cFGyj2516mMIeqUenmK8m3Webg
- TGDXyVScBuhFQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=mkPGcuSiewZTq/ndcID+0L9QDppf6USiRVK8MnWaFMfdpn3ldpLWHEBa2DMY4D9mZ
+ UpUdSZ42pUe1bcxlHPBuD2cgpQq2J4TKjM3QiHSN2awwzoJKZl3YpBZEIJB+TgqBpG
+ iDlRvkTuZEIukPXznDZwEfkcQnayjB9TOpuaEHNNHkbANPrAUNSQu9NJyhJ0VRhEu6
+ g2JHQW/PgpFUVbIwsPhGL+NcjBzM1Oe6GAgeVel7P9toNIHSK35uQUOzcwO7SSAnrQ
+ KqIv7BH5n0zqZRJSLxFvP/LQtCTUANyMeZTNlosBaFU1E9B+IE7yqy5/qhYZ9eLfXL
+ vRJdWpjbQu7nA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NB8nr0qO
-Subject: Re: [Buildroot] [PATCH v8 2/3] boot/uboot: Add support for Rockchip
- binary blobs
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mkPGcuSi
+Subject: Re: [Buildroot] [PATCH v8 3/3] configs/rock5b: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,86 +88,41 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Kilian, All,
 
 On 2023-07-26 20:04 +0200, Kilian Zinnecker via buildroot spake thusly:
-> Currently for some Rockchip SoCs binary blobs are needed, e.g., for
-> the RK3588 bl31 and tpl. These blobs are provided by Rockchip. This
-> patch adds U-Boot package options to use theses binaries, provided
-> by the rockchip-rkbin package, which is also introduced in this
-> patch series. The U-Boot package is modified so that it takes the
-> chosen binaries and automatically uses them during build.
+> This patch adds the defconfig file needed to build u-boot, kernel
+> and rootfs for the Rock 5B. In addition it adds a kernel config
+> fragment file, which activates the needed ethernet driver support.
+> It also adds a readme and post image scripts, needed to generate an
+> sdcard.img file, which can be flashed on an SD card to boot the
+> Radxa Rock 5B.
 > 
 > Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
 > ---
->  boot/uboot/Config.in |  9 +++++++++
->  boot/uboot/uboot.mk  | 17 +++++++++++++++++
->  2 files changed, 26 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 085397d03d..7733f8501f 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -262,6 +262,15 @@ config BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE
->  	  This option makes sure that the i.MX firmwares are copied into
->  	  the U-Boot source directory.
->  
-> +config BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN
-> +	bool "U-Boot needs rockchip-rkbin"
-> +	depends on BR2_PACKAGE_ROCKCHIP_RKBIN
-> +	help
-> +	  For some Rockchip SoCs U-Boot needs binary blobs from
-> +	  Rockchip.
-> +	  This option makes sure that the needed binary blobs are copied
-> +	  into the U-Boot source directory.
+[--SNIP--]
+> diff --git a/board/radxa/rock5b/post-image.sh b/board/radxa/rock5b/post-image.sh
+> new file mode 100755
+> index 0000000000..c0f63ab3a2
+> --- /dev/null
+> +++ b/board/radxa/rock5b/post-image.sh
+> @@ -0,0 +1,6 @@
+> +#!/usr/bin/env bash
 > +
->  menu "U-Boot binary format"
->  
->  config BR2_TARGET_UBOOT_FORMAT_AIS
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 1a6e70a792..b6e270f633 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -207,6 +207,23 @@ endef
->  UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_IMX_FW_FILES
->  endif
->  
-> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN),y)
-> +UBOOT_DEPENDENCIES += rockchip-rkbin
-> +define UBOOT_INSTALL_UBOOT_ROCKCHIP_BIN
-> +	$(INSTALL) -D -m 0644 $(@D)/u-boot-rockchip.bin $(BINARIES_DIR)/u-boot-rockchip.bin
-> +endef
-> +UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_UBOOT_ROCKCHIP_BIN
-> +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME),"")
-> +UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/${notdir $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME))}
+> +gzip -fk ${BINARIES_DIR}/Image
+> +cp board/radxa/rock5b/rock5b.its ${BINARIES_DIR}
+> +(cd $BINARIES_DIR && mkimage -f rock5b.its image.itb)
+> +support/scripts/genimage.sh -c board/radxa/rock5b/genimage.cfg
 
-I've re-used the already-qstripped variables from the rockchip-rkbin
-package.
+    $ make check-package
+    board/radxa/rock5b/post-image.sh:0: run 'shellcheck' and fix the warnings
 
-Also, I switched from using curly brances to the ;ore standard (for
-Buildroot) parethesis.
+I fixed those errors. I also made the script "set -e" so it exits on
+error on the first error.
+
+I've also dropped the custom version, which in fact was not custom.
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
-
-> +endif
-> +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME),"")
-> +UBOOT_MAKE_OPTS += ROCKCHIP_TPL=$(BINARIES_DIR)/${notdir $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME))}
-> +endif
-> +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME),"")
-> +UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/${notdir $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME))}
-> +endif
-> +endif
-> +
->  ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
->  UBOOT_DEPENDENCIES += host-dtc
->  UBOOT_MAKE_OPTS += DTC=$(HOST_DIR)/bin/dtc
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
