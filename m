@@ -4,66 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A67D3C001DE
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 07:19:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8051C001DC
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 10:27:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F1D1A403D6;
-	Wed, 26 Jul 2023 07:19:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1D1A403D6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3AF3140291;
+	Wed, 26 Jul 2023 10:27:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AF3140291
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GoYMNVKFDdEL; Wed, 26 Jul 2023 07:19:27 +0000 (UTC)
+	with ESMTP id aDMf9wSxWO7U; Wed, 26 Jul 2023 10:27:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3954040120;
-	Wed, 26 Jul 2023 07:19:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3954040120
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C7844038D;
+	Wed, 26 Jul 2023 10:27:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C7844038D
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D8C871BF592
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 07:19:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A31B1BF3D6
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 10:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1F6080E44
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 07:19:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1F6080E44
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43A09827D9
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 10:27:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43A09827D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ae31cACcGuW0 for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 07:19:23 +0000 (UTC)
-X-Greylist: delayed 425 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 26 Jul 2023 07:19:22 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB25880E36
-Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CB25880E36
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 07:19:22 +0000 (UTC)
-Received: from smtpclient.apple ([146.241.123.84])
- by Aruba Outgoing Smtp  with ESMTPA
- id OYguqzzxUa8IoOYgvqoimH; Wed, 26 Jul 2023 09:12:13 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Wed, 26 Jul 2023 09:12:12 +0200
-Message-Id: <E2EF003D-F740-4237-8C76-F249176F0B6B@benettiengineering.com>
-References: <CABRndgydwGOk5W1QFQQ3CeM3724aU5-AKeh0yRBw9dJD0yr7Lw@mail.gmail.com>
-In-Reply-To: <CABRndgydwGOk5W1QFQQ3CeM3724aU5-AKeh0yRBw9dJD0yr7Lw@mail.gmail.com>
-To: Zvi Vered <veredz72@gmail.com>
-X-Mailer: iPhone Mail (20G75)
-X-CMAE-Envelope: MS4xfGuMuagBzrg8CGd8VGufuDULVIbYOrDoryiVEfh+BRE5jDhHPDw/cwpkeFlGdE3I5uferND5IjSHTZziQbp8yUlhqbEGyd75jMdNMZgh9bVr8FFSsZqO
- VZ07gLwVPzLirbM7kj3/jgvArygf+8cEVFmCzoD4CAXT8v6VjK0DSoLOBddA7p2pTwDicczPrQmT2fQsDXWATVMAlThs04jg9p7S4mtXNXnU2nZwUANchgDt
- zsnfJdfFSxQ3H3Frgu7kWg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1690355533; bh=NKiddMQIdPQn6kL41EuL8KMwLQ80qXdx5Izb9kzvk1o=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=nAepgj+Zqkx1K6Uz6aGGrb0b1JKbwENCyEwxC9dQm5hYV/z5SLrSPnYVJ63QKBUdd
- Sb6A0PawJSMaN1yGPw83Z7Tx7M9q3Y2SE6IiO6s9May5QismUx+2TQEiY3qaTHGH9J
- evxhJCs6Mwv8M4PtWoqfeRCN3VYk5bIZ4KOSg+1/nXQUTb5swCGuGLK3TMTY0LFwhS
- JmuCgaadwthp06yl3Ud/KYJ90Hjtnf6HOwOz4LlmW+84+0E2DFCpsyOBsC39ZOl8mc
- rL5kldDedJBC/SPQelp2j+BT1z9A4BNX+aMVawIm/xOC9qQ7GEv3d1k8cQCqZtFtdc
- HAzwq4AP8tGiQ==
+ with ESMTP id JG4rR_pZafy7 for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 10:27:01 +0000 (UTC)
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B23682121
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 10:27:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B23682121
+Received: by mail-io1-xd2a.google.com with SMTP id
+ ca18e2360f4ac-7835ae70e46so253305139f.3
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 03:27:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1690367220; x=1690972020;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JQFvkNjUIp6Z7joocCNuPvvZ3U+lvUzcsiJ0UNUOjks=;
+ b=lxDgPU8nP17BPxi6aDmB5cy6DXkqmqyaxSrpUsdalBoSR2SGa2o/pUETafAbtoija5
+ pAUsl9/mDDmF48hUI8ilWSrGZUHFoxmWP96QDOKQvTuJhaZOa3Qjfc4iNQOZOrYrIa+z
+ 6biP0+qD/ebJJr1TyocXYLQJSPzg7GZVNrxgnQ46GqKKmis7/MUJiJhmDhq4z7n8WI1c
+ WsjX/lTw3aRQeuoO/JbroSDufVtUNNEOUhkM/NdhR5IpDf//N176/p1+o9Og4BpUCOcm
+ NNoUVgYOMYzUM8/WTQu5+fnhhKtH+7n0Oz6Y3Gh4vr8aqT9dkkTXKGBEPwjuroO/lAHT
+ m3zA==
+X-Gm-Message-State: ABy/qLZNiQ7SlR+bY0MSBSYaNypjC51CHCgnliDehcJz5ml6ToJ+rVzh
+ s0Gdps/a5eTXVvDV65hLjw4G6eoYy6U=
+X-Google-Smtp-Source: APBJJlGs2xmj/2aCQCXG7v3sBQXf++cjI9decMASEyVRYuwjAMfUf5OblSU/j6JJ3RkNG5uyYhyT9w==
+X-Received: by 2002:a05:6e02:11ab:b0:345:a319:ba83 with SMTP id
+ 11-20020a056e0211ab00b00345a319ba83mr1442614ilj.29.1690367219559; 
+ Wed, 26 Jul 2023 03:26:59 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-156-134.hlrn.qwest.net.
+ [71.33.156.134]) by smtp.gmail.com with ESMTPSA id
+ i14-20020a92c94e000000b00348c7e5e915sm2791795ilq.5.2023.07.26.03.26.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 26 Jul 2023 03:26:58 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 26 Jul 2023 04:26:52 -0600
+Message-Id: <20230726102652.2291658-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1690367220; x=1690972020;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JQFvkNjUIp6Z7joocCNuPvvZ3U+lvUzcsiJ0UNUOjks=;
+ b=i7qyTeXBa2lJXdcwytQs+8c6PJKqcnIM2WidVhOcqkd+eLGEyxfzccl/kAmlNldX58
+ NsVPSsjjUi1GOEOo4lFOYUfjKErcEokOroMUYMK+ZcyS5gD9hWavJFey7u1yUp/VeEWU
+ 6zkOV9Xm4bGQGzvRXcSIoR+q4kBPWtHtMFELQjkAEX39DTJVNUnlZLV/oLkdD+YxG1kc
+ SUny+fI2Cw1hANRr+qfSLTsViqnlBppYw2HCS0WUc1qEZKLjBa7LS4EAgsVKlxqPcZUV
+ 04FrsX1MKaupZMI5LFHVwxDb/PI9POoMMW8h3Ud0BiZPuKcVgjpTepHJ/kKxwGnHSUzm
+ BqJw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=nAepgj+Z
-Subject: Re: [Buildroot] buildroot 2023.02.3 : containers
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=i7qyTeXB
+Subject: [Buildroot] [PATCH v3 1/1] package/weston: bump to version 12.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,148 +93,291 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7428193843871730196=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop patch which is now upstream.
 
---===============7428193843871730196==
-Content-Type: multipart/alternative; boundary=Apple-Mail-80E312D5-9988-4803-B44E-1AA1A686D290
-Content-Transfer-Encoding: 7bit
+Drop no longer supported weston-launch/launcher-logind.
 
+Drop no longer supported color-management-colord config option.
 
---Apple-Mail-80E312D5-9988-4803-B44E-1AA1A686D290
-Content-Type: multipart/related;
-	type="text/html";
-	boundary=Apple-Mail-5A0BA2A4-9B7C-473D-B9A8-D49B0CB67428
-Content-Transfer-Encoding: 7bit
+Remove duplicate backend-headless config option.
 
+Add new libgbm requirement for renderer-gl.
 
---Apple-Mail-5A0BA2A4-9B7C-473D-B9A8-D49B0CB67428
-Content-Type: text/html;
-	charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Add new freerdp server requirement for backend-rdp.
 
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
-utf-8"></head><body dir=3D"auto">Hi Zvika,<div><div dir=3D"ltr"><br><blockqu=
-ote type=3D"cite">Il giorno 26 lug 2023, alle ore 04:43, Zvi Vered &lt;vered=
-z72@gmail.com&gt; ha scritto:<br><br></blockquote></div><blockquote type=3D"=
-cite"><div dir=3D"ltr">=EF=BB=BF<span>Hello,</span><br><span></span><br><spa=
-n>I built root file system with buildroot 2023.02.3</span><br><span>The kern=
-el is vanilla 5.4.249</span><br><span>Architecture: x86_64. It works.</span>=
-<br><span></span><br><span>Can you please tell if I can use containers in th=
-is setup ? How ?</span><br></div></blockquote><div><br></div><div>You can us=
-e official buildroot docker by issuing:</div><div>$ utils/docker-run</div><d=
-iv>inside buildroot folder.</div><div>You can check out buildroot manual:</d=
-iv><div><div style=3D"display: block;" class=3D""><div style=3D"-webkit-user=
--select: all; -webkit-user-drag: element; display: inline-block;" class=3D"a=
-pple-rich-link" draggable=3D"true" role=3D"link" data-url=3D"https://buildro=
-ot.org/downloads/manual/manual.html#submitting-patches"><a style=3D"border-r=
-adius:10px;font-family:-apple-system, Helvetica, Arial, sans-serif;display:b=
-lock;-webkit-user-select:none;width:300px;user-select:none;-webkit-user-modi=
-fy:read-only;user-modify:read-only;overflow:hidden;text-decoration:none;" cl=
-ass=3D"lp-rich-link" rel=3D"nofollow" href=3D"https://buildroot.org/download=
-s/manual/manual.html#submitting-patches" dir=3D"ltr" role=3D"button" draggab=
-le=3D"false" width=3D"300"><table style=3D"table-layout:fixed;border-collaps=
-e:collapse;width:300px;background-color:#E9E9EB;font-family:-apple-system, H=
-elvetica, Arial, sans-serif;" class=3D"lp-rich-link-emailBaseTable" cellpadd=
-ing=3D"0" cellspacing=3D"0" border=3D"0" width=3D"300"><tbody><tr><td vertic=
-al-align=3D"center"><table bgcolor=3D"#E9E9EB" cellpadding=3D"0" cellspacing=
-=3D"0" width=3D"300" style=3D"font-family:-apple-system, Helvetica, Arial, s=
-ans-serif;table-layout:fixed;background-color:rgba(233, 233, 235, 1);" class=
-=3D"lp-rich-link-captionBar"><tbody><tr><td style=3D"padding:8px 0px 8px 0px=
-;" class=3D"lp-rich-link-captionBar-textStackItem"><div style=3D"max-width:1=
-00%;margin:0px 16px 0px 16px;overflow:hidden;" class=3D"lp-rich-link-caption=
-Bar-textStack"><div style=3D"word-wrap:break-word;font-weight:500;font-size:=
-12px;overflow:hidden;text-overflow:ellipsis;text-align:left;" class=3D"lp-ri=
-ch-link-captionBar-textStack-topCaption-leading"><a rel=3D"nofollow" href=3D=
-"https://buildroot.org/downloads/manual/manual.html#submitting-patches" styl=
-e=3D"text-decoration: none" draggable=3D"false"><font color=3D"#000000" styl=
-e=3D"color: rgba(0, 0, 0, 1);">The Buildroot user manual</font></a></div><di=
-v style=3D"word-wrap:break-word;font-weight:400;font-size:11px;overflow:hidd=
-en;text-overflow:ellipsis;text-align:left;" class=3D"lp-rich-link-captionBar=
--textStack-bottomCaption-leading"><a rel=3D"nofollow" href=3D"https://buildr=
-oot.org/downloads/manual/manual.html#submitting-patches" style=3D"text-decor=
-ation: none" draggable=3D"false"><font color=3D"#A2A2A9" style=3D"color: rgb=
-a(60, 60, 67, 0.6);">buildroot.org</font></a></div></div></td><td style=3D"p=
-adding:6px 12px 6px 0px;" class=3D"lp-rich-link-captionBar-rightIconItem" wi=
-dth=3D"36"><a rel=3D"nofollow" href=3D"https://buildroot.org/downloads/manua=
-l/manual.html#submitting-patches" draggable=3D"false"><img style=3D"pointer-=
-events:none !important;display:inline-block;width:36px;height:36px;border-ra=
-dius:3px;" width=3D"36" height=3D"36" draggable=3D"false" class=3D"lp-rich-l=
-ink-captionBar-rightIcon" alt=3D"favicon.ico" src=3D"cid:5B54561A-9548-4E48-=
-A91E-B8BFA516F383"></a></td></tr></tbody></table></td></tr></tbody></table><=
-/a></div></div><br></div><div>In general patches are checked using docker-ru=
-n script.</div><div><br></div><div>Best regards</div><div>Giulio</div><br><b=
-lockquote type=3D"cite"><div dir=3D"ltr"><span></span><br><span>Thank you,</=
-span><br><span>Zvika</span><br><span>_______________________________________=
-________</span><br><span>buildroot mailing list</span><br><span>buildroot@bu=
-ildroot.org</span><br><span>https://lists.buildroot.org/mailman/listinfo/bui=
-ldroot</span><br></div></blockquote></div></body></html>=
+Add support for new screenshare feature.
 
---Apple-Mail-5A0BA2A4-9B7C-473D-B9A8-D49B0CB67428
-Content-Type: image/x-icon;
-	name=favicon.ico;
-	x-apple-part-url=5B54561A-9548-4E48-A91E-B8BFA516F383
-Content-Disposition: inline;
-	filename=favicon.ico
-Content-Transfer-Encoding: base64
-Content-Id: <5B54561A-9548-4E48-A91E-B8BFA516F383>
+Add support for new rdp as backend default feature.
 
-AAABAAEAICAAAAEACACoCAAAFgAAACgAAAAgAAAAQAAAAAEACAAAAAAAAAQAABILAAASCwAAAAEA
-AAABAAADTW4ATVNTAD5ZZwAPYX8ABV6OAABenAAcZIIAD2l9ADhofQAecHEAbmtnABZ0ewA3dHgA
-AG6pAFl4ewAUeZAAC3SkACB9gwAXfY4AV3uAAAd9nAAkfJkADoOJAHp9ewCIfnQANH6ZAByEjQA/
-hIsACoaaAAZ9uwADgrEAN4mNAByNlAArhLUAXIuPAC6LpQAwkZgAP5GUAACJygAEkLQATJOUAA2V
-rwAilbAAAJDNAE+VpABZmZkAeJeWAFqVpwAAlscAl5iVAEKesQAPn8cANaKxAACgygCVnp8AMJ/A
-ACOhxwAgpbsAeKOmAI6hpwBeorQAYaC8ADKntwBXpLwASamwAGmlswB0p6wAhqimAKOmpAAAqt0A
-raqkAACr5gAprs4AIq7WADyt0QAAq+8ACbHaAKGwqwBQssUAK7TLAKa2sgAAtPIAsbW0ACa63QCg
-ur0AwLqzAAC5+AAAu/MAdL/QAB7C6wC+wsAAmcbJAADH/gDJx8IAQMrnAF3L3QCZx9gAxcjGANbM
-wgAr0+gADtL9AADU/gAj1PsAr9HWAMXR0wDP0tAAANv+ADjX/ABJ1/cA29bSAADg/QBo3PcAWuDw
-ACTj/gBA4v0AAOr+AFHl/gDe4d8A5eLdAOzj2gBL6v4A3ObmADzx+gDk6OUA7OnkAGD4/QBu9/8A
-fPv8AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD/
-//8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP//
-/wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////
-AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A
-////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD/
-//8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP//
-/wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////
-AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A
-////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD/
-//8AdXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV7e3t7e3V1
-dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dVUxRlppdXt7dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXxS
-GRUIAgEKGEZde3t1dXV1dXV1dXV1dXV1dXV1dXV7VThcZWVrbEojCAEYWnV1dXV1dXV1dXV1dXV7
-dXV1e2I/XFxcZGxrZmplVxQBRnt1dXV7dXt7e3t7dWF1e3tiPFxlZWRmZmVqZWVlbkc7fHt7e2lp
-YURSUlpSMXVVRi4qTz40QE5OcT5IT0g+MmhhRERhREREMQppRBdSbTYOLBssLCJCE1hvX2M+GzIi
-fFJEMVoXRDFhUmlaYV07IzcZBiE3Iyo4KlFJU1NTXlJ7UlpSYWh1bXZ7bV13aBAEHR0rR0srJktR
-UVZHXEU8dnZVbXt8d0MaEU1CEQxDGhEHDRwRHhELJ0cnRTAURTNiP0dBd0EwQiQoKCgfJVAfEQQE
-ERQUGhopUUU1RTUnMD84OEliSUpBQk0fKDooaC8HBRASJhQnJylXNTUwRTw8SThQWVBIW0IkHyIt
-OihoQgcFEBIrFCkpKVdFVidFQUEzOFBZUkhbOiAaQyhCKGgoBwUQEisnGho5XDUzNUU4NTw4Mzg6
-RTdBOjooIi4iVAkGBR4aR0cLET5sMzlXMzA4YjwwOjxRNUIWFjp8e3V8TQANDyBHXGs0QHBHVjVM
-Nnd7dm18bTNgUCIuaXV1dXxbDxAJEUdmdCQkcD45WUxSe3V1dXV1Q2h7dnx1dXV1e1ADJktWXGts
-cn5/f3puSFV7dXV1dXV2dXV1dXV1dXV1diEmUVZca3J0f39/cWVOYnl1dXV1dXV1dXV1dXV1dXV3
-PSZWXGVycnh/f31zZlR2dXV1dXV1dXV1dXV1dXV1dXZUK1ZcZXFyeH9/enNeXXt1dXV1dXV1dXV1
-dXV1dXV1dXZKS1xlbnF9fXpzblt3dXV1dXV1dXV1dXV1dXV1dXV1dmhHXGVqanNzc3NfbXV1dXV1
-dXV1dXV1dXV1dXV1dXV1d2BXZWVuc3NzY2h2dXV1dXV1dXV1dXV1dXV1dXV1dXV1d2BWXG5ubmNn
-d3V1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dlhZbGRrZ3d1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1
-dnZ2dXZ2dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1
-dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1
-dQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAA
---Apple-Mail-5A0BA2A4-9B7C-473D-B9A8-D49B0CB67428--
+Add support for new pipewire backend feature.
 
---Apple-Mail-80E312D5-9988-4803-B44E-1AA1A686D290--
+Always enable libseat launcher.
 
---===============7428193843871730196==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Disable new unsupported vnc backend.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v2 -> v3:
+  - bump to version 12.0.1
+  - add new pipewire backend option
+  - disable unsupported backend vnc option
+  - remove deprecated logind launcher support
+  - unconditionally enable libseat launcher
+Changes v1 -> v2:
+  - bump to version 11.0.1
+  - propagate freerdp-server dependencies to weston-rdp
+  - ensure we have at least one launcher enabled
+---
+ ...ncy-on-screenshooter-client-protocol.patch | 38 -------------
+ package/weston/Config.in                      | 22 +++++++-
+ package/weston/weston.hash                    |  6 +--
+ package/weston/weston.mk                      | 53 ++++++-------------
+ 4 files changed, 39 insertions(+), 80 deletions(-)
+ delete mode 100644 package/weston/0001-tests-Add-dependency-on-screenshooter-client-protocol.patch
+
+diff --git a/package/weston/0001-tests-Add-dependency-on-screenshooter-client-protocol.patch b/package/weston/0001-tests-Add-dependency-on-screenshooter-client-protocol.patch
+deleted file mode 100644
+index 927215380e..0000000000
+--- a/package/weston/0001-tests-Add-dependency-on-screenshooter-client-protocol.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 2ac6b6b084a877adde64db7faff2ed22eb3ea97a Mon Sep 17 00:00:00 2001
+-From: Daniel Stone <daniels@collabora.com>
+-Date: Tue, 8 Feb 2022 22:39:42 +0000
+-Subject: [PATCH] tests: Add dependency on screenshooter client protocol
+-
+-Given that the test-helper code relies on the screenshooter protocol,
+-make sure it's available for us to build, and the dependency ensures we
+-build in order.
+-
+-Fixes: #588
+-
+-Signed-off-by: Daniel Stone <daniels@collabora.com>
+-
+-[Retrieved from:
+-https://gitlab.freedesktop.org/wayland/weston/-/commit/2ac6b6b084a877adde64db7faff2ed22eb3ea97a]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- tests/meson.build | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/tests/meson.build b/tests/meson.build
+-index 2d464ddcc..222091cd1 100644
+---- a/tests/meson.build
+-+++ b/tests/meson.build
+-@@ -29,8 +29,9 @@ lib_test_client = static_library(
+- 		'weston-test-client-helper.c',
+- 		'weston-test-fixture-compositor.c',
+- 		weston_test_client_protocol_h,
+--		weston_screenshooter_protocol_c,
+- 		weston_test_protocol_c,
+-+		weston_screenshooter_client_protocol_h,
+-+		weston_screenshooter_protocol_c,
+- 		viewporter_client_protocol_h,
+- 		viewporter_protocol_c,
+- 		'color_util.h',
+--- 
+-GitLab
+-
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index d5dbf27bbd..22996805f6 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -18,6 +18,7 @@ config BR2_PACKAGE_WESTON
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_SEATD
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	select BR2_PACKAGE_WESTON_SHELL_DESKTOP if !BR2_PACKAGE_WESTON_HAS_SHELL
+@@ -42,6 +43,15 @@ config BR2_PACKAGE_WESTON_DEFAULT_HEADLESS
+ 	bool "headless"
+ 	select BR2_PACKAGE_WESTON_HEADLESS
+ 
++config BR2_PACKAGE_WESTON_DEFAULT_RDP
++	bool "rdp"
++	depends on BR2_USE_MMU # freerdp, libglib2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_USE_WCHAR # freerdp
++	depends on BR2_INSTALL_LIBSTDCPP # freerdp
++	depends on BR2_PACKAGE_XORG7 # freerdp-server
++	select BR2_PACKAGE_WESTON_RDP
++
+ config BR2_PACKAGE_WESTON_DEFAULT_WAYLAND
+ 	bool "wayland (nested)"
+ 	select BR2_PACKAGE_WESTON_WAYLAND
+@@ -60,6 +70,7 @@ config BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR
+ 	string
+ 	default "drm"      if BR2_PACKAGE_WESTON_DEFAULT_DRM
+ 	default "headless" if BR2_PACKAGE_WESTON_DEFAULT_HEADLESS
++	default "rdp"      if BR2_PACKAGE_WESTON_DEFAULT_RDP
+ 	default "wayland"  if BR2_PACKAGE_WESTON_DEFAULT_WAYLAND
+ 	default "x11"      if BR2_PACKAGE_WESTON_DEFAULT_X11
+ 
+@@ -73,7 +84,9 @@ config BR2_PACKAGE_WESTON_RDP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_WCHAR # freerdp
+ 	depends on BR2_INSTALL_LIBSTDCPP # freerdp
++	depends on BR2_PACKAGE_XORG7 # freerdp-server
+ 	select BR2_PACKAGE_FREERDP
++	select BR2_PACKAGE_FREERDP_SERVER
+ 	help
+ 	  This enables the RDP backend, which allows accessing weston
+ 	  through the network with any RDP-compliant client.
+@@ -87,10 +100,11 @@ config BR2_PACKAGE_WESTON_RDP
+ 	  /etc/freerdp/server/ so you may want to change them in a
+ 	  post-build script or a rootfs overlay.
+ 
+-comment "RDP compositor needs a toolchain w/ wchar, C++"
++comment "RDP compositor needs a toolchain w/ wchar, C++, X.org"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_PACKAGE_XORG7
+ 
+ config BR2_PACKAGE_WESTON_HEADLESS
+ 	bool "headless (testing) compositor"
+@@ -155,6 +169,10 @@ config BR2_PACKAGE_WESTON_SHELL_KIOSK
+ 	default y
+ 	select BR2_PACKAGE_WESTON_HAS_SHELL
+ 
++config BR2_PACKAGE_WESTON_SCREENSHARE
++	bool "screenshare"
++	default y
++
+ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
+ 	bool "demo clients"
+ 	depends on BR2_USE_MMU # pango
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index d58ca1ef70..0ecbaa4168 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2022-June/042260.html
+-sha256  8a9e52506a865a7410981b04f8341b89b84106db8531ab1f9fdd37b5dc034115  weston-10.0.1.tar.xz
+-sha512  688d843096a95b463161b98e85ca3443b31ba2ee49fc8d456a2780cc96f576e9d097054e9f361997a66e9cc8373cf29e406a742dae3884b3b50b26acf1710c8c  weston-10.0.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2023-May/042725.html
++sha256  b18591eab278bc191720f6c09158040b795e7118af1d5ddca6acd9a8e2039535  weston-12.0.1.tar.xz
++sha512  3dcfa1a2a6b9a605d3ecd597bf7ac0f87b0fd1971845b6e5c44b5e34296943ac146dae6e1cfea9be14ad7a9a8b6d30dc765f9289ef80920d7c516ebba1ba4688  weston-12.0.1.tar.xz
+ sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 01f84178b2..437c6f2e38 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WESTON_VERSION = 10.0.1
++WESTON_VERSION = 12.0.1
+ WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+@@ -13,13 +13,13 @@ WESTON_CPE_ID_VENDOR = wayland
+ WESTON_INSTALL_STAGING = YES
+ 
+ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+-	libxkbcommon pixman libpng udev cairo libinput libdrm
++	libxkbcommon pixman libpng udev cairo libinput libdrm seatd
+ 
+ WESTON_CONF_OPTS = \
+-	-Dbackend-headless=false \
+-	-Dcolor-management-colord=false \
+ 	-Ddoc=false \
+ 	-Dremoting=false \
++	-Dbackend-vnc=false \
++	-Dlauncher-libseat=true \
+ 	-Dtools=calibrator,debug,info,terminal,touch-calibrator
+ 
+ # Uses VIDIOC_EXPBUF, only available from 3.8+
+@@ -29,20 +29,6 @@ else
+ WESTON_CONF_OPTS += -Dsimple-clients=
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
+-WESTON_CONF_OPTS += -Dlauncher-logind=true
+-WESTON_DEPENDENCIES += dbus systemd
+-else
+-WESTON_CONF_OPTS += -Dlauncher-logind=false
+-endif
+-
+-ifeq ($(BR2_PACKAGE_SEATD),y)
+-WESTON_CONF_OPTS += -Dlauncher-libseat=true
+-WESTON_DEPENDENCIES += seatd
+-else
+-WESTON_CONF_OPTS += -Dlauncher-libseat=false
+-endif
+-
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ WESTON_CONF_OPTS += -Dimage-jpeg=true
+ WESTON_DEPENDENCIES += jpeg
+@@ -57,33 +43,20 @@ else
+ WESTON_CONF_OPTS += -Dimage-webp=false
+ endif
+ 
+-# weston-launch must be u+s root in order to work properly
+-ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+-define WESTON_PERMISSIONS
+-	/usr/bin/weston-launch f 4755 0 0 - - - - -
+-endef
+-define WESTON_USERS
+-	- - weston-launch -1 - - - - Weston launcher group
+-endef
+-WESTON_CONF_OPTS += -Ddeprecated-weston-launch=true
+-WESTON_DEPENDENCIES += linux-pam
+-else
+-WESTON_CONF_OPTS += -Ddeprecated-weston-launch=false
+-endif
+-
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGBM)$(BR2_PACKAGE_HAS_LIBGLES),yyy)
+ WESTON_CONF_OPTS += -Drenderer-gl=true
+-WESTON_DEPENDENCIES += libegl libgles
++WESTON_DEPENDENCIES += libegl libgbm libgles
+ ifeq ($(BR2_PACKAGE_PIPEWIRE)$(BR2_PACKAGE_WESTON_DRM),yy)
+-WESTON_CONF_OPTS += -Dpipewire=true
++WESTON_CONF_OPTS += -Dpipewire=true -Dbackend-pipewire=true
+ WESTON_DEPENDENCIES += pipewire
+ else
+-WESTON_CONF_OPTS += -Dpipewire=false
++WESTON_CONF_OPTS += -Dpipewire=false -Dbackend-pipewire=false
+ endif
+ else
+ WESTON_CONF_OPTS += \
+ 	-Drenderer-gl=false \
+-	-Dpipewire=false
++	-Dpipewire=false \
++	-Dbackend-pipewire=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
+@@ -180,6 +153,12 @@ else
+ WESTON_CONF_OPTS += -Dshell-kiosk=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_SCREENSHARE),y)
++WESTON_CONF_OPTS += -Dscreenshare=true
++else
++WESTON_CONF_OPTS += -Dscreenshare=false
++endif
++
+ ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
+ WESTON_CONF_OPTS += -Ddemo-clients=true
+ WESTON_DEPENDENCIES += pango
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7428193843871730196==--
