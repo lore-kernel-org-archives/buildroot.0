@@ -4,78 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58059C001DF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 18:29:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73C2CC0015E
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 18:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 009EA81448;
-	Wed, 26 Jul 2023 18:29:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 009EA81448
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E52D80B3B;
+	Wed, 26 Jul 2023 18:38:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E52D80B3B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pqNWdoCfwTM7; Wed, 26 Jul 2023 18:29:03 +0000 (UTC)
+	with ESMTP id UkGaTFswYNWy; Wed, 26 Jul 2023 18:38:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48BC581EB7;
-	Wed, 26 Jul 2023 18:29:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48BC581EB7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9334F1BF421
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 18:29:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A04F80AEE;
+	Wed, 26 Jul 2023 18:38:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A04F80AEE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 907A41BF421
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 18:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C80660F23
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 18:29:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C80660F23
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68328404D9
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 18:38:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68328404D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7_aQ0ueBmHL0 for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 18:28:59 +0000 (UTC)
-Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 82FA060BC7
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 18:28:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82FA060BC7
-Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout02.mail.de (Postfix) with ESMTP id AFDF3A0EA4;
- Wed, 26 Jul 2023 20:28:57 +0200 (CEST)
-Received: from smtp02.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix03.mail.de (Postfix) with ESMTP id 9374980171;
- Wed, 26 Jul 2023 20:28:57 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (No client certificate requested)
- by smtp02.mail.de (Postfix) with ESMTPSA id D00A0A0367;
- Wed, 26 Jul 2023 20:28:56 +0200 (CEST)
-To: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Date: Wed, 26 Jul 2023 20:28:56 +0200
-Message-ID: <4498335.LvFx2qVVIh@kilian-aisec>
-In-Reply-To: <3751483.kQq0lBPeGt@kilian-aisec>
-References: <20230714064413.11433-1-kilian.zinnecker@mail.de>
- <20230714234326.1ab918e8@windsurf> <3751483.kQq0lBPeGt@kilian-aisec>
-MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 1645
-X-purgate-ID: 154282::1690396137-9D67D199-A102ED31/0/0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WXkza7wmkIn6 for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 18:38:28 +0000 (UTC)
+Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 92F8540543
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 18:38:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92F8540543
+Received: from smtpclient.apple ([146.241.200.99])
+ by Aruba Outgoing Smtp  with ESMTPA
+ id OjOzq9O8Ua8IoOjOzquuI0; Wed, 26 Jul 2023 20:38:25 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Wed, 26 Jul 2023 20:38:24 +0200
+Message-Id: <E29A89A4-CBE3-4B41-B65C-DEA72DBCC1FB@benettiengineering.com>
+References: <CABRndgxy9N+ndHtMQNo3qytZ5jbmRKk0yddYT6J-Y+E64BHPGw@mail.gmail.com>
+In-Reply-To: <CABRndgxy9N+ndHtMQNo3qytZ5jbmRKk0yddYT6J-Y+E64BHPGw@mail.gmail.com>
+To: Zvi Vered <veredz72@gmail.com>
+X-Mailer: iPhone Mail (20G75)
+X-CMAE-Envelope: MS4xfK+JNUYv8OPJJ2PgbsG4ymmeGUbAx+6/psA5gl3vJMl+Ylvlj9iNz6fcApm3te7J3iBXl0WgINoYmua2tcHN+5kFEORrrCbAg5JkRHqdX9ln4GlPvEGG
+ I23wyYSq3r+2G2SMUfO/ILlcUUrxm0yadOwjJvyLPiRoX14VkhiGaWm2wL9axVYtOYQYamyTRy6ycnJCWqYLmfkZURYC3yPXNCjo1qOfsqdxkOfZC4VtuCfM
+ +21IB7Dh2D9O15wmg0LWEw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1690396137;
- bh=M1dPuwGabQRywgGY63CXDSr3SxPlyx9YNss8ZXAzx3U=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=P418QQfXj/dGcoNK9eT7tIET5ZRGP7ogPG8nHbgMl5N3SZUkHnkf0hwk2vIJa5yz7
- zmu1p8NzFaJ0bc1IF+TMfqYFgZo3m1YabNRMMZ4i02TV5OQsTHCKftwQLSZg346Ay2
- 8ppan0r1xV83iQjmam6zN3xVrUZdBruuouCp2ZkzYniZSyKj3Fv3o6TkvQ9kZ5tBnn
- ik7jHGQp+5lIgD6Fz0HbX5EHj7K8BpQnyeJAVpoGKjNrGVrHBdnad8lX4/LWo5nIFB
- QJeEEqaEdJq5fyp1uhydV6ZG3js0eyCDURRPSxbepHTDnuV8XTdixNGFsjhhXhxwqD
- 3kcAR/Bxgr0NQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=P418QQfX
-Subject: Re: [Buildroot] [PATCH v6 1/3] package: add rockchip-rkbin package
+ d=aruba.it; s=a1; 
+ t=1690396705; bh=TzY1z8LHcsfB4kOXv1cJrafVb5HxrMEGjNTtPhvktDo=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=XAgDA5JqTehG0ngmT87ySPL4uH0pzaBR9JTL6ErC0vdekRmKt3sroPfZtNDo4NAzI
+ MlLWzPV/p9lVjJ1cKgUvn/wLrHu6imZ0Ufa6PiEkY1nWPA2q8bMTuMV1vkHOtnB9ey
+ +JKadGqlDkopB5B97BoKbvi1lNnUn8Mt95ThlL28/vhLjoEgCWF+8e2o4ouD2HAyi6
+ 91SgqFC9HrP9n/nmowhW+CySzv18CJReZuLYDjzTZDgNw2o1Q7UcOdUufV5EBhMDA5
+ gNvEfxFzH+1lMxUS/uNJ3J//IUdjhzL761L8ibjQXAELAyt4sXrUrWwN4tXXg3Z1mG
+ Ue/lvyhStcvwA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=XAgDA5Jq
+Subject: Re: [Buildroot] buildroot 2023.02.3 : containers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,59 +73,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Andreas Ziegler <br015@umbiko.net>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============8525100595565116247=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas, all
 
-> > > +ROCKCHIP_RKBIN_LICENSE = PROPRIETARY
-> > > +ROCKCHIP_RKBIN_REDISTRIBUTE = NO
-> > 
-> > This is the problematic part I believe. What is the license of this
-> > stuff? Without any license, nobody is allowed to redistribute it. So as
-> > it is, all images produced by Buildroot with this package cannot be
-> > redistributed, making them quite useless, unless it's used by a
-> > hobbyist building his own images for his own usage, without any
-> > redistribution.
-> > 
-> > We have the same issue with some Amlogic blobs I believe. Blobs are
-> > annoying, but they are even more annoying when there's no license
-> > attached to them that allows redistribution.
-> 
-> Well, that seems to be unfortunate. I guess then, there is no point in
-> integrating all this into buildroot, if the binaries are not allowed to be
-> redistributed?
-> 
-> I wrote an email to some of the Rockchip contributors of the rkbin
-> repository, asking them what the license is, regarding the binaries. I hope
-> to get an answer soon, and that a LICENSE file is added to the repository.
-> Let's see ...
-
-Rockchip uploaded a license file to their rkbin repository:
-
-https://github.com/rockchip-linux/rkbin/blob/master/LICENSE
-
-It does allow redistribution of the binaries. I made an 8th version of the 
-patches, removing the "ROCKCHIP_RKBIN_REDISTRIBUTE = NO" and adding a 
-"ROCKCHIP_RKBIN_LICENSE_FILES = LICENSE". I sent the patches to the buildroot 
-mailing list. Are there more things, which would need to be fixed, or would 
-this be sufficient to add this board support to buildroot?
-
-Best regards,
-Kilian
+--===============8525100595565116247==
+Content-Type: multipart/alternative; boundary=Apple-Mail-C872355B-667C-444E-BD75-EEB5CDDD2745
+Content-Transfer-Encoding: 7bit
 
 
+--Apple-Mail-C872355B-667C-444E-BD75-EEB5CDDD2745
+Content-Type: text/html;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+<html><head><meta http-equiv=3D"content-type" content=3D"text/html; charset=3D=
+utf-8"></head><body dir=3D"auto">Hi Zvika,<br><div dir=3D"ltr"><br><blockquo=
+te type=3D"cite">Il giorno 26 lug 2023, alle ore 19:04, Zvi Vered &lt;veredz=
+72@gmail.com&gt; ha scritto:<br><br></blockquote></div><blockquote type=3D"c=
+ite"><div dir=3D"ltr">=EF=BB=BF<div dir=3D"ltr">Hi&nbsp;Giulio,<div><br></di=
+v><div>Thank you very much for your reply.</div><div>I need dockers is my ta=
+rget where the rootfs created by buildroot is located.</div><div>Now I see t=
+hat buildroot has docker components.&nbsp;</div></div></div></blockquote><di=
+v><br></div><div>pardon, I=E2=80=99ve misunderstood. Yes there are:</div><di=
+v>- docker-engine</div><div>and in case you need:</div><div>- docker-cli</di=
+v><div>- docker-compose</div><div><br></div><div>Since you=E2=80=99re using x=
+86_64 you should be able to build with no problem.</div><div><br></div><div>=
+Best regards</div><div>Giulio</div><br><blockquote type=3D"cite"><div dir=3D=
+"ltr"><div dir=3D"ltr"><div><br></div><div>Best&nbsp;regards,</div><div>Zvik=
+a&nbsp;</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"=
+gmail_attr">On Wed, Jul 26, 2023 at 10:12=E2=80=AFAM Giulio Benetti &lt;<a h=
+ref=3D"mailto:giulio.benetti@benettiengineering.com">giulio.benetti@benettie=
+ngineering.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" sty=
+le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
+g-left:1ex"><div dir=3D"auto">Hi Zvika,<div><div dir=3D"ltr"><br><blockquote=
+ type=3D"cite">Il giorno 26 lug 2023, alle ore 04:43, Zvi Vered &lt;<a href=3D=
+"mailto:veredz72@gmail.com" target=3D"_blank">veredz72@gmail.com</a>&gt; ha s=
+critto:<br><br></blockquote></div><blockquote type=3D"cite"><div dir=3D"ltr"=
+>=EF=BB=BF<span>Hello,</span><br><span></span><br><span>I built root file sy=
+stem with buildroot 2023.02.3</span><br><span>The kernel is vanilla 5.4.249<=
+/span><br><span>Architecture: x86_64. It works.</span><br><span></span><br><=
+span>Can you please tell if I can use containers in this setup ? How ?</span=
+><br></div></blockquote><div><br></div><div>You can use official buildroot d=
+ocker by issuing:</div><div>$ utils/docker-run</div><div>inside buildroot fo=
+lder.</div><div>You can check out buildroot manual:</div><div><div style=3D"=
+display:block"><div style=3D"display:inline-block" role=3D"link"><a style=3D=
+"border-radius:10px;font-family:-apple-system,Helvetica,Arial,sans-serif;dis=
+play:block;width:300px;overflow:hidden;text-decoration:none" rel=3D"nofollow=
+" href=3D"https://buildroot.org/downloads/manual/manual.html#submitting-patc=
+hes" dir=3D"ltr" role=3D"button" width=3D"300" target=3D"_blank"><table styl=
+e=3D"table-layout:fixed;border-collapse:collapse;width:300px;background-colo=
+r:rgb(233,233,235);font-family:-apple-system,Helvetica,Arial,sans-serif" cel=
+lpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"300"><tbody><tr><td><=
+table bgcolor=3D"#E9E9EB" cellpadding=3D"0" cellspacing=3D"0" width=3D"300" s=
+tyle=3D"font-family:-apple-system,Helvetica,Arial,sans-serif;table-layout:fi=
+xed;background-color:rgb(233,233,235)"><tbody><tr><td style=3D"padding:8px 0=
+px"><div style=3D"max-width:100%;margin:0px 16px;overflow:hidden"><div style=
+=3D"font-weight:500;font-size:12px;overflow:hidden;text-overflow:ellipsis;te=
+xt-align:left"><a rel=3D"nofollow" href=3D"https://buildroot.org/downloads/m=
+anual/manual.html#submitting-patches" style=3D"text-decoration:none" target=3D=
+"_blank"><font color=3D"#000000" style=3D"color:rgb(0,0,0)">The Buildroot us=
+er manual</font></a></div><div style=3D"font-weight:400;font-size:11px;overf=
+low:hidden;text-overflow:ellipsis;text-align:left"><a rel=3D"nofollow" href=3D=
+"https://buildroot.org/downloads/manual/manual.html#submitting-patches" styl=
+e=3D"text-decoration:none" target=3D"_blank"><font color=3D"#A2A2A9" style=3D=
+"color:rgba(60,60,67,0.6)">buildroot.org</font></a></div></div></td><td styl=
+e=3D"padding:6px 12px 6px 0px" width=3D"36"><a rel=3D"nofollow" href=3D"http=
+s://buildroot.org/downloads/manual/manual.html#submitting-patches" target=3D=
+"_blank"><div>&lt;favicon.ico&gt;</div></a></td></tr></tbody></table></td></=
+tr></tbody></table></a></div></div><br></div><div>In general patches are che=
+cked using docker-run script.</div><div><br></div><div>Best regards</div><di=
+v>Giulio</div><br><blockquote type=3D"cite"><div dir=3D"ltr"><span></span><b=
+r><span>Thank you,</span><br><span>Zvika</span><br><span>___________________=
+____________________________</span><br><span>buildroot mailing list</span><b=
+r><span><a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildro=
+ot@buildroot.org</a></span><br><span><a href=3D"https://lists.buildroot.org/=
+mailman/listinfo/buildroot" target=3D"_blank">https://lists.buildroot.org/ma=
+ilman/listinfo/buildroot</a></span><br></div></blockquote></div></div></bloc=
+kquote></div>
+</div></blockquote></body></html>=
+
+--Apple-Mail-C872355B-667C-444E-BD75-EEB5CDDD2745--
+
+--===============8525100595565116247==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8525100595565116247==--
