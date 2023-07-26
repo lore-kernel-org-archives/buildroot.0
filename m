@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF75BC001DF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 488B3C001E0
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:23:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5FD740BC2;
-	Wed, 26 Jul 2023 21:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5FD740BC2
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA9E040BD9;
+	Wed, 26 Jul 2023 21:23:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9E040BD9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mVJkTHpWmAtR; Wed, 26 Jul 2023 21:22:40 +0000 (UTC)
+	with ESMTP id VjMgC_aJx46x; Wed, 26 Jul 2023 21:23:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DD73940BD0;
-	Wed, 26 Jul 2023 21:22:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD73940BD0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F12E81BF423
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:22:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A37540BCC;
+	Wed, 26 Jul 2023 21:23:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A37540BCC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C1D7B1BF423
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:23:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA7E683A75
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:22:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA7E683A75
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E6FC40BCC
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:23:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E6FC40BCC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id M6uMhncIgkvV for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 21:22:38 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA81A83A68
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:22:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA81A83A68
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 90D27C0004;
- Wed, 26 Jul 2023 21:22:35 +0000 (UTC)
-Date: Wed, 26 Jul 2023 23:22:34 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230726232234.6daa00c5@windsurf>
-In-Reply-To: <20230612165344.3829304-1-giulio.benetti@benettiengineering.com>
-References: <20230612165344.3829304-1-giulio.benetti@benettiengineering.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RZPzOjuwUfhc for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 21:23:11 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E35C40BC2
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E35C40BC2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 63827FF804;
+ Wed, 26 Jul 2023 21:23:09 +0000 (UTC)
+Date: Wed, 26 Jul 2023 23:23:08 +0200
+To: Yair Ben-Avraham via buildroot <buildroot@buildroot.org>
+Message-ID: <20230726232308.684470d7@windsurf>
+In-Reply-To: <3BZE266B89j-Oimbd_8h4tun1G60GrejVfGJajLoDnLBoJ56dpXbbiDB5cz75lracrEQCyPa8GTVynXu27sk3-16XX72SRO_X-dJ8cmJXLs=@protonmail.com>
+References: <3BZE266B89j-Oimbd_8h4tun1G60GrejVfGJajLoDnLBoJ56dpXbbiDB5cz75lracrEQCyPa8GTVynXu27sk3-16XX72SRO_X-dJ8cmJXLs=@protonmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690406556;
+ d=bootlin.com; s=gm1; t=1690406589;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=WTkTvzr7mssQ7nQXWAbBhZODhfpMGh510TMEr+gGVKM=;
- b=UNOhNm7X4vL2LbNzC6htMfKGMIbGNTrCUmSMCx8+kxlKr2IZ3/1pbRktW1oiR/2zIA8Uec
- ck8lpHp/0ACJuOYKPU7dDqDfXjAH8lWI2KUmG/sgSMZRWdzOpTZ8LGKM463fCPYlQ+pF17
- fGcYiPcyXLQ4jIHKGE7ELhZkHOYPN6vjvmFSB9OKF7648hsiNcOrOPVw9FFHJGvFEBUHOU
- jN0tAM4+Sp7bho6Mrhr6AzhO6DFQhtZC0Y7mqNhTuneVy9XdLvAHOWvnLJiP6ja19xEEE6
- wLkB4GHp+osB+92igTJPNobXCR8dYrKd3gupYQAtua7NKnIgfV4Km0V4EeS8Gg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=rfQ+W1ne0paSDOSVLzWj9QmJQudbHUPqcc9YcmBLwpA=;
+ b=B0wmv18WlmJbxizhB59U2HBNqu+2U8KzLv9RsbRXkHcL6Qs4bDwa4dcNqse0ht7O46AQC2
+ lrbQbZla9RYRnJZJkGEMhASrlCHr/jKiVxppDTDmb0fOGxF9vsoDK2/3cXwKg3Niu1dDKP
+ eU55rjwPWG7EE6/gRy6n9EF5F/sABkED3qSjXwa9f+ho24O4hhamQ7cxDExshMFs4amQ1M
+ QT6HRkoXSFap0a/v12g4+Z9uxRaz+vUmYcNNFRSAhDpz/rQs8yQ6CL3FmPUZ4sLSaGZN3N
+ 4g1K9IRrtFTvg8Rp0jQO2h5LYKOfjAOeq5L2uTfebgLcwO8PHnZTFns0XpXg/Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UNOhNm7X
-Subject: Re: [Buildroot] [PATCH] package/rtl8189fs: en/disable runtime debug
- according to BR2_ENABLE_RUNTIME_DEBUG
+ header.s=gm1 header.b=B0wmv18W
+Subject: Re: [Buildroot] [PATCH 1/1] package/tpm2-pkcs11: bump version to
+ 1.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,20 +77,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>,
- Indrek Kruusa <indrek.kruusa@gmail.com>, buildroot@buildroot.org
+Cc: Yair Ben-Avraham <yairba@protonmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 12 Jun 2023 18:53:44 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Fri, 09 Jun 2023 03:37:43 +0000
+Yair Ben-Avraham via buildroot <buildroot@buildroot.org> wrote:
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
 > ---
->  package/rtl8189fs/rtl8189fs.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/tpm2-pkcs11/tpm2-pkcs11.hash | 2 +-
+>  package/tpm2-pkcs11/tpm2-pkcs11.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
