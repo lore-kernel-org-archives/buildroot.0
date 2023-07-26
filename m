@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 414E4C0015E
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53C8AC0015E
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:33:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4AD2612B8;
-	Wed, 26 Jul 2023 21:30:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4AD2612B8
+	by smtp3.osuosl.org (Postfix) with ESMTP id E096F60AC0;
+	Wed, 26 Jul 2023 21:33:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E096F60AC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VZSv_AVuU1Tr; Wed, 26 Jul 2023 21:30:21 +0000 (UTC)
+	with ESMTP id YLZnMZjO74xp; Wed, 26 Jul 2023 21:33:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EC5E6120B;
-	Wed, 26 Jul 2023 21:30:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EC5E6120B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ADBE41BF423
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:30:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C05CD612B2;
+	Wed, 26 Jul 2023 21:33:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C05CD612B2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EDEFC1BF423
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 801E76120B
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:30:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 801E76120B
+ by smtp1.osuosl.org (Postfix) with ESMTP id CE9F183216
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:33:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE9F183216
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FP_Gwx6TxTnW for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 21:30:17 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F71660AC0
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F71660AC0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8443040006;
- Wed, 26 Jul 2023 21:30:13 +0000 (UTC)
-Date: Wed, 26 Jul 2023 23:30:12 +0200
-To: =?UTF-8?B?Sm9zw6k=?= Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Message-ID: <20230726233012.50b0ac6c@windsurf>
-In-Reply-To: <20230608175538.1347170-1-salvador.joseluis@gmail.com>
-References: <20230608175538.1347170-1-salvador.joseluis@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690407014;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Ary62ouzg+TVO+h3fDXIt6WnvSYevEznFKb+PevdFLA=;
- b=Z4bXJcWkUbtFEyVGPoaiv7WXfxOj5cySLKX6YPwC0D14iGjUslt1SfktF97GE3X273WEqS
- SCPoiP666vHqEPUcBz1xaPf+jjfdh4QWtUPWms+ED8e85ptS8lzKxfmTFXaZ4LjOb3pbx9
- iVYrQtYAWsHVP9YRWv/j7dMdGYq6lN2Ol4Su3X3FnfHa8+5Jhf++ODTQ/Mxs/rnFyB38t5
- AHJCFtCHDvaxTE6kWSgCmqLSzufH2rIIUpAgTUsTRq3AOpDgQNMakRtEPFgbjtvMICpaMh
- kiGeszG2X8bVdA7I4FbszE25Itxd/ONSElLs1WA0w9p2W9ECedpxLYipzkYsWw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Z4bXJcWk
-Subject: Re: [Buildroot] [PATCH] package/zfs: fix autotools crosscompilations
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L48LO7BVlFrB for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 21:32:59 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B13AA831F1
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:32:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B13AA831F1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9983A835F9; Wed, 26 Jul 2023 21:32:59 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 26 Jul 2023 23:31:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 293196b2baecd27bc41107393a72cf4aeb5f11bc
+X-Git-Newrev: cfff4e120f18322df676160caa9a0162644d3f9a
+X-Patchwork-Hint: ignore
+Message-Id: <20230726213259.9983A835F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: bump version to 2.1.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,29 +57,203 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>,
- Michael Zimmermann <sigmaepsilon92@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7812794423535971861=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9zw6ksCgpPbiBUaHUsICA4IEp1biAyMDIzIDE5OjU1OjM4ICswMjAwCkpvc8OpIEx1
-aXMgU2FsdmFkb3IgUnVmbyA8c2FsdmFkb3Iuam9zZWx1aXNAZ21haWwuY29tPiB3cm90ZToKCj4g
-U2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIDxzYWx2YWRvci5qb3NlbHVp
-c0BnbWFpbC5jb20+CgpUaGFua3MgZm9yIHRoZSBjb250cmlidXRpb24sIGJ1dCB1bmZvcnR1bmF0
-ZWx5IHdlIGNhbm5vdCBhcHBseSB0aGlzCnBhdGNoOiBpdCBkb2VzIG5vdCBleHBsYWluIGFueXRo
-aW5nIGFib3V0IHdoaWNoICJhdXRvdG9vbHMKY3Jvc3Njb21waWxhdGlvbnMiIGlzc3VlcyBpdCBp
-cyBmaXhpbmcuIEFyZSB0aGVzZSBmYWlsdXJlcyB2aXNpYmxlIGluCnRoZSBhdXRvYnVpbGRlcnM/
-IElmIHNvLCB3aGF0IGxpbms/IElmIG5vdCwgd2hhdCBjb25maWd1cmF0aW9uL3NldHVwCmV4aGli
-aXRzIHRoZSBwcm9ibGVtLCB3aGF0IGlzIHRoZSBlcnJvciBtZXNzYWdlLCBob3cgZG9lcyB0aGUg
-cGF0Y2ggZml4CnRoZSBpc3N1ZT8KCkNvdWxkIHlvdSBzZW5kIGFuIHVwZGF0ZWQgcGF0Y2ggd2l0
-aCBhIG5vbi1lbXB0eSBjb21taXQgbG9nIHRoYXQKY29udGFpbnMgYSBzdWZmaWNpZW50IGFtb3Vu
-dCBvZiBkZXRhaWwgZm9yIHVzIHRvIHByb3Blcmx5CnJldmlldy91bmRlcnN0YW5kIHRoZSBjaGFu
-Z2U/CgpUaGFua3MhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBD
-RU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJh
-aW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+--===============7812794423535971861==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=cfff4e120f18322df676160caa9a0162644d3f9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed backported patch:
+- 0001-removal-of-LegacyVersion-broke-ax_python_dev.m4.patch
+
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...l-of-LegacyVersion-broke-ax_python_dev.m4.patch | 134 ---------------------
+ package/zfs/zfs.hash                               |   4 +-
+ package/zfs/zfs.mk                                 |   2 +-
+ 3 files changed, 3 insertions(+), 137 deletions(-)
+
+diff --git a/package/zfs/0001-removal-of-LegacyVersion-broke-ax_python_dev.m4.patch b/package/zfs/0001-removal-of-LegacyVersion-broke-ax_python_dev.m4.patch
+deleted file mode 100644
+index c7c4dc7d10..0000000000
+--- a/package/zfs/0001-removal-of-LegacyVersion-broke-ax_python_dev.m4.patch
++++ /dev/null
+@@ -1,134 +0,0 @@
+-From ad2c8e13e42bc2f396cce117d17a227dadedd476 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Thu, 5 Jan 2023 11:04:24 -0800
+-Subject: [PATCH] removal of LegacyVersion broke ax_python_dev.m4
+-
+-The 22.0 release of the python `packaging` package removed the
+-`LegacyVersion` trait, causing ZFS to no longer compile.
+-
+-This commit replaces the sections of `ax_python_dev.m4` that rely on
+-`LegacyVersion` with updated implementations from the upstream
+-`autoconf-archive`.
+-
+-Reviewed-by: Brian Behlendorf <behlendorf1@llnl.gov>
+-Signed-off-by: Matthew Ahrens <mahrens@delphix.com>
+-Closes #14297
+-Upstream: https://github.com/openzfs/zfs/commit/b72efb751147ab57afd1588a15910f547cb22600
+-[Romain: backport to 2.1.7]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- config/ax_python_devel.m4 | 71 +++++++++++++++++++--------------------
+- 1 file changed, 35 insertions(+), 36 deletions(-)
+-
+-diff --git a/config/ax_python_devel.m4 b/config/ax_python_devel.m4
+-index 7adcf01a0..9eef45065 100644
+---- a/config/ax_python_devel.m4
+-+++ b/config/ax_python_devel.m4
+-@@ -97,23 +97,13 @@ AC_DEFUN([AX_PYTHON_DEVEL],[
+- 	# Check for a version of Python >= 2.1.0
+- 	#
+- 	AC_MSG_CHECKING([for a version of Python >= '2.1.0'])
+--	ac_supports_python_ver=`cat<<EOD | $PYTHON -
+--from __future__ import print_function;
+--import sys;
+--try:
+--	from packaging import version;
+--except ImportError:
+--	from distlib import version;
+--ver = sys.version.split ()[[0]];
+--(tst_cmp, tst_ver) = ">= '2.1.0'".split ();
+--tst_ver = tst_ver.strip ("'");
+--eval ("print (version.LegacyVersion (ver)"+ tst_cmp +"version.LegacyVersion (tst_ver))")
+--EOD`
+-+	ac_supports_python_ver=`$PYTHON -c "import sys; \
+-+		ver = sys.version.split ()[[0]]; \
+-+		print (ver >= '2.1.0')"`
+- 	if test "$ac_supports_python_ver" != "True"; then
+- 		if test -z "$PYTHON_NOVERSIONCHECK"; then
+- 			AC_MSG_RESULT([no])
+--			m4_ifvaln([$2],[$2],[
+--				AC_MSG_FAILURE([
+-+			AC_MSG_FAILURE([
+- This version of the AC@&t@_PYTHON_DEVEL macro
+- doesn't work properly with versions of Python before
+- 2.1.0. You may need to re-run configure, setting the
+-@@ -122,7 +112,6 @@ PYTHON_EXTRA_LIBS and PYTHON_EXTRA_LDFLAGS by hand.
+- Moreover, to disable this check, set PYTHON_NOVERSIONCHECK
+- to something else than an empty string.
+- ])
+--			])
+- 		else
+- 			AC_MSG_RESULT([skip at user request])
+- 		fi
+-@@ -131,37 +120,47 @@ to something else than an empty string.
+- 	fi
+- 
+- 	#
+--	# if the macro parameter ``version'' is set, honour it
+-+	# If the macro parameter ``version'' is set, honour it.
+-+	# A Python shim class, VPy, is used to implement correct version comparisons via
+-+	# string expressions, since e.g. a naive textual ">= 2.7.3" won't work for
+-+	# Python 2.7.10 (the ".1" being evaluated as less than ".3").
+- 	#
+- 	if test -n "$1"; then
+- 		AC_MSG_CHECKING([for a version of Python $1])
+--		# Why the strip ()?  Because if we don't, version.parse
+--		# will, for example, report 3.10.0 >= '3.11.0'
+--		ac_supports_python_ver=`cat<<EOD | $PYTHON -
+--
+--from __future__ import print_function;
+--import sys;
+--try:
+--	from packaging import version;
+--except ImportError:
+--	from distlib import version;
+--ver = sys.version.split ()[[0]];
+--(tst_cmp, tst_ver) = "$1".split ();
+--tst_ver = tst_ver.strip ("'");
+--eval ("print (version.LegacyVersion (ver)"+ tst_cmp +"version.LegacyVersion (tst_ver))")
+--EOD`
+-+                cat << EOF > ax_python_devel_vpy.py
+-+class VPy:
+-+    def vtup(self, s):
+-+        return tuple(map(int, s.strip().replace("rc", ".").split(".")))
+-+    def __init__(self):
+-+        import sys
+-+        self.vpy = tuple(sys.version_info)
+-+    def __eq__(self, s):
+-+        return self.vpy == self.vtup(s)
+-+    def __ne__(self, s):
+-+        return self.vpy != self.vtup(s)
+-+    def __lt__(self, s):
+-+        return self.vpy < self.vtup(s)
+-+    def __gt__(self, s):
+-+        return self.vpy > self.vtup(s)
+-+    def __le__(self, s):
+-+        return self.vpy <= self.vtup(s)
+-+    def __ge__(self, s):
+-+        return self.vpy >= self.vtup(s)
+-+EOF
+-+		ac_supports_python_ver=`$PYTHON -c "import ax_python_devel_vpy; \
+-+                        ver = ax_python_devel_vpy.VPy(); \
+-+			print (ver $1)"`
+-+                rm -rf ax_python_devel_vpy*.py* __pycache__/ax_python_devel_vpy*.py*
+- 		if test "$ac_supports_python_ver" = "True"; then
+--		   AC_MSG_RESULT([yes])
+-+			AC_MSG_RESULT([yes])
+- 		else
+- 			AC_MSG_RESULT([no])
+--			m4_ifvaln([$2],[$2],[
+--				AC_MSG_ERROR([this package requires Python $1.
+-+			AC_MSG_ERROR([this package requires Python $1.
+- If you have it installed, but it isn't the default Python
+- interpreter in your system path, please pass the PYTHON_VERSION
+- variable to configure. See ``configure --help'' for reference.
+- ])
+--				PYTHON_VERSION=""
+--			])
+-+			PYTHON_VERSION=""
+- 		fi
+- 	fi
+- 
+--- 
+-2.34.3
+-
+diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
+index 0bce3817fe..3a73e5e94f 100644
+--- a/package/zfs/zfs.hash
++++ b/package/zfs/zfs.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openzfs/zfs/releases/download/zfs-2.1.7/zfs-2.1.7.sha256.asc
+-sha256  6462e63e185de6ff10c64ffa6ed773201a082f9dd13e603d7e8136fcb4aca71b  zfs-2.1.7.tar.gz
++# From https://github.com/openzfs/zfs/releases/download/zfs-2.1.12/zfs-2.1.12.sha256.asc
++sha256  64daa26aed3e12c931f6f4413d7527c4ebdb8da35416b356152b5f9fdd4c6e6d  zfs-2.1.12.tar.gz
+ sha256  96a27353fe717ff2c8b95deb8b009c4eb750303c6400e2d8a2582ab1ec12b25a  bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+ 
+ # Hash for license files:
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index 97e9442cf8..6d5d46a305 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZFS_VERSION = 2.1.7
++ZFS_VERSION = 2.1.12
+ ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
+ ZFS_PATCH = https://github.com/openzfs/zfs/commit/bc3f12bfac152a0c28951cec92340ba14f9ccee9.patch
+ ZFS_LICENSE = CDDL
+
+--===============7812794423535971861==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7812794423535971861==--
