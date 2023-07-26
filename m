@@ -4,93 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6F0FC001DF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AE7AC001DF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CD58612B2;
-	Wed, 26 Jul 2023 21:42:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CD58612B2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06B83612C4;
+	Wed, 26 Jul 2023 21:43:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06B83612C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HzoBpeUrZav3; Wed, 26 Jul 2023 21:42:31 +0000 (UTC)
+	with ESMTP id mihS2cUiHqEQ; Wed, 26 Jul 2023 21:43:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93383612BD;
-	Wed, 26 Jul 2023 21:42:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93383612BD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A42201BF980
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:42:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C93D612C0;
+	Wed, 26 Jul 2023 21:43:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C93D612C0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8873E1BF980
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DC92831DA
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DC92831DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62532612C0
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:43:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62532612C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QQBmoR0-3ywH for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 21:42:27 +0000 (UTC)
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com
- [IPv6:2607:f8b0:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D63FE83180
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:42:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D63FE83180
-Received: by mail-pg1-x531.google.com with SMTP id
- 41be03b00d2f7-563643b2b4cso141680a12.1
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 14:42:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690407746; x=1691012546;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=KC4kI1AZCkKPxoBzw2zcBXgkek+VBX03YTtCvkF5w8Y=;
- b=KFFyPDIq/Tj5YLHmaoFuWyWAgsdilW5uotXOKUcpLIZCUr6tkS2qM0HWGknvstfGm3
- St/RBPiDg7Kog+B9xMim5fF6650nn584q+pKcGHRY1VuT29Hfgf7gXeGPihGNIe0oZ93
- fArU/tQRUVE/9YZwkMs/CRH6PpG9SJqPWfVX54UUIv6gyY3Wfhmi1QQn0NqxkGUqcrlV
- muanHDvYDSWOxcUriZfuU0sPkDykrI4X4xpjhdOLT/G+LBbyVldSO1d768DjFEIWgYIf
- hPVE2Cvl3x244tqS6XbA6TFNwhs6I2p3OBXPwfk1D7MHfH2giL7tNIzG66TaAk52XW4l
- VqWw==
-X-Gm-Message-State: ABy/qLajLLpbGVdv7KwAGeZs8286lAoBm/TqzQCiI9KGOGB2hYbjcA/o
- O0lUQtTuPb2ctKDlz2jmLTov1ipcMzbEhkLwdDc=
-X-Google-Smtp-Source: APBJJlEElouB/431JkWcCLEB5a+2HgLpxj3Vhb5YbNwfp/1GodCyVvwl5Laxc3ZG3uCJJGoV3dRRhQ==
-X-Received: by 2002:a17:90a:dd84:b0:268:4df5:8b29 with SMTP id
- l4-20020a17090add8400b002684df58b29mr2573642pjv.19.1690407746252; 
- Wed, 26 Jul 2023 14:42:26 -0700 (PDT)
-Received: from [192.168.0.164] (d205-250-120-28.bchsia.telus.net.
- [205.250.120.28]) by smtp.gmail.com with ESMTPSA id
- p21-20020a17090adf9500b00263d3448141sm68468pjv.8.2023.07.26.14.42.25
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 26 Jul 2023 14:42:25 -0700 (PDT)
-Message-ID: <401c59f6-42c7-ecc8-c6a8-efe9b7c23070@threespeedlogic.com>
-Date: Wed, 26 Jul 2023 14:42:25 -0700
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z2cN_gRtrYrS for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 21:43:08 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2AC67612B8
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:43:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AC67612B8
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:89e8:4a89:fcd4:1b18])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 58A595FF67;
+ Wed, 26 Jul 2023 23:43:00 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 26 Jul 2023 23:43:00 +0200
+Date: Wed, 26 Jul 2023 23:43:00 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Message-ID: <20230726214300.GD3544423@scaer>
+References: <20230726180433.7561-1-kilian.zinnecker@mail.de>
+ <20230726180433.7561-3-kilian.zinnecker@mail.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20230726213726.20750-1-james.hilliard1@gmail.com>
- <20230726213726.20750-2-james.hilliard1@gmail.com>
-From: Graeme Smecher <gsmecher@threespeedlogic.com>
-In-Reply-To: <20230726213726.20750-2-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=threespeedlogic-com.20221208.gappssmtp.com; s=20221208; t=1690407746;
- x=1691012546; 
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=KC4kI1AZCkKPxoBzw2zcBXgkek+VBX03YTtCvkF5w8Y=;
- b=cOPlrSl7dh8Kf8gM2NlbvaceKtnJcyZADlcrNFG+DOkFKC1Q6XyzsPJvg2/4+VKTWt
- WxwRNCC33qBYNnMlt5R9lkggAhlsUCaiykbBZUe5XFR7QEhQA3GQIBlWduXASTB+Hb09
- fKgYvJEuuHrVWFtxy8YQRTRrJwYA41LeE9D7/e/sm+b7nttnKaJyL9ahHGtzYP4pZ78M
- oFZeEwuB9rvB/bA+zd9Fd6KLRmWPhigI5I7zoQj9uiKhQvenUVFaU851teWA8m8Zi9hN
- uBHOMzUXiyplMi80AhoE0OuVURjEA6rJpuQBYOoxLilR+NjnB25k24LDh5jzFca0zZDN
- i36g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=threespeedlogic-com.20221208.gappssmtp.com
- header.i=@threespeedlogic-com.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=cOPlrSl7
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-orjson: bump to version
- 3.9.2
+Content-Disposition: inline
+In-Reply-To: <20230726180433.7561-3-kilian.zinnecker@mail.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690407786;
+ bh=+mAmjpsGmGT7G/tUKlaIJ/4A75nzOa0H4sFVMIQBWnk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=NB8nr0qON2vIXIOpIWNCchjqQq/KT2dEgg/pfiLvDPvsnzRIj3vky/CBd9vJXfaLp
+ MgwqCVHvByQGf55uC0h2qmh9QsD41pHMBhmBmeV29OTSPLEW5B0tQks7enNxkd2BYi
+ l5pThQhyr2w5Cxmhj2mtvBm2chVyGljvtvW7ROUsd6wZlmhllbLGiPxkMFVlcuaM2y
+ iP7jkfBUtiB6Wxdgdr+VoTw0tcfL79vaUI6EEnCd4QEk4VJzEfQzxDMOWligVQj+Mu
+ XmMyvfFr43+Dltzr/kOCRItXz1IA+Ejuya+ad039cFGyj2516mMIeqUenmK8m3Webg
+ TGDXyVScBuhFQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NB8nr0qO
+Subject: Re: [Buildroot] [PATCH v8 2/3] boot/uboot: Add support for Rockchip
+ binary blobs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,54 +77,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+ Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 7/26/23 14:37, James Hilliard wrote:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Kilian, All,
 
-Thanks, James.
-
-Acked-by: Graeme Smecher <gsmecher@threespeedlogic.com>
-
-best,
-Graeme
-
-> ---
->   package/python-orjson/python-orjson.hash | 2 +-
->   package/python-orjson/python-orjson.mk   | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
+On 2023-07-26 20:04 +0200, Kilian Zinnecker via buildroot spake thusly:
+> Currently for some Rockchip SoCs binary blobs are needed, e.g., for
+> the RK3588 bl31 and tpl. These blobs are provided by Rockchip. This
+> patch adds U-Boot package options to use theses binaries, provided
+> by the rockchip-rkbin package, which is also introduced in this
+> patch series. The U-Boot package is modified so that it takes the
+> chosen binaries and automatically uses them during build.
 > 
-> diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-> index f1298c05ce..773fb14568 100644
-> --- a/package/python-orjson/python-orjson.hash
-> +++ b/package/python-orjson/python-orjson.hash
-> @@ -1,5 +1,5 @@
->   # Locally calculated after vendoring
-> -sha256  b932fc1e43598fb91022b1dc651afeaef650793a2a590ca4fbeef57a3808abf5  orjson-3.8.4.tar.gz
-> +sha256  048938fd9153f37eaf7a08b748de94ff87b2488dd3bd9f96c3ae784527a961b3  orjson-3.9.2.tar.gz
->   # Locally computed sha256 checksums
->   sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
->   sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-> diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-> index 8eeadecb3d..f5d4ad1046 100644
-> --- a/package/python-orjson/python-orjson.mk
-> +++ b/package/python-orjson/python-orjson.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
->   
-> -PYTHON_ORJSON_VERSION = 3.8.4
-> +PYTHON_ORJSON_VERSION = 3.9.2
->   PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
-> -PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/8f/2d/ae31eddf7e097eec5e25c7da954ef6e944f4dbf79153676f94cea3dc5116
-> +PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/30/a4/96bcb52da0de9ccfcd99a60719b995c9b9c3aaa3a70701f0790ce856c10d
->   PYTHON_ORJSON_SETUP_TYPE = pep517
->   PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
->   PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+> ---
+>  boot/uboot/Config.in |  9 +++++++++
+>  boot/uboot/uboot.mk  | 17 +++++++++++++++++
+>  2 files changed, 26 insertions(+)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 085397d03d..7733f8501f 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -262,6 +262,15 @@ config BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE
+>  	  This option makes sure that the i.MX firmwares are copied into
+>  	  the U-Boot source directory.
+>  
+> +config BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN
+> +	bool "U-Boot needs rockchip-rkbin"
+> +	depends on BR2_PACKAGE_ROCKCHIP_RKBIN
+> +	help
+> +	  For some Rockchip SoCs U-Boot needs binary blobs from
+> +	  Rockchip.
+> +	  This option makes sure that the needed binary blobs are copied
+> +	  into the U-Boot source directory.
+> +
+>  menu "U-Boot binary format"
+>  
+>  config BR2_TARGET_UBOOT_FORMAT_AIS
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 1a6e70a792..b6e270f633 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -207,6 +207,23 @@ endef
+>  UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_IMX_FW_FILES
+>  endif
+>  
+> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN),y)
+> +UBOOT_DEPENDENCIES += rockchip-rkbin
+> +define UBOOT_INSTALL_UBOOT_ROCKCHIP_BIN
+> +	$(INSTALL) -D -m 0644 $(@D)/u-boot-rockchip.bin $(BINARIES_DIR)/u-boot-rockchip.bin
+> +endef
+> +UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_UBOOT_ROCKCHIP_BIN
+> +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME),"")
+> +UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/${notdir $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME))}
+
+I've re-used the already-qstripped variables from the rockchip-rkbin
+package.
+
+Also, I switched from using curly brances to the ;ore standard (for
+Buildroot) parethesis.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> +endif
+> +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME),"")
+> +UBOOT_MAKE_OPTS += ROCKCHIP_TPL=$(BINARIES_DIR)/${notdir $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME))}
+> +endif
+> +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME),"")
+> +UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/${notdir $(call qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME))}
+> +endif
+> +endif
+> +
+>  ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+>  UBOOT_DEPENDENCIES += host-dtc
+>  UBOOT_MAKE_OPTS += DTC=$(HOST_DIR)/bin/dtc
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
