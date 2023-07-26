@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10AF9C001DF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 20:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F5B4C001DC
+	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 20:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8C1C83B16;
-	Wed, 26 Jul 2023 20:15:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8C1C83B16
+	by smtp1.osuosl.org (Postfix) with ESMTP id 087BD83F84;
+	Wed, 26 Jul 2023 20:16:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 087BD83F84
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id daAgWQnitSVy; Wed, 26 Jul 2023 20:15:35 +0000 (UTC)
+	with ESMTP id iIA7useMTJrz; Wed, 26 Jul 2023 20:16:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2EE183B8D;
-	Wed, 26 Jul 2023 20:15:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2EE183B8D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 698281BF983
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 20:15:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47E5283F6F;
+	Wed, 26 Jul 2023 20:16:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47E5283F6F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B56DE1BF40D
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 20:16:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42D5C611E1
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 20:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42D5C611E1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E89583F6F
+ for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 20:16:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E89583F6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tVfwGpokakLi for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 20:15:18 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CF8760AC0
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 20:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CF8760AC0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 594C88356C; Wed, 26 Jul 2023 20:15:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 26 Jul 2023 22:13:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97cb975dd1d4f4e146898227940574bf96ae4843
-X-Git-Newrev: bef2298f5a9e465b39ef93308ab028d228c2b408
-X-Patchwork-Hint: ignore
-Message-Id: <20230726201518.594C88356C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-iniparse: add host variant
- dependency from python-six
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nR1R0nIC2nkN for <buildroot@lists.busybox.net>;
+ Wed, 26 Jul 2023 20:16:02 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5EB8583A52
+ for <buildroot@buildroot.org>; Wed, 26 Jul 2023 20:16:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EB8583A52
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C29A120008;
+ Wed, 26 Jul 2023 20:15:53 +0000 (UTC)
+Date: Wed, 26 Jul 2023 22:15:52 +0200
+To: Sergey Bobrenok via buildroot <buildroot@buildroot.org>
+Message-ID: <20230726221552.7b9ba813@windsurf>
+In-Reply-To: <20230618111434.62274-1-SIBobrenok@sberdevices.ru>
+References: <20230618111434.62274-1-SIBobrenok@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690402559;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=yqCy92BB50XAop+XCq2V7Kr1XcFh72m0+zZLrYgLhoM=;
+ b=ZcnwIJ3w1mN0KeMXtS0gB1tU2PWfKKqKag79kaH6imE1Vf/WiVuEzrZdkVP8OfWevQZJ8k
+ ZJB4nJ8AgqBl5VIITyOB3C+0B6HbkFCCTyY4S67Ng5mbjfR709x+8C2NjSgDjqfy0UsmDy
+ CjCnBEWJ0FTQGoK5fa5Bb+3UHp/XlstwDiz62dqfGrKEFArmOwep1Zu88LBGQyDkkAvV9p
+ cwjuOGFFRy4OUYnJfksuL4rfsNQ59iGDnTaK2pjjY43w0iet3NwJ4Ej6f1lbx4zgvQSqCC
+ khlUQQiNPkckLYSnvPYxtUg7exUEGOuAqUDsZ12P8o9rB+mouEsBa+hlugh+8w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZcnwIJ3w
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-iniparse: add host
+ variant dependency from python-six
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,35 +77,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Sergey Bobrenok <SIBobrenok@sberdevices.ru>, Asaf Kahlon <asafka7@gmail.com>,
+ sdfw_system_team@sberdevices.ru
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bef2298f5a9e465b39ef93308ab028d228c2b408
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 18 Jun 2023 14:14:33 +0300
+Sergey Bobrenok via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-iniparse/python-iniparse.mk | 3 +++
- 1 file changed, 3 insertions(+)
+> Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
+> ---
+>  package/python-iniparse/python-iniparse.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
-index e76987d1e9..9f00cf7387 100644
---- a/package/python-iniparse/python-iniparse.mk
-+++ b/package/python-iniparse/python-iniparse.mk
-@@ -10,6 +10,9 @@ PYTHON_INIPARSE_SITE = https://pypi.python.org/packages/source/i/iniparse
- PYTHON_INIPARSE_LICENSE = Python-2.0, MIT
- PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
- PYTHON_INIPARSE_SETUP_TYPE = setuptools
-+# This is a runtime dependency, but we don't have the concept of
-+# runtime dependencies for host packages.
-+HOST_PYTHON_INIPARSE_DEPENDENCIES = host-python-six
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+Thanks, both applied after adding a comment in each package explaining
+that it is in fact a runtime dependency, but we have no way to express
+that for host packages, other than by using build dependencies.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
