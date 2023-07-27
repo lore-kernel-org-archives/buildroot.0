@@ -4,64 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F7D2C001E0
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 13:05:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33199C001DC
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 13:40:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8E3381312;
-	Thu, 27 Jul 2023 13:05:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8E3381312
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74F5D81EDA;
+	Thu, 27 Jul 2023 13:40:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74F5D81EDA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TD5zOXl2Xf2g; Thu, 27 Jul 2023 13:05:05 +0000 (UTC)
+	with ESMTP id 5spMfeVlUDIh; Thu, 27 Jul 2023 13:40:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C93181332;
-	Thu, 27 Jul 2023 13:05:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C93181332
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ABCC31BF429
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 13:05:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5AC281B52;
+	Thu, 27 Jul 2023 13:40:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5AC281B52
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 747291BF429
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 13:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D07381332
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 13:05:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D07381332
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54C134031F
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 13:40:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54C134031F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZdXthpkf6jVJ for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 13:05:01 +0000 (UTC)
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C133781312
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 13:05:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C133781312
-Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id C532CC0DF1
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 12:51:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 17A4960012;
- Thu, 27 Jul 2023 12:51:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tFNY4tSqv7EH for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 13:40:13 +0000 (UTC)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8617540217
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 13:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8617540217
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-99bccc9ec02so135274966b.2
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 06:40:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1690465211; x=1691070011;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=2PaOgmKZPjKg7UBJHu6NA6SrIFFujrYUGayjATDkEYk=;
+ b=B1L9l/OJFrkWCSw2PNn8dc/ZzRL3CAg4BiGs/534XwJK5bEHJOOOA9aYsGqAkcm9/D
+ NyKJ3N6dvJkKuSx/larne2gP+YGMBgrt80xjiHjq0b40pIekc3SrKyi8oH+tDd4MZKzc
+ u7SBesDJ9a9Js01tHarjzJOwopdIf2ZO7cux9MwgLBB59YCJdd8Dmyk1tXUXbkMPkGKj
+ fmGolA1yP7w6hf2+aik8Ew41qBN/TwlIAI5V2DCJ/Xs2iLcG8xZ+Z7S31Cpr4uwgv4cl
+ dOBfWh8fctJeVKXHp5O8IYwkE/Ro89IHUCMciGba1JI8YFiJbcC84w5Zlw9ERnxQhA5c
+ T1UQ==
+X-Gm-Message-State: ABy/qLbK/XF8eTWfavgmmKBN2KXIfT0R3r3LfkC2ZLazvgBEDiask7Z5
+ U25nsKih/cspXmozLbBBZzSn66Ryua8=
+X-Google-Smtp-Source: APBJJlFVFbIUhv/hhDQqBC3nTUx6GnQOOucAWhk2q0xYcRTNmquPIvTCWvtMSZQn/haIwPwhVsPLRg==
+X-Received: by 2002:a17:907:2bde:b0:99b:d599:5085 with SMTP id
+ gv30-20020a1709072bde00b0099bd5995085mr2144065ejc.64.1690465210998; 
+ Thu, 27 Jul 2023 06:40:10 -0700 (PDT)
+Received: from hthiery.kontron.local ([213.135.10.150])
+ by smtp.gmail.com with ESMTPSA id
+ j13-20020a17090686cd00b0098884f86e41sm786940ejy.123.2023.07.27.06.40.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 27 Jul 2023 06:40:09 -0700 (PDT)
+From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 14:51:23 +0200
-Message-ID: <20230727125123.927568-1-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.41.0
+Date: Thu, 27 Jul 2023 15:40:01 +0200
+Message-Id: <20230727134000.429651-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-GND-Sasl: herve.codina@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690462287;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=ZbiEr6gvvhFArdRwRSbQDZi1QnitL9LfdnWZBuxwJmw=;
- b=nYaFdU0gzCbV9Yf3xERydASWLa+a4tlL3fqV8Y77xCyQ0lWy+n1FBbPpCrRGnJTDV3h2bo
- +ksCnAU1eePkZQGt8s/IiZzgpSW1b0RWg8H8JNEqN/fcrCwjiu80laJNiC0D4HtUGvbfSD
- mN2FYzlg9pZxKMhOYkuJNOkbDWLviyOz5ywIEuXf/PHp1D+u9F06KC1LMm2EaNFJ/Lnt9o
- E6JMkDpgpE74ehg3m0hH1y4KHHeP+Sg+OEMNTICTQEEkHk19knp3UX7gYKKmgHFdS1EMzc
- +eBP43jvtMzfhiyhe7KfKIzfz5QRhqkcPZGyLMSGwBx5sYXTryEnugmidsyxUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nYaFdU0g
-Subject: [Buildroot] [RFC PATCH 1/1] support/download: allow to use part of
- file in checksum checking
+ d=gmail.com; s=20221208; t=1690465211; x=1691070011;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=2PaOgmKZPjKg7UBJHu6NA6SrIFFujrYUGayjATDkEYk=;
+ b=OCwjwj4KaUd+nqsFbYa0x/2hGmGS4wtoAgAz1IzL0Ui7zGBVYPbXazrw7dFD18f05Z
+ YR/3yBjesZlTQBHDN/9OymMZDGzLL4CJgXt2f5DmQFY2gEf0ITs8oTKkMgp4r5mcyYR1
+ cKjZb76ykWpuIyvx3hw3oTI+XA3GJ2umZe5l1s3nzkgIonfOtqB4gKMkIjzlXEqMvqjP
+ dpMiSADQmwc+fKgPwuDYTxs2zwCkKfyjO87Z4hTQAenNpR1ZvR13k+w+gONYI+Fvrj+U
+ OlHJVfyMsuEZ9Kw7HSS0fXLJGWNogAReBxBaiWJ+kk8TP5NPSD9VEo931/qs31ruw3Y9
+ U3KQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=OCwjwj4K
+Subject: [Buildroot] [RFC] boot/uboot: add option to install custom
+ environment file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,113 +94,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Herve Codina via buildroot <buildroot@buildroot.org>
-Reply-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Herve Codina <herve.codina@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, Michael Walle <michael@walle.cc>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The checksum checking is done on whole files only using the <pkg>.hash
-checksum references.
-Among the files checked, files related to licenses are checked.
+U-Boot has the capability to set the environment variables via a text file.
+The text file has to be located in the U-Boot board source directory and
+selected via the CONFIG_ENV_SOURCE_FILE option. The CONFIG_ENV_SOURCE_FILE
+must only contain the filename without the '.env' suffix.
 
-Some packages do not contain any specific license files and, for
-them, some source files are used. These source files contain license
-information (usually comments at the beginning of the file).
+Thus the buildroot option BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT is added
+that needs the information about the source of the file in the buildroot
+environment (BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE) and the target
+directory (BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET) where to copy the
+file in the U-Boot source environment.
 
-Using the whole source file for checksum checking in this case can lead
-to issues if a br2-external is present and applies some patches to this
-source file.
-Indeed, patching a package from a br2-external is allowed but in that
-case the whole file checksum change and all checksum verification done
-on that file fails. In particular 'make legal-info' fails.
-
-Using only the license related part of a source file for checksum
-checking solve this issue.
-'make legal-info' will fail only if the license part is modify.
-
-Introduce the possibility to have a lines range in <pkg>.hash and, if
-present, compute checksum on the part defined by this lines range.
-
-For instance, in <pkg>.hash:
-sha256  xxxxxx  foo.c        <-- sha256 on the whole foo.c file
-sha256  xxxxxx  foo.c  1,15  <-- sha256 on extraction from line 1 to 15
-
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Cc: Michael Walle <michael@walle.cc>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- support/download/check-hash | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+ boot/uboot/Config.in | 21 +++++++++++++++++++++
+ boot/uboot/uboot.mk  | 21 +++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/support/download/check-hash b/support/download/check-hash
-index 5a47f49bc3..a90c9ca58a 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -45,10 +45,20 @@ fi
- # $1: algo hash
- # $2: known hash
- # $3: file (full path)
-+# $4: lines ranges in the form s,e. If present, the checksum is compute on the
-+#     file extracted part from line number s to line number e included.
-+#     The first line in the file is the line number 1.
-+#     If not present, the whole file is used.
- check_one_hash() {
-     _h="${1}"
-     _known="${2}"
-     _file="${3}"
-+    _r="${4}"
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8b726eaa57..ff58ef3062 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -607,6 +607,27 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+ 
+ endif
+ 
++config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
++	bool "custom environment"
++	help
++	  Provide a custom u-boot environment file. This will be copied
++	  to the BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET path and
++	  enable via the U-Boot config option CONFIG_ENV_SOURCE_FILE.
 +
-+    base_with_range=${base}
-+    if [ ${_r} ]; then
-+        base_with_range="${base_with_range}:${_r}"
-+    fi
++if BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
++config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE
++	string "Custom environment source file"
++	help
++	  Path to U-Boot custom environment file.
++
++config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET
++	string "Custom environment target path"
++	help
++	  Path to the U-Boot target directory where the file will be
++	  copied to. The path is relative to the U-Boot source directory.
++
++endif
++
+ config BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
+ 	string "Custom make options"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index b3d26b16fe..f5f17dbd8f 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -181,6 +181,26 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
+ endif
+ endif
  
-     # Note: md5 is supported, but undocumented on purpose.
-     # Note: sha3 is not supported, since there is currently no implementation
-@@ -64,13 +74,17 @@ check_one_hash() {
-     esac
++#
++# Prepare for custom environment
++#
++ifeq ($(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT),y)
++ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE)),)
++$(error No custom environment source file specified, check your BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE setting)
++endif
++ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET)),)
++$(error No custom environment target path specified, check your BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET setting)
++endif
++define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
++	cp -f $(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE) $(@D)/$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET)/
++endef
++UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
++UBOOT_ENV_FILE_NAME=$(subst .env,,$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE))))
++define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
++	$(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
++endef
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE),y)
+ UBOOT_DEPENDENCIES += optee-os
+ UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
+@@ -497,6 +517,7 @@ define UBOOT_KCONFIG_FIXUP_CMDS
+ 	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
+ 	$(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
+ 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
++	$(UBOOT_KCONFIG_CUSTOM_ENV_SOURCE)
+ endef
  
-     # Do the hashes match?
--    _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
-+    if [ ${_r} ]; then
-+        _hash=$( sed -n "${r} p" ${file} | ${_h}sum |cut -d ' ' -f 1 )
-+    else
-+        _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
-+    fi
-     if [ "${_hash}" = "${_known}" ]; then
--        printf "%s: OK (%s: %s)\n" "${base}" "${_h}" "${_hash}"
-+        printf "%s: OK (%s: %s)\n" "${base_with_range}" "${_h}" "${_hash}"
-         return 0
-     fi
- 
--    printf "ERROR: %s has wrong %s hash:\n" "${base}" "${_h}" >&2
-+    printf "ERROR: %s has wrong %s hash:\n" "${base_with_range}" "${_h}" >&2
-     printf "ERROR: expected: %s\n" "${_known}" >&2
-     printf "ERROR: got     : %s\n" "${_hash}" >&2
-     printf "ERROR: Incomplete download, or man-in-the-middle (MITM) attack\n" >&2
-@@ -80,7 +94,7 @@ check_one_hash() {
- 
- # Do we know one or more hashes for that file?
- nb_checks=0
--while read t h f; do
-+while read t h f r; do
-     case "${t}" in
-         ''|'#'*)
-             # Skip comments and empty lines
-@@ -88,7 +102,7 @@ while read t h f; do
-             ;;
-         *)
-             if [ "${f}" = "${base}" ]; then
--                check_one_hash "${t}" "${h}" "${file}"
-+                check_one_hash "${t}" "${h}" "${file}" "${r}"
-                 : $((nb_checks++))
-             fi
-             ;;
+ ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
 -- 
-2.41.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
