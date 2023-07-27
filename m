@@ -1,88 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33199C001DC
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 13:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9378C04A94
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 14:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74F5D81EDA;
-	Thu, 27 Jul 2023 13:40:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74F5D81EDA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FD1141F82;
+	Thu, 27 Jul 2023 14:42:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FD1141F82
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5spMfeVlUDIh; Thu, 27 Jul 2023 13:40:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UoCiSFGaaRLr; Thu, 27 Jul 2023 14:42:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5AC281B52;
-	Thu, 27 Jul 2023 13:40:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5AC281B52
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E22041F87;
+	Thu, 27 Jul 2023 14:42:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E22041F87
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 747291BF429
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 13:40:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 81BE51BF3C9
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 14:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54C134031F
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 13:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54C134031F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64D9B4055F
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 14:42:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64D9B4055F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tFNY4tSqv7EH for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 13:40:13 +0000 (UTC)
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8617540217
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 13:40:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8617540217
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-99bccc9ec02so135274966b.2
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 06:40:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690465211; x=1691070011;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=2PaOgmKZPjKg7UBJHu6NA6SrIFFujrYUGayjATDkEYk=;
- b=B1L9l/OJFrkWCSw2PNn8dc/ZzRL3CAg4BiGs/534XwJK5bEHJOOOA9aYsGqAkcm9/D
- NyKJ3N6dvJkKuSx/larne2gP+YGMBgrt80xjiHjq0b40pIekc3SrKyi8oH+tDd4MZKzc
- u7SBesDJ9a9Js01tHarjzJOwopdIf2ZO7cux9MwgLBB59YCJdd8Dmyk1tXUXbkMPkGKj
- fmGolA1yP7w6hf2+aik8Ew41qBN/TwlIAI5V2DCJ/Xs2iLcG8xZ+Z7S31Cpr4uwgv4cl
- dOBfWh8fctJeVKXHp5O8IYwkE/Ro89IHUCMciGba1JI8YFiJbcC84w5Zlw9ERnxQhA5c
- T1UQ==
-X-Gm-Message-State: ABy/qLbK/XF8eTWfavgmmKBN2KXIfT0R3r3LfkC2ZLazvgBEDiask7Z5
- U25nsKih/cspXmozLbBBZzSn66Ryua8=
-X-Google-Smtp-Source: APBJJlFVFbIUhv/hhDQqBC3nTUx6GnQOOucAWhk2q0xYcRTNmquPIvTCWvtMSZQn/haIwPwhVsPLRg==
-X-Received: by 2002:a17:907:2bde:b0:99b:d599:5085 with SMTP id
- gv30-20020a1709072bde00b0099bd5995085mr2144065ejc.64.1690465210998; 
- Thu, 27 Jul 2023 06:40:10 -0700 (PDT)
-Received: from hthiery.kontron.local ([213.135.10.150])
- by smtp.gmail.com with ESMTPSA id
- j13-20020a17090686cd00b0098884f86e41sm786940ejy.123.2023.07.27.06.40.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Jul 2023 06:40:09 -0700 (PDT)
-From: Heiko Thiery <heiko.thiery@gmail.com>
+ with ESMTP id 8YHUPE3dqL92 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 14:42:33 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE7DE40012
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 14:42:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE7DE40012
+Received: from fli4l.lan.fli4l (p54a1bcc1.dip0.t-ipconnect.de [84.161.188.193])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 65390A4C105D;
+ Thu, 27 Jul 2023 16:42:28 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57496)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qP2CC-0000BQ-0d;
+ Thu, 27 Jul 2023 16:42:28 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 15:40:01 +0200
-Message-Id: <20230727134000.429651-1-heiko.thiery@gmail.com>
-X-Mailer: git-send-email 2.30.2
+Date: Thu, 27 Jul 2023 16:42:28 +0200
+Message-Id: <20230727144228.351219-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690465211; x=1691070011;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2PaOgmKZPjKg7UBJHu6NA6SrIFFujrYUGayjATDkEYk=;
- b=OCwjwj4KaUd+nqsFbYa0x/2hGmGS4wtoAgAz1IzL0Ui7zGBVYPbXazrw7dFD18f05Z
- YR/3yBjesZlTQBHDN/9OymMZDGzLL4CJgXt2f5DmQFY2gEf0ITs8oTKkMgp4r5mcyYR1
- cKjZb76ykWpuIyvx3hw3oTI+XA3GJ2umZe5l1s3nzkgIonfOtqB4gKMkIjzlXEqMvqjP
- dpMiSADQmwc+fKgPwuDYTxs2zwCkKfyjO87Z4hTQAenNpR1ZvR13k+w+gONYI+Fvrj+U
- OlHJVfyMsuEZ9Kw7HSS0fXLJGWNogAReBxBaiWJ+kk8TP5NPSD9VEo931/qs31ruw3Y9
- U3KQ==
+ d=kuhls.net; 
+ s=kas202306131828; t=1690468948;
+ bh=d4CJ+lSLv5eFCKwqGoxAebSU0euMrGiv4DGE3ab+GwM=;
+ h=From:To:Cc:Subject:Date:From;
+ b=xH0MqMrUHJL4mJVIZ6QJIJ2U3jprg+C1TO8GH34Yjiof0A88Piolifqnr9e5K4dJ1
+ /UggAxbRCclEOWfSKwql5KVz0XBLNhzmYc/TWlLossEdaWkMEFcX7Z4Q7dyL2ebMja
+ 9wNxVl++LLKBU/LiGgAN0lczoX8+WY+Q+poI+O80ZVh+5XfPWF6TYR7HkxeGR3f0Y7
+ CXn8Kh+yGXmQn8QmG5sXppR4eIdoXC8OSdWd8gIvcEi5dkFHdZBU+pmrCPKsqkKQVW
+ ozs5OSsOku9GSKFx/+4hHMWw0xrgYVmLNqpw+4XE9s01XebppNbQwFFBS44vZlQIyN
+ 1X05F6MxEN8Tw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=OCwjwj4K
-Subject: [Buildroot] [RFC] boot/uboot: add option to install custom
- environment file
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=xH0MqMrU
+Subject: [Buildroot] [PATCH v2 1/1] package/cairo: mutex support depends on
+ NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,103 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Heiko Thiery <heiko.thiery@gmail.com>, Michael Walle <michael@walle.cc>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U-Boot has the capability to set the environment variables via a text file.
-The text file has to be located in the U-Boot board source directory and
-selected via the CONFIG_ENV_SOURCE_FILE option. The CONFIG_ENV_SOURCE_FILE
-must only contain the filename without the '.env' suffix.
+Fixes:
+http://autobuild.buildroot.net/results/041/041ac8f0809a0f9415c545b7585cd197db08b55f/
 
-Thus the buildroot option BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT is added
-that needs the information about the source of the file in the buildroot
-environment (BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE) and the target
-directory (BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET) where to copy the
-file in the U-Boot source environment.
+The last bump of cairo took place in 2019 with commit
+8d2a9d089a969909ad2de8acb67ee14ced03de28, the first build error of this
+kind I could find dates back to Sep 2022:
+http://autobuild.buildroot.net/results/8c5/8c547ec2e148ce3c4f230bb4b0d5c5b360d74dd5/
 
-Cc: Michael Walle <michael@walle.cc>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- boot/uboot/Config.in | 21 +++++++++++++++++++++
- boot/uboot/uboot.mk  | 21 +++++++++++++++++++++
- 2 files changed, 42 insertions(+)
+v2: extend commit message (Thomas)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8b726eaa57..ff58ef3062 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -607,6 +607,27 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
- 
+ package/cairo/cairo.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index e8a704c7da..7bc8f92deb 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -26,7 +26,7 @@ ifeq ($(BR2_m68k_cf),y)
+ CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
  endif
  
-+config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
-+	bool "custom environment"
-+	help
-+	  Provide a custom u-boot environment file. This will be copied
-+	  to the BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET path and
-+	  enable via the U-Boot config option CONFIG_ENV_SOURCE_FILE.
-+
-+if BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
-+config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE
-+	string "Custom environment source file"
-+	help
-+	  Path to U-Boot custom environment file.
-+
-+config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET
-+	string "Custom environment target path"
-+	help
-+	  Path to the U-Boot target directory where the file will be
-+	  copied to. The path is relative to the U-Boot source directory.
-+
-+endif
-+
- config BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
- 	string "Custom make options"
- 	help
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index b3d26b16fe..f5f17dbd8f 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -181,6 +181,26 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
- endif
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
+ CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
  endif
  
-+#
-+# Prepare for custom environment
-+#
-+ifeq ($(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE)),)
-+$(error No custom environment source file specified, check your BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE setting)
-+endif
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET)),)
-+$(error No custom environment target path specified, check your BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET setting)
-+endif
-+define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
-+	cp -f $(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE) $(@D)/$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_TARGET)/
-+endef
-+UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
-+UBOOT_ENV_FILE_NAME=$(subst .env,,$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE))))
-+define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
-+	$(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
-+endef
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE),y)
- UBOOT_DEPENDENCIES += optee-os
- UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
-@@ -497,6 +517,7 @@ define UBOOT_KCONFIG_FIXUP_CMDS
- 	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
- 	$(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
- 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
-+	$(UBOOT_KCONFIG_CUSTOM_ENV_SOURCE)
- endef
- 
- ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
 -- 
-2.30.2
+2.39.2
 
 _______________________________________________
 buildroot mailing list
