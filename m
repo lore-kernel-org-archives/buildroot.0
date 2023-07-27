@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2A86C001DC
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43776C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:28:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 979F44048C;
-	Thu, 27 Jul 2023 10:28:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 979F44048C
+	by smtp2.osuosl.org (Postfix) with ESMTP id F23C841819;
+	Thu, 27 Jul 2023 10:28:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F23C841819
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zxhp5CNfegAc; Thu, 27 Jul 2023 10:28:13 +0000 (UTC)
+	with ESMTP id 7xNuOn-UMX47; Thu, 27 Jul 2023 10:28:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF5CC4182D;
-	Thu, 27 Jul 2023 10:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF5CC4182D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 660C51BF98E
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:27:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24A9640471;
+	Thu, 27 Jul 2023 10:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24A9640471
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F4F11BF40B
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4043583F6F
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:27:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4043583F6F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5611360E79
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:28:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5611360E79
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pqmpsLWXm_Nj for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 10:27:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B15483F5F
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:27:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B15483F5F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B4F68369C; Thu, 27 Jul 2023 10:27:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 12:27:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c663675646264e9bb1e72f014195081a1582d19
-X-Git-Newrev: c03fc8a9fffd3a545abbf9829a81c6fed97c7db6
-X-Patchwork-Hint: ignore
-Message-Id: <20230727102757.5B4F68369C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wolfssl: bump version to 5.6.3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sKYyeioi04xu for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 10:28:13 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3034560E74
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:28:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3034560E74
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2249C240007;
+ Thu, 27 Jul 2023 10:28:05 +0000 (UTC)
+Date: Thu, 27 Jul 2023 12:28:05 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230727122805.3c035fc2@windsurf>
+In-Reply-To: <20230726194453.1462570-1-bernd@kuhls.net>
+References: <20230726194453.1462570-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690453691;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=KHPmtaqWfV1wqxMpMh06EOTC2oGavO7zPt6mAs3s4zY=;
+ b=awd2uPe6xjBhn6nGaiGZpn6qI9y9jvgxtsSdNHNoMTRO2BcrM+fc8G2f2qTzBhmpKFwRka
+ /VhkCUPxMNM3/7HS46Lr2BwPBQ38Z40MmlIV918q+nEFU+HBVSRwiTDtLVNriUakGTqncG
+ y6A2BQRyTlTbN6LItScLndzQex3JINswU+MHxak/26QKgZpWtpAA6PteyTmHrwEN3Fu0Bm
+ LRVAwaHDnkhNZnAmFJ3BvhL6NMxspsBkrTqMAYeNB6UOw2ioQBS0+Zm/dGIbO5VytkplZ8
+ HFOwJzM+SEWn4tVEoc3c4UsUinRDXAy345akirT/s/l8I08kaRZAcCbcycuQ4A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=awd2uPe6
+Subject: Re: [Buildroot] [PATCH 1/2] package/wolfssl: disable asm on armv4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,48 +76,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c03fc8a9fffd3a545abbf9829a81c6fed97c7db6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 26 Jul 2023 21:44:52 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Changelog: https://github.com/wolfSSL/wolfssl/blob/master/ChangeLog.md
+> Quoting
+> https://developer.arm.com/documentation/dui0489/i/arm-and-thumb-instructions/clz
+> "This ARM instruction is available in ARMv5T and above."
+> 
+> Fixes:
+> - armeb
+>   http://autobuild.buildroot.net/results/ea9/ea9b19e872b4b20b97fceec3f7e0a6a1109c4f12/
+>   /tmp/ccdRCOaB.s:27: Error: selected processor does not support `clz r5,r2' in ARM mode
+> - arm
+>   http://autobuild.buildroot.net/results/cb1/cb1c7ac68b3379d3f4b5efc897198bea0a904217/
+>   /tmp/cc72ECAj.s:6764: Error: selected processor does not support `clz r5,r0' in ARM mode
+>   /tmp/cc72ECAj.s:7110: Error: selected processor does not support `clz r5,lr' in ARM mode
+>   /tmp/cc72ECAj.s:8934: Error: selected processor does not support `clz r5,fp' in ARM mode
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/wolfssl/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks, both applied!
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 08262113a0..3407586edd 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  fd3135b8657d09fb96a8aad16585da850b96ea420ae8ce5ac4d5fdfc614c2683  wolfssl-5.5.3.tar.gz
-+sha256  2e74a397fa797c2902d7467d500de904907666afb4ff80f6464f6efd5afb114a  wolfssl-5.6.3.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 9f06bb1b4b..9b35a6a84a 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 5.5.3
-+WOLFSSL_VERSION = 5.6.3
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
- WOLFSSL_INSTALL_STAGING = YES
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
