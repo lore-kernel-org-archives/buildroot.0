@@ -1,49 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54F66C0015E
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 07:13:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 985CFC001E0
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 08:14:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB3B80C3D;
-	Thu, 27 Jul 2023 07:13:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AB3B80C3D
+	by smtp2.osuosl.org (Postfix) with ESMTP id D971E40960;
+	Thu, 27 Jul 2023 08:14:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D971E40960
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 50Os86v4xBTE; Thu, 27 Jul 2023 07:13:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZtlVBkGvoi1Z; Thu, 27 Jul 2023 08:14:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C03280BA7;
-	Thu, 27 Jul 2023 07:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C03280BA7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F1411BF83A
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 07:13:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D390408FC;
+	Thu, 27 Jul 2023 08:14:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D390408FC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 250111BF59C
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 08:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 044D8801EC
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 07:13:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 044D8801EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B720408FC
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 08:13:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B720408FC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vLu31hSuzze5 for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 07:13:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD63381585
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 07:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD63381585
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A666B83614; Thu, 27 Jul 2023 07:13:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 09:12:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cfff4e120f18322df676160caa9a0162644d3f9a
-X-Git-Newrev: 41493cae71a25a4a1a1819b078717793eda7ffff
-X-Patchwork-Hint: ignore
-Message-Id: <20230727071327.A666B83614@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zfs: not using kernel-module infra
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YXYFa2OudI80 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 08:13:58 +0000 (UTC)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org
+ [IPv6:2604:1380:4641:c500::1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6AF39408CA
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 08:13:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AF39408CA
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id D6EF461D59;
+ Thu, 27 Jul 2023 08:13:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8643C433CA;
+ Thu, 27 Jul 2023 08:13:55 +0000 (UTC)
+MIME-Version: 1.0
+In-Reply-To: <20230726212009.221147-1-thomas.petazzoni@bootlin.com>
+References: <20230726212009.221147-1-thomas.petazzoni@bootlin.com>
+From: Antoine Tenart <atenart@kernel.org>
+To: Buildroot List <buildroot@buildroot.org>,
+ Christian Stewart <christian@paral.in>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Jul 2023 10:13:53 +0200
+Message-ID: <169044563315.6100.13848963115642161448@kwain>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=kernel.org; s=k20201202; t=1690445636;
+ bh=J4fIPL74KdCybork1BkfBSjGVG4RDhYdYjlRn+wTrqM=;
+ h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+ b=ZEjzSP9yDopY7LUNXmyBcr7Zss6RL6luMDMFfdw4QJtoY508EPHJvhrBdx9brIbBu
+ FCpooBv4qfXqKi4ZblqbPIKgG41CKmBOF1erGm1tuSE45kS//sBakyqMlykeaYKC+H
+ 09N+UZRVRY/GKBXRHhoxPBg6OKElZ/NHX07s/sSLbpZnzonlIXLP9ClQU6NLtRVXp3
+ 3+w/eoTziq5/n+veZ23WuhMrC1UFwQhIZ8DPpa8lCGxB7LFYFSvycQZmYO0J8NhpYf
+ p7uBf0QvAurD9ZJCQvyqyt8vcIFT/xl00PV0AUT6XGnjKri5OXrzSKUWN49D3gIofk
+ EVH+z56ieTVQw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
+ header.a=rsa-sha256 header.s=k20201202 header.b=ZEjzSP9y
+Subject: Re: [Buildroot] [PATCH RFC 1/2] utils/docker-run: make it
+ compatible with SELinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,72 +79,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1643987077163713549=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1643987077163713549==
-Content-Type: text/plain
+Hi Thomas,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41493cae71a25a4a1a1819b078717793eda7ffff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Quoting Thomas Petazzoni via buildroot (2023-07-26 23:20:07)
+> 
+> diff --git a/utils/docker-run b/utils/docker-run
+> index 17c587a484..eee1aad7a4 100755
+> --- a/utils/docker-run
+> +++ b/utils/docker-run
+> @@ -12,8 +12,8 @@ declare -a docker_opts=(
+>      -i
+>      --rm
+>      --user "$(id -u):$(id -g)"
+> -    --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}"
+> -    --mount "type=bind,src=${GIT_DIR},dst=${GIT_DIR}"
+> +    --volume "${MAIN_DIR}:${MAIN_DIR}:Z"
+> +    --volume "${GIT_DIR}:${GIT_DIR}:Z"
 
-zfs already builds the kernel module from the autotools infrastructure.
+Using Z will label all the files in MAIN_DIR and GIT_DIR with a private
+label and IIRC that means relabeling all files each time a new container
+is started; which can take quite some time if there are lots if files in
+there. However z can be used to label files with a shared label and they
+won't be relabeled after the first run.
 
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/zfs/Config.in | 1 +
- package/zfs/zfs.mk    | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/zfs/Config.in b/package/zfs/Config.in
-index 6209c5865b..049e0716f3 100644
---- a/package/zfs/Config.in
-+++ b/package/zfs/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_ZFS
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on BR2_USE_MMU  # util-linux (libblkid)
- 	depends on BR2_TOOLCHAIN_HAS_THREADS  # libtirpc
-+	select BR2_LINUX_NEEDS_MODULES
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index 6d5d46a305..b852d8d4e2 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
-@@ -15,7 +15,7 @@ ZFS_CPE_ID_PRODUCT = openzfs
- # 0001-removal-of-LegacyVersion-broke-ax_python_dev.m4.patch
- ZFS_AUTORECONF = YES
- 
--ZFS_DEPENDENCIES = libaio openssl udev util-linux zlib libcurl
-+ZFS_DEPENDENCIES = libaio openssl udev util-linux zlib libcurl linux
- 
- # sysvinit installs only a commented-out modules-load.d/ config file
- ZFS_CONF_OPTS = \
-@@ -79,5 +79,7 @@ define ZFS_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_ZLIB_INFLATE)
- endef
- 
--$(eval $(kernel-module))
-+# Even though zfs builds a kernel module, it gets built directly by
-+# the autotools logic, so we don't use the kernel-module
-+# infrastructure.
- $(eval $(autotools-package))
-
---===============1643987077163713549==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Antoine
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1643987077163713549==--
