@@ -4,47 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD7B7C001DC
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:49:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3841AC001DC
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DA6E41E81;
-	Thu, 27 Jul 2023 10:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DA6E41E81
+	by smtp4.osuosl.org (Postfix) with ESMTP id D724C41E52;
+	Thu, 27 Jul 2023 10:50:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D724C41E52
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q-oVjGYU8Xh6; Thu, 27 Jul 2023 10:49:53 +0000 (UTC)
+	with ESMTP id UmQuo_BGlVkF; Thu, 27 Jul 2023 10:50:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01CCA41E58;
-	Thu, 27 Jul 2023 10:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01CCA41E58
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C23131BF40B
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:49:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCA0041C6C;
+	Thu, 27 Jul 2023 10:50:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCA0041C6C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AD2D11BF40B
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:50:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A4F841B18
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:49:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A4F841B18
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9456483595
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9456483595
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qe8b4z9STEuz for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 10:49:24 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D86E41895
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:49:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D86E41895
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BD0483714; Thu, 27 Jul 2023 10:49:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 12:49:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 242777898aeb057b1d40026bee5c555c2ab75785
-X-Git-Newrev: 1738b5582ba0cf715303f4ebfa1d2323a33d0ae4
-X-Patchwork-Hint: ignore
-Message-Id: <20230727104924.7BD0483714@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{libuv,
- uvw}: bump to versions 1.46.0, 3.2.0_libuv_v1.46
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D7XRswWSTkT0 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 10:50:23 +0000 (UTC)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E2FED83544
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:50:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2FED83544
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by dfw.source.kernel.org (Postfix) with ESMTPS id AC94E61DF7;
+ Thu, 27 Jul 2023 10:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C53BC433C7;
+ Thu, 27 Jul 2023 10:50:20 +0000 (UTC)
+MIME-Version: 1.0
+In-Reply-To: <20230727122449.3b7993c6@windsurf>
+References: <20230726212009.221147-1-thomas.petazzoni@bootlin.com>
+ <169044563315.6100.13848963115642161448@kwain>
+ <20230727104821.496f8f0b@windsurf>
+ <169045318850.6100.416444363161517133@kwain>
+ <20230727122449.3b7993c6@windsurf>
+From: Antoine Tenart <atenart@kernel.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Jul 2023 12:50:17 +0200
+Message-ID: <169045501791.6100.10586717881840201028@kwain>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=kernel.org; s=k20201202; t=1690455021;
+ bh=pHrFpLQmlo8OBqkF03CHxqPAOYmUNLVmCy3IyhldV+s=;
+ h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+ b=E8Hwe3uUyJXSHxpPyGsqux5G2eAEThvMGAP4ldCSzD1hMuSMZKpXPh2TQfh6jvQHX
+ R2tCL7SO5f6tbYLSZ2gBeMel+akhal4hPib1DMst53jQFxkqO+zKmdEmEQmhfQeP1q
+ cgNWKiArXGS3NxLym4AW40e0hyVaeokFS85k1J5dRTRkiBzMD8+PVthoBj4QP6L4nH
+ 5igypGSYM/JQ/G3sHSDdX3gVXfcCPIh70AlN8L+4X71P2cS84EkDj6WLBOEzN6dFub
+ 1p16Xh0PWvg35QxekLDOyCEc4eD5P2Nh+OkpaAJW72eYzVbR06rqruscZCbDJMhEZb
+ DfQTnacxrLCCw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org
+ header.a=rsa-sha256 header.s=k20201202 header.b=E8Hwe3uU
+Subject: Re: [Buildroot] [PATCH RFC 1/2] utils/docker-run: make it
+ compatible with SELinux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,81 +79,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Christian Stewart <christian@paral.in>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1738b5582ba0cf715303f4ebfa1d2323a33d0ae4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Quoting Thomas Petazzoni (2023-07-27 12:24:49)
+> On Thu, 27 Jul 2023 12:19:48 +0200
+> Antoine Tenart <atenart@kernel.org> wrote:
+> 
+> > IIRC --mount was introduced for better consistency in the docker args
+> > and supporting names parameters (I don't know the full reasoning but
+> > it's probably linked to supporting APIs -like yaml definitions- in a
+> > better way?). While doing so they tried to fix issues in --volume and
+> > labeling files on mount was one of them.
+> > 
+> > The issue is both logical and practical: files should be labeled when
+> > being created (not when being mounted) and relabeling files "magically"
+> > can cause issues (eg. don't `-v /home:/home:z` !). The reasoning with
+> > the new --mount option is a directory should be created and configured
+> > on the host and then only mounted by containers (hence the directory is
+> > not anymore created if not present when using --mount).
+> > 
+> > So here, idk, not a docker expert :) I'd say using relabeling of a
+> > directory that is under Buildroot's control is probably OK. While
+> > replying, had a quick look at this and it seems the preferred solution
+> > would be instead to use the `--security-opt label=disable` option:
+> > labels would be kept in sync with the host and I guess the goal of using
+> > Docker here is not for isolating the build but to have a known
+> > environment. I never played with that option so please investigate
+> > before switching to it.
+> 
+> I tried --security-opt label=disable, and it works, at least it fixes
+> my permission issue, without having to do the z/Z thing. Probably it's
+> a better option than using z/Z that has the side effect of adding
+> SELinux labels on all files being mounted? To be honest, I'm not clear
+> on the consequences of --security-opt label=disable.
 
-Changelog: https://github.com/libuv/libuv/blob/v1.x/ChangeLog
+I agree on not relabeling files if that's an option. Not sure about the
+consequences of `--security-opt label=disable` too. My understanding is
+the containerized process won't be labeled with a container-specific
+label, but they still could be labeled with a permissive one not 100%
+matching the user label.
 
-Switched libuv to tarball provided by upstream. removed autoreconf.
+Without having a full understanding of the implications we can still
+expect child processes not to have more rights than the parent and
+created file labels to match what would have happened on the host (could
+you check?). Given the goal is not to isolate the build, my guess is
+that is fine and the best option.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 6 +++---
- package/uvw/uvw.hash     | 2 +-
- package/uvw/uvw.mk       | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 3ca184feaf..1fd286d9e9 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  458e34d5ef7f3c0394a2bfd8c39d757cb1553baa5959b9b4b45df63aa027a228  libuv-1.45.0.tar.gz
-+sha256  94f101111ef3209340d7f09c2aa150ddb4feabd2f9d87d47d9f5bded835b8094  libuv-v1.46.0-dist.tar.gz
- sha256  16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c  LICENSE
- sha256  262c44bd2cdba037e6d2a82fba15f5800d292bc993a6f5d6b6ea487744d02836  LICENSE-extra
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 640c5bb1ce..75590ad8f2 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,11 +6,11 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.45.0
--LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
-+LIBUV_VERSION = 1.46.0
-+LIBUV_SOURCE = libuv-v$(LIBUV_VERSION)-dist.tar.gz
-+LIBUV_SITE = https://dist.libuv.org/dist/v$(LIBUV_VERSION)
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
--LIBUV_AUTORECONF = YES
- LIBUV_LICENSE = BSD-2-Clause, BSD-3-Clause, ISC, MIT
- LIBUV_LICENSE_FILES = LICENSE LICENSE-extra
- LIBUV_CPE_ID_VENDOR = libuv
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index 8e54ea7d60..2dc6e879e1 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0a612bd243150fbbe1365cdaf48203d32061c1d14f93825a31876b183922f93b  uvw-3.1.0_libuv_v1.45.tar.gz
-+sha256  bd5aed741765950074b1ea2507291dce81e528abdf56c406991ad4a27d8d1714  uvw-3.2.0_libuv_v1.46.tar.gz
- sha256  e2a4062818ab05e2a0908737ad49b7c01202247364e900167ac81105de8713f3  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index 364a2eded4..12149d43ca 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UVW_VERSION = 3.1.0_libuv_v1.45
-+UVW_VERSION = 3.2.0_libuv_v1.46
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
+Antoine
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
