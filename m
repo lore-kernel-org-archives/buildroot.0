@@ -1,70 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3706AC001DF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Jul 2023 21:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F097EB64DD
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 06:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1DE9612BD;
-	Wed, 26 Jul 2023 21:45:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1DE9612BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D9A18322A;
+	Thu, 27 Jul 2023 06:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D9A18322A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id W-UPYO0_l96U; Wed, 26 Jul 2023 21:45:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xPiABKt1cdLU; Thu, 27 Jul 2023 06:54:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06FDE607C7;
-	Wed, 26 Jul 2023 21:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06FDE607C7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CBBE1BF980
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:45:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D63E830FB;
+	Thu, 27 Jul 2023 06:54:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D63E830FB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 62BF81BF841
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 06:54:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24B4B41E73
- for <buildroot@lists.busybox.net>; Wed, 26 Jul 2023 21:45:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24B4B41E73
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C923403E5
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 06:54:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C923403E5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oRMty-g-8eaJ for <buildroot@lists.busybox.net>;
- Wed, 26 Jul 2023 21:45:55 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 01AD241E6A
- for <buildroot@buildroot.org>; Wed, 26 Jul 2023 21:45:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01AD241E6A
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:89e8:4a89:fcd4:1b18])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id D9F2F5FFA3;
- Wed, 26 Jul 2023 23:45:46 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 26 Jul 2023 23:45:46 +0200
-Date: Wed, 26 Jul 2023 23:45:46 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Message-ID: <20230726214546.GE3544423@scaer>
-References: <20230726180433.7561-1-kilian.zinnecker@mail.de>
- <20230726180433.7561-4-kilian.zinnecker@mail.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0GLOjxuNEKYQ for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 06:54:21 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D78A401A1
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 06:54:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D78A401A1
+Received: from fli4l.lan.fli4l (p54a1bcc1.dip0.t-ipconnect.de [84.161.188.193])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 12FB9A4C0824;
+ Thu, 27 Jul 2023 08:54:18 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:39128)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qOut7-0003dW-2k;
+ Thu, 27 Jul 2023 08:54:17 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 27 Jul 2023 08:54:17 +0200
+Message-Id: <20230727065417.347083-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230726180433.7561-4-kilian.zinnecker@mail.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1690407953;
- bh=QvdA13lcgB0AUac9EirgY9Rw32tWlv2ePvfrMQxX5Us=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mkPGcuSiewZTq/ndcID+0L9QDppf6USiRVK8MnWaFMfdpn3ldpLWHEBa2DMY4D9mZ
- UpUdSZ42pUe1bcxlHPBuD2cgpQq2J4TKjM3QiHSN2awwzoJKZl3YpBZEIJB+TgqBpG
- iDlRvkTuZEIukPXznDZwEfkcQnayjB9TOpuaEHNNHkbANPrAUNSQu9NJyhJ0VRhEu6
- g2JHQW/PgpFUVbIwsPhGL+NcjBzM1Oe6GAgeVel7P9toNIHSK35uQUOzcwO7SSAnrQ
- KqIv7BH5n0zqZRJSLxFvP/LQtCTUANyMeZTNlosBaFU1E9B+IE7yqy5/qhYZ9eLfXL
- vRJdWpjbQu7nA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mkPGcuSi
-Subject: Re: [Buildroot] [PATCH v8 3/3] configs/rock5b: new defconfig
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1690440858;
+ bh=K0YoWy6xlZKKL5SvByiZUwxG5z7wlHUUwurGgAoCz/g=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Zni0jF3IjfsV/NlAl2xSGfCaPofRrsH4fGmVp8HE9/hJs5/mFxfqJ3BrQ6BnqXJaM
+ lZ+9A3zMBRBQq8OGBZ3VknylLwf5Hiy9TlCvnmHxKGLCnhVTM7g6jcE9fzXLbo4ioA
+ bsYELFv07QTcxbcFL9/vEn4/d7jY/iw5UYNc5eaaALjxSUpkrtOfwshc6yRy8hX8la
+ gSgkqTrHRtLnSYBjttsP3ekvMIiDImNbBGs5OngfDVdFGmYCNioxCm3o0SQ6zNnoP6
+ hDP4fEwOkmnQrt5ZL7HVwdwQBRiNY8YSbPv6kr8jef+FTFDmOLbjM9Rp17uH71cHok
+ pNk8L1XuXLBUg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Zni0jF3I
+Subject: [Buildroot] [PATCH 1/1] package/cairo: mutex support depends on NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,61 +74,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Kilian, All,
+Fixes:
+http://autobuild.buildroot.net/results/041/041ac8f0809a0f9415c545b7585cd197db08b55f/
 
-On 2023-07-26 20:04 +0200, Kilian Zinnecker via buildroot spake thusly:
-> This patch adds the defconfig file needed to build u-boot, kernel
-> and rootfs for the Rock 5B. In addition it adds a kernel config
-> fragment file, which activates the needed ethernet driver support.
-> It also adds a readme and post image scripts, needed to generate an
-> sdcard.img file, which can be flashed on an SD card to boot the
-> Radxa Rock 5B.
-> 
-> Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
-> ---
-[--SNIP--]
-> diff --git a/board/radxa/rock5b/post-image.sh b/board/radxa/rock5b/post-image.sh
-> new file mode 100755
-> index 0000000000..c0f63ab3a2
-> --- /dev/null
-> +++ b/board/radxa/rock5b/post-image.sh
-> @@ -0,0 +1,6 @@
-> +#!/usr/bin/env bash
-> +
-> +gzip -fk ${BINARIES_DIR}/Image
-> +cp board/radxa/rock5b/rock5b.its ${BINARIES_DIR}
-> +(cd $BINARIES_DIR && mkimage -f rock5b.its image.itb)
-> +support/scripts/genimage.sh -c board/radxa/rock5b/genimage.cfg
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+The last bump of cairo took place in 2019 with commit
+8d2a9d089a969909ad2de8acb67ee14ced03de28, the first build error of this
+kind I could find dates back to Sep 2022:
+http://autobuild.buildroot.net/results/8c5/8c547ec2e148ce3c4f230bb4b0d5c5b360d74dd5/
 
-    $ make check-package
-    board/radxa/rock5b/post-image.sh:0: run 'shellcheck' and fix the warnings
+ package/cairo/cairo.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I fixed those errors. I also made the script "set -e" so it exits on
-error on the first error.
-
-I've also dropped the custom version, which in fact was not custom.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index e8a704c7da..7bc8f92deb 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -26,7 +26,7 @@ ifeq ($(BR2_m68k_cf),y)
+ CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
+ endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
+ CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
+ endif
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
