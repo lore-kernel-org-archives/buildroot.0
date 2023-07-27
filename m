@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60223EB64DD
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 07:13:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54F66C0015E
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 07:13:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6EF983B12;
-	Thu, 27 Jul 2023 07:13:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6EF983B12
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB3B80C3D;
+	Thu, 27 Jul 2023 07:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AB3B80C3D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Al5Z80VUoc1l; Thu, 27 Jul 2023 07:13:17 +0000 (UTC)
+	with ESMTP id 50Os86v4xBTE; Thu, 27 Jul 2023 07:13:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A5EE83A9C;
-	Thu, 27 Jul 2023 07:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A5EE83A9C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 915AE1BF83A
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 07:13:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C03280BA7;
+	Thu, 27 Jul 2023 07:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C03280BA7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F1411BF83A
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 07:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 605EF408CA
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 07:13:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 605EF408CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 044D8801EC
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 07:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 044D8801EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6ojlDRwBrlQC for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 07:13:10 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 30478401A1
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 07:13:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30478401A1
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E24BA2000C;
- Thu, 27 Jul 2023 07:13:06 +0000 (UTC)
-Date: Thu, 27 Jul 2023 09:13:06 +0200
-To: =?UTF-8?B?Sm9zw6k=?= Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Message-ID: <20230727091306.119a3ac6@windsurf>
-In-Reply-To: <20230608175016.1341416-1-salvador.joseluis@gmail.com>
-References: <20220724143533.GV2641@scaer>
- <20230608175016.1341416-1-salvador.joseluis@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690441987;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=14cxoTUBe/VAyJCKfMyFfxnlJnWOPJUMc4JTvqNhHPg=;
- b=LR/L4CI9LbiOxViuXcna3YpGcvYQEggY8HNH2W0oUqLhRlXklHIqKqugGca+NKpQyy3iuy
- q7A4wHxbZP5u+5ItG7alyaSkAgT4CMgnODOzHgAukxfBjUKEyfBiVe77fyzc1SybFmjSjZ
- u5NXckKOZ4fKMPMkxRsYtq+RtpsXt2Fyr+1lrFZBddtaSmXsLjppB4AkSkIguimunD9yOX
- quHHT/AImSkABX72Dwwq5eybZsNt8l+OFr9g3fCsYw4Bb/4UqhlLG7P9qqKt2g7F8SrXcf
- mJdS5EKrMmWlWiodMVIVd88FYG5W1QDWc0T+pHHF935APcuRXkan9aC8aSvdlw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LR/L4CI9
-Subject: Re: [Buildroot] [PATCH] package/zfs: not using kernel-module infra
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vLu31hSuzze5 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 07:13:27 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD63381585
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 07:13:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD63381585
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A666B83614; Thu, 27 Jul 2023 07:13:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 27 Jul 2023 09:12:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cfff4e120f18322df676160caa9a0162644d3f9a
+X-Git-Newrev: 41493cae71a25a4a1a1819b078717793eda7ffff
+X-Patchwork-Hint: ignore
+Message-Id: <20230727071327.A666B83614@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zfs: not using kernel-module infra
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,22 +57,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Michael Zimmermann <sigmaepsilon92@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1643987077163713549=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCAgOCBKdW4gMjAyMyAxOTo1MDoxNiArMDIwMApKb3PDqSBMdWlzIFNhbHZhZG9yIFJ1
-Zm8gPHNhbHZhZG9yLmpvc2VsdWlzQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IHpmcyBhbHJlYWR5IGJ1
-aWxkcyB0aGUga2VybmVsIG1vZHVsZSBmcm9tIHRoZSBhdXRvdG9vbHMgaW5mcmFzdHJ1Y3R1cmUu
-Cj4gCj4gU2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIDxzYWx2YWRvci5q
-b3NlbHVpc0BnbWFpbC5jb20+Cj4gLS0tCj4gIHBhY2thZ2UvemZzL0NvbmZpZy5pbiB8IDEgKwo+
-ICBwYWNrYWdlL3pmcy96ZnMubWsgICAgfCA1ICsrKy0tCj4gIDIgZmlsZXMgY2hhbmdlZCwgNCBp
-bnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4K
-ClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4
-IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============1643987077163713549==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=41493cae71a25a4a1a1819b078717793eda7ffff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+zfs already builds the kernel module from the autotools infrastructure.
+
+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zfs/Config.in | 1 +
+ package/zfs/zfs.mk    | 6 ++++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/zfs/Config.in b/package/zfs/Config.in
+index 6209c5865b..049e0716f3 100644
+--- a/package/zfs/Config.in
++++ b/package/zfs/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_ZFS
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_USE_MMU  # util-linux (libblkid)
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS  # libtirpc
++	select BR2_LINUX_NEEDS_MODULES
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
+index 6d5d46a305..b852d8d4e2 100644
+--- a/package/zfs/zfs.mk
++++ b/package/zfs/zfs.mk
+@@ -15,7 +15,7 @@ ZFS_CPE_ID_PRODUCT = openzfs
+ # 0001-removal-of-LegacyVersion-broke-ax_python_dev.m4.patch
+ ZFS_AUTORECONF = YES
+ 
+-ZFS_DEPENDENCIES = libaio openssl udev util-linux zlib libcurl
++ZFS_DEPENDENCIES = libaio openssl udev util-linux zlib libcurl linux
+ 
+ # sysvinit installs only a commented-out modules-load.d/ config file
+ ZFS_CONF_OPTS = \
+@@ -79,5 +79,7 @@ define ZFS_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_ZLIB_INFLATE)
+ endef
+ 
+-$(eval $(kernel-module))
++# Even though zfs builds a kernel module, it gets built directly by
++# the autotools logic, so we don't use the kernel-module
++# infrastructure.
+ $(eval $(autotools-package))
+
+--===============1643987077163713549==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1643987077163713549==--
