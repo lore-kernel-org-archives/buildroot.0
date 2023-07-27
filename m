@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA94DC00528
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 21:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D1ECEB64DD
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 21:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A21A784077;
-	Thu, 27 Jul 2023 21:37:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A21A784077
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46B3084019;
+	Thu, 27 Jul 2023 21:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46B3084019
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uf9o2s82yS_i; Thu, 27 Jul 2023 21:37:02 +0000 (UTC)
+	with ESMTP id 0rNbMpuU63bm; Thu, 27 Jul 2023 21:47:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE78F84069;
-	Thu, 27 Jul 2023 21:37:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE78F84069
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 66C7C1BF414
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:36:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68F7A83F64;
+	Thu, 27 Jul 2023 21:47:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68F7A83F64
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ABF801BF414
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B78341F2F
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B78341F2F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F8D560D94
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:47:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F8D560D94
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ntAxXPnrxOOA for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 21:36:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FDHyEezzVu5V for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 21:47:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22C3541F2D
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:36:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22C3541F2D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95A1460C2C
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:47:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95A1460C2C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BBC88375F; Thu, 27 Jul 2023 21:36:49 +0000 (UTC)
+ id 7B77283768; Thu, 27 Jul 2023 21:47:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 23:36:31 +0200
+Date: Thu, 27 Jul 2023 23:41:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 653076ab71a418eaa5a0af3528cbec31bfee3aa6
-X-Git-Newrev: 0a4a689e9688120787092286b202fdf5fe89d5bf
+X-Git-Oldrev: 0a4a689e9688120787092286b202fdf5fe89d5bf
+X-Git-Newrev: 898cb9681fa767dfdf4f1cfe19ebbf1a5d6c067c
 X-Patchwork-Hint: ignore
-Message-Id: <20230727213649.0BBC88375F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{4, 10,
- 15}.x / 6.{1, 4}.x series
+Message-Id: <20230727214708.7B77283768@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-rpds-py: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,71 +63,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a4a689e9688120787092286b202fdf5fe89d5bf
+commit: https://git.buildroot.net/buildroot/commit/?id=898cb9681fa767dfdf4f1cfe19ebbf1a5d6c067c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/python-rpds-py/Config.in           |  8 ++++++++
+ package/python-rpds-py/python-rpds-py.hash |  4 ++++
+ package/python-rpds-py/python-rpds-py.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 36 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c8b0d4c5a4..58cc9574a0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.4.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.4.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index a1773ca64b..1236686384 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  e1ecc496efc48aaf25a6607a4b8e52d574d6f67a2b0aa1664087d301d3515ea4  linux-6.4.6.tar.xz
--sha256  312809a78eea052a08a6580f47b2ed8dd28e5633461d6731febaf3cb1e570bb7  linux-6.1.41.tar.xz
-+sha256  de143cb61dcaa756c05f56ff35144316d810615819518a33e34754f064c4a7d8  linux-6.4.7.tar.xz
-+sha256  aaf8261b551c8b76b81eab8780b446e88cea4d551ae517ac3a9b2dbdbd381ed3  linux-6.1.42.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  38755801cd1ce229a8c0a0536d29aa37acea8a8aa13fa438e19fbf9d6293342d  linux-5.15.122.tar.xz
--sha256  f69454210b3e9e00e8b8368aaa897d4ca59f8be3b85399a2fcaecbf17af98bbb  linux-5.10.187.tar.xz
--sha256  0f5b8876526062bf5e346f6b9dde88be873761ee33cf3b8a1586d7d109a091fb  linux-5.4.250.tar.xz
-+sha256  2de69544a12e6a059163c58fc901c13bcf22e8cac39c66b56f8fbb633399bf93  linux-5.15.123.tar.xz
-+sha256  c9558bab35e23ae67661bfb3192c609c857f78582a035449ae63e33d04ab6112  linux-5.10.188.tar.xz
-+sha256  bcb4953ed68131ef17f9f1ba52cac8b9d70007f5ab600bf3dee1fbf8beb218ca  linux-5.4.251.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  118f7411793868db8dcb043cdc82e9ac6f722fbec8dcdde30b07889d941aa3b3  linux-4.19.289.tar.xz
- sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 03c99c08cc..98360204f7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -402,11 +402,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.250"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.187"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.122"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.41"	if BR2_KERNEL_HEADERS_6_1
--	default "6.4.6"		if BR2_KERNEL_HEADERS_6_4
-+	default "5.4.251"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.188"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.123"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.42"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.4.7"		if BR2_KERNEL_HEADERS_6_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0ff44c195d..afdd5a4065 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1424,6 +1424,7 @@ F:	package/python-pydyf/
+ F:	package/python-pypa-build/
+ F:	package/python-pyphen/
+ F:	package/python-pyproject-hooks/
++F:	package/python-rpds-py/
+ F:	package/python-rtoml/
+ F:	package/python-selenium/
+ F:	package/python-snappy/
+diff --git a/package/Config.in b/package/Config.in
+index 1237281701..b07d4be98f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1267,6 +1267,7 @@ menu "External python modules"
+ 	source "package/python-requests-oauthlib/Config.in"
+ 	source "package/python-requests-toolbelt/Config.in"
+ 	source "package/python-rfc3987/Config.in"
++	source "package/python-rpds-py/Config.in"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rpi-ws281x/Config.in"
+ 	source "package/python-rsa/Config.in"
+diff --git a/package/python-rpds-py/Config.in b/package/python-rpds-py/Config.in
+new file mode 100644
+index 0000000000..172c5fd0b6
+--- /dev/null
++++ b/package/python-rpds-py/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_RPDS_PY
++	bool "python-rpds-py"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	help
++	  Python bindings to the Rust rpds crate for persistent
++	  data structures.
++
++	  https://github.com/crate-py/rpds
+diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
+new file mode 100644
+index 0000000000..e42dfbd948
+--- /dev/null
++++ b/package/python-rpds-py/python-rpds-py.hash
+@@ -0,0 +1,4 @@
++# Locally calculated after vendoring
++sha256  3b1087c3c7d55b8730dfaa539147646292074819295812267832ce5b64a0034c  rpds_py-0.9.2.tar.gz
++# Locally computed sha256 checksums
++sha256  8bcb72c82ea8ae74802293c41d93ad7d51434001b0ae45a603a5af0f507aee0a  LICENSE
+diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
+new file mode 100644
+index 0000000000..2b5530f237
+--- /dev/null
++++ b/package/python-rpds-py/python-rpds-py.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# python-rpds-py
++#
++################################################################################
++
++PYTHON_RPDS_PY_VERSION = 0.9.2
++PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
++PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/da/3c/fa2701bfc5d67f4a23f1f0f4347284c51801e9dbc24f916231c2446647df
++PYTHON_RPDS_PY_SETUP_TYPE = pep517
++PYTHON_RPDS_PY_LICENSE = MIT
++PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
++PYTHON_RPDS_PY_DEPENDENCIES = host-python-maturin
++PYTHON_RPDS_PY_ENV = \
++	$(PKG_CARGO_ENV) \
++	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
++# We need to vendor the Cargo crates at download time
++PYTHON_RPDS_PY_DOWNLOAD_POST_PROCESS = cargo
++PYTHON_RPDS_PY_DOWNLOAD_DEPENDENCIES = host-rustc
++PYTHON_RPDS_PY_DL_ENV = $(PKG_CARGO_ENV)
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
