@@ -4,87 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED6FEB64DD
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 22:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5B5EB64DD
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 22:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AED241FEF;
-	Thu, 27 Jul 2023 22:27:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AED241FEF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4072242004;
+	Thu, 27 Jul 2023 22:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4072242004
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cXZq11Qq_wQV; Thu, 27 Jul 2023 22:27:04 +0000 (UTC)
+	with ESMTP id TV8EDwzjnb5e; Thu, 27 Jul 2023 22:27:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5592142004;
-	Thu, 27 Jul 2023 22:27:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5592142004
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5FEB51BF3D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC37C42016;
+	Thu, 27 Jul 2023 22:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC37C42016
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F1381BF98E
  for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 22:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 447678406A
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 22:25:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 447678406A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4387C60EE9
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 22:25:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4387C60EE9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ys9jmjdtFnc0 for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 22:25:49 +0000 (UTC)
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F1C7684069
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 22:25:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1C7684069
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-3fbc59de009so15151665e9.3
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 15:25:48 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ijih4BM2N1JW for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 22:25:54 +0000 (UTC)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1BC8960EC2
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 22:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BC8960EC2
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-3fbc54cab6fso15141275e9.0
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 15:25:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690496747; x=1691101547;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EGP/pBCQGnNdcTc8Keb1BwQfylp9ES1KhQ0e1MREfXE=;
- b=FfxXrAz9XIJS81QOs4q9H9u38WNwCZZQFoplrhtKtJhvKuLWfMAbhfZUp59PWcBrRw
- x/USNRCigbJxwbvu5uBeQ1rCuDATrnLqH2rsE0SKbDJW/a5JD6rfKEYn6AofIMn5K2Cc
- b8cybidUNIwm4Bx7MYrTSyxz0F57oeUtYLyGjcxa8brYy70mk4rCkhKvvOykxRkGzpEg
- czegO/LxMeZLzMlPyYAonxDD6m5M54gUe3JhOLBZAa9edp0wCNNxi0pnwlQR6bENP8du
- XH7r/vYWA40HHyQav812wcnwklbhqnAzEsXEpWIgAj5jMfM4bmJvxooGDLJLun10yjVh
- oCkQ==
-X-Gm-Message-State: ABy/qLbD5Fva+Y8WfpMzjw8//T5BGu8PhDqwqDUJAFHJPICwG69Hq8sA
- wzD8K/pGoimyjy80FFRK2zGyWriGsS8=
-X-Google-Smtp-Source: APBJJlFjA1pceOczYNWykCLS+Al7IjQBNC3ddjJsyIzXWxjpGu10tqrLLO9sFG8yFcIc2cUrmcOX/A==
-X-Received: by 2002:a7b:cd97:0:b0:3fb:d1db:545a with SMTP id
- y23-20020a7bcd97000000b003fbd1db545amr262689wmj.15.1690496746877; 
- Thu, 27 Jul 2023 15:25:46 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1690496752; x=1691101552;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=qoWyYc3zxIzBunBXGE4rLugpg9iMAyQ49Mz0SmwN9Us=;
+ b=BWES8xGDgecEstcSZuJAFn+jFn1zi7FhBunfYbW6E3rEgwOyuzkRshnLHe17ztRKvU
+ GK4QbKSXMZrZifAspOM99V8zzLe7Hcl5gFCbAKvPuUSAKzrrC1RSnSYsA9H4jPDyylSW
+ WtjTBZbQ3rbjszt7Oad3Qt2Si/MyswQ+aS4sCsqk1hlINRtecTaVL3gcZs+IyxBRTQ3c
+ E0f5nr9wrAg3GIM1Kmle3ofaOL4TWeDfApXVm9QKBQJ3dYw0XJ3HYeber5nwB4KeItYN
+ npd1yiJOmp7prWK8ou6g10zGcGVEZZCh7vUC+dtTG/ZRXEKY8Vv2m25tVdfcpcE9NM0T
+ Oqgw==
+X-Gm-Message-State: ABy/qLZ74rrT++yCWWH/NUxhOOn+Su03j5pNLGOHPxrUUjNB6DxiYiUe
+ XhvhqtTQRTADdYMkbi1PmqJbltAtOjM=
+X-Google-Smtp-Source: APBJJlGFLOJedP0wBdTS5z+Rc/0UqorhxoYVoNODuiJAt6411FnO4cOMHMBTiauk0VFf5w3UvvIChQ==
+X-Received: by 2002:a1c:f70a:0:b0:3fc:1bd:95a6 with SMTP id
+ v10-20020a1cf70a000000b003fc01bd95a6mr244352wmh.31.1690496751904; 
+ Thu, 27 Jul 2023 15:25:51 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e00eeca726b991c1980.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:eeca:726b:991c:1980])
  by smtp.gmail.com with ESMTPSA id
- s18-20020a5d5112000000b00313e59cb371sm3218163wrt.12.2023.07.27.15.25.46
+ s18-20020a5d5112000000b00313e59cb371sm3218163wrt.12.2023.07.27.15.25.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Jul 2023 15:25:46 -0700 (PDT)
+ Thu, 27 Jul 2023 15:25:51 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 00:25:37 +0200
-Message-ID: <20230727222544.196562-1-romain.naour@gmail.com>
+Date: Fri, 28 Jul 2023 00:25:43 +0200
+Message-ID: <20230727222544.196562-7-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230727222544.196562-1-romain.naour@gmail.com>
+References: <20230727222544.196562-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690496747; x=1691101547;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=EGP/pBCQGnNdcTc8Keb1BwQfylp9ES1KhQ0e1MREfXE=;
- b=sMsNoH4nRie8Onk3Jt2m6/S/TsnVTIWPqB3WMsWle8upnn8lGmutdMOjTQzCNYQdVZ
- Fd+gcQ1q539Fn7/BFdSEQB9/57Ch5CUFY7veumSckcgULorNPsG1bKKRmZt9m6UCl3tF
- y/f9sRucYUd1rje1UMUOu/gab6LdmMHYcLUMMcgr9ZUpCfQttWMNLkIpXx+nX5pyx9ya
- 9QnzOW3OM4ZYQb+Q84WhuZD2oGtEEC+oOEq2hYqlkYDmMAN+Ez2fTdILI/qIWuOtiDXI
- 8J3S094WeQ4OGvb8ledGJRHPVPPFLqnU+XBG/VfHIJMyPJxKNZQO866eewDa5UhAkTKQ
- 9zMA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20221208; t=1690496752; x=1691101552;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=qoWyYc3zxIzBunBXGE4rLugpg9iMAyQ49Mz0SmwN9Us=;
+ b=rx15HGaTbFSWQAwK0DpjgVjbLZ6ptT9honDhxiq0jONv6dPRtky1MX2E9tcQl9JHij
+ FqXnY5f0deXQKHIdJhGdLI9YdypCt4L5ULkupcvjkqj/CNXNm8vkNrBMHZFDJbB/gY+m
+ JD33gnGeJEh2wGEGpveOrBvY3oxGI4OtHTm4XBEjQT+F8c4CyKy3fUPWN4jve4wHOWBA
+ HE64oXEFaHWRZRBkgCZte3hErBqsVfSU4Vzo+fCFXkig5OSpfpp7UiF/o/voeBPcVa6N
+ ur/cX9V4CHI9uH4aOinz2enJNaoMsfPG8L+i8xZgPzh2pR8PbyI3Q9AlWEbRmUt6dNIT
+ 7S1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=sMsNoH4n
-Subject: [Buildroot] [PATCH v2 1/8] toolchain/Config.in: add
- BR2_TOOLCHAIN_GCC_AT_LEAST_13 blind option
+ header.a=rsa-sha256 header.s=20221208 header.b=rx15HGaT
+Subject: [Buildroot] [PATCH v2 7/8] arch/sparc: disable internal toolchain
+ backend for sparc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,34 +105,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In order to add gcc 13 support for internal and external toolchain in
-follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_13 symbol.
+Since gcc 11 [1] the sparc architecture is disabled since
+it produce a non working image. Buildroot now provide gcc
+13.x, 12.x and 11.x and we are going to remove gcc 10
+that was the last working release (thanks to a local patch).
+
+We have to disable the internal toolchain backend for sparc
+before removing gcc 10. While at it, remove !BR2_sparc
+dependency for gcc 11.x, 12.x and 13.x.
+
+[1] 2ab88dac293aed5adf2504e8b182f9d8a306b935
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- toolchain/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+v2: disable disable internal toolchain backend for sparc
+---
+ arch/Config.in             |  5 +++++
+ package/gcc/Config.in.host | 12 ------------
+ 2 files changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 2479128cab..a142d27231 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -752,10 +752,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_12
- 	bool
+diff --git a/arch/Config.in b/arch/Config.in
+index db0d839c79..e37f4dab1d 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -216,6 +216,11 @@ config BR2_sh
+ config BR2_sparc
+ 	bool "SPARC"
+ 	select BR2_USE_MMU
++	# uClibc-ng broken on sparc due to recent gcc changes
++	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
++	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
++	# gcc <= 10.x has been removed from Buildroot.
++	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+ 	help
+ 	  SPARC (from Scalable Processor Architecture) is a RISC
+ 	  instruction set architecture (ISA) developed by Sun
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index bf2ecbde65..e84ab84f23 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -38,10 +38,6 @@ config BR2_GCC_VERSION_11_X
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_powerpc_SPE
+-	# uClibc-ng broken on sparc due to recent gcc changes
+-	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
+-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+-	depends on !BR2_sparc
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 
-+config BR2_TOOLCHAIN_GCC_AT_LEAST_13
-+	bool
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	string
-+	default "13"	if BR2_TOOLCHAIN_GCC_AT_LEAST_13
- 	default "12"	if BR2_TOOLCHAIN_GCC_AT_LEAST_12
- 	default "11"	if BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	default "10"	if BR2_TOOLCHAIN_GCC_AT_LEAST_10
+@@ -52,10 +48,6 @@ config BR2_GCC_VERSION_12_X
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_powerpc_SPE
+-	# uClibc-ng broken on sparc due to recent gcc changes
+-	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
+-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+-	depends on !BR2_sparc
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
+@@ -65,10 +57,6 @@ config BR2_GCC_VERSION_13_X
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_powerpc_SPE
+-	# uClibc-ng broken on sparc due to recent gcc changes
+-	# that need to be reverted since gcc 8.4, 9.3 and 10.1.
+-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
+-	depends on !BR2_sparc
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
 -- 
 2.41.0
 
