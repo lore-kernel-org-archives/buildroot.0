@@ -4,90 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01361C001DC
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 22:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED6FEB64DD
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 22:27:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8F0241FFD;
-	Thu, 27 Jul 2023 22:26:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8F0241FFD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AED241FEF;
+	Thu, 27 Jul 2023 22:27:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AED241FEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kou41rP08Wwe; Thu, 27 Jul 2023 22:26:50 +0000 (UTC)
+	with ESMTP id cXZq11Qq_wQV; Thu, 27 Jul 2023 22:27:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D0A942003;
-	Thu, 27 Jul 2023 22:26:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D0A942003
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 755C41BF3D4
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 22:25:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5592142004;
+	Thu, 27 Jul 2023 22:27:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5592142004
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FEB51BF3D4
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 22:25:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CDD5B60E59
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 22:25:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDD5B60E59
+ by smtp1.osuosl.org (Postfix) with ESMTP id 447678406A
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 22:25:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 447678406A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Maw9OCX1q7a6 for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 22:25:52 +0000 (UTC)
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 493F460EC2
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 22:25:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 493F460EC2
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-3fba8e2aa52so16604295e9.1
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 15:25:52 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Ys9jmjdtFnc0 for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 22:25:49 +0000 (UTC)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F1C7684069
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 22:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1C7684069
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-3fbc59de009so15151665e9.3
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 15:25:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690496750; x=1691101550;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=/sg7GfMqapw7fWMhICqeDOWOKL8OywRjYdZsx4Vuw4U=;
- b=jlzbSH/x1OgRmG1k9RD/X0voJkZFTj6VK6cUFY7YUHaOGQaEwnMojD37wX+y2gNgOq
- xK9/G0bn68WEzAofaGobhhNOpsMz8irECwRzXYPnNrd1LKP1ioQ92JcbOSW4mWBGKBX7
- ThwY9GdMp/CQWnDZTgXculos9XYzJ+37jP0wVtTrvGKKMH3rGO/lqLaKa1yneXWIMuIp
- mX5Foi4iXXQTZ9k98Q1tJr/xQazXP03ThR8Kon7uvOQgG92swAE0EEyjw5tkVYMDOUqm
- LBCESJml6FztJecmYF3M3zXnNw+wGtgAiPqV6VIzSg6J8BCaopayiBO1H54dm6e+Gu/Y
- U9VA==
-X-Gm-Message-State: ABy/qLbD6oTGQnihM6tbXDmDaFYO0Azf7eNA9HgYX5mUY4XIlqX0E2T2
- BILaEUeaY7CWAAEAJ82GE70BqIUx/nM=
-X-Google-Smtp-Source: APBJJlFlfuSQoPcxRHeY5GvzIferwhaRNWs6imgKaRnDM5yik5VDJvOwXcTHdiTWpxWjdBs2VQpQ5Q==
-X-Received: by 2002:a05:600c:210b:b0:3fb:fb88:974b with SMTP id
- u11-20020a05600c210b00b003fbfb88974bmr293214wml.6.1690496750297; 
- Thu, 27 Jul 2023 15:25:50 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1690496747; x=1691101547;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EGP/pBCQGnNdcTc8Keb1BwQfylp9ES1KhQ0e1MREfXE=;
+ b=FfxXrAz9XIJS81QOs4q9H9u38WNwCZZQFoplrhtKtJhvKuLWfMAbhfZUp59PWcBrRw
+ x/USNRCigbJxwbvu5uBeQ1rCuDATrnLqH2rsE0SKbDJW/a5JD6rfKEYn6AofIMn5K2Cc
+ b8cybidUNIwm4Bx7MYrTSyxz0F57oeUtYLyGjcxa8brYy70mk4rCkhKvvOykxRkGzpEg
+ czegO/LxMeZLzMlPyYAonxDD6m5M54gUe3JhOLBZAa9edp0wCNNxi0pnwlQR6bENP8du
+ XH7r/vYWA40HHyQav812wcnwklbhqnAzEsXEpWIgAj5jMfM4bmJvxooGDLJLun10yjVh
+ oCkQ==
+X-Gm-Message-State: ABy/qLbD5Fva+Y8WfpMzjw8//T5BGu8PhDqwqDUJAFHJPICwG69Hq8sA
+ wzD8K/pGoimyjy80FFRK2zGyWriGsS8=
+X-Google-Smtp-Source: APBJJlFjA1pceOczYNWykCLS+Al7IjQBNC3ddjJsyIzXWxjpGu10tqrLLO9sFG8yFcIc2cUrmcOX/A==
+X-Received: by 2002:a7b:cd97:0:b0:3fb:d1db:545a with SMTP id
+ y23-20020a7bcd97000000b003fbd1db545amr262689wmj.15.1690496746877; 
+ Thu, 27 Jul 2023 15:25:46 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e00eeca726b991c1980.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:eeca:726b:991c:1980])
  by smtp.gmail.com with ESMTPSA id
- s18-20020a5d5112000000b00313e59cb371sm3218163wrt.12.2023.07.27.15.25.49
+ s18-20020a5d5112000000b00313e59cb371sm3218163wrt.12.2023.07.27.15.25.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Jul 2023 15:25:49 -0700 (PDT)
+ Thu, 27 Jul 2023 15:25:46 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 00:25:41 +0200
-Message-ID: <20230727222544.196562-5-romain.naour@gmail.com>
+Date: Fri, 28 Jul 2023 00:25:37 +0200
+Message-ID: <20230727222544.196562-1-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230727222544.196562-1-romain.naour@gmail.com>
-References: <20230727222544.196562-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690496750; x=1691101550;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=/sg7GfMqapw7fWMhICqeDOWOKL8OywRjYdZsx4Vuw4U=;
- b=rllsXOZ96+SaCp+Tkt3Fuz4iSaFbQxpQBl1z71BV/tm5wkZpQzw9j9Mm69LMl4+JKq
- yq71VAztWHE8U6tX7sNMNbsVhVfXc032oucN2+gkr5uwOss95jhRsfoe1zpkZtuhxwsP
- rPjbaNK+GRjJo7o8PUGiazrqL/XVk29g9tHzD60Aeo53DkNYXe8RDUeB88yt9VFxoYL1
- +cZGPrbwr2BIaXHx8N2yNl+ZkSQz2tdInEOEDTdV9n7dwqZJ4YrdaM7p+xVUDDSUw5uQ
- PIi410XpIDm5O1kK/ySohVnqIBhQilqZ18PjrCjhybQ1RccHgadjNgda/qJQZex/i3CI
- tmqw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20221208; t=1690496747; x=1691101547;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EGP/pBCQGnNdcTc8Keb1BwQfylp9ES1KhQ0e1MREfXE=;
+ b=sMsNoH4nRie8Onk3Jt2m6/S/TsnVTIWPqB3WMsWle8upnn8lGmutdMOjTQzCNYQdVZ
+ Fd+gcQ1q539Fn7/BFdSEQB9/57Ch5CUFY7veumSckcgULorNPsG1bKKRmZt9m6UCl3tF
+ y/f9sRucYUd1rje1UMUOu/gab6LdmMHYcLUMMcgr9ZUpCfQttWMNLkIpXx+nX5pyx9ya
+ 9QnzOW3OM4ZYQb+Q84WhuZD2oGtEEC+oOEq2hYqlkYDmMAN+Ez2fTdILI/qIWuOtiDXI
+ 8J3S094WeQ4OGvb8ledGJRHPVPPFLqnU+XBG/VfHIJMyPJxKNZQO866eewDa5UhAkTKQ
+ 9zMA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=rllsXOZ9
-Subject: [Buildroot] [PATCH v2 5/8] package/gcc: switch to gcc 12.x as the
- default
+ header.a=rsa-sha256 header.s=20221208 header.b=sMsNoH4n
+Subject: [Buildroot] [PATCH v2 1/8] toolchain/Config.in: add
+ BR2_TOOLCHAIN_GCC_AT_LEAST_13 blind option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,32 +102,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Even if gcc 11 is still maintained for some time, switch to gcc 12.x
-since it has been released since 2022-05-06 and gcc 13.x is available
-since 2023-04-26.
-
-We have been having toolchains in the autobuilders with gcc
-12.x for a while, so the vast majority of the problems should have
-already been solved.
+In order to add gcc 13 support for internal and external toolchain in
+follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_13 symbol.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 5c356e7cbd..bf2ecbde65 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -5,7 +5,7 @@ choice
- 	default BR2_GCC_VERSION_ARC if BR2_GCC_VERSION_4_8_ARC # legacy
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_POWERPC_SPE if BR2_powerpc_SPE
--	default BR2_GCC_VERSION_11_X
-+	default BR2_GCC_VERSION_12_X
- 	help
- 	  Select the version of gcc you wish to use.
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 2479128cab..a142d27231 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -752,10 +752,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_12
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
  
++config BR2_TOOLCHAIN_GCC_AT_LEAST_13
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "13"	if BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 	default "12"	if BR2_TOOLCHAIN_GCC_AT_LEAST_12
+ 	default "11"	if BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	default "10"	if BR2_TOOLCHAIN_GCC_AT_LEAST_10
 -- 
 2.41.0
 
