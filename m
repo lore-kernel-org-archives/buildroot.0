@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43776C001E0
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 435A4C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:29:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F23C841819;
-	Thu, 27 Jul 2023 10:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F23C841819
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA6C6403CA;
+	Thu, 27 Jul 2023 10:29:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA6C6403CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7xNuOn-UMX47; Thu, 27 Jul 2023 10:28:26 +0000 (UTC)
+	with ESMTP id LNBt4ox6M7Ck; Thu, 27 Jul 2023 10:29:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24A9640471;
-	Thu, 27 Jul 2023 10:28:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24A9640471
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E4F6401C9;
+	Thu, 27 Jul 2023 10:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E4F6401C9
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6F4F11BF40B
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:28:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C398E1BF40B
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5611360E79
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:28:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5611360E79
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D54760E74
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:29:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D54760E74
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sKYyeioi04xu for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 10:28:13 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3034560E74
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3034560E74
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2249C240007;
- Thu, 27 Jul 2023 10:28:05 +0000 (UTC)
-Date: Thu, 27 Jul 2023 12:28:05 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230727122805.3c035fc2@windsurf>
-In-Reply-To: <20230726194453.1462570-1-bernd@kuhls.net>
-References: <20230726194453.1462570-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690453691;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=KHPmtaqWfV1wqxMpMh06EOTC2oGavO7zPt6mAs3s4zY=;
- b=awd2uPe6xjBhn6nGaiGZpn6qI9y9jvgxtsSdNHNoMTRO2BcrM+fc8G2f2qTzBhmpKFwRka
- /VhkCUPxMNM3/7HS46Lr2BwPBQ38Z40MmlIV918q+nEFU+HBVSRwiTDtLVNriUakGTqncG
- y6A2BQRyTlTbN6LItScLndzQex3JINswU+MHxak/26QKgZpWtpAA6PteyTmHrwEN3Fu0Bm
- LRVAwaHDnkhNZnAmFJ3BvhL6NMxspsBkrTqMAYeNB6UOw2ioQBS0+Zm/dGIbO5VytkplZ8
- HFOwJzM+SEWn4tVEoc3c4UsUinRDXAy345akirT/s/l8I08kaRZAcCbcycuQ4A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=awd2uPe6
-Subject: Re: [Buildroot] [PATCH 1/2] package/wolfssl: disable asm on armv4
+ with ESMTP id eTb_1PjXFDOv for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 10:29:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D921060881
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:29:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D921060881
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C7EB48369A; Thu, 27 Jul 2023 10:29:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 27 Jul 2023 12:29:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e84fad284882ab8e353d733f855aedcc424a9d14
+X-Git-Newrev: 8c9de3681022c426f016f6cdf9d336095277e829
+X-Patchwork-Hint: ignore
+Message-Id: <20230727102952.C7EB48369A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/redis-plus-plus: disable shared
+ library build with BR2_STATIC_LIBS=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,41 +58,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 26 Jul 2023 21:44:52 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8c9de3681022c426f016f6cdf9d336095277e829
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Quoting
-> https://developer.arm.com/documentation/dui0489/i/arm-and-thumb-instructions/clz
-> "This ARM instruction is available in ARMv5T and above."
-> 
-> Fixes:
-> - armeb
->   http://autobuild.buildroot.net/results/ea9/ea9b19e872b4b20b97fceec3f7e0a6a1109c4f12/
->   /tmp/ccdRCOaB.s:27: Error: selected processor does not support `clz r5,r2' in ARM mode
-> - arm
->   http://autobuild.buildroot.net/results/cb1/cb1c7ac68b3379d3f4b5efc897198bea0a904217/
->   /tmp/cc72ECAj.s:6764: Error: selected processor does not support `clz r5,r0' in ARM mode
->   /tmp/cc72ECAj.s:7110: Error: selected processor does not support `clz r5,lr' in ARM mode
->   /tmp/cc72ECAj.s:8934: Error: selected processor does not support `clz r5,fp' in ARM mode
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/wolfssl/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Fixes:
+http://autobuild.buildroot.net/results/6d3/6d310d52dbfe076cd470be71f02de32fb47fa904/
+in combination with the bump of hiredis to 1.2.0 which contains
+improvements for static builds.
 
-Thanks, both applied!
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/redis-plus-plus/redis-plus-plus.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/redis-plus-plus/redis-plus-plus.mk b/package/redis-plus-plus/redis-plus-plus.mk
+index ea0e182748..4d1eb9361b 100644
+--- a/package/redis-plus-plus/redis-plus-plus.mk
++++ b/package/redis-plus-plus/redis-plus-plus.mk
+@@ -12,6 +12,7 @@ REDIS_PLUS_PLUS_INSTALL_STAGING = YES
+ REDIS_PLUS_PLUS_DEPENDENCIES = hiredis
+ 
+ REDIS_PLUS_PLUS_CONF_OPTS = \
++	-DREDIS_PLUS_PLUS_BUILD_SHARED=$(if $(BR2_STATIC_LIBS),OFF,ON) \
+ 	-DREDIS_PLUS_PLUS_BUILD_TEST=OFF
+ 
+ # since version 1.3.0, by default, redis-plus-plus is built with the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
