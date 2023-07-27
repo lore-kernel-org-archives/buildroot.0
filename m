@@ -4,96 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF302EB64DD
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 21:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B5FCC0015E
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 21:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F01184069;
-	Thu, 27 Jul 2023 21:20:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F01184069
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED06284072;
+	Thu, 27 Jul 2023 21:20:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED06284072
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3pE_f5oIEUEu; Thu, 27 Jul 2023 21:20:21 +0000 (UTC)
+	with ESMTP id 0_L9elNqdAZE; Thu, 27 Jul 2023 21:20:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A058283295;
-	Thu, 27 Jul 2023 21:20:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A058283295
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 342B21BF414
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:20:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 374DC84055;
+	Thu, 27 Jul 2023 21:20:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 374DC84055
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BD601BF414
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:20:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B12C404D4
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:20:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B12C404D4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6273E613D3
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:20:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6273E613D3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vGsYKIw7I8UJ for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 21:20:17 +0000 (UTC)
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
- [IPv6:2a00:1450:4864:20::62e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 077954020B
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:20:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 077954020B
-Received: by mail-ej1-x62e.google.com with SMTP id
- a640c23a62f3a-99b78fda9a8so200352966b.1
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 14:20:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690492815; x=1691097615;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=soFesbqyItI75QaMpwO04BFMyqRRAkawm8pWzN9WnUw=;
- b=egtKozPysEqSG0LckCfmH10ZO5/jSHnJ+IDj5AygswOaSnkIKq1CxsqK/UuwRaW9pn
- lGeMj3hAwOF1T1XitAD7AyLUgjDvkKS82wXVBItgl8OFd6wPbPihskfgrjWTKL/wxsro
- QPsPyc/FmKxsy0g1UnWHkPsQvv7bhXZigs8LcvMr4NNhicJCbE0MVUA5zh1S9v7ATuZG
- aaucJyhtiOajxAbazUVZHSOrNsLl3GtNGiOxlnoWhPm5pFlgPhHcH14ehnyfbOG5B1dy
- GSOUMvq1i/cLbrzvWwTh5ECUvQ+0e0mJS5BBOVq7NtbwS0iQka2oPPW+E2lXAcC4FFNU
- nBwQ==
-X-Gm-Message-State: ABy/qLYtZ3ZefU6KG9asi6dJe3ydpNV2dC1X2odOCIHXCLwzvtmjOZ3l
- Z9P/8PtGkKp1xlA7CDEpQH8+Vym5mpmqI+7Tq7E=
-X-Google-Smtp-Source: APBJJlE7mKaiL9uu26pOqAz6zNxdpj0BKToowgt+kZ2fEj3zB43JWE6BlafWs+sjtpQv5SnHnO4Ntg==
-X-Received: by 2002:a17:907:2c6b:b0:997:c5c3:32cc with SMTP id
- ib11-20020a1709072c6b00b00997c5c332ccmr318493ejc.66.1690492814604; 
- Thu, 27 Jul 2023 14:20:14 -0700 (PDT)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com.
- [209.85.218.43]) by smtp.gmail.com with ESMTPSA id
- kb10-20020a1709070f8a00b00992b0745548sm1209847ejc.152.2023.07.27.14.20.13
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 27 Jul 2023 14:20:13 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id
- a640c23a62f3a-99bccc9ec02so199560166b.2
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 14:20:13 -0700 (PDT)
-X-Received: by 2002:a17:906:3057:b0:99b:cf57:11e3 with SMTP id
- d23-20020a170906305700b0099bcf5711e3mr314367ejd.59.1690492813308; Thu, 27 Jul
- 2023 14:20:13 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Esoo6Plzif1e for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 21:20:30 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 92F8F60B2A
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:20:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92F8F60B2A
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id A0009A4C1061;
+ Thu, 27 Jul 2023 23:20:27 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41524)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qP8PK-00030l-1S;
+ Thu, 27 Jul 2023 23:20:26 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 27 Jul 2023 23:20:26 +0200
+Message-Id: <20230727212026.2269634-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230721213121.178783-1-romain.naour@gmail.com>
- <20230722232630.1c759813@windsurf>
- <CA+h8R2qhnFzK8WQOVQNi=etMhKyg=hFhyBcRHPu7NYg5S=kjWA@mail.gmail.com>
- <dbadbf67-797f-ad6f-d519-35567417a291@smile.fr>
-In-Reply-To: <dbadbf67-797f-ad6f-d519-35567417a291@smile.fr>
-Date: Thu, 27 Jul 2023 14:20:02 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2oZ=oEr8hrJbHqw1K6AnBb__w1u6PGPmDUSONVb0Q0f6g@mail.gmail.com>
-Message-ID: <CA+h8R2oZ=oEr8hrJbHqw1K6AnBb__w1u6PGPmDUSONVb0Q0f6g@mail.gmail.com>
-To: Romain Naour <romain.naour@smile.fr>
+X-Spamd-Bar: -
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1690492815; x=1691097615;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=soFesbqyItI75QaMpwO04BFMyqRRAkawm8pWzN9WnUw=;
- b=nlnUFclBNcBrG41uJRdvafUlOnZbGB2RNu7AebDz5Pw3YrKFTK5mu+k6dEE4Ozzbfr
- HwB3WuLEqjtDe4TYZTFVmB2IdVtMdrQ25JkQFddUnTJ6Rhb9EMx1QQf+6MIkmyqcdh3I
- 3B2RgeOFYS0uZUCXEeBKT1LNTWVupb03NlyZgXg9b1qyv5zGy+HEUsal1qOC0GY7MM2E
- 3DNfLL4WtfgkmU+Dn2WMF5gSKu9HSnpXSVnNTdZoxZb4OXTPzafa2P3tn2gOpwB5oxkF
- ZIzrBV7EDhCYexwueMgD7SoV/Qp+nDxVxVHajEy+PXpoEiwl+6b88nJzw7/PwkhdaSBf
- VzKA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=nlnUFclB
-Subject: Re: [Buildroot] [PATCH] package/util-linux: bump version to 2.39.1
+ d=kuhls.net; 
+ s=kas202306131828; t=1690492827;
+ bh=6kpyQzlbEsT3PWpEtcIzAAlGCXw+pIX53FdVr7jmifY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=re/+Etcn3v76tRkRnlAfCF3l+gAdK4Hfp8mcDEm7Wq8nuifpNQTum5VNvU6XkFQkM
+ isfEQz5WmTX34SdvUBxx4Wm/L8LD9MmXXIRnOjUr9lUVoBG01p6GlvZf4CRNloIhVG
+ ErXogCvqXq43h3BCZooW5XB6gItFpnlRgtz86tGTxuPgiNjUpMf0G5GTiTIJDVCC6z
+ 38JBgW6Qeti/a6tC8zXebD2gh3deFfwdNfTFsRXTN6WGpX0KRzPnF5rT5wqDhjemls
+ yVWmMO2eXqEy7YvaW5KLScBYA4xTJXIADlcD+ixG+G3XgW6r8jI1iyfWS/5m1PBj96
+ NoKjtKR8uTSVQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=re/+Etcn
+Subject: [Buildroot] [PATCH 1/1] package/fluent-bit: fix build without c++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,26 +74,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Um9tYWluLAoKT24gVGh1LCBKdWwgMjcsIDIwMjMgYXQgMTo0N+KAr1BNIFJvbWFpbiBOYW91ciA8
-cm9tYWluLm5hb3VyQHNtaWxlLmZyPiB3cm90ZToKPiBJdCBzZWVtcyB0aGUgZ28gYm9vdHN0cmFw
-IGRvZXNuJ3Qgd29yayBldmVuIGFmdGVyIEdvIDEuMjAueCBtZXJnZSwKPiBzZWUgWzFdCgpJdCBk
-ZWZpbml0ZWx5IHdvcmtzOyBJJ20gcnVubmluZyBtYW55IGJ1aWxkcyBhIGRheSB3aXRoIGl0LgoK
-V2lsbCBjaGVjayBpbnRvIHdoeSB0aGlzIENJIGpvYiBmYWlsZWQgcmlnaHQgYXdheS4KCj4gPj4+
-IGhvc3QtZ28gMS4yMC42IEJ1aWxkaW5nCj4gLi4uCj4gQnVpbGRpbmcgR28gdG9vbGNoYWluMSB1
-c2luZyBbLi4uXXRlc3Qtb3V0cHV0L1Rlc3RNZW5kZXIvaG9zdC9saWIvZ28tMS4xOS4xMC4KPiBl
-cnJvciBvYnRhaW5pbmcgVkNTIHN0YXR1czogZXhpdCBzdGF0dXMgMTI4Cj4gICAgICAgICBVc2Ug
-LWJ1aWxkdmNzPWZhbHNlIHRvIGRpc2FibGUgVkNTIHN0YW1waW5nLgo+Cj4gWzFdIGh0dHBzOi8v
-Z2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNDcyNTE4NjUyNQoKSXMg
-ImdpdCIgaW5zdGFsbGVkIGJ5IGFueSBjaGFuY2U/CgpUaGFua3MsCkNocmlzdGlhbgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+The kafka plugin needs c++.
+
+Fixes:
+http://autobuild.buildroot.net/results/709/70960056479eab860e94eed993566fcb78c4dbbe/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/fluent-bit/fluent-bit.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 1185860661..245f6ecf44 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -22,6 +22,16 @@ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_PREFER_SYSTEM_LIBS=Yes \
+ 	-DFLB_BACKTRACE=No
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++FLUENT_BIT_CONF_OPTS += \
++	-DFLB_IN_KAFKA=Yes \
++	-DFLB_OUT_KAFKA=Yes
++else
++FLUENT_BIT_CONF_OPTS += \
++	-DFLB_IN_KAFKA=No \
++	-DFLB_OUT_KAFKA=No
++endif
++
+ ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
+ FLUENT_BIT_WAMR_ARCH = $(call qstrip,$(BR2_PACKAGE_FLUENT_BIT_WASM_ARCH))
+ 
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
