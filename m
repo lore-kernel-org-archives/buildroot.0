@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91EC2C001DC
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08163C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38C1440A4A;
-	Thu, 27 Jul 2023 10:27:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38C1440A4A
+	by smtp2.osuosl.org (Postfix) with ESMTP id B1213401C9;
+	Thu, 27 Jul 2023 10:27:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1213401C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yDAFDLFXgJcR; Thu, 27 Jul 2023 10:27:01 +0000 (UTC)
+	with ESMTP id IrHcdhkmFd2R; Thu, 27 Jul 2023 10:27:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5E5A5401C9;
-	Thu, 27 Jul 2023 10:27:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E5A5401C9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 087B24048C;
+	Thu, 27 Jul 2023 10:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 087B24048C
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 229E11BF40B
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:26:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B31D41BF40B
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 099DD60E79
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:26:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 099DD60E79
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8794060E79
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:27:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8794060E79
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cU5uVOP0Qt2Q for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 10:26:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33A0360E74
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:26:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33A0360E74
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2192183608; Thu, 27 Jul 2023 10:26:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 12:26:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80320c478c94d78b49f21b14ea58f034f5b1aba4
-X-Git-Newrev: f60a122281de425fb6884304c8f8b006416b31b5
-X-Patchwork-Hint: ignore
-Message-Id: <20230727102645.2192183608@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-orjson: bump to version
- 3.9.2
+ with ESMTP id 87a51iIfRk8w for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 10:27:05 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3D83660E74
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:27:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D83660E74
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D31B4FF806;
+ Thu, 27 Jul 2023 10:27:01 +0000 (UTC)
+Date: Thu, 27 Jul 2023 12:27:00 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230727122700.4ec9ff41@windsurf>
+In-Reply-To: <20230726213726.20750-1-james.hilliard1@gmail.com>
+References: <20230726213726.20750-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690453622;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3sHHerbiNSJwMIE1KNnF26NiFsgTSnxwiG4NWW8cEFc=;
+ b=W4PF4upHmX2DvoXU3SfrWnYqVdNzs3/H66vWCCASycLqA42fA5wdDLPMo2QHnPDCA0zzwJ
+ R/jvmlqeTPzOR3MIJIo8TSwlVjmRrQrdUrCP/ymnSD0rR8GJwkYfURI/4D06r9jSflPRG/
+ eRuOLFCBNguZ4YyVPnlqJXEAe+ycbxacqKkjuZmQFfVYNNTTKH31loeJAKism8u7XVJiiq
+ 3qBdpE/SXMbz4Z3zaqvf7NoixYpCVDJ79PXcSYlaK0dfFWDZfSfeN6d27RitXzvbQjMwEZ
+ yA+gJG+QTCrKz/z3dXk2jW64hfqIhg5lGP5ykzjoGhWD2J3Y+F3tfO7geNxrIw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=W4PF4upH
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-maturin: bump to version
+ 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Graeme Smecher <gsmecher@threespeedlogic.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f60a122281de425fb6884304c8f8b006416b31b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 26 Jul 2023 15:37:25 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Graeme Smecher <gsmecher@threespeedlogic.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-orjson/python-orjson.hash | 2 +-
- package/python-orjson/python-orjson.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-maturin/python-maturin.hash | 2 +-
+>  package/python-maturin/python-maturin.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-orjson/python-orjson.hash b/package/python-orjson/python-orjson.hash
-index f1298c05ce..773fb14568 100644
---- a/package/python-orjson/python-orjson.hash
-+++ b/package/python-orjson/python-orjson.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  b932fc1e43598fb91022b1dc651afeaef650793a2a590ca4fbeef57a3808abf5  orjson-3.8.4.tar.gz
-+sha256  048938fd9153f37eaf7a08b748de94ff87b2488dd3bd9f96c3ae784527a961b3  orjson-3.9.2.tar.gz
- # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/python-orjson/python-orjson.mk b/package/python-orjson/python-orjson.mk
-index 8eeadecb3d..f5d4ad1046 100644
---- a/package/python-orjson/python-orjson.mk
-+++ b/package/python-orjson/python-orjson.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ORJSON_VERSION = 3.8.4
-+PYTHON_ORJSON_VERSION = 3.9.2
- PYTHON_ORJSON_SOURCE = orjson-$(PYTHON_ORJSON_VERSION).tar.gz
--PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/8f/2d/ae31eddf7e097eec5e25c7da954ef6e944f4dbf79153676f94cea3dc5116
-+PYTHON_ORJSON_SITE = https://files.pythonhosted.org/packages/30/a4/96bcb52da0de9ccfcd99a60719b995c9b9c3aaa3a70701f0790ce856c10d
- PYTHON_ORJSON_SETUP_TYPE = pep517
- PYTHON_ORJSON_LICENSE = Apache-2.0 or MIT
- PYTHON_ORJSON_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+Both applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
