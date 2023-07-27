@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24218C001E0
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD7B7C001DC
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 10:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD54841895;
-	Thu, 27 Jul 2023 10:49:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD54841895
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DA6E41E81;
+	Thu, 27 Jul 2023 10:49:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DA6E41E81
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UOzKyVemdywv; Thu, 27 Jul 2023 10:49:39 +0000 (UTC)
+	with ESMTP id q-oVjGYU8Xh6; Thu, 27 Jul 2023 10:49:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1465418F3;
-	Thu, 27 Jul 2023 10:49:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1465418F3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6797B1BF40B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 01CCA41E58;
+	Thu, 27 Jul 2023 10:49:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01CCA41E58
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C23131BF40B
  for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F37960E7C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A4F841B18
  for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 10:49:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F37960E7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A4F841B18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LmMHc5dcIjXf for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qe8b4z9STEuz for <buildroot@lists.busybox.net>;
  Thu, 27 Jul 2023 10:49:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81DFA60E73
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D86E41895
  for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:49:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81DFA60E73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D86E41895
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7200483713; Thu, 27 Jul 2023 10:49:24 +0000 (UTC)
+ id 7BD0483714; Thu, 27 Jul 2023 10:49:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 12:48:39 +0200
+Date: Thu, 27 Jul 2023 12:49:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 318f08715c3db7fbe76635384cbd4c615e1fe6b4
-X-Git-Newrev: 242777898aeb057b1d40026bee5c555c2ab75785
+X-Git-Oldrev: 242777898aeb057b1d40026bee5c555c2ab75785
+X-Git-Newrev: 1738b5582ba0cf715303f4ebfa1d2323a33d0ae4
 X-Patchwork-Hint: ignore
-Message-Id: <20230727104924.7200483713@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sofia-sip: bump version to 1.13.16
+Message-Id: <20230727104924.7BD0483714@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{libuv,
+ uvw}: bump to versions 1.46.0, 3.2.0_libuv_v1.46
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +64,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=242777898aeb057b1d40026bee5c555c2ab75785
+commit: https://git.buildroot.net/buildroot/commit/?id=1738b5582ba0cf715303f4ebfa1d2323a33d0ae4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog: https://github.com/libuv/libuv/blob/v1.x/ChangeLog
+
+Switched libuv to tarball provided by upstream. removed autoreconf.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sofia-sip/sofia-sip.hash | 2 +-
- package/sofia-sip/sofia-sip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 6 +++---
+ package/uvw/uvw.hash     | 2 +-
+ package/uvw/uvw.mk       | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
-index f7293bd262..6799a941be 100644
---- a/package/sofia-sip/sofia-sip.hash
-+++ b/package/sofia-sip/sofia-sip.hash
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 3ca184feaf..1fd286d9e9 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
 @@ -1,4 +1,4 @@
- # Locally computed
--sha256  846b3d5eef57702e8d18967070b538030252116af1500f4baa78ad068c5fdd64  sofia-sip-1.13.15.tar.gz
-+sha256  125a9653bea1fc1cb275e4aec3445aa2deadf1fe3f1adffae9559d2349bfab36  sofia-sip-1.13.16.tar.gz
- sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
- sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 9734da5020..c829625cb0 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
+ # Locally calculated
+-sha256  458e34d5ef7f3c0394a2bfd8c39d757cb1553baa5959b9b4b45df63aa027a228  libuv-1.45.0.tar.gz
++sha256  94f101111ef3209340d7f09c2aa150ddb4feabd2f9d87d47d9f5bded835b8094  libuv-v1.46.0-dist.tar.gz
+ sha256  16de0c32b265cb7d46a6d3bd614f259dd4d693a5e26b3407b04aae8d73041f0c  LICENSE
+ sha256  262c44bd2cdba037e6d2a82fba15f5800d292bc993a6f5d6b6ea487744d02836  LICENSE-extra
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 640c5bb1ce..75590ad8f2 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,11 +6,11 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.45.0
+-LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
++LIBUV_VERSION = 1.46.0
++LIBUV_SOURCE = libuv-v$(LIBUV_VERSION)-dist.tar.gz
++LIBUV_SITE = https://dist.libuv.org/dist/v$(LIBUV_VERSION)
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+-LIBUV_AUTORECONF = YES
+ LIBUV_LICENSE = BSD-2-Clause, BSD-3-Clause, ISC, MIT
+ LIBUV_LICENSE_FILES = LICENSE LICENSE-extra
+ LIBUV_CPE_ID_VENDOR = libuv
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index 8e54ea7d60..2dc6e879e1 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0a612bd243150fbbe1365cdaf48203d32061c1d14f93825a31876b183922f93b  uvw-3.1.0_libuv_v1.45.tar.gz
++sha256  bd5aed741765950074b1ea2507291dce81e528abdf56c406991ad4a27d8d1714  uvw-3.2.0_libuv_v1.46.tar.gz
+ sha256  e2a4062818ab05e2a0908737ad49b7c01202247364e900167ac81105de8713f3  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index 364a2eded4..12149d43ca 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SOFIA_SIP_VERSION = 1.13.15
-+SOFIA_SIP_VERSION = 1.13.16
- SOFIA_SIP_SITE = $(call github,freeswitch,sofia-sip,v$(SOFIA_SIP_VERSION))
- SOFIA_SIP_INSTALL_STAGING = YES
- # Fetched from github, no pre-generated configure script provided
+-UVW_VERSION = 3.1.0_libuv_v1.45
++UVW_VERSION = 3.2.0_libuv_v1.46
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
