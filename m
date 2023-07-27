@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58AF2EB64DD
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 21:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D7D3C001DC
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 21:29:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1E9C83B95;
-	Thu, 27 Jul 2023 21:29:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1E9C83B95
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58FC883BAC;
+	Thu, 27 Jul 2023 21:29:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58FC883BAC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xGx4yQ5I2PBY; Thu, 27 Jul 2023 21:29:10 +0000 (UTC)
+	with ESMTP id oPZyHqcZfR1K; Thu, 27 Jul 2023 21:29:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3ED9E84043;
-	Thu, 27 Jul 2023 21:29:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3ED9E84043
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1BDD84069;
+	Thu, 27 Jul 2023 21:29:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1BDD84069
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 70B0F1BF414
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:28:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 071EB1BF414
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57446404D4
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57446404D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5353404D4
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 21:29:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5353404D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QpBIcoYHof4Q for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 21:28:55 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D0744020B
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:28:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D0744020B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79A3A83746; Thu, 27 Jul 2023 21:28:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 23:28:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1c180bc5aaf823d62a81141c483bbc555493eb71
-X-Git-Newrev: 92f14307ba670058d0b3692fb8e82753d6ad6868
-X-Patchwork-Hint: ignore
-Message-Id: <20230727212855.79A3A83746@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cairo: mutex support depends on
- NPTL
+ with ESMTP id MMAuMmas5-xO for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 21:29:10 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9593C4020B
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:29:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9593C4020B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 40082FF804;
+ Thu, 27 Jul 2023 21:29:07 +0000 (UTC)
+Date: Thu, 27 Jul 2023 23:29:06 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230727232906.7a886214@windsurf>
+In-Reply-To: <20230727162340.3303969-1-bernd@kuhls.net>
+References: <20230727162340.3303969-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690493347;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=DbD6zK5/ljjOxz0s58MZ+QgtE/lFihC+x8gsYKIF8Ao=;
+ b=ZZKe5kHN7wv6iBDDv7FGYy3y850shDtBzfXCuM0E8n4LH6/4m8CJCmrzGqeX9MlYStmbSQ
+ K7buTr+Gwcc7jyKE8HwvAyIH5pmuoXQzebXkCHuPyV69Eb4x8KkNQNHYGk9JIXmAKpopUP
+ upUS5VjD/n4Vv/XGM3tYb7tmql6OLJ4HYmxHco6RrwtFy+bEqDlF4SUssEMvTDKGkL+kjF
+ puBvwYLeruFfKQkogUb6S3L4OHUa/xPOfCUkYWuYk//pSG7RA0KQdbOwxi9PwxhGC7Xp6n
+ FVsX+WWAapDG92SRwiWTrQqcsGvq4LIqKCmNKNuVnSNmn5QGdhUuXmyAWVikvA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZZKe5kHN
+Subject: Re: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.7.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,42 +76,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92f14307ba670058d0b3692fb8e82753d6ad6868
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 27 Jul 2023 18:23:40 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/041/041ac8f0809a0f9415c545b7585cd197db08b55f/
+> Changelog:
+> https://gitlab.torproject.org/tpo/core/tor/-/blob/release-0.4.7/ChangeLog
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/tor/tor.hash | 4 ++--
+>  package/tor/tor.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-The last bump of cairo took place in 2019 with commit
-8d2a9d089a969909ad2de8acb67ee14ced03de28, the first build error of this
-kind I could find dates back to Sep 2022:
-http://autobuild.buildroot.net/results/8c5/8c547ec2e148ce3c4f230bb4b0d5c5b360d74dd5/
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cairo/cairo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index e8a704c7da..7bc8f92deb 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -26,7 +26,7 @@ ifeq ($(BR2_m68k_cf),y)
- CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
- CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
