@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3029FC001DC
-	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 16:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACCAAC0015E
+	for <buildroot@archiver.kernel.org>; Thu, 27 Jul 2023 17:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9509741C61;
-	Thu, 27 Jul 2023 16:42:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9509741C61
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEAC460BC7;
+	Thu, 27 Jul 2023 17:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEAC460BC7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id V1hVN1dXbHMI; Thu, 27 Jul 2023 16:42:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mqBtPWrresfF; Thu, 27 Jul 2023 17:20:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 590A841C6A;
-	Thu, 27 Jul 2023 16:42:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 590A841C6A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 240A360BA0;
+	Thu, 27 Jul 2023 17:20:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 240A360BA0
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 58BDA1BF475
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 16:42:30 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 372551BF41C
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 17:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3240A400DA
- for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 16:42:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3240A400DA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DDEF40385
+ for <buildroot@lists.busybox.net>; Thu, 27 Jul 2023 17:20:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DDEF40385
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lLFNWCYs9EpT for <buildroot@lists.busybox.net>;
- Thu, 27 Jul 2023 16:42:29 +0000 (UTC)
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE6C5400CC
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 16:42:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE6C5400CC
-Received: by mail-il1-x12c.google.com with SMTP id
- e9e14a558f8ab-34642952736so4650665ab.3
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 09:42:28 -0700 (PDT)
+ with ESMTP id RQF8xnQYDoIl for <buildroot@lists.busybox.net>;
+ Thu, 27 Jul 2023 17:20:51 +0000 (UTC)
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 322EB40297
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 17:20:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 322EB40297
+Received: by mail-io1-xd30.google.com with SMTP id
+ ca18e2360f4ac-7869bcee569so46024539f.0
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 10:20:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690476147; x=1691080947;
+ d=1e100.net; s=20221208; t=1690478450; x=1691083250;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zPps0od/HUKqR6xWe0kWZ2jD9nuc/NA0Q+3i7H3Mgdg=;
- b=J+i+Sbvb23l8Gmjdd/CamuVQmG+UoTI4CoHPKwhRWjcqlA24ToLxjmfFtSS3Nf7tGo
- 9Vfu7JVHAotJf8hXq24aUZGgtudzWGNP+pvqrFS6tjeicRqp5FLjBCO/E8v9Do7tjASL
- 7bFE+BZnetUcH+0tL547c/juJUExLfWy3e3hkOiHC6yNlX5yCRfqcjF+Q0WanWZp/1NW
- iUSfYAUl0F9IzDJ6eZlHaRBjj4R6wAReZSH73qnxqM9wHUHmekegf68fiwMwJyCWzI3T
- HYiLRMX0LKKFxCGqCPeJwoV/+xM51ecT1bmRht0A9IVSOZm7S3pbQvQspKk1N8bY97l1
- 7Fuw==
-X-Gm-Message-State: ABy/qLbMi92iAAPuGXl+Yd1W2IfTL3sSr9ImDbX9BC8oECnxBX6Yi6O0
- uRKkMBPsuKPrOJe8CNQYA7gBoWD6+bE=
-X-Google-Smtp-Source: APBJJlF7Q296eHD8Pi8XPBLqHQeIOvGjFDM7KZBUFCz5BxnXMQaWyTCbV/s6JJQmnQD7u8MnX3whbQ==
-X-Received: by 2002:a92:cdad:0:b0:348:8152:18c4 with SMTP id
- g13-20020a92cdad000000b00348815218c4mr6821364ild.22.1690476147551; 
- Thu, 27 Jul 2023 09:42:27 -0700 (PDT)
+ bh=rFR7ceST5XaxWb/bQ3YbMHJPMRci6S08/Tw3hDBluJA=;
+ b=iQuixBUJbJXZvyU+NWyViL81beZgX4mpW/lfVUW1NNAmIqptn0NSR2v6yiHoxXGxb7
+ VILP9Qg/aLcrv1pOPTI2PcUM0RDuQM4HyqWE0cmLBXWBswkwaOypsXqpuTPaE2RXZ8Jj
+ 9xIai4OkaK7mOeC7IbZDBZJyf3XpIFkO4N7JZL/R5HHhbj9aRu+rh9X1u6B5iVc4kEjp
+ Dy/P8q470DGZ49cqkPbCn4qOPhnqqJ/HNcPkjzRwk08ogsaDU1DQo6cIjHxn6KUeOj8d
+ CjigjkAxhm+2z6a7xseC8Fdwf+Fxo40gNOB7Rd8Cy4hzxfWO4LlX/IvEgSL8S9yUDpIj
+ nXSw==
+X-Gm-Message-State: ABy/qLZBBW9iPNgq5rlK/HOz8N0d2IwAHMEsWlj5qUOXyNxf8twKLvrJ
+ fS6tHG4Y85r/kXj3MpGk9vRIx7Fw2rQ=
+X-Google-Smtp-Source: APBJJlGN35lYldPjOWlZGhvCPITm57OVDZT8lyQv0A95y+VwAg05qJDMcz91qCuLLvarxA+2gBourQ==
+X-Received: by 2002:a05:6602:3b87:b0:783:72b9:ed67 with SMTP id
+ dm7-20020a0566023b8700b0078372b9ed67mr180770iob.10.1690478449746; 
+ Thu, 27 Jul 2023 10:20:49 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-110-92.hlrn.qwest.net.
  [71.218.110.92]) by smtp.gmail.com with ESMTPSA id
- dy37-20020a0566381d6500b0042b068d921esm542451jab.16.2023.07.27.09.42.26
+ el3-20020a0566384d8300b0040908cbbc5asm557956jab.68.2023.07.27.10.20.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Jul 2023 09:42:26 -0700 (PDT)
+ Thu, 27 Jul 2023 10:20:48 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Jul 2023 10:42:24 -0600
-Message-Id: <20230727164224.1945786-1-james.hilliard1@gmail.com>
+Date: Thu, 27 Jul 2023 11:20:45 -0600
+Message-Id: <20230727172045.1990932-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690476147; x=1691080947;
+ d=gmail.com; s=20221208; t=1690478450; x=1691083250;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zPps0od/HUKqR6xWe0kWZ2jD9nuc/NA0Q+3i7H3Mgdg=;
- b=TD1R4esGoYhMXl89ijtGdj+nbbU3L1b2+ogaZx3bbAZGln4EWPS4+TrZUfl0PITCIh
- U65GKsmAfOUlZQFb2/9f8F3ZgHgAZVgB+VulMaFyQZU7oyoK3Ey1n+jTlAjFLpdFzDuq
- ivnQHyP2EAvxRs98ufE2KpGtt1vC6LV2IRz6SElKqFbPzCxvbmed7fVhXqAyEfphvmfa
- EQADgdI9wbm1kK899pQLtqcHarmSTIom5SXULXGRR+NTvAgYKxtRZRR5RwsO9RMCYCIQ
- byspIH8A31bboXk2Nqk8CUad5zsU/XLhn2AEPoTz5QQdAB4g2nn0aGB5HAJGdln6h6c+
- R58g==
+ bh=rFR7ceST5XaxWb/bQ3YbMHJPMRci6S08/Tw3hDBluJA=;
+ b=SbMP1UwqZA37QWrYZA/BR+Z12jGDQ+v8noyDss2fajPgxGlEEGHJL94td+YtQ2IVb/
+ HeDpqtvhGIEcKx3hK4v856TmyW2x0vzCCgqecv7PmV8pnaoDOM81lHIcPjVXYrILnaEz
+ 5lIQQKHO1oKESifbMmAwV6P+8enWnDJkGqxER9KxuNimYFML8p4SO5v4KayyzaJaz/X8
+ CeF+Q6Rni1X5dNJ7jjlp7wK8x0XEQXZRM0C/qcP2scch7Z1Jr5gUDQDu9MceSM1wN876
+ sM9C4DFJwnvbEdJlX1+Ih/qDMNnb10R8AE35prbo9zOT22OD9tj1Ss8/xTRuQRaDOBFI
+ 1zmw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=TD1R4esG
-Subject: [Buildroot] [PATCH 1/1] package/python-rpds-py: new package
+ header.a=rsa-sha256 header.s=20221208 header.b=SbMP1Uwq
+Subject: [Buildroot] [PATCH 1/1] package/seatd: bump to version 0.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,9 +93,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -103,92 +101,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-rpds-py/Config.in           |  8 ++++++++
- package/python-rpds-py/python-rpds-py.hash |  4 ++++
- package/python-rpds-py/python-rpds-py.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/python-rpds-py/Config.in
- create mode 100644 package/python-rpds-py/python-rpds-py.hash
- create mode 100644 package/python-rpds-py/python-rpds-py.mk
+ package/seatd/seatd.hash | 2 +-
+ package/seatd/seatd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0ff44c195d..afdd5a4065 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1424,6 +1424,7 @@ F:	package/python-pydyf/
- F:	package/python-pypa-build/
- F:	package/python-pyphen/
- F:	package/python-pyproject-hooks/
-+F:	package/python-rpds-py/
- F:	package/python-rtoml/
- F:	package/python-selenium/
- F:	package/python-snappy/
-diff --git a/package/Config.in b/package/Config.in
-index 1237281701..b07d4be98f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1267,6 +1267,7 @@ menu "External python modules"
- 	source "package/python-requests-oauthlib/Config.in"
- 	source "package/python-requests-toolbelt/Config.in"
- 	source "package/python-rfc3987/Config.in"
-+	source "package/python-rpds-py/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rpi-ws281x/Config.in"
- 	source "package/python-rsa/Config.in"
-diff --git a/package/python-rpds-py/Config.in b/package/python-rpds-py/Config.in
-new file mode 100644
-index 0000000000..172c5fd0b6
---- /dev/null
-+++ b/package/python-rpds-py/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_RPDS_PY
-+	bool "python-rpds-py"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	help
-+	  Python bindings to the Rust rpds crate for persistent
-+	  data structures.
-+
-+	  https://github.com/crate-py/rpds
-diff --git a/package/python-rpds-py/python-rpds-py.hash b/package/python-rpds-py/python-rpds-py.hash
-new file mode 100644
-index 0000000000..e42dfbd948
---- /dev/null
-+++ b/package/python-rpds-py/python-rpds-py.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated after vendoring
-+sha256  3b1087c3c7d55b8730dfaa539147646292074819295812267832ce5b64a0034c  rpds_py-0.9.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  8bcb72c82ea8ae74802293c41d93ad7d51434001b0ae45a603a5af0f507aee0a  LICENSE
-diff --git a/package/python-rpds-py/python-rpds-py.mk b/package/python-rpds-py/python-rpds-py.mk
-new file mode 100644
-index 0000000000..2b5530f237
---- /dev/null
-+++ b/package/python-rpds-py/python-rpds-py.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# python-rpds-py
-+#
-+################################################################################
-+
-+PYTHON_RPDS_PY_VERSION = 0.9.2
-+PYTHON_RPDS_PY_SOURCE = rpds_py-$(PYTHON_RPDS_PY_VERSION).tar.gz
-+PYTHON_RPDS_PY_SITE = https://files.pythonhosted.org/packages/da/3c/fa2701bfc5d67f4a23f1f0f4347284c51801e9dbc24f916231c2446647df
-+PYTHON_RPDS_PY_SETUP_TYPE = pep517
-+PYTHON_RPDS_PY_LICENSE = MIT
-+PYTHON_RPDS_PY_LICENSE_FILES = LICENSE
-+PYTHON_RPDS_PY_DEPENDENCIES = host-python-maturin
-+PYTHON_RPDS_PY_ENV = \
-+	$(PKG_CARGO_ENV) \
-+	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
-+# We need to vendor the Cargo crates at download time
-+PYTHON_RPDS_PY_DOWNLOAD_POST_PROCESS = cargo
-+PYTHON_RPDS_PY_DOWNLOAD_DEPENDENCIES = host-rustc
-+PYTHON_RPDS_PY_DL_ENV = $(PKG_CARGO_ENV)
-+
-+$(eval $(python-package))
+diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
+index 7500036e5b..e1db897d44 100644
+--- a/package/seatd/seatd.hash
++++ b/package/seatd/seatd.hash
+@@ -1,5 +1,5 @@
+ # Calculated locally
+-sha256  210ddf8efa1149cde4dd35908bef8e9e63c2edaa0cdb5435f2e6db277fafff3c  0.7.0.tar.gz
++sha256  a562a44ee33ccb20954a1c1ec9a90ecb2db7a07ad6b18d0ac904328efbcf65a0  0.8.0.tar.gz
+ 
+ # License files
+ sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
+diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
+index 96caf63b30..141a456116 100644
+--- a/package/seatd/seatd.mk
++++ b/package/seatd/seatd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SEATD_VERSION = 0.7.0
++SEATD_VERSION = 0.8.0
+ SEATD_SOURCE = $(SEATD_VERSION).tar.gz
+ SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
+ SEATD_LICENSE = MIT
 -- 
 2.34.1
 
