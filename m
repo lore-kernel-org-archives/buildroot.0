@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B8B6C0015E
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 14:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3116EC0015E
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 15:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C88E161488;
-	Fri, 28 Jul 2023 14:39:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C88E161488
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6B9F614A7;
+	Fri, 28 Jul 2023 15:19:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6B9F614A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MZLK-fN0IyRo; Fri, 28 Jul 2023 14:39:12 +0000 (UTC)
+	with ESMTP id f_urbfwQA2qU; Fri, 28 Jul 2023 15:19:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1CF36148F;
-	Fri, 28 Jul 2023 14:39:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1CF36148F
+	by smtp3.osuosl.org (Postfix) with ESMTP id F41EA61492;
+	Fri, 28 Jul 2023 15:19:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F41EA61492
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1CF391BF294
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 14:38:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 63E071BF28B
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 15:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5E9961488
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 14:38:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5E9961488
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DC3C61492
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 15:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DC3C61492
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X8brs5VMLWAG for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 14:38:45 +0000 (UTC)
+ with ESMTP id ZBWCa1hr-kKt for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 15:19:06 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 80EB6607C9
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 14:38:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80EB6607C9
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8809F60B46
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 15:19:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8809F60B46
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C1FBDA4C0C45;
- Fri, 28 Jul 2023 16:38:40 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49292)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E31A9A4C0C45
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 17:19:03 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53906)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qPOc4-0002Nd-1W;
- Fri, 28 Jul 2023 16:38:40 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qPPF9-0000w9-24
+ for buildroot@buildroot.org; Fri, 28 Jul 2023 17:19:03 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 16:38:40 +0200
-Message-Id: <20230728143840.4045371-1-bernd@kuhls.net>
+Date: Fri, 28 Jul 2023 17:19:02 +0200
+Message-Id: <20230728151903.466787-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1690555120;
- bh=fqFcvbAP36gmfejnEALUsZKQEKhGx3J55cJXKIKV/HQ=;
- h=From:To:Cc:Subject:Date:From;
- b=jVV1aiQr/SEz4cnjSHhHXeupWuZID3qb0mTNzNaxBeGnC7K7QbkhTdO8vWWS4fkbr
- E52BlL57R66PhV5EnzCU+C3Y1wbGsGS8g6vjRXIB6IrPBhwNEvJwYJt5F+FX+aZDzW
- /9fLpqHoZ4PmA2ul674/47WO4YrwefRmmr0pTvJPZ8ogCgpJbfBn3dVs3x6eb0JLN9
- FHCosi+eTrNkJKLsbEXaKmbcWh9wO+784zEwfSFAudj9ztftcNUNMNBynz3o/7m2F8
- iC3DnXng65X7Hwcf+H4nouxLj6YAWX/tjFVDRpp7pNx1zpD+j7jsVdv7gIsSxhO9Wo
- v5YebKmfagiDg==
+ s=kas202306131828; t=1690557543;
+ bh=F12yM7So1bYfrgwCdITZ8BBng/FNkn0bZtH3hf6Er+k=;
+ h=From:To:Subject:Date:From;
+ b=fNaLfyUpyXbTGoqAPR0/cYOFfacBPS8DMlRqtAhzIDYJF7Edkd5s9vGUg/3Pd0CLU
+ 1lkhYZ5P1ahyywjFCcCsW2GtrsbA4xsVtyIVSGwLj+mfkUyhGzxvcjb2AILHwvO3s3
+ 3yS0habwkpmIyd/45SLAsVobGlXy9zrzeNqZHNHbmt5cHWE2w6cFuAJI0iT2BDCNev
+ jpa8UAs3pXAZL/RakYte4LGVqJsLEBNdVyL85+6naT8CBQHhNH58cfvoLMEkvD8if3
+ vXeMRQI46vRWoNbqEZYjNJH3WqeyMyv6MeLPWQ0yCRMsoVFcs5gJoCH/s4WA2AquJ4
+ qrdt9YZj0iROg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=jVV1aiQr
-Subject: [Buildroot] [PATCH 1/1] package/gcc: or1k: Only define
- TARGET_HAVE_TLS when HAVE_AS_TLS
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=fNaLfyUp
+Subject: [Buildroot] [PATCH 1/2] package/libopenssl: renumber patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,198 +74,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stafford Horne <shorne@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- "Yann E . MORIN" <yann.morin@orange.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport upstream patch to fix build error seens with alsa-lib:
-error.c:(.text+0x12c): undefined reference to `__tls_get_addr'
-
-Fixes:
-http://autobuild.buildroot.net/results/525ca7fe78015168c186ffda5fa52c0edb2071c9/
-
-The fix is included in gcc 13.x.
+Commit ea3e60229bc5647e587685023de475276e28584d added a patch with a
+wrong number.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...ine-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 49 +++++++++++++++++++
- ...ine-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 49 +++++++++++++++++++
- ...ine-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 48 ++++++++++++++++++
- 3 files changed, 146 insertions(+)
- create mode 100644 package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
- create mode 100644 package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
- create mode 100644 package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+ ...ix-static-builds.patch => 0005-Revert-Fix-static-builds.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/libopenssl/{0006-Revert-Fix-static-builds.patch => 0005-Revert-Fix-static-builds.patch} (100%)
 
-diff --git a/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-new file mode 100644
-index 0000000000..7e9714e9cb
---- /dev/null
-+++ b/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-@@ -0,0 +1,49 @@
-+From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Thu, 29 Sep 2022 15:32:39 +0100
-+Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
-+
-+This was found when testing buildroot with linuxthreads enabled.  In
-+this case, the build passes --disable-tls to the toolchain during
-+configuration.  After building the OpenRISC toolchain it was still
-+generating TLS code sequences and causing linker failures such as:
-+
-+ ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
-+ ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
-+
-+This patch fixes this by disabling tls for the OpenRISC target when requested
-+via --disable-tls.
-+
-+gcc/ChangeLog:
-+
-+	* config/or1k/or1k.c (TARGET_HAVE_TLS): Only define if
-+	HAVE_AS_TLS is defined.
-+
-+Tested-by: Yann E. MORIN <yann.morin@orange.com>
-+
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
-+
-+[Bernd: backported to 10.4.0]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ gcc/config/or1k/or1k.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/gcc/config/or1k/or1k.c b/gcc/config/or1k/or1k.c
-+index da2f59062ba..0ce7b234417 100644
-+--- a/gcc/config/or1k/or1k.c
-++++ b/gcc/config/or1k/or1k.c
-+@@ -2175,8 +2175,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
-+ #undef  TARGET_LEGITIMATE_ADDRESS_P
-+ #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
-+ 
-++#ifdef HAVE_AS_TLS
-+ #undef  TARGET_HAVE_TLS
-+ #define TARGET_HAVE_TLS true
-++#endif
-+ 
-+ #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
-+ #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
-+-- 
-+2.39.3
-+
-diff --git a/package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-new file mode 100644
-index 0000000000..025e6cfe32
---- /dev/null
-+++ b/package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-@@ -0,0 +1,49 @@
-+From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Thu, 29 Sep 2022 15:32:39 +0100
-+Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
-+
-+This was found when testing buildroot with linuxthreads enabled.  In
-+this case, the build passes --disable-tls to the toolchain during
-+configuration.  After building the OpenRISC toolchain it was still
-+generating TLS code sequences and causing linker failures such as:
-+
-+ ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
-+ ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
-+
-+This patch fixes this by disabling tls for the OpenRISC target when requested
-+via --disable-tls.
-+
-+gcc/ChangeLog:
-+
-+	* config/or1k/or1k.c (TARGET_HAVE_TLS): Only define if
-+	HAVE_AS_TLS is defined.
-+
-+Tested-by: Yann E. MORIN <yann.morin@orange.com>
-+
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
-+
-+[Bernd: backported to 11.4.0]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ gcc/config/or1k/or1k.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/gcc/config/or1k/or1k.c b/gcc/config/or1k/or1k.c
-+index da2f59062ba..0ce7b234417 100644
-+--- a/gcc/config/or1k/or1k.c
-++++ b/gcc/config/or1k/or1k.c
-+@@ -2175,8 +2175,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
-+ #undef  TARGET_LEGITIMATE_ADDRESS_P
-+ #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
-+ 
-++#ifdef HAVE_AS_TLS
-+ #undef  TARGET_HAVE_TLS
-+ #define TARGET_HAVE_TLS true
-++#endif
-+ 
-+ #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
-+ #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
-+-- 
-+2.39.3
-+
-diff --git a/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-new file mode 100644
-index 0000000000..4bac597233
---- /dev/null
-+++ b/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
-@@ -0,0 +1,48 @@
-+From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
-+From: Stafford Horne <shorne@gmail.com>
-+Date: Thu, 29 Sep 2022 15:32:39 +0100
-+Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
-+
-+This was found when testing buildroot with linuxthreads enabled.  In
-+this case, the build passes --disable-tls to the toolchain during
-+configuration.  After building the OpenRISC toolchain it was still
-+generating TLS code sequences and causing linker failures such as:
-+
-+ ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
-+ ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
-+
-+This patch fixes this by disabling tls for the OpenRISC target when requested
-+via --disable-tls.
-+
-+gcc/ChangeLog:
-+
-+	* config/or1k/or1k.cc (TARGET_HAVE_TLS): Only define if
-+	HAVE_AS_TLS is defined.
-+
-+Tested-by: Yann E. MORIN <yann.morin@orange.com>
-+
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ gcc/config/or1k/or1k.cc | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/gcc/config/or1k/or1k.cc b/gcc/config/or1k/or1k.cc
-+index da2f59062ba..0ce7b234417 100644
-+--- a/gcc/config/or1k/or1k.cc
-++++ b/gcc/config/or1k/or1k.cc
-+@@ -2206,8 +2206,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
-+ #undef  TARGET_LEGITIMATE_ADDRESS_P
-+ #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
-+ 
-++#ifdef HAVE_AS_TLS
-+ #undef  TARGET_HAVE_TLS
-+ #define TARGET_HAVE_TLS true
-++#endif
-+ 
-+ #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
-+ #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
-+-- 
-+2.39.3
-+
+diff --git a/package/libopenssl/0006-Revert-Fix-static-builds.patch b/package/libopenssl/0005-Revert-Fix-static-builds.patch
+similarity index 100%
+rename from package/libopenssl/0006-Revert-Fix-static-builds.patch
+rename to package/libopenssl/0005-Revert-Fix-static-builds.patch
 -- 
 2.39.2
 
