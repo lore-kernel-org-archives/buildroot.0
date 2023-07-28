@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52E81C0015E
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 19:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 688ADC0015E
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 19:22:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07DD380E3B;
-	Fri, 28 Jul 2023 19:18:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07DD380E3B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CEEE84542;
+	Fri, 28 Jul 2023 19:22:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CEEE84542
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JqJ4Uj4kSWc6; Fri, 28 Jul 2023 19:18:31 +0000 (UTC)
+	with ESMTP id GFlD4S5fhMah; Fri, 28 Jul 2023 19:22:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5310B80CD0;
-	Fri, 28 Jul 2023 19:18:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5310B80CD0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ED8D01BF312
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:17:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7187684095;
+	Fri, 28 Jul 2023 19:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7187684095
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CDC81BF312
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C653B42172
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C653B42172
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1270740363
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1270740363
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y1sxvpJ9F67S for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 19:17:48 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 67BCF42171
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 19:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67BCF42171
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 16C7120002;
- Fri, 28 Jul 2023 19:17:44 +0000 (UTC)
-Date: Fri, 28 Jul 2023 21:17:44 +0200
-To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Message-ID: <20230728211744.09250704@windsurf>
-In-Reply-To: <20230727232235.449788-1-christian@aperture.us>
-References: <20230727232235.449788-1-christian@aperture.us>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zsjUvGT-DBPH for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 19:22:23 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9D38440168
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 19:22:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D38440168
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6301D60004;
+ Fri, 28 Jul 2023 19:22:20 +0000 (UTC)
+Date: Fri, 28 Jul 2023 21:22:19 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230728212219.7af37cc1@windsurf>
+In-Reply-To: <20230728151903.466787-1-bernd@kuhls.net>
+References: <20230728151903.466787-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690571865;
+ d=bootlin.com; s=gm1; t=1690572140;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=5MFhrmmuw/Zv3gUK3Vn97vglJLFvB6Zo3SFeyzom0UE=;
- b=UJqKyc6zHVWxpyTXdtQNXXRN+dOGRbTmP+7oZbxdj0sVJXwGQN/fljk05UoeTdShx7NNPH
- xMJO8v/FlXNeGWAm7W9rhxBhSOJ//ZMx2q8W6qwngsTGFvrTY310shE8rZjy+Gbf2BR6Oo
- tNr1RnUu0cL51c8L788+F8gKbnQ8zMzeHGcfEQMQO48uc+1yDUcqC9b8hO6RUr8t0I8AhC
- 5fXmeYesWuRw5HiMlRDP5bGxUzZ0mOPXsTs2T5smc9TzaNCi74lkfVPRtnHBEGf26T6Q+Z
- 36xWShFwN7s5ZVzf7GwSFKr9mNZDJW4qusetw62IfDlmsjs2lkW9Z6TgTClZbQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Sw5qo0c092Vhkg5CB3T/JJRW69Zb4kOMgfrLa3CLy+w=;
+ b=kTnjSj/bfGOkVsg7Kpcwy2qaG+45nyuRtHBrsvwnTacbhGPXsujhw/MRlepwDSkGbifiyn
+ jvrE3Y291F+JOxfh+Zq1Zc0GhSOWiUGbylH5fPE4AdUmUT7rTBSSR/T0LiBjwv7qtIOBEx
+ ty4uGr0dSDbZWDQW99oppM3knAK0JV1Usxdg+yF5e3iJXLGLCBIWV4rvyGsd+yrpczuzO4
+ nAW24BeNviqy+ei65xOVlgiL1qitYMBvDM5aJ9Vh6xTZC8710DwHIBT6aU9Uq44tFZzmHo
+ +W8nCFSZIVLR+W9lL5F9XA+UXIf77e8wSStQOP1NGFfy4DE/iJiLlbr/6CXtAg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UJqKyc6z
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/containerd: bump version to
- v1.6.22
+ header.s=gm1 header.b=kTnjSj/b
+Subject: Re: [Buildroot] [PATCH 1/2] package/libopenssl: renumber patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,25 +76,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart <christian@aperture.us>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 27 Jul 2023 16:22:35 -0700
-Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+On Fri, 28 Jul 2023 17:19:02 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Bugfixes and updates.
+> Commit ea3e60229bc5647e587685023de475276e28584d added a patch with a
+> wrong number.
 > 
-> https://github.com/containerd/containerd/releases/tag/v1.6.22
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/containerd/containerd.hash | 2 +-
->  package/containerd/containerd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...ix-static-builds.patch => 0005-Revert-Fix-static-builds.patch} | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/libopenssl/{0006-Revert-Fix-static-builds.patch => 0005-Revert-Fix-static-builds.patch} (100%)
 
 Applied to master, thanks.
 
