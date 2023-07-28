@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72C2DEB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:15:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968EFEB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:20:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 102B841D64;
-	Fri, 28 Jul 2023 20:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 102B841D64
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9E0F421B6;
+	Fri, 28 Jul 2023 20:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9E0F421B6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BlikyQgyvGgy; Fri, 28 Jul 2023 20:15:17 +0000 (UTC)
+	with ESMTP id 9hHFzAurCp8F; Fri, 28 Jul 2023 20:20:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0C9241F27;
-	Fri, 28 Jul 2023 20:15:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0C9241F27
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 008E61BF38A
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:15:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF0CF420F2;
+	Fri, 28 Jul 2023 20:20:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF0CF420F2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 679971BF38A
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C0D4860BAA
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0D4860BAA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E41340168
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E41340168
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XQfsVr76LY1L for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 20:15:13 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B8A8860B15
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:15:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8A8860B15
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 451871C0002;
- Fri, 28 Jul 2023 20:15:10 +0000 (UTC)
-Date: Fri, 28 Jul 2023 22:15:09 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230728221509.1127286e@windsurf>
-In-Reply-To: <20230726171923.334017-1-bernd@kuhls.net>
-References: <20230726171923.334017-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690575311;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=0bRZxAVejA7ULKYf0ifTF8/r4hU8Jq63XBAfXm9n9L8=;
- b=ZxVidzLd/IUp35WlcLLto08to1m39pGtqYo+bwPwNPKW4RyEyLOk9MJifh1YF/t4t/wngw
- XwFGvIjpIaUBehr2lNCIOq0/VMqpmIuCjGlowpddNKUB+NbTe0SKVK3lh4xdLBToUIVRNb
- xrMrVzIFs6vd07IkpjUOZlqNQS2AezGG6ey4BeiT5wgirbDtTPifu/0giQlnyjyEuu696W
- NPJPgYc5PmVt4lH1MDHhr7XZok85CkjfId7IVluoO47+wrSfl9xazjipY17riA+HrXRIpY
- nBeuWX+PC50r2Hk9I8cR8fyTD6nxTuYHNKzvskLGD0U5dveTd8xJMWkWzd29Qg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZxVidzLd
-Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.76.4
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vrbH6ymlU5az for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 20:20:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F8A8400CF
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F8A8400CF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4BAB2839A4; Fri, 28 Jul 2023 20:20:00 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 28 Jul 2023 22:15:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 50ef6a6f592a5f9e8eb562aee0fc308ba911836a
+X-Git-Newrev: f1350977634f96f0404b9801e6f79cb7200cf26d
+X-Patchwork-Hint: ignore
+Message-Id: <20230728202000.4BAB2839A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fakeroot: bump to version 1.32.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,52 +57,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Knight <james.d.knight@live.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=f1350977634f96f0404b9801e6f79cb7200cf26d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 26 Jul 2023 19:19:23 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fakeroot/fakeroot.hash | 4 ++--
+ package/fakeroot/fakeroot.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> From: James Knight <james.d.knight@live.com>
-> 
-> - Drop `iconv` option since it was obsolete and dropped [1][2].
-> - Ensure `nls` is explicitly configured based on `BR2_SYSTEM_ENABLE_NLS`
->    being set.
-> - Cleanup configuration and dependency options (ordering, having a
->    common variable to share between host/target builds, adding more
->    explicit assignment of options).
-> - Drop "0002-Fix-error-format-in-gio-gunixconnection.c-part-2" since
->    upstream patch was applied in this release.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/f8b0e6f818297ce6a0c68e6e9dccc1eb4666cb73/
->  - http://autobuild.buildroot.net/results/aa8560b919732ee597b18c3e9b3315fa325ed489/
-> 
-> [1]: https://gitlab.gnome.org/GNOME/glib/-/commit/e71ecc8771a4f13bc6046438ab0845944831b9a6
-> [2]: https://gitlab.gnome.org/GNOME/glib/-/commit/24ec80cfb4522d9819dbf5fd117665fef20b6418
-
-These commits don't really say that iconv is no longer used, only that
-the option is gone because Meson now checks iconv.
-
-> -ifneq ($(BR2_ENABLE_LOCALE),y)
-> -LIBGLIB2_DEPENDENCIES += libiconv
-> -endif
-
-Did you do a test build with a BR2_ENABLE_LOCALE disabled configuration?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
+index 5c50c83e13..5e7b6af94b 100644
+--- a/package/fakeroot/fakeroot.hash
++++ b/package/fakeroot/fakeroot.hash
+@@ -1,4 +1,4 @@
+-# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.30.1-1.dsc
+-sha256  32ebb1f421aca0db7141c32a8c104eb95d2b45c393058b9435fbf903dd2b6a75  fakeroot_1.30.1.orig.tar.gz
++# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.32.1-1.dsc
++sha256  c072b0f65bafc4cc5b6112f7c61185f5170ce4cb0c410d1681c1af4a183e94e6  fakeroot_1.32.1.orig.tar.gz
+ # License files, locally calculated
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 20c75d6966..1a0ad70c13 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-FAKEROOT_VERSION = 1.30.1
++FAKEROOT_VERSION = 1.32.1
+ FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
+-FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20221120T030258Z/pool/main/f/fakeroot
++FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20230724T160429Z/pool/main/f/fakeroot
+ 
+ HOST_FAKEROOT_DEPENDENCIES = host-acl
+ # Force capabilities detection off
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
