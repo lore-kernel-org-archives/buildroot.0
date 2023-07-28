@@ -1,67 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C881EC0015E
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 10:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 055D2C001DE
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 12:23:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 56F6140AE7;
-	Fri, 28 Jul 2023 10:18:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56F6140AE7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65DC482157;
+	Fri, 28 Jul 2023 12:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65DC482157
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TVf6EDUIZD2R; Fri, 28 Jul 2023 10:18:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rX6TbNIfOMcE; Fri, 28 Jul 2023 12:23:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB78841882;
-	Fri, 28 Jul 2023 10:18:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB78841882
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 622B81BF36B
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 10:18:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9AA008204D;
+	Fri, 28 Jul 2023 12:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AA008204D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F5A21BF302
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 12:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 327AF40AE7
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 10:18:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 327AF40AE7
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB1E8420A6
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 12:23:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB1E8420A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id B1UOH5KSYyj0 for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 10:18:24 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 258D640ACB
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 10:18:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 258D640ACB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C5EDE40007;
- Fri, 28 Jul 2023 10:18:20 +0000 (UTC)
-Date: Fri, 28 Jul 2023 12:18:19 +0200
-To: Danny Wood <danny@rotronics.co.uk>
-Message-ID: <20230728121819.73bd742d@windsurf>
-In-Reply-To: <20230728101140.10998-1-danny@rotronics.co.uk>
-References: <20230728101140.10998-1-danny@rotronics.co.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nAyLIbwkuVWk for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 12:23:51 +0000 (UTC)
+Received: from server1.sm-technologies.co.uk (server1.sm-technologies.co.uk
+ [109.74.199.29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6A118420AA
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 12:23:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A118420AA
+Received: from localhost (localhost [127.0.0.1])
+ by server1.sm-technologies.co.uk (Postfix) with ESMTP id ED1DC9A2F2;
+ Fri, 28 Jul 2023 13:23:48 +0100 (BST)
+X-Virus-Scanned: Debian amavisd-new at server1.sm-technologies.co.uk
+Received: from server1.sm-technologies.co.uk ([127.0.0.1])
+ by localhost (server1.sm-technologies.co.uk [127.0.0.1]) (amavisd-new,
+ port 10026)
+ with LMTP id 5E7lFd-wkjNH; Fri, 28 Jul 2023 13:23:46 +0100 (BST)
+Received: from [192.168.0.200] (139.171.6.51.dyn.plus.net [51.6.171.139])
+ (Authenticated sender: danny@rotronics.co.uk)
+ by server1.sm-technologies.co.uk (Postfix) with ESMTPSA id 957819A2EB;
+ Fri, 28 Jul 2023 13:23:46 +0100 (BST)
+Content-Type: multipart/mixed; boundary="------------4QhjvS0kV3B0uwRfLGvfVW9D"
+Message-ID: <32ea713a-e571-4f83-c0a4-a9b4995db5ba@rotronics.co.uk>
+Date: Fri, 28 Jul 2023 13:23:45 +0100
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690539501;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4XUXAebJtQuYUaaUkcwGFv5fApidFQdmQM7mpHnSrrg=;
- b=PU4jEIophIbgxyEv1U+e1qzauyPcRG2yG8catTbiO5EUMHseFZUYfmD5U81V96wqYvp+4T
- r42iu9+iMfTEQX6n+MQOfYqK5Zes2sYQnGwiKueFj7kizqpMoYTclkOA18ZkZ4SbT6/1AQ
- uw5VMzk6oSB4DOpQH49h0/5L45ZjgfB7D6EUQtpTu8lt5ChTqGH6lbY2t+cma6UuxgI9xY
- sz6p1gxxOAzP/bX3p3a/ZqwbXzZyaRkO8VpswBCdE1ROZXUgMDUdcCSQXVzeSoRkcBe2+p
- KkYRgBmzvIsd0InLB0Ar6HtrGsCX4jFRWD8hZt977LNeo2Ba+fur+aLvJ9uxQQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PU4jEIop
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230728101140.10998-1-danny@rotronics.co.uk>
+ <20230728121819.73bd742d@windsurf>
+From: Danny Wood <danny@rotronics.co.uk>
+In-Reply-To: <20230728121819.73bd742d@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=rotronics.co.uk; s=mail; t=1690547028;
+ bh=BWotpjolpwZtoTD4dDwEFvxUmv27j6xRt2kBlZ6Ej3E=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+ b=Pk21KdMNwJVEjF3C7pgTQ6NCTXMX1RNr7G4UcP8E/mwkvJjN09zqGa1+7tWkPW4Ss
+ 24g1apfgBQV1I2XFT+vgubeXmQlPrvsZ7fCbBmKzuik9vGxwSl5Zcn4rltAj+0BBA3
+ SO8aR+22DjwxydAFQZQrhXEx9fZw3OeIP4BpsPc8=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=rotronics.co.uk; s=mail; t=1690547026;
+ bh=BWotpjolpwZtoTD4dDwEFvxUmv27j6xRt2kBlZ6Ej3E=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+ b=xgdhGkeHGl0sqqgCSDpNtfsCrUQrZLm2fk/8PxMOEqRe7dawOpVkdVYg1Csayr6Kv
+ zGDFkndbIXr4CWrPUKNuRqDn8JjCblE9AJk9blEAC3B5Mba/fK0lhhE8rpGPrlnlGk
+ UK4itAQ7nhaIZezWFAA2q+8icfGDf2fP7haVfsJA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=rotronics.co.uk header.i=@rotronics.co.uk
+ header.a=rsa-sha256 header.s=mail header.b=Pk21KdMN; 
+ dkim=pass (1024-bit key) header.d=rotronics.co.uk header.i=@rotronics.co.uk
+ header.a=rsa-sha256 header.s=mail header.b=xgdhGkeH
 Subject: Re: [Buildroot] [PATCH 1/1] package/mariadb: add optional systemd
  dependency
 X-BeenThere: buildroot@buildroot.org
@@ -75,38 +90,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Danny,
+This is a multi-part message in MIME format.
+--------------4QhjvS0kV3B0uwRfLGvfVW9D
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, 28 Jul 2023 11:11:40 +0100
-Danny Wood <danny@rotronics.co.uk> wrote:
+On 28/07/2023 11:18, Thomas Petazzoni wrote:
+> Hello Danny,
+>
+> On Fri, 28 Jul 2023 11:11:40 +0100
+> Danny Wood <danny@rotronics.co.uk> wrote:
+>
+>> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>> +MARIADB_DEPENDENCIES += systemd
+>> +endif
+> Thanks for the patch. Is there some CMake option to explicitly
+> enable/disable systemd support in mariadb? If yes, we will want to use
+> them.
+>
+> Thanks!
+>
+> Thomas
+Yes there is.
 
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +MARIADB_DEPENDENCIES += systemd
-> +endif
+I have updated my patch which is attached.
 
-Thanks for the patch. Is there some CMake option to explicitly
-enable/disable systemd support in mariadb? If yes, we will want to use
-them.
+Thanks,
+Danny
+--------------4QhjvS0kV3B0uwRfLGvfVW9D
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-package-mariadb-add-optional-systemd-dependency.patch"
+Content-Disposition: attachment;
+ filename*0="0001-package-mariadb-add-optional-systemd-dependency.patch"
+Content-Transfer-Encoding: base64
 
-Thanks!
+RnJvbSBkMDA4MTMzYjliZjdmZDIzN2ZmYjAxZmY4NDA0ZDk0ODgyZjY1NTRlIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBEYW5ueSBXb29kIDxkYW5ueUByb3Ryb25pY3MuY28u
+dWs+CkRhdGU6IFRodSwgMjcgSnVsIDIwMjMgMTY6NTI6NTQgKzAxMDAKU3ViamVjdDogW1BB
+VENIIDEvMV0gcGFja2FnZS9tYXJpYWRiOiBhZGQgb3B0aW9uYWwgc3lzdGVtZCBkZXBlbmRl
+bmN5CgpJZiBzeXN0ZW1kIGlzIHVzZWQgd2Ugc2hvdWxkIGVuYWJsZSBzdXBwb3J0IGluIG1h
+cmlhZGIgYW5kIGVuYWJsZQoiVHlwZT1ub3RpZnkiIGluIHRoZSBteXNxbGQuc2VydmljZSB1
+bml0IGZpbGUKCiJUeXBlPW5vdGlmeSIgc3RvcHMgc3lzdGVtZCBmcm9tIHN0YXJ0aW5nIHNl
+cnZpY2VzIHdoaWNoIGRlcGVuZCBvbiBtYXJpYWRiCnVudGlsIGl0IGhhcyBub3RpZmllZCBz
+eXN0ZW1kIHRoYXQgaXQgaGFzIGZpbmlzaGVkIHN0YXJ0aW5nIHVwLCB0aGlzIGhlbHBzCmF2
+b2lkIHN0YXJ0dXAgcmFjZSBjb25kaXRpb25zCgpTaWduZWQtb2ZmLWJ5OiBEYW5ueSBXb29k
+IDxkYW5ueUByb3Ryb25pY3MuY28udWs+Ci0tLQogcGFja2FnZS9tYXJpYWRiL21hcmlhZGIu
+bWsgICAgIHwgNyArKysrKysrCiBwYWNrYWdlL21hcmlhZGIvbXlzcWxkLnNlcnZpY2UgfCAy
+ICsrCiAyIGZpbGVzIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvbWFyaWFkYi9tYXJpYWRiLm1rIGIvcGFja2FnZS9tYXJpYWRiL21hcmlhZGIubWsK
+aW5kZXggYTI3MDE2NDNlMS4uNzhlNDcwM2VlZSAxMDA2NDQKLS0tIGEvcGFja2FnZS9tYXJp
+YWRiL21hcmlhZGIubWsKKysrIGIvcGFja2FnZS9tYXJpYWRiL21hcmlhZGIubWsKQEAgLTcy
+LDYgKzcyLDEzIEBAIE1BUklBREJfQ09ORl9PUFRTICs9IFwKIAktRExJQlJFU1NMX1JFU1VM
+VF9fVFJZUlVOX09VVFBVVD0iTGlicmVTU0wgJChMSUJSRVNTTF9WRVJTSU9OKSIKIGVuZGlm
+CiAKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfU1lTVEVNRCkseSkKK01BUklBREJfREVQRU5ERU5D
+SUVTICs9IHN5c3RlbWQKK01BUklBREJfQ09ORl9PUFRTICs9IC1EV0lUSF9TWVNURU1EPXll
+cworZWxzZQorTUFSSUFEQl9DT05GX09QVFMgKz0gLURXSVRIX1NZU1RFTUQ9bm8KK2VuZGlm
+CisKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTUFSSUFEQl9TRVJWRVIpLHkpCiBpZmVxICgkKEJS
+Ml9QQUNLQUdFX01BUklBREJfU0VSVkVSX0VNQkVEREVEKSx5KQogTUFSSUFEQl9DT05GX09Q
+VFMgKz0gLURXSVRIX0VNQkVEREVEX1NFUlZFUj1PTgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9t
+YXJpYWRiL215c3FsZC5zZXJ2aWNlIGIvcGFja2FnZS9tYXJpYWRiL215c3FsZC5zZXJ2aWNl
+CmluZGV4IDUzNzQzMGU5YTIuLjk0MzNlMTQ2MzAgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbWFy
+aWFkYi9teXNxbGQuc2VydmljZQorKysgYi9wYWNrYWdlL21hcmlhZGIvbXlzcWxkLnNlcnZp
+Y2UKQEAgLTksNiArOSw4IEBAIFJlc3RhcnQ9YWx3YXlzCiBVc2VyPW15c3FsCiBSdW50aW1l
+RGlyZWN0b3J5PW15c3FsCiBSdW50aW1lRGlyZWN0b3J5TW9kZT0wNzU1CitUeXBlPW5vdGlm
+eQorTm90aWZ5QWNjZXNzPWFsbAogCiBbSW5zdGFsbF0KIFdhbnRlZEJ5PW11bHRpLXVzZXIu
+dGFyZ2V0Ci0tIAoyLjQxLjAKCg==
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-
-
+--------------4QhjvS0kV3B0uwRfLGvfVW9D
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--------------4QhjvS0kV3B0uwRfLGvfVW9D--
