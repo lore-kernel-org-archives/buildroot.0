@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D3EDC00528
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:35:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A727DEB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:36:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D131B6102C;
-	Fri, 28 Jul 2023 20:35:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D131B6102C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 497D3611C6;
+	Fri, 28 Jul 2023 20:36:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 497D3611C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eALRo8bDs0Et; Fri, 28 Jul 2023 20:35:15 +0000 (UTC)
+	with ESMTP id tr0pvjlk6vDq; Fri, 28 Jul 2023 20:36:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24D0460DF4;
-	Fri, 28 Jul 2023 20:35:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D0460DF4
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C26D91BF38A
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:35:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BECD60DF4;
+	Fri, 28 Jul 2023 20:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BECD60DF4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 84B671BF38A
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 988144013D
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:35:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 988144013D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33FE960DF4
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33FE960DF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vu-Kr_06cSuW for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 20:35:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6C09400CF
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:35:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6C09400CF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3BEA839E0; Fri, 28 Jul 2023 20:35:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 22:29:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 45ede24a529ed6375d0af742f2e7422269cf36a0
-X-Git-Newrev: 2ea97ba0dd52d4419c9bc9031375d78024565648
-X-Patchwork-Hint: ignore
-Message-Id: <20230728203511.A3BEA839E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/capnproto: bump version to 0.10.4
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xLu7JRoEniAk for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 20:35:56 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BE66560D4D
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:35:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE66560D4D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DFC9C60002;
+ Fri, 28 Jul 2023 20:35:53 +0000 (UTC)
+Date: Fri, 28 Jul 2023 22:35:52 +0200
+To: Koen Martens <kmartens@sonologic.se>
+Message-ID: <20230728223552.36535b1f@windsurf>
+In-Reply-To: <eee5a213-c0d0-c400-227e-fe3df1c941a4@sonologic.se>
+References: <eee5a213-c0d0-c400-227e-fe3df1c941a4@sonologic.se>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690576554;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=zMBX+oH5+ZC9FhP6uY/tC4NW8wam118rCGmFNF59Clo=;
+ b=Lpq7Q+yJyNDqp36QcrOUPnmb2t5C/A4IyDPXqtbHj5afndxZIIDLg4t5PH7tsxwkekR9YX
+ t1DdKNRvA0CLfdD9jZAVNNOa4CnZg0EMuzIsWmR2VE7sHLPmGzrPYJ4/aZHWhMemMk9kTB
+ TPHl3JFIaAX8M8HC5odfWDx+Wv7lY5miGROG3Auf4wwQTLYBjtZBkenpKRzGIR3Vz2TniX
+ s9Qkg93NopBjPnZuJYwv0n1SDNA0N1RB6TnxLAYdfHC+JOKpIV8DxE20uubb4+tgnxSBBT
+ fGxWO6cD2Hfg3gA7QpTwsNsAwulEWxgpNWPlwWXDagiKniWoiKcY3GKvEXeyQA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Lpq7Q+yJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/capnproto: bump version to
+ 0.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +77,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ea97ba0dd52d4419c9bc9031375d78024565648
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Koen Martens <gmc@sonologic.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/capnproto/capnproto.hash | 2 +-
- package/capnproto/capnproto.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
-index 0faf69d069..aa722a4242 100644
---- a/package/capnproto/capnproto.hash
-+++ b/package/capnproto/capnproto.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e07446f56043c983e009038e69d18ff86a2924909f0b518ccf47eccf5ac03919  capnproto-0.10.3.tar.gz
-+sha256  c6f25940688c87ddb24e0c4e475c3213d9b044aad2ba305439cc8c224f559da6  capnproto-0.10.4.tar.gz
- sha256  9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
-diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-index 84acf5fc65..7424a1420f 100644
---- a/package/capnproto/capnproto.mk
-+++ b/package/capnproto/capnproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAPNPROTO_VERSION = 0.10.3
-+CAPNPROTO_VERSION = 0.10.4
- CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
- CAPNPROTO_LICENSE = MIT
- CAPNPROTO_LICENSE_FILES = LICENSE
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gS29lbiwKCk9uIE1vbiwgMjQgSnVsIDIwMjMgMTQ6NDI6MDggKzAyMDAKS29lbiBNYXJ0
+ZW5zIDxrbWFydGVuc0Bzb25vbG9naWMuc2U+IHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5OiBLb2Vu
+IE1hcnRlbnMgPGdtY0Bzb25vbG9naWMubmw+Cj4gLS0tCj4gIMKgcGFja2FnZS9jYXBucHJvdG8v
+Y2FwbnByb3RvLmhhc2ggfCAyICstCj4gIMKgcGFja2FnZS9jYXBucHJvdG8vY2FwbnByb3RvLm1r
+wqDCoCB8IDIgKy0KPiAgwqAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxl
+dGlvbnMoLSkKCllvdXIgcGF0Y2ggd2FzIGxpbmUtd3JhcHBlZCwgc28gaXQgY291bGRuJ3QgYmUg
+YXBwbGllZCBhcy1pcy4gQ291bGQgeW91CnRyeSB0byB1c2UgImdpdCBzZW5kLWVtYWlsIiBmb3Ig
+eW91ciBuZXh0IHBhdGNoZXM/CgpBcyB0aGUgcGF0Y2ggd2FzIHRyaXZpYWwsIEkgZml4ZWQgdGhp
+bmdzIHVwIG1hbnVhbGx5IGFuZCBhcHBsaWVkLCBidXQKaXQgd291bGQgYmUgYW5ub3lpbmcgdG8g
+ZG8gb24gYSBtb3JlIGNvbXBsaWNhdGVkIHBhdGNoLgoKVGhhbmtzIGZvciB5b3VyIGNvbnRyaWJ1
+dGlvbiEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVk
+IExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
