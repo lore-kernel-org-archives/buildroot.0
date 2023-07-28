@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0AADEB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8CCC0015E
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96D2C421A2;
-	Fri, 28 Jul 2023 20:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96D2C421A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3922421D6;
+	Fri, 28 Jul 2023 20:11:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3922421D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nP_5o6MYE2b7; Fri, 28 Jul 2023 20:11:06 +0000 (UTC)
+	with ESMTP id tQK-BhVDCHnl; Fri, 28 Jul 2023 20:11:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2AA742172;
-	Fri, 28 Jul 2023 20:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2AA742172
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03556421C4;
+	Fri, 28 Jul 2023 20:11:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03556421C4
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B11421BF38A
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:11:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A6BCF1BF38A
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:11:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 973288451B
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:11:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 973288451B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71B2E8451B
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:11:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71B2E8451B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KU9GL-YuNp8Y for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 20:11:02 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 77E2484519
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:11:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77E2484519
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9A0D71C0004;
- Fri, 28 Jul 2023 20:11:00 +0000 (UTC)
-Date: Fri, 28 Jul 2023 22:10:59 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230728221059.37f9e820@windsurf>
-In-Reply-To: <20230724193753.8490-1-ju.o@free.fr>
-References: <20230724193753.8490-1-ju.o@free.fr>
+ with ESMTP id Jy0H4Z4opZ1q for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 20:11:20 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E384384519
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:11:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E384384519
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CDCFEC0003;
+ Fri, 28 Jul 2023 20:11:17 +0000 (UTC)
+Date: Fri, 28 Jul 2023 22:11:16 +0200
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230728221116.6f4faaf9@windsurf>
+In-Reply-To: <20230727222544.196562-1-romain.naour@gmail.com>
+References: <20230727222544.196562-1-romain.naour@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690575061;
+ d=bootlin.com; s=gm1; t=1690575078;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=EqgYs9MqYfO0g72H2Ad3+ffSwG4suORz4H4KxZQPGYs=;
- b=A0JpZlmyVahwVNhRoJYmwzvgZgKXO3WvJ3khzxYX+bc78Tfc8zYDdJwJOgooUsR8+F57v6
- tHCDf7IfuTW3N6+KXO2tQ56gAOu0UF++1ywqgnybKNjEzv4+1Q6Z+waz0JLjs3qcSXz/D9
- 0ugD+4BJ47aN9xr99FmIZSz2qAYT+rim94iO/b4TT8/Xv3/dU28oXa+1cVcWQFl4aR+TjQ
- Tp1jLL9pSKDaR6oQMTrMd1WFws+hT3+nl00Ge84aI4fMayhFswSOC0tIpLdMrYVa6qHr7l
- SAb05tEZ/V2u8pCKStNYY3zw8ItbKYxpesFI4n/M4aulr8vR9slc+HQHZfOZkw==
+ bh=L3tkHM9oPs/n/SoogL4ynEEaxZRvbRoJ8AKwAPXsr9Q=;
+ b=RuPam5TzdFyEkiECvmZb03yxtL02QIaPkCMTtUF+MiN/lCzi5NMJW2wmKMKZb/8lVQXX97
+ jyEfyunl1vB5M4j6eiLae8fvZ09zkHCIh5B7Z+yL0RuOvylewe6vhL2nNzHf/EbZHF8nbs
+ 2V47TOAJ55ZDE/H7d4BEfXUd1eXt9+wXtYbaOlGbaN3ZeVEYOLBSlxaJchlBIVEY+L+PWO
+ +qELoXGee7olUspuvSJE2oiaYHUFyCQ/29T4lYMv1v2NQ1sqkog7z8yrCOg+xaOuBRttai
+ vRuAyWTeSJXjH+Xu/XYO1jhOoyOTOhi4skpodiM8aTcTF0LCqmXa7mnFAne21Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=A0JpZlmy
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-gnupg: bump to version
- 0.5.1
+ header.s=gm1 header.b=RuPam5Tz
+Subject: Re: [Buildroot] [PATCH v2 1/8] toolchain/Config.in: add
+ BR2_TOOLCHAIN_GCC_AT_LEAST_13 blind option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,26 +77,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 24 Jul 2023 21:37:53 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+On Fri, 28 Jul 2023 00:25:37 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> For change log, see:
-> https://github.com/vsajip/python-gnupg/releases/tag/0.5.1
+> In order to add gcc 13 support for internal and external toolchain in
+> follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_13 symbol.
 > 
-> This commit also adds a comment about the archive being checked with the
-> PGP signature published by the package author.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
-> Patch tested on master branch at commit f359791 with commands:
+>  toolchain/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Applied to master, thanks.
+Entire series applied. Thanks!
 
 Thomas
 -- 
