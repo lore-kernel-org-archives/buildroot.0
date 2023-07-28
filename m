@@ -4,94 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 896CEC001DF
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 04:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEB45C0015E
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 05:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 035664202C;
-	Fri, 28 Jul 2023 04:56:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 035664202C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41BE34201D;
+	Fri, 28 Jul 2023 05:01:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41BE34201D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZOqVBy_-BK_C; Fri, 28 Jul 2023 04:56:02 +0000 (UTC)
+	with ESMTP id BiAsAHbZjNHA; Fri, 28 Jul 2023 05:01:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1906D42017;
-	Fri, 28 Jul 2023 04:56:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1906D42017
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9B4C21BF3ED
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 04:55:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E3D542027;
+	Fri, 28 Jul 2023 05:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E3D542027
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 25E5C1BF3ED
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 05:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75A4783C12
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 04:55:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75A4783C12
+ by smtp2.osuosl.org (Postfix) with ESMTP id F422640462
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 05:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F422640462
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OKBkTrGNF6Aa for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 04:55:58 +0000 (UTC)
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
- [IPv6:2a00:1450:4864:20::12e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E3D3683BFF
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 04:55:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3D3683BFF
-Received: by mail-lf1-x12e.google.com with SMTP id
- 2adb3069b0e04-4fb7dc16ff0so2964206e87.2
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:55:57 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rSj_01OPt96a for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 05:01:25 +0000 (UTC)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com
+ [209.85.167.50])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BB3A64012B
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 05:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB3A64012B
+Received: by mail-lf1-f50.google.com with SMTP id
+ 2adb3069b0e04-4fb863edcb6so2946511e87.0
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 22:01:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690520155; x=1691124955;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=bhpECbZIivWaXuxhfR/5nssdty6RkqzJ7BkuR6rz3XA=;
- b=JyXYm0DYzWn2fuV3lNy9gJzbj0SSNNvSuRXGYvC9vsyf71vUknawYVf31J1OS4aUvN
- Ql+X2aXlFBnabNBEm8L2acjwyprRdISaglVRgWsso2j0kBKcHs/FoEz+iNQmh3FQO1he
- 0sbMQjVM4Vopb+2vyjnZTbS/JS8oFc2Mm9trsoVR+l0nsuvFD9agu/RJogqrOWuAXLi8
- 0WoC1OREXbJo7mySZjM4X5+O/UlGi1QhsPssE7ck4uBmJSi2ENhuPsRhIkmQStvB2AjE
- GX30nCfN8bvVtWjjZzzxXujGGYBwoAYaFkPTEaKRNx708pz8KgoZeoVv2zR+g8QU8/48
- LtPw==
-X-Gm-Message-State: ABy/qLavTPQJJxq+K0n8uGO0gM3gOHa+se6PES2rV8y5cmUDG3VKCpBW
- dTJJvWIuzy4axsstZBTJIORX17LmjWNdrYQuHd+kaZlmNLk=
-X-Google-Smtp-Source: APBJJlHwhXKO3g48FtjnLE3vMhd1i0SkKOWtktQrpnB+KIa5sWQpshG28M7OrAqiS4Z23Q1rHzbKkA==
-X-Received: by 2002:a05:6512:1286:b0:4fb:8bfd:32e4 with SMTP id
- u6-20020a056512128600b004fb8bfd32e4mr939781lfs.13.1690520155475; 
- Thu, 27 Jul 2023 21:55:55 -0700 (PDT)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com.
- [209.85.208.182]) by smtp.gmail.com with ESMTPSA id
- u21-20020ac243d5000000b004fe18e4a4f2sm543718lfl.183.2023.07.27.21.55.53
+ d=1e100.net; s=20221208; t=1690520482; x=1691125282;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Bgy8+/9YP+hQLKfwfGAmyzNRSSmzEtjVX41nyFV9b8A=;
+ b=P1LUR6xBw9KueBnkWM4fkSMRqtU1NLHtN83BKjcsmwJx/1rqt4/Jg6yHZZZTtgMwhp
+ at471UlQ5PEaK+PJgudWgen6iRR+z10dxahldP8MwsQssZplDCIOGD+X2Sq9evahHGPx
+ UtxpAHa57H8VYEB+8AH+Zzc3nt9Ir/tJIdLktNGU5M+19b6lSWDmneSpX63heZvv/j6P
+ l6xSdc1P7PWx9iljmHqFpb/ZlrOnKGcR3mWh5FDcEAK+z+7XYvVfjgKRF0g9g2H2wYAy
+ fnwjF3uDeM+rEWJYd/94WsGXXnC6MORtnPv7dWBcqIS+kAgfbpFbMrCBwm88sUYOQEoj
+ 7GsQ==
+X-Gm-Message-State: ABy/qLb07hhenE7y8ktrTzbzQSyrwFr1Llbc54YSA29d5S0pWJ+VKWQJ
+ WNAZfnLG3B5eYSuVsuEy2GFcrDUubEFW7g==
+X-Google-Smtp-Source: APBJJlE5Cc91BhsvclkhhrceG88s5dv4TqgeM3lbgXV5VQyAQkqGTMBGezvWLiKbKqLqKMG2oD8Yag==
+X-Received: by 2002:a19:ca1a:0:b0:4f8:70b8:12b1 with SMTP id
+ a26-20020a19ca1a000000b004f870b812b1mr678503lfg.4.1690520481541; 
+ Thu, 27 Jul 2023 22:01:21 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com.
+ [209.85.167.49]) by smtp.gmail.com with ESMTPSA id
+ r25-20020ac25a59000000b004faa2de9877sm629136lfn.286.2023.07.27.22.01.21
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 27 Jul 2023 21:55:53 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id
- 38308e7fff4ca-2b9b50be31aso26285091fa.3
- for <buildroot@buildroot.org>; Thu, 27 Jul 2023 21:55:53 -0700 (PDT)
-X-Received: by 2002:a05:651c:156:b0:2b9:c644:415d with SMTP id
- c22-20020a05651c015600b002b9c644415dmr729281ljd.46.1690520153415; Thu, 27 Jul
- 2023 21:55:53 -0700 (PDT)
+ Thu, 27 Jul 2023 22:01:21 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id
+ 2adb3069b0e04-4fe0bb9500aso2921537e87.1
+ for <buildroot@buildroot.org>; Thu, 27 Jul 2023 22:01:21 -0700 (PDT)
+X-Received: by 2002:a05:6512:32bb:b0:4fd:c882:bb42 with SMTP id
+ q27-20020a05651232bb00b004fdc882bb42mr721859lfe.15.1690520481151; Thu, 27 Jul
+ 2023 22:01:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230728045411.1023408-1-christian@aperture.us>
-In-Reply-To: <20230728045411.1023408-1-christian@aperture.us>
-Date: Thu, 27 Jul 2023 21:55:42 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2p4z8_bDF2d8dnzqivFN=iMNr_7Ns0tZ2tbP-eckm=Tcw@mail.gmail.com>
-Message-ID: <CA+h8R2p4z8_bDF2d8dnzqivFN=iMNr_7Ns0tZ2tbP-eckm=Tcw@mail.gmail.com>
-To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1690520155; x=1691124955;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=bhpECbZIivWaXuxhfR/5nssdty6RkqzJ7BkuR6rz3XA=;
- b=z4YPGAR0t/8HyZ77r7xhhEgXrhXDhgQP8CrFTWQ9Mp36UbMyvjetjDy5q8LFky5EZJ
- u8ofVpW+c2qBWip4g9oFbrcznnpOWa1Ptbd8EL+OPbPp1R5LG/2Jp4qIJ5WazcE9wUUM
- izClVYE18XC8eUABjQczmC1NJuTmO6OcdjSOPl2SjVpfWfo/ceRwHjQU/rBYSkoR9rSV
- bc1bhGe0nF8OIxu/V3WyBoN10uhkXGX2O3v88B5+ABMkSi4DXNALFbm8gQnPqxlyWbFd
- xPzV+XWdWRej+tGLCxFS60H38kkk/uZjAN+mfkkjA6FcEGWq1V9RkEC9k/sqZX3kk3hP
- Co0w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=z4YPGAR0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/go: fix go-bootstrap when
- parent dir contains invalid .git
+References: <20230727212026.2269634-1-bernd@kuhls.net>
+In-Reply-To: <20230727212026.2269634-1-bernd@kuhls.net>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Fri, 28 Jul 2023 07:01:09 +0200
+X-Gmail-Original-Message-ID: <CACXRmJjOOZ0t+GU1Sarwt6FhEm8VZDoKg50DdFy6TGr1Yp2dCw@mail.gmail.com>
+Message-ID: <CACXRmJjOOZ0t+GU1Sarwt6FhEm8VZDoKg50DdFy6TGr1Yp2dCw@mail.gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Subject: Re: [Buildroot] [PATCH 1/1] package/fluent-bit: fix build without
+ c++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,28 +89,162 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Romain Naour <romain.naour@gmail.com>, Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2383173638579982648=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgYWxsLAoKT24gVGh1LCBKdWwgMjcsIDIwMjMgYXQgOTo1NOKAr1BNIENocmlzdGlhbiBTdGV3
-YXJ0IDxjaHJpc3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
-L2dvL2dvLm1rIGIvcGFja2FnZS9nby9nby5tawo+IGluZGV4IGVmYTQ3ZTU3ODEuLmFlZjhhYjIy
-NDAgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9nby9nby5tawo+ICsrKyBiL3BhY2thZ2UvZ28vZ28u
-bWsKPiBAQCAtMTI1LDYgKzEyNSw3IEBAIEhPU1RfR09fSE9TVF9FTlYgPSBcCj4gICMgSE9TVEND
-X05PQ0NBQ0hFLiAgU2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9nb2xhbmcvZ28vaXNzdWVzLzExNjg1
-Lgo+ICBIT1NUX0dPX01BS0VfRU5WID0gXAo+ICAgICAgICAgR08xMTFNT0RVTEU9b2ZmIFwKPiAr
-ICAgICAgIEdPQk9PVFNUUkFQX0JVSUxEVkNTPTAgXAo+ICAgICAgICAgR09DQUNIRT0kKEhPU1Rf
-R09fSE9TVF9DQUNIRSkgXAo+ICAgICAgICAgR09ST09UX0JPT1RTVFJBUD0kKEhPU1RfR09fQk9P
-VFNUUkFQX1NUQUdFMl9ST09UKSBcCj4gICAgICAgICBHT1JPT1RfRklOQUw9JChIT1NUX0dPX1JP
-T1QpIFwKClRoaXMgaHVuayBjYW4gYmUgZHJvcHBlZC4gQWxsIHRoYXQncyBuZWVkZWQgaXMgdGhl
-IC5wYXRjaC4KCkJlc3QgcmVnYXJkcywKQ2hyaXN0aWFuCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+--===============2383173638579982648==
+Content-Type: multipart/alternative; boundary="000000000000c3c4b5060184f8e5"
+
+--000000000000c3c4b5060184f8e5
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Bernd,
+
+
+I know, I have a PR open for this upstream.
+https://github.com/confluentinc/librdkafka/pull/4366
+
+Which will then be added to fluent-bit.
+https://github.com/fluent/fluent-bit/compare/master...ThomasDevoogdt:fluent-bit:bugfix/7741-librdkafka-without-cxx-support
+
+The last one could then be applied in buildroot as a patch, or will be part
+of a next fluent-bit release.
+
+This is the issue which I originally submitted:
+https://github.com/fluent/fluent-bit/issues/7741
+
+
+Kr,
+
+Thomas Devoogdt
+
+
+Op do 27 jul. 2023 23:20 schreef Bernd Kuhls <bernd@kuhls.net>:
+
+> The kafka plugin needs c++.
+>
+> Fixes:
+>
+> http://autobuild.buildroot.net/results/709/70960056479eab860e94eed993566fcb78c4dbbe/
+>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/fluent-bit/fluent-bit.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/
+> fluent-bit.mk
+> index 1185860661..245f6ecf44 100644
+> --- a/package/fluent-bit/fluent-bit.mk
+> +++ b/package/fluent-bit/fluent-bit.mk
+> @@ -22,6 +22,16 @@ FLUENT_BIT_CONF_OPTS += \
+>         -DFLB_PREFER_SYSTEM_LIBS=Yes \
+>         -DFLB_BACKTRACE=No
+>
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+> +FLUENT_BIT_CONF_OPTS += \
+> +       -DFLB_IN_KAFKA=Yes \
+> +       -DFLB_OUT_KAFKA=Yes
+> +else
+> +FLUENT_BIT_CONF_OPTS += \
+> +       -DFLB_IN_KAFKA=No \
+> +       -DFLB_OUT_KAFKA=No
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
+>  FLUENT_BIT_WAMR_ARCH = $(call qstrip,$(BR2_PACKAGE_FLUENT_BIT_WASM_ARCH))
+>
+> --
+> 2.39.2
+>
+>
+>
+
+--000000000000c3c4b5060184f8e5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>Hi Bernd,=C2=A0<div dir=3D"auto"><br></div><div dir=
+=3D"auto"><br></div><div dir=3D"auto">I know, I have a PR open for this ups=
+tream.</div><div dir=3D"auto"><a href=3D"https://github.com/confluentinc/li=
+brdkafka/pull/4366">https://github.com/confluentinc/librdkafka/pull/4366</a=
+></div><div dir=3D"auto"><br></div><div dir=3D"auto">Which will then be add=
+ed to fluent-bit.=C2=A0</div><div dir=3D"auto"><a href=3D"https://github.co=
+m/fluent/fluent-bit/compare/master...ThomasDevoogdt:fluent-bit:bugfix/7741-=
+librdkafka-without-cxx-support">https://github.com/fluent/fluent-bit/compar=
+e/master...ThomasDevoogdt:fluent-bit:bugfix/7741-librdkafka-without-cxx-sup=
+port</a></div><div dir=3D"auto"><br></div><div dir=3D"auto">The last one co=
+uld then be applied in buildroot as a patch, or will be part of a next flue=
+nt-bit release.=C2=A0</div><div dir=3D"auto"><br></div><div dir=3D"auto">Th=
+is is the issue which I originally submitted:</div><div dir=3D"auto"><a hre=
+f=3D"https://github.com/fluent/fluent-bit/issues/7741">https://github.com/f=
+luent/fluent-bit/issues/7741</a></div><div dir=3D"auto"><br></div><div dir=
+=3D"auto"><br></div><div dir=3D"auto">Kr,</div><div dir=3D"auto"><br></div>=
+<div dir=3D"auto">Thomas Devoogdt=C2=A0</div><br><br><div class=3D"gmail_qu=
+ote"><div dir=3D"ltr" class=3D"gmail_attr">Op do 27 jul. 2023 23:20 schreef=
+ Bernd Kuhls &lt;<a href=3D"mailto:bernd@kuhls.net">bernd@kuhls.net</a>&gt;=
+:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bor=
+der-left:1px #ccc solid;padding-left:1ex">The kafka plugin needs c++.<br>
+<br>
+Fixes:<br>
+<a href=3D"http://autobuild.buildroot.net/results/709/70960056479eab860e94e=
+ed993566fcb78c4dbbe/" rel=3D"noreferrer noreferrer" target=3D"_blank">http:=
+//autobuild.buildroot.net/results/709/70960056479eab860e94eed993566fcb78c4d=
+bbe/</a><br>
+<br>
+Signed-off-by: Bernd Kuhls &lt;<a href=3D"mailto:bernd@kuhls.net" target=3D=
+"_blank" rel=3D"noreferrer">bernd@kuhls.net</a>&gt;<br>
+---<br>
+=C2=A0package/fluent-bit/<a href=3D"http://fluent-bit.mk" rel=3D"noreferrer=
+ noreferrer" target=3D"_blank">fluent-bit.mk</a> | 10 ++++++++++<br>
+=C2=A01 file changed, 10 insertions(+)<br>
+<br>
+diff --git a/package/fluent-bit/<a href=3D"http://fluent-bit.mk" rel=3D"nor=
+eferrer noreferrer" target=3D"_blank">fluent-bit.mk</a> b/package/fluent-bi=
+t/<a href=3D"http://fluent-bit.mk" rel=3D"noreferrer noreferrer" target=3D"=
+_blank">fluent-bit.mk</a><br>
+index 1185860661..245f6ecf44 100644<br>
+--- a/package/fluent-bit/<a href=3D"http://fluent-bit.mk" rel=3D"noreferrer=
+ noreferrer" target=3D"_blank">fluent-bit.mk</a><br>
++++ b/package/fluent-bit/<a href=3D"http://fluent-bit.mk" rel=3D"noreferrer=
+ noreferrer" target=3D"_blank">fluent-bit.mk</a><br>
+@@ -22,6 +22,16 @@ FLUENT_BIT_CONF_OPTS +=3D \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 -DFLB_PREFER_SYSTEM_LIBS=3DYes \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 -DFLB_BACKTRACE=3DNo<br>
+<br>
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)<br>
++FLUENT_BIT_CONF_OPTS +=3D \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0-DFLB_IN_KAFKA=3DYes \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0-DFLB_OUT_KAFKA=3DYes<br>
++else<br>
++FLUENT_BIT_CONF_OPTS +=3D \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0-DFLB_IN_KAFKA=3DNo \<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0-DFLB_OUT_KAFKA=3DNo<br>
++endif<br>
++<br>
+=C2=A0ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)<br>
+=C2=A0FLUENT_BIT_WAMR_ARCH =3D $(call qstrip,$(BR2_PACKAGE_FLUENT_BIT_WASM_=
+ARCH))<br>
+<br>
+-- <br>
+2.39.2<br>
+<br>
+<br>
+</blockquote></div></div></div>
+
+--000000000000c3c4b5060184f8e5--
+
+--===============2383173638579982648==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2383173638579982648==--
