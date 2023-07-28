@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 968EFEB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6950BEB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9E0F421B6;
-	Fri, 28 Jul 2023 20:20:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9E0F421B6
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0EC4420F2;
+	Fri, 28 Jul 2023 20:20:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0EC4420F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9hHFzAurCp8F; Fri, 28 Jul 2023 20:20:03 +0000 (UTC)
+	with ESMTP id i7KEIGKaxFcj; Fri, 28 Jul 2023 20:20:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF0CF420F2;
-	Fri, 28 Jul 2023 20:20:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF0CF420F2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 679971BF38A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60BBD420F5;
+	Fri, 28 Jul 2023 20:20:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60BBD420F5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 70CD31BF995
  for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E41340168
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A06E60BAA
  for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E41340168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A06E60BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vrbH6ymlU5az for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lAfeHdeNVKK8 for <buildroot@lists.busybox.net>;
  Fri, 28 Jul 2023 20:20:00 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F8A8400CF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6658060B46
  for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:20:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F8A8400CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6658060B46
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4BAB2839A4; Fri, 28 Jul 2023 20:20:00 +0000 (UTC)
+ id 549AC839A5; Fri, 28 Jul 2023 20:20:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 22:15:21 +0200
+Date: Fri, 28 Jul 2023 22:15:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50ef6a6f592a5f9e8eb562aee0fc308ba911836a
-X-Git-Newrev: f1350977634f96f0404b9801e6f79cb7200cf26d
+X-Git-Oldrev: f1350977634f96f0404b9801e6f79cb7200cf26d
+X-Git-Newrev: 9db6cad86e65075dc3d26c20dac362d3401f13eb
 X-Patchwork-Hint: ignore
-Message-Id: <20230728202000.4BAB2839A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fakeroot: bump to version 1.32.1
+Message-Id: <20230728202000.549AC839A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/open62541: bump to version 1.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1350977634f96f0404b9801e6f79cb7200cf26d
+commit: https://git.buildroot.net/buildroot/commit/?id=9db6cad86e65075dc3d26c20dac362d3401f13eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fakeroot/fakeroot.hash | 4 ++--
- package/fakeroot/fakeroot.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/open62541/open62541.hash | 2 +-
+ package/open62541/open62541.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-index 5c50c83e13..5e7b6af94b 100644
---- a/package/fakeroot/fakeroot.hash
-+++ b/package/fakeroot/fakeroot.hash
-@@ -1,4 +1,4 @@
--# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.30.1-1.dsc
--sha256  32ebb1f421aca0db7141c32a8c104eb95d2b45c393058b9435fbf903dd2b6a75  fakeroot_1.30.1.orig.tar.gz
-+# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.32.1-1.dsc
-+sha256  c072b0f65bafc4cc5b6112f7c61185f5170ce4cb0c410d1681c1af4a183e94e6  fakeroot_1.32.1.orig.tar.gz
- # License files, locally calculated
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 20c75d6966..1a0ad70c13 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+index 09002436e9..2e650a1257 100644
+--- a/package/open62541/open62541.hash
++++ b/package/open62541/open62541.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9a7955ba01e12dbd327e534c25288f4918d275031394c804943a7e45ba903621  open62541-v1.3.4-br1.tar.gz
++sha256  372fd6b2d78823d3f9e8279f78fb43b6af2501603675450a194d2bac65925ca1  open62541-v1.3.6-br1.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index 2c0e3b17fe..672fb17be8 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FAKEROOT_VERSION = 1.30.1
-+FAKEROOT_VERSION = 1.32.1
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
--FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20221120T030258Z/pool/main/f/fakeroot
-+FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20230724T160429Z/pool/main/f/fakeroot
- 
- HOST_FAKEROOT_DEPENDENCIES = host-acl
- # Force capabilities detection off
+-OPEN62541_VERSION = v1.3.4
++OPEN62541_VERSION = v1.3.6
+ OPEN62541_SITE_METHOD = git
+ OPEN62541_SITE = https://github.com/open62541/open62541.git
+ OPEN62541_GIT_SUBMODULES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
