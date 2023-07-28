@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80C66C0015E
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05D0FEB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 21:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 397DD614D5;
-	Fri, 28 Jul 2023 20:59:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 397DD614D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4ABD6120F;
+	Fri, 28 Jul 2023 21:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4ABD6120F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bPZqNfhzWXIx; Fri, 28 Jul 2023 20:59:58 +0000 (UTC)
+	with ESMTP id j42lPpfNRfBm; Fri, 28 Jul 2023 21:00:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C1D16120F;
-	Fri, 28 Jul 2023 20:59:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C1D16120F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4E6E01BF20B
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:59:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFBDC614F1;
+	Fri, 28 Jul 2023 21:00:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFBDC614F1
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B4D21BF20B
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:59:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24A9141EC2
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:59:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A9141EC2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 045F48454B
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 045F48454B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3cfGhwn93661 for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 20:59:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B4F24167A
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:59:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B4F24167A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 04AC783A14; Fri, 28 Jul 2023 20:59:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 22:57:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aded3f6b9654b46ec85a84af4bc02d53663b4c0c
-X-Git-Newrev: 233ff41fdb4867638237a6626dd320d46e57f051
-X-Patchwork-Hint: ignore
-Message-Id: <20230728205954.04AC783A14@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xwayland: bump version to
- 23.1.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xl0vfLryedtF for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 20:59:56 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C64A084500
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:59:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C64A084500
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 886FC40002;
+ Fri, 28 Jul 2023 20:59:53 +0000 (UTC)
+Date: Fri, 28 Jul 2023 22:59:52 +0200
+To: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Message-ID: <20230728225952.70b2d130@windsurf>
+In-Reply-To: <20230527081151.59902-1-raphael.pavlidis@gmail.com>
+References: <20230527081151.59902-1-raphael.pavlidis@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690577994;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Dr4SqvPgXzGBWL6gov9Xx0kvPJyGvqMzk+0l6ri2liw=;
+ b=CjxwYGtQQUDrMocZph4AwmBIUEP5ClZULQdXRv6fCo6ysPKHG3psI05gUeXMEwsGxaP0XU
+ 4XPH4NAiqgDsiya6IZylbFcf4JFXx6iPLO68HaE0e2XM1qSHJ36ku1r/mEMfLcDN2lInhq
+ fkWSgzxNSXrvky+wiTCuVJdok4xxaLQxqnMNTNoEAkyPs9Lg9y6vfA94ZN8wacVLmfTm/i
+ cZlM1Ot00bv6RCzLoGiawrdxo/mSC5Ytte9x/QAj2j3jambIpFge7bVvQ61sR9wddFwqpe
+ x/PBnvVi5L8UNE9ZqBYv8ad8IHyWPa9RAS0oJw0s5YnOzbPde5UGtWIkS2127Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CjxwYGtQ
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/x11r7/xwayland: bump version
+ to 23.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,49 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=233ff41fdb4867638237a6626dd320d46e57f051
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 27 May 2023 10:11:51 +0200
+Raphael Pavlidis <raphael.pavlidis@gmail.com> wrote:
 
-Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/x11r7/xwayland/xwayland.hash | 6 +++---
- package/x11r7/xwayland/xwayland.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+> ---
+>  package/x11r7/xwayland/xwayland.hash | 6 +++---
+>  package/x11r7/xwayland/xwayland.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
-index 0c476f3183..b62f404d40 100644
---- a/package/x11r7/xwayland/xwayland.hash
-+++ b/package/x11r7/xwayland/xwayland.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2023-February/003322.html
--sha256  d11eeee73290b88ea8da42a7d9350dedfaba856ce4ae44e58c045ad9ecaa2f73  xwayland-22.1.8.tar.xz
--sha512  f52c6f99d8ef7605bc1c651d5ee5e306c12af30649a2d712b1c4c3cf4c7c80246ae24bd9ac39461d47aafc78f5d659446a459cd6259e05ef3128b204981d114a  xwayland-22.1.8.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2023-March/003376.html
-+sha256  fb9461f5cb9fea5e07e91882311b0c88b43e8843b017ebac05eb5af69aa34c15  xwayland-23.1.1.tar.xz
-+sha512  21c386847135c5cb4ac884926b0fbeb6ad21c9ee54752e0cdc8418e31a72872d81032159c1d91b8afb915aaaf65e80454342461d676996b2f3c535a37b0147f0  xwayland-23.1.1.tar.xz
- 
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
-index 7aef1156d3..1b626327ad 100644
---- a/package/x11r7/xwayland/xwayland.mk
-+++ b/package/x11r7/xwayland/xwayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XWAYLAND_VERSION = 22.1.8
-+XWAYLAND_VERSION = 23.1.1
- XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
- XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XWAYLAND_LICENSE = MIT
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
