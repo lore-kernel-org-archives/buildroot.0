@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C29FC001E0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 19:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7399BC001DE
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 19:26:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6BEB8455B;
-	Fri, 28 Jul 2023 19:26:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6BEB8455B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DC8B84550;
+	Fri, 28 Jul 2023 19:26:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DC8B84550
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nH4z5NcTE1Iz; Fri, 28 Jul 2023 19:26:10 +0000 (UTC)
+	with ESMTP id GZSFL0S8tgtj; Fri, 28 Jul 2023 19:26:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1323D84558;
-	Fri, 28 Jul 2023 19:26:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1323D84558
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B66F51BF312
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:25:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63C6084558;
+	Fri, 28 Jul 2023 19:26:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63C6084558
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 790A61BF312
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:25:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F8A5614CB
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:25:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F8A5614CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 602FE401E1
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:25:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 602FE401E1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e4uBQk24zCtw for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 19:25:46 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7764C60AB2
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 19:25:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7764C60AB2
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 74B4920003;
- Fri, 28 Jul 2023 19:25:44 +0000 (UTC)
-Date: Fri, 28 Jul 2023 21:25:43 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LSvrfBxPJj_l for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 19:25:52 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B5F5D40168
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 19:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5F5D40168
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 85A08240003;
+ Fri, 28 Jul 2023 19:25:48 +0000 (UTC)
+Date: Fri, 28 Jul 2023 21:25:47 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230728212543.1bcc6145@windsurf>
-In-Reply-To: <20230728172026.3337541-1-bernd@kuhls.net>
-References: <20230728172026.3337541-1-bernd@kuhls.net>
+Message-ID: <20230728212547.63324c77@windsurf>
+In-Reply-To: <20230728180854.3808246-1-bernd@kuhls.net>
+References: <20230728180854.3808246-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690572344;
+ d=bootlin.com; s=gm1; t=1690572348;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=aKCIbdxSyhNs+xx7oq7SLaFMqaOCpOrqoYLG3CrqnFw=;
- b=bvzYRpYelMgCS8zw8j5GHWSxNIqtZ0p3jyZl82z+AuAmYVVE9I7FUufh8izYgBgEEaUZ2N
- LPQPMPCQULkISOipJyuE+20g2cvcS1wNFc762OrJk6m9IGAB6DL0W9Q8NIwI6x+xiL5Vyk
- cXVnAtt2jErpALbxEtpJF9Rt2OGIV16B7g/FXn7Z3YnYYy+IzAYDfQu4XcVHU6pPruMzQf
- UxI970Rooo/RWPI77FfNufsYbI4A8+Nn+D6xdk+N8L6rvWW98D+4N5LjAgFIrcno+SmpCK
- 7wT9owbySO+bTJAaBLcHHpuNn7Mrt8ZoPOOB5P5m6WBoxM2q2yyi+bIK/7WfOA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=iCvjbsLwoe60GhHUgeOUT5+z4l8k3yLcPRyNdfAz2+0=;
+ b=KbNX4KXSvgYvRQ9U6viuCrwwVvmQhBeHH7oXlAEhTyhfMFQLZh66rRbSRpJI6MlJMN/7ew
+ LQ36h+LzosDJEpqnp774Qkb1tWqXtO80i/Qpy70u6bVO7ljy7V0sSXhVCH+Yvri9WJTgQE
+ 9GUryc9Uaj099YjwwvmO2WcpZCVnqpwO+7gz3USorZfmnY1asxMmBKA0ovccRv+M44GPQr
+ M1UZ4ww1UHT6wF/wcnsp6rRxIel9Yo9NkTTmLWI7Gv5veRW1Te5RWKDuZXnQylvqf/C8dW
+ Qx6p14/0RJAUHvAndAjnYngOJWNWPC8QBiFXnhvEKwr4642vjnsi/0l6nyYd/g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bvzYRpYe
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: force arm mode instead of
- Thumb mode
+ header.s=gm1 header.b=KbNX4KXS
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpg123: force arm mode instead
+ of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,20 +83,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 28 Jul 2023 19:20:26 +0200
+On Fri, 28 Jul 2023 20:08:54 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
 > Fix the following build failure:
-> /tmp/ccqcLrVb.s:4053: Error: selected processor does not support `umlal r2,r1,r0,r3' in Thumb mode
-> /tmp/ccqcLrVb.s:4076: Error: selected processor does not support `umlal r0,r3,r1,r2' in Thumb mode
-> /tmp/ccqcLrVb.s:8644: Error: selected processor does not support `umlal r0,r3,r2,r4' in Thumb mode
+> Error: selected processor does not support `smull r3,ip,r2,r10' in Thumb mode
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/1d09a0a58cbc1712416de746d57d4532df580673/
+> http://autobuild.buildroot.net/results/848/8484fc6be618f3edbf39a13928ab9a4b7b442235/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/php/php.mk | 7 +++++++
+>  package/mpg123/mpg123.mk | 7 +++++++
 >  1 file changed, 7 insertions(+)
 
 Applied to master, thanks.
