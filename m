@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FB3AC001DE
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 19:39:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D2B9C001DF
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 19:39:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E216C41E8D;
-	Fri, 28 Jul 2023 19:39:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E216C41E8D
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACCF74217A;
+	Fri, 28 Jul 2023 19:39:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACCF74217A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QsFB60DSlHxw; Fri, 28 Jul 2023 19:39:07 +0000 (UTC)
+	with ESMTP id igCQj691dIEr; Fri, 28 Jul 2023 19:39:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6174842172;
-	Fri, 28 Jul 2023 19:39:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6174842172
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C650D1BF312
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:39:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DC1142188;
+	Fri, 28 Jul 2023 19:39:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DC1142188
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 541ED1BF312
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C40840363
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:39:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C40840363
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CC9142172
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 19:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CC9142172
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QAR2JQQIkqzc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WzLCs9BSgApQ for <buildroot@lists.busybox.net>;
  Fri, 28 Jul 2023 19:39:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C479340168
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD7DD41E8D
  for <buildroot@buildroot.org>; Fri, 28 Jul 2023 19:39:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C479340168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD7DD41E8D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2CF6838C5; Fri, 28 Jul 2023 19:39:03 +0000 (UTC)
+ id A7964838C4; Fri, 28 Jul 2023 19:39:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 21:34:41 +0200
+Date: Fri, 28 Jul 2023 21:34:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bb90cbdaa37ab1c12dda592167a69910d96eac80
-X-Git-Newrev: 327b6000416919db034a645800bb700e2736addd
+X-Git-Oldrev: 4ce0dacb60b7fdccf3daabe58e09358da3f09fa2
+X-Git-Newrev: bb90cbdaa37ab1c12dda592167a69910d96eac80
 X-Patchwork-Hint: ignore
-Message-Id: <20230728193903.B2CF6838C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi: needs host-cmake >= 3.24
+Message-Id: <20230728193903.A7964838C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cmake: bump version to 3.27.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,115 +63,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=327b6000416919db034a645800bb700e2736addd
+commit: https://git.buildroot.net/buildroot/commit/?id=bb90cbdaa37ab1c12dda592167a69910d96eac80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building kodi with cmake version 3.22.3 provided by buildroot is broken
+Updated license hash due to various commits since Feb 08, 2021:
+https://gitlab.kitware.com/cmake/cmake/-/commits/v3.27.0/Copyright.txt
 
--- Found Python3: /home/buildroot/br6/output/per-package/kodi/host/x86_
-   64-buildroot-linux-gnu/sysroot/usr/include/python3.11 (found suitable
-    exact version "3.11.4") found components: Development Development.
-    Module Development.Embed
--- Could NOT find Python3 (missing: Interpreter) (Required is exact
-     version "3.11")
-    Reason given by package:
-        Interpreter: Cannot run the interpreter "/home/buildroot/br6/
-        output/per-package/kodi/host/x86_64-buildroot-linux-gnu/sysroot/
-        usr/bin/python3"
-
-CMake Error at cmake/scripts/common/Macros.cmake:432 (message):
-  PYTHON enabled but not found
-Call Stack (most recent call first):
-  CMakeLists.txt:214 (core_optional_dep)
-
-using this defconfig
-
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_FORCE_HOST_BUILD=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_PY_ONLY=y
-BR2_PACKAGE_HOST_CMAKE=y
-
-due to "BR2_FORCE_HOST_BUILD=y".
-
-The cmake version provided by my distro is 3.25.1 which works fine.
-
-Adding "CMAKE_FIND_DEBUG_MODE TRUE" to the "find_package(Python3 [...]"
-call in Kodi's cmake/modules/FindPython.cmake and comparing the logfile
-of both cmake versions shows that 3.25.1 adds
-
-    CMAKE_FIND_USE_INSTALL_PREFIX: 1
-
-while searching for python3.
-
-This option was introduced in cmake 3.24:
-https://cmake.org/cmake/help/latest/variable/CMAKE_FIND_USE_INSTALL_PREFIX.html
-
-After introducing this fix it turns out that
-0002-cmake-modules-fix-python-detection.patch is not needed anymore so
-we remove this patch.
+Added option to disable optional cppdap support, buildroot does not
+provide this package. Needed due to upstream commit:
+https://gitlab.kitware.com/cmake/cmake/-/commit/5ec69eb58c4d863e9f8f278b7c78d08f8cedd3f4
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-cmake-modules-fix-python-detection.patch  | 28 ----------------------
- package/kodi/Config.in                             |  1 +
- 2 files changed, 1 insertion(+), 28 deletions(-)
+ package/cmake/0001-rename-cmake-rootfile.patch |  6 ++++--
+ package/cmake/Config.in.host                   | 25 +++++++++++++++++++++++++
+ package/cmake/cmake.hash                       |  6 +++---
+ package/cmake/cmake.mk                         |  5 +++--
+ 4 files changed, 35 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi/0002-cmake-modules-fix-python-detection.patch b/package/kodi/0002-cmake-modules-fix-python-detection.patch
-deleted file mode 100644
-index fcf35b25b2..0000000000
---- a/package/kodi/0002-cmake-modules-fix-python-detection.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From c29c1e762e126fdb46a19fc15bcb465cf1cd6c76 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sun, 7 May 2023 11:18:00 +0200
--Subject: [PATCH] cmake/modules: fix python detection
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
--Upstream: https://github.com/xbmc/xbmc/pull/23230
-----
-- cmake/modules/FindPython.cmake | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cmake/modules/FindPython.cmake b/cmake/modules/FindPython.cmake
--index 782c0f51f6..a013cccf80 100644
----- a/cmake/modules/FindPython.cmake
--+++ b/cmake/modules/FindPython.cmake
--@@ -60,7 +60,7 @@ endif()
-- 
-- find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Development)
-- if(CORE_SYSTEM_NAME STREQUAL linux)
---  if(HOST_CAN_EXECUTE_TARGET)
--+  if(HOST_CAN_EXECUTE_TARGET OR DEFINED PYTHON_EXECUTABLE)
--     find_package(Python3 ${VERSION} ${EXACT_VER} COMPONENTS Interpreter)
--   else()
--     find_package(Python3 COMPONENTS Interpreter)
---- 
--2.25.1
--
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a21733ea78..0bdb8c50ee 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -66,6 +66,7 @@ menuconfig BR2_PACKAGE_KODI
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on !BR2_PACKAGE_PYTHON3_PYC_ONLY
- 	select BR2_NEEDS_HOST_JAVA
+diff --git a/package/cmake/0001-rename-cmake-rootfile.patch b/package/cmake/0001-rename-cmake-rootfile.patch
+index a8cd3ee820..7e6e0a8cf7 100644
+--- a/package/cmake/0001-rename-cmake-rootfile.patch
++++ b/package/cmake/0001-rename-cmake-rootfile.patch
+@@ -12,10 +12,12 @@ This buildroot-specific patch makes sure ctest looks also for
+ 
+ [Vincent: tweak patch for 3.6.3]
+ [James: tweak patch for 3.15.4]
++[Bernd: tweak patch for 3.27.0]
+ 
+ Signed-off-by: Davide Viti <zinosat@tiscali.it>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  Source/cmake.cxx | 7 ++++++-
+  1 file changed, 6 insertions(+), 1 deletion(-)
+@@ -24,8 +26,8 @@ diff --git a/Source/cmake.cxx b/Source/cmake.cxx
+ index 3772f09985..c317e4af38 100644
+ --- a/Source/cmake.cxx
+ +++ b/Source/cmake.cxx
+-@@ -1009,7 +1009,12 @@ int cmake::AddCMakePaths()
+-     "Path to cpack program executable.", cmStateEnums::INTERNAL);
++@@ -1891,7 +1891,12 @@ int cmake::AddCMakePaths()
++                       cmStateEnums::INTERNAL);
+  #endif
+    if (!cmSystemTools::FileExists(
+ -        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake"))) {
+diff --git a/package/cmake/Config.in.host b/package/cmake/Config.in.host
+index 5de076537b..0935e9a564 100644
+--- a/package/cmake/Config.in.host
++++ b/package/cmake/Config.in.host
+@@ -27,10 +27,35 @@ config BR2_HOST_CMAKE_AT_LEAST_3_22
+ 	bool
+ 	select BR2_HOST_CMAKE_AT_LEAST_3_21
+ 
++config BR2_HOST_CMAKE_AT_LEAST_3_23
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_22
++
++config BR2_HOST_CMAKE_AT_LEAST_3_24
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_23
++
++config BR2_HOST_CMAKE_AT_LEAST_3_25
++	bool
 +	select BR2_HOST_CMAKE_AT_LEAST_3_24
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_GPL
- 	select BR2_PACKAGE_FFMPEG_POSTPROC
++
++config BR2_HOST_CMAKE_AT_LEAST_3_26
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_25
++
++config BR2_HOST_CMAKE_AT_LEAST_3_27
++	bool
++	select BR2_HOST_CMAKE_AT_LEAST_3_26
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_HOST_CMAKE_AT_LEAST
+ 	string
++	default "3.27"	if BR2_HOST_CMAKE_AT_LEAST_3_27
++	default "3.26"	if BR2_HOST_CMAKE_AT_LEAST_3_26
++	default "3.25"	if BR2_HOST_CMAKE_AT_LEAST_3_25
++	default "3.24"	if BR2_HOST_CMAKE_AT_LEAST_3_24
++	default "3.23"	if BR2_HOST_CMAKE_AT_LEAST_3_23
+ 	default "3.22"	if BR2_HOST_CMAKE_AT_LEAST_3_22
+ 	default "3.21"	if BR2_HOST_CMAKE_AT_LEAST_3_21
+ 	default "3.20"	if BR2_HOST_CMAKE_AT_LEAST_3_20
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 43b5efb0f0..e5a047e7d3 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.22/cmake-3.22.3-SHA-256.txt
+-sha256  9f8469166f94553b6978a16ee29227ec49a2eb5ceb608275dec40d8ae0d1b5a0  cmake-3.22.3.tar.gz
++# From https://cmake.org/files/v3.27/cmake-3.27.1-SHA-256.txt
++sha256  b1a6b0135fa11b94476e90f5b32c4c8fad480bf91cf22d0ded98ce22c5132004  cmake-3.27.1.tar.gz
+ 
+ # Locally calculated
+-sha256  f1a4326266aada65b307dac05161a9d02d3dba4fb08b50cb26e3c24cc8a86e97  Copyright.txt
++sha256  4a01ccf2dc580ba570d02bc015bbe0ec92f1f318717aae9540ba841ba7946756  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index b99877696a..1e29e25471 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+-CMAKE_VERSION_MAJOR = 3.22
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
++CMAKE_VERSION_MAJOR = 3.27
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
+@@ -33,6 +33,7 @@ CMAKE_CONF_OPTS = \
+ 	-DKWSYS_CHAR_IS_SIGNED=TRUE \
+ 	-DCMAKE_USE_SYSTEM_LIBRARIES=1 \
+ 	-DCTEST_USE_XMLRPC=OFF \
++	-DCMake_ENABLE_DEBUGGER=0 \
+ 	-DBUILD_CursesDialog=OFF
+ 
+ # Get rid of -I* options from $(HOST_CPPFLAGS) to prevent that a
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
