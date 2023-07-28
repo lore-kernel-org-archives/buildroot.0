@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2A08EB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB61EEB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 20:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73EE3421C6;
-	Fri, 28 Jul 2023 20:11:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73EE3421C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D077421FA;
+	Fri, 28 Jul 2023 20:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D077421FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vnFgSkpNXCFp; Fri, 28 Jul 2023 20:11:44 +0000 (UTC)
+	with ESMTP id SJb-0pl7MH4W; Fri, 28 Jul 2023 20:11:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59E23421F1;
-	Fri, 28 Jul 2023 20:11:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59E23421F1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BAA0C1BF38A
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:11:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15938421DA;
+	Fri, 28 Jul 2023 20:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15938421DA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BA321BF38A
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 940B160BAA
+ by smtp4.osuosl.org (Postfix) with ESMTP id E805D421DA
  for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 20:11:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 940B160BAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E805D421DA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0C1A-r5YH_fi for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9l-YwNfkRAME for <buildroot@lists.busybox.net>;
  Fri, 28 Jul 2023 20:11:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFFBD60B15
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD93E421F3
  for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFFBD60B15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD93E421F3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A069D83976; Fri, 28 Jul 2023 20:11:41 +0000 (UTC)
+ id ACDD583979; Fri, 28 Jul 2023 20:11:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 28 Jul 2023 22:10:43 +0200
+Date: Fri, 28 Jul 2023 22:11:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4f4ae1f15e5686aff4448d62386f3a3e68ef405
-X-Git-Newrev: 056539bc45d8b0d1b0a736a548dd7822357cdaa9
+X-Git-Oldrev: 056539bc45d8b0d1b0a736a548dd7822357cdaa9
+X-Git-Newrev: 50ef6a6f592a5f9e8eb562aee0fc308ba911836a
 X-Patchwork-Hint: ignore
-Message-Id: <20230728201141.A069D83976@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-gnupg: bump to version 0.5.1
+Message-Id: <20230728201141.ACDD583979@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/poco: bump version to 1.12.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=056539bc45d8b0d1b0a736a548dd7822357cdaa9
+commit: https://git.buildroot.net/buildroot/commit/?id=50ef6a6f592a5f9e8eb562aee0fc308ba911836a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 For change log, see:
-https://github.com/vsajip/python-gnupg/releases/tag/0.5.1
+https://github.com/pocoproject/poco/blob/poco-1.12.4-release/CHANGELOG
 
-This commit also adds a comment about the archive being checked with the
-PGP signature published by the package author.
+This commit also drop the package patch, which was included upstream in
+version 1.12.3:
+https://github.com/pocoproject/poco/commit/3884c734c261231c34f59e56cde7ae02945b4dae
+
+The file .checkpackageignore is also updated to reflect this patch
+removal.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-gnupg/python-gnupg.hash | 7 +++++--
- package/python-gnupg/python-gnupg.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...-Fix-optional-JSON-support-for-MySQL-3753.patch | 45 ----------------------
+ package/poco/poco.hash                             |  2 +-
+ package/poco/poco.mk                               |  2 +-
+ 4 files changed, 2 insertions(+), 48 deletions(-)
 
-diff --git a/package/python-gnupg/python-gnupg.hash b/package/python-gnupg/python-gnupg.hash
-index 7886ff7dae..d52b634b8d 100644
---- a/package/python-gnupg/python-gnupg.hash
-+++ b/package/python-gnupg/python-gnupg.hash
-@@ -1,5 +1,8 @@
- # md5, sha256 from https://pypi.org/pypi/python-gnupg/json
--md5  19cc1aef3a612b7b5f13e388260e65d4  python-gnupg-0.5.0.tar.gz
--sha256  70758e387fc0e0c4badbcb394f61acbe68b34970a8fed7e0f7c89469fe17912a  python-gnupg-0.5.0.tar.gz
-+# also checked PGP signature from:
-+# https://bitbucket.org/vinay.sajip/python-gnupg/downloads/python-gnupg-0.5.1.tar.gz.asc
-+# with key: 9147B477339A9B86
-+md5  c5d99c5f0456f8cbf69324ec5e6acaff  python-gnupg-0.5.1.tar.gz
-+sha256  5674bad4e93876c0b0d3197e314d7f942d39018bf31e2b833f6788a6813c3fb8  python-gnupg-0.5.1.tar.gz
- # Locally computed sha256 checksums
- sha256  4104ca980dbca7603fc553078378eb14566a76f819d033d7bff89fd6a97e181b  LICENSE.txt
-diff --git a/package/python-gnupg/python-gnupg.mk b/package/python-gnupg/python-gnupg.mk
-index b51ac61892..f582f4cdb7 100644
---- a/package/python-gnupg/python-gnupg.mk
-+++ b/package/python-gnupg/python-gnupg.mk
-@@ -4,8 +4,8 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b636f66e81..0091c0d0ca 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1173,7 +1173,6 @@ package/pkcs11-helper/0001-openssl-libressl-3-5-0-does-not-have-DSA_meth_set1_na
+ package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch Upstream
+ package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch Upstream
+ package/pkgconf/pkg-config.in Shellcheck
+-package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch Sob Upstream
+ package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch Upstream
+ package/poke/0002-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch Upstream
+ package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch Upstream
+diff --git a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch b/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
+deleted file mode 100644
+index ba2f073a59..0000000000
+--- a/package/poco/0001-Fix-optional-JSON-support-for-MySQL-3753.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 3884c734c261231c34f59e56cde7ae02945b4dae Mon Sep 17 00:00:00 2001
+-From: Hernan Martinez <hernan.c.martinez@gmail.com>
+-Date: Tue, 16 Aug 2022 23:07:25 -0500
+-Subject: [PATCH] Fix optional JSON support for MySQL (#3753)
+-
+-* Fix optional JSON support for MySQL
+-
+-* Fix optional JSON support for MySQLTest
+----
+- Data/MySQL/src/ResultMetadata.cpp      | 2 ++
+- Data/MySQL/testsuite/src/MySQLTest.cpp | 2 ++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/Data/MySQL/src/ResultMetadata.cpp b/Data/MySQL/src/ResultMetadata.cpp
+-index 61b49dd54..adb5dae84 100644
+---- a/Data/MySQL/src/ResultMetadata.cpp
+-+++ b/Data/MySQL/src/ResultMetadata.cpp
+-@@ -133,8 +133,10 @@ namespace
+- 		case MYSQL_TYPE_LONG_BLOB:
+- 		case MYSQL_TYPE_BLOB:
+- 			return Poco::Data::MetaColumn::FDT_BLOB;
+-+#ifdef POCO_MYSQL_JSON
+- 		case MYSQL_TYPE_JSON:
+- 			return Poco::Data::MetaColumn::FDT_JSON;
+-+#endif
+- 		default:
+- 			return Poco::Data::MetaColumn::FDT_UNKNOWN;
+- 		}
+-diff --git a/Data/MySQL/testsuite/src/MySQLTest.cpp b/Data/MySQL/testsuite/src/MySQLTest.cpp
+-index 80a3683b1..2a286d35e 100644
+---- a/Data/MySQL/testsuite/src/MySQLTest.cpp
+-+++ b/Data/MySQL/testsuite/src/MySQLTest.cpp
+-@@ -976,7 +976,9 @@ CppUnit::Test* MySQLTest::suite()
+- 	CppUnit_addTest(pSuite, MySQLTest, testBLOBStmt);
+- 	CppUnit_addTest(pSuite, MySQLTest, testLongBLOB);
+- 	CppUnit_addTest(pSuite, MySQLTest, testLongTEXT);
+-+#ifdef POCO_MYSQL_JSON
+- 	CppUnit_addTest(pSuite, MySQLTest, testJSON);
+-+#endif
+- 	CppUnit_addTest(pSuite, MySQLTest, testUnsignedInts);
+- 	CppUnit_addTest(pSuite, MySQLTest, testFloat);
+- 	CppUnit_addTest(pSuite, MySQLTest, testDouble);
+--- 
+-2.37.2
+-
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index eea3e2494a..9a7981171a 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  30442ccb097a0074133f699213a59d6f8c77db5b2c98a7c1ad9c5eeb3a2b06f3  poco-1.12.2.tar.gz
++sha256  71ef96c35fced367d6da74da294510ad2c912563f12cd716ab02b6ed10a733ef  poco-1.12.4.tar.gz
+ sha256  c4b1e1e5f36d8331737231fefcc30f5714326aec7c387ad59a8115eb0ba7d6b5  LICENSE
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index d078faa8e5..2d0233a8ce 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_GNUPG_VERSION = 0.5.0
--PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/e3/5c/5ff9877001616912a74f4377cd5f80925b31a678087800beae5b28bdb80e
-+PYTHON_GNUPG_VERSION = 0.5.1
-+PYTHON_GNUPG_SITE = https://files.pythonhosted.org/packages/98/62/7737485f44bd4d7d904f4094372f4119195865b29f119fa51a98e121a13a
- PYTHON_GNUPG_LICENSE = BSD-3-Clause
- PYTHON_GNUPG_LICENSE_FILES = LICENSE.txt
- PYTHON_GNUPG_CPE_ID_VENDOR = python
+-POCO_VERSION = 1.12.2
++POCO_VERSION = 1.12.4
+ POCO_SITE = $(call github,pocoproject,poco,poco-$(POCO_VERSION)-release)
+ POCO_LICENSE = BSL-1.0
+ POCO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
