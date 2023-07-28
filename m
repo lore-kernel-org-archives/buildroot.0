@@ -1,101 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67E7FC001DE
-	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 08:37:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4F5C001DE
+	for <buildroot@archiver.kernel.org>; Fri, 28 Jul 2023 09:37:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38176840C0;
-	Fri, 28 Jul 2023 08:37:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38176840C0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EB0E405F8;
+	Fri, 28 Jul 2023 09:37:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EB0E405F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ss2y6sXdgZno; Fri, 28 Jul 2023 08:37:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id flJpi4Rm9uIO; Fri, 28 Jul 2023 09:37:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 714BB84079;
-	Fri, 28 Jul 2023 08:37:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 714BB84079
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9DA231BF385
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 08:37:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C7C540292;
+	Fri, 28 Jul 2023 09:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C7C540292
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C0721BF426
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 09:37:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7512242028
- for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 08:37:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7512242028
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2179540292
+ for <buildroot@lists.busybox.net>; Fri, 28 Jul 2023 09:37:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2179540292
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QcJI7_9f-HbD for <buildroot@lists.busybox.net>;
- Fri, 28 Jul 2023 08:37:48 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5CEFB42026
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 08:37:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CEFB42026
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-3fbc244d384so19686955e9.0
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 01:37:48 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ic4l9x7TAXjt for <buildroot@lists.busybox.net>;
+ Fri, 28 Jul 2023 09:37:19 +0000 (UTC)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com
+ [209.85.208.54])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 04C7040018
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 09:37:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04C7040018
+Received: by mail-ed1-f54.google.com with SMTP id
+ 4fb4d7f45d1cf-52222562f1eso2538464a12.3
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 02:37:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690533466; x=1691138266;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=OoybO3FDoS9NATRnz4alpjSo3xCH+VaVcL3kXjRSPqU=;
- b=CAUhAR80snWeWyRF8qrFh2W4NrWCniPYytFdseF99n5hJ6+qeoe4gqNfGnJzXMxE+J
- Hydn724x4E3bSnA52+UrFyg/r9/6GzGSPSiwUOMrBirY6kKJTSUyaNI6hQry/zi+cTX4
- N8kz6IkYfpSnUVQeS8cqRdqO3PgEcfT1+7axzc6qgF2fWg2tlt6T4rcRqJ2u5MK5sdr1
- MLKtS5odAG9sfTM1mfYWI8/K/ydg9S3z6rIadtzyC7fiy4zrkstfAfvc30O/QO2jp8M9
- 3u4VbWKWLp97aepBAtJIeSQDVdPy1pyHl9AhpW0CuT7l0zhyMI9FaGkLeg51u1jLWwJ1
- wLoQ==
-X-Gm-Message-State: ABy/qLa8qgVe7fEKsDX2+4xAnbAlgHAQVI86Dmqlln1Ddlu+2DgVm2Gp
- zPS4QQ78HractFdBxS7ptRsM/Abvg3VOzIOMPok=
-X-Google-Smtp-Source: APBJJlHGpkhoXOibZo1d6eSIT6XCJhMU2A3NEr0pysmTD/52HPq0lUIYfaqlJdrMh/zkFu+pnb/o5g==
-X-Received: by 2002:a7b:c5c3:0:b0:3fb:ff57:1750 with SMTP id
- n3-20020a7bc5c3000000b003fbff571750mr1117071wmk.32.1690533466361; 
- Fri, 28 Jul 2023 01:37:46 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:945b:7e00:eeca:726b:991c:1980?
- (2a01cb05945b7e00eeca726b991c1980.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:eeca:726b:991c:1980])
+ d=1e100.net; s=20221208; t=1690537037; x=1691141837;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=XypahLZKqB6PUAl1yFS9GPSQKqt0VDYqp0otkwGFsLM=;
+ b=QTgOym6lFKxoyXD30xMQTz9zZdvaOyV583ve2qx/YzEZM6l9msiKqu2if0JuHGyuSg
+ WmAiPbd+BvBiSq/xxa15ykyEvEprFU3WgRY/YcYqw+efhYVXlgeF2ou2lJuHRVCfmuyh
+ VHBZ9B+uu06a6gkdLQ5X+GZNekROuLkR6re6VO8uFBen/skXh+Pp7d686kKiBs9lfp9h
+ ynvszzUH6fIB1pv6jZgenn0hLaL4ak+nUMc8IG4peH1YUOERRMO+Yz12v6GfRLMBw0hq
+ i0Bh5JlFyLrA2WKoSYFlfDUOEQE1sGul+eXmM0UKEWfIqw7nWUjuJurrCxk6Z1aLA7L8
+ Ywbg==
+X-Gm-Message-State: ABy/qLahdOHfJRaA5sfNXOAm7nFs//gc+nzCR07AQA9Wq/I4iYfkXMTG
+ oCnZ2bITSnpbU1Y9N4WIBONFb6pQRgfjRIvd
+X-Google-Smtp-Source: APBJJlHaVPOV+BnvRiJt4g5YmTWl/fOhSZAINkWYpAxpej0fWuEW3tIqJbZfwAyBePdNER5yw1/p9w==
+X-Received: by 2002:a05:6402:1115:b0:522:4f0a:6822 with SMTP id
+ u21-20020a056402111500b005224f0a6822mr1176915edv.22.1690537036540; 
+ Fri, 28 Jul 2023 02:37:16 -0700 (PDT)
+Received: from KORLIN44614.barco.com
+ ([2a02:a03f:eb68:2f00:5f2a:76a0:f2a2:f4bf])
  by smtp.gmail.com with ESMTPSA id
- z24-20020a7bc7d8000000b003fbc681c8d1sm6477160wmk.36.2023.07.28.01.37.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 28 Jul 2023 01:37:46 -0700 (PDT)
-Message-ID: <080e239b-113e-09e8-aef1-0fb39cc70bd1@smile.fr>
-Date: Fri, 28 Jul 2023 10:37:44 +0200
+ d15-20020aa7d68f000000b00522594a614fsm1593357edr.13.2023.07.28.02.37.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Jul 2023 02:37:16 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Fri, 28 Jul 2023 11:36:58 +0200
+Message-Id: <20230728093658.703943-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230727212026.2269634-1-bernd@kuhls.net>
+References: <20230727212026.2269634-1-bernd@kuhls.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-To: Christian Stewart <christian@aperture.us>
-References: <20230721213121.178783-1-romain.naour@gmail.com>
- <20230722232630.1c759813@windsurf>
- <CA+h8R2qhnFzK8WQOVQNi=etMhKyg=hFhyBcRHPu7NYg5S=kjWA@mail.gmail.com>
- <dbadbf67-797f-ad6f-d519-35567417a291@smile.fr>
- <CA+h8R2oZ=oEr8hrJbHqw1K6AnBb__w1u6PGPmDUSONVb0Q0f6g@mail.gmail.com>
- <CA+h8R2p0VrrNpSA=sMqs5C8bpe41L9sOfo_5z6E8X9z6T_m9-w@mail.gmail.com>
- <CA+h8R2qm2i94fcggkXvScyv9unAWa6S6pF8TwYWTQLPt=r9eDw@mail.gmail.com>
-Content-Language: fr, en-US
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <CA+h8R2qm2i94fcggkXvScyv9unAWa6S6pF8TwYWTQLPt=r9eDw@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1690533466; x=1691138266;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=OoybO3FDoS9NATRnz4alpjSo3xCH+VaVcL3kXjRSPqU=;
- b=B8/t9xr8sPiDq+3HKzeLuLfs/5DoqZjOBklWkLNoby9ZftqO5m3K0MLwIyddgqEDzF
- 9FfTSNpcRw9XdTwUqUqRb7vi+2lq/r0ErfFl8vzexi45WNcI2pXsED6MAxGS8xR4qKi7
- shbPGVBpyHuw8TrYLYDe5JeE4dH/K5wLvHwsGvrM5iqOhHjWFz+UuOSMz0BiQH/AIN3J
- Z7IGdCewlng/VCRKOkbpw0l5DzJejhczU2lAesurovlnVXaztU5G7pi0RYiviRZra+Op
- 0iz2CkjxdD8ozZpL2JPklhdj3ZI/3Y6Lx2CkIvoh5uos3sq1HVTPweNvQR2a02wnuRgf
- M/7w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
- header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=B8/t9xr8
-Subject: Re: [Buildroot] [PATCH] package/util-linux: bump version to 2.39.1
+Subject: [Buildroot] [PATCH] package/fluent-bit: fix build without c++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,50 +82,194 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, Bernd Kuhls <bernd@kuhls.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQ2hyaXN0aWFuLAoKTGUgMjgvMDcvMjAyMyDDoCAwNjoyNCwgQ2hyaXN0aWFuIFN0ZXdh
-cnQgYSDDqWNyaXTCoDoKPiBSb21haW4sCj4gCj4gT24gVGh1LCBKdWwgMjcsIDIwMjMgYXQgMjoz
-M+KAr1BNIENocmlzdGlhbiBTdGV3YXJ0IDxjaHJpc3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+
-PiBPbiBUaHUsIEp1bCAyNywgMjAyMyBhdCAyOjIw4oCvUE0gQ2hyaXN0aWFuIFN0ZXdhcnQgPGNo
-cmlzdGlhbkBhcGVydHVyZS51cz4gd3JvdGU6Cj4+PiBPbiBUaHUsIEp1bCAyNywgMjAyMyBhdCAx
-OjQ34oCvUE0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+IHdyb3RlOgo+Pj4+
-IEl0IHNlZW1zIHRoZSBnbyBib290c3RyYXAgZG9lc24ndCB3b3JrIGV2ZW4gYWZ0ZXIgR28gMS4y
-MC54IG1lcmdlLAo+Pj4+IHNlZSBbMV0KPiAKPj4+IFdpbGwgY2hlY2sgaW50byB3aHkgdGhpcyBD
-SSBqb2IgZmFpbGVkIHJpZ2h0IGF3YXkuCj4gCj4+Pgo+Pj4+Pj4+IGhvc3QtZ28gMS4yMC42IEJ1
-aWxkaW5nCj4+Pj4gLi4uCj4+Pj4gQnVpbGRpbmcgR28gdG9vbGNoYWluMSB1c2luZyBbLi4uXXRl
-c3Qtb3V0cHV0L1Rlc3RNZW5kZXIvaG9zdC9saWIvZ28tMS4xOS4xMC4KPj4+PiBlcnJvciBvYnRh
-aW5pbmcgVkNTIHN0YXR1czogZXhpdCBzdGF0dXMgMTI4Cj4+Pj4gICAgICAgICBVc2UgLWJ1aWxk
-dmNzPWZhbHNlIHRvIGRpc2FibGUgVkNTIHN0YW1waW5nLgo+Pj4+Cj4+Pj4gWzFdIGh0dHBzOi8v
-Z2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNDcyNTE4NjUyNQo+IAo+
-IEl0IHRvb2sgbWUgYSBsb25nIHRpbWUgdG8gZmluZCBhIHJlcHJvZHVjdGlvbiBmb3IgdGhpcyBp
-c3N1ZSwKCk1heWJlIGp1c3QgcnVuIHV0aWxzL2RvY2tlci1ydW4gd2l0aCBzdXBwb3J0L3Rlc3Rp
-bmcvcnVuLXRlc3RzIHRvIHJlcHJvZHVjZSB0aGUKaXNzdWUgd2l0aCB0aGUgc2FtZSBlbnZpcm9u
-bWVudCBhcyB0aGUgZ2l0bGFiLWNpIGpvYiA/Cgo+IAo+IEkgZmluYWxseSB0cmFjZWQgaXQ6IGlm
-IHRoZXJlIGlzIGFuIGludmFsaWQgLmdpdCBpbiBhbnkgcGFyZW50Cj4gZGlyZWN0b3J5IG9mIHRo
-ZSBHT1JPT1RfQk9PVFNUUkFQLCB0aGUgYnVpbGQgd2lsbCBmYWlsLiBSZXByb2R1Y3Rpb246Cj4g
-Cj4gYGBgCj4gIyBUaGlzIHJlcHJvZHVjdGlvbiBzZXRzIHVwIGEgZGlyZWN0b3J5IHN0cnVjdHVy
-ZSB0aGF0IGJyZWFrcyBHbyBtYWtlLmJhc2guCj4gIyBtYWtlLmJhc2ggc2hvdWxkIG5vdCBicmVh
-ayBkdWUgdG8gLmdpdCBmaWxlcyBvdXRzaWRlIG9mIHRoZSBHbyBzb3VyY2VzLgo+ICMKPiAjIFRo
-ZSBlcnJvciBzcGVjaWZpY2FsbHkgb2NjdXJzIHdoZW4gYW4gaW52YWxpZCAuZ2l0IGlzIHByZXNl
-bnQgaW4gYSBwYXJlbnQgZ2l0Cj4gIyBkaXJlY3Rvcnkgb2YgdGhlIEdPUk9PVF9CT09UU1RSQVAu
-IEdvIGlzc3VlICM2MTYyMAo+IG1rZGlyIGdvLWlzc3VlLTYxNjIwCj4gY2QgLi9nby1pc3N1ZS02
-MTYyMAo+IHdnZXQgaHR0cHM6Ly9nby5kZXYvZGwvZ28xLjE5LjExLnNyYy50YXIuZ3oKPiBta2Rp
-ciBnby1ib290c3RyYXAKPiB0YXIgLXhmIGdvMS4xOS4xMS5zcmMudGFyLmd6IC1DIC4vZ28tYm9v
-dHN0cmFwIC0tc3RyaXAtY29tcG9uZW50cz0xCj4gY2QgLi9nby1ib290c3RyYXAvc3JjLwo+IGJh
-c2ggbWFrZS5iYXNoCj4gY2QgLi4vLi4vCj4gd2dldCBodHRwczovL2dvLmRldi9kbC9nbzEuMjAu
-Ni5zcmMudGFyLmd6Cj4gbWtkaXIgZ28KPiB0YXIgLXhmIGdvMS4yMC42LnNyYy50YXIuZ3ogLUMg
-Li9nby8gLS1zdHJpcC1jb21wb25lbnRzPTEKPiBwcmludGYgImdpdGRpcjogLi4vLi4vZG9lcy9u
-b3QvZXhpc3QvLmdpdCIgPiAuLy5naXQKPiBjZCAuL2dvL3NyYy8KPiBHT1JPT1RfQk9PVFNUUkFQ
-PSQocHdkKS8uLi8uLi9nby1ib290c3RyYXAvIGJhc2ggbWFrZS5iYXNoCj4gIyBCdWlsZCBmYWls
-cyB1c2luZyAtYnVpbGR2Y3M9ZmFsc2UgZXJyb3JzLgo+IGBgYAo+IAo+IFN1Ym1pdHRlZCB0byB0
-aGUgZ28gaXNzdWUgdHJhY2tlcjogaHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy9nby9pc3N1ZXMv
-NjE2MjAKCk5pY2UhCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gCj4gQmVzdCByZWdhcmRzLAo+
-IENocmlzdGlhbiBTdGV3YXJ0CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+FLB_{IN,OUT}_KAFKA is enabled by default since v2.1.5,
+causing compile errors if no c++ support.
+
+These patches allow the Kafka plugin to be build without C++.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/d63/d638390da721eb3bdfcc7a4229114b492aaead99/
+ - http://autobuild.buildroot.net/results/709/70960056479eab860e94eed993566fcb78c4dbbe/
+ - http://autobuild.buildroot.net/results/366/3667126ee954f927f83ccfbaae3c6fb8ebd07dbb/
+ - http://autobuild.buildroot.net/results/9bd/9bd090216b9a8005fc3d020a9c0adf5e825bea59/
+ - ...
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+ ...MakeLists.txt-allow-compilation-with.patch | 117 ++++++++++++++++++
+ ...isable-cxx-support-for-librdkafka-77.patch |  29 +++++
+ 2 files changed, 146 insertions(+)
+ create mode 100644 package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
+ create mode 100644 package/fluent-bit/0003-CMakeLists.txt-disable-cxx-support-for-librdkafka-77.patch
+
+diff --git a/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch b/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
+new file mode 100644
+index 0000000000..a315fbf7ef
+--- /dev/null
++++ b/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
+@@ -0,0 +1,117 @@
++From d5492ae7a0fa4e2c19b1d091ad28133fed53d8e2 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas.devoogdt@barco.com>
++Date: Tue, 25 Jul 2023 09:10:41 +0200
++Subject: [PATCH] lib: librdkafka: CMakeLists.txt: allow compilation without
++ CXX support #7741
++
++e.g. fluent-bit is a c-only library, so allow compilation without cxx
++
++Upstream: https://github.com/confluentinc/librdkafka/pull/4366
++Upstream: https://github.com/fluent/fluent-bit/pull/7765
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ lib/librdkafka-2.1.0/CMakeLists.txt          | 18 ++++++++++--
++ lib/librdkafka-2.1.0/examples/CMakeLists.txt | 30 +++++++++++++-------
++ 2 files changed, 35 insertions(+), 13 deletions(-)
++
++diff --git a/lib/librdkafka-2.1.0/CMakeLists.txt b/lib/librdkafka-2.1.0/CMakeLists.txt
++index 7f3dd0fc6..c1ee93062 100644
++--- a/lib/librdkafka-2.1.0/CMakeLists.txt
+++++ b/lib/librdkafka-2.1.0/CMakeLists.txt
++@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 3.2)
++ include("packaging/cmake/parseversion.cmake")
++ parseversion("src/rdkafka.h")
++ 
++-project(RdKafka VERSION ${RDKAFKA_VERSION})
+++project(RdKafka VERSION ${RDKAFKA_VERSION} LANGUAGES C)
+++
+++option(RDKAFKA_BUILD_CXX "Enable CXX support" ON)
+++if(RDKAFKA_BUILD_CXX)
+++  enable_language(CXX)
+++endif()
++ 
++ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/packaging/cmake/Modules/")
++ 
++@@ -181,7 +186,11 @@ endif()
++ 
++ option(RDKAFKA_BUILD_STATIC "Build static rdkafka library" OFF)
++ option(RDKAFKA_BUILD_EXAMPLES "Build examples" ON)
++-option(RDKAFKA_BUILD_TESTS "Build tests" ON)
+++
+++if(RDKAFKA_BUILD_CXX)
+++    option(RDKAFKA_BUILD_TESTS "Build tests" ON)
+++endif()
+++
++ if(WIN32)
++     option(WITHOUT_WIN32_CONFIG "Avoid including win32_config.h on cmake builds" ON)
++ endif(WIN32)
++@@ -279,7 +288,10 @@ install(
++ )
++ 
++ add_subdirectory(src)
++-add_subdirectory(src-cpp)
+++
+++if(RDKAFKA_BUILD_CXX)
+++  add_subdirectory(src-cpp)
+++endif()
++ 
++ if(RDKAFKA_BUILD_EXAMPLES)
++   add_subdirectory(examples)
++diff --git a/lib/librdkafka-2.1.0/examples/CMakeLists.txt b/lib/librdkafka-2.1.0/examples/CMakeLists.txt
++index bbbb89ad9..51b8b04be 100644
++--- a/lib/librdkafka-2.1.0/examples/CMakeLists.txt
+++++ b/lib/librdkafka-2.1.0/examples/CMakeLists.txt
++@@ -5,8 +5,10 @@ endif(WIN32)
++ add_executable(producer producer.c ${win32_sources})
++ target_link_libraries(producer PUBLIC rdkafka)
++ 
++-add_executable(producer_cpp producer.cpp ${win32_sources})
++-target_link_libraries(producer_cpp PUBLIC rdkafka++)
+++if(RDKAFKA_BUILD_CXX)
+++    add_executable(producer_cpp producer.cpp ${win32_sources})
+++    target_link_libraries(producer_cpp PUBLIC rdkafka++)
+++endif()
++ 
++ add_executable(consumer consumer.c ${win32_sources})
++ target_link_libraries(consumer PUBLIC rdkafka)
++@@ -14,14 +16,20 @@ target_link_libraries(consumer PUBLIC rdkafka)
++ add_executable(rdkafka_performance rdkafka_performance.c ${win32_sources})
++ target_link_libraries(rdkafka_performance PUBLIC rdkafka)
++ 
++-add_executable(rdkafka_example_cpp rdkafka_example.cpp ${win32_sources})
++-target_link_libraries(rdkafka_example_cpp PUBLIC rdkafka++)
+++if(RDKAFKA_BUILD_CXX)
+++    add_executable(rdkafka_example_cpp rdkafka_example.cpp ${win32_sources})
+++    target_link_libraries(rdkafka_example_cpp PUBLIC rdkafka++)
+++endif()
++ 
++-add_executable(rdkafka_complex_consumer_example_cpp rdkafka_complex_consumer_example.cpp ${win32_sources})
++-target_link_libraries(rdkafka_complex_consumer_example_cpp PUBLIC rdkafka++)
+++if(RDKAFKA_BUILD_CXX)
+++    add_executable(rdkafka_complex_consumer_example_cpp rdkafka_complex_consumer_example.cpp ${win32_sources})
+++    target_link_libraries(rdkafka_complex_consumer_example_cpp PUBLIC rdkafka++)
+++endif()
++ 
++-add_executable(openssl_engine_example_cpp openssl_engine_example.cpp ${win32_sources})
++-target_link_libraries(openssl_engine_example_cpp PUBLIC rdkafka++)
+++if(RDKAFKA_BUILD_CXX)
+++    add_executable(openssl_engine_example_cpp openssl_engine_example.cpp ${win32_sources})
+++    target_link_libraries(openssl_engine_example_cpp PUBLIC rdkafka++)
+++endif()
++ 
++ add_executable(misc misc.c ${win32_sources})
++ target_link_libraries(misc PUBLIC rdkafka)
++@@ -35,6 +43,8 @@ if(NOT WIN32)
++     add_executable(rdkafka_complex_consumer_example rdkafka_complex_consumer_example.c)
++     target_link_libraries(rdkafka_complex_consumer_example PUBLIC rdkafka)
++ 
++-    add_executable(kafkatest_verifiable_client kafkatest_verifiable_client.cpp)
++-    target_link_libraries(kafkatest_verifiable_client PUBLIC rdkafka++)
+++    if(RDKAFKA_BUILD_CXX)
+++        add_executable(kafkatest_verifiable_client kafkatest_verifiable_client.cpp)
+++        target_link_libraries(kafkatest_verifiable_client PUBLIC rdkafka++)
+++    endif()
++ endif(NOT WIN32)
++-- 
++2.34.1
++
+diff --git a/package/fluent-bit/0003-CMakeLists.txt-disable-cxx-support-for-librdkafka-77.patch b/package/fluent-bit/0003-CMakeLists.txt-disable-cxx-support-for-librdkafka-77.patch
+new file mode 100644
+index 0000000000..0022d5929c
+--- /dev/null
++++ b/package/fluent-bit/0003-CMakeLists.txt-disable-cxx-support-for-librdkafka-77.patch
+@@ -0,0 +1,29 @@
++From f5303533fb64bf038dbd8203ac52d94819346239 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas.devoogdt@barco.com>
++Date: Tue, 25 Jul 2023 10:00:36 +0200
++Subject: [PATCH] CMakeLists.txt: disable cxx support for librdkafka #7741
++
++Fluent-bit is c only, so no need to compile cxx.
++This fixes also a compile error in buildroot.
++
++Upstream: https://github.com/fluent/fluent-bit/pull/7765/commits
++Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++---
++ CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index df6b283cf..10e6071f3 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -967,6 +967,7 @@ if(FLB_BACKTRACE)
++ endif()
++ 
++ if(FLB_IN_KAFKA OR FLB_OUT_KAFKA)
+++    FLB_OPTION(RDKAFKA_BUILD_CXX      Off)
++     FLB_OPTION(RDKAFKA_BUILD_STATIC    On)
++     FLB_OPTION(RDKAFKA_BUILD_EXAMPLES Off)
++     FLB_OPTION(RDKAFKA_BUILD_TESTS    Off)
++-- 
++2.34.1
++
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
