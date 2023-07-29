@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F450C001E0
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 08:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A505C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 08:59:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07CC581DF7;
-	Sat, 29 Jul 2023 08:58:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07CC581DF7
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5B5381D73;
+	Sat, 29 Jul 2023 08:59:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5B5381D73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0CfKngKAEOzu; Sat, 29 Jul 2023 08:58:58 +0000 (UTC)
+	with ESMTP id XAD-p6pWgkph; Sat, 29 Jul 2023 08:59:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E99081C0A;
-	Sat, 29 Jul 2023 08:58:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E99081C0A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 56E671BF869
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B9FE82F06;
+	Sat, 29 Jul 2023 08:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B9FE82F06
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A59C91BF3FC
  for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 08:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 307626079B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B558410D8
  for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 08:58:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 307626079B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B558410D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7p_3kljwu_de for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o936Xvs7cEhE for <buildroot@lists.busybox.net>;
  Sat, 29 Jul 2023 08:58:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3128B6076C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 39EDD410D7
  for <buildroot@buildroot.org>; Sat, 29 Jul 2023 08:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3128B6076C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39EDD410D7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E2C283685; Sat, 29 Jul 2023 08:58:42 +0000 (UTC)
+ id 274D083687; Sat, 29 Jul 2023 08:58:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 29 Jul 2023 10:57:42 +0200
+Date: Sat, 29 Jul 2023 10:58:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8147e27cdac8f998ec6644a09ce4e8d62b6433c
-X-Git-Newrev: 9414a7ee3baabfb1c1ac7c5e748ebcaaf46d49be
+X-Git-Oldrev: 9414a7ee3baabfb1c1ac7c5e748ebcaaf46d49be
+X-Git-Newrev: 36d275f695936b7a54738c0354572944c1f08d87
 X-Patchwork-Hint: ignore
-Message-Id: <20230729085842.1E2C283685@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dbus: bump to version 1.14.8
+Message-Id: <20230729085842.274D083687@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: bump to version 254
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,146 +63,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9414a7ee3baabfb1c1ac7c5e748ebcaaf46d49be
+commit: https://git.buildroot.net/buildroot/commit/?id=36d275f695936b7a54738c0354572944c1f08d87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also apply system.conf and session.conf updates to dbus-broker.
+README.md hash changed due to syntax fix:
+https://github.com/systemd/systemd-stable/commit/49ddb4757b197b303309b0dcdfc5f858f4b8e168
 
-License file is changed due to:
+Remove no longer supported/required valgrind config option.
 
--D-Bus is licensed to you under your choice of the Academic Free
-+dbus is licensed to you under your choice of the Academic Free
+Disable new unsupported passwdqc config option.
+
+Disable new unsupported ukify config option.
+
+Disable new unsupported xenctrl config option.
+
+Update systemd-boot config options to new format.
+
+Add new host-python-pyelftools systemd-boot dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-broker/session.conf | 15 +++++++++++++++
- package/dbus-broker/system.conf  | 25 ++++++++++++++++++++++---
- package/dbus/dbus.hash           |  6 +++---
- package/dbus/dbus.mk             |  3 ++-
- 4 files changed, 42 insertions(+), 7 deletions(-)
+ package/systemd/systemd.hash |  4 ++--
+ package/systemd/systemd.mk   | 29 ++++++++++++-----------------
+ 2 files changed, 14 insertions(+), 19 deletions(-)
 
-diff --git a/package/dbus-broker/session.conf b/package/dbus-broker/session.conf
-index e4758fa218..8e9488b1db 100644
---- a/package/dbus-broker/session.conf
-+++ b/package/dbus-broker/session.conf
-@@ -12,6 +12,18 @@
-        the behavior of child processes. -->
-   <keep_umask/>
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 00c08edcd9..10f4bc04fa 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  cf2d27e67663d599a045101c7178cf0ec63d9df2962a54adf7de0d0357724f00  systemd-252.4.tar.gz
++sha256  18db69c8fc33afebf95a40cfa3769df5f0e4a07bccdebd33b2fd81c8b75e7a02  systemd-254.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+ sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+@@ -12,4 +12,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
+ sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
+ sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
+ sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
+-sha256  da9b2c7b8cd10516fd2c4279b82496ea61787148f13e899c62fc8988c5fac34f  LICENSES/README.md
++sha256  8ccb649d1fc1103e5726612cf303f05d4eb86b7ab46d9f630009dd32e87612e2  LICENSES/README.md
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 63467171ed..0aa1da3fb8 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -19,7 +19,7 @@
+ # - Diff sysusers.d with the previous version
+ # - Diff factory/etc/nsswitch.conf with the previous version
+ #   (details are often sprinkled around in README and manpages)
+-SYSTEMD_VERSION = 252.4
++SYSTEMD_VERSION = 254
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = \
+ 	LGPL-2.1+, \
+@@ -82,6 +82,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dmode=release \
+ 	-Dnspawn-locale='C.UTF-8' \
+ 	-Dnss-systemd=true \
++	-Dpasswdqc=false \
+ 	-Dquotacheck-path=/usr/sbin/quotacheck \
+ 	-Dquotaon-path=/usr/sbin/quotaon \
+ 	-Drootlibdir='/usr/lib' \
+@@ -96,7 +97,9 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dtelinit-path= \
+ 	-Dtests=false \
+ 	-Dtmpfiles=true \
+-	-Dumount-path=/usr/bin/umount
++	-Dukify=false \
++	-Dumount-path=/usr/bin/umount \
++	-Dxenctrl=false
  
-+  <listen>unix:tmpdir=/tmp</listen>
-+
-+  <!-- On Unix systems, the most secure authentication mechanism is
-+  EXTERNAL, which uses credential-passing over Unix sockets.
-+
-+  This authentication mechanism is not available on Windows,
-+  is not suitable for use with the tcp: or nonce-tcp: transports,
-+  and will not work on obscure flavours of Unix that do not have
-+  a supported credentials-passing mechanism. On those platforms/transports,
-+  comment out the <auth> element to allow fallback to DBUS_COOKIE_SHA1. -->
-+  <auth>EXTERNAL</auth>
-+
-   <standard_session_servicedirs />
+ SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_OPTIMIZE_FAST),y)
+@@ -215,13 +218,6 @@ else
+ SYSTEMD_CONF_OPTS += -Dfdisk=false
+ endif
  
-   <policy context="default">
-@@ -23,6 +35,9 @@
-     <allow own="*"/>
-   </policy>
- 
-+  <!-- Include legacy configuration location -->
-+  <include ignore_missing="yes">/etc/dbus-1/session.conf</include>
-+
-   <!-- Config files are placed here that among other things,
-        further restrict the above policy for specific services. -->
-   <includedir>session.d</includedir>
-diff --git a/package/dbus-broker/system.conf b/package/dbus-broker/system.conf
-index 4b17fbd90e..272f92361e 100644
---- a/package/dbus-broker/system.conf
-+++ b/package/dbus-broker/system.conf
-@@ -14,18 +14,33 @@
-   <!-- Our well-known bus type, do not change this -->
-   <type>system</type>
- 
--  <!-- Fork into daemon mode -->
--  <fork/>
+-ifeq ($(BR2_PACKAGE_VALGRIND),y)
+-SYSTEMD_DEPENDENCIES += valgrind
+-SYSTEMD_CONF_OPTS += -Dvalgrind=true
+-else
+-SYSTEMD_CONF_OPTS += -Dvalgrind=false
+-endif
 -
-   <!-- Run as special user -->
-   <user>dbus</user>
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ SYSTEMD_DEPENDENCIES += xz
+ SYSTEMD_CONF_OPTS += -Dxz=true
+@@ -575,13 +571,8 @@ endif
  
-+  <!-- Fork into daemon mode -->
-+  <fork/>
-+
-   <!-- We use system service launching using a helper -->
-   <standard_system_servicedirs/>
+ ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
+ SYSTEMD_INSTALL_IMAGES = YES
+-SYSTEMD_DEPENDENCIES += gnu-efi
+-SYSTEMD_CONF_OPTS += \
+-	-Defi=true \
+-	-Dgnu-efi=true \
+-	-Defi-ld=bfd \
+-	-Defi-libdir=$(STAGING_DIR)/usr/lib \
+-	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
++SYSTEMD_DEPENDENCIES += gnu-efi host-python-pyelftools
++SYSTEMD_CONF_OPTS += -Defi=true -Dbootloader=true
  
-+  <!-- This is a setuid helper that is used to launch system services -->
-+  <servicehelper>/usr/libexec/dbus-daemon-launch-helper</servicehelper>
-+
-+  <!-- Write a pid file -->
-+  <pidfile>/run/messagebus.pid</pidfile>
-+
-   <!-- Enable logging to syslog -->
-   <syslog/>
+ SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
+ define SYSTEMD_INSTALL_BOOT_FILES
+@@ -594,7 +585,7 @@ define SYSTEMD_INSTALL_BOOT_FILES
+ endef
  
-+  <!-- Only allow socket-credentials-based authentication -->
-+  <auth>EXTERNAL</auth>
-+
-+  <!-- Only listen on a local socket. (abstract=/path/to/socket
-+       means use abstract namespace, don't really create filesystem
-+       file; only Linux supports this. Use path=/whatever on other
-+       systems.) -->
-+  <listen>unix:path=/run/dbus/system_bus_socket</listen>
-+
-   <policy context="default">
-     <!-- All users can connect to system bus -->
-     <allow user="*"/>
-@@ -54,6 +69,8 @@
-            send_interface="org.freedesktop.DBus.Introspectable"/>
-     <allow send_destination="org.freedesktop.DBus"
-            send_interface="org.freedesktop.DBus.Properties"/>
-+    <allow send_destination="org.freedesktop.DBus"
-+           send_interface="org.freedesktop.DBus.Containers1"/>
-     <!-- But disallow some specific bus services -->
-     <deny send_destination="org.freedesktop.DBus"
-           send_interface="org.freedesktop.DBus"
-@@ -84,6 +101,8 @@
-            send_interface="org.freedesktop.DBus.Debug.Stats"/>
-   </policy>
+ else
+-SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
++SYSTEMD_CONF_OPTS += -Defi=false -Dbootloader=false
+ endif # BR2_PACKAGE_SYSTEMD_BOOT == y
  
-+  <!-- Include legacy configuration location -->
-+  <include ignore_missing="yes">/etc/dbus-1/system.conf</include>
+ SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+@@ -812,6 +803,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dhibernate=false \
+ 	-Dldconfig=false \
+ 	-Dresolve=false \
++	-Dbootloader=false \
+ 	-Defi=false \
+ 	-Dtpm=false \
+ 	-Denvironment-d=false \
+@@ -826,6 +818,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dhostnamed=false \
+ 	-Dlocaled=false \
+ 	-Dmachined=false \
++	-Dpasswdqc=false \
+ 	-Dportabled=false \
+ 	-Dsysext=false \
+ 	-Dsysupdate=false \
+@@ -868,9 +861,11 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dinitrd=false \
+ 	-Dxdg-autostart=false \
+ 	-Dkernel-install=false \
++	-Dukify=false \
+ 	-Danalyze=false \
+ 	-Dlibcryptsetup=false \
+ 	-Daudit=false \
++	-Dxenctrl=false \
+ 	-Dzstd=false
  
-   <!-- The defaults for these limits are hard-coded in dbus-daemon.
-        Some clarifications:
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 0e48d4dafd..638bb4bc6f 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.28.tar.gz.asc
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.14.8.tar.xz.asc
- # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
--sha256  9da1e3f2b73f75eec0a9e4509d64be43909d1f2853fe809528a0a53984d76420  dbus-1.12.28.tar.gz
-+sha256  a6bd5bac5cf19f0c3c594bdae2565a095696980a683a0ef37cb6212e093bde35  dbus-1.14.8.tar.xz
- 
- # Locally calculated
--sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-+sha256  e61807cd1c32ff4e7bd5b4b61dd21997c6dc5642cf19316124fe38d50e1f9fa3  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 99d2c4301c..930b1a298b 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -6,7 +6,8 @@
- 
- # When updating dbus, check if there are changes in session.conf and
- # system.conf, and update the versions in the dbus-broker package accordingly.
--DBUS_VERSION = 1.12.28
-+DBUS_VERSION = 1.14.8
-+DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.xz
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+ HOST_SYSTEMD_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
