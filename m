@@ -4,65 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0155EC0015E
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 11:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39CC4C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 11:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F5A783B80;
-	Sat, 29 Jul 2023 11:57:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F5A783B80
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA43183B8C;
+	Sat, 29 Jul 2023 11:57:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA43183B8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9_OuQ8Jho0Ni; Sat, 29 Jul 2023 11:57:32 +0000 (UTC)
+	with ESMTP id rW7yTrBdkV89; Sat, 29 Jul 2023 11:57:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD13183AD2;
-	Sat, 29 Jul 2023 11:57:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD13183AD2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 34DE083B38;
+	Sat, 29 Jul 2023 11:57:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34DE083B38
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 986921BF82C
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:57:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9F2B61BF82C
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 66ED84044A
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66ED84044A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7980840182
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:57:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7980840182
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bxIlWO67IL-3 for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 11:57:07 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3B2F240182
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 11:57:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B2F240182
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 196C7FF802;
- Sat, 29 Jul 2023 11:57:03 +0000 (UTC)
-Date: Sat, 29 Jul 2023 13:57:03 +0200
+ with ESMTP id NHG_nvRsV_UQ for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 11:57:52 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84854400C8
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 11:57:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84854400C8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1899F1C0004;
+ Sat, 29 Jul 2023 11:57:48 +0000 (UTC)
+Date: Sat, 29 Jul 2023 13:57:47 +0200
 To: Maksim Kiselev <bigunclemax@gmail.com>
-Message-ID: <20230729135703.4675de90@windsurf>
-In-Reply-To: <20230516082340.1375834-1-bigunclemax@gmail.com>
+Message-ID: <20230729135747.24539c4b@windsurf>
+In-Reply-To: <20230516082340.1375834-2-bigunclemax@gmail.com>
 References: <20230516082340.1375834-1-bigunclemax@gmail.com>
+ <20230516082340.1375834-2-bigunclemax@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690631824;
+ d=bootlin.com; s=gm1; t=1690631869;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=6dgeXhCAQ0MwDhDx7AoTDcC5pUBrUHGmsBe3EEeaufY=;
- b=HcwJNyjmSqt1YTKzqKJJZVYIUhUflbzmBRxW8A1S1w1LGMzClYnh6hytg5EZHQJphpY0V+
- 20xIf4ww3EHGHi50EB0iAQTrW+wRT62lKo4CYhx3q0ma/qWZQpZ6ELT4gcuZ8rCnLrkb37
- 3jqu0dDCVvmJqfCxY3H49XaZZPA0H7SSg/Ux9Kd9eEBmnuVNWXkO13Ca7ElC3OtXocBuDx
- DISV8iKI/NnNwuW2Qg9Km2+cQjF3lUBUTJwAmCSopCz4ZcR5hofGJajY034fDGwidaK6YT
- O2ZY6ErblXORfWHyUrpiaD3naNVhduVUPeaegutpfdXhXbehc/oAvInuUoe7QA==
+ bh=SqvtKio5qesWiL3gBxoC2gqFiLR/nR7mYddlx7tuinQ=;
+ b=KtDP9uxq87plEsP//BnvcrNUbzEmLksWcVG9kkIK1uHxep63jP4JcFmuynWFz9l7/oK9+f
+ Fiano9GKbWI6f6vtgQQEBaxaNcpX6hUPIplxAQVYznHUacWix2VEtTlhE90Y3nP1XSI2gP
+ jQBrHM/3zT7qpUL5uXy3Be4Bdl9ha+zG1G7Kr9up1uUOUAxBlTZpJ+FIXJwl9crvu5tdSv
+ SPErQB3T3RtcsQAiKx/mu3Q11ACtIVxc930xLYuFiWJq98b46eSi5OqUrsh3DrqkirINbW
+ 9miv9xhghlZonbmlBSa2ZLZbYyX1ZiqLVuMZJ66COtk9uFkq3Hp1Bs5LbOOseQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HcwJNyjm
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/fio: bump to version 3.34
+ header.s=gm1 header.b=KtDP9uxq
+Subject: Re: [Buildroot] [PATCH v1 2/2] package/fio: add optional libiscsi
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,21 +84,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 16 May 2023 11:23:39 +0300
+On Tue, 16 May 2023 11:23:40 +0300
 Maksim Kiselev <bigunclemax@gmail.com> wrote:
 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> ---
->  package/fio/fio.hash | 2 +-
->  package/fio/fio.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Since commit 247ef2a fio has optional libiscsi engine support
+> 
+> This patch enables fio iscsi support if BR2_PACKAGE_LIBISCSI
+> was selected
 
-Applied to master, thanks.
+As pkg-config is used by the configure script to detect how to
+compile/link against libiscsi, I've added host-pkgconf to the
+dependencies when BR2_PACKAGE_LIBISCSI=y. I also updated a bit the
+commit log to explain why we don't pass --disable-libiscsi.
+
+Applied with those changes, thanks a lot!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
