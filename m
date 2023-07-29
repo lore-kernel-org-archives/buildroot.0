@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25C6EC0015E
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 18:03:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05B94C001DC
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 20:27:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B1B140121;
-	Sat, 29 Jul 2023 18:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B1B140121
+	by smtp2.osuosl.org (Postfix) with ESMTP id 52E1640B96;
+	Sat, 29 Jul 2023 20:27:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52E1640B96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e3pQqCFl1dok; Sat, 29 Jul 2023 18:03:00 +0000 (UTC)
+	with ESMTP id Xz33J32vIaBj; Sat, 29 Jul 2023 20:27:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6996440469;
-	Sat, 29 Jul 2023 18:02:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6996440469
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85F1E404B9;
+	Sat, 29 Jul 2023 20:27:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85F1E404B9
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B77FA1BF3C2
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 18:02:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 166811BF576
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 20:27:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E1A481DEA
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 18:02:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E1A481DEA
+ by smtp1.osuosl.org (Postfix) with ESMTP id F154E81D65
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 20:27:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F154E81D65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iQ6302O_ruxg for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 18:02:55 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 54B8081DE2
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 18:02:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54B8081DE2
-Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 908A4A4C0824;
- Sat, 29 Jul 2023 20:02:51 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35118)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qPoHD-000654-0j;
- Sat, 29 Jul 2023 20:02:51 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+ with ESMTP id EmYBpg0z0uWV for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 20:27:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3B6D81ABB
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 20:27:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3B6D81ABB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D04EF83AFF; Sat, 29 Jul 2023 20:27:40 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 29 Jul 2023 20:02:50 +0200
-Message-Id: <20230729180250.1494674-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1690653771;
- bh=Iu3ByJMjaR0OUjxYGTiIwhqY0h0rRaK33uJ4JBtbfYE=;
- h=From:To:Cc:Subject:Date:From;
- b=XxEo6Pxi6CJ98QpARDxXZRrwsWo4+6waxjWYE71K5CR4ODdFZUjynFrWuTtK0HNb/
- bWVn/lqb4/oiFfYfwhGBUP8mj5sIkfOEB0BhrDjLCneVWvY+Lnk97QI1QHN5pnHO8Z
- P1nWW6PLkx4SokUeVxsrM9Y9Bs5SEhZUIVRfMOKi0bL4oD4YpGjcOmPlUZW/O01c80
- PkBYmVneG7sh+2TvAVjtzM0ofPx0fy+4vmq7+PJmwUQuJNc+DtbExW9K9oANCxS+e4
- LKzh0LXs6/Oup6nWQegM8ZKBu1gzyu2Nd5kHgMma2Orc+vw4is6Foed6s3rGs40bUT
- LAik6hegPQucQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=XxEo6Pxi
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: rework dri3 handling
+Date: Sat, 29 Jul 2023 22:26:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 90790790925c5d456ce7585afdf6e42aa25fd9ea
+X-Git-Newrev: 172e07029857a8087a70596b3a75dcc45e6a1dd8
+X-Patchwork-Hint: ignore
+Message-Id: <20230729202740.D04EF83AFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libglu: bump version to 9.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,160 +56,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
- Romain Naour <romain.naour@gmail.com>, Peter Seiderer <ps.report@gmx.net>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=172e07029857a8087a70596b3a75dcc45e6a1dd8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While fixing a build error
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-July/000725.html
 
-../src/egl/drivers/dri2/platform_x11.c: In function 'dri2_x11_get_msc_rate':
-../src/egl/drivers/dri2/platform_x11.c:1229:44:
- error: 'struct dri2_egl_display' has no member named 'screen_resources'
-
-with this defconfig:
-
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-
-(crocus and i915 drivers are also affected) it turns out that we can
-assume the need for dri3 support when X.org is enabled as a hard depen-
-dency even if mesa3d's configure does not throw errors when missing,
-like for the Intel drivers.
-
-Before this patch these Config.in options were used:
-
-config BR2_PACKAGE_MESA3D_DRI3
-  select BR2_PACKAGE_XLIB_LIBXSHMFENCE
-select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-
-which can be translated into:
-
-select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
-
-and used at option BR2_PACKAGE_MESA3D_DRIVER.
-
-Configure option -Ddri3=enabled is passed to mesa3d when at least one
-driver is enabled along with X.org:
-ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
+Upstream dropped autoconf, switch to meson.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mesa3d/Config.in | 14 ++------------
- package/mesa3d/mesa3d.mk |  4 +---
- 2 files changed, 3 insertions(+), 15 deletions(-)
+ package/libglu/libglu.hash | 6 +++---
+ package/libglu/libglu.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index c7ee2a8db0..542d57e72c 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -56,11 +56,7 @@ config BR2_PACKAGE_MESA3D_OPENCL
- 	select BR2_PACKAGE_LIBCLC
- 	select BR2_PACKAGE_HAS_LIBOPENCL
+diff --git a/package/libglu/libglu.hash b/package/libglu/libglu.hash
+index 234b58dd63..17d018ac66 100644
+--- a/package/libglu/libglu.hash
++++ b/package/libglu/libglu.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-June/000634.html
+-sha256  6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4  glu-9.0.2.tar.xz
+-sha512  2517d7406bb643d12c017a95dcb5d8716f307344332638bcbdf274a90752a7c22165d34745f1b082ed916bb07d40e62d1d1d67d96426225be63166f3480d6f64  glu-9.0.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-July/000725.html
++sha256  bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f  glu-9.0.3.tar.xz
++sha512  b2781059c0e176192c3fc0d7244645020937a463311171efddb9f35fb94ee43faabcf627fa7f429d48fceaf6dd9c5adb69c86c7a21ec4ea490f4ab143d52e3ba  glu-9.0.3.tar.xz
+ # locally computed
+ sha256  3a9992ccc9d672cfdd07ea862431d943a992d04836570c638a733bf15ec62c54  include/GL/glu.h
+diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
+index 8820e75d8b..b30187884a 100644
+--- a/package/libglu/libglu.mk
++++ b/package/libglu/libglu.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
--# inform the .mk file of gallium, dri, dri3 or vulkan driver selection
--config BR2_PACKAGE_MESA3D_DRI3
--	bool
--	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
--
-+# inform the .mk file of gallium or vulkan driver selection
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	bool
- 	select BR2_PACKAGE_MESA3D_DRIVER
-@@ -71,6 +67,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+-LIBGLU_VERSION = 9.0.2
++LIBGLU_VERSION = 9.0.3
+ LIBGLU_SITE = https://mesa.freedesktop.org/archive/glu
+ LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.xz
+ LIBGLU_LICENSE = SGI-B-2.0
+ LIBGLU_LICENSE_FILES = include/GL/glu.h
+ LIBGLU_INSTALL_STAGING = YES
+ LIBGLU_DEPENDENCIES = libgl host-pkgconf
++LIBGLU_CONF_OPTS = -Dgl_provider=gl
  
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
-+	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XORG7
- 
- # Gallium xa state tracker.
- # Quote from mesa3d meson.build: "XA state tracker requires at least
-@@ -103,7 +100,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 	bool "Gallium Etnaviv driver"
- 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_ETNAVIV
- 	help
-@@ -117,7 +113,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- 	# can't see is just spurious. However, that dependency is about
- 	# the toolchain having sync4 primitives, which is always a given
- 	# for arm/aarch64.
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_FREEDRENO
- 	help
-@@ -141,7 +136,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
- 	bool "Gallium lima driver"
- 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  Mesa driver for ARM Mali Utgard GPUs.
-@@ -158,7 +152,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
- 	bool "Gallium panfrost driver"
- 	depends on (BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_RISCV_32) || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
-@@ -247,7 +240,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- 	bool "Gallium v3d driver"
- 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4 # runtime
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-@@ -263,7 +255,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_VC4
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-@@ -305,7 +296,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
--	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6fa5c1c686..73f3b06518 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -35,11 +35,9 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
- MESA3D_CONF_OPTS += -Db_asneeded=false
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
- MESA3D_CONF_OPTS += -Ddri3=enabled
--ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
- MESA3D_DEPENDENCIES += xlib_libxshmfence
--endif
- else
- MESA3D_CONF_OPTS += -Ddri3=disabled
- endif
--- 
-2.39.2
-
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
