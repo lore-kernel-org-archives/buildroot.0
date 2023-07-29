@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E560C00528
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 21:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBA6DC001DC
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 21:39:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07E5880C98;
-	Sat, 29 Jul 2023 21:38:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07E5880C98
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4963F81341;
+	Sat, 29 Jul 2023 21:39:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4963F81341
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 52pulilFIPDA; Sat, 29 Jul 2023 21:38:45 +0000 (UTC)
+	with ESMTP id 0pHYpzRUvA2u; Sat, 29 Jul 2023 21:39:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B87280E64;
-	Sat, 29 Jul 2023 21:38:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B87280E64
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7F0B41BF3C1
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:38:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 966EF812AC;
+	Sat, 29 Jul 2023 21:39:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 966EF812AC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 71ACF1BF3C1
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B043180061
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:38:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B043180061
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C1CF40951
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:39:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C1CF40951
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F6zF61SPLRsI for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 21:38:28 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B70B081ADE
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 21:38:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B70B081ADE
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D44183B50; Sat, 29 Jul 2023 21:38:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 29 Jul 2023 23:35:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2a2fb01c4a3e757173c87511c7a3ed2fefcd26c
-X-Git-Newrev: 7c43f9d4a14f311ee1cad334401d84135af4807e
-X-Patchwork-Hint: ignore
-Message-Id: <20230729213828.9D44183B50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/glslsandbox-player: bump to
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id d0S1ZbMLWbVC for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 21:39:35 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 086754089D
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 21:39:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 086754089D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 362D7FF802;
+ Sat, 29 Jul 2023 21:39:28 +0000 (UTC)
+Date: Sat, 29 Jul 2023 23:39:27 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230729233927.572fd26c@windsurf>
+In-Reply-To: <20230607202439.188050-1-ju.o@free.fr>
+References: <20230607202439.188050-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690666773;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=QD/oiMGyoPfBtVNXeUEDSMWhDWe4QDZqZcpvJThRT6s=;
+ b=NOmdmdTRTNKMbKr9E28207zzl5B6nf5WBWLJnrjun5xLMXE6bTyx8biMl9vgBS8AONaSgu
+ lpYIzGdgnbH+dwBgvt26CYE5mKFke8hF1PaPZx1MNsbQ/DwIiUxK1FQ2udUCeIXEEP9JJp
+ F+UuugOH/rJ4echp3MFPe07dHfJdxQ4/kAvXpBNaGZEgYbLRuSY3Gd1GG6tQsMCLDF0rGG
+ aMAJHV++fZcjgepQYLtBJBdZ0JyYG78Cmn29YvfjdT8bjhFNPaY1GMMYToxBxbj1uA6O9U
+ Dr5ZhEnt1uWUrXp4PuXSIyGdoZyzF5VfmChab7ZhaSrXH5f6GfiC0qRqOC3DkA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=NOmdmdTR
+Subject: Re: [Buildroot] [PATCH 1/2] package/glslsandbox-player: bump to
  version v2023.04.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,47 +77,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c43f9d4a14f311ee1cad334401d84135af4807e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Julien,
 
-License hash changed due to copyright year update.
+On Wed,  7 Jun 2023 22:24:38 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/glslsandbox-player/glslsandbox-player.hash | 4 ++--
- package/glslsandbox-player/glslsandbox-player.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> License hash changed due to copyright year update.
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  package/glslsandbox-player/glslsandbox-player.hash | 4 ++--
+>  package/glslsandbox-player/glslsandbox-player.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glslsandbox-player/glslsandbox-player.hash b/package/glslsandbox-player/glslsandbox-player.hash
-index bc8946c62b..91af3c9c75 100644
---- a/package/glslsandbox-player/glslsandbox-player.hash
-+++ b/package/glslsandbox-player/glslsandbox-player.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b4af34889faa6d3a904e980f23aeb720dfb614d50aa01b9b1874fc2ae77dbcf4  glslsandbox-player-2021.08.24.tar.gz
--sha256  970d45d8a3dfd042d303008294f49db8c0c464f7687aa6e28a01b0926e74df85  LICENSE
-+sha256  8adf89f65a060958e6ba2aa52a28f3189fde23b5478958ad4b8b6a7e82007587  glslsandbox-player-2023.04.05.tar.gz
-+sha256  cda47d436d3aeb02d595ddd316d841494926d286327383b5d63734115204a8b2  LICENSE
-diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-index 241f3475d2..0066f43567 100644
---- a/package/glslsandbox-player/glslsandbox-player.mk
-+++ b/package/glslsandbox-player/glslsandbox-player.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLSLSANDBOX_PLAYER_VERSION = 2021.08.24
-+GLSLSANDBOX_PLAYER_VERSION = 2023.04.05
- GLSLSANDBOX_PLAYER_SITE = $(call github,jolivain,glslsandbox-player,v$(GLSLSANDBOX_PLAYER_VERSION))
- GLSLSANDBOX_PLAYER_AUTORECONF = YES
- GLSLSANDBOX_PLAYER_DEPENDENCIES = libegl libgles host-pkgconf
+Both applied to master. Nice to see an OpenGL test case in automated
+tests! I'm curious to understand more how it works:
+
+- How does glslsandboxplayer knows that we want the frames to be
+  generated as .ppm files?
+
+- What role does the DRM vkms driver play in the story?
+
+Thanks for this work!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
