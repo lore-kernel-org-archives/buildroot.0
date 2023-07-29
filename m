@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F22C001E0
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 09:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33100C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 09:01:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B1464190C;
-	Sat, 29 Jul 2023 09:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B1464190C
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1BA041521;
+	Sat, 29 Jul 2023 09:01:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1BA041521
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7_d01Ph8lWin; Sat, 29 Jul 2023 09:00:17 +0000 (UTC)
+	with ESMTP id CLJLQmE5cYo0; Sat, 29 Jul 2023 09:01:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEE4C41B67;
-	Sat, 29 Jul 2023 09:00:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEE4C41B67
+	by smtp4.osuosl.org (Postfix) with ESMTP id 892B041999;
+	Sat, 29 Jul 2023 09:01:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 892B041999
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 223571BF3FC
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 09:00:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 284961BF3FC
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 09:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B301241966
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 09:00:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B301241966
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C9D541999
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 09:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C9D541999
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dqm7b863HWHh for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 09:00:02 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6BC1C41961
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 09:00:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BC1C41961
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5265C60008;
- Sat, 29 Jul 2023 09:00:00 +0000 (UTC)
-Date: Sat, 29 Jul 2023 10:59:59 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230729105959.3a10d419@windsurf>
-In-Reply-To: <20230728193417.97338-1-james.hilliard1@gmail.com>
-References: <20230728193417.97338-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690621200;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YUrHGdytsVjfMlwaagqfqiTR+IA0AkHM9dLOL4khMcA=;
- b=ewXeIDteUboeqbQezWyTNfXDeFqWEsLVmwnIhcXzSIBgC0LpP2XtojKqKFwSHOtt/eLaY1
- QAcZanNaNHR1xUPUyfhaIVFB6cgQf+bJO8Wv02DD5ddE40XylaQKkI6pooPIMzYtABozjU
- 6uNXhyoyrkxn7YSOmkrtuzkAO82QsJc0c+9GecrCFHp1fzMnXKQuw+kiTCtFSX4SyXu0S0
- 7n9TlSfPJfyptcCBAmbShMSIyw1k2WmBBF+g79Q+daxGWyG8b/l2HFYQOdrK+bbj/+DRNd
- jdUrF/fF9HK2v+T+AYP5GpxPHQXSzQxfotDEWqIygxBYRWEgj9UoHjNxWiNwhg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ewXeIDte
-Subject: Re: [Buildroot] [PATCH 1/1] package/weston: don't select seatd
- daemon if we have logind
+ with ESMTP id Q6x5tokODOKg for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 09:01:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EAF941521
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 09:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EAF941521
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8DBA883798; Sat, 29 Jul 2023 09:01:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 29 Jul 2023 11:00:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9d6f966f9ad012879bb472896eb35eeda5baa9ab
+X-Git-Newrev: d0e2e420c9cc4f05f7c8c0ca5bfb09fa5263bb69
+X-Patchwork-Hint: ignore
+Message-Id: <20230729090110.8DBA883798@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: override the EDK2 CPU
+ hotplug bug check
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +58,99 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 28 Jul 2023 13:34:17 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d0e2e420c9cc4f05f7c8c0ca5bfb09fa5263bb69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> If we are using systemd-logind we shouldn't need the seatd daemon.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/weston/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+In QEMU v5.1.0 up to v7.2.0, the CPU hotplug register block misbehaves.
+EDK2 hang if the bug is detected in Qemu after printing errors to IO port 0x402
+(requires BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL to see them)
 
-Applied to master, thanks.
+The Docker image used by the Buildroot gitlab-ci uses Qemu 5.2.0, the workaround
+can be removed as soon as the Docker image is updated to provided Qemu >= 8.0.0.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://github.com/tianocore/edk2/commit/bf5678b5802685e07583e3c7ec56d883cbdd5da3
+http://lists.busybox.net/pipermail/buildroot/2023-July/670825.html
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4725186190 (TestGrubX8664EFI)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4725186198 (TestGrubi386EFI)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4725186306 (TestIso9660Grub2EFI)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4725186317 (TestIso9660Grub2Hybrid)
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/boot/test_grub.py  | 20 ++++++++++++++++++--
+ support/testing/tests/fs/test_iso9660.py | 11 ++++++++++-
+ 2 files changed, 28 insertions(+), 3 deletions(-)
+
+diff --git a/support/testing/tests/boot/test_grub.py b/support/testing/tests/boot/test_grub.py
+index 2c393f730e..9f3a6a8495 100644
+--- a/support/testing/tests/boot/test_grub.py
++++ b/support/testing/tests/boot/test_grub.py
+@@ -61,7 +61,15 @@ class TestGrubi386EFI(infra.basetest.BRTest):
+     def test_run(self):
+         hda = os.path.join(self.builddir, "images", "disk.img")
+         bios = os.path.join(self.builddir, "images", "OVMF.fd")
+-        self.emulator.boot(arch="i386", options=["-bios", bios, "-hda", hda])
++        # In QEMU v5.1.0 up to v7.2.0, the CPU hotplug register block misbehaves.
++        # EDK2 hang if the bug is detected in Qemu after printing errors to IO port 0x402
++        # (requires BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL to see them)
++        # The Docker image used by the Buildroot gitlab-ci uses Qemu 5.2.0, the workaround
++        # can be removed as soon as the Docker image is updated to provided Qemu >= 8.0.0.
++        # https://github.com/tianocore/edk2/commit/bf5678b5802685e07583e3c7ec56d883cbdd5da3
++        # http://lists.busybox.net/pipermail/buildroot/2023-July/670825.html
++        qemu_fw_cfg = "name=opt/org.tianocore/X-Cpuhp-Bugcheck-Override,string=yes"
++        self.emulator.boot(arch="i386", options=["-bios", bios, "-hda", hda, "-fw_cfg", qemu_fw_cfg])
+         self.emulator.login()
+ 
+         cmd = "modprobe efivarfs"
+@@ -104,7 +112,15 @@ class TestGrubX8664EFI(infra.basetest.BRTest):
+     def test_run(self):
+         hda = os.path.join(self.builddir, "images", "disk.img")
+         bios = os.path.join(self.builddir, "images", "OVMF.fd")
+-        self.emulator.boot(arch="x86_64", options=["-bios", bios, "-hda", hda])
++        # In QEMU v5.1.0 up to v7.2.0, the CPU hotplug register block misbehaves.
++        # EDK2 hang if the bug is detected in Qemu after printing errors to IO port 0x402
++        # (requires BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL to see them)
++        # The Docker image used by the Buildroot gitlab-ci uses Qemu 5.2.0, the workaround
++        # can be removed as soon as the Docker image is updated to provided Qemu >= 8.0.0.
++        # https://github.com/tianocore/edk2/commit/bf5678b5802685e07583e3c7ec56d883cbdd5da3
++        # http://lists.busybox.net/pipermail/buildroot/2023-July/670825.html
++        qemu_fw_cfg = "name=opt/org.tianocore/X-Cpuhp-Bugcheck-Override,string=yes"
++        self.emulator.boot(arch="x86_64", options=["-bios", bios, "-hda", hda, "-fw_cfg", qemu_fw_cfg])
+         self.emulator.login()
+ 
+         cmd = "modprobe efivarfs"
+diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
+index 692291267e..3d08f2e895 100644
+--- a/support/testing/tests/fs/test_iso9660.py
++++ b/support/testing/tests/fs/test_iso9660.py
+@@ -29,7 +29,16 @@ def test_mount_internal_external(emulator, builddir, internal=True, efi=False):
+     img = os.path.join(builddir, "images", "rootfs.iso9660")
+     if efi:
+         efi_img = os.path.join(builddir, "images", "OVMF.fd")
+-        emulator.boot(arch="i386", options=["-cdrom", img, "-bios", efi_img])
++        # In QEMU v5.1.0 up to v7.2.0, the CPU hotplug register block misbehaves.
++        # EDK2 hang if the bug is detected in Qemu after printing errors to IO port 0x402
++        # (requires BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL to see them)
++        # The Docker image used by the Buildroot gitlab-ci uses Qemu 5.2.0, the workaround
++        # can be removed as soon as the Docker image is updated to provided Qemu >= 8.0.0.
++        # This workaround is needed only when efi=True since it imply EDK2 is used.
++        # https://github.com/tianocore/edk2/commit/bf5678b5802685e07583e3c7ec56d883cbdd5da3
++        # http://lists.busybox.net/pipermail/buildroot/2023-July/670825.html
++        qemu_fw_cfg = "name=opt/org.tianocore/X-Cpuhp-Bugcheck-Override,string=yes"
++        emulator.boot(arch="i386", options=["-cdrom", img, "-bios", efi_img, "-fw_cfg", qemu_fw_cfg])
+     else:
+         emulator.boot(arch="i386", options=["-cdrom", img])
+     emulator.login()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
