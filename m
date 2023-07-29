@@ -1,84 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEDECC001DF
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 14:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0DC1C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 15:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 405E760ADF;
-	Sat, 29 Jul 2023 14:47:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 405E760ADF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44BCB81E2E;
+	Sat, 29 Jul 2023 15:24:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44BCB81E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wn1FQ2v_jYxw; Sat, 29 Jul 2023 14:47:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Q-pel1OhF3Pt; Sat, 29 Jul 2023 15:24:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4027360A8A;
-	Sat, 29 Jul 2023 14:47:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4027360A8A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51D9981DFF;
+	Sat, 29 Jul 2023 15:24:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51D9981DFF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C7A71BF339
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 14:47:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A31371BF3EA
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 15:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 164A383415
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 14:47:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 164A383415
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82C9E81DFA
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 15:24:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82C9E81DFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id b-DGx6r86Xbr for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 14:47:27 +0000 (UTC)
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com
- [IPv6:2607:f8b0:4864:20::1131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD16882157
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 14:47:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD16882157
-Received: by mail-yw1-x1131.google.com with SMTP id
- 00721157ae682-584034c706dso31744807b3.1
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 07:47:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690642045; x=1691246845;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=mmt6KjedYWrSL4xSKl1Y1rlmG4Ocv+kozavHxKJWIOs=;
- b=lgeLV2zvRsa2AsNxDIsFusJquHCDqTqMQ1YmgpwoZAnBLGfggpdPzamDMBg6LYbTqU
- 4mw2gj5FGGxKoapRju41JIcsGgw26MHCsIXIxGHZvKVdtenPltM+4SGp3Yc3QjknJQvo
- H6qWGyzkYbb8TnPox6GLpESF5KuR7uY09/5D98Q6kPfBxnsYS8Q5je55sOVJg8VOmrtk
- OBtXvkcnzyh41YTKY7wjrz1sryhJ2TxpaCdeTBdfYeVDibKt0H1lOeRFgjdhoCPtCYrR
- 4ai/j5ZFfcp1/9VqecFlHgoNnOu6dy8UqnaOJgbz/GZZZwI8qIjtuhlanVapg1+MM1Ju
- TePw==
-X-Gm-Message-State: ABy/qLarR5gEThXEu9LklupnYLtAU5CiVmd/BNfNxdUUFrKjYBGMfRGW
- WcQxb/8BwXNLSakdwmucQ+amu5L1NWA1Bm/TvR7FRA==
-X-Google-Smtp-Source: APBJJlFsvp2pXE2pf5HDHqudFixHU6xFwK/AV50UN7RhjxKpznTcYEpUtfR2xpy3tTEv7oJ7dikkdH28x58sZg3LcR4=
-X-Received: by 2002:a0d:d5c8:0:b0:583:d720:db2a with SMTP id
- x191-20020a0dd5c8000000b00583d720db2amr5054759ywd.49.1690642045623; Sat, 29
- Jul 2023 07:47:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230528113042.585399-1-dario.binacchi@amarulasolutions.com>
- <20230728230159.6440c601@windsurf>
-In-Reply-To: <20230728230159.6440c601@windsurf>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 29 Jul 2023 16:47:14 +0200
-Message-ID: <CABGWkvoEvH=4=OmPQHm5T1XMAQ11x-SixLpAxkUL1CUtUrF2_A@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1690642045; x=1691246845;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mmt6KjedYWrSL4xSKl1Y1rlmG4Ocv+kozavHxKJWIOs=;
- b=cgd50W0VcC1RYnHauzfKwwXxVzP//JsOd/Iz1BZEch8rT8CsE+hgkU8DBrn7tVX2gM
- t8PQpwQH+BTxVR6v/7wQwv52d9SFk7NadveMfgpyxqCdR+2gQmoupCUH5AHpOd8vXGgR
- yEFSmQiNFtzPJX6C+Q3NwWR72iWzJLB/h42og=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=cgd50W0V
-Subject: Re: [Buildroot] [RFC PATCH 1/1] package/automake: include .m4 files
- of autoconf-archive
+ with ESMTP id MsWwhJtdjk-2 for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 15:24:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65BDF81D18
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 15:24:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65BDF81D18
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 51E7A83AE7; Sat, 29 Jul 2023 15:24:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 29 Jul 2023 17:22:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4bcbf467c307a8bb07e7937ebf4b35e27eb66305
+X-Git-Newrev: 90790790925c5d456ce7585afdf6e42aa25fd9ea
+X-Patchwork-Hint: ignore
+Message-Id: <20230729152426.51E7A83AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/docker-run: fix support for
+ git-worktrees
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,50 +57,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLAoKT24gRnJpLCBKdWwgMjgsIDIwMjMgYXQgMTE6MDLigK9QTSBUaG9tYXMg
-UGV0YXp6b25pCjx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPgo+IEhlbGxv
-IERhcmlvLAo+Cj4gT24gU3VuLCAyOCBNYXkgMjAyMyAxMzozMDo0MiArMDIwMAo+IERhcmlvIEJp
-bmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4gd3JvdGU6Cj4KPiA+
-IFRoZSBwYXRjaCBleHBhbmRzIHRoZSBudW1iZXIgb2YgdXNhYmxlIC5tNCBmaWxlcyBieSBpbmNs
-dWRpbmcgdGhvc2UKPiA+IGNvbnRhaW5lZCBpbiB0aGUgYXV0b2NvbmYtYXJjaGl2ZS4KPiA+Cj4g
-PiBTaWduZWQtb2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNv
-bHV0aW9ucy5jb20+Cj4gPiAtLS0KPiA+ICBwYWNrYWdlL2F1dG9tYWtlL2F1dG9tYWtlLm1rIHwg
-MyArKy0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
-Cj4gPgo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXV0b21ha2UvYXV0b21ha2UubWsgYi9wYWNr
-YWdlL2F1dG9tYWtlL2F1dG9tYWtlLm1rCj4gPiBpbmRleCBmZDc5MzNkZDc0ZjkuLmZjMjM1Nzg0
-NjQxYSAxMDA2NDQKPiA+IC0tLSBhL3BhY2thZ2UvYXV0b21ha2UvYXV0b21ha2UubWsKPiA+ICsr
-KyBiL3BhY2thZ2UvYXV0b21ha2UvYXV0b21ha2UubWsKPiA+IEBAIC0zNCw1ICszNCw2IEBAICQo
-ZXZhbCAkKGhvc3QtYXV0b3Rvb2xzLXBhY2thZ2UpKQo+ID4gIEFVVE9NQUtFID0gJChIT1NUX0RJ
-UikvYmluL2F1dG9tYWtlCj4gPiAgQUNMT0NBTF9ESVIgPSAkKFNUQUdJTkdfRElSKS91c3Ivc2hh
-cmUvYWNsb2NhbAo+ID4gIEFDTE9DQUwgPSAkKEhPU1RfRElSKS9iaW4vYWNsb2NhbAo+ID4gLUFD
-TE9DQUxfUEFUSCA9ICQoQUNMT0NBTF9ESVIpOiQoQUNMT0NBTF9IT1NUX0RJUikKPiA+ICtBQ0xP
-Q0FMX0hPU1RfQVJDSElWRV9ESVIgPSAkKEhPU1RfRElSKS9zaGFyZS9hdXRvY29uZi1hcmNoaXZl
-Cj4gPiArQUNMT0NBTF9QQVRIID0gJChBQ0xPQ0FMX0RJUik6JChBQ0xPQ0FMX0hPU1RfRElSKTok
-KEFDTE9DQUxfSE9TVF9BUkNISVZFX0RJUikKPiA+ICBleHBvcnQgQUNMT0NBTF9QQVRICj4KPiBD
-b3VsZCB5b3UgY2xhcmlmeSB0aGUgbW90aXZhdGlvbj8gRG8geW91IGhhdmUgYSBzcGVjaWZpYyBj
-YXNlIGZvciB3aGljaAo+IHRoaXMgaXMgbmVlZGVkPwo+Cj4gVGhhbmtzIQo+Cj4gVGhvbWFzCj4g
-LS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCj4gRW1iZWRk
-ZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKPiBodHRwczovL2Jv
-b3RsaW4uY29tCgpGb2xsb3dpbmcgdGhlIHN1Z2dlc3Rpb25zIG9mIFlhbm4gRS4gTU9SSU4gaW4g
-WzFdLCBJIHRyaWVkIHRvIGZpeCB0aGUKaXNzdWUgYnkgc3VibWl0dGluZyBhCnBhdGNoIHRvIHRo
-ZSBldGh0b29sIHByb2plY3QuIER1cmluZyB0aGUgdmFyaW91cyByZXZpZXcgc3RhZ2VzLCBJIHNl
-bnQKYSB2ZXJzaW9uIChtdWNoIG1vcmUKY29tcGxpY2F0ZWQgdGhhbiB0aGUgb25lIHRoYXQgd2Fz
-IGV2ZW50dWFsbHkgYWNjZXB0ZWQpIHRoYXQgcmVxdWlyZWQgYQpzcGVjaWZpYyBNNAptYWNybyAo
-WzJdKS4gRnJvbSB0aGVyZSwgdGhlIGlkZWEgZm9yIHRoaXMgcGF0Y2ggd2FzIGJvcm4uCgpbMV0g
-aHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIz
-MDUyMDIxMTI0Ni4zOTUwMTMxLTEtZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20v
-ClsyXSBodHRwczovL21hcmMuaW5mby8/bD1saW51eC1uZXRkZXYmbT0xNjg0ODYyMzcxMzE1NjAm
-dz0yCgpUaGFua3MgYW5kIHJlZ2FyZHMsCkRhcmlvCgotLSAKCkRhcmlvIEJpbmFjY2hpCgpTZW5p
-b3IgRW1iZWRkZWQgTGludXggRGV2ZWxvcGVyCgpkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRp
-b25zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwoKCkFtYXJ1bGEgU29s
-dXRpb25zIFNSTAoKVmlhIExlIENhbmV2YXJlIDMwLCAzMTEwMCBUcmV2aXNvLCBWZW5ldG8sIElU
-CgpULiArMzkgMDQyIDI0MyA1MzEwCmluZm9AYW1hcnVsYXNvbHV0aW9ucy5jb20KCnd3dy5hbWFy
-dWxhc29sdXRpb25zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=90790790925c5d456ce7585afdf6e42aa25fd9ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The docker-run script attempts to support git-new-workdirs and
+git-worktrees by resolving the symlink at '$GIT_DIR/config' to get the
+true $GIT_DIR. However this does not work for git-worktrees as they do
+not use symlinks, instead they change the $GIT_DIR into a regular file
+that contains the path to the real $GIT_DIR. To complicate things
+further, we actually want the $GIT_COMMON_DIR which is the superset of a
+worktree's $GIT_DIR.
+
+git-rev-parse supports the '--git-common-dir' which will resolve the
+$GIT_COMMON_DIR for us. However it does not work for git-new-workdirs,
+so we still need to detect and handle them.
+
+'--git-common-dir' also appeared only with git 2.10.0, released in 2016,
+so it will not be available in older "enterprise-grade" distributions.
+In that case, 'git rev-parse --git-common-dir' would return the option
+flag '--git-common-dir' as-is, which is incorrect. So, we instruct it to
+never return flags.
+
+'--git-common-dir' also returns just '.git' for the main working copy,
+but 'docker run' want an absolute path, so we canonicalise it.
+
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+[yann.morin.1998@free.fr:
+  - support git versions before --git-common-dir was introduced
+  - don't mount GIT_DIR if unknown (i.e. not needed)
+  - fix expanding MAIN_DIR
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ utils/docker-run | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/utils/docker-run b/utils/docker-run
+index 17c587a484..b201d28289 100755
+--- a/utils/docker-run
++++ b/utils/docker-run
+@@ -2,8 +2,13 @@
+ set -o errexit -o pipefail
+ DIR=$(dirname "${0}")
+ MAIN_DIR=$(readlink -f "${DIR}/..")
+-# GIT_DIR to support workdirs/worktrees
+-GIT_DIR="$(dirname "$(realpath "${MAIN_DIR}/.git/config")")"
++if [ -L "${MAIN_DIR}/.git/config" ]; then
++    # Support git-new-workdir
++    GIT_DIR="$(dirname "$(realpath "${MAIN_DIR}/.git/config")")"
++else
++    # Support git-worktree
++    GIT_DIR="$(cd "${MAIN_DIR}" && git rev-parse --no-flags --git-common-dir)"
++fi
+ # shellcheck disable=SC2016
+ IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
+         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
+@@ -13,9 +18,21 @@ declare -a docker_opts=(
+     --rm
+     --user "$(id -u):$(id -g)"
+     --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}"
+-    --mount "type=bind,src=${GIT_DIR},dst=${GIT_DIR}"
+     --workdir "${MAIN_DIR}"
+ )
++
++# Empty GIT_DIR means that we are not in a workdir, *and* git is too old
++# to know about worktrees, so we're not in a worktree either. So it means
++# we're in the main git working copy, and thus we don't need to mount the
++# .git directory.
++if [ "${GIT_DIR}" ]; then
++    # GIT_DIR in the main working copy (when git supports worktrees) will
++    # be just '.git', but 'docker run' needs an absolute path. If it's an
++    # absolute path already (in a wordir), then that's a noop.
++    GIT_DIR="$(readlink -e "${GIT_DIR}")"
++    docker_opts+=( --mount "type=bind,src=${GIT_DIR},dst=${GIT_DIR}" )
++fi
++
+ if tty -s; then
+     docker_opts+=( -t )
+ fi
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
