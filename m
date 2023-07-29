@@ -4,84 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8AADC0015E
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 06:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43C2DC04A6A
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 07:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EBBC1402E0;
-	Sat, 29 Jul 2023 06:56:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBBC1402E0
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD2C7402C3;
+	Sat, 29 Jul 2023 07:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD2C7402C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dYWQ9tD1z2Z5; Sat, 29 Jul 2023 06:56:26 +0000 (UTC)
+	with ESMTP id nCYGEknHRZVl; Sat, 29 Jul 2023 07:50:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D7A2401ED;
-	Sat, 29 Jul 2023 06:56:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D7A2401ED
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AE2341BF4DA
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 06:56:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 011C540150;
+	Sat, 29 Jul 2023 07:50:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 011C540150
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 837C01BF3D8
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 07:49:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 786194159C
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 06:56:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 786194159C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6968460BC0
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 07:49:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6968460BC0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fvrl32hYd-UE for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 06:56:20 +0000 (UTC)
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6E2544156E
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 06:56:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E2544156E
-Received: by mail-il1-x12b.google.com with SMTP id
- e9e14a558f8ab-348d6bc349eso13100415ab.0
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 23:56:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690613779; x=1691218579;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VKCd1MhyRIUS9paSwDtwM4ak9cysB4rWClnCxyAfgD4=;
- b=lP62lOHmBsEpk7EnokvIu5RgWLz+KDjiJxuvdO9HpgTtZFxh38aWg477T/xqVoEYBW
- escOHtm/No/+qZOppk2iRaKhSs8y5OZqRcn4mEtVKrvWB68gSG9k4lT10XkQxEifUyID
- jXLFpP9l26AIJXgAIB2JuIDYz8k/AZ3WhJagmfb9gLrktsA1n3oRaIMq7cnrL1Q+KmA3
- 6nLb0umKgzcXYIb0c7G1GkPJJAr4jSMfMA4t979VgFzbV3ZMPYY7167J50fbflVzKqFZ
- n5zRjtpCUdF8RsBzAIMu9HsDmBxK0A1LzChdKZJfhICEztAmRys65fENo2rt9OZBLE7r
- vNZw==
-X-Gm-Message-State: ABy/qLahCBYZqDJoAjU902cpY3FlF9oA46SGgw8O/k42ZxtjGr7s440V
- yQwK9MO2kzf7Ny/9GulIpUUBXiYNJJw=
-X-Google-Smtp-Source: APBJJlHRfyPKPN2wFVV8pwUW8PNYBAaVX4aVRXjD6ERyv0pkBdY5QlC3GGEhHQVb+OooJvyCvg4UHg==
-X-Received: by 2002:a05:6e02:f92:b0:348:9c80:f427 with SMTP id
- v18-20020a056e020f9200b003489c80f427mr1696501ilo.30.1690613778890; 
- Fri, 28 Jul 2023 23:56:18 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-110-92.hlrn.qwest.net.
- [71.218.110.92]) by smtp.gmail.com with ESMTPSA id
- u22-20020a02aa96000000b0042b3a328ee0sm1597269jai.166.2023.07.28.23.56.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Jul 2023 23:56:18 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 29 Jul 2023 00:56:16 -0600
-Message-Id: <20230729065616.961984-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2rPdFXzE5V3O for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 07:49:57 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C875A60B8F
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 07:49:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C875A60B8F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 95674240003;
+ Sat, 29 Jul 2023 07:49:53 +0000 (UTC)
+Date: Sat, 29 Jul 2023 09:49:52 +0200
+To: Colin Foster <colin.foster@in-advantage.com>
+Message-ID: <20230729094952.11722d87@windsurf>
+In-Reply-To: <20230728231839.4193379-1-colin.foster@in-advantage.com>
+References: <20230728231839.4193379-1-colin.foster@in-advantage.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690613779; x=1691218579;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VKCd1MhyRIUS9paSwDtwM4ak9cysB4rWClnCxyAfgD4=;
- b=nnRQ2WhnBLmZffmiizskyd1BfAGj1f4x+3Q9SLZKcg7pIEHoX/R032NVQZSphcFm6u
- Jh2/hAB0lasDd4HStR7GHMhtbVzyVHh8fiTizvb8tTNtat3wZlj2zm5b2KCD7AR7L0VN
- +Y/fpQqZtO+X+qthkJqrfnjnJJW6DgxWQHnnehe5teHsrxuM1BunkE/zMSZOUzSoAhMW
- FQN1mRBJKgjKtSXceofxg1pLt/xwZQrU2W+vWSyfycr5HHcipwD4+0mROOjzrDyEYLez
- hFyczlMDW0509CqUdwEHt8Sb0y34aDODlbeY+ormEpwzFb3himPwqTX72ifvwdOoho1p
- iVyA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=nnRQ2Whn
-Subject: [Buildroot] [PATCH 1/1] package/systemd: bump to version 254
+ d=bootlin.com; s=gm1; t=1690616993;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=lCJMGfN0d8SD/mhPCFgdIrrvFNYhbbYur99iQZ55tMg=;
+ b=Z1porTAHAFCXPh3h5bUQbzPlKk11Zbu/DIbSGq3b9ShSHRCEl4gobAJ018GAmCV1+nY9uW
+ X8MWozGjl4mFnV1z+RTF48H5BaYXttWY1uKz7P2jA1+p/rxMJ5LIF7o2uXXE/e+Acok/4j
+ YJeLaatT7NwGo3QW9J2MtDBWX4oYF6KH+9sAJx576LqECqEp2Cmx617YZ+yYSoAhQvIi80
+ jlgmo0fmznMYA+WlMfOgaAgZ+d7VrvByPyGxnuDAqObXH3StI7y6SJmywZeV2FYLENgryQ
+ AQLMg/movbtXTLttaFtVMg9H7QbJlCDxQDZqmkniISdOhamnr6a7ppmWhOSUzA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Z1porTAH
+Subject: Re: [Buildroot] [PATCH V1] core: add kconfig option to archive an
+ un-stripped filesystem
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,154 +75,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-README.md hash changed due to syntax fix:
-https://github.com/systemd/systemd-stable/commit/49ddb4757b197b303309b0dcdfc5f858f4b8e168
+Hello Colin,
 
-Remove no longer supported/required valgrind config option.
+On Fri, 28 Jul 2023 16:18:39 -0700
+Colin Foster <colin.foster@in-advantage.com> wrote:
 
-Disable new unsupported passwdqc config option.
+> It is reasonable to expect that deployed systems don't contain debugging
+> symbols. At the very least, it will bloat image size unnecessarily.
+> 
+> There might also be scenarios where a previously released image might
+> generate core dumps, or require attaching a debugger to a process
+> well after the filesystem image has been made.
+> 
+> These two goals contradict each other, and is addressed here.
+> 
+> Just before stripping target binaries, allow the option to tar the
+> target filesystem for archiving. This will create a single image -
+> rootfs_syms.tgz - with un-stripped target binaries, and allow post-build
+> debugging and core dump analysis. The final image will be unaffected.
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 
-Disable new unsupported ukify config option.
+I understand the reasoning, and what you proposed is indeed a simple
+solution that can work today.
 
-Disable new unsupported xenctrl config option.
+However, I think the "grand plan" to solve this issue was to install
+everything to $(STAGING_DIR), not only packages installing libraries.
+In $(STAGING_DIR), packages are installed unstripped, and with
+debugging symbols if BR2_ENABLE_DEBUG=y. One issue with this solution
+is that it requires a lot of effort to implement, so nobody ever
+tackled that.
 
-Update systemd-boot config options to new format.
+Perhaps one concern with your proposal is that the tar you're
+generating is not exactly the same as the generated filesystem with
+binaries unstripped. Indeed, after the point where you generate this
+tarball, a number of other things will happen in the rootfs, most
+notably all what happens within fakeroot (permission/ownership tweaks,
+etc.). I understand these generally don't cause any issue for the
+specific use-case of having binaries with debugging symbols, but it
+shows that this option does not really provide a "rootfs with debugging
+symbols", but rather a "almost complete but not quite entirely rootfs
+with debugging symbols".
 
-Add new host-python-pyelftools systemd-boot dependency.
+Let's see what others think. The advantage of your proposal is that it
+is actionable now. For now, what we tell people is that libraries with
+debugging symbols are in $(STAGING_DIR), and for packages that don't
+install to staging, the debugging symbols are in the build dir of the
+package: output/build/foo-1.0.0/foo.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/systemd/systemd.hash |  4 ++--
- package/systemd/systemd.mk   | 29 ++++++++++++-----------------
- 2 files changed, 14 insertions(+), 19 deletions(-)
+Best regards,
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 00c08edcd9..10f4bc04fa 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  cf2d27e67663d599a045101c7178cf0ec63d9df2962a54adf7de0d0357724f00  systemd-252.4.tar.gz
-+sha256  18db69c8fc33afebf95a40cfa3769df5f0e4a07bccdebd33b2fd81c8b75e7a02  systemd-254.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
- sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
-@@ -12,4 +12,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
- sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
- sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
- sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
--sha256  da9b2c7b8cd10516fd2c4279b82496ea61787148f13e899c62fc8988c5fac34f  LICENSES/README.md
-+sha256  8ccb649d1fc1103e5726612cf303f05d4eb86b7ab46d9f630009dd32e87612e2  LICENSES/README.md
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 63467171ed..0aa1da3fb8 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 252.4
-+SYSTEMD_VERSION = 254
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
-@@ -82,6 +82,7 @@ SYSTEMD_CONF_OPTS += \
- 	-Dmode=release \
- 	-Dnspawn-locale='C.UTF-8' \
- 	-Dnss-systemd=true \
-+	-Dpasswdqc=false \
- 	-Dquotacheck-path=/usr/sbin/quotacheck \
- 	-Dquotaon-path=/usr/sbin/quotaon \
- 	-Drootlibdir='/usr/lib' \
-@@ -96,7 +97,9 @@ SYSTEMD_CONF_OPTS += \
- 	-Dtelinit-path= \
- 	-Dtests=false \
- 	-Dtmpfiles=true \
--	-Dumount-path=/usr/bin/umount
-+	-Dukify=false \
-+	-Dumount-path=/usr/bin/umount \
-+	-Dxenctrl=false
- 
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
- ifeq ($(BR2_OPTIMIZE_FAST),y)
-@@ -215,13 +218,6 @@ else
- SYSTEMD_CONF_OPTS += -Dfdisk=false
- endif
- 
--ifeq ($(BR2_PACKAGE_VALGRIND),y)
--SYSTEMD_DEPENDENCIES += valgrind
--SYSTEMD_CONF_OPTS += -Dvalgrind=true
--else
--SYSTEMD_CONF_OPTS += -Dvalgrind=false
--endif
--
- ifeq ($(BR2_PACKAGE_XZ),y)
- SYSTEMD_DEPENDENCIES += xz
- SYSTEMD_CONF_OPTS += -Dxz=true
-@@ -575,13 +571,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_BOOT),y)
- SYSTEMD_INSTALL_IMAGES = YES
--SYSTEMD_DEPENDENCIES += gnu-efi
--SYSTEMD_CONF_OPTS += \
--	-Defi=true \
--	-Dgnu-efi=true \
--	-Defi-ld=bfd \
--	-Defi-libdir=$(STAGING_DIR)/usr/lib \
--	-Defi-includedir=$(STAGING_DIR)/usr/include/efi
-+SYSTEMD_DEPENDENCIES += gnu-efi host-python-pyelftools
-+SYSTEMD_CONF_OPTS += -Defi=true -Dbootloader=true
- 
- SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
- define SYSTEMD_INSTALL_BOOT_FILES
-@@ -594,7 +585,7 @@ define SYSTEMD_INSTALL_BOOT_FILES
- endef
- 
- else
--SYSTEMD_CONF_OPTS += -Defi=false -Dgnu-efi=false
-+SYSTEMD_CONF_OPTS += -Defi=false -Dbootloader=false
- endif # BR2_PACKAGE_SYSTEMD_BOOT == y
- 
- SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
-@@ -812,6 +803,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dhibernate=false \
- 	-Dldconfig=false \
- 	-Dresolve=false \
-+	-Dbootloader=false \
- 	-Defi=false \
- 	-Dtpm=false \
- 	-Denvironment-d=false \
-@@ -826,6 +818,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dhostnamed=false \
- 	-Dlocaled=false \
- 	-Dmachined=false \
-+	-Dpasswdqc=false \
- 	-Dportabled=false \
- 	-Dsysext=false \
- 	-Dsysupdate=false \
-@@ -868,9 +861,11 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dinitrd=false \
- 	-Dxdg-autostart=false \
- 	-Dkernel-install=false \
-+	-Dukify=false \
- 	-Danalyze=false \
- 	-Dlibcryptsetup=false \
- 	-Daudit=false \
-+	-Dxenctrl=false \
- 	-Dzstd=false
- 
- HOST_SYSTEMD_DEPENDENCIES = \
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
