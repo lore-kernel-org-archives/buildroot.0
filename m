@@ -4,68 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B12BC0015E
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 21:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31856C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 21:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D84CB40974;
-	Sat, 29 Jul 2023 21:05:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D84CB40974
+	by smtp4.osuosl.org (Postfix) with ESMTP id C334F409A2;
+	Sat, 29 Jul 2023 21:09:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C334F409A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fwa5ZU3xn_dW; Sat, 29 Jul 2023 21:05:13 +0000 (UTC)
+	with ESMTP id dcz055sAMHhR; Sat, 29 Jul 2023 21:09:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD6D940932;
-	Sat, 29 Jul 2023 21:05:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD6D940932
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E4D7D1BF310
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:05:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85BCA4154E;
+	Sat, 29 Jul 2023 21:09:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85BCA4154E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 239831BF3C1
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE0D960F18
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:05:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE0D960F18
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A4EC81F3E
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 21:09:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A4EC81F3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7cWwxvJYQERr for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 21:05:09 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5756460E43
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 21:05:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5756460E43
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 672ADFF802;
- Sat, 29 Jul 2023 21:05:05 +0000 (UTC)
-Date: Sat, 29 Jul 2023 23:05:03 +0200
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <20230729230503.774545db@windsurf>
-In-Reply-To: <CA+h8R2qG4w+mHrZTZ0EmTXjH=txfGQT8-p3f_K_GqP0+8bP8hQ@mail.gmail.com>
-References: <20230728052530.1122268-1-christian@aperture.us>
- <20230728092656.5ae69f0f@windsurf>
- <CA+h8R2qG4w+mHrZTZ0EmTXjH=txfGQT8-p3f_K_GqP0+8bP8hQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690664706;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UAxYBBorGMMBdN5LCpDvJ+a/AJP+yovvaUP2U8H1J/U=;
- b=V/YN4i0dIbR2U6L4VCEJ7NL/tclLXNWtkRNtBshcreIwlaaP1WqUNewgaCFidFW3S+hANr
- 6x3ogPbBSr6irnJa6fAuGJsJv5Hm/rBuRjBM6b2h6ct1u+b+QSXdajnrbv+GOUMaQLikZX
- LLxX/UYcDJ++lkPwe6Ri3tdvMYyJJNFJ4f/J8YHukpbhQH30Lev1vPZxWB7PW2koBb/I5r
- FDk6Rpk3B4jJogMJ4jf3z7YKKhJPXaggrMXnzZdvFJHWWRoZtvpOC703HV7Sq49/qorfcN
- E3Djvu2e8U8JxTsXu3szUxjDX5rg/KPiOymL0bbHE2EVc9pCqDh6+W8aJypXbg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=V/YN4i0d
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: add toolchain as
- dependency of host-go
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T_mdmwC40wQt for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 21:09:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 125C881F3A
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 21:09:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 125C881F3A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F39D183B17; Sat, 29 Jul 2023 21:09:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 29 Jul 2023 23:08:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9ddb1dfb40cad9bc00e68376d2f06cad28bbd296
+X-Git-Newrev: 06f50ff1bf066feb6cf6ed512113773f87c884fb
+X-Patchwork-Hint: ignore
+Message-Id: <20230729210924.F39D183B17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/conmon: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,50 +57,126 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E
- . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 28 Jul 2023 18:19:46 -0700
-Christian Stewart <christian@aperture.us> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=06f50ff1bf066feb6cf6ed512113773f87c884fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > to ensure we build a host-go compiler capable of building code for the
-> > target if the target is supported, but in all cases builds a Go
-> > compiler capable of compiling code for the host. Indeed, host-go might
-> > also be needed solely to build host utilities, which would be relevant
-> > even if the target architecture isn't supported by Go.  
-> 
-> I suppose if you don't set CC_FOR_TARGET nor CXX_FOR_TARGET then the
-> Go compiler will simply use CC and CXX which are HOSTCC_NOCCACHE and
-> HOSTCXX_NOCCACHE.
+Conmon is an OCI container runtime monitor.
 
-It'd be nicer to have more certainty than "I suppose" :-)
+https://github.com/containers/conmon
 
-> I noticed there's already a line which adds toolchain as a dependency
-> if cgo is enabled.
+Dependency of podman.
 
-Hu, where is that?
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/conmon/Config.in   | 14 ++++++++++++++
+ package/conmon/conmon.hash |  3 +++
+ package/conmon/conmon.mk   | 36 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
 
-> Will mark this patch as not applicable for now and consider why the
-> build failed in the TestMender test case when running "make host-go"
-> without building the toolchain first. I guess that's a case where cgo
-> is not enabled and yet BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS=y.
-> 
-> We should move the toolchain dependency to be if
-> BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS instead of if Cgo is enabled,
-> I think.
-
-Possibly, and this would make sense, if indeed Go needs the target
-C/C++ compiler to build the target Go stuff.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cfaadc47a9..4488364458 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -547,6 +547,7 @@ F:	package/balena-engine/
+ F:	package/batman-adv/
+ F:	package/catatonit/
+ F:	package/cni-plugins/
++F:	package/conmon/
+ F:	package/containerd/
+ F:	package/crun/
+ F:	package/delve/
+diff --git a/package/Config.in b/package/Config.in
+index 0e8cdd7c8b..29a7daf6cc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2642,6 +2642,7 @@ menu "System tools"
+ 	source "package/bubblewrap/Config.in"
+ 	source "package/cgroupfs-mount/Config.in"
+ 	source "package/circus/Config.in"
++	source "package/conmon/Config.in"
+ 	source "package/containerd/Config.in"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+diff --git a/package/conmon/Config.in b/package/conmon/Config.in
+new file mode 100644
+index 0000000000..9ba9c215b7
+--- /dev/null
++++ b/package/conmon/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_CONMON
++	bool "conmon"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  Conmon is an OCI container runtime monitor.
++
++	  https://github.com/containers/conmon
++
++comment "conmon needs a toolchain w/ threads, wchar"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+diff --git a/package/conmon/conmon.hash b/package/conmon/conmon.hash
+new file mode 100644
+index 0000000000..82d1d14ba3
+--- /dev/null
++++ b/package/conmon/conmon.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  7d0f9a2f7cb8a76c51990128ac837aaf0cc89950b6ef9972e94417aa9cf901fe  conmon-2.1.7.tar.gz
++sha256  9c9d771d4004725237a31ada889fe06c85a24fd0a29e41825181ab4cde54f016  LICENSE
+diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
+new file mode 100644
+index 0000000000..f3567a4305
+--- /dev/null
++++ b/package/conmon/conmon.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# conmon
++#
++################################################################################
++
++CONMON_VERSION = 2.1.7
++CONMON_SITE = $(call github,containers,conmon,v$(CONMON_VERSION))
++CONMON_LICENSE = Apache-2.0
++CONMON_LICENSE_FILES = LICENSE
++
++CONMON_DEPENDENCIES = host-pkgconf libglib2
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++CONMON_DISABLE_SECCOMP = 0
++CONMON_DEPENDENCIES += libseccomp
++else
++CONMON_DISABLE_SECCOMP = 1
++endif
++
++define CONMON_CONFIGURE_CMDS
++	printf '#!/bin/bash\necho "$(CONMON_DISABLE_SECCOMP)"\n' > \
++		$(@D)/hack/seccomp-notify.sh
++	chmod +x $(@D)/hack/seccomp-notify.sh
++endef
++
++define CONMON_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D) bin/conmon
++endef
++
++define CONMON_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/bin/conmon $(TARGET_DIR)/usr/bin/conmon
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
