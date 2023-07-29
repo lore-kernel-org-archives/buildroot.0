@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 732EEC001E0
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 11:57:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0155EC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 11:57:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2711383B99;
-	Sat, 29 Jul 2023 11:57:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2711383B99
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F5A783B80;
+	Sat, 29 Jul 2023 11:57:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F5A783B80
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RkDNnmndwswW; Sat, 29 Jul 2023 11:57:20 +0000 (UTC)
+	with ESMTP id 9_OuQ8Jho0Ni; Sat, 29 Jul 2023 11:57:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A0CF83B8C;
-	Sat, 29 Jul 2023 11:57:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A0CF83B8C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D6521BF82C
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:56:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD13183AD2;
+	Sat, 29 Jul 2023 11:57:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD13183AD2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 986921BF82C
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:57:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 65E7483AC0
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:56:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65E7483AC0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66ED84044A
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 11:57:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66ED84044A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 12KC4jV0V3oI for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 11:56:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9D6583AD2
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 11:56:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D6583AD2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D693883AE2; Sat, 29 Jul 2023 11:56:51 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 29 Jul 2023 11:04:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3ac61eb9da891b791d47166929226ea73aa1c11f
-X-Git-Newrev: 256395d8e5e7258df830dc19b47dc9ef19e48535
-X-Patchwork-Hint: ignore
-Message-Id: <20230729115651.D693883AE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fio: bump to version 3.34
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bxIlWO67IL-3 for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 11:57:07 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B2F240182
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 11:57:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B2F240182
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 196C7FF802;
+ Sat, 29 Jul 2023 11:57:03 +0000 (UTC)
+Date: Sat, 29 Jul 2023 13:57:03 +0200
+To: Maksim Kiselev <bigunclemax@gmail.com>
+Message-ID: <20230729135703.4675de90@windsurf>
+In-Reply-To: <20230516082340.1375834-1-bigunclemax@gmail.com>
+References: <20230516082340.1375834-1-bigunclemax@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690631824;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6dgeXhCAQ0MwDhDx7AoTDcC5pUBrUHGmsBe3EEeaufY=;
+ b=HcwJNyjmSqt1YTKzqKJJZVYIUhUflbzmBRxW8A1S1w1LGMzClYnh6hytg5EZHQJphpY0V+
+ 20xIf4ww3EHGHi50EB0iAQTrW+wRT62lKo4CYhx3q0ma/qWZQpZ6ELT4gcuZ8rCnLrkb37
+ 3jqu0dDCVvmJqfCxY3H49XaZZPA0H7SSg/Ux9Kd9eEBmnuVNWXkO13Ca7ElC3OtXocBuDx
+ DISV8iKI/NnNwuW2Qg9Km2+cQjF3lUBUTJwAmCSopCz4ZcR5hofGJajY034fDGwidaK6YT
+ O2ZY6ErblXORfWHyUrpiaD3naNVhduVUPeaegutpfdXhXbehc/oAvInuUoe7QA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HcwJNyjm
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/fio: bump to version 3.34
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,45 +76,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=256395d8e5e7258df830dc19b47dc9ef19e48535
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 16 May 2023 11:23:39 +0300
+Maksim Kiselev <bigunclemax@gmail.com> wrote:
 
-Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fio/fio.hash | 2 +-
- package/fio/fio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+> ---
+>  package/fio/fio.hash | 2 +-
+>  package/fio/fio.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fio/fio.hash b/package/fio/fio.hash
-index 891ca4e40e..7f7e12f948 100644
---- a/package/fio/fio.hash
-+++ b/package/fio/fio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  859dca5241e5494d86c4aa1531a984cc556789c78e56b30d6070acfbdd193a8c  fio-3.28.tar.gz
-+sha256  49f340ef51dbb7942d598abd2b8ad93ce7934ca709f73ba13519568556f9089f  fio-3.34.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 13818b60fd..90ec407207 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIO_VERSION = 3.28
-+FIO_VERSION = 3.34
- FIO_SITE = http://brick.kernel.dk/snaps
- FIO_LICENSE = GPL-2.0
- FIO_LICENSE_FILES = COPYING MORAL-LICENSE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
