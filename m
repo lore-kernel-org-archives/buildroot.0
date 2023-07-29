@@ -1,98 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44A95EB64DD
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 01:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B85FBC001DC
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 03:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A5FB61371;
-	Sat, 29 Jul 2023 01:20:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A5FB61371
+	by smtp1.osuosl.org (Postfix) with ESMTP id 084C78412E;
+	Sat, 29 Jul 2023 03:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 084C78412E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v5qjwNyIftfj; Sat, 29 Jul 2023 01:20:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yT7kfc8dSAxt; Sat, 29 Jul 2023 03:53:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E922760F36;
-	Sat, 29 Jul 2023 01:20:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E922760F36
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2DB801BF3E0
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 01:20:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28F3B84101;
+	Sat, 29 Jul 2023 03:53:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28F3B84101
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C10EE1BF356
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 03:53:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05FBF60F36
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 01:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05FBF60F36
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9AA4D84101
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 03:53:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AA4D84101
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4t2qx1MdiQex for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 01:20:03 +0000 (UTC)
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
- [IPv6:2a00:1450:4864:20::22c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BBF8660E78
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 01:20:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBF8660E78
-Received: by mail-lj1-x22c.google.com with SMTP id
- 38308e7fff4ca-2b9c0391749so41271121fa.0
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 18:20:02 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RU3EVcnCWAqT for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 03:53:11 +0000 (UTC)
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8DFF68405B
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 03:53:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DFF68405B
+Received: by mail-il1-x135.google.com with SMTP id
+ e9e14a558f8ab-348cd210438so10836775ab.1
+ for <buildroot@buildroot.org>; Fri, 28 Jul 2023 20:53:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690593600; x=1691198400;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=8cflq0HspmnnmJo6ZWjaauLJhmbzTVan4LjNfmost40=;
- b=LvaeZGNX2uk5C3xQIXRWX8lBVk2lewyVdSEc1vBrNozd80iCy57Oqp39rZDIoF9UaQ
- G+vBSjIurLzykdXQKcv5pnNzJDl0LYcUJr+Kn+rQM7vh17rVZ1m6JU/1buyYNQkGckOH
- lLibbTLfPo8DUD2mNinLWMP0xHBtog0YWA0zdOwbENxNNK6d0ewcIso1hQHgJLm/ibnD
- ETjffKd3fMAk4RYFr03lEECTpASBedm1VZ43T7ACGyC1scAfMx9Ikr0w9g4nTrhovu/p
- x8Q+pqQUdkOpdeNnCdhzVw9UqsuiYVz+vyIecSfz479jRUe7sKlgefn5Jzwr5/yUIFCm
- sUCQ==
-X-Gm-Message-State: ABy/qLbFlEbihs/FfhZxTQxkAAxKFePCnpXDz9lItcw89pdSf1vDKOW/
- /ztoPEYSn71tPm3wvsIfEkCB9aCh3seQGPaJSTXQE4sMnBA=
-X-Google-Smtp-Source: APBJJlEJX6wDIEn1+94uSxHNgGpYhbwzf2h05axoU1xfnSCwjdBSOzsxH3P2yTQLAx9wg/FIEUSdwg==
-X-Received: by 2002:a2e:910f:0:b0:2b9:5695:d10d with SMTP id
- m15-20020a2e910f000000b002b95695d10dmr2732738ljg.36.1690593599934; 
- Fri, 28 Jul 2023 18:19:59 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com.
- [209.85.167.47]) by smtp.gmail.com with ESMTPSA id
- s17-20020a2e98d1000000b002b32600ab9fsm1182108ljj.60.2023.07.28.18.19.58
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 28 Jul 2023 18:19:59 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id
- 2adb3069b0e04-4fe1b00fce2so3621324e87.3
- for <buildroot@buildroot.org>; Fri, 28 Jul 2023 18:19:58 -0700 (PDT)
-X-Received: by 2002:ac2:5f9c:0:b0:4f9:92c7:401d with SMTP id
- r28-20020ac25f9c000000b004f992c7401dmr2763965lfe.30.1690593598050; Fri, 28
- Jul 2023 18:19:58 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1690602790; x=1691207590;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=G8MgsDiw9oHscx4OwRWmosVM8exhwii2TgqV0PobBds=;
+ b=Rh0aD4RpcHJIyVTsBEPXVeaIOrGDTDvIFU/v6FKM4LsFlDGBHRwoAvGuDmfytZ2z3U
+ bq1N5+peVMFbFtesSN57VfdVAaQUy0v2Q/bXe5VhsBqwVrb0kne6MvEZL25DwUF+hY6h
+ m0u5vFbWxgNPAmh2XhnrrWya+Vh8MCo+hYiGTLomX7f4r1p3gbEROtU7g7Rq8y8uK+0+
+ EohWr1ZOfVXKCiObsa0q3LqrLputV+S0+7xD57r6pO6NeIXD50roLoJr94q/pXHsyO3+
+ zB6wzlucB0iteqvkS0XQzH59KHKRJl2KFH6y6JVJSfEm7z+8xQAK3iUBjM7cobU2/B8X
+ c/2g==
+X-Gm-Message-State: ABy/qLaCttFr9QhHrrcAaLZ9F7X1gUrt9SpLenYwQ/iMcV/vS3Ko/WxS
+ yPlyz/OHeSoTopRUKBnKp4Dg5ycfGb8=
+X-Google-Smtp-Source: APBJJlHH5k25ddrpH8tEGVRbZITM7GQYqMqtHoIwsT92/QFqbN+CohoAckTri4g7AN02NCl+q40tVg==
+X-Received: by 2002:a05:6e02:1ca2:b0:345:3378:4251 with SMTP id
+ x2-20020a056e021ca200b0034533784251mr1778297ill.23.1690602790270; 
+ Fri, 28 Jul 2023 20:53:10 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-110-92.hlrn.qwest.net.
+ [71.218.110.92]) by smtp.gmail.com with ESMTPSA id
+ l13-20020a056638220d00b0042b47e8869bsm1549235jas.49.2023.07.28.20.53.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Jul 2023 20:53:09 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 28 Jul 2023 21:53:08 -0600
+Message-Id: <20230729035308.2475367-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230728052530.1122268-1-christian@aperture.us>
- <20230728092656.5ae69f0f@windsurf>
-In-Reply-To: <20230728092656.5ae69f0f@windsurf>
-Date: Fri, 28 Jul 2023 18:19:46 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2qG4w+mHrZTZ0EmTXjH=txfGQT8-p3f_K_GqP0+8bP8hQ@mail.gmail.com>
-Message-ID: <CA+h8R2qG4w+mHrZTZ0EmTXjH=txfGQT8-p3f_K_GqP0+8bP8hQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1690593600; x=1691198400;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=8cflq0HspmnnmJo6ZWjaauLJhmbzTVan4LjNfmost40=;
- b=t3zJS0R5nMQgppgq7rMRLLCJCnsjEQ/v3bGMG738I/gg/4tVjhAsFRSirv979Gco/a
- a8UmLWQ3rMY14Watgsqg9spBwMpm0ngZyeKSBGEowMsyThHrt2PTQx89e/nN6kDEoPe3
- lV6J2O7MQZFwPTem0Jec7wH+zuYgZTAU2mCWEWtlbAjvextFw8WA63tEAz5fDBHeu2BU
- ZQdb/zJaMzHM+45t5dL+A3KxfqsOD1Xnx4uST0JWGPKYippg0c45XD+ZVYHce2aEg02z
- ENJ2zdnzwNCQgnWbScAJNOYf10/qzIrBmokIOh5FsuviVrF4v1uPdMP4khmeWZF5o6+u
- vw3Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=t3zJS0R5
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: add toolchain as
- dependency of host-go
+ d=gmail.com; s=20221208; t=1690602790; x=1691207590;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=G8MgsDiw9oHscx4OwRWmosVM8exhwii2TgqV0PobBds=;
+ b=gyhlSQr9H3l2Y8WYQcB2Sd4PD/NUHEcvXQvJuPL7NkvFLmlKlPz/CuN1D09PMy2veE
+ O1dyXH5z4yk+zwDxTxi6OZw6bj6n3YeXE7MLE8K8LQOhgJJBVsEKfjTo2wM04zrutz+D
+ navdS/HYtFA2DItRBDMZO7FM6wpU7Lt6wrZg/AeZbmmyggQX6PHabgJoXkhVlIFYz3oR
+ ACjo3g8NFoVv9Ahs/6kLHzNIgHmftxNAR0SlC7ffzR+dcJ06TeZ5ai6Vhn43pwrR7ST8
+ XylK24riwN80XcERitR7m3i0RoIKpOp0K3jcf5ikgREP9JS7p9u+MpTHskZcaAs8+xaM
+ 7sTQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=gyhlSQr9
+Subject: [Buildroot] [PATCH 1/1] package/linux-pam: bump to version 1.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,38 +93,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKT24gRnJpLCBKdWwgMjgsIDIwMjMgYXQgMTI6MjfigK9BTSBUaG9tYXMgUGV0
-YXp6b25pCjx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPiBXaGF0IGhhcHBl
-bnMgd2hlbiB3ZSdyZSBidWlsZGluZyBob3N0LWdvIGZvciBhIHRhcmdldCBhcmNoaXRlY3R1cmUg
-dGhhdAo+IEdvIGRvZXMgbm90IHN1cHBvcnQ/IFRoaXMgd2FzIHByZXZpb3VzbHkgc3VwcG9ydGVk
-IGluIGhvc3QtZ28sIGluIHdoaWNoCj4gd2UgaGF2ZSB0aGlzIGNvbmRpdGlvbjoKPgo+IGlmZXEg
-KCQoQlIyX1BBQ0tBR0VfSE9TVF9HT19UQVJHRVRfQVJDSF9TVVBQT1JUUykseSkKPiAuLi4KPiBl
-bmRpZgo+Cj4gdG8gZW5zdXJlIHdlIGJ1aWxkIGEgaG9zdC1nbyBjb21waWxlciBjYXBhYmxlIG9m
-IGJ1aWxkaW5nIGNvZGUgZm9yIHRoZQo+IHRhcmdldCBpZiB0aGUgdGFyZ2V0IGlzIHN1cHBvcnRl
-ZCwgYnV0IGluIGFsbCBjYXNlcyBidWlsZHMgYSBHbwo+IGNvbXBpbGVyIGNhcGFibGUgb2YgY29t
-cGlsaW5nIGNvZGUgZm9yIHRoZSBob3N0LiBJbmRlZWQsIGhvc3QtZ28gbWlnaHQKPiBhbHNvIGJl
-IG5lZWRlZCBzb2xlbHkgdG8gYnVpbGQgaG9zdCB1dGlsaXRpZXMsIHdoaWNoIHdvdWxkIGJlIHJl
-bGV2YW50Cj4gZXZlbiBpZiB0aGUgdGFyZ2V0IGFyY2hpdGVjdHVyZSBpc24ndCBzdXBwb3J0ZWQg
-YnkgR28uCgpJIHN1cHBvc2UgaWYgeW91IGRvbid0IHNldCBDQ19GT1JfVEFSR0VUIG5vciBDWFhf
-Rk9SX1RBUkdFVCB0aGVuIHRoZQpHbyBjb21waWxlciB3aWxsIHNpbXBseSB1c2UgQ0MgYW5kIENY
-WCB3aGljaCBhcmUgSE9TVENDX05PQ0NBQ0hFIGFuZApIT1NUQ1hYX05PQ0NBQ0hFLgoKSSBub3Rp
-Y2VkIHRoZXJlJ3MgYWxyZWFkeSBhIGxpbmUgd2hpY2ggYWRkcyB0b29sY2hhaW4gYXMgYSBkZXBl
-bmRlbmN5CmlmIGNnbyBpcyBlbmFibGVkLgoKV2lsbCBtYXJrIHRoaXMgcGF0Y2ggYXMgbm90IGFw
-cGxpY2FibGUgZm9yIG5vdyBhbmQgY29uc2lkZXIgd2h5IHRoZQpidWlsZCBmYWlsZWQgaW4gdGhl
-IFRlc3RNZW5kZXIgdGVzdCBjYXNlIHdoZW4gcnVubmluZyAibWFrZSBob3N0LWdvIgp3aXRob3V0
-IGJ1aWxkaW5nIHRoZSB0b29sY2hhaW4gZmlyc3QuIEkgZ3Vlc3MgdGhhdCdzIGEgY2FzZSB3aGVy
-ZSBjZ28KaXMgbm90IGVuYWJsZWQgYW5kIHlldCBCUjJfUEFDS0FHRV9IT1NUX0dPX1RBUkdFVF9B
-UkNIX1NVUFBPUlRTPXkuCgpXZSBzaG91bGQgbW92ZSB0aGUgdG9vbGNoYWluIGRlcGVuZGVuY3kg
-dG8gYmUgaWYKQlIyX1BBQ0tBR0VfSE9TVF9HT19UQVJHRVRfQVJDSF9TVVBQT1JUUyBpbnN0ZWFk
-IG9mIGlmIENnbyBpcyBlbmFibGVkLApJIHRoaW5rLgoKYmVzdCwKQ2hyaXN0aWFuCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/linux-pam/linux-pam.hash | 4 ++--
+ package/linux-pam/linux-pam.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
+index 0be3433687..97acbd7adc 100644
+--- a/package/linux-pam/linux-pam.hash
++++ b/package/linux-pam/linux-pam.hash
+@@ -1,6 +1,6 @@
+ # Locally computed hashes after checking signature at
+-# https://github.com/linux-pam/linux-pam/releases/download/v1.5.2/Linux-PAM-1.5.2.tar.xz.asc
++# https://github.com/linux-pam/linux-pam/releases/download/v1.5.3/Linux-PAM-1.5.3.tar.xz.asc
+ # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
+-sha256  e4ec7131a91da44512574268f493c6d8ca105c87091691b8e9b56ca685d4f94d  Linux-PAM-1.5.2.tar.xz
++sha256  7ac4b50feee004a9fa88f1dfd2d2fa738a82896763050cd773b3c54b0a818283  Linux-PAM-1.5.3.tar.xz
+ # Locally computed
+ sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 789dcf5c7b..21e5decb9c 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_PAM_VERSION = 1.5.2
++LINUX_PAM_VERSION = 1.5.3
+ LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.xz
+ LINUX_PAM_SITE = https://github.com/linux-pam/linux-pam/releases/download/v$(LINUX_PAM_VERSION)
+ LINUX_PAM_INSTALL_STAGING = YES
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
