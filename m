@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCAC9C001DC
-	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 15:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA4D3C001DC
+	for <buildroot@archiver.kernel.org>; Sat, 29 Jul 2023 15:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 602A48329E;
-	Sat, 29 Jul 2023 15:33:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 602A48329E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5585F81EC3;
+	Sat, 29 Jul 2023 15:46:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5585F81EC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YSGk3Oxm0Gut; Sat, 29 Jul 2023 15:33:21 +0000 (UTC)
+	with ESMTP id UMHixo-sQ-Z3; Sat, 29 Jul 2023 15:46:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7328783295;
-	Sat, 29 Jul 2023 15:33:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7328783295
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8559A1BF3EA
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 15:33:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97D5A81E52;
+	Sat, 29 Jul 2023 15:46:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97D5A81E52
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 64FD51BF3EA
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 15:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B51960C07
- for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 15:33:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B51960C07
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CEEC409A4
+ for <buildroot@lists.busybox.net>; Sat, 29 Jul 2023 15:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CEEC409A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EEcVwn9-7lsl for <buildroot@lists.busybox.net>;
- Sat, 29 Jul 2023 15:33:18 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A58DE60AC2
- for <buildroot@buildroot.org>; Sat, 29 Jul 2023 15:33:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A58DE60AC2
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:3ce4:463b:40b1:7148])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B4C3113F8C1;
- Sat, 29 Jul 2023 17:33:10 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 29 Jul 2023 17:33:10 +0200
-Date: Sat, 29 Jul 2023 17:33:10 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Brandon Maier <brandon.maier@collins.com>
-Message-ID: <20230729153310.GA229077@scaer>
-References: <20230728213218.3893857-1-brandon.maier@collins.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dD7B7jvHL8gi for <buildroot@lists.busybox.net>;
+ Sat, 29 Jul 2023 15:46:19 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9C4794099D
+ for <buildroot@buildroot.org>; Sat, 29 Jul 2023 15:46:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C4794099D
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 59D32A4C0367;
+ Sat, 29 Jul 2023 17:46:15 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58728)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qPm91-0007l6-0O;
+ Sat, 29 Jul 2023 17:46:15 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sat, 29 Jul 2023 17:46:15 +0200
+Message-Id: <20230729154615.559891-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230728213218.3893857-1-brandon.maier@collins.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1690644794;
- bh=TeYW6f/7W0anSJAxLMtXw3J2Oz3JJZ9+jSF8ykFQOdo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=pYwrgxDvRl6AtaGdLFkoaDpUfuRy0wY/OjG33TapA/Ja/7kDzlkI0PHAS/bi2m28w
- D+UrvB3QmHLxHJ9mBLrJ9tarSZqCNa6uYBj/kKv0EOLT1qFQXDHeJ9FuLlv4Mhz4qs
- PSStsMrvLRWVYlRjZQidwE4hQvzGncFfW2jPT1I5VkBbYd9yPHlvOzLQo3uQWM3p2p
- dizH4jAxjs3kE8Br8KAZbtgUEWFGGqcZcGui24AOi74H0rY8R4NjUXxm6YK9AXNRjW
- AOBkMV/fa25t75C0NV8lxpg2Lyv6S1WFax9vKh4+BMA1L+AO6eKPeJH5ukTzmQfMXm
- 5nGJe84iDupEg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pYwrgxDv
-Subject: Re: [Buildroot] [PATCH 1/1] utils/docker-run: fix support for
- git-worktrees
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1690645575;
+ bh=19aGeMKAq5U2q/Y7svU9y/FDb9nDLiVKr51tKMC6yh4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=fEd+bf4RiXbDXTDv5yM67x5yP9o/MzmYxWdjvcL9yHbK5ITp+HXo+YnpmDbABKfYt
+ GmUkpFARJjFU53okK2feCA7oJLVGCgHi7EciE5N4yM3FXYL1AxPBzDYyfgalW5YPYX
+ SZl4TA8xYp5wQJrIo3+PwaFLarx5+WgtV/fPg3r8cABeOxydFJ76fg3gpZwWVJHP3k
+ FcY6fzypGwQonVuqTXdrP8vTWjjTNjhDR5QsupqYP3TVAyAUhQVVv26v7VyliJ3tkY
+ MFIg2xq4jSIZVriPrmE1XYLPie32PbONMqBzGSK5n+Zdj0QNfPbJG7a7QCX2KeHgkq
+ A3YeOYqaRKtaA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=fEd+bf4R
+Subject: [Buildroot] [PATCH 1/1] package/libglu: bump version to 9.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,95 +74,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Brandon, All,
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-July/000725.html
 
-On 2023-07-28 21:32 +0000, Brandon Maier via buildroot spake thusly:
-> The docker-run script attempts to support git-new-workdirs and
-> git-worktrees by resolving the symlink at '$GIT_DIR/config' to get the
-> true $GIT_DIR. However this does not work for git-worktrees as they do
-> not use symlinks, instead they change the $GIT_DIR into a regular file
-> that contains the path to the real $GIT_DIR. To complicate things
-> further, we actually want the $GIT_COMMON_DIR which is the superset of a
-> worktree's $GIT_DIR.
-> 
-> git-rev-parse supports the '--git-common-dir' which will resolve the
-> $GIT_COMMON_DIR for us. However it does not work for git-new-workdirs,
-> so we still need to detect and handle them.
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Upstream dropped autoconf, switch to meson.
 
-Thanks, I've pushed it to master with a few changes:
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libglu/libglu.hash | 6 +++---
+ package/libglu/libglu.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-  - support git versions before --git-common-dir was introduced
-  - don't mount GIT_DIR if unknown (i.e. not needed)
-  - fix expanding MAIN_DIR
-
-See below..
-
-> ---
->  utils/docker-run | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/utils/docker-run b/utils/docker-run
-> index 17c587a484..db279dca68 100755
-> --- a/utils/docker-run
-> +++ b/utils/docker-run
-> @@ -2,8 +2,13 @@
->  set -o errexit -o pipefail
->  DIR=$(dirname "${0}")
->  MAIN_DIR=$(readlink -f "${DIR}/..")
-> -# GIT_DIR to support workdirs/worktrees
-> -GIT_DIR="$(dirname "$(realpath "${MAIN_DIR}/.git/config")")"
-> +if [ -L "${MAIN_DIR}/.git/config" ]; then
-> +    # Support git-new-workdir
-> +    GIT_DIR="$(dirname "$(realpath "${MAIN_DIR}/.git/config")")"
-> +else
-> +    # Support git-worktree
-> +    GIT_DIR="$(cd "$MAIN_DIR" && readlink -f "$(git rev-parse --git-common-dir)")"
-                      ^^^^^^^^^
-Expansion should use curly braces, like everywhere else.
-
---git-common-dir was only introduced in git 2.10.0, which is most
-probably not available in enterprise-grade distros like RHEL (RHEL 7 is
-still maintained, and it is based on Fedora 19; there's only a docker
-image for Fedora 20, and that has git 1.9).
-
-So I've added --no-flags, that has been present since at least 1.0.0,
-which means that, on git versions that did not support worktrees, we'll
-get an empty GIT_DIR, so that's OK: it means we're in the main working
-copy, and thus we don't need the mount.
-
-Applied to master with those changes, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> +fi
->  # shellcheck disable=SC2016
->  IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
->          sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libglu/libglu.hash b/package/libglu/libglu.hash
+index 234b58dd63..17d018ac66 100644
+--- a/package/libglu/libglu.hash
++++ b/package/libglu/libglu.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-June/000634.html
+-sha256  6e7280ff585c6a1d9dfcdf2fca489251634b3377bfc33c29e4002466a38d02d4  glu-9.0.2.tar.xz
+-sha512  2517d7406bb643d12c017a95dcb5d8716f307344332638bcbdf274a90752a7c22165d34745f1b082ed916bb07d40e62d1d1d67d96426225be63166f3480d6f64  glu-9.0.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-July/000725.html
++sha256  bd43fe12f374b1192eb15fe20e45ff456b9bc26ab57f0eee919f96ca0f8a330f  glu-9.0.3.tar.xz
++sha512  b2781059c0e176192c3fc0d7244645020937a463311171efddb9f35fb94ee43faabcf627fa7f429d48fceaf6dd9c5adb69c86c7a21ec4ea490f4ab143d52e3ba  glu-9.0.3.tar.xz
+ # locally computed
+ sha256  3a9992ccc9d672cfdd07ea862431d943a992d04836570c638a733bf15ec62c54  include/GL/glu.h
+diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
+index 8820e75d8b..b30187884a 100644
+--- a/package/libglu/libglu.mk
++++ b/package/libglu/libglu.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBGLU_VERSION = 9.0.2
++LIBGLU_VERSION = 9.0.3
+ LIBGLU_SITE = https://mesa.freedesktop.org/archive/glu
+ LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.xz
+ LIBGLU_LICENSE = SGI-B-2.0
+ LIBGLU_LICENSE_FILES = include/GL/glu.h
+ LIBGLU_INSTALL_STAGING = YES
+ LIBGLU_DEPENDENCIES = libgl host-pkgconf
++LIBGLU_CONF_OPTS = -Dgl_provider=gl
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
