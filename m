@@ -1,67 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89479EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 08:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89900C001DE
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFA46410D8;
-	Sun, 30 Jul 2023 08:19:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFA46410D8
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nST3nL8d50Rd; Sun, 30 Jul 2023 08:19:02 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D79E6410E0;
-	Sun, 30 Jul 2023 08:19:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D79E6410E0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B61051BF427
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 08:19:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8EB1D60AAE
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 08:19:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EB1D60AAE
+	by smtp3.osuosl.org (Postfix) with ESMTP id D97E660A9B;
+	Sun, 30 Jul 2023 10:12:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D97E660A9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CgYubJKLQdCs for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 08:18:59 +0000 (UTC)
-Received: from mx1.sonologic.net (mx1.sonologic.nl
- [IPv6:2a01:4f8:121:43cd::1:9])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C24CD60A7F
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 08:18:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C24CD60A7F
-Received-SPF: pass (mx1.sonologic.net: authenticated connection)
- receiver=mx1.sonologic.net; client-ip=178.63.120.221; helo=[10.1.3.70];
- envelope-from=kmartens@sonologic.se;
- x-software=spfmilter 2.001 http://www.acme.com/software/spfmilter/ with
- libspf2-1.2.11; 
-Received: from [10.1.3.70] (portal.sonologic.net [178.63.120.221])
- (authenticated bits=0)
- by mx1.sonologic.net (8.17.1/8.16.1) with ESMTPSA id 36U8IrPK021413
- (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
- Sun, 30 Jul 2023 08:18:54 GMT (envelope-from kmartens@sonologic.se)
-X-Authentication-Warning: mx1.sonologic.net: Host portal.sonologic.net
- [178.63.120.221] claimed to be [10.1.3.70]
-Message-ID: <f3596365-41b7-0248-0801-ee62edc0c2e5@metro.cx>
-Date: Sun, 30 Jul 2023 10:18:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <eee5a213-c0d0-c400-227e-fe3df1c941a4@sonologic.se>
- <20230728223552.36535b1f@windsurf>
-From: Koen Martens <kmartens@sonologic.se>
-In-Reply-To: <20230728223552.36535b1f@windsurf>
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4
- (mx1.sonologic.net [178.63.120.202]); Sun, 30 Jul 2023 08:18:55 +0000 (UTC)
-Subject: Re: [Buildroot] [PATCH 1/1] package/capnproto: bump version to
- 0.10.4
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Dy3XcQTd68Bv; Sun, 30 Jul 2023 10:12:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CAB560AAE;
+	Sun, 30 Jul 2023 10:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CAB560AAE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3DD041BF41B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:11:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17FB840193
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17FB840193
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mB3GpwX8bKlP for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 10:11:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE0614010D
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE0614010D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C91F783867; Sun, 30 Jul 2023 10:11:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 12:10:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7205df8a4f3c729b11a5f0c34885e6cf592f24b9
+X-Git-Newrev: f2040c09e6160407e66fa42a90be67a1b8b2baeb
+X-Patchwork-Hint: ignore
+Message-Id: <20230730101157.C91F783867@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestSELinuxSystemd{Ext4,
+ Squashfs} add midding libelf kernel dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,33 +56,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKTXkgYXBvbG9naWVzLiBJdCBpc24ndCBvZnRlbiB0aGF0IEknbSBjb250cmli
-dXRpbmcgb24gYSBwcm9qZWN0IHRoYXQgCnN0aWxsIHVzZXMgZW1haWwgZm9yIHNlbmRpbmcgYXJv
-dW5kIHBhdGNoZXMsIHNvIGV2ZXJ5IHRpbWUgSSBoYXZlIHRvIApyZWRpc2NvdmVyIHRoZSBpbnRy
-aWNhY2llcyBvZiB0aGlzIHBhcnRpY3VsYXIgd29ya2Zsb3cuIEknbGwgdHJ5IGFuZCBwYXkgCm1v
-cmUgYXR0ZW50aW9uIG5leHQgdGltZSEKCmdpdCBzZW5kLWVtYWlsIHNhZGx5IHdvbid0IHdvcmsg
-b3V0IG9mIHRoZSBib3ggZm9yIG1lLCBldmVuIGFmdGVyIEkgCmluc3RhbGwgdGhlIG9wdGlvbmFs
-IHBhY2thZ2VzLCBiZWNhdXNlIG9mIElTUCByZXN0cmljdGlvbnMuIEknbGwgc2VlIGlmIApJIGNh
-biBmaW5kIHNvbWUgdGltZSB0byBmaWd1cmUgb3V0IGFsbCB0aGUgcmVxdWlyZWQgb3B0aW9ucyBm
-b3IgaXQgdG8gCnNlbmQgb3V0IHRocm91Z2ggbXkgbWFpbCBzZXJ2ZXIuCgpDaGVlcnMsCgpLb2Vu
-CgpPbiAyMDIzLTA3LTI4IDIyOjM1LCBUaG9tYXMgUGV0YXp6b25pIHdyb3RlOgo+IEhlbGxvIEtv
-ZW4sCj4KPiBPbiBNb24sIDI0IEp1bCAyMDIzIDE0OjQyOjA4ICswMjAwCj4gS29lbiBNYXJ0ZW5z
-IDxrbWFydGVuc0Bzb25vbG9naWMuc2U+IHdyb3RlOgo+Cj4+IFNpZ25lZC1vZmYtYnk6IEtvZW4g
-TWFydGVucyA8Z21jQHNvbm9sb2dpYy5ubD4KPj4gLS0tCj4+ICAgwqBwYWNrYWdlL2NhcG5wcm90
-by9jYXBucHJvdG8uaGFzaCB8IDIgKy0KPj4gICDCoHBhY2thZ2UvY2FwbnByb3RvL2NhcG5wcm90
-by5ta8KgwqAgfCAyICstCj4+ICAgwqAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwg
-MiBkZWxldGlvbnMoLSkKPiBZb3VyIHBhdGNoIHdhcyBsaW5lLXdyYXBwZWQsIHNvIGl0IGNvdWxk
-bid0IGJlIGFwcGxpZWQgYXMtaXMuIENvdWxkIHlvdQo+IHRyeSB0byB1c2UgImdpdCBzZW5kLWVt
-YWlsIiBmb3IgeW91ciBuZXh0IHBhdGNoZXM/Cj4KPiBBcyB0aGUgcGF0Y2ggd2FzIHRyaXZpYWws
-IEkgZml4ZWQgdGhpbmdzIHVwIG1hbnVhbGx5IGFuZCBhcHBsaWVkLCBidXQKPiBpdCB3b3VsZCBi
-ZSBhbm5veWluZyB0byBkbyBvbiBhIG1vcmUgY29tcGxpY2F0ZWQgcGF0Y2guCj4KPiBUaGFua3Mg
-Zm9yIHlvdXIgY29udHJpYnV0aW9uIQo+Cj4gVGhvbWFzCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=f2040c09e6160407e66fa42a90be67a1b8b2baeb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+objtool built by the kernel requires libelf
+
+ldd TestSELinuxSystemdExt4/build/linux-6.1.26/tools/objtool/objtool
+  linux-vdso.so.1
+  libelf.so.1 => TestSELinuxSystemdExt4/host/lib/libelf.so.1
+
+While updating the kernel used in TestSELinuxSystemd [1] we
+forgot to select BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF to provide
+Buildroot's host-libelf. Using host-libelf avoid linking with
+libelf installed on the host or failing to build objtool if
+libelf is not installed.
+
+[1] 60b84fb7ce4612b2b14a675e28331111468e1f2b
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4725186370 (TestSELinuxSystemdSquashfs)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4725186368 (TestSELinuxSystemdExt4)
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/init/test_systemd_selinux.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
+index 5f91243f37..fab23e3330 100644
+--- a/support/testing/tests/init/test_systemd_selinux.py
++++ b/support/testing/tests/init/test_systemd_selinux.py
+@@ -15,6 +15,7 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+         BR2_PACKAGE_LIBSELINUX=y
+         BR2_PACKAGE_REFPOLICY=y
+         """
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
