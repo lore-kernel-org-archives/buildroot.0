@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8947EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 22:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3A6AEB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 22:13:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43BF061037;
-	Sun, 30 Jul 2023 22:13:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43BF061037
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FECF607A3;
+	Sun, 30 Jul 2023 22:13:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FECF607A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5NjIYQVlIaG9; Sun, 30 Jul 2023 22:13:04 +0000 (UTC)
+	with ESMTP id vrn6jAeIO0sB; Sun, 30 Jul 2023 22:13:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DB2761039;
-	Sun, 30 Jul 2023 22:13:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DB2761039
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F351A1BF3BF
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 22:13:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1C8F607B4;
+	Sun, 30 Jul 2023 22:13:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1C8F607B4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 41F761BF3BF
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 22:13:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB72D404EC
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 22:13:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB72D404EC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BA5680EA4
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 22:13:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BA5680EA4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QHPBCozoaNUx for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 22:12:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D5FF3404B0
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 22:12:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5FF3404B0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C357683D5C; Sun, 30 Jul 2023 22:12:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 31 Jul 2023 00:12:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9163dd1321360a7ac265837c75632bc00f3b3a13
-X-Git-Newrev: 5622c76bf42fd29f8dfc231d0fccb623960b3542
-X-Patchwork-Hint: ignore
-Message-Id: <20230730221257.C357683D5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cmocka: fix build on Thumb classic
- configurations
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4_1pP-nXMlZB for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 22:13:32 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ADB2180B8D
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 22:13:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADB2180B8D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AB7A21C0003;
+ Sun, 30 Jul 2023 22:13:29 +0000 (UTC)
+Date: Mon, 31 Jul 2023 00:13:28 +0200
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20230731001328.5d47d12f@windsurf>
+In-Reply-To: <a38e4cdf-fa74-74a2-eab0-1e63923c5fc0@mind.be>
+References: <20230102071522.3229935-1-JoelsonCarl@gmail.com>
+ <a38e4cdf-fa74-74a2-eab0-1e63923c5fc0@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690755210;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=skHKCXPSOgUYW0VwF0voEQDiihgU/hURibOmiZ6dmQk=;
+ b=TNfWnatqXmqU0d6fX1rdZ4tK+as3Mo8Sqa+SnILckjQP5vgsgHrUXiYdXcxWmX4CKT2TIz
+ 57x96OiAhxa64N8hkn6RHL34RtJOP3x/6/SL7OqmfQl/ySB/w+GoNoo3C0efDlZxFBVNfd
+ 5Frk07w+GCHnBXtIEEQ6x/KH+qf9NYQXNi+vV5o5EM07DNsItRjSUzl7Y2JZgIwhczPedE
+ K46ic1hOs2dFgCClV26xHpzvMClHgsHj7hTqUiRy5M+bCgD3XtHXojHOuI+D7OPquYqsMR
+ fG43lXQphDtTsFYm+eSCeISbqCN5M0X9bAd91I+F4coQ9YHo49tKN6j74tWX7A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TNfWnatq
+Subject: Re: [Buildroot] [PATCH 1/1] package/cmocka: don't allow building
+ for Thumb1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +78,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5622c76bf42fd29f8dfc231d0fccb623960b3542
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 9 Mar 2023 22:54:27 +0100
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-The cmocka package checks if a toolchain supports the
--fstack-clash-protection compiler flag, and if it does automatically
-uses it. That flag is not supported by GCC for Thumb1 builds (at least
-as of both GCC 11 and GCC 12). Let's tell cmocka about this by passing
--DWITH_STACK_CLASH_PROTECTION=OFF in this configuration, as suggested
-by Arnout Vandecappelle.
+>   Instead of adding an arch exception, have you tried (conditionally) adding 
+> -DWITH_STACK_CLASH_PROTECTION=OFF to CMOCKA_CONFIGURE_OPTS? I think that that 
+> should bypass the check.
 
-Fixes:
-http://autobuild.buildroot.net/results/4044b3a71d3130d934c7a7c0c5badfabb2a97030/
+It works!
 
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-[Thomas: change the initial patch from Joel to use the suggestion from
-Arnout]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cmocka/cmocka.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+So I applied Joel's patch but essentially rewrote it (and its commit
+message) to use the solution proposed by Arnout.
 
-diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
-index eafb4898e1..297f95f465 100644
---- a/package/cmocka/cmocka.mk
-+++ b/package/cmocka/cmocka.mk
-@@ -21,4 +21,9 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- CMOCKA_CONF_OPTS += -DWITH_STATIC_LIB=ON
- endif
- 
-+# gcc for ARM Thumb1 doesn't implement -fstack-clash-protection
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+CMOCKA_CONF_OPTS += -DWITH_STACK_CLASH_PROTECTION=OFF
-+endif
-+
- $(eval $(cmake-package))
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
