@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 969E4C00528
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 20:45:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E25C001DC
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 20:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D61E6101A;
-	Sun, 30 Jul 2023 20:45:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D61E6101A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BF676101B;
+	Sun, 30 Jul 2023 20:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BF676101B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j-3eoyfSLi3f; Sun, 30 Jul 2023 20:44:59 +0000 (UTC)
+	with ESMTP id MPO2rs8kiNnL; Sun, 30 Jul 2023 20:45:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 679F56101D;
-	Sun, 30 Jul 2023 20:44:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 679F56101D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 886F91BF86B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21BC661019;
+	Sun, 30 Jul 2023 20:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21BC661019
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 350EF1BF31E
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FF5F81A30
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FF5F81A30
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CD62410BB
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CD62410BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E_L103MLzn7T for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pLae0Le1jRw5 for <buildroot@lists.busybox.net>;
  Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61F7881A29
+ by smtp4.osuosl.org (Postfix) with ESMTP id 858C6410BA
  for <buildroot@buildroot.org>; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61F7881A29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 858C6410BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EDD383CD1; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
+ id 72F7583CDA; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 22:43:02 +0200
+Date: Sun, 30 Jul 2023 22:43:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5010cac4970d8a1e3d7b027921d18713a2d841ea
-X-Git-Newrev: dc08ac951de277d4c601c715b1cb8c121f3eb2e0
+X-Git-Oldrev: eb34442831eed4a301ec1ca1e1ab90acbebed28e
+X-Git-Newrev: 88b188a242d1b7ac2dc08077bb6ed521030b6b0e
 X-Patchwork-Hint: ignore
-Message-Id: <20230730204443.4EDD383CD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bitcoin: fix build with gcc 13.x
+Message-Id: <20230730204443.72F7583CDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi: Fix building with fmt >= 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,143 +63,175 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc08ac951de277d4c601c715b1cb8c121f3eb2e0
+commit: https://git.buildroot.net/buildroot/commit/?id=88b188a242d1b7ac2dc08077bb6ed521030b6b0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/8ac/8aceefdb71814c48163d7b171783172b6e1fdf27/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...sing-includes-to-fix-gcc-13-compile-error.patch | 48 ++++++++++++++++++++++
- ...003-refactor-add-most-of-src-util-to-iwyu.patch | 34 +++++++++++++++
- .../bitcoin/0004-src-util-string-h-fix-gcc13.patch | 23 +++++++++++
- 3 files changed, 105 insertions(+)
+ ...ome-use-AnnouncementFlagToString-when-log.patch | 31 ++++++++++++++++++
+ ...ttonControl-use-explicit-cast-to-UTILS-CO.patch | 32 +++++++++++++++++++
+ ...using-fmt-enums-format_as-for-explicit-en.patch | 33 +++++++++++++++++++
+ ...rmatter-for-std-atomic-for-explicit-atomi.patch | 37 ++++++++++++++++++++++
+ 4 files changed, 133 insertions(+)
 
-diff --git a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch b/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
+diff --git a/package/kodi/0002-CGUIWindowHome-use-AnnouncementFlagToString-when-log.patch b/package/kodi/0002-CGUIWindowHome-use-AnnouncementFlagToString-when-log.patch
 new file mode 100644
-index 0000000000..22c0ca2adf
+index 0000000000..3aa41adc86
 --- /dev/null
-+++ b/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
-@@ -0,0 +1,48 @@
-+From 339a95b7537b47e5d6b732c0633a00afd96e3ca0 Mon Sep 17 00:00:00 2001
-+From: MarcoFalke <*~=`'#}+{/-|&$^_@721217.xyz>
-+Date: Thu, 19 Jan 2023 19:35:43 +0100
-+Subject: [PATCH] Add missing includes to fix gcc-13 compile error
++++ b/package/kodi/0002-CGUIWindowHome-use-AnnouncementFlagToString-when-log.patch
+@@ -0,0 +1,31 @@
++From cfbc0ec1b2cf2952fa4a279cf5fc71c15bf56f23 Mon Sep 17 00:00:00 2001
++From: Lukas Rusak <lorusak@gmail.com>
++Date: Tue, 27 Jun 2023 11:21:50 -0700
++Subject: [PATCH] CGUIWindowHome: use AnnouncementFlagToString when logging
 +
-+Upstream: https://github.com/bitcoin/bitcoin/commit/fadeb6b103cb441e0e91ef506ef29febabb10715
++Upstream: https://github.com/xbmc/xbmc/commit/3a20f5b67ff32cc3663e0ccd72941e666e8756a4
++Upstream: https://github.com/xbmc/xbmc/pull/23571
 +
++Signed-off-by: Lukas Rusak <lorusak@gmail.com>
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/support/lockedpool.cpp | 3 +++
-+ src/support/lockedpool.h   | 4 ++--
-+ 2 files changed, 5 insertions(+), 2 deletions(-)
++ xbmc/windows/GUIWindowHome.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
-+index 26de780f2..11131d551 100644
-+--- a/src/support/lockedpool.cpp
-++++ b/src/support/lockedpool.cpp
-+@@ -22,6 +22,9 @@
++diff --git a/xbmc/windows/GUIWindowHome.cpp b/xbmc/windows/GUIWindowHome.cpp
++index c42e073c48..abc6cfc94d 100644
++--- a/xbmc/windows/GUIWindowHome.cpp
+++++ b/xbmc/windows/GUIWindowHome.cpp
++@@ -78,7 +78,8 @@ void CGUIWindowHome::Announce(ANNOUNCEMENT::AnnouncementFlag flag,
++ {
++   int ra_flag = 0;
++ 
++-  CLog::Log(LOGDEBUG, LOGANNOUNCE, "GOT ANNOUNCEMENT, type: {}, from {}, message {}", flag, sender, message);
+++  CLog::Log(LOGDEBUG, LOGANNOUNCE, "GOT ANNOUNCEMENT, type: {}, from {}, message {}",
+++            AnnouncementFlagToString(flag), sender, message);
++ 
++   // we are only interested in library changes
++   if ((flag & (ANNOUNCEMENT::VideoLibrary | ANNOUNCEMENT::AudioLibrary)) == 0)
++-- 
++2.39.2
++
+diff --git a/package/kodi/0003-CGUIColorButtonControl-use-explicit-cast-to-UTILS-CO.patch b/package/kodi/0003-CGUIColorButtonControl-use-explicit-cast-to-UTILS-CO.patch
+new file mode 100644
+index 0000000000..8ac29dcd20
+--- /dev/null
++++ b/package/kodi/0003-CGUIColorButtonControl-use-explicit-cast-to-UTILS-CO.patch
+@@ -0,0 +1,32 @@
++From 8b1673044971cae84de7d34015230b9503f292f4 Mon Sep 17 00:00:00 2001
++From: Lukas Rusak <lorusak@gmail.com>
++Date: Tue, 27 Jun 2023 11:22:32 -0700
++Subject: [PATCH] CGUIColorButtonControl: use explicit cast to
++ UTILS::COLOR::Color when formatting
++
++Upstream: https://github.com/xbmc/xbmc/commit/c82006b575b78efbb3f5aff40a159b90f245ea9d
++Upstream: https://github.com/xbmc/xbmc/pull/23571
++
++Signed-off-by: Lukas Rusak <lorusak@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ xbmc/guilib/GUIColorButtonControl.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/xbmc/guilib/GUIColorButtonControl.cpp b/xbmc/guilib/GUIColorButtonControl.cpp
++index 940834cb68..67597d7ab5 100644
++--- a/xbmc/guilib/GUIColorButtonControl.cpp
+++++ b/xbmc/guilib/GUIColorButtonControl.cpp
++@@ -188,7 +188,8 @@ void CGUIColorButtonControl::RenderInfoText()
++ void CGUIColorButtonControl::ProcessInfoText(unsigned int currentTime)
++ {
++   CRect labelRenderRect = m_labelInfo.GetRenderRect();
++-  bool changed = m_labelInfo.SetText(StringUtils::Format("#{:08X}", m_imgBoxColor));
+++  bool changed = m_labelInfo.SetText(
+++      StringUtils::Format("#{:08X}", static_cast<UTILS::COLOR::Color>(m_imgBoxColor)));
++   // Set Label X position based on image mask control position
++   float textWidth = m_labelInfo.GetTextWidth() + 2 * m_labelInfo.GetLabelInfo().offsetX;
++   float textPosX = m_imgColorMask->GetXPosition() - textWidth;
++-- 
++2.39.2
++
+diff --git a/package/kodi/0004-CLog-allow-using-fmt-enums-format_as-for-explicit-en.patch b/package/kodi/0004-CLog-allow-using-fmt-enums-format_as-for-explicit-en.patch
+new file mode 100644
+index 0000000000..4e09218361
+--- /dev/null
++++ b/package/kodi/0004-CLog-allow-using-fmt-enums-format_as-for-explicit-en.patch
+@@ -0,0 +1,33 @@
++From ec1fd134e31b8c667ff06e02e21a75c4c3e87dfd Mon Sep 17 00:00:00 2001
++From: Lukas Rusak <lorusak@gmail.com>
++Date: Tue, 27 Jun 2023 11:24:02 -0700
++Subject: [PATCH] CLog: allow using fmt::enums::format_as for explicit enum
++ conversion when using libfmt>=10
++
++Upstream: https://github.com/xbmc/xbmc/commit/e4b1aa8450fabfb41379953c8ccec0a512421531
++Upstream: https://github.com/xbmc/xbmc/pull/23571
++
++Signed-off-by: Lukas Rusak <lorusak@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ xbmc/utils/log.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/xbmc/utils/log.h b/xbmc/utils/log.h
++index 9fc4aae368..adf46905a8 100644
++--- a/xbmc/utils/log.h
+++++ b/xbmc/utils/log.h
++@@ -46,6 +46,10 @@ class dist_sink;
++ } // namespace sinks
++ } // namespace spdlog
++ 
+++#if FMT_VERSION >= 100000
+++using fmt::enums::format_as;
+++#endif
+++
++ class CLog : public ISettingsHandler, public ISettingCallback
++ {
++ public:
++-- 
++2.39.2
++
+diff --git a/package/kodi/0005-CLog-add-formatter-for-std-atomic-for-explicit-atomi.patch b/package/kodi/0005-CLog-add-formatter-for-std-atomic-for-explicit-atomi.patch
+new file mode 100644
+index 0000000000..b87a60f809
+--- /dev/null
++++ b/package/kodi/0005-CLog-add-formatter-for-std-atomic-for-explicit-atomi.patch
+@@ -0,0 +1,37 @@
++From 46f6d97f46254600bd34f77f335a475178d7aaa5 Mon Sep 17 00:00:00 2001
++From: Lukas Rusak <lorusak@gmail.com>
++Date: Tue, 27 Jun 2023 11:24:34 -0700
++Subject: [PATCH] CLog: add formatter for std::atomic for explicit atomic
++ conversion when using libfmt>=10
++
++Upstream: https://github.com/xbmc/xbmc/commit/26c164a28cfd18ceef7a1f2bbba5bf8a4a5a750c
++Upstream: https://github.com/xbmc/xbmc/pull/23571
++
++Signed-off-by: Lukas Rusak <lorusak@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ xbmc/utils/log.h | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/xbmc/utils/log.h b/xbmc/utils/log.h
++index adf46905a8..1c42c888cb 100644
++--- a/xbmc/utils/log.h
+++++ b/xbmc/utils/log.h
++@@ -48,6 +48,14 @@ class dist_sink;
++ 
++ #if FMT_VERSION >= 100000
++ using fmt::enums::format_as;
+++
+++namespace fmt
+++{
+++template<typename T, typename Char>
+++struct formatter<std::atomic<T>, Char> : formatter<T, Char>
+++{
+++};
+++} // namespace fmt
 + #endif
 + 
-+ #include <algorithm>
-++#include <limits>
-++#include <stdexcept>
-++#include <utility>
-+ #ifdef ARENA_DEBUG
-+ #include <iomanip>
-+ #include <iostream>
-+diff --git a/src/support/lockedpool.h b/src/support/lockedpool.h
-+index b9e2e99d1..25b4c0f36 100644
-+--- a/src/support/lockedpool.h
-++++ b/src/support/lockedpool.h
-+@@ -5,11 +5,11 @@
-+ #ifndef BITCOIN_SUPPORT_LOCKEDPOOL_H
-+ #define BITCOIN_SUPPORT_LOCKEDPOOL_H
-+ 
-+-#include <stdint.h>
-++#include <cstddef>
-+ #include <list>
-+ #include <map>
-+-#include <mutex>
-+ #include <memory>
-++#include <mutex>
-+ #include <unordered_map>
-+ 
-+ /**
++ class CLog : public ISettingsHandler, public ISettingCallback
 +-- 
 +2.39.2
 +
-diff --git a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch b/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
-new file mode 100644
-index 0000000000..095fa648dd
---- /dev/null
-+++ b/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
-@@ -0,0 +1,34 @@
-+From c187efa907fd64ea2c7b7d699c5c97f9d5b79960 Mon Sep 17 00:00:00 2001
-+From: fanquake <fanquake@gmail.com>
-+Date: Thu, 9 Jun 2022 16:26:55 +0100
-+Subject: [PATCH] refactor: add most of src/util to iwyu
-+
-+These files change infrequently, and not much header shuffling is required.
-+
-+We don't add everything in src/util/ yet, because IWYU makes some
-+dubious suggestions, which I'm going to follow up with upstream.
-+
-+Upstream: https://github.com/bitcoin/bitcoin/commit/07f2c25d04c39a0074e1d9ee1b24b3e359c8153f
-+
-+[Bernd: backported relevant part from upstream commit to version 0.21.2
-+        to fix build error with gcc 13.x]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/util/bip32.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/util/bip32.h b/src/util/bip32.h
-+index 347e83db9..6ef051c48 100644
-+--- a/src/util/bip32.h
-++++ b/src/util/bip32.h
-+@@ -6,6 +6,7 @@
-+ #define BITCOIN_UTIL_BIP32_H
-+ 
-+ #include <attributes.h>
-++#include <cstdint>
-+ #include <string>
-+ #include <vector>
-+ 
-+-- 
-+2.39.2
-+
-diff --git a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch b/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
-new file mode 100644
-index 0000000000..00a9ef2b97
---- /dev/null
-+++ b/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
-@@ -0,0 +1,23 @@
-+From fa2deae2a86417d7e0d4cd33fb933b1000d20313 Mon Sep 17 00:00:00 2001
-+From: MacroFake <falke.marco@gmail.com>
-+Date: Thu, 5 May 2022 08:28:29 +0200
-+Subject: [PATCH] Wrap boost::replace_all
-+
-+Upstream: https://github.com/bitcoin/bitcoin/commit/fa2deae2a86417d7e0d4cd33fb933b1000d20313
-+
-+[Bernd: backported relevant part from upstream commit to version 0.21.2
-+        to fix build error with gcc 13.x]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+diff --git a/src/util/string.h b/src/util/string.h
-+index 2e91347b27a10..df20e34ae9aaa 100644
-+--- a/src/util/string.h
-++++ b/src/util/string.h
-+@@ -9,6 +9,7 @@
-+ 
-+ #include <algorithm>
-+ #include <array>
-++#include <cstdint>
-+ #include <cstring>
-+ #include <locale>
-+ #include <sstream>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
