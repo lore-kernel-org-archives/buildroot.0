@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49FC7C001DE
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:25:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C009EEB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F31DB6101E;
-	Sun, 30 Jul 2023 21:25:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F31DB6101E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BF5261023;
+	Sun, 30 Jul 2023 21:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BF5261023
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tY5iJP54__D7; Sun, 30 Jul 2023 21:25:14 +0000 (UTC)
+	with ESMTP id zFQV5Ejqm1e9; Sun, 30 Jul 2023 21:26:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F29EB61023;
-	Sun, 30 Jul 2023 21:25:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F29EB61023
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EEFD61BF401
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:24:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 626D36101F;
+	Sun, 30 Jul 2023 21:26:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 626D36101F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 44FE11BF401
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C73AD409B0
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:24:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C73AD409B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2AE6161021
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AE6161021
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SlAQBd96L-ma for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 21:24:57 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1CBB4099F
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:24:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1CBB4099F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C8BB83CF7; Sun, 30 Jul 2023 21:24:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 23:22:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 67cbbbfe6e9632deacd0784bdbf51496ad76701d
-X-Git-Newrev: f93a6c2830d2da73a40edeb83826467672392b62
-X-Patchwork-Hint: ignore
-Message-Id: <20230730212457.8C8BB83CF7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencsd: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dl2r8NNr-9iN for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 21:26:03 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C34206101F
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C34206101F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E402D240004;
+ Sun, 30 Jul 2023 21:26:00 +0000 (UTC)
+Date: Sun, 30 Jul 2023 23:25:59 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230730232559.463da1d5@windsurf>
+In-Reply-To: <20230222204134.38884-1-ju.o@free.fr>
+References: <20230222204134.38884-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690752361;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=WuT41i3Yt2oGQ0vbv5sIhTTwmT1aI+EXxEaIFHcHAyw=;
+ b=ZMT232ZpESmJ3OvhFTAH8nPDZyTlSoXHy195RPgF5MgjHXzBI+gaifruQefxHPq1F2lpFj
+ n572x1vFK4EUtLoWxJcf4d9GQbyOmPFIQlqTyf58JwypX9nxmFevQC+gEQbzHMqzAKdf8Y
+ gxlOYx4l9sOTtuTbpSKaJ7mo18WLH2qrJNhAB2ho2NjC4JaDSfDR0Ec6GA1K3Vi50ymuv5
+ mSC/HzHWUWqzziHBdYpllh8L6lIQax3A4153G9FWjaFflDBliD5gPW53UCAVsmlR+O7oZ0
+ AIItIrjfBhAbFLA5U/oEbBTCsDSB776ysxwUlJuZ0OurmRtsLZBmzmUfoxdaPw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZMT232Zp
+Subject: Re: [Buildroot] [PATCH next 1/2] package/opencsd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,136 +76,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f93a6c2830d2da73a40edeb83826467672392b62
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Julien,
 
-This library provides an API suitable for the decode of
-ARM(r) CoreSight(tm) trace streams.
+On Wed, 22 Feb 2023 21:41:33 +0100
+Julien Olivain <ju.o@free.fr> wrote:
 
-OpenCSD is for example an optional dependency in the Linux
-"perf" tool, starting from kernel version 5.1.
+> This library provides an API suitable for the decode of
+> ARM(r) CoreSight(tm) trace streams.
+> 
+> OpenCSD is for example an optional dependency in the Linux
+> "perf" tool, starting from kernel version 5.1.
+> 
+> https://github.com/Linaro/OpenCSD
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-https://github.com/Linaro/OpenCSD
+Applied with very, very small tweaks.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/opencsd/Config.in    | 27 +++++++++++++++++++++++++++
- package/opencsd/opencsd.hash |  3 +++
- package/opencsd/opencsd.mk   | 31 +++++++++++++++++++++++++++++++
- 5 files changed, 63 insertions(+)
+> +config BR2_PACKAGE_OPENCSD
+> +	bool "OpenCSD"
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d4a6637671..51e7e3439d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1716,6 +1716,7 @@ F:	package/libjxl/
- F:	package/octave/
- F:	package/ola/
- F:	package/openblas/
-+F:	package/opencsd/
- F:	package/openmpi/
- F:	package/perftest/
- F:	package/ptm2human/
-diff --git a/package/Config.in b/package/Config.in
-index 908806db41..43c38d7d99 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1722,6 +1722,7 @@ menu "Hardware handling"
- 	source "package/mtdev/Config.in"
- 	source "package/ne10/Config.in"
- 	source "package/neardal/Config.in"
-+	source "package/opencsd/Config.in"
- 	source "package/opensc/Config.in"
- 	source "package/owfs/Config.in"
- 	source "package/pcsc-lite/Config.in"
-diff --git a/package/opencsd/Config.in b/package/opencsd/Config.in
-new file mode 100644
-index 0000000000..6e400cc2ae
---- /dev/null
-+++ b/package/opencsd/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_OPENCSD_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm
-+	default y if BR2_armeb
-+	default y if BR2_aarch64
-+	default y if BR2_aarch64_be
-+
-+config BR2_PACKAGE_OPENCSD
-+	bool "opencsd"
-+	depends on BR2_PACKAGE_OPENCSD_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	help
-+	  This library provides an API suitable for the decode of
-+	  ARM(r) CoreSight(tm) trace streams.
-+
-+	  OpenCSD is for example an optional dependency in the Linux
-+	  "perf" tool, starting from kernel version 5.1.
-+
-+	  https://github.com/Linaro/OpenCSD
-+
-+comment "opencsd needs a toolchain w/ C++11, gcc >= 4.8, dynamic library"
-+	depends on BR2_PACKAGE_OPENCSD_ARCH_SUPPORTS
-+	depends on BR2_STATIC_LIBS \
-+		|| !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/opencsd/opencsd.hash b/package/opencsd/opencsd.hash
-new file mode 100644
-index 0000000000..84a762fb36
---- /dev/null
-+++ b/package/opencsd/opencsd.hash
-@@ -0,0 +1,3 @@
-+# Locally Computed:
-+sha256  e1bb6d8d09e87974cb5ca6db2a13b0e1ba9e51117ca2ed71879df07ff7af4de2  opencsd-1.4.0.tar.gz
-+sha256  980eef4b0744e63834e3ec0d50c2a4ff6d81d7ec62dd8ba8c66acae0ec5a2e88  LICENSE
-diff --git a/package/opencsd/opencsd.mk b/package/opencsd/opencsd.mk
-new file mode 100644
-index 0000000000..680364d01d
---- /dev/null
-+++ b/package/opencsd/opencsd.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# opencsd
-+#
-+################################################################################
-+
-+OPENCSD_VERSION = 1.4.0
-+OPENCSD_SITE = $(call github,Linaro,OpenCSD,v$(OPENCSD_VERSION))
-+OPENCSD_LICENSE = BSD-3-Clause
-+OPENCSD_LICENSE_FILES = LICENSE
-+OPENCSD_INSTALL_STAGING = YES
-+
-+OPENCSD_MAKE_OPTS = \
-+	CROSS_COMPILE="$(TARGET_CROSS)"
-+
-+define OPENCSD_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/decoder/build/linux \
-+		$(OPENCSD_MAKE_OPTS) all
-+endef
-+
-+define OPENCSD_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/decoder/build/linux \
-+		$(OPENCSD_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define OPENCSD_INSTALL_STAGING_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/decoder/build/linux \
-+		$(OPENCSD_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+	bool "opencsd"
+
+(for consistency, we want all package prompts to be lower-case)
+
+> +	depends on BR2_PACKAGE_OPENCSD_ARCH_SUPPORTS
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+> +	help
+> +	  This library provides an API suitable for the decode of
+> +	  ARM(r) CoreSight(tm) trace streams.
+> +
+> +	  OpenCSD is for example an optional dependency in the Linux
+> +	  "perf" tool, starting from kernel version 5.1.
+> +
+> +	  https://github.com/Linaro/OpenCSD
+> +
+> +comment "OpenCSD needs a toolchain w/ C++11, gcc >= 4.8, dynamic libraries"
+
+            ^^^^^^ opencsd
+                                                                    ^^^^^^^^^ library
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
