@@ -4,66 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C81AC001DC
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:34:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C4EFC001DC
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D526461030;
-	Sun, 30 Jul 2023 21:34:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D526461030
+	by smtp3.osuosl.org (Postfix) with ESMTP id 418B360804;
+	Sun, 30 Jul 2023 21:34:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 418B360804
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Go4yPJtvn6If; Sun, 30 Jul 2023 21:34:27 +0000 (UTC)
+	with ESMTP id PsPSb9pH5URy; Sun, 30 Jul 2023 21:34:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 245FF60804;
-	Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 245FF60804
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D71601BF401
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FB006102B;
+	Sun, 30 Jul 2023 21:34:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FB006102B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 670CD1BF401
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B083781416
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B083781416
+ by smtp3.osuosl.org (Postfix) with ESMTP id 419E361030
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 419E361030
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AeUShulQ1PW1 for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 21:34:24 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C58D781414
- for <buildroot@busybox.net>; Sun, 30 Jul 2023 21:34:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C58D781414
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C1C0120003;
- Sun, 30 Jul 2023 21:34:21 +0000 (UTC)
-Date: Sun, 30 Jul 2023 23:34:20 +0200
-To: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-Message-ID: <20230730233420.4cec6520@windsurf>
-In-Reply-To: <20230521085345.25691-1-guillaume.bressaix@gmail.com>
-References: <20230521085345.25691-1-guillaume.bressaix@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690752862;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=A6e9GJ/jyiYzwcuacaE17r/QNjhfgr6ewpegGrsuHUU=;
- b=NLCyDPHFotpd8/+Oew5jDSLNsOti6m5pgS7xbG/rVzKVHxbv7r2l661sWSS9BEm/V0gSsT
- 0NFrrcFrcyvuse/17/SwZv9JeyUwOCQm37ZavLWXcx1GvW1Cs/lPipT4bCuM47Pdv9kSB8
- zOIdzAjF1kHVdIzBbA4fY/Q/pnFm6hzuJKBTo7/n4zDq5okb30MicnX0fvsuaZZaq3YVpt
- 7vn98a4wNcc8VXCIe8oBi+v5RuSSKjArAyzmzhSzJW8O2OJXr/Zp6Kw8ZOAs1tm2MpsVWV
- Hp6jBhKkdXS2n5FhHmNDKzCe4JewsFmgo2GyFlHHq/LteuETff9uVu/2ZgfbLQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NLCyDPHF
-Subject: Re: [Buildroot] [PATCH 1/1] package/liquid-dsp: bump to version
- 1.5.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rSlmV7XzYwDs for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 731CD61028
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 731CD61028
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5EA5083D28; Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 23:26:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d2a9a06092e66111f34e449371872de2d4ccde5b
+X-Git-Newrev: d78de0ca97e178c89a6e3a78cb36b300200b75a1
+X-Patchwork-Hint: ignore
+Message-Id: <20230730213426.5EA5083D28@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-gast: bump to version 0.5.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +57,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 21 May 2023 10:53:45 +0200
-"Guillaume W. Bres" <guillaume.bressaix@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d78de0ca97e178c89a6e3a78cb36b300200b75a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  package/liquid-dsp/liquid-dsp.hash | 2 +-
->  package/liquid-dsp/liquid-dsp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-gast/python-gast.hash | 4 ++--
+ package/python-gast/python-gast.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-gast/python-gast.hash b/package/python-gast/python-gast.hash
+index f16d001a6a..9ce5296938 100644
+--- a/package/python-gast/python-gast.hash
++++ b/package/python-gast/python-gast.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/gast/json
+-md5  fdff900805e03e9dd76d377eb4cbaed7  gast-0.5.3.tar.gz
+-sha256  cfbea25820e653af9c7d1807f659ce0a0a9c64f2439421a7bba4f0983f532dea  gast-0.5.3.tar.gz
++md5  907c689e3fdbc7a48cc010e665195baa  gast-0.5.4.tar.gz
++sha256  9c270fe5f4b130969b54174de7db4e764b09b4f7f67ccfc32480e29f78348d97  gast-0.5.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6a04bbabd9b48bea6bf7c0bd3f3a062e1476b3c403a746448fd69b0d902e148f  LICENSE
+diff --git a/package/python-gast/python-gast.mk b/package/python-gast/python-gast.mk
+index e02e87fb23..0db1dbe93e 100644
+--- a/package/python-gast/python-gast.mk
++++ b/package/python-gast/python-gast.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GAST_VERSION = 0.5.3
++PYTHON_GAST_VERSION = 0.5.4
+ PYTHON_GAST_SOURCE = gast-$(PYTHON_GAST_VERSION).tar.gz
+-PYTHON_GAST_SITE = https://files.pythonhosted.org/packages/48/a3/0bd844c54ae8141642088b7ae09dd38fec2ec7faa9b7d25bb6a23c1f266f
++PYTHON_GAST_SITE = https://files.pythonhosted.org/packages/e4/41/f26f62ebef1a80148e20951a6e9ef4d0ebbe2090124bc143da26e12a934c
+ PYTHON_GAST_SETUP_TYPE = setuptools
+ PYTHON_GAST_LICENSE = BSD-3-Clause
+ PYTHON_GAST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
