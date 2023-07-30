@@ -1,70 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C0FC00528
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 17:13:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E6F0C001DC
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 17:32:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E980416BC;
-	Sun, 30 Jul 2023 17:13:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E980416BC
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7FCC405A2;
+	Sun, 30 Jul 2023 17:32:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7FCC405A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mPvwM78RssKB; Sun, 30 Jul 2023 17:13:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PJggHqpdZ4VK; Sun, 30 Jul 2023 17:32:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99362416D1;
-	Sun, 30 Jul 2023 17:13:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99362416D1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DB14F1BF3BC
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:13:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C5A1408C0;
+	Sun, 30 Jul 2023 17:32:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C5A1408C0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F7071BF3BC
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B597481761
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:13:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B597481761
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3D5F60F14
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:32:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3D5F60F14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SH9MDeJ6YUGf for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 17:13:24 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C81FC813BC
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 17:13:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C81FC813BC
-Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 0D6A6A4C1077;
- Sun, 30 Jul 2023 19:12:33 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:60884)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qQ9y4-00088q-2k;
- Sun, 30 Jul 2023 19:12:32 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rvZspflS_6jB for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 17:32:47 +0000 (UTC)
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com
+ [IPv6:2001:4860:4864:20::31])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B4EA560F12
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 17:32:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4EA560F12
+Received: by mail-oa1-x31.google.com with SMTP id
+ 586e51a60fabf-1a1fa977667so2969290fac.1
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:32:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1690738366; x=1691343166;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=VPuzPCxjR3kSIHiAKH7zoWJRzyQTAw3LQXlPCudbE7g=;
+ b=RJd/k7tzxhVfKk5a0FrMpe2ccxcgCKttDta7knwa+QiuAFU2ZnS1TUaAdxSG+7L1Zn
+ e+pN54S8L4RCiXhWOIAORWkjZddaw/VXX9OpasIuAwdwmgl0OZDRRtG7UyMToCj35hwm
+ XNdn/gU5+5v22LeuDbjr21OYKyDxyDXM6NRTlJN+1sTB1XrFcStfw1hOid2KjV1RUfRK
+ PDSuJyrbBAXj1HQQgDmGoUZIL7Og6VrPx1EjWfNjNJf4RsAmDTd6OtQ0o/g0PIvlhST0
+ nj+fiGcnzGevHBa651kUJjqsXlpJLLPAX0l0QpADgrDOxker5iyNO0YTiNo5R4LQ5ZmG
+ 8BtA==
+X-Gm-Message-State: ABy/qLaGeGnn6BVNcaKnM11UQI5IAZKlyaD/HB+j/hrjLPOgk1zQWf/a
+ exICAY6+ZzY7xei73u/QcX/vnwpZnBY=
+X-Google-Smtp-Source: APBJJlHEe0pcVpRgzOXITNFc4qkGrgZVtqPje5y74LzmdK926M7m46lKldE8dS9yFwYM4G0LQ5V1pA==
+X-Received: by 2002:a05:6870:a413:b0:1b7:3359:58b2 with SMTP id
+ m19-20020a056870a41300b001b7335958b2mr9612365oal.39.1690738366177; 
+ Sun, 30 Jul 2023 10:32:46 -0700 (PDT)
+Received: from localhost.localdomain
+ (76-250-43-185.lightspeed.mdsnwi.sbcglobal.net. [76.250.43.185])
+ by smtp.gmail.com with ESMTPSA id
+ c7-20020a9d6847000000b006b95392cf09sm3414273oto.33.2023.07.30.10.32.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 30 Jul 2023 10:32:45 -0700 (PDT)
+From: Vincent Fazio <vfazio@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 19:12:32 +0200
-Message-Id: <20230730171232.3381097-5-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230730171232.3381097-1-bernd@kuhls.net>
-References: <20230730171232.3381097-1-bernd@kuhls.net>
+Date: Sun, 30 Jul 2023 12:32:42 -0500
+Message-Id: <20230730173242.6669-1-vfazio@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1690737153;
- bh=UH1gB/jTcAGsComrBnfE1mT7MmjO8KNMbS3DfPOz4wo=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=rDyi+QHoIdOR1g4NTMOxqOz7FdyOtq4wbRIRDFA+++w18nZwoeA52MZsP4ZOtjgxj
- tVTHmGczfATczvcr1FLKDpr5YMBRs4HdoBQk+VKMKZpuDvWFSd9a5Hd+7UR5mluhoL
- +Dw7B/rXHInWAjferaYOV9SSESku5Rt2Jn5SRvRO6DeCwq3uLnMF2R4G0V1cqxR4oo
- eSHy3CJywQkG0fiyMzN9ScRH31f37xk6kqXHLxQEBZ1EHMKwREPRpE19mmpP8opGLD
- 53cV3qUlE/NE70PY23GVBETCfNvLvinz3tiUsmcGP/GU6/8L+K6XuwHdrSbvoSE6LY
- UF0CoBVOFWTdQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=rDyi+QHo
-Subject: [Buildroot] [PATCH 5/5] package/fmt: bump version to 10.0.0
+ d=gmail.com; s=20221208; t=1690738366; x=1691343166;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=VPuzPCxjR3kSIHiAKH7zoWJRzyQTAw3LQXlPCudbE7g=;
+ b=cTOZKFu1vOHwpESCydkgXZYq9eHdGmghXiW+SGORAUuBcI+6IaGXQHiYJ5/UL8yqUr
+ /FbJEhQKrrphgMrjQaBj2hbcFq3eXkJ7nMSOih2RrfT0jkL4Ue2q7LiecuXT7lUu4rNY
+ luOb3PbmhfhwDrEiSD3teKa1DKZajkcgqTP+X5z4/OEglgfG8MCEyE9sOrzG2gxX4w2r
+ aiC67KYBadwUaW83LsfvDgmGRU8GJlSj7ph7JSe+PLJ6FzSWMwah5NCApxPtWskYU64P
+ DIfmsKbnBzggEplFZf/Vfw/fWKEGRpuGJ15ZKeu02g5AhNn1UGWvXVA79c0lVwv9XuAg
+ I4bw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=cTOZKFu1
+Subject: [Buildroot] [PATCH 1/1] arch/Config.in.x86: add Intel and AMD GCC
+ targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,51 +95,325 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Semyon Kolganov <semenak94@mail.ru>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Vincent Fazio <vfazio@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://github.com/fmtlib/fmt/blob/master/ChangeLog.rst
+Sync the CPU target list with what's available up to GCC 13.
 
-Updated license hash due to upstream commit, no legal changes:
-https://github.com/fmtlib/fmt/commit/48dfbcaa95f2043d29e3591ffd3090af4a5f33e2
+Multiple references used for flags and synonyms [0] [1] [2] [3].
 
-This patch depends on bumping spdlog to version 1.12.0.
+[0]: https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/x86-Options.html
+[1]: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=gcc/config/i386/i386.h;hb=refs/tags/releases/gcc-13.2.0
+[2]: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=gcc/common/config/i386/i386-common.cc;hb=refs/tags/releases/gcc-13.2.0
+[3]: https://en.wikipedia.org/wiki/AVX-512#CPUs_with_AVX-512
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 ---
- package/fmt/fmt.hash | 4 ++--
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ arch/Config.in.x86 | 199 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 198 insertions(+), 1 deletion(-)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 65eeaa4ebe..279f071262 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  cceb4cb9366e18a5742128cb3524ce5f50e88b476f1e54737a47ffdf4df4c996  fmt-9.1.0.zip
--sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-+sha256  4943cb165f3f587f26da834d3056ee8733c397e024145ca7d2a8a96bb71ac281  fmt-10.0.0.zip
-+sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index ed0703cbc9..f2c94b8231 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 8ddd1fa994..d7b84df1e9 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -19,12 +19,17 @@ config BR2_X86_CPU_HAS_AVX
+ 	bool
+ config BR2_X86_CPU_HAS_AVX2
+ 	bool
++
++# BR2_X86_CPU_HAS_AVX512 is used to enable the x86_64-v4 toolchain(s).
++# Some CPUs have a _subset_ of AVX512, but do not meet the minimum requirements
++# for x86_64-v4 (AVX512F, AVX512BW, AVX512CD, AVX512DQ, AVX512VL).
++# Reference: https://en.wikipedia.org/wiki/AVX-512#CPUs_with_AVX-512
+ config BR2_X86_CPU_HAS_AVX512
+ 	bool
  
--FMT_VERSION = 9.1.0
-+FMT_VERSION = 10.0.0
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+ # This list of CPU architecture variant is (loosely) ordered according
+ # to the gcc documentation at
+-# https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/x86-Options.html
++# https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/x86-Options.html
+ choice
+ 	prompt "Target Architecture Variant"
+ 	default BR2_x86_i586 if BR2_i386
+@@ -227,6 +232,17 @@ config BR2_x86_sandybridge
+ 	select BR2_X86_CPU_HAS_SSE42
+ 	select BR2_X86_CPU_HAS_AVX
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
++config BR2_x86_ivybridge
++	bool "ivybridge"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+ config BR2_x86_core_avx2
+ 	bool "core-avx2"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -335,6 +351,54 @@ config BR2_x86_tremont
+ 	select BR2_X86_CPU_HAS_SSE4
+ 	select BR2_X86_CPU_HAS_SSE42
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_x86_sierraforest
++	bool "sierraforest"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++config BR2_x86_grandridge
++	bool "grandridge"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++config BR2_x86_knightslanding
++	bool "knightslanding"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
++config BR2_x86_knightsmill
++	bool "knightsmill"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ config BR2_x86_skylake_avx512
+ 	bool "skylake-avx512"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -439,6 +503,8 @@ config BR2_x86_sapphirerapids
+ 	select BR2_X86_CPU_HAS_AVX2
+ 	select BR2_X86_CPU_HAS_AVX512
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
++	help
++	  Use for Sapphire Rapids, Emerald Rapids
+ config BR2_x86_alderlake
+ 	bool "alderlake"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -451,6 +517,8 @@ config BR2_x86_alderlake
+ 	select BR2_X86_CPU_HAS_AVX
+ 	select BR2_X86_CPU_HAS_AVX2
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
++	help
++	  Use for Alder Lake, Raptor Lake, Meteor Lake
+ config BR2_x86_rocketlake
+ 	bool "rocketlake"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -464,6 +532,32 @@ config BR2_x86_rocketlake
+ 	select BR2_X86_CPU_HAS_AVX2
+ 	select BR2_X86_CPU_HAS_AVX512
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
++config BR2_x86_graniterapids
++	bool "graniterapids"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_X86_CPU_HAS_AVX512
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++config BR2_x86_graniterapids_d
++	bool "graniterapids-d"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_X86_CPU_HAS_AVX512
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ config BR2_x86_k6
+ 	bool "k6"
+ 	depends on !BR2_x86_64
+@@ -501,6 +595,13 @@ config BR2_x86_barcelona
+ 	select BR2_X86_CPU_HAS_SSE
+ 	select BR2_X86_CPU_HAS_SSE2
+ 	select BR2_X86_CPU_HAS_SSE3
++config BR2_x86_bobcat
++	bool "bobcat"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ config BR2_x86_jaguar
+ 	bool "jaguar"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -510,6 +611,25 @@ config BR2_x86_jaguar
+ 	select BR2_X86_CPU_HAS_SSSE3
+ 	select BR2_X86_CPU_HAS_SSE4
+ 	select BR2_X86_CPU_HAS_SSE42
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
++config BR2_x86_bulldozer
++	bool "bulldozer"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++config BR2_x86_piledriver
++	bool "piledriver"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
+ config BR2_x86_steamroller
+ 	bool "steamroller"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -519,6 +639,68 @@ config BR2_x86_steamroller
+ 	select BR2_X86_CPU_HAS_SSSE3
+ 	select BR2_X86_CPU_HAS_SSE4
+ 	select BR2_X86_CPU_HAS_SSE42
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
++config BR2_x86_excavator
++	bool "excavator"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
++config BR2_x86_zen
++	bool "zen"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
++config BR2_x86_zen2
++	bool "zen 2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_x86_zen3
++	bool "zen 3"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
++config BR2_x86_zen4
++	bool "zen 4"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
++	select BR2_X86_CPU_HAS_AVX
++	select BR2_X86_CPU_HAS_AVX2
++	select BR2_X86_CPU_HAS_AVX512
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ config BR2_x86_geode
+ 	bool "geode (no mmx)"
+ 	depends on !BR2_x86_64
+@@ -603,6 +785,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "nehalem"	if BR2_x86_nehalem
+ 	default "corei7-avx"	if BR2_x86_corei7_avx
+ 	default "sandybridge"	if BR2_x86_sandybridge
++	default "ivybridge"	if BR2_x86_ivybridge
+ 	default "core-avx2"	if BR2_x86_core_avx2
+ 	default "haswell"	if BR2_x86_haswell
+ 	default "broadwell"	if BR2_x86_broadwell
+@@ -614,6 +797,10 @@ config BR2_GCC_TARGET_ARCH
+ 	default "goldmont"	if BR2_x86_goldmont
+ 	default "goldmont-plus"	if BR2_x86_goldmont_plus
+ 	default "tremont"	if BR2_x86_tremont
++	default "sierraforest"	if BR2_x86_sierraforest
++	default "grandridge"	if BR2_x86_grandridge
++	default "knl"		if BR2_x86_knightslanding
++	default "knm"		if BR2_x86_knightsmill
+ 	default "skylake-avx512" if BR2_x86_skylake_avx512
+ 	default "cannonlake"	if BR2_x86_cannonlake
+ 	default "icelake-client" if BR2_x86_icelake_client
+@@ -624,11 +811,21 @@ config BR2_GCC_TARGET_ARCH
+ 	default "sapphirerapids" if BR2_x86_sapphirerapids
+ 	default "alderlake"	if BR2_x86_alderlake
+ 	default "rocketlake"	if BR2_x86_rocketlake
++	default "graniterapids"	if BR2_x86_graniterapids
++	default "graniterapids-d"	if BR2_x86_graniterapids_d
+ 	default "k8"		if BR2_x86_opteron
+ 	default "k8-sse3"	if BR2_x86_opteron_sse3
+ 	default "barcelona"	if BR2_x86_barcelona
++	default "btver1"	if BR2_x86_bobcat
+ 	default "btver2"	if BR2_x86_jaguar
++	default "bdver1"	if BR2_x86_bulldozer
++	default "bdver2"	if BR2_x86_piledriver
+ 	default "bdver3"	if BR2_x86_steamroller
++	default "bdver4"	if BR2_x86_excavator
++	default "znver1"	if BR2_x86_zen
++	default "znver2"	if BR2_x86_zen2
++	default "znver3"	if BR2_x86_zen3
++	default "znver4"	if BR2_x86_zen4
+ 	default "k6"		if BR2_x86_k6
+ 	default "k6-2"		if BR2_x86_k6_2
+ 	default "athlon"	if BR2_x86_athlon
 -- 
-2.39.2
+2.25.1
 
 _______________________________________________
 buildroot mailing list
