@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26045C001DC
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 20:44:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 969E4C00528
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 20:45:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC5D560B0D;
-	Sun, 30 Jul 2023 20:44:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC5D560B0D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D61E6101A;
+	Sun, 30 Jul 2023 20:45:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D61E6101A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1o_jJvRsCyQt; Sun, 30 Jul 2023 20:44:47 +0000 (UTC)
+	with ESMTP id j-3eoyfSLi3f; Sun, 30 Jul 2023 20:44:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14FA66101A;
-	Sun, 30 Jul 2023 20:44:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14FA66101A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 68D1C1BF31E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 679F56101D;
+	Sun, 30 Jul 2023 20:44:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 679F56101D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 886F91BF86B
  for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 42ACE6101C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FF5F81A30
  for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42ACE6101C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FF5F81A30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oR_gQ9m0rWcv for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E_L103MLzn7T for <buildroot@lists.busybox.net>;
  Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B4466101A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61F7881A29
  for <buildroot@buildroot.org>; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B4466101A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61F7881A29
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69BCE83CD8; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
+ id 4EDD383CD1; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 22:43:07 +0200
+Date: Sun, 30 Jul 2023 22:43:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3fd79fcb61b95b48e8d00bf7b42ca246e7e6f4cf
-X-Git-Newrev: eb34442831eed4a301ec1ca1e1ab90acbebed28e
+X-Git-Oldrev: 5010cac4970d8a1e3d7b027921d18713a2d841ea
+X-Git-Newrev: dc08ac951de277d4c601c715b1cb8c121f3eb2e0
 X-Patchwork-Hint: ignore
-Message-Id: <20230730204443.69BCE83CD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/spdlog: bump version to 1.12.0
+Message-Id: <20230730204443.4EDD383CD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bitcoin: fix build with gcc 13.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,143 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb34442831eed4a301ec1ca1e1ab90acbebed28e
+commit: https://git.buildroot.net/buildroot/commit/?id=dc08ac951de277d4c601c715b1cb8c121f3eb2e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/gabime/spdlog/releases/tag/v1.12.0
+Fixes:
+http://autobuild.buildroot.net/results/8ac/8aceefdb71814c48163d7b171783172b6e1fdf27/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...sing-includes-to-fix-gcc-13-compile-error.patch | 48 ++++++++++++++++++++++
+ ...003-refactor-add-most-of-src-util-to-iwyu.patch | 34 +++++++++++++++
+ .../bitcoin/0004-src-util-string-h-fix-gcc13.patch | 23 +++++++++++
+ 3 files changed, 105 insertions(+)
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index af89ba4e84..a943abba2c 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ca5cae8d6cac15dae0ec63b21d6ad3530070650f68076f3a4a862ca293a858bb  spdlog-1.11.0.tar.gz
-+sha256  4dccf2d10f410c1e2feaff89966bfc49a1abb29ef6f08246335b110e001e09a9  spdlog-1.12.0.tar.gz
- sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index 32a0265484..15a80edbd0 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPDLOG_VERSION = 1.11.0
-+SPDLOG_VERSION = 1.12.0
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
+diff --git a/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch b/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
+new file mode 100644
+index 0000000000..22c0ca2adf
+--- /dev/null
++++ b/package/bitcoin/0002-Add-missing-includes-to-fix-gcc-13-compile-error.patch
+@@ -0,0 +1,48 @@
++From 339a95b7537b47e5d6b732c0633a00afd96e3ca0 Mon Sep 17 00:00:00 2001
++From: MarcoFalke <*~=`'#}+{/-|&$^_@721217.xyz>
++Date: Thu, 19 Jan 2023 19:35:43 +0100
++Subject: [PATCH] Add missing includes to fix gcc-13 compile error
++
++Upstream: https://github.com/bitcoin/bitcoin/commit/fadeb6b103cb441e0e91ef506ef29febabb10715
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/support/lockedpool.cpp | 3 +++
++ src/support/lockedpool.h   | 4 ++--
++ 2 files changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/src/support/lockedpool.cpp b/src/support/lockedpool.cpp
++index 26de780f2..11131d551 100644
++--- a/src/support/lockedpool.cpp
+++++ b/src/support/lockedpool.cpp
++@@ -22,6 +22,9 @@
++ #endif
++ 
++ #include <algorithm>
+++#include <limits>
+++#include <stdexcept>
+++#include <utility>
++ #ifdef ARENA_DEBUG
++ #include <iomanip>
++ #include <iostream>
++diff --git a/src/support/lockedpool.h b/src/support/lockedpool.h
++index b9e2e99d1..25b4c0f36 100644
++--- a/src/support/lockedpool.h
+++++ b/src/support/lockedpool.h
++@@ -5,11 +5,11 @@
++ #ifndef BITCOIN_SUPPORT_LOCKEDPOOL_H
++ #define BITCOIN_SUPPORT_LOCKEDPOOL_H
++ 
++-#include <stdint.h>
+++#include <cstddef>
++ #include <list>
++ #include <map>
++-#include <mutex>
++ #include <memory>
+++#include <mutex>
++ #include <unordered_map>
++ 
++ /**
++-- 
++2.39.2
++
+diff --git a/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch b/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
+new file mode 100644
+index 0000000000..095fa648dd
+--- /dev/null
++++ b/package/bitcoin/0003-refactor-add-most-of-src-util-to-iwyu.patch
+@@ -0,0 +1,34 @@
++From c187efa907fd64ea2c7b7d699c5c97f9d5b79960 Mon Sep 17 00:00:00 2001
++From: fanquake <fanquake@gmail.com>
++Date: Thu, 9 Jun 2022 16:26:55 +0100
++Subject: [PATCH] refactor: add most of src/util to iwyu
++
++These files change infrequently, and not much header shuffling is required.
++
++We don't add everything in src/util/ yet, because IWYU makes some
++dubious suggestions, which I'm going to follow up with upstream.
++
++Upstream: https://github.com/bitcoin/bitcoin/commit/07f2c25d04c39a0074e1d9ee1b24b3e359c8153f
++
++[Bernd: backported relevant part from upstream commit to version 0.21.2
++        to fix build error with gcc 13.x]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/util/bip32.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/util/bip32.h b/src/util/bip32.h
++index 347e83db9..6ef051c48 100644
++--- a/src/util/bip32.h
+++++ b/src/util/bip32.h
++@@ -6,6 +6,7 @@
++ #define BITCOIN_UTIL_BIP32_H
++ 
++ #include <attributes.h>
+++#include <cstdint>
++ #include <string>
++ #include <vector>
++ 
++-- 
++2.39.2
++
+diff --git a/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch b/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
+new file mode 100644
+index 0000000000..00a9ef2b97
+--- /dev/null
++++ b/package/bitcoin/0004-src-util-string-h-fix-gcc13.patch
+@@ -0,0 +1,23 @@
++From fa2deae2a86417d7e0d4cd33fb933b1000d20313 Mon Sep 17 00:00:00 2001
++From: MacroFake <falke.marco@gmail.com>
++Date: Thu, 5 May 2022 08:28:29 +0200
++Subject: [PATCH] Wrap boost::replace_all
++
++Upstream: https://github.com/bitcoin/bitcoin/commit/fa2deae2a86417d7e0d4cd33fb933b1000d20313
++
++[Bernd: backported relevant part from upstream commit to version 0.21.2
++        to fix build error with gcc 13.x]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++diff --git a/src/util/string.h b/src/util/string.h
++index 2e91347b27a10..df20e34ae9aaa 100644
++--- a/src/util/string.h
+++++ b/src/util/string.h
++@@ -9,6 +9,7 @@
++ 
++ #include <algorithm>
++ #include <array>
+++#include <cstdint>
++ #include <cstring>
++ #include <locale>
++ #include <sstream>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
