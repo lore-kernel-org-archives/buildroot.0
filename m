@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 329EEC001DF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A80FEC001DE
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:14:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA3D160D89;
-	Sun, 30 Jul 2023 10:14:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA3D160D89
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6307860E15;
+	Sun, 30 Jul 2023 10:14:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6307860E15
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s2VCisUveRBf; Sun, 30 Jul 2023 10:14:13 +0000 (UTC)
+	with ESMTP id n418JXq3PAdW; Sun, 30 Jul 2023 10:14:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C70160B9F;
-	Sun, 30 Jul 2023 10:14:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C70160B9F
+	by smtp3.osuosl.org (Postfix) with ESMTP id B358060AEF;
+	Sun, 30 Jul 2023 10:14:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B358060AEF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 88BF11BF41B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:12:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F04001BF41B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:14:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FAAE81E05
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:12:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FAAE81E05
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9A7E81799
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:14:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9A7E81799
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lWtLA6s76_Ai for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 10:12:46 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4703081E04
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:12:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4703081E04
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 76EE020002;
- Sun, 30 Jul 2023 10:12:44 +0000 (UTC)
-Date: Sun, 30 Jul 2023 12:12:43 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230730121243.5dc3fe26@windsurf>
-In-Reply-To: <20230730071422.1091893-1-bernd@kuhls.net>
-References: <20230730071422.1091893-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id FubZGlQPvbh1 for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 10:14:26 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 769D781778
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:14:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 769D781778
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1AD40A4C0824;
+ Sun, 30 Jul 2023 12:14:23 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51944)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qQ3RO-0002J5-2e;
+ Sun, 30 Jul 2023 12:14:22 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 12:14:22 +0200
+Message-Id: <20230730101422.2276724-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690711964;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=dwrvpc/jfn9r1PaCTLk9mq8BETAcn9FPz36RO/9xPnw=;
- b=WH8W87qxj3JY5k2gd78wgo8GGB5WO2inr2iLGhML/xp0cEd006Y618PhnCHX4W9VYWg+dg
- 1NsDA1aPbtCZ/30PIUxLeXFEkkQ1i2kQCc4dtCWbiBhAlPridY88GbQPBjkMVNfQ4xsw8a
- RkH7aw+n1FiXL4g2Jhh9lMmdHM6PO1wX3+DzXOYaHDF3cHLNnuAOPQ3u2MIuxr+vPnF+kn
- OIELKXEYjF5TgxDzDkTQqIUOCMKBWlIIP5Gxam9bAuUts+ZQl+dM3FJlzATBDWPJs/OfmY
- afB98ZtYtDMz+LzjKquBZEEpSx2gQ56p9CQgLtzm0pZd6rwB0+UPRaPMDFhI/Q==
+ d=kuhls.net; 
+ s=kas202306131828; t=1690712063;
+ bh=ybocEdK6d065MGi3zQVSvlOXo45Rh9MBReFX+3c0S5U=;
+ h=From:To:Cc:Subject:Date:From;
+ b=y7ROK4oK7rPHqMvFIz86tO/DgVTGxAs393U8ZTq5OzkVE7dOcBdIPePF4iCBQcZ0Z
+ 1tjbJI+Jhp28NLcvh9/Jlt0gqc7inK3lrttH6+cexjM4cy1oBSEF7/mmKD+69OM1pC
+ GoJZZyryPDyZe4Vv1ZqzzmXWFy3sNJYGgdK4T18bDSICszXEgmKDASmzSVI4mq+AHy
+ peUtLhnVhUCUXEPDVx1we1HHrblIAChNBlgoktVgRZ1wzca0tXDvYmzF7GqDSujvQE
+ Tjb2hCrAl3eCzb7aygRbuMci060USpOIU9HJ6yfbYiMsA24DIqheayBNwLxmV/cf0q
+ SfvEQVSrxXWqw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WH8W87qx
-Subject: Re: [Buildroot] [PATCH 1/1] package/linux-pam: fix musl build
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=y7ROK4oK
+Subject: [Buildroot] [PATCH 1/1] package/libuv: remove POST_PATCH_HOOK
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,42 +74,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 30 Jul 2023 09:14:22 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Buildroot commit 1738b5582ba0cf715303f4ebfa1d2323a33d0ae4, which
+switched  _SOURCE to an upstream-provided tarball, forgot to remove the
+POST_PATCH_HOOK which adds a file already present in the tarball.
 
-> The bump to version 1.5.3 with buildroot commit
-> f8147e27cdac8f998ec6644a09ce4e8d62b6433c added the file patched.
-> 
-> Please note that the next version will include
-> https://github.com/linux-pam/linux-pam/commit/5fa961fd3b5b8cf5ba1a0cf49b10ebf79e273e96
-> which adds --enable-examples as configure option to disable examples.
-> This patch, although it would also fix the problem, is not added instead
-> to avoid autoreconf.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1d9/1d96d4c57969536c14340ae5542e62a9459246f9/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  ...-examples-tty_conv-fix-build-on-musl.patch | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 package/linux-pam/0001-examples-tty_conv-fix-build-on-musl.patch
+Fixes:
+http://autobuild.buildroot.net/results/e4d0c06e3babed6b290b6223a1cf7e4cce38064c/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libuv/libuv.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-Thomas
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 75590ad8f2..76316484e4 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -15,16 +15,4 @@ LIBUV_LICENSE = BSD-2-Clause, BSD-3-Clause, ISC, MIT
+ LIBUV_LICENSE_FILES = LICENSE LICENSE-extra
+ LIBUV_CPE_ID_VENDOR = libuv
+ 
+-# Upstream needs tests to be run sequentially. This is the default in
+-# automake 1.11 and before, but not starting in 1.12. To maintain
+-# sequentiality in 1.12 and later, the automake option 'serial-tests'
+-# must be used, Unfortunately, it is not recognised by 1.11 and
+-# before. So upstream only adds it conditionally. We use automake
+-# 1.14, so we need it.
+-define LIBUV_FIXUP_AUTOGEN
+-	echo "m4_define([UV_EXTRA_AUTOMAKE_FLAGS], [serial-tests])" \
+-		>$(@D)/m4/libuv-extra-automake-flags.m4
+-endef
+-LIBUV_POST_PATCH_HOOKS += LIBUV_FIXUP_AUTOGEN
+-
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
