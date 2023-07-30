@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9011C001DC
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 16:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE89C001DF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 17:03:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF7BE410D8;
-	Sun, 30 Jul 2023 16:41:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF7BE410D8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2281841680;
+	Sun, 30 Jul 2023 17:03:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2281841680
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T36SpPNsudfP; Sun, 30 Jul 2023 16:41:25 +0000 (UTC)
+	with ESMTP id 4iRAEZUWjxLh; Sun, 30 Jul 2023 17:02:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC4154091A;
-	Sun, 30 Jul 2023 16:41:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4154091A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 79D001BF392
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 16:41:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E375E416BC;
+	Sun, 30 Jul 2023 17:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E375E416BC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DE8291BF392
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58C0C4029F
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 16:41:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58C0C4029F
+ by smtp4.osuosl.org (Postfix) with ESMTP id B21BA4167E
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B21BA4167E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2KlNVReCMZcl for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 16:41:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0h5wE3t2Xttj for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 17:02:54 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 675ED400D9
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 16:41:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 675ED400D9
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1851D4161B
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 17:02:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1851D4161B
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 00F37A4C0824;
- Sun, 30 Jul 2023 18:41:18 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:41120)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 209FEA4C0367;
+ Sun, 30 Jul 2023 19:02:51 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:56902)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qQ9Tp-0002Uk-2K;
- Sun, 30 Jul 2023 18:41:17 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qQ9og-0006SQ-2k;
+ Sun, 30 Jul 2023 19:02:50 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 18:41:17 +0200
-Message-Id: <20230730164117.3064024-1-bernd@kuhls.net>
+Date: Sun, 30 Jul 2023 19:02:50 +0200
+Message-Id: <20230730170250.3318353-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1690735278;
- bh=63Zy4wzWAYO1OX6FOEV5wzGbzjDUfwDo6NbaFjB0hWs=;
+ s=kas202306131828; t=1690736571;
+ bh=xPT4sZZUD1Xmq9kym01/XB09d+BeIyRc+fXB/74UERw=;
  h=From:To:Cc:Subject:Date:From;
- b=ETZICaQStD8ktxR/W1C0Kck2vZz35Lw7MARMoVjFyn5y5pXaQo6N34BIxvbG4s9Qr
- y/gAhj/vYPW7ZU3OOrAYY5h1+9BxnMKEsREKtFaTzDHMhBoq/i/CppZwcUL6dyO7L5
- 6mrbwVglVNZt7m+PZEP+RL9cIsRTlfSJjWyjs2PO18v4lx3DcZGaet4MZGAa0MdPZ6
- 2bIbI3Euqjl3mu0Qstn4XK5Bhrq18P2j6Xdl2qoR/quE7Cz8gkVsMcvBtUtEMc1mnY
- Nvnz2Q3TSPJaN9j4JOO/MYSPHBMMxlOBWoSH1m9vYyZdy+salTqbDCnI+0f4LLc4Xb
- t4+K8Uae03O2A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=fwQ6KoKeYS0hHMySgD6m/szYVu5blfDhzyeKwrz4vPVDHeDiRzbzRxRSLR3erui5z
+ 7iHgAU6iSJEAEGxjOY35DyCeJL+C8CzoZC/QO/GP0ZQQqnS8ise9RBWrgmPcNZnRU5
+ JMoO9PBojcrEjGQy4QthR8hu/+96bdWRlr8JU3R2tSHJ0VaZxLDuT3lI0fCAlveKha
+ L8FamnhEXk2PIBTUp0U+O1totZVRcOmQcLxXcVOM7Ndnb6NSCLO7rDKXIsqy5IIq2L
+ ZjpKD8jG5+ZLIKmk4WfhvhbNbzmKSUkBE8XcHegtXEpSWCgpUPsUs6+uTX1f2B2NWM
+ Jhgwkv4AJSQSg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=ETZICaQS
-Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: bump version to 8.0.1
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=fwQ6KoKe
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: bump version to 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,42 +74,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS
+Removed patch which is included in this release.
+
+Changelog: https://github.com/gerbera/gerbera/blob/master/ChangeLog.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                           |  1 -
+ .../gerbera/0001-Fix-build-with-fmt-9-0.patch | 36 -------------------
+ package/gerbera/gerbera.hash                  |  2 +-
+ package/gerbera/gerbera.mk                    |  2 +-
+ 4 files changed, 2 insertions(+), 39 deletions(-)
+ delete mode 100644 package/gerbera/0001-Fix-build-with-fmt-9-0.patch
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 6b3dfc22b7..6b71e3819c 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b3db922529..27c66d0bbe 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -531,7 +531,6 @@ package/gengetopt/0001-configure.ac-add-disable-doc-option.patch Upstream
+ package/genpart/0001-fix-return-code.patch Upstream
+ package/genromfs/0001-build-system.patch Sob Upstream
+ package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch Upstream
+-package/gerbera/0001-Fix-build-with-fmt-9-0.patch Upstream
+ package/gerbera/S99gerbera Indent
+ package/gettext-gnu/0001-error_print_progname.patch Upstream
+ package/gettext-gnu/0002-restore-the-ability-to-buld-gettext-tools-seperately-part1.patch Upstream
+diff --git a/package/gerbera/0001-Fix-build-with-fmt-9-0.patch b/package/gerbera/0001-Fix-build-with-fmt-9-0.patch
+deleted file mode 100644
+index 63ae8382a3..0000000000
+--- a/package/gerbera/0001-Fix-build-with-fmt-9-0.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From d7b8fafbc94405c20753fed569abd8878cccde89 Mon Sep 17 00:00:00 2001
+-From: Felix Yan <felixonmars@archlinux.org>
+-Date: Fri, 19 Aug 2022 15:22:10 +0300
+-Subject: [PATCH] Fix build with fmt 9.0
+-
+-Fixes #2681
+-
+-[Retrieved from:
+-https://github.com/gerbera/gerbera/commit/d7b8fafbc94405c20753fed569abd8878cccde89]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/database/sql_format.h | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/database/sql_format.h b/src/database/sql_format.h
+-index 32dc00efa..e4e1909a8 100644
+---- a/src/database/sql_format.h
+-+++ b/src/database/sql_format.h
+-@@ -42,7 +42,7 @@ struct SQLIdentifier {
+- template <>
+- struct fmt::formatter<SQLIdentifier> : formatter<std::string_view> {
+-     template <typename FormatContext>
+--    auto format(const SQLIdentifier& tn, FormatContext& ctx) -> decltype(ctx.out())
+-+    auto format(const SQLIdentifier& tn, FormatContext& ctx) const -> decltype(ctx.out())
+-     {
+-         return format_to(ctx.out(), "{}{}{}", tn.quote_begin, tn.name, tn.quote_end);
+-     }
+-@@ -61,7 +61,7 @@ struct ColumnUpdate {
+- template <>
+- struct fmt::formatter<ColumnUpdate> : formatter<std::string_view> {
+-     template <typename FormatContext>
+--    auto format(const ColumnUpdate& a, FormatContext& ctx) -> decltype(ctx.out())
+-+    auto format(const ColumnUpdate& a, FormatContext& ctx) const -> decltype(ctx.out())
+-     {
+-         return format_to(ctx.out(), "{} = {}", a.column, a.value);
+-     }
+diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+index 89ac9ad55a..ee6e3d9b3a 100644
+--- a/package/gerbera/gerbera.hash
++++ b/package/gerbera/gerbera.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  20770789749ac9ba846df33983dbda22db836c70d9f5d050cb9aa5347094a8fb  harfbuzz-7.3.0.tar.xz
-+sha256  c1ce780acd385569f25b9a29603d1d5bc71e6940e55bfdd4f7266fad50e42620  harfbuzz-8.0.1.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 981d911014..3118ec62c9 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally computed:
+-sha256  bd6c7b2c6380e2e265a998bbc0df9eec14b9c6a65bc91e7f2c0ae0b67fd0c9cf  gerbera-1.10.0.tar.gz
++sha256  2144a7c4a13e8b43aa0c911fbeae65f05e2c42254ddd03be5c41f5fcf103a93c  gerbera-1.12.1.tar.gz
+ sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 6acdfb86ac..c60d49b0f9 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 7.3.0
-+HARFBUZZ_VERSION = 8.0.1
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-GERBERA_VERSION = 1.10.0
++GERBERA_VERSION = 1.12.1
+ GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
+ GERBERA_LICENSE = GPL-2.0
+ GERBERA_LICENSE_FILES = LICENSE.md
 -- 
 2.39.2
 
