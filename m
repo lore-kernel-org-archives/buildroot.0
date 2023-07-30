@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CD11C001DE
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB47DC001DE
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC2E660A68;
-	Sun, 30 Jul 2023 10:56:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC2E660A68
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80D7D60761;
+	Sun, 30 Jul 2023 10:59:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80D7D60761
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6bMBd94AshXd; Sun, 30 Jul 2023 10:56:51 +0000 (UTC)
+	with ESMTP id mpI6XTU1s52n; Sun, 30 Jul 2023 10:59:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E57DE607E3;
-	Sun, 30 Jul 2023 10:56:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E57DE607E3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 956C9607E3;
+	Sun, 30 Jul 2023 10:59:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 956C9607E3
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DB5171BF41B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:56:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 142BF1BF2AF
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFDC2409A7
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:56:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFDC2409A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0A5E4137D
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:59:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0A5E4137D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c6LkQzcfHTwl for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 10:56:47 +0000 (UTC)
-Received: from smtpcmd14161.aruba.it (smtpcmd14161.aruba.it [62.149.156.161])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AFD8F40926
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:56:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFD8F40926
-Received: from [192.168.50.162] ([146.241.4.160])
- by Aruba Outgoing Smtp  with ESMTPSA
- id Q46MqKvdT3oC2Q46Nq0P5W; Sun, 30 Jul 2023 12:56:43 +0200
-Message-ID: <6c02501e-2414-4611-97cb-1460352f55a7@benettiengineering.com>
-Date: Sun, 30 Jul 2023 12:56:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bernd Kuhls <bernd@kuhls.net>
-References: <20230708200447.3919009-1-bernd@kuhls.net>
- <20230708200447.3919009-2-bernd@kuhls.net> <20230730122650.5592af4b@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230730122650.5592af4b@windsurf>
-X-CMAE-Envelope: MS4xfH25uv9DMaWVoNxKvL9WSFm6zIyjvyyssIJuI9y1duK+2WDjUC2CtHDl3mCSSkGCpRccxLI9izs5Cbtxfvvk9OJc4KnWw9KWFq9q7k2B/hmXP1iQVeJ9
- PE9BO4LZvwYr2IEMoD9t/m91Gh+l2rzsgdBRDCyM+/jpmwlVEl1CXI82dFXdxOOrSmbbHYSAZ2+YEIlvPJvUiTMZmezXyPsozACSbQ7vt2YX0GMxdLBV/ruP
- ns4DgtLNDXxAcKR2Y+rcjRQo4S84BWgaokINTUGDp03eKwXDyldAqsIUr3ZzgIcQasj2f6CIPlcqTIn/nkuGV71HHFUv0gxW+KvpZjvoDTiDeFBHTMFOl6XD
- 51H28RgV8ZxJX2qwuqjADPH68GH4dpHjLlOu27aBq2dVDYK8SkA=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1690714603; bh=4kzR9/X3Ns7rG3dsb4jGXiVkoqeIu2frFKSsSV8HvaU=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=S0mAB8qRBLCgHSKzCdEfhwPWY+xtSoEgE2z6Xur3D0uUJqfgPJVFUivxOxnvilI6t
- h2n49IoiDh3fgChTxnBfZYTY3I1Lyu4VmPz7CmoJl96ZTe16aCrrdPYkJAiVv8VK2x
- a6OBXUzh1aoxGr7QbYwBm29SI/Elmr4BXDUZZ5w9C9VIPzSZuYGo+1uM6m2AXS8vcF
- psRI3ufYc1lxq5UmrcJAIpePURy4tAJTJIYPC3eQ2mswZ5Gdvb/Uq3u/jYxwYGMxfF
- ZjNZCDlJ7hEfP//NnAazJH3veV7rk+L2wYBVoXmsKKHhQNwV6QMpgrP29AuXYGVngL
- AQpDCBHH4I3rA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=S0mAB8qR
-Subject: Re: [Buildroot] [PATCH 2/7] package/libheif: new package
+ with ESMTP id fOC816oYggzu for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 10:59:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA007410E0
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:59:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA007410E0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 95AFA83C3B; Sun, 30 Jul 2023 10:59:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 12:59:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f7f915fc4a1be0f44a2cb0509162ea946f8d2bb5
+X-Git-Newrev: 6404185f728fb1feacfbb5eaf59b1243b00a14a7
+X-Patchwork-Hint: ignore
+Message-Id: <20230730105924.95AFA83C3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_fluidsynth.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,59 +56,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pieter De Gendt <pieter.degendt@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Giulio Benetti <giulio.benetti@micronovasrl.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6404185f728fb1feacfbb5eaf59b1243b00a14a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 30/07/23 12:26, Thomas Petazzoni via buildroot wrote:
-> Hello Bernd,
-> 
-> I've applied, but I have some comments below. Giuliu, there is also a
-> question for you.
-> 
-> On Sat,  8 Jul 2023 22:04:42 +0200
-> Bernd Kuhls <bernd@kuhls.net> wrote:
-> 
->> diff --git a/package/libheif/Config.in b/package/libheif/Config.in
->> new file mode 100644
->> index 0000000000..9ce507fd24
->> --- /dev/null
->> +++ b/package/libheif/Config.in
->> @@ -0,0 +1,14 @@
->> +config BR2_PACKAGE_LIBHEIF
->> +	bool "libheif"
->> +	# avoid build error
->> +	# Internal error in emit_expr_encoded at dw2gencfi.c:215
->> +	depends on !BR2_m68k_cf
-> 
-> Giulio, do we have a BR2_TOOLCHAIN_HAS_..._BUG for this? Are other
-> packages affected by this? I see quite a few BR2_m68k_cf conditionals
-> sprinkled all over the places in Buildroot.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_fluidsynth.py   | 61 ++++++++++++++++++++++
+ .../rootfs-overlay/root/check_notes.py             | 24 +++++++++
+ .../rootfs-overlay/root/gen_midi_file.py           | 23 ++++++++
+ 4 files changed, 110 insertions(+)
 
-there is a possible toolchain gcc bug:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79509
-
-but they point this to be a binutils bug, so I'm going to open a bug
-in Sourceware. I can't find it already, so yes, it must be open.
-We then need to add a BR2_TOOLCHAIN_HAS_BINUTILS_BUG_ and then I can
-check against it with the workaround(-fno-dwarf2-cfi-asm) and see if
-someone will fix it in binutils and backport patches.
-BUT I see only now that for BR2_m68k_cf C/CXXFLAGS have by default
--fno-dwarf2-cfi-asm enabled and if that doesn't make the trick I need
-to find another work-around, or maybe it's completely another bug at
-this point. Soon I'll be on holidays and I will have more time so
-I will look into it.
-
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9f115d9f2f..42d08f7fc7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1747,6 +1747,8 @@ F:	support/testing/tests/package/test_compressor_base.py
+ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
+ F:	support/testing/tests/package/test_dos2unix.py
++F:	support/testing/tests/package/test_fluidsynth.py
++F:	support/testing/tests/package/test_fluidsynth/
+ F:	support/testing/tests/package/test_gawk.py
+ F:	support/testing/tests/package/test_glslsandbox_player.py
+ F:	support/testing/tests/package/test_glslsandbox_player/
+diff --git a/support/testing/tests/package/test_fluidsynth.py b/support/testing/tests/package/test_fluidsynth.py
+new file mode 100644
+index 0000000000..20d4da0c50
+--- /dev/null
++++ b/support/testing/tests/package/test_fluidsynth.py
+@@ -0,0 +1,61 @@
++import os
++
++import infra.basetest
++
++
++class TestFluidsynth(infra.basetest.BRTest):
++    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it is
++    # armv5 and based on qemu versatilepb which is limited to 256MB of
++    # RAM.  The test needs 1GB of RAM (larger initrd and soundfont is
++    # loaded in memory).
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.86"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_AUBIO=y
++        BR2_PACKAGE_FLUIDSYNTH=y
++        BR2_PACKAGE_FLUIDSYNTH_LIBSNDFILE=y
++        BR2_PACKAGE_FLUID_SOUNDFONT=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_MIDIUTIL=y
++        BR2_ROOTFS_OVERLAY="{}"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """.format(
++           # overlay to add helper test scripts
++           infra.filepath("tests/package/test_fluidsynth/rootfs-overlay"))
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "1G", "-initrd", img])
++        self.emulator.login()
++
++        # Test the binary executes
++        self.assertRunOk("fluidsynth --version")
++
++        # Create a simple MIDI file programmatically
++        self.assertRunOk("/root/gen_midi_file.py /tmp/output.mid")
++
++        # Convert the MIDI file to a WAV file
++        cmd = "fluidsynth"
++        cmd += " -F /tmp/output.wav"
++        cmd += " /usr/share/soundfonts/FluidR3_GM.sf2"
++        cmd += " /tmp/output.mid"
++        self.assertRunOk(cmd)
++
++        # Extract notes in the WAV file with Aubio
++        self.assertRunOk("aubionotes /tmp/output.wav > /tmp/notes.txt")
++
++        # Check the extracted notes are the expected ones
++        self.assertRunOk("/root/check_notes.py < /tmp/notes.txt")
+diff --git a/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py
+new file mode 100755
+index 0000000000..7301e14a9f
+--- /dev/null
++++ b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/check_notes.py
+@@ -0,0 +1,24 @@
++#! /usr/bin/env python3
++#
++# This script reads the output of the "aubionotes" command and
++# validates it contains three expected notes (A2, E3, A3) in the
++# correct order. Silences or other notes are allowed in between those
++# notes, to allow some flexibility.
++
++import sys
++
++found = 0
++notes = [57, 64, 69]
++
++for line in sys.stdin:
++    fields = line.split()
++    if len(fields) >= 1:
++        value = round(float(fields[0]))
++        if value == notes[found]:
++            found += 1
++        if found == len(notes):
++            print("Found all notes")
++            sys.exit(0)
++
++print("Error: all notes not found")
++sys.exit(1)
+diff --git a/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py
+new file mode 100755
+index 0000000000..aa53a25af3
+--- /dev/null
++++ b/support/testing/tests/package/test_fluidsynth/rootfs-overlay/root/gen_midi_file.py
+@@ -0,0 +1,23 @@
++#! /usr/bin/env python3
++#
++# This script generates a MIDI file with only 3 notes: A2, E3, A3
++# usage: gen_midi_file.py [output-filename]
++
++import sys
++
++from midiutil import MIDIFile
++
++output_filename = "output.mid"
++if len(sys.argv) >= 2:
++    output_filename = sys.argv[1]
++
++notes = [57, 64, 69]  # A2, E3, A3
++
++midi = MIDIFile()
++midi.addTempo(track=0, time=0, tempo=60)
++
++for i, p in enumerate(notes):
++    midi.addNote(track=0, channel=0, pitch=p, time=i, duration=1, volume=100)
++
++with open(output_filename, "wb") as output_file:
++    midi.writeFile(output_file)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
