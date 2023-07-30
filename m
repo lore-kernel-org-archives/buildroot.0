@@ -1,49 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 039C2C001DF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 12:41:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2097C001DF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 14:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 985A741685;
-	Sun, 30 Jul 2023 12:41:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 985A741685
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nQy3lnk64dhl; Sun, 30 Jul 2023 12:41:55 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63E7D41680;
-	Sun, 30 Jul 2023 12:41:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63E7D41680
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9FF8F1BF419
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 12:41:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 798BF60B9C
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 12:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 798BF60B9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CADA60E68;
+	Sun, 30 Jul 2023 14:06:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CADA60E68
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2laE2QxMvVfe for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 12:41:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E97560B9F
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 12:41:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E97560B9F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D47083C6A; Sun, 30 Jul 2023 12:41:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 14:40:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 50d081916e57c132ad726743ff3e664d2ced7235
-X-Git-Newrev: 210306b4fa1f1a018393c69334eb48bf247a91c7
-X-Patchwork-Hint: ignore
-Message-Id: <20230730124111.2D47083C6A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: sort entries of Bernd Kuhls
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZcW3Q2sNJzcJ; Sun, 30 Jul 2023 14:06:40 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A26DA60E4E;
+	Sun, 30 Jul 2023 14:06:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A26DA60E4E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CDB531BF3F2
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 14:06:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 71AA240580
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 14:06:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71AA240580
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rVxc3CmkRUk5 for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 14:06:36 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7257A40525
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 14:06:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7257A40525
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4C49BC0002;
+ Sun, 30 Jul 2023 14:06:33 +0000 (UTC)
+Date: Sun, 30 Jul 2023 16:06:32 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230730160632.71114780@windsurf>
+In-Reply-To: <50d4fcd31983bde7b248a088e983a0c7@free.fr>
+References: <20230607202439.188050-1-ju.o@free.fr>
+ <20230729233927.572fd26c@windsurf>
+ <50d4fcd31983bde7b248a088e983a0c7@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690725993;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hqmk3FOR7NNNVH5xLrvtDRtSYtxMgfJWydQOW45ptnw=;
+ b=mb5TBzNlovnaPiT3p8h52JleflRRFb6c3cRM9ueMf16k+eN9vf3cgtPlsolaIY7vEVf6Jo
+ HHE06j49kzMnatsNRv4Af5/edNrJM8/uKXJ713KNr3G/ic7HqgR/F5o5JfuiBP4vUD+bQR
+ xte0CWIQOz7c+kiexo92+pLzdXxq7rOsWMnqbPYA3WOMZXU29OyDG/dzc1ASfUaE1bYfgq
+ OpvPaCtopRQDAh0IHALDoOCGQeH0XUfQCDkvNyUS65cBxzyfPQ7UT+5GdAXpwc+zCusbGF
+ Btb3x1SAOkywZU6e0hBtO+q25wxJrm+GJYOySwOU6yJWRmZ5jQdGT2b0ku9TqA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mb5TBzNl
+Subject: Re: [Buildroot] [PATCH 1/2] package/glslsandbox-player: bump to
+ version v2023.04.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,88 +79,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=210306b4fa1f1a018393c69334eb48bf247a91c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On Sun, 30 Jul 2023 14:12:44 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 42d08f7fc7..fe2ebc3e1b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -343,8 +343,8 @@ F:	package/giflib/
- F:	package/gkrellm/
- F:	package/gpsd/
- F:	package/gptfdisk/
--F:	package/hdparm/
- F:	package/hddtemp/
-+F:	package/hdparm/
- F:	package/intel-gmmlib/
- F:	package/intel-mediadriver/
- F:	package/intel-mediasdk/
-@@ -362,19 +362,19 @@ F:	package/libbroadvoice/
- F:	package/libcap/
- F:	package/libcdio/
- F:	package/libcec/
--F:	package/libdisplay-info/
- F:	package/libcodec2/
- F:	package/libcrossguid/
- F:	package/libde265/
- F:	package/libdeflate/
-+F:	package/libdisplay-info/
- F:	package/libdrm/
- F:	package/libdvbcsa/
- F:	package/libdvdcss/
- F:	package/libdvdnav/
- F:	package/libdvdread/
- F:	package/libebur128/
--F:	package/libfribidi/
- F:	package/libfreeglut/
-+F:	package/libfribidi/
- F:	package/libg7221/
- F:	package/libglew/
- F:	package/libglfw/
-@@ -437,9 +437,9 @@ F:	package/perl-io-html/
- F:	package/perl-lwp-mediatypes/
- F:	package/perl-mail-dkim/
- F:	package/perl-mailtools/
-+F:	package/perl-netaddr-ip/
- F:	package/perl-net-dns/
- F:	package/perl-net-http/
--F:	package/perl-netaddr-ip/
- F:	package/perl-timedate/
- F:	package/perl-uri/
- F:	package/perl-www-robotrules/
-@@ -451,17 +451,17 @@ F:	package/pure-ftpd/
- F:	package/python-couchdb/
- F:	package/python-cssutils/
- F:	package/python-glslang/
-+F:	package/python-mako/
- F:	package/python-mwclient/
- F:	package/python-mwscrape/
- F:	package/python-mwscrape2slob/
--F:	package/python-mako/
- F:	package/python-oauthlib/
- F:	package/python-pyicu/
- F:	package/python-pylru/
- F:	package/python-requests-oauthlib/
- F:	package/python-slob/
--F:	package/rsync/
- F:	package/rrdtool/
-+F:	package/rsync/
- F:	package/rtmpdump/
- F:	package/samba4/
- F:	package/sofia-sip/
+> I hope this demystifies a bit all the hidden magic behind this test.
+> I also hope to see other graphic runtime tests! ;)
+
+Thanks a lot for all those details, very useful. Minor nit: you've put
+a lot of references to link [XYZ], but you forgot the list of those
+links.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
