@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7758AC001DE
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15F21C001DE
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:05:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E81E061020;
-	Sun, 30 Jul 2023 21:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E81E061020
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6E946101F;
+	Sun, 30 Jul 2023 21:05:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E946101F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cK81Ta05DV5l; Sun, 30 Jul 2023 21:01:59 +0000 (UTC)
+	with ESMTP id hsISMHayeiXW; Sun, 30 Jul 2023 21:05:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16B646101E;
-	Sun, 30 Jul 2023 21:01:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16B646101E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4835C1BF31E
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:01:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF02E6101B;
+	Sun, 30 Jul 2023 21:05:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF02E6101B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C32751BF401
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:05:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1502E81A3E
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:01:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1502E81A3E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96FEC4020B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:05:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96FEC4020B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ub9TTLsZzYxs for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 21:01:55 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 826AE81A3B
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:01:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 826AE81A3B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D615240004;
- Sun, 30 Jul 2023 21:01:52 +0000 (UTC)
-Date: Sun, 30 Jul 2023 23:01:51 +0200
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230730230151.5a1de6c2@windsurf>
-In-Reply-To: <20230730173242.6669-1-vfazio@gmail.com>
-References: <20230730173242.6669-1-vfazio@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QeJFf7RwI0W4 for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 21:05:28 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D3165401CA
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:05:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3165401CA
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D0B8FA4C0C45;
+ Sun, 30 Jul 2023 23:05:23 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45514)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qQDbP-0006bm-1r;
+ Sun, 30 Jul 2023 23:05:23 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 23:05:23 +0200
+Message-Id: <20230730210523.2327588-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690750912;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=g3RE/YXYgRwrZn4XI3a5apzkl385jxGg4QNOkzTr6bA=;
- b=dbUfXr/fzikMhhnppKSyB+3nTbxLpV48xfG2hlwyoB5JQMSB4m+9RJEzwKvjOe/hCVGB8v
- j5DLGvFUmf68OcN5kXln7KwBTogTYKRi9RU9vAW+M0rupsFl/2KgWsgWHFURZHyRpUP2Ii
- GZLhjgGiegX9zJAN0Vb8R///BOlwoPOXVsApdavjLaSKH8fjHiIOJJ4dPOer98x5RleuV1
- XC4uSFQdegbUY2z+iPbaYbjC2PIV7Ppc7q0YLwzAhv+lKBJH+ky2yC+BKPI9eRdam3q8D5
- hRpA2fe3FBlbLPuTHAKux6JYNrDFyuqF8RnFX6xJ5I0zFxuMq7mW44wdLPSX7w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dbUfXr/f
-Subject: Re: [Buildroot] [PATCH 1/1] arch/Config.in.x86: add Intel and AMD
- GCC targets
+ d=kuhls.net; 
+ s=kas202306131828; t=1690751123;
+ bh=oHMXWH3PFkoRZD9olmTM+J/h6WzSrJaPHVSGEzIZYCU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=YWXBBJZIUT8jqKe/WOAZxxJef2mJ2DWSclvL1cFAy6Tl1kTrCVV38qv+7Ib7+/MQc
+ wH8jX6W1QUbgr7gCcYlAr3ZbgSRTFi/RYDw7FEacHbDMsqHSwfUTZbhocAxN1G6VDe
+ aaxMDrRrB1Cj7gOm5q9M08YTKP4gecs7lhsIzTzc9erfoJfQrvobfL4QRMW3r+3sRG
+ os2N9nzj2LZvh0GufMx2CdbdeAGJKN58PQidrT3bfJkFbWe0TXtNeSOHU9wrXxjXIR
+ 57GxGXDFOENAabEIaFeFReXH/kYdvjQU50fRQ133WLXL/AGJdz0cZOHBW+eN01XlJ4
+ 1u1Tk03bZgi9g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=YWXBBJZI
+Subject: [Buildroot] [PATCH RFC 1/1] package/xenomai: disable -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,64 +74,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Vincent,
+Fixes:
+http://autobuild.buildroot.net/results/1fd/1fd8d97e0f514a65eb6a4723e49605073c9e3824/
 
-On Sun, 30 Jul 2023 12:32:42 -0500
-Vincent Fazio <vfazio@gmail.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+This is a quick'n'dirty fix for the build error which is only visible if
+you issue the build commands manually and remove ">/dev/null 2>&1".
+Since this is my first patch for Xenomai I am unsure the fix would be
+accepted upstream so I would like to discuss it here before sending it
+upstream. Therefore I did not add an Upstream: tag.
 
-> Sync the CPU target list with what's available up to GCC 13.
-> 
-> Multiple references used for flags and synonyms [0] [1] [2] [3].
-> 
-> [0]: https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/x86-Options.html
-> [1]: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=gcc/config/i386/i386.h;hb=refs/tags/releases/gcc-13.2.0
-> [2]: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=gcc/common/config/i386/i386-common.cc;hb=refs/tags/releases/gcc-13.2.0
-> [3]: https://en.wikipedia.org/wiki/AVX-512#CPUs_with_AVX-512
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+ .../0004-configure.ac-Remove-Werror.patch     | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch
 
-It generally looks good (even though I definitely didn't check all the
-CPUs and their capabilities, I trust you). However, I have one comment.
-
-> +# BR2_X86_CPU_HAS_AVX512 is used to enable the x86_64-v4 toolchain(s).
-
-I think this wording is not good. BR2_X86_CPU_HAS_AVX512 is not *used*
-to enable the x86-86-v4 toolchain. This option is not there for that.
-This hidden option is here to allow the CPU variants that support
-AVX512 to indicate that they do offer this support. It has nothing to
-with the x86-86-v4 toolchain per-se.
-
-> +# Some CPUs have a _subset_ of AVX512, but do not meet the minimum requirements
-> +# for x86_64-v4 (AVX512F, AVX512BW, AVX512CD, AVX512DQ, AVX512VL).
-> +# Reference: https://en.wikipedia.org/wiki/AVX-512#CPUs_with_AVX-512
-
-I think a better wording is:
-
-# CPU variants should only select this option if they support for the
-# full set of AVX512 instructions: AVX512F, AVX512BW, AVX512CD, AVX512DQ,
-# AVX512VL
-
-Please note that if this is not a good choice, we can also revisit how
-the AVX512 support is handled.
-
->  config BR2_X86_CPU_HAS_AVX512
->  	bool
-
-Thanks!
-
-Thomas
+diff --git a/package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch b/package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch
+new file mode 100644
+index 0000000000..74e590deff
+--- /dev/null
++++ b/package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch
+@@ -0,0 +1,31 @@
++From 7e1010c82453442edce2914667538f648875284a Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sun, 30 Jul 2023 22:59:41 +0200
++Subject: [PATCH] configure.ac: Remove -Werror
++
++Fixes build errors
++
++task.c:398:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
++task.c:444:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 45e222b97..5c9476e7b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -629,7 +629,7 @@ fi
++ dnl Internal CFLAGS and LDFLAGS, may be enhanced per-arch below
++ XENO_USER_CFLAGS="$XENO_USER_APP_CFLAGS -pipe -fstrict-aliasing \
++ -Wall -Wstrict-prototypes -Wmissing-prototypes -Wno-long-long \
++--Wno-unused-parameter -Werror -Wformat-security -D__XENO__ -D__IN_XENO__"
+++-Wno-unused-parameter -Wformat-security -D__XENO__ -D__IN_XENO__"
++ if test x$want_fortify = xyes -a x$debug_mode != xfull; then
++    XENO_USER_CFLAGS="$XENO_USER_CFLAGS -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2"
++ fi
++-- 
++2.39.2
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
