@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 590B2C001DF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEC61C001DF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BFAB60A9B;
-	Sun, 30 Jul 2023 10:12:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BFAB60A9B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9748B60ACA;
+	Sun, 30 Jul 2023 10:12:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9748B60ACA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z97VF1tKLW5I; Sun, 30 Jul 2023 10:12:39 +0000 (UTC)
+	with ESMTP id BLB1ztjNWloQ; Sun, 30 Jul 2023 10:12:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3383060A9C;
-	Sun, 30 Jul 2023 10:12:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3383060A9C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C6F21BF95C
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:11:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF20D60AD0;
+	Sun, 30 Jul 2023 10:12:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF20D60AD0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BDC451BF41B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25EF981E05
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2D664010D
  for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:11:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25EF981E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2D664010D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ul-eXuO7SiaK for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O5EekwxyV7yf for <buildroot@lists.busybox.net>;
  Sun, 30 Jul 2023 10:11:58 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FE3381E04
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:11:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FE3381E04
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00B4040138
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00B4040138
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDE74838C9; Sun, 30 Jul 2023 10:11:57 +0000 (UTC)
+ id DB02283874; Sun, 30 Jul 2023 10:11:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 12:11:45 +0200
+Date: Sun, 30 Jul 2023 12:11:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eb99c88a151aa95d1ecdbf93b9cf0ce3f753bca2
-X-Git-Newrev: a9523e3f72bc05fc2ecfa9ebf597fde0e512ff95
+X-Git-Oldrev: 90c89b29d32114f12dc8cafe095e233490286305
+X-Git-Newrev: 5b8aa2a21e0d84e10b261844d9304f93ce49ce8c
 X-Patchwork-Hint: ignore
-Message-Id: <20230730101157.EDE74838C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-pam: fix musl build
+Message-Id: <20230730101157.DB02283874@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mbpoll: fix build without c++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,73 +63,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9523e3f72bc05fc2ecfa9ebf597fde0e512ff95
+commit: https://git.buildroot.net/buildroot/commit/?id=5b8aa2a21e0d84e10b261844d9304f93ce49ce8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The bump to version 1.5.3 with buildroot commit
-f8147e27cdac8f998ec6644a09ce4e8d62b6433c added the file patched.
+Add patch to enable build without c++.
 
-Please note that the next version will include
-https://github.com/linux-pam/linux-pam/commit/5fa961fd3b5b8cf5ba1a0cf49b10ebf79e273e96
-which adds --enable-examples as configure option to disable examples.
-This patch, although it would also fix the problem, is not added instead
-to avoid autoreconf.
+Add configure option to fix subsequent configure error due to patched
+source file during git version check:
+
+CMake Error at cmake/GitVersion.cmake:118 (message):
+  Unable to find current project version !
+Call Stack (most recent call first):
+  CMakeLists.txt:100 (GetGitVersion)
 
 Fixes:
-http://autobuild.buildroot.net/results/1d9/1d96d4c57969536c14340ae5542e62a9459246f9/
+http://autobuild.buildroot.net/results/2f8/2f819871a89cb2a2df239b1f879c1babcdd022fc/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-examples-tty_conv-fix-build-on-musl.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ ...txt-Add-LANGUAGES-option-to-project-varia.patch | 30 ++++++++++++++++++++++
+ package/mbpoll/mbpoll.mk                           |  1 +
+ 2 files changed, 31 insertions(+)
 
-diff --git a/package/linux-pam/0001-examples-tty_conv-fix-build-on-musl.patch b/package/linux-pam/0001-examples-tty_conv-fix-build-on-musl.patch
+diff --git a/package/mbpoll/0001-CMakeLists.txt-Add-LANGUAGES-option-to-project-varia.patch b/package/mbpoll/0001-CMakeLists.txt-Add-LANGUAGES-option-to-project-varia.patch
 new file mode 100644
-index 0000000000..c1257d64da
+index 0000000000..8c9d1a5680
 --- /dev/null
-+++ b/package/linux-pam/0001-examples-tty_conv-fix-build-on-musl.patch
-@@ -0,0 +1,40 @@
-+From 5374f677e4cae669eb9accf2449178b602e8a40a Mon Sep 17 00:00:00 2001
-+From: Violet Purcell <vimproved@inventati.org>
-+Date: Thu, 11 May 2023 12:50:34 -0400
-+Subject: [PATCH] examples/tty_conv: fix build on musl
++++ b/package/mbpoll/0001-CMakeLists.txt-Add-LANGUAGES-option-to-project-varia.patch
+@@ -0,0 +1,30 @@
++From 97a2c39fea591509ac1f8a31598b7555b63b8d55 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sun, 30 Jul 2023 08:45:58 +0200
++Subject: [PATCH] CMakeLists.txt: Add LANGUAGES option to project variable
 +
-+termio.h is the old System V version of the interface header, and is
-+only provided in glibc and dietlibc as far as I can tell.
-+This fixes it to use the POSIX termios.h instead.
++Fixes build with toolchains without c++.
 +
-+Upstream: https://github.com/linux-pam/linux-pam/commit/5374f677e4cae669eb9accf2449178b602e8a40a
++Upstream: https://github.com/epsilonrt/mbpoll/pull/71
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ examples/tty_conv.c | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/examples/tty_conv.c b/examples/tty_conv.c
-+index 23f0684cc..9a0e1ad99 100644
-+--- a/examples/tty_conv.c
-++++ b/examples/tty_conv.c
-+@@ -6,8 +6,9 @@
-+ #include <string.h>
-+ #include <errno.h>
-+ #include <unistd.h>
-+-#include <termio.h>
-++#include <termios.h>
-+ #include <security/pam_appl.h>
-++#include <sys/ioctl.h>
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 6daa039..11dcd05 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -3,7 +3,7 @@
++ cmake_minimum_required(VERSION 2.9)
 + 
-+ /***************************************
-+  * @brief echo off/on
-+@@ -16,7 +17,7 @@
-+  ***************************************/
-+ static void echoOff(int fd, int off)
-+ {
-+-    struct termio tty;
-++    struct termios tty;
-+     if (ioctl(fd, TCGETA, &tty) < 0)
-+     {
-+         fprintf(stderr, "TCGETA failed: %s\n", strerror(errno));
++ # Workspace name
++-project(mbpoll)
+++project(mbpoll LANGUAGES C)
++ 
++ # This setting is useful for providing JSON file used by CodeLite for code completion
++ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
++-- 
++2.39.2
++
+diff --git a/package/mbpoll/mbpoll.mk b/package/mbpoll/mbpoll.mk
+index 466d9a0ec1..4289264e0d 100644
+--- a/package/mbpoll/mbpoll.mk
++++ b/package/mbpoll/mbpoll.mk
+@@ -9,5 +9,6 @@ MBPOLL_SITE = $(call github,epsilonrt,mbpoll,v$(MBPOLL_VERSION))
+ MBPOLL_DEPENDENCIES = host-pkgconf libmodbus
+ MBPOLL_LICENSE = GPL-3.0+
+ MBPOLL_LICENSE_FILES = COPYING
++MBPOLL_CONF_OPTS = -DGIT_EXECUTABLE=/bin/false
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
