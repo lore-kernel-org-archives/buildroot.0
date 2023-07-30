@@ -4,65 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62A5C001DE
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 14:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F90BC001DF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 15:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7570940525;
-	Sun, 30 Jul 2023 14:16:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7570940525
+	by smtp2.osuosl.org (Postfix) with ESMTP id 961064016F;
+	Sun, 30 Jul 2023 15:08:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 961064016F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZewPM18wAkm3; Sun, 30 Jul 2023 14:16:28 +0000 (UTC)
+	with ESMTP id 60SPNxwHKkzu; Sun, 30 Jul 2023 15:08:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9659A40558;
-	Sun, 30 Jul 2023 14:16:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9659A40558
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CF58A1BF3F2
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 14:16:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 70B2140280;
+	Sun, 30 Jul 2023 15:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70B2140280
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 04DE71BF393
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 15:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9153D40345
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 14:16:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9153D40345
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC28D60EF6
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 15:08:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC28D60EF6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dBYOruQnP096 for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 14:16:24 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C2C4C40340
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 14:16:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2C4C40340
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDDFD60003;
- Sun, 30 Jul 2023 14:16:20 +0000 (UTC)
-Date: Sun, 30 Jul 2023 16:16:19 +0200
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20230730161619.2b8417cc@windsurf>
-In-Reply-To: <20230123055259.2285749-1-troglobit@gmail.com>
-References: <20230123055259.2285749-1-troglobit@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sA1NVNdcs7Xy for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 15:08:49 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E9DD60EF2
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 15:08:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E9DD60EF2
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 05E43B0037C;
+ Sun, 30 Jul 2023 17:08:44 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:48340])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 30 Jul 2023 17:08:44 +0200
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690726581;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pjYsX4nICNZZ/fpDpyG/FcWRvHHu5PSAvqqp5FzBQdw=;
- b=HtJt7hkwfPRPdOhjr84PFLKWN44t19SpxDy/HBT0sxqv6q491g2Gh6s83bFeul3WvWSUG0
- rYZFeESw6kGb+fmKIFx70L9G6CxHxpGALHhti9WM2MGLsYD2YKAdnGEKcja360vo4lCJfp
- Q9+DZV1mGDKwFdNwws+eW2IilHQo7rdRxd+gOzyoEp3Imb16g622u3BqTQoXQ9bTq/H5kn
- dwIGny83qqkyCGhixWbliJj46VwkKLVVsMWKOY0BvlIkoMWiXXji4sxo24vtiUlIvXGbJP
- UDwP76I4qcbT8xjT4yTvmMAiTWlh7KmjcNf7cIfS4weDz6Qqdcd66IBLJVCEgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HtJt7hkw
-Subject: Re: [Buildroot] [PATCH 1/1] package/mdnsd: new package
+Date: Sun, 30 Jul 2023 17:08:44 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <50d4fcd31983bde7b248a088e983a0c7@free.fr>
+References: <20230607202439.188050-1-ju.o@free.fr>
+ <20230729233927.572fd26c@windsurf>
+ <50d4fcd31983bde7b248a088e983a0c7@free.fr>
+User-Agent: Webmail Free/1.6.1
+Message-ID: <d769c819d6035b23c52bc041bdd13477@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690729726;
+ bh=zC2l3H0taeXA9atPBECdGWIpDjjjcehjWha/TLvzL0E=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=cCQtamXLysgaySq3v/DQ2JwDENRbcN+TMFR4+y/q2uzF32Pn/BojMM1ciNeuI/8r8
+ p6caYlch2dqojz1MRg54T1tv6Ly+l8KGjc8xeWA3/e1f4Ik1t1bfWdfTTh2r065KI6
+ IfDH5/get5wDhrNHrzu8Rz7wPGaj1MP9Pj5B7CGa8YTwn9neLotDKq4cLRl2ipiOaa
+ mXOYyycxHgaO0i647ItfRW3Dg3N26vBWoa+l6gBxEtz4KktJV2g/gvK34vCwCvvSyf
+ Ey5Ex9sPug0JMeipYrxs05YVzUVEX/1niwYsnkJ4rp3wWUbJgwXIvdAox2tBdj0wnt
+ g+Gm3/xXL+sZA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cCQtamXL
+Subject: Re: [Buildroot] [PATCH 1/2] package/glslsandbox-player: bump to
+ version v2023.04.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,201 +79,194 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hi Thomas,
 
-On Mon, 23 Jan 2023 06:52:58 +0100
-Joachim Wiberg <troglobit@gmail.com> wrote:
+As you mentioned, links were missing. I added them. Sorry about that.
 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+On 30/07/2023 14:12, Julien Olivain wrote:
+> Hi Thomas,
+> 
+> I'm glad to see there is some interest in graphical runtime testing!
+> 
+> On 29/07/2023 23:39, Thomas Petazzoni wrote:
+>> Hello Julien,
+>> 
+>> On Wed,  7 Jun 2023 22:24:38 +0200
+>> Julien Olivain <ju.o@free.fr> wrote:
+>> 
+>>> License hash changed due to copyright year update.
+>>> 
+>>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+>>> ---
+>>>  package/glslsandbox-player/glslsandbox-player.hash | 4 ++--
+>>>  package/glslsandbox-player/glslsandbox-player.mk   | 2 +-
+>>>  2 files changed, 3 insertions(+), 3 deletions(-)
+>> 
+>> Both applied to master. Nice to see an OpenGL test case in automated
+>> tests! I'm curious to understand more how it works:
+>> 
+>> - How does glslsandboxplayer knows that we want the frames to be
+>>   generated as .ppm files?
+> 
+> The last frame screen dump as a .ppm is requested with the '-D'
+> argument in the program invocation, see [1] and [2].
+> 
+> I'll provide here a bit more insights, in case other people would like
+> to write other graphical tests ;)
+> 
+> glslsandbox-player was designed as a tool for stressing, benchmarking,
+> testing and debugging OpenGL ES 2 GPU drivers. So it includes its own
+> screenshot feature. It was also designed to run in reduced
+> environments (non-linux, static-only, C90, POSIX.1, ...). This is why
+> there is no fancy getopt_long() or other dependencies on modern
+> graphics formats libraries.
+> 
+> glslsandbox-player is implementing the screenshot with a good old
+> glReadPixel() call, then a fwrite() in [3].
+> 
+> Even if all of this is a bit outdated, it still continuing to catch
+> hardware and GPU driver software bugs in modern implementations (up to
+> OpenGL ES 3.2, and also in Vulkan drivers, thanks to Mesa Zink [4] or
+> other adaptation layers).
+> 
+> You could achieve the same behavior with any application having its
+> own builtin screenshot feature, for example with weston:
+> 
+>     # start compositor (with debug protocol to allow screenshots)
+>     weston --debug ...other-options...
+>     # do the screenshot by calling the client program
+>     weston-screenshooter
+> 
+> This will generate a files with the date, matching
+> "wayland-screenshot-*.png".
+> 
+> 
+> Regarding the validity of the output:
+> 
+> This test is "just" checking a non-empty PPM file is generated. This
+> is because, quoting the OpenGL ES 2.0 spec at [5] in Appendix A, "The
+> OpenGL ES specification is not pixel exact". I did not wanted to
+> introduce a test that would fail every now an then. I also wanted to
+> include a sufficiently "complex" workload, while remaining fast (a
+> Mandel fractal was a good candidate for that).
+> 
+> Testing for a non-empty file could be seen as a bit weak. In fact, it
+> implicitly relies on the fact that glslsandbox-player validates return
+> codes of every library, system and OpenGL calls. It is programmed to
+> fail in case an unexpected code is seen. See for example [6]. Since
+> the PPM screenshot is made at the end of the rendering, and cleanup
+> routines are also checking return codes, the mere presence of this PPM
+> file AND a clean return code of the glslsandbox-player invocation
+> means a lot. It means that all the plumbing between all the involved
+> components returned "OK": compilation of LLVM, Mesa, libdrm, Kernel,
+> client application... and a simple execution of all of that also
+> returned "OK".
+> 
+> This is a peculiarity of glslsandbox-player. A "normal" OpenGL
+> application would not validate every single call, mainly for
+> performance reasons (this is why glslsandbox-player has also those
+> --disable-strict-{egl,gles} build time configure options).
+> 
+> Since OpenGL ES has some invariance rules (continue reading [6]), some
+> image checksums could be added in other graphic tests.
+> 
+> The glslsandbox-player in its testsuite some of this kind of tests,
+> for example [7].  I thought it was not really relevant to include
+> those kind of checks in this test.
+> 
+> Also, the DRM VKMS display driver includes CRC checksumming functions,
+> see [8] [9] through debugfs, which could be leveraged to validate the
+> Kernel display controller "view" is the same as the user space client
+> screenshots. For example, we can compare the CRC of the screenshot
+> with the CRC of the display controller driver. See below for VKMS
+> details.
+> 
+> 
+>> - What role does the DRM vkms driver play in the story?
+> 
+> To run correctly, OpenGL ES requires a "valid context" created by EGL
+> (with eglCreateContext()). The EGL API always requires a "valid
+> display" to be initialized, see [10].
+> 
+> There is many non-standard hacks to run offscreen without a valid
+> display, but they are outside the Khronos specs, and sometimes non
+> portable from one GPU driver version to another.
+> 
+> Without a display, we usually end up with eglInitialize() failing with
+> error EGL_BAD_DISPLAY or EGL_NOT_INITIALIZED and stop there.
+> 
+> With KMS/DRM, the user space client application is also controlling
+> its swap chain, see [11], so the application needs a DRM driver to
+> talk to.
+> 
+> For such a test to work, the tested application must discover the DRM
+> driver on its own (or must be configurable to use a specific DRM
+> driver). glslsandbox-player can do both, see [12] and [13]. Here,
+> since we have only one DRM vkms driver, we let the application
+> discover it.
+> 
+> To me, VKMS with Mesa llvmpipe/swrast is the best software-only
+> solution for the moment. It allows to run Qemu with "-display none"
+> while emulating some kind of display in the virtual
+> machine. Obviously, this limits to simple GPU workloads that could
+> still fit in a software llvmpipe/swrast implementation. With a Qemu
+> Aarch64 virt (possibly with SMP), we can still reach decent
+> performance for simple runtime tests.
+> 
+> Virtio-GPU would have been another option, but requires QEmu emulate a
+> display, and access an OpenGL implementation. This would put too many
+> requirements on the testing environment.
+> 
+> Finally, other GPU vendor implementation usually require to emulate
+> some hardware to probe their drivers. This solution can be ruled out
+> for now.
+> 
+> 
+>> Thanks for this work!
+>> 
+>> Thomas
+> 
+> I hope this demystifies a bit all the hidden magic behind this test.
+> I also hope to see other graphic runtime tests! ;)
+> 
+> Best regards,
+> 
+> Julien.
 
-Thanks, I've applied with those changes. See below.
+[1]  
+https://git.buildroot.org/buildroot/tree/support/testing/tests/package/test_glslsandbox_player.py?id=1367f3e465500129998631419cf645c0180c71a1#n45
+[2]  
+https://github.com/jolivain/glslsandbox-player/blob/v2023.04.05/README.md#running-glslsandbox-player
+[3]  
+https://github.com/jolivain/glslsandbox-player/blob/v2023.04.05/src/glslsandbox-player.c#L274
+[4]  https://docs.mesa3d.org/drivers/zink.html
+[5]  
+https://registry.khronos.org/OpenGL/specs/es/2.0/es_full_spec_2.0.pdf#page=169
+[6]  
+https://github.com/jolivain/glslsandbox-player/blob/v2023.04.05/src/gles_helper.c#L292
+[7]  
+https://github.com/jolivain/glslsandbox-player/blob/v2023.04.05/tests/tst-textures.at#L17
+[8]  
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/gpu/drm/vkms/vkms_composer.c?h=v6.4.7#n107
+[9]  https://docs.kernel.org/gpu/drm-uapi.html#display-crc-support
+[10] 
+https://registry.khronos.org/EGL/sdk/docs/man/html/eglInitialize.xhtml
+[11] 
+https://github.com/jolivain/glslsandbox-player/blob/v2023.04.05/src/native_gfx_kms.c#L761
+[12] 
+https://github.com/jolivain/glslsandbox-player/blob/v2023.04.05/src/native_gfx_kms.c#L416
+[13] 
+https://github.com/jolivain/glslsandbox-player/blob/v2023.04.05/src/native_gfx_kms.c#L526
 
-> diff --git a/package/mdnsd/Config.in b/package/mdnsd/Config.in
-> new file mode 100644
-> index 0000000000..095a924e98
-> --- /dev/null
-> +++ b/package/mdnsd/Config.in
-> @@ -0,0 +1,50 @@
-> +config BR2_PACKAGE_MDNSD
-> +	bool "mdnsd"
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  Small mDNS-SD daemon for advertising services and device discovery,
-> +	  similar to Avahi and Bonjour.
-> +
-> +	  By default, mdnsd runs on all interfaces that support multicast.
-> +	  It reads services to announce from /etc/mdns.d/*.service, a few
-> +	  common services are included below.  To override the defaults,
-> +	  e.g., path to services, TTL of multicast frames, or the default
-> +	  interface, set MDNSD_ARGS in /etc/default/mdnsd
-> +
-> +	  Note: currently no NSS integration with GLIBC.
+Best regards,
 
-Some of the lines here were too long, causing a check-package warning.
-Also the upstream URL of the project was missing as a last line in the
-help text.
-
-> +
-> +if BR2_PACKAGE_MDNSD
-> +
-> +config BR2_PACKAGE_MDNSD_MQUERY
-> +	bool "mquery"
-> +	default n
-
-Not needed, being disabled is the default.
-
-> +	help
-> +  	  Scan a LAN for mDNS capable devices, or query specific records,
-> +	  similar to the mdns-scan tool.  Useful for verifying multicast
-> +	  connectivity or locating neighbors with link-local address.
-
-Some of the lines here were too long, causing a check-package warning.
-
-> +comment "Services to advertise"
-> +
-> +config BR2_PACKAGE_MDNSD_FTP_SERVICE
-> +	bool "FTP service"
-> +	default n
-> +
-> +config BR2_PACKAGE_MDNSD_HTTP_SERVICE
-> +	bool "HTTP service"
-> +	default n
-> +
-> +config BR2_PACKAGE_MDNSD_IPP_SERVICE
-> +	bool "IPP service"
-> +	default n
-> +
-> +config BR2_PACKAGE_MDNSD_PRINTER_SERVICE
-> +	bool "Printer service"
-> +	default n
-
-Same comment as above about "default n".
-
-> diff --git a/package/mdnsd/mdnsd.hash b/package/mdnsd/mdnsd.hash
-> new file mode 100644
-> index 0000000000..2fa7552d85
-> --- /dev/null
-> +++ b/package/mdnsd/mdnsd.hash
-> @@ -0,0 +1,6 @@
-> +# Upstream sha256 from GitHub
-> +sha256  1af8742ab82a0af88d99d0b15508358ad4305879ab039631bea889138f5c87e8  mdnsd-0.12.tar.gz
-> +
-> +# Locally computed
-> +sha256  2969546227b58ce1b431cc4c36c9a9b45d604e6b94fb8b787ea5d3696f3eee3b  LICENSE
-> +
-
-This final empty line was causing a check-package warning.
-
-> diff --git a/package/mdnsd/mdnsd.mk b/package/mdnsd/mdnsd.mk
-> new file mode 100644
-> index 0000000000..90a4d4c051
-> --- /dev/null
-> +++ b/package/mdnsd/mdnsd.mk
-> @@ -0,0 +1,75 @@
-> +################################################################################
-> +#
-> +# mdnsd
-> +#
-> +################################################################################
-> +
-> +MDNSD_VERSION = 0.12
-> +MDNSD_SITE = https://github.com/troglobit/mdnsd/releases/download/v$(MDNSD_VERSION)
-> +MDNSD_LICENSE = BSD-3-Clause
-> +MDNSD_LICENSE_FILES = LICENSE
-> +MDNSD_DEPENDENCIES = host-pkgconf
-> +
-> +ifeq ($(BR2_PACKAGE_MDNSD_MQUERY),y)
-> +MDNSD_CONF_OPTS += --with-mquery
-> +else
-> +MDNSD_CONF_OPTS += --without-mquery
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +MDNSD_DEPENDENCIES += systemd
-> +MDNSD_CONF_OPTS += --with-systemd
-> +else
-> +MDNSD_CONF_OPTS += --without-systemd
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MDNSD_FTP_SERVICE),y)
-> +define MDNSD_INSTALL_FTP_SERVICE
-> +	$(INSTALL) -D -m 0644 package/mdnsd/ftp.service \
-> +		$(TARGET_DIR)/etc/mdns.d/
-> +endef
-> +MDNSD_POST_INSTALL_TARGET_HOOKS += MDNSD_INSTALL_FTP_SERVICE
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MDNSD_HTTP_SERVICE),y)
-> +define MDNSD_INSTALL_HTTP_SERVICE
-> +	$(INSTALL) -D -m 0644 package/mdnsd/http.service \
-> +		$(TARGET_DIR)/etc/mdns.d/
-> +endef
-> +MDNSD_POST_INSTALL_TARGET_HOOKS += MDNSD_INSTALL_HTTP_SERVICE
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MDNSD_IPP_SERVICE),y)
-> +define MDNSD_INSTALL_IPP_SERVICE
-> +	$(INSTALL) -D -m 0644 package/mdnsd/ipp.service \
-> +		$(TARGET_DIR)/etc/mdns.d/
-> +endef
-> +MDNSD_POST_INSTALL_TARGET_HOOKS += MDNSD_INSTALL_IPP_SERVICE
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MDNSD_PRINTER_SERVICE),y)
-> +define MDNSD_INSTALL_PRINTER_SERVICE
-> +	$(INSTALL) -D -m 0644 package/mdnsd/printer.service \
-> +		$(TARGET_DIR)/etc/mdns.d/
-> +endef
-> +MDNSD_POST_INSTALL_TARGET_HOOKS += MDNSD_INSTALL_PRINTER_SERVICE
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_MDNSD_SSH_SERVICE),y)
-> +define MDNSD_INSTALL_SSH_SERVICE
-> +	$(INSTALL) -D -m 0644 package/mdnsd/ssh.service \
-> +		$(TARGET_DIR)/etc/mdns.d/
-> +endef
-> +MDNSD_POST_INSTALL_TARGET_HOOKS += MDNSD_INSTALL_SSH_SERVICE
-> +endif
-
-All of this service handling stuff was very verbose. I've refactored it
-like this:
-
-MDNSD_SERVICES_$(BR2_PACKAGE_MDNSD_FTP_SERVICE) += ftp
-MDNSD_SERVICES_$(BR2_PACKAGE_MDNSD_HTTP_SERVICE) += http
-MDNSD_SERVICES_$(BR2_PACKAGE_MDNSD_IPP_SERVICE) += ipp
-MDNSD_SERVICES_$(BR2_PACKAGE_MDNSD_PRINTER_SERVICE) += printer
-MDNSD_SERVICES_$(BR2_PACKAGE_MDNSD_SSH_SERVICE) += ssh
-
-define MDNSD_INSTALL_SERVICES
-        $(foreach service,$(MDNSD_SERVICES_y),\
-                $(INSTALL) -D -m 0644 package/mdnsd/$(service).service \
-                        $(TARGET_DIR)/etc/mdns.d/$(service).service
-        )
-endef
-MDNSD_POST_INSTALL_TARGET_HOOKS += MDNSD_INSTALL_SERVICES
-
-> +define MDNSD_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 755 -D package/mdnsd/S50mdnsd $(TARGET_DIR)/etc/init.d/
-
-You need a full destination path here.
-
-As said above: I fixed those various small things when applying.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
