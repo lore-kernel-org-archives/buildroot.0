@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25147C001DC
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:34:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 892CEEB64DD
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D124F6101E;
-	Sun, 30 Jul 2023 21:34:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D124F6101E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45A6561024;
+	Sun, 30 Jul 2023 21:35:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45A6561024
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uhaxW6BFpeDt; Sun, 30 Jul 2023 21:34:52 +0000 (UTC)
+	with ESMTP id nSOaEPVU7loX; Sun, 30 Jul 2023 21:35:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F1EAD6102C;
-	Sun, 30 Jul 2023 21:34:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1EAD6102C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A93CC1BF401
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 695C96102E;
+	Sun, 30 Jul 2023 21:35:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 695C96102E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F1FE1BF401
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EF6B408E1
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EF6B408E1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 65FA360804
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:34:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65FA360804
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z3BnareJhjEj for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7dspbhXFG2gI for <buildroot@lists.busybox.net>;
  Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 831E84089E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 798536102C
  for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 831E84089E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 798536102C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7120983D2A; Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
+ id 67D3F83D29; Sun, 30 Jul 2023 21:34:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 23:34:02 +0200
+Date: Sun, 30 Jul 2023 23:33:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cfde8aec04f67fd5d50c7fbd1ec73166fed0fbfb
-X-Git-Newrev: c2aaa0fbe2fdf6e599c68169aa7b2e55237190c7
+X-Git-Oldrev: d78de0ca97e178c89a6e3a78cb36b300200b75a1
+X-Git-Newrev: cfde8aec04f67fd5d50c7fbd1ec73166fed0fbfb
 X-Patchwork-Hint: ignore
-Message-Id: <20230730213426.7120983D2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liquid-dsp: bump to version 1.5.0
+Message-Id: <20230730213426.67D3F83D29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pythran: bump to version
+ 0.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2aaa0fbe2fdf6e599c68169aa7b2e55237190c7
+commit: https://git.buildroot.net/buildroot/commit/?id=cfde8aec04f67fd5d50c7fbd1ec73166fed0fbfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/liquid-dsp/liquid-dsp.hash | 2 +-
- package/liquid-dsp/liquid-dsp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pythran/python-pythran.hash | 4 ++--
+ package/python-pythran/python-pythran.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/liquid-dsp/liquid-dsp.hash b/package/liquid-dsp/liquid-dsp.hash
-index 7e5de6b259..6fdbd62a86 100644
---- a/package/liquid-dsp/liquid-dsp.hash
-+++ b/package/liquid-dsp/liquid-dsp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  66f38d509aa8f6207d2035bae5ee081a3d9df0f2cab516bc2118b5b1c6ce3333  liquid-dsp-1.4.0.tar.gz
-+sha256  93003edb6e74090b41009b1fae6f273a3e711dc4c8c56a0cca3e89167b765953  liquid-dsp-1.5.0.tar.gz
- sha256  4df7126196efba1283deb99e3269418dde4ab0ad1fde80a55051153451eb4df2  LICENSE
-diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
-index fcdf572532..e9788eb144 100644
---- a/package/liquid-dsp/liquid-dsp.mk
-+++ b/package/liquid-dsp/liquid-dsp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pythran/python-pythran.hash b/package/python-pythran/python-pythran.hash
+index 08348a5ccf..2dfc445b2f 100644
+--- a/package/python-pythran/python-pythran.hash
++++ b/package/python-pythran/python-pythran.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pythran/json
+-md5  d2961ece35b4b9f44a84ef31df1b21ff  pythran-0.12.0.tar.gz
+-sha256  eff3dd0d3eebe57372f0d14f82985525e9bcdfb5b1d1010e1932cf9207060f9f  pythran-0.12.0.tar.gz
++md5  3090288af50566af75cb058d1878aaad  pythran-0.13.1.tar.gz
++sha256  8aad08162f010e5425a7b254dd68d83311b430bb29f9252dce2eff3ba39497dd  pythran-0.13.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0be9f14c66a9a3cb66d5263a6495437862ce0c9cdf60d4a6c36d1e51b1244c6e  LICENSE
+ sha256  e1c0ed0a99e4462016d79d835f1f479b78c4d4a07fe66598e97f449503ffd178  docs/LICENSE.rst
+diff --git a/package/python-pythran/python-pythran.mk b/package/python-pythran/python-pythran.mk
+index 0d946be28a..25735ad95a 100644
+--- a/package/python-pythran/python-pythran.mk
++++ b/package/python-pythran/python-pythran.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIQUID_DSP_VERSION = 1.4.0
-+LIQUID_DSP_VERSION = 1.5.0
- LIQUID_DSP_SITE = $(call github,jgaeddert,liquid-dsp,v$(LIQUID_DSP_VERSION))
- LIQUID_DSP_LICENSE = MIT
- LIQUID_DSP_LICENSE_FILES = LICENSE
+-PYTHON_PYTHRAN_VERSION = 0.12.0
++PYTHON_PYTHRAN_VERSION = 0.13.1
+ PYTHON_PYTHRAN_SOURCE = pythran-$(PYTHON_PYTHRAN_VERSION).tar.gz
+-PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/99/e0/ed0e81de05cfa4ecbcbceec6603d175387d8bc7a6332cbfd155d09958ccf
++PYTHON_PYTHRAN_SITE = https://files.pythonhosted.org/packages/8d/d8/b27e8dc3f3a03dcd317d40d9df0ae07ebbd85444585973ceba07716934d0
+ PYTHON_PYTHRAN_SETUP_TYPE = setuptools
+ PYTHON_PYTHRAN_LICENSE = BSD-3-Clause
+ PYTHON_PYTHRAN_LICENSE_FILES = LICENSE docs/LICENSE.rst
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
