@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E7E9C04A94
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 11:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 771BDC001DE
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 11:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 059BA60ACF;
-	Sun, 30 Jul 2023 11:00:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 059BA60ACF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3088E60BAE;
+	Sun, 30 Jul 2023 11:00:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3088E60BAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qRlXtzbPcHPq; Sun, 30 Jul 2023 11:00:20 +0000 (UTC)
+	with ESMTP id BpEL1v8wfX7G; Sun, 30 Jul 2023 11:00:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D2F160A97;
-	Sun, 30 Jul 2023 11:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D2F160A97
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 074541BF41B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 11:00:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 759B560B16;
+	Sun, 30 Jul 2023 11:00:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 759B560B16
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EA6A1BF41B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 11:00:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE841410E0
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 11:00:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE841410E0
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBEEF60B16
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 11:00:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBEEF60B16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rPnTp43E63ln for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 11:00:16 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BFB18409A7
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 11:00:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFB18409A7
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 84E4B240003;
- Sun, 30 Jul 2023 11:00:08 +0000 (UTC)
-Date: Sun, 30 Jul 2023 13:00:07 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230730130007.711b7b37@windsurf>
-In-Reply-To: <20230103200046.96070-2-ju.o@free.fr>
-References: <20230103200046.96070-1-ju.o@free.fr>
- <20230103200046.96070-2-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NldU_wmAGk-0 for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 11:00:34 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D35B460A7E
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 11:00:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D35B460A7E
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 038E4A4C0824
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 13:00:32 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41542)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qQ4A3-0001rz-2X
+ for buildroot@buildroot.org; Sun, 30 Jul 2023 13:00:31 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 13:00:31 +0200
+Message-Id: <20230730110031.3570266-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690714814;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ifFG/SM6Ed2i/aO7tvMYXnEt15+Q9fZLwliixGE9QMU=;
- b=aqt70vixtSYs65fkBKJ3/UvXSXeeMF0V4x3JHYWWq+cjqyMoCeCBcShk458N4ul/L9zYLV
- c0XAA6BFWjvNFRsYlmNibYZFCXXt5oO56IuemkFbVm9sgXtuVZBnTPcRv7y5WDbvOoWSwU
- EhpwKire2BJzKT5QSAbtbqTkPj/fsPb/XNK79zUYA/LFr3EVgvd6htP4T6su5FWe4T2pWR
- LUEwmCNrKOiL1Bdmg9SLsZf/2w4T6ki8y7mrTGQ/xQG5Q1Av2ESk8mYbaOR6qE6SqHJwnf
- nchTHUsRZy2s7rUW7xRSBUiFK9dJdg7LJ498i4CrtGlB1SIG596HIjFO0C7JSg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aqt70vix
-Subject: Re: [Buildroot] [PATCH 2/2]
- support/testing/tests/package/test_fluidsynth.py: new runtime test
+ d=kuhls.net; 
+ s=kas202306131828; t=1690714832;
+ bh=n2NBLNa38HTHjvzzgWFjWGYaNN2s04lKur7NiOTY0cc=;
+ h=From:To:Subject:Date:From;
+ b=Ws8ayhsZ2QFaCtIljTOz7c76je5ma2dGslgLt5AhLOB8L/vU08RkKylPshscRQgba
+ guZYAGnce6elSYvwEyhJq6as9w454RthvJOxEx9ZkmAtvLlN09N8GTY061xI6spxX2
+ UDxVeGuQg0HNcwhnhBfTOCVI9J1zYZCg2Hpnz3KYw/qJmHPLIjG8FbQdnaxHbyZ2jy
+ e+6f6TfHTCqrebBLDIYjpQ5n6SbFjG6Io15diJYPqIzJkzHx8q/1CQ99w/ZHLHi6tq
+ FvEiSopBFXmv12l+YHlmjdE6/idkFwFZmam0RBMDBGgMYu+9ya9vrYO09KmiEdAALX
+ eJBkKsDkSf9Bw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Ws8ayhsZ
+Subject: [Buildroot] [PATCH 1/1] package/kodi-audiodecoder-timidity: fix
+ build with gcc-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,31 +75,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  3 Jan 2023 21:00:46 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...001-MidiScan-include-missing-cstdint.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
 
-> +class TestFluidsynth(infra.basetest.BRTest):
-> +    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it is
-> +    # armv5 and based on qemu versatilepb which is limited to 256MB of
-> +    # RAM.  The test needs 1GB of RAM (larger initrd and soundfond is
-
-                                                             ^^^^^^^^ typo here
-
-Applied with the minor typo fixed. Thanks!
-
-Thomas
+diff --git a/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch b/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
+new file mode 100644
+index 0000000000..a0fb586e44
+--- /dev/null
++++ b/package/kodi-audiodecoder-timidity/0001-MidiScan-include-missing-cstdint.patch
+@@ -0,0 +1,29 @@
++From 0d4d3fcf5c58dd16b3e9a7337189141b839e4ace Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Sat, 15 Apr 2023 07:41:15 +1000
++Subject: [PATCH] MidiScan: include missing <cstdint>
++
++gcc 13 moved some includes around and as a result <cstdint> is no longer transitively
++included [1]. Explicitly include it for uint{32,64}_t.
++
++[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
++
++Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
++Upstream: https://github.com/xbmc/audiodecoder.timidity/commit/0d4d3fcf5c58dd16b3e9a7337189141b839e4ace
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/MidiScan.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/MidiScan.h b/src/MidiScan.h
++index 9c19bdf..ac959e0 100644
++--- a/src/MidiScan.h
+++++ b/src/MidiScan.h
++@@ -8,6 +8,7 @@
++ 
++ #pragma once
++ 
+++#include <cstdint>
++ #include <string>
++ #include <vector>
++ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
