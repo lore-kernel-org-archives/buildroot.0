@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A094EB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5254DC001DC
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B92B56102E;
-	Sun, 30 Jul 2023 21:38:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B92B56102E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C4E161020;
+	Sun, 30 Jul 2023 21:38:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C4E161020
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NOSjN_lR_HNi; Sun, 30 Jul 2023 21:38:08 +0000 (UTC)
+	with ESMTP id OyymLVp9HiNW; Sun, 30 Jul 2023 21:38:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 032BC61028;
-	Sun, 30 Jul 2023 21:38:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 032BC61028
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44759605EA;
+	Sun, 30 Jul 2023 21:38:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44759605EA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7085D1BF401
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:38:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5947C1BF401
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5702D61021
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:38:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5702D61021
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3309B605EA
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:38:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3309B605EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Mnuin-wat1DW for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 21:38:04 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 15707605EA
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:38:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15707605EA
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 009D6E0002;
- Sun, 30 Jul 2023 21:38:01 +0000 (UTC)
-Date: Sun, 30 Jul 2023 23:38:00 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230730233800.0ce60d19@windsurf>
-In-Reply-To: <20230730210523.2327588-1-bernd@kuhls.net>
-References: <20230730210523.2327588-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690753082;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CMacyn160UY7TSJi8ad9Wp8Mv3mFbg31e6vEp8L33Y0=;
- b=XqUv9Q6y+/hvzUMuatmyAA2GJgRHy9atXrnSs+Z0NnVxMfdUYijjF0BojOP9TBKBeyQmMm
- NYyeRat+wbmvMF2cuZrL11XAh9jHdYcit9BV2Jkyw0DKOqgp7Wd1ExkUcAh0kFGpYRyo82
- psU1NOg+sJiCqJlj2XJA8atUVi9bhPEo7hwUjpHHwXafubQPr2vlxENybodRwPTcdksOul
- H3rVXIiaHOb+dI8yypQqbU/f+9Hq5YbWeukJzT9efjyMmWkiWmmTmWSvq6z04h7wH4bFaV
- PAspcdDrqBeDRQNQhg/8mbOFksq9sFwBrTILtAN09vadgked9C1LgSHQOPn4ug==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XqUv9Q6y
-Subject: Re: [Buildroot] [PATCH RFC 1/1] package/xenomai: disable -Werror
+ with ESMTP id mnFmskXBUEXO for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 21:38:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CE07600B9
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:38:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CE07600B9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5821B83D33; Sun, 30 Jul 2023 21:38:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 23:36:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 17cdf58f1cb85a786cdd884872486828fe416112
+X-Git-Newrev: 47a3eb132d22d7b21dd98d987f43a297615b4fa6
+X-Patchwork-Hint: ignore
+Message-Id: <20230730213822.5821B83D33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediasdk: bump version to
+ 23.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,35 +58,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=47a3eb132d22d7b21dd98d987f43a297615b4fa6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 30 Jul 2023 23:05:23 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/intel-mediasdk/intel-mediasdk.hash | 2 +-
+ package/intel-mediasdk/intel-mediasdk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> This is a quick'n'dirty fix for the build error which is only visible if
-> you issue the build commands manually and remove ">/dev/null 2>&1".
-> Since this is my first patch for Xenomai I am unsure the fix would be
-> accepted upstream so I would like to discuss it here before sending it
-> upstream. Therefore I did not add an Upstream: tag.
-
-I guess upstream would prefer to fix the actual issue rather than
-dropping -Werror.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/intel-mediasdk/intel-mediasdk.hash b/package/intel-mediasdk/intel-mediasdk.hash
+index a00748b667..f975ab15c3 100644
+--- a/package/intel-mediasdk/intel-mediasdk.hash
++++ b/package/intel-mediasdk/intel-mediasdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  186bb82fc9fe23ed21be51a58036c66b109f64c49d923ebe8ac922133338991e  intel-mediasdk-23.2.1.tar.gz
++sha256  12f23a78104edc1c9bfa755effd2723866d107ad752f72d3839fcc8db0503cec  intel-mediasdk-23.2.2.tar.gz
+ sha256  dfd67773578903698f9ff4a61eb8f2d84810cbecd56f3f3cee8c649f813b6ea6  LICENSE
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index eb7703dbb3..18a2938441 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_MEDIASDK_VERSION = 23.2.1
++INTEL_MEDIASDK_VERSION = 23.2.2
+ INTEL_MEDIASDK_SITE = https://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
