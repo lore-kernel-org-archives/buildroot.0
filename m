@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC69AC001DF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B49C001DC
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A058960BB1;
-	Sun, 30 Jul 2023 10:38:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A058960BB1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EF9160B99;
+	Sun, 30 Jul 2023 10:39:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EF9160B99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CB9bzQuhmezM; Sun, 30 Jul 2023 10:38:55 +0000 (UTC)
+	with ESMTP id JqBcRv0uMMGz; Sun, 30 Jul 2023 10:39:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6EC46079B;
-	Sun, 30 Jul 2023 10:38:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6EC46079B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F16811BF41B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:38:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74BFC60644;
+	Sun, 30 Jul 2023 10:39:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74BFC60644
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4167A1BF41B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:39:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C89E660774
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C89E660774
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C5F24014D
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:39:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C5F24014D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 33-_ZeRolvHn for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 10:38:50 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D3A2C60615
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:38:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A2C60615
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 13ABEE0002;
- Sun, 30 Jul 2023 10:38:47 +0000 (UTC)
-Date: Sun, 30 Jul 2023 12:38:47 +0200
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20230730123847.0432c1f0@windsurf>
-In-Reply-To: <20230604154818.3681851-1-troglobit@gmail.com>
-References: <20230604154818.3681851-1-troglobit@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690713528;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qky/74nJsL9X3457tQWnGDtaRwg6YyIwx9LMX6R/KGw=;
- b=S+uGG0eUfj1RDiZeWEscJAP5hclbOwQEKGRRphoEOLMZGDGq96HNJGZd0rmB4/9ij2tgRu
- jzQj0ym2UdNpKj/MjZyXBGpCTcSr/bkgldzYSmpF6jXNB5KQU4QMVXC7QUO5oACUnSBbmL
- XNWmO9Khh0Yg3sB5zmN4h00ZftgmopA//AzMdqhtSd6etr3W/odMYv8CvLUS+fewcS1ZRR
- KDzAo4Xtp8T3lWCWNqo0tt2f8AXwlRtN27d7rIBDkBIIfQMxKTVCEL6ncjXpL5mTCtCgi/
- gDTHyfxgRlwbYhmF7qQIZu23gXM9x8W+RIySxuHF9hp1y8mdjawmlbH2sNU7NA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=S+uGG0eU
-Subject: Re: [Buildroot] [PATCH 0/2] mrouted upgrade with systemd build fix
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gbMMcYl9yw6F for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 10:39:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A09940138
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:39:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A09940138
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3A23283C07; Sun, 30 Jul 2023 10:39:18 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 30 Jul 2023 12:37:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d4f23da67eedc56f285e093b7432b33ba303a71c
+X-Git-Newrev: 2737af9cf9b490ffbd2a83d8897428a81a899d2e
+X-Patchwork-Hint: ignore
+Message-Id: <20230730103918.3A23283C07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ssdp-responder: bump to v2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,26 +57,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  4 Jun 2023 17:48:16 +0200
-Joachim Wiberg <troglobit@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2737af9cf9b490ffbd2a83d8897428a81a899d2e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Joachim Wiberg (2):
->   package/mrouted: bump for v4.5 release
->   package/mrouted: add /var/lib/misc for systemd builds
+Upstream ChangeLog, summary:
 
-Both applied, thanks!
+ - Add support for JSON output with 'ssdpd-scan -j'
+ - Dump received data from devices in 'ssdp-scan -l debug'
+ - Termios support for disabling '^C' output from 'ssdp-scan'
+ - Update copyright years, LICENSE file hash change
+ - Source '/etc/default/ssdpd' from systemd unit file
+ - Add fallback if '/var/lib/misc' is missing on system
+ - Fix truncated UUID when reading from cache file
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ssdp-responder/ssdp-responder.hash | 4 ++--
+ package/ssdp-responder/ssdp-responder.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
+index 8b4f3e4e45..7794c66643 100644
+--- a/package/ssdp-responder/ssdp-responder.hash
++++ b/package/ssdp-responder/ssdp-responder.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d8888f2ac59febfb3b2473a1402041014052ad4dc1eeb4168c78aeca1692aae3  ssdp-responder-2.0.tar.gz
+-sha256  68d6fdc22e337f725fe719bf9ae6d92b1d8d0ca4cff8219b303ab76706670a8d  LICENSE
++sha256  75787cd9c0a88329dd39437eb28a188b54a3a0cab8472968e2713d90076f321f  ssdp-responder-2.1.tar.gz
++sha256  b66025f1e568a8d80264550d7bd7683780ac248f2baa1e85b4da4b15e28d55a7  LICENSE
+diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
+index 20e7219386..ddd87bc599 100644
+--- a/package/ssdp-responder/ssdp-responder.mk
++++ b/package/ssdp-responder/ssdp-responder.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SSDP_RESPONDER_VERSION = 2.0
++SSDP_RESPONDER_VERSION = 2.1
+ SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
+ SSDP_RESPONDER_LICENSE = ISC
+ SSDP_RESPONDER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
