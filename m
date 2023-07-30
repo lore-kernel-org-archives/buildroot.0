@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C033EC001DE
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E61CC001DC
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:27:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 765C560A9C;
-	Sun, 30 Jul 2023 10:25:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 765C560A9C
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9DBB60AD0;
+	Sun, 30 Jul 2023 10:27:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9DBB60AD0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ids41aPjWteD; Sun, 30 Jul 2023 10:25:30 +0000 (UTC)
+	with ESMTP id eLll2jraFA4d; Sun, 30 Jul 2023 10:27:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABD9960ACA;
-	Sun, 30 Jul 2023 10:25:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD9960ACA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 45F481BF41B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:25:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 333FF60774;
+	Sun, 30 Jul 2023 10:27:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 333FF60774
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C80361BF41B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:27:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FC3560A8C
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:25:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FC3560A8C
+ by smtp4.osuosl.org (Postfix) with ESMTP id A01434136B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:27:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A01434136B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nNMhdD_Jwwg8 for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 10:25:04 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0944E60736
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0944E60736
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 60E2960002;
- Sun, 30 Jul 2023 10:25:00 +0000 (UTC)
-Date: Sun, 30 Jul 2023 12:24:59 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pZVT3wv9x3Ig for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 10:27:01 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1F9F841365
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F9F841365
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4AF761C0003;
+ Sun, 30 Jul 2023 10:26:51 +0000 (UTC)
+Date: Sun, 30 Jul 2023 12:26:50 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230730122459.77ef4c0e@windsurf>
-In-Reply-To: <20230708200447.3919009-1-bernd@kuhls.net>
+Message-ID: <20230730122650.5592af4b@windsurf>
+In-Reply-To: <20230708200447.3919009-2-bernd@kuhls.net>
 References: <20230708200447.3919009-1-bernd@kuhls.net>
+ <20230708200447.3919009-2-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690712700;
+ d=bootlin.com; s=gm1; t=1690712818;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Q55gSAbHdAn1RH7JSzcPf7ByhRnxZDVYDj5EDUJ/iPk=;
- b=OLtSMtYTGmhkR1p7MFz/NVwxfbTmLzY7nzTy/YC3UWKgIuJc5ybYPIFCqHBbPmWxKkrMxV
- xw3AdWS+YPfryO9cDBcCilETpmMSMTIxJPw0mpGn3qrrvhGVccO8+S8zH9u7MBpVoHsZ2/
- tCaFEajI3rn6m+T6bxW1Hj5vEa6CuVxv2NxDUF7kf5f9jzVPiMdNeArU3LHq8JT5ls2pkJ
- 7iXAkRFlQ/Q194etsgM0LD0mamG4pBQJnd7dLtgQ7aa6jpvQdkbm1lt8kJdTxDQAjeV6F0
- ccNxACgdty9BpGwGO1v+POwdV/tAENx4WXE4GynCWvY3lyR9v1r+A1Bt4ZXEcw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ykpKZcyqhkzI0hwQ13RiLZWFrFF7WOEz5uDMyZ/qtz0=;
+ b=LFIyXiPC1BeQpnlTc6aduxtUqNThR31WZGdslb3DK5ypSfTxH99p8wCRVmM7+nyCDC3BEZ
+ xO6WDOKSfBUsb29prFQNVp7L/ch61GI++Yn1WyS//mP5RLI8PIFQIaEGD+i2EKgQqGLiHy
+ mRIG6bF7isjvhS3hkeYKQUWnHy3aegmyluow5ObMCnnVeAm1pHFpAf/tFCosAJfSFRdzZe
+ weBSHzKK5fx+y5EA8CiRnhUnhUxw2/SoOuGB+B4SHBuwVcpUwGx/DLxhcEu/fssCei+s2z
+ d2k82Ppei/gY+cCUtT2z3YmWei/jJyclhNKvjJZqsmziZpHL1igLF4tFlKO05A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OLtSMtYT
-Subject: Re: [Buildroot] [PATCH 1/7] package/libde265: new package
+ header.s=gm1 header.b=LFIyXiPC
+Subject: Re: [Buildroot] [PATCH 2/7] package/libheif: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,35 +78,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Pieter De Gendt <pieter.degendt@gmail.com>,
- Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+ Samuel Martin <s.martin49@gmail.com>,
+ Giulio Benetti <giulio.benetti@micronovasrl.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  8 Jul 2023 22:04:41 +0200
+Hello Bernd,
+
+I've applied, but I have some comments below. Giuliu, there is also a
+question for you.
+
+On Sat,  8 Jul 2023 22:04:42 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Optional dependency of the upcoming libheif package.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/libde265/Config.in     | 12 ++++++++++++
->  package/libde265/libde265.hash |  3 +++
->  package/libde265/libde265.mk   | 13 +++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/libde265/Config.in
->  create mode 100644 package/libde265/libde265.hash
->  create mode 100644 package/libde265/libde265.mk
+> diff --git a/package/libheif/Config.in b/package/libheif/Config.in
+> new file mode 100644
+> index 0000000000..9ce507fd24
+> --- /dev/null
+> +++ b/package/libheif/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_LIBHEIF
+> +	bool "libheif"
+> +	# avoid build error
+> +	# Internal error in emit_expr_encoded at dw2gencfi.c:215
+> +	depends on !BR2_m68k_cf
 
-Applied to master, thanks.
+Giulio, do we have a BR2_TOOLCHAIN_HAS_..._BUG for this? Are other
+packages affected by this? I see quite a few BR2_m68k_cf conditionals
+sprinkled all over the places in Buildroot.
+
+> +	depends on BR2_INSTALL_LIBSTDCPP
+
+I've added a dependency on gcc >= 4.8, because this package uses C++11.
+I have verified it builds fine with GCC 4.8.
+
+Applied with this tweak.
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
