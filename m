@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 933B7C001DC
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 20:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15F57C00528
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 20:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19FD661019;
-	Sun, 30 Jul 2023 20:45:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19FD661019
+	by smtp3.osuosl.org (Postfix) with ESMTP id C21F561021;
+	Sun, 30 Jul 2023 20:45:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C21F561021
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fXCRh9IPMwLS; Sun, 30 Jul 2023 20:45:25 +0000 (UTC)
+	with ESMTP id xjHcSCSgaBIT; Sun, 30 Jul 2023 20:45:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3117C61028;
-	Sun, 30 Jul 2023 20:45:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3117C61028
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3BC191BF86B
+	by smtp3.osuosl.org (Postfix) with ESMTP id B75186101F;
+	Sun, 30 Jul 2023 20:45:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B75186101F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E04BC1BF31E
  for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 641B46101A
+ by smtp1.osuosl.org (Postfix) with ESMTP id B868981A29
  for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 20:44:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 641B46101A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B868981A29
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j3amdIU_-Gz3 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 34PazOEigZ7P for <buildroot@lists.busybox.net>;
  Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 963026101B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E8D781A2B
  for <buildroot@buildroot.org>; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 963026101B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E8D781A2B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8647783CD3; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
+ id 7CB3283CD1; Sun, 30 Jul 2023 20:44:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 22:43:12 +0200
+Date: Sun, 30 Jul 2023 22:43:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bc6fbe7954d6b289787297ac2b37bab6a832d1e5
-X-Git-Newrev: 0d219fd34f280d2d4a1ff86f5fcbf451d9297576
+X-Git-Oldrev: 88b188a242d1b7ac2dc08077bb6ed521030b6b0e
+X-Git-Newrev: bc6fbe7954d6b289787297ac2b37bab6a832d1e5
 X-Patchwork-Hint: ignore
-Message-Id: <20230730204443.8647783CD3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmt: bump version to 10.0.0
+Message-Id: <20230730204443.7CB3283CD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gerbera: Fix building with fmt >=
+ 10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,46 +64,189 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d219fd34f280d2d4a1ff86f5fcbf451d9297576
+commit: https://git.buildroot.net/buildroot/commit/?id=bc6fbe7954d6b289787297ac2b37bab6a832d1e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/fmtlib/fmt/blob/master/ChangeLog.rst
-
-Updated license hash due to upstream commit, no legal changes:
-https://github.com/fmtlib/fmt/commit/48dfbcaa95f2043d29e3591ffd3090af4a5f33e2
-
-This patch depends on bumping spdlog to version 1.12.0.
+This patch depends on bumping gerbera to version 1.12.1.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fmt/fmt.hash | 4 ++--
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../gerbera/0001-buildfix-support-fmtlib-10.patch  | 166 +++++++++++++++++++++
+ 1 file changed, 166 insertions(+)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 65eeaa4ebe..279f071262 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  cceb4cb9366e18a5742128cb3524ce5f50e88b476f1e54737a47ffdf4df4c996  fmt-9.1.0.zip
--sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-+sha256  4943cb165f3f587f26da834d3056ee8733c397e024145ca7d2a8a96bb71ac281  fmt-10.0.0.zip
-+sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index ed0703cbc9..f2c94b8231 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FMT_VERSION = 9.1.0
-+FMT_VERSION = 10.0.0
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+diff --git a/package/gerbera/0001-buildfix-support-fmtlib-10.patch b/package/gerbera/0001-buildfix-support-fmtlib-10.patch
+new file mode 100644
+index 0000000000..b274aab75b
+--- /dev/null
++++ b/package/gerbera/0001-buildfix-support-fmtlib-10.patch
+@@ -0,0 +1,166 @@
++From 37957aac0aea776e6f843af2358916f81056a405 Mon Sep 17 00:00:00 2001
++From: Mamoru TASAKA <mtasaka@fedoraproject.org>
++Date: Thu, 29 Jun 2023 22:09:15 +0900
++Subject: [PATCH] buildfix: support fmtlib 10
++
++With fmtlib10, fmt::format does not accept pugi::xml_node as it is.
++Use name() member function, as this usage appear on other places of
++gerbera source code.
++
++Closes #2839 .
++
++Upstream: https://github.com/gerbera/gerbera/commit/37957aac0aea776e6f843af2358916f81056a405
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/config/setup/config_setup_array.cc       | 6 +++---
++ src/config/setup/config_setup_autoscan.cc    | 2 +-
++ src/config/setup/config_setup_client.cc      | 2 +-
++ src/config/setup/config_setup_dictionary.cc  | 6 +++---
++ src/config/setup/config_setup_dynamic.cc     | 2 +-
++ src/config/setup/config_setup_transcoding.cc | 2 +-
++ src/config/setup/config_setup_tweak.cc       | 2 +-
++ src/config/setup/config_setup_vector.cc      | 4 ++--
++ 8 files changed, 13 insertions(+), 13 deletions(-)
++
++diff --git a/src/config/setup/config_setup_array.cc b/src/config/setup/config_setup_array.cc
++index 62dd5c9a7..a5f8958ce 100644
++--- a/src/config/setup/config_setup_array.cc
+++++ b/src/config/setup/config_setup_array.cc
++@@ -137,11 +137,11 @@ std::vector<std::string> ConfigArraySetup::getXmlContent(const pugi::xml_node& o
++     std::vector<std::string> result;
++     if (initArray) {
++         if (!initArray(optValue, result, ConfigDefinition::mapConfigOption(nodeOption))) {
++-            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue);
+++            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue.name());
++         }
++     } else {
++         if (!createOptionFromNode(optValue, result)) {
++-            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue);
+++            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue.name());
++         }
++     }
++     if (result.empty()) {
++@@ -150,7 +150,7 @@ std::vector<std::string> ConfigArraySetup::getXmlContent(const pugi::xml_node& o
++         result = defaultEntries;
++     }
++     if (notEmpty && result.empty()) {
++-        throw_std_runtime_error("Invalid array {} empty '{}'", xpath, optValue);
+++        throw_std_runtime_error("Invalid array {} empty '{}'", xpath, optValue.name());
++     }
++     return result;
++ }
++diff --git a/src/config/setup/config_setup_autoscan.cc b/src/config/setup/config_setup_autoscan.cc
++index 9ae4e61f8..5e1394585 100644
++--- a/src/config/setup/config_setup_autoscan.cc
+++++ b/src/config/setup/config_setup_autoscan.cc
++@@ -245,7 +245,7 @@ std::shared_ptr<ConfigOption> ConfigAutoscanSetup::newOption(const pugi::xml_nod
++ {
++     auto result = std::vector<AutoscanDirectory>();
++     if (!createOptionFromNode(optValue, result)) {
++-        throw_std_runtime_error("Init {} autoscan failed '{}'", xpath, optValue);
+++        throw_std_runtime_error("Init {} autoscan failed '{}'", xpath, optValue.name());
++     }
++     optionValue = std::make_shared<AutoscanListOption>(result);
++     return optionValue;
++diff --git a/src/config/setup/config_setup_client.cc b/src/config/setup/config_setup_client.cc
++index ffd12fc01..857db3c3e 100644
++--- a/src/config/setup/config_setup_client.cc
+++++ b/src/config/setup/config_setup_client.cc
++@@ -183,7 +183,7 @@ std::shared_ptr<ConfigOption> ConfigClientSetup::newOption(const pugi::xml_node&
++     auto result = std::make_shared<ClientConfigList>();
++ 
++     if (!createOptionFromNode(isEnabled ? optValue : pugi::xml_node(nullptr), result)) {
++-        throw_std_runtime_error("Init {} client config failed '{}'", xpath, optValue);
+++        throw_std_runtime_error("Init {} client config failed '{}'", xpath, optValue.name());
++     }
++     optionValue = std::make_shared<ClientConfigListOption>(result);
++     return optionValue;
++diff --git a/src/config/setup/config_setup_dictionary.cc b/src/config/setup/config_setup_dictionary.cc
++index 003b4cc59..69d1a7255 100644
++--- a/src/config/setup/config_setup_dictionary.cc
+++++ b/src/config/setup/config_setup_dictionary.cc
++@@ -163,11 +163,11 @@ std::map<std::string, std::string> ConfigDictionarySetup::getXmlContent(const pu
++     std::map<std::string, std::string> result;
++     if (initDict) {
++         if (!initDict(optValue, result)) {
++-            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue);
+++            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue.name());
++         }
++     } else {
++         if (!createOptionFromNode(optValue, result) && required) {
++-            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue);
+++            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue.name());
++         }
++     }
++     if (result.empty()) {
++@@ -176,7 +176,7 @@ std::map<std::string, std::string> ConfigDictionarySetup::getXmlContent(const pu
++         result = defaultEntries;
++     }
++     if (notEmpty && result.empty()) {
++-        throw_std_runtime_error("Invalid dictionary {} empty '{}'", xpath, optValue);
+++        throw_std_runtime_error("Invalid dictionary {} empty '{}'", xpath, optValue.name());
++     }
++     return result;
++ }
++diff --git a/src/config/setup/config_setup_dynamic.cc b/src/config/setup/config_setup_dynamic.cc
++index 0074cb6d3..d6962afe6 100644
++--- a/src/config/setup/config_setup_dynamic.cc
+++++ b/src/config/setup/config_setup_dynamic.cc
++@@ -192,7 +192,7 @@ std::shared_ptr<ConfigOption> ConfigDynamicContentSetup::newOption(const pugi::x
++     auto result = std::make_shared<DynamicContentList>();
++ 
++     if (!createOptionFromNode(optValue, result)) {
++-        throw_std_runtime_error("Init {} DynamicContentList failed '{}'", xpath, optValue);
+++        throw_std_runtime_error("Init {} DynamicContentList failed '{}'", xpath, optValue.name());
++     }
++     optionValue = std::make_shared<DynamicContentListOption>(result);
++     return optionValue;
++diff --git a/src/config/setup/config_setup_transcoding.cc b/src/config/setup/config_setup_transcoding.cc
++index 17d1780dc..1f6fb0604 100644
++--- a/src/config/setup/config_setup_transcoding.cc
+++++ b/src/config/setup/config_setup_transcoding.cc
++@@ -501,7 +501,7 @@ std::shared_ptr<ConfigOption> ConfigTranscodingSetup::newOption(const pugi::xml_
++     auto result = std::make_shared<TranscodingProfileList>();
++ 
++     if (!createOptionFromNode(isEnabled ? optValue : pugi::xml_node(nullptr), result)) {
++-        throw_std_runtime_error("Init {} transcoding failed '{}'", xpath, optValue);
+++        throw_std_runtime_error("Init {} transcoding failed '{}'", xpath, optValue.name());
++     }
++     optionValue = std::make_shared<TranscodingProfileListOption>(result);
++     return optionValue;
++diff --git a/src/config/setup/config_setup_tweak.cc b/src/config/setup/config_setup_tweak.cc
++index 65dae2759..4da9fca1b 100644
++--- a/src/config/setup/config_setup_tweak.cc
+++++ b/src/config/setup/config_setup_tweak.cc
++@@ -257,7 +257,7 @@ std::shared_ptr<ConfigOption> ConfigDirectorySetup::newOption(const pugi::xml_no
++     auto result = std::make_shared<DirectoryConfigList>();
++ 
++     if (!createOptionFromNode(optValue, result)) {
++-        throw_std_runtime_error("Init {} DirectoryConfigList failed '{}'", xpath, optValue);
+++        throw_std_runtime_error("Init {} DirectoryConfigList failed '{}'", xpath, optValue.name());
++     }
++     optionValue = std::make_shared<DirectoryTweakOption>(result);
++     return optionValue;
++diff --git a/src/config/setup/config_setup_vector.cc b/src/config/setup/config_setup_vector.cc
++index e5efe2767..9a9670569 100644
++--- a/src/config/setup/config_setup_vector.cc
+++++ b/src/config/setup/config_setup_vector.cc
++@@ -181,7 +181,7 @@ std::vector<std::vector<std::pair<std::string, std::string>>> ConfigVectorSetup:
++ {
++     std::vector<std::vector<std::pair<std::string, std::string>>> result;
++     if (!createOptionFromNode(optValue, result) && required) {
++-        throw_std_runtime_error("Init {} vector failed '{}'", xpath, optValue);
+++        throw_std_runtime_error("Init {} vector failed '{}'", xpath, optValue.name());
++     }
++     if (result.empty()) {
++         log_debug("{} assigning {} default values", xpath, defaultEntries.size());
++@@ -189,7 +189,7 @@ std::vector<std::vector<std::pair<std::string, std::string>>> ConfigVectorSetup:
++         result = defaultEntries;
++     }
++     if (notEmpty && result.empty()) {
++-        throw_std_runtime_error("Invalid vector {} empty '{}'", xpath, optValue);
+++        throw_std_runtime_error("Invalid vector {} empty '{}'", xpath, optValue.name());
++     }
++     return result;
++ }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
