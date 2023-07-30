@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 512EBC001DF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C033EC001DE
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 10:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A2AA60736;
-	Sun, 30 Jul 2023 10:25:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A2AA60736
+	by smtp3.osuosl.org (Postfix) with ESMTP id 765C560A9C;
+	Sun, 30 Jul 2023 10:25:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 765C560A9C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cTQMjpN-Ayn5; Sun, 30 Jul 2023 10:25:18 +0000 (UTC)
+	with ESMTP id ids41aPjWteD; Sun, 30 Jul 2023 10:25:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C46E60AD0;
-	Sun, 30 Jul 2023 10:25:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C46E60AD0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 629F11BF41B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:25:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABD9960ACA;
+	Sun, 30 Jul 2023 10:25:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABD9960ACA
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 45F481BF41B
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 475DB408B5
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 475DB408B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FC3560A8C
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 10:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FC3560A8C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tMa7IPN211w6 for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 10:25:02 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 018AB408B0
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:25:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 018AB408B0
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4B828383C; Sun, 30 Jul 2023 10:25:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 12:24:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ba451d691b1444bfe7cb897fbe68b691a7597736
-X-Git-Newrev: afb30002403857baae1c48c2d2c4186ae63be613
-X-Patchwork-Hint: ignore
-Message-Id: <20230730102501.D4B828383C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libheif: new package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nNMhdD_Jwwg8 for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 10:25:04 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0944E60736
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 10:25:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0944E60736
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 60E2960002;
+ Sun, 30 Jul 2023 10:25:00 +0000 (UTC)
+Date: Sun, 30 Jul 2023 12:24:59 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230730122459.77ef4c0e@windsurf>
+In-Reply-To: <20230708200447.3919009-1-bernd@kuhls.net>
+References: <20230708200447.3919009-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690712700;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Q55gSAbHdAn1RH7JSzcPf7ByhRnxZDVYDj5EDUJ/iPk=;
+ b=OLtSMtYTGmhkR1p7MFz/NVwxfbTmLzY7nzTy/YC3UWKgIuJc5ybYPIFCqHBbPmWxKkrMxV
+ xw3AdWS+YPfryO9cDBcCilETpmMSMTIxJPw0mpGn3qrrvhGVccO8+S8zH9u7MBpVoHsZ2/
+ tCaFEajI3rn6m+T6bxW1Hj5vEa6CuVxv2NxDUF7kf5f9jzVPiMdNeArU3LHq8JT5ls2pkJ
+ 7iXAkRFlQ/Q194etsgM0LD0mamG4pBQJnd7dLtgQ7aa6jpvQdkbm1lt8kJdTxDQAjeV6F0
+ ccNxACgdty9BpGwGO1v+POwdV/tAENx4WXE4GynCWvY3lyR9v1r+A1Bt4ZXEcw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=OLtSMtYT
+Subject: Re: [Buildroot] [PATCH 1/7] package/libde265: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,144 +76,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Pieter De Gendt <pieter.degendt@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afb30002403857baae1c48c2d2c4186ae63be613
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  8 Jul 2023 22:04:41 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/libheif/Config.in    | 15 +++++++++++
- package/libheif/libheif.hash |  3 +++
- package/libheif/libheif.mk   | 59 ++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 79 insertions(+)
+> Optional dependency of the upcoming libheif package.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  DEVELOPERS                     |  1 +
+>  package/Config.in              |  1 +
+>  package/libde265/Config.in     | 12 ++++++++++++
+>  package/libde265/libde265.hash |  3 +++
+>  package/libde265/libde265.mk   | 13 +++++++++++++
+>  5 files changed, 30 insertions(+)
+>  create mode 100644 package/libde265/Config.in
+>  create mode 100644 package/libde265/libde265.hash
+>  create mode 100644 package/libde265/libde265.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 25d49b0fc3..9b829a364b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -380,6 +380,7 @@ F:	package/libglew/
- F:	package/libglfw/
- F:	package/libglu/
- F:	package/libhdhomerun/
-+F:	package/libheif/
- F:	package/libilbc/
- F:	package/libks/
- F:	package/libldns/
-diff --git a/package/Config.in b/package/Config.in
-index d47c8e8f6b..998074960d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1845,6 +1845,7 @@ menu "Multimedia"
- 	source "package/libdvdread/Config.in"
- 	source "package/libebml/Config.in"
- 	source "package/libhdhomerun/Config.in"
-+	source "package/libheif/Config.in"
- 	source "package/libimxvpuapi/Config.in"
- 	source "package/libmatroska/Config.in"
- 	source "package/libmms/Config.in"
-diff --git a/package/libheif/Config.in b/package/libheif/Config.in
-new file mode 100644
-index 0000000000..d0ea72430e
---- /dev/null
-+++ b/package/libheif/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBHEIF
-+	bool "libheif"
-+	# avoid build error
-+	# Internal error in emit_expr_encoded at dw2gencfi.c:215
-+	depends on !BR2_m68k_cf
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	help
-+	  libheif is an HEIF and AVIF file format decoder and encoder.
-+
-+	  https://github.com/strukturag/libheif
-+
-+comment "libheif needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on !BR2_m68k_cf
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
-new file mode 100644
-index 0000000000..50152abde5
---- /dev/null
-+++ b/package/libheif/libheif.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  7f97e4205c0bd9f9b8560536c8bd2e841d1c9a6d610401eb3eb87ed9cdfe78ea  libheif-1.16.2.tar.gz
-+sha256  b2eb4f6588b005bebac44cfb2dfd23f6a16c5ca9b8a619a315158b0215a917a3  COPYING
-diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
-new file mode 100644
-index 0000000000..9c6c2829cf
---- /dev/null
-+++ b/package/libheif/libheif.mk
-@@ -0,0 +1,59 @@
-+################################################################################
-+#
-+# libheif
-+#
-+################################################################################
-+
-+LIBHEIF_VERSION = 1.16.2
-+LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
-+LIBHEIF_LICENSE = LGPL-3.0+
-+LIBHEIF_LICENSE_FILES = COPYING
-+LIBHEIF_INSTALL_STAGING = YES
-+LIBHEIF_CONF_OPTS = \
-+	-DCMAKE_CXX_FLAGS="-std=c++11" \
-+	-DENABLE_PLUGIN_LOADING=OFF \
-+	-DWITH_AOM_DECODER=OFF \
-+	-DWITH_AOM_ENCODER=OFF \
-+	-DWITH_DEFLATE_HEADER_COMPRESSION=OFF \
-+	-DWITH_EXAMPLES=OFF \
-+	-DWITH_GDK_PIXBUF=OFF \
-+	-DWITH_LIBSHARPYUV=OFF \
-+	-DWITH_RAV1E=OFF \
-+	-DWITH_REDUCED_VISIBILITY=ON \
-+	-DWITH_SvtEnc=OFF
-+
-+ifeq ($(BR2_PACKAGE_DAV1D),y)
-+LIBHEIF_CONF_OPTS += -DWITH_DAV1D=ON
-+LIBHEIF_DEPENDENCIES += dav1d
-+else
-+LIBHEIF_CONF_OPTS += -DWITH_DAV1D=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDE265),y)
-+LIBHEIF_CONF_OPTS += -DWITH_LIBDE265=ON
-+LIBHEIF_DEPENDENCIES += libde265
-+else
-+LIBHEIF_CONF_OPTS += -DWITH_LIBDE265=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_X265),y)
-+LIBHEIF_CONF_OPTS += -DWITH_X265=ON
-+LIBHEIF_DEPENDENCIES += x265
-+else
-+LIBHEIF_CONF_OPTS += -DWITH_X265=OFF
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+LIBHEIF_CONF_OPTS += -DENABLE_MULTITHREADING_SUPPORT=ON
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
-+LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=OFF
-+else
-+LIBHEIF_CONF_OPTS += -DENABLE_PARALLEL_TILE_DECODING=ON
-+endif
-+else
-+LIBHEIF_CONF_OPTS += \
-+	-DENABLE_MULTITHREADING_SUPPORT=OFF \
-+	-DENABLE_PARALLEL_TILE_DECODING=OFF
-+endif
-+
-+$(eval $(cmake-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
