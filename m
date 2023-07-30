@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE89C001DF
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 17:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33445C001DF
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 17:12:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2281841680;
-	Sun, 30 Jul 2023 17:03:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2281841680
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BF664109F;
+	Sun, 30 Jul 2023 17:12:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BF664109F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4iRAEZUWjxLh; Sun, 30 Jul 2023 17:02:59 +0000 (UTC)
+	with ESMTP id QIXh7wj2Kdc9; Sun, 30 Jul 2023 17:12:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E375E416BC;
-	Sun, 30 Jul 2023 17:02:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E375E416BC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DE8291BF392
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:02:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B402410DC;
+	Sun, 30 Jul 2023 17:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B402410DC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 27BA31BF3BC
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B21BA4167E
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:02:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B21BA4167E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0617481761
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 17:12:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0617481761
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0h5wE3t2Xttj for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 17:02:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 232W-cMUNj7Z for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 17:12:36 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1851D4161B
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 17:02:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1851D4161B
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 43652813BC
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 17:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43652813BC
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 209FEA4C0367;
- Sun, 30 Jul 2023 19:02:51 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56902)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9BA6BA4C036A;
+ Sun, 30 Jul 2023 19:12:32 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60884)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qQ9og-0006SQ-2k;
- Sun, 30 Jul 2023 19:02:50 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qQ9y4-00088q-1D;
+ Sun, 30 Jul 2023 19:12:32 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 19:02:50 +0200
-Message-Id: <20230730170250.3318353-1-bernd@kuhls.net>
+Date: Sun, 30 Jul 2023 19:12:28 +0200
+Message-Id: <20230730171232.3381097-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1690736571;
- bh=xPT4sZZUD1Xmq9kym01/XB09d+BeIyRc+fXB/74UERw=;
+ s=kas202306131828; t=1690737152;
+ bh=3VRsQH9IhROxRllOIdKxTn5kgC2q5Z2BO8C27yYJPfA=;
  h=From:To:Cc:Subject:Date:From;
- b=fwQ6KoKeYS0hHMySgD6m/szYVu5blfDhzyeKwrz4vPVDHeDiRzbzRxRSLR3erui5z
- 7iHgAU6iSJEAEGxjOY35DyCeJL+C8CzoZC/QO/GP0ZQQqnS8ise9RBWrgmPcNZnRU5
- JMoO9PBojcrEjGQy4QthR8hu/+96bdWRlr8JU3R2tSHJ0VaZxLDuT3lI0fCAlveKha
- L8FamnhEXk2PIBTUp0U+O1totZVRcOmQcLxXcVOM7Ndnb6NSCLO7rDKXIsqy5IIq2L
- ZjpKD8jG5+ZLIKmk4WfhvhbNbzmKSUkBE8XcHegtXEpSWCgpUPsUs6+uTX1f2B2NWM
- Jhgwkv4AJSQSg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=gr7yTVDGKIgiKJ9wZmXrn+00MhgANbb0FxAzS3O10QCsj9RqpNAg9FVAUdIxIAw36
+ d+qHwNX3SqPhhH/ouhff7LMYyIpv0K7g5DGlG6zUIC7JBBm9Md4cX0SkgrUGDoj1ru
+ +x9bwdMMuMikWNja095mkSCbDUG6mFNkdOM2Ch5ceQiQWqPwHMHVq8daGFDFrU70lB
+ ip8FZeHuNdalRYgo7S1jdAtZECucUR4eES0vDOJhA8jjOmqq5Upuh4ljlBJIFSaUdr
+ mpkvXMmfk2m20FD0hvKwDnmTGf5pRbbHzEa4djywnI5IuffG2No9qy/mkh/3qaWP9g
+ sSCcRcIUugG8Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=fwQ6KoKe
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: bump version to 1.12.1
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=gr7yTVDG
+Subject: [Buildroot] [PATCH 1/5] package/gerbera: bump version to 1.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,15 +74,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Semyon Kolganov <semenak94@mail.ru>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Removed patch which is included in this release.
-
-Changelog: https://github.com/gerbera/gerbera/blob/master/ChangeLog.md
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
