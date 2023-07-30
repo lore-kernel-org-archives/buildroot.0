@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15F21C001DE
-	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14F66C001DE
+	for <buildroot@archiver.kernel.org>; Sun, 30 Jul 2023 21:10:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6E946101F;
-	Sun, 30 Jul 2023 21:05:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E946101F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 963C36101B;
+	Sun, 30 Jul 2023 21:10:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 963C36101B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hsISMHayeiXW; Sun, 30 Jul 2023 21:05:32 +0000 (UTC)
+	with ESMTP id 6rISXJv7I4sV; Sun, 30 Jul 2023 21:10:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF02E6101B;
-	Sun, 30 Jul 2023 21:05:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF02E6101B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C32751BF401
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:05:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4E1161019;
+	Sun, 30 Jul 2023 21:10:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4E1161019
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 43EF51BF401
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96FEC4020B
- for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96FEC4020B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D24E6101A
+ for <buildroot@lists.busybox.net>; Sun, 30 Jul 2023 21:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D24E6101A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QeJFf7RwI0W4 for <buildroot@lists.busybox.net>;
- Sun, 30 Jul 2023 21:05:28 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D3165401CA
- for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:05:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3165401CA
-Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D0B8FA4C0C45;
- Sun, 30 Jul 2023 23:05:23 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45514)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qQDbP-0006bm-1r;
- Sun, 30 Jul 2023 23:05:23 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dtteEImkSyZt for <buildroot@lists.busybox.net>;
+ Sun, 30 Jul 2023 21:10:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28DFA60B0D
+ for <buildroot@buildroot.org>; Sun, 30 Jul 2023 21:10:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28DFA60B0D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 12D5C83CE4; Sun, 30 Jul 2023 21:10:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 30 Jul 2023 23:05:23 +0200
-Message-Id: <20230730210523.2327588-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Spamd-Bar: ++++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1690751123;
- bh=oHMXWH3PFkoRZD9olmTM+J/h6WzSrJaPHVSGEzIZYCU=;
- h=From:To:Cc:Subject:Date:From;
- b=YWXBBJZIUT8jqKe/WOAZxxJef2mJ2DWSclvL1cFAy6Tl1kTrCVV38qv+7Ib7+/MQc
- wH8jX6W1QUbgr7gCcYlAr3ZbgSRTFi/RYDw7FEacHbDMsqHSwfUTZbhocAxN1G6VDe
- aaxMDrRrB1Cj7gOm5q9M08YTKP4gecs7lhsIzTzc9erfoJfQrvobfL4QRMW3r+3sRG
- os2N9nzj2LZvh0GufMx2CdbdeAGJKN58PQidrT3bfJkFbWe0TXtNeSOHU9wrXxjXIR
- 57GxGXDFOENAabEIaFeFReXH/kYdvjQU50fRQ133WLXL/AGJdz0cZOHBW+eN01XlJ4
- 1u1Tk03bZgi9g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=YWXBBJZI
-Subject: [Buildroot] [PATCH RFC 1/1] package/xenomai: disable -Werror
+Date: Sun, 30 Jul 2023 22:47:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0d219fd34f280d2d4a1ff86f5fcbf451d9297576
+X-Git-Newrev: 0626a2b61a509654bdc2f1a8403a041667e40572
+X-Patchwork-Hint: ignore
+Message-Id: <20230730211025.12D5C83CE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libiberty: bump version to 2.40
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,68 +55,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0626a2b61a509654bdc2f1a8403a041667e40572
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+If the libiberty package is not the same version as the one packaged
+with binutils AND if libiberty is installed before binutils, then the
+below error is observed. Hence for now let us keep the versions in sync.
+
+/usr/bin/ld: ../libiberty/libiberty.a(hashtab.o):(.data.rel.local+0x0)
+: multiple definition of `htab_eq_pointer'
+
 Fixes:
-http://autobuild.buildroot.net/results/1fd/1fd8d97e0f514a65eb6a4723e49605073c9e3824/
+http://autobuild.buildroot.net/results/f07/f077ec588b395102ad501a18c85d5030c0765031/
 
+Build-tested using these four defconfigs:
+----------
+BR2_arceb=y
+----------
+BR2_BINUTILS_VERSION_2_38_X=y
+----------
+(empty defconfig meaning binutils-2.39)
+----------
+BR2_BINUTILS_VERSION_2_40_X=y
+----------
+each using these commands:
+
+$ make host-libiberty
+$ make host-binutils
+
+Signed-off-by: Akshay Bhat <nodeax@gmail.com>
+[Bernd: bump to version 2.40, replace hash file with link to binutils]
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-This is a quick'n'dirty fix for the build error which is only visible if
-you issue the build commands manually and remove ">/dev/null 2>&1".
-Since this is my first patch for Xenomai I am unsure the fix would be
-accepted upstream so I would like to discuss it here before sending it
-upstream. Therefore I did not add an Upstream: tag.
+ package/libiberty/libiberty.hash | 6 +-----
+ package/libiberty/libiberty.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
- .../0004-configure.ac-Remove-Werror.patch     | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch
-
-diff --git a/package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch b/package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch
-new file mode 100644
-index 0000000000..74e590deff
+diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+deleted file mode 100644
+index 0dafcea520..0000000000
+--- a/package/libiberty/libiberty.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+-sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+-
+-# Locally computed, same as binutils.hash
+-sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
+diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+new file mode 120000
+index 0000000000..e0655d3af3
 --- /dev/null
-+++ b/package/xenomai/3.0.10/0004-configure.ac-Remove-Werror.patch
-@@ -0,0 +1,31 @@
-+From 7e1010c82453442edce2914667538f648875284a Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sun, 30 Jul 2023 22:59:41 +0200
-+Subject: [PATCH] configure.ac: Remove -Werror
-+
-+Fixes build errors
-+
-+task.c:398:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
-+task.c:444:16: error: 'ret' may be used uninitialized [-Werror=maybe-uninitialized]
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 45e222b97..5c9476e7b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -629,7 +629,7 @@ fi
-+ dnl Internal CFLAGS and LDFLAGS, may be enhanced per-arch below
-+ XENO_USER_CFLAGS="$XENO_USER_APP_CFLAGS -pipe -fstrict-aliasing \
-+ -Wall -Wstrict-prototypes -Wmissing-prototypes -Wno-long-long \
-+--Wno-unused-parameter -Werror -Wformat-security -D__XENO__ -D__IN_XENO__"
-++-Wno-unused-parameter -Wformat-security -D__XENO__ -D__IN_XENO__"
-+ if test x$want_fortify = xyes -a x$debug_mode != xfull; then
-+    XENO_USER_CFLAGS="$XENO_USER_CFLAGS -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2"
-+ fi
-+-- 
-+2.39.2
-+
--- 
-2.39.2
-
++++ b/package/libiberty/libiberty.hash
+@@ -0,0 +1 @@
++../binutils/binutils.hash
+\ No newline at end of file
+diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
+index 6235a8b956..e7a02c963a 100644
+--- a/package/libiberty/libiberty.mk
++++ b/package/libiberty/libiberty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIBERTY_VERSION = 2.32
++LIBIBERTY_VERSION = 2.40
+ LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
+ LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
+ HOST_LIBIBERTY_DL_SUBDIR = binutils
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
