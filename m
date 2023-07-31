@@ -4,82 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36E06C001DE
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 18:32:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7D12C001DE
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 18:37:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF47F421B3;
-	Mon, 31 Jul 2023 18:32:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF47F421B3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6C0864224F;
+	Mon, 31 Jul 2023 18:37:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C0864224F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vf25mPPHyMDh; Mon, 31 Jul 2023 18:32:41 +0000 (UTC)
+	with ESMTP id GbGsiqz0SMyW; Mon, 31 Jul 2023 18:37:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66167421A1;
-	Mon, 31 Jul 2023 18:32:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66167421A1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E23B1BF2B8
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 18:32:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7BE44224C;
+	Mon, 31 Jul 2023 18:37:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7BE44224C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3ED251BF97D
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 18:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1F83421CB
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 18:32:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1F83421CB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A56682068
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 18:37:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A56682068
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DFD6mhaz7mnD for <buildroot@lists.busybox.net>;
- Mon, 31 Jul 2023 18:32:26 +0000 (UTC)
-X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 31 Jul 2023 18:32:26 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AB7C4203C
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1AB7C4203C
- for <buildroot@buildroot.org>; Mon, 31 Jul 2023 18:32:25 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([89.144.221.49]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MTABT-1qHtzk0TCJ-00UdUz for <buildroot@buildroot.org>; Mon, 31 Jul 2023
- 20:27:19 +0200
-From: Daniel Lang <dalang@gmx.at>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gntrPzYcyDzM for <buildroot@lists.busybox.net>;
+ Mon, 31 Jul 2023 18:37:34 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0EF74840E8
+ for <buildroot@buildroot.org>; Mon, 31 Jul 2023 18:37:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EF74840E8
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2A977A4C068C;
+ Mon, 31 Jul 2023 20:37:32 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46890)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qQXlr-0000xG-2z;
+ Mon, 31 Jul 2023 20:37:31 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 31 Jul 2023 20:26:07 +0200
-Message-ID: <20230731182608.21007-2-dalang@gmx.at>
-X-Mailer: git-send-email 2.41.0
+Date: Mon, 31 Jul 2023 20:37:30 +0200
+Message-Id: <20230731183731.2978383-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:3vyDJ5cpkyKttLqtjworhZbYbMY8fRIWSisARcnUoSmu+Uj8pg0
- 44/+eNcK5FtUKTo4LmLB733xzuGeZdKDLaXQfpWDf8n/jFIeOdWR79itZIS+b3teSi5VlI5
- w5mdEwmglv/mfzdhwFABsh31hhdRbSNYThe0bzxKP4X/7XYglgK6ZtGe0y+UB+H6wpXmOu0
- 6h5W/5aJv2z/S8wUDmXog==
-UI-OutboundReport: notjunk:1;M01:P0:xsKesK3tcjo=;79TE2x37ebMixw8xjx6dC8519BM
- Z0fFiVi4YJr5Mncgz0ZM3lIIlFK2XtwgTN2x+BMb9vZGs3ZBFFHJKhwTPu+E/NDxfPdBBGaA+
- KKWLd7zmmaTGU8yyBBeP9lI18YC7N3um1JmyQNG6kH71GlMaSHG468FYfmGd7b8WDCavd8x2/
- Tgd0NXJj8Hb+RkfGyQkXaC/Lp6Na+sXEca0OygQMOZVaV5Zmr9gbcPILAc+h8mS4O7X6wrc3Z
- gcB82moPCfoFmbp3I6OBP3dymRSaobFNboO4fE50CLZvZaodRS5rWV1nYJ8S2o/ANIMKQ0uPP
- blS5PwvtSmCm2Y4JIHIbUCkpCXPnvNqv2Q7CZhIMgFor3t/V2jt5q6SYLV9M0TgjZHA8Bprdy
- I2H6RGlHjwumiG127l23aRlalzobf8WgGzn+xoUUauq03twZWS9c7xG3i1P8R/8JHfn/CRmNr
- 7C5k22mqTkdcu24SR6hrVXzOn0uW5bcaXIa5ne3Wn78kR009sNEvIJYPKcdx+uPqSqmMajfaD
- EZxTyL9u6tqPEJMmUUaLyBztHsGEqYSCM+XTnmKr6ieSnk/QGpbz+nPvPuCqLpaPcfwLEiyL6
- u0w4XVA8/YzqJuumBlvZOtE9YID4HXWbfyr9lsevm68PcLGmce3yAfknQ/ED+RmUcTvMXYMJs
- 2P+Wj/14FPLpXWrdlNOfhkdwbicHD0+c5RjzjkQ4JAlQ1lsD1McHMZhzDYWzxTue1D+7gdbAc
- Kvrqk3GTxMXRDdZcCdRQ3eyr/VwngsRPW+q8kRxCkYb+QMvb1nsjnAwCVUHYaUAW6YV2X9hzC
- zxfrAztG95s74e0u+B/pvZYvmQ0ZN5/pDWIM9jtCfFkYvle0Iyf5j9gTBEG1CjJj9yMK+BulF
- fVvfdTh6TtStOwUq0WYtHCNJNwkHfX0Eu/mOoKqLWBsMoHMIp303rtP3X/bYy776izx4oxJpF
- 2TceyUP7tdKWdfWuWrXsyRZk3DQ=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; 
- s=s31663417; t=1690828344; x=1691433144; i=dalang@gmx.at;
- bh=HyVh3IBIsjVzLU0Ahog8Mck2HRfHC2hWG0z5KvAo8uU=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=AbfDNvVVhi2mUWF2CrSStU2JkFvHYKhtfFrh+Af6ApgEqo6lxt6+C/arxZoqoWVWj0RDa0D
- mgJF4UFcuYbmc9RyHTcRDMrpm23CxG4yGtjt7th3VfF6L93WMgNgxKkKGr2qqjCu6QmMKi6ik
- tKot4HV0goAPBkDl9IPCxE9xOdtFjjqCDcl705X+ntgOgwRyNruZT3ElTecYahxCSG+SJHJK7
- HOQnjWAGow5bt+UGg7OBrUgaOOLwK3s8OmU51l02ipRSExQzZ4sUlza9l4NzbXYuH1UmGhuxk
- w0IKW4bwKewYL0bxXlO5Ss6CcxQuird5iWPe6tb7MZ3pi9/vgcNg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=AbfDNvVV
-Subject: [Buildroot] [PATCH] package/llvm-project/compiler-rt: add CPE ID
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1690828652;
+ bh=wIGIT1RM6+ArBsBb95jNJGFVoA6XCnf79AGTdL8dXVc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Ahr888JC6842MezQ1eQc7sCEOGICBg+OESZN72EwATKqkNiEa4QPmllJrqpN+RJdd
+ 3jqr9FtYWErOnrpvouGFPQaUt5Y/UI16VB1FOrI/YaxtRAvjiQwOP1D3sXccEl6wUo
+ 0S5nrBg/PRmrJfpUYyQoqPoWihR1Og+5IA3gLL+7SicEUuw8BcCtip8fmChPA5yJka
+ x4nSakJtSi5VVA0zvErK7dhZsBdxsEJHRe7OGZ7hww2iJ3vfYArRtFPHSA9hpd7+CZ
+ yEMLm7ElR621akuRNes6mx2cABjS1cBZL71R47z4vjMyg9AQ+/iNSR85uR61SRwt8h
+ fOXgguFGD3/Jw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Ahr888JC
+Subject: [Buildroot] [PATCH v2 1/2] package/binutils: install libsframe to
+ staging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,34 +75,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-llvm:compiler-rt is a valid CPE ID [0] for this package.
+binutils 2.40 added libsframe:
+https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=19e559f1c91bfaedbd2f91d85ee161f3f03fda3c
 
-[0]: https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=compiler-rt
+Quoting release notes:
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob_plain;f=binutils/NEWS;hb=refs/heads/binutils-2_40-branch
+* readelf and objdump now have a newly added option --sframe which dumps
+  the SFrame section.
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
+Install libsframe to staging when available to avoid build errors, for
+example with lightning:
+libsframe.so.0, needed by output/per-package/lightning/host/arm-
+  buildroot-linux-gnueabi/sysroot/usr/lib/libopcodes.so, not found
+
+Fixes:
+http://autobuild.buildroot.net/results/1d1/1d1480dc0c3fb0a88490e3fae85abb2aa76bdade/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/llvm-project/compiler-rt/compiler-rt.mk | 1 +
- 1 file changed, 1 insertion(+)
+v2: no changes
 
-diff --git a/package/llvm-project/compiler-rt/compiler-rt.mk b/package/llvm-project/compiler-rt/compiler-rt.mk
-index 026650c7c8..03dc76eaea 100644
---- a/package/llvm-project/compiler-rt/compiler-rt.mk
-+++ b/package/llvm-project/compiler-rt/compiler-rt.mk
-@@ -9,6 +9,7 @@ COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
- COMPILER_RT_SITE = $(LLVM_PROJECT_SITE)
- COMPILER_RT_LICENSE = NCSA MIT
- COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-+COMPILER_RT_CPE_ID_VENDOR = llvm
- COMPILER_RT_DEPENDENCIES = host-clang llvm
+ package/binutils/Config.in.host | 4 ++++
+ package/binutils/binutils.mk    | 7 +++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index de5ca866e5..e62fea1406 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -5,6 +5,9 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+ 	default y
+ 	depends on !BR2_microblaze
  
- COMPILER_RT_INSTALL_STAGING = YES
++config BR2_PACKAGE_BINUTILS_HAS_LIBSFRAME
++	bool
++
+ choice
+ 	prompt "Binutils Version"
+ 	default BR2_BINUTILS_VERSION_2_39_X if !BR2_arc
+@@ -20,6 +23,7 @@ config BR2_BINUTILS_VERSION_2_39_X
+ 
+ config BR2_BINUTILS_VERSION_2_40_X
+ 	bool "binutils 2.40"
++	select BR2_PACKAGE_BINUTILS_HAS_LIBSFRAME
+ 
+ config BR2_BINUTILS_VERSION_ARC
+ 	bool "binutils arc (2.34.50)"
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 0dd8526b26..48a036651c 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -105,12 +105,19 @@ endif
+ # our TARGET_CONFIGURE_ARGS are taken into consideration for those
+ BINUTILS_MAKE_ENV = $(TARGET_CONFIGURE_ARGS)
+ 
++ifeq ($(BR2_PACKAGE_BINUTILS_HAS_LIBSFRAME),y)
++define BINUTILS_INSTALL_STAGING_LIBSFRAME
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libsframe DESTDIR=$(STAGING_DIR) install
++endef
++endif
++
+ # We just want libbfd, libiberty and libopcodes,
+ # not the full-blown binutils in staging
+ define BINUTILS_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(STAGING_DIR) install
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(STAGING_DIR) install
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libiberty DESTDIR=$(STAGING_DIR) install
++	$(BINUTILS_INSTALL_STAGING_LIBSFRAME)
+ endef
+ 
+ # If we don't want full binutils on target
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
