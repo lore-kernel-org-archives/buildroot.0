@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C8EFC001DE
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 20:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A228C001DE
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 20:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB0560737;
-	Mon, 31 Jul 2023 20:36:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DB0560737
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7746610C5;
+	Mon, 31 Jul 2023 20:40:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7746610C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lu1WQgb_X1rP; Mon, 31 Jul 2023 20:36:08 +0000 (UTC)
+	with ESMTP id e5bMPVrxVhsK; Mon, 31 Jul 2023 20:40:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B34F607C7;
-	Mon, 31 Jul 2023 20:36:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B34F607C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 688EE60BCF;
+	Mon, 31 Jul 2023 20:40:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 688EE60BCF
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 699991BF25B
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 20:36:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5CE631BF954
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 20:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D116F60BCF
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 20:36:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D116F60BCF
+ by smtp3.osuosl.org (Postfix) with ESMTP id CED0760F1A
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 20:39:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CED0760F1A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dUqUxX4PKQ_b for <buildroot@lists.busybox.net>;
- Mon, 31 Jul 2023 20:35:57 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8186060812
- for <buildroot@buildroot.org>; Mon, 31 Jul 2023 20:35:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8186060812
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2F72460003;
- Mon, 31 Jul 2023 20:35:54 +0000 (UTC)
-Date: Mon, 31 Jul 2023 22:35:52 +0200
-To: Francis Laniel <flaniel@linux.microsoft.com>
-Message-ID: <20230731223552.6d2187cf@windsurf>
-In-Reply-To: <20230731221843.61feafea@windsurf>
-References: <20230428152211.20394-1-flaniel@linux.microsoft.com>
- <20230428152211.20394-2-flaniel@linux.microsoft.com>
- <20230731221843.61feafea@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id B-ZT8jWvTAEp for <buildroot@lists.busybox.net>;
+ Mon, 31 Jul 2023 20:39:50 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B2750607C0
+ for <buildroot@buildroot.org>; Mon, 31 Jul 2023 20:39:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2750607C0
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:9f57:78c5:813c:6b41])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 44BE5B005A1;
+ Mon, 31 Jul 2023 22:39:41 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 31 Jul 2023 22:39:41 +0200
+Date: Mon, 31 Jul 2023 22:39:40 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20230731203940.GD421096@scaer>
+References: <20230729065616.961984-1-james.hilliard1@gmail.com>
+ <20230731212049.10b538fd@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690835754;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=9vVx/R7P4yG09jDzbQYnHItpgQpuIupAytMUgIdbkmk=;
- b=aKgVkF9Wp8xi1T2ZwypP+X4/V+ApABsOwKgssAcgRYuqP0dEfGg1ASIDBLcdzIsSf3mjwR
- N+Gsx9wH7OUqlcPdEKGF3fol2xnRcOMjKzDBRnw9pIyU172+kEVlbtsujK1gGkfcXVwKxz
- FKHjv6dk+YIWFn/UgGBGuEOt7+I/DYNnk/h01WtZDQU6y2IVjt+LVRyRxr/JFOfCq5EFih
- 3XVXIvhdtqVRVuzBUJcikr5xTRrNHiVXZwX19mxx7pxWSoTgzifz238UyERFH7BMx2wJqh
- SR3rgbHnn8TXUZ5XImL5jvKZI1nElN1XjHHqc+68K+/RytE7bDE6a8umUvqp8A==
+Content-Disposition: inline
+In-Reply-To: <20230731212049.10b538fd@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690835987;
+ bh=EE0E3YTdv26pOwAiehwdCytLMImjxebQe5/HJzfaZcE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=G3Zcv6XesvTtHrWnw9sA+R1PrZBoHX/q3XBc8UMeeRzQEHnQKhzDl2LKI91nx6QBV
+ gG2JyFVbktYj+Wo/YbH/JD8xOhnWWLQpC6/XNb3DV/un3AwggNuXm+SwiSXi0JF/d4
+ ToBbSjD8FU16kw2iubgTPe6FC/N6Z+cMCI3752/D9EIDdR+hq8x6bVoaRN2R/SPPhV
+ s0MDknaskKnZ21HkE4vc0Kd48gj/YcZHbYwxX7ul4eoL4egPZNz5RCVHPWZ6jF3O9G
+ cW9PjfTp+p5Qc9SW0qvDdpZkmOzuOJKH49kenXgxGmk1E10F5YonomvMv6H3W2MdhY
+ q2ZQ2pjMEkMoA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aKgVkF9W
-Subject: Re: [Buildroot] [RFC PATCH v1 1/2] package/sysdig: bump to version
- 0.31.4
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=G3Zcv6Xe
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: bump to version 254
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,45 +76,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org,
+ Norbert Lange <nolange79@gmail.com>, Romain Naour <romain.naour@smile.fr>,
+ Sen Hastings <sen@phobosdpl.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 31 Jul 2023 22:18:43 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> By the way
-> -DVALIJSON_INCLUDE=$(BUILD_DIR)/valijson-0.6/include/valijson is truly
-> horrible, because if valijson gets updated to another version... like
-> it has:
-> 
-> VALIJSON_VERSION = 0.7
-> 
-> then this doesn't work anymore.
-> 
-> It needs to be VALIJSON_SRCDIR.
-> 
-> Curious that we can build sysdig today (I verified, it builds) with
-> this mistake. Probably means this option is irrelevant.
-
-(1) There is no build dependency on valijson, so I don't see how it
-    could be relevant anyway.
-
-(2) There is no reference to VALIJSON_INCLUDE anywhere in the code
-    base, as far as I can see
-
-This really needs to be cleaned up. Very soon.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SmFtZXMsIEFsbCwKCk9uIDIwMjMtMDctMzEgMjE6MjAgKzAyMDAsIFRob21hcyBQZXRhenpvbmkg
+dmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gT24gU2F0LCAyOSBKdWwgMjAyMyAwMDo1Njox
+NiAtMDYwMAo+IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPiB3cm90
+ZToKPiA+ICBwYWNrYWdlL3N5c3RlbWQvc3lzdGVtZC5oYXNoIHwgIDQgKystLQo+ID4gIHBhY2th
+Z2Uvc3lzdGVtZC9zeXN0ZW1kLm1rICAgfCAyOSArKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0t
+LQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMTQgaW5zZXJ0aW9ucygrKSwgMTkgZGVsZXRpb25zKC0p
+Cj4gSSBhbSBnZXR0aW5nIGJhY2sgdG8geW91IHJlZ2FyZGluZyB0aGlzIHZlcnNpb24gYnVtcC4g
+RGlkIHlvdSBydW4gdGhlCj4gc3lzdGVtZCB0ZXN0IGNhc2VzIGluIHN1cHBvcnRpbmcvdGVzdGlu
+ZyBhZnRlciBkb2luZyB0aGlzIHZlcnNpb24gYnVtcD8KPiAKPiBJbmRlZWQsIGl0IHNlZW1zIGxp
+a2UgdGhlIHN5c3RlbWQgdGVzdCBjYXNlcyBhcmUgbm8gYnJva2VuLiBTZWUKPiBodHRwczovL2dp
+dGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9waXBlbGluZXMvOTUwMTc1MDc3L2Zh
+aWx1cmVzCj4gZm9yIHRoZSBmdWxsIGxpc3Qgb2YgZmFpbGVkIGNhc2VzIChhIG51bWJlciBhcmUg
+bm90IHN5c3RlbWQgcmVsYXRlZCwKPiBhbmQgbm90IHJlbGV2YW50IGhlcmUsIGJ1dCBtYW55IGFy
+ZSBzeXN0ZW1kIHJlbGF0ZWQpLgo+IAo+IEkgbG9va2VkIGF0IG9ubHkgb25lLCBhbmQgdGhlIGZh
+aWx1cmUgaGFwcGVucyBhdCBydW50aW1lIGFuZCBnb2VzIGxpa2UKPiB0aGlzOgo+IAo+ICMgc3lz
+dGVtY3RsIC0tbm8tcGFnZXIgLS1mYWlsZWQgLS1uby1sZWdlbmQKPiDil48gc3lzdGVtZC12Y29u
+c29sZS1zZXR1cC5zZXJ2aWNlIGxvYWRlZCBmYWlsZWQgZmFpbGVkIFZpcnR1YWwgQ29uc29sZSBT
+ZXR1cAoKICAgICMgam91cm5hbGN0bCAtdSBzeXN0ZW1kLXZjb25zb2xlLXNldHVwLnNlcnZpY2UK
+ICAgIEp1bCAzMSAyMDoyMTowNCBidWlsZHJvb3Qgc3lzdGVtZC12Y29uc29sZS1zZXR1cFsxMjld
+OiAvdXNyL2Jpbi9sb2Fka2V5cyBmYWlsZWQgd2l0aCBleGl0IHN0YXR1cyAxLgoKU28gaXQgbG9v
+a3MgbGlrZSBpdCBuZWVkcyBrYmQgKGZvciBsb2Fka2V5cykuIHYyNTIgYWxyZWFkeSBkaWQsIHNv
+IGl0CndvdWxkIGJlIGludGVyZXN0aW5nIHRvIGFsc28gdW5kZXJzdGFuZCB3aHkgaXQgZGlkIG5v
+dCBmYWlsIHRoZW4sIHdoaWxlCml0IGZhaWxzIG5vdy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4u
+CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0t
+LS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRp
+bWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCAr
+MzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwg
+IF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0t
+LS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1v
+cmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29u
+c3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0t
+LS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
