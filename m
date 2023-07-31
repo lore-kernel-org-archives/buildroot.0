@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD867C001E0
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 19:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C6AEC001E0
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 20:14:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B43861163;
-	Mon, 31 Jul 2023 19:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B43861163
+	by smtp3.osuosl.org (Postfix) with ESMTP id B662960F0A;
+	Mon, 31 Jul 2023 20:14:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B662960F0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vJ-2wNIkuG8D; Mon, 31 Jul 2023 19:21:15 +0000 (UTC)
+	with ESMTP id utK5uAa3_2iI; Mon, 31 Jul 2023 20:14:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A39B06114F;
-	Mon, 31 Jul 2023 19:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A39B06114F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6B0261BF25B
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 19:21:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAEFA60774;
+	Mon, 31 Jul 2023 20:14:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAEFA60774
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 285F71BF2B4
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 20:14:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9895B40156
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 19:21:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9895B40156
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03CF281EE0
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 20:14:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03CF281EE0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id a4s03rbSd93Z for <buildroot@lists.busybox.net>;
- Mon, 31 Jul 2023 19:21:00 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6A6FB401BE
- for <buildroot@buildroot.org>; Mon, 31 Jul 2023 19:20:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A6FB401BE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 514E2FF807;
- Mon, 31 Jul 2023 19:20:50 +0000 (UTC)
-Date: Mon, 31 Jul 2023 21:20:49 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230731212049.10b538fd@windsurf>
-In-Reply-To: <20230729065616.961984-1-james.hilliard1@gmail.com>
-References: <20230729065616.961984-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690831256;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WFkYx2kg6oRh19ty3wqCcDvtT7InN8t+j5xZ29u91Mg=;
- b=PCg1MfvcVSYhzRg65yxb4BO4f+DHC/uCni8uSUjDGlNyeZAj6ZTWIVjYcaJFe2fes33vKH
- Lx8NgTShkLxuMkDPVin8cleLzN02O8XHd7jE+YvEMPlyGa5CPrkhWgicv8070NKEC6iLWE
- CrLbnBURVabEKa7/ALmRYw9FXydHgRtCyJs9zykMdJQwKjktiDEabOG1vR+NPjLL40PBsF
- 9QSs8oRMgCYMy7vcUqOKu3O2h1AKCxiFWzBgu0pYKF1yfl06N8yIFZE9lQ9x6FWQWWXRZ2
- 6PVpEv69ynq1HcKrSJXREpEhPc4VtAw9x60UMvfbHhppOqrE/Sus+jtbL7GnDA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PCg1Mfvc
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: bump to version 254
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3IJJIRewyeNR for <buildroot@lists.busybox.net>;
+ Mon, 31 Jul 2023 20:14:04 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2BF98188B
+ for <buildroot@buildroot.org>; Mon, 31 Jul 2023 20:14:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2BF98188B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8705D83DEE; Mon, 31 Jul 2023 20:14:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 31 Jul 2023 22:10:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5b559109eeeec19e6e33c82712690aec89dcb562
+X-Git-Newrev: e434d8a29fd566c43c1051eb84694b6ac032597d
+X-Patchwork-Hint: ignore
+Message-Id: <20230731201404.8705D83DEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysdig: remove patch that doesn't
+ apply
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,42 +58,95 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Norbert Lange <nolange79@gmail.com>, Romain Naour <romain.naour@smile.fr>,
- Sen Hastings <sen@phobosdpl.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSmFtZXMsCgpPbiBTYXQsIDI5IEp1bCAyMDIzIDAwOjU2OjE2IC0wNjAwCkphbWVzIEhp
-bGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPiB3cm90ZToKCj4gUkVBRE1FLm1kIGhh
-c2ggY2hhbmdlZCBkdWUgdG8gc3ludGF4IGZpeDoKPiBodHRwczovL2dpdGh1Yi5jb20vc3lzdGVt
-ZC9zeXN0ZW1kLXN0YWJsZS9jb21taXQvNDlkZGI0NzU3YjE5N2IzMDMzMDliMGRjZGZjNWY4NThm
-NGI4ZTE2OAo+IAo+IFJlbW92ZSBubyBsb25nZXIgc3VwcG9ydGVkL3JlcXVpcmVkIHZhbGdyaW5k
-IGNvbmZpZyBvcHRpb24uCj4gCj4gRGlzYWJsZSBuZXcgdW5zdXBwb3J0ZWQgcGFzc3dkcWMgY29u
-ZmlnIG9wdGlvbi4KPiAKPiBEaXNhYmxlIG5ldyB1bnN1cHBvcnRlZCB1a2lmeSBjb25maWcgb3B0
-aW9uLgo+IAo+IERpc2FibGUgbmV3IHVuc3VwcG9ydGVkIHhlbmN0cmwgY29uZmlnIG9wdGlvbi4K
-PiAKPiBVcGRhdGUgc3lzdGVtZC1ib290IGNvbmZpZyBvcHRpb25zIHRvIG5ldyBmb3JtYXQuCj4g
-Cj4gQWRkIG5ldyBob3N0LXB5dGhvbi1weWVsZnRvb2xzIHN5c3RlbWQtYm9vdCBkZXBlbmRlbmN5
-Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21h
-aWwuY29tPgo+IC0tLQo+ICBwYWNrYWdlL3N5c3RlbWQvc3lzdGVtZC5oYXNoIHwgIDQgKystLQo+
-ICBwYWNrYWdlL3N5c3RlbWQvc3lzdGVtZC5tayAgIHwgMjkgKysrKysrKysrKysrLS0tLS0tLS0t
-LS0tLS0tLS0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxOSBkZWxldGlv
-bnMoLSkKCkkgYW0gZ2V0dGluZyBiYWNrIHRvIHlvdSByZWdhcmRpbmcgdGhpcyB2ZXJzaW9uIGJ1
-bXAuIERpZCB5b3UgcnVuIHRoZQpzeXN0ZW1kIHRlc3QgY2FzZXMgaW4gc3VwcG9ydGluZy90ZXN0
-aW5nIGFmdGVyIGRvaW5nIHRoaXMgdmVyc2lvbiBidW1wPwoKSW5kZWVkLCBpdCBzZWVtcyBsaWtl
-IHRoZSBzeXN0ZW1kIHRlc3QgY2FzZXMgYXJlIG5vIGJyb2tlbi4gU2VlCmh0dHBzOi8vZ2l0bGFi
-LmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL3BpcGVsaW5lcy85NTAxNzUwNzcvZmFpbHVy
-ZXMKZm9yIHRoZSBmdWxsIGxpc3Qgb2YgZmFpbGVkIGNhc2VzIChhIG51bWJlciBhcmUgbm90IHN5
-c3RlbWQgcmVsYXRlZCwKYW5kIG5vdCByZWxldmFudCBoZXJlLCBidXQgbWFueSBhcmUgc3lzdGVt
-ZCByZWxhdGVkKS4KCkkgbG9va2VkIGF0IG9ubHkgb25lLCBhbmQgdGhlIGZhaWx1cmUgaGFwcGVu
-cyBhdCBydW50aW1lIGFuZCBnb2VzIGxpa2UKdGhpczoKCiMgc3lzdGVtY3RsIC0tbm8tcGFnZXIg
-LS1mYWlsZWQgLS1uby1sZWdlbmQK4pePIHN5c3RlbWQtdmNvbnNvbGUtc2V0dXAuc2VydmljZSBs
-b2FkZWQgZmFpbGVkIGZhaWxlZCBWaXJ0dWFsIENvbnNvbGUgU2V0dXAKIyBlY2hvICQ/CjAKCkkg
-aGF2ZW4ndCBjaGVja2VkIHRoZSBvdGhlciBmYWlsdXJlcy4gQ291bGQgeW91IGhhdmUgYSBsb29r
-IGF0IGZpeCB0aGUKaXNzdWU/CgpUaGFua3MgYSBsb3QhCgpUaG9tYXMKLS0gClRob21hcyBQZXRh
-enpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5n
-Cmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=e434d8a29fd566c43c1051eb84694b6ac032597d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Patch 0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+should have been deleted as part of Buildroot commit
+08792a60df80a1147ee78bb108f8186996bf0c77 ("package/sysdig: bump to
+version 0.29.3"). Indeed, this patch was merged upstream as commit
+114436c1a45142ef73acfc2607fbc6572782160f between 0.29.2 and 0.29.3.
+
+This fixes the following build failure:
+
+Applying 0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch using patch:
+patching file cmake/modules/nlohmann-json.cmake
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file cmake/modules/nlohmann-json.cmake.rej
+
+There are no autobuilder failures, probably because getting to build
+sysdig requires so many special conditions that it never triggered.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-USE_BUNDLED_DEPS-before-getting-nlohmann.patch | 52 ----------------------
+ 1 file changed, 52 deletions(-)
+
+diff --git a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch b/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+deleted file mode 100644
+index 3521bd3f8d..0000000000
+--- a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 0dbebd008c04d266dc41c4bec8280a0744fd5130 Mon Sep 17 00:00:00 2001
+-From: Francis Laniel <flaniel@linux.microsoft.com>
+-Date: Wed, 13 Apr 2022 18:01:11 +0100
+-Subject: [PATCH] cmake: Check USE_BUNDLED_DEPS before getting
+- nlohmann-json.
+-
+-Upstream: https://github.com/draios/sysdig/pull/1869
+-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+----
+- cmake/modules/nlohmann-json.cmake | 29 +++++++++++++++++++----------
+- 1 file changed, 19 insertions(+), 10 deletions(-)
+-
+-diff --git a/cmake/modules/nlohmann-json.cmake b/cmake/modules/nlohmann-json.cmake
+-index bb1279d7..feb0f071 100644
+---- a/cmake/modules/nlohmann-json.cmake
+-+++ b/cmake/modules/nlohmann-json.cmake
+-@@ -16,13 +16,22 @@
+- # limitations under the License.
+- #
+- 
+--set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
+--message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
+--set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
+--ExternalProject_Add(
+--  njson
+--  URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
+--  URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
+--  CONFIGURE_COMMAND ""
+--  BUILD_COMMAND ""
+--  INSTALL_COMMAND "")
+-+if(NOT USE_BUNDLED_DEPS)
+-+  find_path(NJSON_INCLUDE_DIR NAMES nlohmann/json.hpp)
+-+  if(NJSON_INCLUDE_DIR)
+-+    message(STATUS "Found njson: include: ${NJSON_INCLUDE_DIR}")
+-+  else()
+-+    message(FATAL_ERROR "Couldn't find system njson")
+-+  endif()
+-+else()
+-+  set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
+-+  message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
+-+  set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
+-+  ExternalProject_Add(
+-+    njson
+-+    URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
+-+    URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
+-+    CONFIGURE_COMMAND ""
+-+    BUILD_COMMAND ""
+-+    INSTALL_COMMAND "")
+-+endif()
+--- 
+-2.25.1
+-
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
