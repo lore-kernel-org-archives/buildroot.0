@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3234BC001DF
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 22:11:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED7F0C001DF
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 22:13:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B662740BBF;
-	Mon, 31 Jul 2023 22:11:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B662740BBF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9748F40BDD;
+	Mon, 31 Jul 2023 22:13:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9748F40BDD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ea8RReQSTZ2Q; Mon, 31 Jul 2023 22:11:54 +0000 (UTC)
+	with ESMTP id WHpCCxeDewgH; Mon, 31 Jul 2023 22:13:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C1BF40C11;
-	Mon, 31 Jul 2023 22:11:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C1BF40C11
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 42B5B1BF369
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 22:11:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEF3640C04;
+	Mon, 31 Jul 2023 22:13:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEF3640C04
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 312421BF378
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 22:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3569E40C04
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 22:11:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3569E40C04
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A59A400F2
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 22:13:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A59A400F2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xbjZ8WPJlhQW for <buildroot@lists.busybox.net>;
- Mon, 31 Jul 2023 22:11:34 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25B5840514
- for <buildroot@buildroot.org>; Mon, 31 Jul 2023 22:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25B5840514
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 638E7C0003;
- Mon, 31 Jul 2023 22:11:31 +0000 (UTC)
-Date: Tue, 1 Aug 2023 00:11:30 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iiOhplB8ehAh for <buildroot@lists.busybox.net>;
+ Mon, 31 Jul 2023 22:13:17 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C83604011A
+ for <buildroot@buildroot.org>; Mon, 31 Jul 2023 22:13:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C83604011A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2ED3060005;
+ Mon, 31 Jul 2023 22:13:07 +0000 (UTC)
+Date: Tue, 1 Aug 2023 00:13:06 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230801001130.11395a1f@windsurf>
-In-Reply-To: <20230731183731.2978383-1-bernd@kuhls.net>
+Message-ID: <20230801001306.19ae77b4@windsurf>
+In-Reply-To: <20230731183731.2978383-2-bernd@kuhls.net>
 References: <20230731183731.2978383-1-bernd@kuhls.net>
+ <20230731183731.2978383-2-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690841492;
+ d=bootlin.com; s=gm1; t=1690841593;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=yB40uHZU67TZAiz1XqkTpvCygL9efFbNUd7NIY6qJIo=;
- b=j99rt5ERz3vUW3vppkdjxtG2obzQVLBmtaiKCzluvWP2TIARtRmMzU3W9l4cAxp07gdAkD
- H3sWThHZsiY8kJgbZazy76KStqnqPjFoiwWtd0g4chs0dqLzt5I+/9H0ifBBVsmJV3fxSN
- yVEu7UvwYz6RF8i49L5diLVt8qFwC2Dx7pRA2bRD5hXw/Uq5kE+6THEWtRKAX1+boyZ0mr
- 0B1nlbo/n54d2CfJZZoirVSkDYHQJK+39t0LhuLiggyrEikwdkVbfZpqrmN0pV8rJ/fCht
- VXGbM7SrUYhn2Z5+ll9n0E6Gh9Sx/Fye19oEr6/0s1QhRcDpkRPrgqipm/1lnQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Tuz8cb/xPi2vR4C7gOjN3j6XVbzAb8slujTFtBBKsXs=;
+ b=kncPqsaAE4G0gdkDwHi0I0YsimNKRp80GKQWNZEXomf86xt9V65S9DeC/ub63QI5LYbPEu
+ vsqbdWDYiov+O77JTdjCdN5cmvCA6/W5xbDbstBmOTOppLG3ZolkxTAVftAI6CKPAot8tV
+ yc5clFSI/cLciJPCKOzh3vh4xxNuwUFI+TELt4W0Chyp2PYhHZxmi+h3lMcNhPBjT0YEEO
+ 3pF/tMXqQC4kJDuWZVIZ/5cwiBu4aAqLSpCi0/2tvIk6B28vr2rKWDE+8ZCfe/WgZ9cyrX
+ BgsalK0g14BRj6flM1R+eBGG4Y99s4cQE/en9eFr/PSciYCNkt2Pbj/6N1C17w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=j99rt5ER
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/binutils: install libsframe
- to staging
+ header.s=gm1 header.b=kncPqsaA
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/{binutils,
+ libiberty}: add support for version 2.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,35 +86,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 31 Jul 2023 20:37:30 +0200
+Hello Bernd,
+
+On Mon, 31 Jul 2023 20:37:31 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> binutils 2.40 added libsframe:
-> https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=19e559f1c91bfaedbd2f91d85ee161f3f03fda3c
+> Release notes:
+> https://sourceware.org/pipermail/binutils/2023-July/128719.html
 > 
-> Quoting release notes:
-> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob_plain;f=binutils/NEWS;hb=refs/heads/binutils-2_40-branch
-> * readelf and objdump now have a newly added option --sframe which dumps
->   the SFrame section.
-> 
-> Install libsframe to staging when available to avoid build errors, for
-> example with lightning:
-> libsframe.so.0, needed by output/per-package/lightning/host/arm-
->   buildroot-linux-gnueabi/sysroot/usr/lib/libopcodes.so, not found
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/1d1/1d1480dc0c3fb0a88490e3fae85abb2aa76bdade/
+> Copied patches from version 2.40.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-> v2: no changes
 
-Applied to master, thanks.
+This needs a bit more work, look at other binutils bumps. We want at
+least:
+
+- Introduce 2.41
+- Switch to 2.40 as default
+- Drop 2.38 (don't forget legacy handling)
+
+Also, do we want to update libiberty to 2.41 as well? (Need to make
+sure it remains compatible with binutils 2.39 and 2.40).
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
