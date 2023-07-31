@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CDF9C001DE
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 21:53:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E2BCC04A94
+	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 21:58:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1AFA140BFC;
-	Mon, 31 Jul 2023 21:53:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AFA140BFC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1951D40A07;
+	Mon, 31 Jul 2023 21:58:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1951D40A07
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eYlCsYI3VJl9; Mon, 31 Jul 2023 21:53:16 +0000 (UTC)
+	with ESMTP id y2niMoz-cAk5; Mon, 31 Jul 2023 21:58:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1FA68408B0;
-	Mon, 31 Jul 2023 21:53:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FA68408B0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3ABC81BF3A1
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 21:53:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D6157408B0;
+	Mon, 31 Jul 2023 21:58:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6157408B0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 296671BF20B
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 21:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09F0240BAB
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 21:52:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09F0240BAB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0156180BDC
+ for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 21:57:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0156180BDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wRnt1TydAb4o for <buildroot@lists.busybox.net>;
- Mon, 31 Jul 2023 21:52:41 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC55C40189
- for <buildroot@buildroot.org>; Mon, 31 Jul 2023 21:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC55C40189
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 906D6E0006;
- Mon, 31 Jul 2023 21:52:37 +0000 (UTC)
-Date: Mon, 31 Jul 2023 23:52:36 +0200
-To: Daniel Lang <dalang@gmx.at>
-Message-ID: <20230731235236.60ddc54a@windsurf>
-In-Reply-To: <20230731201422.13543-1-dalang@gmx.at>
-References: <20230731201422.13543-1-dalang@gmx.at>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0Bh-woG53wyo for <buildroot@lists.busybox.net>;
+ Mon, 31 Jul 2023 21:57:43 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A0B1580C08
+ for <buildroot@buildroot.org>; Mon, 31 Jul 2023 21:57:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0B1580C08
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 078DFC0003;
+ Mon, 31 Jul 2023 21:57:38 +0000 (UTC)
+Date: Mon, 31 Jul 2023 23:57:37 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230731235737.3a0eb6a5@windsurf>
+In-Reply-To: <20230731214559.99648-1-james.hilliard1@gmail.com>
+References: <20230731214559.99648-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690840357;
+ d=bootlin.com; s=gm1; t=1690840659;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=RCz1X6+rQxGG6OUTzE0cUGeweYkPtdYwrtUDFLdO9pQ=;
- b=PjVVL+mucdaMoSvZhHEXgU0acXxDzcYG4FJbqHRncjupMQyQRDqZc9oj2/CLcFUsqDndG2
- 5zSms9WVmBnXFGw5Xzr3RfhIF1XuK0G44lIPpx0TubiCe5lp50gV7msJrZKXqJ3yWcMBo4
- e86SVd5IeK31/vLKVpKtGFyyfY/3WV9U2c44uFP6x5KXuG80e82/wzLqQakdYndBzhrCGe
- /4xc23gBRztliQCGeJf2GHmsP8+rb3UETiPTS0P1YKkzeFbAjaWXXiIqp/4P8YI36l1LWJ
- hqFyI4E4O/4X7kVfCztrcY67ikpIRFV7i6pSCIqwnoz5V/OHn/owIsCxqxJDEg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=4NsroCdWmbHkl5jdp1xe3HTNuCw23qa65PQehjC+eBw=;
+ b=o/oX7jboD78p82hwAYS8/6iKZjxUkX7kxqgKRt7JQNf4aXu6VxaxHmsYJP917RR+oOnc/F
+ tFsNI4PuIssc2aTABFLcek/5WSD24LwTv+TZ3A8XsGkGpcDenFMfZUOP2f8NUPGAcv6/cI
+ BLfSZTtmrgYXuS2zUmZADCiVTSEbOVNRD7bqqHvZYmvuT4+OeOyJbmHBkkJyjoYv9gBaE8
+ vgvODQKIwCnuapsm3t0Gu8iNQTeiFQ7nhWIDQjpEaxDtnYJBKOByNby9MI5ZJHUlCQRGbw
+ WyUZohUvqSQgHev+cUfmfjNM6PeQHYVo8WWmDViQLRI8DsBg/AQT0BvK+ToJng==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PjVVL+mu
-Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
- version 2.0
+ header.s=gm1 header.b=o/oX7jbo
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: select kdb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,38 +76,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Daniel,
+Hello James,
 
-On Mon, 31 Jul 2023 22:14:20 +0200
-Daniel Lang <dalang@gmx.at> wrote:
+On Mon, 31 Jul 2023 15:45:59 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> The currently used feed is deprecated and will be retired by NVD in
-> September 2023 [0].
-> The new API returns up to 2000 CVEs every 5 seconds (without API key) [1].
-> Instead of request individual years as with the feed, one can specify
-> two timestamps are range. Any CVE changed in this time is returned.
-> Therefore every single CVE is stored in a seperate JSON file.
-> All fields returned by the API are saved for future use.
-> This results in over 200000 files grouped by year with ~800MiB total.
+> We need to select BR2_PACKAGE_KBD when building systemd with vconsole.
 > 
-> [0]: https://nvd.nist.gov/General/News/change-timeline
-> [1]: https://nvd.nist.gov/developers/start-here
+> Fixes:
+> systemd-vconsole-setup[129]: /usr/bin/loadkeys failed with exit status 1.
 > 
-> Signed-off-by: Daniel Lang <dalang@gmx.at>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Wow, thanks for working on this! Is the storing of 200k files workable,
-or do we need to consider some other option like a local sqlite
-database or something?
+Same question as always: since when is this needed? I suppose since
+commit 36d275f695936b7a54738c0354572944c1f08d87 ("package/systemd: bump
+to version 254"), but I don't know, and Peter will have an even harder
+time figuring this out when he will try to figure out which commits in
+master need to be backported to the stable branch.
 
-Another question: did you do a run of "make pkg-stats" before and after
-your patch to compare the results in terms of CVEs reported for each
-Buildroot package?
+Thanks!
 
 Thomas
 -- 
