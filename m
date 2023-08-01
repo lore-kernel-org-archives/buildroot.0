@@ -1,52 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CC03C0015E
-	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 17:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64C2DC04A6A
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 19:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E99440C07;
-	Tue,  1 Aug 2023 17:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E99440C07
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0A8C41802;
+	Tue,  1 Aug 2023 19:44:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0A8C41802
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KaZWU5NOU2OO; Tue,  1 Aug 2023 17:10:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gdAwTrcmeO_E; Tue,  1 Aug 2023 19:44:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D61740A92;
-	Tue,  1 Aug 2023 17:10:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D61740A92
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6577E401D3;
+	Tue,  1 Aug 2023 19:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6577E401D3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1959F1BF964
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 17:10:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 726901BF86B
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 19:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 006DB81F03
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 17:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 006DB81F03
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E6F58146A
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 19:44:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E6F58146A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JeEC5MAHnUyM for <buildroot@lists.busybox.net>;
- Tue,  1 Aug 2023 17:10:18 +0000 (UTC)
-Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2343B81E63
- for <buildroot@buildroot.org>; Tue,  1 Aug 2023 17:10:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2343B81E63
-Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
- by mail.xes-mad.com (Postfix) with ESMTP id 844B12013A;
- Tue,  1 Aug 2023 12:10:16 -0500 (CDT)
-From: Vincent Fazio <vfazio@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  1 Aug 2023 12:10:12 -0500
-Message-Id: <20230801171012.1652426-1-vfazio@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230731224703.2923-1-vfazio@gmail.com>
-References: <20230731224703.2923-1-vfazio@gmail.com>
+ with ESMTP id HHGKK9oqru2i for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 19:44:43 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 29AD480E5C
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 19:44:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29AD480E5C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 096691BF206;
+ Tue,  1 Aug 2023 19:44:34 +0000 (UTC)
+Date: Tue, 1 Aug 2023 21:44:33 +0200
+To: Daniel Lang <dalang@gmx.at>
+Message-ID: <20230801214433.64c77f3a@windsurf>
+In-Reply-To: <d2033d92-cb45-ccbf-b3f8-05e0fdbda360@gmx.at>
+References: <20230731201422.13543-1-dalang@gmx.at>
+ <20230731235236.60ddc54a@windsurf>
+ <47519c2e-9b64-68b1-79b2-21a2ddea976b@gmx.at>
+ <20230801161956.00715a06@windsurf>
+ <d2033d92-cb45-ccbf-b3f8-05e0fdbda360@gmx.at>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/1] arch/Config.in.x86: consolidate Geode
- CPU targets
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1690919080;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZjbQWWqctMediAI+tEXoN1pfwPKHpdMvUcCJ8Awzd+U=;
+ b=h/VY0IMqud+K/DIpqJY9sJb5ps69WCtjw3wn5/Y2KUkAa6JX9EnFOOt9rb7AaPM/TAEC0+
+ xueDVAnd4PsUunCiY5yfBGNHaDrr72/lwOYOrl4jy7whmUnLsO2MzsLP9vFCUdlkxg1jl7
+ McTMbrSK3ToI9VUrIzcj305Dr7MLZGRpsOXvSoqU2SpdDsxtq8n54/JL7B/MUdbtwhBqG7
+ LNH7xEY2nPYso23UVBDIRWiVBq0gdlq66DE8xMX5ghxq16PbLMChiMGrPXLS1Qtag/1DKG
+ SZaVc6VeKzVs2KscDdwx4czV8oxhNJQhr1pJGUFIBm1gsxsxUDL3L1atsrr8KA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=h/VY0IMq
+Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
+ version 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,84 +79,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vincent Fazio <vfazio@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since its introduction in 7d8a59b40, the BR2_x86_geode CPU target has
-pointed to GCC -march=geode which targets AMD Geode processors [0].
+Hello Daniel,
 
-This arch tuning enables MMX and 3DNow! extensions in GCC but these are
-not currently reflected in the selected flags by BR2_x86_geode.
+On Tue, 1 Aug 2023 16:44:12 +0200
+Daniel Lang <dalang@gmx.at> wrote:
 
-This is likely due to the confusing naming and history of "Geode".
+> I disabled all parts that would request information online during execution
+> to get a more predictable timing information.
 
-The AMD Geode can trace its origins back to the Cyrix MediaGXm [1] and
-then to the NSC Geode GXm/GXLV/GX1/GX2 [2]. All of these processors have
-MMX instruction support listed in their datasheets. The NSC GX2 was the
-first in the series to enable 3DNow!.
+Sure.
 
-When 7fed07d3a4a introduced BR2_X86_CPU_HAS_MMX, Geode was skipped
-presumably because it wasn't clear that the target is AMD Geode and
-because the Wikipedia documentation for Geode is incomplete [2] with
-regards to supported instructions as they all support MMX.
+> To be honest I didn't check if the CPE feed is deprecated as well.
+> But looking at the feed's website (https://nvd.nist.gov/products/cpe) it
+> seems like it will be retired as well in favor of running delta updates
+> via an API (https://nvd.nist.gov/developers/products).
+> 
+> The "problem" is that NVD currently tracks 1M CPEs and the API returns
+> 10k at a time.
 
-When f6cd56b9ce3 introduced BR2_X86_CPU_HAS_3DNOW, Geode was skipped
-presumably for similar reasons.
+Gah. I'm not sure this API thing is really a win compared to the good
+old way of providing a database dump (JSON blob or anything similar).
 
-Note: the in-tree olpc_xo1_defconfig uses BR2_x86_geode which is fine
-as this hardware uses the AMD Geode [3].
+> Saving them one by one into a file won't make much sense.
+> Another idea is to put them in an array and save it as a big json file.
+> When updating one has to make sure that entries are unique.
 
-Make it more clear that the target is AMD Geode by renaming the Kconfig
-menu option and add both MMX and 3DNow! flags to BR2_x86_geode.
+How do you know which ones to retrieve? You can request them by
+timestamp or something, to ensure your local copy has all entries,
+without having to redownload them all?
 
-[0]: https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/geode.md;;hb=HEAD
-[1]: https://en.wikipedia.org/wiki/MediaGX#MediaGXm
-[2]: https://en.wikipedia.org/wiki/Geode_%28processor%29
-[3]: https://wiki.laptop.org/go/Hardware_specification
+> I will send a separate patch once I have that part updated as well.
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
----
-Changes v1 -> v2:
-  - Reword the commit message
----
- arch/Config.in.x86 | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+Awesome, thanks a lot for working on this!
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 86e148dee6..49823fe885 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -705,22 +705,10 @@ config BR2_x86_zen4
- 	select BR2_X86_CPU_HAS_AVX512
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
- config BR2_x86_geode
--	bool "geode (no mmx)"
--	depends on !BR2_x86_64
--	help
--	  For several variant of geode which have not MMX support.
--	  See https://en.wikipedia.org/wiki/Geode_%28processor%29 to
--	  determine if your particular Geode processor supports MMX or
--	  not.
--config BR2_x86_geode_mmx
--	bool "geode (with mmx)"
-+	bool "AMD Geode"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
--	help
--	  For several variant of geode which have MMX support.
--	  See https://en.wikipedia.org/wiki/Geode_%28processor%29 to
--	  determine if your particular Geode processor supports MMX or
--	  not.
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_c3
- 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
- 	depends on !BR2_x86_64
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
