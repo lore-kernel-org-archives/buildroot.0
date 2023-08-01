@@ -4,82 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38152C00528
-	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 21:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11317C04A6A
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 21:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BC05600C7;
-	Tue,  1 Aug 2023 21:09:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BC05600C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCBEC61179;
+	Tue,  1 Aug 2023 21:10:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCBEC61179
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MvcCXI94VNB8; Tue,  1 Aug 2023 21:09:33 +0000 (UTC)
+	with ESMTP id jdcAWanVPNEd; Tue,  1 Aug 2023 21:10:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5507E60DFF;
-	Tue,  1 Aug 2023 21:09:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5507E60DFF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 428551BF869
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:09:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEB0761160;
+	Tue,  1 Aug 2023 21:10:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEB0761160
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 74A7D1BF408
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E804980C3D
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E804980C3D
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5C7A60DFC
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:09:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5C7A60DFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Eg8wBU7IgS_b for <buildroot@lists.busybox.net>;
- Tue,  1 Aug 2023 21:09:23 +0000 (UTC)
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com
- [IPv6:2001:4860:4864:20::32])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF31880D96
- for <buildroot@buildroot.org>; Tue,  1 Aug 2023 21:09:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF31880D96
-Received: by mail-oa1-x32.google.com with SMTP id
- 586e51a60fabf-1bf0c4489feso1035497fac.0
- for <buildroot@buildroot.org>; Tue, 01 Aug 2023 14:09:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690924162; x=1691528962;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=/Le/LpapWc6Y+kZDS5cFjU5xHuFxjPCgI1Gyv29/6YI=;
- b=UshkkHFsJyYgjX41so63A+qkJKEGtQx08mGo1SNfqzDH+X9rA53fUdZg+HeX1m/JvF
- A+B3ZDW5cCBp+AD7YuRR9W3e8r+k0r0SpflCrTuZQwMOgdlvYT3FhtDBWpOdFdiJmG04
- elzQTHBELWNQfiAJIA3uFlY8PDX5ucrjiAgl9lXLMeHgoNu71733KxGX8/+PrIdPDzp8
- wrers4DjA57UowZegK9gV/ZtBqs7SjUUup7ZsHK24DJTpWH3jQZxurWbtRyRAljV0uvN
- Nt/ZeidN5rwxl7CBhnLSBu/3dL7MEIUTba2rrH9ExcltiSKZ7aBs8rb55EhcO2pdIJjT
- eDFw==
-X-Gm-Message-State: ABy/qLbIQ3Hx4zZ91TMpmq+6ZcQUcDSpyNgUftQcJy0mUDnELc8H1HLR
- Fl7LF7zCRi0Ydrjqh7s5jm1v/+do7FVM2hggEYk=
-X-Google-Smtp-Source: APBJJlFHx06o1oNui7+oWXUY2ytAnmRjmpgYlQL6SxMkQg9F7D1Q8WeAkBYRyceC33j+mP0RrbbVslpg4omr/v3/4BU=
-X-Received: by 2002:a05:6870:1608:b0:1bb:4c5f:6db0 with SMTP id
- b8-20020a056870160800b001bb4c5f6db0mr16447244oae.36.1690924162571; Tue, 01
- Aug 2023 14:09:22 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jrL3rn979c7A for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 21:09:36 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6009C606A0
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 21:09:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6009C606A0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 15CAA1BF205;
+ Tue,  1 Aug 2023 21:09:32 +0000 (UTC)
+Date: Tue, 1 Aug 2023 23:09:31 +0200
+To: carrier.nicolas0@gmail.com
+Message-ID: <20230801230931.296eeb62@windsurf>
+In-Reply-To: <20230119132856.1801425-3-carrier.nicolas0@gmail.com>
+References: <20230119132856.1801425-1-carrier.nicolas0@gmail.com>
+ <20230119132856.1801425-3-carrier.nicolas0@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230731214559.99648-1-james.hilliard1@gmail.com>
- <20230801200154.GE421096@scaer>
-In-Reply-To: <20230801200154.GE421096@scaer>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 1 Aug 2023 15:09:10 -0600
-Message-ID: <CADvTj4r5Zv4t1RsAFBMRyKwTRYCJ2FWOC1nWwQjdrzvwD=q+tw@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690924162; x=1691528962;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=/Le/LpapWc6Y+kZDS5cFjU5xHuFxjPCgI1Gyv29/6YI=;
- b=aiKky8faWKhifW/dia7gjG2LpmH4S11v9IUltdUf+1CAGSMJvXqqAm7f10Ug4clDzP
- o83BFFhIN7zFgaDI/o7ks53h5qpTvoGUEFGfc8AsWutqTXQbkj5zTxraNeeQrGvFJ55m
- t1LiP4uyldU3jkjrMCyC85D4Bmzz/NbpE9yYEZ8oOFCO0p8clcsjDoX2mAFRVZoltp0+
- 9NmOSgoTCRxRW9lKP+jZpHEs/M+C5bsqwgrEG1qU2J34rSqcW6J2Gz+Jt+zimW0TwYV0
- MJnYohl5+A5suO5PJD0bztz4ErO79+0atZ8WMyCr0wlNlYIWEEO+JgJ0Ikwqw/r15JCz
- X2xQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=aiKky8fa
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: select kdb
+ d=bootlin.com; s=gm1; t=1690924173;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8eAYyLTM5HGdustk33KF/8lukXm221+kjqtq9hFhenc=;
+ b=XL3PcarCcYVwB31FyGGDjWxdvHM+fGrX7086TjXdPaqqVvPiol275P0QpRMgFaDyFgNz1x
+ sBaf6s/xvglET67//ex/nzeuSBdw78rOPD38iaMg5QfRdoW0YZg/O4Epw7PG8eES3j8wN6
+ N4oHh57nkHj8eTDTsZzmADBF+hSpvefMdkj6y7E0DPCxlv3RN3X3I60v+/5HdVIT9WnzAM
+ ThZRqgAFx3pMRsEAMI2d0YUef8GcjlSu0JweDrT+JNSnzVsS0nVXhRnQ9MoMBsLZywMpHd
+ 32iByN77kjRKX1tauXd/ErMiyvDi0pp2MTh0uzXpgwze5RHtrWzXyL4a7Ye8pw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XL3PcarC
+Subject: Re: [Buildroot] [PATCH 2/3] package/php/php.mk: add host-php
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,54 +75,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBBdWcgMSwgMjAyMyBhdCAyOjAx4oCvUE0gWWFubiBFLiBNT1JJTiA8eWFubi5tb3Jp
-bi4xOTk4QGZyZWUuZnI+IHdyb3RlOgo+Cj4gSmFtZXMsIEFsbCwKPgo+IE9uIDIwMjMtMDctMzEg
-MTU6NDUgLTA2MDAsIEphbWVzIEhpbGxpYXJkIHNwYWtlIHRodXNseToKPiA+IFdlIG5lZWQgdG8g
-c2VsZWN0IEJSMl9QQUNLQUdFX0tCRCB3aGVuIGJ1aWxkaW5nIHN5c3RlbWQgd2l0aCB2Y29uc29s
-ZS4KPiA+Cj4gPiBGaXhlczoKPiA+IHN5c3RlbWQtdmNvbnNvbGUtc2V0dXBbMTI5XTogL3Vzci9i
-aW4vbG9hZGtleXMgZmFpbGVkIHdpdGggZXhpdCBzdGF0dXMgMS4KPiA+Cj4gPiBTaWduZWQtb2Zm
-LWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KPiA+IC0tLQo+
-ID4gIHBhY2thZ2Uvc3lzdGVtZC9Db25maWcuaW4gfCAxICsKPiA+ICAxIGZpbGUgY2hhbmdlZCwg
-MSBpbnNlcnRpb24oKykKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zeXN0ZW1kL0NvbmZp
-Zy5pbiBiL3BhY2thZ2Uvc3lzdGVtZC9Db25maWcuaW4KPiA+IGluZGV4IGJlYTcxN2E0NTYuLmYz
-ZTU2MWU2NjEgMTAwNjQ0Cj4gPiAtLS0gYS9wYWNrYWdlL3N5c3RlbWQvQ29uZmlnLmluCj4gPiAr
-KysgYi9wYWNrYWdlL3N5c3RlbWQvQ29uZmlnLmluCj4gPiBAQCAtNTYzLDYgKzU2Myw3IEBAIGNv
-bmZpZyBCUjJfUEFDS0FHRV9TWVNURU1EX1VUTVAKPiA+ICBjb25maWcgQlIyX1BBQ0tBR0VfU1lT
-VEVNRF9WQ09OU09MRQo+ID4gICAgICAgYm9vbCAiZW5hYmxlIHZjb25zb2xlIHRvb2wiCj4gPiAg
-ICAgICBkZWZhdWx0IHkKPiA+ICsgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9LQkQKPgo+IFRoaXMg
-aXMgdHJpdmlhbCB0byBleHBsYWluLCBpbmRlZWQsIGJ1dCB3aGF0IGlzIG5vdCB0cml2aWFsIHRv
-IGV4cGxhbgo+IGJ1dCBtb3N0IGludGVyZXN0aW5nLCBhbmQgYXMgSSBkaWQgYXNrIGluIG15IHBy
-ZXZpZXcgbWFpbCwgaXMgdG8gZXhwbGFpbgo+IHdoeToKPgo+ICAgLSBpbiBzeXN0ZW1kIDI1Miwg
-bG9hZGtleXMgd2FzIGFscmVhZHkgbmVlZGVkIGFuZCBjYWxsZWQgZnJvbQo+ICAgICBzeXN0ZW1k
-LXZjb25zb2xlLXNldHVwIChjaGVjayB0aGUgY29kZSwgaXQgd2FzIGFscmVhZHkgdGhlcmUgaW4g
-MjUyCj4gICAgIGFuZCBtb3N0IHByb2JhYmx5IGV2ZW4gbG9uZyBiZWZvcmUgdGhhdC4uLikKPgo+
-ICAgLSB3aXRoIHN5c3RlbWQgMjUyLCBvdXIgdGVzdCBjYXNlcyB3ZXJlIG5vdCBmYWlsaW5nLCBl
-dmVuIHRob3VnaAo+ICAgICBsb2Fka2V5cyB3YXMgbmVlZGVkCj4KPiAgIC0gd2l0aCBzeXN0ZW1k
-IDI1NCwgdGhlIHNhbWUgdGVzdCBjYXNlIG5vdyBmYWlscy4KPgo+IFRoaXMgd2UgbmVlZCB0byB1
-bmRlcnN0YW5kLgoKWWVhaCwgSSB0cmllZCB0byBmaWd1cmUgdGhhdCBvdXQsIGJ1dCBJIGNvdWxk
-bid0IGZpbmQgYW55IHJlYXNvbiBmb3IKdGhlIHRlc3Qgbm90CmZhaWxpbmcgcHJldmlvdXNseS4K
-Cj4KPiBUaGF0IHdheSwgd2Uga25vdyBpZiBvdXIgdGVzdCB3YXMgYnJva2VuLCBvciBpZiB0aGUg
-bmV3IGRlcGVuZGVuY3kKPiBzaG91bGQgYmUgYmFja3BvcnRlZCB0byBwcmV2aW91cyBtYWludGVu
-YW5jZSBicmFuY2hlcy4uLgo+Cj4gKGFuZCBub3cgSSBzZWUgdGhhdCBUaG9tYXMgaGFkIHRoZSBz
-YW1lIHF1ZXN0aW9ucykuCj4KPiA+ICAgICAgIGhlbHAKPiA+ICAgICAgICAgc3lzdGVtZC12Y29u
-c29sZS1zZXR1cCBpcyBhbiBlYXJseSBib290IHNlcnZpY2UgdGhhdAo+ID4gICAgICAgICBjb25m
-aWd1cmVzIHRoZSB2aXJ0dWFsIGNvbnNvbGUgZm9udCBhbmQgY29uc29sZSBrZXltYXAuCj4gPiAt
-LQo+ID4gMi4zNC4xCj4gPgo+Cj4gLS0KPiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
-LS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+IHwgIFlh
-bm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVy
-aWNzJyBjb25zcGlyYWN5OiB8Cj4gfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWdu
-ZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKPiB8ICszMyA1NjEg
-MDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBU
-aGVyZSBpcyBubyAgfAo+IHwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwg
-LyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8Cj4gJy0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0t
-LS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello,
+
+On Thu, 19 Jan 2023 14:28:55 +0100
+carrier.nicolas0@gmail.com wrote:
+
+> From: Nicolas Carrier <carrier.nicolas0@gmail.com>
+> 
+> having a working PHP with the correct version, is mandatory for executing
+> some PHP tools, such as composer, when building packages.
+> 
+> Signed-off-by: Nicolas Carrier <carrier.nicolas0@gmail.com>
+
+Tweaked commit title as:
+
+	package/php/php: add a host variant
+
+and it should have been:
+
+	package/php: add a host variant
+
+but I messed up.
+
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 23dd4ba96f..bd301254d4 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -14,6 +14,24 @@ PHP_DEPENDENCIES = host-pkgconf pcre2
+>  PHP_LICENSE = PHP-3.01
+>  PHP_LICENSE_FILES = LICENSE
+>  PHP_CPE_ID_VENDOR = php
+> +
+> +# This host php is installed in $(HOST_DIR), as it is needed
+> +# to use composer.
+
+This comment was not really useful: all host packages are installed in
+$(HOST_DIR). So I dropped this comment.
+
+> +
+> +HOST_PHP_CONF_OPTS += \
+> +	--disable-all \
+> +	--without-pear \
+> +	--with-config-file-path=/etc \
+> +	--disable-phpdbg \
+> +	--enable-phar \
+> +	--enable-json \
+> +	--enable-filter \
+> +	--enable-mbstring \
+> +	--enable-tokenizer \
+> +	--with-openssl=$(HOST_DIR)/usr
+> +
+> +HOST_PHP_DEPENDENCIES += host-oniguruma host-openssl host-pkgconf
+
+I moved both of these to the bottom of the file, to have first all the
+stuff related to target PHP, and the all the stuff related to host PHP.
+
+I replaced the += by = signs, since these assignments are not within
+conditions.
+
+I was also puzzled by the discrepancy in dependencies between target
+and host PHP:
+
+- target PHP depends on host-pkgconf and pcre2
+- your host PHP proposal depends on host-onigurama host-openssl and host-pkgconf
+
+So I added host-pcre2 in the dependencies, and added the option
+--with-external-pcre to be on par with what we're doing for the target
+PHP. host-onigurama is needed for --enable-mbstring, and host-openssl
+for --with-openssl.
+
+--with-openssl=$(HOST_DIR)/usr had to be changed to
+--with-openssl=$(HOST_DIR) (we no longer used a usr/ subdir, and this
+line was causing a check-package warning).
+
+--with-config-file-path=/etc was changed to
+--with-config-file-path=$(HOST_DIR)/etc.
+
+Applied with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
