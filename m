@@ -4,81 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F441C001E0
-	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 13:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9F63C0015E
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 13:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA64C606CB;
-	Tue,  1 Aug 2023 13:18:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA64C606CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67CB060071;
+	Tue,  1 Aug 2023 13:19:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67CB060071
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gYkIhECZGpjS; Tue,  1 Aug 2023 13:18:51 +0000 (UTC)
+	with ESMTP id E_tWRxXzZRNr; Tue,  1 Aug 2023 13:19:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D793E6114D;
-	Tue,  1 Aug 2023 13:18:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D793E6114D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9273E605A6;
+	Tue,  1 Aug 2023 13:19:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9273E605A6
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8F54B1BF31D
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1928E1BF31D
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9835403AC
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9835403AC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10F2340471
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10F2340471
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tw9g0vu2OCzS for <buildroot@lists.busybox.net>;
- Tue,  1 Aug 2023 13:18:33 +0000 (UTC)
-X-Greylist: delayed 430 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 01 Aug 2023 13:18:32 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B57D440201
+ with ESMTP id PExSX6jlwI5K for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 13:18:34 +0000 (UTC)
 Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B57D440201
- for <buildroot@buildroot.org>; Tue,  1 Aug 2023 13:18:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 949C840374
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 13:18:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 949C840374
 Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 01 Aug 2023 15:11:19 +0200
+ 01 Aug 2023 15:11:21 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
  ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2023 15:11:19 +0200
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2023 15:11:21 +0200
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 1 Aug 2023 15:11:18 +0200
+ 15.1.2507.27; Tue, 1 Aug 2023 15:11:20 +0200
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Tue, 01 Aug 2023 15:11:17 +0200
+ Tue, 01 Aug 2023 15:11:19 +0200
 From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.01,247,1684792800"; d="scan'208";a="22642996"
+X-IronPort-AV: E=Sophos;i="6.01,247,1684792800"; d="scan'208";a="22643009"
 To: <buildroot@buildroot.org>
-Date: Tue, 1 Aug 2023 15:11:15 +0200
-Message-ID: <cc9779f7c1aa962cbf837affdda39716cab219fa.1690895462.git.yann.morin@orange.com>
+Date: Tue, 1 Aug 2023 15:11:16 +0200
+Message-ID: <e15f8b87f4c1895832f8ff549bca8cc39d7a5032.1690895462.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1690895462.git.yann.morin@orange.com>
 References: <cover.1690895462.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX604.corporate.adroot.infra.ftgroup
- (10.115.26.32) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-Originating-IP: [10.115.27.53]
+X-ClientProxiedBy: OPE16NORMBX207.corporate.adroot.infra.ftgroup (10.115.27.8)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1690895912; x=1722431912;
+ t=1690895913; x=1722431913;
  h=to:cc:subject:date:message-id:in-reply-to:references:
  mime-version:content-transfer-encoding:from;
- bh=80w6UMPt5FQK864nQtOdj1gG2ArLhgitftjHpKtqwu4=;
- b=hkd/Rj1AttFLg3cLQuCTx835BV7pmLVjIp4gDVNnqvkbKdUITTlYwGsN
- m/11naq+7cIbk2t04L0jdRDlxqeuxdO5by4eSa9s+apoea1rgJeNQg67f
- Tc6WUSixZ/za+xgb9xHWpMKDr8GvB9yuMCI0CH7vWkrX0HnioEH1tTk6R
- kY1zx+bfNY319HiZDz138XkcCM4FehRihT90x7hMXGlGlkuoNci400ISO
- iu8wVCUO6gwfEC9SzVoBQEJF0OFWWRTvyLMD8fAQUzlND+k5zX1vdsOzW
- J5NeNKoMLzCXOJTLxaFAlAL7xX8n5fb860AB/S13sQYXgJKDyk4ZHy5T6
- w==;
+ bh=kitA/wWjQJeRxyQE0ZzXB/KAYD94Yd/ZDD2VpnLZWRA=;
+ b=J9mhOj0yj0zlR2Z2tAR8EgD1RAEYJ/UZ9hIuX9NCVgYW2vojscY4Xd5z
+ nTg7cmjlNlaW9nyJeErhUNFZRa39+/KGrMQU2n28tpacv3cR2wYzDMn5c
+ IXaXWzJwFhOUDwv5CGr5hAL4wMW7fgf55qtPkLRfilpduvWXJjI5orqFd
+ OlH53bEFcQMTOJZ7Asr4WkCR7ymdTSZ3FSWJ5MqtpQ63qpHlT0rE8bn9s
+ aYTY+IBwR1U7xbktq0rfyGrioPvLTEYBoDvt4Y/TW/C5KlR2HnkzlyZA6
+ UlWxBaEWZFZm+eF5ZHj9npEisgZFyJ5SmefFSOBGGLIYnyDXsh9mf+QC5
+ Q==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=hkd/Rj1A
-Subject: [Buildroot] [PATCH 1/3 v2] support/download: fix shellcheck errors
- in svn backend
+ header.a=rsa-sha256 header.s=orange002 header.b=J9mhOj0y
+Subject: [Buildroot] [PATCH 2/3 v2] support/download: use svn credentials to
+ retrieve revision date
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,57 +94,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bizarrely enough, the unquoted expansion of ${quiet} does not trigger
-any warning from shellcheck, so we do not add any exception for it.
+When an svn repository requires credentials, and they are passed
+in _DL_OPTS, they must be used also to retrieve the revision date.
 
-${SVN} can contain more than one item, but we don't care about splitting
-on spaces when we just print it for debug, so we can just quote it
-rather than add an exception.
+One could argue that credentials should not be handled in _DL_OPTS, but
+rather that they be fed through other means (e.g. by pre-authenticating
+manually once in an interactive session, or by filling them in the usual
+~/svn/auth/* mechanisms for a CI).
+
+However, some public facing repositories are using authentication, even
+though the credentials are public. This is the case for example for:
+    http://software.rtcm-ntrip.org/
+
+In such a case, it does make sense to pass credentials via _DL_OPTS,
+because they are not really, even really not, secret.
+
+Another use-case (e.g. for a CI) is to pass the credentials as
+environment variables, with _DL_OPTS not hard-coded in the .mk file.
+
+However, _DL_OPTS may contain options that are not valid for 'svn info',
+as they are meant to be passed to 'svn export' in the first place. Since
+the only options common to 'svn info' and 'svn export' are the
+credentials, we just extract those and pass them to 'svn info'.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 ---
- .checkpackageignore  | 1 -
- support/download/svn | 4 +++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ support/download/svn | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 27c66d0bbe..427791d84b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1658,7 +1658,6 @@ support/download/go-post-process Shellcheck
- support/download/hg Shellcheck
- support/download/scp Shellcheck
- support/download/sftp Shellcheck
--support/download/svn Shellcheck
- support/download/wget Shellcheck
- support/gnuconfig/update Shellcheck
- support/libtool/buildroot-libtool-v1.5.patch ApplyOrder Sob Upstream
 diff --git a/support/download/svn b/support/download/svn
-index b23b7773d3..d9325b7478 100755
+index d9325b7478..3e08a0ef36 100755
 --- a/support/download/svn
 +++ b/support/download/svn
-@@ -20,6 +20,7 @@ set -e
- # Environment:
- #   SVN      : the svn command to call
+@@ -54,12 +54,28 @@ _plain_svn() {
  
-+# shellcheck disable=SC1090 # Only provides mk_tar_gz()
- . "${0%/*}/helpers"
+ _svn export --ignore-keywords ${quiet} "${@}" "'${uri}@${rev}'" "'${basename}'"
  
- quiet=
-@@ -41,12 +42,13 @@ shift $((OPTIND-1)) # Get rid of our options
- # being expanded a second time (in case there are spaces in them)
- _svn() {
-     if [ -z "${quiet}" ]; then
--        printf '%s ' ${SVN} "${@}"; printf '\n'
-+        printf '%s ' "${SVN}" "${@}"; printf '\n'
-     fi
-     _plain_svn "$@"
- }
- # Note: please keep command below aligned with what is printed above
- _plain_svn() {
-+    # shellcheck disable=SC2086 # We want word-splitting for SVN
-     eval ${SVN} "${@}"
- }
++# For 'svn info', we only need the credentials, if any; other options
++# would be invalid, as they are intended for 'svn export'.
++# We can also consume the positional parameters, as we'll no longer
++# be calling any other remote-reaching svn command.
++creds=
++while [ ${#} -gt 0 ]; do
++    case "${1}" in
++    --username=*)   creds+=" ${1}"; shift;;
++    --password=*)   creds+=" ${1}"; shift;;
++    --username)     creds+=" ${1} ${2}"; shift 2;;
++    --password)     creds+=" ${1} ${2}"; shift 2;;
++    *)              shift;;
++    esac
++done
++
+ # Get the date of the revision, to generate reproducible archives.
+ # The output format is YYYY-MM-DDTHH:MM:SS.mmmuuuZ (i.e. always in the
+ # UTC timezone), which we can feed as-is to the --mtime option for tar.
+ # In case there is a redirection (e.g. http -> https), just keep the
+ # last line (svn outputs everything on stdout)
+-date="$( _plain_svn info "'${uri}@${rev}'" \
++# shellcheck disable=SC2086 # creds may be empty
++date="$( _plain_svn info ${creds} "'${uri}@${rev}'" \
+         |sed -r -e '/^Last Changed Date: /!d; s///'
+        )"
  
 -- 
 2.34.1
