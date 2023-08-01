@@ -4,79 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB3BC0015E
-	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 13:18:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F441C001E0
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 13:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9A7161127;
-	Tue,  1 Aug 2023 13:18:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9A7161127
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA64C606CB;
+	Tue,  1 Aug 2023 13:18:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA64C606CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YnbkG71o3eWz; Tue,  1 Aug 2023 13:18:38 +0000 (UTC)
+	with ESMTP id gYkIhECZGpjS; Tue,  1 Aug 2023 13:18:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16D1260E46;
-	Tue,  1 Aug 2023 13:18:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16D1260E46
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D72A1BF97D
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D793E6114D;
+	Tue,  1 Aug 2023 13:18:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D793E6114D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F54B1BF31D
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2707180BAE
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2707180BAE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9835403AC
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 13:18:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9835403AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vcWDDTeIggCU for <buildroot@lists.busybox.net>;
- Tue,  1 Aug 2023 13:18:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tw9g0vu2OCzS for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 13:18:33 +0000 (UTC)
 X-Greylist: delayed 430 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 01 Aug 2023 13:18:29 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC80D80D4D
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CC80D80D4D
- for <buildroot@buildroot.org>; Tue,  1 Aug 2023 13:18:29 +0000 (UTC)
-Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+ Tue, 01 Aug 2023 13:18:32 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B57D440201
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B57D440201
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 13:18:32 +0000 (UTC)
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 01 Aug 2023 15:11:17 +0200
+ 01 Aug 2023 15:11:19 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2023 15:11:16 +0200
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2023 15:11:19 +0200
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 1 Aug 2023 15:11:15 +0200
+ 15.1.2507.27; Tue, 1 Aug 2023 15:11:18 +0200
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Tue, 01 Aug 2023 15:11:14 +0200
+ Tue, 01 Aug 2023 15:11:17 +0200
 From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.01,247,1684792800"; d="scan'208";a="22653886"
+X-IronPort-AV: E=Sophos;i="6.01,247,1684792800"; d="scan'208";a="22642996"
 To: <buildroot@buildroot.org>
-Date: Tue, 1 Aug 2023 15:11:14 +0200
-Message-ID: <cover.1690895462.git.yann.morin@orange.com>
+Date: Tue, 1 Aug 2023 15:11:15 +0200
+Message-ID: <cc9779f7c1aa962cbf837affdda39716cab219fa.1690895462.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1690895462.git.yann.morin@orange.com>
+References: <cover.1690895462.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX103.corporate.adroot.infra.ftgroup (10.115.26.4)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX604.corporate.adroot.infra.ftgroup
+ (10.115.26.32) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1690895910; x=1722431910;
- h=to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding:from;
- bh=bAUua2mLPv+LAIWpd7XmqTEvuWkQJIniVGZH3FJIIeE=;
- b=bbB1IRFSXPxZ0jtddA1jpXj7TKnifsNt6U0NyI5Jhv52hjRIeKQBzQ2+
- SRkrVWBfxNjiohTGCWDiXxZmysefbLDV8AiSbPvIBp9pB3cRj1gEU/uUx
- wPDYDF56hNHoSZbWZWrbocHIT2eSMQdCVTVoCi/W2z9KpxAjHvbKaPxOa
- i5QtlLbKRdm3fpJBkKqx0WHu4l61Ovm6kD2npWMN6+7pnWkmFcrOamk0I
- UHGHgVn9S3zwBVbzhqpN+Um0O0SCxWKcaK7q02cIcpQt1yKKk3+r1DIym
- uAcayiAoZbt4L4VEP5tlWCKpRJrEBKFAC8bo/TTW1oFIOPtMPQhUG2Eo4
- g==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1690895912; x=1722431912;
+ h=to:cc:subject:date:message-id:in-reply-to:references:
+ mime-version:content-transfer-encoding:from;
+ bh=80w6UMPt5FQK864nQtOdj1gG2ArLhgitftjHpKtqwu4=;
+ b=hkd/Rj1AttFLg3cLQuCTx835BV7pmLVjIp4gDVNnqvkbKdUITTlYwGsN
+ m/11naq+7cIbk2t04L0jdRDlxqeuxdO5by4eSa9s+apoea1rgJeNQg67f
+ Tc6WUSixZ/za+xgb9xHWpMKDr8GvB9yuMCI0CH7vWkrX0HnioEH1tTk6R
+ kY1zx+bfNY319HiZDz138XkcCM4FehRihT90x7hMXGlGlkuoNci400ISO
+ iu8wVCUO6gwfEC9SzVoBQEJF0OFWWRTvyLMD8fAQUzlND+k5zX1vdsOzW
+ J5NeNKoMLzCXOJTLxaFAlAL7xX8n5fb860AB/S13sQYXgJKDyk4ZHy5T6
+ w==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=bbB1IRFS
-Subject: [Buildroot] [PATCH 0/3 v2] support/download: enhance svn backend
+ header.a=rsa-sha256 header.s=orange002 header.b=hkd/Rj1A
+Subject: [Buildroot] [PATCH 1/3 v2] support/download: fix shellcheck errors
+ in svn backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,62 +90,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin@orange.com>
+Cc: yann.morin@orange.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Bizarrely enough, the unquoted expansion of ${quiet} does not trigger
+any warning from shellcheck, so we do not add any exception for it.
 
-This small series enhances the svn backend with two new features:
-  - properly use credentials to retrieve changeset info
-  - allow skipping svn-externals
+${SVN} can contain more than one item, but we don't care about splitting
+on spaces when we just print it for debug, so we can just quote it
+rather than add an exception.
 
-Additionally, it also adds shellcheck fixes/exceptions, so that script
-does not end up on the list of derelict scripts.
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+---
+ .checkpackageignore  | 1 -
+ support/download/svn | 4 +++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Changes v1 -> v2:
-  - don't accidentally force submodules for git-downloaded packages
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 22e476d7886163484d233803b42a2a4c2b588a5b
-
-  arch/Config.in.x86: add Intel and AMD GCC targets (2023-08-01 00:14:50 +0200)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to 2281fe5f1a1324621f726080c57b35374ab7bb55
-
-  support/download: add support to exclude svn externals (2023-08-01 15:07:36 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      support/download: fix shellcheck errors in svn backend
-      support/download: use svn credentials to retrieve revision date
-      support/download: add support to exclude svn externals
-
- .checkpackageignore                     |  1 -
- docs/manual/adding-packages-generic.txt |  6 ++++++
- package/pkg-download.mk                 |  1 +
- package/pkg-generic.mk                  | 10 ++++++++++
- support/download/svn                    | 28 +++++++++++++++++++++++++---
- 5 files changed, 42 insertions(+), 4 deletions(-)
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 27c66d0bbe..427791d84b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1658,7 +1658,6 @@ support/download/go-post-process Shellcheck
+ support/download/hg Shellcheck
+ support/download/scp Shellcheck
+ support/download/sftp Shellcheck
+-support/download/svn Shellcheck
+ support/download/wget Shellcheck
+ support/gnuconfig/update Shellcheck
+ support/libtool/buildroot-libtool-v1.5.patch ApplyOrder Sob Upstream
+diff --git a/support/download/svn b/support/download/svn
+index b23b7773d3..d9325b7478 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -20,6 +20,7 @@ set -e
+ # Environment:
+ #   SVN      : the svn command to call
+ 
++# shellcheck disable=SC1090 # Only provides mk_tar_gz()
+ . "${0%/*}/helpers"
+ 
+ quiet=
+@@ -41,12 +42,13 @@ shift $((OPTIND-1)) # Get rid of our options
+ # being expanded a second time (in case there are spaces in them)
+ _svn() {
+     if [ -z "${quiet}" ]; then
+-        printf '%s ' ${SVN} "${@}"; printf '\n'
++        printf '%s ' "${SVN}" "${@}"; printf '\n'
+     fi
+     _plain_svn "$@"
+ }
+ # Note: please keep command below aligned with what is printed above
+ _plain_svn() {
++    # shellcheck disable=SC2086 # We want word-splitting for SVN
+     eval ${SVN} "${@}"
+ }
+ 
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.34.1
 
 ____________________________________________________________________________________________________________
 Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
