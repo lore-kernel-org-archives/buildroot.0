@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11317C04A6A
-	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 21:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9CAFC00528
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 21:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCBEC61179;
-	Tue,  1 Aug 2023 21:10:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCBEC61179
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47F4361170;
+	Tue,  1 Aug 2023 21:11:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47F4361170
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jdcAWanVPNEd; Tue,  1 Aug 2023 21:10:06 +0000 (UTC)
+	with ESMTP id X09RBq8cU_cc; Tue,  1 Aug 2023 21:11:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEB0761160;
-	Tue,  1 Aug 2023 21:10:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEB0761160
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 74A7D1BF408
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:10:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 805A960C02;
+	Tue,  1 Aug 2023 21:11:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 805A960C02
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 137D31BF408
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5C7A60DFC
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:09:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5C7A60DFC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 704CE41829
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:11:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 704CE41829
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jrL3rn979c7A for <buildroot@lists.busybox.net>;
- Tue,  1 Aug 2023 21:09:36 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6009C606A0
- for <buildroot@buildroot.org>; Tue,  1 Aug 2023 21:09:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6009C606A0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 15CAA1BF205;
- Tue,  1 Aug 2023 21:09:32 +0000 (UTC)
-Date: Tue, 1 Aug 2023 23:09:31 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OMc9nxWvDmqp for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 21:11:11 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07004415DE
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 21:11:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07004415DE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E0013240004;
+ Tue,  1 Aug 2023 21:11:08 +0000 (UTC)
+Date: Tue, 1 Aug 2023 23:11:07 +0200
 To: carrier.nicolas0@gmail.com
-Message-ID: <20230801230931.296eeb62@windsurf>
-In-Reply-To: <20230119132856.1801425-3-carrier.nicolas0@gmail.com>
+Message-ID: <20230801231107.78940dc0@windsurf>
+In-Reply-To: <20230119132856.1801425-4-carrier.nicolas0@gmail.com>
 References: <20230119132856.1801425-1-carrier.nicolas0@gmail.com>
- <20230119132856.1801425-3-carrier.nicolas0@gmail.com>
+ <20230119132856.1801425-4-carrier.nicolas0@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690924173;
+ d=bootlin.com; s=gm1; t=1690924269;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8eAYyLTM5HGdustk33KF/8lukXm221+kjqtq9hFhenc=;
- b=XL3PcarCcYVwB31FyGGDjWxdvHM+fGrX7086TjXdPaqqVvPiol275P0QpRMgFaDyFgNz1x
- sBaf6s/xvglET67//ex/nzeuSBdw78rOPD38iaMg5QfRdoW0YZg/O4Epw7PG8eES3j8wN6
- N4oHh57nkHj8eTDTsZzmADBF+hSpvefMdkj6y7E0DPCxlv3RN3X3I60v+/5HdVIT9WnzAM
- ThZRqgAFx3pMRsEAMI2d0YUef8GcjlSu0JweDrT+JNSnzVsS0nVXhRnQ9MoMBsLZywMpHd
- 32iByN77kjRKX1tauXd/ErMiyvDi0pp2MTh0uzXpgwze5RHtrWzXyL4a7Ye8pw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Vsz4RYAGrDXxpIM2zPYYez0n4e3y3k1LBpjDTMoFXFM=;
+ b=OakNSx+P34vtEUmEUg4sUFj99DvA/gzQODzKGD6H76meafs/quBwDtx2Fc50UG4b/K/aLZ
+ 1bs8aQzKqtrK3WAcD3MZF/bMsYcEcrjW3/I7Q5H7kQ1eEN1ds6eZcc9hpiiAcILYOo6GWU
+ GQOkWgtbROKVzecC0BReyZ9pUPNqS7o2sZuYqbTIexJBxIKYl2dTIXxGY2fKRG3tNUNE3B
+ 14h0amNjO5aJCRDnT2mFByu+q6Sa1q/GP0Vh2M7WSpacy0G7ccfsvE4I5rGqwG8RJLJRtz
+ JntTr4F2aNoRucaa3hiIjsANo37ziR6i7kwQzDl0+FkegHunxnIb4HBnaER/Ag==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XL3PcarC
-Subject: Re: [Buildroot] [PATCH 2/3] package/php/php.mk: add host-php
+ header.s=gm1 header.b=OakNSx+P
+Subject: Re: [Buildroot] [PATCH 3/3] package/composer: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,83 +84,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hello Nicolas,
 
-On Thu, 19 Jan 2023 14:28:55 +0100
+On Thu, 19 Jan 2023 14:28:56 +0100
 carrier.nicolas0@gmail.com wrote:
 
 > From: Nicolas Carrier <carrier.nicolas0@gmail.com>
 > 
-> having a working PHP with the correct version, is mandatory for executing
-> some PHP tools, such as composer, when building packages.
+> composer describes itself as a dependency manager for PHP, it is used
+> by projects such as CakePHP.
 > 
 > Signed-off-by: Nicolas Carrier <carrier.nicolas0@gmail.com>
+> ---
+>  package/composer/composer.hash |  3 +++
+>  package/composer/composer.mk   | 31 +++++++++++++++++++++++++++++++
+>  2 files changed, 34 insertions(+)
+>  create mode 100644 package/composer/composer.hash
+>  create mode 100644 package/composer/composer.mk
+> 
+> diff --git a/package/composer/composer.hash b/package/composer/composer.hash
+> new file mode 100644
+> index 0000000000..512f4399a8
+> --- /dev/null
+> +++ b/package/composer/composer.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed hashes, not provided by upstream
 
-Tweaked commit title as:
+Actually hashes are available at https://getcomposer.org/download/.
 
-	package/php/php: add a host variant
-
-and it should have been:
-
-	package/php: add a host variant
-
-but I messed up.
-
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 23dd4ba96f..bd301254d4 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -14,6 +14,24 @@ PHP_DEPENDENCIES = host-pkgconf pcre2
->  PHP_LICENSE = PHP-3.01
->  PHP_LICENSE_FILES = LICENSE
->  PHP_CPE_ID_VENDOR = php
+> +sha256  2021f0d52b446e0efe3c548cc058ab5671fa38cdbcf814e7911c7e9d71d61538  composer-2.0.8.phar
+> +sha256  c8cce4b6b9729f264ffdf9296d505d63432497feeed1f586d1902b942197e024  LICENSE
+> diff --git a/package/composer/composer.mk b/package/composer/composer.mk
+> new file mode 100644
+> index 0000000000..5ff5644d29
+> --- /dev/null
+> +++ b/package/composer/composer.mk
+> @@ -0,0 +1,31 @@
+> +################################################################################
+> +#
+> +# composer
+> +#
+> +################################################################################
 > +
-> +# This host php is installed in $(HOST_DIR), as it is needed
-> +# to use composer.
+> +COMPOSER_VERSION = 2.0.8
 
-This comment was not really useful: all host packages are installed in
-$(HOST_DIR). So I dropped this comment.
+I have bumped to 2.5.8, because at runtime 2.0.8 was spitting out a few
+warnings about usage of PHP features that are deprecated/obsolete.
 
-> +
-> +HOST_PHP_CONF_OPTS += \
-> +	--disable-all \
-> +	--without-pear \
-> +	--with-config-file-path=/etc \
-> +	--disable-phpdbg \
-> +	--enable-phar \
-> +	--enable-json \
-> +	--enable-filter \
-> +	--enable-mbstring \
-> +	--enable-tokenizer \
-> +	--with-openssl=$(HOST_DIR)/usr
-> +
-> +HOST_PHP_DEPENDENCIES += host-oniguruma host-openssl host-pkgconf
+I've added a Config.in.host file so that this package can be enabled as
+a host package from menuconfig.
 
-I moved both of these to the bottom of the file, to have first all the
-stuff related to target PHP, and the all the stuff related to host PHP.
+And I now realize that I forgot to add a DEVELOPERS entry, so I will do
+that now.
 
-I replaced the += by = signs, since these assignments are not within
-conditions.
-
-I was also puzzled by the discrepancy in dependencies between target
-and host PHP:
-
-- target PHP depends on host-pkgconf and pcre2
-- your host PHP proposal depends on host-onigurama host-openssl and host-pkgconf
-
-So I added host-pcre2 in the dependencies, and added the option
---with-external-pcre to be on par with what we're doing for the target
-PHP. host-onigurama is needed for --enable-mbstring, and host-openssl
-for --with-openssl.
-
---with-openssl=$(HOST_DIR)/usr had to be changed to
---with-openssl=$(HOST_DIR) (we no longer used a usr/ subdir, and this
-line was causing a check-package warning).
-
---with-config-file-path=/etc was changed to
---with-config-file-path=$(HOST_DIR)/etc.
-
-Applied with those changes. Thanks!
+Applied with those changes!
 
 Thomas
 -- 
