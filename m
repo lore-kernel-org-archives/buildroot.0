@@ -1,89 +1,132 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 331A8C001DE
-	for <buildroot@archiver.kernel.org>; Mon, 31 Jul 2023 22:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AB46EB64DD
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 04:36:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B086F40CC3;
-	Mon, 31 Jul 2023 22:47:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B086F40CC3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3775B60DFC;
+	Tue,  1 Aug 2023 04:36:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3775B60DFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id M10KutEtxT_4; Mon, 31 Jul 2023 22:47:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FU7ZF-sO43Q0; Tue,  1 Aug 2023 04:36:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9782D40147;
-	Mon, 31 Jul 2023 22:47:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9782D40147
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1BB511BF378
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 22:47:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EC0160BDC;
+	Tue,  1 Aug 2023 04:36:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EC0160BDC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CC211BF35A
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 04:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F7F740AFF
- for <buildroot@lists.busybox.net>; Mon, 31 Jul 2023 22:47:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F7F740AFF
+ by smtp4.osuosl.org (Postfix) with ESMTP id C642340213
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 04:36:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C642340213
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pmow9HWeIpyH for <buildroot@lists.busybox.net>;
- Mon, 31 Jul 2023 22:47:07 +0000 (UTC)
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com
- [IPv6:2607:f8b0:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 886BB40147
- for <buildroot@buildroot.org>; Mon, 31 Jul 2023 22:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 886BB40147
-Received: by mail-ot1-x32e.google.com with SMTP id
- 46e09a7af769-6bc93523162so2103741a34.2
- for <buildroot@buildroot.org>; Mon, 31 Jul 2023 15:47:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690843626; x=1691448426;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gGZFXIuqRPB/A1DcPTqFOXZ2PnXlimmw8o8vMyuhehg=;
- b=j5jSZBn/3OmClS9z/+g87g96cIiQK2cAqf/4qn1pBK4mUGac3ZBZGptr99f3yILMin
- 7JcmltT5bwW00n38SkiX3Jfl2KxzmNu3kq/b0w2f2E5i+S1WjYaIeGgV6XUxarHprzkz
- tMVfP3ZYvP/MOiHXGr0wpjfoxTtLQGA+ukVs0+tRlsElL26TfX3ByjzrMdKPvuLhy4W3
- J/8rCZYWrOrF+ek86+leeA2ip15//ip/g/GD2NDxzDvwFBPujktv7YxJ6Aq4uyRBgl+a
- c0rMlG2UyJiscul/JWogcR3/k5YOyOPnbuKh3OQ/f7kSMkNkTrIjqWyCHS9EJt3AO+vU
- Ndaw==
-X-Gm-Message-State: ABy/qLaR5aFkLghwVpR2EC4a1vgOqnz5OMW/ORkRsSnZNQkLRKMmaIV7
- UePD9jEzEh8cmyJZ52BnwzWzbdj/63Y=
-X-Google-Smtp-Source: APBJJlGx7NwOixX3dWmVV61EPL8dLhAIEvkITC2QdswJ2gb3Ugk8IH4O6XAHxW0Of7m6Dj2hqhMiCQ==
-X-Received: by 2002:a05:6870:1495:b0:1bf:6ec:dd4d with SMTP id
- k21-20020a056870149500b001bf06ecdd4dmr1093559oab.28.1690843625902; 
- Mon, 31 Jul 2023 15:47:05 -0700 (PDT)
-Received: from localhost.localdomain
- (76-250-43-185.lightspeed.mdsnwi.sbcglobal.net. [76.250.43.185])
- by smtp.gmail.com with ESMTPSA id
- e1-20020a056870450100b001bb7a3ab484sm4866052oao.16.2023.07.31.15.47.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Jul 2023 15:47:05 -0700 (PDT)
-From: Vincent Fazio <vfazio@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 31 Jul 2023 17:47:03 -0500
-Message-Id: <20230731224703.2923-1-vfazio@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2kIMegkcPZoh for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 04:36:33 +0000 (UTC)
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com
+ (mail-sy4aus01on20714.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:7005::714])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1A47B402EC
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 04:36:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A47B402EC
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gcUCQ02GRNqjjH+iWlrSHGiG43Nvu0ImoA6iwmgwdUvKTf3Hmi4nYEmjvqgWyph1Nztz412iltQUGXFp6y0ien0Ta5uPJE00NcPlBK24ZL8JRhovondDWTvToDo2Mj0GPNm3r08TbglAXXHIrPzKdB16JSFe72GPUgfc2m4fLN77oVVDMwuAnAiaj4mKsdKNeR8YrHMcx70WjdeRBuS4ScP0ymmAR/2aR3xQmSZmMhmKZ9LxDclbd5BhaB544OmxQUi8EQNzGbR/JoBWm5trbW1C2WOf9tvBe3lTRVmdN5vbEWKaldyxsKny7ApGzaxYJbQBlYVu0Zwi5Z89jYtmGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EvyCtmsNz5IHRu2BH19uBV96ZUbTs3P12cU42r5U1vE=;
+ b=dfmHxzTKfdiXL5S/DXGTD9aYy+uOAGR4FeMW1KCcnCEQeyLEbNJgO98zxUoBkPluGURKZC7H8UQs1ierEIxqs5mmikX647RH8SEYtpBaysNPQEgojiFBw+//TxYDhAGk+xPUF10VErnVGD7mUw40XL/VZkjwW2teeviFyWGCKKYQaJ8FZzVCZif/21D9WxcFtQU9Hbb0oXyWxS3Yr5IthgNN1LOhBhqo8Kt42ONCUYS7jMBGXQ332cg4ut9d8vnCKxAg9J7HuXi8NKyKXR3YBwbLijLabTGonOyC6tbyvq+caxjYqrPB5FpqrLnArl/dzbcOHgUsfK17CaXbzP9SjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=gallagher.com; dmarc=pass action=none
+ header.from=gallagher.com; dkim=pass header.d=gallagher.com; arc=none
+Received: from SY2PR01MB2778.ausprd01.prod.outlook.com (2603:10c6:1:25::22) by
+ SY4PR01MB5865.ausprd01.prod.outlook.com (2603:10c6:10:f8::5) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6631.44; Tue, 1 Aug 2023 04:36:24 +0000
+Received: from SY2PR01MB2778.ausprd01.prod.outlook.com
+ ([fe80::c574:9949:1619:eac5]) by SY2PR01MB2778.ausprd01.prod.outlook.com
+ ([fe80::c574:9949:1619:eac5%3]) with mapi id 15.20.6631.043; Tue, 1 Aug 2023
+ 04:36:24 +0000
+From: Afshin Pir <Afshin.Pir@gallagher.com>
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: Update schedule of sources.buildroot.org
+Thread-Index: AdnEMbW/GqCIjib8R+iHlW1XZFDX9Q==
+Date: Tue, 1 Aug 2023 04:36:24 +0000
+Message-ID: <SY2PR01MB2778500474B41D29E8E7D54C940AA@SY2PR01MB2778.ausprd01.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SY2PR01MB2778:EE_|SY4PR01MB5865:EE_
+x-ms-office365-filtering-correlation-id: ef7f45ec-951f-4102-0ea8-08db9248dcb0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1uQrA9hEkNAh5rl+C6Nj1ContF6qowL2Kc3A2ZfzVcEwYsgsS+/Gj6Q9imd6MLvQsCxPx8v9UTOvAzWfuv8li5bNZ46+ZVX9IH5I3B2tLuuJoseJnqhkZn/4ztsJxYL4FxWrszcBK2DlTAhC8SH2b+ePP8C/LDgyenhfa4Z1zfetHIR12aBtPOTjNM1cGc2a8hnj0JZj9ZCs7agE5wkvICokI371cY8Bwm+MRvmfe7hR1Vvl1ef7r3TgDdRgQlR/33OtBVStuoAwrQgqfG4SOPUnqjtFk/u1wf7zLoSOLUG+914aKC92VlZO3YhJXaIbztmRBzBirAXgzurzilHq4EDsETekPjJ1lmtFToXYizuxY/k9CPOsZoUy6jD0aQ/057dSP+ZJgRND8sKeUI0hi06lm+/zHCGMriIZ5S4jaThvCDFQQH+uqkH9cyHWbENYGTWWBIa0lFG2ePZfwSECqEA8GcfX6rE4+tKO7585JZ1jHUfPqNNr08sZi4PKLU3mwZd2whjOEx2Bqe0lROKcTXQdyzuklKMnTo4AJ1EL6yB4DEmm/nw8k9YZ3BINbBvwXcpAUGPST19CSJjk+vRgl52K+BGy65N23EhobtezNR8=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SY2PR01MB2778.ausprd01.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230028)(4636009)(346002)(376002)(136003)(366004)(396003)(39860400002)(451199021)(7696005)(966005)(9686003)(166002)(66946007)(66446008)(66476007)(64756008)(71200400001)(76116006)(66556008)(478600001)(38070700005)(52536014)(41300700001)(6916009)(316002)(83380400001)(5660300002)(186003)(26005)(9326002)(6506007)(8676002)(8936002)(2906002)(86362001)(38100700002)(33656002)(15650500001)(55016003)(4744005)(122000001);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9OAeYIm8T99byjj9kMP1zCeH44ezRxr1jKc1U9yyDhhmmIWNQC7D+KBpEXKD?=
+ =?us-ascii?Q?Vt15lxd6RkHHWRhi2vKCeCXXFVmwPDMPQ5r8Syi/i5H4AbQolXag/yDMQiq/?=
+ =?us-ascii?Q?kikaC4+z3eZZ6N0VeZDSQFcZGtkuk6o8REnNzXOvNtTZ48ruj98oUfiSMQBW?=
+ =?us-ascii?Q?utDKjIQhuxepT2UglcUqNIz9Pg1o6/yrJuBZmc9UnW/YzkswcByUc0/Ht2KV?=
+ =?us-ascii?Q?XnjguVf1dwdF6rxUXRTv/UF6Inr10/2SVN/6xrmcl9Wxr2rb//sYcvnlJGYo?=
+ =?us-ascii?Q?tVjN/I7ZnfV7Nu20rQ3PPJvunPYzo1JCeSwG8RSz1kWutf61THCoCjO9p8ba?=
+ =?us-ascii?Q?QqLP6rPvf2xCS2X9ZFGQS2b9pAg2lZYVanuxIWjVWEpUuojoixVt9XbcblVH?=
+ =?us-ascii?Q?xca9sqN9coBRMpCBhpKVyk5BRELDU19WRikFI7ts5M4Dvw4ntfY1nvHdV7ak?=
+ =?us-ascii?Q?TK37DU1bJsduTSb83JgoKl+ZkIO92nfPmA+8pRqCSMSZNaDpSHYpCvPQXyLq?=
+ =?us-ascii?Q?zfbGCFkA8OX2ncC3g+Nr3C/mgG/oqhAkVNkoscAVNA7H3U8n0FYQpJf9gSlQ?=
+ =?us-ascii?Q?LisaUjhUM06p2KHF+Y3vLnpO9ufVnqnohXRhDyZYftm19E0PSYtr6GiRgnI4?=
+ =?us-ascii?Q?IxYFTdLhvegU6of0nI+T7D7KMv+IP+7abSrMethzkQfem3yxzrRPSmf31vCC?=
+ =?us-ascii?Q?FAPuTSscsqoVab8Cns1/gLCGGnrFSl22biJ4uijCxG57uYGQSw+4gxoNghvM?=
+ =?us-ascii?Q?M4yyQ++xt2XuJg7dul1XFltz8Urn2PHE/hHDMOAzMvlnQXRb+41OQfr9UqLc?=
+ =?us-ascii?Q?layI1yKrnWE+7QChyIGcDIbAyfL58+dStmzaJn9N6AggCgahpih3NkwHSg9w?=
+ =?us-ascii?Q?wE1Bfw/wHA4hhuvkZgC6qg0n7Cz8n27k+Wjcl3zzhVoaGgUOepV4jGTN4qqH?=
+ =?us-ascii?Q?ZavHc/VTGJq8DISHKkPgF64iV27K915owSsvXAY5Gvq5uvLW2Tdi9W5lfRGk?=
+ =?us-ascii?Q?Hir1H2yCnCHK5iQ5TyDEcNmvGXBjHCwUFpEv31Ef8aZnhq33LlRQEQvLxc7d?=
+ =?us-ascii?Q?wZD+H/HrX8pLCH4uQlWYTBL4xp11fsyOZKPpNKMCZkFefGqmopBksrXKiv+o?=
+ =?us-ascii?Q?cMAyWREY8DKscRDb9wEa43OLd6voolsldZhrqfrLS6eqnEBfLZoA+LN7F5jq?=
+ =?us-ascii?Q?t7SIQ/PEldQmtoaA9xySjdeY/OPjkfT9lORCH5jntqgZNAumxp4m+35FBxE3?=
+ =?us-ascii?Q?NYN9b0v1mqUCf/YBbiDJXPf4goRkwyi+Ywev8hCpsEFzGo3ATebHLWCF9P7F?=
+ =?us-ascii?Q?OX0h898u+L+NWqjpIkguvW2+oHR1/Rq2yFiGN4bCqHUAOIPty2taFvRoBVdn?=
+ =?us-ascii?Q?dA8qm1UgKHltooYCWNcrPJbtqdzlGoidifWgo3FjVFrBPqObqDA3xgsMzqMi?=
+ =?us-ascii?Q?vwhGl7/uID2tlDEFm9cZRF48Js1P+t3mFUaKrGVLUAl7OFP97EgTvmYkdI8q?=
+ =?us-ascii?Q?STuEuZA/r+u6HIb9/8bt3nL3dK3Euwa5ATxutzzpax3Uz2dcU2+Mj65Iu8ys?=
+ =?us-ascii?Q?spLTXX4fkjYL0M+q18WMQyCstyVvuo4DJ71uTAfJ?=
 MIME-Version: 1.0
+X-OriginatorOrg: gallagher.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SY2PR01MB2778.ausprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef7f45ec-951f-4102-0ea8-08db9248dcb0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2023 04:36:24.0503 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 2156b869-431f-4815-b2ce-b4893b5c9aaa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 39KnWgwKSsqGnreVtPXtqkbGfkSO2wWm7IYfEPMtvbe+xODAuFsk3czXQBhoKaXXQ5psUukV8mSPckKkrS/ITVZ4eTdRYYkxh6+6HDqpCyc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY4PR01MB5865
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690843626; x=1691448426;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gGZFXIuqRPB/A1DcPTqFOXZ2PnXlimmw8o8vMyuhehg=;
- b=cDXNo5HtP37MdF5DA2T7EBRXVC2ZIlybE3xPe+A2WuJimRSGcvfItIFLzL1W9QtTrd
- QyGZN3n3aehVPSVK0XummyUQwaUaatenzKTWX6PXn8WtmQrzI1WwSaM53ozINW1m2GLr
- 3OWlDS7BDyaUQ4CO+1zqCJzqqz8skyYq3GjaBebXV2v7L+ic52cXwfpex+59pcddez4Q
- y89ZE07vGRLcoqQgkRlQx7DHt9N2ux5zVnWQOgv17t0bQGS3NOzIush2iDB6DJlvlAQq
- p3BOHrB4xJ9Ix+d84ufgEIghMqxhWyil8c0Zbd/fmT+qSZXIY3C5dAfkC6BW/VKY0Jk3
- J0dA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=cDXNo5Ht
-Subject: [Buildroot] [PATCH 1/1] arch/Config.in.x86: consolidate AMD Geode
- CPU targets
+ d=gallagher.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EvyCtmsNz5IHRu2BH19uBV96ZUbTs3P12cU42r5U1vE=;
+ b=s0TSsaXkUQVQqcU9ldfNetNBSL4KuFdB8vaVSt5UDZGFtTsCMffNPiKap5zQ+b9pIB3VGbss/orsjqYSgXCGYB77l5XFJ9vsfpDPxiajxY1lOMKd6UKStpuzjMHfb91aEElu1YM5V/aGpvB4P0MJdbU88Mx4rFLxfFPUrl6QxB+FnHAHGcWBADFaGhjA2rlYD52EIRjjvhSX2S01H7vcKcE6fVBRmAEW+aLwlSumdXXxQ44DNUfQgmWE6ww+cRx/GgvSd+U8vlUTs8n72VByB3JJHtJDblXF3M4Y8IkQWdZZjt1/AlAUWaBzFwHEqXP4WRCmR3CiUH7EfH6E6v2Rpw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gallagher.com header.i=@gallagher.com
+ header.a=rsa-sha256 header.s=selector2 header.b=s0TSsaXk
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=gallagher.com;
+Subject: [Buildroot] Update schedule of sources.buildroot.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,81 +138,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vincent Fazio <vfazio@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5248643203840509725=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since its introduction in 7d8a59b40, the BR2_x86_geode CPU target has
-pointed to GCC -march=geode which targets AMD Geode processors [0].
+--===============5248643203840509725==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_SY2PR01MB2778500474B41D29E8E7D54C940AASY2PR01MB2778ausp_"
 
-This arch tuning enables MMX and 3DNow! extensions in GCC but these were
-never reflected in the selected flags by BR2_x86_geode.
+--_000_SY2PR01MB2778500474B41D29E8E7D54C940AASY2PR01MB2778ausp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-This is likely due to the confusing naming and history of "Geode".
+Hi
 
-The AMD Geode can trace its origins back to the Cyrix MediaGXm [1] and
-then to the NSC Geode GXm/GXLV/GX1/GX2 [2]. All of these processors have
-MMX instruction support listed in their datasheets. The GX2 was the
-first in the series to enable 3DNow!.
+I wonder when http://sources.buildroot.org is updated normally. Because fro=
+m what I see, it is normally updates pretty quickly when packages are chang=
+ed, but there has been no update for last 2 weeks while some packages like =
+openssh have been updated.
 
-When 7fed07d3a4a introduced BR2_X86_CPU_HAS_MMX, the Geode was skipped
-presumably because Wikipedia documentation is incomplete [2] with regards
-to supported instructions and wasn't aware the target was AMD Geode.
+Best Regards
+Afshin
+________________________________
+This email is confidential and may contain information subject to legal pri=
+vilege. If you are not the intended recipient please advise us of our error=
+ by return e-mail then delete this email and any attached files. You may no=
+t copy, disclose or use the contents in any way. The views expressed in thi=
+s email may not be those of Gallagher Group Ltd or subsidiary companies the=
+reof.
+________________________________
 
-When f6cd56b9ce3 introduced BR2_X86_CPU_HAS_3DNOW, Geode was skipped
-presumably for similar reasons.
+--_000_SY2PR01MB2778500474B41D29E8E7D54C940AASY2PR01MB2778ausp_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-The in-tree olpc_xo1_defconfig uses BR2_x86_geode as this hardware uses
-the AMD Geode [3].
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-ligatures:standardcontextual;
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-NZ" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hi<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I wonder when <a href=3D"http://sources.buildroot.or=
+g">http://sources.buildroot.org</a> is updated normally. Because from what =
+I see, it is normally updates pretty quickly when packages are changed, but=
+ there has been no update for last 2
+ weeks while some packages like openssh have been updated.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Best Regards<o:p></o:p></p>
+<p class=3D"MsoNormal">Afshin<o:p></o:p></p>
+</div>
+<hr>
+This email is confidential and may contain information subject to legal pri=
+vilege. If you are not the intended recipient please advise us of our error=
+ by return e-mail then delete this email and any attached files. You may no=
+t copy, disclose or use the contents
+ in any way. The views expressed in this email may not be those of Gallaghe=
+r Group Ltd or subsidiary companies thereof.
+<hr>
+</body>
+</html>
 
-Clarify in the menu label that this is the AMD Geode and add both MMX
-and 3DNow! flags.
+--_000_SY2PR01MB2778500474B41D29E8E7D54C940AASY2PR01MB2778ausp_--
 
-[0]: https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/geode.md;;hb=HEAD
-[1]: https://en.wikipedia.org/wiki/MediaGX#MediaGXm
-[2]: https://en.wikipedia.org/wiki/Geode_%28processor%29
-[3]: https://wiki.laptop.org/go/Hardware_specification
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
----
- arch/Config.in.x86 | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
-
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 86e148dee6..49823fe885 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -705,22 +705,10 @@ config BR2_x86_zen4
- 	select BR2_X86_CPU_HAS_AVX512
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
- config BR2_x86_geode
--	bool "geode (no mmx)"
--	depends on !BR2_x86_64
--	help
--	  For several variant of geode which have not MMX support.
--	  See https://en.wikipedia.org/wiki/Geode_%28processor%29 to
--	  determine if your particular Geode processor supports MMX or
--	  not.
--config BR2_x86_geode_mmx
--	bool "geode (with mmx)"
-+	bool "AMD Geode"
- 	depends on !BR2_x86_64
- 	select BR2_X86_CPU_HAS_MMX
--	help
--	  For several variant of geode which have MMX support.
--	  See https://en.wikipedia.org/wiki/Geode_%28processor%29 to
--	  determine if your particular Geode processor supports MMX or
--	  not.
-+	select BR2_X86_CPU_HAS_3DNOW
- config BR2_x86_c3
- 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
- 	depends on !BR2_x86_64
--- 
-2.25.1
+--===============5248643203840509725==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5248643203840509725==--
