@@ -4,83 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EEFCC04A6A
-	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 20:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C6EC0015E
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 20:50:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02458814C9;
-	Tue,  1 Aug 2023 20:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02458814C9
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFC5B813D2;
+	Tue,  1 Aug 2023 20:50:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFC5B813D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9QSiG3ihM2ep; Tue,  1 Aug 2023 20:48:47 +0000 (UTC)
+	with ESMTP id ABzRmJIy-8qA; Tue,  1 Aug 2023 20:50:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20006813C0;
-	Tue,  1 Aug 2023 20:48:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20006813C0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 188ED1BF476
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 20:48:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17863813C0;
+	Tue,  1 Aug 2023 20:50:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17863813C0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6AB091BF476
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 20:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C4E760EEF
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 20:48:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C4E760EEF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3473740607
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 20:49:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3473740607
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rCJeGJtVAyFY for <buildroot@lists.busybox.net>;
- Tue,  1 Aug 2023 20:48:34 +0000 (UTC)
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com
- [IPv6:2607:f8b0:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EF20060E6A
- for <buildroot@buildroot.org>; Tue,  1 Aug 2023 20:48:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF20060E6A
-Received: by mail-pf1-x430.google.com with SMTP id
- d2e1a72fcca58-686bc261111so4434083b3a.3
- for <buildroot@buildroot.org>; Tue, 01 Aug 2023 13:48:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690922913; x=1691527713;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+7xFgCpPtq98b8Fuw+AeAMGQd+7xgWK/r72wgxhO/7s=;
- b=WSHQJSsyrT1ryYcXcpEgKRHxuPFLUlit5vb1YLzkbEMI4m03lxUgPjouB+2aVn2HKP
- tVOk/s23b4vw6FnSRaTIUkyM7hjMoM1mAT4MK9m0//ppT37ZsWKsyM4Z3Svr2aaLVxTC
- 7xmzNiBo8iN5ybvbEc7nUsKhWYT7xwY89N9ZIRGsgLS9hFOIk8nMOFYIQtoT1buEpL3x
- IEXynVXE0yGGAlNjAmJOod1jnm5lGbcX0fstRyy/HR8qmiyWCbQ8J5K23M68J9d7qrlF
- vvYVf5mPmvyMNZyjit4w6ZGJGq6V1UfGB8Hx5bpoM0lap1Ov7K++1AjPPBh1r/31wdVV
- E6pQ==
-X-Gm-Message-State: ABy/qLbC1vM9ArOHknT8/uHpK3XLkOBO47melTts54wcwHnDoDqj6JbF
- SKvnHznNGnMMNVCQqLHd4Tu3NNOsW7hB0lfWJj+GvA==
-X-Google-Smtp-Source: APBJJlES9eW9wOVEHbSNI6Sxx7yB3dgLk3+TVPYqPi+pRq4LcsFR2grageS9SFKVmU2ntBaCSwvYfA==
-X-Received: by 2002:a05:6a00:2352:b0:687:3d65:7792 with SMTP id
- j18-20020a056a00235200b006873d657792mr7312454pfj.20.1690922913086; 
- Tue, 01 Aug 2023 13:48:33 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- x26-20020a62fb1a000000b00686e6e2b556sm9658681pfm.26.2023.08.01.13.48.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Aug 2023 13:48:32 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Tue,  1 Aug 2023 13:48:30 -0700
-Message-ID: <20230801204830.175727-1-christian@aperture.us>
-X-Mailer: git-send-email 2.41.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nics5HR3s20s for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 20:49:28 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC509400FF
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 20:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC509400FF
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 936971C0002;
+ Tue,  1 Aug 2023 20:49:24 +0000 (UTC)
+Date: Tue, 1 Aug 2023 22:49:23 +0200
+To: Robert Marko <robimarko@gmail.com>
+Message-ID: <20230801224923.35b6ac96@windsurf>
+In-Reply-To: <20230731170504.2769638-1-robimarko@gmail.com>
+References: <20230731170504.2769638-1-robimarko@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1690922913; x=1691527713;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+7xFgCpPtq98b8Fuw+AeAMGQd+7xgWK/r72wgxhO/7s=;
- b=OKh78rqk3wrm6RJJxT4AeJGn7FYrHfAWnxQemvK/Ah8TGXytJdBh72EQ8O7qc/OUMW
- TZDIB/nj4wJcGutCd0jw76wPU/Ahwuj8A5jHJh3nUBmFOg/Nno0YDe/uMVfb2xE286UM
- wFK4a7aScdicgIfkU2wKL9Jo3XGfqdNQ3Fb4S8f0ATH7tA4GLm8iKQSjpVrK4lbRLHCs
- lqrRUmzJymP8/PXdkjVtg6LC7pLwGHrLr1UFms36y4B0YVRlzjwjZJfGjvQ2s8uK46k8
- 0DNp43kV0qTihO9fJzVsKtMVlbvVV1YIng4ewiGMRmfzQkAS/FjdeO+0bRyfS7GywI1c
- rlow==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=OKh78rqk
-Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump to v1.20.7
+ d=bootlin.com; s=gm1; t=1690922964;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FJI+Ew2D+NM7+Ir9/C7KAsaQFis+ZygeliQwBxLg+es=;
+ b=YyCIxRknYA3+RmiAnG0tus65VRjWfhuXP/L7RV4s507h4YCQGoTrhQ8Zd3MJ2ld0IXldur
+ YOjLO/G4xHS9Tuv1Xvabq/0Gsn2HPnTR2+9bjnEb2MBmOrFZf1mcacm4Sg4vHmS2j8oVnU
+ q4eK/V0IW+Tnyr7jy8LZfJKp5bRMyIFo2BZrSKZuA0lDnchdqbkbNStMGExia9daEpgkqP
+ ZqEkTQXkDDN4KkUuE1QqlXS/7r0tXdHPlW3Alfvq4/ndhJoJagXhA5TppbfjiP9JgaAe99
+ 6HJMuAiQfaXxw02iGfQ5k/rC8rMsmjcMGPMtbZmvvkfT269PYWSe56gqX0XviA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YyCIxRkn
+Subject: Re: [Buildroot] [PATCH v3] package/mhz: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,65 +74,97 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-go1.20.7 (released 2023-08-01) includes a security fix to the crypto/tls
-package, as well as bug fixes to the assembler and the compiler.
+Hello Robert,
 
-Fixes CVE-2023-29409: restrict RSA keys in certificates to <= 8192 bits
+On Mon, 31 Jul 2023 19:05:04 +0200
+Robert Marko <robimarko@gmail.com> wrote:
 
-Extremely large RSA keys in certificate chains can cause a client/server to
-expend significant CPU time verifying signatures. Limit this by restricting the
-size of RSA keys transmitted during handshakes to <= 8192 bits.
+> mhz is a tool to mathematically calculate the real running CPU frequency
+> and as such has proved as invaluable tool for developing CPUFreq and
+> similar features in the kernel.
+> 
+> Its source finally got a license recently so it can be packaged.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
-Based on a survey of publicly trusted RSA keys, there are currently only three
-certificates in circulation with keys larger than this, and all three appear to
-be test certificates that are not actively deployed. It is possible there are
-larger keys in use in private PKIs, but we target the web PKI, so causing
-breakage here in the interests of increasing the default safety of users of
-crypto/tls seems reasonable.
+I've applied your change, after making a number of tweaks. Many of them
+had already been pointed out to you in the review of the previous
+versions, but you did not take them into account.
 
-https://go.dev/doc/devel/release#go1.20.7
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/Config.in     |  1 +
+>  package/mhz/Config.in |  6 ++++++
+>  package/mhz/mhz.hash  |  3 +++
+>  package/mhz/mhz.mk    | 21 +++++++++++++++++++++
+>  4 files changed, 31 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 135d1ad37b..2298534d91 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  62ee5bc6fb55b8bae8f705e0cb8df86d6453626b4ecf93279e2867092e0b7f70  go1.20.6.src.tar.gz
-+sha256  2c5ee9c9ec1e733b0dbbc2bdfed3f62306e51d8172bf38f4f4e542b27520f597  go1.20.7.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index efa47e5781..fc1d9ed681 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.20.6
-+GO_VERSION = 1.20.7
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Entry in the DEVELOPERS file was missing.
+
+> diff --git a/package/mhz/mhz.hash b/package/mhz/mhz.hash
+> new file mode 100644
+> index 0000000000..eb66c10d63
+> --- /dev/null
+> +++ b/package/mhz/mhz.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  1e07bb0d455d63fd33fb87a24f65a803c7c2d920fde4e5b5378b8c1b07de3b47  mhz-11aac2399780a1f7ea9f007b14af0464797d5cf1-br1.tar.gz
+> +sha256  9449d373cad921620bb8f1e4f7b39f957e263163ded159c1efc8de27f8997099  LICENSE
+> \ No newline at end of file
+
+Missing newline here. This is reported by "make check-package", which
+verifies basic coding style details.
+
+> diff --git a/package/mhz/mhz.mk b/package/mhz/mhz.mk
+> new file mode 100644
+> index 0000000000..36b3754968
+> --- /dev/null
+> +++ b/package/mhz/mhz.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# mhz
+> +#
+> +################################################################################
+> +
+> +MHZ_VERSION = 11aac2399780a1f7ea9f007b14af0464797d5cf1
+> +MHZ_SITE = https://github.com/wtarreau/mhz.git
+> +MHZ_SITE_METHOD = git
+
+Switched to using the "github" helper to do an HTTP download instead.
+
+> +MHZ_LICENSE = MIT/X11
+
+The license is just MIT. X11 is a slightly difference license, and
+MIT/X11 is not a valid SPDX identifier.
+
+> +MHZ_LICENSE_FILES = LICENSE
+> +
+> +define MHZ_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +endef
+> +
+> +define MHZ_INSTALL_TARGET_CMDS
+> +	$(INSTALL) $(@D)/mhz $(TARGET_DIR)/usr/bin/mhz
+
+Missing -D -m 0755 options.
+
+As said: I fixed those small details when applying.
+
+Thanks for your contribution!
+
+Thomas
 -- 
-2.41.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
