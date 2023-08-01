@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25B11C00528
-	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 21:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23DBC00528
+	for <buildroot@archiver.kernel.org>; Tue,  1 Aug 2023 21:20:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA0F760F03;
-	Tue,  1 Aug 2023 21:18:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA0F760F03
+	by smtp3.osuosl.org (Postfix) with ESMTP id 686C660DFC;
+	Tue,  1 Aug 2023 21:20:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 686C660DFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2dBfAfdjT2-c; Tue,  1 Aug 2023 21:18:48 +0000 (UTC)
+	with ESMTP id VSKtoxJCJz-w; Tue,  1 Aug 2023 21:20:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1158A60A61;
-	Tue,  1 Aug 2023 21:18:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1158A60A61
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DCAD41BF408
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:18:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA7F6607E1;
+	Tue,  1 Aug 2023 21:20:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA7F6607E1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1917A1BF408
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B66CC60743
- for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:18:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B66CC60743
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7086C40605
+ for <buildroot@lists.busybox.net>; Tue,  1 Aug 2023 21:19:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7086C40605
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S1l0fEqYqdCl for <buildroot@lists.busybox.net>;
- Tue,  1 Aug 2023 21:18:42 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C72A260DFF
- for <buildroot@buildroot.org>; Tue,  1 Aug 2023 21:18:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C72A260DFF
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B914420004;
- Tue,  1 Aug 2023 21:18:38 +0000 (UTC)
-Date: Tue, 1 Aug 2023 23:18:37 +0200
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230801231837.25545d7c@windsurf>
-In-Reply-To: <20230801171012.1652426-1-vfazio@gmail.com>
-References: <20230731224703.2923-1-vfazio@gmail.com>
- <20230801171012.1652426-1-vfazio@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1690924719;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=AqwV+28BcwHDr4W6i4X+TKNaed+sHuzHcGWTQnoLarg=;
- b=CBsDV8VLh/FdYUeMZu4BUFLJN0A12lidshuc/Ljv+Bau//PIvhM3pD18UqXBgtXwYw3uLj
- 8UR/rsL3SG20tU8zqLTkD2XTqZOTK+eYgY4bXUQjubEsNmm3Of/vJJSzheE1oVgNtYP6Hm
- 9Z7/EU4l55ykDutdjQDl/GoXl603uhCWp/ghkCvMHWs/DzuTelHoFkANDQuDsES2pvx0xJ
- wKhileslWSRPUdKv/uUObfr5ycz3nXekjzgwkTL3DJ+FIwJMNcGNpZx2qMJTRow6TSLCXg
- QFso7nTMW5Tq8nJpK13MUaStPkCLulWaufLwY6JTf83NxrVkmoRhRKhJFndj8A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CBsDV8VL
-Subject: Re: [Buildroot] [PATCH v2 1/1] arch/Config.in.x86: consolidate
- Geode CPU targets
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vRxZAD_q8vba for <buildroot@lists.busybox.net>;
+ Tue,  1 Aug 2023 21:19:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A145D400FF
+ for <buildroot@buildroot.org>; Tue,  1 Aug 2023 21:19:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A145D400FF
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8F3428406C; Tue,  1 Aug 2023 21:19:56 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 1 Aug 2023 23:18:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2bd0431bafc981ea6237b3abdd18ea22fb825f5f
+X-Git-Newrev: ee7179497bbdd1b44c8d2dd6dbfa0ac4c234567d
+X-Patchwork-Hint: ignore
+Message-Id: <20230801211956.8F3428406C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: security bump to v1.20.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,67 +57,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  1 Aug 2023 12:10:12 -0500
-Vincent Fazio <vfazio@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ee7179497bbdd1b44c8d2dd6dbfa0ac4c234567d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Since its introduction in 7d8a59b40, the BR2_x86_geode CPU target has
-> pointed to GCC -march=geode which targets AMD Geode processors [0].
-> 
-> This arch tuning enables MMX and 3DNow! extensions in GCC but these are
-> not currently reflected in the selected flags by BR2_x86_geode.
-> 
-> This is likely due to the confusing naming and history of "Geode".
-> 
-> The AMD Geode can trace its origins back to the Cyrix MediaGXm [1] and
-> then to the NSC Geode GXm/GXLV/GX1/GX2 [2]. All of these processors have
-> MMX instruction support listed in their datasheets. The NSC GX2 was the
-> first in the series to enable 3DNow!.
-> 
-> When 7fed07d3a4a introduced BR2_X86_CPU_HAS_MMX, Geode was skipped
-> presumably because it wasn't clear that the target is AMD Geode and
-> because the Wikipedia documentation for Geode is incomplete [2] with
-> regards to supported instructions as they all support MMX.
-> 
-> When f6cd56b9ce3 introduced BR2_X86_CPU_HAS_3DNOW, Geode was skipped
-> presumably for similar reasons.
-> 
-> Note: the in-tree olpc_xo1_defconfig uses BR2_x86_geode which is fine
-> as this hardware uses the AMD Geode [3].
-> 
-> Make it more clear that the target is AMD Geode by renaming the Kconfig
-> menu option and add both MMX and 3DNow! flags to BR2_x86_geode.
-> 
-> [0]: https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/geode.md;;hb=HEAD
-> [1]: https://en.wikipedia.org/wiki/MediaGX#MediaGXm
-> [2]: https://en.wikipedia.org/wiki/Geode_%28processor%29
-> [3]: https://wiki.laptop.org/go/Hardware_specification
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Reword the commit message
-> ---
->  arch/Config.in.x86 | 16 ++--------------
->  1 file changed, 2 insertions(+), 14 deletions(-)
+go1.20.7 (released 2023-08-01) includes a security fix to the crypto/tls
+package, as well as bug fixes to the assembler and the compiler.
 
-I have further extended the commit log to explain that
-BR2_x86_geode_mmx is removed, and that we don't need legacy handling
-for this removal, as this option has never been part of a released
-version of Buildroot.
+Fixes CVE-2023-29409: restrict RSA keys in certificates to <= 8192 bits
 
-Applied with this tweak. Thanks!
+Extremely large RSA keys in certificate chains can cause a client/server to
+expend significant CPU time verifying signatures. Limit this by restricting the
+size of RSA keys transmitted during handshakes to <= 8192 bits.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Based on a survey of publicly trusted RSA keys, there are currently only three
+certificates in circulation with keys larger than this, and all three appear to
+be test certificates that are not actively deployed. It is possible there are
+larger keys in use in private PKIs, but we target the web PKI, so causing
+breakage here in the interests of increasing the default safety of users of
+crypto/tls seems reasonable.
+
+https://go.dev/doc/devel/release#go1.20.7
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 135d1ad37b..2298534d91 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  62ee5bc6fb55b8bae8f705e0cb8df86d6453626b4ecf93279e2867092e0b7f70  go1.20.6.src.tar.gz
++sha256  2c5ee9c9ec1e733b0dbbc2bdfed3f62306e51d8172bf38f4f4e542b27520f597  go1.20.7.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index efa47e5781..fc1d9ed681 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.20.6
++GO_VERSION = 1.20.7
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
