@@ -4,74 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D827C00528
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 12:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 061ACC04A6A
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 14:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE71F6117A;
-	Wed,  2 Aug 2023 12:03:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE71F6117A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 56C8F6122A;
+	Wed,  2 Aug 2023 14:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56C8F6122A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TPi9t8NuGLZX; Wed,  2 Aug 2023 12:03:09 +0000 (UTC)
+	with ESMTP id AryYiPOSHH0N; Wed,  2 Aug 2023 14:11:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86A4B61229;
-	Wed,  2 Aug 2023 12:03:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86A4B61229
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 62DB11BF343
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 12:02:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91A9C61242;
+	Wed,  2 Aug 2023 14:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91A9C61242
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F8421BF372
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 14:11:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 151488209C
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 12:02:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 151488209C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C3C640313
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 14:11:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C3C640313
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id il_SadmqcJhL for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 12:02:10 +0000 (UTC)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com
- [209.85.221.54])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 22F4B81096
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 12:02:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22F4B81096
-Received: by mail-wr1-f54.google.com with SMTP id
- ffacd0b85a97d-307d20548adso5994542f8f.0
- for <buildroot@buildroot.org>; Wed, 02 Aug 2023 05:02:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690977727; x=1691582527;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=NUyOjpugI1lhnOK8FLj2KBeGW9qbmeeW5u6eW7xCa14=;
- b=QNgxvx4pvTuUD1WVrGFW0qIcuqj4PADkz3UoMujbeWBJCSTABgtimVPZRT7TFvdn8P
- vuNP7EgXmenMQWJ5qQXlWJMUqfaGA+kdbg2iUJ7UH2CcBzdY1V6zu5jg35ZTByvqtPsi
- 3dILm0O2uzpxKEeG6q0rrKlwRMxwen2whkg/UwORY6IEO6YnYFavsxutMDTcZjAYnyMm
- opOnBkDYiE2Oz3FWhr7DOkkEvyB7JHjrzuUuYf9mufRO48giXs7bKJrREJgZn0lIkMJP
- PQLkIRlDIUGGPeIQ1cELSmz/TTe9K1vmLk93AEaMaqim2Xpz7MLDESp5DZl9UPBKr3XE
- j7ug==
-X-Gm-Message-State: ABy/qLZPWQtPUPjQLq8kp09zE4knw4ujGq0msXIEEz6eh1dVDxZI58Fc
- ym3ZiWsMbW7nMV8ZfYvh/6wdDwyuQan5BSudWGI=
-X-Google-Smtp-Source: APBJJlHH62+0RHCIQ6dECLLmJjTQRVK/A6I5PfjFnausx3sGpHy1BGaE4MXhYYHAsTbODv+UeSAuiA==
-X-Received: by 2002:a5d:4d09:0:b0:317:9537:d746 with SMTP id
- z9-20020a5d4d09000000b003179537d746mr4277046wrt.2.1690977727431; 
- Wed, 02 Aug 2023 05:02:07 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:d6c7:beba:8b4a:76a7])
- by smtp.gmail.com with ESMTPSA id
- q23-20020a7bce97000000b003fe20533a1esm1501873wmj.44.2023.08.02.05.02.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Aug 2023 05:02:07 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Wed,  2 Aug 2023 14:01:50 +0200
-Message-Id: <20230802120150.564860-3-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230802120150.564860-1-thomas@devoogdt.com>
-References: <20230802120150.564860-1-thomas@devoogdt.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9rwDXCRkIMx5 for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 14:11:44 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 39A9840576
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 14:11:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39A9840576
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:aecc:7f70:551b:efac])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id E317F2003B4;
+ Wed,  2 Aug 2023 16:11:36 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 02 Aug 2023 16:11:36 +0200
+Date: Wed, 2 Aug 2023 16:11:36 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230802141136.GF421096@scaer>
+References: <20230731214559.99648-1-james.hilliard1@gmail.com>
+ <20230801200154.GE421096@scaer>
+ <CADvTj4r5Zv4t1RsAFBMRyKwTRYCJ2FWOC1nWwQjdrzvwD=q+tw@mail.gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 3/3] package/wpewebkit: add http/2 support by
- using libsoup3
+Content-Disposition: inline
+In-Reply-To: <CADvTj4r5Zv4t1RsAFBMRyKwTRYCJ2FWOC1nWwQjdrzvwD=q+tw@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1690985501;
+ bh=cXLc9R8rOLEjldzvu0pljrIsnQKHWa0jAEqAgVPaXtM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=JVdMfnDKcCFFr/rH3Dc76IFfreSAUTBAYtrg+aRFaqoqrgA9VdTvPiMs0LUEG7r0h
+ cimTKm3GkWwgYAhfEXCphaS0COWzOeKCR+96sgONFPdbJQCZEaUDFmOed013AM3RCZ
+ bHuVEXZ+QiT8g3h48V9foqc5icEyoszHyy3pHdN/l1hdPjN7c2Q4nps+TGs+4fwlYx
+ +YvvkpIlKyYQ+qYZhLkzCwOVF7ZD5L9l6gX5wjXlvcQGmyAwmw1/7QsWBqgccQ743K
+ biuzcbyNSlnj1qjr14b+mJ2VNujrn3lxi2XvtmHH1Oj5eJu3A8Xld+WxQlpGKTlqV1
+ A2UALVd1bORRQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JVdMfnDK
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: select kdb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,78 +77,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas@devoogdt.com>,
- Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Support added in 2.33.2:
-  https://wpewebkit.org/release/wpewebkit-2.33.2.html
-  "HTTP/2 support when building with libsoup3."
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
----
-v2: fix git message typo
----
- package/wpewebkit/Config.in    | 6 +++---
- package/wpewebkit/wpewebkit.mk | 5 ++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 7a8dc557c3..f1d38c7cad 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -36,9 +36,9 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
--	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
--	depends on BR2_USE_WCHAR # icu, libsoup
-+	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
-@@ -51,7 +51,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	select BR2_PACKAGE_LIBEPOXY
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBSOUP3
- 	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_OPENJPEG
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index c13a7201e6..8b5de00f07 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -15,7 +15,7 @@ WPEWEBKIT_LICENSE_FILES = \
- WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
- WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
- WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
--	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
-+	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
- 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
- 
- WPEWEBKIT_CONF_OPTS = \
-@@ -26,8 +26,7 @@ WPEWEBKIT_CONF_OPTS = \
- 	-DENABLE_INTROSPECTION=OFF \
- 	-DENABLE_MINIBROWSER=OFF \
- 	-DENABLE_WEB_RTC=OFF \
--	-DUSE_AVIF=OFF \
--	-DUSE_SOUP2=ON
-+	-DUSE_AVIF=OFF
- 
- ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
- WPEWEBKIT_CONF_OPTS += \
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SmFtZXMsIEFsbCwKCk9uIDIwMjMtMDgtMDEgMTU6MDkgLTA2MDAsIEphbWVzIEhpbGxpYXJkIHNw
+YWtlIHRodXNseToKPiBPbiBUdWUsIEF1ZyAxLCAyMDIzIGF0IDI6MDHigK9QTSBZYW5uIEUuIE1P
+UklOIDx5YW5uLm1vcmluLjE5OThAZnJlZS5mcj4gd3JvdGU6Cj4gPiBPbiAyMDIzLTA3LTMxIDE1
+OjQ1IC0wNjAwLCBKYW1lcyBIaWxsaWFyZCBzcGFrZSB0aHVzbHk6Cj4gPiA+IFdlIG5lZWQgdG8g
+c2VsZWN0IEJSMl9QQUNLQUdFX0tCRCB3aGVuIGJ1aWxkaW5nIHN5c3RlbWQgd2l0aCB2Y29uc29s
+ZS4KPiA+IFRoaXMgaXMgdHJpdmlhbCB0byBleHBsYWluLCBpbmRlZWQsIGJ1dCB3aGF0IGlzIG5v
+dCB0cml2aWFsIHRvIGV4cGxhbgo+ID4gYnV0IG1vc3QgaW50ZXJlc3RpbmcsIGFuZCBhcyBJIGRp
+ZCBhc2sgaW4gbXkgcHJldmlldyBtYWlsLCBpcyB0byBleHBsYWluCj4gPiB3aHk6Cj4gWWVhaCwg
+SSB0cmllZCB0byBmaWd1cmUgdGhhdCBvdXQsIGJ1dCBJIGNvdWxkbid0IGZpbmQgYW55IHJlYXNv
+biBmb3IKPiB0aGUgdGVzdCBub3QKPiBmYWlsaW5nIHByZXZpb3VzbHkuCgpJbiB0aGUgbWVhbnRp
+bWUsIFJvbWFpbiBoYXMgc2VudCBhIHBhdGNoIHRoYXQgZXhwbGFpbnMgdGhlIGlzc3VlLCBhbmQK
+YWRkcyB0aGUgYXBwcm9wcmlhdGUgb3B0aW9uIHRvIHNvbHZlIGl0LgoKUmVnYXJkcywKWWFubiBF
+LiBNT1JJTi4KCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0t
+LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5uIEUuIE1PUklOICB8
+IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmljcycgY29uc3BpcmFj
+eTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8IFwgLyBDQU1QQUlH
+TiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0t
+LS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAp8IGh0
+dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUwgICAgfCAg
+IHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0t
+LS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
