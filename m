@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62E7AC41513
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 19:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20A06C00528
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 20:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E4F041DA7;
-	Wed,  2 Aug 2023 19:26:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E4F041DA7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89B9C41DE8;
+	Wed,  2 Aug 2023 20:00:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89B9C41DE8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MrQ0C_enxhMl; Wed,  2 Aug 2023 19:26:29 +0000 (UTC)
+	with ESMTP id yNopaACr2o4g; Wed,  2 Aug 2023 20:00:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBE4541DC0;
-	Wed,  2 Aug 2023 19:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBE4541DC0
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA8DA40924;
+	Wed,  2 Aug 2023 20:00:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA8DA40924
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 535EA1BF2F5
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:26:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 23E891BF8C7
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 20:00:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C40180C00
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C40180C00
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE0B080E6A
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:59:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE0B080E6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cn8sXuV8zrks for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 19:26:14 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0558E8139A
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 19:26:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0558E8139A
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:79c1:a9ed:b3cf:6f2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 1415A200401;
- Wed,  2 Aug 2023 21:26:10 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 02 Aug 2023 21:26:09 +0200
-Date: Wed, 2 Aug 2023 21:26:09 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230802192609.GI421096@scaer>
-References: <20230802164628.389812-1-romain.naour@gmail.com>
- <20230802164628.389812-2-romain.naour@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230802164628.389812-2-romain.naour@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691004372;
- bh=/Hegclm479cHMz0NRxyLl2bl9vak5jAZkQA2bCHF/QA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=J8fvgwNFm6DvMPO8n0slzSWOruOK+/JKnJ4/nY0ctlIX3roM+ui5MqoA9n2AQ4j6a
- W7uEdIawNRZ/duRoYgCABXg9J+eEeeIlHu5B3Neby3NA3kfx82C6K9ZwD57XLETOxb
- TBk29LARm20ey+BIIINTDozjn4Q9jFRt+4LxmwbkfKcfEptBVLP0ueFb8r38lZtJ1I
- n1sRMcqtRRkyBM7AVROXJqUIjeM2ppXP4O2zBN8qd/UHXylxm6Jzl/9J7RcjQO3jRD
- DQE2TNnG/Wa7OCD9BHXPTOhndGs7u+pqjiHSGLf6mxn0MSUntH10qRTfkh3NVCe+GY
- gDYIDEPp0HBCA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=J8fvgwNF
-Subject: Re: [Buildroot] [PATCH 2/2] package/systemd: bump linux-headers
- dependency to 4.14
+ with ESMTP id 3P2xH8GhUOw1 for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 19:59:58 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E57F98211A
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 19:59:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E57F98211A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CD0A684142; Wed,  2 Aug 2023 19:59:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 2 Aug 2023 21:59:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 360a7cd738a85067ba60b029ca88eb7c874bfe4f
+X-Git-Newrev: ea1816008818acc7a339cf1b009b9453bc59e95a
+X-Patchwork-Hint: ignore
+Message-Id: <20230802195957.CD0A684142@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gdb: fix build error for version
+ arc-2020.09
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,116 +56,146 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ea1816008818acc7a339cf1b009b9453bc59e95a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-08-02 18:46 +0200, Romain Naour spake thusly:
-> The recent update to systemd v254 requires a toolchain w/ linux headers
-> >= 4.14 to provide LOOP_SET_BLOCK_SIZE [1] (added in systemd v253 [2]).
-> 
-> Note:
-> Buildroot already warn the user if a toolchain w/ linux headers < 4.15
-> is used while enabling systemd as init system [3]. It was matter of
-> time before problem occurs.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=89e4fdecb51cf5535867026274bc97de9480ade5
-> [2] https://github.com/systemd/systemd/commit/1163ddb386ef46f63942171e6eab0ca64eb818e4
-> [3] 9a095643b4dd34eb7acb69662aa64fa945f4b542
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/e60/e60c9bba5395970f99e9f889bba4675ac6f004c4/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...Do-not-define-basic_string_view-to_string.patch | 114 +++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/systemd/Config.in | 7 +++----
->  system/Config.in          | 6 +++---
->  2 files changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 174ee77b29..a3e424cb4c 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
->  	depends on !BR2_STATIC_LIBS # kmod
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	depends on BR2_TOOLCHAIN_HAS_SSP
-> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 # LOOP_SET_BLOCK_SIZE
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
->  	select BR2_PACKAGE_HAS_UDEV
-> @@ -237,7 +237,6 @@ config BR2_PACKAGE_SYSTEMD_HOMED
->  	depends on BR2_USE_MMU # cryptsetup -> lvm2
->  	depends on !BR2_STATIC_LIBS # cryptsetup -> lvm2
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
-> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # fscrypt_key
->  	select BR2_PACKAGE_CRYPTSETUP
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> @@ -248,11 +247,11 @@ config BR2_PACKAGE_SYSTEMD_HOMED
->  
->  	  https://www.freedesktop.org/software/systemd/man/systemd-homed.service.html
->  
-> -comment "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
-> +comment "homed support needs a toolchain w/ threads, dynamic library"
->  	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-> -		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-> +		BR2_STATIC_LIBS
->  
->  config BR2_PACKAGE_SYSTEMD_HOSTNAMED
->  	bool "enable hostname daemon"
-> diff --git a/system/Config.in b/system/Config.in
-> index 1ca7690ea3..24798dc068 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -124,19 +124,19 @@ config BR2_INIT_SYSTEMD
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
->  	depends on BR2_TOOLCHAIN_HAS_SSP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  	depends on BR2_HOST_GCC_AT_LEAST_5
->  	select BR2_ROOTFS_MERGED_USR
->  	select BR2_PACKAGE_SYSTEMD
->  	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
->  
-> -comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.15, host and target gcc >= 5"
-> +comment "systemd needs a glibc toolchain w/ SSP, headers >= 4.14, host and target gcc >= 5"
->  	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
->  	depends on BR2_USE_MMU
->  	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
->  		!BR2_TOOLCHAIN_HAS_SSP || \
-> -		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15 || \
-> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 || \
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
->  		!BR2_HOST_GCC_AT_LEAST_5
->  
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+new file mode 100644
+index 0000000000..210ba6d609
+--- /dev/null
++++ b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+@@ -0,0 +1,114 @@
++From 5ac588997c3c2d032d5d5145d9245eb37354c23b Mon Sep 17 00:00:00 2001
++From: Tom Tromey <tromey@adacore.com>
++Date: Tue, 30 Jun 2020 07:53:03 -0600
++Subject: [PATCH] Do not define basic_string_view::to_string
++
++gdb's copy of basic_string_view includes a to_string method.  However,
++according to cppreference, this is not a method on the real
++std::basic_string_view:
++
++https://en.cppreference.com/w/cpp/string/basic_string_view
++
++This difference matters because gdb_string_view.h will use the
++standard implementation when built with a C++17 or later.  This caused
++PR build/26183.
++
++This patch fixes the problem by changing the method to be a standalone
++helper function, and then rewriting the uses.  Tested by rebuilding
++with a version of GCC that defaults to C++17.
++
++(Note that the build still is not clean; and also I noticed that the
++libstdc++ string_view forbids the use of nullptr ... I wonder if gdb
++violates that.)
++
++gdb/ChangeLog
++2020-06-30  Tom Tromey  <tromey@adacore.com>
++
++	PR build/26183:
++	* ada-lang.c (ada_lookup_name_info::ada_lookup_name_info): Use
++	gdb::to_string.
++
++gdbsupport/ChangeLog
++2020-06-30  Tom Tromey  <tromey@adacore.com>
++
++	PR build/26183:
++	* gdb_string_view.h (basic_string_view::to_string): Remove.
++	(gdb::to_string): New function.
++
++Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=5ac588997c3c2d032d5d5145d9245eb37354c23b
++Bug report: https://sourceware.org/bugzilla/show_bug.cgi?id=26183
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ gdb/ChangeLog                |  6 ++++++
++ gdb/ada-lang.c               |  8 ++++----
++ gdbsupport/ChangeLog         |  6 ++++++
++ gdbsupport/gdb_string_view.h | 17 ++++++++++-------
++ 4 files changed, 26 insertions(+), 11 deletions(-)
++
++diff --git a/gdb/ada-lang.c b/gdb/ada-lang.c
++index 9b0c2efbfe2..98508c168bc 100644
++--- a/gdb/ada-lang.c
+++++ b/gdb/ada-lang.c
++@@ -13553,10 +13553,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
++     {
++       if (user_name.back () == '>')
++ 	m_encoded_name
++-	  = user_name.substr (1, user_name.size () - 2).to_string ();
+++	  = gdb::to_string (user_name.substr (1, user_name.size () - 2));
++       else
++ 	m_encoded_name
++-	  = user_name.substr (1, user_name.size () - 1).to_string ();
+++	  = gdb::to_string (user_name.substr (1, user_name.size () - 1));
++       m_encoded_p = true;
++       m_verbatim_p = true;
++       m_wild_match_p = false;
++@@ -13575,10 +13575,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
++ 	  if (encoded != NULL)
++ 	    m_encoded_name = encoded;
++ 	  else
++-	    m_encoded_name = user_name.to_string ();
+++	    m_encoded_name = gdb::to_string (user_name);
++ 	}
++       else
++-	m_encoded_name = user_name.to_string ();
+++	m_encoded_name = gdb::to_string (user_name);
++ 
++       /* Handle the 'package Standard' special case.  See description
++ 	 of m_standard_p.  */
++diff --git a/gdbsupport/gdb_string_view.h b/gdbsupport/gdb_string_view.h
++index c0ae7a8a2d9..65124e67e54 100644
++--- a/gdbsupport/gdb_string_view.h
+++++ b/gdbsupport/gdb_string_view.h
++@@ -245,13 +245,6 @@ namespace gdb {
++ 	  return { this->_M_str, this->_M_len };
++ 	}
++ 
++-      template<typename _Allocator = std::allocator<_CharT>>
++-	std::basic_string<_CharT, _Traits, _Allocator>
++-	to_string(const _Allocator& __alloc = _Allocator()) const
++-	{
++-	  return { this->_M_str, this->_M_len, __alloc };
++-	}
++-
++       size_type
++       copy(_CharT* __str, size_type __n, size_type __pos = 0) const
++       {
++@@ -560,4 +553,14 @@ namespace gdb {
++ 
++ #endif // __cplusplus < 201703L
++ 
+++namespace gdb {
+++
+++static inline std::string
+++to_string(const gdb::string_view &view)
+++{
+++  return { view.data (), view.size () };
+++}
+++
+++}
+++
++ #endif /* COMMON_GDB_STRING_VIEW_H */
++-- 
++2.39.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
