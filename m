@@ -1,90 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC784C04A6A
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 16:48:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAC12C001E0
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 17:54:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83DA361244;
-	Wed,  2 Aug 2023 16:48:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83DA361244
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03D5C40276;
+	Wed,  2 Aug 2023 17:54:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03D5C40276
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3A-IX9n9s4Xy; Wed,  2 Aug 2023 16:48:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OS5AfSMW1u-a; Wed,  2 Aug 2023 17:54:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4CC36124C;
-	Wed,  2 Aug 2023 16:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4CC36124C
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3AE3402D9;
+	Wed,  2 Aug 2023 17:54:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3AE3402D9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 306371BF3A0
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 16:48:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 881041BF3A7
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 17:54:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9315340315
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 16:47:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9315340315
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AC6140353
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 17:54:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AC6140353
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i7bAnlneGkmS for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 16:47:37 +0000 (UTC)
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 58BDB41DCE
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 16:47:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58BDB41DCE
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-307d58b3efbso25834f8f.0
- for <buildroot@buildroot.org>; Wed, 02 Aug 2023 09:47:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690994855; x=1691599655;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=a9fHII5r3Tg2/WF/UHyggQ2Z4zrxGUSHa4uXTSL8foU=;
- b=JiFCY4rEKTjD5NtvbmaxeB9RbtL4PA8H6FH3RHqfesP+TaQo6SsYqyfz+0CxFhKT0L
- tYqR1UHvPKkI+JCxiE/OP9x7Ft7LeSNUB+CvMmBOmTh6pYX5P8wRe8aWp8tn5AoQf/aS
- x1rXOUahEunY0hxVkavFLxS+LP1gJQ6FK3NyobHYcaCeODIwoKoVxuTP+rZ5lwGsdogX
- OSVOMKGgwPhXYoEVmNsnh8xrRq7XHqVbwKMJb5J9O9ft8o59VuHknPDNMe7ByEF4X0D+
- ARkRdwvEsarH+25c05in+kENZ1D5VWaWyxTXMG6QitZ248tvrahay11wQOmA5ssAStTJ
- FsyQ==
-X-Gm-Message-State: ABy/qLbTTq91EHyEMXIfGAFdfmCm+czj2mPzDxFQinsoZkP/e0xJiq8K
- wsoQa+EkL8ZfUckgIRkK761CcpnItg0=
-X-Google-Smtp-Source: APBJJlHHfQAXVlb9hoopbpbVIpayv4z3ys6FIfQOuUDryzJ0Wv7qK221D7sK7C1S16CvIP62EJY1fg==
-X-Received: by 2002:adf:f9c3:0:b0:317:66c0:9d82 with SMTP id
- w3-20020adff9c3000000b0031766c09d82mr5276486wrr.64.1690994854938; 
- Wed, 02 Aug 2023 09:47:34 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb05945b7e00eeca726b991c1980.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:eeca:726b:991c:1980])
- by smtp.gmail.com with ESMTPSA id
- y1-20020adfd081000000b003179d5aee63sm11349703wrh.91.2023.08.02.09.47.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Aug 2023 09:47:34 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
+ with ESMTP id aT4zOMUt17KP for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 17:54:11 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2C099418A4
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 17:54:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C099418A4
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id AADA0A4C00C6;
+ Wed,  2 Aug 2023 19:54:07 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35912)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qRG2x-0006yM-0w;
+ Wed, 02 Aug 2023 19:54:07 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  2 Aug 2023 18:46:27 +0200
-Message-ID: <20230802164628.389812-1-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.41.0
+Date: Wed,  2 Aug 2023 19:54:07 +0200
+Message-Id: <20230802175407.537056-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1690994855; x=1691599655;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=a9fHII5r3Tg2/WF/UHyggQ2Z4zrxGUSHa4uXTSL8foU=;
- b=f07X4IdJggCJKlgKsSz8LDh1CHmLjyFq87oTgCtcMTKUwJMmtbmH4YpU2GkRvy/QwI
- vGerb2C96oR91zn9GI8YnvGqttCFCJWUo91bdsUx34OmHqc+tr3dgaksa26/hQI0BLYF
- U7YUswzs69UQ5LOZOEyfsOIs4g0GGyB7R8rBOKp7gB+8wdWSFYvSULkTpWH9eBB9KcXx
- 9ydPLSK3NjLizmZN4ylC0VMUN4q9L1nCeVwk50MFQ/bHz/NoqqGYYxN9pPEoEfY0lN6T
- xY8nabHi10XKj/v2cKFUNBlx8BMhyCyMlgZo9gDY6vgxDZ5vKMPNpMlsCuX5rXn3fDKk
- ik2g==
+ d=kuhls.net; 
+ s=kas202306131828; t=1690998847;
+ bh=pSfy1S8yD9fgyyBv2fpox5B9pEHs5iCJKkzTGS+jrC0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=FTd9R3g1gnKwXvgBrNBoIk6EBb46NDUHSpm9R05QOtxo8uWk96Rq0FuWpDavq1NdT
+ cx8p8ekpNkGI0jOi80U9q9oze92ZE1O6+eDsMJJMWpVDYNBirPgY89VoeXLygX3AZc
+ KrI0AoyQE7DtRHPR2BOB0tsjklA7iL0hiuQz2qJAYHjUChYmkfF4EmtRushRaDa7tA
+ 9ZnXCZVohck8PecUIh5UbXdHLFmhr0OIdfhQfmlbEvVh10F7u//uZK6QNAtlLK1Xiq
+ W5GhUO+k1fMDTRDIJFIDkYiUx3RpvuBts/oelKsPRm+IwZ80ZDerGMlQLpFkSUa29v
+ vtGDRsiTLQ52g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=f07X4IdJ
-Subject: [Buildroot] [PATCH 1/2] support/testing: TestLxc switch to the Arm
- Bootlin toolchain
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=FTd9R3g1
+Subject: [Buildroot] [PATCH 1/1] package/proj: bump version to 9.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,45 +74,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TestLxc uses systemd as init but the recent update to systemd v254
-requires a toolchain w/ linux headers >= 4.14 to provide
-LOOP_SET_BLOCK_SIZE [1] (added in systemd v253 [2]).
+Release notes: https://github.com/OSGeo/PROJ/blob/master/NEWS
 
-Since no other toolchain that the Bootlin one is available
-switch to it.
-(ARM Arm toolchain requires BR2_ARM_CPU_HAS_NEON enabled)
+Switch package to cmake, add json-for-modern-cpp dependency.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=89e4fdecb51cf5535867026274bc97de9480ade5
-[2] https://github.com/systemd/systemd/commit/1163ddb386ef46f63942171e6eab0ca64eb818e4
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561390
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- support/testing/tests/package/test_lxc.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/proj/Config.in |  7 ++++---
+ package/proj/proj.hash |  6 +++---
+ package/proj/proj.mk   | 14 +++++++-------
+ 3 files changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
-index f66b31f3ba..5be4782e2d 100644
---- a/support/testing/tests/package/test_lxc.py
-+++ b/support/testing/tests/package/test_lxc.py
-@@ -10,6 +10,7 @@ class TestLxc(infra.basetest.BRTest):
-             BR2_cortex_a9=y
-             BR2_ARM_ENABLE_VFP=y
-             BR2_TOOLCHAIN_EXTERNAL=y
-+            BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-             BR2_LINUX_KERNEL=y
-             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.38"
+diff --git a/package/proj/Config.in b/package/proj/Config.in
+index 1952fc7d9a..d9a9918c43 100644
+--- a/package/proj/Config.in
++++ b/package/proj/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_PROJ
+ 	bool "proj"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+ 	select BR2_PACKAGE_SQLITE
+ 	help
+ 	  proj.4 is a standard UNIX filter function which converts
+@@ -14,7 +15,7 @@ config BR2_PACKAGE_PROJ
+ 
+ 	  http://proj4.org/
+ 
+-comment "proj needs a toolchain w/ C++, gcc >= 4.7, threads, wchar"
++comment "proj needs a toolchain w/ C++, gcc >= 4.9, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index 96d94e458e..054499beca 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from http://download.osgeo.org/proj/proj-8.1.1.tar.gz.md5
+-md5  f017fd7d35311b0d65b2cf0503844690  proj-8.1.1.tar.gz
++# From http://download.osgeo.org/proj/proj-9.2.1.tar.gz.md5
++md5  c8e878049ef27330ac94624e1a75b0db  proj-9.2.1.tar.gz
+ # Locally calculated
+-sha256  82f1345e5fa530c407cb1fc0752e83f8d08d2b98772941bbdc7820241f7fada2  proj-8.1.1.tar.gz
++sha256  15ebf4afa8744b9e6fccb5d571fc9f338dc3adcf99907d9e62d1af815d4971a1  proj-9.2.1.tar.gz
+ sha256  6a8f30793e877d32e3f88b972f0970a051a3b5a26cd057d3993cb51e21c43319  COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index bc924b41fb..641613a02a 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-PROJ_VERSION = 8.1.1
++PROJ_VERSION = 9.2.1
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+ PROJ_INSTALL_STAGING = YES
+-PROJ_DEPENDENCIES = host-pkgconf host-sqlite sqlite
++PROJ_DEPENDENCIES = host-pkgconf host-sqlite json-for-modern-cpp sqlite
+ 
+ PROJ_CFLAGS = $(TARGET_CFLAGS)
+ PROJ_CXXFLAGS = $(TARGET_CXXFLAGS)
+@@ -25,16 +25,16 @@ PROJ_CONF_ENV = \
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ PROJ_DEPENDENCIES += libcurl
+-PROJ_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr/bin/curl-config
++PROJ_CONF_OPTS += -DENABLE_CURL=ON
+ else
+-PROJ_CONF_OPTS += --without-curl
++PROJ_CONF_OPTS += -DENABLE_CURL=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ PROJ_DEPENDENCIES += tiff
+-PROJ_CONF_OPTS += --enable-tiff
++PROJ_CONF_OPTS += -DENABLE_TIFF=ON
+ else
+-PROJ_CONF_OPTS += --disable-tiff
++PROJ_CONF_OPTS += -DENABLE_TIFF=OFF
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
