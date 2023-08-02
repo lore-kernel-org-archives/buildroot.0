@@ -4,74 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 107FCC00528
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 11:16:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53F73C001DF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 11:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9207F611F2;
-	Wed,  2 Aug 2023 11:16:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9207F611F2
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF11B60F4A;
+	Wed,  2 Aug 2023 11:58:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF11B60F4A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vnPldtmkSBBX; Wed,  2 Aug 2023 11:16:04 +0000 (UTC)
+	with ESMTP id 0WsJDhFht7pE; Wed,  2 Aug 2023 11:58:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A155B61160;
-	Wed,  2 Aug 2023 11:16:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A155B61160
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5E90A1BF343
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:15:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC55960EEB;
+	Wed,  2 Aug 2023 11:58:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC55960EEB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E7CE41BF343
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:58:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08DCC41B80
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:15:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08DCC41B80
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0566540A5F
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:58:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0566540A5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZhcUZDMhGqo2 for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 11:15:13 +0000 (UTC)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com
- [209.85.221.47])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D0C7341966
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 11:15:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0C7341966
-Received: by mail-wr1-f47.google.com with SMTP id
- ffacd0b85a97d-31427ddd3fbso6158218f8f.0
- for <buildroot@buildroot.org>; Wed, 02 Aug 2023 04:15:12 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b8yDwnR5_Rae for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 11:58:21 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com
+ [209.85.221.49])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B64CB40A4D
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 11:58:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B64CB40A4D
+Received: by mail-wr1-f49.google.com with SMTP id
+ ffacd0b85a97d-307d20548adso5990560f8f.0
+ for <buildroot@buildroot.org>; Wed, 02 Aug 2023 04:58:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690974910; x=1691579710;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=m6w0fxDEcWIeHAicHhvjaBCR6qjjAVJ6HMiJEHAWrYM=;
- b=YlpbRKh0yXa2TN4hOphmUhLdFzesdzLADte/cVO2u7qF3kSNm6ht5mbCm26C1rsyQI
- 7AtSplIe2xlZRuzo8XgALwY5oHRm06GONxmTqZ5ucICaah2F9CPMxGkweMrhRSc9TJER
- l6wPLciQgQ1U9g4MJbW4O5iFqhzL0tXH56UH8YAwLLLVW+ulnOiIh9+ukieZsCte55t7
- PyLeiMED56PpY+V+zKVtuKvs5DS3fd9yDJ3TSAaMrBPOr4hKJnf5C9iiMEFco/mDfE2A
- P2VSav0VKtUY2yyxrKjqmaD52rqH2GXN5UfQ/0e2+LXjUHtzzX3u06jKhRF86UMVyC5G
- 2pVw==
-X-Gm-Message-State: ABy/qLYxCrZ1aQn5YNYraaj5JAxdV9dn/Ol9sD7aykvvfoSBxz+JlT+n
- M94OY3C7TDQj+7HCd9O9IGtTxNdRP/3myCRiHk0=
-X-Google-Smtp-Source: APBJJlGhaZDOfGcBIYOEXheaOeVcyHBwXC3zkNSvTcpOyM0niA8cwq+gNIse7KCFut9LWSvh19uUcA==
-X-Received: by 2002:a05:6000:1046:b0:317:5c8c:3f17 with SMTP id
- c6-20020a056000104600b003175c8c3f17mr4035971wrx.66.1690974910563; 
- Wed, 02 Aug 2023 04:15:10 -0700 (PDT)
-Received: from KORLIN44614.home ([2a02:a03f:eb68:2f00:d6c7:beba:8b4a:76a7])
+ d=1e100.net; s=20221208; t=1690977498; x=1691582298;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=i3zHFRck9PhXJ7BWohPftIC1gRApu1D7OhVGOV+GlbE=;
+ b=hxrGhgV39fIMgvFzOYAbLIxFrOSZylzwASMLLFuFBKdAwfmHrK5sZBFrILYkEvQ//X
+ zKyH0D1nKfl+V8YI5J2OeSosskMQiKebWxGpB8q5gohIchgq/SLjKEJyoF2GgSgMZ08c
+ Ea9XQ+krnWNLX3RyQl+vSjXojYoXst1rk8vG8KcIgj3+HFIvA+Wodc5msLfz6HvXpfyp
+ BR5h4El+QXkB3hUKd50UZYwernbE6IoE0GfZOLTRT6DVJh1oqR0CW8uS9rURJEjD+j43
+ dWu3hd2kNxK3JwYRJ20llEgRQH8u0YkatzwhVMn2+LhVGQhDyKEcziKAlf8YgFW5CtzC
+ UmhA==
+X-Gm-Message-State: ABy/qLbOo6cw6HBUnYvA2dKviPVDQUBfolwXW2Nro/IRPfvcJxuZXj0P
+ m6Rzg2UtjUA2xicTWBX2Zn/GsykTUOA5wY5R6WQ=
+X-Google-Smtp-Source: APBJJlGSHC59PzcquhiMNbM0gI3wEZ5QhVHf5uQkcVwlAZKiiIgb0olxhCxGBYejWcDgcZ4cpfzhYw==
+X-Received: by 2002:a5d:46ce:0:b0:306:46c4:d313 with SMTP id
+ g14-20020a5d46ce000000b0030646c4d313mr4415491wrs.28.1690977498258; 
+ Wed, 02 Aug 2023 04:58:18 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2a02:a03f:eb68:2f00:d6c7:beba:8b4a:76a7])
  by smtp.gmail.com with ESMTPSA id
- c4-20020a056000104400b003143b14848dsm18653128wrx.102.2023.08.02.04.15.10
+ c18-20020a5d4f12000000b0030647449730sm18903863wru.74.2023.08.02.04.58.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Aug 2023 04:15:10 -0700 (PDT)
+ Wed, 02 Aug 2023 04:58:17 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Aug 2023 13:14:45 +0200
-Message-Id: <20230802111447.41714-2-thomas@devoogdt.com>
+Date: Wed,  2 Aug 2023 13:58:09 +0200
+Message-Id: <20230802115811.501698-1-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230802111447.41714-1-thomas@devoogdt.com>
-References: <20230516082155.22014-1-thomas@devoogdt.com>
- <20230802111447.41714-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v6 2/4] package/webkitgtk: use the CMAKE_NINJA
- flag
+Subject: [Buildroot] [PATCH v1 1/3] package/libsoup3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,80 +80,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas@devoogdt.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Libsoup3 has a new API [1], packages using libsoup may not
+compile with libsoup3 or may crash at runtime in unexpected
+ways. So add a new package.
 
-Replaces:
+This replaces my original commit that was sent to the buildroot
+mailing list a long time ago: [2]
 
-commit 16e5c92ff5fd2b44a1126bd7d7538c68ce838213
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Thu Feb 9 18:07:05 2023 +0100
+Changes for libsoup3:
+- "0001-meson.build-set-c_std-to-gnu99.patch" is upstream now [2].
+- The "gnome" option was dropped in [3].
+- A new "libnghttp2" dependency is added since libsoup 2.99.6 (HTTP2 backend) [4].
 
-    package/webkitgtk: Build with ninja
+[1] https://libsoup.org/libsoup-3.0/ch02.html
+[2] https://patchwork.ozlabs.org/project/buildroot/patch/20220129214235.5133-2-thomas.devoogdt@gmail.com/
+[3] https://gitlab.gnome.org/GNOME/libsoup/-/commit/5c3d431bdb094c59997f2a23e31e83f815ab667c
+[4] https://gitlab.gnome.org/GNOME/libsoup/-/commit/3fcaa882c4eb29fd754cdb6dd06195632cb4b52a
+[5] https://gitlab.gnome.org/GNOME/libsoup/-/commit/1a1d29c3114ca86c673d0c0b02a492d0962dcfe8
 
-    Webkitgtk needs cmake >= 3.20 when building with the make backend since
-    webkitgtk 3.8.0.
-
-    Cmake 3.20 is above our minimal version in
-    support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
-    with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
-
-    https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
-v5: no change
-v6: rebase
----
- package/webkitgtk/webkitgtk.mk | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/libsoup3/Config.in     | 40 +++++++++++++++++++++++
+ package/libsoup3/libsoup3.hash |  4 +++
+ package/libsoup3/libsoup3.mk   | 58 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 104 insertions(+)
+ create mode 100644 package/libsoup3/Config.in
+ create mode 100644 package/libsoup3/libsoup3.hash
+ create mode 100644 package/libsoup3/libsoup3.mk
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 56277a0a0a..aa1c11f7cd 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -13,6 +13,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-APPLE \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_CPE_ID_VENDOR = webkitgtk
-+WEBKITGTK_CMAKE_NINJA = YES
- WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
-@@ -140,23 +141,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5023ecd775..700422dcfa 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2855,6 +2855,7 @@ F:	toolchain/
  
--# webkitgtk needs cmake >= 3.20 when not building with ninja, which is
--# above our minimal version in
--# support/dependencies/check-host-cmake.mk, so use the ninja backend:
--# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
--WEBKITGTK_CONF_OPTS += -GNinja
--WEBKITGTK_DEPENDENCIES += host-ninja
--
--define WEBKITGTK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
--endef
--
--define WEBKITGTK_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
--endef
--
--define WEBKITGTK_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
--endef
--
- $(eval $(cmake-package))
+ N:	Thomas Devoogdt <thomas@devoogdt.com>
+ F:	package/fluent-bit/
++F:	package/libsoup3/
+ 
+ N:	Thomas Huth <huth@tuxfamily.org>
+ F:	board/qemu/m68k-mcf5208/
+diff --git a/package/Config.in b/package/Config.in
+index 54cddc3914..e12ee34e9f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1957,6 +1957,7 @@ menu "Networking"
+ 	source "package/libshout/Config.in"
+ 	source "package/libsocketcan/Config.in"
+ 	source "package/libsoup/Config.in"
++	source "package/libsoup3/Config.in"
+ 	source "package/libsrtp/Config.in"
+ 	source "package/libstrophe/Config.in"
+ 	source "package/libteam/Config.in"
+diff --git a/package/libsoup3/Config.in b/package/libsoup3/Config.in
+new file mode 100644
+index 0000000000..8a6cbc1e67
+--- /dev/null
++++ b/package/libsoup3/Config.in
+@@ -0,0 +1,40 @@
++config BR2_PACKAGE_LIBSOUP3
++	bool "libsoup3"
++	depends on BR2_USE_WCHAR # glib2, gnutls and libpsl
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	select BR2_PACKAGE_NGHTTP2
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBPSL
++	select BR2_PACKAGE_SQLITE
++	help
++	  libsoup3 is an HTTP client/server library. It uses GObject
++	  and the GLib main loop, to integrate well with GNOME
++	  applications.
++
++	  https://wiki.gnome.org/Projects/libsoup
++
++if BR2_PACKAGE_LIBSOUP3
++
++config BR2_PACKAGE_LIBSOUP3_GNOME
++	bool "libsoup3-gnome"
++	help
++	  Build libsoup3-gnome library.
++
++config BR2_PACKAGE_LIBSOUP3_SSL
++	bool "https support"
++	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
++	select BR2_PACKAGE_GLIB_NETWORKING # runtime
++	select BR2_PACKAGE_GNUTLS # runtime
++	help
++	  Enable HTTPS (SSL) support.
++
++comment "libsoup3 https support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
++endif
++
++comment "libsoup3 needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
+new file mode 100644
+index 0000000000..01313b394b
+--- /dev/null
++++ b/package/libsoup3/libsoup3.hash
+@@ -0,0 +1,4 @@
++# From https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.2.sha256sum
++sha256  78c8fa37cb152d40ec8c4a148d6155e2f6947f3f1602a7cda3a31ad40f5ee2f3  libsoup-3.4.2.tar.xz
++# Locally calculated
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+new file mode 100644
+index 0000000000..5a25e10047
+--- /dev/null
++++ b/package/libsoup3/libsoup3.mk
+@@ -0,0 +1,58 @@
++################################################################################
++#
++# libsoup3
++#
++################################################################################
++
++LIBSOUP3_VERSION_MAJOR = 3.4
++LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).2
++LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
++LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
++LIBSOUP3_LICENSE = LGPL-2.0+
++LIBSOUP3_LICENSE_FILES = COPYING
++LIBSOUP3_CPE_ID_VENDOR = gnome
++LIBSOUP3_INSTALL_STAGING = YES
++LIBSOUP3_DEPENDENCIES = \
++	host-intltool \
++	host-libglib2 \
++	host-pkgconf \
++	libglib2 \
++	libpsl \
++	libxml2 \
++	nghttp2 \
++	sqlite \
++	$(TARGET_NLS_DEPENDENCIES)
++
++LIBSOUP3_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++
++LIBSOUP3_CONF_OPTS = \
++	-Dntlm=disabled \
++	-Dsysprof=disabled \
++	-Dtests=false \
++	-Dtls_check=false \
++	-Dvapi=disabled
++
++ifeq ($(BR2_PACKAGE_BROTLI),y)
++LIBSOUP3_CONF_OPTS += -Dbrotli=enabled
++LIBSOUP3_DEPENDENCIES += brotli
++else
++LIBSOUP3_CONF_OPTS += -Dbrotli=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBSOUP3_CONF_OPTS += -Dintrospection=enabled
++LIBSOUP3_DEPENDENCIES += gobject-introspection
++else
++LIBSOUP3_CONF_OPTS += -Dintrospection=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++LIBSOUP3_CONF_OPTS += \
++	-Dgssapi=enabled \
++	-Dkrb5_config=$(STAGING_DIR)/usr/bin/krb5-config
++LIBSOUP3_DEPENDENCIES += libkrb5
++else
++LIBSOUP3_CONF_OPTS += -Dgssapi=disabled
++endif
++
++$(eval $(meson-package))
 -- 
 2.34.1
 
