@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 346C5C001E0
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 18:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0EA2C04A94
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 19:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9FDD41508;
-	Wed,  2 Aug 2023 18:34:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9FDD41508
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C941414B9;
+	Wed,  2 Aug 2023 19:02:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C941414B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id STs7q2tmdo9y; Wed,  2 Aug 2023 18:34:02 +0000 (UTC)
+	with ESMTP id 0gmAhsTsIu0G; Wed,  2 Aug 2023 19:02:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4CA540CA8;
-	Wed,  2 Aug 2023 18:34:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4CA540CA8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4E66E1BF84C
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 18:34:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22EAB414FF;
+	Wed,  2 Aug 2023 19:02:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22EAB414FF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 584151BF84C
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:02:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6823418A0
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 18:33:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6823418A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47EF98204A
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:02:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47EF98204A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tNJEHjwEytKJ for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 18:33:17 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 67860402E0
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 18:33:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67860402E0
-Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 876C5A4C0D76
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 20:33:15 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59974)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qRGeo-0005K5-3B
- for buildroot@buildroot.org; Wed, 02 Aug 2023 20:33:15 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 12sslSZcpREi for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 19:02:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 57EA580B8E
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 19:02:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57EA580B8E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 41FF4840CD; Wed,  2 Aug 2023 19:02:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  2 Aug 2023 20:33:14 +0200
-Message-Id: <20230802183314.1240578-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1691001195;
- bh=o+7ExV6f4815zVkHhXS5IEB/Daswwsgmhf2JOke+mv4=;
- h=From:To:Subject:Date:From;
- b=p+YnAoTxSDVcJbMz7ReRjhYClSiykiRHAxNXetmOW/xA6AdknE7V2kXvewej83+yM
- MVAkdUyRYxf7ZCea63JtDdQnvOtBftssCgEeBe2u79cpye8bWwVXrO/7m6omqUg0Qs
- l+9C9jCQKqAxUMxD11uaPUv8U/cBjzWgQxT0mi6FutIVObqSXjPloQ3evbTvAJeryP
- v8rrI82DyWmbVvZASmiBd4W1JgjEId4zFOTSBxAw+oFP7h4K4b0CDsI92Zoe1KcGmL
- TeJ3s540cbESpkl23A8SlxUj9GqFTqyoYMyuE36sK63/jYIA0zcPqyx5PL/ysr4i0V
- HK7n18uZdY03Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=p+YnAoTx
-Subject: [Buildroot] [PATCH 1/1] package/gdb: fix build error for version
- arc-2020.09
+Date: Wed, 2 Aug 2023 21:01:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 59ddc3a987426a1b9ad2497038c0b52d2c11ee8b
+X-Git-Newrev: 3ceb8c97bcb6753740fa27a58b8e0dc00dbbbd19
+X-Patchwork-Hint: ignore
+Message-Id: <20230802190221.41FF4840CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: handle vconsole w/ keymap
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,143 +57,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=3ceb8c97bcb6753740fa27a58b8e0dc00dbbbd19
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+systemd v254 provide a new option "default-keymap" to handle vconsole
+with keymap support [1]. With this change systemd now use the "us"
+keymap by default and requires keytable files and keyboard utilities
+from kbd package.
+
+The keymap support can still be disabled using -Ddefault-keymap=""
+at build time.
+
+Handle the vconsole w/ keymap support and allow to use another
+keymap than "us" by default.
+
 Fixes:
-http://autobuild.buildroot.net/results/e60/e60c9bba5395970f99e9f889bba4675ac6f004c4/
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561206 (TestInitSystemSystemdRwNetworkd)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561203 (TestInitSystemSystemdRwIfupdownDbusbrokerDbus)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561202 (TestInitSystemSystemdRwIfupdownDbusbroker)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561201 (TestInitSystemSystemdRwIfupdown)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561199 (TestInitSystemSystemdRwFull)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561197 (TestInitSystemSystemdRoNetworkd)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561194 (TestInitSystemSystemdRoIfupdownDbusbrokerDbus)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561190 (TestInitSystemSystemdRoIfupdownDbusbroker)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561189 (TestInitSystemSystemdRoIfupdown)
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561186 (TestInitSystemSystemdRoFull)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[1] https://github.com/systemd/systemd/releases/tag/v254
+[2] https://github.com/systemd/systemd-stable/commit/1cd421106893c5126e33e211cf6634e9167d1762
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998@free.fr: don't introduce inter;ediate boolean option]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...t-define-basic_string_view-to_string.patch | 114 ++++++++++++++++++
- 1 file changed, 114 insertions(+)
- create mode 100644 package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+ package/systemd/Config.in  | 9 +++++++++
+ package/systemd/systemd.mk | 4 +++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
-new file mode 100644
-index 0000000000..210ba6d609
---- /dev/null
-+++ b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
-@@ -0,0 +1,114 @@
-+From 5ac588997c3c2d032d5d5145d9245eb37354c23b Mon Sep 17 00:00:00 2001
-+From: Tom Tromey <tromey@adacore.com>
-+Date: Tue, 30 Jun 2020 07:53:03 -0600
-+Subject: [PATCH] Do not define basic_string_view::to_string
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index bea717a456..89ce62d1d2 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -563,10 +563,19 @@ config BR2_PACKAGE_SYSTEMD_UTMP
+ config BR2_PACKAGE_SYSTEMD_VCONSOLE
+ 	bool "enable vconsole tool"
+ 	default y
++	select BR2_PACKAGE_KBD if BR2_PACKAGE_SYSTEMD_VCONSOLE_DEFAULT_KEYMAP != ""
+ 	help
+ 	  systemd-vconsole-setup is an early boot service that
+ 	  configures the virtual console font and console keymap.
+ 
+ 	  https://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
+ 
++config BR2_PACKAGE_SYSTEMD_VCONSOLE_DEFAULT_KEYMAP
++	string "default keymap"
++	default "us"
++	depends on BR2_PACKAGE_SYSTEMD_VCONSOLE
++	help
++	  Default keymap for the system. Leave empty to not set a
++	  default keymap.
 +
-+gdb's copy of basic_string_view includes a to_string method.  However,
-+according to cppreference, this is not a method on the real
-+std::basic_string_view:
-+
-+https://en.cppreference.com/w/cpp/string/basic_string_view
-+
-+This difference matters because gdb_string_view.h will use the
-+standard implementation when built with a C++17 or later.  This caused
-+PR build/26183.
-+
-+This patch fixes the problem by changing the method to be a standalone
-+helper function, and then rewriting the uses.  Tested by rebuilding
-+with a version of GCC that defaults to C++17.
-+
-+(Note that the build still is not clean; and also I noticed that the
-+libstdc++ string_view forbids the use of nullptr ... I wonder if gdb
-+violates that.)
-+
-+gdb/ChangeLog
-+2020-06-30  Tom Tromey  <tromey@adacore.com>
-+
-+	PR build/26183:
-+	* ada-lang.c (ada_lookup_name_info::ada_lookup_name_info): Use
-+	gdb::to_string.
-+
-+gdbsupport/ChangeLog
-+2020-06-30  Tom Tromey  <tromey@adacore.com>
-+
-+	PR build/26183:
-+	* gdb_string_view.h (basic_string_view::to_string): Remove.
-+	(gdb::to_string): New function.
-+
-+Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=5ac588997c3c2d032d5d5145d9245eb37354c23b
-+Bug report: https://sourceware.org/bugzilla/show_bug.cgi?id=26183
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ gdb/ChangeLog                |  6 ++++++
-+ gdb/ada-lang.c               |  8 ++++----
-+ gdbsupport/ChangeLog         |  6 ++++++
-+ gdbsupport/gdb_string_view.h | 17 ++++++++++-------
-+ 4 files changed, 26 insertions(+), 11 deletions(-)
-+
-+diff --git a/gdb/ada-lang.c b/gdb/ada-lang.c
-+index 9b0c2efbfe2..98508c168bc 100644
-+--- a/gdb/ada-lang.c
-++++ b/gdb/ada-lang.c
-+@@ -13553,10 +13553,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
-+     {
-+       if (user_name.back () == '>')
-+ 	m_encoded_name
-+-	  = user_name.substr (1, user_name.size () - 2).to_string ();
-++	  = gdb::to_string (user_name.substr (1, user_name.size () - 2));
-+       else
-+ 	m_encoded_name
-+-	  = user_name.substr (1, user_name.size () - 1).to_string ();
-++	  = gdb::to_string (user_name.substr (1, user_name.size () - 1));
-+       m_encoded_p = true;
-+       m_verbatim_p = true;
-+       m_wild_match_p = false;
-+@@ -13575,10 +13575,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
-+ 	  if (encoded != NULL)
-+ 	    m_encoded_name = encoded;
-+ 	  else
-+-	    m_encoded_name = user_name.to_string ();
-++	    m_encoded_name = gdb::to_string (user_name);
-+ 	}
-+       else
-+-	m_encoded_name = user_name.to_string ();
-++	m_encoded_name = gdb::to_string (user_name);
-+ 
-+       /* Handle the 'package Standard' special case.  See description
-+ 	 of m_standard_p.  */
-+diff --git a/gdbsupport/gdb_string_view.h b/gdbsupport/gdb_string_view.h
-+index c0ae7a8a2d9..65124e67e54 100644
-+--- a/gdbsupport/gdb_string_view.h
-++++ b/gdbsupport/gdb_string_view.h
-+@@ -245,13 +245,6 @@ namespace gdb {
-+ 	  return { this->_M_str, this->_M_len };
-+ 	}
-+ 
-+-      template<typename _Allocator = std::allocator<_CharT>>
-+-	std::basic_string<_CharT, _Traits, _Allocator>
-+-	to_string(const _Allocator& __alloc = _Allocator()) const
-+-	{
-+-	  return { this->_M_str, this->_M_len, __alloc };
-+-	}
-+-
-+       size_type
-+       copy(_CharT* __str, size_type __n, size_type __pos = 0) const
-+       {
-+@@ -560,4 +553,14 @@ namespace gdb {
-+ 
-+ #endif // __cplusplus < 201703L
-+ 
-++namespace gdb {
-++
-++static inline std::string
-++to_string(const gdb::string_view &view)
-++{
-++  return { view.data (), view.size () };
-++}
-++
-++}
-++
-+ #endif /* COMMON_GDB_STRING_VIEW_H */
-+-- 
-+2.39.3
-+
--- 
-2.39.2
-
+ endif
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0aa1da3fb8..3ce0634594 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -348,7 +348,9 @@ SYSTEMD_CONF_OPTS += -Dutmp=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_VCONSOLE),y)
+-SYSTEMD_CONF_OPTS += -Dvconsole=true
++SYSTEMD_CONF_OPTS += \
++	-Dvconsole=true \
++	-Ddefault-keymap=$(call qstrip,$(BR2_PACKAGE_SYSTEMD_VCONSOLE_DEFAULT_KEYMAP))
+ else
+ SYSTEMD_CONF_OPTS += -Dvconsole=false
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
