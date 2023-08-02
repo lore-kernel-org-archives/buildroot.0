@@ -4,60 +4,117 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D6E0C001DE
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 05:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EF25C001DF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 05:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD621607A4;
-	Wed,  2 Aug 2023 05:40:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD621607A4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97A8E600C5;
+	Wed,  2 Aug 2023 05:56:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97A8E600C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ziX9S2TcXj8I; Wed,  2 Aug 2023 05:40:30 +0000 (UTC)
+	with ESMTP id 1IgCqKCM3233; Wed,  2 Aug 2023 05:56:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A78D60E5C;
-	Wed,  2 Aug 2023 05:40:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A78D60E5C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0644A6114D;
+	Wed,  2 Aug 2023 05:56:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0644A6114D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A45151BF387
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 05:40:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7C3521BF387
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 05:56:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8380404AF
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 05:40:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8380404AF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 320C24185F
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 05:56:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 320C24185F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FZz0UDfqTvHJ for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 05:40:19 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 804B54187E
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 05:40:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 804B54187E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 77810FF808
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 05:40:15 +0000 (UTC)
+ with ESMTP id 0z9OCHbvGsoI for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 05:55:59 +0000 (UTC)
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com
+ (mail-bn7nam10on20615.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e8a::615])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EF40B4008A
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 05:55:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF40B4008A
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=biAU93h1eNT4qd/WypfbZgjeBNGvTLnv/9nNjAszAAHsiRoE652AGgWJmQW0rOQMQSWtbqcb61GiZw3j3ZpZ/cF0w28mDA9FUJiDxEQif7kXGnbVMHHxclAdC+TfSB/qhIQUN/evUN2HlWCVl5XdKVdyRd8sbpPRNGAAKYrm/V5YIR6LHMm5qHqWz6tmjFCjF0m9RBiYVV7Qof/ex4t16e0TFHpjFVZWpTWYCsqo8wl0dP/+/q4QpRdcCw5I8/YIVjT1xAPGnvLfbyM0SX8KmNlESNmZ3do+U6L18oM6aMKyocC1YGq0pKgCI2U/W4M++fdfdJCmOdfkQ6gUWmL4oQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MPxLBw6BLkUw6JB/VSgllPQ5a6K4RRp+AJ8Es9MSfFs=;
+ b=SPIPoemoLJY6nJEGqCgTIqnt0lbg1ElAJbdXcaDSbW5+kppeuq2F7HbzGc1q8BP3fcviRmOv9ohrSO26/TC1WfUWO2VW/hGVYnT9ojSnuMiHL2v+sxc6t4pZOvXFqhrLhaqFlZ0hpjtK/kvQubBw5vQP0P8BgKHbxekh3ZnKYdZj0ipgMDdt6eZ2iRA4142bobua/lwXzDnOTUHcnxOjXmYJbo+gcyLHQyO0KEgH6yIODe60538FeEWb3zQITkLzL9/Fd2FAwlI1ON9yY015cYcm8dc5Wy8T80J4ZGXw2DdwFALpf+9RQervSX/WVbM7qVhI3IzCQpWHMjL0qKOFRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+Received: from CY5PR19CA0056.namprd19.prod.outlook.com (2603:10b6:930:1a::25)
+ by DM8PR12MB5494.namprd12.prod.outlook.com (2603:10b6:8:24::9) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6631.45; Wed, 2 Aug 2023 05:55:52 +0000
+Received: from CY4PEPF0000EE3D.namprd03.prod.outlook.com
+ (2603:10b6:930:1a:cafe::17) by CY5PR19CA0056.outlook.office365.com
+ (2603:10b6:930:1a::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.44 via Frontend
+ Transport; Wed, 2 Aug 2023 05:55:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000EE3D.mail.protection.outlook.com (10.167.242.17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6652.19 via Frontend Transport; Wed, 2 Aug 2023 05:55:51 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 2 Aug
+ 2023 00:55:51 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 1 Aug
+ 2023 22:55:50 -0700
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Wed, 2 Aug 2023 00:55:49 -0500
+To: <buildroot@buildroot.org>
+Date: Wed, 2 Aug 2023 06:55:46 +0100
+Message-ID: <20230802055546.360651-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Wed, 02 Aug 2023 05:40:15 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20230802054020.A8380404AF@smtp4.osuosl.org>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3D:EE_|DM8PR12MB5494:EE_
+X-MS-Office365-Filtering-Correlation-Id: fdb3b2ac-7011-46b3-4500-08db931d20b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JdD9W8cJwsbq1ns/XjytcpySMl90Xb35MU9kgMwC+8nrNkDKaWp+cvY5GpU3ut3+pWR+7tdrw205YqSZXEe1RW4qdsfU35FhWcI90YGyFui94VxHd0PJQXg4ab9cbZzwTJOjpgS92eMZmb4tUueT4pwX4EmY3EIMfNV4r5IFwibYXIMDAJcRuNuq8o7oDF6GgOhcbeQFvkRYhh7N6gt6DwbSis6okRs89CaYtgugaiGacosnXU/A638MZLKaFWMXDHdwNJaZWdGRC/UCtl9R8iIThTzOx0Mskqx61ch4LIPqG3Fsb7qrA6G/jAvA1GQEjR77AWrNTDiT4NSO5TCpu/9kTdtw0Vw2uWf9uGuHD+pkluqqYFT7lE7P7pStxt1bey+ZCKiUXVwHE8GWmLBZV3uRjpm+WhLZGXgIs0iwPRuoqYHDYavzpycUDJaZq5XDaPWiWMtdG8bOb2SM+Be0wRdJia3KO/H9psp3jXAFLLHNWp9vqZg4T+gL4ULiRQ0vtNQF61CKEA5vkJIloP85DmbdR0HKIsVATLtPK7FKVPsIhsQ45gVOuM7znqFj5hoipHXRimUZk+PGMdNdPFRX5AGZL2MmEa1on2tvicpAVxlQVdKm2ZLPVMkqlPBQ/KuUVMivNb9YLorpebwOacd3CEVc+CwB7S2XkRZdeJRfViS2qFxlDb55+BuG2vve0gzJoN3m1BsA7ytHO/KzRCUR/L93GVPbTIDrp46yVtQRm5pKYfrlV6aH0No9wSIhsPbnRXGulDBkwv8jSqvHLaO7kCNJ8CM5Se+rKBLXq3Q8qXo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(82310400008)(451199021)(46966006)(36840700001)(40470700004)(83380400001)(478600001)(54906003)(40460700003)(8936002)(8676002)(36860700001)(426003)(36756003)(2906002)(30864003)(5660300002)(41300700001)(356005)(44832011)(40480700001)(316002)(1076003)(336012)(186003)(26005)(81166007)(6666004)(86362001)(70586007)(4326008)(6916009)(70206006)(2616005)(47076005)(82740400003)(36900700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2023 05:55:51.4310 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdb3b2ac-7011-46b3-4500-08db931d20b9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE3D.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5494
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1690954815; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=3MtIVbS+cbobpqHo0VNgqkZCkFpOO9EAebYO3chs2H0=;
- b=BfMWLnVr63yl79xt6kjWahq92su6lY3S6p8TtYtIHz85wj0R75FOAdkr/5sHxQ8BJ7mCxk
- 9XScRXkfGWE0cjQzLwEIKl4oFw1Ea3HeVCARNAimSm1p7McSF/+92PkI4o16/Zi9s107bv
- o/uS84bZRDsRUYzWmdN4LfVpziAXzg3BnblaNhQByw7MW1e0L2uS7EIFAcV1Iiv13RIGYJ
- wrPD48wG3KNFJ3ZV2da6X756HY1xZWODo1WifYgY06psqyLSbUKd5+58qB5YQNGdoa8wL9
- S+IaVNIESo402Nd6E1zihEZdHLV6Nya5vHG2xxCtQEZtrq9qhxUuxtrPOHirQg==
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MPxLBw6BLkUw6JB/VSgllPQ5a6K4RRp+AJ8Es9MSfFs=;
+ b=lig3q4sIg2m1ni+xrRtc/Cyo2xHiMWvNG4NTHmaTi2gcnMXo1gkhJVkOC3/xOEYNTYrzfbcMot3/Q3a212P0tlFjyThCk8bI+oE2JSMH6ASDba5z3KmwtMgqvQS8E4EzbTfMdVgVJb9n+KwpQMhAg72kxLOmquDA/Y6VAVjsBsE=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BfMWLnVr
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-08-01
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=lig3q4sI
+Subject: [Buildroot] [PATCH v2 1/1] configs/zynqmp: bump to xilinx-v2023.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,197 +126,671 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+This patch bumps the zynqmp defconfigs to xilinx-v2023.1 which includes
+the following updates:
 
-Autobuild statistics for 2023-08-01
-===================================
+- Linux v6.1.5
+- U-Boot v2023.01
+- ATF v2.8 (including mainline buildroot patches)
+- PMUFW xilinx_v2023.1
+- Updated pm_cfg_obj.c from Vitis v2023.1
+- Removed kria u-boot patch which is included with xilinx-v2023.1
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  4  |  3  |  0  |  7  |
-  2023.05.x  |  1  |  4  |  0  |  5  |
-    master   | 52  | 55  |  0  | 107 |
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+V1->V2:
+  - adds tf-a v2.8 patches
+  - squashes zynqmp bump together since all 3 boards share the tf-a patches
+---
+ .checkpackageignore                           |  1 -
+ board/zynqmp/kria/kv260/pm_cfg_obj.c          | 69 ++-----------------
+ ...-0001-makefile-add-multi_dtb_fit-dep.patch | 32 ---------
+ ...dd-support-for-new-binutils-versions.patch |  2 +-
+ ...2-build-tools-avoid-unnecessary-link.patch |  1 +
+ board/zynqmp/zcu102/pm_cfg_obj.c              | 51 ++------------
+ board/zynqmp/zcu106/pm_cfg_obj.c              | 51 ++------------
+ configs/zynqmp_kria_kv260_defconfig           | 15 ++--
+ configs/zynqmp_zcu102_defconfig               | 13 ++--
+ configs/zynqmp_zcu106_defconfig               | 13 ++--
+ 10 files changed, 39 insertions(+), 209 deletions(-)
+ delete mode 100644 board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch
+ create mode 120000 board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
 
-Classification of failures by reason for master
------------------------------------------------
-
-             host-ccache-4.8.2 | 5 
-              open62541-v1.3.6 | 3 
-                  check-0.15.2 | 2 
-  gobject-introspection-1.76.1 | 2 
-host-gdb-arc-2020.09-releas... | 2 
-                host-go-1.20.6 | 2 
-     linux-5.10.162-cip24-rt10 | 2 
-                   linux-6.4.7 | 2 
-               linux-pam-1.5.3 | 2 
-                     pound-4.8 | 2 
-             util-linux-2.39.1 | 2 
-                xenomai-3.0.10 | 2 
-             bluez5_utils-5.68 | 1 
-                  botan-2.19.3 | 1 
-                   bullet-3.21 | 1 
-           dmraid-1.0.0.rc16-3 | 1 
-             f2fs-tools-1.16.0 | 1 
-             gnuradio-3.10.7.0 | 1 
-                   guile-3.0.9 | 1 
-         host-gcc-final-12.3.0 | 1 
-     host-python-maturin-1.1.0 | 1 
-         host-sentry-cli-2.8.0 | 1 
-                libgeos-3.12.0 | 1 
-            linux-fusion-9.0.3 | 1 
-                     lxc-5.0.2 | 1 
-                 mpg123-1.31.3 | 1 
-                  nginx-1.24.0 | 1 
-                    olsr-0.9.8 | 1 
-                   perl-5.36.1 | 1 
-            qpid-proton-0.35.0 | 1 
-                    sslh-1.22c | 1 
-               syslog-ng-4.2.0 | 1 
-                tpm2-tss-3.2.2 | 1 
-tvheadend-fe47ecb5504a521fe... | 1 
-                       unknown | 1 
-               valgrind-3.21.0 | 1 
-                  zeromq-4.3.4 | 1 
-                 zlib-ng-2.1.3 | 1 
-               zxing-cpp-2.1.0 | 1 
-
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sh4eb     |       bluez5_utils-5.68        | NOK | http://autobuild.buildroot.net/results/1627d3c9209186f1f39c3a82191afb2fef8db755 |     
-    arm      |          botan-2.19.3          | NOK | http://autobuild.buildroot.net/results/5906f53e8dab00a0e5358953ffe85395081c2701 | ORPH
-    or1k     |          bullet-3.21           | NOK | http://autobuild.buildroot.net/results/e25ef00ea9961f37fbe0a99c8ac8271b5595178b |     
-    m68k     |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/0dce320809bbba0438afd03e79c898d737f81f6a | ORPH
-  riscv64    |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/8d9376bb0f8a620a9939d7ffcc90a13d6d27acce | ORPH
- microblaze  |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/29f841a0ddaf4c50bc7432e7c899140f10d95be0 | ORPH
-  powerpc    |       f2fs-tools-1.16.0        | NOK | http://autobuild.buildroot.net/results/71c8b688c20171c36bb21d4026e80cb7c60880d6 |     
-   x86_64    |       gnuradio-3.10.7.0        | NOK | http://autobuild.buildroot.net/results/f33d4dd5633dd0ab770716805924417ca08db21b |     
-   x86_64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/a7081a2eaf913d4b80c17823b666082801c65d16 | ORPH
-   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/77f76d6605c7b4c60d4996f7191ccddb63203463 | ORPH
-powerpc64le  |          guile-3.0.9           | NOK | http://autobuild.buildroot.net/results/e6f31cf9a7a0174188b9be3850254c3ad6ebd26e |     
-    mips     |       host-ccache-4.8.2        | NOK | http://autobuild.buildroot.net/results/2db9afebcf22e5a05fc491bf75b0793ffe2479ab | ORPH
- aarch64_be  |       host-ccache-4.8.2        | NOK | http://autobuild.buildroot.net/results/36ff0c4bf4844d634830ae6da8ea1038f700ef70 | ORPH
-    arc      |       host-ccache-4.8.2        | NOK | http://autobuild.buildroot.net/results/a15d020a8f06cb8ad2d4aedab8b18db45970f74b | ORPH
-   s390x     |       host-ccache-4.8.2        | NOK | http://autobuild.buildroot.net/results/f50cb469dd5d199573f09f7e9178b3f6cd8d383d | ORPH
-  mips64el   |       host-ccache-4.8.2        | NOK | http://autobuild.buildroot.net/results/cd341365d1c429bfca505a742e86b3090897db23 | ORPH
-microblazeel |     host-gcc-final-12.3.0      | NOK | http://autobuild.buildroot.net/results/f2ca977355b8f5c0fddb75ab28f485793d425b7a |     
-   arceb     | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/e60c9bba5395970f99e9f889bba4675ac6f004c4 | ORPH
-    arc      | host-gdb-arc-2020.09-releas... | NOK | http://autobuild.buildroot.net/results/77807555de23e4800df6f856b95d1089eb481632 | ORPH
-   mips64    |         host-go-1.20.6         | NOK | http://autobuild.buildroot.net/results/10c5caba0196f050dfb1b2f3e56c82a32937b990 |     
-  aarch64    |         host-go-1.20.6         | NOK | http://autobuild.buildroot.net/results/c0d8e6ed6d16e4c1e8f0e8a5388aa8fe1f1a9fb3 |     
-powerpc64le  |   host-python-maturin-1.1.0    | NOK | http://autobuild.buildroot.net/results/f121c3d54d82e9cc915ff9e987d4300807e48073 |     
-  mips64el   |     host-sentry-cli-2.8.0      | NOK | http://autobuild.buildroot.net/results/8dcdf3303fb1e68fcde43f14d2f3c01d4b21ae76 |     
-    or1k     |         libgeos-3.12.0         | NOK | http://autobuild.buildroot.net/results/62ff987b5aade5013faa7360048d03288631281d |     
-powerpc64le  |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/a62e48a0e05b9fd9c2b7583758ea45c68afb5efd | ORPH
-    mips     |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/72d030d4024429fd9af6c0ee0db588e2c7fb2432 | ORPH
-   mips64    |          linux-6.4.7           | NOK | http://autobuild.buildroot.net/results/af182c5de052dcc861d171efd0cd1d374a6692a4 | ORPH
-   mips64    |          linux-6.4.7           | NOK | http://autobuild.buildroot.net/results/eaccff642afbaad8770c4f07b29ea43f882fc8b2 | ORPH
-powerpc64le  |       linux-fusion-9.0.3       | NOK | http://autobuild.buildroot.net/results/d992ce4998bb488a9606a17ec81caa14b0e9c471 | ORPH
-   sparc     |        linux-pam-1.5.3         | NOK | http://autobuild.buildroot.net/results/197e8514a8e0061ba3eefd7225bef1beb4c3421d | ORPH
-   xtensa    |        linux-pam-1.5.3         | NOK | http://autobuild.buildroot.net/results/e555d1c8e7bbcc224a88eb5c222b11290fe80a14 | ORPH
- aarch64_be  |           lxc-5.0.2            | NOK | http://autobuild.buildroot.net/results/8311293f14a36d3f9bd38982d294e1d2bb96d4f9 |     
-   sh4aeb    |         mpg123-1.31.3          | NOK | http://autobuild.buildroot.net/results/cd00855b6132becefc4b29fa6a9e21dcddc54982 |     
-    arc      |          nginx-1.24.0          | NOK | http://autobuild.buildroot.net/results/fe8ee4b29d08b751d87d3df2e48eae7832090134 |     
-    i486     |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/2d88e78e7557d3c6a7ac246bea18764ca718af7a | ORPH
-powerpc64le  |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/7fbe8440d2bae56f56a55f076707fa99d083c69c | ORPH
-   armeb     |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/6586be2661a76a291390285d187db0426b5c1eac | ORPH
-   xtensa    |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/81009792a9d1e51604ac3a92554ebc5ba2eecc31 | ORPH
-    arc      |          perl-5.36.1           | NOK | http://autobuild.buildroot.net/results/e438d1d5f3643e3ab998a4714eda3f362fa312e9 |     
- powerpc64   |           pound-4.8            | NOK | http://autobuild.buildroot.net/results/711bb6189be502baf36e7f02c9c5f0c83961a2cf | ORPH
-    mips     |           pound-4.8            | NOK | http://autobuild.buildroot.net/results/8433df3388b661ba9167ccdf9cad097497251741 | ORPH
-   xtensa    |       qpid-proton-0.35.0       | NOK | http://autobuild.buildroot.net/results/636f3cb72a0832bf9c8716878fd980a73c037d86 |     
-   sh4eb     |           sslh-1.22c           | NOK | http://autobuild.buildroot.net/results/55fd2e7acddf3cf4a773dd6cca0b1a07da5b0491 |     
-    i686     |        syslog-ng-4.2.0         | NOK | http://autobuild.buildroot.net/results/cd4411d6f10ef3482389c1aadd2c4dc55f351b55 |     
-   mips64    |         tpm2-tss-3.2.2         | NOK | http://autobuild.buildroot.net/results/a334f19cface29322ec688629326f87748f065ea | ORPH
-   nios2     | tvheadend-fe47ecb5504a521fe... | NOK | http://autobuild.buildroot.net/results/858af1bbbd1fb6de791efb51e6ab4c89bbd82956 |     
-  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/d268e720c10948acc48e014fc845353d80e179d6 |     
-   sparc     |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/216a120beaa673ae822414f426ed51efe22b83e4 | ORPH
-  mips64el   |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/edf85774c9f8b7b992f0fa8cb9e73b1f00bcc713 | ORPH
-  mips64el   |        valgrind-3.21.0         | NOK | http://autobuild.buildroot.net/results/0dbac4e2693cf36a037e60d5c5338c9cc25a5170 | ORPH
-   x86_64    |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/8180749c9d1259d68d6ac7c5b0d041675f475287 |     
-   s390x     |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/afa258750cc54c0907140b1cf009337ab0434764 |     
-    mips     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/c5bd4562723d0cf47a37ce4c38796a1662fbcfdc |     
-    arm      |         zlib-ng-2.1.3          | NOK | http://autobuild.buildroot.net/results/943d9445c50313611bd0747c1f46e540cb11befb | ORPH
-microblazeel |        zxing-cpp-2.1.0         | NOK | http://autobuild.buildroot.net/results/19a51780e0661ad70a6b4608e06d5e78f4bf4822 |     
-
-
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
-
-  gobject-introspection-1.72.0 | 1 
-          linux-5.10.162-cip24 | 1 
-ulog-0389d243352255f6182326... | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
- powerpc64   |  gobject-introspection-1.72.0  | NOK | http://autobuild.buildroot.net/results/0ec67b84ce755201c86873e03878d0138553e8f0 | ORPH
-    m68k     |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/ad43f6e57f88b9c36e3448e66c515b66b3b08661 | ORPH
- aarch64_be  | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/69169d5fbfccbf9814a54018fe8e5e4a4c10a6c8 |     
-
-
-Classification of failures by reason for 2023.05.x
---------------------------------------------------
-
-          linux-5.10.162-cip24 | 1 
-     linux-5.10.162-cip24-rt10 | 1 
-                  linux-6.3.12 | 1 
-       python-stack-data-0.6.2 | 1 
-
-
-Detail of failures for 2023.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  powerpc    |      linux-5.10.162-cip24      | NOK | http://autobuild.buildroot.net/results/25903b061a02476c8c3c0dc3443d4f04e9ae8f95 | ORPH
-    arc      |   linux-5.10.162-cip24-rt10    | NOK | http://autobuild.buildroot.net/results/eee7908e73cd447342b728431d44bdea462ef95f | ORPH
-   mips64    |          linux-6.3.12          | NOK | http://autobuild.buildroot.net/results/3a95fd110525d56a90f7ecf6095e7a4afa189a97 | ORPH
-   s390x     |    python-stack-data-0.6.2     | NOK | http://autobuild.buildroot.net/results/d4a9442d058c3367debabbe3cac92f7b74f7743e |     
-
-
-Gitlab CI results for 2023-08-01
-================================
-
-Detail of runtime-test failures for master
-------------------------------------------
-
-             runtime-test |                        link to the job                        | orph?
---------------------------+---------------------------------------------------------------+------
-        TestDockerCompose | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561231  | ORPH 
-...nitSystemSystemdRoFull | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561186  | ORPH 
-...ystemSystemdRoIfupdown | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561189  | ORPH 
-...mdRoIfupdownDbusbroker | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561190  | ORPH 
-...IfupdownDbusbrokerDbus | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561194  | ORPH 
-...ystemSystemdRoNetworkd | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561197  | ORPH 
-...nitSystemSystemdRwFull | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561199  | ORPH 
-...ystemSystemdRwIfupdown | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561201  | ORPH 
-...mdRwIfupdownDbusbroker | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561202  | ORPH 
-...IfupdownDbusbrokerDbus | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561203  | ORPH 
-...ystemSystemdRwNetworkd | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561206  | ORPH 
-                 TestLuvi | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561386  | ORPH 
-                  TestLxc | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561390  | ORPH 
-           TestNoTimezone | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561117  | ORPH 
-        TestPolkitSystemd | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561464  | ORPH 
-       TestPythonPy3Boto3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561481  | ORPH 
-    TestPythonPy3Botocore | https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561482  | ORPH 
-
-
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f846cc7a87..c44bc1d8d0 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -101,7 +101,6 @@ board/udoo/common/post-build.sh Shellcheck
+ board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch Upstream
+ board/versal/post-build.sh Shellcheck
+ board/versal/post-image.sh Shellcheck TrailingSpace
+-board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch ApplyOrder Upstream
+ boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch Upstream
+ boot/at91bootstrap/0001-eabi-fix.patch Upstream
+ boot/at91bootstrap/0002-gcc-4.6.x-ldscript-fix.patch Upstream
+diff --git a/board/zynqmp/kria/kv260/pm_cfg_obj.c b/board/zynqmp/kria/kv260/pm_cfg_obj.c
+index 019df6e237..fc6c4024c6 100644
+--- a/board/zynqmp/kria/kv260/pm_cfg_obj.c
++++ b/board/zynqmp/kria/kv260/pm_cfg_obj.c
+@@ -30,6 +30,9 @@
+ 
+ #define SUSPEND_TIMEOUT	0xFFFFFFFFU
+ 
++#define PM_CONFIG_OBJECT_TYPE_BASE	0x1U
++
++
+ #define PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK    0x00000001
+ #define PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK    0x00000100
+ #define PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK    0x00000200
+@@ -51,7 +54,7 @@ __root const u32 XPm_ConfigObject[] =
+ 	/* HEADER */
+ 	2,	/* Number of remaining words in the header */
+ 	8,	/* Number of sections included in config object */
+-	1U,	/* Type of config object as base */
++	PM_CONFIG_OBJECT_TYPE_BASE,	/* Type of config object as base */
+ 	/**********************************************************************/
+ 	/* MASTER SECTION */
+ 	PM_CONFIG_MASTER_SECTION_ID, /* Master SectionID */
+@@ -81,7 +84,7 @@ __root const u32 XPm_ConfigObject[] =
+ 
+ 
+ 	PM_CONFIG_SLAVE_SECTION_ID,	/* Section ID */
+-	49,				/* Number of slaves */
++	34,				/* Number of slaves */
+ 
+ 	NODE_OCM_BANK_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+@@ -131,10 +134,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_USB_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_TTC_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -151,54 +150,22 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_SATA,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_ETH_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_ETH_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_ETH_2,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_ETH_3,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_UART_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_UART_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_SPI_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_SPI_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_I2C_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_I2C_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_SD_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_SD_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -215,10 +182,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_NAND,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_QSPI,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -227,14 +190,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_CAN_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_CAN_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_EXTERN,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -259,22 +214,10 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_PCIE,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_PCAP,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_RTC,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_VCU,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_PL,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -545,8 +488,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	/**********************************************************************/
+ 	/* GPO SECTION */
+ 	PM_CONFIG_GPO_SECTION_ID,		/* GPO Section ID */
+-	PM_CONFIG_GPO1_BIT_2_MASK |
+-	PM_CONFIG_GPO1_MIO_PIN_34_MAP |
+ 	PM_CONFIG_GPO1_MIO_PIN_35_MAP |
+ 	0,					/* State of GPO pins */
+ };
+diff --git a/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch b/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch
+deleted file mode 100644
+index ddc04cacac..0000000000
+--- a/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 8b181bf582c17cf709a62cf499f9709c94f49d33 Mon Sep 17 00:00:00 2001
+-From: Neal Frager <neal.frager@amd.com>
+-Date: Wed, 21 Dec 2022 07:51:42 +0000
+-Subject: [PATCH v1 1/1] makefile: add multi_dtb_fit dep
+-
+-With certain gcc compilers, the u-boot.itb is built immediately after dtb
+-generation.  If CONFIG_MULTI_DTB_FIT is used, it is possible that the
+-fit-dtb.blob is not finished in time.
+-
+-This patch adds a necessary dependency to guarantee that the fit-dtb.blob
+-is built before attempting to build the u-boot.itb.
+-
+-Signed-off-by: Neal Frager <neal.frager@amd.com>
+----
+- Makefile | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/Makefile b/Makefile
+-index b96e2ffa15..682a5d94fd 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -1425,6 +1425,7 @@ MKIMAGEFLAGS_u-boot.itb += -B 0x8
+- ifdef U_BOOT_ITS
+- u-boot.itb: u-boot-nodtb.bin \
+- 		$(if $(CONFIG_OF_SEPARATE)$(CONFIG_OF_EMBED)$(CONFIG_SANDBOX),dts/dt.dtb) \
+-+		$(if $(CONFIG_MULTI_DTB_FIT),$(FINAL_DTB_CONTAINER)) \
+- 		$(U_BOOT_ITS) FORCE
+- 	$(call if_changed,mkfitimage)
+- 	$(BOARD_SIZE_CHECK)
+--- 
+-2.17.1
+-
+diff --git a/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch b/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
+index 695cc80b94..8ad996914b 120000
+--- a/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
++++ b/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
+@@ -1 +1 @@
+-../../../../boot/arm-trusted-firmware/v2.6/0001-feat-build-add-support-for-new-binutils-versions.patch
+\ No newline at end of file
++../../../../boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch
+\ No newline at end of file
+diff --git a/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch b/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
+new file mode 120000
+index 0000000000..fecdee5449
+--- /dev/null
++++ b/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
+@@ -0,0 +1 @@
++../../../../boot/arm-trusted-firmware/v2.8/0002-build-tools-avoid-unnecessary-link.patch
+\ No newline at end of file
+diff --git a/board/zynqmp/zcu102/pm_cfg_obj.c b/board/zynqmp/zcu102/pm_cfg_obj.c
+index 68557c4cb4..04bfb16e35 100644
+--- a/board/zynqmp/zcu102/pm_cfg_obj.c
++++ b/board/zynqmp/zcu102/pm_cfg_obj.c
+@@ -30,6 +30,9 @@
+ 
+ #define SUSPEND_TIMEOUT	0xFFFFFFFFU
+ 
++#define PM_CONFIG_OBJECT_TYPE_BASE	0x1U
++
++
+ #define PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK    0x00000001
+ #define PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK    0x00000100
+ #define PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK    0x00000200
+@@ -51,7 +54,7 @@ __root const u32 XPm_ConfigObject[] =
+ 	/* HEADER */
+ 	2,	/* Number of remaining words in the header */
+ 	8,	/* Number of sections included in config object */
+-	1U,	/* Type of config object as base */
++	PM_CONFIG_OBJECT_TYPE_BASE,	/* Type of config object as base */
+ 	/**********************************************************************/
+ 	/* MASTER SECTION */
+ 	PM_CONFIG_MASTER_SECTION_ID, /* Master SectionID */
+@@ -81,7 +84,7 @@ __root const u32 XPm_ConfigObject[] =
+ 
+ 
+ 	PM_CONFIG_SLAVE_SECTION_ID,	/* Section ID */
+-	49,				/* Number of slaves */
++	38,				/* Number of slaves */
+ 
+ 	NODE_OCM_BANK_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+@@ -131,10 +134,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_USB_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_TTC_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -155,18 +154,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_ETH_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_ETH_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_ETH_2,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_ETH_3,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -179,14 +166,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_SPI_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_SPI_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_I2C_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -195,10 +174,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_SD_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_SD_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -215,10 +190,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_NAND,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_QSPI,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -227,10 +198,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_CAN_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_CAN_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -263,18 +230,10 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_PCAP,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_RTC,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_VCU,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_PL,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+diff --git a/board/zynqmp/zcu106/pm_cfg_obj.c b/board/zynqmp/zcu106/pm_cfg_obj.c
+index 6d15d510e9..54a1afa902 100644
+--- a/board/zynqmp/zcu106/pm_cfg_obj.c
++++ b/board/zynqmp/zcu106/pm_cfg_obj.c
+@@ -30,6 +30,9 @@
+ 
+ #define SUSPEND_TIMEOUT	0xFFFFFFFFU
+ 
++#define PM_CONFIG_OBJECT_TYPE_BASE	0x1U
++
++
+ #define PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK    0x00000001
+ #define PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK    0x00000100
+ #define PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK    0x00000200
+@@ -51,7 +54,7 @@ __root const u32 XPm_ConfigObject[] =
+ 	/* HEADER */
+ 	2,	/* Number of remaining words in the header */
+ 	8,	/* Number of sections included in config object */
+-	1U,	/* Type of config object as base */
++	PM_CONFIG_OBJECT_TYPE_BASE,	/* Type of config object as base */
+ 	/**********************************************************************/
+ 	/* MASTER SECTION */
+ 	PM_CONFIG_MASTER_SECTION_ID, /* Master SectionID */
+@@ -81,7 +84,7 @@ __root const u32 XPm_ConfigObject[] =
+ 
+ 
+ 	PM_CONFIG_SLAVE_SECTION_ID,	/* Section ID */
+-	49,				/* Number of slaves */
++	38,				/* Number of slaves */
+ 
+ 	NODE_OCM_BANK_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+@@ -131,10 +134,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_USB_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_TTC_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -155,18 +154,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_ETH_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_ETH_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_ETH_2,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_ETH_3,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -179,14 +166,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_SPI_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_SPI_1,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_I2C_0,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -195,10 +174,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_SD_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_SD_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -215,10 +190,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_NAND,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_QSPI,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -227,10 +198,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_CAN_0,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_CAN_1,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+@@ -259,14 +226,6 @@ __root const u32 XPm_ConfigObject[] =
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+ 
+-	NODE_PCIE,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+-	NODE_PCAP,
+-	PM_SLAVE_FLAG_IS_SHAREABLE,
+-	0U, /* IPI Mask */
+-
+ 	NODE_RTC,
+ 	PM_SLAVE_FLAG_IS_SHAREABLE,
+ 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 8ceaa6983d..78b62a9ff8 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -1,12 +1,12 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kv260/kv260.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+@@ -15,27 +15,28 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/kria/uboot.fragment"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/kv260/kv260_pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/kv260-kria/pmufw.elf"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/zynqmp/patches"
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches"
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index f4789b9d88..18230cf89b 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -1,12 +1,12 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+@@ -15,21 +15,22 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/zcu102/zcu102_pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/zcu102-zynqmp/pmufw.elf"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 516f1143ce..21f41a2d8f 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -1,12 +1,12 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+@@ -15,21 +15,22 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-revA"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+-BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/zcu106/zcu106_pmufw.elf"
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/zcu106-zynqmp/pmufw.elf"
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
 -- 
-http://autobuild.buildroot.net
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
