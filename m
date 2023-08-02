@@ -1,70 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30F3DC001DF
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 19:11:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53AC3C001DF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 19:25:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B971140111;
-	Wed,  2 Aug 2023 19:11:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B971140111
+	by smtp4.osuosl.org (Postfix) with ESMTP id C238341D73;
+	Wed,  2 Aug 2023 19:25:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C238341D73
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZxdMwRmB5fCd; Wed,  2 Aug 2023 19:11:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id jPbiZOoUVDBg; Wed,  2 Aug 2023 19:25:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD5D04052E;
-	Wed,  2 Aug 2023 19:11:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD5D04052E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2AD541BF86B
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:11:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 997DD41C49;
+	Wed,  2 Aug 2023 19:25:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 997DD41C49
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 50AE81BF2F5
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:25:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 696F36121B
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:10:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 696F36121B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37F1C80C00
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 19:25:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37F1C80C00
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NHrq69_tdKaq for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 19:10:45 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 003686124D
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 19:10:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 003686124D
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:79c1:a9ed:b3cf:6f2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 249792003D6;
- Wed,  2 Aug 2023 21:10:39 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 02 Aug 2023 21:10:38 +0200
-Date: Wed, 2 Aug 2023 21:10:38 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230802191038.GG421096@scaer>
-References: <20230802120201.382284-1-romain.naour@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230802120201.382284-1-romain.naour@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691003442;
- bh=GPFtsNMLHFHW09wUN/9Y/E4I4Zx1eOgkL4rlW2jJGcY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=PkRod3zf/2PW3kWHa/BXRPwOwU+3X8qXNXxt3MJ4vceOH6FPQcv9jpCULTlauf/b0
- DqRBpqeOS8r9rx9oSlLl/b7wOvFnzVTzS6fZ5iQQDV/cN94QbFkY7H5v5KpkqEd0DG
- C0UY5rWNB93F2AreeYSjiugot7tto4FwHI5ptfkwckfXLPWUPyvd3shu8jdR/NK44N
- 5NsbIfTuZiTTzMMpUY0Q/W447cYDJyo3U0t0DWectUEC7ClOPNoXak6E4jGBV2OX6v
- coSQdvmZVk7HNvAMIWyl7N0ouz9CqrF/GjXpeoz2bR0ERpEkZrPfxEVIsc65XvZZXX
- wReQIqb5px65Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=PkRod3zf
-Subject: Re: [Buildroot] [PATCH] package/systemd: handle vconsole w/ keymap
- support
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ENiwA35Tvm-2 for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 19:25:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80EBA8141D
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 19:25:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80EBA8141D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6A3DE8411D; Wed,  2 Aug 2023 19:25:43 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 2 Aug 2023 21:18:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3ceb8c97bcb6753740fa27a58b8e0dc00dbbbd19
+X-Git-Newrev: c26a44b5567a88ec471b7bcad150f5a6c33ae87b
+X-Patchwork-Hint: ignore
+Message-Id: <20230802192543.6A3DE8411D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: TestLxc switch to the Arm
+ Bootlin toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,123 +57,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c26a44b5567a88ec471b7bcad150f5a6c33ae87b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-08-02 14:02 +0200, Romain Naour spake thusly:
-> systemd v254 provide a new option "default-keymap" to handle vconsole
-> with keymap support [1]. With this change systemd now use the "us"
-> keymap by default and requires keytable files and keyboard utilities
-> from kbd package.
-> 
-> The keymap support can still be disabled using -Ddefault-keymap=""
-> at build time.
-> 
-> Handle the vconsole w/ keymap support and allow to use another
-> keymap than "us" by default.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561206 (TestInitSystemSystemdRwNetworkd)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561203 (TestInitSystemSystemdRwIfupdownDbusbrokerDbus)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561202 (TestInitSystemSystemdRwIfupdownDbusbroker)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561201 (TestInitSystemSystemdRwIfupdown)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561199 (TestInitSystemSystemdRwFull)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561197 (TestInitSystemSystemdRoNetworkd)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561194 (TestInitSystemSystemdRoIfupdownDbusbrokerDbus)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561190 (TestInitSystemSystemdRoIfupdownDbusbroker)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561189 (TestInitSystemSystemdRoIfupdown)
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561186 (TestInitSystemSystemdRoFull)
-> 
-> [1] https://github.com/systemd/systemd/releases/tag/v254
-> [2] https://github.com/systemd/systemd-stable/commit/1cd421106893c5126e33e211cf6634e9167d1762
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/systemd/Config.in  | 15 +++++++++++++++
->  package/systemd/systemd.mk |  6 ++++++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index bea717a456..174ee77b29 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -569,4 +569,19 @@ config BR2_PACKAGE_SYSTEMD_VCONSOLE
->  
->  	  https://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
->  
-> +config BR2_PACKAGE_SYSTEMD_VCONSOLE_KEYMAP
+TestLxc uses systemd as init but the recent update to systemd v254
+requires a toolchain w/ linux headers >= 4.14 to provide
+LOOP_SET_BLOCK_SIZE [1] (added in systemd v253 [2]).
 
-There's no need for this intermediate option, see below...
+Since no other toolchain that the Bootlin one is available
+switch to it.
+(ARM Arm toolchain requires BR2_ARM_CPU_HAS_NEON enabled)
 
-> +	bool "enable vconsole w/ keymap support"
-> +	depends on BR2_PACKAGE_SYSTEMD_VCONSOLE
-> +	select BR2_PACKAGE_KBD
-> +	help
-> +	  systemd-vconsole-setup requires keytable files and keyboard
-> +	  utilities only if at least one keymap is used by default.
-> +
-> +config BR2_PACKAGE_SYSTEMD_VCONSOLE_DEFAULT_KEYMAP
-> +	string "vconsole default keymap"
-> +	default "us"
-> +	depends on BR2_PACKAGE_SYSTEMD_VCONSOLE_KEYMAP
-> +	help
-> +	  default keymap used when populating /etc/vconsole.conf.
-> +
->  endif
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 0aa1da3fb8..f6d131c304 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -353,6 +353,12 @@ else
->  SYSTEMD_CONF_OPTS += -Dvconsole=false
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_VCONSOLE_KEYMAP),y)
-> +SYSTEMD_CONF_OPTS += -Ddefault-keymap=$(call qstrip,$(BR2_PACKAGE_SYSTEMD_VCONSOLE_DEFAULT_KEYMAP))
-> +else
-> +SYSTEMD_CONF_OPTS += -Ddefault-keymap=""
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=89e4fdecb51cf5535867026274bc97de9480ade5
+[2] https://github.com/systemd/systemd/commit/1163ddb386ef46f63942171e6eab0ca64eb818e4
 
-There's nothing that prevents BR2_PACKAGE_SYSTEMD_VCONSOLE_DEFAULT_KEYMAP
-from being empty, in which case the above sets the option to an empty
-string, exactly as is done if the boolean is not set.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561390
 
-So the boolean is superfluous, and I dropped it (I moved the select to
-kbd to the vconsole option instead, with a condition on the keymap not
-being empty).
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/testing/tests/package/test_lxc.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-This in turns simplifies the condition in the .mk file as well.
-
-Applied to master with the above changes, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
->  SYSTEMD_CONF_OPTS += -Dquotacheck=true
->  else
-> -- 
-> 2.41.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
+index f66b31f3ba..5be4782e2d 100644
+--- a/support/testing/tests/package/test_lxc.py
++++ b/support/testing/tests/package/test_lxc.py
+@@ -10,6 +10,7 @@ class TestLxc(infra.basetest.BRTest):
+             BR2_cortex_a9=y
+             BR2_ARM_ENABLE_VFP=y
+             BR2_TOOLCHAIN_EXTERNAL=y
++            BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+             BR2_LINUX_KERNEL=y
+             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+             BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.38"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
