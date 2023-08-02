@@ -1,65 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1595DC001DF
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 20:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57324C001E0
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 20:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A14D4026D;
-	Wed,  2 Aug 2023 20:03:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A14D4026D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9728D6117A;
+	Wed,  2 Aug 2023 20:32:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9728D6117A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yemaIriNjjT1; Wed,  2 Aug 2023 20:03:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id S39v8DifShJf; Wed,  2 Aug 2023 20:32:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E4BF402CE;
-	Wed,  2 Aug 2023 20:03:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E4BF402CE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A5D6B1BF42C
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 20:03:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCB4D60B6A;
+	Wed,  2 Aug 2023 20:32:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCB4D60B6A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 443D31BF8C7
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 20:32:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E14B415FE
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 20:03:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E14B415FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id A239840491
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 20:31:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A239840491
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I8uqM91whxPp for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 20:03:26 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 460A0402B3
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 20:03:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 460A0402B3
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC2FB1C0002;
- Wed,  2 Aug 2023 20:03:22 +0000 (UTC)
-Date: Wed, 2 Aug 2023 22:03:21 +0200
-To: <alexey.brodkin@synopsys.com>, ARC Maintainers <arc-buildroot@synopsys.com>
-Message-ID: <20230802220321.6af766af@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5es38liJIkYn for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 20:31:50 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 27613401E1
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 20:31:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27613401E1
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 162E3A4C00BA
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 22:31:47 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46832)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qRIVW-0000Vf-1X
+ for buildroot@buildroot.org; Wed, 02 Aug 2023 22:31:46 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Wed,  2 Aug 2023 22:31:46 +0200
+Message-Id: <20230802203146.765631-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691006603;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=tSdzXygaK1z3ABOb9/gMtMEW/Q2JSx5tpaYKCb449f4=;
- b=AdZmOu66EKz4IfuL6D/9jAx29AgM/rZRIF/oPZvcJavbvRk8P/02uabVR6vAqDkjgy/BtI
- c+XDwltyQIMDeQq77VVYif2jXFO1kOWmQBsuadmlbTutUaY+0QP6MmFIDKjTkRKgrYL4TW
- Byrl3LHdmack0/ZhOq/dcq2iAcSo5/5FON73z3c1oEWNK2A8+eX4WDEgiTujt4OU9tzG61
- oAuN3P9qecAAA5Fub6Ocz765+2umXEtj4EKmxKaPGAB9GjsY7TO7m1rnyG6p4Zc6ZLIRbu
- u8MLlhnb4eTcZSiw5XYh9O04ivupK4lm5uDkW3Zxt0d30/Bobii3MskSmZlYYg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AdZmOu66
-Subject: [Buildroot] ARC support in Buildroot
+ d=kuhls.net; 
+ s=kas202306131828; t=1691008307;
+ bh=lvDVQPsAOlb39WwMnlCGNXxN57Rr9jcivZrB0Svd9Lk=;
+ h=From:To:Subject:Date:From;
+ b=YqeDMEaUK1/3RuwMA+z/dB/62AUddWgMeDOBGyS+8MjDu1k94vwvHohGGlCXs1/GD
+ cHQAQvR1VfAUtIJyXYoc3/mvLnWqgvVi6uk3G/1cpC6xKl/7eI0jpgvkMNO7I6wceX
+ bwOOESicvqomjPQN7FxfMVMoHzt7elSqLS8eWVrF/RD/FPaJmyhmi/rokQMZaRP+e4
+ Q4MXLSflRHAxD37jYCtdBCOjHAeLtx2eXMg0b0ezUPEp/kKFkL/9wgzr5u4QnpTsOp
+ TrAqkWwplLg0oIhJsS7O+2so+ntKfN4vJ5AgZ/9k2i33pigKcLcJ5faYBZtrQCrRHQ
+ uZbPLKvMm3GlA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=YqeDMEaU
+Subject: [Buildroot] [PATCH 1/1] boot/at91dataflashboot: force arm mode
+ instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,44 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexey, Hello ARC maintainers,
+Fixes:
+http://autobuild.buildroot.net/results/68b/68bf2291201ef1882d8e8d3eca2b1a5ad731e4b0/
 
-I am reaching out to you to understand the interest that you have (or
-no longer have) with the ARC support in Buildroot.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ boot/at91dataflashboot/at91dataflashboot.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Indeed, we haven't seen any updates from ARC people in a long time. Our
-toolchain components for ARC are stuck at arc-2020.09, which is quite
-old as I've noticed you have release much newer versions of
-gcc/binutils/gdb. Also, some of that ARC support has been upstreamed I
-guess.
-
-Is there still some interest at Synopsys in maintaining the ARC support
-in Buildroot? If not, we would probably want to get rid of the support
-for this CPU architecture.
-
-Side question, is there an emulated platform that is freely available
-we could use to do runtime testing of ARC? I very quickly looked at the
-4 defconfigs we have, but none of them seem to be related to a freely
-available emulated platform. And in fact, only one of the defconfigs
-seem to have a readme.txt to indicate how to use it.
-
-Thanks in advance for your feedback!
-
-Best regards,
-
-Thomas
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index c66f27e343..cb329a90df 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -11,9 +11,14 @@ AT91DATAFLASHBOOT_SITE = ftp://www.at91.com/pub/buildroot
+ AT91DATAFLASHBOOT_INSTALL_TARGET = NO
+ AT91DATAFLASHBOOT_INSTALL_IMAGES = YES
+ 
++AT91DATAFLASHBOOT_CFLAGS = $(TARGET_CFLAGS) -fno-stack-protector
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++AT91DATAFLASHBOOT_CFLAGS += -marm
++endif
++
+ define AT91DATAFLASHBOOT_BUILD_CMDS
+ 	make -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) \
+-		CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector"
++		CFLAGS="$(AT91DATAFLASHBOOT_CFLAGS)"
+ endef
+ 
+ define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
