@@ -4,74 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F484C001DF
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 11:15:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5D64C001DF
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 11:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A156761160;
-	Wed,  2 Aug 2023 11:15:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A156761160
+	by smtp3.osuosl.org (Postfix) with ESMTP id 770B960F4A;
+	Wed,  2 Aug 2023 11:15:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 770B960F4A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e8uRo70T1ZfZ; Wed,  2 Aug 2023 11:15:39 +0000 (UTC)
+	with ESMTP id 26AhBLg1W1l5; Wed,  2 Aug 2023 11:15:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2AFF61148;
-	Wed,  2 Aug 2023 11:15:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2AFF61148
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E77C81BF343
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:15:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73D9161159;
+	Wed,  2 Aug 2023 11:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73D9161159
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 890251BF3BB
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:15:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 968DF405A1
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:15:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 968DF405A1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FA5261159
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:15:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FA5261159
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zR76cQgAOr6U for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 11:15:16 +0000 (UTC)
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com
- [209.85.221.52])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E004D40569
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 11:15:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E004D40569
-Received: by mail-wr1-f52.google.com with SMTP id
- ffacd0b85a97d-31781e15a0cso5749692f8f.3
- for <buildroot@buildroot.org>; Wed, 02 Aug 2023 04:15:15 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vJ1vVz5ryGxC for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 11:15:11 +0000 (UTC)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com
+ [209.85.221.49])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6F67160B27
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 11:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F67160B27
+Received: by mail-wr1-f49.google.com with SMTP id
+ ffacd0b85a97d-3090d3e9c92so6742267f8f.2
+ for <buildroot@buildroot.org>; Wed, 02 Aug 2023 04:15:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690974914; x=1691579714;
+ d=1e100.net; s=20221208; t=1690974909; x=1691579709;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=W+r3CQDFhZGOW9cMwIJNYSgh4/+yMReaqaXheZQoHlw=;
- b=JdmDh+VftXf+GhFA8Y4dhdKsdCSj6nWD/yOg9QRbLospzizG13S/N0ZK0EQUbb736/
- /CyyxuBME974QKsAnSHMdh2ouMA2gch92WBDOutUTJCkg/0+Px/Hlbqvcm948n1pMWU9
- hbLDZJO6K9OSi1gViD4uK67Ix7FlQHKvKEGy+WjKoOlcOkXNmPYPg6uk8lDABwFtOaSj
- EsyVSOPXAj+xXnCe40QvaJSSwMOhkMQs+CakpQpuE+HoGWrKQBnDOYHvq9H4Ysd6tXj/
- EOwc2qiYOE/8ZY9F+exPNYka2pE9K9aWln5p4mgLmCWbns4yuQqKA3z5Cwj0czIRO+vW
- LOyQ==
-X-Gm-Message-State: ABy/qLa7YhrxNENLYgEHUh7tL894apll/qcFXMBI7hjEvLHIIP+C+p7e
- 85gYXErVjbjWu4ZQHBNhR9IVhCa8M5aMLAbKP3w=
-X-Google-Smtp-Source: APBJJlH9eMD/ExyRfktFvnz7yUX2uDnpHrYlBfuqBmL6R/Q5hV8MZufXrCWRUyyJ3ne/i+V3T0nLbQ==
-X-Received: by 2002:a05:6000:12d2:b0:317:4bdc:6f34 with SMTP id
- l18-20020a05600012d200b003174bdc6f34mr4288519wrx.64.1690974913634; 
- Wed, 02 Aug 2023 04:15:13 -0700 (PDT)
+ bh=n9BjhjU5VRQ+XgiWWuaxQse6lgXl272+9wHGm5CkxmY=;
+ b=Pn6ck6nCWy96zBVzvYDwW6WVsTqQJyhVA54B+qP6b7atNbZQKNSPoqzAzxZyBXCqbT
+ //QaaQzgjt0+YnsQmhhfA7ZMecBR9jqe11LtgqOT3fyzmzBZfXv3OWetmY3tRVX2X7p4
+ rvH/w/MpcMRHeKKjfULVTnhi8/RyQHbH2pqKEn28ycWJK/8Ly4/Lmf3gIs/KEqyAvIan
+ An+O0JIp0vwALdg2rXPKtVYYdFXxf1J5Hhfb0QmsQkwD6TESjYzzuUrJS58Yt8cxUPYl
+ LAsp+cSp80D+7Gg8Mm3T35f4KntbpKCcLOu6vYX8Pwh06ON8Hatzr/YuA+MHpaSJR8tE
+ 2oyw==
+X-Gm-Message-State: ABy/qLaAp/tyUkEtC3f61CHAJqDpchdE34DVHK6K2ceaYxWIUEbsh/oR
+ WdnUVXbXL6cSlBlCKscUgD1OGWKp7IsDGZEfJT4=
+X-Google-Smtp-Source: APBJJlF4x6B6nsPqd1/pGjm58ZGDwVGBwd4NcSUlYT0oJI0DxiaW6QtKGiK/67HrtTXtu4zW0P5VQQ==
+X-Received: by 2002:a5d:460f:0:b0:315:9993:1caa with SMTP id
+ t15-20020a5d460f000000b0031599931caamr2362172wrq.12.1690974908891; 
+ Wed, 02 Aug 2023 04:15:08 -0700 (PDT)
 Received: from KORLIN44614.home ([2a02:a03f:eb68:2f00:d6c7:beba:8b4a:76a7])
  by smtp.gmail.com with ESMTPSA id
- c4-20020a056000104400b003143b14848dsm18653128wrx.102.2023.08.02.04.15.13
+ c4-20020a056000104400b003143b14848dsm18653128wrx.102.2023.08.02.04.15.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Aug 2023 04:15:13 -0700 (PDT)
+ Wed, 02 Aug 2023 04:15:08 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Aug 2023 13:14:47 +0200
-Message-Id: <20230802111447.41714-4-thomas@devoogdt.com>
+Date: Wed,  2 Aug 2023 13:14:44 +0200
+Message-Id: <20230802111447.41714-1-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230802111447.41714-1-thomas@devoogdt.com>
+In-Reply-To: <20230516082155.22014-1-thomas@devoogdt.com>
 References: <20230516082155.22014-1-thomas@devoogdt.com>
- <20230802111447.41714-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v6 4/4] pkg-cmake: make ninja the default for
- all packages
+Subject: [Buildroot] [PATCH v6 1/4] pkg-cmake: add option to select the
+ Ninja generator
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,9 +83,9 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Samuel Martin <s.martin49@gmail.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
+ Samuel Martin <s.martin49@gmail.com>, John Keeping <john@metanate.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -94,43 +93,177 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-Use ninja as the default generator.
-A fun fact is that we of course have to disable ninja when building ninja.
+Cmake supports multiple generators. Ninja is a small build system with a
+focus on speed. It is mainly used with the meson build system, but also
+cmake has very good support for it. This adds optional support for the
+Ninja build system.
+
+Usage:
+<package>_CMAKE_NINJA = YES
+
+E.g. Commit 16e5c92ff5fd2b44a1126bd7d7538c68ce838213 can now be replaced by:
+WEBKITGTK_CMAKE_NINJA = YES
+
+Packages that are selecting Ninja (or overtime another generator),
+should also use the _BUILD_{ENV,OPTS} variables iso the _MAKE variables.
+
+No _INSTALL{,_STAGING,_TARGET}_OPTS used so far, so reuse as cmake install opts:
+
+    $ grep '_INSTALL_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
+    $ grep '_INSTALL_STAGING_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
+    $ grep '_INSTALL_TARGET_OPTS' $(grep -rl "cmake-package" package/*/*.mk)
+
+The _MAKE_{ENV,OPTS} are copied to _BUILD_{ENV,OPTS}, involved packages:
+
+    $ grep '_MAKE_ENV =' $(grep -rl "cmake-package" package/*/*.mk)
+
+    package/netopeer2/netopeer2.mk:NETOPEER2_MAKE_ENV = \
+    package/racehound/racehound.mk:RACEHOUND_MAKE_ENV = $(LINUX_MAKE_FLAGS)
+
+    $ grep '_MAKE_OPTS =' $(grep -rl "cmake-package" package/*/*.mk)
+
+    package/mariadb/mariadb.mk:HOST_MARIADB_MAKE_OPTS = import_executables
+    package/zeek/zeek.mk:HOST_ZEEK_MAKE_OPTS = binpac bifcl
+
+Only "musepack" seems to overwrite MAKE to enforce -j1, so replace it:
+
+    $ grep '_MAKE =' $(grep -rl "cmake-package" package/*/*.mk)
+
+    package/musepack/musepack.mk:MUSEPACK_MAKE = $(MAKE1)
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Reviewed-by: John Keeping <john@metanate.com>
 ---
-v5: add this optional commit
-v6: rebase
+v2:
+ - made generator use more generic, other generators can now easily be added if required
+v3:
+ - add _GENERATOR_PROGRAM
+ - add _GENERATOR_PARALLEL for make
+ - dropped BUILD_OPTS
+ - fix gdal.mk
+v4:
+ - restored _MAKE_ENV/_MAKE_OPTS for the Unix Makefiles case
+ - always set -j$(PARALLEL_JOBS)
+v5:
+ - reword commit slightly
+v6:
+ - rebase
 ---
- package/ninja/ninja.mk | 1 +
- package/pkg-cmake.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/musepack/musepack.mk |  2 +-
+ package/pkg-cmake.mk         | 35 +++++++++++++++++++++++------------
+ 2 files changed, 24 insertions(+), 13 deletions(-)
 
-diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-index b7bc1a4f1c..85dd2e05aa 100644
---- a/package/ninja/ninja.mk
-+++ b/package/ninja/ninja.mk
-@@ -9,6 +9,7 @@ NINJA_VERSION = $(NINJA_VERSION_MAJOR).g95dee.kitware.jobserver-1
- NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
- NINJA_LICENSE = Apache-2.0
- NINJA_LICENSE_FILES = COPYING
-+NINJA_CMAKE_NINJA = NO
+diff --git a/package/musepack/musepack.mk b/package/musepack/musepack.mk
+index fc66c684a5..d4dd08df36 100644
+--- a/package/musepack/musepack.mk
++++ b/package/musepack/musepack.mk
+@@ -9,7 +9,7 @@ MUSEPACK_SITE = http://files.musepack.net/source
+ MUSEPACK_SOURCE = musepack_src_$(MUSEPACK_VERSION).tar.gz
+ MUSEPACK_DEPENDENCIES = libcuefile libreplaygain
+ MUSEPACK_INSTALL_STAGING = YES
+-MUSEPACK_MAKE = $(MAKE1)
++MUSEPACK_BUILD_OPTS = -j1
+ MUSEPACK_LICENSE = BSD-3-Clause (*mpcdec), LGPL-2.1+ (*mpcenc)
+ MUSEPACK_LICENSE_FILES = libmpcdec/COPYING libmpcenc/quant.c
  
- define HOST_NINJA_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/ninja $(HOST_DIR)/bin/ninja
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 36ab88d3a1..dab87c81f4 100644
+index 8c375779cb..36ab88d3a1 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -52,7 +52,7 @@ endif
+@@ -51,11 +51,6 @@ endif
+ 
  define inner-cmake-package
  
- $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+-$(2)_MAKE			?= $$(MAKE)
+-$(2)_INSTALL_OPTS		?= install
+-$(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+-$(2)_INSTALL_TARGET_OPTS	?= DESTDIR=$$(TARGET_DIR) install/fast
 -
-+$(3)_CMAKE_NINJA ?= YES
+ $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
  
- ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
- $(2)_BUILDDIR			= $$($(2)_SRCDIR)
+ 
+@@ -65,6 +60,20 @@ else
+ $(2)_BUILDDIR			= $$($(2)_SRCDIR)/buildroot-build
+ endif
+ 
++ifeq ($$($(3)_CMAKE_NINJA),YES)
++$(2)_DEPENDENCIES	+= host-ninja
++$(2)_GENERATOR		= "Ninja"
++$(2)_GENERATOR_PROGRAM	= $(HOST_DIR)/bin/ninja
++else
++$(2)_GENERATOR		= "Unix Makefiles"
++$(2)_GENERATOR_PROGRAM	= $(firstword $(BR2_MAKE))
++
++# Generator specific code (make) should be avoided,
++# but for now, copy them to the new variables.
++$(2)_BUILD_ENV		?= $$($(2)_MAKE_ENV)
++$(2)_BUILD_OPTS		?= -- $$($(2)_MAKE_OPTS)
++endif
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file. And take care of the differences between host and target
+@@ -88,7 +97,8 @@ define $(2)_CONFIGURE_CMDS
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+-		-G"Unix Makefiles" \
++		-G$$($$(PKG)_GENERATOR) \
++		-DCMAKE_MAKE_PROGRAM="$$($$(PKG)_GENERATOR_PROGRAM)" \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_INSTALL_RUNSTATEDIR="/run" \
+@@ -119,7 +129,8 @@ define $(2)_CONFIGURE_CMDS
+ 	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+ 	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+ 	$$($$(PKG)_CONF_ENV) $$(BR2_CMAKE) $$($$(PKG)_SRCDIR) \
+-		-G"Unix Makefiles" \
++		-G$$($$(PKG)_GENERATOR) \
++		-DCMAKE_MAKE_PROGRAM="$$($$(PKG)_GENERATOR_PROGRAM)" \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+@@ -166,11 +177,11 @@ $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
+ ifndef $(2)_BUILD_CMDS
+ ifeq ($(4),target)
+ define $(2)_BUILD_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) -j$(PARALLEL_JOBS) $$($$(PKG)_BUILD_OPTS)
+ endef
+ else
+ define $(2)_BUILD_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --build $$($$(PKG)_BUILDDIR) -j$(PARALLEL_JOBS) $$($$(PKG)_BUILD_OPTS)
+ endef
+ endif
+ endif
+@@ -181,7 +192,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+-	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_BUILD_ENV) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_OPTS)
+ endef
+ endif
+ 
+@@ -191,7 +202,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(STAGING_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_STAGING_OPTS)
+ endef
+ endif
+ 
+@@ -201,7 +212,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_BUILD_ENV) DESTDIR=$$(TARGET_DIR) $$(BR2_CMAKE) --install $$($$(PKG)_BUILDDIR) $$($$(PKG)_INSTALL_TARGET_OPTS)
+ endef
+ endif
+ 
 -- 
 2.34.1
 
