@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49109C001DF
-	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 11:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0493C00528
+	for <buildroot@archiver.kernel.org>; Wed,  2 Aug 2023 11:58:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8609A60D75;
-	Wed,  2 Aug 2023 11:58:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8609A60D75
+	by smtp3.osuosl.org (Postfix) with ESMTP id A721D600C7;
+	Wed,  2 Aug 2023 11:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A721D600C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6dbKpjCYUXZ6; Wed,  2 Aug 2023 11:58:42 +0000 (UTC)
+	with ESMTP id JZ5QaxXqH0O7; Wed,  2 Aug 2023 11:58:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C1BC60784;
-	Wed,  2 Aug 2023 11:58:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C1BC60784
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 54E741BF98D
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:58:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E755261203;
+	Wed,  2 Aug 2023 11:58:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E755261203
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F6FE1BF3BB
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:58:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83FF94051D
- for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:58:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83FF94051D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 105E560F3B
+ for <buildroot@lists.busybox.net>; Wed,  2 Aug 2023 11:58:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 105E560F3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eoy6Nkj1Tfk1 for <buildroot@lists.busybox.net>;
- Wed,  2 Aug 2023 11:58:23 +0000 (UTC)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com
- [209.85.221.49])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8EAD04031C
- for <buildroot@buildroot.org>; Wed,  2 Aug 2023 11:58:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EAD04031C
-Received: by mail-wr1-f49.google.com with SMTP id
- ffacd0b85a97d-3128fcd58f3so6828540f8f.1
- for <buildroot@buildroot.org>; Wed, 02 Aug 2023 04:58:23 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Im0uCoZbOCbt for <buildroot@lists.busybox.net>;
+ Wed,  2 Aug 2023 11:58:25 +0000 (UTC)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com
+ [209.85.221.54])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 11C31611A4
+ for <buildroot@buildroot.org>; Wed,  2 Aug 2023 11:58:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11C31611A4
+Received: by mail-wr1-f54.google.com with SMTP id
+ ffacd0b85a97d-31297125334so554327f8f.0
+ for <buildroot@buildroot.org>; Wed, 02 Aug 2023 04:58:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1690977501; x=1691582301;
+ d=1e100.net; s=20221208; t=1690977503; x=1691582303;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=1W0prdfT1AAOdtwMiw+GQIRkBtviud4VAuWDea/QR2I=;
- b=df/R6Se67aUkHbwWTZOMjE1iwgmgRItOEtNpubdEp+92sYFhuj1ibCRGKNr2INegYV
- LLy9ZAVDiHjczpmmRyerF32SSrMLKPRIBvq7BJdbfZKTmn/3iPS8eYvpzi8hBf2ZpYAp
- k/i1/mU+Hs9/AdPE7Jd1NQnEEHK5Xzwsj/RZUBgF/Om9X+5j/dtFgfx+Nmzv7hh7GcPg
- njadOzAhPWob/f1u+rXbBD8deHBO8KvPf/iAQtFP/ZPqhJJiMelaMHJm+X+o73gWF2pM
- n5wlt3HmDIQUiv8QitnmvLl11u7gbDrBwfqncrS6ysbRgmeclPcZe5UVCN7QeEY0gC0T
- RS9g==
-X-Gm-Message-State: ABy/qLbG9Sq0oMIB0wB2qWR6E2efrdyTdRFLlqhgoyJFKW9RSOqkUSDB
- OrLQEx/GhhDpozD0ZkpP0OhFNCcZYAtImF96J4E=
-X-Google-Smtp-Source: APBJJlHmHkOVLF/S7Hrskli1GFEd33M2UX41+ufs9IH7VxRV8gozr1cnm/B7Wpt4Cskl4N4aVeMqwQ==
-X-Received: by 2002:a5d:66cf:0:b0:315:ac1b:91e with SMTP id
- k15-20020a5d66cf000000b00315ac1b091emr4884897wrw.53.1690977501301; 
- Wed, 02 Aug 2023 04:58:21 -0700 (PDT)
+ bh=h2ueEbBL4ZGfI8pWDhoXzdOI7pcKYouPH9rXJgWLOKo=;
+ b=Taf4ji/kn/+k8PNqFkJRDqR9Kgu3z448zS29RROp2+XH85L40QckTKpMHnJj9oveQy
+ RJuo1UH9n6xeg28x1OhT6WMTdGLpQjQyBeydGNU5HM+maPUUdh+cWuj/zvQkdprHY7jy
+ gaO/U17gLLC40Agzjwoi5XOSFtPvcoowOF5GspgSVSjyMw46NWBODPhpIs23onNlrS/8
+ CwEhD3u82kwMFCX5K51vikzRH2s7xys2WViQHusJXvRS/kHUJ3Rknc7kbY2PsA8ATQQM
+ S9hcrXupLFllFmcxbNyzfydLIiiV5MIoRTrKdUtfKWgmujoPBiiIhzLV0tSCh7IbaXpA
+ ngQw==
+X-Gm-Message-State: ABy/qLY4TgAMa+WV2yht2NMo/sVP5f0u1Mw2OkH9YH2+wWhRWjdzpoRd
+ hbW2znnkiXRnriodAWgSTKwK02weRQ6x5s0xJyQ=
+X-Google-Smtp-Source: APBJJlEQwg4DaQIxUzlP5s9QXtKaiR17W6Yumu+teKpCqRdEehRHpShxjas8LGPfZgrxFZBAokzvfw==
+X-Received: by 2002:adf:d84f:0:b0:317:5cfb:44c7 with SMTP id
+ k15-20020adfd84f000000b003175cfb44c7mr4552426wrl.30.1690977502586; 
+ Wed, 02 Aug 2023 04:58:22 -0700 (PDT)
 Received: from localhost.localdomain
  ([2a02:a03f:eb68:2f00:d6c7:beba:8b4a:76a7])
  by smtp.gmail.com with ESMTPSA id
- c18-20020a5d4f12000000b0030647449730sm18903863wru.74.2023.08.02.04.58.20
+ c18-20020a5d4f12000000b0030647449730sm18903863wru.74.2023.08.02.04.58.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Aug 2023 04:58:21 -0700 (PDT)
+ Wed, 02 Aug 2023 04:58:22 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Aug 2023 13:58:10 +0200
-Message-Id: <20230802115811.501698-2-thomas@devoogdt.com>
+Date: Wed,  2 Aug 2023 13:58:11 +0200
+Message-Id: <20230802115811.501698-3-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230802115811.501698-1-thomas@devoogdt.com>
 References: <20230802115811.501698-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 2/3] package/webkitgtk: add http/2 support by
+Subject: [Buildroot] [PATCH v1 3/3] package/webkitgtk: add http/2 support by
  using libsoup3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -92,73 +92,63 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Support added in 2.33.2:
-  https://webkitgtk.org/2021/06/08/webkitgtk2.33.2-released.html
+  https://wpewebkit.org/release/wpewebkit-2.33.2.html
   "HTTP/2 support when building with libsoup3."
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/webkitgtk/Config.in    | 10 +++++-----
- package/webkitgtk/webkitgtk.mk |  3 +--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/wpewebkit/Config.in    | 6 +++---
+ package/wpewebkit/wpewebkit.mk | 5 ++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 23c0bf41db..6835467c46 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -31,9 +31,9 @@ config BR2_PACKAGE_WEBKITGTK
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 7a8dc557c3..f1d38c7cad 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -36,9 +36,9 @@ config BR2_PACKAGE_WPEWEBKIT
  	depends on !BR2_BINFMT_FLAT # icu
  	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
 -	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
 +	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
 -	depends on BR2_USE_WCHAR # icu, libsoup
 +	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	select BR2_PACKAGE_CAIRO
-@@ -44,7 +44,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_JPEG
+ 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
+@@ -51,7 +51,7 @@ config BR2_PACKAGE_WPEWEBKIT
+ 	select BR2_PACKAGE_LIBEPOXY
  	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBSECRET
+ 	select BR2_PACKAGE_LIBPNG
 -	select BR2_PACKAGE_LIBSOUP
 +	select BR2_PACKAGE_LIBSOUP3
  	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBXML2
  	select BR2_PACKAGE_LIBXSLT
-@@ -82,9 +82,9 @@ comment "sandboxing support needs a toolchain w/ headers >= 3.12"
+ 	select BR2_PACKAGE_OPENJPEG
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index c13a7201e6..8b5de00f07 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -15,7 +15,7 @@ WPEWEBKIT_LICENSE_FILES = \
+ WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
+ WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
+ WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
+-	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
++	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
+ 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
  
- config BR2_PACKAGE_WEBKITGTK_HTTPS
- 	bool "HTTPS support"
--	depends on !BR2_STATIC_LIBS # libsoup -> glib-networking, gnutls
-+	depends on !BR2_STATIC_LIBS # libsoup3 -> glib-networking, gnutls
- 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
--	select BR2_PACKAGE_LIBSOUP_SSL
-+	select BR2_PACKAGE_LIBSOUP3_SSL
- 	help
- 	  Enable HTTPS protocol support.
+ WPEWEBKIT_CONF_OPTS = \
+@@ -26,8 +26,7 @@ WPEWEBKIT_CONF_OPTS = \
+ 	-DENABLE_INTROSPECTION=OFF \
+ 	-DENABLE_MINIBROWSER=OFF \
+ 	-DENABLE_WEB_RTC=OFF \
+-	-DUSE_AVIF=OFF \
+-	-DUSE_SOUP2=ON
++	-DUSE_AVIF=OFF
  
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 56277a0a0a..f578868e52 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_CPE_ID_VENDOR = webkitgtk
- WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
--	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
-+	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup3 \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
-@@ -27,7 +27,6 @@ WEBKITGTK_CONF_OPTS = \
- 	-DUSE_AVIF=OFF \
- 	-DUSE_LIBHYPHEN=OFF \
- 	-DUSE_OPENJPEG=ON \
--	-DUSE_SOUP2=ON \
- 	-DUSE_WOFF2=ON
- 
- ifeq ($(BR2_PACKAGE_WEBKITGTK_SANDBOX),y)
+ ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
+ WPEWEBKIT_CONF_OPTS += \
 -- 
 2.34.1
 
