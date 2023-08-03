@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9318EC001DB
-	for <buildroot@archiver.kernel.org>; Thu,  3 Aug 2023 19:17:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18138C00528
+	for <buildroot@archiver.kernel.org>; Thu,  3 Aug 2023 19:18:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26E0982135;
-	Thu,  3 Aug 2023 19:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26E0982135
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0F788235E;
+	Thu,  3 Aug 2023 19:18:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0F788235E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z25tx5vyhdM4; Thu,  3 Aug 2023 19:17:49 +0000 (UTC)
+	with ESMTP id KS3oIDAVQsLl; Thu,  3 Aug 2023 19:18:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2ED2F83F48;
-	Thu,  3 Aug 2023 19:17:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ED2F83F48
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5FD1E1BF2BD
- for <buildroot@lists.busybox.net>; Thu,  3 Aug 2023 19:17:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96D6F8215A;
+	Thu,  3 Aug 2023 19:18:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96D6F8215A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 12C221BF2BD
+ for <buildroot@lists.busybox.net>; Thu,  3 Aug 2023 19:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45346418C9
- for <buildroot@lists.busybox.net>; Thu,  3 Aug 2023 19:17:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45346418C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1B4741F5B
+ for <buildroot@lists.busybox.net>; Thu,  3 Aug 2023 19:18:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1B4741F5B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UvP0Hkq4trvv for <buildroot@lists.busybox.net>;
- Thu,  3 Aug 2023 19:17:05 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89F294032A
- for <buildroot@buildroot.org>; Thu,  3 Aug 2023 19:17:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89F294032A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 772AF841B8; Thu,  3 Aug 2023 19:17:05 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 3 Aug 2023 21:16:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e0ff6ad7ff6fb5c4643314b9e029f81cc3b07762
-X-Git-Newrev: 2672fb08730dc378079672b02aa4c1f713b186ab
-X-Patchwork-Hint: ignore
-Message-Id: <20230803191705.772AF841B8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] DEVELOPERS: sort entries of Neal Frager
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VoYep6ZWHo5w for <buildroot@lists.busybox.net>;
+ Thu,  3 Aug 2023 19:18:34 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D16D340297
+ for <buildroot@buildroot.org>; Thu,  3 Aug 2023 19:18:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D16D340297
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:220a:a3fc:7608:6165])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id E11ED780372;
+ Thu,  3 Aug 2023 21:18:27 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 03 Aug 2023 21:18:27 +0200
+Date: Thu, 3 Aug 2023 21:18:27 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20230803191827.GN421096@scaer>
+References: <20230803050339.1347725-1-neal.frager@amd.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230803050339.1347725-1-neal.frager@amd.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1691090311;
+ bh=xUdnwNcSkC38UVDTkj01qrIGfTpTfMOqcPvG4OL/JzM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=FxiWfRBvWMZxfgxKEbZChIPMsTPXzCU1kCki+lFSCo9NHhOr/XPO54bKYhngzu91T
+ lPU8yS21kZuCAp5hwPct1snY10Pyyyu3jJZ42nh1ANlbDChaKPSMQMWpvj9lFcJ+Xk
+ i/auQlWsrCmBzMdHjUnKmwccn+quWewM4Wn06PDAgElyFM2owY/NFVnwmrOvnlKHOG
+ jGJXqlDPix6Ik/tlQ5td8kgf5n75mCoWJ5zKzeqorcD2ZhG/vZnb1EqtoMtKckdZv/
+ Up9b35mXBsE2jc7H9pqynKtMSX/c14wJ85qELjnwmHnETwo02QpdcB8hZWuRsT7Vx+
+ 95lbQlhD5EAPg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=FxiWfRBv
+Subject: Re: [Buildroot] [PATCH v1 1/1] DEVELOPERS: sort entries of Neal
+ Frager
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,40 +76,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: thomas.petazzoni@bootlin.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2672fb08730dc378079672b02aa4c1f713b186ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Neal, All,
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-[yann.morin.1998@free.fr: sort with LC_ALL=C]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 2023-08-03 06:03 +0100, Neal Frager via buildroot spake thusly:
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  DEVELOPERS | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 5023ecd775..575f14d7f8 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2182,12 +2182,11 @@ N:	Neal Frager <neal.frager@amd.com>
+>  F:	board/versal/
+>  F:	board/zynq/
+>  F:	board/zynqmp/
+> -F:	board/zynqmp/kria/
+>  F:	configs/versal_vck190_defconfig
+> -F:	configs/zynq_zc706_defconfig
+> +F:	configs/zynqmp_kria_kv260_defconfig
+>  F:	configs/zynqmp_zcu102_defconfig
+>  F:	configs/zynqmp_zcu106_defconfig
+> -F:	configs/zynqmp_kria_kv260_defconfig
+> +F:	configs/zynq_zc706_defconfig
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5023ecd775..0f6cb75e0e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2182,12 +2182,11 @@ N:	Neal Frager <neal.frager@amd.com>
- F:	board/versal/
- F:	board/zynq/
- F:	board/zynqmp/
--F:	board/zynqmp/kria/
- F:	configs/versal_vck190_defconfig
- F:	configs/zynq_zc706_defconfig
-+F:	configs/zynqmp_kria_kv260_defconfig
- F:	configs/zynqmp_zcu102_defconfig
- F:	configs/zynqmp_zcu106_defconfig
--F:	configs/zynqmp_kria_kv260_defconfig
- F:	package/bootgen/
- F:	package/versal-firmware/
- 
+'_' sorts before 'm' in the C locale, which is the one that matters when
+we sort, so I've fixed that and applied to master, thanks!
+
+Regards,
+Yann E. MORIN.
+
+>  F:	package/bootgen/
+>  F:	package/versal-firmware/
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
