@@ -4,83 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9676AC001DF
-	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 16:03:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94692C001DE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 16:12:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F20960A97;
-	Fri,  4 Aug 2023 16:03:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F20960A97
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07F2260D58;
+	Fri,  4 Aug 2023 16:12:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07F2260D58
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z6T9omhnkgAX; Fri,  4 Aug 2023 16:03:30 +0000 (UTC)
+	with ESMTP id TzLiDXeRap-t; Fri,  4 Aug 2023 16:12:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F1C960E4D;
-	Fri,  4 Aug 2023 16:03:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F1C960E4D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2DC6E1BF271
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 16:03:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F47660EE5;
+	Fri,  4 Aug 2023 16:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F47660EE5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 11D8C1BF27A
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 16:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67EB740583
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 16:03:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67EB740583
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5FDF3835A6
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 16:11:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FDF3835A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qcVEz_nS_-Oc for <buildroot@lists.busybox.net>;
- Fri,  4 Aug 2023 16:03:05 +0000 (UTC)
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com
- [IPv6:2a00:1450:4864:20::243])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E9E13400AB
- for <buildroot@buildroot.org>; Fri,  4 Aug 2023 16:03:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9E13400AB
-Received: by mail-lj1-x243.google.com with SMTP id
- 38308e7fff4ca-2b9cdba1228so37539101fa.2
- for <buildroot@buildroot.org>; Fri, 04 Aug 2023 09:03:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691164982; x=1691769782;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DYrxWVI9x6BY7uPnyK5EXQX30L7zmAQV+TQxf9SK5GI=;
- b=XyDJa3RbOR+uJuPsk14of2O1M8fzZHE65bD+IBrkzXG5Tm1OPC0wmB+kvvuaHqoaYx
- eTothOkBCXXH3Kuvy3lcSR0AOguecJ3WNgU5Pu5rTOPpTufk49NBOa63Gn2iUGt8RaXP
- 7DK4m+W+nY0CcH3/WtPU+mCr5IPX2t5P9bYMEtRRaFkPTaatDTwgvsyss2mzwHbgXgcW
- CfKNAyG+7JASKemDpITu1uXhw1ZImWc1yMLg1d8yAPHbBCurflx2H+iwZ+zVnC6WJvl3
- rQ/9YF3n6k9OXvwuY/4tWWYu7LydX0lcxpy39HMKTisjSIr8IirlpLRSHLEhPMqr3dJA
- S3Ow==
-X-Gm-Message-State: AOJu0Yw3wCJmnEBVNKEfmh4Ewqgu414S3iwelOZMqvbZAxtfneJXK91Y
- OkV4V6+FVzlrIM5/JLn4r0SjS60EHRGj1uPPkj666mHU
-X-Google-Smtp-Source: AGHT+IHBXgOKpM1OkGOW0vTR6bW89EAUfWk5hda4spau0MXFO7/zwMy78d4LX3KuYXG11MIWNNXb/A==
-X-Received: by 2002:a05:651c:1030:b0:2b6:a05a:c5c with SMTP id
- w16-20020a05651c103000b002b6a05a0c5cmr1993940ljm.1.1691164982322; 
- Fri, 04 Aug 2023 09:03:02 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-82-52-12-96.retail.telecomitalia.it. [82.52.12.96])
- by smtp.gmail.com with ESMTPSA id
- n8-20020a1709067b4800b00992b66e54e9sm1477040ejo.214.2023.08.04.09.03.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Aug 2023 09:03:01 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VPXywWZuuTuN for <buildroot@lists.busybox.net>;
+ Fri,  4 Aug 2023 16:11:24 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8242680BC6
+ for <buildroot@buildroot.org>; Fri,  4 Aug 2023 16:11:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8242680BC6
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 02C79A4C068C;
+ Fri,  4 Aug 2023 18:11:22 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:58084)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qRxOb-0001RP-2K;
+ Fri, 04 Aug 2023 18:11:21 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  4 Aug 2023 18:02:58 +0200
-Message-Id: <20230804160258.3918831-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri,  4 Aug 2023 18:11:21 +0200
+Message-Id: <20230804161121.1033315-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1691164982; x=1691769782;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DYrxWVI9x6BY7uPnyK5EXQX30L7zmAQV+TQxf9SK5GI=;
- b=SJXaMlp2Rf1cM2EaVqEE0x+XRjxVudLGfdR1PMQNwmr/j+w1X1cy05T6JS27m5BJgq
- jwedaf5etZGAt6B8su8X8F9kJQQql6oiARXDsOUbxxF0EYDedJQZQ6lC+5Ze15nARIE4
- IRVhY8wLO6oMSqoray+9746vtw1PZrQbdUNYk=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=SJXaMlp2
-Subject: [Buildroot] [PATCH 1/1] package/arp-scan: don't install package data
+ d=kuhls.net; 
+ s=kas202306131828; t=1691165482;
+ bh=5XGR4iLqFAmZKwBDs0DvsW5YNnCtfvMMiKhrjHyR+OQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=UJiCjXFJs93ftjPV/sY9pWJfr4/oBv3ZsDnmgAoeqA7VEcgJ+fcSSXSJmCJWm5WpV
+ lnSGcqhZJdOH3eGnkSmQBSyvC4AFJt84oCwECJpNe8ak6btL+wkIzQ6QmB9//cRH2E
+ Q+0IqnyDCHRz8GgZB4tUhmBnxBhp1a0sPZPa0avpAgsLhDTVWVjIQ5f58mZr9yEOcX
+ 5pqJV+QG5sqBEO1aDHsEP8fdR2QNLIluE6SZ1KHsKEYGSZ78jOBpN+nAKdw8E9w7Nf
+ cy0VOJcuh+Ab44Pj6px7Q984DofcDjDG884lkAPF1xc5cBkBgzYfZT2N6YjD9kBWNn
+ 89iezvT9K/cbA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=UJiCjXFJ
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: needs __sync_*_8
+ intrisics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,44 +75,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch only installs the executables (less than 100kb) saving 1.4Mb
-of rootfs data.
+Fixes:
+http://autobuild.buildroot.net/results/992/99235aa2aca1afe031a088baebbd46057fe75fcd/
 
-The list of what is no longer being installed:
-- arp-fingerprint.1 -> /usr/share/man/man1
-- arp-scan.1        -> /usr/share/man/man1
-- get-oui.1         -> /usr/share/man/man1
-- ieee-oui.txt      -> /usr/share/arp-scan
-- mac-vendor.txt    -> /etc/arp-scan
-- mac-vendor.5      -> /usr/share/man/man5
+/home/autobuild/autobuild/instance-15/output-1/build/tvheadend-fe47ecb5504a521fed9c1ca9705fb0dd2bb8443a/src/atomic.h:253:
+ undefined reference to `__sync_lock_test_and_set_8'
+/home/autobuild/autobuild/instance-15/output-1/build/tvheadend-fe47ecb5504a521fed9c1ca9705fb0dd2bb8443a/src/atomic.h:81:
+ undefined reference to `__sync_fetch_and_add_8'
 
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+The build error was introduced by the latest bump of tvheadend with
+commit 67cbbbfe6e9632deacd0784bdbf51496ad76701d.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/arp-scan/arp-scan.mk | 2 ++
- 1 file changed, 2 insertions(+)
+v2: added comment about commit which introduced the build error (Thomas)
 
-diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
-index 89644be9d3ef..1c1bd34882ea 100644
---- a/package/arp-scan/arp-scan.mk
-+++ b/package/arp-scan/arp-scan.mk
-@@ -23,4 +23,6 @@ else
- ARP_SCAN_CONF_OPTS += --without-libcap
- endif
+ package/tvheadend/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index 3d21897c6d..fa06f345e9 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -1,14 +1,14 @@
+ comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_HAS_SYNC_8
  
-+ARP_SCAN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
-+
- $(eval $(autotools-package))
+ menuconfig BR2_PACKAGE_TVHEADEND
+ 	bool "tvheadend"
+ 	depends on !BR2_STATIC_LIBS # dladdr()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_HAS_SYNC_8
+ 	select BR2_PACKAGE_DTV_SCAN_TABLES
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_OPENSSL
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
