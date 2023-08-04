@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78A54C001DF
-	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 18:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BF6CC001DF
+	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 18:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DBBC40647;
-	Fri,  4 Aug 2023 18:33:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DBBC40647
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3235405F0;
+	Fri,  4 Aug 2023 18:34:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3235405F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g5JaCycAyRLo; Fri,  4 Aug 2023 18:33:49 +0000 (UTC)
+	with ESMTP id QVzAstqrLCBJ; Fri,  4 Aug 2023 18:34:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE2FE40481;
-	Fri,  4 Aug 2023 18:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE2FE40481
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 519A21BF98E
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 18:33:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 35DBE405B0;
+	Fri,  4 Aug 2023 18:34:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35DBE405B0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 740B71BF346
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 18:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF0E9400D9
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 18:33:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF0E9400D9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9174D60E1D
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 18:33:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9174D60E1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KucLmQ_TCDxD for <buildroot@lists.busybox.net>;
- Fri,  4 Aug 2023 18:33:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sirPOcbGkhfz for <buildroot@lists.busybox.net>;
+ Fri,  4 Aug 2023 18:33:37 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E4466405FD
- for <buildroot@buildroot.org>; Fri,  4 Aug 2023 18:33:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4466405FD
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B043F60E08
+ for <buildroot@buildroot.org>; Fri,  4 Aug 2023 18:33:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B043F60E08
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A46FBA4C0C85
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EE29AA4C0D76
  for <buildroot@buildroot.org>; Fri,  4 Aug 2023 20:33:21 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:45074)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qRzc1-0000kx-1H
+ (envelope-from <bernd@kuhls.net>) id 1qRzc1-0000kx-1S
  for buildroot@buildroot.org; Fri, 04 Aug 2023 20:33:21 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri,  4 Aug 2023 20:33:19 +0200
-Message-Id: <20230804183321.1766262-1-bernd@kuhls.net>
+Date: Fri,  4 Aug 2023 20:33:20 +0200
+Message-Id: <20230804183321.1766262-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230804183321.1766262-1-bernd@kuhls.net>
+References: <20230804183321.1766262-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1691174001;
- bh=amn9f0LB2PTVk/NSZ4wfJZ7yT9kElUlZn7/qkfMBKNQ=;
- h=From:To:Subject:Date:From;
- b=grBns3/wvdoL3sb6foqgqGyqmGDMd9PElbksHo2pTGLSQNzqttNNmjWY3ML85LJZD
- O5Yn07t5hsHJiq5DVRpqJIPDKZEr2O0n1JsZiHhonPNzUb6iMGql9i5JcJyRwqQw0a
- wp0giNMpL1cPO+nGsS0IMb5jYTEOimm6S5qI81mIR+SRX1E/Xl0v8W+cXeH1mrLZWb
- nDpVFMQRrYkri8KpNKYWyI6N3gAU2IMmnIFMJ339gNL5EfmqL/J3sVFZvEuvXCsbJS
- U4WVC/HmZ+g2vpczvIhrMpVVXqYyoWN5pnaP4tcYSMen4UlJCfX0Rc2xsT102pkkNd
- wrD5LJB8fbfDg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=66HgxMTqubPE5tVVp+apX8kfeMb1wSjvxlKczfYx9ws=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=f5uelnIt0/C3zfr1FNGckHyDnM4D55WiAJnh+nyb/AtoGKTdXdYr+nuG77Ou2FfPO
+ z5RnmoKGksOc8j1unzJvsvpuesg4N45pbbXFhHrlCClE0QGf+wZY4YGENPvSTOpvo7
+ T4KoSnu2Bn6WmImhAXxqQykUjT61Oy9lhpEXvQVI0BETgLK1B2esy+DoWZRBGO/QF5
+ 33QJ71hMEMZnCmLDL7F7BWwZJ9+VAn2rDDPgYIn4aU7oyNF4UEXxP/AAx+jqQjE59K
+ InwPlafjAScNc1HWRxrbtZOuEVUjoN+I7raU6FSuTc3YiR4wg7DkdvWh9/qxeYEQKP
+ aietoz3QUFEzg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=grBns3/w
-Subject: [Buildroot] [PATCH 1/3] package/stellarium: disable
- telescopecontrol plugin
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=f5uelnIt
+Subject: [Buildroot] [PATCH 2/3] package/stellarium: disable xlsx support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,48 +85,32 @@ Buildroot commit 319c56dfe3309dbf24be01fed3afff6259a2c5dd bumped
 stellarium which included this commit
 https://github.com/Stellarium/stellarium/commit/186b06fa215bd28ea03cc291dc861b552af8d99a
 
-It removed the previously bundled libindi source and lets stellarium
-download the sourcecode of the indiclient package (not present in
-buildroot) during the build:
+It removed the previously bundled QXlsx source and lets stellarium
+git-clone the sourcecode of the QXlsx package (not present in buildroot)
+during the build:
 
-$ find output/build/stellarium-23.2/ -iname *.zip
-output/build/stellarium-23.2/_deps/indiclient-subbuild/indiclient-populate-prefix/src/v1.8.5.zip
+$ find output/build/stellarium-23.2/ -iname .gitignore | grep qxl
+output/build/stellarium-23.2/_deps/qxlsxqt5-src/.gitignore
 
 which breaks offline builds.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/stellarium/stellarium.mk | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ package/stellarium/stellarium.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index 4dc5692d79..cc25f91063 100644
+index cc25f91063..7ee19c8b18 100644
 --- a/package/stellarium/stellarium.mk
 +++ b/package/stellarium/stellarium.mk
 @@ -20,6 +20,7 @@ STELLARIUM_CONF_OPTS = \
  	-DENABLE_NLS=OFF \
  	-DENABLE_QTWEBENGINE=OFF \
  	-DENABLE_QT6=OFF \
-+	-DUSE_PLUGIN_TELESCOPECONTROL=OFF \
++	-DENABLE_XLSX=OFF \
+ 	-DUSE_PLUGIN_TELESCOPECONTROL=OFF \
  	-DUSE_SYSTEM_ZLIB=ON
  
- ifeq ($(BR2_PACKAGE_QT5SCRIPT),y)
-@@ -34,13 +35,9 @@ STELLARIUM_DEPENDENCIES += qt5serialport
- ifeq ($(BR2_PACKAGE_GPSD),y)
- STELLARIUM_DEPENDENCIES += gpsd
- endif
--STELLARIUM_CONF_OPTS += \
--	-DENABLE_GPS=ON \
--	-DUSE_PLUGIN_TELESCOPECONTROL=ON
-+STELLARIUM_CONF_OPTS += -DENABLE_GPS=ON
- else
--STELLARIUM_CONF_OPTS += \
--	-DENABLE_GPS=OFF \
--	-DUSE_PLUGIN_TELESCOPECONTROL=OFF
-+STELLARIUM_CONF_OPTS += -DENABLE_GPS=OFF
- endif
- 
- $(eval $(cmake-package))
 -- 
 2.39.2
 
