@@ -1,84 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEA27C001DE
-	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 07:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD60CC001DE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 08:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 609EF4026F;
-	Fri,  4 Aug 2023 07:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 609EF4026F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id khwCR1zdpGSN; Fri,  4 Aug 2023 07:04:54 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB10240BF7;
-	Fri,  4 Aug 2023 07:04:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB10240BF7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1088F1BF2BB
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 07:04:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1E50408A1
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 07:04:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1E50408A1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BB164202D;
+	Fri,  4 Aug 2023 08:25:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BB164202D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J011mm3XLpGx for <buildroot@lists.busybox.net>;
- Fri,  4 Aug 2023 07:04:36 +0000 (UTC)
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 757864088F
- for <buildroot@buildroot.org>; Fri,  4 Aug 2023 07:04:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 757864088F
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2b9b5ee9c5aso27700421fa.1
- for <buildroot@buildroot.org>; Fri, 04 Aug 2023 00:04:36 -0700 (PDT)
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id CetCr7NmTVMt; Fri,  4 Aug 2023 08:25:21 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7C864191A;
+	Fri,  4 Aug 2023 08:25:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7C864191A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2580C1BF315
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 08:25:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BCCC183BC9
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 08:25:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCCC183BC9
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gc2r4NJRsRty for <buildroot@lists.busybox.net>;
+ Fri,  4 Aug 2023 08:25:16 +0000 (UTC)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E46D580CB3
+ for <buildroot@buildroot.org>; Fri,  4 Aug 2023 08:25:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E46D580CB3
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-3fe4ad22e36so1626715e9.2
+ for <buildroot@buildroot.org>; Fri, 04 Aug 2023 01:25:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691132674; x=1691737474;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20221208; t=1691137513; x=1691742313;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=c4dzrcelnHF9d/H3ix4753JBrKgfFPrXhujaQYZqGl8=;
- b=QSWQUQTAqmZN43Mr2LYTVK+Qs+LbDTFMalLENt5t/Aq9Tm8WqmoZX/QdE0J30TYoH7
- vHjXGxnFyRv9iluabmqhWEmN2J1k1LNHj7qenLQXB/Z/XhWYW0H/Y25olFxW0r+4RGTH
- TgQ6UwmRRntq8mdZ1/Hx990zWzIlXluXIRpHwM22wKH2kMDLJBtAk/tO11Lb04nx/hrz
- QFO0w3HYiFrf3R5Rt2pjI7P/m65D4wacVB9v7ZNF4U5MlUnXYKjFe6gIlUbHZMcHnc7R
- 4CY4s76aFomPh5Xjhrix/DLXNlDrgldDYoWe036N07SFHmTZ76zyHmf2TRG+qiZJ1b3D
- gcMQ==
-X-Gm-Message-State: AOJu0YylotLmFws3BObIRD9i6ZknObjHq1nC0OWS6doAfCuwK9vixJN2
- oHkUIpwZiKxdYiz1xO97fXdPVbo+UJhmBog5yjzoRHbig0s=
-X-Google-Smtp-Source: AGHT+IE3Jl5chNJ/Hijjl0CjMHOl51vlj5zBFXCcYJBsts6ZbwRfCurbMBTRWG6uDLbHeID+lJyD4x85frlCJdnFuig=
-X-Received: by 2002:a05:651c:106:b0:2b6:d9dd:f65f with SMTP id
- a6-20020a05651c010600b002b6d9ddf65fmr739538ljb.17.1691132673390; Fri, 04 Aug
- 2023 00:04:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230803121003.160501-1-heiko.thiery@gmail.com>
- <20230803194140.GP421096@scaer>
-In-Reply-To: <20230803194140.GP421096@scaer>
+ bh=h+FqgsiPZdvh3cDxb5o6aPIxfGhflxOsG98D1JsGxoU=;
+ b=SyTPWZBhn2lbHm0Fs2SwZ0lJVUsY2/a3WvtfQnD48ZCW85gbkGOxp9aMw6oqAOVRVN
+ aGceJJGRPPwFcI2xdrV4uAps/ekeDk/BU4+ZQD16Pt/S9Y0A1+zccdlXoKiUcYJwjOD9
+ wFw6tcgSk03m6D4Z9AZrLDkMFiUCFOE/Objg/VSitPYXf/sfuhhpTRL4o+UiWhMPIx1c
+ juBhBNIZH/4QsiM+2wKDX27Fc9v0KCUSqxTUEQ4ZBVIh8pAQC1MlPxliK6wgMXb1aMPg
+ RQJInUbHjjxixI+HxeiJUCBKapbP0g6X2HVHw5wNFxBClAmuHbu+PZLwr+3+EMJTGxz0
+ uGjg==
+X-Gm-Message-State: AOJu0YzNaMZKVXdHtHLW80eL9h6T01CBdVMtoF/HjisSc2VLgis9Z/hN
+ 9odnrwdAzN6wROWfEmXjt8NLVfGlTBw=
+X-Google-Smtp-Source: AGHT+IHHII7HAF+vMViOtm/7IfzLyzASg9mCWHP138oD7k9lAFelPXpKSwz9aNxXkFpGW9Ngj0u1iw==
+X-Received: by 2002:a05:600c:21ce:b0:3f7:3991:e12e with SMTP id
+ x14-20020a05600c21ce00b003f73991e12emr1057350wmj.1.1691137513281; 
+ Fri, 04 Aug 2023 01:25:13 -0700 (PDT)
+Received: from hthiery.kontron.local ([213.135.10.150])
+ by smtp.gmail.com with ESMTPSA id
+ h20-20020a05600c261400b003fe2ebf479fsm1739579wma.36.2023.08.04.01.25.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 04 Aug 2023 01:25:12 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 4 Aug 2023 09:04:22 +0200
-Message-ID: <CAEyMn7ba6E_iRuAPUoZ5dWfNAi3eY7wxHMZ8p=fT=OTjtZjKPA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri,  4 Aug 2023 10:24:35 +0200
+Message-Id: <20230804082434.288173-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691132674; x=1691737474;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=c4dzrcelnHF9d/H3ix4753JBrKgfFPrXhujaQYZqGl8=;
- b=Oj0/4442SORsRIGT0eYkksASmKinCkXrg3fW9+xfOALghDpSBBIVS+KtPcyf0S73b7
- UMUB2wlNK11Yu/QLiU6xWzQH8Eo1ckcXb9puC71ApldRHXtPV5Ubm2P6NU/gAqzZs/ZQ
- ZqCMJLv15d0yzUNkzM91V/mpQG90EvzfP7w2TOSEuMC/VYw/shImffyAsHR5iDFkqjP/
- VJdvebaRKNUo1SKGuaBOHC4u5nEGVNJiZZIi3U9a1FXqOAd3aYCcYAFlJwfkjFnbi+VK
- oNHj2ofnJq2QrWvficRqUnNGJ/Dq9kGEY4bQL/+NG0tVrf1x1BMFPJM6vbU9dIQttMnL
- t4YQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20221208; t=1691137513; x=1691742313;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=h+FqgsiPZdvh3cDxb5o6aPIxfGhflxOsG98D1JsGxoU=;
+ b=axpXLw1IhgfvMAIrOt8tDnLf5ujTB+XrDaBCJ99aRS9nR0sC45I5S9WnWdhoqoUL/l
+ 2QMgJ6f69KIzCi8jO5jenuuplbOj9XmoXiAMX+WR65mBktFrETl7zAAAfYwkme3hPQru
+ b1BAfpUUMlMzmYQrEiLnyvkg/DjMLJW7VlNnDtsoYgWg/QrHrnEfKgD7B9YsV32inqRF
+ skL0BEXRuhMp/dpqruv5bm/mvjVayGOfiHv56uaDODCXUpPjlugHbPdHq4X0Mky515r+
+ gWhzd38r7N5Jw1Gw1yvXaf4hYYYGwBrnkxh9c5+A5V/nxZg4IKXql7nVYLrGI2jTNFSZ
+ wrdQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Oj0/4442
-Subject: Re: [Buildroot] [RFC v2] boot/uboot: add option to install custom
+ header.a=rsa-sha256 header.s=20221208 header.b=axpXLw1I
+Subject: [Buildroot] [PATCH] boot/uboot: add option to install custom
  environment file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -91,158 +94,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Walle <michael@walle.cc>, buildroot@buildroot.org
+Cc: Heiko Thiery <heiko.thiery@gmail.com>, Michael Walle <michael@walle.cc>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+U-Boot has the capability to set the environment variables via a text file.
+The text file has to be located in the U-Boot board source directory and
+selected via the CONFIG_ENV_SOURCE_FILE option. The value of
+CONFIG_ENV_SOURCE_FILE must only contain the filename without the
+'.env' suffix.
 
-Am Do., 3. Aug. 2023 um 21:41 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
->
-> Heiko, All,
->
-> On 2023-08-03 14:10 +0200, Heiko Thiery spake thusly:
-> > U-Boot has the capability to set the environment variables via a text file.
-> > The text file has to be located in the U-Boot board source directory and
-> > selected via the CONFIG_ENV_SOURCE_FILE option. The CONFIG_ENV_SOURCE_FILE
-> > must only contain the filename without the '.env' suffix.
-> >
-> > Thus the buildroot option BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT is added
-> > that needs the information about the source of the file in the buildroot
-> > environment (BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE).
-> >
-> > Since the environment file must be located in the U-Boot board source
-> > directory. This directory is <SRC>/board/<VENDOR>/<BOARDNAME>.
-> >
-> > Thes information about vendor name and board name are available in the
-> > U-Boot .config file and can be extracted from there to determine the
-> > destination directoy.
-> >
-> > Cc: Michael Walle <michael@walle.cc>
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > ---
-> [--SNIP--]
-> > diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> > index 8b726eaa57..894a0bd3b2 100644
-> > --- a/boot/uboot/Config.in
-> > +++ b/boot/uboot/Config.in
-> > @@ -607,6 +607,22 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-> >
-> >  endif
-> >
-> > +config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
-> > +     bool "custom environment"
-> > +     help
-> > +       Provide a custom u-boot environment file. This will be
-> > +       copied to the U-Boot source path and enabled via the
-> > +       U-Boot config option CONFIG_ENV_SOURCE_FILE. The target
-> > +       path will be determined based on the U-Boot configuration.
-> > +
-> > +if BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
-> > +config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE
-> > +     string "Custom environment source file"
-> > +     help
-> > +       Path to U-Boot custom environment file.
-> > +
-> > +endif
->
-> We don't really need a boolean option to guard a single string option. I
-> know we tend to do that a lot, but I find that to be an anti-pattern.
->
-> In this case, the empty string is as good as saying "no" to the boolean
-> option, so we can just live with the sting option, and then (see below)...
->
-> (of course, if the empty string _has_ a special meaning, then we'd need
-> a boolean, but that's usually not the case in such situations).
+Thus the buildroot option BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_FILE is added
+that needs the information about the target of the file in the buildroot
+environment.
 
-Ok, makes sense. Previously I had 2 config options for source and
-destination and removed the destination in v2.
+Since the environment file must be located in the U-Boot board source
+directory <SRC>/board/<VENDOR>/<BOARDNAME>.
 
-> >  config BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
-> >       string "Custom make options"
-> >       help
-> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > index b3d26b16fe..35e26ade2d 100644
-> > --- a/boot/uboot/uboot.mk
-> > +++ b/boot/uboot/uboot.mk
-> > @@ -181,6 +181,26 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
-> >  endif
-> >  endif
-> >
-> > +#
-> > +# Prepare for custom environment
-> > +#
-> > +ifeq ($(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT),y)
-> > +ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE)),)
-> > +$(error No custom environment source file specified, check your BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE setting)
-> > +endif
->
-> ... we don't need to check the sanity of the settings: empty means don't
-> use a custom env file, set means use that file as custom env file.
+These information about vendor name and board name are available in the
+U-Boot .config file and can be extracted from there to determine the
+destination directoy.
 
-Ok
+Cc: Michael Walle <michael@walle.cc>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ boot/uboot/Config.in | 10 ++++++++++
+ boot/uboot/uboot.mk  | 19 +++++++++++++++++++
+ 2 files changed, 29 insertions(+)
 
->
-> > +define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
-> > +     cp -f $(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE) $(@D)/board/$(shell grep CONFIG_SYS_VENDOR $(@D)/.config | sed 's/.*=//' | sed 's/"//g')/$(shell grep CONFIG_SYS_BOARD $(@D)/.config | sed 's/.*=//' | sed 's/"//g')/
->
-> Please split this line into easier-to-parse construct, see below...
->
-> > +endef
-> > +UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
->
-> Is it a pre-build or a post-configure hook? I would think it should be a
-> post-configure one...
-
-I wanted to do it like the other steps, copy the files to the source
-folder before building.
-
-- UBOOT_COPY_ATF_FIRMWARE
-- UBOOT_COPY_IMX_FW_FILES
-
->
-> > +
-> > +
-> > +UBOOT_ENV_FILE_NAME=$(subst .env,,$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE))))
->
-> $(patsubst %.env,%,$(notdir $(UBOOT_CUSTOM_ENVIRONMENT_SOURCE)))
->
-> > +define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
-> > +     $(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
-> > +endef
-> > +endif
->
-> So, the .mk code would look like;
->
->     UBOOT_CUSTOM_ENVIRONMENT_SOURCE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE)))
->     UBOOT_ENV_FILE_NAME=$(patsubst %.env,%,$(notdir $(UBOOT_CUSTOM_ENVIRONMENT_SOURCE)))
->     ifneq ($(UBOOT_CUSTOM_ENVIRONMENT_SOURCE),)
->     define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
->         sys_config=$( ./utils/config --file $(@D)/.config -s CONFIG_SYS_VENDOR ); \
-
-Creating a subshell to get the output of uitls/config does not work
-that way. I have to do $(shell ...). But with that it works ;-)
-
->         sys_board=$( ./utils/config --file $(@D)/.config -s CONFIG_SYS_BOARD ); \
->         cp -f $(UBOOT_CUSTOM_ENVIRONMENT_SOURCE) $(@D)/board/$${sys_config}/$${sys_board}
->     endef
->     UBOOT_POST_CONFIGURE_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
->
->     define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
->         $(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
->     endef
->     endif  # UBOOT_CUSTOM_ENVIRONMENT_SOURCE != ""
->
-> Regards,
-> Yann E. MORIN.
-
-Many thanks for your comments! I will retest and prepare a v3.
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8b726eaa57..cbbf629ba6 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -607,6 +607,16 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+ 
+ endif
+ 
++config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_FILE
++	string "Custom environment file"
++	help
++	  Provide a custom u-boot environment file. This will be
++	  copied to the U-Boot source directory in the corresponding
++	  boardspecific folder and enabled via the U-Boot config
++	  option CONFIG_ENV_SOURCE_FILE. The target path will be
++	  determined based on the U-Boot configuration using
++	  CONFIG_SYS_VENDOR and CONFIG_SYS_BOARD.
++
+ config BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
+ 	string "Custom make options"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index b3d26b16fe..847cc7648a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -181,6 +181,24 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
+ endif
+ endif
+ 
++#
++# Prepare for custom environment
++#
++UBOOT_CUSTOM_ENVIRONMENT_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_FILE))
++UBOOT_ENV_FILE_NAME=$(patsubst %.env,%,$(notdir $(UBOOT_CUSTOM_ENVIRONMENT_FILE)))
++ifneq ($(UBOOT_CUSTOM_ENVIRONMENT_FILE),)
++define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
++	sys_vendor=$(shell BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_VENDOR); \
++	sys_board=$(shell BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_BOARD); \
++	cp -f $(UBOOT_CUSTOM_ENVIRONMENT_FILE) $(@D)/board/$${sys_vendor}/$${sys_board}
++endef
++UBOOT_POST_CONFIGURE_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
++
++define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
++	$(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
++endef
++endif  # UBOOT_CUSTOM_ENVIRONMENT_FILE != ""
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE),y)
+ UBOOT_DEPENDENCIES += optee-os
+ UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
+@@ -497,6 +515,7 @@ define UBOOT_KCONFIG_FIXUP_CMDS
+ 	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
+ 	$(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
+ 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
++	$(UBOOT_KCONFIG_CUSTOM_ENV_SOURCE)
+ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
 -- 
-Heiko
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
