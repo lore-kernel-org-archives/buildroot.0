@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD60CC001DE
-	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 08:25:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D56FAC001DB
+	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 08:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BB164202D;
-	Fri,  4 Aug 2023 08:25:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BB164202D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E7D640334;
+	Fri,  4 Aug 2023 08:52:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E7D640334
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CetCr7NmTVMt; Fri,  4 Aug 2023 08:25:21 +0000 (UTC)
+	with ESMTP id ADJfrdQbIeDG; Fri,  4 Aug 2023 08:52:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7C864191A;
-	Fri,  4 Aug 2023 08:25:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7C864191A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2580C1BF315
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 08:25:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B9BB40360;
+	Fri,  4 Aug 2023 08:52:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B9BB40360
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1772E1BF315
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 08:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BCCC183BC9
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 08:25:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCCC183BC9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9633B40541
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 08:51:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9633B40541
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gc2r4NJRsRty for <buildroot@lists.busybox.net>;
- Fri,  4 Aug 2023 08:25:16 +0000 (UTC)
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E46D580CB3
- for <buildroot@buildroot.org>; Fri,  4 Aug 2023 08:25:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E46D580CB3
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-3fe4ad22e36so1626715e9.2
- for <buildroot@buildroot.org>; Fri, 04 Aug 2023 01:25:15 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L1f2kSC7YA1q for <buildroot@lists.busybox.net>;
+ Fri,  4 Aug 2023 08:51:41 +0000 (UTC)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7C63240227
+ for <buildroot@buildroot.org>; Fri,  4 Aug 2023 08:51:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C63240227
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3177163aa97so1599546f8f.0
+ for <buildroot@buildroot.org>; Fri, 04 Aug 2023 01:51:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691137513; x=1691742313;
+ d=1e100.net; s=20221208; t=1691139099; x=1691743899;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=h+FqgsiPZdvh3cDxb5o6aPIxfGhflxOsG98D1JsGxoU=;
- b=SyTPWZBhn2lbHm0Fs2SwZ0lJVUsY2/a3WvtfQnD48ZCW85gbkGOxp9aMw6oqAOVRVN
- aGceJJGRPPwFcI2xdrV4uAps/ekeDk/BU4+ZQD16Pt/S9Y0A1+zccdlXoKiUcYJwjOD9
- wFw6tcgSk03m6D4Z9AZrLDkMFiUCFOE/Objg/VSitPYXf/sfuhhpTRL4o+UiWhMPIx1c
- juBhBNIZH/4QsiM+2wKDX27Fc9v0KCUSqxTUEQ4ZBVIh8pAQC1MlPxliK6wgMXb1aMPg
- RQJInUbHjjxixI+HxeiJUCBKapbP0g6X2HVHw5wNFxBClAmuHbu+PZLwr+3+EMJTGxz0
- uGjg==
-X-Gm-Message-State: AOJu0YzNaMZKVXdHtHLW80eL9h6T01CBdVMtoF/HjisSc2VLgis9Z/hN
- 9odnrwdAzN6wROWfEmXjt8NLVfGlTBw=
-X-Google-Smtp-Source: AGHT+IHHII7HAF+vMViOtm/7IfzLyzASg9mCWHP138oD7k9lAFelPXpKSwz9aNxXkFpGW9Ngj0u1iw==
-X-Received: by 2002:a05:600c:21ce:b0:3f7:3991:e12e with SMTP id
- x14-20020a05600c21ce00b003f73991e12emr1057350wmj.1.1691137513281; 
- Fri, 04 Aug 2023 01:25:13 -0700 (PDT)
+ bh=BVVq0A2dsg92vtBJmADG5QeraIhLQd6hAuB7BBbOt1U=;
+ b=MvxiBxqGRAws0hC8/uPLRRpuInbhXEBWe7df9SRAiIwfTECTr9cUDZYKoyKlwgk1gt
+ tAN0IRjlTjFevjlcRhosHH1xx8YQdn0r8XsmHctdtxfs1zt6Vsmjt8kErsVxLp7RDPny
+ zonvebvLQmy7PfSMMvoh+iu+8njLvJaTnJLwd1K/z9JCJbQPh8ch8g5HlIp1kPECZqQg
+ jG8Fe5VwVjmdJQO39buCrwQJb4Vg4cAmlBOikyWCdjkKIYBX/Zqy3iKw7lfKMeTMmD8p
+ bEWp61A+zZ4OulwfBhQHOpQ8FRQ4zqb5PBTq0ppbUcwEzW01VniCrPTTyRuybiMBjblK
+ RMsg==
+X-Gm-Message-State: AOJu0YwgrmA08zNNLpOs+xgslwM69zW8h8sa/wcVAjr35lu8eTJUfNp6
+ FVkuPqXR15DTnMqXBCa4N1dmiwphCt8=
+X-Google-Smtp-Source: AGHT+IEyQ5FEd/g2pTq5qk9gF2200iHK4rcuhWnm/T6HrSc5oHUHPHyuy6CMHg07HP953/ZOSpfpkA==
+X-Received: by 2002:a5d:514c:0:b0:317:5b3f:1998 with SMTP id
+ u12-20020a5d514c000000b003175b3f1998mr876662wrt.58.1691139099113; 
+ Fri, 04 Aug 2023 01:51:39 -0700 (PDT)
 Received: from hthiery.kontron.local ([213.135.10.150])
  by smtp.gmail.com with ESMTPSA id
- h20-20020a05600c261400b003fe2ebf479fsm1739579wma.36.2023.08.04.01.25.12
+ c11-20020a5d4f0b000000b0030fa3567541sm1953706wru.48.2023.08.04.01.51.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Aug 2023 01:25:12 -0700 (PDT)
+ Fri, 04 Aug 2023 01:51:38 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  4 Aug 2023 10:24:35 +0200
-Message-Id: <20230804082434.288173-1-heiko.thiery@gmail.com>
+Date: Fri,  4 Aug 2023 10:51:19 +0200
+Message-Id: <20230804085118.315117-1-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691137513; x=1691742313;
+ d=gmail.com; s=20221208; t=1691139099; x=1691743899;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=h+FqgsiPZdvh3cDxb5o6aPIxfGhflxOsG98D1JsGxoU=;
- b=axpXLw1IhgfvMAIrOt8tDnLf5ujTB+XrDaBCJ99aRS9nR0sC45I5S9WnWdhoqoUL/l
- 2QMgJ6f69KIzCi8jO5jenuuplbOj9XmoXiAMX+WR65mBktFrETl7zAAAfYwkme3hPQru
- b1BAfpUUMlMzmYQrEiLnyvkg/DjMLJW7VlNnDtsoYgWg/QrHrnEfKgD7B9YsV32inqRF
- skL0BEXRuhMp/dpqruv5bm/mvjVayGOfiHv56uaDODCXUpPjlugHbPdHq4X0Mky515r+
- gWhzd38r7N5Jw1Gw1yvXaf4hYYYGwBrnkxh9c5+A5V/nxZg4IKXql7nVYLrGI2jTNFSZ
- wrdQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=BVVq0A2dsg92vtBJmADG5QeraIhLQd6hAuB7BBbOt1U=;
+ b=Qk0UPkGBYRdHL+rAK6CRcjpuZPvvA9GOUcWPIVl2GUaDzuvM4CjOMcus9qjCahsCcH
+ tuSo80VbY/KaKn9UWKYpiyIujViyAq4sjs2m305dHDQHotejAwJBprDfCxzt4GMvQvbS
+ yCZ0tV0q4ny/me7wl1Xg82dIcCAc/Y4CRSRECv+pIKjDLr849J/09B9FM7oTXBx4XTAA
+ TJiPm2fuxA+UJ/JGZZPTItyv4pfGtSDUnge4zsfXqzNG+JTt3sbF0cOibnagDdWxN8Tr
+ LBDyMO/lY7bCyf+QIxEBXcr+Ayydl4tHH7Y5taEU1aYZFNVRIEKwuTgAqso+I4BryJi5
+ NgNA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=axpXLw1I
-Subject: [Buildroot] [PATCH] boot/uboot: add option to install custom
+ header.a=rsa-sha256 header.s=20221208 header.b=Qk0UPkGB
+Subject: [Buildroot] [PATCH v2] boot/uboot: add option to install custom
  environment file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -122,6 +122,10 @@ Cc: Michael Walle <michael@walle.cc>
 Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
+v2: change to shell expansion instead of make shell expansion. With that
+    we make sure it is expanded right at the time the command is called.
+
+
  boot/uboot/Config.in | 10 ++++++++++
  boot/uboot/uboot.mk  | 19 +++++++++++++++++++
  2 files changed, 29 insertions(+)
@@ -148,7 +152,7 @@ index 8b726eaa57..cbbf629ba6 100644
  	string "Custom make options"
  	help
 diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index b3d26b16fe..847cc7648a 100644
+index b3d26b16fe..2007647e3b 100644
 --- a/boot/uboot/uboot.mk
 +++ b/boot/uboot/uboot.mk
 @@ -181,6 +181,24 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
@@ -162,8 +166,8 @@ index b3d26b16fe..847cc7648a 100644
 +UBOOT_ENV_FILE_NAME=$(patsubst %.env,%,$(notdir $(UBOOT_CUSTOM_ENVIRONMENT_FILE)))
 +ifneq ($(UBOOT_CUSTOM_ENVIRONMENT_FILE),)
 +define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
-+	sys_vendor=$(shell BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_VENDOR); \
-+	sys_board=$(shell BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_BOARD); \
++	sys_vendor=`BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_VENDOR`; \
++	sys_board=`BR2_PREFIX= utils/config --file $(@D)/.config -s CONFIG_SYS_BOARD`; \
 +	cp -f $(UBOOT_CUSTOM_ENVIRONMENT_FILE) $(@D)/board/$${sys_vendor}/$${sys_board}
 +endef
 +UBOOT_POST_CONFIGURE_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
