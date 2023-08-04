@@ -4,66 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42F72C04A6A
-	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 06:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEA27C001DE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 07:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5B9E41C64;
-	Fri,  4 Aug 2023 06:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5B9E41C64
+	by smtp2.osuosl.org (Postfix) with ESMTP id 609EF4026F;
+	Fri,  4 Aug 2023 07:04:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 609EF4026F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 28kJ9e-6uhlt; Fri,  4 Aug 2023 06:23:34 +0000 (UTC)
+	with ESMTP id khwCR1zdpGSN; Fri,  4 Aug 2023 07:04:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 098BA40A8F;
-	Fri,  4 Aug 2023 06:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 098BA40A8F
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB10240BF7;
+	Fri,  4 Aug 2023 07:04:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB10240BF7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 97A331BF2F2
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 06:23:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1088F1BF2BB
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 07:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A54C41E58
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 06:23:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A54C41E58
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1E50408A1
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 07:04:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1E50408A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7ebeZQRBJv11 for <buildroot@lists.busybox.net>;
- Fri,  4 Aug 2023 06:23:11 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8D88A417AE
- for <buildroot@buildroot.org>; Fri,  4 Aug 2023 06:23:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D88A417AE
-Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 78CF6A4C04F6;
- Fri,  4 Aug 2023 08:23:08 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:39906)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qRoDM-0000xe-06;
- Fri, 04 Aug 2023 08:23:08 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Fri,  4 Aug 2023 08:23:07 +0200
-Message-Id: <20230804062307.227606-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id J011mm3XLpGx for <buildroot@lists.busybox.net>;
+ Fri,  4 Aug 2023 07:04:36 +0000 (UTC)
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 757864088F
+ for <buildroot@buildroot.org>; Fri,  4 Aug 2023 07:04:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 757864088F
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-2b9b5ee9c5aso27700421fa.1
+ for <buildroot@buildroot.org>; Fri, 04 Aug 2023 00:04:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691132674; x=1691737474;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=c4dzrcelnHF9d/H3ix4753JBrKgfFPrXhujaQYZqGl8=;
+ b=QSWQUQTAqmZN43Mr2LYTVK+Qs+LbDTFMalLENt5t/Aq9Tm8WqmoZX/QdE0J30TYoH7
+ vHjXGxnFyRv9iluabmqhWEmN2J1k1LNHj7qenLQXB/Z/XhWYW0H/Y25olFxW0r+4RGTH
+ TgQ6UwmRRntq8mdZ1/Hx990zWzIlXluXIRpHwM22wKH2kMDLJBtAk/tO11Lb04nx/hrz
+ QFO0w3HYiFrf3R5Rt2pjI7P/m65D4wacVB9v7ZNF4U5MlUnXYKjFe6gIlUbHZMcHnc7R
+ 4CY4s76aFomPh5Xjhrix/DLXNlDrgldDYoWe036N07SFHmTZ76zyHmf2TRG+qiZJ1b3D
+ gcMQ==
+X-Gm-Message-State: AOJu0YylotLmFws3BObIRD9i6ZknObjHq1nC0OWS6doAfCuwK9vixJN2
+ oHkUIpwZiKxdYiz1xO97fXdPVbo+UJhmBog5yjzoRHbig0s=
+X-Google-Smtp-Source: AGHT+IE3Jl5chNJ/Hijjl0CjMHOl51vlj5zBFXCcYJBsts6ZbwRfCurbMBTRWG6uDLbHeID+lJyD4x85frlCJdnFuig=
+X-Received: by 2002:a05:651c:106:b0:2b6:d9dd:f65f with SMTP id
+ a6-20020a05651c010600b002b6d9ddf65fmr739538ljb.17.1691132673390; Fri, 04 Aug
+ 2023 00:04:33 -0700 (PDT)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+References: <20230803121003.160501-1-heiko.thiery@gmail.com>
+ <20230803194140.GP421096@scaer>
+In-Reply-To: <20230803194140.GP421096@scaer>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 4 Aug 2023 09:04:22 +0200
+Message-ID: <CAEyMn7ba6E_iRuAPUoZ5dWfNAi3eY7wxHMZ8p=fT=OTjtZjKPA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1691130188;
- bh=xUYW0cfdX10O+AzqTgaaNUKR86jHJAVdassZVp2AYko=;
- h=From:To:Cc:Subject:Date:From;
- b=w6mof+pLDAHiMYW1A88oIpqCaxfQa9zWRVDVFgv3DAymEYX4Fhbvje10kPZICqIRh
- GuTkkfWnjQtbbHkgHDLH1UIzTAv2imKY0pZuNoHeB4qYUMDiEF5iAPd3ap28Ov8cb5
- mwC7dWByUXzszLzPAjmEe+kurI3Po3MKnvFquZN5LnQDZLexXPOp92+CZwFIqAtZO8
- C5jzrNVeP8GzcA61FWEkHoRlFDRC1KAjDVVSadylxseAuM6ubVps4CH+GhpxIL+xzH
- qDtlNbXT68qP/QKbaVZ5k6zPWhme7vXoU69/vMNo8CBwLZw7CnB2AOx3x5Ba1kUYHl
- 5aXhbREIArOtw==
+ d=gmail.com; s=20221208; t=1691132674; x=1691737474;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=c4dzrcelnHF9d/H3ix4753JBrKgfFPrXhujaQYZqGl8=;
+ b=Oj0/4442SORsRIGT0eYkksASmKinCkXrg3fW9+xfOALghDpSBBIVS+KtPcyf0S73b7
+ UMUB2wlNK11Yu/QLiU6xWzQH8Eo1ckcXb9puC71ApldRHXtPV5Ubm2P6NU/gAqzZs/ZQ
+ ZqCMJLv15d0yzUNkzM91V/mpQG90EvzfP7w2TOSEuMC/VYw/shImffyAsHR5iDFkqjP/
+ VJdvebaRKNUo1SKGuaBOHC4u5nEGVNJiZZIi3U9a1FXqOAd3aYCcYAFlJwfkjFnbi+VK
+ oNHj2ofnJq2QrWvficRqUnNGJ/Dq9kGEY4bQL/+NG0tVrf1x1BMFPJM6vbU9dIQttMnL
+ t4YQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=w6mof+pL
-Subject: [Buildroot] [PATCH 1/1] package/pkg-generic: handle host-php as an
- extract dependency
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=Oj0/4442
+Subject: Re: [Buildroot] [RFC v2] boot/uboot: add option to install custom
+ environment file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,94 +91,158 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Michael Walle <michael@walle.cc>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/506/50658c50fde8145fac320e3b17004e98c78c6c4d/
+Hi Yann,
 
-Although composer has host-php as build dependency, in the case of
-BR2_PER_PACKAGE_DIRECTORIES=y host-php was not built during extract stage
-of the composer package.
+Am Do., 3. Aug. 2023 um 21:41 Uhr schrieb Yann E. MORIN
+<yann.morin.1998@free.fr>:
+>
+> Heiko, All,
+>
+> On 2023-08-03 14:10 +0200, Heiko Thiery spake thusly:
+> > U-Boot has the capability to set the environment variables via a text file.
+> > The text file has to be located in the U-Boot board source directory and
+> > selected via the CONFIG_ENV_SOURCE_FILE option. The CONFIG_ENV_SOURCE_FILE
+> > must only contain the filename without the '.env' suffix.
+> >
+> > Thus the buildroot option BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT is added
+> > that needs the information about the source of the file in the buildroot
+> > environment (BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE).
+> >
+> > Since the environment file must be located in the U-Boot board source
+> > directory. This directory is <SRC>/board/<VENDOR>/<BOARDNAME>.
+> >
+> > Thes information about vendor name and board name are available in the
+> > U-Boot .config file and can be extracted from there to determine the
+> > destination directoy.
+> >
+> > Cc: Michael Walle <michael@walle.cc>
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > ---
+> [--SNIP--]
+> > diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> > index 8b726eaa57..894a0bd3b2 100644
+> > --- a/boot/uboot/Config.in
+> > +++ b/boot/uboot/Config.in
+> > @@ -607,6 +607,22 @@ config BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+> >
+> >  endif
+> >
+> > +config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
+> > +     bool "custom environment"
+> > +     help
+> > +       Provide a custom u-boot environment file. This will be
+> > +       copied to the U-Boot source path and enabled via the
+> > +       U-Boot config option CONFIG_ENV_SOURCE_FILE. The target
+> > +       path will be determined based on the U-Boot configuration.
+> > +
+> > +if BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT
+> > +config BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE
+> > +     string "Custom environment source file"
+> > +     help
+> > +       Path to U-Boot custom environment file.
+> > +
+> > +endif
+>
+> We don't really need a boolean option to guard a single string option. I
+> know we tend to do that a lot, but I find that to be an anti-pattern.
+>
+> In this case, the empty string is as good as saying "no" to the boolean
+> option, so we can just live with the sting option, and then (see below)...
+>
+> (of course, if the empty string _has_ a special meaning, then we'd need
+> a boolean, but that's usually not the case in such situations).
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/composer/composer.mk           |  2 +-
- package/pkg-utils.mk                   |  2 ++
- support/dependencies/check-host-php.mk |  4 ++++
- support/dependencies/check-host-php.sh | 14 ++++++++++++++
- 4 files changed, 21 insertions(+), 1 deletion(-)
- create mode 100644 support/dependencies/check-host-php.mk
- create mode 100755 support/dependencies/check-host-php.sh
+Ok, makes sense. Previously I had 2 config options for source and
+destination and removed the destination in v2.
 
-diff --git a/package/composer/composer.mk b/package/composer/composer.mk
-index a24c020796..ad1785cba6 100644
---- a/package/composer/composer.mk
-+++ b/package/composer/composer.mk
-@@ -18,7 +18,7 @@ HOST_COMPOSER_DEPENDENCIES = host-php
- 
- define HOST_COMPOSER_EXTRACT_CMDS
- 	cp $(HOST_COMPOSER_DL_DIR)/$(COMPOSER_SOURCE) $(@D)
--	cd $(@D); $(HOST_DIR)/bin/php <<< '<?php \
-+	cd $(@D); $(PHP) <<< '<?php \
- 		$$p = new Phar("$(COMPOSER_SOURCE)"); \
- 		$$p->extractTo(".", "LICENSE");'
- endef
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 530638566c..353190c334 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -55,6 +55,7 @@ INFLATE.bz2  = $(BZCAT)
- INFLATE.gz   = $(ZCAT)
- INFLATE.lz   = $(LZCAT)
- INFLATE.lzma = $(XZCAT)
-+INFLATE.phar = $(PHP)
- INFLATE.tbz  = $(BZCAT)
- INFLATE.tbz2 = $(BZCAT)
- INFLATE.tgz  = $(ZCAT)
-@@ -64,6 +65,7 @@ INFLATE.tar  = cat
- suitable-extractor = $(INFLATE$(suffix $(1)))
- 
- EXTRACTOR_PKG_DEPENDENCY.lzma = $(BR2_XZCAT_HOST_DEPENDENCY)
-+EXTRACTOR_PKG_DEPENDENCY.phar = $(BR2_PHP_HOST_DEPENDENCY)
- EXTRACTOR_PKG_DEPENDENCY.xz   = $(BR2_XZCAT_HOST_DEPENDENCY)
- EXTRACTOR_PKG_DEPENDENCY.lz   = $(BR2_LZIP_HOST_DEPENDENCY)
- 
-diff --git a/support/dependencies/check-host-php.mk b/support/dependencies/check-host-php.mk
-new file mode 100644
-index 0000000000..eac98e73d9
---- /dev/null
-+++ b/support/dependencies/check-host-php.mk
-@@ -0,0 +1,4 @@
-+ifeq (,$(call suitable-host-package,php,$(PHP)))
-+BR2_PHP_HOST_DEPENDENCY = host-php
-+PHP = $(HOST_DIR)/bin/php
-+endif
-diff --git a/support/dependencies/check-host-php.sh b/support/dependencies/check-host-php.sh
-new file mode 100755
-index 0000000000..d049a89455
---- /dev/null
-+++ b/support/dependencies/check-host-php.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+
-+candidate="$1"
-+
-+php=`which $candidate 2>/dev/null`
-+if [ ! -x "$php" ]; then
-+	php=`which php 2>/dev/null`
-+	if [ ! -x "$php" ]; then
-+		# echo nothing: no suitable php found
-+		exit 1
-+	fi
-+fi
-+
-+echo $php
+> >  config BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS
+> >       string "Custom make options"
+> >       help
+> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> > index b3d26b16fe..35e26ade2d 100644
+> > --- a/boot/uboot/uboot.mk
+> > +++ b/boot/uboot/uboot.mk
+> > @@ -181,6 +181,26 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_ATF_FIRMWARE
+> >  endif
+> >  endif
+> >
+> > +#
+> > +# Prepare for custom environment
+> > +#
+> > +ifeq ($(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT),y)
+> > +ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE)),)
+> > +$(error No custom environment source file specified, check your BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE setting)
+> > +endif
+>
+> ... we don't need to check the sanity of the settings: empty means don't
+> use a custom env file, set means use that file as custom env file.
+
+Ok
+
+>
+> > +define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
+> > +     cp -f $(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE) $(@D)/board/$(shell grep CONFIG_SYS_VENDOR $(@D)/.config | sed 's/.*=//' | sed 's/"//g')/$(shell grep CONFIG_SYS_BOARD $(@D)/.config | sed 's/.*=//' | sed 's/"//g')/
+>
+> Please split this line into easier-to-parse construct, see below...
+>
+> > +endef
+> > +UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
+>
+> Is it a pre-build or a post-configure hook? I would think it should be a
+> post-configure one...
+
+I wanted to do it like the other steps, copy the files to the source
+folder before building.
+
+- UBOOT_COPY_ATF_FIRMWARE
+- UBOOT_COPY_IMX_FW_FILES
+
+>
+> > +
+> > +
+> > +UBOOT_ENV_FILE_NAME=$(subst .env,,$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE))))
+>
+> $(patsubst %.env,%,$(notdir $(UBOOT_CUSTOM_ENVIRONMENT_SOURCE)))
+>
+> > +define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
+> > +     $(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
+> > +endef
+> > +endif
+>
+> So, the .mk code would look like;
+>
+>     UBOOT_CUSTOM_ENVIRONMENT_SOURCE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_ENVIRONMENT_SOURCE)))
+>     UBOOT_ENV_FILE_NAME=$(patsubst %.env,%,$(notdir $(UBOOT_CUSTOM_ENVIRONMENT_SOURCE)))
+>     ifneq ($(UBOOT_CUSTOM_ENVIRONMENT_SOURCE),)
+>     define UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
+>         sys_config=$( ./utils/config --file $(@D)/.config -s CONFIG_SYS_VENDOR ); \
+
+Creating a subshell to get the output of uitls/config does not work
+that way. I have to do $(shell ...). But with that it works ;-)
+
+>         sys_board=$( ./utils/config --file $(@D)/.config -s CONFIG_SYS_BOARD ); \
+>         cp -f $(UBOOT_CUSTOM_ENVIRONMENT_SOURCE) $(@D)/board/$${sys_config}/$${sys_board}
+>     endef
+>     UBOOT_POST_CONFIGURE_HOOKS += UBOOT_COPY_CUSTOM_ENVIRONMENT_FILE
+>
+>     define UBOOT_KCONFIG_CUSTOM_ENV_SOURCE
+>         $(call KCONFIG_SET_OPT,CONFIG_ENV_SOURCE_FILE,"$(UBOOT_ENV_FILE_NAME)")
+>     endef
+>     endif  # UBOOT_CUSTOM_ENVIRONMENT_SOURCE != ""
+>
+> Regards,
+> Yann E. MORIN.
+
+Many thanks for your comments! I will retest and prepare a v3.
+
 -- 
-2.39.2
-
+Heiko
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
