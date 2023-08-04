@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3DF2C001DB
-	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 19:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A2EAC001DE
+	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 20:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83B10404A5;
-	Fri,  4 Aug 2023 19:41:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83B10404A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7073414C5;
+	Fri,  4 Aug 2023 20:17:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7073414C5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TbU3Zasodndj; Fri,  4 Aug 2023 19:41:05 +0000 (UTC)
+	with ESMTP id PX8xgG2K-8d1; Fri,  4 Aug 2023 20:17:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C70E41603;
-	Fri,  4 Aug 2023 19:41:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C70E41603
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E954F1BF30A
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 19:41:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE99841C03;
+	Fri,  4 Aug 2023 20:17:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE99841C03
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A5AF51BF328
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 20:17:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1ED3A60899
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 19:40:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ED3A60899
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08B0A82031
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 20:16:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08B0A82031
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2L5YrObaV0aa for <buildroot@lists.busybox.net>;
- Fri,  4 Aug 2023 19:40:49 +0000 (UTC)
-Received: from smtpcmd14173.aruba.it (smtpcmd14173.aruba.it [62.149.156.173])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0B2BC60F76
- for <buildroot@buildroot.org>; Fri,  4 Aug 2023 19:40:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B2BC60F76
-Received: from [10.10.3.240] ([217.14.215.226])
- by Aruba Outgoing Smtp  with ESMTPSA
- id S0fGqjiMuXI7yS0fGq51CV; Fri, 04 Aug 2023 21:40:47 +0200
-Message-ID: <48bef18e-b43b-cc91-6ce4-e214ddf300f0@benettiengineering.com>
-Date: Fri, 4 Aug 2023 21:40:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2m64m5CHnb_J for <buildroot@lists.busybox.net>;
+ Fri,  4 Aug 2023 20:16:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BDEA821DA
+ for <buildroot@buildroot.org>; Fri,  4 Aug 2023 20:16:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BDEA821DA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 27CC2841F1; Fri,  4 Aug 2023 20:16:31 +0000 (UTC)
 To: buildroot@buildroot.org
-References: <20230802141636.528011-1-giulio.benetti@benettiengineering.com>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230802141636.528011-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfILEJU1cEjIaU/Xev/K6MInMalLRyt+f+N4hIXzAhUoz/5zq+0vsY+AXY+Fu+a7G07TpLCyc259upvRz8tP6nXZKnG1k4w5YJloP2/Loy1MwGMWQMRCo
- PpOrjzktLBRaF8av7DJPXECrLK/Mhf8fYc35GZCLA+oDpDy93JA1NKakUfEIys6pSxizmtx+o76y25RLBmNXrS63RFwYMUTIl2OKB31d1ezv4qR8eaJjpo0p
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1691178047; bh=YLgDxypqR427qM0vQDTFnw0HqT+nQWl28Hg/+TA3i/A=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=mIVPIVVA/83Z7bpXD2QAdhfW7WyJlIPAd9hQwa8WBGaWS/gw6AkEmzxIzOO2j+qq3
- 1/ZxlDB0/Wur+j2QU5Sfey4VNTaE/IV0W8GSG3lzYUZERS2PbxgBC9UDvDtfZ31JAs
- v6AbcOtVHPmd7H5o2b8o7UDA+QZje8sNDpfAAGV+8rtq8AhVKDubp/z+3P3O1iNtYN
- XpKW725LiisyHcuJRkP8wRlS895ZhK84Vc8xBKuCIB+zWLKh4VGHNZ9M1H6+s5W95h
- UFOD543F9M9/m7f+Aj9am36rf1Kg8N0kShS8WJBDSECFdwXHLb+6TTjSne/0T0Zzq5
- igHCTuNYCXQdQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=mIVPIVVA
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump version to 8.1.0
+Date: Fri, 4 Aug 2023 22:16:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fdbe83166ff7b2bbc6d3c71e404be81df61ce431
+X-Git-Newrev: 837ab4708cbfb8f44ec2da23ef23e0a0dfa8eb7c
+X-Patchwork-Hint: ignore
+Message-Id: <20230804201631.27CC2841F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_ppc64*: remove binutils
+ version from defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,54 +56,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5066506720009144528=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch is superseded in favor of:
-https://patchwork.ozlabs.org/project/buildroot/patch/20230804193801.93049-1-giulio.benetti@benettiengineering.com/
+--===============5066506720009144528==
+Content-Type: text/plain
 
-So please ignore it.
+commit: https://git.buildroot.net/buildroot/commit/?id=837ab4708cbfb8f44ec2da23ef23e0a0dfa8eb7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+Buildroot 2022.05 use binutils 2.37 by default, but the binutils
+version was downgraded to the previous binutils version in qemu_ppc64*
+defconfigs due to a bug in binutils 2.37 [1].
 
-On 02/08/23 16:16, Giulio Benetti wrote:
-> Release notes: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/harfbuzz/harfbuzz.hash | 2 +-
->   package/harfbuzz/harfbuzz.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-> index 6b71e3819c..72210a78f9 100644
-> --- a/package/harfbuzz/harfbuzz.hash
-> +++ b/package/harfbuzz/harfbuzz.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  c1ce780acd385569f25b9a29603d1d5bc71e6940e55bfdd4f7266fad50e42620  harfbuzz-8.0.1.tar.xz
-> +sha256  639596da7c26cc503b16b3bf4dfdca77fe832d3c9e06004ef63a7ce53cafbac9  harfbuzz-8.1.0.tar.xz
->   sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-> index 3118ec62c9..ce3573c10d 100644
-> --- a/package/harfbuzz/harfbuzz.mk
-> +++ b/package/harfbuzz/harfbuzz.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -HARFBUZZ_VERSION = 8.0.1
-> +HARFBUZZ_VERSION = 8.1.0
->   HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
->   HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
->   HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+Later when binutils 2.36 has been removed the binutils version has
+been updated to 2.38 (even though it was already the default version
+selected by Buildroot at that time) [2].
+
+Since then, several binutils release has been added and the binutils
+version 2.38 has been removed recently [3].
+
+Since the initial bug is gone with the removal of binutils 2.37,
+we can safely remove the binutils version from qemu_ppc64 defconfigs.
+
+[1] 1e2fe860f3a261fc877591c056808d6fb30e25d4
+[2] e461c9adc82a889deb6e259ce811193cb8d00f36
+[3] 1391c99d627d27c55bec99072b3ae4d78be02c74
+
+Fixes:
+https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/4798047373
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Cédric Le Goater <clg@kaod.org>
+Cc: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/qemu_ppc64_e5500_defconfig      | 1 -
+ configs/qemu_ppc64_pseries_defconfig    | 1 -
+ configs/qemu_ppc64le_powernv8_defconfig | 1 -
+ configs/qemu_ppc64le_pseries_defconfig  | 1 -
+ 4 files changed, 4 deletions(-)
+
+diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+index 0ab7e8e76f..6839f2f0ba 100644
+--- a/configs/qemu_ppc64_e5500_defconfig
++++ b/configs/qemu_ppc64_e5500_defconfig
+@@ -3,7 +3,6 @@ BR2_powerpc64=y
+ BR2_powerpc_e5500=y
+ 
+ # System
+-BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ 
+diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+index 92fe3a11f6..896d209675 100644
+--- a/configs/qemu_ppc64_pseries_defconfig
++++ b/configs/qemu_ppc64_pseries_defconfig
+@@ -3,7 +3,6 @@ BR2_powerpc64=y
+ BR2_powerpc_power7=y
+ 
+ # System
+-BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ 
+diff --git a/configs/qemu_ppc64le_powernv8_defconfig b/configs/qemu_ppc64le_powernv8_defconfig
+index cb086ba248..e23fcd4695 100644
+--- a/configs/qemu_ppc64le_powernv8_defconfig
++++ b/configs/qemu_ppc64le_powernv8_defconfig
+@@ -3,7 +3,6 @@ BR2_powerpc64le=y
+ BR2_powerpc_power8=y
+ 
+ # System
+-BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ BR2_SYSTEM_DHCP="eth0"
+ 
+diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
+index 001d614c3b..fa8e2a09d3 100644
+--- a/configs/qemu_ppc64le_pseries_defconfig
++++ b/configs/qemu_ppc64le_pseries_defconfig
+@@ -3,7 +3,6 @@ BR2_powerpc64le=y
+ BR2_powerpc_power8=y
+ 
+ # System
+-BR2_BINUTILS_VERSION_2_38_X=y
+ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ BR2_SYSTEM_DHCP="eth0"
+ 
+
+--===============5066506720009144528==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5066506720009144528==--
