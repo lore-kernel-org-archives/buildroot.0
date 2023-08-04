@@ -4,84 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31D23C001DB
-	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 20:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E51C6C00528
+	for <buildroot@archiver.kernel.org>; Fri,  4 Aug 2023 21:30:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4C7D400AC;
-	Fri,  4 Aug 2023 20:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4C7D400AC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69B5941E54;
+	Fri,  4 Aug 2023 21:30:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 69B5941E54
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lRLklJBrGmsK; Fri,  4 Aug 2023 20:55:32 +0000 (UTC)
+	with ESMTP id O0PkAly35suH; Fri,  4 Aug 2023 21:30:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B76740308;
-	Fri,  4 Aug 2023 20:55:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B76740308
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8CFB61BF328
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 20:55:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E5C0741715;
+	Fri,  4 Aug 2023 21:30:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5C0741715
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FB411BF31C
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 21:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43CF660FF3
- for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 20:54:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43CF660FF3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 392D782C3E
+ for <buildroot@lists.busybox.net>; Fri,  4 Aug 2023 21:30:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 392D782C3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yM5oOb8SkWAS for <buildroot@lists.busybox.net>;
- Fri,  4 Aug 2023 20:54:11 +0000 (UTC)
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com
- [IPv6:2a00:1450:4864:20::241])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB50C61341
- for <buildroot@buildroot.org>; Fri,  4 Aug 2023 20:54:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB50C61341
-Received: by mail-lj1-x241.google.com with SMTP id
- 38308e7fff4ca-2b974031aeaso39323731fa.0
- for <buildroot@buildroot.org>; Fri, 04 Aug 2023 13:54:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691182448; x=1691787248;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=bTst3k6RVh/LdXDD9uNJW5kwCgOSVbhULAALIhjFoEQ=;
- b=GCvW5a4RMfze7NpKAgLYUnbce9s8/pSixstw0y0uI7Vm3P5Cf1ZVVUaDhF6ZhWYtc8
- RhZzR7obB6C7EFDMa3t45yVD9BInQILkRf+ghgmwsMlji+rN596AG6dBqx3oJdaBXU5J
- TIv9qeMYyHpQK6Z3FkLepeBvCam54bYx33W5ezWkr7uDWoAsn7rOD0sl1Rsu0zOHZzyF
- Z95xfE3WlM6LfJ76Xpoj8uaa8UDBg1zSC6S73yhSvUkazs+20CQwIf0dQkMbidMY+8XU
- uJx2fESNwVnhhU0ycWYb+M6WRL/1aX4+WMZ30lRDZ6wJabf87F7gu2NQkz9SMBsDy1WH
- mDhA==
-X-Gm-Message-State: AOJu0Yxl6S92CNVwGBh1vDLDP+ZOb6brH3N+gIvKlTtW3tALnAUPdakI
- XlXTouI3NoDZw1DBkKLEWDKa6vHtyA5qbFpc7MO30tHY
-X-Google-Smtp-Source: AGHT+IF10EJZ7y4GS0992xGq5r0AxScvOIvcioJIRaDJqS8f5JP6plSStOyJtUYOZgx1z6dmG7IfUg==
-X-Received: by 2002:a2e:9a9a:0:b0:2b6:bb08:91c4 with SMTP id
- p26-20020a2e9a9a000000b002b6bb0891c4mr2864689lji.42.1691182448446; 
- Fri, 04 Aug 2023 13:54:08 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-82-52-12-96.retail.telecomitalia.it. [82.52.12.96])
- by smtp.gmail.com with ESMTPSA id
- a23-20020a1709063e9700b00993150e5325sm1802624ejj.60.2023.08.04.13.54.07
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Aug 2023 13:54:08 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Fri,  4 Aug 2023 22:54:01 +0200
-Message-Id: <20230804205401.3975960-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id k7Atqok-LGB9 for <buildroot@lists.busybox.net>;
+ Fri,  4 Aug 2023 21:30:16 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AE064812C6
+ for <buildroot@buildroot.org>; Fri,  4 Aug 2023 21:30:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE064812C6
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 23DA820039E;
+ Fri,  4 Aug 2023 23:30:07 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:47862])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 04 Aug 2023 23:30:07 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1691182448; x=1691787248;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bTst3k6RVh/LdXDD9uNJW5kwCgOSVbhULAALIhjFoEQ=;
- b=rXuqQ/8ITCG3a0jtyj91nh9KZBZSiM7PmOx3UG8td52FVqr/e16x0y9zFWo+wfWgmV
- owe/BYlbrEdP0xeGEKq5UD+NBi+AUcGjd/t2BpIjEKekkNJDAN86XSMNRtPtBOSAbXLO
- 166gUP/xIInudJ4hjCyQrX7GhrsO6G0V/zATE=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=rXuqQ/8I
-Subject: [Buildroot] [PATCH v2 1/1] package/arp-scan: allow to not install
- package data
+Date: Fri, 04 Aug 2023 23:30:07 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20230801003858.43eb3fb9@windsurf>
+References: <20230512014056.2107657-1-christian@aperture.us>
+ <20230801003858.43eb3fb9@windsurf>
+User-Agent: Webmail Free/1.6.1
+Message-ID: <b761f284b557b40079e6fa83f408927b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1691184613;
+ bh=OvWuxH8QGd7wot9pxqOAC+JO9OUFZSfw+x3F3GTrEls=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=JVk490UOUP9oBY/ASFJicOLYVTEKSysZXNS61lUInmjzZT5YlF6msFzIsaozNx73S
+ pwecE8pOWgktwG7MpUryZ8u5oKhGDvINO/1e32UdaSEtjjq/V8VDgSJjktaojAFClf
+ ENZ+2qCMAVj8aOVqX1nfbq+Ll1dtrnDVcjGYha7hT9U850BwRRtWYswgxQTQZnEW7c
+ C1plXXoKdqnjs+o7RqU0dt70G0ab/P6gXT3pBYFdkOpGFjBpoBMyQ8vxiMuhgXQjuD
+ Mp7xukw/sTbjZN0ynFUQACMCsquEBiC+XqqU0o14QEtByCo9gQOI6cwgSNgqr5UMJh
+ fN7wvnTwe2DrQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JVk490UO
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/crio: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,68 +77,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: Tian Yuanhao <tianyuanhao3@163.com>, "Yann
+ E . MORIN" <yann.morin.1998@free.fr>, Christian Stewart <christian@aperture.us>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch adds an option that allows you to not install the data along
-with the binaries (less than 100kb), saving 1.4Mb of rootfs data.
+Hi Thomas, Christian, All,
 
-By default, the data is installed for backward compatibility.
+On 01/08/2023 00:38, Thomas Petazzoni wrote:
+> Hello Christian,
+> 
+> Thanks for the patch. See below some review.
+> 
+> On Thu, 11 May 2023 18:40:56 -0700
+> Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+> 
+>>  package/Config.in      |  1 +
+>>  package/crio/Config.in | 54 ++++++++++++++++++++++++++++
+>>  package/crio/crio.hash |  3 ++
+>>  package/crio/crio.mk   | 82 
+>> ++++++++++++++++++++++++++++++++++++++++++
+>>  4 files changed, 140 insertions(+)
+> 
+> Entry in DEVELOPERS file missing.
+> 
+>> diff --git a/package/crio/Config.in b/package/crio/Config.in
+>> new file mode 100644
+>> index 0000000000..35a38c587e
+>> --- /dev/null
+>> +++ b/package/crio/Config.in
+>> @@ -0,0 +1,54 @@
+>> +config BR2_PACKAGE_CRIO
+>> +	bool "crio"
+>> +	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>> +	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # iproute2, 
+>> __kernel_{u,}long_t
+>> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+> 
+> uClibc has fexecve() now
+> 
+>> +	depends on BR2_USE_MMU # libgpgme, iproute2, fork()
+> 
+> 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme
+> 
+> is missing
+> 
+>> +	select BR2_PACKAGE_IPROUTE2
+>> +	select BR2_PACKAGE_IPTABLES
+> 
+> Neither of these are referenced in the .mk file. Are these runtime
+> dependencies? If so, please indicate this via a comment.
+> 
+> For this kind of package, a runtime test in support/testing/ would be
+> very good. You can ask Julien Olivain for help here :-)
 
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+I will be glad to help! For a good runtime test, we need:
 
----
+1. a simple reference Buildroot configuration that compiles the
+package, and
 
-Changes in v2:
-- add the option to ensure backward compatibility.
-- update the commit message
+2. a simple reference "known working" sequence that is sufficiently
+stable in time (to require minimum maintenance after package updates).
 
-package/arp-scan/Config.in   | 11 +++++++++++
- package/arp-scan/arp-scan.mk |  4 ++++
- 2 files changed, 15 insertions(+)
+I was thinking about this CRI-O tutorial:
+https://github.com/cri-o/cri-o/blob/main/tutorials/crictl.md
 
-diff --git a/package/arp-scan/Config.in b/package/arp-scan/Config.in
-index ed70b3958610..cf7377d2f9b6 100644
---- a/package/arp-scan/Config.in
-+++ b/package/arp-scan/Config.in
-@@ -8,3 +8,14 @@ config BR2_PACKAGE_ARP_SCAN
- 	  discover and fingerprint IP hosts on the local network.
- 
- 	  https://github.com/royhills/arp-scan
-+
-+if BR2_PACKAGE_ARP_SCAN
-+
-+config BR2_PACKAGE_ARP_SCAN_DATA
-+	bool "install data (OUI)"
-+	default y  # legacy
-+	help
-+	  Say 'y' here (the default) to install the data along the
-+	  binaries.
-+
-+endif # BR2_PACKAGE_ARP_SCAN
-diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
-index 89644be9d3ef..67eb1881dba2 100644
---- a/package/arp-scan/arp-scan.mk
-+++ b/package/arp-scan/arp-scan.mk
-@@ -23,4 +23,8 @@ else
- ARP_SCAN_CONF_OPTS += --without-libcap
- endif
- 
-+ifeq ($(BR2_PACKAGE_ARP_SCAN_DATA),)
-+ARP_SCAN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.34.1
+But it requires crictl, from the cri-tools package:
+https://github.com/kubernetes-sigs/cri-tools/tree/master
 
+Christian:
+Are you planning to add this package later?  Or do you know a
+better/simpler way to start a small container?
+
+Moreover, when I quickly tried this patch, starting from
+qemu_aarch64_virt_defconfig. (without systemd) I observed
+the following:
+
+I had a build failure due to a missing libseccomp. Maybe a build
+dependency is missing?
+
+Once built, the service failed to start (by running "crio" manually),
+due to missing runtime dependencies to: conmon, runc, nsenter (from
+util-linux). Could you check those are mandatory (and add those as
+runtime dependency), or if they can be disabled by configuration?
+
+Once installed, I finally got an error due to the missing
+/var/lib/crio directory on the target filesystem. Maybe it is missing
+in CRIO_INSTALL_TARGET_CMDS?  Please also check if specific
+permissions are needed, and define a CRIO_PERMISSIONS if needed. See:
+https://nightly.buildroot.org/manual.html#generic-package-reference
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
