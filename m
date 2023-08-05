@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC55C00528
-	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 22:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 765A8C001DB
+	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 22:28:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1FA840363;
-	Sat,  5 Aug 2023 22:27:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1FA840363
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EF45408FF;
+	Sat,  5 Aug 2023 22:28:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EF45408FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PoNsIgD997W2; Sat,  5 Aug 2023 22:27:46 +0000 (UTC)
+	with ESMTP id Lx_Wc-0hbCwR; Sat,  5 Aug 2023 22:28:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEB95414E4;
-	Sat,  5 Aug 2023 22:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEB95414E4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 133BB41503;
+	Sat,  5 Aug 2023 22:27:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 133BB41503
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 423671BF85D
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 22:27:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 79E411BF870
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 22:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 091FD81F13
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8C9AD81EEC
  for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 22:26:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 091FD81F13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C9AD81EEC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8imOhLjOhitd for <buildroot@lists.busybox.net>;
+ with ESMTP id ckHSUWqRDVTt for <buildroot@lists.busybox.net>;
  Sat,  5 Aug 2023 22:26:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0EB4381448
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B85881EDF
  for <buildroot@buildroot.org>; Sat,  5 Aug 2023 22:26:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EB4381448
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B85881EDF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1C6284271; Sat,  5 Aug 2023 22:26:37 +0000 (UTC)
+ id 1BD8B8426F; Sat,  5 Aug 2023 22:26:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 5 Aug 2023 23:59:58 +0200
+Date: Sun, 6 Aug 2023 00:00:08 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fb99d902e4ee36e0f50b3fe0c2ec4a05358b1915
-X-Git-Newrev: db8c5b35f29a163b7e72ca9e280904b76e6ff391
+X-Git-Oldrev: 05f4c2fd102c0ca0a4e5947ce55e0a09660b6282
+X-Git-Newrev: 2a44207ea0eeaf2346cb6fe572a96770b74d9dc9
 X-Patchwork-Hint: ignore
-Message-Id: <20230805222637.F1C6284271@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pipewire: bump version
- to 0.3.77
+Message-Id: <20230805222638.1BD8B8426F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/hwdata: bump version
+ to 0.373
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +64,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db8c5b35f29a163b7e72ca9e280904b76e6ff391
+commit: https://git.buildroot.net/buildroot/commit/?id=2a44207ea0eeaf2346cb6fe572a96770b74d9dc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Release notes:
-https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pipewire/pipewire.hash | 2 +-
- package/pipewire/pipewire.mk   | 2 +-
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-index 98de073bdb..88fd9c2fab 100644
---- a/package/pipewire/pipewire.hash
-+++ b/package/pipewire/pipewire.hash
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 84979a70fa..6915e04e46 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
 @@ -1,4 +1,4 @@
  # Locally calculated
--sha256  b30d886b87aa8c055af6d6c7261d1d04336f3a75221c31afe1ea8ba86184bf70  pipewire-0.3.74.tar.bz2
-+sha256  3027cadf9933adb03b1895069c79f4eb39f7f2873b962c674ee1fec316ec60e1  pipewire-0.3.77.tar.bz2
- sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
- sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index 24e642b418..994da081b7 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
+-sha256  8059ed6f696b5be4bf77c59d57fc26e35d9e579ba2629e325400a6eb8b91089f  hwdata-0.371.tar.gz
++sha256  0db28dc635d5059ad23d068d2e56ef5dc540f95bc813ea5a3c0f5d63b03d20d6  hwdata-0.373.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index cac6b80185..025f5b4969 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PIPEWIRE_VERSION = 0.3.74
-+PIPEWIRE_VERSION = 0.3.77
- PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
- PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
- PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+-HWDATA_VERSION = 0.371
++HWDATA_VERSION = 0.373
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
