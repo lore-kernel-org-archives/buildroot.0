@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0A01C001DB
-	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 21:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AD01C001DB
+	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 21:37:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A544D60D9D;
-	Sat,  5 Aug 2023 21:37:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A544D60D9D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 417C060B0C;
+	Sat,  5 Aug 2023 21:37:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 417C060B0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id b7-lNYF-Ch0E; Sat,  5 Aug 2023 21:37:13 +0000 (UTC)
+	with ESMTP id 1hdmFGCGLCC1; Sat,  5 Aug 2023 21:37:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF38860AEE;
-	Sat,  5 Aug 2023 21:37:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF38860AEE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 75EDF1BF28F
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:37:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DF5B60AEE;
+	Sat,  5 Aug 2023 21:37:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DF5B60AEE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CE9E1BF28F
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:37:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 107248142D
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:36:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 107248142D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A13C40240
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:36:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A13C40240
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LaOwiyNL-Wbk for <buildroot@lists.busybox.net>;
- Sat,  5 Aug 2023 21:36:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3QeYih8CWihh for <buildroot@lists.busybox.net>;
+ Sat,  5 Aug 2023 21:36:35 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4AC038145C
- for <buildroot@buildroot.org>; Sat,  5 Aug 2023 21:36:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AC038145C
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 51A27415A7
+ for <buildroot@buildroot.org>; Sat,  5 Aug 2023 21:36:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51A27415A7
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 8A55CA4C03A4
- for <buildroot@buildroot.org>; Sat,  5 Aug 2023 23:36:52 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35742)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 60307A4C03A4
+ for <buildroot@buildroot.org>; Sat,  5 Aug 2023 23:36:33 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:48082)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qSOxA-00019F-16
- for buildroot@buildroot.org; Sat, 05 Aug 2023 23:36:52 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qSOwr-00015u-0P
+ for buildroot@buildroot.org; Sat, 05 Aug 2023 23:36:33 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  5 Aug 2023 23:36:52 +0200
-Message-Id: <20230805213652.3588314-1-bernd@kuhls.net>
+Date: Sat,  5 Aug 2023 23:36:32 +0200
+Message-Id: <20230805213632.3588301-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +++++
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1691271412;
- bh=g52tE2eQobiQLNrk9RbJzN0z+FkAuUPqqAZM0mUpeI4=;
+ s=kas202306131828; t=1691271393;
+ bh=fQr5hEFdup4DTkiA7zDz3tyULkVAcKxa0C9mWc1Fixo=;
  h=From:To:Subject:Date:From;
- b=a4z4fkY85kcSePaSnJH681QlU7EOoTrO43bJDhzGsQv1k49XdM2LJbBi1QECE/Cti
- xUfyggpNPrGuG86/yXPEjAlLzHGNnTxHVKjBa2Ht57xdL9lfjQnAt6ERcRlmS1Fonj
- YW84EhzuwEEuOQUvxRa61Zd/rie0+lFe9eht5qYjEeXcBT+ev7iKoPT8NoAfx9IK++
- x/epqgTtcFQxJgNbpaGSjbqDARiZVIInAiWgqnfMtr+cd4AvkGqRreYZ0tq31uOl1L
- 9z3zmxZzC4xWDV2THwfoOZtqcera5hJtUe6YJ8gg1+OoSGegHiRoGYN97O59C+AqbL
- bDr11RT2kB5Bg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=K7MSbkIh27DHh+KpcoCkgt8o0KMxaP9LnuyhJwrFIL6HQZdvem6rvGeEmbsx4SKiV
+ ELRg3bdgk0LIOOCY55+Zq5QLrO4N5nxWhSPRrLxdUITiHiFUBMNiQ+dTp8iTiPrHrR
+ 4TDiJYK22AhQTK/QhRakBHrX0ZxVz6JdQxrsbW9SeQtFdp4OSHGnq6AIiEtc4SPvFT
+ mOw7LIwOGRPmYDOkp/+4Q4bTXTGkNAR87r15rWHoYjh/ILnJWXMPkP6YeBn4KlklKu
+ DSbS7EH6YXXlV9B3wVA3eDvtTZpHZQb4uptyff6JXdbFTJ1HcCmcLKV6SnJBncVah9
+ 8zniCr6PoCavg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=a4z4fkY8
-Subject: [Buildroot] [PATCH 1/1] package/hwdata: bump version to 0.373
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=K7MSbkIh
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: bump version to 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,33 +81,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 84979a70fa..6915e04e46 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 2f6dba9d3c..a6ba6b22c6 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.0.tar.xz.sig
+-sha256  0ea0d11a1660a1e63f960f157b197abe6d0c8cb3255be24e1fb3815930b9bdc5  gnutls-3.8.0.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.1.tar.xz.sig
++sha256  ba8b9e15ae20aba88f44661978f5b5863494316fe7e722ede9d069fe6294829c  gnutls-3.8.1.tar.xz
  # Locally calculated
--sha256  8059ed6f696b5be4bf77c59d57fc26e35d9e579ba2629e325400a6eb8b91089f  hwdata-0.371.tar.gz
-+sha256  0db28dc635d5059ad23d068d2e56ef5dc540f95bc813ea5a3c0f5d63b03d20d6  hwdata-0.373.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index cac6b80185..025f5b4969 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index d6b8b229bd..d9b9831fd6 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
  
--HWDATA_VERSION = 0.371
-+HWDATA_VERSION = 0.373
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).0
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 -- 
 2.39.2
 
