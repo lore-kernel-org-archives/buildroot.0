@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D08D4C001DE
-	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 21:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 685ABC001DB
+	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 21:34:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3528C60D68;
-	Sat,  5 Aug 2023 21:14:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3528C60D68
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FDE160009;
+	Sat,  5 Aug 2023 21:34:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FDE160009
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3I13iB4wp2Jz; Sat,  5 Aug 2023 21:14:55 +0000 (UTC)
+	with ESMTP id Omj4fIGLh9DB; Sat,  5 Aug 2023 21:34:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 428AE60812;
-	Sat,  5 Aug 2023 21:14:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 428AE60812
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6FB931BF28F
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:14:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3836060899;
+	Sat,  5 Aug 2023 21:34:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3836060899
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 32A421BF28F
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 07E2660BC1
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:14:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07E2660BC1
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDD2440449
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDD2440449
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bQAlJtMn5Si6 for <buildroot@lists.busybox.net>;
- Sat,  5 Aug 2023 21:14:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31A3660B8B
- for <buildroot@buildroot.org>; Sat,  5 Aug 2023 21:14:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31A3660B8B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1EB0183DB8; Sat,  5 Aug 2023 21:14:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 03ScECMDruIn for <buildroot@lists.busybox.net>;
+ Sat,  5 Aug 2023 21:33:30 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BFAD3400C6
+ for <buildroot@buildroot.org>; Sat,  5 Aug 2023 21:33:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFAD3400C6
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B5C4EA4C00C6
+ for <buildroot@buildroot.org>; Sat,  5 Aug 2023 23:33:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:41934)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qSOtq-0000YK-1O
+ for buildroot@buildroot.org; Sat, 05 Aug 2023 23:33:26 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 5 Aug 2023 23:03:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 837ab4708cbfb8f44ec2da23ef23e0a0dfa8eb7c
-X-Git-Newrev: 0473a9b521f13b56ee0745e7364e392e8740110b
-X-Patchwork-Hint: ignore
-Message-Id: <20230805211423.1EB0183DB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2023.08-rc1
+Date: Sat,  5 Aug 2023 23:33:26 +0200
+Message-Id: <20230805213326.3588196-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1691271206;
+ bh=qAv5eHekT+JkCnHpwe0omN4GcEjAlH8qOU4ASyA3fq8=;
+ h=From:To:Subject:Date:From;
+ b=LNSTqatOy4fVgpPk1rLQM/GxsHe1v4kyUMzJ4h37J614XOv2TkGNpnQv4Vc19yPBR
+ puIP4B2auFyAWcJVPj1Gxv5n1iFifHTR7EFf/Q+LXZWh6l30irZFMb/eQtnWspus4m
+ uDOBz4HdSFOtUDu7xJWt4z4OJnZSB/vbMISMd2YD6wq9zXJVG8eBhi8XKkZnQik00Z
+ 0xZgXa1dY7AL2T4PKzy3OV53zorEy+C+XaVFdpQR66kNJ29FhuVqEUhIuKc+d4wJ4b
+ at8Ru7JxIiPOiFxP4a5QqbkcqytUjIJH44PZDDELDKMeTielLFEYkajMzWQvINTYKa
+ oF2427s6TS7rg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=LNSTqatO
+Subject: [Buildroot] [PATCH 1/1] package/gmp: bump version to 6.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,171 +74,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0473a9b521f13b56ee0745e7364e392e8740110b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Removed patch which is included in this release.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Release notes:
+https://gmplib.org/list-archives/gmp-announce/2023-July/000050.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- CHANGES                    | 33 +++++++++++++++++++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 4 files changed, 67 insertions(+), 13 deletions(-)
+ .checkpackageignore                           |  1 -
+ ...z-inp_raw.c-Avoid-bit-size-overflows.patch | 27 -------------------
+ package/gmp/gmp.hash                          |  2 +-
+ package/gmp/gmp.mk                            |  5 +---
+ 4 files changed, 2 insertions(+), 33 deletions(-)
+ delete mode 100644 package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
 
-diff --git a/CHANGES b/CHANGES
-index 6ca8a2c58d..5ed0568bec 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,36 @@
-+2023.08-rc1, released August 5, 2023
-+
-+	Numerous package updates and fixes, additional runtime tests.
-+
-+	Toolchain:
-+	- Toolchains from ARM (for ARM, AArch64 and AArch64 BE)
-+          updated to 12.2.
-+	- Support for binutils 2.40 and 2.41 added, binutils 2.37 and
-+          2.38 removed, binutils 2.40 is now the default
-+	- Support for gcc 13 added, gcc 10 removed, gcc 12 is now the
-+          default
-+
-+	Architectures:
-+	- Additional x86-64 variants added
-+	- RISC-V vector extension support added
-+
-+	Infrastructure:
-+	- Go now built in 3 stages to be able to update to Go 1.20.x.
-+
-+	New defconfigs: rock5b
-+
-+	Removed defconfigs: qemu_sparc_ss10
-+
-+	New packages: composer, conmon, dfu-programmer, esp-hosted,
-+	kodi-imagedecoder-heif, kodi-imagedecoder-raw, libde2654,
-+	libdisplay-info, libheif, llvm-cmake, llvm-libunwind,
-+	lua-dkjson, mbpoll, mdnsd, mhz, opencsd, python-libconf,
-+	python-blinker, python-midiutil, python-rdps-py, python-wheel,
-+	qt6svg, redis-plus-plus, rockchip-rkbin, rtl8822cs, swaybg,
-+	swugenerator
-+
-+	Removed packages: libasplib, ocf-linux, tovid
-+
- 2023.05.1, released July 17th, 2023
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ff884081eb..8d5e291e8b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -534,7 +534,6 @@ package/gli/0001-Optional-building-tests.patch Upstream
+ package/glog/0001-added-emscripten-support.patch Upstream
+ package/glorytun/0001-Add-support-for-Apple-silicon.patch Upstream
+ package/glorytun/0002-aegis256.c-fix-aarch64-build-with-uclibc.patch Upstream
+-package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch Upstream
+ package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch Upstream
+ package/gnupg/0001-build-Always-use-EXTERN_UNLESS_MAIN_MODULE-pattern.patch Upstream
+ package/gnuplot/0001-configure-add-without-demo-option.patch Upstream
+diff --git a/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch b/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
+deleted file mode 100644
+index 0003f342c3..0000000000
+--- a/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-# HG changeset patch
+-# User Marco Bodrato <bodrato@mail.dm.unipi.it>
+-# Date 1634836009 -7200
+-# Node ID 561a9c25298e17bb01896801ff353546c6923dbd
+-# Parent  e1fd9db13b475209a864577237ea4b9105b3e96e
+-mpz/inp_raw.c: Avoid bit size overflows
+-
+-[Retrieved from: https://gmplib.org/repo/gmp-6.2/rev/561a9c25298e]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -r e1fd9db13b47 -r 561a9c25298e mpz/inp_raw.c
+---- a/mpz/inp_raw.c	Tue Dec 22 23:49:51 2020 +0100
+-+++ b/mpz/inp_raw.c	Thu Oct 21 19:06:49 2021 +0200
+-@@ -88,8 +88,11 @@
+- 
+-   abs_csize = ABS (csize);
+- 
+-+  if (UNLIKELY (abs_csize > ~(mp_bitcnt_t) 0 / 8))
+-+    return 0; /* Bit size overflows */
+-+
+-   /* round up to a multiple of limbs */
+--  abs_xsize = BITS_TO_LIMBS (abs_csize*8);
+-+  abs_xsize = BITS_TO_LIMBS ((mp_bitcnt_t) abs_csize * 8);
+- 
+-   if (abs_xsize != 0)
+-     {
+-
+diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
+index d55e312bbb..8c8b4d1151 100644
+--- a/package/gmp/gmp.hash
++++ b/package/gmp/gmp.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2  gmp-6.2.1.tar.xz
++sha256  a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898  gmp-6.3.0.tar.xz
  
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 09b2066f05..080136bc9a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -90,9 +90,9 @@ all:
- .PHONY: all
+ # Locally calculated
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 9b402767fd..c52a5214a6 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Set and export the version string
--export BR2_VERSION := 2023.08-git
-+export BR2_VERSION := 2023.08-rc1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1686172000
-+BR2_VERSION_EPOCH = 1691269000
+-GMP_VERSION = 6.2.1
++GMP_VERSION = 6.3.0
+ GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+ GMP_INSTALL_STAGING = YES
+@@ -14,9 +14,6 @@ GMP_CPE_ID_VENDOR = gmplib
+ GMP_DEPENDENCIES = host-m4
+ HOST_GMP_DEPENDENCIES = host-m4
  
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 732554233e..3d5e2b37de 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -75,41 +75,41 @@
- 	  <p><a href="/downloads/buildroot-2023.05.1.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest release candidate: <b>2023.05-rc3</b></h3>
-+
-+      <h3 style="text-align: center;">Latest release candidate: <b>2023.08-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.05-rc3.tar.gz">buildroot-2023.05-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.05-rc3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.08-rc1.tar.gz">buildroot-2023.08-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.08-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.05-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.05-rc3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.05-rc3.tar.xz">buildroot-2023.05-rc3.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.05-rc3.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.08-rc1.tar.xz">buildroot-2023.08-rc1.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.08-rc1.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index acd3ffeee4..a338b15acf 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.08-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 August 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over
-+	  the tree, see
-+	  the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.08-rc1">CHANGES</a>
-+	  file for more details.</p>
-+	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
-+          <a href="/downloads/buildroot-2023.08-rc1.tar.xz">2023.08-rc1
-+            release</a>, and report any problems found to the
-+          <a href="support.html">mailing list</a> or
-+          <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-# 0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
+-GMP_IGNORE_CVES += CVE-2021-43618
+-
+ # GMP doesn't support assembly for coldfire or mips r6 ISA yet
+ # Disable for ARM v7m since it has different asm constraints
+ ifeq ($(BR2_m68k_cf)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6)$(BR2_ARM_CPU_ARMV7M),y)
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
