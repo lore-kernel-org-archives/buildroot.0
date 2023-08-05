@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5CEEC8734
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD444EC8737
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:52:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D98141E6F;
-	Thu,  7 Sep 2023 14:52:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D98141E6F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B14B41E1F;
+	Thu,  7 Sep 2023 14:52:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B14B41E1F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OpP0Nr4FUxgl; Thu,  7 Sep 2023 14:52:02 +0000 (UTC)
+	with ESMTP id U35c0xA-21Xc; Thu,  7 Sep 2023 14:52:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82EFB41DE3;
-	Thu,  7 Sep 2023 14:52:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82EFB41DE3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5AE9E1BF995
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FBB441E71;
+	Thu,  7 Sep 2023 14:52:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FBB441E71
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 59F921BF990
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33BE161257
+ by smtp4.osuosl.org (Postfix) with ESMTP id 327AB41D8B
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33BE161257
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 327AB41D8B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3_G7InR7V94S for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ITLqA-H9dWer for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F51061232
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1525441C01
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F51061232
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1525441C01
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F1C986A21; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+ id 02F0686A1F; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 00:00:08 +0200
+Date: Sat, 5 Aug 2023 23:59:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 05f4c2fd102c0ca0a4e5947ce55e0a09660b6282
-X-Git-Newrev: 2a44207ea0eeaf2346cb6fe572a96770b74d9dc9
+X-Git-Oldrev: a5a7de82f37c5b6997894f51aff50593b6081cfa
+X-Git-Newrev: 09c4a7a35fb0e82f24399dea4507e47242eee27b
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.3F1C986A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.373
+Message-Id: <20230907145125.02F0686A1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gmp: bump version to 6.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a44207ea0eeaf2346cb6fe572a96770b74d9dc9
+commit: https://git.buildroot.net/buildroot/commit/?id=09c4a7a35fb0e82f24399dea4507e47242eee27b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed patch which is included in this release.
+
+Release notes:
+https://gmplib.org/list-archives/gmp-announce/2023-July/000050.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...01-mpz-inp_raw.c-Avoid-bit-size-overflows.patch | 27 ----------------------
+ package/gmp/gmp.hash                               |  2 +-
+ package/gmp/gmp.mk                                 |  5 +---
+ 4 files changed, 2 insertions(+), 33 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 84979a70fa..6915e04e46 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f846cc7a87..3a9329ab71 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -536,7 +536,6 @@ package/gli/0001-Optional-building-tests.patch Upstream
+ package/glog/0001-added-emscripten-support.patch Upstream
+ package/glorytun/0001-Add-support-for-Apple-silicon.patch Upstream
+ package/glorytun/0002-aegis256.c-fix-aarch64-build-with-uclibc.patch Upstream
+-package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch Upstream
+ package/gnu-efi/0001-Make.defaults-don-t-override-ARCH-when-cross-compili.patch Upstream
+ package/gnupg/0001-build-Always-use-EXTERN_UNLESS_MAIN_MODULE-pattern.patch Upstream
+ package/gnuplot/0001-configure-add-without-demo-option.patch Upstream
+diff --git a/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch b/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
+deleted file mode 100644
+index 0003f342c3..0000000000
+--- a/package/gmp/0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-# HG changeset patch
+-# User Marco Bodrato <bodrato@mail.dm.unipi.it>
+-# Date 1634836009 -7200
+-# Node ID 561a9c25298e17bb01896801ff353546c6923dbd
+-# Parent  e1fd9db13b475209a864577237ea4b9105b3e96e
+-mpz/inp_raw.c: Avoid bit size overflows
+-
+-[Retrieved from: https://gmplib.org/repo/gmp-6.2/rev/561a9c25298e]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -r e1fd9db13b47 -r 561a9c25298e mpz/inp_raw.c
+---- a/mpz/inp_raw.c	Tue Dec 22 23:49:51 2020 +0100
+-+++ b/mpz/inp_raw.c	Thu Oct 21 19:06:49 2021 +0200
+-@@ -88,8 +88,11 @@
+- 
+-   abs_csize = ABS (csize);
+- 
+-+  if (UNLIKELY (abs_csize > ~(mp_bitcnt_t) 0 / 8))
+-+    return 0; /* Bit size overflows */
+-+
+-   /* round up to a multiple of limbs */
+--  abs_xsize = BITS_TO_LIMBS (abs_csize*8);
+-+  abs_xsize = BITS_TO_LIMBS ((mp_bitcnt_t) abs_csize * 8);
+- 
+-   if (abs_xsize != 0)
+-     {
+-
+diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
+index d55e312bbb..8c8b4d1151 100644
+--- a/package/gmp/gmp.hash
++++ b/package/gmp/gmp.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2  gmp-6.2.1.tar.xz
++sha256  a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898  gmp-6.3.0.tar.xz
+ 
  # Locally calculated
--sha256  8059ed6f696b5be4bf77c59d57fc26e35d9e579ba2629e325400a6eb8b91089f  hwdata-0.371.tar.gz
-+sha256  0db28dc635d5059ad23d068d2e56ef5dc540f95bc813ea5a3c0f5d63b03d20d6  hwdata-0.373.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index cac6b80185..025f5b4969 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 9b402767fd..c52a5214a6 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HWDATA_VERSION = 0.371
-+HWDATA_VERSION = 0.373
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+-GMP_VERSION = 6.2.1
++GMP_VERSION = 6.3.0
+ GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+ GMP_INSTALL_STAGING = YES
+@@ -14,9 +14,6 @@ GMP_CPE_ID_VENDOR = gmplib
+ GMP_DEPENDENCIES = host-m4
+ HOST_GMP_DEPENDENCIES = host-m4
+ 
+-# 0001-mpz-inp_raw.c-Avoid-bit-size-overflows.patch
+-GMP_IGNORE_CVES += CVE-2021-43618
+-
+ # GMP doesn't support assembly for coldfire or mips r6 ISA yet
+ # Disable for ARM v7m since it has different asm constraints
+ ifeq ($(BR2_m68k_cf)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6)$(BR2_ARM_CPU_ARMV7M),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
