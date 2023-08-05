@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46AB0C001DB
-	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 17:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FD8AC001DB
+	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 17:40:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA5CA416AA;
-	Sat,  5 Aug 2023 17:39:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA5CA416AA
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB490415E5;
+	Sat,  5 Aug 2023 17:40:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB490415E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nZz5uFo_wCSy; Sat,  5 Aug 2023 17:39:46 +0000 (UTC)
+	with ESMTP id I71Zu7HRBo5q; Sat,  5 Aug 2023 17:39:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C61B9416BA;
-	Sat,  5 Aug 2023 17:39:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C61B9416BA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2510D1BF860
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 17:39:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 952F14002C;
+	Sat,  5 Aug 2023 17:39:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 952F14002C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C79D1BF860
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 17:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 837EE40114
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 17:39:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 837EE40114
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72B0D816F5
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 17:38:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72B0D816F5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gM-9GlUIDn7x for <buildroot@lists.busybox.net>;
- Sat,  5 Aug 2023 17:39:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I2XBtOrUdArk for <buildroot@lists.busybox.net>;
+ Sat,  5 Aug 2023 17:38:43 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DD77040533
- for <buildroot@buildroot.org>; Sat,  5 Aug 2023 17:39:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD77040533
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 953838146E
+ for <buildroot@buildroot.org>; Sat,  5 Aug 2023 17:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 953838146E
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 2735EA4C10B9;
- Sat,  5 Aug 2023 19:37:52 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id EF015A4C1099;
+ Sat,  5 Aug 2023 19:37:51 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:58718)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qSLDs-0001nw-0A;
- Sat, 05 Aug 2023 19:37:52 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qSLDr-0001nw-23;
+ Sat, 05 Aug 2023 19:37:51 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  5 Aug 2023 19:37:41 +0200
-Message-Id: <20230805173749.1570940-12-bernd@kuhls.net>
+Date: Sat,  5 Aug 2023 19:37:33 +0200
+Message-Id: <20230805173749.1570940-4-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230805173749.1570940-1-bernd@kuhls.net>
 References: <20230805173749.1570940-1-bernd@kuhls.net>
@@ -52,19 +52,19 @@ MIME-Version: 1.0
 X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1691257072;
- bh=pH4ICzLjhf3ZL12SjlbzNreKLmDp9S/psqVOkLN2YTM=;
+ s=kas202306131828; t=1691257071;
+ bh=Zlhjgw/u6mKsws+DOlLaGwtZCLIJoQ3aY0IPr73QFRY=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=YNBkxvc1tlBTcSn0i4UZiBKriz8x1yCDX1Ogtvzt+v3x54tqt9Gk6CRN9lRFnqEww
- XA4BFm7lzeYYRvBAKGe18ctQD8IB1S9+F4eLDm5IjITTClm3YnrXXIrnhueYSTaC17
- C590lZXV0AxK6Ej3JYEYNAxAjqY6oUEOlbjY/DVmJcnkFd0K95YvkDUtPJWF3MDSVc
- 4cq62aoQPUwwoHzj0zkq6+hgtTSZ/fWxaBUX0mEMDaCa+C3jaeThCXgUCxm2NF1oya
- XiHMfPVzNeEkd1boDVdcavfIN0kIrvZXcmjZ0DY2wATyZKeHjr1ZR1VV/XtrWfAO9k
- XJo2iG5Aj7+CQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=tZ0qW3TYoQAgr76sAIpBnWISfU/jx/RoGOBlW5NSjKMSayxKWxxeDSCZ0Bh6iLvnV
+ ere5p11qVI7clrzruez/PYMuQ5r6+Xn4BZ/C6ZuxIcUw4MUxbpUXYGBrZaysaMzonz
+ 6uuLeGSyWfbc7y8ZbQKVlY/GYD2Xby0Vbl7laXPVkF1zMZ1JiPNAXSAi98bAuSIxug
+ +AQu2bmshKW1gkRCdM1HVOsJyydxFKLnSeRsoMwkI5bCX01dVCxmWY6yxNhEa4K1T5
+ 0+ywVAqm/lj9pvUU8yj35rCDXWfJszyD7CCcCiDel5PvJ6kcYnS+l1mueHIb9PpMwK
+ DtLP5NXusdlDg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=YNBkxvc1
-Subject: [Buildroot] [PATCH 12/20] package/python-mwscrape2slob: switch from
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=tZ0qW3TY
+Subject: [Buildroot] [PATCH 04/20] package/python-crcmod: switch from
  distutils to setuptools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -91,21 +91,22 @@ distutils will be dropped with python 3.12.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-mwscrape2slob/python-mwscrape2slob.mk | 2 +-
+ package/python-crcmod/python-crcmod.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-mwscrape2slob/python-mwscrape2slob.mk b/package/python-mwscrape2slob/python-mwscrape2slob.mk
-index cd8ae35234..a99005ba7c 100644
---- a/package/python-mwscrape2slob/python-mwscrape2slob.mk
-+++ b/package/python-mwscrape2slob/python-mwscrape2slob.mk
-@@ -7,6 +7,6 @@
- PYTHON_MWSCRAPE2SLOB_VERSION = e01d3e92f0a372ebd0f57390e437a28f9d3c0438
- PYTHON_MWSCRAPE2SLOB_SITE = $(call github,itkach,mwscrape2slob,$(PYTHON_MWSCRAPE2SLOB_VERSION))
- PYTHON_MWSCRAPE2SLOB_LICENSE = GPL-3.0, Apache-2.0 (MathJax), GPL (MediaWiki monobook style sheet)
--PYTHON_MWSCRAPE2SLOB_SETUP_TYPE = distutils
-+PYTHON_MWSCRAPE2SLOB_SETUP_TYPE = setuptools
+diff --git a/package/python-crcmod/python-crcmod.mk b/package/python-crcmod/python-crcmod.mk
+index 1aab7f5084..c97f8808c1 100644
+--- a/package/python-crcmod/python-crcmod.mk
++++ b/package/python-crcmod/python-crcmod.mk
+@@ -7,7 +7,7 @@
+ PYTHON_CRCMOD_VERSION = 1.7
+ PYTHON_CRCMOD_SOURCE = crcmod-$(PYTHON_CRCMOD_VERSION).tar.gz
+ PYTHON_CRCMOD_SITE = https://pypi.python.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b
+-PYTHON_CRCMOD_SETUP_TYPE = distutils
++PYTHON_CRCMOD_SETUP_TYPE = setuptools
+ PYTHON_CRCMOD_LICENSE = MIT
+ PYTHON_CRCMOD_LICENSE_FILES = LICENSE
  
- $(eval $(python-package))
 -- 
 2.39.2
 
