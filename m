@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 976C6C001DB
-	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 21:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89732C001DB
+	for <buildroot@archiver.kernel.org>; Sat,  5 Aug 2023 21:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50E22608D8;
-	Sat,  5 Aug 2023 21:35:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50E22608D8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3602760D78;
+	Sat,  5 Aug 2023 21:36:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3602760D78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RTRa9g6jY10e; Sat,  5 Aug 2023 21:35:47 +0000 (UTC)
+	with ESMTP id NtC3MyxxtMoH; Sat,  5 Aug 2023 21:36:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F3D460D59;
-	Sat,  5 Aug 2023 21:35:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F3D460D59
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 588D51BF86B
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:35:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70A3660E2F;
+	Sat,  5 Aug 2023 21:36:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70A3660E2F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AEA11BF28F
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DBCB40257
- for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DBCB40257
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE8EE8142D
+ for <buildroot@lists.busybox.net>; Sat,  5 Aug 2023 21:35:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE8EE8142D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ecwRhNUAazQP for <buildroot@lists.busybox.net>;
- Sat,  5 Aug 2023 21:34:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D41kHEcGj4BM for <buildroot@lists.busybox.net>;
+ Sat,  5 Aug 2023 21:35:45 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABBCD415D7
- for <buildroot@buildroot.org>; Sat,  5 Aug 2023 21:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABBCD415D7
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EFEA8814A1
+ for <buildroot@buildroot.org>; Sat,  5 Aug 2023 21:35:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFEA8814A1
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 68B43A4C00C6;
- Sat,  5 Aug 2023 23:34:08 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55386)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 25697A4C066D;
+ Sat,  5 Aug 2023 23:35:43 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:35586)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qSOuW-0000fm-0W;
- Sat, 05 Aug 2023 23:34:08 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qSOw2-0000wu-2l;
+ Sat, 05 Aug 2023 23:35:42 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  5 Aug 2023 23:34:08 +0200
-Message-Id: <20230805213408.3588223-1-bernd@kuhls.net>
+Date: Sat,  5 Aug 2023 23:35:42 +0200
+Message-Id: <20230805213542.3588279-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: --
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1691271248;
- bh=N47APkByva/SlfgO2ZCZKThZosUCMgmOkikuU0HC4k4=;
+ s=kas202306131828; t=1691271343;
+ bh=Nm/2cL6B+evlxSVQElpMjDr3+M1kYDZ7BIzZsq8NOs0=;
  h=From:To:Cc:Subject:Date:From;
- b=UrZIN3tlzTKHe/+454D6kXq/UGeesPB9Iqgfvh+ueNv+8A36fSPVU3kepen3rpS7F
- jCapAiD3/7cWKs1asVD/GMgPxswhBMEl96iTKY8kMB9vERs+0gQ8c151QpNlyFbC7W
- UMqM8lzNoRJWCAJQexsq9jbF8bQudyhF9QF/PZ0yMJZ9dF1GKh5V6Us/2yEr2sYEqz
- jGl3mYcD+fHOSxm2zOYAqQOGVXHDaN1lJHOlFZ58nytz3fzr8dtcX17C+I/eKxEGND
- XJonkeiiq3m45s230qep6gGYLesmZOthOLgxgzhJfgL1dDHJQBDXI4tAxrk+SREsQR
- KiQs8B3vgw65A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=Bb6ZSJU22/KCtkUOTGSxAyO0b7tq2UvfrtdErbOIvvqnc8fcnaa45eaqgp6Fsd/AU
+ 5TZ87/lXNqyGkrvdZttoXi2sIfRKemCYYWjnNjS2RPej5tARpmYJl0NV9hAn+yEnuI
+ 4iqhfIRx2tcaaFIc0Ui0RbusEsdpq/Su+xq5PZkuE0fvnxNVLP6LVXZ7YZRlh2RQIK
+ WNZduF1jXk/rzJYPSRjP3DX7Ra2tWpgBgl0SoFmcYWTpV8v0sampqfeYqJ+IzRkzoa
+ ynKtWo2lvwXj0xKpGodjGSrpCtNkK0KuuzEAtytYdG08chtVpuuIWD8b2XGQaKp6rw
+ KWgwgNjs7YyMw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=UrZIN3tl
-Subject: [Buildroot] [PATCH 1/1] package/libarchive: bump version to 3.7.1
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Bb6ZSJU2
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: bump version to
+ 20230804
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,107 +75,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removed patch, upstream applied a different solution:
-https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2
-
-Release notes:
-https://github.com/libarchive/libarchive/releases/tag/v3.7.1
-https://github.com/libarchive/libarchive/releases/tag/v3.7.0
+Updated license hash due to various commits:
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/log/WHENCE
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .checkpackageignore                           |  1 -
- ...o-not-add-iconv-for-Requires.private.patch | 28 -------------------
- package/libarchive/libarchive.hash            |  2 +-
- package/libarchive/libarchive.mk              |  6 +---
- 4 files changed, 2 insertions(+), 35 deletions(-)
- delete mode 100644 package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch
+ package/linux-firmware/linux-firmware.hash | 4 ++--
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8d5e291e8b..67db03239c 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -657,7 +657,6 @@ package/leveldb/0003-CMakeLists.txt-check-for-atomic-library.patch Upstream
- package/lftp/0001-Fix-build-with-LibreSSL-following-commit-537f37898.patch Upstream
- package/lftp/0002-src-lftp_ssl.c-fix-build-with-libressl-2.7.0.patch Upstream
- package/libabseil-cpp/0001-force-position-independent-code.patch Upstream
--package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch Upstream
- package/libargon2/0001-libargon2-dont-fail-on-existing-symlink.patch Upstream
- package/libart/0001-art-config-cross.patch Sob Upstream
- package/libatasmart/0001-strpool-cross-flags.patch Upstream
-diff --git a/package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch b/package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch
-deleted file mode 100644
-index 91903866ef..0000000000
---- a/package/libarchive/0001-autotools-do-not-add-iconv-for-Requires.private.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 619c1be8d38ff79622db8f66f3b02832795315f9 Mon Sep 17 00:00:00 2001
--From: Christian Hesse <mail@eworm.de>
--Date: Wed, 14 Dec 2022 09:04:39 +0100
--Subject: [PATCH] autotools: do not add iconv for Requires.private
--
--There is no pkgconfig file for iconv, thus things break with this
--change. Let's drop iconv from Requires.private.
--
--Fixes: a83f3d32 ("autotools: Fix static linking when openssl is enabled in windows")
--[Retrieved from:
--https://github.com/libarchive/libarchive/pull/1817/commits/619c1be8d38ff79622db8f66f3b02832795315f9]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 99bff20d1..f245d0c55 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -378,7 +378,6 @@ if test "x$with_iconv" != "xno"; then
--     AC_CHECK_HEADERS([localcharset.h])
--     am_save_LIBS="$LIBS"
--     LIBS="${LIBS} ${LIBICONV}"
---    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
--     AC_CHECK_FUNCS([locale_charset])
--     LIBS="${am_save_LIBS}"
--     if test "x$ac_cv_func_locale_charset" != "xyes"; then
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index b03bef3de5..02f7d84246 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  9e2c1b80d5fbe59b61308fdfab6c79b5021d7ff4ff2489fb12daf0a96a83551d  libarchive-3.6.2.tar.xz
-+sha256  b17403ce670ff18d8e06fea05a9ea9accf70678c88f1b9392a2e29b51127895f  libarchive-3.7.1.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 2010b6529f..5bcf559a6e 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,17 +4,13 @@
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 25b6d018a1..7ba9537dd8 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/sha256sums.asc
+-sha256  87597111c0d4b71b31e53cb85a92c386921b84c825a402db8c82e0e86015500d  linux-firmware-20230625.tar.xz
++sha256  88d46c543847ee3b03404d4941d91c92974690ee1f6fdcbee9cef3e5f97db688  linux-firmware-20230804.tar.xz
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
+@@ -35,6 +35,6 @@ sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENS
+ sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
+ sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
+ sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
+-sha256  cb91afd4cf763c316d3cb6acc20a63a58d3c7e7b3ff03f254285a4414aeb76f9  WHENCE
++sha256  0f87f8f67de39828d8e59c69369f850e0a80de638795e22ddfdd1f7f31cdf889  WHENCE
+ sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
+ sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 01718fa1e0..a1cec90de2 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.6.2
-+LIBARCHIVE_VERSION = 3.7.1
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
- LIBARCHIVE_LICENSE_FILES = COPYING
- LIBARCHIVE_CPE_ID_VENDOR = libarchive
--# We're patching configure.ac
--LIBARCHIVE_AUTORECONF = YES
--# needed for autoreconf
--LIBARCHIVE_DEPENDENCIES += host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
+-LINUX_FIRMWARE_VERSION = 20230625
++LINUX_FIRMWARE_VERSION = 20230804
+ LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
+ LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
+ LINUX_FIRMWARE_INSTALL_IMAGES = YES
 -- 
 2.39.2
 
