@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 027EFEC8734
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B724EC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4BCF41D81;
-	Thu,  7 Sep 2023 14:55:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4BCF41D81
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4393F41E43;
+	Thu,  7 Sep 2023 14:55:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4393F41E43
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9zleRP9UwuoT; Thu,  7 Sep 2023 14:55:12 +0000 (UTC)
+	with ESMTP id hDYap2P5r-IR; Thu,  7 Sep 2023 14:55:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3824A41E26;
-	Thu,  7 Sep 2023 14:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3824A41E26
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05AE71BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FC3A41DFE;
+	Thu,  7 Sep 2023 14:55:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FC3A41DFE
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 282D61BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A46206124D
+ by smtp4.osuosl.org (Postfix) with ESMTP id B670641D92
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A46206124D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B670641D92
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dJs9_DKyqlU2 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iAf1I5z07sxP for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2AD86124E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 475B541D65
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2AD86124E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 475B541D65
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEE7186A21; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+ id 36FAC86A20; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 16:24:09 +0200
+Date: Sun, 6 Aug 2023 00:00:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38a098df133aaa2ebf09742054b02db5a44f58e5
-X-Git-Newrev: dff67170f73959e6826ec3e87e892747f8d3a5fb
+X-Git-Oldrev: b86708826bcbbc1f1af01ed84f3e13dc9538ac6b
+X-Git-Newrev: 05f4c2fd102c0ca0a4e5947ce55e0a09660b6282
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.CEE7186A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: add http/2 support by
- using libsoup3
+Message-Id: <20230907145125.36FAC86A20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnutls: bump version to 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,68 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dff67170f73959e6826ec3e87e892747f8d3a5fb
+commit: https://git.buildroot.net/buildroot/commit/?id=05f4c2fd102c0ca0a4e5947ce55e0a09660b6282
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support added in 2.33.2:
-  https://wpewebkit.org/release/wpewebkit-2.33.2.html
-  "HTTP/2 support when building with libsoup3."
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpewebkit/Config.in    | 6 +++---
- package/wpewebkit/wpewebkit.mk | 5 ++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 7a8dc557c3..f1d38c7cad 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -36,9 +36,9 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
--	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
--	depends on BR2_USE_WCHAR # icu, libsoup
-+	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
-@@ -51,7 +51,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	select BR2_PACKAGE_LIBEPOXY
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBSOUP3
- 	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_OPENJPEG
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6712291c22..bf0b095372 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -15,7 +15,7 @@ WPEWEBKIT_LICENSE_FILES = \
- WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
- WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
- WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
--	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
-+	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
- 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 2f6dba9d3c..a6ba6b22c6 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.0.tar.xz.sig
+-sha256  0ea0d11a1660a1e63f960f157b197abe6d0c8cb3255be24e1fb3815930b9bdc5  gnutls-3.8.0.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.1.tar.xz.sig
++sha256  ba8b9e15ae20aba88f44661978f5b5863494316fe7e722ede9d069fe6294829c  gnutls-3.8.1.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index d6b8b229bd..d9b9831fd6 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
  
- WPEWEBKIT_CMAKE_BACKEND = ninja
-@@ -28,8 +28,7 @@ WPEWEBKIT_CONF_OPTS = \
- 	-DENABLE_INTROSPECTION=OFF \
- 	-DENABLE_MINIBROWSER=OFF \
- 	-DENABLE_WEB_RTC=OFF \
--	-DUSE_AVIF=OFF \
--	-DUSE_SOUP2=ON
-+	-DUSE_AVIF=OFF
- 
- ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
- WPEWEBKIT_CONF_OPTS += \
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).0
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
