@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73522C001DE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 13:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2501AC001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 13:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3FEA409F0;
-	Sun,  6 Aug 2023 13:43:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3FEA409F0
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2318409A8;
+	Sun,  6 Aug 2023 13:45:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2318409A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QxHLlZ1FAP18; Sun,  6 Aug 2023 13:43:40 +0000 (UTC)
+	with ESMTP id COlcUMJr1j7b; Sun,  6 Aug 2023 13:45:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0583240997;
-	Sun,  6 Aug 2023 13:43:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0583240997
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 233A31BF8C7
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:43:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91DEF4043D;
+	Sun,  6 Aug 2023 13:45:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91DEF4043D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F6861BF3C0
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8165C40201
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8165C40201
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE9BB60AC6
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:44:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE9BB60AC6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l_AAUfcn9dqO for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 13:43:05 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 191BC40113
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 13:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 191BC40113
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CBB8E60003;
- Sun,  6 Aug 2023 13:43:01 +0000 (UTC)
-Date: Sun, 6 Aug 2023 15:43:00 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20230806154300.310491c4@windsurf>
-In-Reply-To: <ZM+YFazhq0X2JCwl@waldemar-brodkorb.de>
-References: <20230806102554.46261-1-thomas.petazzoni@bootlin.com>
- <ZM+YFazhq0X2JCwl@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691329382;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BmzqeJhwa+TbJI+VV6RqQ6kIuJodk7CQhdHGOJolpIs=;
- b=HvkTia5RHzNG6/Yw/GU5chlj8bBjj0Q3cUEH+sPJGwoChiipKNcuxWeCwzGMlXJmm5bbuv
- a8fGUqqWjTh8cirPk7EcLzv7iOcdFXbw+QZpBAwGPBTsLxB2P7JFKfJs316VgPIpfMUagh
- iJJYPa0hbV+T9z9mobwhEYT4OI+MZIMjoIsGwSF4l7i82LQEvppFFRIsM8HFAV2CJlBPSi
- IDXvp8824fnCvxD7Dg+M7xA9qs/LUjM7tqakjV/iIpMI1tr8AYuyR3K/fhahOKbn0L5dwD
- tU2aq4cuiiEfhjdtB4LkMO/NO8J2YP/Fs7Ww1bjLfJ709LH7BvxKiunhLPsOLg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HvkTia5R
-Subject: Re: [Buildroot] [PATCH 1/3] package/elf2flt: refresh patches
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id etHk-1A0UNhQ for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 13:44:56 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE75160B32
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 13:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE75160B32
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DC966843C6; Sun,  6 Aug 2023 13:44:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 15:44:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d79f9c9f416ac5da90cd428916cff0b5288cb03a
+X-Git-Newrev: d0349d5ba02df26c9f3d98b1e34ebd2c5c34192c
+X-Patchwork-Hint: ignore
+Message-Id: <20230806134455.DC966843C6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elf2flt: fix build with binutils
+ >= 2.41 due to libbfd location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +58,82 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Waldemar,
+commit: https://git.buildroot.net/buildroot/commit/?id=d0349d5ba02df26c9f3d98b1e34ebd2c5c34192c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 6 Aug 2023 14:54:45 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+elf2flt needs to link against libbfd.a and libiberty.a which are
+provided by host-binutils, but not installed, so we poke directly
+into the host-binutils build directory. While not very nice, it has
+already been like this for a long time. We could build host-binutils
+with --enable-install-libbfd and --enable-install-libiberty so that
+those libraries are installed, but we prefer to do this separately,
+and there is a serious potential for perturbations to other packages
+by having libbfd/libiberty installed in $(HOST_DIR).
 
-> I tested the series and it worked well for following defconfigs:
-> qemu_m68k_mcf5208_defconfig
-> qemu_riscv64_nommu_virt_defconfig
-> qemu_xtensa_lx60_nommu_defconfig
-> 
-> You can add if you like a 
-> Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+In the mean time, an issue of poking directly into the host-binutils
+build directory is that the location of libbfd.a has changed in
+binutils >= 2.41, so we special case binutils 2.39 and 2.40, which are
+the two remaining versions still using the "old" path".
 
-Thanks a lot for having tested the whole series!
+Note: the ARC-special binutils version is not considered because
+Buildroot only supports ARC CPUs with a MMU and therefore host-elf2flt
+is never used on ARC.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fixes:
+
+gcc: error: /builds/buildroot.org/toolchains-builder/build/output/build/host-binutils-2.41/bfd/libbfd.a: No such file or directory
+
+When build host-elf2flt against host-binutils 2.41.
+
+This issue is not visible in the autobuilders as it is hidden by the
+BFD_VMA_FMT issue fixed in the previous commit.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/elf2flt/elf2flt.mk | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+index 6cd0786c3d..b970de48f2 100644
+--- a/package/elf2flt/elf2flt.mk
++++ b/package/elf2flt/elf2flt.mk
+@@ -14,12 +14,27 @@ HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
+ # 0001-elf2flt-handle-binutils-2.34.patch
+ HOST_ELF2FLT_AUTORECONF = YES
+ 
++# elf2flt needs to link against libbfd.a and libiberty.a which are
++# provided by host-binutils, but not installed, so we poke directly
++# into the host-binutils build directory. Turns out that the location
++# of libbfd.a has changed in binutils >= 2.41, so we special case
++# binutils 2.39 and 2.40, which are the two remaining versions still
++# using the "old" path". Note: the ARC-special binutils version is not
++# considered because Buildroot only supports ARC CPUs with a MMU and
++# therefore host-elf2flt is never used on ARC. libiberty.a has
++# remained at the same location.
++ifeq ($(BR2_BINUTILS_VERSION_2_39_X)$(BR2_BINUTILS_VERSION_2_40_X),y)
++HOST_ELF2FLT_LIBBFD_PATH = $(HOST_BINUTILS_DIR)/bfd/libbfd.a
++else
++HOST_ELF2FLT_LIBBFD_PATH = $(HOST_BINUTILS_DIR)/bfd/.libs/libbfd.a
++endif
++
+ # It is not exactly a host variant, but more a cross variant, which is
+ # why we pass a special --target option.
+ HOST_ELF2FLT_CONF_OPTS = \
+ 	--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
+ 	--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
+-	--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
++	--with-libbfd=$(HOST_ELF2FLT_LIBBFD_PATH) \
+ 	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--disable-werror
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
