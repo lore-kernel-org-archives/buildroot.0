@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED3FAC001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EA52C00528
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:53:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4AF860F76;
-	Sun,  6 Aug 2023 21:53:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4AF860F76
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0975960E85;
+	Sun,  6 Aug 2023 21:53:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0975960E85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 545Ll5J52Q_W; Sun,  6 Aug 2023 21:53:25 +0000 (UTC)
+	with ESMTP id IhbmBNoKDG-F; Sun,  6 Aug 2023 21:53:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEC0660FAF;
-	Sun,  6 Aug 2023 21:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEC0660FAF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72C9760FEF;
+	Sun,  6 Aug 2023 21:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72C9760FEF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 574CB1BF30C
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:53:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13D021BF30C
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:53:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D28C6414DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCA17414E0
  for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:52:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D28C6414DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCA17414E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FXk9R1kNDc9O for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 21:52:16 +0000 (UTC)
+ with ESMTP id 9jQHLjqXIukB for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 21:52:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE8FB40267
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC8CF408F7
  for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:52:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE8FB40267
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC8CF408F7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8C3D84632; Sun,  6 Aug 2023 21:52:16 +0000 (UTC)
+ id D9BAC84639; Sun,  6 Aug 2023 21:52:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 23:40:43 +0200
+Date: Sun, 6 Aug 2023 23:40:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8ed502d5e1cdcb948d7919c627a700e8d39d18b3
-X-Git-Newrev: 9ae04a4d116afffc84d8e3615acdafe7b9a78615
+X-Git-Oldrev: b05a3948107670e9f6027fd1e7a41e3e91f98255
+X-Git-Newrev: 0fe729f70ef695d0f355226d69b7ae7ab4a9b56b
 X-Patchwork-Hint: ignore
-Message-Id: <20230806215216.B8C3D84632@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ranger: switch from
- distutils to setuptools
+Message-Id: <20230806215216.D9BAC84639@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pycups: switch
+ from distutils to setuptools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ae04a4d116afffc84d8e3615acdafe7b9a78615
+commit: https://git.buildroot.net/buildroot/commit/?id=0fe729f70ef695d0f355226d69b7ae7ab4a9b56b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 distutils will be dropped with python 3.12.
@@ -72,22 +72,22 @@ distutils will be dropped with python 3.12.
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ranger/ranger.mk | 2 +-
+ package/python-pycups/python-pycups.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ranger/ranger.mk b/package/ranger/ranger.mk
-index 91b30f216e..1c948db848 100644
---- a/package/ranger/ranger.mk
-+++ b/package/ranger/ranger.mk
-@@ -6,7 +6,7 @@
- 
- RANGER_VERSION = 1.7.2
- RANGER_SITE = http://ranger.nongnu.org
--RANGER_SETUP_TYPE = distutils
-+RANGER_SETUP_TYPE = setuptools
- RANGER_LICENSE = GPL-3.0
- RANGER_LICENSE_FILES = AUTHORS
- 
+diff --git a/package/python-pycups/python-pycups.mk b/package/python-pycups/python-pycups.mk
+index 41da3641a0..bf61400afe 100644
+--- a/package/python-pycups/python-pycups.mk
++++ b/package/python-pycups/python-pycups.mk
+@@ -7,7 +7,7 @@
+ PYTHON_PYCUPS_VERSION = 2.0.1
+ PYTHON_PYCUPS_SOURCE = pycups-$(PYTHON_PYCUPS_VERSION).tar.gz
+ PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/0c/bb/82546806a86dc16f5eeb76f62ffdc42cce3d43aacd4e25a8b5300eec0263
+-PYTHON_PYCUPS_SETUP_TYPE = distutils
++PYTHON_PYCUPS_SETUP_TYPE = setuptools
+ PYTHON_PYCUPS_LICENSE = GPL-2.0+
+ PYTHON_PYCUPS_LICENSE_FILES = COPYING
+ PYTHON_PYCUPS_DEPENDENCIES = cups
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
