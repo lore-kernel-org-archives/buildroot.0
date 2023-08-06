@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB2AAC001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 15:42:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D3D7C0015E
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 16:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 85B594054E;
-	Sun,  6 Aug 2023 15:42:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85B594054E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 50F0A403C6;
+	Sun,  6 Aug 2023 16:05:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50F0A403C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IqspaH1OZraD; Sun,  6 Aug 2023 15:42:08 +0000 (UTC)
+	with ESMTP id MTvmcAy5qMWx; Sun,  6 Aug 2023 16:05:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D02754028D;
-	Sun,  6 Aug 2023 15:42:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D02754028D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9FC321BF5DA
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 15:42:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 72B84405D1;
+	Sun,  6 Aug 2023 16:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72B84405D1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 995611BF909
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 16:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A443401F1
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 15:41:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A443401F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1F6E41526
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 16:04:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1F6E41526
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qaaA-AqaoF2i for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 15:41:42 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2682E4028D
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 15:41:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2682E4028D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15FE08452F; Sun,  6 Aug 2023 15:41:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 17:40:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8b1bc64d924e386466d715637a4a09228322beef
-X-Git-Newrev: 7efd8e3c0b584a1d743db2c0005bf9b85f521ae9
-X-Patchwork-Hint: ignore
-Message-Id: <20230806154142.15FE08452F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luvi: bump 2.14
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3-839et8wMVJ for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 16:04:03 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33C85401B1
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 16:04:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33C85401B1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D1A840009;
+ Sun,  6 Aug 2023 16:04:00 +0000 (UTC)
+Date: Sun, 6 Aug 2023 18:03:59 +0200
+To: Bernd Kuhls <bernd.kuhls@t-online.de>
+Message-ID: <20230806180359.1382e1dd@windsurf>
+In-Reply-To: <20230516193307.1543455-1-bernd.kuhls@t-online.de>
+References: <20230516193307.1543455-1-bernd.kuhls@t-online.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691337840;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=iWARhxA8eSReJSLVoSA5jpKgSHAGdWJMYoX4b8PsjUU=;
+ b=AwcXzKEOgggvgX/9cOGwqauWI0MCizfBHzsy3eCK8EkXUXWK+QDn07voeNQrzHR4wXYlDg
+ dyFzROx/dCLRZN1nr1+VDVo7m8Yu0RdfTwTAyRhuE98wWpAWUUiN6An2cnE5K9x9OdBhCZ
+ XsJdR7jUxwSa6LH+p8CZ5kpQkvo13idKAOBM4rE2XeLPggm1nKOxn4BGmHuvz6fuXob8ag
+ iHzS1iVySvIttZntQbEbFJsVwj/EIm3o6EC+BRtg+KJjv3dfItYOgcqsi/zFrCSzgcWrcK
+ xadhJY9Ctvv6WC9FI9Xs/LCW88+qIbz/31HBKhAxT6/D2Rsa/6tIeM6PEbCgDA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AwcXzKEO
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: depend on libucontext for
+ musl builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +77,96 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7efd8e3c0b584a1d743db2c0005bf9b85f521ae9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Bernd,
 
-lua-openssl (0.7.8-0) bundled in luvi 2.13 fail to build with openssl-3.x
+On Tue, 16 May 2023 21:33:07 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-test-output/TestLuvi/build/luvi-2.13.0/deps/lua-openssl/src/lbn.c:28:27: error: expected ')' before 'SHLIB_VERSION_NUMBER'
-   28 |       "based on OpenSSL " SHLIB_VERSION_NUMBER
-      |                           ^~~~~~~~~~~~~~~~~~~~
+> diff --git a/package/php/Config.in b/package/php/Config.in
+> index 69b4268c1d..18779ba1f9 100644
+> --- a/package/php/Config.in
+> +++ b/package/php/Config.in
+> @@ -8,7 +8,9 @@ config BR2_PACKAGE_PHP_ARCH_SUPPORTS
+>  	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+>  	default y if BR2_RISCV_64
+>  	default y if BR2_s390x
+> -	default y if BR2_TOOLCHAIN_HAS_UCONTEXT
+> +	default y if \
+> +		BR2_TOOLCHAIN_HAS_UCONTEXT || \
+> +		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
 
-Luvi 2.14 include an lua-openssl update to 0.8.2-0 fixing TestLuvi.
+Thanks for looking into this.
 
-See:
-https://github.com/luvit/luvi/releases/tag/v2.14.0
+I think this isn't the right solution, but it's not your fault: the
+semantic of BR2_TOOLCHAIN_HAS_UCONTEXT today is fuzzy and vague, and
+it's actually quite wrong how it's working.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561386
+If you look at your commit, you're basically saying that "some
+toolchains define BR2_TOOLCHAIN_HAS_UCONTEXT, but in fact they don't
+really provide ucontext support so we need to use an extra libucontext
+library". Don't you see how weird that sounds?
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/luvi/luvi.hash | 2 +-
- package/luvi/luvi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+libucontext should only be needed for toolchains that don't support
+ucontext... and musl right now is declared as
+BR2_TOOLCHAIN_HAS_UCONTEXT=y.
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index 9621ef4d03..3518a2dc85 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  da25c74a30a3fe2fc75e9797a6fa0717ebb05ceb7e6ccb61301f80c7dd436b73  luvi-src-v2.13.0.tar.gz
-+sha256  4be4468d01657100967a9c696f503aa3c30de6f23af39050c1aae909fbf0aaf2  luvi-src-v2.14.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index 5266281ffc..4a8072dee5 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUVI_VERSION = 2.13.0
-+LUVI_VERSION = 2.14.0
- LUVI_SOURCE = luvi-src-v$(LUVI_VERSION).tar.gz
- LUVI_SITE = https://github.com/luvit/luvi/releases/download/v$(LUVI_VERSION)
- LUVI_LICENSE = Apache-2.0
+But that's wrong as you point out: musl only provides the ucontext_t
+definition, but not the functions to manipulate it. So for example, the
+existing capnproto package does this:
+
+	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
+
+but because musl doesn't really support ucontext, it also does:
+
+# musl doesn't support getcontext/setcontext
+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+CAPNPROTO_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -DKJ_USE_FIBERS=0"
+endif
+
+For a similar reason, libopenssl has to do this:
+
+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+LIBOPENSSL_CFLAGS += -DOPENSSL_NO_ASYNC
+endif
+ifeq ($(BR2_TOOLCHAIN_HAS_UCONTEXT),)
+LIBOPENSSL_CFLAGS += -DOPENSSL_NO_ASYNC
+endif
+
+Because libopenssl really uses ucontext, so
+BR2_TOOLCHAIN_HAS_UCONTEXT=y isn't enough, it also needs to exclude the
+musl case.
+
+Apparently, the only packages for which BR2_TOOLCHAIN_HAS_UCONTEXT kind
+of makes sense are libsigsegv libabseil-cpp, as it indeed only needs
+ucontext_t, but not the getcontext/makecontext functions.
+
+Still, I would argue that we should change BR2_TOOLCHAIN_HAS_UCONTEXT
+to mean that the toolchain defines ucontext_t *and* implements
+getcontext/makecontext/setcontext. This implies (1) adding a comment
+above the option to explain its semantic and (2) drop the select
+BR2_TOOLCHAIN_HAS_UCONTEXT from musl.
+
+Then we can clean up libopenssl and capnproto. php would no longer
+fail, because BR2_TOOLCHAIN_HAS_UCONTEXT would no longer be true for
+musl.
+
+And finally, we can re-enable php on musl by making use of libucontext.
+
+Do you think you could work on this? It would be nice.
+
+Thanks a lot,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
