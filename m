@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79A7CC0015E
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 13:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7EF1C001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:03:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 252FB400D7;
-	Sun,  6 Aug 2023 13:59:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 252FB400D7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95E61400A8;
+	Sun,  6 Aug 2023 14:03:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95E61400A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0nzUG-koT5YN; Sun,  6 Aug 2023 13:59:27 +0000 (UTC)
+	with ESMTP id IJcsrb-DYikJ; Sun,  6 Aug 2023 14:03:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03BF440571;
-	Sun,  6 Aug 2023 13:59:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03BF440571
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 074BE1BF3C0
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:59:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E077402A6;
+	Sun,  6 Aug 2023 14:03:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E077402A6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D2F51BF947
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E56E607FF
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:57:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E56E607FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 217E54021B
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:02:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 217E54021B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id je-y-F9LzJeY for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 969D160EE8
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 969D160EE8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 81799843FF; Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KCSdw5TMIVHQ for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 14:02:45 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8549440322
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:02:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8549440322
+Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 67C1FA4C00C6;
+ Sun,  6 Aug 2023 16:02:42 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46282)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qSeLB-0000Bn-2f;
+ Sun, 06 Aug 2023 16:02:41 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 15:07:26 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8251bf2d2d7572264bace97a160cbc5cfd04d10a
-X-Git-Newrev: 0fb677c087228bd853ad66f31191378a9f1b39c2
-X-Patchwork-Hint: ignore
-Message-Id: <20230806135751.81799843FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gdal: drop remnants of
- cmake workarounds
+Date: Sun,  6 Aug 2023 16:02:29 +0200
+Message-Id: <20230806140241.4155773-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1691330562;
+ bh=QLBlwqDj900gDiN9t1GcejoD1PU7qgg38mTf0tCR+PU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=RPOle45jRfDho+mopCHD8Pi+XtcCN8HdZ39yvZ5M0q+oziyl1DM9cpYa1zAC4/l77
+ soB5EPsU2vRL4EWv1CCgBNHyxa9FwWzQTipqlZvPTcl+SbLVIB8xt46WmNDO3+Xfja
+ CjqwoHl+cdp6jmH7YdLLrls9M6zOLg1zOKSLbvEVOyYqBFeNRM9iRBe9MS8Oy3t2RA
+ w1FuXEzV8ngyOAOK4CsFu8Wg6zHy6LAbRpnS2vEPK5jneSoDf+EGiWNKCGM4GKiclE
+ dEN+jrhLVYdJ7Gvt0JeCOnZQFdIKZPdE48j17kkNl1Z8poQ/Htya8ntqy9Fnn5mfKQ
+ M56LC1tpCVFHg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=RPOle45j
+Subject: [Buildroot] [PATCH/next v9 00/12] Introduce libudev (branch
+ yem/libudev-6)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +75,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Sen Hastings <sen@phobosdpl.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Julien Corjon <corjon.j@ecagroup.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fb677c087228bd853ad66f31191378a9f1b39c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi,
 
-In 2b43579e9453 (package/gdal: switch to cmake build to fix libgeotiff
-detection) a workaround was added to use the generated 'Makefile' rather
-than the bundled-for-autotools GNUMakefile, which was supposedly removed
-for the then upcoming 3.6 version.
+quoting Yann from 2016:
+https://lists.buildroot.org/pipermail/buildroot/2016-July/167371.html
 
-In 4c17985880be (package/gdal: bump version to 3.6.2) the bump occured,
-but the workaround was left untouched. However, in 3.6.2, there is
-indeed no GNUMakefile anymore.
+"Hello All!
 
-Drop the workaround now.
+This series introduces the possibility to just build and install
+libudev, without requiring that the /dev management be handled by
+eudev or systemd.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gdal/gdal.mk | 7 -------
- 1 file changed, 7 deletions(-)
+A lot of packages that have a dependency on udev, in fact only require a
+libudev, not a udev daemon. That's the case for e.g. libinput, libcec,
+mesa3d...
 
-diff --git a/package/gdal/gdal.mk b/package/gdal/gdal.mk
-index ce67399c32..3f39aa657a 100644
---- a/package/gdal/gdal.mk
-+++ b/package/gdal/gdal.mk
-@@ -14,13 +14,6 @@ GDAL_INSTALL_STAGING = YES
- GDAL_CONFIG_SCRIPTS = gdal-config
- GDAL_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--# Using 'make' with CMake's Makefile generator will not work, as
--# 'make' uses GNUmakefile first, but GNUmakefile is provided by
--# autotools in gdal. We need to force 'make' to use the Makefile,
--# which is generated by CMake. GNUmakefile and autoconf are dropped in
--# 3.6 so this can be dropped in future version.
--GDAL_MAKE_OPTS += -f Makefile
--
- # gdal at its core only needs host-pkgconf, libgeotiff, proj and tiff
- # but since by default mrf driver support is enabled, it also needs
- # jpeg, libpng and zlib. By default there are also many other drivers
+During previous developers days, it was suggested that libudev was to be
+made a virtual package that could be selected (like jpeg is). So I
+eventually got some time to rework it (since the series was not adopted
+by Peter as it was discussed during those DevDays:
+https://lite5.framapad.org/p/buildrootfosdem15 ;-) ).
+
+This series is a full rewrite from scratch, with very little caried over
+from the previous attempts (far back in the past).
+
+  - first come a few cleanup patches;
+
+  - then eudev is split in two, virtually providing to different
+    packages in one, with two different configure/build/install
+    procedures, one for libudev only, one for the full package;
+
+  - then the libudev virtual package is introduced, with eudev and
+    systemd both declared as providers;
+
+  - libudev is made selectable, so that packages can select it instead
+    of depending (like is usual) on the virtual package;
+
+  - eventually, two packages are converted over to using libudev:
+    qt5base, as an optional implicit dependency, and libinput, as a
+    mandatory dependency.
+
+Not all packages that reference udev have been switched over to depend
+on libudev, though, since it is unclear to me whether they require a
+udev daemon, or would be happy with just libudev. This can be done in
+follow up patches once libudev is eventually in the tree (for good this
+time I hope! ;-) )"
+
+This patch series was rebased on Yann's latest code from 2020:
+https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/libudev-6
+as suggested in 2021:
+https://lists.buildroot.org/pipermail/buildroot/2021-March/607988.html
+"eudev now has had the ability to only build the library for a while
+already"
+
+and more packages were ported to make use of libudev.
+
+Bernd Kuhls (4):
+  package/kodi: only needs libudev, not udev daemon
+  package/libv4l: optionally use libudev
+  package/libcec: optionally use libudev
+  package/usbutils: only needs libudev, not udev daemon
+
+Yann E. MORIN (8):
+  package/eudev: add option to enable the udev daemon
+  package/eudev: allow building only the library
+  package/libudev: new virtual package
+  package/eudev: provides libudev
+  package/systemd: provides libudev
+  package/libudev: make it selectable
+  package/qt5base: optionally use libudev
+  package/libinput: only needs libudev, not udev daemon
+
+ package/Config.in              |  1 +
+ package/eudev/Config.in        | 45 +++++++++++++++++++++++++-------
+ package/eudev/eudev.mk         | 47 ++++++++++++++++++++++++----------
+ package/kodi/Config.in         |  4 +--
+ package/kodi/kodi.mk           |  4 +--
+ package/libcec/libcec.mk       |  4 +--
+ package/libinput/Config.in     | 10 +++++---
+ package/libinput/libinput.mk   |  2 +-
+ package/libudev/Config.in      | 13 ++++++++++
+ package/libudev/libudev.mk     |  7 +++++
+ package/libv4l/libv4l.mk       |  4 +--
+ package/qt5/qt5base/qt5base.mk |  4 +--
+ package/systemd/Config.in      |  4 +++
+ package/systemd/systemd.mk     |  2 +-
+ package/usbutils/Config.in     | 12 ++++++---
+ package/usbutils/usbutils.mk   |  2 +-
+ system/Config.in               |  1 +
+ 17 files changed, 124 insertions(+), 42 deletions(-)
+ create mode 100644 package/libudev/Config.in
+ create mode 100644 package/libudev/libudev.mk
+
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
