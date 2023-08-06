@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC679C001DF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 17:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0180DC001DF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 17:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 545B58176A;
-	Sun,  6 Aug 2023 17:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 545B58176A
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFD69817A7;
+	Sun,  6 Aug 2023 17:24:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFD69817A7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TCEUCWYdyRCJ; Sun,  6 Aug 2023 17:24:09 +0000 (UTC)
+	with ESMTP id fhp_b3dU9jhd; Sun,  6 Aug 2023 17:24:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA95981E1F;
-	Sun,  6 Aug 2023 17:24:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA95981E1F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17774812A4;
+	Sun,  6 Aug 2023 17:24:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17774812A4
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B32BA1BF286
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:23:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4EC3B1BF286
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:23:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5BA5C40142
+ by smtp2.osuosl.org (Postfix) with ESMTP id 69CC2401C9
  for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:23:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BA5C40142
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69CC2401C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6gfaFN-2JZza for <buildroot@lists.busybox.net>;
+ with ESMTP id 2iaOpyBXS5DU for <buildroot@lists.busybox.net>;
  Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 988F140260
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B7D5401F1
  for <buildroot@buildroot.org>; Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 988F140260
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B7D5401F1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 963488454E; Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
+ id 6BA628454E; Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 18:06:32 +0200
+Date: Sun, 6 Aug 2023 18:06:23 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6fea0598255cfe2aaff094876fa1c65756662496
-X-Git-Newrev: bee32945ab82af5eb6c71930c9aa0d0842a7db0b
+X-Git-Oldrev: 31a12000486d17d7009668ef4732892e581c4dc9
+X-Git-Newrev: 464c37e350d85a97d1fb7c68ebf20eb0d4aa6956
 X-Patchwork-Hint: ignore
-Message-Id: <20230806172337.963488454E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-mwscrape:
- switch from distutils to setuptools
+Message-Id: <20230806172337.6BA628454E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-hwdata: switch
+ from distutils to setuptools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bee32945ab82af5eb6c71930c9aa0d0842a7db0b
+commit: https://git.buildroot.net/buildroot/commit/?id=464c37e350d85a97d1fb7c68ebf20eb0d4aa6956
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 distutils will be dropped with python 3.12.
@@ -72,21 +72,22 @@ distutils will be dropped with python 3.12.
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mwscrape/python-mwscrape.mk | 2 +-
+ package/python-hwdata/python-hwdata.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
-index 3ffe9d6880..8b6c718c56 100644
---- a/package/python-mwscrape/python-mwscrape.mk
-+++ b/package/python-mwscrape/python-mwscrape.mk
-@@ -8,6 +8,6 @@ PYTHON_MWSCRAPE_VERSION = 568ccbe6e12dd6391277df02adf724ba0e5f9197
- PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
- PYTHON_MWSCRAPE_LICENSE = MPL-2.0
- PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
--PYTHON_MWSCRAPE_SETUP_TYPE = distutils
-+PYTHON_MWSCRAPE_SETUP_TYPE = setuptools
+diff --git a/package/python-hwdata/python-hwdata.mk b/package/python-hwdata/python-hwdata.mk
+index 8eeec6efa8..5e968ce847 100644
+--- a/package/python-hwdata/python-hwdata.mk
++++ b/package/python-hwdata/python-hwdata.mk
+@@ -7,7 +7,7 @@
+ PYTHON_HWDATA_VERSION = 2.3.7
+ PYTHON_HWDATA_SOURCE = hwdata-$(PYTHON_HWDATA_VERSION).tar.gz
+ PYTHON_HWDATA_SITE = https://files.pythonhosted.org/packages/15/26/f5bc1b42129fbcbd1c99c29714af1685fc89e2cf37680a9930d4fcac1808
+-PYTHON_HWDATA_SETUP_TYPE = distutils
++PYTHON_HWDATA_SETUP_TYPE = setuptools
+ PYTHON_HWDATA_LICENSE = GPL-2.0+
+ PYTHON_HWDATA_LICENSE_FILES = LICENSE
  
- $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
