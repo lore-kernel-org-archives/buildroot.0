@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 803E0C04A6A
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 11:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10512C001DF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 11:55:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36C93815CD;
-	Sun,  6 Aug 2023 11:55:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36C93815CD
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0D9080BD0;
+	Sun,  6 Aug 2023 11:55:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0D9080BD0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oo3oMqYyiH7C; Sun,  6 Aug 2023 11:55:02 +0000 (UTC)
+	with ESMTP id uiHC5MXmPdzH; Sun,  6 Aug 2023 11:55:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78B07818A2;
-	Sun,  6 Aug 2023 11:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78B07818A2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 52E431BF293
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:55:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5ECD813B6;
+	Sun,  6 Aug 2023 11:55:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5ECD813B6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 929E11BF293
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B1C3400DD
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B1C3400DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 135DD4030F
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:55:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 135DD4030F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 804Zytkf9dTI for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 11:54:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9C8640192
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 11:54:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9C8640192
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4786842F3; Sun,  6 Aug 2023 11:54:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 13:48:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4f053c7b0582251c8441def72619bbe18bb78ea
-X-Git-Newrev: bcfa3d6d1b45e8aedea38142c12665d7d76f390b
-X-Patchwork-Hint: ignore
-Message-Id: <20230806115456.C4786842F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tvheadend: needs __sync_*_8
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gT000AN4ALsv for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 11:55:04 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 956BA4031B
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 11:55:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 956BA4031B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D528240004;
+ Sun,  6 Aug 2023 11:54:59 +0000 (UTC)
+Date: Sun, 6 Aug 2023 13:54:59 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230806135459.7fc67211@windsurf>
+In-Reply-To: <20230804161121.1033315-1-bernd@kuhls.net>
+References: <20230804161121.1033315-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691322900;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Henk782D5+pH8ipXZfu1gCXuUkZ36GNI+44H4eyKtX8=;
+ b=DlFaMqdVDOa1zY9qePZQMaWdOFZyLxikdUOXwPfXI9ZLyatEcSL5rbh7rFo2ds2QST4KYR
+ PF9IZzt0xYxPN2Opfit+tq1z6K3SKCAuoejSiw2PIPfTSMWd2nnHigKsR5AawOAzs6ojyn
+ IjKeKMNXn4rWtL4EtcHfXBwKMN825e4Tct+7zWgoedhIawpPrypbgGXvv+qivOZEZFpnVF
+ +9V8/ycVIS2WYICMVBUZHqLzzO50ueu2RqmXvuueCl/1dKCQlOJu7aA2o12rWlahGLvQFC
+ U9yeoE2oKNAEAVU1/2d1Vk7pIZ/zBXq9DqWK1N2PY35zAakXkRIR+NXIPo2TOQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=DlFaMqdV
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/tvheadend: needs __sync_*_8
  intrisics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,53 +77,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcfa3d6d1b45e8aedea38142c12665d7d76f390b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  4 Aug 2023 18:11:21 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/992/99235aa2aca1afe031a088baebbd46057fe75fcd/
+> Fixes:
+> http://autobuild.buildroot.net/results/992/99235aa2aca1afe031a088baebbd46057fe75fcd/
+> 
+> /home/autobuild/autobuild/instance-15/output-1/build/tvheadend-fe47ecb5504a521fed9c1ca9705fb0dd2bb8443a/src/atomic.h:253:
+>  undefined reference to `__sync_lock_test_and_set_8'
+> /home/autobuild/autobuild/instance-15/output-1/build/tvheadend-fe47ecb5504a521fed9c1ca9705fb0dd2bb8443a/src/atomic.h:81:
+>  undefined reference to `__sync_fetch_and_add_8'
+> 
+> The build error was introduced by the latest bump of tvheadend with
+> commit 67cbbbfe6e9632deacd0784bdbf51496ad76701d.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+> v2: added comment about commit which introduced the build error (Thomas)
 
-/home/autobuild/autobuild/instance-15/output-1/build/tvheadend-fe47ecb5504a521fed9c1ca9705fb0dd2bb8443a/src/atomic.h:253:
- undefined reference to `__sync_lock_test_and_set_8'
-/home/autobuild/autobuild/instance-15/output-1/build/tvheadend-fe47ecb5504a521fed9c1ca9705fb0dd2bb8443a/src/atomic.h:81:
- undefined reference to `__sync_fetch_and_add_8'
+Applied to master, thanks.
 
-The build error was introduced by the latest bump of tvheadend with
-commit 67cbbbfe6e9632deacd0784bdbf51496ad76701d.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tvheadend/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 3d21897c6d..fa06f345e9 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,14 +1,14 @@
- comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_8
- 
- menuconfig BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on !BR2_STATIC_LIBS # dladdr()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_8
- 	select BR2_PACKAGE_DTV_SCAN_TABLES
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_OPENSSL
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
