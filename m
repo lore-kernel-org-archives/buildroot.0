@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC6D0EC8735
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 270C8EC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CE674030F;
-	Thu,  7 Sep 2023 14:59:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CE674030F
+	by smtp4.osuosl.org (Postfix) with ESMTP id C985D41DD7;
+	Thu,  7 Sep 2023 14:59:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C985D41DD7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nTwnFhzuDHst; Thu,  7 Sep 2023 14:59:04 +0000 (UTC)
+	with ESMTP id yl-KGljJOXZ1; Thu,  7 Sep 2023 14:59:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9205D41E87;
-	Thu,  7 Sep 2023 14:59:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9205D41E87
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 15DC41BF3BB
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA08D41E98;
+	Thu,  7 Sep 2023 14:59:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA08D41E98
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 11D691BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C38B841DA8
+ by smtp3.osuosl.org (Postfix) with ESMTP id C917D6124E
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C38B841DA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C917D6124E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NWSjEDTbN0Vo for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XJ1JWXGzqLFl for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC32F41D79
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC32F41D79
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12CEA6125F
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12CEA6125F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3AC586A22; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0CD2886A22; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 15:55:41 +0200
+Date: Sun, 6 Aug 2023 19:27:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e8cb970534debcb5b36c7919d435dbad8c4e38ee
-X-Git-Newrev: 05555c0daf5610f733f5516901b5c44d07d09599
+X-Git-Oldrev: 2bd1d9d812d529071e1ab9d8ed8344f8077286d3
+X-Git-Newrev: aa17849e8ba216022fff15f2fafb669317c4b237
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.B3AC586A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpewebkit: use the CMAKE_NINJA flag
+Message-Id: <20230907145127.0CD2886A22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: bump
+ version to 8.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,63 +56,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7575409291532104199=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05555c0daf5610f733f5516901b5c44d07d09599
+--===============7575409291532104199==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=aa17849e8ba216022fff15f2fafb669317c4b237
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the newly introduce backend option to specify what cmake backend to
-use, in lieue of special-coding its use as done in 78d499409f71
-(package/wpewebkit: Build with ninja).
+Both the COPYING and EULA files have changed, with the following main
+changes:
+  - update to copyright years (2022 -> 2023)
+  - switch from ASCCI double quotes to fancy Unicode ones ("" -> “”)
+  - reflow the license text
+  - identify new third-parties and their conditions
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpewebkit/wpewebkit.mk | 21 ++-------------------
- 1 file changed, 2 insertions(+), 19 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index c13a7201e6..6712291c22 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -18,6 +18,8 @@ WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
- 	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
- 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index eb0c387af3..0b3561a927 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  937e196476b8e95b4b7f2501a14c8326d8a0649f8a3f9228b72373770a08deb3  firmware-imx-8.15.bin
+-sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  COPYING
+-sha256  30f61825583b4c26d29a798ad7e4c8ef2f2f390b1e964af302d2dc40e93cb0a4  EULA
++sha256  f6dc6a5c8fd9b913a15360d3ccd53d188db05a08a8594c518e57622478c72383  firmware-imx-8.20.bin
++sha256  913ba38d4be97361c3d0fa9bf2f6dbe7b1c0c41213dd268fb6738db9704dbe32  COPYING
++sha256  4fd8bb45a2ec22117d20cfea84370e2a3a2cd99e8e177138bed0938137b1aeb3  EULA
+ sha256  40d02f6d6b4e94d9307529408f372f5a9908cf3d156ec533a4e54274b40f271e  SCR.txt
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 4cceb67019..66ef8c3930 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+WPEWEBKIT_CMAKE_BACKEND = ninja
-+
- WPEWEBKIT_CONF_OPTS = \
- 	-DPORT=WPE \
- 	-DENABLE_ACCESSIBILITY=OFF \
-@@ -104,23 +106,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+-FIRMWARE_IMX_VERSION = 8.15
++FIRMWARE_IMX_VERSION = 8.20
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
  
--# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
--# above our minimal version in
--# support/dependencies/check-host-cmake.mk, so use the ninja backend:
--# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
--WPEWEBKIT_CONF_OPTS += -GNinja
--WPEWEBKIT_DEPENDENCIES += host-ninja
--
--define WPEWEBKIT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
--endef
--
--define WPEWEBKIT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
--endef
--
--define WPEWEBKIT_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
--endef
--
- $(eval $(cmake-package))
+
+--===============7575409291532104199==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7575409291532104199==--
