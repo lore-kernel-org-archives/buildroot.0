@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A23ABEC8735
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 565C7EC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5088841D74;
-	Thu,  7 Sep 2023 14:53:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5088841D74
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04E9E41D7F;
+	Thu,  7 Sep 2023 14:54:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E9E41D7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wMjbNPXrxJ1R; Thu,  7 Sep 2023 14:53:50 +0000 (UTC)
+	with ESMTP id uXZgh3RkA3xd; Thu,  7 Sep 2023 14:54:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4251C41DB6;
-	Thu,  7 Sep 2023 14:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4251C41DB6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 16AED1BF995
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5BD741DB7;
+	Thu,  7 Sep 2023 14:54:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5BD741DB7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FD3A1BF997
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B6076123E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42FEF41D8D
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B6076123E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42FEF41D8D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OPvjTFZJ_yWJ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qwK5hVJGR2SL for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC3936124D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 589EE41D6A
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC3936124D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 589EE41D6A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA87986A21; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 46F7E86A22; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 15:52:35 +0200
+Date: Sun, 6 Aug 2023 12:28:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606
-X-Git-Newrev: e8cb970534debcb5b36c7919d435dbad8c4e38ee
+X-Git-Oldrev: 2a44207ea0eeaf2346cb6fe572a96770b74d9dc9
+X-Git-Newrev: 7aea64c843590fb8dc3640d4ccc6851b114cdd30
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.AA87986A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/webkitgtk: use the CMAKE_NINJA flag
+Message-Id: <20230907145125.46F7E86A22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/acpica: remove HARDWARE_NAME make
+ variable override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,63 +56,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8cb970534debcb5b36c7919d435dbad8c4e38ee
+commit: https://git.buildroot.net/buildroot/commit/?id=7aea64c843590fb8dc3640d4ccc6851b114cdd30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the newly introduce backend option to specify what cmake backend to
-use, in lieue of special-coding its use as done in 16e5c92ff5fd
-(package/webkitgtk: Build with ninja).
+The HARDWARE_NAME Makefile variable was removed few years ago in
+upstream (by Thomas). See [1].
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+This commit was first included in tag R01_19_17 (version 20170119).
+See the change log [2].
+
+This patch removes occurences of this HARDWARE_NAME, since it's now
+unneeded. There is no change in the behavior of this build recipe.
+
+[1] https://github.com/acpica/acpica/commit/0ba20f5f86d41bbe442eaeb426d13d25181fa512
+[2] https://github.com/acpica/acpica/blob/R01_19_17/documents/changes.txt#L26
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/webkitgtk/webkitgtk.mk | 22 +++-------------------
- 1 file changed, 3 insertions(+), 19 deletions(-)
+ package/acpica/acpica.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 56277a0a0a..3e9d42c7c3 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -16,6 +16,9 @@ WEBKITGTK_CPE_ID_VENDOR = webkitgtk
- WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
-+
-+WEBKITGTK_CMAKE_BACKEND = ninja
-+
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
- 	-DENABLE_DOCUMENTATION=OFF \
-@@ -140,23 +143,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 81f7d8e103..b932941369 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -14,7 +14,7 @@ HOST_ACPICA_DEPENDENCIES = host-bison host-flex
  
--# webkitgtk needs cmake >= 3.20 when not building with ninja, which is
--# above our minimal version in
--# support/dependencies/check-host-cmake.mk, so use the ninja backend:
--# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
--WEBKITGTK_CONF_OPTS += -GNinja
--WEBKITGTK_DEPENDENCIES += host-ninja
--
--define WEBKITGTK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
--endef
--
--define WEBKITGTK_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
--endef
--
--define WEBKITGTK_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
--endef
--
- $(eval $(cmake-package))
+ define ACPICA_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+-		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
++		HOST=_LINUX CC="$(TARGET_CC)" \
+ 		NOWERROR=TRUE \
+ 		all
+ endef
+@@ -27,7 +27,7 @@ endef
+ 
+ define ACPICA_INSTALL_TARGET_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+-		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" \
++		DESTDIR="$(TARGET_DIR)" \
+ 		INSTALLFLAGS=-m755 install
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
