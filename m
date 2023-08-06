@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80FA6EC8734
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A23ABEC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B7DB41DB3;
-	Thu,  7 Sep 2023 14:53:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B7DB41DB3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5088841D74;
+	Thu,  7 Sep 2023 14:53:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5088841D74
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vYBRPgewlH6p; Thu,  7 Sep 2023 14:53:37 +0000 (UTC)
+	with ESMTP id wMjbNPXrxJ1R; Thu,  7 Sep 2023 14:53:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD11B41DE9;
-	Thu,  7 Sep 2023 14:53:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD11B41DE9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 126C11BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4251C41DB6;
+	Thu,  7 Sep 2023 14:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4251C41DB6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 16AED1BF995
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58C314027F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B6076123E
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58C314027F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B6076123E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wyu4ioUfk-_H for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OPvjTFZJ_yWJ for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A669404ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC3936124D
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A669404ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC3936124D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8847B86A22; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+ id AA87986A21; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 14:06:24 +0200
+Date: Sun, 6 Aug 2023 15:52:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a3166cc2931178602810e241c21c67ac885ab87
-X-Git-Newrev: 90be99fd67f1f931c6fd1545b2e0690113a00316
+X-Git-Oldrev: 4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606
+X-Git-Newrev: e8cb970534debcb5b36c7919d435dbad8c4e38ee
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.8847B86A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 23.1.5
+Message-Id: <20230907145125.AA87986A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: use the CMAKE_NINJA flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,67 +56,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90be99fd67f1f931c6fd1545b2e0690113a00316
+commit: https://git.buildroot.net/buildroot/commit/?id=e8cb970534debcb5b36c7919d435dbad8c4e38ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2023-August/000726.html
+Use the newly introduce backend option to specify what cmake backend to
+use, in lieue of special-coding its use as done in 16e5c92ff5fd
+(package/webkitgtk: Build with ninja).
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/webkitgtk/webkitgtk.mk | 22 +++-------------------
+ 1 file changed, 3 insertions(+), 19 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index b101394869..e602953a3f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 56277a0a0a..3e9d42c7c3 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -16,6 +16,9 @@ WEBKITGTK_CPE_ID_VENDOR = webkitgtk
+ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
+ 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
++
++WEBKITGTK_CMAKE_BACKEND = ninja
++
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_DOCUMENTATION=OFF \
+@@ -140,23 +143,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
+ WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+ endif
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 23.1.4
-+MESA3D_HEADERS_VERSION = 23.1.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 60c3bd6d5d..3606cca56d 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-July/000724.html
--sha256  7261a17fb94867e3dc5a90d8a1f100fa04b0cbbde51d25302c0872b5e9a10959  mesa-23.1.4.tar.xz
--sha512  4063c7848f507b5e25cfc862394268147254b90c9f3eb19035cce338b0a9cb611b7380c1c73f0e4feeddde68124225df7dee7b9db5f019603dfde2b88ff46a21  mesa-23.1.4.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000726.html
-+sha256  3cf88576fdebf24fc4047067936131c90cb6541c27365996b79b661dec1fb153  mesa-23.1.5.tar.xz
-+sha512  c5eac5a497561374eaf931214aebc9001820c5ab49f9b8c5634b62af081b03b2f21c169c936524b2953c8815eb27dfb5c8c12276b9b1c119722cd6fea0b22d85  mesa-23.1.5.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6fa5c1c686..add9232d2f 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 23.1.4
-+MESA3D_VERSION = 23.1.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-# webkitgtk needs cmake >= 3.20 when not building with ninja, which is
+-# above our minimal version in
+-# support/dependencies/check-host-cmake.mk, so use the ninja backend:
+-# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
+-WEBKITGTK_CONF_OPTS += -GNinja
+-WEBKITGTK_DEPENDENCIES += host-ninja
+-
+-define WEBKITGTK_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
+-endef
+-
+-define WEBKITGTK_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-endef
+-
+-define WEBKITGTK_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-endef
+-
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
