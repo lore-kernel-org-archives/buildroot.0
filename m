@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C6AC0015E
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DF88C001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:20:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6C1940213;
-	Sun,  6 Aug 2023 14:18:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6C1940213
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8CFE408DF;
+	Sun,  6 Aug 2023 14:20:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8CFE408DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uquo4s79b4uP; Sun,  6 Aug 2023 14:18:32 +0000 (UTC)
+	with ESMTP id NDJPjv51RgJW; Sun,  6 Aug 2023 14:20:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACC9240216;
-	Sun,  6 Aug 2023 14:18:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACC9240216
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3F3481BF340
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:18:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8068E40085;
+	Sun,  6 Aug 2023 14:20:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8068E40085
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 849391BF340
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:20:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8E7C81E7E
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:17:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8E7C81E7E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CDC04011C
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:20:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CDC04011C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YIXEr9t5JTgL for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 14:17:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eANQgQeH74nd for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 14:20:03 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BEA2781C20
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:17:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEA2781C20
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 478674000B
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 478674000B
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:c94f:8093:8f39:b163])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E6DF613F8C1;
- Sun,  6 Aug 2023 16:17:03 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6ECAD13F8BB;
+ Sun,  6 Aug 2023 16:19:55 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 06 Aug 2023 16:17:03 +0200
-Date: Sun, 6 Aug 2023 16:17:03 +0200
+ Sun, 06 Aug 2023 16:19:55 +0200
+Date: Sun, 6 Aug 2023 16:19:55 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20230806141703.GU421096@scaer>
+Message-ID: <20230806141955.GV421096@scaer>
 References: <20230802111447.41714-1-thomas@devoogdt.com>
- <20230802111447.41714-3-thomas@devoogdt.com>
+ <20230802111447.41714-4-thomas@devoogdt.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230802111447.41714-3-thomas@devoogdt.com>
+In-Reply-To: <20230802111447.41714-4-thomas@devoogdt.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691331430;
- bh=Q9D3CwcEi4JE+McjXv2Y7a9YHiSUfFGY0moIGKdfoFw=;
+ d=free.fr; s=smtp-20201208; t=1691331601;
+ bh=KcoYzE2I/KlZsX9aDiAMsM3hyCQhxlh4L6JDMJdyX3U=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=junvXNHZ49x5U6xtk7ms8P9ljK02eiVzaSKsLa6byBcopLOtNRXC0lr8mY+wL4e5M
- Ik7Qw4G37ZpV40a4ynYKf9gUBDuOiMwPlY7rzoLulOpeMe1AbYtQIwWAQLyoJC9ZVn
- e/tg8GyJcGkFLfYaBS4QU4rvFhQMHodNfjcoHt9QA81DXqnShmpQ0rZtx4boNuDkPw
- sOgtpEGyTFzv7e/lfby0ytd23mkP2lJRCBsH0lMdby7hiYGK/ekKAheBsCe0mvilry
- vn1ImX9l9NuV2lqE6qEvWAjR5Ownvc68p1EMe6IEEq5vAEJSp1Kn06dUxkTUYV35f4
- /A+ydvUteVeJQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=obG2wcA3F8JUwZIT3y6QCZuz18dTtBWuKBk4XfX1K9/7OJpLm++0mQxtyvkdINgFL
+ 48Lxzx8+JOSQ7efr4PenehWlWwn1+M1Kph+np06UUjmIO35shd3g5VCe8xyIxLzeEj
+ ONGFulYrpMfnyXu2+rchCJ/mw8a/LGswPBRvnP+6yo6e20Ik5zaQhOuY0GuSIiWxoD
+ 9TybUntcKxr1LosC+KNxj6/bt4ljOj3w8r1eBzYWmsPcVJgHxrzNxjiiFjrBJbAodS
+ EMCbNbYk+sLYY9FeUo3xXxqYAnNDzWtHtq7vJohkZfUI7s6ypRsPvrc2XjOXGzVJAV
+ mcr3G+uDlVvMw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=junvXNHZ
-Subject: Re: [Buildroot] [PATCH v6 3/4] package/wpewebkit: use the
- CMAKE_NINJA flag
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=obG2wcA3
+Subject: Re: [Buildroot] [PATCH v6 4/4] pkg-cmake: make ninja the default
+ for all packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,77 +91,56 @@ Thomas, All,
 On 2023-08-02 13:14 +0200, Thomas Devoogdt spake thusly:
 > From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 > 
-> Replaces:
-> 
-> commit 78d499409f71d8a22b0632c8ebc06f67ee6ae6dd
-> Author: Peter Korsgaard <peter@korsgaard.com>
-> Date:   Thu Feb 9 18:07:06 2023 +0100
-> 
->     package/wpewebkit: Build with ninja
-> 
->     Wpewebkit needs cmake >= 3.20 when building with the make backend since
->     wpewebkit 3.8.0.
-> 
->     Cmake 3.20 is above our minimal version in
->     support/dependencies/check-host-cmake.mk, so this breaks builds on hosts
->     with cmake >= 3.18 < 3.20 - So use the ninja backend instead.
-> 
->     https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-> 
->     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Use ninja as the default generator.
 
-Ditto the commit log and variable.
+I have not applied that patch yet, because Thomas P. and I believed this
+is a bit bold, even for next.
 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+I've started a build with a bunch of cmake-based packages, and I'll see
+if they break alot of not later in the evening. If there's breakage,
+I'll report and you'll have to investigate! ;-p
 
-Applied to next, thanks.
+> A fun fact is that we of course have to disable ninja when building ninja.
+
+Yes, of course! :-)
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 > ---
-> v5: no change
+> v5: add this optional commit
 > v6: rebase
 > ---
->  package/wpewebkit/wpewebkit.mk | 20 +-------------------
->  1 file changed, 1 insertion(+), 19 deletions(-)
+>  package/ninja/ninja.mk | 1 +
+>  package/pkg-cmake.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-> index c13a7201e6..135db02b44 100644
-> --- a/package/wpewebkit/wpewebkit.mk
-> +++ b/package/wpewebkit/wpewebkit.mk
-> @@ -14,6 +14,7 @@ WPEWEBKIT_LICENSE_FILES = \
->  	Source/WebCore/LICENSE-LGPL-2.1
->  WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
->  WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
-> +WPEWEBKIT_CMAKE_NINJA = YES
->  WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
->  	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
->  	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
-> @@ -104,23 +105,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
->  WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
->  endif
+> diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+> index b7bc1a4f1c..85dd2e05aa 100644
+> --- a/package/ninja/ninja.mk
+> +++ b/package/ninja/ninja.mk
+> @@ -9,6 +9,7 @@ NINJA_VERSION = $(NINJA_VERSION_MAJOR).g95dee.kitware.jobserver-1
+>  NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
+>  NINJA_LICENSE = Apache-2.0
+>  NINJA_LICENSE_FILES = COPYING
+> +NINJA_CMAKE_NINJA = NO
 >  
-> -# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
-> -# above our minimal version in
-> -# support/dependencies/check-host-cmake.mk, so use the ninja backend:
-> -# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
-> -WPEWEBKIT_CONF_OPTS += -GNinja
-> -WPEWEBKIT_DEPENDENCIES += host-ninja
+>  define HOST_NINJA_INSTALL_CMDS
+>  	$(INSTALL) -m 0755 -D $(@D)/ninja $(HOST_DIR)/bin/ninja
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 36ab88d3a1..dab87c81f4 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -52,7 +52,7 @@ endif
+>  define inner-cmake-package
+>  
+>  $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
 > -
-> -define WPEWEBKIT_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
-> -endef
-> -
-> -define WPEWEBKIT_INSTALL_STAGING_CMDS
-> -	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
-> -endef
-> -
-> -define WPEWEBKIT_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
-> -endef
-> -
->  $(eval $(cmake-package))
+> +$(3)_CMAKE_NINJA ?= YES
+>  
+>  ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
+>  $(2)_BUILDDIR			= $$($(2)_SRCDIR)
 > -- 
 > 2.34.1
 > 
