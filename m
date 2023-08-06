@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8386EE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CAADEE49A6
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6404B40B22;
-	Mon, 21 Aug 2023 20:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6404B40B22
+	by smtp2.osuosl.org (Postfix) with ESMTP id BACCB40B5F;
+	Mon, 21 Aug 2023 20:02:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BACCB40B5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 71eRG360exGX; Mon, 21 Aug 2023 20:02:15 +0000 (UTC)
+	with ESMTP id MmALKBD_Eoum; Mon, 21 Aug 2023 20:02:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A200C40B30;
-	Mon, 21 Aug 2023 20:02:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A200C40B30
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 141FF1BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC44F40B48;
+	Mon, 21 Aug 2023 20:02:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC44F40B48
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 20A4A1BF94D
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F6E94139E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BC9781E30
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F6E94139E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BC9781E30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vfBlxeFwdoUr for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lIiTXTASVEoX for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C7B8409A3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6910981AC1
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C7B8409A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6910981AC1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B81386025; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id 57EB786026; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 13:46:48 +0200
+Date: Sun, 6 Aug 2023 14:09:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b032b3b1df645eaaf79f53005945bac7dad45e74
-X-Git-Newrev: 2616272339073834c262bc46fdf995fdaa91acf7
+X-Git-Oldrev: bcfa3d6d1b45e8aedea38142c12665d7d76f390b
+X-Git-Newrev: f5d68db8bd7001ff25be1f512c8518dbbe7fe83d
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.3B81386025@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/stellarium: disable
- ShowMySky atmosphere model
+Message-Id: <20230821200123.57EB786026@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/liblo: add upstream
+ patch to fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +64,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2616272339073834c262bc46fdf995fdaa91acf7
+commit: https://git.buildroot.net/buildroot/commit/?id=f5d68db8bd7001ff25be1f512c8518dbbe7fe83d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Buildroot commit 319c56dfe3309dbf24be01fed3afff6259a2c5dd bumped
-stellarium which included these commits
-https://github.com/Stellarium/stellarium/commit/b3f02beaec2a285251db1e1707abe2e423803834
-https://github.com/Stellarium/stellarium/commit/5d5edd0e5f5630872628a1525685b77854b6e4b4
+Since the merge of gcc 13.x, a warning treated as error causes liblo
+to fail building:
 
-It downloads external packages during the build:
+server.c: In function 'lo_server_del_lo_method':
+server.c:2251:16: error: pointer 'prev' used after 'free' [-Werror=use-after-free]
 
-$ find output/build/stellarium-23.2/ -iname *.tar.*
-output/build/stellarium-23.2/_deps/eigen3-subbuild/eigen3-populate-prefix/src/eigen-3.4.0.tar.bz2
-output/build/stellarium-23.2/_deps/showmysky-qt5-subbuild/showmysky-qt5-populate-prefix/src/v0.3.1.tar.gz
-
-which breaks offline builds.
+Fixes:
+http://autobuild.buildroot.net/results/c98/c98c21093714542d4c0546a742fdcc48f3f07d04/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/stellarium/stellarium.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...01-Fix-use-after-free-warning-in-server.c.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index 7ee19c8b18..43c99413dd 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
-@@ -18,6 +18,7 @@ STELLARIUM_DEPENDENCIES = \
- STELLARIUM_CONF_OPTS = \
- 	-DENABLE_MEDIA=ON \
- 	-DENABLE_NLS=OFF \
-+	-DENABLE_SHOWMYSKY=OFF \
- 	-DENABLE_QTWEBENGINE=OFF \
- 	-DENABLE_QT6=OFF \
- 	-DENABLE_XLSX=OFF \
+diff --git a/package/liblo/0001-Fix-use-after-free-warning-in-server.c.patch b/package/liblo/0001-Fix-use-after-free-warning-in-server.c.patch
+new file mode 100644
+index 0000000000..be815a0a61
+--- /dev/null
++++ b/package/liblo/0001-Fix-use-after-free-warning-in-server.c.patch
+@@ -0,0 +1,29 @@
++From 8187a8456c14eeb3af08c86ffa1228823c9ef1c5 Mon Sep 17 00:00:00 2001
++From: Guido Aulisi <guido.aulisi@gmail.com>
++Date: Sun, 25 Jun 2023 15:58:30 +0200
++Subject: [PATCH] Fix use-after-free warning in server.c
++
++That assignment is not necessary before returning
++
++Upstream: https://sourceforge.net/p/liblo/git/ci/8187a8456c14eeb3af08c86ffa1228823c9ef1c5/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/server.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/server.c b/src/server.c
++index ba02d8e..35c9ba5 100644
++--- a/src/server.c
+++++ b/src/server.c
++@@ -2289,7 +2289,6 @@ int lo_server_del_lo_method(lo_server s, lo_method m)
++             free((void *) it->path);
++             free((void *) it->typespec);
++             free(it);
++-            it = prev;
++             return 0;
++         }
++         prev = it;
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
