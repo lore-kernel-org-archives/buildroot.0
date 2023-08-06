@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7AF3C001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 20:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAE8DC001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 20:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BE5560ADF;
-	Sun,  6 Aug 2023 20:51:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BE5560ADF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A9DA60A8D;
+	Sun,  6 Aug 2023 20:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A9DA60A8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id udmH4OGNyWk7; Sun,  6 Aug 2023 20:51:57 +0000 (UTC)
+	with ESMTP id DOl28FQxsMYQ; Sun,  6 Aug 2023 20:55:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFF9260DFE;
-	Sun,  6 Aug 2023 20:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFF9260DFE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 361221BF421
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:51:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84BAF60BD3;
+	Sun,  6 Aug 2023 20:55:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84BAF60BD3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 995551BF2F3
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FE44605AC
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FE44605AC
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0CD640857
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:54:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0CD640857
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pXStiql84bC3 for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 20:51:31 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4610B60B9C
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 20:51:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4610B60B9C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3114E20002;
- Sun,  6 Aug 2023 20:51:28 +0000 (UTC)
-Date: Sun, 6 Aug 2023 22:51:27 +0200
-To: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Message-ID: <20230806225127.02236235@windsurf>
-In-Reply-To: <DS7PR12MB9041C235443BB70E65A561FEA108A@DS7PR12MB9041.namprd12.prod.outlook.com>
-References: <20230802220321.6af766af@windsurf>
- <DS7PR12MB9041FA314EB2D49935CF2D85A10BA@DS7PR12MB9041.namprd12.prod.outlook.com>
- <20230803001230.284ba84d@windsurf>
- <DS7PR12MB9041C235443BB70E65A561FEA108A@DS7PR12MB9041.namprd12.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7yEsChasfMgl for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 20:54:57 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0560B4012C
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 20:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0560B4012C
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:973b:6057:7632:5151])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id CC4415FF9A;
+ Sun,  6 Aug 2023 22:54:47 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 06 Aug 2023 22:54:47 +0200
+Date: Sun, 6 Aug 2023 22:54:47 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <20230806205447.GW421096@scaer>
+References: <20230802111447.41714-1-thomas@devoogdt.com>
+ <20230802111447.41714-4-thomas@devoogdt.com>
+ <20230806141955.GV421096@scaer>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691355088;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=FNbMR4r9wNKNl6jtEwhyHCpv8zFe846x2WGRV0bwvh8=;
- b=Naf1clxZ2ofoSGzI1LwMdvRvRPGipSGPCzvKTzBaRJ4gaEa6ZXlNeO3nCFfaE03ENQsf7t
- vR9cKoqPECnI9+j1VjU/2JBB8drvC5YjG8VGs4wYAl0W/gDy9EqH6B13pImmp9ASbaKgaU
- eHILOSKkjrnA0MjZfYgeOQwR6b+/YtqslCKuHvHR6BJgqiIFnxQMXmoB2LeOY3FgNhcsUV
- o/F3vyMmsXSn1ie+13Xo1oS/MfXvFBsx946BahyHnBkUYsp0/pEb8/T0uIJRwyYNBQqd/s
- WAid8ro2MiNFEGfq81/P7R8P2ArfdAsH9MoU8pPXrmrKFSyy+xrEuoQI1Knm8w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Naf1clxZ
-Subject: Re: [Buildroot] ARC support in Buildroot
+Content-Disposition: inline
+In-Reply-To: <20230806141955.GV421096@scaer>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1691355294;
+ bh=/Za75dGGKkskBCT6+H3NWT1tboGlXcemEXkjqZQw9L0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=uvNqbfpUZnW0DttAVTIt0oXbsvUlHDQ7VMhjZgICvhDYz+62Ff7VWsY5SEVgZTlak
+ rP5bedN89Ct0msWqsrb9hQfjFxdZS13jdB/G2tJPwqIUvbSeHkclTk2r0bic2nw9L3
+ i1zcwq4vFe8INg3TIwWmsnTlunYmnmoGQRvZhnVm68HhxfU00laRNF5OenPiflH+22
+ zo7oDO/4F2HRrBYNcrYkHU89Ck931wwHQHdiZQxc+s4GmX3s3b6xVZgx62hFbE8JxJ
+ 5w5kMrHFOLSW1NQTyckMFn/ylrwUtvz8yE6y+SSgJVovBGcDfVC/eK0SxM72/SAi47
+ H2nPtHOB+dKSQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uvNqbfpU
+Subject: Re: [Buildroot] [PATCH v6 4/4] pkg-cmake: make ninja the default
+ for all packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,87 +78,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- ARC Buildroot mailing list <arc-buildroot@synopsys.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Adrian Perez de Castro <aperez@igalia.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexey,
+Thomas, All,
 
-On Thu, 3 Aug 2023 07:59:56 +0000
-Alexey Brodkin via buildroot <buildroot@buildroot.org> wrote:
+On 2023-08-06 16:19 +0200, Yann E. MORIN spake thusly:
+> On 2023-08-02 13:14 +0200, Thomas Devoogdt spake thusly:
+> > From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> > Use ninja as the default generator.
+> I have not applied that patch yet, because Thomas P. and I believed this
+> is a bit bold, even for next.
 
-> > Can we drop those special versions and assume what's in upstream
-> > GCC/binutils/GDB is good enough?  
+And I will not apply it, because it does actually break some packages
+because of ninja.
+
+For example, compiler-rt complains with:
+
+    ninja: error: dependency cycle: include/sanitizer/allocator_interface.h -> include/sanitizer/allocator_interface.h
+
+So, maybe the package is broken and needs fixing, but it (supposedly)
+builds OKi-ish with makefiles.
+
+So, we need to assess how many of the cmake packages build fine with
+ninja. If they are the vast majority, then we annonate those that don't
+and change the default to use ninja. If however, the vast majority does
+not work with ninja, then we keep the curremnt status quo, and annotate
+those packages that do, like webktigtk or wpewebkit.
+
+Also, please have a look at qt6: it is already using ninja, but like
+webkitgtk and wpewebkit, is was special-coded. Could you please send
+a follow-up patch that upgrades qt6 to use QT6_CMAKE_BACKEND?
+
+Regards,
+Yann E. MORIN.
+
+> I've started a build with a bunch of cmake-based packages, and I'll see
+> if they break alot of not later in the evening. If there's breakage,
+> I'll report and you'll have to investigate! ;-p
 > 
-> Well, we'll just update it to say 2023.03 [1] or maybe even 2023.09 later
-> in the fall :)
-
-Looking forward to your patch doing this.
-
-> And the reason is that ARCv3 support. As I mentioned ARCompact/ARCv2 is
-> well supported in upstream GCC/Binutils/GDB etc and all the fixes go right
-> to the upstream repos as we have our own maintainers who take care of that.
+> > A fun fact is that we of course have to disable ninja when building ninja.
 > 
-> So, in theory it should be OK to remove "arc-xxxx.yy" toolchains from Buildroot.
-> But since we were a bit late with ARCv3 changes for GCC 13, those will only
-> land in GCC 14 which is going to happen sometime in 2024, I guess.
+> Yes, of course! :-)
 > 
-> Thus, we'll need to have "arc-xxxx.yy" anyway with sources from our GitHub
-> forks, primarily to support ARCv3 stuff. Thus, I didn't want to introduce that
-> turbulence with removal of ARC toolchain and then adding it back next week.
-
-Sounds good to me, but it should be maintained then :-)
-
-> > (1) Drop ARC-specific versions of GCC/binutils/GDB if you confirm it's OK  
+> Regards,
+> Yann E. MORIN.
 > 
-> As I said, we'll update ARC toolchain instead:
->  - Primarily to add ARCv3 support and while ARC toolchian will be there anyway
->  - It makes sense to keep it for ARCompact/ARCv2 as there're some fixes and
->    improvements which are not yet upstream (because release schedules don't match)
-
-OK.
-
-> > (2) Add readme.txt about the different defconfigs so we understand
-> >     which platform they target, and where it can be found, if freely
-> >     available.  
+> > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> > ---
+> > v5: add this optional commit
+> > v6: rebase
+> > ---
+> >  package/ninja/ninja.mk | 1 +
+> >  package/pkg-cmake.mk   | 2 +-
+> >  2 files changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+> > index b7bc1a4f1c..85dd2e05aa 100644
+> > --- a/package/ninja/ninja.mk
+> > +++ b/package/ninja/ninja.mk
+> > @@ -9,6 +9,7 @@ NINJA_VERSION = $(NINJA_VERSION_MAJOR).g95dee.kitware.jobserver-1
+> >  NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
+> >  NINJA_LICENSE = Apache-2.0
+> >  NINJA_LICENSE_FILES = COPYING
+> > +NINJA_CMAKE_NINJA = NO
+> >  
+> >  define HOST_NINJA_INSTALL_CMDS
+> >  	$(INSTALL) -m 0755 -D $(@D)/ninja $(HOST_DIR)/bin/ninja
+> > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> > index 36ab88d3a1..dab87c81f4 100644
+> > --- a/package/pkg-cmake.mk
+> > +++ b/package/pkg-cmake.mk
+> > @@ -52,7 +52,7 @@ endif
+> >  define inner-cmake-package
+> >  
+> >  $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+> > -
+> > +$(3)_CMAKE_NINJA ?= YES
+> >  
+> >  ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
+> >  $(2)_BUILDDIR			= $$($(2)_SRCDIR)
+> > -- 
+> > 2.34.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
 > 
-> We'll do that.
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Good.
-
-> > (3) Perhaps make it possible to build the ARC-specific qemu, so that we
-> >     can out of the box have a qemu that we can use to boot test one ARC
-> >     platform. Then we can enable that in our Gitlab CI  
-> 
-> Well, QEMU for ARC is easily doable. I guess it's more of a question on how to
-> integrate it with Buildroot's GitLab flow, any references to docs on the matter
-> (sorry if asking something simple, but while I have your attention, possibly you
-> may point me at something immediately)?
-
-We probably need to simply tweak the existing Qemu package. Not a
-priority, but would be nice.
-
-Something more important: fix the broken snps_arc700_axs101_defconfig.
-You're normally receiving e-mails about this. If not, let me know,
-because it means there is an issue in the notification machinery.
-
-See:
-
- https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673779
- https://bugs.busybox.net/show_bug.cgi?id=15446
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
