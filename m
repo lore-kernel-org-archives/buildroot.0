@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8698AEE49A6
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F036DEE49A5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:04:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3EBA240B60;
-	Mon, 21 Aug 2023 20:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3EBA240B60
+	by smtp2.osuosl.org (Postfix) with ESMTP id A963B40B57;
+	Mon, 21 Aug 2023 20:04:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A963B40B57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xhHRm12C77Ss; Mon, 21 Aug 2023 20:04:45 +0000 (UTC)
+	with ESMTP id hZ50XJo-b2o4; Mon, 21 Aug 2023 20:04:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5863D40B74;
-	Mon, 21 Aug 2023 20:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5863D40B74
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 29E201BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAC9240B72;
+	Mon, 21 Aug 2023 20:04:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAC9240B72
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 410961BF951
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB5E4409AC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6CFE661120
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB5E4409AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CFE661120
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BMXqH2R5-n9O for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O4yuOQS3HZQs for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 778E4409CB
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6D7961112
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 778E4409CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6D7961112
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74E3C86023; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id A507E86024; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 14:25:57 +0200
+Date: Sun, 6 Aug 2023 16:26:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e34063c5be6963cb3fd87e6852af0854ec1c2dc1
-X-Git-Newrev: 2b738044edbed64e313a2b4f275a70e02e5bc143
+X-Git-Oldrev: d0349d5ba02df26c9f3d98b1e34ebd2c5c34192c
+X-Git-Newrev: 8382f0eb41bc12098f032c12781fb488aa63d901
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.74E3C86023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/versal: clean shellcheck
- issues
+Message-Id: <20230821200123.A507E86024@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sentry-cli: fix build
+ with OpenSSL 3.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,86 +64,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b738044edbed64e313a2b4f275a70e02e5bc143
+commit: https://git.buildroot.net/buildroot/commit/?id=8382f0eb41bc12098f032c12781fb488aa63d901
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch cleans up the shellcheck issues in the versal post scripts.
+Fixes:
+http://autobuild.buildroot.net/results/4e2/4e24cb67402bad35ab57833d72e6c857b3eb4e07/
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore        |  2 --
- board/versal/post-build.sh |  5 ++---
- board/versal/post-image.sh | 14 +++++++-------
- 3 files changed, 9 insertions(+), 12 deletions(-)
+ ...1-Disable-SSL-support-for-the-curl-module.patch | 62 ++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f846cc7a87..f612dfae4d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -99,8 +99,6 @@ board/technologic/ts4900/post-image.sh Shellcheck
- board/toradex/apalis-imx6/post-image.sh Shellcheck
- board/udoo/common/post-build.sh Shellcheck
- board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch Upstream
--board/versal/post-build.sh Shellcheck
--board/versal/post-image.sh Shellcheck TrailingSpace
- board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch ApplyOrder Upstream
- boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch Upstream
- boot/at91bootstrap/0001-eabi-fix.patch Upstream
-diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
-index ff8f8a6071..ed08ea2d49 100755
---- a/board/versal/post-build.sh
-+++ b/board/versal/post-build.sh
-@@ -3,9 +3,8 @@
- # genimage will need to find the extlinux.conf
- # in the binaries directory
- 
--BOARD_DIR="$(dirname $0)"
--CONSOLE=$2
--ROOT=$3
-+CONSOLE="$2"
-+ROOT="$3"
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
-diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
-index 92e65ed3b7..1d9802c34d 100755
---- a/board/versal/post-image.sh
-+++ b/board/versal/post-image.sh
-@@ -6,12 +6,12 @@
- 
- FIRST_DT=$(sed -nr \
-                -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
--               ${BR2_CONFIG})
-+               "${BR2_CONFIG}")
- 
--[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
-+[ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
- 
--BOARD_DIR="$(dirname $0)"
--BOARD_NAME=$4
-+BOARD_DIR="$(dirname "$0")"
-+BOARD_NAME="$4"
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
-@@ -23,7 +23,7 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	    { core=psm, file=${BINARIES_DIR}/${BOARD_NAME}_psmfw.elf }
- 	  }
- 	  image {
--	    id = 0x1c000000, name=apu_subsystem 
-+	    id = 0x1c000000, name=apu_subsystem
- 	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/u-boot.dtb }
- 	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
- 	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
-@@ -31,5 +31,5 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	}
- 	__HEADER_EOF
- 
--${HOST_DIR}/bin/bootgen -arch versal -image ${BINARIES_DIR}/bootgen.bif -o ${BINARIES_DIR}/boot.bin -w on
--support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
-+"${HOST_DIR}/bin/bootgen" -arch versal -image "${BINARIES_DIR}/bootgen.bif" -o "${BINARIES_DIR}/boot.bin" -w on
-+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+diff --git a/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch b/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
+new file mode 100644
+index 0000000000..e68401da78
+--- /dev/null
++++ b/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
+@@ -0,0 +1,62 @@
++From a3754088b4cf7d19ff4f9a98412dd132d5baf1c1 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Mon, 31 Jul 2023 22:34:04 +0200
++Subject: [PATCH] Disable SSL support for the curl module
++
++Fixes build with OpenSSL v3.
++
++Downloaded Cargo.toml patch from
++https://cgit.freebsd.org/ports/tree/devel/sentry-cli/files/patch-Cargo.toml
++
++Upstream: https://github.com/getsentry/sentry-cli/issues/1706
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ Cargo.lock | 10 ----------
++ Cargo.toml |  2 +-
++ 2 files changed, 1 insertion(+), 11 deletions(-)
++
++diff --git a/Cargo.lock b/Cargo.lock
++index 75e1c8c..5121211 100644
++--- a/Cargo.lock
+++++ b/Cargo.lock
++@@ -1557,15 +1557,6 @@ version = "0.1.5"
++ source = "registry+https://github.com/rust-lang/crates.io-index"
++ checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
++ 
++-[[package]]
++-name = "openssl-src"
++-version = "111.22.0+1.1.1q"
++-source = "registry+https://github.com/rust-lang/crates.io-index"
++-checksum = "8f31f0d509d1c1ae9cada2f9539ff8f37933831fd5098879e482aa687d659853"
++-dependencies = [
++- "cc",
++-]
++-
++ [[package]]
++ name = "openssl-sys"
++ version = "0.9.74"
++@@ -1575,7 +1566,6 @@ dependencies = [
++  "autocfg",
++  "cc",
++  "libc",
++- "openssl-src",
++  "pkg-config",
++  "vcpkg",
++ ]
++diff --git a/Cargo.toml b/Cargo.toml
++index abd6839..ddc141f 100644
++--- a/Cargo.toml
+++++ b/Cargo.toml
++@@ -19,7 +19,7 @@ clap = { version = "3.2.22", default-features = false, features = [
++   "wrap_help",
++ ] }
++ console = "0.15.2"
++-curl = { version = "0.4.44", features = ["static-curl", "static-ssl"] }
+++curl = { version = "0.4.44" }
++ dirs = "4.0.0"
++ dotenv = "0.15.0"
++ elementtree = "1.2.2"
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
