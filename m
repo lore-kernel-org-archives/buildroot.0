@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A936DC001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:38:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CA75C001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 560B081E1F;
-	Sun,  6 Aug 2023 14:38:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 560B081E1F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3646980BF6;
+	Sun,  6 Aug 2023 14:40:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3646980BF6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id E_PQEpTWJ36b; Sun,  6 Aug 2023 14:38:00 +0000 (UTC)
+	with ESMTP id mwW7tM_Zi_B6; Sun,  6 Aug 2023 14:40:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 705EA81D7D;
-	Sun,  6 Aug 2023 14:37:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 705EA81D7D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3EF641BF340
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:37:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EFF381DE2;
+	Sun,  6 Aug 2023 14:40:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EFF381DE2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B95A1BF340
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:40:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 697DC80AF4
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:36:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 697DC80AF4
+ by smtp4.osuosl.org (Postfix) with ESMTP id E86A040275
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:40:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E86A040275
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id esaCJgbpuAhg for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 14:36:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C62C80C09
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:36:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C62C80C09
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59D8C844B4; Sun,  6 Aug 2023 14:36:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 16:35:52 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 92d51faedab5f738ad3b9e7b7084c177e100cc7b
-X-Git-Newrev: 7dd27cbe5b9ec99e71760c77c78a7971a93c7615
-X-Patchwork-Hint: ignore
-Message-Id: <20230806143630.59D8C844B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/download: add support
- to exclude svn externals
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZI5K5VLCuPtT for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 14:40:40 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 93A3A4032E
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:40:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93A3A4032E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D3C8940003;
+ Sun,  6 Aug 2023 14:40:37 +0000 (UTC)
+Date: Sun, 6 Aug 2023 16:40:36 +0200
+To: yann.morin@orange.com
+Message-ID: <20230806164036.60d21e39@windsurf>
+In-Reply-To: <cover.1690895462.git.yann.morin@orange.com>
+References: <cover.1690895462.git.yann.morin@orange.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691332838;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=f5ug4mM41gWQ9raEllAfigKIT82Yw60oWY7ND3Ajs4Y=;
+ b=elMc40O6IY5RFWz+whusPvVSdplef1p2BjHbchNFZAeJATdVUG92l9J+oA6D02yhvZ/dQh
+ M/GMIHOXwb0BPn8phOSZtHQSRWKmQGK6rG6gnktCtx91UPkPMf9TZbAUWr4lp/14wdOC/K
+ To5KRx5G+JofndfuiTtraY+ig9HGudZfaND53V64Be111eaASRYpySp8TzI0kwpffNOzrK
+ EvWSf5I0DZiOKDA85PHmcZJnwT/XabhG2ENJAhJRGjhrIFs46DpC8K7EfeSWkilB98Ymqo
+ uWCn1cllvY7FRRl+qR685/uAh4mvxAr8CucBPvOn15g9gcKoYfQ5l3rdgnszhA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=elMc40O6
+Subject: Re: [Buildroot] [PATCH 0/3 v2] support/download: enhance svn backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,135 +76,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7dd27cbe5b9ec99e71760c77c78a7971a93c7615
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Yann,
 
-Like git which can have submodules, subversion can have externals. The
-default behaviour for subversion is to retrieve all the externals,
-unless told otherwise.
+On Tue, 1 Aug 2023 15:11:14 +0200
+yann.morin@orange.com wrote:
 
-For some repositories, the externals may be huge (e.g. a dataset or some
-assets) and may not be required for building the package. In such a
-case, retrieving the externals is both a waste of network bandwitdh and
-time, and a waste of disk storage.
+> Yann E. MORIN (3):
+>       support/download: fix shellcheck errors in svn backend
+>       support/download: use svn credentials to retrieve revision date
+>       support/download: add support to exclude svn externals
 
-Like for git submodules and git lfs, add an option that packages can set
-to specify whether they want externals or not.
+I have applied the series to next. As reported on IRC, the From: field
+is not correct, as it is just From: yann.morin@orange.com, while it
+should be From: Yann E. MORIN <yann.morin@orange.com> to match the
+Signed-off-by value. I fixed that up when applying.
 
-Since we've so far been retrieving externals, we keep that the default,
-and packages can opt-out (rather than the opt-in for git submodules or
-git lfs).
+Another aspect I'd like to challenge though is your decision in PATCH
+3/3 to preserve the current behavior of downloading externals as the
+default. We have only one package in the tree that uses SVN as far as I
+can see, so it would be easy to verify if this one uses external or
+not, and do the right thing.
 
-We must only set it when the package is actually hosted on svn, to avoid
-passing -r when the package is not hosted by svn; otherwise, -r would
-also be passed e.g. to a git-hosted package, triggering the download of
-git submodules even when they are not requested. We need to do so,
-because we have a default value, which we usually do not have in other
-download options.
+Yes, I know this change of the default behavior could break external
+packages, but we were just discussing about switching the default CMake
+backend from Makefile to Ninja once all packages in the tree have been
+verified: if we following the same reasoning, we should also forever
+preserve Makefile as the default CMake backend to not break external
+packages.
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/adding-packages-generic.txt |  6 ++++++
- package/pkg-download.mk                 |  1 +
- package/pkg-generic.mk                  | 10 ++++++++++
- support/download/svn                    |  6 +++++-
- 4 files changed, 22 insertions(+), 1 deletion(-)
+I think we need to find the right balance between preserving backward
+compatibility and moving forward with "better" solutions. I believe the
+chances of having people having external packages *and* packages that
+use external SVN repositories are fairly slim, so I would think that
+defaulting to *not* downloading the SVN externals would be an
+acceptable change. We can always mention it in the migration guidelines
+at
+https://buildroot.org/downloads/manual/manual.html#migrating-from-ol-versions
+if we want to be extra nice.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index fbe37f9ca9..299017f9d2 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -347,6 +347,12 @@ not and can not work as people would expect it should:
-   Git LFS to store large files out of band.  This is only available for
-   packages downloaded with git (i.e. when +LIBFOO_SITE_METHOD=git+).
- 
-++ +LIBFOO_SVN_EXTERNAL+ can be set to +YES+ (the default) to specify
-+  whether to retrieve the svn external references, or to +NO+ to avoid
-+  retrieving those externals. Note that, contrary to other similar
-+  options like +LIBFOO_GIT_SUBMODULES+ or +LIBFOO_GIT_LFS+, the default
-+  here is to actually retrieve the externals; this is a legacy heritage.
-+
- * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
-   (directories) that tar must strip from file names on extraction.
-   The tarball for most packages has one leading component named
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 0718f21aad..5a311a95c6 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -119,6 +119,7 @@ define DOWNLOAD
- 		-n '$($(2)_BASENAME_RAW)' \
- 		-N '$($(2)_RAWNAME)' \
- 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
-+		$(if $(filter YES,$($(2)_SVN_EXTERNALS)),-r) \
- 		$(if $($(2)_GIT_SUBMODULES),-r) \
- 		$(if $($(2)_GIT_LFS),-l) \
- 		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 5d1c1da128..86b9c1f9d3 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -643,6 +643,16 @@ ifndef $(2)_GIT_SUBMODULES
-  endif
- endif
- 
-+ifndef $(2)_SVN_EXTERNALS
-+ ifdef $(3)_SVN_EXTERNALS
-+  $(2)_SVN_EXTERNALS = $$($(3)_SVN_EXTERNALS)
-+ else
-+  # Legacy: we used to always use externals by default
-+  # Only set it when the package is actually hosted on svn
-+  $(2)_SVN_EXTERNALS = $$(if $$(filter svn,$$($(2)_SITE_METHOD)),YES)
-+ endif
-+endif
-+
- # Do not accept to download git submodule if not using the git method
- ifneq ($$($(2)_GIT_SUBMODULES),)
-  ifneq ($$($(2)_SITE_METHOD),git)
-diff --git a/support/download/svn b/support/download/svn
-index 3e08a0ef36..1decb2310b 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -16,6 +16,7 @@ set -e
- #   -u URI      Checkout from repository at URI.
- #   -c REV      Use revision REV.
- #   -n NAME     Use basename NAME.
-+#   -r          Recursive, i.e. use externals
- #
- # Environment:
- #   SVN      : the svn command to call
-@@ -24,6 +25,7 @@ set -e
- . "${0%/*}/helpers"
- 
- quiet=
-+externals=--ignore-externals
- while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     case "${OPT}" in
-     q)  quiet=-q;;
-@@ -31,6 +33,7 @@ while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
-     u)  uri="${OPTARG}";;
-     c)  rev="${OPTARG}";;
-     n)  basename="${OPTARG}";;
-+    r)  externals=;;
-     :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
-     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
-     esac
-@@ -52,7 +55,8 @@ _plain_svn() {
-     eval ${SVN} "${@}"
- }
- 
--_svn export --ignore-keywords ${quiet} "${@}" "'${uri}@${rev}'" "'${basename}'"
-+# shellcheck disable=SC2086 # externals and quiet may be empty
-+_svn export --ignore-keywords ${quiet} ${externals} "${@}" "'${uri}@${rev}'" "'${basename}'"
- 
- # For 'svn info', we only need the credentials, if any; other options
- # would be invalid, as they are intended for 'svn export'.
+What do you think?
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
