@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79319C001DE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 11:45:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2723CC04A6A
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 11:45:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DEF281E0B;
-	Sun,  6 Aug 2023 11:45:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DEF281E0B
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA5AD81E82;
+	Sun,  6 Aug 2023 11:45:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA5AD81E82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ldl9hX6hCMmY; Sun,  6 Aug 2023 11:45:43 +0000 (UTC)
+	with ESMTP id 6swpYvmuIbCP; Sun,  6 Aug 2023 11:45:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63F07813C7;
-	Sun,  6 Aug 2023 11:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63F07813C7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 468A21BF47E
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:45:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B54681842;
+	Sun,  6 Aug 2023 11:45:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B54681842
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1603A1BF293
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:45:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D6D1600B6
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:45:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D6D1600B6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6EAA781852
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 11:45:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EAA781852
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hW3vxjcKs3iU for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 11:45:18 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E864B60672
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 11:45:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E864B60672
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 85E8F20003;
- Sun,  6 Aug 2023 11:45:14 +0000 (UTC)
-Date: Sun, 6 Aug 2023 13:45:13 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20230806134513.7477f865@windsurf>
-In-Reply-To: <20230804205401.3975960-1-dario.binacchi@amarulasolutions.com>
-References: <20230804205401.3975960-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691322315;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=gXHZ6i6SznKFpT7ToS4dL8JVy5tuEWAW8xZsmx5NtgA=;
- b=SHBICnr1I9ulhdrg0J6Lh15FG+gXxakn9Q5pQPxqWEMjMihQR9NXCRaCLVaEI3/SQY1EQi
- NNXp/5E1BMFmbO0rFiHRCY+Nc7kILZig85bN651AZGlsk9Fa6nVPwwBxumBCrqAiwUxBWs
- YLUMygrf0NOgW839ANMynhj3+vJxn/03I1h9YBDZi6+u5zgkiXYpXBU2khJVgTis/NVrmH
- 3vzAOyBZUbSMHZyrXvy13UHCV96ahAO5S3Q4jmwgcj20+aJzIdRMFNye47mzrzj26RzT5G
- NjU2dHFPh5pWCEMkpltD6tWJI0nj+AwWeNcqaMe8DxTc2pYMn1l8ByktjgLV9g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SHBICnr1
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/arp-scan: allow to not
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pMR3WbLDMoKe for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 11:45:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC11C8145C
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 11:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC11C8145C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 968EE842C0; Sun,  6 Aug 2023 11:45:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 13:44:32 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 6d37bf0509aa163154c7b8723ce653afb8810e6c
+X-Git-Newrev: ffbc72e8bc1feb28351d009aa6292309c8aaf9bf
+X-Patchwork-Hint: ignore
+Message-Id: <20230806114509.968EE842C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/arp-scan: allow to not
  install package data
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,34 +58,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, "Yann E .
- MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  4 Aug 2023 22:54:01 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ffbc72e8bc1feb28351d009aa6292309c8aaf9bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> The patch adds an option that allows you to not install the data along
-> with the binaries (less than 100kb), saving 1.4Mb of rootfs data.
-> 
-> By default, the data is installed for backward compatibility.
-> 
-> Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> 
-> ---
+The patch adds an option that allows you to not install the data along
+with the binaries (less than 100kb), saving 1.4Mb of rootfs data.
 
-Applied to next, thanks.
+By default, the data is installed for backward compatibility.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/arp-scan/Config.in   | 11 +++++++++++
+ package/arp-scan/arp-scan.mk |  4 ++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/package/arp-scan/Config.in b/package/arp-scan/Config.in
+index ed70b39586..cf7377d2f9 100644
+--- a/package/arp-scan/Config.in
++++ b/package/arp-scan/Config.in
+@@ -8,3 +8,14 @@ config BR2_PACKAGE_ARP_SCAN
+ 	  discover and fingerprint IP hosts on the local network.
+ 
+ 	  https://github.com/royhills/arp-scan
++
++if BR2_PACKAGE_ARP_SCAN
++
++config BR2_PACKAGE_ARP_SCAN_DATA
++	bool "install data (OUI)"
++	default y  # legacy
++	help
++	  Say 'y' here (the default) to install the data along the
++	  binaries.
++
++endif # BR2_PACKAGE_ARP_SCAN
+diff --git a/package/arp-scan/arp-scan.mk b/package/arp-scan/arp-scan.mk
+index 89644be9d3..67eb1881db 100644
+--- a/package/arp-scan/arp-scan.mk
++++ b/package/arp-scan/arp-scan.mk
+@@ -23,4 +23,8 @@ else
+ ARP_SCAN_CONF_OPTS += --without-libcap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ARP_SCAN_DATA),)
++ARP_SCAN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
