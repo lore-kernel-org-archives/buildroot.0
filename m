@@ -4,66 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54015C001DE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 13:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C9C6C001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 13:58:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAED340322;
-	Sun,  6 Aug 2023 13:57:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAED340322
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28B3D40189;
+	Sun,  6 Aug 2023 13:58:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28B3D40189
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PYqpCdeLajIr; Sun,  6 Aug 2023 13:57:48 +0000 (UTC)
+	with ESMTP id B2KOuJaBaqlz; Sun,  6 Aug 2023 13:58:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 653BB4011A;
-	Sun,  6 Aug 2023 13:57:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 653BB4011A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 919001BF3C0
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:57:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE06E41403;
+	Sun,  6 Aug 2023 13:58:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE06E41403
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 375041BF8C7
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:58:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0322D60EE8
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:56:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0322D60EE8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7DF4C80B9B
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:57:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DF4C80B9B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nDm9J0ZG4Ukn for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 13:56:11 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 656DD605EC
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 13:56:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 656DD605EC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B950C40008;
- Sun,  6 Aug 2023 13:56:07 +0000 (UTC)
-Date: Sun, 6 Aug 2023 15:56:06 +0200
-To: Alistair Francis <alistair23@gmail.com>
-Message-ID: <20230806155606.53d6f567@windsurf>
-In-Reply-To: <20230724014832.2207166-2-alistair.francis@wdc.com>
-References: <20230724014832.2207166-1-alistair.francis@wdc.com>
- <20230724014832.2207166-2-alistair.francis@wdc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691330168;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uq3dbkc79UsFX8B4T/HoIHZ3uNvcjoHjL0+qsr/waME=;
- b=h7ypDvJHg8DWEYlwe6RAnOmYwRTZYYvPr+B5ceUqk+QmV6/qEwvnVZiXcreoqgBUUtaVha
- XmWB69deUeLqyVupjyG5HIUCuBSpCjKP4t7kOnMOSIZnffKNc3NKeS0UOVLh3RVOdwFZNM
- NFQdoTnBoRfCbuZSqD/ot8R1pcsHVjjmjMzweYcC0P3JgPydDVnt83eJTz4Adi0yztmAbH
- bPu0Ge2YF2QmbPVpqVgluWIB+3Il7EB+nKB6cmowjFdQdhWb+VjZ7lw+oekeM73cxq9Z8d
- Tcj8U08/trouofE0Fee0T+mtkwGK25QOh8Eg1q2vXY7sWe+dIihaQCcn7DIpfQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=h7ypDvJH
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/libspdm: Initial commit
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nHl7FSyeCx8o for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE3C481468
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE3C481468
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 964B184426; Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 15:52:35 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606
+X-Git-Newrev: e8cb970534debcb5b36c7919d435dbad8c4e38ee
+X-Patchwork-Hint: ignore
+Message-Id: <20230806135751.964B184426@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/webkitgtk: use the
+ CMAKE_NINJA flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,185 +57,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Alistair Francis <alistair.francis@wdc.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e8cb970534debcb5b36c7919d435dbad8c4e38ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 24 Jul 2023 11:48:32 +1000
-Alistair Francis <alistair23@gmail.com> wrote:
+Use the newly introduce backend option to specify what cmake backend to
+use, in lieue of special-coding its use as done in 16e5c92ff5fd
+(package/webkitgtk: Build with ninja).
 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/webkitgtk/webkitgtk.mk | 22 +++-------------------
+ 1 file changed, 3 insertions(+), 19 deletions(-)
 
-Commit title should be:
-
-	package/libspdm: new package
-
-> ---
->  package/Config.in            |  1 +
->  package/libspdm/Config.in    | 20 ++++++++++++
->  package/libspdm/libspdm.hash |  3 ++
->  package/libspdm/libspdm.mk   | 59 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 83 insertions(+)
->  create mode 100644 package/libspdm/Config.in
->  create mode 100644 package/libspdm/libspdm.hash
->  create mode 100644 package/libspdm/libspdm.mk
-
-A new entry in the DEVELOPERS file is needed.
-
-> diff --git a/package/libspdm/Config.in b/package/libspdm/Config.in
-> new file mode 100644
-> index 0000000000..b732662842
-> --- /dev/null
-> +++ b/package/libspdm/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_LIBSPDM
-> +	bool "libspdm"
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> +	help
-> +	  libspdm is a sample implementation that follows
-> +	  the DMTF SPDM specifications
-> +
-> +	  https://github.com/DMTF/libspdm
-> +
-> +config BR2_PACKAGE_LIBSPDM_CPU_FAMILLY
-> +	string
-> +	default "arc" if BR2_arcle || BR2_arceb
-> +	default "arm" if BR2_arm || BR2_armeb
-> +	default "aarch64" if BR2_aarch64 || BR2_aarch64_be
-> +	default "ia32" if BR2_i386
-> +	default "riscv32" if BR2_riscv && BR2_RISCV_32
-> +	default "riscv64" if BR2_riscv && BR2_RISCV_64
-> +	default "x64" if BR2_x86_64
-> +	default BR2_ARCH  # Yes, this should work...\
-
-Are all CPU families really supported? Usually, when a package needs to
-know the CPU family/platform, it is a very strong sign that the package
-has some architecture-specific stuff, and that some of our "special"
-architectures will not be supported.
-
-According to the CMakeLists.txt, I'm pretty correct:
-
-
-if(ARCH STREQUAL "x64")
-    MESSAGE("ARCH = x64")
-elseif(ARCH STREQUAL "ia32")
-    MESSAGE("ARCH = ia32")
-elseif(ARCH STREQUAL "arm")
-    MESSAGE("ARCH = arm")
-elseif(ARCH STREQUAL "aarch64")
-    MESSAGE("ARCH = aarch64")
-elseif(ARCH STREQUAL "riscv32")
-    MESSAGE("ARCH = riscv32")
-elseif(ARCH STREQUAL "riscv64")
-    MESSAGE("ARCH = riscv64")
-elseif(ARCH STREQUAL "arc")
-    MESSAGE("ARCH = arc")
-elseif(ARCH STREQUAL "nios2")
-    MESSAGE("ARCH = nios2")
-else()
-    MESSAGE(FATAL_ERROR "Unknown ARCH")
-endif()
-
-Your package will fail to build on any other architectures than the
-ones listed here.
-
-> diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
-> new file mode 100644
-> index 0000000000..daf6639808
-> --- /dev/null
-> +++ b/package/libspdm/libspdm.mk
-> @@ -0,0 +1,59 @@
-> +################################################################################
-> +#
-> +# libspdm
-> +#
-> +################################################################################
-> +
-> +LIBSPDM_VERSION = 3.0.0
-> +LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
-> +LIBSPDM_LICENSE = BSD-3-Clause
-> +LIBSPDM_LICENSE_FILES = LICENSE.md
-> +
-> +LIBSPDM_INSTALL_STAGING = YES
-> +LIBSPDM_INSTALL_TARGET = YES
-
-This line is not needed, it's the default.
-
-> +
-> +LIBSPDM_DEPENDENCIES += openssl
-
-Just =, not +=.
-
-> +
-> +LIBSPDM_TARGET_CPU_FAMILY = $(call qstrip,$(BR2_PACKAGE_LIBSPDM_CPU_FAMILLY))
-> +
-> +LIBSPDM_CONF_OPTS = \
-> +	-DARCH=$(LIBSPDM_TARGET_CPU_FAMILY) \
-> +	-DTOOLCHAIN=NONE \
-> +	-DTARGET=Release \
-> +	-DCRYPTO=openssl \
-> +	-DENABLE_BINARY_BUILD=1 \
-> +	-DCOMPILED_LIBCRYPTO_PATH=/usr/lib/ \
-> +	-DCOMPILED_LIBSSL_PATH=/usr/lib/ \
-> +	-DDISABLE_TESTS=1 \
-> +	-DLINK_FLAGS=$(STAGING_DIR)
-> +
-> +define LIBSPDM_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -m 0755 -t $(STAGING_DIR)/usr/lib/ $(@D)/lib/*
-> +
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include/libspdm/library
-> +	$(INSTALL) -D -m 0755 $(@D)/include/library/* $(STAGING_DIR)/usr/include/libspdm/library
-> +
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include/libspdm/internal
-> +	$(INSTALL) -D -m 0755 $(@D)/include/internal/*.h $(STAGING_DIR)/usr/include/libspdm/internal/
-> +
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include/libspdm/hal/library/cryptlib
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include/libspdm/hal/library/requester
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include/libspdm/hal/library/responder
-> +	$(INSTALL) -D -m 0755 $(@D)/include/hal/*.h $(STAGING_DIR)/usr/include/libspdm/hal/
-> +	$(INSTALL) -D -m 0755 $(@D)/include/hal/library/*.h $(STAGING_DIR)/usr/include/libspdm/hal/library/
-> +	$(INSTALL) -D -m 0755 $(@D)/include/hal/library/cryptlib/* $(STAGING_DIR)/usr/include/libspdm/hal/library/cryptlib/
-> +	$(INSTALL) -D -m 0755 $(@D)/include/hal/library/requester/* $(STAGING_DIR)/usr/include/libspdm/hal/library/requester/
-> +	$(INSTALL) -D -m 0755 $(@D)/include/hal/library/responder/* $(STAGING_DIR)/usr/include/libspdm/hal/library/responder/
-> +
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include/libspdm/industry_standard
-> +	$(INSTALL) -D -m 0755 $(@D)/include/industry_standard/* $(STAGING_DIR)/usr/include/libspdm/industry_standard
-> +
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include/libspdm/os_stub/spdm_crypt_ext_lib
-> +	$(INSTALL) -D -m 0755 $(@D)/os_stub/spdm_crypt_ext_lib/*.h $(STAGING_DIR)/usr/include/libspdm/os_stub/spdm_crypt_ext_lib
-
-This seems very verbose. If you're copying all files/directories of
-$(@D)/include/* to $(STAGING_DIR)/usr/include/libspdm, why not:
-
-	mkdir -p $(STAGING_DIR)/usr/include/libspdm/
-	cp -dpfr $(@D)/include/* $(STAGING_DIR)/usr/include/libspdm/
-
-> +endef
-> +
-> +define LIBSPDM_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/lib/* $(TARGET_DIR)/usr/lib/
-
-This is not good, as it could create a file called "lib" in
-$(TARGET_DIR)/usr if $(TARGET_DIR)/usr/lib doesn't already exist. So:
-
-	mkdir -p $(TARGET_DIR)/usr/lib
-	cp -dpfr $(@D)/lib/* $(TARGET_DIR)/usr/lib/
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 56277a0a0a..3e9d42c7c3 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -16,6 +16,9 @@ WEBKITGTK_CPE_ID_VENDOR = webkitgtk
+ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
+ 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
++
++WEBKITGTK_CMAKE_BACKEND = ninja
++
+ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_API_TESTS=OFF \
+ 	-DENABLE_DOCUMENTATION=OFF \
+@@ -140,23 +143,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
+ WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+ endif
+ 
+-# webkitgtk needs cmake >= 3.20 when not building with ninja, which is
+-# above our minimal version in
+-# support/dependencies/check-host-cmake.mk, so use the ninja backend:
+-# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
+-WEBKITGTK_CONF_OPTS += -GNinja
+-WEBKITGTK_DEPENDENCIES += host-ninja
+-
+-define WEBKITGTK_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
+-endef
+-
+-define WEBKITGTK_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-endef
+-
+-define WEBKITGTK_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-endef
+-
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
