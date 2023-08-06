@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E22E8C001DE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:26:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B272BC001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EBC781E99;
-	Sun,  6 Aug 2023 12:26:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EBC781E99
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FA7B80C0E;
+	Sun,  6 Aug 2023 12:27:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FA7B80C0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QIhEn0ZwWrtU; Sun,  6 Aug 2023 12:26:39 +0000 (UTC)
+	with ESMTP id ggnvcW7nIvCY; Sun,  6 Aug 2023 12:27:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB47981919;
-	Sun,  6 Aug 2023 12:26:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB47981919
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8BE201BF2A4
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:26:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A148481B71;
+	Sun,  6 Aug 2023 12:27:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A148481B71
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1394D1BF2A4
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:27:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30E4F40192
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30E4F40192
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE43460E24
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:27:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE43460E24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6MkwZ4WFvrg3 for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 12:26:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7A45401C9
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 12:26:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7A45401C9
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DC518438E; Sun,  6 Aug 2023 12:26:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 14:25:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e34063c5be6963cb3fd87e6852af0854ec1c2dc1
-X-Git-Newrev: 2b738044edbed64e313a2b4f275a70e02e5bc143
-X-Patchwork-Hint: ignore
-Message-Id: <20230806122626.8DC518438E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/versal: clean shellcheck issues
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IP_MWHLtgNOp for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 12:27:06 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9DB9460B70
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 12:27:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DB9460B70
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7764420003;
+ Sun,  6 Aug 2023 12:27:04 +0000 (UTC)
+Date: Sun, 6 Aug 2023 14:27:03 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230806142703.36df2af4@windsurf>
+In-Reply-To: <20230803181544.3064901-1-bernd@kuhls.net>
+References: <20230803181544.3064901-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691324824;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=79AUgRww7hinxOafIWyU3F9Vyc84Opvr9S/QGoNFZ3I=;
+ b=XwEsNFFAU7hSRqli4X/O+3ugt7onaEXsV/IqHFCZWcZNZq0M2Z6ttLYXg+kTt9Ggvc6H3p
+ 9IDoyvDBMbNupWWikhNpURHKML+M9WcO7aZW0lgA/p5SZQDxUC3EIixkYnkcxYKZmXptmC
+ HV2dbJPTbxwWc3X+wMYlz2lplVuaneBsymtS/Y5D6c9muGXQgawRPlALms834hrMLt7A2S
+ WU03ShIrRnN4QAaH2o0fUHLjwe/p9T0FYFroyPOES/3xD23HefYc79X29gFPEfkJVk84iQ
+ zIeaOOKD4la6XV57TtsOtPkMK0kkzRpNpyOkaPqL26QlH7/8fOXb+E4DA8rKmQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XwEsNFFA
+Subject: Re: [Buildroot] [PATCH 1/1] {linux,
+ linux-headers}: bump 5.15.x / 6.{1, 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,92 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b738044edbed64e313a2b4f275a70e02e5bc143
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  3 Aug 2023 20:15:44 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-This patch cleans up the shellcheck issues in the versal post scripts.
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  linux/Config.in                      | 2 +-
+>  linux/linux.hash                     | 6 +++---
+>  package/linux-headers/Config.in.host | 6 +++---
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore        |  2 --
- board/versal/post-build.sh |  5 ++---
- board/versal/post-image.sh | 14 +++++++-------
- 3 files changed, 9 insertions(+), 12 deletions(-)
+Applied to master, thanks.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index f846cc7a87..f612dfae4d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -99,8 +99,6 @@ board/technologic/ts4900/post-image.sh Shellcheck
- board/toradex/apalis-imx6/post-image.sh Shellcheck
- board/udoo/common/post-build.sh Shellcheck
- board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch Upstream
--board/versal/post-build.sh Shellcheck
--board/versal/post-image.sh Shellcheck TrailingSpace
- board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch ApplyOrder Upstream
- boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch Upstream
- boot/at91bootstrap/0001-eabi-fix.patch Upstream
-diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
-index ff8f8a6071..ed08ea2d49 100755
---- a/board/versal/post-build.sh
-+++ b/board/versal/post-build.sh
-@@ -3,9 +3,8 @@
- # genimage will need to find the extlinux.conf
- # in the binaries directory
- 
--BOARD_DIR="$(dirname $0)"
--CONSOLE=$2
--ROOT=$3
-+CONSOLE="$2"
-+ROOT="$3"
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
-diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
-index 92e65ed3b7..1d9802c34d 100755
---- a/board/versal/post-image.sh
-+++ b/board/versal/post-image.sh
-@@ -6,12 +6,12 @@
- 
- FIRST_DT=$(sed -nr \
-                -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
--               ${BR2_CONFIG})
-+               "${BR2_CONFIG}")
- 
--[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
-+[ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
- 
--BOARD_DIR="$(dirname $0)"
--BOARD_NAME=$4
-+BOARD_DIR="$(dirname "$0")"
-+BOARD_NAME="$4"
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
-@@ -23,7 +23,7 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	    { core=psm, file=${BINARIES_DIR}/${BOARD_NAME}_psmfw.elf }
- 	  }
- 	  image {
--	    id = 0x1c000000, name=apu_subsystem 
-+	    id = 0x1c000000, name=apu_subsystem
- 	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/u-boot.dtb }
- 	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
- 	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
-@@ -31,5 +31,5 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	}
- 	__HEADER_EOF
- 
--${HOST_DIR}/bin/bootgen -arch versal -image ${BINARIES_DIR}/bootgen.bif -o ${BINARIES_DIR}/boot.bin -w on
--support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
-+"${HOST_DIR}/bin/bootgen" -arch versal -image "${BINARIES_DIR}/bootgen.bif" -o "${BINARIES_DIR}/boot.bin" -w on
-+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
