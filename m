@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B724EC8735
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:55:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AFFEEC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4393F41E43;
-	Thu,  7 Sep 2023 14:55:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4393F41E43
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA67541D91;
+	Thu,  7 Sep 2023 14:55:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA67541D91
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hDYap2P5r-IR; Thu,  7 Sep 2023 14:55:26 +0000 (UTC)
+	with ESMTP id JSZpd0vKnOQM; Thu,  7 Sep 2023 14:55:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FC3A41DFE;
-	Thu,  7 Sep 2023 14:55:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FC3A41DFE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 282D61BF313
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E3C641DF3;
+	Thu,  7 Sep 2023 14:55:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E3C641DF3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D0F1C1BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B670641D92
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B670641D92
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16510415B5
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16510415B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iAf1I5z07sxP for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n4-RKmD_Cn7U for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 475B541D65
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 475B541D65
+ by smtp2.osuosl.org (Postfix) with ESMTP id 648BE40488
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 648BE40488
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 36FAC86A20; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+ id 6227C86A25; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 00:00:04 +0200
+Date: Sun, 6 Aug 2023 18:06:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b86708826bcbbc1f1af01ed84f3e13dc9538ac6b
-X-Git-Newrev: 05f4c2fd102c0ca0a4e5947ce55e0a09660b6282
+X-Git-Oldrev: 1cc378b004ddbb1bc351f12ab374a19fe6c8d90c
+X-Git-Newrev: 77fc07c9804d802acad27c7e8734549af54135dd
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.36FAC86A20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnutls: bump version to 3.8.1
+Message-Id: <20230907145126.6227C86A25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-backcall: switch from
+ distutils to setuptools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +64,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05f4c2fd102c0ca0a4e5947ce55e0a09660b6282
+commit: https://git.buildroot.net/buildroot/commit/?id=77fc07c9804d802acad27c7e8734549af54135dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+distutils will be dropped with python 3.12.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-backcall/python-backcall.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 2f6dba9d3c..a6ba6b22c6 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.0.tar.xz.sig
--sha256  0ea0d11a1660a1e63f960f157b197abe6d0c8cb3255be24e1fb3815930b9bdc5  gnutls-3.8.0.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.1.tar.xz.sig
-+sha256  ba8b9e15ae20aba88f44661978f5b5863494316fe7e722ede9d069fe6294829c  gnutls-3.8.1.tar.xz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  doc/COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index d6b8b229bd..d9b9831fd6 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/python-backcall/python-backcall.mk b/package/python-backcall/python-backcall.mk
+index 2ead3421a8..ea9ffb863c 100644
+--- a/package/python-backcall/python-backcall.mk
++++ b/package/python-backcall/python-backcall.mk
+@@ -7,7 +7,7 @@
+ PYTHON_BACKCALL_VERSION = 0.2.0
+ PYTHON_BACKCALL_SOURCE = backcall-$(PYTHON_BACKCALL_VERSION).tar.gz
+ PYTHON_BACKCALL_SITE = https://files.pythonhosted.org/packages/a2/40/764a663805d84deee23043e1426a9175567db89c8b3287b5c2ad9f71aa93
+-PYTHON_BACKCALL_SETUP_TYPE = distutils
++PYTHON_BACKCALL_SETUP_TYPE = setuptools
+ PYTHON_BACKCALL_LICENSE = BSD-3-Clause
+ PYTHON_BACKCALL_LICENSE_FILES = LICENSE
  
- # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
- GNUTLS_VERSION_MAJOR = 3.8
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).0
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
