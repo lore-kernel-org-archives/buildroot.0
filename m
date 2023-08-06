@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BDC4C0015E
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B88C3C0015E
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:12:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C08180AA2;
-	Sun,  6 Aug 2023 12:10:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C08180AA2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FBE381E6D;
+	Sun,  6 Aug 2023 12:12:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FBE381E6D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XB4MeWbxjPf1; Sun,  6 Aug 2023 12:10:53 +0000 (UTC)
+	with ESMTP id J06rckVtI5Vi; Sun,  6 Aug 2023 12:12:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9260481A30;
-	Sun,  6 Aug 2023 12:10:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9260481A30
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B1471BF2A4
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:10:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A025A81E53;
+	Sun,  6 Aug 2023 12:12:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A025A81E53
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 57D9C1BF2A4
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:12:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27FAE4027F
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:10:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27FAE4027F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31FA381831
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:11:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31FA381831
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PxfkY0WiLGOn for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 12:10:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5905540106
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 12:10:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5905540106
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 45B9484355; Sun,  6 Aug 2023 12:10:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 14:09:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bcfa3d6d1b45e8aedea38142c12665d7d76f390b
-X-Git-Newrev: f5d68db8bd7001ff25be1f512c8518dbbe7fe83d
-X-Patchwork-Hint: ignore
-Message-Id: <20230806121049.45B9484355@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liblo: add upstream patch to fix
- build error
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UeSRPUV3ckOn for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 12:11:37 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B7D40818A7
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 12:11:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7D40818A7
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BFCAF1C0002;
+ Sun,  6 Aug 2023 12:11:32 +0000 (UTC)
+Date: Sun, 6 Aug 2023 14:11:31 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230806141131.3a019654@windsurf>
+In-Reply-To: <20230802181215.807175-1-bernd@kuhls.net>
+References: <20230802181215.807175-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691323893;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6GTo5UL9159Fg53bGEqN4gFxfelabT4Dvx4DFFhn4YE=;
+ b=Kwde6bCuhU0CnpKs4x5cNnN05EqaBmDgWsPn4j+uT9yuj2TSpCNbQ8zmqToIkAk/DneYDE
+ aa/HDDOefLYH45x361kzToza3yhaLO406OiKDz84HUIR8TnlsMuxBP+HrPJnBhH684r90X
+ v3YBbeiVo7A6RJBZK5dNNMDw24iMWxAlFofshYQtidvQCHrzqLuyNtMmpNM/P4jZTj9b3+
+ 70cGus78Yomv0MGE2x5yXZS6bDnQbO0GqCZBP3C8cu0d0zWvafIwLS/zPq35RBiDdsNr9S
+ KSjr7SwU+yIx0jQjSXmE8H0fYy7TzYglWUgQ0dBWbpWs2i/irY3qMfQHW4Zy/w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Kwde6bCu
+Subject: Re: [Buildroot] [PATCH 1/1] package/liblo: add upstream patch to
+ fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,65 +77,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5d68db8bd7001ff25be1f512c8518dbbe7fe83d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Bernd,
 
-Since the merge of gcc 13.x, a warning treated as error causes liblo
-to fail building:
+On Wed,  2 Aug 2023 20:12:15 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-server.c: In function 'lo_server_del_lo_method':
-server.c:2251:16: error: pointer 'prev' used after 'free' [-Werror=use-after-free]
+> Fixes:
+> http://autobuild.buildroot.net/results/c98/c98c21093714542d4c0546a742fdcc48f3f07d04/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  ...x-use-after-free-warning-in-server.c.patch | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 package/liblo/0001-Fix-use-after-free-warning-in-server.c.patch
 
-Fixes:
-http://autobuild.buildroot.net/results/c98/c98c21093714542d4c0546a742fdcc48f3f07d04/
+You forgot to explain in the commit log when this build error started
+occurring and for what reason, so I updated the commit log with that
+information: it started to fail building since the merge of GCC 13.x.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...01-Fix-use-after-free-warning-in-server.c.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Applied with this change.
 
-diff --git a/package/liblo/0001-Fix-use-after-free-warning-in-server.c.patch b/package/liblo/0001-Fix-use-after-free-warning-in-server.c.patch
-new file mode 100644
-index 0000000000..be815a0a61
---- /dev/null
-+++ b/package/liblo/0001-Fix-use-after-free-warning-in-server.c.patch
-@@ -0,0 +1,29 @@
-+From 8187a8456c14eeb3af08c86ffa1228823c9ef1c5 Mon Sep 17 00:00:00 2001
-+From: Guido Aulisi <guido.aulisi@gmail.com>
-+Date: Sun, 25 Jun 2023 15:58:30 +0200
-+Subject: [PATCH] Fix use-after-free warning in server.c
-+
-+That assignment is not necessary before returning
-+
-+Upstream: https://sourceforge.net/p/liblo/git/ci/8187a8456c14eeb3af08c86ffa1228823c9ef1c5/
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/server.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/src/server.c b/src/server.c
-+index ba02d8e..35c9ba5 100644
-+--- a/src/server.c
-++++ b/src/server.c
-+@@ -2289,7 +2289,6 @@ int lo_server_del_lo_method(lo_server s, lo_method m)
-+             free((void *) it->path);
-+             free((void *) it->typespec);
-+             free(it);
-+-            it = prev;
-+             return 0;
-+         }
-+         prev = it;
-+-- 
-+2.39.2
-+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
