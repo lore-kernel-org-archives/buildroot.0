@@ -4,95 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF845C001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12821C001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6134760E46;
-	Sun,  6 Aug 2023 21:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6134760E46
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAA3260E46;
+	Sun,  6 Aug 2023 21:31:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAA3260E46
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ikFQUYyCVByw; Sun,  6 Aug 2023 21:26:16 +0000 (UTC)
+	with ESMTP id c2iUX8LLnIKf; Sun,  6 Aug 2023 21:31:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABAF160D65;
-	Sun,  6 Aug 2023 21:26:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABAF160D65
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 704C11BF909
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:26:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F27B60C18;
+	Sun,  6 Aug 2023 21:31:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F27B60C18
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 48DA71BF30C
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:31:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E00A981765
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:25:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E00A981765
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF4F340337
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:30:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF4F340337
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0fEYQM4cV0wM for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 21:25:56 +0000 (UTC)
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6B6A681314
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:25:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B6A681314
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-317744867a6so2905856f8f.1
- for <buildroot@buildroot.org>; Sun, 06 Aug 2023 14:25:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691357154; x=1691961954;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=pTjrZKHa7EyZNenCFFYaR5QkH760YyPHF30m3ePc36s=;
- b=Q3vK8rXbq6vM10NbgxAoZ2CGVleiTPLtpadav3I+JM1IVG8Fxas+8skvr6e9H27i8x
- jAjP+odjUbeHihb+0IL32/RsZfRF3qIGQNJl/xCZdLMEDm2xTYTZPSQ4GnQJzsEzohnf
- fgQJcbAieysRsiMEkRwyzhQg1H6fBx+zEo8yghInj5Tl/C/SMkTCuthiAu6NPM+XRxR7
- Nr2iC6ZZXthR0t7KU89tD4xxswUntavVvzvJC/iHE7lVEoyW9CpRDbELa5erexnrZx4A
- nyA9QD4Apszj74iGlCbEn0k7PRMnnItcKjppEDPINqNoNno5VNCRU2W0fiDCB1jz/Mf2
- urQQ==
-X-Gm-Message-State: AOJu0Yzv6vEvBwQ+W/Ez5n9+Q88tNi01yFaAVRFtg+wLE4CmKcrMXf5z
- g7IKmKAhdjx8cafSAxn7YmngFA==
-X-Google-Smtp-Source: AGHT+IHZUz+UJO1OScN+ev47xr0ItylDaBH7CDv66USlCL+1VYhTsG8UZTG7tF++D6PkEdqzA8ZBvA==
-X-Received: by 2002:adf:e802:0:b0:317:4755:9e3f with SMTP id
- o2-20020adfe802000000b0031747559e3fmr4280813wrm.62.1691357154514; 
- Sun, 06 Aug 2023 14:25:54 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:945b:7e00:eeca:726b:991c:1980?
- (2a01cb05945b7e00eeca726b991c1980.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:eeca:726b:991c:1980])
- by smtp.gmail.com with ESMTPSA id
- h12-20020adff4cc000000b00314367cf43asm8417285wrp.106.2023.08.06.14.25.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 06 Aug 2023 14:25:54 -0700 (PDT)
-Message-ID: <2d73fe79-ae7c-6fab-defd-0d73cff598b8@smile.fr>
-Date: Sun, 6 Aug 2023 23:25:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- James Hilliard <james.hilliard1@gmail.com>
-References: <20230725142120.318785-1-james.hilliard1@gmail.com>
- <20230801102221.264475b0@windsurf>
-Content-Language: fr, en-US
-From: Romain Naour <romain.naour@smile.fr>
-In-Reply-To: <20230801102221.264475b0@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1691357154; x=1691961954;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=pTjrZKHa7EyZNenCFFYaR5QkH760YyPHF30m3ePc36s=;
- b=t1fb8nWqHZ4/8i5Qy0lTWERoMFveNFGbj1GZxfBlmnqePVLx4mCXH88Yr6YBL6FqKf
- IIDM+2I0lK1wdlPVcmeXOfp0ajh9mBr+BhWBfgO4QpmVHo7LTMIX9nACgU/nILSfOP92
- ZkIwudq6YoU41WGQp7G+etksWOInbT4LlH5gqhDhxziFBszVUOwncbWVDdD9/WXdgc+K
- 9gsOIzoxjNzbGRChURwszBy6KHiHVbth+rZPTQ2wGKCYlz6I+b4o/5yuISRjg4coLa9M
- gHcOjmMLRsCe7zfjloWaBeevLZ/vtpmW2AYy3oGUd5zbTMd2MCzP+snSYglz3hfvIlqG
- ZMUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
- header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
- header.s=20221208 header.b=t1fb8nWq
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-urllib3: bump to version
- 2.0.4
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bpI9UrR0eTJQ for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 21:30:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D18040878
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:30:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D18040878
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 58D4B84612; Sun,  6 Aug 2023 21:30:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 23:27:31 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 552a054d45f516990e6470338c18ce9f792c59b3
+X-Git-Newrev: 134900401f0831f893ddd4f358e499f548d66433
+X-Patchwork-Hint: ignore
+Message-Id: <20230806213037.58D4B84612@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/scripts/fix-rpath:
+ parallelize patching files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,36 +56,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLCBKYW1lcywgYWxsLAoKTGUgMDEvMDgvMjAyMyDDoCAxMDoyMiwgVGhvbWFz
-IFBldGF6em9uaSB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gSGVsbG8gSmFtZXMsCj4gCj4g
-T24gVHVlLCAyNSBKdWwgMjAyMyAwODoyMToyMCAtMDYwMAo+IEphbWVzIEhpbGxpYXJkIDxqYW1l
-cy5oaWxsaWFyZDFAZ21haWwuY29tPiB3cm90ZToKPiAKPj4gTWlncmF0ZSBmcm9tIHNldHVwdG9v
-bHMgdG8gaGF0Y2hsaW5nIHBlcDUxNyBidWlsZCBiYWNrZW5kLgo+Pgo+PiBMaWNlbnNlIGhhc2gg
-Y2hhbmdlZCBkdWUgY29udHJpYnV0b3JzIGNoYW5nZToKPj4gaHR0cHM6Ly9naXRodWIuY29tL3Vy
-bGxpYjMvdXJsbGliMy9jb21taXQvOGU5NDc1NGY4NWM1OWQ4MjZhYzA2MDRkMGRkMmEwYjQxODc0
-YmIzNgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQx
-QGdtYWlsLmNvbT4KPiAKPiBUaGlzIGNvbW1pdCBicmVha3MgdHdvIHRlc3QgY2FzZXM6Cj4gCj4g
-ICAgIFRlc3RQeXRob25QeTNCb3RvMyAgICB8IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qu
-b3JnL2J1aWxkcm9vdC8tL2pvYnMvNDc2ODU2MTQ4MSAgfCBPUlBIIAo+ICAgICBUZXN0UHl0aG9u
-UHkzQm90b2NvcmUgfCBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3Qv
-LS9qb2JzLzQ3Njg1NjE0ODIgIHwgT1JQSCAKPiAKPiBDb3VsZCB5b3UgcGxlYXNlIGhhdmUgYSBs
-b29rPwoKRnJvbSBbMV0KSW1wb3J0RXJyb3I6IGNhbm5vdCBpbXBvcnQgbmFtZSAnREVGQVVMVF9D
-SVBIRVJTJyBmcm9tICd1cmxsaWIzLnV0aWwuc3NsXycgaXMKZHVlIHRvIGJvdG9jb3JlIHdoaWNo
-IGRvZXMgbm90IHN1cHBvcnQgdXJsbGliMyAyLjAgeWV0IFsyXS4KCkl0IHNlZW1zIG1hbnkgcHJv
-amVjdHMgYXJlIGFubm95ZWQgYnkgdXJsbGliMyAxLnggdG8gMi4wIG1pZ3JhdGlvbi4KClNlZSBo
-dHRwczovL2dpdGh1Yi5jb20vdXJsbGliMy91cmxsaWIzL2Jsb2IvbWFpbi9kb2NzL3YyLW1pZ3Jh
-dGlvbi1ndWlkZS5yc3QKClsxXQpodHRwczovL2dpdGh1Yi5jb20vdXJsbGliMy91cmxsaWIzL2Js
-b2IvbWFpbi9kb2NzL3YyLW1pZ3JhdGlvbi1ndWlkZS5yc3QjaW1wb3J0ZXJyb3ItY2Fubm90LWlt
-cG9ydC1uYW1lLWRlZmF1bHRfY2lwaGVycy1mcm9tLXVybGxpYjN1dGlsc3NsXwpbMl0gaHR0cHM6
-Ly9naXRodWIuY29tL2JvdG8vYm90b2NvcmUvaXNzdWVzLzI5MjEKCkJlc3QgcmVnYXJkcywKUm9t
-YWluCgo+IAo+IFRoYW5rcyBhIGxvdCEKPiAKPiBUaG9tYXMKCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=134900401f0831f893ddd4f358e499f548d66433
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Using "xargs" instead of "while read" loop allows for the patching of
+files to be parallelized. This significantly reduces the amount of
+time it takes to fix all the paths.  On a larger RFS(~300MB) this
+script was taking 5 minutes, it now only takes about 30s on a 12 core
+machine.
+
+Signed-off-by: Victor Dumas <dumasv.dev@gmail.com>
+[Thomas: take into account the suggestion of Quentin Schulz to pass
+PARALLEL_JOBS through the environment down to the fix-rpath script]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile                  | 12 ++++++---
+ support/scripts/fix-rpath | 67 +++++++++++++++++++++++++++--------------------
+ 2 files changed, 48 insertions(+), 31 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 18e337006b..e5aae17602 100644
+--- a/Makefile
++++ b/Makefile
+@@ -594,8 +594,12 @@ world: target-post-image
+ .PHONY: prepare-sdk
+ prepare-sdk: world
+ 	@$(call MESSAGE,"Rendering the SDK relocatable")
+-	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath host
+-	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath staging
++	PARALLEL_JOBS=$(PARALLEL_JOBS) \
++		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
++		$(TOPDIR)/support/scripts/fix-rpath host
++	PARALLEL_JOBS=$(PARALLEL_JOBS) \
++		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
++		$(TOPDIR)/support/scripts/fix-rpath staging
+ 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+ 	mkdir -p $(HOST_DIR)/share/buildroot
+ 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+@@ -765,7 +769,9 @@ endif
+ 	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
+ 
+ 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
+-	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath target
++	PARALLEL_JOBS=$(PARALLEL_JOBS) \
++		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
++		$(TOPDIR)/support/scripts/fix-rpath target
+ 
+ # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
+ # counterparts are appropriately setup as symlinks ones to the others.
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+index 3e67e770e5..a9b348e189 100755
+--- a/support/scripts/fix-rpath
++++ b/support/scripts/fix-rpath
+@@ -46,6 +46,8 @@ Environment:
+     TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR
+                  (default HOST_DIR/opt/ext-toolchain)
+ 
++    PARALLEL_JOBS number of parallel jobs to run
++
+ Returns:         0 if success or 1 in case of error
+ 
+ EOF
+@@ -58,6 +60,38 @@ HOST_EXCLUDEPATHS="/share/terminfo"
+ STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
+ TARGET_EXCLUDEPATHS="/lib/firmware"
+ 
++patch_file() {
++    PATCHELF="${1}"
++    rootdir="${2}"
++    sanitize_extra_args="${3}"
++    file="${4}"
++
++    # check if it's an ELF file
++    rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
++    if test $? -ne 0 ; then
++        return 0
++    fi
++
++    # make files writable if necessary
++    changed=$(chmod -c u+w "${file}")
++
++    # With per-package directory support, most RPATH of host
++    # binaries will point to per-package directories. This won't
++    # work with the --make-rpath-relative ${rootdir} invocation as
++    # the per-package host directory is not within ${rootdir}. So,
++    # we rewrite all RPATHs pointing to per-package directories so
++    # that they point to the global host directry.
++    changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
++    if test "${rpath}" != "${changed_rpath}" ; then
++        ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
++    fi
++
++    # call patchelf to sanitize the rpath
++    ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
++    # restore the original permission
++    test "${changed}" != "" && chmod u-w "${file}"
++}
++
+ main() {
+     local rootdir
+     local tree="${1}"
+@@ -123,34 +157,11 @@ main() {
+             ;;
+     esac
+ 
+-    find_args+=( "-type" "f" "-print" )
+-
+-    while read file ; do
+-        # check if it's an ELF file
+-        rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
+-        if test $? -ne 0 ; then
+-            continue
+-        fi
+-
+-        # make files writable if necessary
+-        changed=$(chmod -c u+w "${file}")
+-
+-        # With per-package directory support, most RPATH of host
+-        # binaries will point to per-package directories. This won't
+-        # work with the --make-rpath-relative ${rootdir} invocation as
+-        # the per-package host directory is not within ${rootdir}. So,
+-        # we rewrite all RPATHs pointing to per-package directories so
+-        # that they point to the global host directry.
+-        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
+-        if test "${rpath}" != "${changed_rpath}" ; then
+-            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
+-        fi
+-
+-        # call patchelf to sanitize the rpath
+-        ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
+-        # restore the original permission
+-        test "${changed}" != "" && chmod u-w "${file}"
+-    done < <(find "${rootdir}" ${find_args[@]})
++    find_args+=( "-type" "f" "-print0" )
++
++    export -f patch_file
++    # Limit the number of cores used
++    find "${rootdir}" ${find_args[@]} | xargs -0 -r -P ${PARALLEL_JOBS} -I {} bash -c "patch_file '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
+ 
+     # Restore patched patchelf utility
+     test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
