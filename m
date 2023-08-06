@@ -1,69 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CC34C001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 18:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F29C0015E
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 19:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DE964026D;
-	Sun,  6 Aug 2023 18:40:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DE964026D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39AF660EE8;
+	Sun,  6 Aug 2023 19:23:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39AF660EE8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dlPqRF2G33DZ; Sun,  6 Aug 2023 18:40:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ErfKZNz3deM8; Sun,  6 Aug 2023 19:23:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4524D40276;
-	Sun,  6 Aug 2023 18:40:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4524D40276
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EDE3E1BF5A9
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 18:40:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C5C460E85;
+	Sun,  6 Aug 2023 19:23:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C5C460E85
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D7DB61BF32A
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 19:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30ABC4011C
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 18:39:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30ABC4011C
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFB3A813FA
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 19:23:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB3A813FA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fs1Wr6uvDZWA for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 18:39:44 +0000 (UTC)
-Received: from smtpcmd14173.aruba.it (smtpcmd14173.aruba.it [62.149.156.173])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DCA6640471
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 18:39:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCA6640471
-Received: from [10.10.6.40] ([217.14.215.226])
- by Aruba Outgoing Smtp  with ESMTPSA
- id SifFq6NiQXI7ySifFqGg3h; Sun, 06 Aug 2023 20:39:42 +0200
-Message-ID: <1f870f14-4bc1-1f8d-aa4e-e9f3e32f7f3c@benettiengineering.com>
-Date: Sun, 6 Aug 2023 20:39:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
-To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
-References: <ZM/aaG0d/pzoYgp1@waldemar-brodkorb.de>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <ZM/aaG0d/pzoYgp1@waldemar-brodkorb.de>
-X-CMAE-Envelope: MS4xfMqqnO7pYWlhNEwyuvVspbPp89TPwniJKW6WTu3x8kLwjnQpA6GjzIqensp9HQNJfzi5kDSuRet+CFLz+nqN6eORq0dULYbtumQqSAlDRbagELVRkk0g
- akawTJSyuDFlkbQNayKx6lGSUBd0zGUPUBumVlfAlnv4kFcYBEcQbk8K7sVmOGnS14Li4P8zeGfxBCgzdFpDbbftQm451+KFO87d0FhhzhGUtgnQ0/S+hsxM
- 6htwDeotJ8H84yS6Pa89Ug==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1691347182; bh=z0h8pRVm97FvAZBck/bsYhpVx7Q3MCEucP8hZXzv/0w=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=MiOaSRJLKv4tqmmi8aU3sPugcQlGa/5rvQxdJ46DHfDLqxR6KGW4V2gBrFBnU51P7
- ITl95HBmCciM9t/mFtnDgbVTe/92YhzyFkW/yyYvyqcAi+OM5ld1/8MDDeQ2SvtVga
- aMg2awFO0w5thQ7cTe7ldOJSCnbD9dmoLJaF7W8NxvRRDk6UjwzPZ68R3cwxcDJeX0
- krmuQsVGtqXzIVhZSRLrc8SLkV8KFyrdfvbQM0Ydqjz4+NMrOxZthM2+4Hs9xIVq8E
- X/bCtfAcy5150tHUPFMQt9V8CZTQMqH0rnPjZ8oKLkpLDBS77xLyRHlOipR6qk72so
- Iu4/szvimx/RQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=MiOaSRJL
-Subject: Re: [Buildroot] [PATCH] package/openssh: fix compile issue for m68k
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 517M8s7mR5qf for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 19:23:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F152813C5
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 19:23:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F152813C5
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7CB62845A9; Sun,  6 Aug 2023 19:23:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 19:29:56 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: aa17849e8ba216022fff15f2fafb669317c4b237
+X-Git-Newrev: b1c4e46c1ebdd2b200fc67acd0b59de238499106
+X-Patchwork-Hint: ignore
+Message-Id: <20230806192335.7CB62845A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/freescale-imx/imx-seco: bump version to 5.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,72 +56,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3145270838215763157=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Waldemar,
+--===============3145270838215763157==
+Content-Type: text/plain
 
-On 06/08/23 19:37, Waldemar Brodkorb wrote:
-> Following ICE occurs:
-> (cd openbsd-compat && /home/autobuild/make/make)
-> make[2]: Entering directory '/home/autobuild/autobuild/instance-10/output-1/build/openssh-9.3p1/openbsd-compat'
-> /home/autobuild/autobuild/instance-10/output-1/host/bin/m68k-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -pipe -Wno-error=format-truncation -Wall -Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation -fno-strict-aliasing -D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=all -fno-builtin-memset   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -D_DEFAULT_SOURCE -D_GNU_SOURCE -DHAVE_CONFIG_H -c bsd-asprintf.c
-> /home/autobuild/autobuild/instance-10/output-1/host/bin/m68k-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -pipe -Wno-error=format-truncation -Wall -Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation -fno-strict-aliasing -D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=all -fno-builtin-memset   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -D_DEFAULT_SOURCE -D_GNU_SOURCE -DHAVE_CONFIG_H -c bsd-closefrom.c
-> during RTL pass: zero_call_used_regs
-> bsd-closefrom.c: In function 'closefrom':
-> bsd-closefrom.c:151:1: internal compiler error: in change_address_1, at emit-rtl.c:2275
->    151 | }
->        | ^
-> 0x7fa76f4bad09 __libc_start_main
-> 	../csu/libc-start.c:308
-> Please submit a full bug report,
-> with preprocessed source if appropriate.
-> Please include the complete backtrace with any bug report.
-> See <http://bugs.buildroot.net/> for instructions.
-> make[2]: *** [Makefile:106: bsd-closefrom.o] Error 1
-> 
-> Fixes following autobuild failure:
-> http://autobuild.buildroot.net/results/d29/d29c662e41d8969e6a8aa24870e728bcc7050563/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->   package/openssh/openssh.mk | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index e14d752290..65f02088a0 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -35,6 +35,11 @@ define OPENSSH_PERMISSIONS
->   	/var/empty d 755 root root - - - - -
->   endef
->   
-> +# workaround gcc ICE with 11.x/12.x and 13.x
-> +ifeq ($(BR2_m68k),y)
-> +OPENSSH_CONF_OPTS += --without-hardening
-> +endif
-> +
+commit: https://git.buildroot.net/buildroot/commit/?id=b1c4e46c1ebdd2b200fc67acd0b59de238499106
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This deserves a gcc bug that I've added with this patch:
-https://patchwork.ozlabs.org/project/buildroot/patch/20230806183738.257006-1-giulio.benetti@benettiengineering.com/
+The COPYING and EULA files have changed, with various changes, mainly:
+ - update to copyright years
+ - switch from ASCCI double quotes to fancy Unicode ones ("" -> “”)
+ - reflow the license text
+ - identify new third-parties and their conditions
 
-this is the bug:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80786
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
+ package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-and for consistency in Buildroot we tend to work-around gcc/binutils
-bugs, whenever possible, by lowering the optimization to -O0, so I ask
-you to send a patch doing this.
-You can take as a model this commit for the commit log too:
-https://gitlab.com/buildroot.org/buildroot/-/commit/803247337d35643afdca9718c4616500b9930f2d
+diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+index 378c24bc54..e02e30886f 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.hash
++++ b/package/freescale-imx/imx-seco/imx-seco.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  08cf25a4be6841ca7264a50b29c311b386eae1c02fced8a3b55fd04213acb4bc  imx-seco-3.7.5.bin
+-sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+-sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
++sha256  c3bd761f457e939035b01a0ab36e79064a2a1bc6c3cdb3cd847f7f38df0964df  imx-seco-5.9.0.bin
++sha256  654f0c4ce6d08f9a6d74e29c58206742cb7469a6a7c25413028a9bdbe647aa13  EULA
++sha256  5bd7aab9dc380a6f9577443b2e90bd5ca73d9528175fad04b6d17da43a05a48e  COPYING
+diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+index 987f24658d..3788f1e404 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.mk
++++ b/package/freescale-imx/imx-seco/imx-seco.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_SECO_VERSION = 3.7.5
++IMX_SECO_VERSION = 5.9.0
+ IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+ IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
+ 
 
-Thank you
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+--===============3145270838215763157==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3145270838215763157==--
