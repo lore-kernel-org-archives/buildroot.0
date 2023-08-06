@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38010C001DE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3C93C001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:28:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFBAF80B97;
-	Sun,  6 Aug 2023 12:27:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFBAF80B97
+	by smtp1.osuosl.org (Postfix) with ESMTP id 715B880B9B;
+	Sun,  6 Aug 2023 12:28:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 715B880B9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nfbI93-Ywnl8; Sun,  6 Aug 2023 12:27:55 +0000 (UTC)
+	with ESMTP id tTKskskKXDUV; Sun,  6 Aug 2023 12:28:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27671819D6;
-	Sun,  6 Aug 2023 12:27:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27671819D6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1D8631BF2A4
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:27:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CAF781438;
+	Sun,  6 Aug 2023 12:28:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CAF781438
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 906061BF2A4
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:28:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0CF881BC0
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0CF881BC0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B13C402A7
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:28:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B13C402A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id feHC4mpk_MiQ for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 12:26:33 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C2F7B818AC
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 12:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2F7B818AC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AEB3BFF802;
- Sun,  6 Aug 2023 12:26:29 +0000 (UTC)
-Date: Sun, 6 Aug 2023 14:26:28 +0200
-To: Neal Frager via buildroot <buildroot@buildroot.org>
-Message-ID: <20230806142628.254749aa@windsurf>
-In-Reply-To: <20230804062006.2398819-1-neal.frager@amd.com>
-References: <20230804062006.2398819-1-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691324790;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=I29dYqaV6Oc2/vMQMGnq/H2tjbbjIUSNZ3sr9rEFl1E=;
- b=jDRoNam4DM3i6x77RvBIn6DIoa+MBBv/SB+w3EWO/Ej/a4pKM8AxzwhRVcPpHd5IgbADUn
- WIXl0/Qa4Ag4UvbVYzE0iIXHPuU+dixiTVeMyeGbqw5MMlgCdAuSIW6v+gY8ip0ijt8yYu
- Cs5EZXYFYUB65QwlC38bSTjANVyOMC7XyLzM9dSvbquvXX/Iv5IiwmJd9Rq7qBFWebe6GQ
- Z+Wt+SXdargPVj+D+jbamSZZWU1/bJhc/u6Rh/ccm1A5Oz5PiYiBgu1uzFmlPpTXYj79KN
- zSd7SExt2IfojOQr3y5ZeTmpfb3U8IkQprqW4b/wCH6C9X775LN27QbNWPtXbA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jDRoNam4
-Subject: Re: [Buildroot] [PATCH v2 1/1] board/versal: clean shellcheck issues
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Re-YecuB9Pik for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 12:28:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4318540192
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 12:28:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4318540192
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 322D284397; Sun,  6 Aug 2023 12:28:01 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 14:26:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2b738044edbed64e313a2b4f275a70e02e5bc143
+X-Git-Newrev: 95116bc65e53f58b1dfbd35e5156b46f9e6b9a51
+X-Patchwork-Hint: ignore
+Message-Id: <20230806122801.322D284397@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.15.x / 6.{1,
+ 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,36 +58,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: luca.ceresoli@bootlin.com, michal.simek@amd.com,
- Neal Frager <neal.frager@amd.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 4 Aug 2023 07:20:06 +0100
-Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=95116bc65e53f58b1dfbd35e5156b46f9e6b9a51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This patch cleans up the shellcheck issues in the versal post scripts.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> V1->V2:
->   - Removed " from lines within the cat command as they are not needed
->     to clear the shellcheck issues.
-> ---
->  .checkpackageignore        |  2 --
->  board/versal/post-build.sh |  5 ++---
->  board/versal/post-image.sh | 14 +++++++-------
->  3 files changed, 9 insertions(+), 12 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 58cc9574a0..1501df86e9 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.4.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.4.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 1236686384..c9a0497d1a 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  de143cb61dcaa756c05f56ff35144316d810615819518a33e34754f064c4a7d8  linux-6.4.7.tar.xz
+-sha256  aaf8261b551c8b76b81eab8780b446e88cea4d551ae517ac3a9b2dbdbd381ed3  linux-6.1.42.tar.xz
++sha256  c59f34e19e84db30206b9373041abf893f9d8a08765d163586570a5238c458b6  linux-6.4.8.tar.xz
++sha256  245248470a62d4e94b46f753afc01e19e45b9e6f3a0fa06e7f5da21fe845a808  linux-6.1.43.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  2de69544a12e6a059163c58fc901c13bcf22e8cac39c66b56f8fbb633399bf93  linux-5.15.123.tar.xz
++sha256  00036a0260ad012aa832a8698a4afcf23b2410091527738ce48ce3fcc23f22ed  linux-5.15.124.tar.xz
+ sha256  c9558bab35e23ae67661bfb3192c609c857f78582a035449ae63e33d04ab6112  linux-5.10.188.tar.xz
+ sha256  bcb4953ed68131ef17f9f1ba52cac8b9d70007f5ab600bf3dee1fbf8beb218ca  linux-5.4.251.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 98360204f7..d528f88745 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -404,9 +404,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.251"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.188"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.123"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.42"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.4.7"		if BR2_KERNEL_HEADERS_6_4
++	default "5.15.124"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.43"	if BR2_KERNEL_HEADERS_6_1
++	default "6.4.8"		if BR2_KERNEL_HEADERS_6_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
