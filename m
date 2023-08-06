@@ -1,62 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70DAAC001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 17:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65875C001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 17:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2043B815CE;
-	Sun,  6 Aug 2023 17:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2043B815CE
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5C21410E6;
+	Sun,  6 Aug 2023 17:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5C21410E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cJZYwWwirE6r; Sun,  6 Aug 2023 17:38:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5Fl6RR-GFcur; Sun,  6 Aug 2023 17:46:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D39F81C20;
-	Sun,  6 Aug 2023 17:38:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D39F81C20
+	by smtp4.osuosl.org (Postfix) with ESMTP id C10804097F;
+	Sun,  6 Aug 2023 17:46:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C10804097F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7834A1BF286
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:38:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 11AF71BF286
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91BC16062F
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:37:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91BC16062F
+ by smtp3.osuosl.org (Postfix) with ESMTP id BEBB760067
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:46:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEBB760067
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rSTPZkosBxFI for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 17:37:49 +0000 (UTC)
-X-Greylist: delayed 18140 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 06 Aug 2023 17:37:48 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4F24600BB
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D4F24600BB
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 17:37:48 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 47B0235206AC; Sun,  6 Aug 2023 19:37:45 +0200 (CEST)
-Date: Sun, 6 Aug 2023 19:37:44 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZM/aaG0d/pzoYgp1@waldemar-brodkorb.de>
+ with ESMTP id 3oNuO2zdauIJ for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 17:46:15 +0000 (UTC)
+Received: from smtpcmd14173.aruba.it (smtpcmd14173.aruba.it [62.149.156.173])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6E8FF607BC
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 17:46:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E8FF607BC
+Received: from [10.10.6.40] ([217.14.215.226])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id ShpSq5w65XI7yShpSqGRNY; Sun, 06 Aug 2023 19:46:10 +0200
+Message-ID: <b5138265-42c0-8118-cf5c-52e9ce38c606@benettiengineering.com>
+Date: Sun, 6 Aug 2023 19:46:09 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230804193801.93049-1-giulio.benetti@benettiengineering.com>
+ <20230806140536.0f5dac52@windsurf>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230806140536.0f5dac52@windsurf>
+X-CMAE-Envelope: MS4xfMm3nXttMBSR9eyq1d2o+lBzZpoHbSIww8JFxHn9HV0DS5QjlUydBbZsMJndOZB2eoJBx7EfnbTSwI4xt7CkyZwYJYNv4CZawfnWgjoFgmo16S7ZhJ0i
+ tEWINFE9g/ZSsWQ7EJSDb8knJpps9Bwj3ZzLT7rGQfIOGe0Bz6CIzJiDHvNYQ4ipKuw3BMrFhAS9uSkF0Zcm9LGh5+rlkLG+vaZ65020Msc9Z8B0CMlfd+UL
+ GB1RQvDn+d3B8TCwPOaelhjQd0OK0dWtbzfnm37aKhY=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1691343465; bh=xqqsV8k/Ci32QbE/rm1JxCyladS+FqcK1I737rDOlSk=;
- h=Date:From:To:Subject:From;
- b=C9oZJvBnLe7X2LlLNLtJ4lQvoyFgfAvEMcTopH+M2UJjTdFu+vfdSh4M0UYdP2V6/
- S2kkN/S72Zks18nz+XYsWCH6gfrHwnMVHFvW0ItNu8nVZZ/hO+JEH9R9XporZM+wA0
- G18wVTT9pUVZkI0zUAYVVq7ksnLt8IUL0VHfcsBKHKfUAcUsff5AbqNqeAr1zSSYBl
- aMQgRjOLLk9TgeRcXGvFfv0qwAzlkFLS5PfNQZA3oAPN2sZxUWqIVcu6FwqNtXxkfD
- v5WAbYUUcpGJM6RzTt4yowXkuetgmYtnjiqEZxn28ZlQ0K9Z8zuIlBzpS7siuVRUir
- D0l5w+YEDHI7A==
-Subject: [Buildroot] [PATCH] package/openssh: fix compile issue for m68k
+ d=aruba.it; s=a1; 
+ t=1691343971; bh=lNAPgJrV8wd6+MBe9t30l67MgJdxEXbwN0OfwEDUj1w=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=j1hedP7kp5ON94JN05JyTFzL4tHP5g2xfwYmri2TYnBMYB3F+v/7QnVfpiqdMGKNB
+ x/BCJg0Znc1jLkG1ENNpicg0mJos+knZMHEPwmo9Ikb0xazYfTUv7WoyuqrUr4oKPQ
+ o7eSQNWsIicSmgWdmEzlYLLK29HUhnATv21D2uXCsfc1ype1+H6GuN1ORaIJR2aXjO
+ otWhZXjZoaYOr7x36m9GkYwz1GWJesbg6+QQVW5IaMZWDLeSJ9wl2U8MDl77bH19lr
+ H8uo44d5JB2DNj5ahIyEzGPu07CBcDVCz0KtPve9vE8cuqhjetR0hBdgwodKZ6JQ0i
+ URUGl63E5HY1A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=j1hedP7k
+Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump version to 8.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,56 +76,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Following ICE occurs:
-(cd openbsd-compat && /home/autobuild/make/make)
-make[2]: Entering directory '/home/autobuild/autobuild/instance-10/output-1/build/openssh-9.3p1/openbsd-compat'
-/home/autobuild/autobuild/instance-10/output-1/host/bin/m68k-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -pipe -Wno-error=format-truncation -Wall -Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation -fno-strict-aliasing -D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=all -fno-builtin-memset   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -D_DEFAULT_SOURCE -D_GNU_SOURCE -DHAVE_CONFIG_H -c bsd-asprintf.c
-/home/autobuild/autobuild/instance-10/output-1/host/bin/m68k-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -pipe -Wno-error=format-truncation -Wall -Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation -fno-strict-aliasing -D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=all -fno-builtin-memset   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE -D_DEFAULT_SOURCE -D_GNU_SOURCE -DHAVE_CONFIG_H -c bsd-closefrom.c
-during RTL pass: zero_call_used_regs
-bsd-closefrom.c: In function 'closefrom':
-bsd-closefrom.c:151:1: internal compiler error: in change_address_1, at emit-rtl.c:2275
-  151 | }
-      | ^
-0x7fa76f4bad09 __libc_start_main
-	../csu/libc-start.c:308
-Please submit a full bug report,
-with preprocessed source if appropriate.
-Please include the complete backtrace with any bug report.
-See <http://bugs.buildroot.net/> for instructions.
-make[2]: *** [Makefile:106: bsd-closefrom.o] Error 1
+Hi Thomas,
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/d29/d29c662e41d8969e6a8aa24870e728bcc7050563/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/openssh/openssh.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+On 06/08/23 14:05, Thomas Petazzoni wrote:
+> On Fri,  4 Aug 2023 21:38:01 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> Release notes: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   package/harfbuzz/harfbuzz.hash | 2 +-
+>>   package/harfbuzz/harfbuzz.mk   | 2 +-
+>>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Applied to next, thanks.
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index e14d752290..65f02088a0 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -35,6 +35,11 @@ define OPENSSH_PERMISSIONS
- 	/var/empty d 755 root root - - - - -
- endef
- 
-+# workaround gcc ICE with 11.x/12.x and 13.x
-+ifeq ($(BR2_m68k),y)
-+OPENSSH_CONF_OPTS += --without-hardening
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- OPENSSH_CONF_OPTS += --without-pie
- endif
+I haven't pointed in commit log but this version contains a security
+bug-fix, please check this line:
+https://github.com/harfbuzz/harfbuzz/blob/main/NEWS#L5
+
+so IMHO it should be applied to main branch.
+
+Best regards
 -- 
-2.39.2
-
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
