@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12821C001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8D50C00528
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:33:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAA3260E46;
-	Sun,  6 Aug 2023 21:31:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAA3260E46
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C893605A6;
+	Sun,  6 Aug 2023 21:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C893605A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c2iUX8LLnIKf; Sun,  6 Aug 2023 21:31:45 +0000 (UTC)
+	with ESMTP id BShzaeQEJmWr; Sun,  6 Aug 2023 21:33:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F27B60C18;
-	Sun,  6 Aug 2023 21:31:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F27B60C18
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9BFE60B21;
+	Sun,  6 Aug 2023 21:33:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9BFE60B21
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 48DA71BF30C
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:31:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 34B8D1BF30C
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF4F340337
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:30:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF4F340337
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0662409EA
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:32:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0662409EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bpI9UrR0eTJQ for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 21:30:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D18040878
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D18040878
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58D4B84612; Sun,  6 Aug 2023 21:30:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 23:27:31 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 552a054d45f516990e6470338c18ce9f792c59b3
-X-Git-Newrev: 134900401f0831f893ddd4f358e499f548d66433
-X-Patchwork-Hint: ignore
-Message-Id: <20230806213037.58D4B84612@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/scripts/fix-rpath:
- parallelize patching files
+ with ESMTP id hGwhT2A8jq-8 for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 21:32:13 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D152404AF
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:32:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D152404AF
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E3F660002;
+ Sun,  6 Aug 2023 21:32:10 +0000 (UTC)
+Date: Sun, 6 Aug 2023 23:32:08 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230806233208.67c2657a@windsurf>
+In-Reply-To: <20230806183738.257006-1-giulio.benetti@benettiengineering.com>
+References: <20230806183738.257006-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691357530;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MMVlbCS86HghriBSd9mVREzpKak2b5c95EL23Rn8qZE=;
+ b=br9XEZFL+2/8YavsAOZiH6TfU2cKZDzAKNk8ugTiK/sR5r2KJYvoLDakAHuBwoMjIjQnr7
+ pLhlGIUn0JK567KI64c/McZeWulWeIr7m7NgJeZd4hx8SUPE0DdYpmPARZFYUKcVINHKfO
+ ch+ub+U60KrG2FZ7EiMwJsq1wyxfEPTYuMQfpaHMq4tgBD7HuE3Lj/E33YL+Hewaix8vD9
+ d4DMNYbe2KV4crjRewi5zuDTHA9rSqxR/rfcKUXXSvuJT2oBtemG/tPVkHeixew4hY9rJO
+ ye2s0UtjWOX7SAm3nWmRi0h2GdXA9eEBGRJUdX5vEG0QFxzWBT8ivVTIvk0xvg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=br9XEZFL
+Subject: Re: [Buildroot] [PATCH] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_80786
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,152 +77,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=134900401f0831f893ddd4f358e499f548d66433
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sun,  6 Aug 2023 20:37:38 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Using "xargs" instead of "while read" loop allows for the patching of
-files to be parallelized. This significantly reduces the amount of
-time it takes to fix all the paths.  On a larger RFS(~300MB) this
-script was taking 5 minutes, it now only takes about 30s on a 12 core
-machine.
+> openssh package fails to build for the M68K architecture with optimization
+> enabled with gcc = 12.3.0 and it's still present in gcc = 13.2.0:
+> http://autobuild.buildroot.net/results/d29/d29c662e41d8969e6a8aa24870e728bcc7050563/
+> 
+> It's been reported upstream:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80786
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Signed-off-by: Victor Dumas <dumasv.dev@gmail.com>
-[Thomas: take into account the suggestion of Quentin Schulz to pass
-PARALLEL_JOBS through the environment down to the fix-rpath script]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Makefile                  | 12 ++++++---
- support/scripts/fix-rpath | 67 +++++++++++++++++++++++++++--------------------
- 2 files changed, 48 insertions(+), 31 deletions(-)
+But this commit is only introducing a hidden boolean option, how can it
+solve any problem on its own? Can you submit this in a patch series
+where it gets used at least in some place?
 
-diff --git a/Makefile b/Makefile
-index 18e337006b..e5aae17602 100644
---- a/Makefile
-+++ b/Makefile
-@@ -594,8 +594,12 @@ world: target-post-image
- .PHONY: prepare-sdk
- prepare-sdk: world
- 	@$(call MESSAGE,"Rendering the SDK relocatable")
--	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath host
--	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath staging
-+	PARALLEL_JOBS=$(PARALLEL_JOBS) \
-+		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
-+		$(TOPDIR)/support/scripts/fix-rpath host
-+	PARALLEL_JOBS=$(PARALLEL_JOBS) \
-+		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
-+		$(TOPDIR)/support/scripts/fix-rpath staging
- 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
- 	mkdir -p $(HOST_DIR)/share/buildroot
- 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-@@ -765,7 +769,9 @@ endif
- 	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
- 
- 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
--	PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) $(TOPDIR)/support/scripts/fix-rpath target
-+	PARALLEL_JOBS=$(PARALLEL_JOBS) \
-+		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
-+		$(TOPDIR)/support/scripts/fix-rpath target
- 
- # For a merged /usr, ensure that /lib, /bin and /sbin and their /usr
- # counterparts are appropriately setup as symlinks ones to the others.
-diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-index 3e67e770e5..a9b348e189 100755
---- a/support/scripts/fix-rpath
-+++ b/support/scripts/fix-rpath
-@@ -46,6 +46,8 @@ Environment:
-     TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR
-                  (default HOST_DIR/opt/ext-toolchain)
- 
-+    PARALLEL_JOBS number of parallel jobs to run
-+
- Returns:         0 if success or 1 in case of error
- 
- EOF
-@@ -58,6 +60,38 @@ HOST_EXCLUDEPATHS="/share/terminfo"
- STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
- TARGET_EXCLUDEPATHS="/lib/firmware"
- 
-+patch_file() {
-+    PATCHELF="${1}"
-+    rootdir="${2}"
-+    sanitize_extra_args="${3}"
-+    file="${4}"
-+
-+    # check if it's an ELF file
-+    rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
-+    if test $? -ne 0 ; then
-+        return 0
-+    fi
-+
-+    # make files writable if necessary
-+    changed=$(chmod -c u+w "${file}")
-+
-+    # With per-package directory support, most RPATH of host
-+    # binaries will point to per-package directories. This won't
-+    # work with the --make-rpath-relative ${rootdir} invocation as
-+    # the per-package host directory is not within ${rootdir}. So,
-+    # we rewrite all RPATHs pointing to per-package directories so
-+    # that they point to the global host directry.
-+    changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
-+    if test "${rpath}" != "${changed_rpath}" ; then
-+        ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
-+    fi
-+
-+    # call patchelf to sanitize the rpath
-+    ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
-+    # restore the original permission
-+    test "${changed}" != "" && chmod u-w "${file}"
-+}
-+
- main() {
-     local rootdir
-     local tree="${1}"
-@@ -123,34 +157,11 @@ main() {
-             ;;
-     esac
- 
--    find_args+=( "-type" "f" "-print" )
--
--    while read file ; do
--        # check if it's an ELF file
--        rpath=$(${PATCHELF} --print-rpath "${file}" 2>&1)
--        if test $? -ne 0 ; then
--            continue
--        fi
--
--        # make files writable if necessary
--        changed=$(chmod -c u+w "${file}")
--
--        # With per-package directory support, most RPATH of host
--        # binaries will point to per-package directories. This won't
--        # work with the --make-rpath-relative ${rootdir} invocation as
--        # the per-package host directory is not within ${rootdir}. So,
--        # we rewrite all RPATHs pointing to per-package directories so
--        # that they point to the global host directry.
--        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
--        if test "${rpath}" != "${changed_rpath}" ; then
--            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
--        fi
--
--        # call patchelf to sanitize the rpath
--        ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
--        # restore the original permission
--        test "${changed}" != "" && chmod u-w "${file}"
--    done < <(find "${rootdir}" ${find_args[@]})
-+    find_args+=( "-type" "f" "-print0" )
-+
-+    export -f patch_file
-+    # Limit the number of cores used
-+    find "${rootdir}" ${find_args[@]} | xargs -0 -r -P ${PARALLEL_JOBS} -I {} bash -c "patch_file '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
- 
-     # Restore patched patchelf utility
-     test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
