@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 207C1C0015E
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 19:24:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D6CC00528
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 19:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9A2460ADF;
-	Sun,  6 Aug 2023 19:24:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9A2460ADF
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD6BC60C06;
+	Sun,  6 Aug 2023 19:24:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD6BC60C06
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C8GN82j-oect; Sun,  6 Aug 2023 19:24:39 +0000 (UTC)
+	with ESMTP id 491-0vQhtBj9; Sun,  6 Aug 2023 19:24:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7A0260E84;
-	Sun,  6 Aug 2023 19:24:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7A0260E84
+	by smtp3.osuosl.org (Postfix) with ESMTP id D861460C0B;
+	Sun,  6 Aug 2023 19:24:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D861460C0B
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 149E71BF32A
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 19:24:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2CD9E1BF32A
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 19:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4DE2360E76
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DD9960E73
  for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 19:23:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DE2360E76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DD9960E73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 83NdMN_v2aB3 for <buildroot@lists.busybox.net>;
+ with ESMTP id aJGFfBCgw6Jq for <buildroot@lists.busybox.net>;
  Sun,  6 Aug 2023 19:23:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A097360E73
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABC83605E3
  for <buildroot@buildroot.org>; Sun,  6 Aug 2023 19:23:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A097360E73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABC83605E3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F55B845B6; Sun,  6 Aug 2023 19:23:35 +0000 (UTC)
+ id 99526845B7; Sun,  6 Aug 2023 19:23:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 19:34:37 +0200
+Date: Sun, 6 Aug 2023 21:23:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 89d39912f9520ac542a5936574be434546cf3421
-X-Git-Newrev: beb74069ef890a0874e06be98690949492d83f3a
+X-Git-Oldrev: beb74069ef890a0874e06be98690949492d83f3a
+X-Git-Newrev: 03b228fd1a0bcc1905cd62c8f9167facdad2cd5a
 X-Patchwork-Hint: ignore
-Message-Id: <20230806192335.8F55B845B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/freescale-imx: add
- BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
+Message-Id: <20230806192335.99526845B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/freescale_imx8dxlevk:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,148 +64,152 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beb74069ef890a0874e06be98690949492d83f3a
+commit: https://git.buildroot.net/buildroot/commit/?id=03b228fd1a0bcc1905cd62c8f9167facdad2cd5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-This commit adds support for the i.MX8DXL SoC from NXP, by adding a
-new BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL and propagate its
-support in the affected packages.
 
 Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/freescale/common/imx/imx8-bootloader-prepare.sh    | 2 ++
- board/freescale/common/imx/post-image.sh                 | 2 ++
- package/freescale-imx/Config.in                          | 7 ++++++-
- package/freescale-imx/firmware-imx/Config.in             | 1 +
- package/freescale-imx/imx-sc-firmware/Config.in          | 3 ++-
- package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk | 4 ++++
- package/freescale-imx/imx-seco/Config.in                 | 6 ++++--
- 7 files changed, 21 insertions(+), 4 deletions(-)
+ DEVELOPERS                             |  4 ++
+ board/freescale/imx8dxlevk/readme.txt  | 69 ++++++++++++++++++++++++++++++++++
+ configs/freescale_imx8dxlevk_defconfig | 39 +++++++++++++++++++
+ 3 files changed, 112 insertions(+)
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index ace0f6d610..7ebf15b6ff 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -63,6 +63,8 @@ main ()
- 		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
- 		if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
- 			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
-+	        elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y$" ${BR2_CONFIG}; then
-+			${HOST_DIR}/bin/mkimage_imx8 -soc DXL -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8dxl-evk-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 		else
- 			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 		fi
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index d36f82917e..c359ef6032 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -46,6 +46,8 @@ genimage_type()
- 		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_imx8"
-+	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
- 		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		    echo "genimage.cfg.template_no_boot_part_spl"
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 13d611b696..fe3f265941 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -57,6 +57,10 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c9117146ea..0ae5f89d88 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2730,6 +2730,10 @@ F:	package/libvpx/
+ F:	package/mesa3d-demos/
+ F:	package/ti-gfx/
  
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 	bool "imx8x"
++N:	Stefan Nickl <Stefan.Nickl@gmail.com>
++F:	board/freescale/imx8dxlevk/
++F:	configs/freescale_imx8dxlevk_defconfig
 +
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
-+	bool "imx8dxl"
+ N:	Stefan Ott <stefan@ott.net>
+ F:	package/unbound/
+ 
+diff --git a/board/freescale/imx8dxlevk/readme.txt b/board/freescale/imx8dxlevk/readme.txt
+new file mode 100644
+index 0000000000..33ceb66931
+--- /dev/null
++++ b/board/freescale/imx8dxlevk/readme.txt
+@@ -0,0 +1,69 @@
++******************************
++Freescale i.MX8DXL WEVK board
++******************************
 +
- endchoice
- 
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
-@@ -100,7 +104,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 0c1913e227..087ddef877 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -34,6 +34,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME
- 	default "imx6"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
- 	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+	default "imx8"  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 
- config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
- 	bool
-diff --git a/package/freescale-imx/imx-sc-firmware/Config.in b/package/freescale-imx/imx-sc-firmware/Config.in
-index 4932e62dd2..016f9739bf 100644
---- a/package/freescale-imx/imx-sc-firmware/Config.in
-+++ b/package/freescale-imx/imx-sc-firmware/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_IMX_SC_FIRMWARE
- 	bool "imx-sc-firmware"
- 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 	help
- 	  System Control Unit Firmware blobs for the Freescale i.MX8
- 	  SoCs.
-diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-index 3452e8b0eb..55b6fb00e3 100644
---- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-+++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-@@ -25,6 +25,10 @@ define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
- 	cp $(@D)/mx8qx-mek-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-mek-scfw-tcm.bin
- 	cp $(@D)/mx8qx-val-scfw-tcm.bin $(BINARIES_DIR)/mx8qx-val-scfw-tcm.bin
- endef
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL),y)
-+define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
-+	cp $(@D)/mx8dxl-evk-scfw-tcm.bin $(BINARIES_DIR)/
-+endef
- else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
- define IMX_SC_FIRMWARE_INSTALL_IMAGES_CMDS
- 	cp $(@D)/mx8qm-*-scfw-tcm.bin $(BINARIES_DIR)/
-diff --git a/package/freescale-imx/imx-seco/Config.in b/package/freescale-imx/imx-seco/Config.in
-index 41f8444651..7abdd7eb0d 100644
---- a/package/freescale-imx/imx-seco/Config.in
-+++ b/package/freescale-imx/imx-seco/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_IMX_SECO
- 	bool "imx-seco"
- 	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 	help
- 	  Firmware file for the i.MX8 and i.MX8X Security Controller.
- 
-@@ -14,6 +15,7 @@ choice
- 	prompt "i.MX Seco Firmware Release"
- 	default BR2_PACKAGE_IMX_SECO_MX8QMB0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
- 	default BR2_PACKAGE_IMX_SECO_MX8QXC0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+	default BR2_PACKAGE_IMX_SECO_MX8DXLB0 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 	help
- 	  Select the appropriate ahab container image to install
- 	  to match the iMX asics revision.
-@@ -30,7 +32,7 @@ config BR2_PACKAGE_IMX_SECO_MX8DXLA1
- 
- config BR2_PACKAGE_IMX_SECO_MX8DXLB0
- 	bool "imx-seco-mx8dxlb0"
--	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL
- 
- config BR2_PACKAGE_IMX_SECO_MX8QMB0
- 	bool "imx-seco-mx8qmb0"
++This file documents the Buildroot support for the Freescale i.MX8DXL WEVK
++board.
++
++Build
++=====
++
++First, configure Buildroot for the i.MX8DXL WEVK board:
++
++  make freescale_imx8dxlevk_defconfig
++
++Build all components:
++
++  make
++
++You will find in output/images/ the following files:
++  - ahab-container.img
++  - bl31.bin
++  - boot.vfat
++  - Image
++  - imx8-boot-sd.bin
++  - imx8dxl-evk.dtb
++  - mkimg.commit
++  - mx8dxl-ddr3-evk-scfw-tcm.bin
++  - mx8dxl-evk-scfw-tcm.bin
++  - mx8dxl-phantom-mek-scfw-tcm.bin
++  - mx8dxl-val-scfw-tcm.bin
++  - rootfs.ext2
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - u-boot-atf.bin
++  - u-boot.bin
++  - u-boot-hash.bin
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/common/imx/genimage.cfg.template_imx8.
++
++Boot the i.MX8DXL WEVK board
++============================
++
++To boot your newly created system:
++- insert the SD card in the SD slot of the board;
++- Configure the boot switch as follows:
++SW1:	ON	ON	OFF	OFF
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
+diff --git a/configs/freescale_imx8dxlevk_defconfig b/configs/freescale_imx8dxlevk_defconfig
+new file mode 100644
+index 0000000000..bf59e64430
+--- /dev/null
++++ b/configs/freescale_imx8dxlevk_defconfig
+@@ -0,0 +1,39 @@
++BR2_aarch64=y
++BR2_cortex_a35=y
++BR2_ARM_FPU_VFPV3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8dxl-evk.dtb"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.1.22-2.0.0)/linux-imx-lf-6.1.22-2.0.0.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8dxl-evk"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8DXL=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++BR2_PACKAGE_IMX_SC_FIRMWARE=y
++BR2_PACKAGE_IMX_SECO=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.1.22-2.0.0)/imx-atf-lf-6.1.22-2.0.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8dxl"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.1.22-2.0.0)/uboot-imx-lf-6.1.22-2.0.0.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8dxl_evk"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
