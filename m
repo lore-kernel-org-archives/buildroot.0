@@ -4,69 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAE8DC001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 20:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB7AC0015E
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:09:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A9DA60A8D;
-	Sun,  6 Aug 2023 20:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A9DA60A8D
+	by smtp3.osuosl.org (Postfix) with ESMTP id A565860BD3;
+	Sun,  6 Aug 2023 21:09:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A565860BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DOl28FQxsMYQ; Sun,  6 Aug 2023 20:55:21 +0000 (UTC)
+	with ESMTP id 9CUbOVrjjgPO; Sun,  6 Aug 2023 21:09:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84BAF60BD3;
-	Sun,  6 Aug 2023 20:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84BAF60BD3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 995551BF2F3
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:55:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D246360E50;
+	Sun,  6 Aug 2023 21:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D246360E50
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A1411BF30C
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0CD640857
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0CD640857
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F75560DDF
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:08:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F75560DDF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7yEsChasfMgl for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 20:54:57 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0560B4012C
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 20:54:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0560B4012C
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:973b:6057:7632:5151])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id CC4415FF9A;
- Sun,  6 Aug 2023 22:54:47 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 06 Aug 2023 22:54:47 +0200
-Date: Sun, 6 Aug 2023 22:54:47 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20230806205447.GW421096@scaer>
-References: <20230802111447.41714-1-thomas@devoogdt.com>
- <20230802111447.41714-4-thomas@devoogdt.com>
- <20230806141955.GV421096@scaer>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DXcq3NNey7a3 for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 21:08:43 +0000 (UTC)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
+ [IPv6:2607:f8b0:4864:20::62a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 775B9607F0
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 775B9607F0
+Received: by mail-pl1-x62a.google.com with SMTP id
+ d9443c01a7336-1b8b2b60731so23692965ad.2
+ for <buildroot@buildroot.org>; Sun, 06 Aug 2023 14:08:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691356123; x=1691960923;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=BPgEg6dWsCalOtpTnv1MlwHYLsthmlG9C06+PKuztzA=;
+ b=adGJsrpwdIyYh6zgt3PbloM9U2Rh1bqkYssml0GN18Gn9XVE7EcaHaFMWzL5mDDdQa
+ 3RMO3T/wzNRw7pZIvStGwa6HXCIqhwzRvxm4+RLmRgxv1M6MjdTW3ZFwc+omx2H4l1lq
+ uInJbNFIbr2F5lVI93dM6ItgghQ65egGePRCBWduNI+Yd5t+/tJ0pNy89t56TeU3nAKy
+ v+Muwil31GrmRnnRbBann1tyi9hMyoZq8mmolL6ikOZ1BRdwqmNKzTNug9ZWcUhnh/w9
+ tROQJQvSXUBC3UilNjvmEnHFxNFkS6eO2I7i2l+b+qpxLoyx6rEFICiVCSp1Ow1XXWAE
+ F3+Q==
+X-Gm-Message-State: AOJu0Yx+R0x1jgRUDqhdLIq4ZdpavqxepIZTPwmaW9H4yXB0Nyhiiylh
+ jLNzB2gptucv4+axlBXBh4RcteeNIanpxLQQsiS2//WFe+I=
+X-Google-Smtp-Source: AGHT+IGda7nJOTNlj0FYG7aqe9VNmVEBRI5Y/5mfTZ4HT+QquKxiichmh5X+3J8UL7fregfJcTDpv99hYlKWFBO8Gzk=
+X-Received: by 2002:a17:903:230b:b0:1bc:239:a7e3 with SMTP id
+ d11-20020a170903230b00b001bc0239a7e3mr8052284plh.44.1691356122666; Sun, 06
+ Aug 2023 14:08:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230806141955.GV421096@scaer>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691355294;
- bh=/Za75dGGKkskBCT6+H3NWT1tboGlXcemEXkjqZQw9L0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uvNqbfpUZnW0DttAVTIt0oXbsvUlHDQ7VMhjZgICvhDYz+62Ff7VWsY5SEVgZTlak
- rP5bedN89Ct0msWqsrb9hQfjFxdZS13jdB/G2tJPwqIUvbSeHkclTk2r0bic2nw9L3
- i1zcwq4vFe8INg3TIwWmsnTlunYmnmoGQRvZhnVm68HhxfU00laRNF5OenPiflH+22
- zo7oDO/4F2HRrBYNcrYkHU89Ck931wwHQHdiZQxc+s4GmX3s3b6xVZgx62hFbE8JxJ
- 5w5kMrHFOLSW1NQTyckMFn/ylrwUtvz8yE6y+SSgJVovBGcDfVC/eK0SxM72/SAi47
- H2nPtHOB+dKSQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uvNqbfpU
-Subject: Re: [Buildroot] [PATCH v6 4/4] pkg-cmake: make ninja the default
- for all packages
+From: Andreas <andreasembbuild@gmail.com>
+Date: Sun, 6 Aug 2023 23:08:31 +0200
+Message-ID: <CAOLWrZ_+U2+hsJe9rSyxO=DcTf1DOMP-Mrn6t-602D1W4nQk0g@mail.gmail.com>
+To: buildroot@buildroot.org
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1691356123; x=1691960923;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=BPgEg6dWsCalOtpTnv1MlwHYLsthmlG9C06+PKuztzA=;
+ b=SQMgSl9kveQUcdNyag2iqEtZM2vcck/Y/uhZmtWb+OnU01IxsSxa+YcAdRBkgcVJEG
+ abotvyImyKPZa3E+wnLD62AjMq2tPQCtdi8VFARwsuu8YTinRu926yoctDiN9WmqSMxT
+ EostjpJW9UQGjpXSuQWL9UZZ96SDQ1eN3FlWxaxv4TkODwL+ZGHm0r19DSZqNZ9sMyDJ
+ skULE17kX9ZPrLYhEZlTDEsPL6OSgv37iX3JyyLkBiBoBWSuonWGETCEdCFiwCaZV0Nu
+ T5MyiOwnhI1IjShAmwGPmmPt66XyOQ7ubQJliHbPlwNRf0k7W//Eb0M2vmaov0lDjOJV
+ /jng==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=SQMgSl9k
+Subject: [Buildroot] Support for python-prctl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,120 +86,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Samuel Martin <s.martin49@gmail.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0338703263351717856=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+--===============0338703263351717856==
+Content-Type: multipart/alternative; boundary="000000000000e159820602478802"
 
-On 2023-08-06 16:19 +0200, Yann E. MORIN spake thusly:
-> On 2023-08-02 13:14 +0200, Thomas Devoogdt spake thusly:
-> > From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> > Use ninja as the default generator.
-> I have not applied that patch yet, because Thomas P. and I believed this
-> is a bit bold, even for next.
+--000000000000e159820602478802
+Content-Type: text/plain; charset="UTF-8"
 
-And I will not apply it, because it does actually break some packages
-because of ninja.
+Hi,
 
-For example, compiler-rt complains with:
+I am trying to add the package python-prctl but it fails missing the libcap
+developement headers. How can I add them. I added libcap as a dependency
 
-    ninja: error: dependency cycle: include/sanitizer/allocator_interface.h -> include/sanitizer/allocator_interface.h
+You need to install libcap development headers to build this module
+make: *** [package/pkg-generic.mk:293:
+/buildroot/output/build/python-prctl-1.8.1/.stamp_built] Error 1
+make: Leaving directory '/buildroot'
+finish
 
-So, maybe the package is broken and needs fixing, but it (supposedly)
-builds OKi-ish with makefiles.
 
-So, we need to assess how many of the cmake packages build fine with
-ninja. If they are the vast majority, then we annonate those that don't
-and change the default to use ninja. If however, the vast majority does
-not work with ninja, then we keep the curremnt status quo, and annotate
-those packages that do, like webktigtk or wpewebkit.
+################################################################################
+#
+# python-prctl
+#
+################################################################################
 
-Also, please have a look at qt6: it is already using ninja, but like
-webkitgtk and wpewebkit, is was special-coded. Could you please send
-a follow-up patch that upgrades qt6 to use QT6_CMAKE_BACKEND?
+PYTHON_PRCTL_VERSION = 1.8.1
+PYTHON_PRCTL_SITE =
+https://files.pythonhosted.org/packages/c0/99/be5393cfe9c16376b4f515d90a68b11f1840143ac1890e9008bc176cf6a6
+PYTHON_PRCTL_SETUP_TYPE = setuptools
+PYTHON_PRCTL_LICENSE = GNU General Public License (GPL)
+PYTHON_PRCTL_DEPENDENCIES = host-pkgconf host-libcap libcap
 
-Regards,
-Yann E. MORIN.
+$(eval $(python-package))
 
-> I've started a build with a bunch of cmake-based packages, and I'll see
-> if they break alot of not later in the evening. If there's breakage,
-> I'll report and you'll have to investigate! ;-p
-> 
-> > A fun fact is that we of course have to disable ninja when building ninja.
-> 
-> Yes, of course! :-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> > ---
-> > v5: add this optional commit
-> > v6: rebase
-> > ---
-> >  package/ninja/ninja.mk | 1 +
-> >  package/pkg-cmake.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-> > index b7bc1a4f1c..85dd2e05aa 100644
-> > --- a/package/ninja/ninja.mk
-> > +++ b/package/ninja/ninja.mk
-> > @@ -9,6 +9,7 @@ NINJA_VERSION = $(NINJA_VERSION_MAJOR).g95dee.kitware.jobserver-1
-> >  NINJA_SITE = $(call github,Kitware,ninja,v$(NINJA_VERSION))
-> >  NINJA_LICENSE = Apache-2.0
-> >  NINJA_LICENSE_FILES = COPYING
-> > +NINJA_CMAKE_NINJA = NO
-> >  
-> >  define HOST_NINJA_INSTALL_CMDS
-> >  	$(INSTALL) -m 0755 -D $(@D)/ninja $(HOST_DIR)/bin/ninja
-> > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> > index 36ab88d3a1..dab87c81f4 100644
-> > --- a/package/pkg-cmake.mk
-> > +++ b/package/pkg-cmake.mk
-> > @@ -52,7 +52,7 @@ endif
-> >  define inner-cmake-package
-> >  
-> >  $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
-> > -
-> > +$(3)_CMAKE_NINJA ?= YES
-> >  
-> >  ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
-> >  $(2)_BUILDDIR			= $$($(2)_SRCDIR)
-> > -- 
-> > 2.34.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+--000000000000e159820602478802
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+<div dir=3D"ltr">Hi,<div><br></div><div>I am trying to add the package pyth=
+on-prctl but it fails missing the libcap developement headers. How can I ad=
+d them. I added libcap as a dependency</div><div><br></div><div>You need to=
+ install libcap development headers to build this module<br>make: *** [pack=
+age/<a href=3D"http://pkg-generic.mk:293">pkg-generic.mk:293</a>: /buildroo=
+t/output/build/python-prctl-1.8.1/.stamp_built] Error 1<br>make: Leaving di=
+rectory &#39;/buildroot&#39;<br>finish<br></div><div><br></div><div><br></d=
+iv><div>###################################################################=
+#############<br>#<br># python-prctl<br>#<br>##############################=
+##################################################<br><br>PYTHON_PRCTL_VERS=
+ION =3D 1.8.1<br>PYTHON_PRCTL_SITE =3D <a href=3D"https://files.pythonhoste=
+d.org/packages/c0/99/be5393cfe9c16376b4f515d90a68b11f1840143ac1890e9008bc17=
+6cf6a6">https://files.pythonhosted.org/packages/c0/99/be5393cfe9c16376b4f51=
+5d90a68b11f1840143ac1890e9008bc176cf6a6</a><br>PYTHON_PRCTL_SETUP_TYPE =3D =
+setuptools<br>PYTHON_PRCTL_LICENSE =3D GNU General Public License (GPL)<br>=
+PYTHON_PRCTL_DEPENDENCIES =3D host-pkgconf host-libcap libcap<br><br>$(eval=
+ $(python-package))<br></div></div>
+
+--000000000000e159820602478802--
+
+--===============0338703263351717856==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0338703263351717856==--
