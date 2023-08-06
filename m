@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 270C8EC8733
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4173FEC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C985D41DD7;
-	Thu,  7 Sep 2023 14:59:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C985D41DD7
+	by smtp1.osuosl.org (Postfix) with ESMTP id D315781351;
+	Thu,  7 Sep 2023 14:59:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D315781351
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yl-KGljJOXZ1; Thu,  7 Sep 2023 14:59:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2a5et40dIbBC; Thu,  7 Sep 2023 14:59:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA08D41E98;
-	Thu,  7 Sep 2023 14:59:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA08D41E98
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11D691BF313
+	by smtp1.osuosl.org (Postfix) with ESMTP id 397F081F42;
+	Thu,  7 Sep 2023 14:59:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 397F081F42
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C4BE1BF990
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C917D6124E
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C917D6124E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 359DE415C6
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 359DE415C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XJ1JWXGzqLFl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yz9SucoRAL8n for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12CEA6125F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82C4F404ED
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12CEA6125F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82C4F404ED
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0CD2886A22; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+ id 734A986A25; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 19:27:09 +0200
+Date: Sun, 6 Aug 2023 23:40:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2bd1d9d812d529071e1ab9d8ed8344f8077286d3
-X-Git-Newrev: aa17849e8ba216022fff15f2fafb669317c4b237
+X-Git-Oldrev: b05a3948107670e9f6027fd1e7a41e3e91f98255
+X-Git-Newrev: 0fe729f70ef695d0f355226d69b7ae7ab4a9b56b
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145127.0CD2886A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: bump
- version to 8.20
+Message-Id: <20230907145127.734A986A25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pycups: switch from
+ distutils to setuptools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,66 +59,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7575409291532104199=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7575409291532104199==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=aa17849e8ba216022fff15f2fafb669317c4b237
+commit: https://git.buildroot.net/buildroot/commit/?id=0fe729f70ef695d0f355226d69b7ae7ab4a9b56b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Both the COPYING and EULA files have changed, with the following main
-changes:
-  - update to copyright years (2022 -> 2023)
-  - switch from ASCCI double quotes to fancy Unicode ones ("" -> “”)
-  - reflow the license text
-  - identify new third-parties and their conditions
+distutils will be dropped with python 3.12.
 
-Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
- package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pycups/python-pycups.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-index eb0c387af3..0b3561a927 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  937e196476b8e95b4b7f2501a14c8326d8a0649f8a3f9228b72373770a08deb3  firmware-imx-8.15.bin
--sha256  35188e65dbb9c7da4bbcb77c7726e835607f9f41b8b44149806ea51429ca9a31  COPYING
--sha256  30f61825583b4c26d29a798ad7e4c8ef2f2f390b1e964af302d2dc40e93cb0a4  EULA
-+sha256  f6dc6a5c8fd9b913a15360d3ccd53d188db05a08a8594c518e57622478c72383  firmware-imx-8.20.bin
-+sha256  913ba38d4be97361c3d0fa9bf2f6dbe7b1c0c41213dd268fb6738db9704dbe32  COPYING
-+sha256  4fd8bb45a2ec22117d20cfea84370e2a3a2cd99e8e177138bed0938137b1aeb3  EULA
- sha256  40d02f6d6b4e94d9307529408f372f5a9908cf3d156ec533a4e54274b40f271e  SCR.txt
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 4cceb67019..66ef8c3930 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIRMWARE_IMX_VERSION = 8.15
-+FIRMWARE_IMX_VERSION = 8.20
- FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
- 
-
---===============7575409291532104199==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/python-pycups/python-pycups.mk b/package/python-pycups/python-pycups.mk
+index 41da3641a0..bf61400afe 100644
+--- a/package/python-pycups/python-pycups.mk
++++ b/package/python-pycups/python-pycups.mk
+@@ -7,7 +7,7 @@
+ PYTHON_PYCUPS_VERSION = 2.0.1
+ PYTHON_PYCUPS_SOURCE = pycups-$(PYTHON_PYCUPS_VERSION).tar.gz
+ PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/0c/bb/82546806a86dc16f5eeb76f62ffdc42cce3d43aacd4e25a8b5300eec0263
+-PYTHON_PYCUPS_SETUP_TYPE = distutils
++PYTHON_PYCUPS_SETUP_TYPE = setuptools
+ PYTHON_PYCUPS_LICENSE = GPL-2.0+
+ PYTHON_PYCUPS_LICENSE_FILES = COPYING
+ PYTHON_PYCUPS_DEPENDENCIES = cups
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7575409291532104199==--
