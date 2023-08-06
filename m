@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CC2EC001DF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 16:05:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35221C0015E
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 16:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 38B6D4095F;
-	Sun,  6 Aug 2023 16:05:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38B6D4095F
+	by smtp2.osuosl.org (Postfix) with ESMTP id C726940412;
+	Sun,  6 Aug 2023 16:06:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C726940412
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WM1pagAI1fAY; Sun,  6 Aug 2023 16:05:37 +0000 (UTC)
+	with ESMTP id EZEPsP7o18hJ; Sun,  6 Aug 2023 16:06:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7200040533;
-	Sun,  6 Aug 2023 16:05:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7200040533
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D52241BF909
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 16:05:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 06E3B4035D;
+	Sun,  6 Aug 2023 16:06:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06E3B4035D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 192671BF2C3
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 16:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CC20607F0
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 16:05:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CC20607F0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FD3340363
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 16:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FD3340363
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8HlZbl-iAcMW for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 16:05:26 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6241F60769
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 16:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6241F60769
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9BCCC60004;
- Sun,  6 Aug 2023 16:05:24 +0000 (UTC)
-Date: Sun, 6 Aug 2023 18:05:23 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230806180523.2a2178e6@windsurf>
-In-Reply-To: <20230718221120.1433795-1-bernd@kuhls.net>
-References: <20230718221120.1433795-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691337924;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7ABSNCRuSA/OzYAl/7r9gnr/xxXni+TUOwED3vgVL8Y=;
- b=D1fr6Spy07L5ax/TsZhC4RGWOLQPGvtizHGlR36KW36G02+XYHwEOmSR/HyPfQ6XTkSrJE
- VIgu89aI+tVnX+Ogd+0W8h6SkQFqDrHbpdvfjDr743apoikAdy5tVOs+NwUhfHd+/4knKx
- MGZkCpXbKVLPS3+yT8ZqWEIGq3C86brCZOXFf3sRaM5lIObQs1BXg2fchQBfs3ftLuBCg3
- CP/YC1+H9QE3b4IS+c5l9dqedrjXahwbRN053cuZ3p2+JQDIVMGkeRYK4jtctYCVZ8SpRj
- 7CyDA4SFg/3xdVSXi1TxPSB4g2Gk1qlXeXu+xOD0QK+rU4xLMVD+RBl4TTJ4bQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=D1fr6Spy
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/kodi: fix filenames of kodi
- host utils
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h13IwAm9X1xM for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 16:05:13 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43D4A402C2
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 16:05:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D4A402C2
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2B83984546; Sun,  6 Aug 2023 16:05:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 18:04:34 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 78039eb59acfb2c3051ca81e7e161d9e281d3983
+X-Git-Newrev: 0d8c70e93d1835c97d797ce1f390e6acc0adb225
+X-Patchwork-Hint: ignore
+Message-Id: <20230806160513.2B83984546@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi: fix filenames of
+ kodi host utils
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,42 +58,94 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 19 Jul 2023 00:11:20 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0d8c70e93d1835c97d797ce1f390e6acc0adb225
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> The variables WITH_JSONSCHEMABUILDER & WITH_TEXTUREPACKER are defined as
-> directories:
-> https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindJsonSchemaBuilder.cmake
-> https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindTexturePacker.cmake
-> 
-> and during configure kodi searches these directories for usable binaries
-> with the name scheme.
-> 
-> ${APP_NAME_LC}-JsonSchemaBuilder
-> ${APP_NAME_LC}-TexturePacker
-> 
-> which translates to kodi-JsonSchemaBuilder and kodi-TexturePacker.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
-> v2: also updated kodi-skin-confluence.mk
+The variables WITH_JSONSCHEMABUILDER & WITH_TEXTUREPACKER are defined as
+directories:
+https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindJsonSchemaBuilder.cmake
+https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindTexturePacker.cmake
 
-Applied to next with an improved commit log that explains this is just
-an improvement and it doesn't fix any build/runtime issue.
+and during configure kodi searches these directories for usable
+binaries with the name scheme.
 
-Thanks!
+${APP_NAME_LC}-JsonSchemaBuilder
+${APP_NAME_LC}-TexturePacker
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+which translates to kodi-JsonSchemaBuilder and kodi-TexturePacker.
+
+This is an improvement to follow upstream's expections and it does
+neither fix a build nor a runtime error.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk     | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.mk                                     | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 569bde8cd2..e017aa8d9c 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -20,7 +20,7 @@ HOST_KODI_JSONSCHEMABUILDER_CONF_OPTS = \
+ define HOST_KODI_JSONSCHEMABUILDER_INSTALL_CMDS
+ 	$(INSTALL) -m 755 -D \
+ 		$(@D)/tools/depends/native/JsonSchemaBuilder/JsonSchemaBuilder \
+-		$(HOST_DIR)/bin/JsonSchemaBuilder
++		$(HOST_DIR)/bin/kodi-JsonSchemaBuilder
+ endef
+ 
+ $(eval $(host-cmake-package))
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index 43d0c4bff6..58e51ffc8a 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+@@ -11,7 +11,7 @@ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+ KODI_SKIN_CONFLUENCE_DEPENDENCIES = kodi
+ 
+ define KODI_SKIN_CONFLUENCE_BUILD_CMDS
+-	$(HOST_DIR)/bin/TexturePacker -input $(@D)/media/ -output $(@D)/media/Textures.xbt -dupecheck -use_none
++	$(HOST_DIR)/bin/kodi-TexturePacker -input $(@D)/media/ -output $(@D)/media/Textures.xbt -dupecheck -use_none
+ endef
+ 
+ define KODI_SKIN_CONFLUENCE_INSTALL_TARGET_CMDS
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index 44eba85d75..c0bc767dd4 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -35,7 +35,7 @@ HOST_KODI_TEXTUREPACKER_CONF_OPTS += \
+ define HOST_KODI_TEXTUREPACKER_INSTALL_CMDS
+ 	$(INSTALL) -m 755 -D \
+ 		$(@D)/tools/depends/native/TexturePacker/TexturePacker \
+-		$(HOST_DIR)/bin/TexturePacker
++		$(HOST_DIR)/bin/kodi-TexturePacker
+ endef
+ 
+ $(eval $(host-cmake-package))
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index aff272d014..4fe6ea46cc 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -88,8 +88,8 @@ KODI_CONF_OPTS += \
+ 	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR) \
+ 	-DPYTHON_PATH=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
+ 	-DPYTHON_VER=$(PYTHON3_VERSION_MAJOR) \
+-	-DWITH_JSONSCHEMABUILDER=$(HOST_DIR)/bin/JsonSchemaBuilder \
+-	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/TexturePacker \
++	-DWITH_JSONSCHEMABUILDER=$(HOST_DIR)/bin/ \
++	-DWITH_TEXTUREPACKER=$(HOST_DIR)/bin/ \
+ 	-DLIBDVDCSS_URL=$(KODI_DL_DIR)/kodi-libdvdcss-$(KODI_LIBDVDCSS_VERSION).tar.gz \
+ 	-DLIBDVDNAV_URL=$(KODI_DL_DIR)/kodi-libdvdnav-$(KODI_LIBDVDNAV_VERSION).tar.gz \
+ 	-DLIBDVDREAD_URL=$(KODI_DL_DIR)/kodi-libdvdread-$(KODI_LIBDVDREAD_VERSION).tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
