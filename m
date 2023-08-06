@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3162AEC8737
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:09:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5987FEC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0D7D8266D;
-	Thu,  7 Sep 2023 15:09:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0D7D8266D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19FB680AE3;
+	Thu,  7 Sep 2023 15:09:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19FB680AE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BWliiuLpUK_p; Thu,  7 Sep 2023 15:09:35 +0000 (UTC)
+	with ESMTP id rBjBvg2uxdEQ; Thu,  7 Sep 2023 15:09:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2933E82EF1;
-	Thu,  7 Sep 2023 15:09:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2933E82EF1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 609D18392C;
+	Thu,  7 Sep 2023 15:09:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 609D18392C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 99BBE1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3790C1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B4FE41DDF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DA3A41DDA
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B4FE41DDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DA3A41DDA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ALCysviOEMqa for <buildroot@lists.busybox.net>;
+ with ESMTP id TQFkggi8qxoZ for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1502641D99
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1502641D99
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1ADFE41D9A
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ADFE41D9A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F039086A21; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+ id 045A986A1E; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 18:06:45 +0200
+Date: Sun, 6 Aug 2023 18:06:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d3996b49397decd782621330f4009d5c6f0728e0
-X-Git-Newrev: 77eba3436d3fbd0aaf0318774b66d30c098edf01
+X-Git-Oldrev: 77eba3436d3fbd0aaf0318774b66d30c098edf01
+X-Git-Newrev: 2bd1d9d812d529071e1ab9d8ed8344f8077286d3
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145126.F039086A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-slob: switch from distutils
- to setuptools
+Message-Id: <20230907145127.045A986A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-stack-data: switch from
+ setuptools to pep517
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +64,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77eba3436d3fbd0aaf0318774b66d30c098edf01
+commit: https://git.buildroot.net/buildroot/commit/?id=2bd1d9d812d529071e1ab9d8ed8344f8077286d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-distutils will be dropped with python 3.12.
+Needed for building with python 3.12.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-slob/python-slob.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-stack-data/python-stack-data.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-slob/python-slob.mk b/package/python-slob/python-slob.mk
-index 2db3932216..4a0d1a7e1c 100644
---- a/package/python-slob/python-slob.mk
-+++ b/package/python-slob/python-slob.mk
-@@ -8,6 +8,6 @@ PYTHON_SLOB_VERSION = 31ad0e769360a5b10a4893f686587bb8e48c3895
- PYTHON_SLOB_SITE = $(call github,itkach,slob,$(PYTHON_SLOB_VERSION))
- PYTHON_SLOB_LICENSE = GPL-3.0
- PYTHON_SLOB_LICENSE_FILES = LICENSE
--PYTHON_SLOB_SETUP_TYPE = distutils
-+PYTHON_SLOB_SETUP_TYPE = setuptools
+diff --git a/package/python-stack-data/python-stack-data.mk b/package/python-stack-data/python-stack-data.mk
+index 494ce8f454..1a85938311 100644
+--- a/package/python-stack-data/python-stack-data.mk
++++ b/package/python-stack-data/python-stack-data.mk
+@@ -7,8 +7,9 @@
+ PYTHON_STACK_DATA_VERSION = 0.6.2
+ PYTHON_STACK_DATA_SOURCE = stack_data-$(PYTHON_STACK_DATA_VERSION).tar.gz
+ PYTHON_STACK_DATA_SITE = https://files.pythonhosted.org/packages/db/18/aa7f2b111aeba2cd83503254d9133a912d7f61f459a0c8561858f0d72a56
+-PYTHON_STACK_DATA_SETUP_TYPE = setuptools
++PYTHON_STACK_DATA_SETUP_TYPE = pep517
+ PYTHON_STACK_DATA_LICENSE = MIT
+ PYTHON_STACK_DATA_LICENSE_FILES = LICENSE.txt
++PYTHON_STACK_DATA_DEPENDENCIES = host-python-setuptools-scm
  
  $(eval $(python-package))
 _______________________________________________
