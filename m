@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DF29EC8735
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:57:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D002EC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 115194088D;
-	Thu,  7 Sep 2023 14:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 115194088D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E4144005D;
+	Thu,  7 Sep 2023 14:58:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E4144005D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HoCjTLrW1clJ; Thu,  7 Sep 2023 14:57:57 +0000 (UTC)
+	with ESMTP id nxSfqBB-Nn7M; Thu,  7 Sep 2023 14:58:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BE9EE41E55;
-	Thu,  7 Sep 2023 14:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE9EE41E55
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1FFA11BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F29A402AE;
+	Thu,  7 Sep 2023 14:58:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F29A402AE
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C5181BF995
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9012341DA4
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3FB440598
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9012341DA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3FB440598
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 503mMGQjDITu for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hvKRc2MmqwvW for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79B1741D6B
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79B1741D6B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17C6B415B6
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17C6B415B6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75C9D86A1E; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+ id 157BD86A25; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 13:55:21 +0200
+Date: Sun, 6 Aug 2023 19:29:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 727584320785aca15990b2a03d4ff7b541b4c210
-X-Git-Newrev: 05adefbafd532d901f8476e9dc59eb416108c4d4
+X-Git-Oldrev: aa17849e8ba216022fff15f2fafb669317c4b237
+X-Git-Newrev: b1c4e46c1ebdd2b200fc67acd0b59de238499106
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.75C9D86A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-lxml: bump version to 4.9.3
+Message-Id: <20230907145127.157BD86A25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-seco: bump
+ version to 5.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,54 +59,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3126846827323043144=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05adefbafd532d901f8476e9dc59eb416108c4d4
+--===============3126846827323043144==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b1c4e46c1ebdd2b200fc67acd0b59de238499106
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/lxml/lxml/blob/master/CHANGES.txt
+The COPYING and EULA files have changed, with various changes, mainly:
+ - update to copyright years
+ - switch from ASCCI double quotes to fancy Unicode ones ("" -> “”)
+ - reflow the license text
+ - identify new third-parties and their conditions
 
-Added sha256 hash provided by upstream.
-This release includes fixes for upcoming Python 3.12.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-lxml/python-lxml.hash | 3 ++-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
+ package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 72df6d0278..e34cb193f4 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,5 +1,6 @@
-+# From https://pypi.org/project/lxml/
-+sha256  48628bd53a426c9eb9bc066a923acaa0878d1e86129fd5359aee99285f4eed9c  lxml-4.9.3.tar.gz
- # Locally computed
--sha256  2455cfaeb7ac70338b3257f41e21f0724f4b5b0c0e7702da67ee6c3640835b67  lxml-4.9.2.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 657622a962..3ef3aabdbc 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+index 378c24bc54..e02e30886f 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.hash
++++ b/package/freescale-imx/imx-seco/imx-seco.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  08cf25a4be6841ca7264a50b29c311b386eae1c02fced8a3b55fd04213acb4bc  imx-seco-3.7.5.bin
+-sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+-sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
++sha256  c3bd761f457e939035b01a0ab36e79064a2a1bc6c3cdb3cd847f7f38df0964df  imx-seco-5.9.0.bin
++sha256  654f0c4ce6d08f9a6d74e29c58206742cb7469a6a7c25413028a9bdbe647aa13  EULA
++sha256  5bd7aab9dc380a6f9577443b2e90bd5ca73d9528175fad04b6d17da43a05a48e  COPYING
+diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+index 987f24658d..3788f1e404 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.mk
++++ b/package/freescale-imx/imx-seco/imx-seco.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.9.2
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/06/5a/e11cad7b79f2cf3dd2ff8f81fa8ca667e7591d3d8451768589996b65dec1
-+PYTHON_LXML_VERSION = 4.9.3
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/30/39/7305428d1c4f28282a4f5bdbef24e0f905d351f34cf351ceb131f5cddf78
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+-IMX_SECO_VERSION = 3.7.5
++IMX_SECO_VERSION = 5.9.0
+ IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+ IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
  
- # Not including the GPL, because it is used only for the test scripts.
+
+--===============3126846827323043144==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3126846827323043144==--
