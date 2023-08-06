@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74248C0015E
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 386EDC001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12F33408C5;
-	Sun,  6 Aug 2023 14:24:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12F33408C5
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBE3D409F4;
+	Sun,  6 Aug 2023 14:24:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBE3D409F4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R5AhLMk2G3GJ; Sun,  6 Aug 2023 14:24:34 +0000 (UTC)
+	with ESMTP id AKP0lq01bBrK; Sun,  6 Aug 2023 14:24:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E16A5409A5;
-	Sun,  6 Aug 2023 14:24:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E16A5409A5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 642651BF340
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:24:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F9E3409A1;
+	Sun,  6 Aug 2023 14:24:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F9E3409A1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 845CB1BF340
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA65C409A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE32B401D8
  for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA65C409A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE32B401D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id v9CyMoQZLwnm for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AEsuTu9RfP6m for <buildroot@lists.busybox.net>;
  Sun,  6 Aug 2023 14:24:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCB94409A0
+ by smtp2.osuosl.org (Postfix) with ESMTP id B46984000B
  for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:24:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCB94409A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B46984000B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AA34184458; Sun,  6 Aug 2023 14:24:26 +0000 (UTC)
+ id A14C384457; Sun,  6 Aug 2023 14:24:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 16:24:09 +0200
+Date: Sun, 6 Aug 2023 16:24:08 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 28e38f4d5cff5db7aa96a4ab5c87cf996087c977
-X-Git-Newrev: 38a098df133aaa2ebf09742054b02db5a44f58e5
+X-Git-Oldrev: 05555c0daf5610f733f5516901b5c44d07d09599
+X-Git-Newrev: 28e38f4d5cff5db7aa96a4ab5c87cf996087c977
 X-Patchwork-Hint: ignore
-Message-Id: <20230806142426.AA34184458@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/webkitgtk: add http/2
- support by using libsoup3
+Message-Id: <20230806142426.A14C384457@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsoup3: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,78 +63,163 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38a098df133aaa2ebf09742054b02db5a44f58e5
+commit: https://git.buildroot.net/buildroot/commit/?id=28e38f4d5cff5db7aa96a4ab5c87cf996087c977
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Support added in 2.33.2:
-  https://webkitgtk.org/2021/06/08/webkitgtk2.33.2-released.html
-  "HTTP/2 support when building with libsoup3."
+Libsoup3 has a new API [1], packages using libsoup may not compile
+with libsoup3 or may crash at runtime in unexpected ways, so we add a
+new package. It can be installed side by site with libsoup, without
+any conflict.
+
+[1] https://libsoup.org/libsoup-3.0/ch02.html
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/webkitgtk/Config.in    | 10 +++++-----
- package/webkitgtk/webkitgtk.mk |  3 +--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/libsoup3/Config.in     | 34 +++++++++++++++++++++++++
+ package/libsoup3/libsoup3.hash |  4 +++
+ package/libsoup3/libsoup3.mk   | 57 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 97 insertions(+)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 23c0bf41db..6835467c46 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -31,9 +31,9 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
--	depends on BR2_USE_WCHAR # icu, libsoup
-+	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	select BR2_PACKAGE_CAIRO
-@@ -44,7 +44,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBSECRET
--	select BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBSOUP3
- 	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBXSLT
-@@ -82,9 +82,9 @@ comment "sandboxing support needs a toolchain w/ headers >= 3.12"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0f6cb75e0e..c9117146ea 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2854,6 +2854,7 @@ F:	toolchain/
  
- config BR2_PACKAGE_WEBKITGTK_HTTPS
- 	bool "HTTPS support"
--	depends on !BR2_STATIC_LIBS # libsoup -> glib-networking, gnutls
-+	depends on !BR2_STATIC_LIBS # libsoup3 -> glib-networking, gnutls
- 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
--	select BR2_PACKAGE_LIBSOUP_SSL
-+	select BR2_PACKAGE_LIBSOUP3_SSL
- 	help
- 	  Enable HTTPS protocol support.
+ N:	Thomas Devoogdt <thomas@devoogdt.com>
+ F:	package/fluent-bit/
++F:	package/libsoup3/
  
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 3e9d42c7c3..32f6102797 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_CPE_ID_VENDOR = webkitgtk
- WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
--	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
-+	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup3 \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
- 
- WEBKITGTK_CMAKE_BACKEND = ninja
-@@ -30,7 +30,6 @@ WEBKITGTK_CONF_OPTS = \
- 	-DUSE_AVIF=OFF \
- 	-DUSE_LIBHYPHEN=OFF \
- 	-DUSE_OPENJPEG=ON \
--	-DUSE_SOUP2=ON \
- 	-DUSE_WOFF2=ON
- 
- ifeq ($(BR2_PACKAGE_WEBKITGTK_SANDBOX),y)
+ N:	Thomas Huth <huth@tuxfamily.org>
+ F:	board/qemu/m68k-mcf5208/
+diff --git a/package/Config.in b/package/Config.in
+index 54cddc3914..e12ee34e9f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1957,6 +1957,7 @@ menu "Networking"
+ 	source "package/libshout/Config.in"
+ 	source "package/libsocketcan/Config.in"
+ 	source "package/libsoup/Config.in"
++	source "package/libsoup3/Config.in"
+ 	source "package/libsrtp/Config.in"
+ 	source "package/libstrophe/Config.in"
+ 	source "package/libteam/Config.in"
+diff --git a/package/libsoup3/Config.in b/package/libsoup3/Config.in
+new file mode 100644
+index 0000000000..504cc3bd2b
+--- /dev/null
++++ b/package/libsoup3/Config.in
+@@ -0,0 +1,34 @@
++config BR2_PACKAGE_LIBSOUP3
++	bool "libsoup3"
++	depends on BR2_USE_WCHAR # glib2, libpsl
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBPSL
++	select BR2_PACKAGE_NGHTTP2
++	select BR2_PACKAGE_SQLITE
++	help
++	  libsoup3 is an HTTP client/server library. It uses GObject
++	  and the GLib main loop, to integrate well with GNOME
++	  applications.
++
++	  https://wiki.gnome.org/Projects/libsoup
++
++if BR2_PACKAGE_LIBSOUP3
++
++config BR2_PACKAGE_LIBSOUP3_SSL
++	bool "https support"
++	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
++	select BR2_PACKAGE_GLIB_NETWORKING # runtime
++	select BR2_PACKAGE_GNUTLS # runtime
++	help
++	  Enable HTTPS (SSL) support.
++
++comment "libsoup3 https support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
++endif
++
++comment "libsoup3 needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
+new file mode 100644
+index 0000000000..01313b394b
+--- /dev/null
++++ b/package/libsoup3/libsoup3.hash
+@@ -0,0 +1,4 @@
++# From https://download.gnome.org/sources/libsoup/3.4/libsoup-3.4.2.sha256sum
++sha256  78c8fa37cb152d40ec8c4a148d6155e2f6947f3f1602a7cda3a31ad40f5ee2f3  libsoup-3.4.2.tar.xz
++# Locally calculated
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+new file mode 100644
+index 0000000000..9e66b6ebd2
+--- /dev/null
++++ b/package/libsoup3/libsoup3.mk
+@@ -0,0 +1,57 @@
++################################################################################
++#
++# libsoup3
++#
++################################################################################
++
++LIBSOUP3_VERSION_MAJOR = 3.4
++LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).2
++LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
++LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
++LIBSOUP3_LICENSE = LGPL-2.0+
++LIBSOUP3_LICENSE_FILES = COPYING
++LIBSOUP3_CPE_ID_VENDOR = gnome
++LIBSOUP3_INSTALL_STAGING = YES
++LIBSOUP3_DEPENDENCIES = \
++	host-intltool \
++	host-libglib2 \
++	host-pkgconf \
++	libglib2 \
++	libpsl \
++	nghttp2 \
++	sqlite \
++	$(TARGET_NLS_DEPENDENCIES)
++
++LIBSOUP3_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++
++LIBSOUP3_CONF_OPTS = \
++	-Dntlm=disabled \
++	-Dsysprof=disabled \
++	-Dtests=false \
++	-Dtls_check=false \
++	-Dvapi=disabled
++
++ifeq ($(BR2_PACKAGE_BROTLI),y)
++LIBSOUP3_CONF_OPTS += -Dbrotli=enabled
++LIBSOUP3_DEPENDENCIES += brotli
++else
++LIBSOUP3_CONF_OPTS += -Dbrotli=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBSOUP3_CONF_OPTS += -Dintrospection=enabled
++LIBSOUP3_DEPENDENCIES += gobject-introspection
++else
++LIBSOUP3_CONF_OPTS += -Dintrospection=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBKRB5),y)
++LIBSOUP3_CONF_OPTS += \
++	-Dgssapi=enabled \
++	-Dkrb5_config=$(STAGING_DIR)/usr/bin/krb5-config
++LIBSOUP3_DEPENDENCIES += libkrb5
++else
++LIBSOUP3_CONF_OPTS += -Dgssapi=disabled
++endif
++
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
