@@ -1,89 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC6C0C0015E
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 07:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 364D4C04A6A
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 10:23:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CE5741506;
-	Sun,  6 Aug 2023 07:06:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CE5741506
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C8D8403C6;
+	Sun,  6 Aug 2023 10:23:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C8D8403C6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rAkxuxjkYXQ4; Sun,  6 Aug 2023 07:06:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id b9yWuqikGAAp; Sun,  6 Aug 2023 10:23:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F03D7415EF;
-	Sun,  6 Aug 2023 07:06:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F03D7415EF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AA1511BF909
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 07:06:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3085240463;
+	Sun,  6 Aug 2023 10:23:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3085240463
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7ABE51BF44A
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 10:23:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B73F415ED
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 07:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B73F415ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id D854E60A8D
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 10:23:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D854E60A8D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zfM8ZEpSuCQw for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 07:05:27 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E315240050
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 07:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E315240050
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-4fe61ae020bso1689091e87.2
- for <buildroot@buildroot.org>; Sun, 06 Aug 2023 00:05:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691305524; x=1691910324;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xm78eWQHTWJCgOBt4Dosi1b1ujwg7xGc/K4eLjeB4bE=;
- b=YHcvbvMIJm+/u9p+kiJbAaAkVg/ytr34ibrCOTOzyfTKO+h0b6diVsrJ52bzYh8JaZ
- Kk5HRm9MWj/VMAqeuOK/Zu0Chw7Cw3A05xEPlRaWZPedVxa3sfZdHp8buwCKR3RilQG7
- hh9MzprIa45J0Y878QZETME06MyJcaGIcYosrFV85SZWnNBqEJAqTR+43NCiPuLKv1Le
- nAdw8mWr7yf3On/Tgn09JmEjvx42GbHmiDcabMHA60LASAViMlJsKBhIy51Kku5ggF7h
- 9Hof1G+cOf0wiL+vcj+gwGgGoB0jFo9gVrmEGEhDPocIyPyRMy/0ki6KxuGvkcCJD2ox
- YZ1g==
-X-Gm-Message-State: AOJu0Yzy1pNatSpiXNXOVS+QMtC5KgybXguYV2xiHvQqbCz0nn8rrHGv
- Yx7Ouo9E473Ad8M4mworlK1PDHCARQI=
-X-Google-Smtp-Source: AGHT+IGF90NkVfZqqgrabTNqRnkYJUfh7AnJdmw2XmoPI/DzQC4B6JSQYJg9o/UINCNEZgQpkJeMDg==
-X-Received: by 2002:a05:6512:32cb:b0:4f8:6dfd:faa0 with SMTP id
- f11-20020a05651232cb00b004f86dfdfaa0mr4484114lfg.2.1691305524262; 
- Sun, 06 Aug 2023 00:05:24 -0700 (PDT)
-Received: from curiosity ([80.211.22.60]) by smtp.gmail.com with ESMTPSA id
- a11-20020a056512020b00b004fe4ba4cdc2sm1010731lfo.87.2023.08.06.00.05.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 06 Aug 2023 00:05:23 -0700 (PDT)
-Date: Sun, 6 Aug 2023 10:05:19 +0300
-From: Sergey Matyukevich <geomatsi@gmail.com>
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <ZM9GL54wnPY803DH@curiosity>
-References: <20230726202838.1931660-1-christian@aperture.us>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jGP2tOHtb6W8 for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 10:23:16 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 142C060A4F
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 10:23:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 142C060A4F
+Received: by mail.gandi.net (Postfix) with ESMTPA id C7EE7E0004;
+ Sun,  6 Aug 2023 10:23:12 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Sun,  6 Aug 2023 12:23:05 +0200
+Message-ID: <20230806102306.45138-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230726202838.1931660-1-christian@aperture.us>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691305524; x=1691910324;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=xm78eWQHTWJCgOBt4Dosi1b1ujwg7xGc/K4eLjeB4bE=;
- b=UtuYBUcpTU8GKDmtmOA3cg3GKlq87xjzLT0h5e9YQIXm39lBqE+hCNTW3cad3f8A31
- 0NfuS/FUcdbqouuWjpnbr2vmy4m6NPXPOKSoKJmZyvbxXSr9C+FRx/QGVe9j0B5RG8jZ
- 63C8ohAF2xwe11Hbuv2OecXhCVu3GKppSZyKHd6AdCzh71sZDUh0jsHNXAxJoAdL6ALq
- Yn+N/b5OHr+aTtevaW2fIrqLmaL2FIy8Sti14wrS0iYP+KmPgdzjE4WyPD1WfxvuWcXL
- 05B+pbFIIsLXJ8VA4i8MQ1tC1J6u5WKpv2HKc/8OUo0rXyyxSIxkX8E69eZMcvhATv/u
- Cl5Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=UtuYBUcp
-Subject: Re: [Buildroot] [PATCH v1 1/3] package/python-pylibfdt: bump
- version to 1.7.0.post1
+ d=bootlin.com; s=gm1; t=1691317393;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Wme++wO4GPfKkViH97vDmOgmUzGMfulxwHsIJTV6hww=;
+ b=bKpk2UnesYzNOdduB30yKOh2Liwi9EXlUIU5WcFRYjDnE4Ej00AEdgsvu3XHjbyH6FOCGR
+ AhD71L/yBpBEkotoATp9cEajaFe6+FhJp7FtLtb2cD+JL25nQh6GkCKiVggMmhUM2qQMmJ
+ XzXTnpDvJqe8OAFEOr5giYPSLcFRt3kxx2sSHxcfY8I4kAi9wk1JqIhhYViFSQaWDk7VVz
+ upVeRa9z+WMRiNIXWlsAkS8oEq2vHnC+/FvyiH08RMnYNLGjh4jXQ0yT1ZPosNy9zUwsiA
+ y7RiEaLdXtz4woBAUVU4TqvDaZyC2kJgl5o4cwdA4FHE8l0FEui32eKhmaMyMA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=bKpk2Une
+Subject: [Buildroot] [PATCH] configs/qemu_m68k: add Linux kernel patch to
+ fix build with binutils >= 2.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,65 +71,268 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Huth <huth@tuxfamily.org>, Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Christian,
+The m68k Linux kernel build is broken with binutils >= 2.41 with:
 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
-> ---
->  package/python-pylibfdt/python-pylibfdt.hash | 4 ++--
->  package/python-pylibfdt/python-pylibfdt.mk   | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/python-pylibfdt/python-pylibfdt.hash b/package/python-pylibfdt/python-pylibfdt.hash
-> index 056fd3a62e..82527e727e 100644
-> --- a/package/python-pylibfdt/python-pylibfdt.hash
-> +++ b/package/python-pylibfdt/python-pylibfdt.hash
-> @@ -1,6 +1,6 @@
->  # md5, sha256 from https://pypi.python.org/pypi/pylibfdt/json
-> -md5  5765c20ac6cde517d5b7218503ab707b  pylibfdt-1.6.1.tar.gz
-> -sha256  90c667c5adf44c6ab2f13bdc566598897784c7b781bed91064e7373bd270b778  pylibfdt-1.6.1.tar.gz
-> +md5  353ee3063d0b10e94d165e032897d34e  pylibfdt-1.7.0.post1.tar.gz
-> +sha256  2d048f9f8ce9a0527d497f423dea1f1135f9811c05b009cc5d5753771c1f9ba1  pylibfdt-1.7.0.post1.tar.gz
->  # Locally computed
->  sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
-> diff --git a/package/python-pylibfdt/python-pylibfdt.mk b/package/python-pylibfdt/python-pylibfdt.mk
-> index dc68de83b3..5511bd12b3 100644
-> --- a/package/python-pylibfdt/python-pylibfdt.mk
-> +++ b/package/python-pylibfdt/python-pylibfdt.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -PYTHON_PYLIBFDT_VERSION = 1.6.1
-> +PYTHON_PYLIBFDT_VERSION = 1.7.0.post1
->  PYTHON_PYLIBFDT_SOURCE = pylibfdt-$(PYTHON_PYLIBFDT_VERSION).tar.gz
-> -PYTHON_PYLIBFDT_SITE = https://files.pythonhosted.org/packages/15/3c/40b1d6a1df9dbc9d9ba5700a47ad95ca1e984f18daf25ede0da5f67d0cf7
-> -PYTHON_PYLIBFDT_SETUP_TYPE = setuptools
-> +PYTHON_PYLIBFDT_SITE = https://files.pythonhosted.org/packages/96/5c/77ef0f0459e0b13f39ecc22e21ad4ac9fbe741e8a7cd70702ac8165f80e2
-> +PYTHON_PYLIBFDT_SETUP_TYPE = pep517
->  PYTHON_PYLIBFDT_LICENSE = BSD-2-Clause or GPL-2.0+
->  PYTHON_PYLIBFDT_LICENSE_FILES = BSD-2-Clause GPL
->  PYTHON_PYLIBFDT_DEPENDENCIES = host-python-setuptools-scm host-swig
+arch/m68k/fpsp040/skeleton.S: Assembler messages:
+arch/m68k/fpsp040/skeleton.S:502: Error: junk at end of line, first unrecognized character is `#'
+arch/m68k/fpsp040/skeleton.S:508: Error: junk at end of line, first unrecognized character is `#'
 
+This commit adds a backport from the upstream Linux kernel which fixes
+this issue. Many thanks to Romain Naour for the issue investigation
+and the identification of the kernel commit fixing this.
 
-This patch series fixes the following recent build failures:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556137
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556224
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556227
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556229
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556230
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...001-m68k-Fix-invalid-.section-syntax.patch | 97 +++++++++++++++++++
+ ...001-m68k-Fix-invalid-.section-syntax.patch | 97 +++++++++++++++++++
+ configs/qemu_m68k_mcf5208_defconfig           |  1 +
+ configs/qemu_m68k_q800_defconfig              |  1 +
+ 4 files changed, 196 insertions(+)
+ create mode 100644 board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch
+ create mode 100644 board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch
 
-Tested-by: Sergey Matyukevich <geomatsi@gmail.com>
+diff --git a/board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch b/board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch
+new file mode 100644
+index 0000000000..1f1ed75ae0
+--- /dev/null
++++ b/board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch
+@@ -0,0 +1,97 @@
++From 0bb6b7477f5dcfafbdd76eea9c7aa7a5f78d7613 Mon Sep 17 00:00:00 2001
++From: Ben Hutchings <benh@debian.org>
++Date: Fri, 16 Jun 2023 17:36:10 +0200
++Subject: [PATCH] m68k: Fix invalid .section syntax
++
++gas supports several different forms for .section for ELF targets,
++including:
++    .section NAME [, "FLAGS"[, @TYPE[,FLAG_SPECIFIC_ARGUMENTS]]]
++and:
++    .section "NAME"[, #FLAGS...]
++
++In several places we use a mix of these two forms:
++    .section NAME, #FLAGS...
++
++A current development snapshot of binutils (2.40.50.20230611) treats
++this mixed syntax as an error.
++
++Change to consistently use:
++    .section NAME, "FLAGS"
++as is used elsewhere in the kernel.
++
++Link: https://buildd.debian.org/status/fetch.php?pkg=linux&arch=m68k&ver=6.4%7Erc6-1%7Eexp1&stamp=1686907300&raw=1
++Signed-off-by: Ben Hutchings <benh@debian.org>
++Tested-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
++Link: https://lore.kernel.org/r/ZIyBaueWT9jnTwRC@decadent.org.uk
++Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=922a9bd138101e3e5718f0f4d40dba68ef89bb43
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ arch/m68k/fpsp040/skeleton.S       | 4 ++--
++ arch/m68k/ifpsp060/os.S            | 4 ++--
++ arch/m68k/kernel/relocate_kernel.S | 4 ++--
++ 3 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
++index 439395aa6fb4..081922c72daa 100644
++--- a/arch/m68k/fpsp040/skeleton.S
+++++ b/arch/m68k/fpsp040/skeleton.S
++@@ -499,13 +499,13 @@ in_ea:
++ 	dbf	%d0,morein
++ 	rts
++ 
++-	.section .fixup,#alloc,#execinstr
+++	.section .fixup,"ax"
++ 	.even
++ 1:
++ 	jbsr	fpsp040_die
++ 	jbra	.Lnotkern
++ 
++-	.section __ex_table,#alloc
+++	.section __ex_table,"a"
++ 	.align	4
++ 
++ 	.long	in_ea,1b
++diff --git a/arch/m68k/ifpsp060/os.S b/arch/m68k/ifpsp060/os.S
++index 7a0d6e428066..89e2ec224ab6 100644
++--- a/arch/m68k/ifpsp060/os.S
+++++ b/arch/m68k/ifpsp060/os.S
++@@ -379,11 +379,11 @@ _060_real_access:
++ 
++ 
++ | Execption handling for movs access to illegal memory
++-	.section .fixup,#alloc,#execinstr
+++	.section .fixup,"ax"
++ 	.even
++ 1:	moveq		#-1,%d1
++ 	rts
++-.section __ex_table,#alloc
+++.section __ex_table,"a"
++ 	.align 4
++ 	.long	dmrbuae,1b
++ 	.long	dmrwuae,1b
++diff --git a/arch/m68k/kernel/relocate_kernel.S b/arch/m68k/kernel/relocate_kernel.S
++index ab0f1e7d4653..f7667079e08e 100644
++--- a/arch/m68k/kernel/relocate_kernel.S
+++++ b/arch/m68k/kernel/relocate_kernel.S
++@@ -26,7 +26,7 @@ ENTRY(relocate_new_kernel)
++ 	lea %pc@(.Lcopy),%a4
++ 2:	addl #0x00000000,%a4		/* virt_to_phys() */
++ 
++-	.section ".m68k_fixup","aw"
+++	.section .m68k_fixup,"aw"
++ 	.long M68K_FIXUP_MEMOFFSET, 2b+2
++ 	.previous
++ 
++@@ -49,7 +49,7 @@ ENTRY(relocate_new_kernel)
++ 	lea %pc@(.Lcont040),%a4
++ 5:	addl #0x00000000,%a4		/* virt_to_phys() */
++ 
++-	.section ".m68k_fixup","aw"
+++	.section .m68k_fixup,"aw"
++ 	.long M68K_FIXUP_MEMOFFSET, 5b+2
++ 	.previous
++ 
++-- 
++2.41.0
++
+diff --git a/board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch b/board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch
+new file mode 100644
+index 0000000000..1f1ed75ae0
+--- /dev/null
++++ b/board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch
+@@ -0,0 +1,97 @@
++From 0bb6b7477f5dcfafbdd76eea9c7aa7a5f78d7613 Mon Sep 17 00:00:00 2001
++From: Ben Hutchings <benh@debian.org>
++Date: Fri, 16 Jun 2023 17:36:10 +0200
++Subject: [PATCH] m68k: Fix invalid .section syntax
++
++gas supports several different forms for .section for ELF targets,
++including:
++    .section NAME [, "FLAGS"[, @TYPE[,FLAG_SPECIFIC_ARGUMENTS]]]
++and:
++    .section "NAME"[, #FLAGS...]
++
++In several places we use a mix of these two forms:
++    .section NAME, #FLAGS...
++
++A current development snapshot of binutils (2.40.50.20230611) treats
++this mixed syntax as an error.
++
++Change to consistently use:
++    .section NAME, "FLAGS"
++as is used elsewhere in the kernel.
++
++Link: https://buildd.debian.org/status/fetch.php?pkg=linux&arch=m68k&ver=6.4%7Erc6-1%7Eexp1&stamp=1686907300&raw=1
++Signed-off-by: Ben Hutchings <benh@debian.org>
++Tested-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
++Link: https://lore.kernel.org/r/ZIyBaueWT9jnTwRC@decadent.org.uk
++Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=922a9bd138101e3e5718f0f4d40dba68ef89bb43
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ arch/m68k/fpsp040/skeleton.S       | 4 ++--
++ arch/m68k/ifpsp060/os.S            | 4 ++--
++ arch/m68k/kernel/relocate_kernel.S | 4 ++--
++ 3 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
++index 439395aa6fb4..081922c72daa 100644
++--- a/arch/m68k/fpsp040/skeleton.S
+++++ b/arch/m68k/fpsp040/skeleton.S
++@@ -499,13 +499,13 @@ in_ea:
++ 	dbf	%d0,morein
++ 	rts
++ 
++-	.section .fixup,#alloc,#execinstr
+++	.section .fixup,"ax"
++ 	.even
++ 1:
++ 	jbsr	fpsp040_die
++ 	jbra	.Lnotkern
++ 
++-	.section __ex_table,#alloc
+++	.section __ex_table,"a"
++ 	.align	4
++ 
++ 	.long	in_ea,1b
++diff --git a/arch/m68k/ifpsp060/os.S b/arch/m68k/ifpsp060/os.S
++index 7a0d6e428066..89e2ec224ab6 100644
++--- a/arch/m68k/ifpsp060/os.S
+++++ b/arch/m68k/ifpsp060/os.S
++@@ -379,11 +379,11 @@ _060_real_access:
++ 
++ 
++ | Execption handling for movs access to illegal memory
++-	.section .fixup,#alloc,#execinstr
+++	.section .fixup,"ax"
++ 	.even
++ 1:	moveq		#-1,%d1
++ 	rts
++-.section __ex_table,#alloc
+++.section __ex_table,"a"
++ 	.align 4
++ 	.long	dmrbuae,1b
++ 	.long	dmrwuae,1b
++diff --git a/arch/m68k/kernel/relocate_kernel.S b/arch/m68k/kernel/relocate_kernel.S
++index ab0f1e7d4653..f7667079e08e 100644
++--- a/arch/m68k/kernel/relocate_kernel.S
+++++ b/arch/m68k/kernel/relocate_kernel.S
++@@ -26,7 +26,7 @@ ENTRY(relocate_new_kernel)
++ 	lea %pc@(.Lcopy),%a4
++ 2:	addl #0x00000000,%a4		/* virt_to_phys() */
++ 
++-	.section ".m68k_fixup","aw"
+++	.section .m68k_fixup,"aw"
++ 	.long M68K_FIXUP_MEMOFFSET, 2b+2
++ 	.previous
++ 
++@@ -49,7 +49,7 @@ ENTRY(relocate_new_kernel)
++ 	lea %pc@(.Lcont040),%a4
++ 5:	addl #0x00000000,%a4		/* virt_to_phys() */
++ 
++-	.section ".m68k_fixup","aw"
+++	.section .m68k_fixup,"aw"
++ 	.long M68K_FIXUP_MEMOFFSET, 5b+2
++ 	.previous
++ 
++-- 
++2.41.0
++
+diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
+index bf62136345..d6dd8bd1b7 100644
+--- a/configs/qemu_m68k_mcf5208_defconfig
++++ b/configs/qemu_m68k_mcf5208_defconfig
+@@ -22,6 +22,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
++BR2_LINUX_KERNEL_PATCH="board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
+index 50b61a8007..a6444103c9 100644
+--- a/configs/qemu_m68k_q800_defconfig
++++ b/configs/qemu_m68k_q800_defconfig
+@@ -22,6 +22,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
++BR2_LINUX_KERNEL_PATCH="board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+-- 
+2.41.0
 
-Thanks,
-Sergey
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
