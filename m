@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A9D6C001DE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:30:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5E28C001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 14:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF91F414DE;
-	Sun,  6 Aug 2023 14:29:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF91F414DE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7844B81E92;
+	Sun,  6 Aug 2023 14:37:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7844B81E92
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AwJ7-bvQ9BXJ; Sun,  6 Aug 2023 14:29:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KOZopGcya2Rf; Sun,  6 Aug 2023 14:36:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95AFB414E4;
-	Sun,  6 Aug 2023 14:29:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95AFB414E4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7D2FB1BF340
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:29:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A42C381E83;
+	Sun,  6 Aug 2023 14:36:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A42C381E83
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 620C81BF340
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6BD660A5E
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:28:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6BD660A5E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DB43404AB
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 14:36:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DB43404AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VCtAn5aephQy for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 14:28:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QF6X74PslTtn for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 14:36:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D76DB60B21
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:28:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D76DB60B21
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60F814052C
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 14:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60F814052C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5B508448C; Sun,  6 Aug 2023 14:28:16 +0000 (UTC)
+ id 4F0FE844B3; Sun,  6 Aug 2023 14:36:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 16:27:03 +0200
+Date: Sun, 6 Aug 2023 16:35:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 961dc9d397c136181982a9c3add17f737e1b9e82
-X-Git-Newrev: e29f3760e8f3922dfa963bb07ba69ba03f9a3220
+X-Git-Oldrev: 206d08c04a0bb8e7d03a672a322a4c30c2b0dde8
+X-Git-Newrev: 92d51faedab5f738ad3b9e7b7084c177e100cc7b
 X-Patchwork-Hint: ignore
-Message-Id: <20230806142816.C5B508448C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sentry-cli: bump
- version to 2.20.3
+Message-Id: <20230806143630.4F0FE844B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/download: use svn
+ credentials to retrieve revision date
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,111 +64,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e29f3760e8f3922dfa963bb07ba69ba03f9a3220
+commit: https://git.buildroot.net/buildroot/commit/?id=92d51faedab5f738ad3b9e7b7084c177e100cc7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog:
-https://github.com/getsentry/sentry-cli/blob/master/CHANGELOG.md
+When an svn repository requires credentials, and they are passed
+in _DL_OPTS, they must be used also to retrieve the revision date.
 
-Rebased patch 0001.
+One could argue that credentials should not be handled in _DL_OPTS, but
+rather that they be fed through other means (e.g. by pre-authenticating
+manually once in an interactive session, or by filling them in the usual
+~/svn/auth/* mechanisms for a CI).
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+However, some public facing repositories are using authentication, even
+though the credentials are public. This is the case for example for:
+    http://software.rtcm-ntrip.org/
+
+In such a case, it does make sense to pass credentials via _DL_OPTS,
+because they are not really, even really not, secret.
+
+Another use-case (e.g. for a CI) is to pass the credentials as
+environment variables, with _DL_OPTS not hard-coded in the .mk file.
+
+However, _DL_OPTS may contain options that are not valid for 'svn info',
+as they are meant to be passed to 'svn export' in the first place. Since
+the only options common to 'svn info' and 'svn export' are the
+credentials, we just extract those and pass them to 'svn info'.
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-Disable-SSL-support-for-the-curl-module.patch | 24 +++++++++++-----------
- package/sentry-cli/sentry-cli.hash                 |  2 +-
- package/sentry-cli/sentry-cli.mk                   |  2 +-
- 3 files changed, 14 insertions(+), 14 deletions(-)
+ support/download/svn | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch b/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
-index e68401da78..819d8016ae 100644
---- a/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
-+++ b/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
-@@ -1,4 +1,4 @@
--From a3754088b4cf7d19ff4f9a98412dd132d5baf1c1 Mon Sep 17 00:00:00 2001
-+From 5b4179af15b435a476c006260718d4f6e22ea2ab Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd@kuhls.net>
- Date: Mon, 31 Jul 2023 22:34:04 +0200
- Subject: [PATCH] Disable SSL support for the curl module
-@@ -17,26 +17,26 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 1 insertion(+), 11 deletions(-)
+diff --git a/support/download/svn b/support/download/svn
+index d9325b7478..3e08a0ef36 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -54,12 +54,28 @@ _plain_svn() {
  
- diff --git a/Cargo.lock b/Cargo.lock
--index 75e1c8c..5121211 100644
-+index e5031db..7357215 100644
- --- a/Cargo.lock
- +++ b/Cargo.lock
--@@ -1557,15 +1557,6 @@ version = "0.1.5"
-+@@ -1521,15 +1521,6 @@ version = "0.1.5"
-  source = "registry+https://github.com/rust-lang/crates.io-index"
-  checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
-  
- -[[package]]
- -name = "openssl-src"
---version = "111.22.0+1.1.1q"
-+-version = "111.25.0+1.1.1t"
- -source = "registry+https://github.com/rust-lang/crates.io-index"
---checksum = "8f31f0d509d1c1ae9cada2f9539ff8f37933831fd5098879e482aa687d659853"
-+-checksum = "3173cd3626c43e3854b1b727422a276e568d9ec5fe8cec197822cf52cfb743d6"
- -dependencies = [
- - "cc",
- -]
- -
-  [[package]]
-  name = "openssl-sys"
-- version = "0.9.74"
--@@ -1575,7 +1566,6 @@ dependencies = [
-+ version = "0.9.80"
-+@@ -1539,7 +1530,6 @@ dependencies = [
-   "autocfg",
-   "cc",
-   "libc",
-@@ -45,18 +45,18 @@ index 75e1c8c..5121211 100644
-   "vcpkg",
-  ]
- diff --git a/Cargo.toml b/Cargo.toml
--index abd6839..ddc141f 100644
-+index c8c9ca9..117e77d 100644
- --- a/Cargo.toml
- +++ b/Cargo.toml
--@@ -19,7 +19,7 @@ clap = { version = "3.2.22", default-features = false, features = [
--   "wrap_help",
-+@@ -25,7 +25,7 @@ clap = { version = "4.1.6", default-features = false, features = [
-+   "error-context",
-  ] }
-- console = "0.15.2"
-+ console = "0.15.5"
- -curl = { version = "0.4.44", features = ["static-curl", "static-ssl"] }
- +curl = { version = "0.4.44" }
-  dirs = "4.0.0"
-  dotenv = "0.15.0"
-- elementtree = "1.2.2"
-+ elementtree = "1.2.3"
- -- 
- 2.39.2
+ _svn export --ignore-keywords ${quiet} "${@}" "'${uri}@${rev}'" "'${basename}'"
  
-diff --git a/package/sentry-cli/sentry-cli.hash b/package/sentry-cli/sentry-cli.hash
-index 3562199a82..78f137da3a 100644
---- a/package/sentry-cli/sentry-cli.hash
-+++ b/package/sentry-cli/sentry-cli.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  fa06f9f47782713eef8a4f10b674e2375b9439360ab34b37558ec4b30ec84861  sentry-cli-2.8.0.tar.gz
-+sha256  2188b8eead4f2b6543725b23852427bea164e8dd76bf1ce33f41ca0c03cfeee7  sentry-cli-2.20.3.tar.gz
- sha256  9503def7b54ceb6e3cd182fd59bc05d3a30d7eae481e65aaba4b495133c83c14  LICENSE
-diff --git a/package/sentry-cli/sentry-cli.mk b/package/sentry-cli/sentry-cli.mk
-index 15094c2d01..df419f81e1 100644
---- a/package/sentry-cli/sentry-cli.mk
-+++ b/package/sentry-cli/sentry-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++# For 'svn info', we only need the credentials, if any; other options
++# would be invalid, as they are intended for 'svn export'.
++# We can also consume the positional parameters, as we'll no longer
++# be calling any other remote-reaching svn command.
++creds=
++while [ ${#} -gt 0 ]; do
++    case "${1}" in
++    --username=*)   creds+=" ${1}"; shift;;
++    --password=*)   creds+=" ${1}"; shift;;
++    --username)     creds+=" ${1} ${2}"; shift 2;;
++    --password)     creds+=" ${1} ${2}"; shift 2;;
++    *)              shift;;
++    esac
++done
++
+ # Get the date of the revision, to generate reproducible archives.
+ # The output format is YYYY-MM-DDTHH:MM:SS.mmmuuuZ (i.e. always in the
+ # UTC timezone), which we can feed as-is to the --mtime option for tar.
+ # In case there is a redirection (e.g. http -> https), just keep the
+ # last line (svn outputs everything on stdout)
+-date="$( _plain_svn info "'${uri}@${rev}'" \
++# shellcheck disable=SC2086 # creds may be empty
++date="$( _plain_svn info ${creds} "'${uri}@${rev}'" \
+         |sed -r -e '/^Last Changed Date: /!d; s///'
+        )"
  
--SENTRY_CLI_VERSION = 2.8.0
-+SENTRY_CLI_VERSION = 2.20.3
- SENTRY_CLI_SITE = $(call github,getsentry,sentry-cli,$(SENTRY_CLI_VERSION))
- SENTRY_CLI_LICENSE = BSD-3-clause
- SENTRY_CLI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
