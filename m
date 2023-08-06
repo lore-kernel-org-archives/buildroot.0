@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03FF7EC8734
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:56:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63BFFEC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4AF841DA3;
-	Thu,  7 Sep 2023 14:56:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4AF841DA3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1245041E5F;
+	Thu,  7 Sep 2023 14:56:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1245041E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u9G8C1-xhstL; Thu,  7 Sep 2023 14:56:06 +0000 (UTC)
+	with ESMTP id VvbZKaA1vaMf; Thu,  7 Sep 2023 14:56:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7619341D7D;
-	Thu,  7 Sep 2023 14:56:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7619341D7D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FAC81BF313
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C8EE41E68;
+	Thu,  7 Sep 2023 14:56:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C8EE41E68
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BC541BF990
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15A1061261
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70C6441D9F
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15A1061261
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70C6441D9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KtqlQ9JYYRpH for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JA9odNnncHH3 for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6948361232
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6948361232
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AF8541D78
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AF8541D78
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A38C86A22; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+ id 64DC186A20; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 18:06:15 +0200
+Date: Sun, 6 Aug 2023 13:55:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d8c70e93d1835c97d797ce1f390e6acc0adb225
-X-Git-Newrev: 1cc378b004ddbb1bc351f12ab374a19fe6c8d90c
+X-Git-Oldrev: ffbc72e8bc1feb28351d009aa6292309c8aaf9bf
+X-Git-Newrev: cb9c63055db66f29cc0af15ba3f2be87ead0cf6f
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145126.5A38C86A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiologstash: switch from
- distutils to setuptools
+Message-Id: <20230907145125.64DC186A20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/harfbuzz: bump version to 8.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,30 +63,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cc378b004ddbb1bc351f12ab374a19fe6c8d90c
+commit: https://git.buildroot.net/buildroot/commit/?id=cb9c63055db66f29cc0af15ba3f2be87ead0cf6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-distutils will be dropped with python 3.12.
+Release notes: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiologstash/python-aiologstash.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-aiologstash/python-aiologstash.mk b/package/python-aiologstash/python-aiologstash.mk
-index be1c40b714..de0ed820a0 100644
---- a/package/python-aiologstash/python-aiologstash.mk
-+++ b/package/python-aiologstash/python-aiologstash.mk
-@@ -7,7 +7,7 @@
- PYTHON_AIOLOGSTASH_VERSION = 2.0.0
- PYTHON_AIOLOGSTASH_SOURCE = aiologstash-$(PYTHON_AIOLOGSTASH_VERSION).tar.gz
- PYTHON_AIOLOGSTASH_SITE = https://files.pythonhosted.org/packages/1c/dc/382861d5d25ccc976d02118922598fc4547f74f3287793e270ed614d8176
--PYTHON_AIOLOGSTASH_SETUP_TYPE = distutils
-+PYTHON_AIOLOGSTASH_SETUP_TYPE = setuptools
- PYTHON_AIOLOGSTASH_LICENSE = MIT
- PYTHON_AIOLOGSTASH_LICENSE_FILES = LICENSE
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 6b71e3819c..1f0d9befa1 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c1ce780acd385569f25b9a29603d1d5bc71e6940e55bfdd4f7266fad50e42620  harfbuzz-8.0.1.tar.xz
++sha256  0305ad702e11906a5fc0c1ba11c270b7f64a8f5390d676aacfd71db129d6565f  harfbuzz-8.1.1.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 3118ec62c9..6d52c52a85 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-HARFBUZZ_VERSION = 8.0.1
++HARFBUZZ_VERSION = 8.1.1
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
