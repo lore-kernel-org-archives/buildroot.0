@@ -4,77 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36A18C001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87B11C001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:38:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9E5D60008;
-	Sun,  6 Aug 2023 21:37:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9E5D60008
+	by smtp3.osuosl.org (Postfix) with ESMTP id 316C160C18;
+	Sun,  6 Aug 2023 21:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 316C160C18
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VXBfy1plgfCw; Sun,  6 Aug 2023 21:37:19 +0000 (UTC)
+	with ESMTP id TOAcLvfGCvuI; Sun,  6 Aug 2023 21:38:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3E8560769;
-	Sun,  6 Aug 2023 21:37:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3E8560769
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0F5161BF909
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:37:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7635760B4E;
+	Sun,  6 Aug 2023 21:38:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7635760B4E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E4CF81BF30C
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 514C180C35
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:36:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 514C180C35
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AA5A400C5
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:37:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AA5A400C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 91FU9aewKGQb for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 21:36:46 +0000 (UTC)
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
- [IPv6:2607:f8b0:4864:20::1032])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 51FC081854
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:36:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51FC081854
-Received: by mail-pj1-x1032.google.com with SMTP id
- 98e67ed59e1d1-26837895fbbso2741910a91.3
- for <buildroot@buildroot.org>; Sun, 06 Aug 2023 14:36:46 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PsgVHuIe8QHO for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 21:37:46 +0000 (UTC)
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 205F94046A
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:37:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 205F94046A
+Received: by mail-io1-xd2f.google.com with SMTP id
+ ca18e2360f4ac-790fc019c62so32606939f.0
+ for <buildroot@buildroot.org>; Sun, 06 Aug 2023 14:37:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691357806; x=1691962606;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=+maw012WV5WRF9STW/UFwbnT6l8OV7D/cqDJUPInCug=;
- b=BpCXdyDkAyNA7uWXRH70AjNHx61Yo5u/1CrOjNpCLRNMNK2pnzTJx89LvRbzUj7iE+
- 4+p+B1Y+bWXUv2DCje5dleHTar2WJOZTkwCMsVrgKmthN4kSC25hNpp2z1729hmOghrO
- hW/Gx7l/ksztVSdgVYmQJWOZsdTPUBlMF5YESuwtHBdvVf7FFN1+kxA601u6aDAz5sM7
- be1v/iRW9OQy2DynK70KzZ1QfU8uyQgzDp/hpycby4KoP1LMo6M0wv3NP/rBG4nkZi+p
- h6D+G9vr+WOx4R2QS1/5FYmJ56tMfkPHBG+GvY+sQJwcMQPRyY63ezoH9mhOrOk002z8
- uxKw==
-X-Gm-Message-State: AOJu0YxyRFHU8BlZcqfqtt+LUhehNxNdxwlAKWlScMEge8aCpvtZcYSM
- V41HG6HaBUYkHsOLibFA6eQdF14XvaljGMsUs23p23E0hXM=
-X-Google-Smtp-Source: AGHT+IE0jZ61JueDfB1BsCwktPMcHAEMZW5ZbtdWqoRYw0OE+Xanqcn/xrdFaDbavMjLKhmTx6lsw1VtgZeRNCQ25t0=
-X-Received: by 2002:a17:90b:3b8a:b0:268:576d:a831 with SMTP id
- pc10-20020a17090b3b8a00b00268576da831mr7600119pjb.45.1691357805548; Sun, 06
- Aug 2023 14:36:45 -0700 (PDT)
-MIME-Version: 1.0
-From: Andreas <andreasembbuild@gmail.com>
-Date: Sun, 6 Aug 2023 23:36:34 +0200
-Message-ID: <CAOLWrZ8O-mF6RnuX80SmS7Mn5Op=o0OJMp6-wbhjUfRBiqfnXg@mail.gmail.com>
+ d=1e100.net; s=20221208; t=1691357865; x=1691962665;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mlTYwoxX7WcWNiIaH9NKlYOhb1iHXCw+nEj1vRM+ugQ=;
+ b=J73dAacxYzcVmB63PBZZkWMEv9mAAcdJ6meDlntpaskk2bWH69Cp4VITVU4IBDyw5Q
+ ygRKlXlfW/Bd5shI/gjaiGxMGrUHyF75166j0BYSiC/I/MuqBUlahFGhcDkmqgT1U9lx
+ I9ULZz3EDoA7acYSbA+A9NH84XxUoudXek8jpWeZjhoLnXm9//R5bL47Hw4XKWxBGWDF
+ pFj48yD17vDzNcp2DZ+RLZ/lVpZl8gloVJdnyq4wzQyJX6F/mU2K/gS/eBDm7jVgLL0C
+ qToE1UVP7XekKJS9gh/PLAysXNx3r1kybGWx+byEYnJ5D0wDvvdxIwLUtmleTvTtGOWp
+ 58bg==
+X-Gm-Message-State: AOJu0Yy4VHFQVO/MslOMTi8e6Aa+QuzsxsUEjOuq6qa4cA38bJAquCJo
+ kLRvlqdBvixJKsKfDBQrIwGl5ZkAIBo=
+X-Google-Smtp-Source: AGHT+IH15jZtTEXRlnlxP9xGD1BVxRRkxiHSTFMAA3vGYv5v7Z3Hh5yxt959jmpvGaFB26VhTCex8g==
+X-Received: by 2002:a05:6602:1646:b0:790:a365:610b with SMTP id
+ y6-20020a056602164600b00790a365610bmr7130905iow.7.1691357864763; 
+ Sun, 06 Aug 2023 14:37:44 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-110-92.hlrn.qwest.net.
+ [71.218.110.92]) by smtp.gmail.com with ESMTPSA id
+ e17-20020a056638021100b0042b451aa95esm2000073jaq.150.2023.08.06.14.37.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 06 Aug 2023 14:37:43 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
+Date: Sun,  6 Aug 2023 15:37:42 -0600
+Message-Id: <20230806213742.4097588-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691357806; x=1691962606;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=+maw012WV5WRF9STW/UFwbnT6l8OV7D/cqDJUPInCug=;
- b=YMddKN23RTl3Jok2lsmb4UdF0m9yxDNJpcgVMwvrez6AtJAdfVkNmseFnfwpJGpk47
- P2WV9WtaZMBXQ3aTUq7kyZTvGyefGngGJsQ7hG+Ta6kT/GmprVN5Z16U/hVgjm+Zh6nT
- xqOI824FcTp7wMk3wg63jxAHLGVeSJk2952mYs7AjzGt7pdhjAsIQ/G+g6af054g+cAp
- 0eFN5Wbov11zMUqHGt13MhpVjHLgo5ftS/rSHXNxpyufUQNgKb5YPGicbjIxRo++SXv/
- stT93nDZC6s4gUYbFqbUOWCVyx23jTaUHpmyklGlOBxFo70weUWnBYgPJZwdWfaSV/cJ
- /Nlg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20221208; t=1691357865; x=1691962665;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mlTYwoxX7WcWNiIaH9NKlYOhb1iHXCw+nEj1vRM+ugQ=;
+ b=I4kUXgJABRZO9a3o1sNz5+Qx6BjAa2wLXA7KVxYL5uk0bNOUwtDk40CyumMiVJxgU9
+ +p8iWvADnTPExkJo+4IcQjly34yCvfkw7WRKWBPZ+jX5QcoXVS36vgwu0C7rtpFrrUQK
+ lp2OFqp+LVSRticUpjW0Ocf8aJAXUTflx8ybjm5DJsZGGwFAlBo1LpsgV8Lh+qhLpSOV
+ y3s9amc4qkx7e2U+TBeppjHM+IK6MkyvLj6+Bl7HDNMbKTdWxTyZGxRyTT64ddW/s0xb
+ Dtr+8eLCTATw9GVTgyTwRgnaxrYhK9JkV3xPR/UhBQdVPLZLA0k+s0tmVqYfI90POdBn
+ L5uQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=YMddKN23
-Subject: [Buildroot] Support for lapack
+ header.a=rsa-sha256 header.s=20221208 header.b=I4kUXgJA
+Subject: [Buildroot] [PATCH 1/1] package/python-botocore: bump to version
+ 1.31.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,162 +94,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5106991459643358749=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5106991459643358749==
-Content-Type: multipart/alternative; boundary="000000000000301b18060247edca"
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-botocore/python-botocore.hash | 4 ++--
+ package/python-botocore/python-botocore.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
---000000000000301b18060247edca
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-How do I configure Fortran properly for lapack? I need it on host for the
-python-scikit-learn package. I get the following error.
-
--- The Fortran compiler identification is unknown
--- The C compiler identification is GNU 8.3.0
-CMake Error at CMakeLists.txt:3 (project):
-  No CMAKE_Fortran_COMPILER could be found.
-
-  Tell CMake where to find the compiler by setting either the environment
-  variable "FC" or the CMake cache entry CMAKE_Fortran_COMPILER to the full
-  path to the compiler, or to the compiler name if it is in the PATH.
-
-
--- Check for working C compiler: /usr/bin/gcc
--- Check for working C compiler: /usr/bin/gcc -- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Configuring incomplete, errors occurred!
-See also
-"/buildroot/output/build/host-lapack-3.10.1/buildroot-build/CMakeFiles/CMakeOutput.log".
-See also
-"/buildroot/output/build/host-lapack-3.10.1/buildroot-build/CMakeFiles/CMakeError.log".
-
-################################################################################
-#
-# python-scikit-learn
-#
-################################################################################
-
-PYTHON_SCIKIT_LEARN_VERSION = 1.3.0
-PYTHON_SCIKIT_LEARN_SOURCE =
-scikit-learn-$(PYTHON_SCIKIT_LEARN_VERSION).tar.gz
-PYTHON_SCIKIT_LEARN_SITE =
-https://files.pythonhosted.org/packages/72/cd/4761675df1b3dd93072c89697278f3ed3dc004a60c034cd2603c43ff64b5
-PYTHON_SCIKIT_LEARN_SETUP_TYPE = setuptools
-PYTHON_SCIKIT_LEARN_LICENSE = BSD-3-Clause
-PYTHON_SCIKIT_LEARN_LICENSE_FILES = COPYING
-PYTHON_SCIKIT_LEARN_DEPENDENCIES = \
-host-python-cython \
-host-python-scipy \
-python-joblib \
-python-threadpoolctl
-
-# disable test execution when cross compiling
-PYTHON_SCIKIT_LEARN_ENV = PYTHON_CROSSENV=1
-
-$(eval $(python-package))
-
-################################################################################
-#
-# lapack
-#
-################################################################################
-
-LAPACK_VERSION = 3.10.1
-LAPACK_LICENSE = BSD-3-Clause
-LAPACK_LICENSE_FILES = LICENSE
-LAPACK_SITE = $(call github,Reference-LAPACK,lapack,v$(LAPACK_VERSION))
-LAPACK_CPE_ID_VENDOR = lapack_project
-LAPACK_INSTALL_STAGING = YES
-LAPACK_SUPPORTS_IN_SOURCE_BUILD = NO
-LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON
-
-ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
-LAPACK_CONF_OPTS += \
--DBUILD_COMPLEX=ON \
--DBUILD_COMPLEX16=ON \
--DLAPACKE_BUILD_COMPLEX=ON \
--DLAPACKE_BUILD_COMPLEX16=ON
-else
-LAPACK_CONF_OPTS += \
--DBUILD_COMPLEX=OFF \
--DBUILD_COMPLEX16=OFF \
--DLAPACKE_BUILD_COMPLEX=OFF \
--DLAPACKE_BUILD_COMPLEX16=OFF
-endif
-
-$(eval $(cmake-package))
-$(eval $(host-cmake-package))
-
-Andreas
-
---000000000000301b18060247edca
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div>How do I configure Fortran properly=
- for lapack? I need it on host for the python-scikit-learn package. I get t=
-he following error.</div><div><br></div><div>-- The Fortran compiler identi=
-fication is unknown<br>-- The C compiler identification is GNU 8.3.0<br>CMa=
-ke Error at CMakeLists.txt:3 (project):<br>=C2=A0 No CMAKE_Fortran_COMPILER=
- could be found.<br><br>=C2=A0 Tell CMake where to find the compiler by set=
-ting either the environment<br>=C2=A0 variable &quot;FC&quot; or the CMake =
-cache entry CMAKE_Fortran_COMPILER to the full<br>=C2=A0 path to the compil=
-er, or to the compiler name if it is in the PATH.<br><br><br>-- Check for w=
-orking C compiler: /usr/bin/gcc<br>-- Check for working C compiler: /usr/bi=
-n/gcc -- works<br>-- Detecting C compiler ABI info<br>-- Detecting C compil=
-er ABI info - done<br>-- Detecting C compile features<br>-- Detecting C com=
-pile features - done<br>-- Configuring incomplete, errors occurred!<br>See =
-also &quot;/buildroot/output/build/host-lapack-3.10.1/buildroot-build/CMake=
-Files/CMakeOutput.log&quot;.<br>See also &quot;/buildroot/output/build/host=
--lapack-3.10.1/buildroot-build/CMakeFiles/CMakeError.log&quot;.<br></div><d=
-iv><br></div><div>#########################################################=
-#######################<br>#<br># python-scikit-learn<br>#<br>#############=
-###################################################################<br><br>=
-PYTHON_SCIKIT_LEARN_VERSION =3D 1.3.0<br>PYTHON_SCIKIT_LEARN_SOURCE =3D sci=
-kit-learn-$(PYTHON_SCIKIT_LEARN_VERSION).tar.gz<br>PYTHON_SCIKIT_LEARN_SITE=
- =3D <a href=3D"https://files.pythonhosted.org/packages/72/cd/4761675df1b3d=
-d93072c89697278f3ed3dc004a60c034cd2603c43ff64b5">https://files.pythonhosted=
-.org/packages/72/cd/4761675df1b3dd93072c89697278f3ed3dc004a60c034cd2603c43f=
-f64b5</a><br>PYTHON_SCIKIT_LEARN_SETUP_TYPE =3D setuptools<br>PYTHON_SCIKIT=
-_LEARN_LICENSE =3D BSD-3-Clause<br>PYTHON_SCIKIT_LEARN_LICENSE_FILES =3D CO=
-PYING<br>PYTHON_SCIKIT_LEARN_DEPENDENCIES =3D \<br>	host-python-cython \<br=
->	host-python-scipy \<br>	python-joblib \<br>	python-threadpoolctl<br><br>#=
- disable test execution when cross compiling<br>PYTHON_SCIKIT_LEARN_ENV =3D=
- PYTHON_CROSSENV=3D1<br><br>$(eval $(python-package))<br></div><div><br></d=
-iv><div>###################################################################=
-#############<br>#<br># lapack<br>#<br>####################################=
-############################################<br><br>LAPACK_VERSION =3D 3.10=
-.1<br>LAPACK_LICENSE =3D BSD-3-Clause<br>LAPACK_LICENSE_FILES =3D LICENSE<b=
-r>LAPACK_SITE =3D $(call github,Reference-LAPACK,lapack,v$(LAPACK_VERSION))=
-<br>LAPACK_CPE_ID_VENDOR =3D lapack_project<br>LAPACK_INSTALL_STAGING =3D Y=
-ES<br>LAPACK_SUPPORTS_IN_SOURCE_BUILD =3D NO<br>LAPACK_CONF_OPTS =3D -DLAPA=
-CKE=3DON -DCBLAS=3DON<br><br>ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)<br>LAPA=
-CK_CONF_OPTS +=3D \<br>	-DBUILD_COMPLEX=3DON \<br>	-DBUILD_COMPLEX16=3DON \=
-<br>	-DLAPACKE_BUILD_COMPLEX=3DON \<br>	-DLAPACKE_BUILD_COMPLEX16=3DON<br>e=
-lse<br>LAPACK_CONF_OPTS +=3D \<br>	-DBUILD_COMPLEX=3DOFF \<br>	-DBUILD_COMP=
-LEX16=3DOFF \<br>	-DLAPACKE_BUILD_COMPLEX=3DOFF \<br>	-DLAPACKE_BUILD_COMPL=
-EX16=3DOFF<br>endif<br><br>$(eval $(cmake-package))<br>$(eval $(host-cmake-=
-package))<br></div><div><br></div><div>Andreas</div></div>
-
---000000000000301b18060247edca--
-
---===============5106991459643358749==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
+index 89f4c06de8..1f5e5c0d3b 100644
+--- a/package/python-botocore/python-botocore.hash
++++ b/package/python-botocore/python-botocore.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/botocore/json
+-md5  805e638c353c532c2af7a7538d5bd4d6  botocore-1.29.115.tar.gz
+-sha256  58eee8cf8f4f3e515df29f6dc535dd86ed3f4cea40999c5bc74640ff40bdc71f  botocore-1.29.115.tar.gz
++md5  efadef54dc1959898a42d4cae949572f  botocore-1.31.20.tar.gz
++sha256  485ef175cd011ebc965f4577d8cc02a226c46bd608dd2bb75ce6938328cff0fd  botocore-1.31.20.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
+diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
+index 3e828fef78..b76d1c64d7 100644
+--- a/package/python-botocore/python-botocore.mk
++++ b/package/python-botocore/python-botocore.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BOTOCORE_VERSION = 1.29.115
++PYTHON_BOTOCORE_VERSION = 1.31.20
+ PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+-PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/9e/00/4560081a431aaa14c2257040d43f56c2ccba816d8bce3b8e1577a19f4076
++PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/f9/0d/ec24cb66b7651268462d5eb5d9d3c140a99f487db3ed58a45617991b11e8
+ PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+ PYTHON_BOTOCORE_LICENSE = Apache-2.0
+ PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5106991459643358749==--
