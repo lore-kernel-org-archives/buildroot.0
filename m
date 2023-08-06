@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C9C6C001DE
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 13:58:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95D25C001DE
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 13:58:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28B3D40189;
-	Sun,  6 Aug 2023 13:58:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28B3D40189
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A568405E7;
+	Sun,  6 Aug 2023 13:58:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A568405E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B2KOuJaBaqlz; Sun,  6 Aug 2023 13:58:05 +0000 (UTC)
+	with ESMTP id XJPXvmwN5Pcb; Sun,  6 Aug 2023 13:58:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE06E41403;
-	Sun,  6 Aug 2023 13:58:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE06E41403
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29C6240065;
+	Sun,  6 Aug 2023 13:58:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29C6240065
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 375041BF8C7
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:58:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 056C21BF3C0
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DF4C80B9B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E53D810D6
  for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 13:57:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DF4C80B9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E53D810D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nHl7FSyeCx8o for <buildroot@lists.busybox.net>;
+ with ESMTP id tTIMwwJTuk26 for <buildroot@lists.busybox.net>;
  Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE3C481468
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA286817FD
  for <buildroot@buildroot.org>; Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE3C481468
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA286817FD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 964B184426; Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
+ id A03558442A; Sun,  6 Aug 2023 13:57:51 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 15:52:35 +0200
+Date: Sun, 6 Aug 2023 15:55:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606
-X-Git-Newrev: e8cb970534debcb5b36c7919d435dbad8c4e38ee
+X-Git-Oldrev: e8cb970534debcb5b36c7919d435dbad8c4e38ee
+X-Git-Newrev: 05555c0daf5610f733f5516901b5c44d07d09599
 X-Patchwork-Hint: ignore
-Message-Id: <20230806135751.964B184426@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/webkitgtk: use the
+Message-Id: <20230806135751.A03558442A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: use the
  CMAKE_NINJA flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,54 +63,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8cb970534debcb5b36c7919d435dbad8c4e38ee
+commit: https://git.buildroot.net/buildroot/commit/?id=05555c0daf5610f733f5516901b5c44d07d09599
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Use the newly introduce backend option to specify what cmake backend to
-use, in lieue of special-coding its use as done in 16e5c92ff5fd
-(package/webkitgtk: Build with ninja).
+use, in lieue of special-coding its use as done in 78d499409f71
+(package/wpewebkit: Build with ninja).
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/webkitgtk/webkitgtk.mk | 22 +++-------------------
- 1 file changed, 3 insertions(+), 19 deletions(-)
+ package/wpewebkit/wpewebkit.mk | 21 ++-------------------
+ 1 file changed, 2 insertions(+), 19 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 56277a0a0a..3e9d42c7c3 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -16,6 +16,9 @@ WEBKITGTK_CPE_ID_VENDOR = webkitgtk
- WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
- 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
- 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index c13a7201e6..6712291c22 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -18,6 +18,8 @@ WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
+ 	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
+ 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
+ 
++WPEWEBKIT_CMAKE_BACKEND = ninja
 +
-+WEBKITGTK_CMAKE_BACKEND = ninja
-+
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
- 	-DENABLE_DOCUMENTATION=OFF \
-@@ -140,23 +143,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+ WPEWEBKIT_CONF_OPTS = \
+ 	-DPORT=WPE \
+ 	-DENABLE_ACCESSIBILITY=OFF \
+@@ -104,23 +106,4 @@ ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS
+ WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
  endif
  
--# webkitgtk needs cmake >= 3.20 when not building with ninja, which is
+-# wpewebkit needs cmake >= 3.20 when building with the make backend, which is
 -# above our minimal version in
 -# support/dependencies/check-host-cmake.mk, so use the ninja backend:
 -# https://github.com/WebKit/WebKit/commit/6cd89696b5d406c1a3d9a7a9bbb18fda9284fa1f
--WEBKITGTK_CONF_OPTS += -GNinja
--WEBKITGTK_DEPENDENCIES += host-ninja
+-WPEWEBKIT_CONF_OPTS += -GNinja
+-WPEWEBKIT_DEPENDENCIES += host-ninja
 -
--define WEBKITGTK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WEBKITGTK_BUILDDIR)
+-define WPEWEBKIT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(WPEWEBKIT_BUILDDIR)
 -endef
 -
--define WEBKITGTK_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-define WPEWEBKIT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
 -endef
 -
--define WEBKITGTK_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WEBKITGTK_BUILDDIR)
+-define WPEWEBKIT_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(WPEWEBKIT_BUILDDIR)
 -endef
 -
  $(eval $(cmake-package))
