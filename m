@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36F8AEC8733
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:02:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4F0BEC8736
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:03:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D582E82EF0;
-	Thu,  7 Sep 2023 15:02:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D582E82EF0
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79830827DD;
+	Thu,  7 Sep 2023 15:03:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79830827DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3kXSOXMyhZ9k; Thu,  7 Sep 2023 15:02:47 +0000 (UTC)
+	with ESMTP id EoWwN8FRbxq3; Thu,  7 Sep 2023 15:02:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14C0782EB6;
-	Thu,  7 Sep 2023 15:02:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14C0782EB6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 929AC1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9FCC82B51;
+	Thu,  7 Sep 2023 15:02:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9FCC82B51
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EE1E1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFC8461286
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1A5441D7F
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFC8461286
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1A5441D7F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FIbJ9t5Zh-2D for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id o5uNrjvwkvNE for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0D72D6126A
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D72D6126A
+ by smtp4.osuosl.org (Postfix) with ESMTP id EB31941D80
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB31941D80
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F091A86A28; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+ id E94C286A1F; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 8 Aug 2023 18:43:55 +0200
+Date: Sun, 6 Aug 2023 16:28:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: edab6d0beac5fb3dc21d98cabd9fc94eb9a68c42
-X-Git-Newrev: 3f32fab3d85c4e8e45f170d7b720bf9f6404962f
+X-Git-Oldrev: e29f3760e8f3922dfa963bb07ba69ba03f9a3220
+X-Git-Newrev: 223596c75d73a7eb29152235d3c5d9bf53bd58f5
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145127.F091A86A28@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/quazip: bump to 1.4
+Message-Id: <20230907145125.E94C286A1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/crun: allow building with uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f32fab3d85c4e8e45f170d7b720bf9f6404962f
+commit: https://git.buildroot.net/buildroot/commit/?id=223596c75d73a7eb29152235d3c5d9bf53bd58f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+uClibc now provides fexecve(), so crun can build just fine with
+uClibc. However, argp-standalone is needed, just like it was needed
+for musl.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/quazip/quazip.hash | 2 +-
- package/quazip/quazip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/crun/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-index 16d299fdf4..1c5c614caf 100644
---- a/package/quazip/quazip.hash
-+++ b/package/quazip/quazip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c1239559cd6860cab80a0fd81f4204e606f9324f702dab6166b0960676ee1754  quazip-1.3.tar.gz
-+sha256  79633fd3a18e2d11a7d5c40c4c79c1786ba0c74b59ad752e8429746fe1781dd6  quazip-1.4.tar.gz
- sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index 70534b63b3..bf3b844624 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QUAZIP_VERSION = 1.3
-+QUAZIP_VERSION = 1.4
- QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
- QUAZIP_INSTALL_STAGING = YES
- QUAZIP_DEPENDENCIES = \
+diff --git a/package/crun/Config.in b/package/crun/Config.in
+index 45c86f0655..1b69034459 100644
+--- a/package/crun/Config.in
++++ b/package/crun/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_CRUN
+ 	bool "crun"
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+-	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_YAJL # libocispec
+ 	help
+ 	  crun is a fast and low-memory OCI Container Runtime in C.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
