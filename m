@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC348C001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69CE7C001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 21:35:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6101E60E5D;
-	Sun,  6 Aug 2023 21:34:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6101E60E5D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18AE160E62;
+	Sun,  6 Aug 2023 21:35:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18AE160E62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zH4Z3VNnK26i; Sun,  6 Aug 2023 21:34:08 +0000 (UTC)
+	with ESMTP id sT2R2AnlSfgY; Sun,  6 Aug 2023 21:35:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2C5A60E50;
-	Sun,  6 Aug 2023 21:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2C5A60E50
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1CB461BF30C
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:34:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47CB060807;
+	Sun,  6 Aug 2023 21:35:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47CB060807
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 986291BF30C
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E87E480F89
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E87E480F89
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66FFC400C5
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 21:34:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66FFC400C5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bzcSEqOUmWrJ for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 21:33:58 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DAA1980E34
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:33:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAA1980E34
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00ED2FF802;
- Sun,  6 Aug 2023 21:33:55 +0000 (UTC)
-Date: Sun, 6 Aug 2023 23:33:55 +0200
-To: Victor Dumas <dumasv.dev@gmail.com>
-Message-ID: <20230806233355.4e92a27e@windsurf>
-In-Reply-To: <20221020115030.483083-1-dumasv.dev@gmail.com>
-References: <20221006155217.626248-1-dumasv.dev@gmail.com>
- <20221020115030.483083-1-dumasv.dev@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691357636;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WzPosAoJCiPXbgAhSQaIrW0hqUOp6oEPX2obY+O4oK8=;
- b=mG3mLKy0KKtMmRj8wDBFpykrC0eyBz9JAU0nl/D1k6xTMMXtr/zIj8qGtYa1UlYe6jQSQ9
- AvR/VoUcrePPmkmDjF+TMuOg55P7FieTmx3hAi0JqhRU9WDpkP6NeBxsekeXgRNktt78Ga
- r5JB22JYsRo914b3WZ3NOFxMUmfFFT2j9sR7+eDtnrZ+1Jf1+sXwt7rKWwOfZK9zS2oj+7
- PbB9Ex6GpWe7UZOIAjUE1gRQs243OUTDYEfZ0/+kz5KkvByBxBjBeHu6jae6YsJ/6MAeuG
- DMTrrpFTVbWbGCopBhYPOWBYD2aQ3Ue7+845WG5oXsPGtm1uV4VLzJzlXruUzA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mG3mLKy0
-Subject: Re: [Buildroot] [PATCH v4] support/scripts/fix-rpath: parallelize
- patching files
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VlUlpni7jmmC for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 21:34:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A58CC404C8
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 21:34:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A58CC404C8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9165B8461A; Sun,  6 Aug 2023 21:34:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Aug 2023 23:33:15 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 134900401f0831f893ddd4f358e499f548d66433
+X-Git-Newrev: 8ed502d5e1cdcb948d7919c627a700e8d39d18b3
+X-Patchwork-Hint: ignore
+Message-Id: <20230806213409.9165B8461A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-zattoo: bump
+ version to 20.3.14-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,35 +58,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 20 Oct 2022 13:50:30 +0200
-Victor Dumas <dumasv.dev@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ed502d5e1cdcb948d7919c627a700e8d39d18b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Using "xargs" instead of "while read" loop allows for the patching of files to be parallelized.
-> This significantly reduces the amount of time it takes to fix all the paths.
-> On a larger RFS(~300MB) this script was taking 5 minutes, it now only takes about 30s on a 12 core machine
-> 
-> Signed-off-by: Victor Dumas <dumasv.dev@gmail.com>
-> ---
->  support/scripts/fix-rpath | 66 ++++++++++++++++++++++-----------------
->  1 file changed, 38 insertions(+), 28 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next after taking into account the feedback from Quentin
-Schulz on using $(PARALLEL_JOBS) to specify the number of cores.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index e14491f192..86410df72a 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5a2fa7655b3c62912341f453a98df81fa47e53c3c54a4e9bea47a4a85f4d2a20  kodi-pvr-zattoo-20.3.13-Nexus.tar.gz
++sha256  b6f5205caede6aaf57c1eab8206c5a5b3aaa6b5d8bda862d983ca53150cdf14a  kodi-pvr-zattoo-20.3.14-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 94cc9f2a05..d97d940bdc 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_ZATTOO_VERSION = 20.3.13-Nexus
++KODI_PVR_ZATTOO_VERSION = 20.3.14-Nexus
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
