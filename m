@@ -1,50 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55B6EC0015E
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 20:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CB15C001B0
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 20:46:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE952408FE;
-	Sun,  6 Aug 2023 20:15:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE952408FE
+	by smtp3.osuosl.org (Postfix) with ESMTP id D175B60E24;
+	Sun,  6 Aug 2023 20:46:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D175B60E24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2t7A14vXzGXk; Sun,  6 Aug 2023 20:15:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KxBK9MhLXoE3; Sun,  6 Aug 2023 20:46:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AAE8640942;
-	Sun,  6 Aug 2023 20:15:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAE8640942
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 20CB81BF421
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:15:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2556E60BD3;
+	Sun,  6 Aug 2023 20:46:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2556E60BD3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 806BE1BF421
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:46:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FC234012D
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:14:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FC234012D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4CC1A60AE8
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 20:45:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CC1A60AE8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NIYUOBBHV9-n for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 20:14:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2671640315
- for <buildroot@buildroot.org>; Sun,  6 Aug 2023 20:14:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2671640315
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1186E845F5; Sun,  6 Aug 2023 20:14:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 22:13:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 876a365ea2a1c48477eabfe3ae600a9d48f1b4ab
-X-Git-Newrev: 6cdb48a0482a093dcdf73d0d748f5435262515ab
-X-Patchwork-Hint: ignore
-Message-Id: <20230806201450.1186E845F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: ensure expat is enabled when
- BR2_PACKAGE_MPD_UPNP_NPUPNP=y
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IJR65IXahFx2 for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 20:45:51 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1520160A8D
+ for <buildroot@buildroot.org>; Sun,  6 Aug 2023 20:45:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1520160A8D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2585E1C0005;
+ Sun,  6 Aug 2023 20:45:47 +0000 (UTC)
+Date: Sun, 6 Aug 2023 22:45:47 +0200
+To: Andreas Ziegler <br015@umbiko.net>
+Message-ID: <20230806224547.207cadf5@windsurf>
+In-Reply-To: <20221005091032.3014-5-br015@umbiko.net>
+References: <20220409160921.GA3547512@scaer>
+ <20221005091032.3014-5-br015@umbiko.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691354748;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=X/agdjSbkwM9VF2gar6qDhAfYwvDhyjKjpsQqnneGPM=;
+ b=GzjAI6Gjmeq/LzJiVug4uDbmHAzVW9qKNB24hzTmUQ/S0O3FlpR11kq8YcJC0a8sS1CHk5
+ SDUZOGOqre9CD4LaP/nhTRGRyH2AiRLSt4WWGKaIFytBZBt9zAiwqUk8FtWCYndj51XsJy
+ dDPLkkHHFzaZ/sjCu6tUVOiBI659hzU/ayg7V5fsTUc9D3YDiO2ljTcLMmSh5Vby14OqU9
+ XKnpUbaDFd37bETsFEqrajc3xI2mGSYsN6f30xgy7HzbeCFdjzf0WC2Q5ebCcl6RN1QUep
+ 7jZy4g9Ve2hOjQtajPaSQgg57rRFVOWb2fy1f9OQkOmXQAentfEJEzLh9Gsyyg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GzjAI6Gj
+Subject: Re: [Buildroot] [PATCH v2 4/4] package/mpd: introduce sub-options
+ for expat and yajl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,55 +78,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: YANN E MORIN <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cdb48a0482a093dcdf73d0d748f5435262515ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Andreas,
 
-Just like BR2_PACKAGE_MPD_UPNP_PUPNP needs expat and curl support,
-BR2_PACKAGE_MPD_UPNP_NPUPNP also needs expat and curl. curl was
-already selected, but not expat. It didn't cause any visible issue, as
-BR2_PACKAGE_MPD_UPNP_NPUPNP selects BR2_PACKAGE_LIBNPUPNP, which
-itself select BR2_PACKAGE_EXPAT. But as mpd directly checks for the
-availability of expat, it makes sense to also select it directly.
+On Wed,  5 Oct 2022 11:10:32 +0200
+Andreas Ziegler <br015@umbiko.net> wrote:
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-[Thomas: extracted from a larger patch at
-https://patchwork.ozlabs.org/project/buildroot/patch/20221005091032.3014-5-br015@umbiko.net/]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mpd/Config.in | 1 +
- package/mpd/mpd.mk    | 1 +
- 2 files changed, 2 insertions(+)
+> Make inclusion of expat and yajl libraries in the mpd build dependent on
+> user selection, not presence of the libraries in the target filesystem.
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index f350b7e72a..902a3da779 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -407,6 +407,7 @@ config BR2_PACKAGE_MPD_UPNP_PUPNP
- 
- config BR2_PACKAGE_MPD_UPNP_NPUPNP
- 	bool "npupnp"
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBNPUPNP
- 	select BR2_PACKAGE_MPD_CURL
- 	help
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 0205208946..4b737c715c 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -312,6 +312,7 @@ MPD_DEPENDENCIES += \
- MPD_CONF_OPTS += -Dupnp=pupnp
- else ifeq ($(BR2_PACKAGE_MPD_UPNP_NPUPNP),y)
- MPD_DEPENDENCIES += \
-+	expat \
- 	libnpupnp
- MPD_CONF_OPTS += -Dupnp=npupnp
- else ifeq ($(BR2_PACKAGE_MPD_UPNP_DISABLED),y)
+So I handled this differently:
+
+- First, one patch that adds the "missing" dependency of
+  BR2_PACKAGE_MPD_UPNP_NPUPNP on expat:
+
+  https://gitlab.com/buildroot.org/buildroot/-/commit/6cdb48a0482a093dcdf73d0d748f5435262515ab
+
+- Second, a patch that takes care of expat and yajl, but without the
+  intermediate options: as soon as expat or yajl are available in
+  Buildroot, their support will enabled in mpq:
+
+  https://gitlab.com/buildroot.org/buildroot/-/commit/3693462a1f8bd328c1a4f8fb68f00ce9127c31cd
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
