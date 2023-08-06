@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C5D6C001B0
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 17:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD812C001DF
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 17:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0371681E5D;
-	Sun,  6 Aug 2023 17:27:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0371681E5D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74D9681E61;
+	Sun,  6 Aug 2023 17:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74D9681E61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cYIa4ix29ovY; Sun,  6 Aug 2023 17:27:19 +0000 (UTC)
+	with ESMTP id zPRKK9gfP0kG; Sun,  6 Aug 2023 17:27:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32BB08149E;
-	Sun,  6 Aug 2023 17:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32BB08149E
+	by smtp1.osuosl.org (Postfix) with ESMTP id A904181E64;
+	Sun,  6 Aug 2023 17:27:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A904181E64
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3EF9F1BF2BE
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:24:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1199A1BF2BE
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:24:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75E558169B
+ by smtp1.osuosl.org (Postfix) with ESMTP id A61C081775
  for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 17:23:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75E558169B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A61C081775
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id x3yfopNlnSBY for <buildroot@lists.busybox.net>;
- Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
+ with ESMTP id yYU08TaRdHd4 for <buildroot@lists.busybox.net>;
+ Sun,  6 Aug 2023 17:23:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB4FF815CC
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC067813C0
  for <buildroot@buildroot.org>; Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB4FF815CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC067813C0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7CE68454F; Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
+ id EA15B8454F; Sun,  6 Aug 2023 17:23:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 18:06:35 +0200
+Date: Sun, 6 Aug 2023 18:06:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cf05ac37ca0ba4efa11b46b07d3d7be1528c3dab
-X-Git-Newrev: 2182ae07235b90bd08999a3b070f4186bac9f2a5
+X-Git-Oldrev: 77eba3436d3fbd0aaf0318774b66d30c098edf01
+X-Git-Newrev: 2bd1d9d812d529071e1ab9d8ed8344f8077286d3
 X-Patchwork-Hint: ignore
-Message-Id: <20230806172337.A7CE68454F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pexpect: switch
- from distutils to setuptools
+Message-Id: <20230806172337.EA15B8454F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-stack-data:
+ switch from setuptools to pep517
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +64,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2182ae07235b90bd08999a3b070f4186bac9f2a5
+commit: https://git.buildroot.net/buildroot/commit/?id=2bd1d9d812d529071e1ab9d8ed8344f8077286d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-distutils will be dropped with python 3.12.
+Needed for building with python 3.12.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pexpect/python-pexpect.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-stack-data/python-stack-data.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-index 3efda26825..d230b11338 100644
---- a/package/python-pexpect/python-pexpect.mk
-+++ b/package/python-pexpect/python-pexpect.mk
-@@ -9,6 +9,6 @@ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
- PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/e5/9b/ff402e0e930e70467a7178abb7c128709a30dfb22d8777c043e501bc1b10
- PYTHON_PEXPECT_LICENSE = ISC
- PYTHON_PEXPECT_LICENSE_FILES = LICENSE
--PYTHON_PEXPECT_SETUP_TYPE = distutils
-+PYTHON_PEXPECT_SETUP_TYPE = setuptools
+diff --git a/package/python-stack-data/python-stack-data.mk b/package/python-stack-data/python-stack-data.mk
+index 494ce8f454..1a85938311 100644
+--- a/package/python-stack-data/python-stack-data.mk
++++ b/package/python-stack-data/python-stack-data.mk
+@@ -7,8 +7,9 @@
+ PYTHON_STACK_DATA_VERSION = 0.6.2
+ PYTHON_STACK_DATA_SOURCE = stack_data-$(PYTHON_STACK_DATA_VERSION).tar.gz
+ PYTHON_STACK_DATA_SITE = https://files.pythonhosted.org/packages/db/18/aa7f2b111aeba2cd83503254d9133a912d7f61f459a0c8561858f0d72a56
+-PYTHON_STACK_DATA_SETUP_TYPE = setuptools
++PYTHON_STACK_DATA_SETUP_TYPE = pep517
+ PYTHON_STACK_DATA_LICENSE = MIT
+ PYTHON_STACK_DATA_LICENSE_FILES = LICENSE.txt
++PYTHON_STACK_DATA_DEPENDENCIES = host-python-setuptools-scm
  
  $(eval $(python-package))
 _______________________________________________
