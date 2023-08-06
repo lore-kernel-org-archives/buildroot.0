@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C54AEE49A6
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A6BAEE49AA
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:01:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6321F40B46;
-	Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6321F40B46
+	by smtp2.osuosl.org (Postfix) with ESMTP id 009FA405B1;
+	Mon, 21 Aug 2023 20:01:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 009FA405B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hU-XCngmZVxl; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+	with ESMTP id Zyq5kCT5qbV0; Mon, 21 Aug 2023 20:01:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB79B4063C;
-	Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB79B4063C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E0C1E1BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 522E040B4A;
+	Mon, 21 Aug 2023 20:01:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 522E040B4A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 04EA11BF94D
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C78F34063C
+ by smtp1.osuosl.org (Postfix) with ESMTP id D34B481E30
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C78F34063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D34B481E30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZSwtTvaVAEDn for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fAOQqhxLGi-T for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CE36405B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A24F8196E
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CE36405B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A24F8196E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 07BFC86023; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id 13B6586024; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 12:29:23 +0200
+Date: Sun, 6 Aug 2023 12:29:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bfa4a7c8f243a0325573da6544543ffdd3ec6743
-X-Git-Newrev: 7449146f5996b22d6f3db6ab67d5af3ec23b9ecb
+X-Git-Oldrev: 7449146f5996b22d6f3db6ab67d5af3ec23b9ecb
+X-Git-Newrev: 05a0adea8355ba0901d5af02548a57657a2af89d
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.07BFC86023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-pylibfdt: bump
- version to 1.7.0.post1
+Message-Id: <20230821200123.13B6586024@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pylibfdt: add
+ host python package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,18 +64,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7449146f5996b22d6f3db6ab67d5af3ec23b9ecb
+commit: https://git.buildroot.net/buildroot/commit/?id=05a0adea8355ba0901d5af02548a57657a2af89d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
-Tested-by: Sergey Matyukevich <geomatsi@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pylibfdt/python-pylibfdt.hash | 4 ++--
- package/python-pylibfdt/python-pylibfdt.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pylibfdt/python-pylibfdt.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python-pylibfdt/python-pylibfdt.mk b/package/python-pylibfdt/python-pylibfdt.mk
+index 5511bd12b3..9591439b01 100644
+--- a/package/python-pylibfdt/python-pylibfdt.mk
++++ b/package/python-pylibfdt/python-pylibfdt.mk
+@@ -11,5 +11,7 @@ PYTHON_PYLIBFDT_SETUP_TYPE = pep517
+ PYTHON_PYLIBFDT_LICENSE = BSD-2-Clause or GPL-2.0+
+ PYTHON_PYLIBFDT_LICENSE_FILES = BSD-2-Clause GPL
+ PYTHON_PYLIBFDT_DEPENDENCIES = host-python-setuptools-scm host-swig
++HOST_PYTHON_PYLIBFDT_DEPENDENCIES = host-python-setuptools-scm host-swig
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
