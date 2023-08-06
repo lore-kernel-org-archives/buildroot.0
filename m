@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 081F0EC8733
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4927DEC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B657382321;
-	Thu,  7 Sep 2023 15:00:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B657382321
+	by smtp1.osuosl.org (Postfix) with ESMTP id 082558277E;
+	Thu,  7 Sep 2023 15:01:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 082558277E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bmpqQlqcaNCi; Thu,  7 Sep 2023 15:00:45 +0000 (UTC)
+	with ESMTP id EK-l1alAnDc2; Thu,  7 Sep 2023 15:01:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C35A82358;
-	Thu,  7 Sep 2023 15:00:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C35A82358
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 517121BF990
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E512F82675;
+	Thu,  7 Sep 2023 15:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E512F82675
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AEF31BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35C886125D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A41941DAF
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35C886125D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A41941DAF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g_iPZqYnsJFB for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UwkAnyXvVKB8 for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E81161263
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E81161263
+ by smtp4.osuosl.org (Postfix) with ESMTP id D661D41D7C
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D661D41D7C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CC60869E0; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id C6B7886A20; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Aug 2023 19:37:32 +0200
+Date: Sun, 6 Aug 2023 16:24:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0fe729f70ef695d0f355226d69b7ae7ab4a9b56b
-X-Git-Newrev: a0c0bc9d33eb1a3b481e30021d31d20e257b337d
+X-Git-Oldrev: 28e38f4d5cff5db7aa96a4ab5c87cf996087c977
+X-Git-Newrev: 38a098df133aaa2ebf09742054b02db5a44f58e5
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145127.7CC60869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-cmake: fix late expansion in
- infra
+Message-Id: <20230907145125.C6B7886A20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: add http/2 support by
+ using libsoup3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,54 +56,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0c0bc9d33eb1a3b481e30021d31d20e257b337d
+commit: https://git.buildroot.net/buildroot/commit/?id=38a098df133aaa2ebf09742054b02db5a44f58e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 4cf79d9b71ff (pkg-cmake: add option to select the Ninja
-generator) forgot to account for the late expansion rule in the inner
-infrastructure macros, which breaks the build in two ways:
+Support added in 2.33.2:
+  https://webkitgtk.org/2021/06/08/webkitgtk2.33.2-released.html
+  "HTTP/2 support when building with libsoup3."
 
- 1. the expansion of $(firstword $$(MAKE)) does not actually expands to
-    the first word, but to the full value of $(MAKE);
-
- 2. the paths are invalid for per-package directories.
-
-Fix that by applying the proper double-dollar rule for inner macros.
-
-Reported-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-cmake.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/Config.in    | 10 +++++-----
+ package/webkitgtk/webkitgtk.mk |  3 +--
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index e085fb2b5d..8f391eb4c9 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -65,7 +65,7 @@ endif
- ifeq ($$($(3)_CMAKE_BACKEND),make)
- $(2)_GENERATOR = "Unix Makefiles"
- # $$(MAKE) can be 'make -jN', we just want 'make'  (possibly with a full path)
--$(2)_GENERATOR_PROGRAM = $(firstword $$(MAKE))
-+$(2)_GENERATOR_PROGRAM = $$(firstword $$(MAKE))
- # Generator specific code (make) should be avoided,
- # but for now, copy them to the new variables.
- $(2)_BUILD_ENV ?= $$($(2)_MAKE_ENV)
-@@ -74,7 +74,7 @@ $(2)_BUILD_OPTS ?= -- $$($(2)_MAKE_OPTS)
- else ifeq ($$($(3)_CMAKE_BACKEND),ninja)
- $(2)_DEPENDENCIES += host-ninja
- $(2)_GENERATOR = "Ninja"
--$(2)_GENERATOR_PROGRAM = $(HOST_DIR)/bin/ninja
-+$(2)_GENERATOR_PROGRAM = $$(HOST_DIR)/bin/ninja
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 23c0bf41db..6835467c46 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -31,9 +31,9 @@ config BR2_PACKAGE_WEBKITGTK
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
++	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+-	depends on BR2_USE_WCHAR # icu, libsoup
++	depends on BR2_USE_WCHAR # icu, libsoup3
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_CAIRO
+@@ -44,7 +44,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBSECRET
+-	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_LIBSOUP3
+ 	select BR2_PACKAGE_LIBTASN1
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBXSLT
+@@ -82,9 +82,9 @@ comment "sandboxing support needs a toolchain w/ headers >= 3.12"
  
- else
- $$(error Unsupported cmake backend "$$($(3)_CMAKE_BACKEND)")
+ config BR2_PACKAGE_WEBKITGTK_HTTPS
+ 	bool "HTTPS support"
+-	depends on !BR2_STATIC_LIBS # libsoup -> glib-networking, gnutls
++	depends on !BR2_STATIC_LIBS # libsoup3 -> glib-networking, gnutls
+ 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
+-	select BR2_PACKAGE_LIBSOUP_SSL
++	select BR2_PACKAGE_LIBSOUP3_SSL
+ 	help
+ 	  Enable HTTPS protocol support.
+ 
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 3e9d42c7c3..32f6102797 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+ WEBKITGTK_CPE_ID_VENDOR = webkitgtk
+ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
+-	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
++	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup3 \
+ 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+ 
+ WEBKITGTK_CMAKE_BACKEND = ninja
+@@ -30,7 +30,6 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DUSE_AVIF=OFF \
+ 	-DUSE_LIBHYPHEN=OFF \
+ 	-DUSE_OPENJPEG=ON \
+-	-DUSE_SOUP2=ON \
+ 	-DUSE_WOFF2=ON
+ 
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_SANDBOX),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
