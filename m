@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9279C001DF
-	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E151C0015E
+	for <buildroot@archiver.kernel.org>; Sun,  6 Aug 2023 12:05:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5FB37818A7;
-	Sun,  6 Aug 2023 12:05:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FB37818A7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30CC68179A;
+	Sun,  6 Aug 2023 12:05:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30CC68179A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J_Z0UWvHhnwP; Sun,  6 Aug 2023 12:05:27 +0000 (UTC)
+	with ESMTP id OpAdgPYMvebh; Sun,  6 Aug 2023 12:05:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81EFA81E51;
-	Sun,  6 Aug 2023 12:05:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81EFA81E51
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2CD6B1BF2A4
- for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:05:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F29881E7D;
+	Sun,  6 Aug 2023 12:05:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F29881E7D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CF261BF2A4
+ for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DD914027F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5DCD860B1F
  for <buildroot@lists.busybox.net>; Sun,  6 Aug 2023 12:05:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DD914027F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DCD860B1F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XYE2NsN848Kr for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EZIENCIIozHG for <buildroot@lists.busybox.net>;
  Sun,  6 Aug 2023 12:05:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B8B8240106
+ by smtp3.osuosl.org (Postfix) with ESMTP id A46DE60A87
  for <buildroot@buildroot.org>; Sun,  6 Aug 2023 12:05:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8B8240106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A46DE60A87
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A72A48432B; Sun,  6 Aug 2023 12:05:20 +0000 (UTC)
+ id 92A5F84323; Sun,  6 Aug 2023 12:05:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 13:55:48 +0200
+Date: Sun, 6 Aug 2023 13:55:19 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 05adefbafd532d901f8476e9dc59eb416108c4d4
-X-Git-Newrev: 6a3166cc2931178602810e241c21c67ac885ab87
+X-Git-Oldrev: cb9c63055db66f29cc0af15ba3f2be87ead0cf6f
+X-Git-Newrev: 727584320785aca15990b2a03d4ff7b541b4c210
 X-Patchwork-Hint: ignore
-Message-Id: <20230806120520.A72A48432B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-dominate: bump
- version to 2.8.0
+Message-Id: <20230806120520.92A5F84323@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lua-rotas: bump to
+ version 0.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +64,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a3166cc2931178602810e241c21c67ac885ab87
+commit: https://git.buildroot.net/buildroot/commit/?id=727584320785aca15990b2a03d4ff7b541b4c210
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://github.com/Knio/dominate/releases/tag/2.8.0
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dominate/python-dominate.hash | 4 ++--
- package/python-dominate/python-dominate.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/lua-rotas/lua-rotas.hash | 4 ++--
+ package/lua-rotas/lua-rotas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-dominate/python-dominate.hash b/package/python-dominate/python-dominate.hash
-index 89293baec6..9993dbe95f 100644
---- a/package/python-dominate/python-dominate.hash
-+++ b/package/python-dominate/python-dominate.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dominate/json
--md5  77bba29beaaac4dfb657092cd89db033  dominate-2.7.0.tar.gz
--sha256  520101360892ebf9d0553f67d37e359ff92403d8a1e33814030503088a05da49  dominate-2.7.0.tar.gz
-+md5  df2d30e7c2e7f1e5b085a58820e4cc94  dominate-2.8.0.tar.gz
-+sha256  4c90c3befaf88e612b71f4b39af7bcbef8977acfa855cec957225a8fbf504007  dominate-2.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  LICENSE.txt
-diff --git a/package/python-dominate/python-dominate.mk b/package/python-dominate/python-dominate.mk
-index 0f3687de5f..39e2edb82e 100644
---- a/package/python-dominate/python-dominate.mk
-+++ b/package/python-dominate/python-dominate.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
+index cb8d48c0ea..6b33d94a85 100644
+--- a/package/lua-rotas/lua-rotas.hash
++++ b/package/lua-rotas/lua-rotas.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  601d0fe9cb57e4c2fd22352c6e0f064888edc428e32f0cb7ddbdc9650f21d8d9  lua-rotas-0.2.2-1.src.rock
+-sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.2.2/COPYRIGHT
++sha256  c1570d38552816c7b4a4881e491049a22214ddaa609f65d9edc8013b416cecf7  lua-rotas-0.3.0-1.src.rock
++sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.3.0/COPYRIGHT
+diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
+index 5c9b2caacb..79e1e42291 100644
+--- a/package/lua-rotas/lua-rotas.mk
++++ b/package/lua-rotas/lua-rotas.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DOMINATE_VERSION = 2.7.0
-+PYTHON_DOMINATE_VERSION = 2.8.0
- PYTHON_DOMINATE_SOURCE = dominate-$(PYTHON_DOMINATE_VERSION).tar.gz
--PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/12/d7/5e5f50f5d5bdd4282d2a70b9479c1d91d6628bebd4829e455cdf7366a92e
-+PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/13/3d/8d22916c12184f0c4930b9cdfb136a130e8d8eacf5942fc9883f2a189f6a
- PYTHON_DOMINATE_SETUP_TYPE = setuptools
- PYTHON_DOMINATE_LICENSE = LGPL-3.0+
- PYTHON_DOMINATE_LICENSE_FILES = LICENSE.txt
+-LUA_ROTAS_VERSION = 0.2.2-1
++LUA_ROTAS_VERSION = 0.3.0-1
+ LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
+ LUA_ROTAS_LICENSE = MIT
+ LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
