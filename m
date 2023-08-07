@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2345FC001DB
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6FABC001DE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:27:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C387A403F5;
-	Mon,  7 Aug 2023 21:26:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C387A403F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A8E0402BD;
+	Mon,  7 Aug 2023 21:27:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A8E0402BD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kN_1LLXwDdqK; Mon,  7 Aug 2023 21:26:48 +0000 (UTC)
+	with ESMTP id IZbIneUVwOB9; Mon,  7 Aug 2023 21:27:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABE2C402BD;
-	Mon,  7 Aug 2023 21:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABE2C402BD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AA3601BF23C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B04140889;
+	Mon,  7 Aug 2023 21:27:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B04140889
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D1C6F1BF951
  for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9172381E9C
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABF2760E19
  for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:26:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9172381E9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABF2760E19
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z5qJzfzbY5ke for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 21:26:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IBVy95WI8s9w for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 21:26:45 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4F4181E6B
+ by smtp3.osuosl.org (Postfix) with ESMTP id E683760BCD
  for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:26:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4F4181E6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E683760BCD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C23B784755; Mon,  7 Aug 2023 21:26:44 +0000 (UTC)
+ id D58EE84758; Mon,  7 Aug 2023 21:26:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Aug 2023 23:26:18 +0200
+Date: Mon, 7 Aug 2023 23:26:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c64a3e9767757f6bab0ecf2df35871508003f39e
-X-Git-Newrev: b66dc042f5f5861375a91a6363920f9aea32fa43
+X-Git-Oldrev: 14956518c8ac9d5eba24f76de5a916a7624ce6f1
+X-Git-Newrev: df8b0643b538f33cd605a002cdee65a5a4a8b3e9
 X-Patchwork-Hint: ignore
-Message-Id: <20230807212644.C23B784755@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt6/qt6serialport: use
- the CMAKE_NINJA flag
+Message-Id: <20230807212644.D58EE84758@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: use the
+ CMAKE_NINJA flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b66dc042f5f5861375a91a6363920f9aea32fa43
+commit: https://git.buildroot.net/buildroot/commit/?id=df8b0643b538f33cd605a002cdee65a5a4a8b3e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Use the newly introduce backend option (4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606)
@@ -73,50 +73,80 @@ to specify what cmake backend to use, instead of special-coding it's use.
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6serialport/qt6serialport.mk | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+ package/qt6/qt6base/qt6base.mk | 26 ++------------------------
+ 1 file changed, 2 insertions(+), 24 deletions(-)
 
-diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
-index 497719d4ec..bdb16dd892 100644
---- a/package/qt6/qt6serialport/qt6serialport.mk
-+++ b/package/qt6/qt6serialport/qt6serialport.mk
-@@ -10,6 +10,8 @@ QT6SERIALPORT_SOURCE = qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT
- QT6SERIALPORT_INSTALL_STAGING = YES
- QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index e6cf4f14bb..4a01bb17b2 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -8,6 +8,8 @@ QT6BASE_VERSION = $(QT6_VERSION)
+ QT6BASE_SITE = $(QT6_SITE)
+ QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
  
-+QT6SERIALPORT_CMAKE_BACKEND = ninja
++QT6BASE_CMAKE_BACKEND = ninja
 +
- QT6SERIALPORT_LICENSE = \
+ QT6BASE_LICENSE = \
  	GPL-2.0+ or LGPL-3.0, \
  	GPL-3.0 with exception (tools), \
-@@ -25,7 +27,6 @@ QT6SERIALPORT_LICENSE_FILES = \
+@@ -29,7 +31,6 @@ QT6BASE_LICENSE_FILES = \
  	LICENSES/Qt-GPL-exception-1.0.txt
  
- QT6SERIALPORT_CONF_OPTS = \
+ QT6BASE_DEPENDENCIES = \
+-	host-ninja \
+ 	host-qt6base \
+ 	double-conversion \
+ 	libb2 \
+@@ -38,7 +39,6 @@ QT6BASE_DEPENDENCIES = \
+ QT6BASE_INSTALL_STAGING = YES
+ 
+ QT6BASE_CONF_OPTS = \
 -	-GNinja \
  	-DQT_HOST_PATH=$(HOST_DIR) \
- 	-DBUILD_WITH_PCH=OFF \
- 	-DQT_BUILD_EXAMPLES=OFF \
-@@ -33,19 +34,6 @@ QT6SERIALPORT_CONF_OPTS = \
+ 	-DFEATURE_concurrent=OFF \
+ 	-DFEATURE_xml=OFF \
+@@ -76,26 +76,12 @@ QT6BASE_CONF_OPTS += \
+ 	-DFEATURE_avx512vl=OFF \
+ 	-DFEATURE_vaes=OFF
  
- QT6SERIALPORT_DEPENDENCIES = \
- 	host-pkgconf \
+-define QT6BASE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6BASE_BUILDDIR)
+-endef
+-
+-define QT6BASE_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR)
+-endef
+-
+-define QT6BASE_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6BASE_BUILDDIR)
+-endef
+-
+ HOST_QT6BASE_DEPENDENCIES = \
 -	host-ninja \
- 	qt6base
+ 	host-double-conversion \
+ 	host-libb2 \
+ 	host-pcre2 \
+ 	host-zlib
+ HOST_QT6BASE_CONF_OPTS = \
+-	-GNinja \
+ 	-DFEATURE_gui=OFF \
+ 	-DFEATURE_concurrent=OFF \
+ 	-DFEATURE_xml=ON \
+@@ -110,14 +96,6 @@ HOST_QT6BASE_CONF_OPTS = \
+ 	-DFEATURE_system_pcre2=ON \
+ 	-DFEATURE_system_zlib=ON
  
--define QT6SERIALPORT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALPORT_BUILDDIR)
+-define HOST_QT6BASE_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(BR2_CMAKE) --build $(HOST_QT6BASE_BUILDDIR)
 -endef
 -
--define QT6SERIALPORT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
+-define HOST_QT6BASE_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(BR2_CMAKE) --install $(HOST_QT6BASE_BUILDDIR)
 -endef
 -
--define QT6SERIALPORT_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
--endef
--
- $(eval $(cmake-package))
+ # Conditional blocks below are ordered by alphabetic ordering of the
+ # BR2_PACKAGE_* option.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
