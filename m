@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43526C001B0
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2345FC001DB
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E08D6410D4;
-	Mon,  7 Aug 2023 21:23:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E08D6410D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id C387A403F5;
+	Mon,  7 Aug 2023 21:26:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C387A403F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QSF3VG23rbiH; Mon,  7 Aug 2023 21:23:47 +0000 (UTC)
+	with ESMTP id kN_1LLXwDdqK; Mon,  7 Aug 2023 21:26:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9CA6410D6;
-	Mon,  7 Aug 2023 21:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9CA6410D6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6B99D1BF23C
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:23:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABE2C402BD;
+	Mon,  7 Aug 2023 21:26:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABE2C402BD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AA3601BF23C
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:26:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4352F401E1
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:23:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4352F401E1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9172381E9C
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:26:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9172381E9C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2ubrQ9Nb3jPY for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 21:23:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z5qJzfzbY5ke for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 21:26:44 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D36840481
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D36840481
+ by smtp1.osuosl.org (Postfix) with ESMTP id D4F4181E6B
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:26:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4F4181E6B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C7CF84713; Mon,  7 Aug 2023 21:23:17 +0000 (UTC)
+ id C23B784755; Mon,  7 Aug 2023 21:26:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 7 Aug 2023 23:22:52 +0200
+Date: Mon, 7 Aug 2023 23:26:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 18c60087c1b0e10bcbe16e405b83901d5be1fb3c
-X-Git-Newrev: c64a3e9767757f6bab0ecf2df35871508003f39e
+X-Git-Oldrev: c64a3e9767757f6bab0ecf2df35871508003f39e
+X-Git-Newrev: b66dc042f5f5861375a91a6363920f9aea32fa43
 X-Patchwork-Hint: ignore
-Message-Id: <20230807212317.6C7CF84713@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libostree: bump to
- version 2023.5
+Message-Id: <20230807212644.C23B784755@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6serialport: use
+ the CMAKE_NINJA flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c64a3e9767757f6bab0ecf2df35871508003f39e
+commit: https://git.buildroot.net/buildroot/commit/?id=b66dc042f5f5861375a91a6363920f9aea32fa43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Use the newly introduce backend option (4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606)
+to specify what cmake backend to use, instead of special-coding it's use.
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt6/qt6serialport/qt6serialport.mk | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 088650a86f..3b88b8200f 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9c575a094da2c307769f0aee15de95470c3b5550cbff211fbbc4f6fc75f333b1  libostree-2023.3.tar.xz
-+sha256  bc593afb31fe1ac3d50419f917fafe321a0a3561d7bb2ba498a83740fe3adb14  libostree-2023.5.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 5c39090654..c61c1d1508 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
+index 497719d4ec..bdb16dd892 100644
+--- a/package/qt6/qt6serialport/qt6serialport.mk
++++ b/package/qt6/qt6serialport/qt6serialport.mk
+@@ -10,6 +10,8 @@ QT6SERIALPORT_SOURCE = qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT
+ QT6SERIALPORT_INSTALL_STAGING = YES
+ QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD = NO
  
--LIBOSTREE_VERSION = 2023.3
-+LIBOSTREE_VERSION = 2023.5
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
++QT6SERIALPORT_CMAKE_BACKEND = ninja
++
+ QT6SERIALPORT_LICENSE = \
+ 	GPL-2.0+ or LGPL-3.0, \
+ 	GPL-3.0 with exception (tools), \
+@@ -25,7 +27,6 @@ QT6SERIALPORT_LICENSE_FILES = \
+ 	LICENSES/Qt-GPL-exception-1.0.txt
  
+ QT6SERIALPORT_CONF_OPTS = \
+-	-GNinja \
+ 	-DQT_HOST_PATH=$(HOST_DIR) \
+ 	-DBUILD_WITH_PCH=OFF \
+ 	-DQT_BUILD_EXAMPLES=OFF \
+@@ -33,19 +34,6 @@ QT6SERIALPORT_CONF_OPTS = \
+ 
+ QT6SERIALPORT_DEPENDENCIES = \
+ 	host-pkgconf \
+-	host-ninja \
+ 	qt6base
+ 
+-define QT6SERIALPORT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALPORT_BUILDDIR)
+-endef
+-
+-define QT6SERIALPORT_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
+-endef
+-
+-define QT6SERIALPORT_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
+-endef
+-
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
