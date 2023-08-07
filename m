@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7DD5C001DE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 17:30:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84652C001DB
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 17:38:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EFF26073E;
-	Mon,  7 Aug 2023 17:30:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EFF26073E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E6EA60EE4;
+	Mon,  7 Aug 2023 17:38:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E6EA60EE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Zv8BnqumXZNd; Mon,  7 Aug 2023 17:30:17 +0000 (UTC)
+	with ESMTP id qR4xECIJRrJD; Mon,  7 Aug 2023 17:38:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A14260E7D;
-	Mon,  7 Aug 2023 17:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A14260E7D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A2271BF36D
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 17:30:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FB5760585;
+	Mon,  7 Aug 2023 17:38:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FB5760585
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 43AE11BF969
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 17:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4963E60EC2
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 17:30:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4963E60EC2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 266FB81A6F
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 17:37:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 266FB81A6F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5zx-jf_zpmJd for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 17:30:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id us4fjEW9oK6n for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 17:37:08 +0000 (UTC)
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A3C19606EC
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 17:30:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3C19606EC
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 25C688121F
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 17:37:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25C688121F
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:d6ff:7cb6:900b:4575])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6CF4AB0058A;
- Mon,  7 Aug 2023 19:29:55 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 148B5B00710;
+ Mon,  7 Aug 2023 19:37:01 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 07 Aug 2023 19:29:55 +0200
-Date: Mon, 7 Aug 2023 19:29:55 +0200
+ Mon, 07 Aug 2023 19:37:00 +0200
+Date: Mon, 7 Aug 2023 19:37:00 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Message-ID: <20230807172955.GX421096@scaer>
-References: <20230726180433.7561-1-kilian.zinnecker@mail.de>
- <20230726180433.7561-2-kilian.zinnecker@mail.de>
- <20230726214126.GC3544423@scaer> <8255697.T7Z3S40VBb@kilian-aisec>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <20230807173700.GY421096@scaer>
+References: <20230807134219.1598626-1-thomas.devoogdt@barco.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <8255697.T7Z3S40VBb@kilian-aisec>
+In-Reply-To: <20230807134219.1598626-1-thomas.devoogdt@barco.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691429402;
- bh=Wfu7t2qNhX/OksBt4cbWrhCv0NAlDxma1LXfV+4DCJI=;
+ d=free.fr; s=smtp-20201208; t=1691429825;
+ bh=6qXa2kT7h+4+HqrXNaZ5k+jWPs7yGphfTcq6IjeDRX0=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=bCy5CuzVL8TX+1+CApbCJUo8lkc7c8lekXrfSsuRONTvobJGkruYIt+LatupGMVzb
- udH5ZYeVwaCDdyKygiu4D/7dIfm6onP02/zVneVqxln6ZzX0o8YdRr2SYv86Zuspwb
- vayvvHcdNta86VUfiTJjm4m8z0ZGqZAympjQdvHgRuy+sQOaALQW0Dggirffz2OQtF
- EIgx1cv53/zkEwEM0wYAnYy8XXi1DpRmpJhdLFMboOoWqM4h/MhTnMcmwftMhgRDsF
- d9gJvgclha3wqqX+UmeXqviKcf6JbbbIhvWxobsVRjneFUF/Vrc1VyX2fNKtsdnDHW
- vtCOyrV2AR9eA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=fquRyIgznYoTE7zWse3DOArKuXpYaGLBTEm0xWIk5LMKZUWti4+cM7DZIjm1xjzQg
+ QAwbU450Z9z9JoDwz0CqcZXRxZ4+gixPfHe8bCWKzL/nViVrmLwobLEJwQl/7lvmM8
+ IExNrZ4NIn/UGIsvXRmMsA/Gt5/JTxrb4wjbqIMhcsYvVP5Gwc+4cGaMLWmLSxg/kl
+ PIGRBMKGx/XS8EH1/y/h9qLayeJFnyUATFYXcU3ROdTnzCkn7vkYcz2ETujqtN1Cxt
+ TQfB8ONazpoN10jxQJ80epgoIB5fMevoYCcwXkfoFxK8vfuKwHkkqtr/pVtpjG0Yar
+ TU6ZRvia5NESg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bCy5CuzV
-Subject: Re: [Buildroot] [PATCH v8 1/3] package/rockchip-rkbin: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=fquRyIgz
+Subject: Re: [Buildroot] [PATCH v1,
+ next] pkg-cmake: fix typo for the make backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,39 +76,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Quentin Schulz <quentin.schulz@theobroma-systems.com>,
- Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Kilian, All,
+Thomas, All,
 
-On 2023-08-07 13:45 +0200, Kilian Zinnecker spake thusly:
-[--SNIP--]
-> > > +config BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME
-> > > +	string "Rockchip rkbin tpl file path"
-> > > +	help
-> > > +	  Full path to the tpl file inside the rkbin repository. The
-> > I've driopped the "Full" qualifier, because that is not a full path, as
-> > it is relative to the top of the rockchip-rkbin directory.
-> > Ditto for the other help texts.
-> Agreed. However, you introduced some typo on one occasion, by snipping "Full" 
-> and "path" to "Fath ;)
+On 2023-08-07 15:42 +0200, Thomas Devoogdt spake thusly:
+> A small typo in commit 4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606
+> causes the wrong path to be selected.
+> 
+> Cmake breaks on the first compiler check because it isn't
+> able to call the make program with the -jxx added.
+> 
+> $(firstword $$(MAKE)) --> -DCMAKE_MAKE_PROGRAM="/usr/bin/make -j13"
+> $(firstword $(MAKE)) --> -DCMAKE_MAKE_PROGRAM="/usr/bin/make"
+> 
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> ---
+>  package/pkg-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index e085fb2b5d..3483b50d46 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -65,7 +65,7 @@ endif
+>  ifeq ($$($(3)_CMAKE_BACKEND),make)
+>  $(2)_GENERATOR = "Unix Makefiles"
+>  # $$(MAKE) can be 'make -jN', we just want 'make'  (possibly with a full path)
+> -$(2)_GENERATOR_PROGRAM = $(firstword $$(MAKE))
+> +$(2)_GENERATOR_PROGRAM = $(firstword $(MAKE))
 
-You may have noticed that typoes are my hallmark, the very personal
-signature of mine! ;-)
+Actually, it is the $(firstword that must be double-dolared, because we
+want the expansion to happen when the macro is evaluated (i.e. at the
+time a package uses $(eval $(cmake-package)) ), not at the time it is
+parsed (i.e. when make reads the Makefile).
 
-> https://gitlab.com/buildroot.org/buildroot/-/blob/
-> 8d1180aa483b624f1be27bd0858c2f6665ebf36c/package/rockchip-rkbin/Config.in#L12
+That's because values, esp. paths, may differ. For example, if you
+enable BR2_PER_PACKAGE_DIRECTORIES, and you have a package that needs
+the Buildroot-built make, then a single dollar will evaluate to (e.g.)
 
-Fixed, thanks.
+    blabla/buildroot/output/host/bin/make
+
+But that does not exist until the end of the build, and we want the
+package to use its per-package directory, e.g.
+
+    blabla/buildroot/output/per-package/MY_PACKAGE/host/bin/make
+
+I've already fixed that localy, plus another similar issue on line 77,
+where we want to use $$(HOST_DIR)/bin/ninja
+
+I'll soon push the fix (I noticed yesterday while doing this big test
+build, but forgot to push before hitting my bed...)
 
 Regards,
 Yann E. MORIN.
+
+>  # Generator specific code (make) should be avoided,
+>  # but for now, copy them to the new variables.
+>  $(2)_BUILD_ENV ?= $$($(2)_MAKE_ENV)
+> -- 
+> 2.41.0
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
