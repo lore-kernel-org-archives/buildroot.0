@@ -1,60 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E085CEB64DD
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 09:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8DB4EB64DD
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 10:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4736F40577;
-	Mon,  7 Aug 2023 09:54:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4736F40577
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4173560F74;
+	Mon,  7 Aug 2023 10:39:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4173560F74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mZWjZfR0CyrZ; Mon,  7 Aug 2023 09:54:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ehe_H0sBweIQ; Mon,  7 Aug 2023 10:39:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5BBDC40913;
-	Mon,  7 Aug 2023 09:54:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BBDC40913
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 46ADB1BF329
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 09:54:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D5B260E85;
+	Mon,  7 Aug 2023 10:39:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D5B260E85
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AEB851BF3FB
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 10:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8A3380C14
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 09:54:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A3380C14
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9563B60E85
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 10:38:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9563B60E85
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K_xlxOGLHXB2 for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 09:54:11 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 237388142D
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 09:54:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 237388142D
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 629033520C44; Mon,  7 Aug 2023 11:54:08 +0200 (CEST)
-Date: Mon, 7 Aug 2023 11:54:07 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZNC/P8D2B1tAPFk0@waldemar-brodkorb.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TRT8-1thaeWt for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 10:38:44 +0000 (UTC)
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E406A60E53
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 10:38:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E406A60E53
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout02.mail.de (Postfix) with ESMTP id 03E9FA0258;
+ Mon,  7 Aug 2023 12:38:42 +0200 (CEST)
+Received: from smtp02.mail.de (smtp02.bt.mail.de [10.0.121.212])
+ by postfix03.mail.de (Postfix) with ESMTP id DBF38801A9;
+ Mon,  7 Aug 2023 12:38:41 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp02.mail.de (Postfix) with ESMTPSA id A104FA0482;
+ Mon,  7 Aug 2023 12:38:40 +0200 (CEST)
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Date: Mon, 07 Aug 2023 12:38:40 +0200
+Message-ID: <4851354.31r3eYUQgx@kilian-aisec>
+In-Reply-To: <7a065654-a4bb-5ce7-dc9c-801037f0f4bd@gmail.com>
+References: <7a065654-a4bb-5ce7-dc9c-801037f0f4bd@gmail.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 3010
+X-purgate-ID: 154282::1691404721-72FFD199-B29E38F4/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1691402048; bh=v08jNf2j1DHItSIvekH/YV60KwPw0vtnexLqlaLC+Zc=;
- h=Date:From:To:Subject:From;
- b=fDvuCNaE2MufxKvbwweZZX+GaiCCK7DFqj+crvOdqQLtKLamJ4/8CK3wm7nuWGYwV
- ccuITx1dWb/H1HOVThLT4IV+nidOSUWoR6qTZ5+vjE5Vn6l2/cyZd+bFs7RUblAPyC
- 33S4H7/298wSmJrYw6VaQT597T1NrLy41ccjyP9m9GbHudgZp4Im4VU/5TTtemypdA
- q8pcyq6zipZYj8Y9R7fVGJM5dXGGIhDFTRQBb5006ZVdNEA4wV2CnMWOlEMicXcw0a
- jyD52YjVmu6bpSSyu/41bdAg1hhC2UOohZxP03KpHy3axM9fxTWKRUpoAA1g0xg8xT
- LuPjVatVK/tQw==
-Subject: [Buildroot] [PATCH v2] package/elf2flt: handle more relocations
+ d=mail.de; s=mailde202009; t=1691404721;
+ bh=J+HKDRx3VMRnrIv4KaPA+QKD0MvjVw39Cw9ylqCAF2s=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=IaRyjz1lpL8jtLwGJ813m05iInCAswsyEeJhVClusS+Sqr7OUJ1g6UxHuC4wOU+A7
+ gzL1Q/dF10ldt2+9AzxdZfqmKZW5yZoyUIacOqwO/3LzfqivfqA4ydHtpTvJYMzv3l
+ MDcr5FyumhqIAo1gzQmXhwiPOK4aQIr9cspSGZtiqZOD9ajQm9nCvenmQ4ce/SY1OM
+ YhxNd14SMLQs+CK8TLuXbuT+U2rAHKSj4CZF8xEmfjt9h3in69xbkwK6OlxU6ECxzo
+ f9gQmsKruG2wFxBuh/KdUCb8TOl3g1GFVmxyECzm8u8vKDporW/g6LuJDB6E4228xY
+ i9s7mdgbMQ+hg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
+ header.a=rsa-sha256 header.s=mailde202009 header.b=IaRyjz1l
+Subject: Re: [Buildroot] rock5b & 2023.08-rc1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,75 +86,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Nick Betteridge <lists.nick.betteridge@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here the comment:
-https://github.com/uclinux-dev/elf2flt/pull/24
+Hello Nick, all
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/c16/c161f191d85f9d064626ee6fcfebea61d916e434/
+> I just tried to build the rock5b, with a 'make rock5b_defconfig' and
+> 'make', and the build failed during the kernel compilation
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1 -> v2:
- - remove patch numbering 8/8
- - add Upstream Tag
----
- ...e-relocations-required-to-be-handled.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch
+Thanks for your mail. I think your issue is related to the current build job 
+fail, see here:
 
-diff --git a/package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch b/package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch
-new file mode 100644
-index 0000000000..74d3085d08
---- /dev/null
-+++ b/package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch
-@@ -0,0 +1,40 @@
-+From 5acfed0012f2fff9801b25403bd8a5e1c2ccfea2 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Mon, 7 Aug 2023 09:30:34 +0200
-+Subject: [PATCH] riscv64: add more relocations required to be handled
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://github.com/uclinux-dev/elf2flt/pull/24
-+---
-+ elf2flt.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/elf2flt.c b/elf2flt.c
-+index 6685bff..6b3bea4 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -850,11 +850,21 @@ output_relocs (
-+ 				default:
-+ 					goto bad_resolved_reloc;
-+ #elif defined(TARGET_riscv64)
-++				case R_RISCV_NONE:
-+ 				case R_RISCV_32_PCREL:
-++				case R_RISCV_ADD8:
-++				case R_RISCV_ADD16:
-+ 				case R_RISCV_ADD32:
-+ 				case R_RISCV_ADD64:
-++				case R_RISCV_SUB6:
-++				case R_RISCV_SUB8:
-++				case R_RISCV_SUB16:
-+ 				case R_RISCV_SUB32:
-+ 				case R_RISCV_SUB64:
-++				case R_RISCV_SET6:
-++				case R_RISCV_SET8:
-++				case R_RISCV_SET16:
-++				case R_RISCV_SET32:
-+ 					continue;
-+ 				case R_RISCV_32:
-+ 				case R_RISCV_64:
-+-- 
-+2.39.2
-+
--- 
-2.39.2
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673759
+
+> (page_alloc.c) - there were many 'error, forbidden warning', many
+> referencing 'in expansion of macro 'adj_init_size''.
+
+I am not sure, whether I completely understand it yet. I believe some setting 
+changed, such that some gcc warnings now produce actual errors (because it is 
+now a "forbidden warning"). Maybe some gcc version bumb changed these 
+settings, or some other config change to buildroot introduced this - to be 
+honest: I don't know. Maybe someone has an idea an can help?
+
+> I tried out the rock5b last month using the patches posted to the list
+> and the build completed - is there something I can modify in the
+> defconfig to make this work?
+
+Now, regarding those error producing warnings: to me it seems that Radxa (or 
+Rockchip) did fork from mainline kernel at some point to introduce their code 
+to support their boards (or SoCs respectively). Unfortunately this also means, 
+that mainline kernel fixes are not automatically introduced to the forked Linux 
+version. I already looked into it and I found two patches to mainline Linux, 
+which fix two (now error producing) warnings, but which are not yet applied to 
+the Radxa kernel:
+
+https://github.com/gregkh/linux/commit/
+08ad7a770efacfecf903143f8de88d1e351a1f2d
+
+https://github.com/gregkh/linux/commit/69848f9488bc1088bcd9a73987dff8d2cb47a060
+
+So I made patches from these commits:
+
+git format-patch -1 08ad7a770efacfecf903143f8de88d1e351a1f2d
+git format-patch -1 69848f9488bc1088bcd9a73987dff8d2cb47a060
+
+I then put these patches into the rock5b folder (i.e., board/radxa/rock5b/) 
+and added the following line to the rock5b_defconfig, so that buildroot applies 
+the patches during build:
+
+BR2_LINUX_KERNEL_PATCH="board/radxa/rock5b/0001-etherdevice-Adjust-ether_addr-
+prototypes-to-silence-.patch board/radxa/rock5b/0002-mm-page_alloc-fix-
+building-error-on-Werror-array-com.patch"
+
+However, the build did fail again, because there are even more "forbidden 
+warnings". These warnings are produced by kernel code which is located in 
+"drivers/net/wireless/rockchip_wlan/". To me it seems that this folder is not 
+part of mainline linux, but contains code some wireless driver code, put there 
+by Radxa or Rockchip. I am now not sure what to do about this. It would be 
+possible to try to fix these issues and then add more patches to the board/
+radxa/rock5b folder. However, I am not sure, whether I want to touch that 
+code. I am a bit afraid, I might not properly understand the code and then 
+introduce some bugs myself ...
+
+Does anyone have some suggestions, ideas and overall helpful info about this? 
+Help is really appreciated!
+
+Best regards,
+Kilian
+
 
 _______________________________________________
 buildroot mailing list
