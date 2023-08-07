@@ -4,58 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74CF0C001DB
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 13:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E553AC001B0
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 14:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21E6581DF4;
-	Mon,  7 Aug 2023 13:51:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21E6581DF4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D60581EB9;
+	Mon,  7 Aug 2023 14:07:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D60581EB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kFgd_9j2jryl; Mon,  7 Aug 2023 13:51:16 +0000 (UTC)
+	with ESMTP id 8iYpjFpD-GW4; Mon,  7 Aug 2023 14:07:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5655081D67;
-	Mon,  7 Aug 2023 13:51:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5655081D67
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 29CE01BF2F6
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 13:51:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 945B6818A1;
+	Mon,  7 Aug 2023 14:07:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 945B6818A1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 38CD31BF97A
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 14:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5BC9D40913
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 13:50:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BC9D40913
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5196660EE4
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 14:06:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5196660EE4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Vb6fQMl-PpBQ for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 13:50:10 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 753AC40B60
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 13:50:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 753AC40B60
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 6124D3520C58; Mon,  7 Aug 2023 15:50:08 +0200 (CEST)
-Date: Mon, 7 Aug 2023 15:50:08 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZND2kP8kQgFsEzMZ@waldemar-brodkorb.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JaH9HZyF8wq8 for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 14:06:40 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D61FA606E6
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 14:06:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D61FA606E6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51665E000F;
+ Mon,  7 Aug 2023 14:06:36 +0000 (UTC)
+Date: Mon, 7 Aug 2023 16:06:35 +0200
+To: Andreas <andreasembbuild@gmail.com>
+Message-ID: <20230807160635.0c4da553@windsurf>
+In-Reply-To: <CAOLWrZ8p5g6xSYjXrDYseTDz_wW0MqWQ81EpeiHf788NnwhN8Q@mail.gmail.com>
+References: <CAOLWrZ8O-mF6RnuX80SmS7Mn5Op=o0OJMp6-wbhjUfRBiqfnXg@mail.gmail.com>
+ <20230806235806.307605e5@windsurf>
+ <CAOLWrZ8p5g6xSYjXrDYseTDz_wW0MqWQ81EpeiHf788NnwhN8Q@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1691416208; bh=WRsSzGK5sv1L/LTCjjntXcmcWSkBVkNeczN1dqviKQM=;
- h=Date:From:To:Cc:Subject:From;
- b=sJrIkR8ritv1oF8MkUcKNIdS6frZaLNTE0wOHqaMEIsHBjxjK+ijsGTRtByvGggYb
- Xoa0QbInFO6KPPwsMAkU9Af6J1yN9sC7rZnPI6E2c9vIcmY80K5Pfl/mnIto8ARd0q
- oRkPoAnwkNgkHIKVRvWdSTa6yssgJPAQXo78SiwoAfceWeEl9iw1y03fHcxj+/Noox
- Zq5TlSF0POP/TTLvWDGwbYR1REv3sCJZTkC27PzTiwfsBFw9UMfI87ffjAXjCZ3rlS
- nOTh7pJViTp3/trre7FAEmgog6CefHPDFgL/aYR8jwLnA1DZHwvBOX+CEiIuR1qRKF
- 8RhbLseoCpn3Q==
-Subject: [Buildroot] [PATCH 2/2] package/openssh: fix build failure due to
- gcc bug 110934
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691417196;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9vES63HPOChocuTubZXUOQVCAatYd72/On0qOVjolyY=;
+ b=IOCK1MGGI0VEmbUeYLsqlNMNtOExffDe47ID93kF3KCduAnD5wDAQ7tKohJwKuQqcr7EeB
+ e2+9limToQH6lslnKOVG6MTCtQFQE5IbZ409Ia62MtIG7WW2wfnm/Tq/VdDvBv2KIEP87R
+ tQhrZyMu3bOaYEuiccTI1N69jTprj80wM/9K5umh0J3DBwY6s+8YSCoUqaIaelIX+CQQpa
+ +HiS1JlDV4BJtC6Y+jA74Z2ett/m1L51xNHlkjlnAN9/bepqA51JU68QxoT5shroz5P8qt
+ Jlj29HPtuI2HGLU6Bxm8Q7gE7yFoWHk9uquFnrUOLfEwZWdkWndm7IKSpz16Ag==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IOCK1MGG
+Subject: Re: [Buildroot] Support for lapack
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,57 +76,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Following ICE occurs for m68k builds:
-(cd openbsd-compat && /home/autobuild/make/make)
-/home/autobuild/autobuild/instance-10/output-1/host/bin/m68k-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -pipe -Wno-error=format-truncation -Wall
-+-Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation -fno-strict-aliasing
-+-D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=all -fno-builtin-memset   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE
-+-D_DEFAULT_SOURCE -D_GNU_SOURCE -DHAVE_CONFIG_H -c bsd-closefrom.c
-during RTL pass: zero_call_used_regs
-bsd-closefrom.c: In function 'closefrom':
-bsd-closefrom.c:151:1: internal compiler error: in change_address_1, at emit-rtl.c:2275
-  151 | }
-      | ^
-0x7fa76f4bad09 __libc_start_main
-        ../csu/libc-start.c:308
-Please submit a full bug report,
-with preprocessed source if appropriate.
-Please include the complete backtrace with any bug report.
-See <http://bugs.buildroot.net/> for instructions.
-make[2]: *** [Makefile:106: bsd-closefrom.o] Error 1
+Hello,
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/d29/d29c662e41d8969e6a8aa24870e728bcc7050563/
+On Mon, 7 Aug 2023 15:41:53 +0200
+Andreas <andreasembbuild@gmail.com> wrote:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/openssh/openssh.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> Thanks for the hint. I followed this patch. I think from the errors I saw
+> my problem is most likely the toolchain. This dependency
+> respectively depends on BR2_TOOLCHAIN_HAS_FORTRAN # python-scipy. Since I
+> am migrating from an old buildroot to a recent version of it might also be
+> part of the problem. I know the toolchain menu in the menu config but like
+> to set it programatically in the build config.
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index e14d752290..a2c3f16129 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -35,6 +35,10 @@ define OPENSSH_PERMISSIONS
- 	/var/empty d 755 root root - - - - -
- endef
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_110934),y)
-+OPENSSH_CONF_OPTS += --without-hardening
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- OPENSSH_CONF_OPTS += --without-pie
- endif
+Not sure to understand what you mean here by "set it programmatically".
+
+> But I don't know how exactly
+> and which options depend on what. Basically I think I need a toolchain with
+> support for c++, wchar, threads, fortran, openblas and arch.
+
+Then use a toolchain that provides all of this, or ask Buildroot to
+build its own toolchain with those features enabled.
+
+> I found this
+> resource:
+> http://underpop.online.fr/b/buildroot/en/dependencies-target-toolchain-options.htm.gz
+
+Not sure why you go to some random website. This content comes from the
+Buildroot manual, see section 18.2.4 at
+https://buildroot.org/downloads/manual/manual.html.
+
+> but
+> still don't know how to set it properly in the config. Can you point me to
+> an example?
+
+I don't quite understand what problem you're trying to solve, so it's
+quite difficult to help.
+
+Best regards,
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
