@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7CBCC001DE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8812BC001DE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D9E440A00;
-	Mon,  7 Aug 2023 21:35:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D9E440A00
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37B1C409A5;
+	Mon,  7 Aug 2023 21:35:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37B1C409A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QiYexKCa_kGT; Mon,  7 Aug 2023 21:35:19 +0000 (UTC)
+	with ESMTP id H-M4wimBgrv3; Mon,  7 Aug 2023 21:35:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92663410A5;
-	Mon,  7 Aug 2023 21:35:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92663410A5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 208F140993;
+	Mon,  7 Aug 2023 21:35:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 208F140993
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 294361BF5F8
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:34:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 099EF1BF5F8
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E61F3408FB
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:34:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E61F3408FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABA6D410A2
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:35:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABA6D410A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3TKBlb1nBkeZ for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 21:34:55 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 95E02408EB
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:34:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95E02408EB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 883431C0003;
- Mon,  7 Aug 2023 21:34:53 +0000 (UTC)
-Date: Mon, 7 Aug 2023 23:34:52 +0200
+ with ESMTP id QdlVyFU0x-G4 for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 21:35:19 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3A24B410D1
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:35:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A24B410D1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D74381BF203;
+ Mon,  7 Aug 2023 21:35:15 +0000 (UTC)
+Date: Mon, 7 Aug 2023 23:35:14 +0200
 To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230807233452.0209f199@windsurf>
-In-Reply-To: <20230806215127.283714-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20230807233514.23a6f538@windsurf>
+In-Reply-To: <20230806215127.283714-2-giulio.benetti@benettiengineering.com>
 References: <20230806215127.283714-1-giulio.benetti@benettiengineering.com>
+ <20230806215127.283714-2-giulio.benetti@benettiengineering.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691444094;
+ d=bootlin.com; s=gm1; t=1691444116;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=0HQ3zu7EDEUU3oyWM9BWvbiUiETi8Fz3I03QolGikyk=;
- b=QVpV07pBvOGeMN9TSxnfRW1oYIKeuzva8vnhs11gUXzMF4nol3TBLIHDYSEq8J4csZRiPm
- N+L/adldNI0nhJVve8vPQocVA9IG8ctAyrmuU2UIR6kK6bb0LPkTgNIeUswNsfhjxC42Q2
- 8HxgUSHx4LlDrrPdUG2EBdSCdGEQtYj8hRzu2qJG62fbupiOBuODQvs9mLXg5244VRbt5G
- hcEIDKt8Q0Mqm5HO6uXeLWh8YL7eU4xngJI8tDl6XayaQcE0Fgoa6wObq8QHfRP9m61JnM
- hi8W1oQMtZ2Jw++fJISfiCb37eUMCYfoQ2BavCmDehpuWuvVPyWU3s66M8ZvZw==
+ bh=TKWesVW++o+Pat2uGYa52sB9oue6mGf0HD+YCWxpN5k=;
+ b=m9j6XBBk4j7jl5uX3ryVv2e3Mx/3Tm/OjiwYjhZOFjHuX/BZUBDF1gWA48jBZIG0I17x8f
+ IlD10O6Q/KYk3uxzq3pNLqEyKA3byVur4fJL9JDYIJdcJYnknn7wtaPEnhHL/mK7t7dL+h
+ QakdVmxtp7OS+uBX84pY4HFI5G3CaxTErN4omYjMt65r3qbw0qQBXg12rDTmCtgU/2syJC
+ l6bT1Z9AOQ1OHwn4unj4X50c6a7I1+0c5oKbdBxwfnELO+lw/+ZOQziNzLNxqykBm84vyh
+ uvdp8Dlrj+ZeDBXsSHjCDLfeQZLugRR2NAdeVlPY1B+HEKesM4ggdZFuWQbZhA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QVpV07pB
-Subject: Re: [Buildroot] [PATCH 1/2] toolchain: introduce
+ header.s=gm1 header.b=m9j6XBBk
+Subject: Re: [Buildroot] [PATCH 2/2] package/libheif: let's use
  BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -85,31 +86,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun,  6 Aug 2023 23:51:26 +0200
+On Sun,  6 Aug 2023 23:51:27 +0200
 Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> libheif package fails to build for the M68K architecture due to a binutils
-> bug that leads to:
-> Internal error in emit_expr_encoded at dw2gencfi.c:215
-> 
-> Let's add binutils bug to avoid to deal with architectures in packages
-> when a binutils bug arises. Let's instead deal directly with binutils
-> bug number.
-> 
-> It's been reported upstream:
-> https://sourceware.org/bugzilla/show_bug.cgi?id=30730
+> Let's use binutils bug define instead of architecture checking in packages.
 > 
 > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->  toolchain/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  package/kodi-imagedecoder-heif/Config.in | 4 ++--
+>  package/libheif/Config.in                | 4 +---
+>  2 files changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/kodi-imagedecoder-heif/Config.in b/package/kodi-imagedecoder-heif/Config.in
+> index 7cf2d1ef6e..d0950385a0 100644
+> --- a/package/kodi-imagedecoder-heif/Config.in
+> +++ b/package/kodi-imagedecoder-heif/Config.in
+> @@ -2,7 +2,7 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
+>  	bool "kodi-imagedecoder-heif"
+>  	depends on BR2_INSTALL_LIBSTDCPP # libde265, libheif, tinyxml2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libde265
+> -	depends on !BR2_m68k_cf # libheif
+> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libheif
+>  	select BR2_PACKAGE_LIBDE265
+>  	select BR2_PACKAGE_LIBHEIF
+> @@ -13,6 +13,6 @@ config BR2_PACKAGE_KODI_IMAGEDECODER_HEIF
+>  	  https://github.com/xbmc/imagedecoder.heif
+>  
+>  comment "kodi-imagedecoder-heif needs a toolchain w/ C++, threads, gcc >= 4.8"
+> -	depends on !BR2_m68k_cf # libheif
+> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730 # libheif
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+>  		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> diff --git a/package/libheif/Config.in b/package/libheif/Config.in
+> index d0ea72430e..1310205c41 100644
+> --- a/package/libheif/Config.in
+> +++ b/package/libheif/Config.in
+> @@ -1,8 +1,6 @@
+>  config BR2_PACKAGE_LIBHEIF
+>  	bool "libheif"
+> -	# avoid build error
+> -	# Internal error in emit_expr_encoded at dw2gencfi.c:215
+> -	depends on !BR2_m68k_cf
+> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_30730
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>  	help
 
-Applied to master, thanks.
+You forgot to update the Config.in comment dependency in
+libheif/Config.in. Fixed that and applied to master. Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
