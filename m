@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B516EE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:04:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD0FEE49A5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CCFAA40B8A;
-	Mon, 21 Aug 2023 20:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCFAA40B8A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 42CB440B59;
+	Mon, 21 Aug 2023 20:04:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42CB440B59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pqfn-PUEiAxa; Mon, 21 Aug 2023 20:04:07 +0000 (UTC)
+	with ESMTP id mNi8_9nmZDW7; Mon, 21 Aug 2023 20:04:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDF5140B96;
-	Mon, 21 Aug 2023 20:04:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDF5140B96
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3FE6A1BF951
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5889940B84;
+	Mon, 21 Aug 2023 20:04:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5889940B84
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 48A571BF95F
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F95260FB9
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC90481FA6
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F95260FB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC90481FA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uK1G9osz81rJ for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6w53XeRsrX-3 for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F67D6110A
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F67D6110A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 201FD8196E
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 201FD8196E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E59186024; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id 1DF9186028; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 14:26:47 +0200
+Date: Mon, 7 Aug 2023 22:22:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2b738044edbed64e313a2b4f275a70e02e5bc143
-X-Git-Newrev: 95116bc65e53f58b1dfbd35e5156b46f9e6b9a51
+X-Git-Oldrev: d1508c9d5cb6bcb297bf7945db20eade350ed613
+X-Git-Newrev: 88bff51ea610aba4f522748d88329f5f4f1e5f66
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.7E59186024@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] {linux,
- linux-headers}: bump 5.15.x / 6.{1, 4}.x series
+Message-Id: <20230821200124.1DF9186028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/nitrogen8*: bump atf
+ version to v2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,63 +64,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95116bc65e53f58b1dfbd35e5156b46f9e6b9a51
+commit: https://git.buildroot.net/buildroot/commit/?id=88bff51ea610aba4f522748d88329f5f4f1e5f66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+- Based upon NXP lf-6.1.22-2.0.0 release
+- This version "fixes" the RXW segment permissions warning as well as
+the array-bounds errors
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673582
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556175
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673585
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556176
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673588
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556177
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673590
+
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ configs/nitrogen8m_defconfig  | 4 ++--
+ configs/nitrogen8mm_defconfig | 4 ++--
+ configs/nitrogen8mn_defconfig | 4 ++--
+ configs/nitrogen8mp_defconfig | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 58cc9574a0..1501df86e9 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index dc9c1acf78..20f492c045 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
+ # ARM Trusted Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-# Latest revision of branch boundary-lf-5.15.52-2.1.0
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
++# Latest revision of branch boundary-lf-6.1.22-2.0.0
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.4.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.4.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 1236686384..c9a0497d1a 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  de143cb61dcaa756c05f56ff35144316d810615819518a33e34754f064c4a7d8  linux-6.4.7.tar.xz
--sha256  aaf8261b551c8b76b81eab8780b446e88cea4d551ae517ac3a9b2dbdbd381ed3  linux-6.1.42.tar.xz
-+sha256  c59f34e19e84db30206b9373041abf893f9d8a08765d163586570a5238c458b6  linux-6.4.8.tar.xz
-+sha256  245248470a62d4e94b46f753afc01e19e45b9e6f3a0fa06e7f5da21fe845a808  linux-6.1.43.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  2de69544a12e6a059163c58fc901c13bcf22e8cac39c66b56f8fbb633399bf93  linux-5.15.123.tar.xz
-+sha256  00036a0260ad012aa832a8698a4afcf23b2410091527738ce48ce3fcc23f22ed  linux-5.15.124.tar.xz
- sha256  c9558bab35e23ae67661bfb3192c609c857f78582a035449ae63e33d04ab6112  linux-5.10.188.tar.xz
- sha256  bcb4953ed68131ef17f9f1ba52cac8b9d70007f5ab600bf3dee1fbf8beb218ca  linux-5.4.251.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 98360204f7..d528f88745 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -404,9 +404,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.251"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.188"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.123"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.42"	if BR2_KERNEL_HEADERS_6_1
--	default "6.4.7"		if BR2_KERNEL_HEADERS_6_4
-+	default "5.15.124"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.43"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.4.8"		if BR2_KERNEL_HEADERS_6_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index f021a30ad8..b7d62681db 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
+ # ARM Trusted Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-# Latest revision of branch boundary-lf-5.15.52-2.1.0
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
++# Latest revision of branch boundary-lf-6.1.22-2.0.0
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ 
+diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
+index 88925cfda7..c205b90ebb 100644
+--- a/configs/nitrogen8mn_defconfig
++++ b/configs/nitrogen8mn_defconfig
+@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
+ # ARM Trusted Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-# Latest revision of branch boundary-lf-5.15.52-2.1.0
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
++# Latest revision of branch boundary-lf-6.1.22-2.0.0
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ 
+diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
+index 956c3b7bc1..3ab4f15167 100644
+--- a/configs/nitrogen8mp_defconfig
++++ b/configs/nitrogen8mp_defconfig
+@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
+ # ARM Trusted Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-# Latest revision of branch boundary-lf-5.15.52-2.1.0
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
++# Latest revision of branch boundary-lf-6.1.22-2.0.0
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
