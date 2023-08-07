@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39D50C001DE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 08:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD937EB64DD
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 08:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A68D481B7B;
-	Mon,  7 Aug 2023 08:13:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A68D481B7B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5274080BA2;
+	Mon,  7 Aug 2023 08:14:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5274080BA2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SLY_wd-JWEDM; Mon,  7 Aug 2023 08:13:50 +0000 (UTC)
+	with ESMTP id FzsXRbdqI-QD; Mon,  7 Aug 2023 08:14:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED45981A33;
-	Mon,  7 Aug 2023 08:13:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED45981A33
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 49E911BF852
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 08:13:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC7A180BFB;
+	Mon,  7 Aug 2023 08:14:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC7A180BFB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E1C91BF868
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 08:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D9E6401E3
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 08:13:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D9E6401E3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92C0F60DFC
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 08:13:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C0F60DFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P2C10seQ1rds for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 08:13:11 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6053940276
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 08:13:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6053940276
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-4fe463420fbso6429567e87.3
- for <buildroot@buildroot.org>; Mon, 07 Aug 2023 01:13:11 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IbAvWyRtoBcV for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 08:13:45 +0000 (UTC)
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 927A460E6A
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 08:13:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 927A460E6A
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-4fe5ab64a26so4268460e87.2
+ for <buildroot@buildroot.org>; Mon, 07 Aug 2023 01:13:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691395989; x=1692000789;
+ d=1e100.net; s=20221208; t=1691396023; x=1692000823;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=kG2UcOTOqnnFdNv2UgZxiFCEsgNJmleWp6GL49MxxjY=;
- b=leAzxL9bKz+NaSrWMCwkvXQcL2I9qgkmJkeN9RcBrK//Br8ebuW08OvUXLDWytEWke
- W2NTzz0HXa5MntH9r1aQiWlUhz+iuSC7Bma9bUBGeL9/GEy0TgYyNNzsvH0HzrBdXqu2
- 6gIh6E15TfTEttwIuoOdf9P/K9KxMFuBQI0lTE6DKHFV1AEmSOkDk4C51RmoD2C/JVr2
- ns+AY1vfnecNFZ/Hn2lLtGBQ7L0nTXS7Bwp6axlaBp7FkqK6l5QmAsKOf+qJ8LfwAvEM
- U9Tzg20qj7sDasQn2QWgUIZIyM7KeSXMWR50oVQkMgbdD0aHsvGRVnfxLLrItWIlJujp
- cK+g==
-X-Gm-Message-State: AOJu0YzTfWpjEuQO9ial8h46042F8jEFQUiGnLpl+o/2/kNkFzQqqHp3
- hAK1Cz3eaahsaRuQIUi+hhWn8Efpj+X+KaBD
-X-Google-Smtp-Source: AGHT+IE2lZhMsqFQBdeP0KJxRRtIkKdTwchRgYngBLGV0nvJ2EYXxmQScqJ8WwqiCy5LPuxAY8kakA==
-X-Received: by 2002:a05:6512:324d:b0:4f8:6833:b13c with SMTP id
- c13-20020a056512324d00b004f86833b13cmr4647403lfr.14.1691395988579; 
- Mon, 07 Aug 2023 01:13:08 -0700 (PDT)
+ bh=9ZzGLwqCHj1GLReM/II1mPvAKjAnUttoDmUJgAW4I5o=;
+ b=L5chxxhlYX4cxrsisllvYKKE02YiqGEl7XRw60IxYQrwOduOL6f0J8J+gWArjMGYNd
+ FqlSUYiXFuNhvgewR57TaUJcqNqBpfrA2IZalM8MkBEjFzUp1KNi9f+s5DrFx1kF3aBV
+ Xr2fcbU+UI2GlQ2BRUrt9rCeT2DjXmO93wXPSWKVHx4s1UliCf8H3ygvaR+HvVHA6w4j
+ mnni9UNxkNrhzhPBeeiBrXLXo7a9hIip2CXWYk0YEZTBVGiZ7dCurjK0fIt6GYV5CCdP
+ AZv2ZB+1QNfiuKrPWQMuFruDkqFB2AyN/fJftLNZvriZZSAwWs1hEbknDvSiZTG4/vNB
+ xdsA==
+X-Gm-Message-State: AOJu0YzK3z3LTNzJUiA30RCZFsroo15w7yJ7gG5AzoHS1FprWAKolHFE
+ r0TJm/5zKI4JhcN3ytYzn6Hd8Uri48kLtk40
+X-Google-Smtp-Source: AGHT+IEBNZiMg1r3in9nV6k+mUdL/W/QW5hfrG7lwFlr/QOkOcbb6k5EbPIFTu41sjHs2jxfQs3WOQ==
+X-Received: by 2002:ac2:4f0b:0:b0:4fd:fafd:1ed4 with SMTP id
+ k11-20020ac24f0b000000b004fdfafd1ed4mr6864741lfr.2.1691396022507; 
+ Mon, 07 Aug 2023 01:13:42 -0700 (PDT)
 Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
  [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
- t10-20020ac2548a000000b004fb78959218sm1395141lfk.200.2023.08.07.01.13.07
+ p10-20020ac246ca000000b004fde7ef2435sm1418987lfo.102.2023.08.07.01.13.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Aug 2023 01:13:08 -0700 (PDT)
+ Mon, 07 Aug 2023 01:13:41 -0700 (PDT)
 From: Marcus Folkesson <marcus.folkesson@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon,  7 Aug 2023 10:15:04 +0200
-Message-Id: <20230807081504.4167712-1-marcus.folkesson@gmail.com>
+Date: Mon,  7 Aug 2023 10:15:36 +0200
+Message-Id: <20230807081536.4167754-1-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691395989; x=1692000789;
+ d=gmail.com; s=20221208; t=1691396023; x=1692000823;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kG2UcOTOqnnFdNv2UgZxiFCEsgNJmleWp6GL49MxxjY=;
- b=f0bd21zTM/cQpfXd118/7SU3td3NSbN/GKHwDHN7ekqcfpV0qTVwyBX29NpwEzSfe1
- lw85J72O88MgAk4irvwiifQfS/GnFXoDlA6nqPg2ncvzw0AXQJLBp9XyYZJpYNLmrAR0
- Xs0TYh6p48w48gwxUK/VxmHsVY2Q8AYo/ozB2X4wWaLh2/wI83ydF8xXGBNkZcqwYKcu
- 5TtVOY1VlRSvLycqrVVQTq/7iL1uw8xT4Yc+NnRptNTka5n0jONBojmyXGxTOK2//j3y
- 4YeJMyNiOmX3ov7oM3uAsOCOn2+cQTtMBI+uSvWxgbptuGSGPSLUdBsd+W+2MVGusLZj
- 1bug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=9ZzGLwqCHj1GLReM/II1mPvAKjAnUttoDmUJgAW4I5o=;
+ b=C3bt57UDVfEdU3RIPvVkiXSRCJJdd8ExTQcZUEkU0QXbk8/Jxyg2mYAONoqtEVH+PH
+ YPGNEQNdCFdBrohrvVKiDUSkf4nQmCpe1XtZBQ0SmU0WlRzVssEj3clMjWkAate5z9Sa
+ 6tqgz3GVfcz4syQAmXK/98G6bwSvQsTnzNXNIkqGFO9PuS9th9ypU6Mbe2zchgCgjedH
+ tFU3RPLNE8jTv1yNvYH3krRystApPxhFJMBMqh28w/QvJ0kKUFev0XUIvSqKNECCe290
+ TIc26g0s9gcibiNLfR0KO/zT1dui5MhgxIyh1n5/vFzex4IVAccJYplde2oCPSZT9U5+
+ 4qsg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=f0bd21zT
-Subject: [Buildroot] [PATCH] package/libcamera-apps: bump to version 1.2.1
+ header.a=rsa-sha256 header.s=20221208 header.b=C3bt57UD
+Subject: [Buildroot] [PATCH] package/libostree: bump to version 2023.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,32 +101,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- package/libcamera-apps/libcamera-apps.hash | 2 +-
- package/libcamera-apps/libcamera-apps.mk   | 2 +-
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index 97fcef7ddf..1437a0e8fa 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 088650a86f..3b88b8200f 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  49ace5382a0a9f8b05d20077fc0900b801fff83dae6ca9e3caa94dae16dbef27  libcamera-apps-1.2.0.tar.gz
-+sha256  e6b74a0ba10a962f1930199d7dd828c8d9ee370dfe1fdfd8ae2638df744f1344  libcamera-apps-1.2.1.tar.gz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index 022e6055b5..2a217f095f 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
+ # Locally calculated
+-sha256  9c575a094da2c307769f0aee15de95470c3b5550cbff211fbbc4f6fc75f333b1  libostree-2023.3.tar.xz
++sha256  bc593afb31fe1ac3d50419f917fafe321a0a3561d7bb2ba498a83740fe3adb14  libostree-2023.5.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 5c39090654..c61c1d1508 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCAMERA_APPS_VERSION = 1.2.0
-+LIBCAMERA_APPS_VERSION = 1.2.1
- LIBCAMERA_APPS_SITE = $(call github,raspberrypi,libcamera-apps,v$(LIBCAMERA_APPS_VERSION))
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
+-LIBOSTREE_VERSION = 2023.3
++LIBOSTREE_VERSION = 2023.5
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
 -- 
 2.40.1
 
