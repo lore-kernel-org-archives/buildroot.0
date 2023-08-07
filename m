@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07158C001B0
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0DC6C001B0
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8118681D5A;
-	Mon,  7 Aug 2023 21:02:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8118681D5A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E8EC409A0;
+	Mon,  7 Aug 2023 21:14:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E8EC409A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6STSzkEiqLz2; Mon,  7 Aug 2023 21:02:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id R2FM5wMJ2g3y; Mon,  7 Aug 2023 21:14:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 818B481D68;
-	Mon,  7 Aug 2023 21:02:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 818B481D68
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8B9011BF287
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:02:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0ACF2409A5;
+	Mon,  7 Aug 2023 21:14:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0ACF2409A5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EE761BF23C
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:14:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63F7B4048E
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:02:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63F7B4048E
+ by smtp3.osuosl.org (Postfix) with ESMTP id CEA6A60E49
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:14:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEA6A60E49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sgsw8Bi725iT for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 21:02:39 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 319A440168
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:02:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 319A440168
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:d6ff:7cb6:900b:4575])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 36D39B0053A;
- Mon,  7 Aug 2023 23:02:34 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 07 Aug 2023 23:02:33 +0200
-Date: Mon, 7 Aug 2023 23:02:33 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Victor Dumas <dumasv.dev@gmail.com>
-Message-ID: <20230807210233.GZ421096@scaer>
-References: <20230806213037.58D4B84612@busybox.osuosl.org>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HVFO_dfCFtoH for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 21:14:44 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1046860C13
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:14:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1046860C13
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EECEE1C0006;
+ Mon,  7 Aug 2023 21:14:39 +0000 (UTC)
+Date: Mon, 7 Aug 2023 23:14:38 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230807231438.6bfe2c7a@windsurf>
+In-Reply-To: <20230807174515.3261136-1-bernd@kuhls.net>
+References: <20230807174515.3261136-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230806213037.58D4B84612@busybox.osuosl.org>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691442156;
- bh=DIaXfllck1PhJ9IMUB6gD98YflQALoAUI6mZf/hZlfM=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=a4hduSb2Q1JGQYpqysZYtTpjiOngtUkmEvspiH0L6oMP3M6rkBNo5vqgHYEQ+4xp/
- Z9gaPIfUvY8xOWdRJ20fMSWrnOnS38kj5OZ8SjEaoqxOAyuA+WAG1UqcTNUeVxJW33
- CRDelELqzBtE+NI2oSjXOJ8n6g31q0KGCo/VKav2pUaEPuDmM4PV++cZJqYNFcUNaj
- xtpB4FgPm9/BWGQP1Gq4+m+T557YJat64rxDt9Taj8+6otCDJwTd5VIqmfJbXeQgap
- lBQK53pY/RCT4rkYeCJnlVoulZCLlycIjOpFUXL0lhi44vjcFpqouuzfbh8i+3HM9X
- eib0E+bHPSkOg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=a4hduSb2
-Subject: Re: [Buildroot] [git commit branch/next] support/scripts/fix-rpath:
- parallelize patching files
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691442880;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ykhHVSnI95Viy/R2mFdkvpEkF04cGoqDvfTQRtegq6k=;
+ b=gwA7nfs5G9NWxeJ+G9/njtb4BEjcICrajPR/bZjlE36Gdc9ZDkty3d48Tfk49e8g5OBln4
+ 5bGaVM8AD969LfYLRtli3LHznl+/+qYistXDiuS6Idt0Vd7ka04xRXMdma/LcxK13CLe9M
+ w/NvAG9Owgtng5aly5Zh9/h3EI+Sl4tj0ahat3dRkkxN+QBAQQBJoua622hYvBHPUTIQ4Q
+ zWRag/OTrU7zN9IbVvWE8JlZcy912LcYr72kwBtELpzNzg7czKNZhgJxtR6HXL6XKaXUo9
+ iEbuTIRhtTRxljMUoT1nyeKPwlMdo57Xt9EevpuMfs9WWJiwADhVTseh+h5NDA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gwA7nfs5
+Subject: Re: [Buildroot] [PATCH 1/2] package/berkeleydb: add option for
+ historic dbm interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,165 +75,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Victor, All,
+Hello Bernd,
 
-On 2023-08-06 23:27 +0200, Thomas Petazzoni via buildroot spake thusly:
-> commit: https://git.buildroot.net/buildroot/commit/?id=134900401f0831f893ddd4f358e499f548d66433
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon,  7 Aug 2023 19:45:14 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
+
+> Berkeley DB support in python depends on dbm, when missing python fails
+> to detect libdb:
+> https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
 > 
-> Using "xargs" instead of "while read" loop allows for the patching of
-> files to be parallelized. This significantly reduces the amount of
-> time it takes to fix all the paths.  On a larger RFS(~300MB) this
-> script was taking 5 minutes, it now only takes about 30s on a 12 core
-> machine.
+> quoting python configure log:
+> checking for libdb... no
+> 
+> quoting python config.log:
+> conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
+> 
+> This patch provides a configure option for the historic dbm interface
+> to be used by the python package.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-This commit is not working, and breaks fix-rpath. See below...
+Thanks for those patches. However, I don't quite understand how it was
+working in Python 3.10.
 
-[--SNIP--]
-> diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
-> index 3e67e770e5..a9b348e189 100755
-> --- a/support/scripts/fix-rpath
-> +++ b/support/scripts/fix-rpath
+I agree that in Python 3.11, they moved some detection logic from
+setup.py to configure.ac. But the actual code of dbm module hasn't
+changed. Back in Python 3.10, it was already calling dbm_open(), which
+gets expanded by a macro from db.h into __db_ndbm_open(). And indeed in
+Python 3.10, the dbm module already has references to this symbol:
 
-there are tons of shellcheck errors in that script, which is what
-prompted me to look into that and notice the breakage.
+$ readelf -aW output/target/usr/lib/python3.10/lib-dynload/_dbm.cpython-310-arm-linux-gnueabihf.so  | grep "UND.*__db"
+    10: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_delete
+    15: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_store
+    23: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_nextkey
+    25: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_clearerr
+    40: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_fetch
+    41: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_open
+    44: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_firstkey
+    48: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_error
+    51: 00000000     0 NOTYPE  GLOBAL DEFAULT  UND __db_ndbm_close
 
-    $ ./utils/docker-run shellcheck support/scripts/fix-rpath
-    In support/scripts/fix-rpath line 56:
-    : ${PATCHELF:=${HOST_DIR}/bin/patchelf}
-      ^-- SC2223: This default assignment may cause DoS due to globbing. Quote it.
+And those symbols are not provided by libdb-5.3.so:
 
+$ readelf -aW output/target/usr/lib/libdb-5.3.so | grep __db_ndbm
+$
 
-    In support/scripts/fix-rpath line 84:
-        changed_rpath=$(echo ${rpath} | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
-                        ^-- SC2001: See if you can use ${variable//search/replace} instead.
-                             ^------^ SC2086: Double quote to prevent globbing and word splitting.
+But, the dbm Python module works as expected:
 
-    Did you mean:
-        changed_rpath=$(echo "${rpath}" | sed "s@${PER_PACKAGE_DIR}/[^/]\+/host@${HOST_DIR}@")
+# python
+Python 3.10.8 (main, Aug  7 2023, 22:52:15) [GCC 11.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import dbm
+>>> dbm.open("/tmp/plop", "c")
+<dbm.dumb._Database object at 0x767ccc28>
 
+So I'm really confused. How does it work in Python 3.10 ? Did we
+already need the historic dbm interface back then ?
 
-    In support/scripts/fix-rpath line 86:
-            ${PATCHELF} --set-rpath ${changed_rpath} "${file}"
-                                    ^--------------^ SC2086: Double quote to prevent globbing and word splitting.
+Any idea?
 
-    Did you mean:
-            ${PATCHELF} --set-rpath "${changed_rpath}" "${file}"
-
-
-    In support/scripts/fix-rpath line 90:
-        ${PATCHELF} --make-rpath-relative "${rootdir}" ${sanitize_extra_args[@]} "${file}"
-                                                       ^-----------------------^ SC2068: Double quote array expansions to avoid re-splitting elements.
-
-
-    In support/scripts/fix-rpath line 164:
-        find "${rootdir}" ${find_args[@]} | xargs -0 -r -P ${PARALLEL_JOBS} -I {} bash -c "patch_file '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
-                          ^-------------^ SC2068: Double quote array expansions to avoid re-splitting elements.
-                                                           ^--------------^ SC2086: Double quote to prevent globbing and word splitting.
-                                                                                                                                  ^--------------------^ SC2128: Expanding an array without an index only gives the first element.
-                                                                                                                                                          ^-- SC2145: Argument mixes string and array. Use * or separate argument.
-
-    Did you mean:
-        find "${rootdir}" ${find_args[@]} | xargs -0 -r -P "${PARALLEL_JOBS}" -I {} bash -c "patch_file '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
-
-
-    In support/scripts/fix-rpath line 173:
-    main ${@}
-         ^--^ SC2068: Double quote array expansions to avoid re-splitting elements.
-
-    For more information:
-      https://www.shellcheck.net/wiki/SC2068 -- Double quote array expansions to ...
-      https://www.shellcheck.net/wiki/SC2145 -- Argument mixes string and array. ...
-      https://www.shellcheck.net/wiki/SC2128 -- Expanding an array without an ind...
-
-So a few of those reported issues are harmless, or at least were OK-ish
-before the parallelisation.
-
-> @@ -46,6 +46,8 @@ Environment:
->      TOOLCHAIN_EXTERNAL_DOWNLOAD_INSTALL_DIR
->                   (default HOST_DIR/opt/ext-toolchain)
->  
-> +    PARALLEL_JOBS number of parallel jobs to run
-> +
->  Returns:         0 if success or 1 in case of error
->  
->  EOF
-> @@ -58,6 +60,38 @@ HOST_EXCLUDEPATHS="/share/terminfo"
->  STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
->  TARGET_EXCLUDEPATHS="/lib/firmware"
->  
-> +patch_file() {
-
-I've stuck a 'set -x' here to see how this function was called and what
-it did, once it got called from a sub-bash, and I also tweaked the xargs
-call with '-t -P1'  (verbose and mt parralel, just to have a clean
-output). Here's what it says for the first entry:
-
-    bash -c "patch_file '/home/ymorin/dev/buildroot/O/next/host/bin/patchelf' '/home/ymorin/dev/buildroot/O/next/target' '--no-standard-lib-dirs' target" _ /home/ymorin/dev/buildroot/O/next/target/lib/udev/cdrom_id
-    + PATCHELF=/home/ymorin/dev/buildroot/O/next/host/bin/patchelf
-    + rootdir=/home/ymorin/dev/buildroot/O/next/target
-    + sanitize_extra_args=--no-standard-lib-dirs
-    + file=target
-    ++ /home/ymorin/dev/buildroot/O/next/host/bin/patchelf --print-rpath target
-    + rpath='patchelf: getting info about '''target''': No such file or directory'
-    + test 1 -ne 0
-    + return 0
-
-So what's going on here? Why does it look at 'target', and not at the
-actual file 'cdrom_id' ?
-
-That's because it is actually told to look at 'target'. See that the $@
-has been replaced by 'target'. See below [0]...
-
-> +    PATCHELF="${1}"
-> +    rootdir="${2}"
-> +    sanitize_extra_args="${3}"
-
-In the caller, this is an array, but here it's a string. That's not
-going to cut it, but it works by accident: we only ever put a single
-item in the array, so we're lucky. But we can't rely on luck alone.
-
-[--SNIP--]
-> @@ -123,34 +157,11 @@ main() {
-[--SNIP--]
-
-(I've split the following line so that it is easier to read and comment on).
-
-> +    find "${rootdir}" ${find_args[@]} \
-> +    | xargs -0 -r -P ${PARALLEL_JOBS} -I {} \
-> +            bash -c "patch_file '${PATCHELF}' '${rootdir}' '${sanitize_extra_args}' $@" _ {}
-                                                                                       ^^
-That $@ is double-quoted, so it is expanded in the context of the
-caller, i.e. it expands to the postional parameters passed when calling
-main(), the current function, i.e.... 'target', as we noticed in the
-log, above...
-
-I've fixed all this and will push that shortly.
-
-Regards,
-Yann E. MORIN.
-
->  
->      # Restore patched patchelf utility
->      test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
