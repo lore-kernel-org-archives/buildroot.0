@@ -4,81 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A956C00528
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 13:42:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FFA9C001DB
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 13:42:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75D4381AD7;
-	Mon,  7 Aug 2023 13:42:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75D4381AD7
+	by smtp1.osuosl.org (Postfix) with ESMTP id A948681E90;
+	Mon,  7 Aug 2023 13:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A948681E90
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y8Tcsve-enyX; Mon,  7 Aug 2023 13:42:30 +0000 (UTC)
+	with ESMTP id 05XeaEwA8Zz2; Mon,  7 Aug 2023 13:42:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A20A81E61;
-	Mon,  7 Aug 2023 13:42:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A20A81E61
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DF0C51BF2F6
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 13:42:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB1BE81DF4;
+	Mon,  7 Aug 2023 13:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB1BE81DF4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 26EEF1BF909
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 13:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5350D8174F
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 13:42:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5350D8174F
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2A82409AA
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 13:42:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2A82409AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FYF9cKbNttlo for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 13:42:06 +0000 (UTC)
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
- [IPv6:2607:f8b0:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6422881DF4
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 13:42:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6422881DF4
-Received: by mail-pf1-x42f.google.com with SMTP id
- d2e1a72fcca58-686d8c8fc65so3002846b3a.0
- for <buildroot@buildroot.org>; Mon, 07 Aug 2023 06:42:06 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id p5qxPyRRbRvm for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 13:42:26 +0000 (UTC)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AD743400E3
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 13:42:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD743400E3
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-3fe45481edfso35617945e9.1
+ for <buildroot@buildroot.org>; Mon, 07 Aug 2023 06:42:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691415726; x=1692020526;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vhBz6uNIcqMBdpQg7aQz4CbSWhsAXknIn5upF9N3Llo=;
- b=NNb1nZkCRdKnpON2/6Ekng4VPkjkXUlcjON62fhIR71z+jf09j5M/IwTY75nHnLzox
- mrYLEJkTgXjE9A8nX9VIsrh3sx1q9ppMeaYEY3rE8FRp0VfIjFsm3Wb4lOuFXk0LTaLO
- L7ZzGFoBqqrN1jGdjDqEqXIlnY7TWwb3Eo7K3jbPf3Z9BFGahIWWqFuz2/GMGOgt89d1
- UR/5EDQLU1VgO3FAn0Vpv6hlqJA6mO9NYgGu4qch59YYA6K4PWXmR66cF3rbbBh2HUqg
- nEcWOhsXaRPcTDpEhsrWD9zpPt2/hTfK0+OL0xik40cKP+hCbdn7nN3xeTYgmU1Oo+wf
- OEnQ==
-X-Gm-Message-State: AOJu0YyL45JXx+0hHHk8T8CiJlGUZzBtyfDDC3GJLT6AfCG8ZsHRWLdl
- 10cLqURE0nAtKFd/Q8XATGgKVbMgTWzy7kZg+Fg=
-X-Google-Smtp-Source: AGHT+IF4mdTMMVWQ5oPJDuVwTBii9vZiWb0r6urLpc2THziC17z1mIYxXx6ul8bSvaV6MolaMKx/lxaztQUe9XRPzjo=
-X-Received: by 2002:a17:90a:d506:b0:268:7262:1067 with SMTP id
- t6-20020a17090ad50600b0026872621067mr6307472pju.36.1691415724820; Mon, 07 Aug
- 2023 06:42:04 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1691415744; x=1692020544;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=JGF1MgLi+1VTd3q2dFzhaABeNJOYabXutnDoNpmuvU4=;
+ b=BN8zF8+dPbV0G1R4GyDz9zJ34w790wCNP1xSTZ0Pz/8l1G5dCyhNgwhCq4eYpx1QUL
+ uZhS2iSAA6NjC6kG/tEV+O7OxM8zUkCSvHv53GzuqIGqinsR+egF0bg2+l2zbNrkV9td
+ F33G7pGjBT2VBY3ApJr5HTH1komw0+C4hnu0yrF2MrAonQvGeuGCcLpfs5B4WMIhR55I
+ kBJdl4gNEdrkMkhN6hTmwge8EE526bIXmfHtYvyBVEebXHYI3TTqjkWsnyeThOZKobpu
+ 22+YB6xSZkGXcXYKZy0ITU6QkpohraGthpXSOdyV+gpmZMflu+7u5VudjCzePCpSYUSW
+ JhvQ==
+X-Gm-Message-State: AOJu0YyUhub1tqaFO8RKdnjT8Py6BjQNY3FhVPqO1eCkv6qO4TvlfV5Z
+ 64N8LEE6V714tZaYUzIF7Xyw5CHAbFEhtQ==
+X-Google-Smtp-Source: AGHT+IESeJIwjxbgWoasixwf9xlQnu06ysBRu3ZMHn9Sg7CsIkTAYic5f8gaw/L5fT7G0lYtrkZ9aw==
+X-Received: by 2002:a05:600c:ad8:b0:3fb:a0fc:1ba1 with SMTP id
+ c24-20020a05600c0ad800b003fba0fc1ba1mr6966753wmr.35.1691415744236; 
+ Mon, 07 Aug 2023 06:42:24 -0700 (PDT)
+Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
+ [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
+ z25-20020a7bc7d9000000b003fbaade0735sm15114562wmk.19.2023.08.07.06.42.23
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 07 Aug 2023 06:42:23 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+To: buildroot@buildroot.org
+Date: Mon,  7 Aug 2023 15:42:19 +0200
+Message-ID: <20230807134219.1598626-1-thomas.devoogdt@barco.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <CAOLWrZ8O-mF6RnuX80SmS7Mn5Op=o0OJMp6-wbhjUfRBiqfnXg@mail.gmail.com>
- <20230806235806.307605e5@windsurf>
-In-Reply-To: <20230806235806.307605e5@windsurf>
-From: Andreas <andreasembbuild@gmail.com>
-Date: Mon, 7 Aug 2023 15:41:53 +0200
-Message-ID: <CAOLWrZ8p5g6xSYjXrDYseTDz_wW0MqWQ81EpeiHf788NnwhN8Q@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691415726; x=1692020526;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=vhBz6uNIcqMBdpQg7aQz4CbSWhsAXknIn5upF9N3Llo=;
- b=j4Mwq+JXYgCToBG/PUtAA2I+2ygos94RXi6HO/OGqn93BHQj783qSECC+SJWyuWjf7
- ZwghSns39wOJl34EM6nVH9ZvLWVTYv9uZdSjA4+9f7Og7OzC7IXJQVFTBHx6mIaJM4FC
- KoJp9vrqB5CKkQ1fB86JiHV2doFg7Ukd74/q6h2LCFZt9TfrHJcqtStdyCkBhIL5YHJX
- wLvPlc+klspG1GYu4nnmJcMfcJ7p9avKpr3pvmS7+kSwWYw4kYSviWW0uIb1KziUvQpR
- hRgsFVZ+WnBs/CXgyQB8Dbj47eNLdtlpt1zXYpgzZJD95TGqXiGCKzLP+FtLU678NXId
- Of9g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20221208; t=1691415744; x=1692020544;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=JGF1MgLi+1VTd3q2dFzhaABeNJOYabXutnDoNpmuvU4=;
+ b=n7eS7SS+93PBUcqWpVGTyemhNHNB1xdVFlspZHOLJlYQrmJafNsnHkXIN0VpBARZGQ
+ qdPk8/M7VtzS+hLCgPsPAe7omhm03F33cWk5WIyEcvdIuEdVTDHKSp7TlJ2GqkBv7VjS
+ hDZ6YrbDz1udAzHM2K4Fy6cpx2nkGhbiTFh1GSxjLbi9mY9BA0wnyPz3WP9QP7DD1r18
+ 6/tDBy2xooFuU0Ey7RENc9u7LjInuMq7IIHJD6T4qVeNbZvgKpsgJIzsPVyRTSEskWuW
+ 32F300FJap2lijw7qlyA/W6SpPKDXjE39IpdBM0yXRRYS8QjYuf4uO73juAtAte8VR0v
+ duow==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=j4Mwq+JX
-Subject: Re: [Buildroot] Support for lapack
+ header.a=rsa-sha256 header.s=20221208 header.b=n7eS7SS+
+Subject: [Buildroot] [PATCH v1,
+ next] pkg-cmake: fix typo for the make backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,130 +95,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2905205415958232483=="
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2905205415958232483==
-Content-Type: multipart/alternative; boundary="000000000000720e760602556926"
+A small typo in commit 4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606
+causes the wrong path to be selected.
 
---000000000000720e760602556926
-Content-Type: text/plain; charset="UTF-8"
+Cmake breaks on the first compiler check because it isn't
+able to call the make program with the -jxx added.
 
-Hi Thomas,
+$(firstword $$(MAKE)) --> -DCMAKE_MAKE_PROGRAM="/usr/bin/make -j13"
+$(firstword $(MAKE)) --> -DCMAKE_MAKE_PROGRAM="/usr/bin/make"
 
-Thanks for the hint. I followed this patch. I think from the errors I saw
-my problem is most likely the toolchain. This dependency
-respectively depends on BR2_TOOLCHAIN_HAS_FORTRAN # python-scipy. Since I
-am migrating from an old buildroot to a recent version of it might also be
-part of the problem. I know the toolchain menu in the menu config but like
-to set it programatically in the build config. But I don't know how exactly
-and which options depend on what. Basically I think I need a toolchain with
-support for c++, wchar, threads, fortran, openblas and arch. I found this
-resource:
-http://underpop.online.fr/b/buildroot/en/dependencies-target-toolchain-options.htm.gz
-but
-still don't know how to set it properly in the config. Can you point me to
-an example?
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+ package/pkg-cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Andreas
-
-
-Am So., 6. Aug. 2023 um 23:58 Uhr schrieb Thomas Petazzoni <
-thomas.petazzoni@bootlin.com>:
-
-> Hello Andreas,
->
-> On Sun, 6 Aug 2023 23:36:34 +0200
-> Andreas <andreasembbuild@gmail.com> wrote:
->
-> > How do I configure Fortran properly for lapack? I need it on host for the
-> > python-scikit-learn package. I get the following error.
->
-> Please look at the patch series at:
->
->   https://patchwork.ozlabs.org/project/buildroot/list/?series=314036
->
-> for python-scikit-learn.
->
-> Note: this is difficult stuff to package, you're now starting with easy
-> stuff :-)
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
---000000000000720e760602556926
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi Thomas,=C2=A0<div><br></div><div>Thank=
-s for the hint. I followed this patch. I think from the errors I saw my pro=
-blem is most likely the toolchain. This dependency respectively=C2=A0depend=
-s on BR2_TOOLCHAIN_HAS_FORTRAN # python-scipy. Since I am migrating from an=
- old buildroot to a recent version of it might also be part of the problem.=
- I know the toolchain menu in the menu config but like to set it programati=
-cally in the build config. But I don&#39;t know how exactly and which optio=
-ns depend on what. Basically I think I need a toolchain with support for c+=
-+, wchar, threads, fortran, openblas and arch. I found this resource:=C2=A0=
-<a href=3D"http://underpop.online.fr/b/buildroot/en/dependencies-target-too=
-lchain-options.htm.gz" target=3D"_blank">http://underpop.online.fr/b/buildr=
-oot/en/dependencies-target-toolchain-options.htm.gz</a>=C2=A0but still don&=
-#39;t know how to set it properly in the config. Can you point me to an exa=
-mple?</div><div><br></div><div>Thanks,</div><div>Andreas</div></div><div cl=
-ass=3D"gmail-yj6qo gmail-ajU" style=3D"outline:none;padding:10px 0px;width:=
-22px;margin:2px 0px 0px"><br class=3D"gmail-Apple-interchange-newline"></di=
-v></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr=
-">Am So., 6. Aug. 2023 um 23:58=C2=A0Uhr schrieb Thomas Petazzoni &lt;<a hr=
-ef=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>=
-&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0p=
-x 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Andr=
-eas,<br>
-<br>
-On Sun, 6 Aug 2023 23:36:34 +0200<br>
-Andreas &lt;<a href=3D"mailto:andreasembbuild@gmail.com" target=3D"_blank">=
-andreasembbuild@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; How do I configure Fortran properly for lapack? I need it on host for =
-the<br>
-&gt; python-scikit-learn package. I get the following error.<br>
-<br>
-Please look at the patch series at:<br>
-<br>
-=C2=A0 <a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/?seri=
-es=3D314036" rel=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs.=
-org/project/buildroot/list/?series=3D314036</a><br>
-<br>
-for python-scikit-learn.<br>
-<br>
-Note: this is difficult stuff to package, you&#39;re now starting with easy=
-<br>
-stuff :-)<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-
---000000000000720e760602556926--
-
---===============2905205415958232483==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index e085fb2b5d..3483b50d46 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -65,7 +65,7 @@ endif
+ ifeq ($$($(3)_CMAKE_BACKEND),make)
+ $(2)_GENERATOR = "Unix Makefiles"
+ # $$(MAKE) can be 'make -jN', we just want 'make'  (possibly with a full path)
+-$(2)_GENERATOR_PROGRAM = $(firstword $$(MAKE))
++$(2)_GENERATOR_PROGRAM = $(firstword $(MAKE))
+ # Generator specific code (make) should be avoided,
+ # but for now, copy them to the new variables.
+ $(2)_BUILD_ENV ?= $$($(2)_MAKE_ENV)
+-- 
+2.41.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2905205415958232483==--
