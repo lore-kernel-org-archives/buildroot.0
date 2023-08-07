@@ -4,88 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20BFAC001DE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 09:20:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E085CEB64DD
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 09:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C22B4031E;
-	Mon,  7 Aug 2023 09:20:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C22B4031E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4736F40577;
+	Mon,  7 Aug 2023 09:54:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4736F40577
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5urV7vQRrq7d; Mon,  7 Aug 2023 09:20:32 +0000 (UTC)
+	with ESMTP id mZWjZfR0CyrZ; Mon,  7 Aug 2023 09:54:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED166404B9;
-	Mon,  7 Aug 2023 09:20:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED166404B9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8A84A1BF329
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 09:20:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5BBDC40913;
+	Mon,  7 Aug 2023 09:54:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BBDC40913
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 46ADB1BF329
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 09:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B12E4148B
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 09:19:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B12E4148B
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8A3380C14
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 09:54:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A3380C14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id R9xQ2STs3eZ5 for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 09:19:34 +0000 (UTC)
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC6DC410BE
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 09:19:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC6DC410BE
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-31792ac0fefso3177853f8f.2
- for <buildroot@buildroot.org>; Mon, 07 Aug 2023 02:19:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691399972; x=1692004772;
- h=content-transfer-encoding:subject:from:to:content-language
- :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=xpOyLiXPBZaps9vGsn35gPVi5DaslKORL6FsbpOMhy4=;
- b=AfLrau+jguVkDnBlKokIc7riyLzJq80WJTwkJCoUPAzHf1OYbHQl696zjMRKIZcw05
- jwvpNRBGVUWHxPKIRdNbEPnzCjxa3aEu0OpkB67Z4CxS9AkHeFVdrT+j0Ejepi77U/fD
- DKikb7pfnVrKlSvZuMs45HEiuw7TgHBar6oqLslO2orYvAB+POBPQCAGShiof1SfUOsG
- ObY8+iNIIj+DqqHtKXgh41g3IAfnkPoKPk8S3K3PxZqieelIr5eAWcXpqyMqF9SiMZeK
- jpEEN2110N3eRXnfd2TyuzYHg4jw7vsuOUz4N9Pfih6t2MpT653nMwlTXcM9XndX4vjQ
- D+CA==
-X-Gm-Message-State: AOJu0YySfN16cSc7YGVSEsasOy0wCT8Vjk4roFd7VRyKlfVQ607ZMeA1
- d5PX7vr+TR/DlzEtMWUZPNeuEm/MI9Q=
-X-Google-Smtp-Source: AGHT+IEBGnIZwH3z+euIzzsSHTLVIrZFJ9cwWm0gSaYRQVA9Vm2VxLQVBTJT9XU6v530+1sko+Zzsw==
-X-Received: by 2002:a5d:4044:0:b0:314:a3f:9c17 with SMTP id
- w4-20020a5d4044000000b003140a3f9c17mr5698973wrp.42.1691399971970; 
- Mon, 07 Aug 2023 02:19:31 -0700 (PDT)
-Received: from [10.0.0.120] (static-90-255-244-241.vodafonexdsl.co.uk.
- [90.255.244.241]) by smtp.gmail.com with ESMTPSA id
- k2-20020adfe8c2000000b00317ddccb0d1sm5944406wrn.24.2023.08.07.02.19.31
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 07 Aug 2023 02:19:31 -0700 (PDT)
-Message-ID: <7a065654-a4bb-5ce7-dc9c-801037f0f4bd@gmail.com>
-Date: Mon, 7 Aug 2023 10:19:28 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K_xlxOGLHXB2 for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 09:54:11 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 237388142D
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 09:54:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 237388142D
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 629033520C44; Mon,  7 Aug 2023 11:54:08 +0200 (CEST)
+Date: Mon, 7 Aug 2023 11:54:07 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZNC/P8D2B1tAPFk0@waldemar-brodkorb.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-From: Nick Betteridge <lists.nick.betteridge@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691399972; x=1692004772;
- h=content-transfer-encoding:subject:from:to:content-language
- :user-agent:mime-version:date:message-id:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xpOyLiXPBZaps9vGsn35gPVi5DaslKORL6FsbpOMhy4=;
- b=KgJ3GRvi6qoqeQ4DR8S4kC4bldqPa5L/X+ZsEqIduNpZ0BCK0v0Epw4rq2/EBVCCoc
- 1jLHcISAXdWCuaOaXE1sLncALRiMW5QPiRgdcnRueA8bosLghxL/X3pvb4rXX5saEfPH
- RwjRgLLiZ9JOwbTgraPupo2rcYF1jGLYPlH4sjGaAJrFWf+OyOY/rxWtW/k3h9BPab4d
- Di+9NND/3AFgOMh4tMh9l6uBO0oapvizWfMxlatb/QqBJqijc3JuIGakEfW0wCD+Q580
- dJ6C+4HgNQY3EFIb/hr6IvNcQTGCF71OpGm0A76ORxSmdaqQXeL1FqN0CqY3VdT2KiKK
- nARA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=KgJ3GRvi
-Subject: [Buildroot] rock5b & 2023.08-rc1
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1691402048; bh=v08jNf2j1DHItSIvekH/YV60KwPw0vtnexLqlaLC+Zc=;
+ h=Date:From:To:Subject:From;
+ b=fDvuCNaE2MufxKvbwweZZX+GaiCCK7DFqj+crvOdqQLtKLamJ4/8CK3wm7nuWGYwV
+ ccuITx1dWb/H1HOVThLT4IV+nidOSUWoR6qTZ5+vjE5Vn6l2/cyZd+bFs7RUblAPyC
+ 33S4H7/298wSmJrYw6VaQT597T1NrLy41ccjyP9m9GbHudgZp4Im4VU/5TTtemypdA
+ q8pcyq6zipZYj8Y9R7fVGJM5dXGGIhDFTRQBb5006ZVdNEA4wV2CnMWOlEMicXcw0a
+ jyD52YjVmu6bpSSyu/41bdAg1hhC2UOohZxP03KpHy3axM9fxTWKRUpoAA1g0xg8xT
+ LuPjVatVK/tQw==
+Subject: [Buildroot] [PATCH v2] package/elf2flt: handle more relocations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,25 +66,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+See here the comment:
+https://github.com/uclinux-dev/elf2flt/pull/24
 
-I just tried to build the rock5b, with a 'make rock5b_defconfig' and 
-'make', and the build failed during the kernel compilation 
-(page_alloc.c) - there were many 'error, forbidden warning', many 
-referencing 'in expansion of macro 'adj_init_size''.
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/c16/c161f191d85f9d064626ee6fcfebea61d916e434/
 
-I tried out the rock5b last month using the patches posted to the list 
-and the build completed - is there something I can modify in the 
-defconfig to make this work?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1 -> v2:
+ - remove patch numbering 8/8
+ - add Upstream Tag
+---
+ ...e-relocations-required-to-be-handled.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch
 
-Thanks
-
-Nick
+diff --git a/package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch b/package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch
+new file mode 100644
+index 0000000000..74d3085d08
+--- /dev/null
++++ b/package/elf2flt/0008-riscv64-add-more-relocations-required-to-be-handled.patch
+@@ -0,0 +1,40 @@
++From 5acfed0012f2fff9801b25403bd8a5e1c2ccfea2 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 7 Aug 2023 09:30:34 +0200
++Subject: [PATCH] riscv64: add more relocations required to be handled
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/uclinux-dev/elf2flt/pull/24
++---
++ elf2flt.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/elf2flt.c b/elf2flt.c
++index 6685bff..6b3bea4 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -850,11 +850,21 @@ output_relocs (
++ 				default:
++ 					goto bad_resolved_reloc;
++ #elif defined(TARGET_riscv64)
+++				case R_RISCV_NONE:
++ 				case R_RISCV_32_PCREL:
+++				case R_RISCV_ADD8:
+++				case R_RISCV_ADD16:
++ 				case R_RISCV_ADD32:
++ 				case R_RISCV_ADD64:
+++				case R_RISCV_SUB6:
+++				case R_RISCV_SUB8:
+++				case R_RISCV_SUB16:
++ 				case R_RISCV_SUB32:
++ 				case R_RISCV_SUB64:
+++				case R_RISCV_SET6:
+++				case R_RISCV_SET8:
+++				case R_RISCV_SET16:
+++				case R_RISCV_SET32:
++ 					continue;
++ 				case R_RISCV_32:
++ 				case R_RISCV_64:
++-- 
++2.39.2
++
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
