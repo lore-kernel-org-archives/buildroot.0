@@ -4,64 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22919C001DE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A9CC001DE
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 21:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D925410E8;
-	Mon,  7 Aug 2023 21:27:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D925410E8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19E39408E9;
+	Mon,  7 Aug 2023 21:31:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19E39408E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id A4OouuKDQTlk; Mon,  7 Aug 2023 21:27:29 +0000 (UTC)
+	with ESMTP id ZiI8Y9ve1x9w; Mon,  7 Aug 2023 21:31:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 889534109B;
-	Mon,  7 Aug 2023 21:27:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 889534109B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A8F251BF23C
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:26:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DED3740894;
+	Mon,  7 Aug 2023 21:31:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DED3740894
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CCBD41BF23C
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:31:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F9F840168
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:26:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F9F840168
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1F6340894
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 21:31:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1F6340894
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MslLgGwLV6c2 for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 21:26:51 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C5D340150
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:26:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C5D340150
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C6793FF803;
- Mon,  7 Aug 2023 21:26:47 +0000 (UTC)
-Date: Mon, 7 Aug 2023 23:26:46 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lq2AQyYGWBb5 for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 21:31:39 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A57B540566
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 21:31:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A57B540566
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:d6ff:7cb6:900b:4575])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5A587B00515;
+ Mon,  7 Aug 2023 23:31:31 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 07 Aug 2023 23:31:31 +0200
+Date: Mon, 7 Aug 2023 23:31:31 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20230807232646.76210d7e@windsurf>
-In-Reply-To: <20230807145839.2375839-1-thomas.devoogdt@barco.com>
+Message-ID: <20230807213131.GA421096@scaer>
 References: <20230807145839.2375839-1-thomas.devoogdt@barco.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691443608;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=rWCO4N1WjhWcDUa3crH/vfyRouBntwVxFhIMX7oKMok=;
- b=PKZ3bNJk2lmOGLmRGZ9z6teuVdGKgaqAxxhQP0yKS2d9W15wVMtnL5rslK1P8SbQJyVCTf
- x9KmzH+emVon9JgpBpq4FIEw8oVqlvlV0KNv0eUHmcHMJa4L4I0ednIX+OcI0LIticYfP9
- E5v+gTCQG09Y1bKFAznfsyko5ja08fQu/aSUWku5RX6Ikp1E/qg0LeH9XfbrceYFhs5Kd6
- zb4ULKeACiqAUwKFjkFRmqMZm0uXMq1T869odIwckrawCi+or6JfWmE9RlZ10vtDlv09w/
- Q+Dy4wQHKhOAl9amXrxGSvjkzmh508rDTSylt4Mn72qx8+J+R7UaDmhKsNJQ3A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PKZ3bNJk
+Content-Disposition: inline
+In-Reply-To: <20230807145839.2375839-1-thomas.devoogdt@barco.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1691443896;
+ bh=MXYpxFOFKQXqZY+FpvsilBxXvUSb13LUZ+vMpisdoS0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=mHxwLYzZlKgcLqAb54/reLXqL+5cxuUj+jkNOCkaxO9ASNLZ+PeyI0o4H5jxXrfVN
+ XnRSV2zXCbDDk3JF6RcTz05Lz36pklSkbtYXqv+cJMQMyvt0+frWlW376U0cbmt/Iz
+ DO0gwa49qlHAd/sKLdEyX0NxfKHODJvYnO+8hrULAJiizvzWNvcY4S7LEXT6FqV/MF
+ kgZIZtLwt/kAGmnxcLwGaCStl9LhORPfhYQKJYSmfgTgp0YhHiduzytiXx3sWzlRW8
+ nlTmiUG5D/SVTc9fPClUP04DoWwbGH7/vOjizpewP0/Y98z/DfOwh/7vhhHIimBc4F
+ H3MJZ8pfhvHsA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mHxwLYzZ
 Subject: Re: [Buildroot] [PATCH v1 1/3 next] package/qt6/qt6serialport: use
  the CMAKE_NINJA flag
 X-BeenThere: buildroot@buildroot.org
@@ -75,19 +76,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>,
- Jesse Van Gavere <jesseevg@gmail.com>, "Yann E
- . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Jesse Van Gavere <jesseevg@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  7 Aug 2023 16:58:37 +0200
-Thomas Devoogdt <thomas@devoogdt.com> wrote:
+Thomas, All,
 
+Thanks for this series. Thomas P. applied it before I had a chance to
+reply, so:
+
+Is there an issue with qt6svg, or did you just miss it?
+
+Regards,
+Yann E. MORIN.
+
+On 2023-08-07 16:58 +0200, Thomas Devoogdt spake thusly:
 > Use the newly introduce backend option (4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606)
 > to specify what cmake backend to use, instead of special-coding it's use.
 > 
@@ -95,14 +102,63 @@ Thomas Devoogdt <thomas@devoogdt.com> wrote:
 > ---
 >  package/qt6/qt6serialport/qt6serialport.mk | 16 ++--------------
 >  1 file changed, 2 insertions(+), 14 deletions(-)
+> 
+> diff --git a/package/qt6/qt6serialport/qt6serialport.mk b/package/qt6/qt6serialport/qt6serialport.mk
+> index 497719d4ec..bdb16dd892 100644
+> --- a/package/qt6/qt6serialport/qt6serialport.mk
+> +++ b/package/qt6/qt6serialport/qt6serialport.mk
+> @@ -10,6 +10,8 @@ QT6SERIALPORT_SOURCE = qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT
+>  QT6SERIALPORT_INSTALL_STAGING = YES
+>  QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD = NO
+>  
+> +QT6SERIALPORT_CMAKE_BACKEND = ninja
+> +
+>  QT6SERIALPORT_LICENSE = \
+>  	GPL-2.0+ or LGPL-3.0, \
+>  	GPL-3.0 with exception (tools), \
+> @@ -25,7 +27,6 @@ QT6SERIALPORT_LICENSE_FILES = \
+>  	LICENSES/Qt-GPL-exception-1.0.txt
+>  
+>  QT6SERIALPORT_CONF_OPTS = \
+> -	-GNinja \
+>  	-DQT_HOST_PATH=$(HOST_DIR) \
+>  	-DBUILD_WITH_PCH=OFF \
+>  	-DQT_BUILD_EXAMPLES=OFF \
+> @@ -33,19 +34,6 @@ QT6SERIALPORT_CONF_OPTS = \
+>  
+>  QT6SERIALPORT_DEPENDENCIES = \
+>  	host-pkgconf \
+> -	host-ninja \
+>  	qt6base
+>  
+> -define QT6SERIALPORT_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALPORT_BUILDDIR)
+> -endef
+> -
+> -define QT6SERIALPORT_INSTALL_STAGING_CMDS
+> -	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
+> -endef
+> -
+> -define QT6SERIALPORT_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)
+> -endef
+> -
+>  $(eval $(cmake-package))
+> -- 
+> 2.41.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-All three applied to next, thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
