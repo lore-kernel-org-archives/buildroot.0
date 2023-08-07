@@ -1,55 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8DB4EB64DD
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 10:39:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 902F5C001B0
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 11:45:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4173560F74;
-	Mon,  7 Aug 2023 10:39:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4173560F74
+	by smtp2.osuosl.org (Postfix) with ESMTP id A43BE4036E;
+	Mon,  7 Aug 2023 11:45:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A43BE4036E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ehe_H0sBweIQ; Mon,  7 Aug 2023 10:39:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id tueN69zeaarT; Mon,  7 Aug 2023 11:45:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D5B260E85;
-	Mon,  7 Aug 2023 10:39:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D5B260E85
+	by smtp2.osuosl.org (Postfix) with ESMTP id 97327404F7;
+	Mon,  7 Aug 2023 11:45:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97327404F7
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AEB851BF3FB
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 10:38:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1759F1BF85D
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 11:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9563B60E85
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 10:38:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9563B60E85
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB085607CE
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 11:45:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB085607CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TRT8-1thaeWt for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 10:38:44 +0000 (UTC)
+ with ESMTP id nQ3mlswnqCF9 for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 11:45:44 +0000 (UTC)
 Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E406A60E53
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 10:38:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E406A60E53
-Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout02.mail.de (Postfix) with ESMTP id 03E9FA0258;
- Mon,  7 Aug 2023 12:38:42 +0200 (CEST)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6E2DA6068A
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 11:45:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E2DA6068A
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout02.mail.de (Postfix) with ESMTP id 9AB85A0424;
+ Mon,  7 Aug 2023 13:45:42 +0200 (CEST)
 Received: from smtp02.mail.de (smtp02.bt.mail.de [10.0.121.212])
- by postfix03.mail.de (Postfix) with ESMTP id DBF38801A9;
- Mon,  7 Aug 2023 12:38:41 +0200 (CEST)
+ by postfix01.mail.de (Postfix) with ESMTP id 759EB8020A;
+ Mon,  7 Aug 2023 13:45:42 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp02.mail.de (Postfix) with ESMTPSA id A104FA0482;
- Mon,  7 Aug 2023 12:38:40 +0200 (CEST)
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Date: Mon, 07 Aug 2023 12:38:40 +0200
-Message-ID: <4851354.31r3eYUQgx@kilian-aisec>
-In-Reply-To: <7a065654-a4bb-5ce7-dc9c-801037f0f4bd@gmail.com>
-References: <7a065654-a4bb-5ce7-dc9c-801037f0f4bd@gmail.com>
+ by smtp02.mail.de (Postfix) with ESMTPSA id 77A64A031A;
+ Mon,  7 Aug 2023 13:45:40 +0200 (CEST)
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Mon, 07 Aug 2023 13:45:40 +0200
+Message-ID: <8255697.T7Z3S40VBb@kilian-aisec>
+In-Reply-To: <20230726214126.GC3544423@scaer>
+References: <20230726180433.7561-1-kilian.zinnecker@mail.de>
+ <20230726180433.7561-2-kilian.zinnecker@mail.de>
+ <20230726214126.GC3544423@scaer>
 MIME-Version: 1.0
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
@@ -59,22 +61,22 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 3010
-X-purgate-ID: 154282::1691404721-72FFD199-B29E38F4/0/0
+X-purgate-size: 5708
+X-purgate-ID: 154282::1691408742-03FEF199-C1A40076/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1691404721;
- bh=J+HKDRx3VMRnrIv4KaPA+QKD0MvjVw39Cw9ylqCAF2s=;
+ d=mail.de; s=mailde202009; t=1691408742;
+ bh=jh+AlxhVYW85Gz5eKX0RFno8E0vJHkxuntVCzrc5LGw=;
  h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=IaRyjz1lpL8jtLwGJ813m05iInCAswsyEeJhVClusS+Sqr7OUJ1g6UxHuC4wOU+A7
- gzL1Q/dF10ldt2+9AzxdZfqmKZW5yZoyUIacOqwO/3LzfqivfqA4ydHtpTvJYMzv3l
- MDcr5FyumhqIAo1gzQmXhwiPOK4aQIr9cspSGZtiqZOD9ajQm9nCvenmQ4ce/SY1OM
- YhxNd14SMLQs+CK8TLuXbuT+U2rAHKSj4CZF8xEmfjt9h3in69xbkwK6OlxU6ECxzo
- f9gQmsKruG2wFxBuh/KdUCb8TOl3g1GFVmxyECzm8u8vKDporW/g6LuJDB6E4228xY
- i9s7mdgbMQ+hg==
+ b=3mn/nnduJg/u86KPIhADTuzLiYhE4nKmCUZ3zu4LX+F92FfFFs6UYZHV5ggyFKciz
+ fsFqzV2xxGkq9i554THs1JwkjiUMLX1thWe4v6cgnHt5BOZA1mDZz4+7koBZzu8luT
+ dWnvU8OIrdtl5g+EDdvotSjKu2L88yux0DA3Fa4N67PvQS7pXEZJ6JKh8LAk8Fy9QA
+ M4T+5Irgsd3YChOG0i4GOPmbydlAOqcnF0CYQkFvoJxKBq0uww4YwM8Ch4hJlSpCd8
+ erUdGGANuMT5He+9o3uaUiEvEM07rYcs9WhX3fzfvbRQ/Rc7gFA24dLH8mdNiXIJcW
+ XjJh1DYc+1LhQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=IaRyjz1l
-Subject: Re: [Buildroot] rock5b & 2023.08-rc1
+ header.a=rsa-sha256 header.s=mailde202009 header.b=3mn/nndu
+Subject: Re: [Buildroot] [PATCH v8 1/3] package/rockchip-rkbin: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,76 +90,165 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
 Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Nick Betteridge <lists.nick.betteridge@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+ Andreas Ziegler <br015@umbiko.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Nick, all
+Hello Yann, all
 
-> I just tried to build the rock5b, with a 'make rock5b_defconfig' and
-> 'make', and the build failed during the kernel compilation
+thanks for your review, fixes and applying the patches. And sorry for the late 
+answer. What I write now is imho not so important anymore, still I want to 
+give some reply:
 
-Thanks for your mail. I think your issue is related to the current build job 
-fail, see here:
+> > This patch adds a package for the Rockchip ATF binary blobs. These
+> > binaries are needed to build U-Boot for some Rockchip SoCs (e.g.,
+> > RK3588). One can config a custom version and manually define which
+> > blobs (for bl31, tpl and optee) to use from the repository.
+> 
+> So, there was no rationale about why we sould need a custom version [0],
+> and the defconfig you provided was actually using the same version as
+> the predefined one, so we did not have any usage for it in-tree.
+> 
+> [0] yes, I read your reply about the question from Thomas, but
+> discussing with him we conluded that we indeed did not want to have a
+> custom version for now. So I dropped it.
+> 
+> If and when the need arises, then it will be time to add it back; see
+> below.
 
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673759
+I personally still favor it, but its not so important to me and I can 
+understand, that you don't see much need at the moment and probably prefer to 
+keep it simple, so I am totally fine with dropping the custom version stuff. As 
+you say: If need arises, we can then revaluate.
 
-> (page_alloc.c) - there were many 'error, forbidden warning', many
-> referencing 'in expansion of macro 'adj_init_size''.
+[--SNIP--]
 
-I am not sure, whether I completely understand it yet. I believe some setting 
-changed, such that some gcc warnings now produce actual errors (because it is 
-now a "forbidden warning"). Maybe some gcc version bumb changed these 
-settings, or some other config change to buildroot introduced this - to be 
-honest: I don't know. Maybe someone has an idea an can help?
+> > +config BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME
+> > +	string "Rockchip rkbin tpl file path"
+> > +	help
+> > +	  Full path to the tpl file inside the rkbin repository. The
+> 
+> I've driopped the "Full" qualifier, because that is not a full path, as
+> it is relative to the top of the rockchip-rkbin directory.
+> 
+> Ditto for the other help texts.
 
-> I tried out the rock5b last month using the patches posted to the list
-> and the build completed - is there something I can modify in the
-> defconfig to make this work?
+Agreed. However, you introduced some typo on one occasion, by snipping "Full" 
+and "path" to "Fath ;)
 
-Now, regarding those error producing warnings: to me it seems that Radxa (or 
-Rockchip) did fork from mainline kernel at some point to introduce their code 
-to support their boards (or SoCs respectively). Unfortunately this also means, 
-that mainline kernel fixes are not automatically introduced to the forked Linux 
-version. I already looked into it and I found two patches to mainline Linux, 
-which fix two (now error producing) warnings, but which are not yet applied to 
-the Radxa kernel:
+https://gitlab.com/buildroot.org/buildroot/-/blob/
+8d1180aa483b624f1be27bd0858c2f6665ebf36c/package/rockchip-rkbin/Config.in#L12
 
-https://github.com/gregkh/linux/commit/
-08ad7a770efacfecf903143f8de88d1e351a1f2d
+> > diff --git a/package/rockchip-rkbin/rockchip-rkbin.hash
+> > b/package/rockchip-rkbin/rockchip-rkbin.hash new file mode 100644
+> > index 0000000000..cb71226556
+> > --- /dev/null
+> > +++ b/package/rockchip-rkbin/rockchip-rkbin.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally computed
+> > +sha256  bd8d19ace202ff26d1c0b4d7744cd467cd0093801dc674dde57290159eedee2b 
+> > rockchip-rkbin-b4558da0860ca48bf1a571dd33ccba580b9abe23-br1.tar.gz
+> I've added a hash for the license file. Please check with:
+> 
+>     $ make legal-info
+> or:
+>     $ make rockchip-rkbin-legal-info
 
-https://github.com/gregkh/linux/commit/69848f9488bc1088bcd9a73987dff8d2cb47a060
+Thanks, seems to work on my PC.
 
-So I made patches from these commits:
+> > diff --git a/package/rockchip-rkbin/rockchip-rkbin.mk
+> > b/package/rockchip-rkbin/rockchip-rkbin.mk new file mode 100644
+> > index 0000000000..74787585e8
+> > --- /dev/null
+> > +++ b/package/rockchip-rkbin/rockchip-rkbin.mk
+> > @@ -0,0 +1,46 @@
+> > +#########################################################################
+> > ####### +#
+> > +# rockchip-rkbin
+> > +#
+> > +#########################################################################
+> > ####### +
+> > +ROCKCHIP_RKBIN_VERSION = $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_VERSION)) +ROCKCHIP_RKBIN_SITE =
+> > https://github.com/rockchip-linux/rkbin.git +ROCKCHIP_RKBIN_SITE_METHOD =
+> > git
+> > +ROCKCHIP_RKBIN_LICENSE = PROPRIETARY
+> > +ROCKCHIP_RKBIN_LICENSE_FILES = LICENSE
+> 
+> Since the license file was only recently added, it should not be defined
+> except for the known version.
+> 
+> Furthermore, I think hadling the custom version, if we re-introduce it
+> later, should be done with:
+> 
+> Config.in:
+> 
+>     config BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
+>         bool "Use a custom version"
+>         help
+>           Some binaries for older hipsets mey get pruned from the
+>           latest revisions of the repository. Say 'y' here if your
+>           SoC uses such older binaries.
+> 
+>     config BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE
+>         string "Custom version"
+>         depends on BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION
+> 
+> rocjchip-rkbin.mk:
+> 
+>     ifeq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION),)
+>     ROCKCHIP_RKBIN_VERSION = b4558da0860ca48bf1a571dd33ccba580b9abe23
+>     ROCKCHIP_RKBIN_LICENSE_FILES = LICENSE
+>     else
+>     ROCKCHIP_RKBIN_VERSION = $(call
+> qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_CUSTOM_VERSION_VALUE)) ifeq
+> ($(ROCKCHIP_RKBIN_VERSION),)
+>     $(error blabla check config blabla)
+>     endif
+>     BR_NO_CHECK_HASH_FOR += $(ROCKCHIP_RKBIN_SOURCE)
+>     endif
 
-git format-patch -1 08ad7a770efacfecf903143f8de88d1e351a1f2d
-git format-patch -1 69848f9488bc1088bcd9a73987dff8d2cb47a060
+Great, thanks! I did actually have in mind, that the custom version and the 
+(in older versions not existing) LICENSE file may cause problems. But I didn't 
+know what to do about it and forgot to ask here. Thanks!
 
-I then put these patches into the rock5b folder (i.e., board/radxa/rock5b/) 
-and added the following line to the rock5b_defconfig, so that buildroot applies 
-the patches during build:
+[--SNIP--]
 
-BR2_LINUX_KERNEL_PATCH="board/radxa/rock5b/0001-etherdevice-Adjust-ether_addr-
-prototypes-to-silence-.patch board/radxa/rock5b/0002-mm-page_alloc-fix-
-building-error-on-Werror-array-com.patch"
+> > +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME),"")
+> > +ROCKCHIP_RKBIN_TPL_FILENAME = $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME)) +endif
+> > +
+> > +ifneq ($(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME),"")
+> > +ROCKCHIP_RKBIN_TEE_FILENAME = $(call
+> > qstrip,$(BR2_PACKAGE_ROCKCHIP_RKBIN_TEE_FILENAME)) +endif
+> > +
+> > +define ROCKCHIP_RKBIN_INSTALL_IMAGES_CMDS
+> > +	$(if $(ROCKCHIP_RKBIN_BL31_FILENAME), \
+> > +		cp $(@D)/$(ROCKCHIP_RKBIN_BL31_FILENAME)
+> > $(BINARIES_DIR)/${ROCKCHIP_RKBIN_BL31_FILENAME##*/}) +	$(if
+> > $(ROCKCHIP_RKBIN_TPL_FILENAME), \
+> > +		cp $(@D)/$(ROCKCHIP_RKBIN_TPL_FILENAME)
+> > $(BINARIES_DIR)/${ROCKCHIP_RKBIN_TPL_FILENAME##*/}) +	$(if
+> > $(ROCKCHIP_RKBIN_TEE_FILENAME), \
+> > +		cp $(@D)/$(ROCKCHIP_RKBIN_TEE_FILENAME)
+> > $(BINARIES_DIR)/${ROCKCHIP_RKBIN_TEE_FILENAME##*/})
+> I've simplified this with a $(foreach...)
 
-However, the build did fail again, because there are even more "forbidden 
-warnings". These warnings are produced by kernel code which is located in 
-"drivers/net/wireless/rockchip_wlan/". To me it seems that this folder is not 
-part of mainline linux, but contains code some wireless driver code, put there 
-by Radxa or Rockchip. I am now not sure what to do about this. It would be 
-possible to try to fix these issues and then add more patches to the board/
-radxa/rock5b folder. However, I am not sure, whether I want to touch that 
-code. I am a bit afraid, I might not properly understand the code and then 
-introduce some bugs myself ...
+Thanks, much better of course!
 
-Does anyone have some suggestions, ideas and overall helpful info about this? 
-Help is really appreciated!
+> Applied to master with these changes, thanks.
+
+Thanks for reviewing!
 
 Best regards,
 Kilian
+
+
 
 
 _______________________________________________
