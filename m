@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F036DEE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:04:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C494EE49A6
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:05:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A963B40B57;
-	Mon, 21 Aug 2023 20:04:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A963B40B57
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1699B40B8E;
+	Mon, 21 Aug 2023 20:05:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1699B40B8E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hZ50XJo-b2o4; Mon, 21 Aug 2023 20:04:57 +0000 (UTC)
+	with ESMTP id 4ooo6wBXc4zS; Mon, 21 Aug 2023 20:05:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CAC9240B72;
-	Mon, 21 Aug 2023 20:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAC9240B72
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 410961BF951
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4738A40B74;
+	Mon, 21 Aug 2023 20:05:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4738A40B74
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CACE1BF95F
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CFE661120
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CFE661120
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31FC28196E
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31FC28196E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O4yuOQS3HZQs for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4K2UzXoC8FF5 for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6D7961112
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6D7961112
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C4C581AC1
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C4C581AC1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A507E86024; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id 69F2A86028; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 16:26:37 +0200
+Date: Mon, 7 Aug 2023 23:49:16 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d0349d5ba02df26c9f3d98b1e34ebd2c5c34192c
-X-Git-Newrev: 8382f0eb41bc12098f032c12781fb488aa63d901
+X-Git-Oldrev: 02a199105d88b295cac5bbce3d48f896e5605300
+X-Git-Newrev: ff050de534eed1dab152890d748952fc659882a0
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.A507E86024@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sentry-cli: fix build
- with OpenSSL 3.x
+Message-Id: <20230821200124.69F2A86028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libglib2: fix libiconv
+ handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,86 +64,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8382f0eb41bc12098f032c12781fb488aa63d901
+commit: https://git.buildroot.net/buildroot/commit/?id=ff050de534eed1dab152890d748952fc659882a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/4e2/4e24cb67402bad35ab57833d72e6c857b3eb4e07/
+In upstream commit e71ecc8771a4f13bc6046438ab0845944831b9a6 ("build:
+Remove deprecated -Diconv option"), merged since glib 2.75.1, the
+meson -Diconv option was removed.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+In Buildroot, this means that the build of libglib2 has been broken
+since commit 3f9622fe3d85b4d9f734b879abc1d485afea19b2, which bumped
+libglib2 from 2.72.3 to 2.76.1 for configurations that have libiconv
+enabled, causing this build failure:
+
+../output-1/build/libglib2-2.76.1/meson.build:1:0: ERROR: Unknown options: "iconv"
+
+iconv is now automatically detected by Meson machinery, and so the
+option was considered as no longer being needed. This commit fixes
+that by dropping the useless -Diconv=external.
+
+Another related change done is remove the double addition of libiconv
+into the <pkg>_DEPENDENCIES variable: libiconv can only be enabled
+when BR2_ENABLE_LOCALE is disabled, and libglib2/Config.in selects
+BR2_PACKAGE_LIBICONV when !BR2_ENABLE_LOCALE. So testing
+BR2_ENABLE_LOCALE!=y and BR2_PACKAGE_LIBICONV=y is exactly the same
+thing, causing libiconv to be added twice to the dependencies.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/d2da03f7558f3b6ee59c813bb64115702e52704c/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-Disable-SSL-support-for-the-curl-module.patch | 62 ++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ package/libglib2/libglib2.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch b/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
-new file mode 100644
-index 0000000000..e68401da78
---- /dev/null
-+++ b/package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
-@@ -0,0 +1,62 @@
-+From a3754088b4cf7d19ff4f9a98412dd132d5baf1c1 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Mon, 31 Jul 2023 22:34:04 +0200
-+Subject: [PATCH] Disable SSL support for the curl module
-+
-+Fixes build with OpenSSL v3.
-+
-+Downloaded Cargo.toml patch from
-+https://cgit.freebsd.org/ports/tree/devel/sentry-cli/files/patch-Cargo.toml
-+
-+Upstream: https://github.com/getsentry/sentry-cli/issues/1706
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ Cargo.lock | 10 ----------
-+ Cargo.toml |  2 +-
-+ 2 files changed, 1 insertion(+), 11 deletions(-)
-+
-+diff --git a/Cargo.lock b/Cargo.lock
-+index 75e1c8c..5121211 100644
-+--- a/Cargo.lock
-++++ b/Cargo.lock
-+@@ -1557,15 +1557,6 @@ version = "0.1.5"
-+ source = "registry+https://github.com/rust-lang/crates.io-index"
-+ checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
-+ 
-+-[[package]]
-+-name = "openssl-src"
-+-version = "111.22.0+1.1.1q"
-+-source = "registry+https://github.com/rust-lang/crates.io-index"
-+-checksum = "8f31f0d509d1c1ae9cada2f9539ff8f37933831fd5098879e482aa687d659853"
-+-dependencies = [
-+- "cc",
-+-]
-+-
-+ [[package]]
-+ name = "openssl-sys"
-+ version = "0.9.74"
-+@@ -1575,7 +1566,6 @@ dependencies = [
-+  "autocfg",
-+  "cc",
-+  "libc",
-+- "openssl-src",
-+  "pkg-config",
-+  "vcpkg",
-+ ]
-+diff --git a/Cargo.toml b/Cargo.toml
-+index abd6839..ddc141f 100644
-+--- a/Cargo.toml
-++++ b/Cargo.toml
-+@@ -19,7 +19,7 @@ clap = { version = "3.2.22", default-features = false, features = [
-+   "wrap_help",
-+ ] }
-+ console = "0.15.2"
-+-curl = { version = "0.4.44", features = ["static-curl", "static-ssl"] }
-++curl = { version = "0.4.44" }
-+ dirs = "4.0.0"
-+ dotenv = "0.15.0"
-+ elementtree = "1.2.2"
-+-- 
-+2.39.2
-+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index ecd7d5dbfe..c06ded2a5b 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -60,10 +60,6 @@ LIBGLIB2_MESON_EXTRA_PROPERTIES = \
+ 	have_c99_snprintf=true \
+ 	have_unix98_printf=true
+ 
+-ifneq ($(BR2_ENABLE_LOCALE),y)
+-LIBGLIB2_DEPENDENCIES += libiconv
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ LIBGLIB2_DEPENDENCIES += elfutils
+ endif
+@@ -74,7 +70,6 @@ LIBGLIB2_LDFLAGS += -latomic
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+-LIBGLIB2_CONF_OPTS += -Diconv=external
+ LIBGLIB2_DEPENDENCIES += libiconv
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
