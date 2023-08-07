@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B85DCC001DE
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 20:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D20B3C001B0
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 20:21:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C87A81E7D;
-	Mon,  7 Aug 2023 20:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C87A81E7D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AD9681E6C;
+	Mon,  7 Aug 2023 20:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AD9681E6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7sXbeyUgfMAv; Mon,  7 Aug 2023 20:21:33 +0000 (UTC)
+	with ESMTP id b_X8ks59PinH; Mon,  7 Aug 2023 20:21:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CF0981E6D;
-	Mon,  7 Aug 2023 20:21:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CF0981E6D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6B6671BF287
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 20:21:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E72A981E1D;
+	Mon,  7 Aug 2023 20:21:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E72A981E1D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 655B81BF287
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 20:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5205A81E4A
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 20:21:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5205A81E4A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F23C4049E
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 20:21:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F23C4049E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XMsOck0JMmXu for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 20:21:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6938681E1D
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 20:21:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6938681E1D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 572C584692; Mon,  7 Aug 2023 20:21:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 7 Aug 2023 22:15:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd17b3dd44363b8d47f2394cc5320b271229982c
-X-Git-Newrev: 9fa3799dfaa0cc08ff787a09e1f5b68e9bd4eef2
-X-Patchwork-Hint: ignore
-Message-Id: <20230807202125.572C584692@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-docker: bump to version
- 6.1.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RQUShnNQRMwD for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 20:21:49 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3C37840122
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 20:21:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C37840122
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 56C2960003;
+ Mon,  7 Aug 2023 20:21:47 +0000 (UTC)
+Date: Mon, 7 Aug 2023 22:21:46 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230807222146.6e6ea019@windsurf>
+In-Reply-To: <20230806220255.4099091-1-james.hilliard1@gmail.com>
+References: <20230806220255.4099091-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691439707;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hpGPPzZnw8dMIXdKYrmbYaeqy3m5wL7oJuavu2elNns=;
+ b=haWBQR0Ba66PK7aaRXHZpH61HyqgflsbfugQLt53sWGUrVg/IOpbllLR10GIJCuT5MIwak
+ 9zAnAtT5Iz32/X9TktqCTNUaK8rdc2vhUEmTAUtfg+Ba5s992ROBd0MSKuK+Sxp7egu0kq
+ WUg8WpTT4ba1pIzPN8b1fgjVnkTL/evUKGl6K/FUKb9+4pKI41LvDgrXEHFeLQ8+sSXnAV
+ 1SYioibtSsVxOqdxePnI22bjnUDrKHyi7ywgsCXfzva/qY+qCDwoH4yOvKcVgcPhdODKOr
+ uO0txn460zWq3f9xnvqXIZCpPDNbZCW/ebmcHM6PWPQ5Ss5A2XikqhfUG3MCBw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=haWBQR0B
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/python-botocore: bump to
+ version 1.31.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,77 +77,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fa3799dfaa0cc08ff787a09e1f5b68e9bd4eef2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  6 Aug 2023 16:02:55 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Remove no longer required six runtime dependency.
+> When we bumped urllib3 in 074bc42971181ee71d8ff5bd57641b7b7eb7580f
+> we broke compatibility with python-botocore.
+> 
+> This compatibility error was fixed upstream in botocore 1.29.122:
+> https://github.com/boto/botocore/commit/0a6d8e3c6325da395a04227599cfa292190d6841
+> 
+> Fixes:
+>  - https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561482
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - add fixes info
+> ---
+>  package/python-botocore/python-botocore.hash | 4 ++--
+>  package/python-botocore/python-botocore.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Add new explicit urllib3 runtime dependency.
+Applied to master, thanks.
 
-When we bumped urllib3 in 074bc42971181ee71d8ff5bd57641b7b7eb7580f
-we broke compatibility with python-docker.
-
-This compatibility error was fixed upstream in python-docker 6.1.0:
-https://github.com/docker/docker-py/commit/3178c8d48b7e7414d1f864ba1fe77139f4e923eb
-
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/4811724555
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-docker/Config.in          | 2 +-
- package/python-docker/python-docker.hash | 4 ++--
- package/python-docker/python-docker.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-docker/Config.in b/package/python-docker/Config.in
-index ae5a7a5181..944992f251 100644
---- a/package/python-docker/Config.in
-+++ b/package/python-docker/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_PYTHON_DOCKER
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
- 	select BR2_PACKAGE_PYTHON_WEBSOCKET_CLIENT # runtime
- 	help
- 	  A Python library for the Docker Engine API.
-diff --git a/package/python-docker/python-docker.hash b/package/python-docker/python-docker.hash
-index 3fc3c4f0f4..8e561e93a7 100644
---- a/package/python-docker/python-docker.hash
-+++ b/package/python-docker/python-docker.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/docker/json
--md5  8e85e23ed30a3d07129e197d35e56eb4  docker-6.0.1.tar.gz
--sha256  896c4282e5c7af5c45e8b683b0b0c33932974fe6e50fc6906a0a83616ab3da97  docker-6.0.1.tar.gz
-+md5  c319e75054a226776f32797e56ec82da  docker-6.1.3.tar.gz
-+sha256  aa6d17830045ba5ef0168d5eaa34d37beeb113948c413affe1d5991fc11f9a20  docker-6.1.3.tar.gz
- # Locally computed sha256 checksums
- sha256  f2f0b07fa5e492c11d27aa0d2f3f1a0e64b9d17f32d8aa489ae2af9609af33b2  LICENSE
-diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
-index 4da972e017..ab03ac6af0 100644
---- a/package/python-docker/python-docker.mk
-+++ b/package/python-docker/python-docker.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DOCKER_VERSION = 6.0.1
-+PYTHON_DOCKER_VERSION = 6.1.3
- PYTHON_DOCKER_SOURCE = docker-$(PYTHON_DOCKER_VERSION).tar.gz
--PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/79/26/6609b51ecb418e12d1534d00b888ce7e108f38b47dc6cd589598d5c6aaa2
-+PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/f0/73/f7c9a14e88e769f38cb7fb45aa88dfd795faa8e18aea11bababf6e068d5e
- PYTHON_DOCKER_SETUP_TYPE = setuptools
- PYTHON_DOCKER_LICENSE = Apache-2.0
- PYTHON_DOCKER_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
