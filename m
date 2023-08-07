@@ -4,67 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E553AC001B0
-	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 14:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D597BC00528
+	for <buildroot@archiver.kernel.org>; Mon,  7 Aug 2023 14:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D60581EB9;
-	Mon,  7 Aug 2023 14:07:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D60581EB9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62EFD81E6B;
+	Mon,  7 Aug 2023 14:20:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62EFD81E6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8iYpjFpD-GW4; Mon,  7 Aug 2023 14:07:12 +0000 (UTC)
+	with ESMTP id Qb5Gke4jmBJd; Mon,  7 Aug 2023 14:20:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 945B6818A1;
-	Mon,  7 Aug 2023 14:07:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 945B6818A1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 38CD31BF97A
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 14:07:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DFC38196E;
+	Mon,  7 Aug 2023 14:20:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DFC38196E
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 214A91BF280
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 14:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5196660EE4
- for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 14:06:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5196660EE4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67D4040162
+ for <buildroot@lists.busybox.net>; Mon,  7 Aug 2023 14:19:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67D4040162
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JaH9HZyF8wq8 for <buildroot@lists.busybox.net>;
- Mon,  7 Aug 2023 14:06:40 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D61FA606E6
- for <buildroot@buildroot.org>; Mon,  7 Aug 2023 14:06:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D61FA606E6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 51665E000F;
- Mon,  7 Aug 2023 14:06:36 +0000 (UTC)
-Date: Mon, 7 Aug 2023 16:06:35 +0200
-To: Andreas <andreasembbuild@gmail.com>
-Message-ID: <20230807160635.0c4da553@windsurf>
-In-Reply-To: <CAOLWrZ8p5g6xSYjXrDYseTDz_wW0MqWQ81EpeiHf788NnwhN8Q@mail.gmail.com>
-References: <CAOLWrZ8O-mF6RnuX80SmS7Mn5Op=o0OJMp6-wbhjUfRBiqfnXg@mail.gmail.com>
- <20230806235806.307605e5@windsurf>
- <CAOLWrZ8p5g6xSYjXrDYseTDz_wW0MqWQ81EpeiHf788NnwhN8Q@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kcTUW_fWDqJY for <buildroot@lists.busybox.net>;
+ Mon,  7 Aug 2023 14:19:54 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 43EC44085F
+ for <buildroot@buildroot.org>; Mon,  7 Aug 2023 14:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43EC44085F
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 990D0352BD4A; Mon,  7 Aug 2023 16:19:51 +0200 (CEST)
+Date: Mon, 7 Aug 2023 16:19:51 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZND9hxOZvMoUHrgQ@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691417196;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=9vES63HPOChocuTubZXUOQVCAatYd72/On0qOVjolyY=;
- b=IOCK1MGGI0VEmbUeYLsqlNMNtOExffDe47ID93kF3KCduAnD5wDAQ7tKohJwKuQqcr7EeB
- e2+9limToQH6lslnKOVG6MTCtQFQE5IbZ409Ia62MtIG7WW2wfnm/Tq/VdDvBv2KIEP87R
- tQhrZyMu3bOaYEuiccTI1N69jTprj80wM/9K5umh0J3DBwY6s+8YSCoUqaIaelIX+CQQpa
- +HiS1JlDV4BJtC6Y+jA74Z2ett/m1L51xNHlkjlnAN9/bepqA51JU68QxoT5shroz5P8qt
- Jlj29HPtuI2HGLU6Bxm8Q7gE7yFoWHk9uquFnrUOLfEwZWdkWndm7IKSpz16Ag==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IOCK1MGG
-Subject: Re: [Buildroot] Support for lapack
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1691417991; bh=pJYgYvbJKaFxmhxMAHp7Bp48IrcU3UvWgiPFJU8Vb9A=;
+ h=Date:From:To:Subject:From;
+ b=vrgHrayxVL9j16bJgVfMOTnpISnDEjpArxJgD+mTwyAKOxbD5zhigcqcyqRONmoz/
+ 7YtzbdeVQ025y3J7wK/JYMklDZIR2U7+skpmyomsu56qjVdtpdY6YrioZDbQdwrHzM
+ cYYIMAZsv6TA/YCt0In0oiVAsts2nXdJNay+YX/Q3TGc1tSMf4pkVkd+nLcjgYs77/
+ VtrhNFNbGVouuYMtisguCBtynaDdhuf9Pf3/UTM0YE9wmlf+On3q+p6qAAgmuXsJ+1
+ A16+mmSEIVROZnDOKWHAFHZxlGpe6HfXWGgV/nnEniS+uAlKdMzWJkOamtnl+eJVfU
+ bgXf+TQrQsqYg==
+Subject: [Buildroot] [PATCH] package/mpg123: fix linking error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,57 +66,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Fixes following build errors:
+http://autobuild.buildroot.net/?reason=mpg123-1.31.3
 
-On Mon, 7 Aug 2023 15:41:53 +0200
-Andreas <andreasembbuild@gmail.com> wrote:
+Patch was provided by upstream:
+https://sourceforge.net/p/mpg123/bugs/353/
 
-> Thanks for the hint. I followed this patch. I think from the errors I saw
-> my problem is most likely the toolchain. This dependency
-> respectively depends on BR2_TOOLCHAIN_HAS_FORTRAN # python-scipy. Since I
-> am migrating from an old buildroot to a recent version of it might also be
-> part of the problem. I know the toolchain menu in the menu config but like
-> to set it programatically in the build config.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/mpg123/0001-mpg123-buildfix.patch | 24 +++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/mpg123/0001-mpg123-buildfix.patch
 
-Not sure to understand what you mean here by "set it programmatically".
-
-> But I don't know how exactly
-> and which options depend on what. Basically I think I need a toolchain with
-> support for c++, wchar, threads, fortran, openblas and arch.
-
-Then use a toolchain that provides all of this, or ask Buildroot to
-build its own toolchain with those features enabled.
-
-> I found this
-> resource:
-> http://underpop.online.fr/b/buildroot/en/dependencies-target-toolchain-options.htm.gz
-
-Not sure why you go to some random website. This content comes from the
-Buildroot manual, see section 18.2.4 at
-https://buildroot.org/downloads/manual/manual.html.
-
-> but
-> still don't know how to set it properly in the config. Can you point me to
-> an example?
-
-I don't quite understand what problem you're trying to solve, so it's
-quite difficult to help.
-
-Best regards,
-
-Thomas
+diff --git a/package/mpg123/0001-mpg123-buildfix.patch b/package/mpg123/0001-mpg123-buildfix.patch
+new file mode 100644
+index 0000000000..cc731ea967
+--- /dev/null
++++ b/package/mpg123/0001-mpg123-buildfix.patch
+@@ -0,0 +1,24 @@
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://sourceforge.net/p/mpg123/bugs/353/
++
++diff -Nur mpg123-1.31.3.orig/src/libmpg123/getcpuflags.h mpg123-1.31.3/src/libmpg123/getcpuflags.h
++--- mpg123-1.31.3.orig/src/libmpg123/getcpuflags.h	2023-03-15 09:02:58.000000000 +0100
+++++ mpg123-1.31.3/src/libmpg123/getcpuflags.h	2023-08-07 15:57:19.444106173 +0200
++@@ -44,6 +44,8 @@
++ 
++ unsigned int getcpuflags(struct cpuflags* cf);
++ 
+++#if ((defined OPT_X86) || (defined OPT_X86_64) || (defined OPT_NEON) || (defined OPT_NEON64)) && (defined OPT_MULTI)
+++
++ #ifdef WANT_GETCPUFLAGS
++ #include <string.h>
++ // Wrapper needed for ignorant clang memory sanitizer that chokes
++@@ -55,8 +57,6 @@
++ }
++ #endif
++ 
++-#if ((defined OPT_X86) || (defined OPT_X86_64) || (defined OPT_NEON) || (defined OPT_NEON64)) && (defined OPT_MULTI)
++-
++ // We really evaluate the CPU flags.
++ #define OPT_CPU_FLAGS
++ 
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
