@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A4BCEE49AA
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B999EE49B5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 51B1A405B1;
-	Mon, 21 Aug 2023 20:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51B1A405B1
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD51940B67;
+	Mon, 21 Aug 2023 20:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD51940B67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1jUuiNUNoPkM; Mon, 21 Aug 2023 20:08:07 +0000 (UTC)
+	with ESMTP id yLdJDuufuuRb; Mon, 21 Aug 2023 20:08:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 440D740BD4;
-	Mon, 21 Aug 2023 20:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 440D740BD4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 120C21BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8FB940BE8;
+	Mon, 21 Aug 2023 20:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8FB940BE8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BCFF21BF8B4
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA559415C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9795D6110A
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA559415C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9795D6110A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0jGNjrQO9NyY for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mTZf4zNGi8b4 for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2C94409FE
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2C94409FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id B369761112
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B369761112
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9365A86023; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id A2B4B86026; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 15:43:12 +0200
+Date: Tue, 8 Aug 2023 18:49:03 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f3b22e3642c836f83b5f45d0bceba9c36ae9d33f
-X-Git-Newrev: d79f9c9f416ac5da90cd428916cff0b5288cb03a
+X-Git-Oldrev: 262849c518cdd1357b99ef0143bd9434fd563569
+X-Git-Newrev: 969bd6e3ddf3567495bab190e828dc9135d31e87
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.9365A86023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/elf2flt: backport
- upstream patch to remove use of BFD_VMA_FMT
+Message-Id: <20230821200124.A2B4B86026@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/aubio: add
+ AUBIO_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,214 +59,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1597431062968247349=="
+Content-Type: multipart/mixed; boundary="===============8574319803096244122=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1597431062968247349==
+--===============8574319803096244122==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d79f9c9f416ac5da90cd428916cff0b5288cb03a
+commit: https://git.buildroot.net/buildroot/commit/?id=969bd6e3ddf3567495bab190e828dc9135d31e87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit backports upstream commit
-https://github.com/uclinux-dev/elf2flt/commit/a36df7407d9e3f93ca6449841ff0821b0d980438
-to fix a build issue with binutils 2.40 or later:
+cpe:2.3:a:aubio:aubio is a valid identifier for
+this package:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=aubio
 
-elf2flt.c:223:31: error: expected ‘)’ before ‘BFD_VMA_FMT’
-
-We prefer a backport over updating to a newer elf2flt version for now
-as there has been multiple other changes in elf2flt, and elf2flt is
-very fragile. Therefore for now we prefer to be conservative.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/938a59b5e52d712786590e80328bb45b1c5fc519/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0007-elf2flt-remove-use-of-BFD_VMA_FMT.patch   | 169 +++++++++++++++++++++
- 1 file changed, 169 insertions(+)
+ package/aubio/aubio.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/elf2flt/0007-elf2flt-remove-use-of-BFD_VMA_FMT.patch b/package/elf2flt/0007-elf2flt-remove-use-of-BFD_VMA_FMT.patch
-new file mode 100644
-index 0000000000..82e693f35f
---- /dev/null
-+++ b/package/elf2flt/0007-elf2flt-remove-use-of-BFD_VMA_FMT.patch
-@@ -0,0 +1,169 @@
-+From 9ec7dd9dead2f3c4c73c3ab2166a1f81bfb41825 Mon Sep 17 00:00:00 2001
-+From: Greg Ungerer <gerg@kernel.org>
-+Date: Thu, 13 Apr 2023 22:58:20 +1000
-+Subject: [PATCH] elf2flt: remove use of BFD_VMA_FMT
-+
-+In binutils-2.40 the BFD_VMA_FMT definition used for printf style
-+formatting specifiers has been removed. For reference this was done in
-+commit b82817674f46 ("Don't use BFD_VMA_FMT in binutils") in the
-+binutils git development tree.
-+
-+BFD_VMA_FMT is used in a number of places in the elf2flt code to output
-+bfd offsets, values and the like. So it is broken when using the bfd
-+code from binutils-2.40 and newer.
-+
-+According to the binutils change PRIx64 (and friends) is used to replace
-+it, with appropriate casts to keep it clean for 32 and 64 bit platforms.
-+Change the elf2flt.c use of it in the same way to fix.
-+
-+This does not change the output in any way in normal use. This fix can
-+be used on all versions of binutils (older and newer), there is no
-+need to only do this on 2.40 and newer.
-+
-+Signed-off-by: Greg Ungerer <gerg@kernel.org>
-+Upstream: https://github.com/uclinux-dev/elf2flt/commit/a36df7407d9e3f93ca6449841ff0821b0d980438
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ elf2flt.c | 58 ++++++++++++++++++++++++++++---------------------------
-+ 1 file changed, 30 insertions(+), 28 deletions(-)
-+
-+diff --git a/elf2flt.c b/elf2flt.c
-+index 0fcb747..6685bff 100644
-+--- a/elf2flt.c
-++++ b/elf2flt.c
-+@@ -220,8 +220,8 @@ dump_symbols(asymbol **symbol_table, long number_of_symbols)
-+   long i;
-+   printf("SYMBOL TABLE:\n");
-+   for (i=0; i<number_of_symbols; i++) {
-+-	printf("  NAME=%s  VALUE=0x%"BFD_VMA_FMT"x\n",
-+-		symbol_table[i]->name, symbol_table[i]->value);
-++	printf("  NAME=%s  VALUE=0x%"PRIx64"\n",
-++		symbol_table[i]->name, (uint64_t) symbol_table[i]->value);
-+   }
-+   printf("\n");
-+   return(0);
-+@@ -466,8 +466,8 @@ output_relocs (
-+ 	if (r == NULL)
-+ 	  continue;
-+ 	if (verbose)
-+-	  printf(" RELOCS: %s [%p]: flags=0x%x vma=0x%"BFD_VMA_FMT"x\n",
-+-			r->name, r, r->flags, elf2flt_bfd_section_vma(r));
-++	  printf(" RELOCS: %s [%p]: flags=0x%x vma=0x%"PRIx64"\n",
-++			r->name, r, r->flags, (uint64_t) elf2flt_bfd_section_vma(r));
-+   	if ((r->flags & SEC_RELOC) == 0)
-+   	  continue;
-+ 	relsize = bfd_get_reloc_upper_bound(rel_bfd, r);
-+@@ -952,12 +952,13 @@ output_relocs (
-+ 					if (verbose)
-+ 						fprintf(stderr,
-+ 							"%s vma=0x%x, "
-+-							"value=0x%"BFD_VMA_FMT"x, "
-+-							"address=0x%"BFD_VMA_FMT"x "
-++							"value=0x%"PRIx64", "
-++							"address=0x%"PRIx64" "
-+ 							"sym_addr=0x%x rs=0x%x, opcode=0x%x\n",
-+ 							"ABS32",
-+-							sym_vma, (*(q->sym_ptr_ptr))->value,
-+-							q->address, sym_addr,
-++							sym_vma, 
-++							(uint64_t) (*(q->sym_ptr_ptr))->value,
-++							(uint64_t) q->address, sym_addr,
-+ 							(*p)->howto->rightshift,
-+ 							*(uint32_t *)r_mem);
-+ 					sym_vma = elf2flt_bfd_section_vma(sym_section);
-+@@ -971,12 +972,13 @@ output_relocs (
-+ 					if (verbose)
-+ 						fprintf(stderr,
-+ 							"%s vma=0x%x, "
-+-							"value=0x%"BFD_VMA_FMT"x, "
-+-							"address=0x%"BFD_VMA_FMT"x "
-++							"value=0x%"PRIx64", "
-++							"address=0x%"PRIx64" "
-+ 							"sym_addr=0x%x rs=0x%x, opcode=0x%x\n",
-+ 							"PLT32",
-+-							sym_vma, (*(q->sym_ptr_ptr))->value,
-+-							q->address, sym_addr,
-++							sym_vma,
-++							(uint64_t) (*(q->sym_ptr_ptr))->value,
-++							(uint64_t) q->address, sym_addr,
-+ 							(*p)->howto->rightshift,
-+ 							*(uint32_t *)r_mem);
-+ 				case R_ARM_PC24:
-+@@ -994,8 +996,8 @@ output_relocs (
-+ 				case R_V850_ZDA_16_16_OFFSET:
-+ 				case R_V850_ZDA_16_16_SPLIT_OFFSET:
-+ 					/* Can't support zero-relocations.  */
-+-					printf ("ERROR: %s+0x%"BFD_VMA_FMT"x: zero relocations not supported\n",
-+-							sym_name, q->addend);
-++					printf ("ERROR: %s+0x%"PRIx64": zero relocations not supported\n",
-++							sym_name, (uint64_t) q->addend);
-+ 					continue;
-+ #endif /* TARGET_v850 */
-+ 
-+@@ -1194,12 +1196,12 @@ output_relocs (
-+ 					temp |= (exist_val & 0x3f);
-+ 					*(unsigned long *)r_mem = htoniosl(temp);
-+ 					if (verbose)
-+-						printf("omit: offset=0x%"BFD_VMA_FMT"x symbol=%s%s "
-++						printf("omit: offset=0x%"PRIx64" symbol=%s%s "
-+ 								"section=%s size=%d "
-+-								"fixup=0x%x (reloc=0x%"BFD_VMA_FMT"x) GPREL\n",
-+-								q->address, sym_name, addstr,
-++								"fixup=0x%x (reloc=0x%"PRIx64") GPREL\n",
-++								(uint64_t) q->address, sym_name, addstr,
-+ 								section_name, sym_reloc_size,
-+-								sym_addr, section_vma + q->address);
-++								sym_addr, (uint64_t) section_vma + q->address);
-+ 					continue;
-+ 				}
-+ 				case R_NIOS2_PCREL16:
-+@@ -1214,12 +1216,12 @@ output_relocs (
-+ 					exist_val |= ((sym_addr & 0xFFFF) << 6);
-+ 					*(unsigned long *)r_mem = htoniosl(exist_val);
-+ 					if (verbose)
-+-						printf("omit: offset=0x%"BFD_VMA_FMT"x symbol=%s%s "
-++						printf("omit: offset=0x%"PRIx64" symbol=%s%s "
-+ 								"section=%s size=%d "
-+-								"fixup=0x%x (reloc=0x%"BFD_VMA_FMT"x) PCREL\n",
-+-								q->address, sym_name, addstr,
-++								"fixup=0x%x (reloc=0x%"PRIx64") PCREL\n",
-++								(uint64_t) q->address, sym_name, addstr,
-+ 								section_name, sym_reloc_size,
-+-								sym_addr, section_vma + q->address);
-++								sym_addr, (uint64_t) section_vma + q->address);
-+ 					continue;
-+ 				}
-+ 
-+@@ -1231,9 +1233,9 @@ output_relocs (
-+ 					    && (p[-1]->sym_ptr_ptr == p[0]->sym_ptr_ptr)
-+ 					    && (p[-1]->addend == p[0]->addend)) {
-+ 						if (verbose)
-+-							printf("omit: offset=0x%"BFD_VMA_FMT"x symbol=%s%s "
-++							printf("omit: offset=0x%"PRIx64" symbol=%s%s "
-+ 								"section=%s size=%d LO16\n",
-+-								q->address, sym_name, addstr,
-++								(uint64_t) q->address, sym_name, addstr,
-+ 								section_name, sym_reloc_size);
-+ 						continue;
-+ 					}
-+@@ -1646,13 +1648,13 @@ DIS29_RELOCATION:
-+ 			 */
-+ 			if (relocation_needed) {
-+ 				if (verbose)
-+-					printf("  RELOC[%d]: offset=0x%"BFD_VMA_FMT"x symbol=%s%s "
-++					printf("  RELOC[%d]: offset=0x%"PRIx64" symbol=%s%s "
-+ 						"section=%s size=%d "
-+-						"fixup=0x%x (reloc=0x%"BFD_VMA_FMT"x)\n",
-++						"fixup=0x%x (reloc=0x%"PRIx64")\n",
-+ 						flat_reloc_count,
-+-						q->address, sym_name, addstr,
-++						(uint64_t) q->address, sym_name, addstr,
-+ 						section_name, sym_reloc_size,
-+-						sym_addr, section_vma + q->address);
-++						sym_addr, (uint64_t) section_vma + q->address);
-+ 
-+ #ifndef TARGET_bfin
-+ 				flat_relocs = realloc(flat_relocs,
-+-- 
-+2.41.0
-+
+diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
+index 64174a113d..bfc627fa91 100644
+--- a/package/aubio/aubio.mk
++++ b/package/aubio/aubio.mk
+@@ -9,6 +9,7 @@ AUBIO_SITE = https://aubio.org/pub
+ AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
+ AUBIO_LICENSE = GPL-3.0+
+ AUBIO_LICENSE_FILES = COPYING
++AUBIO_CPE_ID_VENDOR = aubio
+ AUBIO_INSTALL_STAGING = YES
+ 
+ AUBIO_DEPENDENCIES = host-pkgconf
 
---===============1597431062968247349==
+--===============8574319803096244122==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -277,4 +103,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1597431062968247349==--
+--===============8574319803096244122==--
