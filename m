@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EEE8EC8733
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62045EC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:00:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE27482095;
-	Thu,  7 Sep 2023 14:59:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE27482095
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14CBC8230F;
+	Thu,  7 Sep 2023 15:00:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14CBC8230F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0xGa-Bbnyp8D; Thu,  7 Sep 2023 14:59:56 +0000 (UTC)
+	with ESMTP id mlPLYRRo6Tpo; Thu,  7 Sep 2023 15:00:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBDEF82314;
-	Thu,  7 Sep 2023 14:59:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBDEF82314
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 247F51BF3BB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FA998232A;
+	Thu,  7 Sep 2023 15:00:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FA998232A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C6591BF990
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB8DC41DA6
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB8DC41DA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7344404ED
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7344404ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 91nzBXGDvWCt for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n8vzZ6zpGuNO for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 94F2641D74
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94F2641D74
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1035415B6
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1035415B6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F30A86A1F; Thu,  7 Sep 2023 14:51:25 +0000 (UTC)
+ id DECAF86A25; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 13:55:48 +0200
+Date: Tue, 8 Aug 2023 09:46:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 05adefbafd532d901f8476e9dc59eb416108c4d4
-X-Git-Newrev: 6a3166cc2931178602810e241c21c67ac885ab87
+X-Git-Oldrev: ccc49c16bc457878f7d750f6fa8d7d0f102e7a9d
+X-Git-Newrev: 1d0fd8a11c76876d04e22f9a4f1d4558077c0c5b
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145125.7F30A86A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dominate: bump version to
- 2.8.0
+Message-Id: <20230907145127.DECAF86A25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
+ 23.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,46 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a3166cc2931178602810e241c21c67ac885ab87
+commit: https://git.buildroot.net/buildroot/commit/?id=1d0fd8a11c76876d04e22f9a4f1d4558077c0c5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes: https://github.com/Knio/dominate/releases/tag/2.8.0
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dominate/python-dominate.hash | 4 ++--
- package/python-dominate/python-dominate.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/intel-mediadriver/intel-mediadriver.hash | 2 +-
+ package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-dominate/python-dominate.hash b/package/python-dominate/python-dominate.hash
-index 89293baec6..9993dbe95f 100644
---- a/package/python-dominate/python-dominate.hash
-+++ b/package/python-dominate/python-dominate.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dominate/json
--md5  77bba29beaaac4dfb657092cd89db033  dominate-2.7.0.tar.gz
--sha256  520101360892ebf9d0553f67d37e359ff92403d8a1e33814030503088a05da49  dominate-2.7.0.tar.gz
-+md5  df2d30e7c2e7f1e5b085a58820e4cc94  dominate-2.8.0.tar.gz
-+sha256  4c90c3befaf88e612b71f4b39af7bcbef8977acfa855cec957225a8fbf504007  dominate-2.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256  9ccf26cfe845e0eb8bb58053e47366e7ab6b697ae010f7650978d4b71b7d1fc1  LICENSE.txt
-diff --git a/package/python-dominate/python-dominate.mk b/package/python-dominate/python-dominate.mk
-index 0f3687de5f..39e2edb82e 100644
---- a/package/python-dominate/python-dominate.mk
-+++ b/package/python-dominate/python-dominate.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
+index d22732b99f..39aa23a973 100644
+--- a/package/intel-mediadriver/intel-mediadriver.hash
++++ b/package/intel-mediadriver/intel-mediadriver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2d0e8892199f1f2365fd8729776bdfd9968a97a63ce1e759b3724bff57e9fc08  intel-media-23.3.0.tar.gz
++sha256  ce929da08ea917e4bb133ae67b5de42dce9c459b06a2670358a6ada00c48db58  intel-media-23.3.1.tar.gz
+ sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 58376bde2b..353f06156e 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -6,7 +6,7 @@
  
--PYTHON_DOMINATE_VERSION = 2.7.0
-+PYTHON_DOMINATE_VERSION = 2.8.0
- PYTHON_DOMINATE_SOURCE = dominate-$(PYTHON_DOMINATE_VERSION).tar.gz
--PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/12/d7/5e5f50f5d5bdd4282d2a70b9479c1d91d6628bebd4829e455cdf7366a92e
-+PYTHON_DOMINATE_SITE = https://files.pythonhosted.org/packages/13/3d/8d22916c12184f0c4930b9cdfb136a130e8d8eacf5942fc9883f2a189f6a
- PYTHON_DOMINATE_SETUP_TYPE = setuptools
- PYTHON_DOMINATE_LICENSE = LGPL-3.0+
- PYTHON_DOMINATE_LICENSE_FILES = LICENSE.txt
+ # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
+ 
+-INTEL_MEDIADRIVER_VERSION = 23.3.0
++INTEL_MEDIADRIVER_VERSION = 23.3.1
+ INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
+ INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
+ INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
