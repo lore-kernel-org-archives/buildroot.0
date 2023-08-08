@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52946EE49A6
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:08:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8C7AEE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:08:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09B5040BDF;
-	Mon, 21 Aug 2023 20:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09B5040BDF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 839D040BF2;
+	Mon, 21 Aug 2023 20:08:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 839D040BF2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y1YibX_f41QW; Mon, 21 Aug 2023 20:08:32 +0000 (UTC)
+	with ESMTP id Kmwi7Q56cwzU; Mon, 21 Aug 2023 20:08:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4801240B5B;
-	Mon, 21 Aug 2023 20:08:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4801240B5B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 231381BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id B607C40BF6;
+	Mon, 21 Aug 2023 20:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B607C40BF6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CCF511BF8B4
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C738E415A7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F28261126
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C738E415A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F28261126
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Pm4iqyCsRa32 for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JrYPemdsgyKe for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF1F3410A7
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF1F3410A7
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED61E6111C
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED61E6111C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC53086025; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id EB2B886026; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 22:14:13 +0200
+Date: Wed, 9 Aug 2023 00:12:40 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6cdb48a0482a093dcdf73d0d748f5435262515ab
-X-Git-Newrev: 3693462a1f8bd328c1a4f8fb68f00ce9127c31cd
+X-Git-Oldrev: 8ca41303efbada05fa0acf577ca86bd8f1a7eb15
+X-Git-Newrev: 159e469f53a1220249e8df41e287668a3d726678
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.DC53086025@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mpd: handle expat and
- yajl explicitly
+Message-Id: <20230821200124.EB2B886026@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sngrep: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,88 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3693462a1f8bd328c1a4f8fb68f00ce9127c31cd
+commit: https://git.buildroot.net/buildroot/commit/?id=159e469f53a1220249e8df41e287668a3d726678
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-mpd's Config.in selects expat and/or yajl depending on which
-sub-options is enabled, and adds build dependencies, but does not pass
--D<option>=enabled/disabled for both of these features, relying on
-auto-detection.
+irontec:sngrep is a valid CPE ID:
+https://nvd.nist.gov/products/cpe/detail/558A213D-A36B-4ED8-8671-2C38110F47FD?namingFormat=2.3&orderBy=CPEURI&keyword=sngrep&status=FINAL
 
-This commit fixes that by explicitly enabling/disabling expat and yajl
-depending on their presence. The mpd sub-options no longer need to
-have these as build-time dependencies, as it is handled globally.
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-[Thomas: extracted from
-https://patchwork.ozlabs.org/project/buildroot/patch/20221005091032.3014-5-br015@umbiko.net/]
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/mpd.mk | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ package/sngrep/sngrep.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 4b737c715c..f03a459b8c 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -29,6 +29,13 @@ else
- MPD_CONF_OPTS += -Dzeroconf=disabled
- endif
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index eedb99492f..0e344550d3 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -9,6 +9,7 @@ SNGREP_SITE = \
+ 	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
+ SNGREP_LICENSE = GPL-3.0+
+ SNGREP_LICENSE_FILES = LICENSE
++SNGREP_CPE_ID_VENDOR = irontec
+ SNGREP_AUTORECONF = YES
+ SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
  
-+ifeq ($(BR2_PACKAGE_EXPAT),y)
-+MPD_DEPENDENCIES += expat
-+MPD_CONF_OPTS += -Dexpat=enabled
-+else
-+MPD_CONF_OPTS += -Dexpat=disabled
-+endif
-+
- # MPD prefers libicu for utf8 collation instead of libglib2.
- ifeq ($(BR2_PACKAGE_ICU),y)
- MPD_DEPENDENCIES += icu
-@@ -37,6 +44,13 @@ else
- MPD_CONF_OPTS += -Dicu=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_YAJL),y)
-+MPD_DEPENDENCIES += yajl
-+MPD_CONF_OPTS += -Dyajl=enabled
-+else
-+MPD_CONF_OPTS += -Dyajl=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPD_ALSA),y)
- MPD_DEPENDENCIES += alsa-lib
- MPD_CONF_OPTS += -Dalsa=enabled
-@@ -251,7 +265,7 @@ MPD_CONF_OPTS += -Dpulse=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_QOBUZ),y)
--MPD_DEPENDENCIES += libgcrypt yajl
-+MPD_DEPENDENCIES += libgcrypt
- MPD_CONF_OPTS += -Dqobuz=enabled
- else
- MPD_CONF_OPTS += -Dqobuz=disabled
-@@ -272,7 +286,6 @@ MPD_CONF_OPTS += -Dsidplay=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
--MPD_DEPENDENCIES += yajl
- MPD_CONF_OPTS += -Dsoundcloud=enabled
- else
- MPD_CONF_OPTS += -Dsoundcloud=disabled
-@@ -307,12 +320,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_MPD_UPNP_PUPNP),y)
- MPD_DEPENDENCIES += \
--	expat \
- 	libupnp
- MPD_CONF_OPTS += -Dupnp=pupnp
- else ifeq ($(BR2_PACKAGE_MPD_UPNP_NPUPNP),y)
- MPD_DEPENDENCIES += \
--	expat \
- 	libnpupnp
- MPD_CONF_OPTS += -Dupnp=npupnp
- else ifeq ($(BR2_PACKAGE_MPD_UPNP_DISABLED),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
