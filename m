@@ -4,66 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 574ADC001DE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 15:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45B3FC001B0
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 16:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2DC161182;
-	Tue,  8 Aug 2023 15:16:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2DC161182
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3F106119B;
+	Tue,  8 Aug 2023 16:21:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3F106119B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dISYcgnLHv3M; Tue,  8 Aug 2023 15:16:57 +0000 (UTC)
+	with ESMTP id fLwr2E7svDtq; Tue,  8 Aug 2023 16:21:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 238056117C;
-	Tue,  8 Aug 2023 15:16:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 238056117C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 69CBD1BF37C
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 15:16:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E9C05610F1;
+	Tue,  8 Aug 2023 16:21:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9C05610F1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BF1131BF5A5
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 16:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A1B981FED
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 15:16:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A1B981FED
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9637240C09
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 16:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9637240C09
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RHiOWZDUee0u for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 15:16:52 +0000 (UTC)
-X-Greylist: delayed 304 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 08 Aug 2023 15:16:51 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A954781CE7
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A954781CE7
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 15:16:51 +0000 (UTC)
-Received: from uxmal ([37.161.196.16]) by mrelayeu.kundenserver.de (mreue010
- [212.227.17.189]) with ESMTPSA (Nemesis) id 1Ma1kC-1qHFIK3j7c-00Vwxg; Tue, 08
- Aug 2023 17:11:45 +0200
-From: Pedro Aguilar <paguilar@paguilar.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j6NWfb9HziQS for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 16:21:14 +0000 (UTC)
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F2E9040BCB
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 16:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2E9040BCB
+Received: from localhost (unknown [127.0.0.1])
+ by mx.kolabnow.com (Postfix) with ESMTP id EA2EDAA8
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:21:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mykolab.com
+Received: from mx.kolabnow.com ([127.0.0.1])
+ by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 34TAq9qJkEXB for <buildroot@buildroot.org>;
+ Tue,  8 Aug 2023 18:21:09 +0200 (CEST)
+Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
+ by mx.kolabnow.com (Postfix) with ESMTPS id 9EB1C83A
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:21:07 +0200 (CEST)
+Received: from ext-subm002.mykolab.com (unknown [10.9.6.2])
+ by int-mx001.mykolab.com (Postfix) with ESMTPS id 1F2C8CA7;
+ Tue,  8 Aug 2023 18:21:07 +0200 (CEST)
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 To: buildroot@buildroot.org
-Date: Tue,  8 Aug 2023 17:11:03 +0200
-Message-Id: <20230808151103.5597-1-paguilar@paguilar.org>
-X-Mailer: git-send-email 2.34.1
+Date: Tue,  8 Aug 2023 18:20:27 +0200
+Message-Id: <20230808162027.100470-1-zgyarmati@zgyarmati.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:PYD6auiiWC+ip4QTaIDzSILNwtRiu0DsZit9+hWHPdm9FreiWpc
- ikIrwnGmwc6ES/W2uuMu/Hcdx11vIJmNJk3A7QEDwXUF1ikUBJIosEahQVH+jvMslNmYJFM
- uXVyksyXts+esP7ZKqAVE4e7yAFlQ8C7OUzyKihtSGgV9zTmOxqMRiFNxyeM9Wvqq3q6kPJ
- IgeW1Cxr/k7amDizSxEBw==
-UI-OutboundReport: notjunk:1;M01:P0:cfkiO2LmHjM=;5x6+YT5sxK8Hvj6xOi6EgGW/47s
- wJ1cGnjp2N1EDPp93c2b615Rf+1dntH13GWyVv0vBvXHbNTt3+ws8z5B3MfosK1xq5sDBlJQY
- muB5ntMWapMa/94A9T+bDaDKATNUUYuwWMa8FADomk9HTieAaifF0tY7GOEXXTnpykaJ3924C
- E90A30PRH9cRRFDNBQtnYVZ5mpvEi2tnzSyaFlkEUF7qe5G4XESSRU799hy/2Obw6V2tFPZCM
- huLqwmcjwubJK7kIYPohgM1k6PSP6xpFH2S/y0jcNz55DAKu6zRSwc0b6YU9JHJZEq8MSGUD/
- Ov7j+vxySou1BebtwfneK5SL03z3OYm8GVRhnRkwNXy99N5002mm2lQuRcxqSoI2OAEy2qVTc
- Uz0ZJhu53mOUcUv0YE4bQ+0qkFaDFTf1u764m1550g6nRGfX6ZYzOOxBrCd0i2TX6LVxHVIbZ
- TGY0nYto0HY3pNzcAWoCDH51r4Av5OzA3dmDTNfYtNlc9gnQANiahS0ydlpimDGciPVzGo/+K
- yEuXo1KtJLgFMYcUUwkHkoYpO9hAJKE0c2dAq74w+uDGY6JoTnO8TtLzqxt2G1duQivTR5Yq0
- AbYo99g5HR236+4rnrUDb3pDMSEk+R3eYLXKR5P0VxBUDVYrFbU4aWvZCZGh2rcYXlaAhKeWa
- w8IKBsjdhlGo4arlvLtbLQtSKl1EVhpB2p+aRLxGDLDj2p8l1mdayttsYWurrwHrsN2evnoqq
- M3B4xUQKEG0vQ7raSPfua6yFc3/2D0wQ+8BqZ6XUINkOj2gzE5NhSpZjG8Rbe+QhjBRBHHlXJ
- BgLhSER5IcIgHx88Lq3URHKHUisUud2eEV3Wp/DhPyXapfgiIOy7VDPFtRGP8/6Ib+4re5Nux
- 7dBiKRKaU3bwUSQ==
-Subject: [Buildroot] [PATCH 1/1] package/bdwgc: Bump to version 8.2.4
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kolabnow.com; h=
+ content-transfer-encoding:mime-version:message-id:date:date
+ :subject:subject:from:from:received:received:received; s=
+ dkim20160331; t=1691511669; x=1693326070; bh=fDRJT/Aqx5vset7U5Hu
+ 0PpqKGkbzsr3CAvZX+ACw9XM=; b=ADk5dcOMMS5bOhHgGSPj0IUqJNtvUAyKR2q
+ f3q6BJRKp+J/WI0tRWSX4EZ/0IYhXcEsXGUDiFrol4NWmFSRp48bb4aafkwekPZW
+ 00EI1F3p3YBM8CHRycPbJNrt/haniOxyCLKmgLLO2opO7K6dwp7QQrzjaSKn1Gwd
+ lQN+yC4hW2o5PWfzZ6CBUG44FwFasesaF2ayu9aTtsKxYbVCQoAZW3m2P4yysCcD
+ hxAeufsAJtij7B6XfdVGZSwIgEQVsmGbhnlGGaTEGMREWhq8g2Bhb+zwtOx+81BA
+ g9LeabmTLlMMqklwIkPlaMcAhehgbbP52Eak9trZLriLCkRgSmaZMbMqb+MYES0U
+ 4yhVovmFLl841R6PqMzF/FMNY4bxjg3bw+3q0OacV3vRMwv/Z+fr0ma7A1NooLVB
+ wMGb/99mTVqZNnQIWys+hr+7JlxVeuOtxqG4CdrDdBlh7ii+v3B7CqFtrCyat9y8
+ ReGvqcOJxzkO0sCwHmSPbp+fxNqVIh32rzIHo4OnEueYwoAsfr5EwWT1XZQ69HB4
+ jTP67W7gKHUsg21vcclxnx8bXNlse5V8B4bgYOBoMTZNmL1EKRlQkvlLoUwVwnvD
+ QOicimc+OZwHx74IRF/dMV429SFTvekmZWCGVz/KxS0D2rOF8kDvMWllhf/XCVNb
+ Cxbw3j2g=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (4096-bit key) header.d=kolabnow.com header.i=@kolabnow.com
+ header.a=rsa-sha256 header.s=dkim20160331 header.b=ADk5dcOM
+X-Mailman-Original-Authentication-Results: ext-mx-out001.mykolab.com
+ (amavisd-new); 
+ dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+ header.d=kolabnow.com
+Subject: [Buildroot] [PATCH 1/1] package/quazip: bump to 1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,44 +89,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pedro Aguilar <paguilar@paguilar.org>
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/ivmai/bdwgc/releases/tag/v8.2.4
-
-Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 ---
- package/bdwgc/bdwgc.hash | 2 +-
- package/bdwgc/bdwgc.mk   | 2 +-
+ package/quazip/quazip.hash | 2 +-
+ package/quazip/quazip.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
-index 917089da08..8fa49b4585 100644
---- a/package/bdwgc/bdwgc.hash
-+++ b/package/bdwgc/bdwgc.hash
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+index 16d299fdf4..1c5c614caf 100644
+--- a/package/quazip/quazip.hash
++++ b/package/quazip/quazip.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  f30107bcb062e0920a790ffffa56d9512348546859364c23a14be264b38836a0  gc-8.2.2.tar.gz
-+sha256  3d0d3cdbe077403d3106bb40f0cbb563413d6efdbb2a7e1cd6886595dec48fc2  gc-8.2.4.tar.gz
- sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index e776fb7458..bff703ee98 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
+-sha256  c1239559cd6860cab80a0fd81f4204e606f9324f702dab6166b0960676ee1754  quazip-1.3.tar.gz
++sha256  79633fd3a18e2d11a7d5c40c4c79c1786ba0c74b59ad752e8429746fe1781dd6  quazip-1.4.tar.gz
+ sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index 70534b63b3..bf3b844624 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BDWGC_VERSION = 8.2.2
-+BDWGC_VERSION = 8.2.4
- BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
- BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
- BDWGC_INSTALL_STAGING = YES
+-QUAZIP_VERSION = 1.3
++QUAZIP_VERSION = 1.4
+ QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
+ QUAZIP_INSTALL_STAGING = YES
+ QUAZIP_DEPENDENCIES = \
 -- 
-2.34.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
