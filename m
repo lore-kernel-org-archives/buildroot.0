@@ -1,81 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CF90C04A6A
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 05:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E9DC001B0
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 05:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17A9E81F3C;
-	Tue,  8 Aug 2023 05:02:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17A9E81F3C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F3734091E;
+	Tue,  8 Aug 2023 05:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F3734091E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1O1vONms373R; Tue,  8 Aug 2023 05:01:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Hcg5L5vQwHMa; Tue,  8 Aug 2023 05:24:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E97C81E6B;
-	Tue,  8 Aug 2023 05:01:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E97C81E6B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DBCCB1BF3AA
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:01:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DBBD40923;
+	Tue,  8 Aug 2023 05:24:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DBBD40923
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CA8F1BF32C
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:24:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B34FB81E04
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:01:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B34FB81E04
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C597403A2
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:24:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C597403A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wt9gFOp5OX1i for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 05:01:30 +0000 (UTC)
-Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 66F4981E4A
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 05:01:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66F4981E4A
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout02.mail.de (Postfix) with ESMTP id 837FBA0415
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 07:01:28 +0200 (CEST)
-Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix01.mail.de (Postfix) with ESMTP id 694DC80069;
- Tue,  8 Aug 2023 07:01:28 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 2520110013C;
- Tue,  8 Aug 2023 07:01:28 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Tue,  8 Aug 2023 07:01:22 +0200
-Message-Id: <20230808050122.6788-3-kilian.zinnecker@mail.de>
-In-Reply-To: <20230808050122.6788-1-kilian.zinnecker@mail.de>
-References: <20230808050122.6788-1-kilian.zinnecker@mail.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5tWgpKxWgCQD for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 05:24:19 +0000 (UTC)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com
+ [209.85.208.169])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D1838402F4
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 05:24:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1838402F4
+Received: by mail-lj1-f169.google.com with SMTP id
+ 38308e7fff4ca-2b974031aeaso81344841fa.0
+ for <buildroot@buildroot.org>; Mon, 07 Aug 2023 22:24:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691472256; x=1692077056;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=MTJrO9hlh/I9TCaAcYvgRBT+eiOsauAeJBXJwzzSFxw=;
+ b=leeA4JtytCqx7gpX9qBotBTfAjgABLAsi4tiEteF/7qROyk/nR0v0N30CrQFkXFftu
+ T4v6mQXMEAEoNJ4Oq0Fq4UfX7Nfi98tnNMr5Er1wE/Q+SWb90fZrDjfXEGOhjo7uq9ln
+ a1cLW2TSLTuSec/6Bmk4s0Ls5O3Ag/9ZkpDvYL2zMBgaI/TAhWIvk6T8O1H8EhPWVsNI
+ fjpjZQe9UyboEZYweowTawADam9f54+jPq1pDs7Lp1JZ8rT6mxZJSlpTIKybzBkOmHq2
+ Yd3XS9OxrX2J5yALiQ4VykwuH9/fBybj0dj5t9fxKjH/AUA/YOnNI9NNeuAGCCUbtv+n
+ ZzKg==
+X-Gm-Message-State: AOJu0Ywgz+xXSJTUCARgq0GAqR9Bus5MTxLJpGis4fhdN3XUBEivW7mK
+ 1tJ8wlnu9jvntcZND6L/IYXS1E3DaQDjZND2
+X-Google-Smtp-Source: AGHT+IHp2UCOQh0L02I1LBsFrcCi9ERZ2QAFQwrQ6TxL0S1Xm+Ck21Ye0/8K8pDVTw1NDbkUiDYTgg==
+X-Received: by 2002:a2e:a312:0:b0:2b6:decf:5cbd with SMTP id
+ l18-20020a2ea312000000b002b6decf5cbdmr8144149lje.36.1691472256493; 
+ Mon, 07 Aug 2023 22:24:16 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com.
+ [209.85.167.47]) by smtp.gmail.com with ESMTPSA id
+ z24-20020a2e8e98000000b002b9ead74535sm2132392ljk.15.2023.08.07.22.24.15
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 07 Aug 2023 22:24:16 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id
+ 2adb3069b0e04-4f4b2bc1565so8467037e87.2
+ for <buildroot@buildroot.org>; Mon, 07 Aug 2023 22:24:15 -0700 (PDT)
+X-Received: by 2002:ac2:504e:0:b0:4f8:6d54:72f9 with SMTP id
+ a14-20020ac2504e000000b004f86d5472f9mr7471377lfm.61.1691472255722; Mon, 07
+ Aug 2023 22:24:15 -0700 (PDT)
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 6979
-X-purgate-ID: 154282::1691470888-90D0F7B6-49E88ADF/0/0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1691470888;
- bh=KHiIqjSZ5HtGJkP+k5Imww02c/EZM5YPFXr491ckoio=;
- h=From:To:Cc:Subject:Date:Message-Id:From:To:CC:Subject:Reply-To;
- b=LnvP4q3rFSDvXpEZIv3plU1/ue7WmcSINper4yLJ02bM0TjFQJmufYJATg9D6kxAI
- 0Imwi0muViCpaSXZRMI7MMUCjNsvpEqwz65wf2fCinUZwRvtXfLZzPakQIRGuK4dSU
- Mdj3aOJBKGZFm2AT5Y5y66BBMxzAjb/ZJVyIpmsLljCZivYgTWQ2fyHL1VEpCm8ABf
- XSyFLTFndIqrbmv+PQmlSL2r+/ScTRiPh9C9YtZ5jtqGH7Te5Y7KPdDvcX+uMQR78p
- UAZdDeIeEs1BBAVrLWj5xNyh49PV4juKlPHu7SMMl7zs7xjAKeNwV/yJ6wdWVPRUn8
- Ki4XxaIbYnXmg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=LnvP4q3r
-Subject: [Buildroot] [PATCH 2/2] board/radxa/rock5b: Add patches for gcc12
- warnings
+References: <20230807145839.2375839-1-thomas.devoogdt@barco.com>
+ <20230807213131.GA421096@scaer>
+In-Reply-To: <20230807213131.GA421096@scaer>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Tue, 8 Aug 2023 07:24:03 +0200
+X-Gmail-Original-Message-ID: <CACXRmJg7oT6yyWCtNJ7ok_57AtGXzS3sD41KYFTn9YzUeUWgWQ@mail.gmail.com>
+Message-ID: <CACXRmJg7oT6yyWCtNJ7ok_57AtGXzS3sD41KYFTn9YzUeUWgWQ@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Subject: Re: [Buildroot] [PATCH v1 1/3 next] package/qt6/qt6serialport: use
+ the CMAKE_NINJA flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,134 +90,251 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Devoogdt <thomas@devoogdt.com>,
+ Jesse Van Gavere <jesseevg@gmail.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2738318534126508895=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBwYXRjaCBpbnRyb2R1Y2VzIHBhdGNoZXMgZm9yIHRoZSBjdXN0b20ga2VybmVsLCBhcyBp
-dCBpcwpjdXJyZW50bHkgdXNlZCBmb3IgdGhlIFJhZHhhIFJvY2sgNUIuIFRoZSBwYXRjaGVzIGZp
-eCB0d28gZ2NjCmNvbXBpbGVyIHdhcm5pbmdzLCB3aGljaCByZXN1bHQgaW4gYSBidWlsZCBlcnJv
-ciwgaWYgdGhlIGtlcm5lbAppcyB1c2VkIHdpdGggZ2NjIHZlcnNpb24gMTIuCgpTaWduZWQtb2Zm
-LWJ5OiBLaWxpYW4gWmlubmVja2VyIDxraWxpYW4uemlubmVja2VyQG1haWwuZGU+Ci0tLQogLi4u
-c3QtZXRoZXJfYWRkci1wcm90b3R5cGVzLXRvLXNpbGVuY2UtLnBhdGNoIHwgNjIgKysrKysrKysr
-KysrKysrKysrKwogLi4ueC1idWlsZGluZy1lcnJvci1vbi1XZXJyb3ItYXJyYXktY29tLnBhdGNo
-IHwgNDUgKysrKysrKysrKysrKysKIGNvbmZpZ3Mvcm9jazViX2RlZmNvbmZpZyAgICAgICAgICAg
-ICAgICAgICAgICB8ICAxICsKIDMgZmlsZXMgY2hhbmdlZCwgMTA4IGluc2VydGlvbnMoKykKIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9yYWR4YS9yb2NrNWIvMDAwMS1ldGhlcmRldmljZS1BZGp1
-c3QtZXRoZXJfYWRkci1wcm90b3R5cGVzLXRvLXNpbGVuY2UtLnBhdGNoCiBjcmVhdGUgbW9kZSAx
-MDA2NDQgYm9hcmQvcmFkeGEvcm9jazViLzAwMDItbW0tcGFnZV9hbGxvYy1maXgtYnVpbGRpbmct
-ZXJyb3Itb24tV2Vycm9yLWFycmF5LWNvbS5wYXRjaAoKZGlmZiAtLWdpdCBhL2JvYXJkL3JhZHhh
-L3JvY2s1Yi8wMDAxLWV0aGVyZGV2aWNlLUFkanVzdC1ldGhlcl9hZGRyLXByb3RvdHlwZXMtdG8t
-c2lsZW5jZS0ucGF0Y2ggYi9ib2FyZC9yYWR4YS9yb2NrNWIvMDAwMS1ldGhlcmRldmljZS1BZGp1
-c3QtZXRoZXJfYWRkci1wcm90b3R5cGVzLXRvLXNpbGVuY2UtLnBhdGNoCm5ldyBmaWxlIG1vZGUg
-MTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjhjMWNlYzJmNDcKLS0tIC9kZXYvbnVsbAorKysgYi9i
-b2FyZC9yYWR4YS9yb2NrNWIvMDAwMS1ldGhlcmRldmljZS1BZGp1c3QtZXRoZXJfYWRkci1wcm90
-b3R5cGVzLXRvLXNpbGVuY2UtLnBhdGNoCkBAIC0wLDAgKzEsNjIgQEAKK0Zyb20gMjYxOGEwZGFl
-MDllZjM3NzI4ZGFiODlmZjYwNDE4Y2JlMjVhZTZiZCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEK
-K0Zyb206IEtlZXMgQ29vayA8a2Vlc2Nvb2tAY2hyb21pdW0ub3JnPgorRGF0ZTogU2F0LCAxMiBG
-ZWIgMjAyMiAwOToxNDo0OSAtMDgwMAorU3ViamVjdDogW1BBVENIXSBldGhlcmRldmljZTogQWRq
-dXN0IGV0aGVyX2FkZHIqIHByb3RvdHlwZXMgdG8gc2lsZW5jZQorIC1Xc3RyaW5nb3Atb3ZlcmVh
-ZAorTUlNRS1WZXJzaW9uOiAxLjAKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1V
-VEYtOAorQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAorCitXaXRoIEdDQyAxMiwgLVdz
-dHJpbmdvcC1vdmVycmVhZCB3YXMgd2FybmluZyBhYm91dCBhbiBpbXBsaWNpdCBjYXN0IGZyb20K
-K2NoYXJbNl0gdG8gY2hhcls4XS4gSG93ZXZlciwgdGhlIGV4dHJhIDIgYnl0ZXMgYXJlIGFsd2F5
-cyB0aHJvd24gYXdheSwKK2FsaWdubWVudCBkb2Vzbid0IG1hdHRlciwgYW5kIHRoZSByaXNrIG9m
-IGhpdHRpbmcgdGhlIGVkZ2Ugb2YgdW5hbGxvY2F0ZWQKK21lbW9yeSBoYXMgYmVlbiBhY2NlcHRl
-ZCwgc28gdGhpcyBwcm90b3R5cGUgY2FuIGp1c3QgYmUgY29udmVydGVkIHRvIGEKK3JlZ3VsYXIg
-Y2hhciAqLiBTaWxlbmNlczoKKworbmV0L2NvcmUvZGV2LmM6IEluIGZ1bmN0aW9uIOKAmGJwZl9w
-cm9nX3J1bl9nZW5lcmljX3hkcOKAmTogbmV0L2NvcmUvZGV2LmM6NDYxODoyMTogd2FybmluZzog
-4oCYZXRoZXJfYWRkcl9lcXVhbF82NGJpdHPigJkgcmVhZGluZyA4IGJ5dGVzIGZyb20gYSByZWdp
-b24gb2Ygc2l6ZSA2IFstV3N0cmluZ29wLW92ZXJyZWFkXQorIDQ2MTggfCAgICAgICAgIG9yaWdf
-aG9zdCA9IGV0aGVyX2FkZHJfZXF1YWxfNjRiaXRzKGV0aC0+aF9kZXN0LCA+IHNrYi0+ZGV2LT5k
-ZXZfYWRkcik7CisgICAgICB8ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4KK25ldC9jb3JlL2Rldi5jOjQ2
-MTg6MjE6IG5vdGU6IHJlZmVyZW5jaW5nIGFyZ3VtZW50IDEgb2YgdHlwZSDigJhjb25zdCB1OFs4
-XeKAmSB7YWthIOKAmGNvbnN0IHVuc2lnbmVkIGNoYXJbOF3igJl9CituZXQvY29yZS9kZXYuYzo0
-NjE4OjIxOiBub3RlOiByZWZlcmVuY2luZyBhcmd1bWVudCAyIG9mIHR5cGUg4oCYY29uc3QgdThb
-OF3igJkge2FrYSDigJhjb25zdCB1bnNpZ25lZCBjaGFyWzhd4oCZfQorSW4gZmlsZSBpbmNsdWRl
-ZCBmcm9tIG5ldC9jb3JlL2Rldi5jOjkxOiBpbmNsdWRlL2xpbnV4L2V0aGVyZGV2aWNlLmg6Mzc1
-OjIwOiBub3RlOiBpbiBhIGNhbGwgdG8gZnVuY3Rpb24g4oCYZXRoZXJfYWRkcl9lcXVhbF82NGJp
-dHPigJkKKyAgMzc1IHwgc3RhdGljIGlubGluZSBib29sIGV0aGVyX2FkZHJfZXF1YWxfNjRiaXRz
-KGNvbnN0IHU4IGFkZHIxWzYrMl0sCisgICAgICB8ICAgICAgICAgICAgICAgICAgICBefn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fgorCitSZXBvcnRlZC1ieTogTWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBw
-ZW5ndXRyb25peC5kZT4KK1Rlc3RlZC1ieTogTWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBwZW5ndXRy
-b25peC5kZT4KK0xpbms6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL25ldGRldi8yMDIyMDIxMjA5
-MDgxMS51dXprNmQ3NmFndzJ2djczQHBlbmd1dHJvbml4LmRlCitDYzogSmFrdWIgS2ljaW5za2kg
-PGt1YmFAa2VybmVsLm9yZz4KK0NjOiAiRGF2aWQgUy4gTWlsbGVyIiA8ZGF2ZW1AZGF2ZW1sb2Z0
-Lm5ldD4KK0NjOiBuZXRkZXZAdmdlci5rZXJuZWwub3JnCitTaWduZWQtb2ZmLWJ5OiBLZWVzIENv
-b2sgPGtlZXNjb29rQGNocm9taXVtLm9yZz4KK1NpZ25lZC1vZmYtYnk6IERhdmlkIFMuIE1pbGxl
-ciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD4KKy0tLQorIGluY2x1ZGUvbGludXgvZXRoZXJkZXZpY2Uu
-aCB8IDUgKystLS0KKyAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9u
-cygtKQorCitkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9ldGhlcmRldmljZS5oIGIvaW5jbHVk
-ZS9saW51eC9ldGhlcmRldmljZS5oCitpbmRleCAyYWQ3MWNjOTBiMzcuLjkyYjEwZTY3ZDVmOCAx
-MDA2NDQKKy0tLSBhL2luY2x1ZGUvbGludXgvZXRoZXJkZXZpY2UuaAorKysrIGIvaW5jbHVkZS9s
-aW51eC9ldGhlcmRldmljZS5oCitAQCAtMTM0LDcgKzEzNCw3IEBAIHN0YXRpYyBpbmxpbmUgYm9v
-bCBpc19tdWx0aWNhc3RfZXRoZXJfYWRkcihjb25zdCB1OCAqYWRkcikKKyAjZW5kaWYKKyB9Cisg
-Cistc3RhdGljIGlubGluZSBib29sIGlzX211bHRpY2FzdF9ldGhlcl9hZGRyXzY0Yml0cyhjb25z
-dCB1OCBhZGRyWzYrMl0pCisrc3RhdGljIGlubGluZSBib29sIGlzX211bHRpY2FzdF9ldGhlcl9h
-ZGRyXzY0Yml0cyhjb25zdCB1OCAqYWRkcikKKyB7CisgI2lmIGRlZmluZWQoQ09ORklHX0hBVkVf
-RUZGSUNJRU5UX1VOQUxJR05FRF9BQ0NFU1MpICYmIEJJVFNfUEVSX0xPTkcgPT0gNjQKKyAjaWZk
-ZWYgX19CSUdfRU5ESUFOCitAQCAtMzcyLDggKzM3Miw3IEBAIHN0YXRpYyBpbmxpbmUgYm9vbCBl
-dGhlcl9hZGRyX2VxdWFsKGNvbnN0IHU4ICphZGRyMSwgY29uc3QgdTggKmFkZHIyKQorICAqIFBs
-ZWFzZSBub3RlIHRoYXQgYWxpZ25tZW50IG9mIGFkZHIxICYgYWRkcjIgYXJlIG9ubHkgZ3VhcmFu
-dGVlZCB0byBiZSAxNiBiaXRzLgorICAqLworIAorLXN0YXRpYyBpbmxpbmUgYm9vbCBldGhlcl9h
-ZGRyX2VxdWFsXzY0Yml0cyhjb25zdCB1OCBhZGRyMVs2KzJdLAorLQkJCQkJICAgY29uc3QgdTgg
-YWRkcjJbNisyXSkKKytzdGF0aWMgaW5saW5lIGJvb2wgZXRoZXJfYWRkcl9lcXVhbF82NGJpdHMo
-Y29uc3QgdTggKmFkZHIxLCBjb25zdCB1OCAqYWRkcjIpCisgeworICNpZiBkZWZpbmVkKENPTkZJ
-R19IQVZFX0VGRklDSUVOVF9VTkFMSUdORURfQUNDRVNTKSAmJiBCSVRTX1BFUl9MT05HID09IDY0
-CisgCXU2NCBmb2xkID0gKCooY29uc3QgdTY0ICopYWRkcjEpIF4gKCooY29uc3QgdTY0ICopYWRk
-cjIpOworLS0gCisyLjM0LjEKKwpkaWZmIC0tZ2l0IGEvYm9hcmQvcmFkeGEvcm9jazViLzAwMDIt
-bW0tcGFnZV9hbGxvYy1maXgtYnVpbGRpbmctZXJyb3Itb24tV2Vycm9yLWFycmF5LWNvbS5wYXRj
-aCBiL2JvYXJkL3JhZHhhL3JvY2s1Yi8wMDAyLW1tLXBhZ2VfYWxsb2MtZml4LWJ1aWxkaW5nLWVy
-cm9yLW9uLVdlcnJvci1hcnJheS1jb20ucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
-MDAwMDAwMDAwMC4uMzRlYWU5YzE1OAotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL3JhZHhhL3Jv
-Y2s1Yi8wMDAyLW1tLXBhZ2VfYWxsb2MtZml4LWJ1aWxkaW5nLWVycm9yLW9uLVdlcnJvci1hcnJh
-eS1jb20ucGF0Y2gKQEAgLTAsMCArMSw0NSBAQAorRnJvbSA2OTg0OGY5NDg4YmMxMDg4YmNkOWE3
-Mzk4N2RmZjhkMmNiNDdhMDYwIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogWGlvbmd3
-ZWkgU29uZyA8c3h3amVhbkBnbWFpbC5jb20+CitEYXRlOiBGcmksIDE0IEphbiAyMDIyIDE0OjA3
-OjI0IC0wODAwCitTdWJqZWN0OiBbUEFUQ0hdIG1tOiBwYWdlX2FsbG9jOiBmaXggYnVpbGRpbmcg
-ZXJyb3Igb24gLVdlcnJvcj1hcnJheS1jb21wYXJlCisKK2NvbW1pdCBjYTgzMWYyOWY4ZjI1Yzk3
-MTgyZTcyNjQyOWIzOGMwODAyMjAwYzhmIHVwc3RyZWFtLgorCitBcnRodXIgTWFyc2ggcmVwb3J0
-ZWQgd2Ugd291bGQgaGl0IHRoZSBlcnJvciBiZWxvdyB3aGVuIGJ1aWxkaW5nIGtlcm5lbAord2l0
-aCBnY2MtMTI6CisKKyAgQ0MgICAgICBtbS9wYWdlX2FsbG9jLm8KKyAgbW0vcGFnZV9hbGxvYy5j
-OiBJbiBmdW5jdGlvbiBgbWVtX2luaXRfcHJpbnRfaW5mbyc6CisgIG1tL3BhZ2VfYWxsb2MuYzo4
-MTczOjI3OiBlcnJvcjogY29tcGFyaXNvbiBiZXR3ZWVuIHR3byBhcnJheXMgWy1XZXJyb3I9YXJy
-YXktY29tcGFyZV0KKyAgIDgxNzMgfCAgICAgICAgICAgICAgICAgaWYgKHN0YXJ0IDw9IHBvcyAm
-JiBwb3MgPCBlbmQgJiYgc2l6ZSA+IGFkaikgXAorICAgICAgICB8CisKK0luIEMrKzIwLCB0aGUg
-Y29tcGFyaXNpb24gYmV0d2VlbiBhcnJheXMgc2hvdWxkIGJlIHdhcm5lZC4KKworTGluazogaHR0
-cHM6Ly9sa21sLmtlcm5lbC5vcmcvci8yMDIxMTEyNTEzMDkyOC4zMjQ2NS0xLXN4d2plYW5AbWUu
-Y29tCitTaWduZWQtb2ZmLWJ5OiBYaW9uZ3dlaSBTb25nIDxzeHdqZWFuQGdtYWlsLmNvbT4KK1Jl
-cG9ydGVkLWJ5OiBBcnRodXIgTWFyc2ggPGFydGh1ci5tYXJzaEBpbnRlcm5vZGUub24ubmV0Pgor
-U2lnbmVkLW9mZi1ieTogQW5kcmV3IE1vcnRvbiA8YWtwbUBsaW51eC1mb3VuZGF0aW9uLm9yZz4K
-K1NpZ25lZC1vZmYtYnk6IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3VuZGF0aW9u
-Lm9yZz4KK0NjOiBLaGVtIFJhaiA8cmFqLmtoZW1AZ21haWwuY29tPgorU2lnbmVkLW9mZi1ieTog
-R3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4KKy0tLQorIG1t
-L3BhZ2VfYWxsb2MuYyB8IDIgKy0KKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
-ZGVsZXRpb24oLSkKKworZGlmZiAtLWdpdCBhL21tL3BhZ2VfYWxsb2MuYyBiL21tL3BhZ2VfYWxs
-b2MuYworaW5kZXggZjAyMmUwMDI0ZThkLi5mMzQxOGVkYjEzNmIgMTAwNjQ0CistLS0gYS9tbS9w
-YWdlX2FsbG9jLmMKKysrKyBiL21tL3BhZ2VfYWxsb2MuYworQEAgLTc2NzgsNyArNzY3OCw3IEBA
-IHZvaWQgX19pbml0IG1lbV9pbml0X3ByaW50X2luZm8oY29uc3QgY2hhciAqc3RyKQorIAkgKi8K
-KyAjZGVmaW5lIGFkal9pbml0X3NpemUoc3RhcnQsIGVuZCwgc2l6ZSwgcG9zLCBhZGopIFwKKyAJ
-ZG8geyBcCistCQlpZiAoc3RhcnQgPD0gcG9zICYmIHBvcyA8IGVuZCAmJiBzaXplID4gYWRqKSBc
-CisrCQlpZiAoJnN0YXJ0WzBdIDw9ICZwb3NbMF0gJiYgJnBvc1swXSA8ICZlbmRbMF0gJiYgc2l6
-ZSA+IGFkaikgXAorIAkJCXNpemUgLT0gYWRqOyBcCisgCX0gd2hpbGUgKDApCisgCistLSAKKzIu
-MzQuMQorCmRpZmYgLS1naXQgYS9jb25maWdzL3JvY2s1Yl9kZWZjb25maWcgYi9jb25maWdzL3Jv
-Y2s1Yl9kZWZjb25maWcKaW5kZXggOTNkMzRmOGNmMy4uYjhjNzM0NzI4OCAxMDA2NDQKLS0tIGEv
-Y29uZmlncy9yb2NrNWJfZGVmY29uZmlnCisrKyBiL2NvbmZpZ3Mvcm9jazViX2RlZmNvbmZpZwpA
-QCAtMTEsNiArMTEsNyBAQCBCUjJfTElOVVhfS0VSTkVMPXkKIEJSMl9MSU5VWF9LRVJORUxfQ1VT
-VE9NX0dJVD15CiBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9SRVBPX1VSTD0iaHR0cHM6Ly9naXRo
-dWIuY29tL3JhZHhhL2tlcm5lbC5naXQiCiBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9SRVBPX1ZF
-UlNJT049IjUyZjUxYTJiNWJhMTc4ZjMzMWFmNjIyNjBkMmRhODZkNzQ3MmMxNGIiCitCUjJfTElO
-VVhfS0VSTkVMX1BBVENIPSJib2FyZC9yYWR4YS9yb2NrNWIvMDAwMS1ldGhlcmRldmljZS1BZGp1
-c3QtZXRoZXJfYWRkci1wcm90b3R5cGVzLXRvLXNpbGVuY2UtLnBhdGNoIGJvYXJkL3JhZHhhL3Jv
-Y2s1Yi8wMDAyLW1tLXBhZ2VfYWxsb2MtZml4LWJ1aWxkaW5nLWVycm9yLW9uLVdlcnJvci1hcnJh
-eS1jb20ucGF0Y2giCiBCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0icm9ja2NoaXBfbGludXgi
-CiBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKIEJSMl9MSU5VWF9LRVJORUxfSU5UUkVF
-X0RUU19OQU1FPSJyb2NrY2hpcC9yazM1ODgtcm9jay01YiIKLS0gCjIuMzQuMQoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============2738318534126508895==
+Content-Type: multipart/alternative; boundary="000000000000f32c47060262929a"
+
+--000000000000f32c47060262929a
+Content-Type: text/plain; charset="UTF-8"
+
+Yann, All,
+
+
+Ah wow, missed it, will change it too and re-run test-pkg with that one
+include. The other three simply passed for the default test-pkg
+architectures.
+
+
+Kr,
+
+Thomas
+
+Op ma 7 aug. 2023 23:31 schreef Yann E. MORIN <yann.morin.1998@free.fr>:
+
+> Thomas, All,
+>
+> Thanks for this series. Thomas P. applied it before I had a chance to
+> reply, so:
+>
+> Is there an issue with qt6svg, or did you just miss it?
+>
+> Regards,
+> Yann E. MORIN.
+>
+> On 2023-08-07 16:58 +0200, Thomas Devoogdt spake thusly:
+> > Use the newly introduce backend option
+> (4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606)
+> > to specify what cmake backend to use, instead of special-coding it's use.
+> >
+> > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> > ---
+> >  package/qt6/qt6serialport/qt6serialport.mk | 16 ++--------------
+> >  1 file changed, 2 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/package/qt6/qt6serialport/qt6serialport.mk
+> b/package/qt6/qt6serialport/qt6serialport.mk
+> > index 497719d4ec..bdb16dd892 100644
+> > --- a/package/qt6/qt6serialport/qt6serialport.mk
+> > +++ b/package/qt6/qt6serialport/qt6serialport.mk
+> > @@ -10,6 +10,8 @@ QT6SERIALPORT_SOURCE =
+> qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT
+> >  QT6SERIALPORT_INSTALL_STAGING = YES
+> >  QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD = NO
+> >
+> > +QT6SERIALPORT_CMAKE_BACKEND = ninja
+> > +
+> >  QT6SERIALPORT_LICENSE = \
+> >       GPL-2.0+ or LGPL-3.0, \
+> >       GPL-3.0 with exception (tools), \
+> > @@ -25,7 +27,6 @@ QT6SERIALPORT_LICENSE_FILES = \
+> >       LICENSES/Qt-GPL-exception-1.0.txt
+> >
+> >  QT6SERIALPORT_CONF_OPTS = \
+> > -     -GNinja \
+> >       -DQT_HOST_PATH=$(HOST_DIR) \
+> >       -DBUILD_WITH_PCH=OFF \
+> >       -DQT_BUILD_EXAMPLES=OFF \
+> > @@ -33,19 +34,6 @@ QT6SERIALPORT_CONF_OPTS = \
+> >
+> >  QT6SERIALPORT_DEPENDENCIES = \
+> >       host-pkgconf \
+> > -     host-ninja \
+> >       qt6base
+> >
+> > -define QT6SERIALPORT_BUILD_CMDS
+> > -     $(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALPORT_BUILDDIR)
+> > -endef
+> > -
+> > -define QT6SERIALPORT_INSTALL_STAGING_CMDS
+> > -     $(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install
+> $(QT6SERIALPORT_BUILDDIR)
+> > -endef
+> > -
+> > -define QT6SERIALPORT_INSTALL_TARGET_CMDS
+> > -     $(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install
+> $(QT6SERIALPORT_BUILDDIR)
+> > -endef
+> > -
+> >  $(eval $(cmake-package))
+> > --
+> > 2.41.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot@buildroot.org
+> > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+>
+
+--000000000000f32c47060262929a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>Yann, All,=C2=A0</div><div dir=3D"auto"><br></div><d=
+iv dir=3D"auto"><br></div><div dir=3D"auto">Ah wow, missed it, will change =
+it too and re-run test-pkg with that one include. The other three simply pa=
+ssed for the default test-pkg architectures.=C2=A0</div><div dir=3D"auto"><=
+br></div><div dir=3D"auto"><br></div><div dir=3D"auto">Kr,=C2=A0</div><div =
+dir=3D"auto"><br></div><div dir=3D"auto">Thomas=C2=A0<br><br><div class=3D"=
+gmail_quote" dir=3D"auto"><div dir=3D"ltr" class=3D"gmail_attr">Op ma 7 aug=
+. 2023 23:31 schreef Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@fr=
+ee.fr">yann.morin.1998@free.fr</a>&gt;:<br></div><blockquote class=3D"gmail=
+_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:=
+1ex">Thomas, All,<br>
+<br>
+Thanks for this series. Thomas P. applied it before I had a chance to<br>
+reply, so:<br>
+<br>
+Is there an issue with qt6svg, or did you just miss it?<br>
+<br>
+Regards,<br>
+Yann E. MORIN.<br>
+<br>
+On 2023-08-07 16:58 +0200, Thomas Devoogdt spake thusly:<br>
+&gt; Use the newly introduce backend option (4cf79d9b71ff5cf2aede3f21e09ade=
+7c7ac59606)<br>
+&gt; to specify what cmake backend to use, instead of special-coding it&#39=
+;s use.<br>
+&gt; <br>
+&gt; Signed-off-by: Thomas Devoogdt &lt;<a href=3D"mailto:thomas.devoogdt@b=
+arco.com" target=3D"_blank" rel=3D"noreferrer">thomas.devoogdt@barco.com</a=
+>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" re=
+l=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a> | 16 ++-=
+-------------<br>
+&gt;=C2=A0 1 file changed, 2 insertions(+), 14 deletions(-)<br>
+&gt; <br>
+&gt; diff --git a/package/qt6/qt6serialport/<a href=3D"http://qt6serialport=
+.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a> b=
+/package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" rel=3D"noref=
+errer noreferrer" target=3D"_blank">qt6serialport.mk</a><br>
+&gt; index 497719d4ec..bdb16dd892 100644<br>
+&gt; --- a/package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" re=
+l=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a><br>
+&gt; +++ b/package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" re=
+l=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a><br>
+&gt; @@ -10,6 +10,8 @@ QT6SERIALPORT_SOURCE =3D qtserialport-$(QT6_SOURCE_T=
+ARBALL_PREFIX)-$(QT6SERIALPORT<br>
+&gt;=C2=A0 QT6SERIALPORT_INSTALL_STAGING =3D YES<br>
+&gt;=C2=A0 QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD =3D NO<br>
+&gt;=C2=A0 <br>
+&gt; +QT6SERIALPORT_CMAKE_BACKEND =3D ninja<br>
+&gt; +<br>
+&gt;=C2=A0 QT6SERIALPORT_LICENSE =3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0GPL-2.0+ or LGPL-3.0, \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0GPL-3.0 with exception (tools), \<br>
+&gt; @@ -25,7 +27,6 @@ QT6SERIALPORT_LICENSE_FILES =3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0LICENSES/Qt-GPL-exception-1.0.txt<br>
+&gt;=C2=A0 <br>
+&gt;=C2=A0 QT6SERIALPORT_CONF_OPTS =3D \<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0-GNinja \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DQT_HOST_PATH=3D$(HOST_DIR) \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DBUILD_WITH_PCH=3DOFF \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DQT_BUILD_EXAMPLES=3DOFF \<br>
+&gt; @@ -33,19 +34,6 @@ QT6SERIALPORT_CONF_OPTS =3D \<br>
+&gt;=C2=A0 <br>
+&gt;=C2=A0 QT6SERIALPORT_DEPENDENCIES =3D \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0host-pkgconf \<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0host-ninja \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0qt6base<br>
+&gt;=C2=A0 <br>
+&gt; -define QT6SERIALPORT_BUILD_CMDS<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERI=
+ALPORT_BUILDDIR)<br>
+&gt; -endef<br>
+&gt; -<br>
+&gt; -define QT6SERIALPORT_INSTALL_STAGING_CMDS<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) DESTDIR=3D$(STAGING_DIR) $(BR2=
+_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)<br>
+&gt; -endef<br>
+&gt; -<br>
+&gt; -define QT6SERIALPORT_INSTALL_TARGET_CMDS<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) DESTDIR=3D$(TARGET_DIR) $(BR2_=
+CMAKE) --install $(QT6SERIALPORT_BUILDDIR)<br>
+&gt; -endef<br>
+&gt; -<br>
+&gt;=C2=A0 $(eval $(cmake-package))<br>
+&gt; -- <br>
+&gt; 2.41.0<br>
+&gt; <br>
+&gt; _______________________________________________<br>
+&gt; buildroot mailing list<br>
+&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=3D"no=
+referrer">buildroot@buildroot.org</a><br>
+&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
+=3D"noreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/ma=
+ilman/listinfo/buildroot</a><br>
+<br>
+-- <br>
+.-----------------.--------------------.------------------.----------------=
+----.<br>
+|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
+Erics&#39; conspiracy: |<br>
+| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
+=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
+| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
+ =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
+| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer noreferrer" ta=
+rget=3D"_blank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=
+=A0 =C2=A0 |=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
+&#39;------------------------------^-------^------------------^------------=
+--------&#39;<br>
+<br>
+</blockquote></div></div></div>
+
+--000000000000f32c47060262929a--
+
+--===============2738318534126508895==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2738318534126508895==--
