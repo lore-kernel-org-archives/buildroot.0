@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA14DC04FE1
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:54:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655FFC001B0
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 19:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DF6A81B26;
-	Tue,  8 Aug 2023 18:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DF6A81B26
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6739E8202C;
+	Tue,  8 Aug 2023 19:32:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6739E8202C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jadD0Xg0Qa-p; Tue,  8 Aug 2023 18:54:52 +0000 (UTC)
+	with ESMTP id 2nC6dxsWiJov; Tue,  8 Aug 2023 19:32:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4184182144;
-	Tue,  8 Aug 2023 18:54:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4184182144
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 31FFD1BF330
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:54:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 905DF82001;
+	Tue,  8 Aug 2023 19:32:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 905DF82001
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C09ED1BF341
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 19:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 171F0410B8
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:54:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 171F0410B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99ACD401AD
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 19:32:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99ACD401AD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Skh0B-rqUC0N for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 18:54:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h1yVNB_Ozr7o for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 19:31:59 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4C82F409E2
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:54:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C82F409E2
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6E80240129
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 19:31:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E80240129
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E1EA6A4C1112;
- Tue,  8 Aug 2023 20:51:10 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48850)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8A68DA4C0354
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 21:31:57 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54846)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qTRnS-0005AS-1j;
- Tue, 08 Aug 2023 20:51:10 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qTSQv-0003oO-0x
+ for buildroot@buildroot.org; Tue, 08 Aug 2023 21:31:57 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  8 Aug 2023 20:51:08 +0200
-Message-Id: <20230808185108.3787835-17-bernd@kuhls.net>
+Date: Tue,  8 Aug 2023 21:31:56 +0200
+Message-Id: <20230808193157.2042920-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230808185108.3787835-1-bernd@kuhls.net>
-References: <20230808185108.3787835-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: --
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1691520670;
- bh=pRs6DRZrJjzCwg+3kvmcCgkHbtSKJeUDbyYhXyOl+5U=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=W1tpNEC5kBixmiUYdz8onLqyAtbO6Bk1ungwAkqLl/2KZvPbFWIw98/fh2KCWUMq+
- umMROuIdpS6G4zY80D6OmByNZrvyXktLi8iheesjuTssM3a1pX8gz1XAYROAC23Hlm
- MlF24LsaWRZB3/YzL4CfZ499duPLE1G7K9gUNIIZvowKL/RRdUcPjttOas/MwpVsmX
- +RLUqhByiMlB7xRpiE8BNA0jEZLKumdlK8/g0y7PizKwiplF8QUHlQqJr8rxxvS9yN
- 0T2/aTw/touVsGwGWkJuc1YELYCKt4WRMTtYVG7lK2iM5rsozLm9WTxdYw37L1l5zq
- cc6N4g3SnW0lw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202306131828; t=1691523117;
+ bh=zD7b1soTP+Q0Q6um7un9G3m4/I+HlNyCGatZJm0Fb40=;
+ h=From:To:Subject:Date:From;
+ b=TaDrWuSOJz4lArB1p2zBtz9znyQtPb2aGp/9/PTBxE31n4/3WVu86xLU2Aim8nmuy
+ xnrnxZniRCs3li0LgkA74mxvylU5QJh+aZo+wR97FxHh/liN94qCaulz18Dp8gggKZ
+ qZGs1d/Y13nfvEPxUQG3EElBP5i8CIebeCAaUg5gjPMA6AOqMKcbzdDAOpUXlb54Xc
+ TBSMExQ6nAoWXKRrC5xFVfwrEam+yhEdLyIle6Er6YwobPQCMtx4CLR0Dq2VyAz4g/
+ n0w+a6jFKNq8+WGsZqp125VDXmeHFaH+meTx+uPp4nAhv7DF4eU1vdHmlxHqJOtfNq
+ r85cFmPkx2rFQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=W1tpNEC5
-Subject: [Buildroot] [PATCH/next 16/16] package/python3: Remove
- infrastructure to disable the build of certain extensions
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=TaDrWuSO
+Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: security bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,222 +75,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All modules are now excluded using features of the upstream build system,
-partly by backported patches from Python 3.12 branch.
-
-Renumber remaining patches.
+Fixes CVE-2022-40982:
+https://downfall.page/
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00828.html
+https://www.phoronix.com/news/Linux-Git-INCEPTION-DOWNFALL
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...re-to-disable-the-build-of-certain-e.patch | 108 ------------------
- ...-header-paths-for-cross-compilation.patch} |   0
- ...ok-in-usr-lib-termcap-for-libraries.patch} |   0
- ...h => 0005-Don-t-add-multiarch-paths.patch} |   0
- ...> 0006-Abort-on-failed-module-build.patch} |   0
- ...tch => 0007-Serial-ioctl-workaround.patch} |   0
- ...-shebang-of-Python-scripts-for-cros.patch} |   0
- ...g.sh.in-ensure-sed-invocations-only.patch} |   0
- ...0010-Add-an-option-to-disable-pydoc.patch} |   0
- ...11-Add-an-option-to-disable-lib2to3.patch} |   0
- ... 0012-Add-an-option-to-disable-IDLE.patch} |   0
- ...hon-config.sh-don-t-reassign-prefix.patch} |   0
- ...p-CC-print-multiarch-output-for-mus.patch} |   0
- ...fix-building-on-older-distributions.patch} |   0
- ...ng-doesn-t-set-errno-when-encryptio.patch} |   0
- 15 files changed, 108 deletions(-)
- delete mode 100644 package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
- rename package/python3/{0004-Adjust-library-header-paths-for-cross-compilation.patch => 0003-Adjust-library-header-paths-for-cross-compilation.patch} (100%)
- rename package/python3/{0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch => 0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch} (100%)
- rename package/python3/{0006-Don-t-add-multiarch-paths.patch => 0005-Don-t-add-multiarch-paths.patch} (100%)
- rename package/python3/{0007-Abort-on-failed-module-build.patch => 0006-Abort-on-failed-module-build.patch} (100%)
- rename package/python3/{0008-Serial-ioctl-workaround.patch => 0007-Serial-ioctl-workaround.patch} (100%)
- rename package/python3/{0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch => 0008-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch} (100%)
- rename package/python3/{0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch => 0009-Misc-python-config.sh.in-ensure-sed-invocations-only.patch} (100%)
- rename package/python3/{0011-Add-an-option-to-disable-pydoc.patch => 0010-Add-an-option-to-disable-pydoc.patch} (100%)
- rename package/python3/{0012-Add-an-option-to-disable-lib2to3.patch => 0011-Add-an-option-to-disable-lib2to3.patch} (100%)
- rename package/python3/{0020-Add-an-option-to-disable-IDLE.patch => 0012-Add-an-option-to-disable-IDLE.patch} (100%)
- rename package/python3/{0026-python-config.sh-don-t-reassign-prefix.patch => 0013-python-config.sh-don-t-reassign-prefix.patch} (100%)
- rename package/python3/{0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch => 0014-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch} (100%)
- rename package/python3/{0028-fix-building-on-older-distributions.patch => 0015-fix-building-on-older-distributions.patch} (100%)
- rename package/python3/{0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch => 0016-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch} (100%)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch b/package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
-deleted file mode 100644
-index 5b3911374e..0000000000
---- a/package/python3/0003-Add-infrastructure-to-disable-the-build-of-certain-e.patch
-+++ /dev/null
-@@ -1,108 +0,0 @@
--From 8e02cebdac536dfb6748da2c50656a26f70d9da7 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 22 Feb 2017 16:33:22 -0800
--Subject: [PATCH] Add infrastructure to disable the build of certain extensions
--
--Some of the extensions part of the Python core have dependencies on
--external libraries (sqlite, tk, etc.) or are relatively big and not
--necessarly always useful (CJK codecs for example). By extensions, we
--mean part of Python modules that are written in C and therefore
--compiled to binary code.
--
--Therefore, we introduce a small infrastructure that allows to disable
--some of those extensions. This can be done inside the configure.ac by
--adding values to the DISABLED_EXTENSIONS variable (which is a
--word-separated list of extensions).
--
--The implementation works as follow :
--
-- * configure.ac defines a DISABLED_EXTENSIONS variable, which is
--   substituted (so that when Makefile.pre is generated from
--   Makefile.pre.in, the value of the variable is substituted). For
--   now, this DISABLED_EXTENSIONS variable is empty, later patches will
--   use it.
--
-- * Makefile.pre.in passes the DISABLED_EXTENSIONS value down to the
--   variables passed in the environment when calling the setup.py
--   script that actually builds and installs those extensions.
--
-- * setup.py is modified so that the existing "disabled_module_list" is
--   filled with those pre-disabled extensions listed in
--   DISABLED_EXTENSIONS.
--
--Patch ported to python2.7 by Maxime Ripard <ripard@archos.com>, and
--then extended by Thomas Petazzoni
--<thomas.petazzoni@free-electrons.com>.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[ Andrey Smirnov: ported to Python 3.6 ]
--Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-----
-- Makefile.pre.in | 6 +++++-
-- configure.ac    | 2 ++
-- setup.py        | 5 ++++-
-- 3 files changed, 11 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 2957c8e5a1..c1cfb96767 100644
----- a/Makefile.pre.in
--+++ b/Makefile.pre.in
--@@ -239,6 +239,8 @@ FILEMODE=	644
-- # configure script arguments
-- CONFIG_ARGS=	@CONFIG_ARGS@
-- 
--+# disabled extensions
--+DISABLED_EXTENSIONS=	@DISABLED_EXTENSIONS@
-- 
-- # Subdirectories with code
-- SRCDIRS= 	@SRCDIRS@
--@@ -739,6 +741,7 @@ sharedmods: $(PYTHON_FOR_BUILD_DEPS) pybuilddir.txt @LIBMPDEC_INTERNAL@ @LIBEXPA
-- 	    *) quiet="";; \
-- 	esac; \
-- 	echo "$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
--+		DISABLED_EXTENSIONS="$(DISABLED_EXTENSIONS)" \
-- 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build"; \
-- 	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
-- 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
--@@ -2228,7 +2231,8 @@ libainstall: all python-config
-- # Install the dynamically loadable modules
-- # This goes into $(exec_prefix)
-- sharedinstall: all
---	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/setup.py install \
--+	$(RUNSHARED) DISABLED_EXTENSIONS="$(DISABLED_EXTENSIONS)" \
--+		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py install \
-- 	   	--prefix=$(prefix) \
-- 		--install-scripts=$(BINDIR) \
-- 		--install-platlib=$(DESTSHARED) \
--diff --git a/configure.ac b/configure.ac
--index 830885fcb3..5a6a1fe608 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -3562,6 +3562,8 @@ LIBS="$withval $LIBS"
-- ],
-- [AC_MSG_RESULT(no)])
-- 
--+AC_SUBST(DISABLED_EXTENSIONS)
--+
-- # Check for use of the system expat library
-- AC_MSG_CHECKING(for --with-system-expat)
-- AC_ARG_WITH(system_expat,
--diff --git a/setup.py b/setup.py
--index 15d0d4576a..e496ee34c2 100644
----- a/setup.py
--+++ b/setup.py
--@@ -56,7 +56,10 @@
-- 
-- 
-- # This global variable is used to hold the list of modules to be disabled.
---DISABLED_MODULE_LIST = []
--+try:
--+    DISABLED_MODULE_LIST = sysconfig.get_config_var("DISABLED_EXTENSIONS").split(" ")
--+except KeyError:
--+    DISABLED_MODULE_LIST = list()
-- 
-- # --list-module-names option used by Tools/scripts/generate_module_names.py
-- LIST_MODULE_NAMES = False
---- 
--2.34.1
--
-diff --git a/package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch b/package/python3/0003-Adjust-library-header-paths-for-cross-compilation.patch
-similarity index 100%
-rename from package/python3/0004-Adjust-library-header-paths-for-cross-compilation.patch
-rename to package/python3/0003-Adjust-library-header-paths-for-cross-compilation.patch
-diff --git a/package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch b/package/python3/0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-similarity index 100%
-rename from package/python3/0005-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-rename to package/python3/0004-Don-t-look-in-usr-lib-termcap-for-libraries.patch
-diff --git a/package/python3/0006-Don-t-add-multiarch-paths.patch b/package/python3/0005-Don-t-add-multiarch-paths.patch
-similarity index 100%
-rename from package/python3/0006-Don-t-add-multiarch-paths.patch
-rename to package/python3/0005-Don-t-add-multiarch-paths.patch
-diff --git a/package/python3/0007-Abort-on-failed-module-build.patch b/package/python3/0006-Abort-on-failed-module-build.patch
-similarity index 100%
-rename from package/python3/0007-Abort-on-failed-module-build.patch
-rename to package/python3/0006-Abort-on-failed-module-build.patch
-diff --git a/package/python3/0008-Serial-ioctl-workaround.patch b/package/python3/0007-Serial-ioctl-workaround.patch
-similarity index 100%
-rename from package/python3/0008-Serial-ioctl-workaround.patch
-rename to package/python3/0007-Serial-ioctl-workaround.patch
-diff --git a/package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch b/package/python3/0008-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
-similarity index 100%
-rename from package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
-rename to package/python3/0008-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
-diff --git a/package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch b/package/python3/0009-Misc-python-config.sh.in-ensure-sed-invocations-only.patch
-similarity index 100%
-rename from package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch
-rename to package/python3/0009-Misc-python-config.sh.in-ensure-sed-invocations-only.patch
-diff --git a/package/python3/0011-Add-an-option-to-disable-pydoc.patch b/package/python3/0010-Add-an-option-to-disable-pydoc.patch
-similarity index 100%
-rename from package/python3/0011-Add-an-option-to-disable-pydoc.patch
-rename to package/python3/0010-Add-an-option-to-disable-pydoc.patch
-diff --git a/package/python3/0012-Add-an-option-to-disable-lib2to3.patch b/package/python3/0011-Add-an-option-to-disable-lib2to3.patch
-similarity index 100%
-rename from package/python3/0012-Add-an-option-to-disable-lib2to3.patch
-rename to package/python3/0011-Add-an-option-to-disable-lib2to3.patch
-diff --git a/package/python3/0020-Add-an-option-to-disable-IDLE.patch b/package/python3/0012-Add-an-option-to-disable-IDLE.patch
-similarity index 100%
-rename from package/python3/0020-Add-an-option-to-disable-IDLE.patch
-rename to package/python3/0012-Add-an-option-to-disable-IDLE.patch
-diff --git a/package/python3/0026-python-config.sh-don-t-reassign-prefix.patch b/package/python3/0013-python-config.sh-don-t-reassign-prefix.patch
-similarity index 100%
-rename from package/python3/0026-python-config.sh-don-t-reassign-prefix.patch
-rename to package/python3/0013-python-config.sh-don-t-reassign-prefix.patch
-diff --git a/package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch b/package/python3/0014-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-similarity index 100%
-rename from package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-rename to package/python3/0014-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-diff --git a/package/python3/0028-fix-building-on-older-distributions.patch b/package/python3/0015-fix-building-on-older-distributions.patch
-similarity index 100%
-rename from package/python3/0028-fix-building-on-older-distributions.patch
-rename to package/python3/0015-fix-building-on-older-distributions.patch
-diff --git a/package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0016-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-similarity index 100%
-rename from package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-rename to package/python3/0016-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
+diff --git a/linux/Config.in b/linux/Config.in
+index 1501df86e9..32940bc346 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.4.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.4.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index c9a0497d1a..ec879b21d9 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  c59f34e19e84db30206b9373041abf893f9d8a08765d163586570a5238c458b6  linux-6.4.8.tar.xz
+-sha256  245248470a62d4e94b46f753afc01e19e45b9e6f3a0fa06e7f5da21fe845a808  linux-6.1.43.tar.xz
++sha256  b8b8a29852b999f337c4e93eff6c91fb7fd2d49a6614cbcbeb6fa171ba55cc9f  linux-6.4.9.tar.xz
++sha256  2e51d41fe11d082ae167cee05772bb07ca7f19448d2b46772d8ca2db7673a1a5  linux-6.1.44.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  00036a0260ad012aa832a8698a4afcf23b2410091527738ce48ce3fcc23f22ed  linux-5.15.124.tar.xz
+-sha256  c9558bab35e23ae67661bfb3192c609c857f78582a035449ae63e33d04ab6112  linux-5.10.188.tar.xz
+-sha256  bcb4953ed68131ef17f9f1ba52cac8b9d70007f5ab600bf3dee1fbf8beb218ca  linux-5.4.251.tar.xz
++sha256  150f3846b76cd23a6135f49cef71372bade5a06e851cb4f8558df8b862d8fec7  linux-5.15.125.tar.xz
++sha256  4c03516ae1d417571faaef175932d0892710bcbe0173e40550014d043d9098c9  linux-5.10.189.tar.xz
++sha256  3a78587523940374a7319089b63357c7dc412b90f5879d512265e59173588267  linux-5.4.252.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  118f7411793868db8dcb043cdc82e9ac6f722fbec8dcdde30b07889d941aa3b3  linux-4.19.289.tar.xz
+-sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
++sha256  6ee30a46f3fa6576602085b7b4b0c640586f99d1c110982db411819308b5755c  linux-4.19.250.tar.xz
++sha256  d0e32bd47a547cc20e0ce09ff45514282742edb2af38df5dc0a03f22d4321715  linux-4.14.321.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d528f88745..c7d725aa13 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -400,13 +400,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.251"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.188"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.124"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.43"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.4.8"		if BR2_KERNEL_HEADERS_6_4
++	default "4.14.321"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.290"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.252"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.189"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.125"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.44"	if BR2_KERNEL_HEADERS_6_1
++	default "6.4.9"		if BR2_KERNEL_HEADERS_6_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.39.2
 
