@@ -4,65 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D58C001B0
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 19:37:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03886C001B0
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 19:58:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D2E941736;
-	Tue,  8 Aug 2023 19:37:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D2E941736
+	by smtp4.osuosl.org (Postfix) with ESMTP id C83CC402E0;
+	Tue,  8 Aug 2023 19:58:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C83CC402E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CAx93TGsFTsD; Tue,  8 Aug 2023 19:37:22 +0000 (UTC)
+	with ESMTP id dEJ2_DDMkg47; Tue,  8 Aug 2023 19:58:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3438241731;
-	Tue,  8 Aug 2023 19:37:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3438241731
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E3CE61BF341
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 19:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C71F1402A9;
+	Tue,  8 Aug 2023 19:58:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C71F1402A9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 577121BF341
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 19:58:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E2DE41731
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 19:37:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E2DE41731
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30F1C60D4C
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 19:58:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30F1C60D4C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fT3rTAUnjVCf for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 19:37:18 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5882E4155F
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 19:37:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5882E4155F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 309CC1C0005;
- Tue,  8 Aug 2023 19:37:15 +0000 (UTC)
-Date: Tue, 8 Aug 2023 21:37:14 +0200
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Message-ID: <20230808213714.1c741707@windsurf>
-In-Reply-To: <20230808003527.1469175-1-adam.duskett@amarulasolutions.com>
-References: <20230808003527.1469175-1-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DC8dcbZJCKjh for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 19:58:04 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EB90C60C25
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 19:58:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB90C60C25
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9836313F88A;
+ Tue,  8 Aug 2023 21:57:59 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Tue,  8 Aug 2023 21:57:53 +0200
+Message-ID: <20230808195753.19748-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691523435;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qra9Q8FOjZ1Qd/bh05W4rruz1rUakTPYWcXIt6+1bG0=;
- b=Gccbot9NLC4CAIepEXSrz5+DGTL6FBW+SGrzeXk7tJvFiR56bgZbdqe7zE459noIgJZ8tB
- MOovNB0BZUsbWaOZQn29cxxv5rH/e6TdTjSbCRdPXgnbPiVcHSqsWA3EKpKx3gvpXV+dJJ
- 0tDu8n1Oiv0kyRSuCRgnHhH2llQT8b8f1+W2hLB1vw1uto2LdiHU0rsMBBRaanjQ8K32Oa
- gIxABRl/IX9TY8zkzfFjmr/uXEhcnlskiL6bHq65iEJvHqM69i7zuBaQJnyB6OF2iuXD8X
- t0uK6BO0aaRRUfeOnoKOBQS9LR0Pr0bgXOoXL5GZLBvHOCInBRv1m2tSCbRcBA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Gccbot9N
-Subject: Re: [Buildroot] [PATCH/next vRFCv2 0/3] Initial flutter packages
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1691524680;
+ bh=vB37cmPXutIf6CQs0a0wIx6xiXxHeqKkN021nIABJQk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=BechoeXLXwFy4tyS015S9CMjd9vRsAPTkD+V83ZOmtUpMdp03TiY1Bk8vIi7Qtr5t
+ ZoHTodAvyZrVBrsNjhur/XfzZ0S2hbQsU7C1OULIqNA5zk3M5wqriT7PnXoPQkonAi
+ YVVEtWZUG5b1qvu6HoUHbk5HXxkDf/TZ/4G/X8rWd9dW/0ILJCtsPoMxyMw0DZHRsX
+ LnOBB1lQS79l74TdRYBy/wP204aD2uMf0wBRE25S2Nr/FGWqL8grqHb6dD6QBo/tgD
+ Lhr7iJbpoDb2DyXfjtqm5T/7EfqN+vj5Zv2JPGE3kOPzfImVpQENOpGjQyCiTPwO7y
+ x2oBPsLw9ByeQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=BechoeXL
+Subject: [Buildroot] [PATCH next 1/1] support/docker: add qemu-system-misc
+ for riscv runtime tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,44 +71,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  7 Aug 2023 18:35:24 -0600
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+The docker image currently contains qemu-system-arm and
+qemu-system-x86. Each package contains the 32bit and 64bit variants.
+This has been sufficient for the time being.
 
-> Adam Duskett (3):
->   package/python-httplib2: add host variant
->   package/depot-tools: new package
->   package/flutter-engine: new package
+The RISC-V ecosystem is growing rapidly. It is starting to become
+mainstream. To increase the diversity in Buildroot runtime tests,
+this commit adds the qemu-system-misc package in the Docker image,
+in order to have the commands qemu-system-riscv{32,64}. This package
+also contains other architectures (for example: microblaze, nios2,
+s390x, xtensa, ...).
 
-FYI, I did a test build of:
+For Debian package details, see:
+https://packages.debian.org/bullseye/qemu-system-misc
 
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_FLUTTER_ENGINE=y
-BR2_PACKAGE_SUNXI_MALI_UTGARD=y
-# BR2_TARGET_ROOTFS_TAR is not set
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Note: I have already two work-in-progress patch series using
+qemu-system-riscv64. I'll wait for this patch to be accepted, and
+.gitlab-ci.yml to be updated to use the image before sending those.
+---
+ support/docker/Dockerfile | 1 +
+ 1 file changed, 1 insertion(+)
 
-and it did build successfully, in 18 minutes total.
-
-Thomas
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index a16c1e3849..8c6e2add60 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -44,6 +44,7 @@ RUN apt-get -o APT::Retries=3 install -y --no-install-recommends \
+         python3-pexpect \
+         python3-pytest \
+         qemu-system-arm \
++        qemu-system-misc \
+         qemu-system-x86 \
+         rsync \
+         shellcheck \
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
