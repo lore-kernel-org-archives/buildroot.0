@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AADAC001DB
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 22:19:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EFF8C001DB
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 22:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 055808146A;
-	Tue,  8 Aug 2023 22:19:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 055808146A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5565681456;
+	Tue,  8 Aug 2023 22:20:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5565681456
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3LGnzVhnK9kc; Tue,  8 Aug 2023 22:19:47 +0000 (UTC)
+	with ESMTP id 2kfvM29iDbWC; Tue,  8 Aug 2023 22:19:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BEF981763;
-	Tue,  8 Aug 2023 22:19:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BEF981763
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99E9882151;
+	Tue,  8 Aug 2023 22:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99E9882151
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 850CA1BF3A3
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:18:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 015131BF3A3
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:19:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4903C4011B
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:18:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4903C4011B
+ by smtp2.osuosl.org (Postfix) with ESMTP id C01E840494
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:19:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C01E840494
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 99KPcc94tb7b for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 22:18:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 79F6F40BCB
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 22:18:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79F6F40BCB
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 683D084F10; Tue,  8 Aug 2023 22:18:41 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 00:12:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 159e469f53a1220249e8df41e287668a3d726678
-X-Git-Newrev: 35d97842a234b429531be8164028497d59446ca8
-X-Patchwork-Hint: ignore
-Message-Id: <20230808221841.683D084F10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/yajl: add CPE ID
+ with ESMTP id Px8eCmHzRCUA for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 22:19:07 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B777A4011B
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 22:19:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B777A4011B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D014C0004;
+ Tue,  8 Aug 2023 22:19:03 +0000 (UTC)
+Date: Wed, 9 Aug 2023 00:19:02 +0200
+To: Daniel Lang <dalang@gmx.at>
+Message-ID: <20230809001902.03adbb90@windsurf>
+In-Reply-To: <20230808184555.3787-2-dalang@gmx.at>
+References: <20230808184555.3787-2-dalang@gmx.at>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691533143;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/IkieC1iT+9zeu63qm9qErv460o47N7LTigBRx2ZRYY=;
+ b=eUkbUs5opEscDQUB1wkJvRQYL9ptfKZVD2Y1BViDJ0AybD19rqyzwUJYLvIvqF8dV4vMRI
+ 5Ux/PMVn3WW6EIvDkVl1v3md00nGkEjAqcQ7D76goJjEn47X0wvDkzTfdqiT0DzRBaimau
+ 3xPu4/qjSUU2IBkF5xiLfqd4XPyvw+KM7tD6oqD7bnv25/WF5jvbdXp5j6NUISETNUu7Iq
+ ulPZKoWPsejJCelkDsBJCV1Z6CWVf9yJVdnsqcLXBas7b4ZDeTJot6yz4+k0F5aXvwxLap
+ czhczX9woita/OzMieWIo6PH29rLhD3F7TXr4ahU/MSDm9LGgPFyB5RVNqZGdQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=eUkbUs5o
+Subject: Re: [Buildroot] [PATCH] package/bwm-ng: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,35 +76,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35d97842a234b429531be8164028497d59446ca8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Aug 2023 20:45:55 +0200
+Daniel Lang <dalang@gmx.at> wrote:
 
-yajl_project:yajl is a valid CPE ID:
-https://nvd.nist.gov/products/cpe/detail/CD8C46A4-151E-4DC3-BCE8-4C322E9E10DB?namingFormat=2.3&orderBy=CPEURI&keyword=yajl&status=FINAL
+> bwm-ng_project:bwm-ng is a valid CPE ID:
+> https://nvd.nist.gov/products/cpe/detail/DBF33404-2CC8-41FD-B0FF-039B27A19871?namingFormat=2.3&orderBy=CPEURI&keyword=bwm-ng&status=FINAL
+> 
+> Signed-off-by: Daniel Lang <dalang@gmx.at>
+> ---
+>  package/bwm-ng/bwm-ng.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/yajl/yajl.mk | 1 +
- 1 file changed, 1 insertion(+)
+Applied to master, thanks.
 
-diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
-index d14a68b402..cd23c8728d 100644
---- a/package/yajl/yajl.mk
-+++ b/package/yajl/yajl.mk
-@@ -9,5 +9,6 @@ YAJL_SITE = $(call github,lloyd,yajl,refs/tags/$(YAJL_VERSION))
- YAJL_INSTALL_STAGING = YES
- YAJL_LICENSE = ISC
- YAJL_LICENSE_FILES = COPYING
-+YAJL_CPE_ID_VENDOR = yajl_project
- 
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
