@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60A60EE49A6
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6A3AEE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 188D940B8D;
-	Mon, 21 Aug 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 188D940B8D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EF7E40B93;
+	Mon, 21 Aug 2023 20:13:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EF7E40B93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ocXMU8bTHcdj; Mon, 21 Aug 2023 20:13:31 +0000 (UTC)
+	with ESMTP id fj6g7cCApKxJ; Mon, 21 Aug 2023 20:13:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E6B440CBD;
-	Mon, 21 Aug 2023 20:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E6B440CBD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 109FF1BF94D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D36140FCC;
+	Mon, 21 Aug 2023 20:13:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D36140FCC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CE4171BF8B4
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28DDF6111C
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28DDF6111C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CFFB414A1
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CFFB414A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cuEyobBXElG7 for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ndRwqjqDAhwg for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6061B6111F
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6061B6111F
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5814414D1
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5814414D1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E86586028; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id BD51286028; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 10:58:48 +0200
+Date: Tue, 8 Aug 2023 20:04:35 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: acfdf21f0b752e844a33c70a0fd2f82f4534a5a0
-X-Git-Newrev: 9f1ca943d554afe855f7eca2a0199481cc2c0426
+X-Git-Oldrev: df5fd7dec45eb26a2ac97c494cf1904123e29c5f
+X-Git-Newrev: 642b42928eeaf74db7dc7d7bf6670f37b7b7d274
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200127.5E86586028@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mosquitto: security
- bump to version 2.0.16
+Message-Id: <20230821200124.BD51286028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ntpsec: security bump
+ version to 1.2.2a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,66 +56,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f1ca943d554afe855f7eca2a0199481cc2c0426
+commit: https://git.buildroot.net/buildroot/commit/?id=642b42928eeaf74db7dc7d7bf6670f37b7b7d274
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+Fixes CVE-2023-4012 (see [1] for details).
 
-- CVE-2023-28366: Fix memory leak in broker when clients send multiple QoS 2
-  messages with the same message ID, but then never respond to the PUBREC
-  commands.
-- CVE-2023-0809: Fix excessive memory being allocated based on malicious
-  initial packets that are not CONNECT packets.
-- CVE-2023-3592: Fix memory leak when clients send v5 CONNECT packets with a
-  will message that contains invalid property types.
-- Broker will now reject Will messages that attempt to publish to $CONTROL/.
-- Broker now validates usernames provided in a TLS certificate or TLS-PSK
-  identity are valid UTF-8.
-- Fix potential crash when loading invalid persistence file.
-- Library will no longer allow single level wildcard certificates, e.g. *.com
+[1] https://gitlab.com/NTPsec/ntpsec/-/releases/NTPsec_1_2_2a
 
-For more details, see the changelog:
-https://mosquitto.org/ChangeLog.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ntpsec/ntpsec.hash | 2 +-
+ package/ntpsec/ntpsec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 2cfd0d9422..cbe54d6d1a 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.15.tar.gz.asc
--sha256  4735b1d32e3f91c7a8896741d88a3022e89730a1ee897946decfa0df27039ac6  mosquitto-2.0.15.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.16.tar.gz.asc
-+sha256  638db9e43e89d243ea98d10d66e76ff376131217780decd01abaffacc66d8035  mosquitto-2.0.16.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index a95a2cac4d..f146a86d0a 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
+index 44e04b2403..8d98b5c411 100644
+--- a/package/ntpsec/ntpsec.hash
++++ b/package/ntpsec/ntpsec.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  ad45f5b88d08a159bc9f44ecb79e08358d26d3d22bb6c96ab7aaa3734de130e6  ntpsec-NTPsec_1_2_2.tar.bz2
++sha256  ef901df5a05d486563db22f4d0dad3840a3bf5d0a9aceb8c3ecaeb396c67a805  ntpsec-NTPsec_1_2_2a.tar.bz2
+ sha256  899261d6eb6c922cf8f051225411f27b738ba0014be18c2eaf6afbf30d421bb1  LICENSES/BSD-2
+ sha256  5fe38d8724c53ff4e69f0a3492a368b4a6719700ac16f706efeb01a45c62f2b5  LICENSES/BSD-3
+ sha256  9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411  LICENSES/CC-BY-4.0
+diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+index e612e982ec..f6262cdaca 100644
+--- a/package/ntpsec/ntpsec.mk
++++ b/package/ntpsec/ntpsec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 2.0.15
-+MOSQUITTO_VERSION = 2.0.16
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+-NTPSEC_VERSION = 1.2.2
++NTPSEC_VERSION = 1.2.2a
+ NTPSEC_SOURCE = ntpsec-NTPsec_$(subst .,_,$(NTPSEC_VERSION)).tar.bz2
+ NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(subst .,_,$(NTPSEC_VERSION))
+ NTPSEC_LICENSE = BSD-2-Clause, NTP, BSD-3-Clause, MIT, CC-BY-4.0 (docs)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
