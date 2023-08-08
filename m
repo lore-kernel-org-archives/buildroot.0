@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56E2CEE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A2DAEE49A6
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1283140CC9;
-	Mon, 21 Aug 2023 20:15:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1283140CC9
+	by smtp2.osuosl.org (Postfix) with ESMTP id D41A841183;
+	Mon, 21 Aug 2023 20:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D41A841183
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FroGw3YR79Wo; Mon, 21 Aug 2023 20:14:58 +0000 (UTC)
+	with ESMTP id S4CExhYejfga; Mon, 21 Aug 2023 20:15:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 775564116F;
-	Mon, 21 Aug 2023 20:14:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 775564116F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07E53410A7;
+	Mon, 21 Aug 2023 20:15:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07E53410A7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AD9711BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B10F01BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72D82409A3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6FF9A40928
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72D82409A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FF9A40928
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zaol2hFK7-hP for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+ with ESMTP id 1fLjpbuuifJd for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C8A0414C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90D44414CC
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C8A0414C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90D44414CC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CD2886025; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+ id 8E8C586028; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 8 Aug 2023 00:03:22 +0200
+Date: Tue, 8 Aug 2023 09:40:32 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ef57da23b9950a8820c64c268672265f233cfb00
-X-Git-Newrev: a1ce9474e40f731f327035d8c0962abb16f00ff7
+X-Git-Oldrev: 7dc8dffe3a83dbd33abb0a0c7c3a24ce5cfe73cb
+X-Git-Newrev: 4936a8e9e2c5cc03b30f32ac8476d6bcfb0412e8
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200124.7CD2886025@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/qemu_m68k: add Linux
- kernel patch to fix build with binutils >= 2.41
+Message-Id: <20230821200124.8E8C586028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libksba: update CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,257 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1ce9474e40f731f327035d8c0962abb16f00ff7
+commit: https://git.buildroot.net/buildroot/commit/?id=4936a8e9e2c5cc03b30f32ac8476d6bcfb0412e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The m68k Linux kernel build is broken with binutils >= 2.41 with:
+libksba_project:libksba has been deprecated by NVD [0],
+gnupg:libksba should be used instead.
 
-arch/m68k/fpsp040/skeleton.S: Assembler messages:
-arch/m68k/fpsp040/skeleton.S:502: Error: junk at end of line, first unrecognized character is `#'
-arch/m68k/fpsp040/skeleton.S:508: Error: junk at end of line, first unrecognized character is `#'
+[0]: https://nvd.nist.gov/products/cpe/detail/AA709F75-0B9E-4B67-ACEA-C1DCF33E7745?namingFormat=2.3&orderBy=CPEURI&keyword=libksba&status=FINAL
 
-This commit adds a backport from the upstream Linux kernel which fixes
-this issue. Many thanks to Romain Naour for the issue investigation
-and the identification of the kernel commit fixing this.
-
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-m68k-Fix-invalid-.section-syntax.patch    | 97 ++++++++++++++++++++++
- .../0001-m68k-Fix-invalid-.section-syntax.patch    | 97 ++++++++++++++++++++++
- configs/qemu_m68k_mcf5208_defconfig                |  1 +
- configs/qemu_m68k_q800_defconfig                   |  1 +
- 4 files changed, 196 insertions(+)
+ package/libksba/libksba.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch b/board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch
-new file mode 100644
-index 0000000000..1f1ed75ae0
---- /dev/null
-+++ b/board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch
-@@ -0,0 +1,97 @@
-+From 0bb6b7477f5dcfafbdd76eea9c7aa7a5f78d7613 Mon Sep 17 00:00:00 2001
-+From: Ben Hutchings <benh@debian.org>
-+Date: Fri, 16 Jun 2023 17:36:10 +0200
-+Subject: [PATCH] m68k: Fix invalid .section syntax
-+
-+gas supports several different forms for .section for ELF targets,
-+including:
-+    .section NAME [, "FLAGS"[, @TYPE[,FLAG_SPECIFIC_ARGUMENTS]]]
-+and:
-+    .section "NAME"[, #FLAGS...]
-+
-+In several places we use a mix of these two forms:
-+    .section NAME, #FLAGS...
-+
-+A current development snapshot of binutils (2.40.50.20230611) treats
-+this mixed syntax as an error.
-+
-+Change to consistently use:
-+    .section NAME, "FLAGS"
-+as is used elsewhere in the kernel.
-+
-+Link: https://buildd.debian.org/status/fetch.php?pkg=linux&arch=m68k&ver=6.4%7Erc6-1%7Eexp1&stamp=1686907300&raw=1
-+Signed-off-by: Ben Hutchings <benh@debian.org>
-+Tested-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-+Link: https://lore.kernel.org/r/ZIyBaueWT9jnTwRC@decadent.org.uk
-+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=922a9bd138101e3e5718f0f4d40dba68ef89bb43
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ arch/m68k/fpsp040/skeleton.S       | 4 ++--
-+ arch/m68k/ifpsp060/os.S            | 4 ++--
-+ arch/m68k/kernel/relocate_kernel.S | 4 ++--
-+ 3 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
-+index 439395aa6fb4..081922c72daa 100644
-+--- a/arch/m68k/fpsp040/skeleton.S
-++++ b/arch/m68k/fpsp040/skeleton.S
-+@@ -499,13 +499,13 @@ in_ea:
-+ 	dbf	%d0,morein
-+ 	rts
-+ 
-+-	.section .fixup,#alloc,#execinstr
-++	.section .fixup,"ax"
-+ 	.even
-+ 1:
-+ 	jbsr	fpsp040_die
-+ 	jbra	.Lnotkern
-+ 
-+-	.section __ex_table,#alloc
-++	.section __ex_table,"a"
-+ 	.align	4
-+ 
-+ 	.long	in_ea,1b
-+diff --git a/arch/m68k/ifpsp060/os.S b/arch/m68k/ifpsp060/os.S
-+index 7a0d6e428066..89e2ec224ab6 100644
-+--- a/arch/m68k/ifpsp060/os.S
-++++ b/arch/m68k/ifpsp060/os.S
-+@@ -379,11 +379,11 @@ _060_real_access:
-+ 
-+ 
-+ | Execption handling for movs access to illegal memory
-+-	.section .fixup,#alloc,#execinstr
-++	.section .fixup,"ax"
-+ 	.even
-+ 1:	moveq		#-1,%d1
-+ 	rts
-+-.section __ex_table,#alloc
-++.section __ex_table,"a"
-+ 	.align 4
-+ 	.long	dmrbuae,1b
-+ 	.long	dmrwuae,1b
-+diff --git a/arch/m68k/kernel/relocate_kernel.S b/arch/m68k/kernel/relocate_kernel.S
-+index ab0f1e7d4653..f7667079e08e 100644
-+--- a/arch/m68k/kernel/relocate_kernel.S
-++++ b/arch/m68k/kernel/relocate_kernel.S
-+@@ -26,7 +26,7 @@ ENTRY(relocate_new_kernel)
-+ 	lea %pc@(.Lcopy),%a4
-+ 2:	addl #0x00000000,%a4		/* virt_to_phys() */
-+ 
-+-	.section ".m68k_fixup","aw"
-++	.section .m68k_fixup,"aw"
-+ 	.long M68K_FIXUP_MEMOFFSET, 2b+2
-+ 	.previous
-+ 
-+@@ -49,7 +49,7 @@ ENTRY(relocate_new_kernel)
-+ 	lea %pc@(.Lcont040),%a4
-+ 5:	addl #0x00000000,%a4		/* virt_to_phys() */
-+ 
-+-	.section ".m68k_fixup","aw"
-++	.section .m68k_fixup,"aw"
-+ 	.long M68K_FIXUP_MEMOFFSET, 5b+2
-+ 	.previous
-+ 
-+-- 
-+2.41.0
-+
-diff --git a/board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch b/board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch
-new file mode 100644
-index 0000000000..1f1ed75ae0
---- /dev/null
-+++ b/board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch
-@@ -0,0 +1,97 @@
-+From 0bb6b7477f5dcfafbdd76eea9c7aa7a5f78d7613 Mon Sep 17 00:00:00 2001
-+From: Ben Hutchings <benh@debian.org>
-+Date: Fri, 16 Jun 2023 17:36:10 +0200
-+Subject: [PATCH] m68k: Fix invalid .section syntax
-+
-+gas supports several different forms for .section for ELF targets,
-+including:
-+    .section NAME [, "FLAGS"[, @TYPE[,FLAG_SPECIFIC_ARGUMENTS]]]
-+and:
-+    .section "NAME"[, #FLAGS...]
-+
-+In several places we use a mix of these two forms:
-+    .section NAME, #FLAGS...
-+
-+A current development snapshot of binutils (2.40.50.20230611) treats
-+this mixed syntax as an error.
-+
-+Change to consistently use:
-+    .section NAME, "FLAGS"
-+as is used elsewhere in the kernel.
-+
-+Link: https://buildd.debian.org/status/fetch.php?pkg=linux&arch=m68k&ver=6.4%7Erc6-1%7Eexp1&stamp=1686907300&raw=1
-+Signed-off-by: Ben Hutchings <benh@debian.org>
-+Tested-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-+Link: https://lore.kernel.org/r/ZIyBaueWT9jnTwRC@decadent.org.uk
-+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=922a9bd138101e3e5718f0f4d40dba68ef89bb43
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ arch/m68k/fpsp040/skeleton.S       | 4 ++--
-+ arch/m68k/ifpsp060/os.S            | 4 ++--
-+ arch/m68k/kernel/relocate_kernel.S | 4 ++--
-+ 3 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/arch/m68k/fpsp040/skeleton.S b/arch/m68k/fpsp040/skeleton.S
-+index 439395aa6fb4..081922c72daa 100644
-+--- a/arch/m68k/fpsp040/skeleton.S
-++++ b/arch/m68k/fpsp040/skeleton.S
-+@@ -499,13 +499,13 @@ in_ea:
-+ 	dbf	%d0,morein
-+ 	rts
-+ 
-+-	.section .fixup,#alloc,#execinstr
-++	.section .fixup,"ax"
-+ 	.even
-+ 1:
-+ 	jbsr	fpsp040_die
-+ 	jbra	.Lnotkern
-+ 
-+-	.section __ex_table,#alloc
-++	.section __ex_table,"a"
-+ 	.align	4
-+ 
-+ 	.long	in_ea,1b
-+diff --git a/arch/m68k/ifpsp060/os.S b/arch/m68k/ifpsp060/os.S
-+index 7a0d6e428066..89e2ec224ab6 100644
-+--- a/arch/m68k/ifpsp060/os.S
-++++ b/arch/m68k/ifpsp060/os.S
-+@@ -379,11 +379,11 @@ _060_real_access:
-+ 
-+ 
-+ | Execption handling for movs access to illegal memory
-+-	.section .fixup,#alloc,#execinstr
-++	.section .fixup,"ax"
-+ 	.even
-+ 1:	moveq		#-1,%d1
-+ 	rts
-+-.section __ex_table,#alloc
-++.section __ex_table,"a"
-+ 	.align 4
-+ 	.long	dmrbuae,1b
-+ 	.long	dmrwuae,1b
-+diff --git a/arch/m68k/kernel/relocate_kernel.S b/arch/m68k/kernel/relocate_kernel.S
-+index ab0f1e7d4653..f7667079e08e 100644
-+--- a/arch/m68k/kernel/relocate_kernel.S
-++++ b/arch/m68k/kernel/relocate_kernel.S
-+@@ -26,7 +26,7 @@ ENTRY(relocate_new_kernel)
-+ 	lea %pc@(.Lcopy),%a4
-+ 2:	addl #0x00000000,%a4		/* virt_to_phys() */
-+ 
-+-	.section ".m68k_fixup","aw"
-++	.section .m68k_fixup,"aw"
-+ 	.long M68K_FIXUP_MEMOFFSET, 2b+2
-+ 	.previous
-+ 
-+@@ -49,7 +49,7 @@ ENTRY(relocate_new_kernel)
-+ 	lea %pc@(.Lcont040),%a4
-+ 5:	addl #0x00000000,%a4		/* virt_to_phys() */
-+ 
-+-	.section ".m68k_fixup","aw"
-++	.section .m68k_fixup,"aw"
-+ 	.long M68K_FIXUP_MEMOFFSET, 5b+2
-+ 	.previous
-+ 
-+-- 
-+2.41.0
-+
-diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
-index bf62136345..d6dd8bd1b7 100644
---- a/configs/qemu_m68k_mcf5208_defconfig
-+++ b/configs/qemu_m68k_mcf5208_defconfig
-@@ -22,6 +22,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
-+BR2_LINUX_KERNEL_PATCH="board/qemu/m68k-mcf5208/0001-m68k-Fix-invalid-.section-syntax.patch"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
-diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
-index 50b61a8007..a6444103c9 100644
---- a/configs/qemu_m68k_q800_defconfig
-+++ b/configs/qemu_m68k_q800_defconfig
-@@ -22,6 +22,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.26"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
-+BR2_LINUX_KERNEL_PATCH="board/qemu/m68k-q800/0001-m68k-Fix-invalid-.section-syntax.patch"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index b7c0508df8..122914d524 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -9,7 +9,7 @@ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
+ LIBKSBA_LICENSE_FILES = AUTHORS COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv3
+-LIBKSBA_CPE_ID_VENDOR = libksba_project
++LIBKSBA_CPE_ID_VENDOR = gnupg
+ LIBKSBA_INSTALL_STAGING = YES
+ LIBKSBA_DEPENDENCIES = libgpg-error
+ LIBKSBA_CONF_OPTS = --with-gpg-error-prefix=$(STAGING_DIR)/usr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
