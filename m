@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A25BEE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B596EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D768040C6F;
-	Mon, 21 Aug 2023 20:12:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D768040C6F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B3D440B5C;
+	Mon, 21 Aug 2023 20:12:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B3D440B5C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vF3wBR4wnHEw; Mon, 21 Aug 2023 20:12:17 +0000 (UTC)
+	with ESMTP id gEzOTvdGou69; Mon, 21 Aug 2023 20:12:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2C69640B72;
-	Mon, 21 Aug 2023 20:12:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C69640B72
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EAF971BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C3F340C5A;
+	Mon, 21 Aug 2023 20:12:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C3F340C5A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A06371BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C9826112E
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C9826112E
+ by smtp4.osuosl.org (Postfix) with ESMTP id C9308410DF
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9308410DF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jwi4Va3AYDSp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ELnsE4swhSsi for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C531361112
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C531361112
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFB8B409DD
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFB8B409DD
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0B5E86026; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+ id AC2F286025; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 22:21:57 +0200
+Date: Tue, 8 Aug 2023 18:49:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f7ebab67abc24b48035868dbaf2c362f47118a9a
-X-Git-Newrev: 76af307f01dad46913caa87edb09fe3b65cbb607
+X-Git-Oldrev: 969bd6e3ddf3567495bab190e828dc9135d31e87
+X-Git-Newrev: 606beef3527b0dacc7a3d8b870330b10f6dc566a
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200126.C0B5E86026@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- toolchain/toolchain-external/toolchain-external-codescape-img-mips: disable
- gdbserver
+Message-Id: <20230821200124.AC2F286025@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/chocolate-doom: add
+ VENDOR and PRODUCT CPE IDs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,41 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0196176876430301780=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76af307f01dad46913caa87edb09fe3b65cbb607
+--===============0196176876430301780==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=606beef3527b0dacc7a3d8b870330b10f6dc566a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure:
+cpe:2.3:a:chocolate-doom:chocolate_doom is a valid identifier for
+this package:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=chocolate-doom
 
->>> toolchain-external-codescape-img-mips 2018.09-02 Copying gdbserver
-Could not find gdbserver in external toolchain
-
-Fixes:
- - http://autobuild.buildroot.org/results/b0786965e0b249c8168df855682e54cfe95fa0cc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external/toolchain-external-codescape-img-mips/Config.in   | 1 +
- 1 file changed, 1 insertion(+)
+ package/chocolate-doom/chocolate-doom.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-index 2341d08832..d49c610237 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-img-mips/Config.in
-@@ -5,6 +5,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_MIPS_CPU_MIPS32R6 || (BR2_MIPS_CPU_MIPS64R6 && !BR2_MIPS_SOFT_FLOAT)
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+index 8318c123bd..581b2c51c2 100644
+--- a/package/chocolate-doom/chocolate-doom.mk
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -8,6 +8,8 @@ CHOCOLATE_DOOM_VERSION = 3.0.1
+ CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
+ CHOCOLATE_DOOM_LICENSE = GPL-2.0+
+ CHOCOLATE_DOOM_LICENSE_FILES = COPYING
++CHOCOLATE_DOOM_CPE_ID_VENDOR = chocolate-doom
++CHOCOLATE_DOOM_CPE_ID_PRODUCT = chocolate_doom
+ CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2 sdl2_mixer sdl2_net
+ 
+ # Avoid installing desktop entries, icons, etc.
+
+--===============0196176876430301780==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0196176876430301780==--
