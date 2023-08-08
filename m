@@ -4,81 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E9DC001B0
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 05:24:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00496C001B0
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 05:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F3734091E;
-	Tue,  8 Aug 2023 05:24:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F3734091E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64399403A8;
+	Tue,  8 Aug 2023 05:48:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64399403A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hcg5L5vQwHMa; Tue,  8 Aug 2023 05:24:23 +0000 (UTC)
+	with ESMTP id maV7GPQF_swW; Tue,  8 Aug 2023 05:48:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DBBD40923;
-	Tue,  8 Aug 2023 05:24:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DBBD40923
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6CA8F1BF32C
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:24:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03603403B4;
+	Tue,  8 Aug 2023 05:48:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03603403B4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B1AC1BF32C
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3C597403A2
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:24:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C597403A2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AF2C80F5C
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 05:48:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AF2C80F5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5tWgpKxWgCQD for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 05:24:19 +0000 (UTC)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com
- [209.85.208.169])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D1838402F4
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 05:24:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1838402F4
-Received: by mail-lj1-f169.google.com with SMTP id
- 38308e7fff4ca-2b974031aeaso81344841fa.0
- for <buildroot@buildroot.org>; Mon, 07 Aug 2023 22:24:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691472256; x=1692077056;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=MTJrO9hlh/I9TCaAcYvgRBT+eiOsauAeJBXJwzzSFxw=;
- b=leeA4JtytCqx7gpX9qBotBTfAjgABLAsi4tiEteF/7qROyk/nR0v0N30CrQFkXFftu
- T4v6mQXMEAEoNJ4Oq0Fq4UfX7Nfi98tnNMr5Er1wE/Q+SWb90fZrDjfXEGOhjo7uq9ln
- a1cLW2TSLTuSec/6Bmk4s0Ls5O3Ag/9ZkpDvYL2zMBgaI/TAhWIvk6T8O1H8EhPWVsNI
- fjpjZQe9UyboEZYweowTawADam9f54+jPq1pDs7Lp1JZ8rT6mxZJSlpTIKybzBkOmHq2
- Yd3XS9OxrX2J5yALiQ4VykwuH9/fBybj0dj5t9fxKjH/AUA/YOnNI9NNeuAGCCUbtv+n
- ZzKg==
-X-Gm-Message-State: AOJu0Ywgz+xXSJTUCARgq0GAqR9Bus5MTxLJpGis4fhdN3XUBEivW7mK
- 1tJ8wlnu9jvntcZND6L/IYXS1E3DaQDjZND2
-X-Google-Smtp-Source: AGHT+IHp2UCOQh0L02I1LBsFrcCi9ERZ2QAFQwrQ6TxL0S1Xm+Ck21Ye0/8K8pDVTw1NDbkUiDYTgg==
-X-Received: by 2002:a2e:a312:0:b0:2b6:decf:5cbd with SMTP id
- l18-20020a2ea312000000b002b6decf5cbdmr8144149lje.36.1691472256493; 
- Mon, 07 Aug 2023 22:24:16 -0700 (PDT)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com.
- [209.85.167.47]) by smtp.gmail.com with ESMTPSA id
- z24-20020a2e8e98000000b002b9ead74535sm2132392ljk.15.2023.08.07.22.24.15
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 07 Aug 2023 22:24:16 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id
- 2adb3069b0e04-4f4b2bc1565so8467037e87.2
- for <buildroot@buildroot.org>; Mon, 07 Aug 2023 22:24:15 -0700 (PDT)
-X-Received: by 2002:ac2:504e:0:b0:4f8:6d54:72f9 with SMTP id
- a14-20020ac2504e000000b004f86d5472f9mr7471377lfm.61.1691472255722; Mon, 07
- Aug 2023 22:24:15 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j43a0Bb6Oqm3 for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 05:48:34 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 72E6780EA0
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 05:48:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72E6780EA0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 45F31FF804
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 05:48:30 +0000 (UTC)
 MIME-Version: 1.0
-References: <20230807145839.2375839-1-thomas.devoogdt@barco.com>
- <20230807213131.GA421096@scaer>
-In-Reply-To: <20230807213131.GA421096@scaer>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Tue, 8 Aug 2023 07:24:03 +0200
-X-Gmail-Original-Message-ID: <CACXRmJg7oT6yyWCtNJ7ok_57AtGXzS3sD41KYFTn9YzUeUWgWQ@mail.gmail.com>
-Message-ID: <CACXRmJg7oT6yyWCtNJ7ok_57AtGXzS3sD41KYFTn9YzUeUWgWQ@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH v1 1/3 next] package/qt6/qt6serialport: use
- the CMAKE_NINJA flag
+To: buildroot@buildroot.org
+Date: Tue, 08 Aug 2023 05:48:30 -0000
+X-GND-Sasl: bot@bootlin.com
+Message-Id: <20230808054835.4AF2C80F5C@smtp1.osuosl.org>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; 
+ t=1691473710; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
+ mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=x5RckEPkJ2Bt3mWs3vfeg0CfakVv4QMDHNkW2IsVUDM=;
+ b=llF77E3iQslfxyxqg0HfDP7Yqg+IKK/sdlo4KMz0BOa43sCkZCnQhvlyi8LrnkH4lpj7pb
+ qdMid/5lJnCudlwATOPwXJ6YnFkagwFQuEyGKBDKo23wmWlLmmuVdlilbTvBZVIJCSbc4A
+ 8M29x1MSZj8sW5U0ij9ry1ic/IJjw4/YOMMpKMobBAyNS1g+Q/Jed4yI5ZdMsfmZa5pyK9
+ oOFO4Tti2WmBYDk8ICGfFYvBXTy1Jmfa4hZ6dlpx6zak/vBOtnihitgHi1N+/TW0jM2rkC
+ 0hBOvhHCMf3sHXFJPXe2DqMYbaJEJbTjR7wlwbzv4DtlXg1/Iis52d7Xa2qjQg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=llF77E3i
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-08-07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,251 +69,177 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>,
- Jesse Van Gavere <jesseevg@gmail.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2738318534126508895=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2738318534126508895==
-Content-Type: multipart/alternative; boundary="000000000000f32c47060262929a"
+Hello,
 
---000000000000f32c47060262929a
-Content-Type: text/plain; charset="UTF-8"
+Autobuild statistics for 2023-08-07
+===================================
 
-Yann, All,
+      branch |  OK | NOK | TIM | TOT |
+  2023.02.x  |  4  |  2  |  0  |  6  |
+  2023.05.x  |  1  |  2  |  0  |  3  |
+    master   | 44  | 52  |  2  | 98  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+               libglib2-2.76.1 | 5 
+                  check-0.15.2 | 4 
+             util-linux-2.39.1 | 4 
+                elfutils-0.189 | 3 
+                   linux-6.4.8 | 3 
+  gobject-introspection-1.76.1 | 2 
+                 mpg123-1.31.3 | 2 
+            quickjs-2021-03-27 | 2 
+             batman-adv-2022.3 | 1 
+                 c-icap-0.5.10 | 1 
+                  clamav-1.0.1 | 1 
+             cni-plugins-1.3.0 | 1 
+                    cramfs-2.1 | 1 
+          cryptodev-linux-1.13 | 1 
+             dahdi-linux-3.2.0 | 1 
+        edk2-edk2-stable202305 | 1 
+             f2fs-tools-1.16.0 | 1 
+fs/romfs/romfs.mk:32: /home... | 1 
+         gobject-introspection | 1 
+           host-composer-2.5.8 | 1 
+                host-go-1.20.7 | 1 
+host-go-bootstrap-stage2-1.... | 1 
+       host-python-sip-4.19.25 | 1 
+              host-rust-1.71.0 | 1 
+libdill-32d0e8b733416208e04... | 1 
+                    libndp-1.8 | 1 
+                        libpng | 1 
+              libuhttpd-3.14.1 | 1 
+          lttng-modules-2.13.7 | 1 
+                    mosh-1.4.0 | 1 
+              open62541-v1.3.6 | 1 
+                   perl-5.36.1 | 1 
+          python-rpds-py-0.9.2 | 1 
+             stress-ng-0.15.07 | 1 
+                       unknown | 1 
+        util-linux-libs-2.39.1 | 1 
+x264-baee400fa9ced6f5481a72... | 1 
 
 
-Ah wow, missed it, will change it too and re-run test-pkg with that one
-include. The other three simply passed for the default test-pkg
-architectures.
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |       batman-adv-2022.3        | NOK | http://autobuild.buildroot.net/results/7b4ca83a69b597f74a37b9767d795eeea120e6bc |     
+  sparc64    |         c-icap-0.5.10          | NOK | http://autobuild.buildroot.net/results/79fe12177eeaa26ab00fe8df75ee1078f7fb4734 | ORPH
+  aarch64    |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/2904e016b9f3bc2dab5f4a15784991f2819a045c | ORPH
+    arc      |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/e823c656a6336bf2e1d89039d2805a6a2d248cb8 | ORPH
+    mips     |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/ae7e3b0f0fbf1e0b4f190d9e32efe8702879741b | ORPH
+   armeb     |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/b1087e9a67ff0382632b73f280fabe92cd863593 | ORPH
+    mips     |          clamav-1.0.1          | NOK | http://autobuild.buildroot.net/results/69b8b3494c12e691ec524d80d6d08140875cc64c |     
+   x86_64    |       cni-plugins-1.3.0        | NOK | http://autobuild.buildroot.net/results/2f8984e752885efa12ba6cc81d0c99ad74211e62 |     
+  riscv64    |           cramfs-2.1           | NOK | http://autobuild.buildroot.net/results/0b19b980d4d94bfa06c8159f3d0758cc1873400d |     
+   xtensa    |      cryptodev-linux-1.13      | NOK | http://autobuild.buildroot.net/results/e53f8b2bd401c75a6d93424ffea17c44dfd12501 | ORPH
+    i686     |       dahdi-linux-3.2.0        | NOK | http://autobuild.buildroot.net/results/a6f2baa1363c6160cd2d738266d436aa7ed87176 |     
+  aarch64    |     edk2-edk2-stable202305     | NOK | http://autobuild.buildroot.net/results/19635a166f07ccb6da8bdf4a5753ed0e5f4cb163 |     
+ microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/f872533d9a08e713c795e588e40040b712f87190 | ORPH
+ microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/12d72ef5e2dc1c72aa2462812e4d8d40226bf5c2 | ORPH
+microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/90f30eb359d40ad892b8fbcfc1e373b371b863a1 | ORPH
+powerpc64le  |       f2fs-tools-1.16.0        | NOK | http://autobuild.buildroot.net/results/58cef7ff6787c3a43e11244d0108ab73c7813a33 |     
+  sparc64    | fs/romfs/romfs.mk:32: /home... | NOK | http://autobuild.buildroot.net/results/2501c7e6eb222b1fdaf94f04f08e4a95ec4b609e |     
+   armeb     |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/06245c11e00c564488026d6014adf5b1c69afd76 |     
+    i686     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/f6e9339b49cd5249a89d932d50dc1d0b68721603 | ORPH
+   mipsel    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/b7704ce6f5fc9766825881259557cedc3e9a44dc | ORPH
+   arceb     |      host-composer-2.5.8       | NOK | http://autobuild.buildroot.net/results/170806213b01966cb9dc297d990707db6457b2e4 |     
+   mips64    |         host-go-1.20.7         | NOK | http://autobuild.buildroot.net/results/9d5232745f17b6e9fc77f1661101080d1f439ba9 |     
+ powerpc64   | host-go-bootstrap-stage2-1.... | NOK | http://autobuild.buildroot.net/results/9a0dc8bffa2a51d71e3f6d8c9b1041a080e64049 |     
+   x86_64    |    host-python-sip-4.19.25     | NOK | http://autobuild.buildroot.net/results/95e1a4e2c4952c1f578d5efaae4df3e5fe237b77 |     
+ powerpc64   |        host-rust-1.71.0        | NOK | http://autobuild.buildroot.net/results/67966a508ebe87a842f0f6525ddd60d306708a51 |     
+    m68k     | libdill-32d0e8b733416208e04... | NOK | http://autobuild.buildroot.net/results/1fdfb97da422c269077886855e4581feb9abda5a |     
+    arc      |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/5c7ef54cdf7f4cbfa8a2cfb37c5858005576af86 |     
+   arceb     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/859ccc06227ce1916c63336a61e3bf0671a0b748 |     
+    m68k     |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/9d0c6c2e3a47396b9cf373a4a3446af458c6421a |     
+   x86_64    |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/dedc7788a0501a404083e9b947b6f2dd0c9ca9dc |     
+   x86_64    |        libglib2-2.76.1         | NOK | http://autobuild.buildroot.net/results/d2da03f7558f3b6ee59c813bb64115702e52704c |     
+  riscv64    |           libndp-1.8           | NOK | http://autobuild.buildroot.net/results/4b20586e6cd02762cd3dc6536daf1d973fe2d937 |     
+   armeb     |             libpng             | TIM | http://autobuild.buildroot.net/results/eadfa401d53770f39803194419e5deb1c5bdc65e |     
+  mips64el   |        libuhttpd-3.14.1        | NOK | http://autobuild.buildroot.net/results/79d2cce07c8f7f7de1a067bc27819a890a3cf8d5 |     
+  aarch64    |          linux-6.4.8           | NOK | http://autobuild.buildroot.net/results/e1839d4d078096920dc0b61c7ce83011a4643204 | ORPH
+   sh4aeb    |          linux-6.4.8           | NOK | http://autobuild.buildroot.net/results/0c8b37e221ff957c953eec89e2e0a14528982454 | ORPH
+    mips     |          linux-6.4.8           | NOK | http://autobuild.buildroot.net/results/1a4fce2e6a624d94c5bf8594626b1c6919870d6f | ORPH
+ aarch64_be  |      lttng-modules-2.13.7      | NOK | http://autobuild.buildroot.net/results/bf84062290151e179fd546ed90d8656bc3b6acfc |     
+ powerpc64   |           mosh-1.4.0           | NOK | http://autobuild.buildroot.net/results/0780481885197b1874981c36ec0c7f2bc9e5a00e |     
+   nios2     |         mpg123-1.31.3          | NOK | http://autobuild.buildroot.net/results/859cd84d4d9cc788c21cd7368a901194ed7f9174 |     
+ microblaze  |         mpg123-1.31.3          | NOK | http://autobuild.buildroot.net/results/715ffabf0626f55e6e9e52a2ff9884222e5cd07a |     
+powerpc64le  |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/f1473a453778cbb51929a012054276afedb70737 | ORPH
+   mipsel    |          perl-5.36.1           | NOK | http://autobuild.buildroot.net/results/13d66e281cb4778f7498f909f5f7c65d4b28bcbb |     
+  sparc64    |      python-rpds-py-0.9.2      | NOK | http://autobuild.buildroot.net/results/8c304c3daf0f320b482fe8215151996324d75026 |     
+ powerpc64   |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/55bd5cf39b76ac13be5a3d62ca50b5ee89eeac94 |     
+powerpc64le  |       quickjs-2021-03-27       | NOK | http://autobuild.buildroot.net/results/23e68589652cabd5f19702cec2eb8b6f702c3a62 |     
+    i686     |       stress-ng-0.15.07        | NOK | http://autobuild.buildroot.net/results/823aac32b0ff365ebb3d99073f34276362a2c530 |     
+    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/d0e1796a8524329124381eb7b4b6009451df0fbf |     
+    mips     |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/ab4a05a502899b45483c70cdcc724600e9086cd2 | ORPH
+powerpc64le  |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/ecb2f45c488513cef21f93cd6c75dcf2d1e49ecf | ORPH
+microblazeel |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/535bdf8af93c658c1e64a0fa5f8afe7600bbd715 | ORPH
+  mips64el   |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/f873e61dfb35f65a313f112e60063510d5f5b543 | ORPH
+  powerpc    |     util-linux-libs-2.39.1     | NOK | http://autobuild.buildroot.net/results/94a406fe89e451fddb2e7ba8732cc4eb55791ad9 | ORPH
+    i686     | x264-baee400fa9ced6f5481a72... | NOK | http://autobuild.buildroot.net/results/c30009df570ba39e8199f6cbcbd3a189de67d946 |     
 
 
-Kr,
+Classification of failures by reason for 2023.02.x
+--------------------------------------------------
 
-Thomas
+              host-rust-1.67.1 | 1 
+                 qt6base-6.4.3 | 1 
 
-Op ma 7 aug. 2023 23:31 schreef Yann E. MORIN <yann.morin.1998@free.fr>:
 
-> Thomas, All,
->
-> Thanks for this series. Thomas P. applied it before I had a chance to
-> reply, so:
->
-> Is there an issue with qt6svg, or did you just miss it?
->
-> Regards,
-> Yann E. MORIN.
->
-> On 2023-08-07 16:58 +0200, Thomas Devoogdt spake thusly:
-> > Use the newly introduce backend option
-> (4cf79d9b71ff5cf2aede3f21e09ade7c7ac59606)
-> > to specify what cmake backend to use, instead of special-coding it's use.
-> >
-> > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> > ---
-> >  package/qt6/qt6serialport/qt6serialport.mk | 16 ++--------------
-> >  1 file changed, 2 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/package/qt6/qt6serialport/qt6serialport.mk
-> b/package/qt6/qt6serialport/qt6serialport.mk
-> > index 497719d4ec..bdb16dd892 100644
-> > --- a/package/qt6/qt6serialport/qt6serialport.mk
-> > +++ b/package/qt6/qt6serialport/qt6serialport.mk
-> > @@ -10,6 +10,8 @@ QT6SERIALPORT_SOURCE =
-> qtserialport-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SERIALPORT
-> >  QT6SERIALPORT_INSTALL_STAGING = YES
-> >  QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD = NO
-> >
-> > +QT6SERIALPORT_CMAKE_BACKEND = ninja
-> > +
-> >  QT6SERIALPORT_LICENSE = \
-> >       GPL-2.0+ or LGPL-3.0, \
-> >       GPL-3.0 with exception (tools), \
-> > @@ -25,7 +27,6 @@ QT6SERIALPORT_LICENSE_FILES = \
-> >       LICENSES/Qt-GPL-exception-1.0.txt
-> >
-> >  QT6SERIALPORT_CONF_OPTS = \
-> > -     -GNinja \
-> >       -DQT_HOST_PATH=$(HOST_DIR) \
-> >       -DBUILD_WITH_PCH=OFF \
-> >       -DQT_BUILD_EXAMPLES=OFF \
-> > @@ -33,19 +34,6 @@ QT6SERIALPORT_CONF_OPTS = \
-> >
-> >  QT6SERIALPORT_DEPENDENCIES = \
-> >       host-pkgconf \
-> > -     host-ninja \
-> >       qt6base
-> >
-> > -define QT6SERIALPORT_BUILD_CMDS
-> > -     $(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERIALPORT_BUILDDIR)
-> > -endef
-> > -
-> > -define QT6SERIALPORT_INSTALL_STAGING_CMDS
-> > -     $(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(BR2_CMAKE) --install
-> $(QT6SERIALPORT_BUILDDIR)
-> > -endef
-> > -
-> > -define QT6SERIALPORT_INSTALL_TARGET_CMDS
-> > -     $(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(BR2_CMAKE) --install
-> $(QT6SERIALPORT_BUILDDIR)
-> > -endef
-> > -
-> >  $(eval $(cmake-package))
-> > --
-> > 2.41.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
->
+Detail of failures for 2023.02.x
+--------------------------------
 
---000000000000f32c47060262929a
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ powerpc64   |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/5febcac4979a88c1b3f9a642eedfaa4dd9e3f846 |     
+  aarch64    |         qt6base-6.4.3          | NOK | http://autobuild.buildroot.net/results/1468ab483bc8d9e56bca4fb735a32f8f8b315107 |     
 
-<div dir=3D"auto"><div>Yann, All,=C2=A0</div><div dir=3D"auto"><br></div><d=
-iv dir=3D"auto"><br></div><div dir=3D"auto">Ah wow, missed it, will change =
-it too and re-run test-pkg with that one include. The other three simply pa=
-ssed for the default test-pkg architectures.=C2=A0</div><div dir=3D"auto"><=
-br></div><div dir=3D"auto"><br></div><div dir=3D"auto">Kr,=C2=A0</div><div =
-dir=3D"auto"><br></div><div dir=3D"auto">Thomas=C2=A0<br><br><div class=3D"=
-gmail_quote" dir=3D"auto"><div dir=3D"ltr" class=3D"gmail_attr">Op ma 7 aug=
-. 2023 23:31 schreef Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@fr=
-ee.fr">yann.morin.1998@free.fr</a>&gt;:<br></div><blockquote class=3D"gmail=
-_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:=
-1ex">Thomas, All,<br>
-<br>
-Thanks for this series. Thomas P. applied it before I had a chance to<br>
-reply, so:<br>
-<br>
-Is there an issue with qt6svg, or did you just miss it?<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
-On 2023-08-07 16:58 +0200, Thomas Devoogdt spake thusly:<br>
-&gt; Use the newly introduce backend option (4cf79d9b71ff5cf2aede3f21e09ade=
-7c7ac59606)<br>
-&gt; to specify what cmake backend to use, instead of special-coding it&#39=
-;s use.<br>
-&gt; <br>
-&gt; Signed-off-by: Thomas Devoogdt &lt;<a href=3D"mailto:thomas.devoogdt@b=
-arco.com" target=3D"_blank" rel=3D"noreferrer">thomas.devoogdt@barco.com</a=
->&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" re=
-l=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a> | 16 ++-=
--------------<br>
-&gt;=C2=A0 1 file changed, 2 insertions(+), 14 deletions(-)<br>
-&gt; <br>
-&gt; diff --git a/package/qt6/qt6serialport/<a href=3D"http://qt6serialport=
-.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a> b=
-/package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" rel=3D"noref=
-errer noreferrer" target=3D"_blank">qt6serialport.mk</a><br>
-&gt; index 497719d4ec..bdb16dd892 100644<br>
-&gt; --- a/package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" re=
-l=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a><br>
-&gt; +++ b/package/qt6/qt6serialport/<a href=3D"http://qt6serialport.mk" re=
-l=3D"noreferrer noreferrer" target=3D"_blank">qt6serialport.mk</a><br>
-&gt; @@ -10,6 +10,8 @@ QT6SERIALPORT_SOURCE =3D qtserialport-$(QT6_SOURCE_T=
-ARBALL_PREFIX)-$(QT6SERIALPORT<br>
-&gt;=C2=A0 QT6SERIALPORT_INSTALL_STAGING =3D YES<br>
-&gt;=C2=A0 QT6SERIALPORT_SUPPORTS_IN_SOURCE_BUILD =3D NO<br>
-&gt;=C2=A0 <br>
-&gt; +QT6SERIALPORT_CMAKE_BACKEND =3D ninja<br>
-&gt; +<br>
-&gt;=C2=A0 QT6SERIALPORT_LICENSE =3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0GPL-2.0+ or LGPL-3.0, \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0GPL-3.0 with exception (tools), \<br>
-&gt; @@ -25,7 +27,6 @@ QT6SERIALPORT_LICENSE_FILES =3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0LICENSES/Qt-GPL-exception-1.0.txt<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 QT6SERIALPORT_CONF_OPTS =3D \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0-GNinja \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DQT_HOST_PATH=3D$(HOST_DIR) \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DBUILD_WITH_PCH=3DOFF \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DQT_BUILD_EXAMPLES=3DOFF \<br>
-&gt; @@ -33,19 +34,6 @@ QT6SERIALPORT_CONF_OPTS =3D \<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 QT6SERIALPORT_DEPENDENCIES =3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0host-pkgconf \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0host-ninja \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0qt6base<br>
-&gt;=C2=A0 <br>
-&gt; -define QT6SERIALPORT_BUILD_CMDS<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) $(BR2_CMAKE) --build $(QT6SERI=
-ALPORT_BUILDDIR)<br>
-&gt; -endef<br>
-&gt; -<br>
-&gt; -define QT6SERIALPORT_INSTALL_STAGING_CMDS<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) DESTDIR=3D$(STAGING_DIR) $(BR2=
-_CMAKE) --install $(QT6SERIALPORT_BUILDDIR)<br>
-&gt; -endef<br>
-&gt; -<br>
-&gt; -define QT6SERIALPORT_INSTALL_TARGET_CMDS<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0$(TARGET_MAKE_ENV) DESTDIR=3D$(TARGET_DIR) $(BR2_=
-CMAKE) --install $(QT6SERIALPORT_BUILDDIR)<br>
-&gt; -endef<br>
-&gt; -<br>
-&gt;=C2=A0 $(eval $(cmake-package))<br>
-&gt; -- <br>
-&gt; 2.41.0<br>
-&gt; <br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=3D"no=
-referrer">buildroot@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/ma=
-ilman/listinfo/buildroot</a><br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer noreferrer" ta=
-rget=3D"_blank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=
-=A0 =C2=A0 |=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br>
-<br>
-</blockquote></div></div></div>
 
---000000000000f32c47060262929a--
+Classification of failures by reason for 2023.05.x
+--------------------------------------------------
 
---===============2738318534126508895==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+              host-rust-1.68.2 | 1 
+                   trinity-1.9 | 1 
 
+
+Detail of failures for 2023.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  sparc64    |        host-rust-1.68.2        | NOK | http://autobuild.buildroot.net/results/f372977e02947bef042058f8a9976fa39e86e360 |     
+  aarch64    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/6415f013d58748ce66cbe8baffb7505d1833ff6c | ORPH
+
+
+Gitlab CI results for 2023-08-07
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+        TestDockerCompose | https://gitlab.com/buildroot.org/buildroot/-/jobs/4814732224  | ORPH 
+...sh4aebMuslBleedingEdge | https://gitlab.com/buildroot.org/buildroot/-/jobs/4814734175  | ORPH 
+        TestPolkitSystemd | https://gitlab.com/buildroot.org/buildroot/-/jobs/4814732904  | ORPH 
+       TestPythonPy3Boto3 | https://gitlab.com/buildroot.org/buildroot/-/jobs/4814732966  | ORPH 
+    TestPythonPy3Botocore | https://gitlab.com/buildroot.org/buildroot/-/jobs/4814732970  | ORPH 
+
+
+
+-- 
+http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2738318534126508895==--
