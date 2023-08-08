@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43DE2EC8738
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76B98EC8738
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDD7F831B4;
-	Thu,  7 Sep 2023 15:18:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDD7F831B4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F49C81767;
+	Thu,  7 Sep 2023 15:18:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F49C81767
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OhkDC_Mjm6kG; Thu,  7 Sep 2023 15:18:27 +0000 (UTC)
+	with ESMTP id bqbkoybodZX0; Thu,  7 Sep 2023 15:18:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2474E82C3C;
-	Thu,  7 Sep 2023 15:18:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2474E82C3C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 679201BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 508518146B;
+	Thu,  7 Sep 2023 15:18:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 508518146B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 185DC1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E080612BA
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E080612BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id B8D5F41D7D
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8D5F41D7D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZLUtoJpf3ZnU for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MMJUN1XAgBCJ for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75DC6612B2
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75DC6612B2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 149E741D74
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 149E741D74
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 743A986A22; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id 094DF869E0; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:44:51 +0200
+Date: Tue, 8 Aug 2023 19:15:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f38a2a95ac9cefaf7483d49ba0f2ded6fa97019c
-X-Git-Newrev: 9299ea4bff290bd2f178eb81b3a86451c3153a7e
+X-Git-Oldrev: 3f32fab3d85c4e8e45f170d7b720bf9f6404962f
+X-Git-Newrev: c50e9c21f0444b064bc257fcc0d3073fee945623
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.743A986A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.93
+Message-Id: <20230907145128.094DF869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/onevpl: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,173 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9299ea4bff290bd2f178eb81b3a86451c3153a7e
+commit: https://git.buildroot.net/buildroot/commit/?id=c50e9c21f0444b064bc257fcc0d3073fee945623
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../onevpl/0001-Don-t-force-fstack-protector.patch | 32 ++++++++++++++++
+ package/onevpl/Config.in                           | 27 ++++++++++++++
+ package/onevpl/onevpl.hash                         |  3 ++
+ package/onevpl/onevpl.mk                           | 43 ++++++++++++++++++++++
+ 6 files changed, 107 insertions(+)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index b95c0448b0..a3b98b0f8c 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_92_RTM/src/SHA256SUMS
--sha256  3db192d6e882039af02ae7eaf3217ed114bb7ad83414c646772ab8021e24a254  nss-3.92.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_93_RTM/src/SHA256SUMS
-+sha256  15f54bb72048eb105f8c0e936a04b899e74c3db9a19bbc1e00acee2af9476a8a  nss-3.93.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index e9e7c5a278..e859f479bb 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.92
-+LIBNSS_VERSION = 3.93
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9915143a04..eb703d52c7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -417,6 +417,7 @@ F:	package/mjpg-streamer/
+ F:	package/mpg123/
+ F:	package/ntp/
+ F:	package/nut/
++F:	package/onevpl/
+ F:	package/opus/
+ F:	package/pciutils/
+ F:	package/perl-crypt-openssl-guess/
+diff --git a/package/Config.in b/package/Config.in
+index e12ee34e9f..58e653dcd9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1642,6 +1642,7 @@ menu "Graphics"
+ 	source "package/libvips/Config.in"
+ 	source "package/libwpe/Config.in"
+ 	source "package/menu-cache/Config.in"
++	source "package/onevpl/Config.in"
+ 	source "package/opencl-clhpp/Config.in"
+ 	source "package/opencv3/Config.in"
+ 	source "package/opencv4/Config.in"
+diff --git a/package/onevpl/0001-Don-t-force-fstack-protector.patch b/package/onevpl/0001-Don-t-force-fstack-protector.patch
+new file mode 100644
+index 0000000000..14948e28cc
+--- /dev/null
++++ b/package/onevpl/0001-Don-t-force-fstack-protector.patch
+@@ -0,0 +1,32 @@
++From 682a9eabc71c2e33ebbbba2e75d0ba7caa08c7c8 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 8 May 2023 20:03:22 +0200
++Subject: [PATCH] Don't force -fstack-protector
++
++This allows the environment to decide whether SSP should be used or
++not, for example to support toolchains that don't have SSP support.
++
++Upstream: Not applicable
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ cmake/CompileOptions.cmake | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/cmake/CompileOptions.cmake b/cmake/CompileOptions.cmake
++index 9923f1c..5b24622 100644
++--- a/cmake/CompileOptions.cmake
+++++ b/cmake/CompileOptions.cmake
++@@ -54,9 +54,6 @@ else()
++       add_definitions("-D_FORTIFY_SOURCE=2")
++     endif()
++   endif()
++-  if(NOT MINGW)
++-    add_compile_options("-fstack-protector-strong")
++-  endif()
++   if(NOT MINGW)
++     add_link_options("-Wl,-z,relro,-z,now,-z,noexecstack")
++   endif()
++-- 
++2.39.2
++
+diff --git a/package/onevpl/Config.in b/package/onevpl/Config.in
+new file mode 100644
+index 0000000000..a750e54d52
+--- /dev/null
++++ b/package/onevpl/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
++	bool
++	default y if BR2_ARCH_IS_64
++	default y if BR2_arm
++
++config BR2_PACKAGE_ONEVPL
++	bool "onevpl"
++	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
++	# libva support needs a libdrm with intel driver
++	select BR2_PACKAGE_LIBDRM_INTEL if BR2_PACKAGE_LIBVA
++	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	help
++	  oneAPI Video Processing Library (oneVPL) dispatcher,
++	  tools, and examples
++
++	  https://github.com/oneapi-src/oneVPL
++
++comment "onevpl needs a toolchain w/ dynamic library, gcc >= 7, C++, threads"
++	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/onevpl/onevpl.hash b/package/onevpl/onevpl.hash
+new file mode 100644
+index 0000000000..c9ca1e6c04
+--- /dev/null
++++ b/package/onevpl/onevpl.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  4411543519486a2450f6f5af06a077596e7888a551768594e9dfa2a46b23b6f5  onevpl-2023.3.1.tar.gz
++sha256  bf1cfac2e2792b6e1e995ce103d70796aecaf2ec7e4c5fe5474f7acec7b4a677  LICENSE
+diff --git a/package/onevpl/onevpl.mk b/package/onevpl/onevpl.mk
+new file mode 100644
+index 0000000000..2033f755c0
+--- /dev/null
++++ b/package/onevpl/onevpl.mk
+@@ -0,0 +1,43 @@
++################################################################################
++#
++# onevpl
++#
++################################################################################
++
++ONEVPL_VERSION = 2023.3.1
++ONEVPL_SITE = $(call github,oneapi-src,oneVPL,v$(ONEVPL_VERSION))
++ONEVPL_LICENSE = MIT
++ONEVPL_LICENSE_FILES = LICENSE
++ONEVPL_INSTALL_STAGING = YES
++ONEVPL_DEPENDENCIES = host-pkgconf
++
++ONEVPL_CONF_OPTS = \
++	-DINSTALL_EXAMPLE_CODE=OFF
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++ONEVPL_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS="-latomic"
++endif
++
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++ONEVPL_CONF_OPTS += -DENABLE_VA=ON
++ONEVPL_DEPENDENCIES += libva
++else
++ONEVPL_CONF_OPTS += -DENABLE_VA=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=ON
++ONEVPL_DEPENDENCIES += wayland wayland-protocols
++else
++ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++ONEVPL_CONF_OPTS += -DENABLE_X11=ON
++ONEVPL_DEPENDENCIES += libxcb xlib_libX11
++else
++ONEVPL_CONF_OPTS += -DENABLE_X11=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
