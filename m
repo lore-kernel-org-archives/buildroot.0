@@ -4,46 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E864FC001DB
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 17:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F21CC04A6A
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 17:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 755B74057F;
-	Tue,  8 Aug 2023 17:23:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 755B74057F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2E2F64044A;
+	Tue,  8 Aug 2023 17:26:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E2F64044A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dN81dlyBHcDr; Tue,  8 Aug 2023 17:23:58 +0000 (UTC)
+	with ESMTP id zJ0WUhqctDGX; Tue,  8 Aug 2023 17:26:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F2D440C0E;
-	Tue,  8 Aug 2023 17:23:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F2D440C0E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 101351BF59C
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:23:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D785405AA;
+	Tue,  8 Aug 2023 17:26:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D785405AA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 276181BF59C
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDF7960BA2
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:23:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDF7960BA2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 011D881E98
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:26:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 011D881E98
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H4ElUdfjJyXn for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 17:23:41 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A64896074C
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 17:23:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A64896074C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 927C684AE3; Tue,  8 Aug 2023 17:23:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rIrVZ1munLc2 for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 17:26:29 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3A62480D5E
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 17:26:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A62480D5E
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.fritz.box ([62.216.209.240]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MXXuH-1qJ7s50D9T-00Yz0t for <buildroot@buildroot.org>; Tue, 08 Aug 2023
+ 19:26:26 +0200
+From: Peter Seiderer <ps.report@gmx.net>
 To: buildroot@buildroot.org
-Date: Tue, 8 Aug 2023 19:15:05 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3f32fab3d85c4e8e45f170d7b720bf9f6404962f
-X-Git-Newrev: c50e9c21f0444b064bc257fcc0d3073fee945623
-X-Patchwork-Hint: ignore
-Message-Id: <20230808172341.927C684AE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/onevpl: new package
+Date: Tue,  8 Aug 2023 19:26:25 +0200
+Message-ID: <20230808172625.20598-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:XdAPcWjFJ8eRkf8j7thlELRwgbwAS4XAwYImmyk1rXzo/F1UB3H
+ 8gqcMQETB0TFJW87L+7BkT3j5pyOo0Jc03e6VNgR7VLU2dELjJ2uFJIKi0PI0A9uI+L+O6x
+ AxehmGXjou2ZDY5leO2QVo8LiHjkChWGgMOD73+sbZeK0UaA1ctq0P5UuRZ2GEeFNcNIGvV
+ nsqNllL3ehsy3G9ja7k/w==
+UI-OutboundReport: notjunk:1;M01:P0:/O2IChz8c20=;FQnTm5bOKwDdJ9TRCralSrNJbqH
+ cOZ6i/C1K679pAUJjwMJGVqqvkiI5usbTRwZRkz8UxkHNWan6ylkMTblYNbWEcifJ0or90OLk
+ lmxQBR9K0LmJMR3wNw3BGjkqu6JWiop9KJtDKuLoLmRYqVq15RVwiouJDg8xJ5MyoySfqQgZs
+ Jrx5Eb6uGjSmGBB1gX0ZH9XxwW8xc/ahL0FfAnSBFSiBVr/mYRBBjJW6ngSmnBKLyGrHq4tyf
+ 09HjnIvItST+gWBHjRAhuWBhtKP0AiOW1WlJ72/GsmzzYa6jkrEQz9M+a02VBO1EUCLJ3KRiJ
+ NfKh61Uv3x08NeETVx5TbB2Dm7k60SNHshB6H5XL+znt1AIrMm4LSv9ivpsIf84Lfqr5FiEln
+ /NC4Jzqk5MxXRqxAGEBUlZymn7uFZzzGCBnjDeEW+K/EtZNqyH3VpSPlP2DMNHyykIEzWyiZb
+ +lNAu0Ue1st8z/doGbzfmvT8upEIdGHTz4HYGepLKueJaY2J98Hro6HuBon4rd3z/qGDEhknI
+ NchTUIp1UDQld+SpskxrTkwG9nYfw0RXj4fQpMTY/cVGvCt+XbXi+hSjyvLm9tuZlrPiLpk1Y
+ 1xexa14p4s7UDkN1MJ+QihesCEMkx0vTU4coT6XBn3vRZR5x1CsuQXMKovXaTvg0dXyqJqK+d
+ xAf4B3myi+u64oQYGhDTia5vADZnFM0eQXVD4Ackav7zqi/r6sw5tN6QHSTgzxaUsyjmTf5tf
+ 1EtB2GxNsmnsD1mJu0JSuvmUFxMUHeoIPHznu+8yXDOced+utBFL0Mk4xn2/5CtMH4FY4J2F7
+ nipQ6MkfDBselpNnxQnyrOXr59vNj/7K3Y9gwG1poAhJGA0Ju+TJPVkrBKZLe/4uEEZ6mzAYa
+ W+b3J2SOwOsHw8tnYMRs0JyNA5vs2AmDnRIoqot97IMygCz8giJ7wZa2411a9+T08QmXNtpID
+ 27Y5wldu1cBnA13pDFIVfKEMLqg=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.net; 
+ s=s31663417; t=1691515586; x=1692120386; i=ps.report@gmx.net;
+ bh=Cswzj2ZtkMXVCSEtzravVwb6CFLBbfYscNg6N9f+H6g=;
+ h=X-UI-Sender-Class:From:To:Subject:Date;
+ b=KYFCkuX5cw+em9wjDoK/4t6WoG+p8RB4u/cAE+m+usuX+Eq+T7TshdxPMX2vsLxcP/y4yWq
+ evgXA7t5LQA1HVNI/va6T6UTQc95CkTc2lQ8e5OxzUfYafH+PXlaPpUsSoXkcs3XSNi2/zqDJ
+ TsGFGO3ZGR2Ch4FjIaHHboMRqKJE5lkZFP0AUgGgCN0rxvSnNuN3jXqcnYk4Shor/Or4cHJZS
+ ao0Dms1yX1FOK4+U70nXwFjhHGDTfqQd94h2mowAlxr6II3rAdOj9Q0mYXgktgTl+ESPRYAQx
+ WCTSbUmU/Oq2y3QhguLxoGqohXdSV+sIim2uZhao0NAUa54Fa4mA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=KYFCkuX5
+Subject: [Buildroot] [PATCH v1] package/ntpsec: bump version to 1.2.2a
+ (fixes CVE-2023-4012)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,181 +90,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c50e9c21f0444b064bc257fcc0d3073fee945623
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Fixes CVE-2023-4012 (see [1] for details).
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[1] https://gitlab.com/NTPsec/ntpsec/-/releases/NTPsec_1_2_2a
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../onevpl/0001-Don-t-force-fstack-protector.patch | 32 ++++++++++++++++
- package/onevpl/Config.in                           | 27 ++++++++++++++
- package/onevpl/onevpl.hash                         |  3 ++
- package/onevpl/onevpl.mk                           | 43 ++++++++++++++++++++++
- 6 files changed, 107 insertions(+)
+ package/ntpsec/ntpsec.hash | 2 +-
+ package/ntpsec/ntpsec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9915143a04..eb703d52c7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -417,6 +417,7 @@ F:	package/mjpg-streamer/
- F:	package/mpg123/
- F:	package/ntp/
- F:	package/nut/
-+F:	package/onevpl/
- F:	package/opus/
- F:	package/pciutils/
- F:	package/perl-crypt-openssl-guess/
-diff --git a/package/Config.in b/package/Config.in
-index e12ee34e9f..58e653dcd9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1642,6 +1642,7 @@ menu "Graphics"
- 	source "package/libvips/Config.in"
- 	source "package/libwpe/Config.in"
- 	source "package/menu-cache/Config.in"
-+	source "package/onevpl/Config.in"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
-diff --git a/package/onevpl/0001-Don-t-force-fstack-protector.patch b/package/onevpl/0001-Don-t-force-fstack-protector.patch
-new file mode 100644
-index 0000000000..14948e28cc
---- /dev/null
-+++ b/package/onevpl/0001-Don-t-force-fstack-protector.patch
-@@ -0,0 +1,32 @@
-+From 682a9eabc71c2e33ebbbba2e75d0ba7caa08c7c8 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 8 May 2023 20:03:22 +0200
-+Subject: [PATCH] Don't force -fstack-protector
-+
-+This allows the environment to decide whether SSP should be used or
-+not, for example to support toolchains that don't have SSP support.
-+
-+Upstream: Not applicable
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ cmake/CompileOptions.cmake | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/cmake/CompileOptions.cmake b/cmake/CompileOptions.cmake
-+index 9923f1c..5b24622 100644
-+--- a/cmake/CompileOptions.cmake
-++++ b/cmake/CompileOptions.cmake
-+@@ -54,9 +54,6 @@ else()
-+       add_definitions("-D_FORTIFY_SOURCE=2")
-+     endif()
-+   endif()
-+-  if(NOT MINGW)
-+-    add_compile_options("-fstack-protector-strong")
-+-  endif()
-+   if(NOT MINGW)
-+     add_link_options("-Wl,-z,relro,-z,now,-z,noexecstack")
-+   endif()
-+-- 
-+2.39.2
-+
-diff --git a/package/onevpl/Config.in b/package/onevpl/Config.in
-new file mode 100644
-index 0000000000..a750e54d52
---- /dev/null
-+++ b/package/onevpl/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_ARCH_IS_64
-+	default y if BR2_arm
-+
-+config BR2_PACKAGE_ONEVPL
-+	bool "onevpl"
-+	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
-+	# libva support needs a libdrm with intel driver
-+	select BR2_PACKAGE_LIBDRM_INTEL if BR2_PACKAGE_LIBVA
-+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	help
-+	  oneAPI Video Processing Library (oneVPL) dispatcher,
-+	  tools, and examples
-+
-+	  https://github.com/oneapi-src/oneVPL
-+
-+comment "onevpl needs a toolchain w/ dynamic library, gcc >= 7, C++, threads"
-+	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/onevpl/onevpl.hash b/package/onevpl/onevpl.hash
-new file mode 100644
-index 0000000000..c9ca1e6c04
---- /dev/null
-+++ b/package/onevpl/onevpl.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  4411543519486a2450f6f5af06a077596e7888a551768594e9dfa2a46b23b6f5  onevpl-2023.3.1.tar.gz
-+sha256  bf1cfac2e2792b6e1e995ce103d70796aecaf2ec7e4c5fe5474f7acec7b4a677  LICENSE
-diff --git a/package/onevpl/onevpl.mk b/package/onevpl/onevpl.mk
-new file mode 100644
-index 0000000000..2033f755c0
---- /dev/null
-+++ b/package/onevpl/onevpl.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# onevpl
-+#
-+################################################################################
-+
-+ONEVPL_VERSION = 2023.3.1
-+ONEVPL_SITE = $(call github,oneapi-src,oneVPL,v$(ONEVPL_VERSION))
-+ONEVPL_LICENSE = MIT
-+ONEVPL_LICENSE_FILES = LICENSE
-+ONEVPL_INSTALL_STAGING = YES
-+ONEVPL_DEPENDENCIES = host-pkgconf
-+
-+ONEVPL_CONF_OPTS = \
-+	-DINSTALL_EXAMPLE_CODE=OFF
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+ONEVPL_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="-latomic"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBVA),y)
-+ONEVPL_CONF_OPTS += -DENABLE_VA=ON
-+ONEVPL_DEPENDENCIES += libva
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_VA=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=ON
-+ONEVPL_DEPENDENCIES += wayland wayland-protocols
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+ONEVPL_CONF_OPTS += -DENABLE_X11=ON
-+ONEVPL_DEPENDENCIES += libxcb xlib_libX11
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_X11=OFF
-+endif
-+
-+$(eval $(cmake-package))
+diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
+index 44e04b2403..8d98b5c411 100644
+--- a/package/ntpsec/ntpsec.hash
++++ b/package/ntpsec/ntpsec.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  ad45f5b88d08a159bc9f44ecb79e08358d26d3d22bb6c96ab7aaa3734de130e6  ntpsec-NTPsec_1_2_2.tar.bz2
++sha256  ef901df5a05d486563db22f4d0dad3840a3bf5d0a9aceb8c3ecaeb396c67a805  ntpsec-NTPsec_1_2_2a.tar.bz2
+ sha256  899261d6eb6c922cf8f051225411f27b738ba0014be18c2eaf6afbf30d421bb1  LICENSES/BSD-2
+ sha256  5fe38d8724c53ff4e69f0a3492a368b4a6719700ac16f706efeb01a45c62f2b5  LICENSES/BSD-3
+ sha256  9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411  LICENSES/CC-BY-4.0
+diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+index e612e982ec..f6262cdaca 100644
+--- a/package/ntpsec/ntpsec.mk
++++ b/package/ntpsec/ntpsec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NTPSEC_VERSION = 1.2.2
++NTPSEC_VERSION = 1.2.2a
+ NTPSEC_SOURCE = ntpsec-NTPsec_$(subst .,_,$(NTPSEC_VERSION)).tar.bz2
+ NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(subst .,_,$(NTPSEC_VERSION))
+ NTPSEC_LICENSE = BSD-2-Clause, NTP, BSD-3-Clause, MIT, CC-BY-4.0 (docs)
+-- 
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
