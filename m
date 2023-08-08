@@ -4,84 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F49CC04A6A
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94B23C04A94
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09E2281F7D;
-	Tue,  8 Aug 2023 18:15:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09E2281F7D
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD8C982062;
+	Tue,  8 Aug 2023 18:46:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD8C982062
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NE2AQg9mgtqq; Tue,  8 Aug 2023 18:15:13 +0000 (UTC)
+	with ESMTP id WB9EDH_E9N8d; Tue,  8 Aug 2023 18:46:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCFDE81FB4;
-	Tue,  8 Aug 2023 18:15:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCFDE81FB4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CB098204E;
+	Tue,  8 Aug 2023 18:46:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CB098204E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 634A71BF330
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:15:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D3A31BF330
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CAF240592
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:15:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CAF240592
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75E0A402D4
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:46:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75E0A402D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HMTLbVsYtZuD for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 18:15:08 +0000 (UTC)
-X-Greylist: delayed 304 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 08 Aug 2023 18:15:07 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B34402D4
+ with ESMTP id QtfU88kaQdXS for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 18:46:36 +0000 (UTC)
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B4B34402D4
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:15:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D2AF1401AD
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:46:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2AF1401AD
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.209.240]) by mail.gmx.net
+Received: from localhost.localdomain ([89.144.222.147]) by mail.gmx.net
  (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MIx3I-1qDZEA20cc-00KMaL; Tue, 08 Aug 2023 20:10:00 +0200
-From: Peter Seiderer <ps.report@gmx.net>
+ 1MRCOE-1q8d5g2O8K-00N7De; Tue, 08 Aug 2023 20:46:32 +0200
+From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Tue,  8 Aug 2023 20:09:59 +0200
-Message-ID: <20230808180959.28091-2-ps.report@gmx.net>
+Date: Tue,  8 Aug 2023 20:45:55 +0200
+Message-ID: <20230808184555.3787-2-dalang@gmx.at>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230808180959.28091-1-ps.report@gmx.net>
-References: <20230808180959.28091-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:NIZpKRKPOXMaOmN8pwIlX97sXBPyHrVy8sgPzcf2rhQKyhO0sEY
- VBAtFKe7xXPOMiKX5AoRhhzDvycjlH7lv/smZvyDBgPAW6S47/DdjIzWijiWP0YOANC4nEO
- be7my8CtrYVP45M2o46JOtY45kybEeNAoChx8PwDIWJaANWm9sePosspu5iYUK4kFEHCHSn
- SMITwOI1EIOBe8ZFL3xMQ==
-UI-OutboundReport: notjunk:1;M01:P0:eEWlhPWrrKE=;NJsT+vaZybY1RhxUgsVdYDoUSLB
- E1WPc3PcQ9srzvtIwV3kCTTREFzcO3U/IKduEN3nKvph2RUIcaS1Q3atqDre8qGVk8xYgeBM9
- 1nRuzmFQwfGXJmBlDIX64C4c78mIkF0+vHBZfH5VKlgLF4FsopGtZR2bQ03msvinHlfnsthbt
- xKW+cUYk64VA8v0eqwXsrOabRJfSxqjywFtyi9LT0+iqUjdGYVi11DlhS25UPMVYkWjW8za31
- yvpPwRNp0rjRe9brUJ9y3smyF9w3GZpo0aBWjieG4rLhhD+7lDx9TA7GLx6hD5QrjtufDBfxE
- /qybO1ZvzehyhqHU4nbT+o4r45+FLqHG3TtDmziuC/XxnwezAVFr6Yko9XTdK5faMKqK6HmaB
- ij73/VU9s4MekLL7mJzpTSMzP8r0L1slA8MGmzHPAgPZUteyULHqKXajV1VsoiM2VK+56qLs4
- uV6cReThwdtXk0LBvyGWEGzFEb9Ep0bVIDEZk5eVpOAn7Wmm7qZ7Djsdn+D1ivrXBrYyW/yff
- qiBvcUw3nBEiy3WaAzoHwysvntXIhPRwmj+DVS+lxNn6zgxDUpKCcJj8FcGbZJFRZ6/AKrLYg
- R0N2mPp3bqOl7q5lbPqKtIO5XYgqp7qYieHdNFbSvocI/Mhrqr/Dt9Elqb/DBHy65QuoUgYYs
- C0BoRvYv+pkvDmI5FphiXwTnmvaoXXtJ9VlpaJfiS0N291EeHSDCmRHcOD3W2MvZMslcpbEHS
- kvTCm9RiLd4pUYYBm388tlmZTq6F1kNljbRAjSDu0Rn5Qi6e7EzJdl+kJFpzH0PNyafxg5Hh4
- xGZd8DCxngu2IYYVw080WQQ9i0UHXsmxjBLrqHWyJcaax84myUhhojJuPoVjk5Hm6xYVgHy7Y
- krJ84mRa44pQIslmzdHV/xLXy6ylcNuaGqUz/Um7epgyIsVxcOS2A/UKXOKwWbR5zFj1CEf7/
- 1FVYzPqss3f/EOIEf7YZNI2iLFk=
+X-Provags-ID: V03:K1:VBGHIXW57MPcVdcgPZ2Z6oCaWlJny0bf8p9FeGzeJIOYp7G5vYl
+ Rn3Zb7llypfCzRl5sd0cQG4FpRBCik2cpo9KkMOM2QNUv/4FPPFKg1QCqMjShaZmIV1+BuU
+ ika2D2IIm3ycNCq7zo3NU9Bzhpvsx5NZzFXRMR3WOFflzvQ8oxWHmRur2ZUr8pr8NhjWVr/
+ Z4Q6shXYQ5v0BTCbD8NjA==
+UI-OutboundReport: notjunk:1;M01:P0:EBa0gj8NVao=;bXQMRIj+5U0R9WFAwudt0rroBga
+ hlT0wsDfPI9NvxtY/3rTMqPKaNHweOqTywmHWGWE2ggF8P1QLHDFbz4wH1qTrA6jIew2XbCg4
+ pomjZLE/AbbVOvZpOnpK+pQcBX26T1ndy2h+rwQj+gq9fT5OycTu778yandYTr0zRRtG8scxn
+ KcrUuVgLtOVAowgVXRw0VPmi/l1aM90e9NARcHz7DjD0nEDtWZuciZ3pESn+oGDKrJXKKHfZQ
+ 7VVzXNVgOdQDMGD6dnABG5Cyx7PZV3BdyeNxqycj8ENMAcTnDAXI9bdQC/rzxEVoNg2gVnT+g
+ tg9xoZaQ9BIDo5enyDDqkd7GSYWYLWwJe1MytcZNhz/uRENPC0fSy4/q4YdPEmLq6r3eGJUNA
+ GjqL27hhFQobxtvhzprmi/ajkeRNuipHku2v7DYp1SskbQjRSx2hQtlAYsJuoXk5taoJGkLd0
+ 7tUF1c/MRvvJjQMd2NhwZYr2WjGiBlBQ5nxwdNKrSvfTHEXpVP4Iu/5+tCR//lsLyjRn/8ALC
+ FaUoldmdqaS57xq5LzyxUrxxtc2O3Z6HVhwpnj98LRM2l/ANgpz0BrkqPVX4tTs7Mh5A1Hh3l
+ p7/6y8aZk/u66pSiamc4GPM2rMg9iUOnXhm4sftm4SiiZqJJ7q+jxOzVcIEGCbVVyDk5fFnVL
+ 5d7DI41BZXbw9F9PaRtDV1F1i2Jvxd4j0IpGKEwSjjQzAnsKbJibSp8d/MOa0hG02p/vndOCL
+ PFxypdwTMgN6h0y+iFyngsPagBj6UqOi3dae2H2Y0zH9D3LEEP1vo7KDSqc1QLFBTCh/Z9miQ
+ 5zIQaFo+cTuGPhuTGpvQeEREAbRCgiHhrSAf13aYoTpLhRSHQthTsS7wwemrhW/VoiNw7xlDC
+ PFINqu9kfNp4HyqIhkjtmxaLNkvg3dvBGVUd7PAHqJS1fUdcFYP227BAy0WNFRwp2g8ik9e9W
+ 2GChqjTeABC5V9ReMxZa8VnGbGw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1691518505; x=1692123305; i=ps.report@gmx.net;
- bh=Ux7XQR2Fl5NQn4CGIbFZ8nUZk/bWh+a4SWQxbFA6+J8=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=CbDRO+XmQ86M/efnB6bSiJRCEximQqRMVKI+HABiZ+Tk3n6St0GlFLC/ZkMcUa8wG5+NEUq
- LXSAxJHKxJ8X8T1lroGlJPU5Q1ip1GEh9zFVG/Gt/zlDEBjOu6L+xN7/MMH7IlQcQ+JWzwdGx
- 0yP3u3Uu6xWXh6pvi2GwmXAofWVmD/2Y3YTVjTcauP4FVW4VQ9+x12dm4HD1Wpt9isTDocYhY
- JD8/gs2eypourSaR2ZgqEnPnLXHo2I7CpaIrUUHTJxXszC9uPeO8Ug9cdDlh8TgJYxO/Y4AUM
- LU0WW2/MQLtWT9hry8D+huWNs2rOg7cRG1EnEertgA2JOe8NVGyg==
+ d=gmx.at; 
+ s=s31663417; t=1691520392; x=1692125192; i=dalang@gmx.at;
+ bh=VWjeReU2E4/BHLOXSFDXnasuOTfJ7hj9WIyhgdxadQY=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=qvSuxy2D55Hn1Td5YVpjd01VVLaOlVPxhSVE997bnV0LxnlBr9puvikt+FqZuVdR9FzEDV5
+ SUZpBAjefIylrniyWJzhlKdyQwoE2n9Z+a688inG5LBUT8hsXaQWs2N/J0Z8Ibw7aZVpmSMXz
+ zVTqgN07H6dWNiW12k3I6vru0yd6U4ghA5a974No8EWMX0Dzz26H+JqNqKQ6bZsYPjCaxIZ/j
+ hDolp6T85rF3dkm7QLf79O43+uBGldO64sK1yTJwy3q6ynnSqSAlmo4x3UAxljJhAX0xVg4c0
+ g33327b49MC0cKvfhv9ObhRoK13HYvIR4MDZ0rrieXDz6FquRg2w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=CbDRO+Xm
-Subject: [Buildroot] [PATCH v1] board/raspberrypi/config*.txt: remove
- failing 'dtoverlay=krnbt=on'
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=qvSuxy2D
+Subject: [Buildroot] [PATCH] package/bwm-ng: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,108 +88,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove failing 'dtoverlay=krnbt=on' from config.txt introduced with commit
-689b9ac439 ("package/rpi-firmware: rework boot/config file handling") [1] by
-changing an dtoverlay option wrongly to an extra line (instead of changing
-to an proper dtparam line), but as no one complained since 2021 just
-drop it (and upcoming raspberry pi kernel/device tree will enable
-it by default [2]).
+bwm-ng_project:bwm-ng is a valid CPE ID:
+https://nvd.nist.gov/products/cpe/detail/DBF33404-2CC8-41FD-B0FF-039B27A19871?namingFormat=2.3&orderBy=CPEURI&keyword=bwm-ng&status=FINAL
 
-Fixes (on the board):
-
-	$ cat /proc/device-tree/chosen/user-warnings
-	Failed to load overlay 'krnbt=on'
-
-[1] https://git.buildroot.net/buildroot/commit/?id=689b9ac439ab7b507c8982b6102bddf59d03efbf
-[2] https://github.com/raspberrypi/linux/commit/ec08e93837efa2e75e5cab4d80427fdf7ea23da1
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
- board/raspberrypi/config_0w.txt      | 3 ---
- board/raspberrypi/config_3.txt       | 3 ---
- board/raspberrypi/config_3_64bit.txt | 3 ---
- board/raspberrypi/config_4.txt       | 3 ---
- board/raspberrypi/config_4_64bit.txt | 3 ---
- board/raspberrypi/config_zero2w.txt  | 3 ---
- 6 files changed, 18 deletions(-)
+ package/bwm-ng/bwm-ng.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/raspberrypi/config_0w.txt b/board/raspberrypi/config_0w.txt
-index 195bad449e..771b975046 100644
---- a/board/raspberrypi/config_0w.txt
-+++ b/board/raspberrypi/config_0w.txt
-@@ -24,6 +24,3 @@ gpu_mem_1024=100
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+index de09eafae5..bf3ed74afc 100644
+--- a/package/bwm-ng/bwm-ng.mk
++++ b/package/bwm-ng/bwm-ng.mk
+@@ -9,6 +9,7 @@ BWM_NG_SITE = $(call github,vgropp,bwm-ng,v$(BWM_NG_VERSION))
+ BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
+ BWM_NG_LICENSE = GPL-2.0+
+ BWM_NG_LICENSE_FILES = COPYING
++BWM_NG_CPE_ID_VENDOR = bwm-ng_project
+ BWM_NG_AUTORECONF = YES
  
- # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
- dtoverlay=miniuart-bt
--
--# enable autoprobing of Bluetooth driver without need of hciattach/btattach
--dtoverlay=krnbt=on
-diff --git a/board/raspberrypi/config_3.txt b/board/raspberrypi/config_3.txt
-index 195bad449e..771b975046 100644
---- a/board/raspberrypi/config_3.txt
-+++ b/board/raspberrypi/config_3.txt
-@@ -24,6 +24,3 @@ gpu_mem_1024=100
- 
- # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
- dtoverlay=miniuart-bt
--
--# enable autoprobing of Bluetooth driver without need of hciattach/btattach
--dtoverlay=krnbt=on
-diff --git a/board/raspberrypi/config_3_64bit.txt b/board/raspberrypi/config_3_64bit.txt
-index 34412fa9e8..ac5a09c486 100644
---- a/board/raspberrypi/config_3_64bit.txt
-+++ b/board/raspberrypi/config_3_64bit.txt
-@@ -25,8 +25,5 @@ gpu_mem_1024=100
- # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
- dtoverlay=miniuart-bt
- 
--# enable autoprobing of Bluetooth driver without need of hciattach/btattach
--dtoverlay=krnbt=on
--
- # enable 64bits support
- arm_64bit=1
-diff --git a/board/raspberrypi/config_4.txt b/board/raspberrypi/config_4.txt
-index ea02d3f071..01f60395b3 100644
---- a/board/raspberrypi/config_4.txt
-+++ b/board/raspberrypi/config_4.txt
-@@ -24,6 +24,3 @@ gpu_mem_1024=100
- 
- # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
- dtoverlay=miniuart-bt
--
--# enable autoprobing of Bluetooth driver without need of hciattach/btattach
--dtoverlay=krnbt=on
-diff --git a/board/raspberrypi/config_4_64bit.txt b/board/raspberrypi/config_4_64bit.txt
-index 4a77fb3f1b..139f6a8788 100644
---- a/board/raspberrypi/config_4_64bit.txt
-+++ b/board/raspberrypi/config_4_64bit.txt
-@@ -25,8 +25,5 @@ gpu_mem_1024=100
- # fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
- dtoverlay=miniuart-bt
- 
--# enable autoprobing of Bluetooth driver without need of hciattach/btattach
--dtoverlay=krnbt=on
--
- # enable 64bits support
- arm_64bit=1
-diff --git a/board/raspberrypi/config_zero2w.txt b/board/raspberrypi/config_zero2w.txt
-index 9e6b7f5ccf..151e446b5d 100644
---- a/board/raspberrypi/config_zero2w.txt
-+++ b/board/raspberrypi/config_zero2w.txt
-@@ -24,6 +24,3 @@ gpu_mem_1024=100
- 
- # fixes rpi (3B, 3B+, 3A+, 4B ,zero W and zero 2) ttyAMA0 serial console
- dtoverlay=miniuart-bt
--
--# enable autoprobing of Bluetooth driver without need of hciattach/btattach
--dtoverlay=krnbt=on
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
 -- 
 2.41.0
 
