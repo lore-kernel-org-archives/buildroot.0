@@ -4,68 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACDDCC001B0
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 14:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19736C001DF
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 14:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0699C6111F;
-	Tue,  8 Aug 2023 14:23:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0699C6111F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89F476113C;
+	Tue,  8 Aug 2023 14:32:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89F476113C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jFz6GBmokejP; Tue,  8 Aug 2023 14:23:37 +0000 (UTC)
+	with ESMTP id dDGcO-d1V0eo; Tue,  8 Aug 2023 14:32:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4815F60AD8;
-	Tue,  8 Aug 2023 14:23:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4815F60AD8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91C816113E;
+	Tue,  8 Aug 2023 14:32:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91C816113E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3E6261BF398
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 14:23:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E1FF11BF398
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 14:32:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 162C24062E
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 14:23:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 162C24062E
+ by smtp4.osuosl.org (Postfix) with ESMTP id AFA06416AB
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 14:32:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFA06416AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n4RuoxM6BdxS for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 14:23:32 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 72C65405C7
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 14:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72C65405C7
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 39B281C0003;
- Tue,  8 Aug 2023 14:23:29 +0000 (UTC)
-Date: Tue, 8 Aug 2023 16:23:28 +0200
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20230808162328.1ead34db@windsurf>
-In-Reply-To: <CACXRmJhaDgbsEhKC+m60ifiv0bPd8rC10OmAN8pqi=RBs_vtJw@mail.gmail.com>
-References: <20230808090407.558957-1-thomas@devoogdt.com>
- <20230808112016.226ac8be@windsurf>
- <CACXRmJhaDgbsEhKC+m60ifiv0bPd8rC10OmAN8pqi=RBs_vtJw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id q6cEXl02JKWK for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 14:32:53 +0000 (UTC)
+X-Greylist: delayed 478 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 08 Aug 2023 14:32:53 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50628416D1
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 50628416D1
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 14:32:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 3D290FF805;
+ Tue,  8 Aug 2023 14:32:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue,  8 Aug 2023 16:31:15 +0200
+Message-Id: <20230808143115.290604-1-clement.ramirez@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Sasl: clement.ramirez@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691504609;
+ d=bootlin.com; s=gm1; t=1691505170;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BwEd5wmmXUPplNFZ2RycBHJZVI3OlTrqJfxm5x7xLBQ=;
- b=J1+bN/mekGiGHxIpzjKjN12fDMvq2tqiRq5P33FVG8W/1rg3X3COrVa/UH0yOanjiujP7Y
- Fl7UuYGznOUEER4pIWuPrif466IwnTmEjiC1ANhSRrIP6E1++S7edr9xGsMb/SwMKY2DL8
- Qg0y0xHkryDGZgLHr6PsLtnOKazUE0VncJ6DiCtgm9NtzZqbC+q7KCgajYInGj13k62H2W
- UznA4kPiTrVDbJVVhGcAP+gPMamCLdwv1oTqDBVU8/Dm9DdOW66Ng3gArLRdtSOuKehC6l
- 1NeAAsATHtDYmwQP4SDxYXM/z5JmhOhvkey275sZVMyix+fBXDm+IPhJ5LMu5A==
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Vg4uko/57KX9U4HSlR74hZajgztwdTRFXhxtcHSKUoU=;
+ b=idaWQ/XDy0n8edMJsjaVuiLh/BPT9PUaDzH/uXvMJac/rBFkgeRmbr+hx8vWTi/GxzBOUN
+ 9/fFL5EDoexn0LnoimvdT35jSMu1E5woPPQmxUYqzhqQNSSz8UcXPZQdrWNt4ZlzyTfyPE
+ txHCqDJmkG5i4DIqVGc09dXGTqTQ5N9G69eHDAUCT2+YP6f+gV49ziJH4EloJrf1aBdAK9
+ 4kc4nCJjtAqwgvfvA57WhhIJ2r1gJI3VgTmQIJ7DkrA0Aoh3MEJJEIwZy25P7Tn2OIf9bQ
+ HAUerFWHXteXDKEV2OitEf2i36Pub6aPh7IM0x3VSbCZwvSqE2Wz9828p+kPvw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=J1+bN/me
-Subject: Re: [Buildroot] [PATCH v1,
- next] package/llvm-project/compiler-rt: fix build with Ninja
+ header.s=gm1 header.b=idaWQ/XD
+Subject: [Buildroot] [PATCH 1/1] package/chocolate-doom: add VENDOR AND
+ PRODUCT CPE IDs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,51 +73,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Daniel Lang <dalang@gmx.at>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Cl=C3=A9ment_Ramirez_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Cl=C3=A9ment=20Ramirez?= <clement.ramirez@bootlin.com>
+Cc: Rodrigo Rebello <rprebello@gmail.com>,
+ =?UTF-8?q?Cl=C3=A9ment=20Ramirez?= <clement.ramirez@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 8 Aug 2023 13:22:21 +0200
-Thomas Devoogdt <thomas@devoogdt.com> wrote:
-
-> > Not sure to understand: the default backend for CMake is still
-> > makefiles, and compiler-rt was not switched to using ninja. So?  
-> 
-> No, ninja is not yet the default.
-> Yann did some tests to find out if it makes sense to make ninja the default.
-> If only a few packages break on it, then we can force them to use make.
-> But if there are too many of them, then we can just keep make as the default.
-> 
-> Either way, see this mail:
-> https://lore.kernel.org/buildroot/20230806205447.GW421096@scaer/,
-> where Yann told me that compiler-rt fails on ninja, so that's the
-> reason for the patch.
-
-Right, but changing compiler-rt to use out of tree build makes sense
-together with switching to ninja. So in the same patch, you should have:
-
-COMPILER_RT_SUPPORTS_IN_SOURCE_BUILD = NO
-COMPILER_RT_CMAKE_BACKEND = ninja
-
-And then later, when we are ready to make ninja the default backend of
-cmake, we can remove in one batch all "<pkg>_CMAKE_BACKEND = ninja"
-statements from all packages. We can also progressively mark as
-"<pkg>_CMAKE_BACKEND = make" the packages that we know are not
-compatible with ninja.
-
-At least, that's how I see the transition period. What do you think?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Y3BlOjIuMzphOmNob2NvbGF0ZS1kb29tOmNob2NvbGF0ZV9kb29tIGlzIGEgdmFsaWQgaWRlbnRp
+ZmllciBmb3IKdGhpcyBwYWNrYWdlOgpodHRwczovL252ZC5uaXN0Lmdvdi9wcm9kdWN0cy9jcGUv
+c2VhcmNoL3Jlc3VsdHM/bmFtaW5nRm9ybWF0PTIuMyZrZXl3b3JkPWNob2NvbGF0ZS1kb29tCgpT
+aWduZWQtb2ZmLWJ5OiBDbMOpbWVudCBSYW1pcmV6IDxjbGVtZW50LnJhbWlyZXpAYm9vdGxpbi5j
+b20+Ci0tLQogcGFja2FnZS9jaG9jb2xhdGUtZG9vbS9jaG9jb2xhdGUtZG9vbS5tayB8IDIgKysK
+IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2No
+b2NvbGF0ZS1kb29tL2Nob2NvbGF0ZS1kb29tLm1rIGIvcGFja2FnZS9jaG9jb2xhdGUtZG9vbS9j
+aG9jb2xhdGUtZG9vbS5tawppbmRleCA4MzE4YzEyM2JkLi41ODFiMmM1MWMyIDEwMDY0NAotLS0g
+YS9wYWNrYWdlL2Nob2NvbGF0ZS1kb29tL2Nob2NvbGF0ZS1kb29tLm1rCisrKyBiL3BhY2thZ2Uv
+Y2hvY29sYXRlLWRvb20vY2hvY29sYXRlLWRvb20ubWsKQEAgLTgsNiArOCw4IEBAIENIT0NPTEFU
+RV9ET09NX1ZFUlNJT04gPSAzLjAuMQogQ0hPQ09MQVRFX0RPT01fU0lURSA9IGh0dHA6Ly93d3cu
+Y2hvY29sYXRlLWRvb20ub3JnL2Rvd25sb2Fkcy8kKENIT0NPTEFURV9ET09NX1ZFUlNJT04pCiBD
+SE9DT0xBVEVfRE9PTV9MSUNFTlNFID0gR1BMLTIuMCsKIENIT0NPTEFURV9ET09NX0xJQ0VOU0Vf
+RklMRVMgPSBDT1BZSU5HCitDSE9DT0xBVEVfRE9PTV9DUEVfSURfVkVORE9SID0gY2hvY29sYXRl
+LWRvb20KK0NIT0NPTEFURV9ET09NX0NQRV9JRF9QUk9EVUNUID0gY2hvY29sYXRlX2Rvb20KIENI
+T0NPTEFURV9ET09NX0RFUEVOREVOQ0lFUyA9IGhvc3QtcGtnY29uZiBzZGwyIHNkbDJfbWl4ZXIg
+c2RsMl9uZXQKIAogIyBBdm9pZCBpbnN0YWxsaW5nIGRlc2t0b3AgZW50cmllcywgaWNvbnMsIGV0
+Yy4KLS0gCjIuMzQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
+czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
