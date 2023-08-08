@@ -4,79 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94B23C04A94
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93A02C04FDF
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD8C982062;
-	Tue,  8 Aug 2023 18:46:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD8C982062
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B79882072;
+	Tue,  8 Aug 2023 18:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B79882072
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WB9EDH_E9N8d; Tue,  8 Aug 2023 18:46:40 +0000 (UTC)
+	with ESMTP id HQ-jovA4e26c; Tue,  8 Aug 2023 18:47:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CB098204E;
-	Tue,  8 Aug 2023 18:46:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CB098204E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D3A31BF330
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:46:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 882E382050;
+	Tue,  8 Aug 2023 18:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 882E382050
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B22AA1BF330
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75E0A402D4
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:46:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75E0A402D4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BE4A60D80
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:47:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BE4A60D80
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QtfU88kaQdXS for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 18:46:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZQzY5MfgFp9z for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 18:47:16 +0000 (UTC)
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D2AF1401AD
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:46:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2AF1401AD
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 34BE160BDF
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:47:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34BE160BDF
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.localdomain ([89.144.222.147]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MRCOE-1q8d5g2O8K-00N7De; Tue, 08 Aug 2023 20:46:32 +0200
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MMGN2-1qCSql0KCE-00JM3f; Tue, 08 Aug 2023 20:47:13 +0200
 From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Tue,  8 Aug 2023 20:45:55 +0200
-Message-ID: <20230808184555.3787-2-dalang@gmx.at>
+Date: Tue,  8 Aug 2023 20:46:55 +0200
+Message-ID: <20230808184657.4041-1-dalang@gmx.at>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:VBGHIXW57MPcVdcgPZ2Z6oCaWlJny0bf8p9FeGzeJIOYp7G5vYl
- Rn3Zb7llypfCzRl5sd0cQG4FpRBCik2cpo9KkMOM2QNUv/4FPPFKg1QCqMjShaZmIV1+BuU
- ika2D2IIm3ycNCq7zo3NU9Bzhpvsx5NZzFXRMR3WOFflzvQ8oxWHmRur2ZUr8pr8NhjWVr/
- Z4Q6shXYQ5v0BTCbD8NjA==
-UI-OutboundReport: notjunk:1;M01:P0:EBa0gj8NVao=;bXQMRIj+5U0R9WFAwudt0rroBga
- hlT0wsDfPI9NvxtY/3rTMqPKaNHweOqTywmHWGWE2ggF8P1QLHDFbz4wH1qTrA6jIew2XbCg4
- pomjZLE/AbbVOvZpOnpK+pQcBX26T1ndy2h+rwQj+gq9fT5OycTu778yandYTr0zRRtG8scxn
- KcrUuVgLtOVAowgVXRw0VPmi/l1aM90e9NARcHz7DjD0nEDtWZuciZ3pESn+oGDKrJXKKHfZQ
- 7VVzXNVgOdQDMGD6dnABG5Cyx7PZV3BdyeNxqycj8ENMAcTnDAXI9bdQC/rzxEVoNg2gVnT+g
- tg9xoZaQ9BIDo5enyDDqkd7GSYWYLWwJe1MytcZNhz/uRENPC0fSy4/q4YdPEmLq6r3eGJUNA
- GjqL27hhFQobxtvhzprmi/ajkeRNuipHku2v7DYp1SskbQjRSx2hQtlAYsJuoXk5taoJGkLd0
- 7tUF1c/MRvvJjQMd2NhwZYr2WjGiBlBQ5nxwdNKrSvfTHEXpVP4Iu/5+tCR//lsLyjRn/8ALC
- FaUoldmdqaS57xq5LzyxUrxxtc2O3Z6HVhwpnj98LRM2l/ANgpz0BrkqPVX4tTs7Mh5A1Hh3l
- p7/6y8aZk/u66pSiamc4GPM2rMg9iUOnXhm4sftm4SiiZqJJ7q+jxOzVcIEGCbVVyDk5fFnVL
- 5d7DI41BZXbw9F9PaRtDV1F1i2Jvxd4j0IpGKEwSjjQzAnsKbJibSp8d/MOa0hG02p/vndOCL
- PFxypdwTMgN6h0y+iFyngsPagBj6UqOi3dae2H2Y0zH9D3LEEP1vo7KDSqc1QLFBTCh/Z9miQ
- 5zIQaFo+cTuGPhuTGpvQeEREAbRCgiHhrSAf13aYoTpLhRSHQthTsS7wwemrhW/VoiNw7xlDC
- PFINqu9kfNp4HyqIhkjtmxaLNkvg3dvBGVUd7PAHqJS1fUdcFYP227BAy0WNFRwp2g8ik9e9W
- 2GChqjTeABC5V9ReMxZa8VnGbGw=
+X-Provags-ID: V03:K1:OjF1KWW4EU6ralkq+c0XXBkLn1NeqAJdzyiBncXCj3CUOnBzXpB
+ YKQM/2G3ypgh7lVDcQ1p26kQY7dhnFDX4y9+mu2+R3jDStOAJ2FnBYhmwmsE9OIgusgRI+G
+ fERl3nzW2jpnMVYn+WHgFf6jTprYI5DEa/Z0AcQe9ymnWIHDEvZJx6UzXfij28wMU8OL5wP
+ ybUIUNRF8zSHWuN76SFQg==
+UI-OutboundReport: notjunk:1;M01:P0:tHbmQZy8mj4=;y3qgM8/sGc+HN7Tqf8x4bNQEmgl
+ Tp3u50g7mzQvRJK6JqSWGb8gxeKUA7EoXIMdQY0g/dTOL2Gt7gZudNWk475dzVDt0b2tKTflN
+ kps8rc2YkgFMnoqitlLldkJXfjwbTmh17FOaQjG9nIiX0mCKRpbO6KqYu6U/11FIokwA1wNf2
+ OhqFF18/XIcCulapFWEEvkCxXDx9lssN3JtTiUs/74naFTqpvUTrS/mwRcSJ1RU5YwabC026K
+ rytrc7hhrdXoU+zyZW/oqtb87Hh+MOuWI7X+P5w4/+HQL+1aPoIo+adSLOSET9CMVBQel2o6s
+ ro3nSy2CQIxv7lF0Ih3JsnOFxXxzKXTCIOlZrp6Hp7fTtZ26zr1XjmHp0tJdvO89U3SWin8D3
+ Lj2RT+kkG6o1uOkFIcn1q3TO2sjjv7U3mFOt3/dhXQUwDox/HLwU82tUD2/1ktmXnvzeqoLhP
+ xYV2hGn0Zbu848QhuyTrAEwTV5/2qJFiqKVgIaCt4JMTDtuOdhuT37+7ErSPaaGVqhUjEdFv4
+ I5K7I2ZNM9OVBDzZxTXXxRRKVKSit9oq2is27hV0OVajHHCjc58SiW2Qo8Ax4dqe2YzWj8DHV
+ NoCtQ7p42u3EnlFekgquPQxwfVw/jlTsJDFokkQd5cV+pIqV+MC+fwR49V/7OtAJxqJEdn7tM
+ UHgv33zFadaM2bsx+FtJsPkqFBMdxw+KmfDfdRPWyc/2BOtQQ59mKnIhxPezublHMazk654Sx
+ KWT6Z6d16x4LQrtUwYrwfngURGAsHvmRyw3diTJqLIvBDDFBa8tPQ6GfvPHkfBfCLuPlUyfgf
+ tY6Mx6X8CghQBZ3QbcvUkGwm7ILGDQepPQ2spwh/3UiU9NglWE8g8vy3I0CA+yucrbDrut6/X
+ OS1jSDha0lNP9SkJffUxfwqnmgodN+9UqCsE1JftGy9fgAExqTtoUfQV12PNY/+SgG7sJ2LK6
+ ukZZby2NTIZOdb74MzBmhP328Os=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.at; 
- s=s31663417; t=1691520392; x=1692125192; i=dalang@gmx.at;
- bh=VWjeReU2E4/BHLOXSFDXnasuOTfJ7hj9WIyhgdxadQY=;
+ s=s31663417; t=1691520433; x=1692125233; i=dalang@gmx.at;
+ bh=cOheL+pSTaFBF21rLEcNflCoZK00tKhCRUQQDCBjEoo=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=qvSuxy2D55Hn1Td5YVpjd01VVLaOlVPxhSVE997bnV0LxnlBr9puvikt+FqZuVdR9FzEDV5
- SUZpBAjefIylrniyWJzhlKdyQwoE2n9Z+a688inG5LBUT8hsXaQWs2N/J0Z8Ibw7aZVpmSMXz
- zVTqgN07H6dWNiW12k3I6vru0yd6U4ghA5a974No8EWMX0Dzz26H+JqNqKQ6bZsYPjCaxIZ/j
- hDolp6T85rF3dkm7QLf79O43+uBGldO64sK1yTJwy3q6ynnSqSAlmo4x3UAxljJhAX0xVg4c0
- g33327b49MC0cKvfhv9ObhRoK13HYvIR4MDZ0rrieXDz6FquRg2w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=U83pzf48fXlDEb6JrpuqlpPdWOdmWMHmgXRkfX1x0aAhSJ5OT9fswTlq+BhncRmzYs7/WHw
+ /UCEWy2iYY4XL773+pm73YeSFq/vmruy7gQJhGueeDy2j1qmEDNNFr468SRl7Pw4rBzUUOBRi
+ H6sOcQUmZXeldxgbgVRkGWtKi/Vg05ZJ83pmmLtcPe3sx9zbl9OfNoN2TVPHvWaVie3gh667x
+ yNSELc0z1IHNoPBF6o2RPZZWf59LAa4moB2NXs107F5hxQ/n7ZIcoqd5x78vUUTFzAyuCwp02
+ 2WuQ7KSb6IaTUlUZC+n70lx5l6T9Pi/ub+BrLvoeba3bvM2rjS0A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=qvSuxy2D
-Subject: [Buildroot] [PATCH] package/bwm-ng: add CPE ID
+ header.a=rsa-sha256 header.s=s31663417 header.b=U83pzf48
+Subject: [Buildroot] [PATCH] package/dracut: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,31 +88,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thierry Bultel <tbultel@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-bwm-ng_project:bwm-ng is a valid CPE ID:
-https://nvd.nist.gov/products/cpe/detail/DBF33404-2CC8-41FD-B0FF-039B27A19871?namingFormat=2.3&orderBy=CPEURI&keyword=bwm-ng&status=FINAL
+dracut_project:dracut is a valid CPE ID:
+https://nvd.nist.gov/products/cpe/detail/8050B12A-93FB-453E-8459-9B8B9CC7544E?namingFormat=2.3&orderBy=CPEURI&keyword=dracut&status=FINAL
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
- package/bwm-ng/bwm-ng.mk | 1 +
+ package/dracut/dracut.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
-index de09eafae5..bf3ed74afc 100644
---- a/package/bwm-ng/bwm-ng.mk
-+++ b/package/bwm-ng/bwm-ng.mk
-@@ -9,6 +9,7 @@ BWM_NG_SITE = $(call github,vgropp,bwm-ng,v$(BWM_NG_VERSION))
- BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
- BWM_NG_LICENSE = GPL-2.0+
- BWM_NG_LICENSE_FILES = COPYING
-+BWM_NG_CPE_ID_VENDOR = bwm-ng_project
- BWM_NG_AUTORECONF = YES
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+index 597492bc5e..3eb9bcc474 100644
+--- a/package/dracut/dracut.mk
++++ b/package/dracut/dracut.mk
+@@ -8,6 +8,7 @@ DRACUT_VERSION = 057
+ DRACUT_SITE = $(call github,dracutdevs,dracut,$(DRACUT_VERSION))
+ DRACUT_LICENSE = GPL-2.0
+ DRACUT_LICENSE_FILES = COPYING
++DRACUT_CPE_ID_VENDOR = dracut_project
  
- ifeq ($(BR2_PACKAGE_NCURSES),y)
+ HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-prelink-cross
+ 
 -- 
 2.41.0
 
