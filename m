@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66556C001B0
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 16:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EBA0C001B0
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 16:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EFC3040BF9;
-	Tue,  8 Aug 2023 16:43:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFC3040BF9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2871840BF9;
+	Tue,  8 Aug 2023 16:48:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2871840BF9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CINNWJM230UD; Tue,  8 Aug 2023 16:43:18 +0000 (UTC)
+	with ESMTP id H81pqXe_1Gx5; Tue,  8 Aug 2023 16:48:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 425A540C23;
-	Tue,  8 Aug 2023 16:43:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 425A540C23
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DC4701BF5A5
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 16:43:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68BFB4058F;
+	Tue,  8 Aug 2023 16:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68BFB4058F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C7E991BF5A5
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 16:48:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC11E40295
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 16:43:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC11E40295
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9E8A380B1E
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 16:48:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E8A380B1E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n_7sPGZFnMpT for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 16:43:14 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2E1334092F
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 16:43:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E1334092F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B7F7B240009;
- Tue,  8 Aug 2023 16:43:10 +0000 (UTC)
-Date: Tue, 8 Aug 2023 18:43:09 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20230808184309.379b5996@windsurf>
-In-Reply-To: <ZNJZ7Huyn6K+Pgwy@waldemar-brodkorb.de>
-References: <ZNJZ7Huyn6K+Pgwy@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691512991;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=GtovCTsoVwUgOXt9ML+WajExs9JtlVYYLIcLinr/4zo=;
- b=KfmTGpBEvTGYl2JSq+bXtWUgMMhJaigKipaTl7zrRG2bBsGFDjveLhZHOpdIHP0VeNUaOb
- snIgrhbrT/O313GNWn3TUiUXAy3Rx9iKPXSvxQpefkRoyFIsaux+ugAX/YlwKEpKHbrJlj
- WvbPkWj/67r0ydv3qyJH/UOtoSvpC0v5wBJyiKdVaNxhqx0WLh1oBz4kAM2BRnd7wsphEO
- i2kjzcAWcgvCn5cH0SnrXQXIe1BgsannNtg3xGCsUDpWnZaBjvUw3H5N+FasbzL4i5FKBi
- E0rq2hufCNbzhB/KiWYtJgDHc2F4HHd4to8P/1yV4QVSJV/cCWS7MwrUBh9BuA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KfmTGpBE
-Subject: Re: [Buildroot] [PATCH v3] package/uclibc: update to 1.0.44
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Od_J18kPy06F for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 16:48:29 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6F7380A4B
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 16:48:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6F7380A4B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B561184A09; Tue,  8 Aug 2023 16:48:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 8 Aug 2023 18:43:55 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: edab6d0beac5fb3dc21d98cabd9fc94eb9a68c42
+X-Git-Newrev: 3f32fab3d85c4e8e45f170d7b720bf9f6404962f
+X-Patchwork-Hint: ignore
+Message-Id: <20230808164829.B561184A09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/quazip: bump to 1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,46 +57,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 8 Aug 2023 17:06:20 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3f32fab3d85c4e8e45f170d7b720bf9f6404962f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> - mostly stability improvements
-> - patch is included so remove it
-> - add a hotfix for aarch64 missing hwcap header
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/823/823aac32b0ff365ebb3d99073f34276362a2c530
->  - http://autobuild.buildroot.net/results/0eb/0eb921e07a3d13bd76e76ab6bafad3a13632f8bf
->  - http://autobuild.buildroot.net/results/f4f/f4f37179a732d1bd4a31c929608a963f291e21a2
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v1 -> v2:                                                                                                                                                                                                           
->  - add Fixes for haveged and stress-ng
-> v2 -> v3:
->  - add a patch to fix glorytun compile when using aarch64
-> ---
->  .../0001-aarch64-add-hwcap-header-file.patch  | 163 ++++++++++++++++++
->  .../0001-gettimeofday-fix-static-build.patch  |  29 ----
->  package/uclibc/uclibc.hash                    |   4 +-
->  package/uclibc/uclibc.mk                      |   2 +-
->  4 files changed, 166 insertions(+), 32 deletions(-)
->  create mode 100644 package/uclibc/0001-aarch64-add-hwcap-header-file.patch
->  delete mode 100644 package/uclibc/0001-gettimeofday-fix-static-build.patch
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/quazip/quazip.hash | 2 +-
+ package/quazip/quazip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+index 16d299fdf4..1c5c614caf 100644
+--- a/package/quazip/quazip.hash
++++ b/package/quazip/quazip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c1239559cd6860cab80a0fd81f4204e606f9324f702dab6166b0960676ee1754  quazip-1.3.tar.gz
++sha256  79633fd3a18e2d11a7d5c40c4c79c1786ba0c74b59ad752e8429746fe1781dd6  quazip-1.4.tar.gz
+ sha256  b455b21b0d31d6e51993f1fb7e0694c75fa0eb0519a9ea62e4815fcf48b140b0  COPYING
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index 70534b63b3..bf3b844624 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QUAZIP_VERSION = 1.3
++QUAZIP_VERSION = 1.4
+ QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
+ QUAZIP_INSTALL_STAGING = YES
+ QUAZIP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
