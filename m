@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A45CC001DE
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 17:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00AD4C001DE
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 17:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C810A40BF1;
-	Tue,  8 Aug 2023 17:29:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C810A40BF1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9564881886;
+	Tue,  8 Aug 2023 17:34:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9564881886
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U_W7CsN5I1Ge; Tue,  8 Aug 2023 17:29:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3VaSmZkC-ACe; Tue,  8 Aug 2023 17:34:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 07D54405AA;
-	Tue,  8 Aug 2023 17:29:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07D54405AA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F3381BF59C
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:29:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9D63817B3;
+	Tue,  8 Aug 2023 17:34:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9D63817B3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C1BD1BF59C
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC3E960BF8
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:29:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC3E960BF8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23E8540361
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 17:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23E8540361
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bfj7kmklevQC for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 17:29:11 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B656360B27
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 17:29:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B656360B27
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D5C4E1BF205;
- Tue,  8 Aug 2023 17:29:07 +0000 (UTC)
-Date: Tue, 8 Aug 2023 19:29:06 +0200
-To: Christian Stewart via buildroot <buildroot@buildroot.org>
-Message-ID: <20230808192906.1a6c6871@windsurf>
-In-Reply-To: <20230724011811.434148-1-christian@aperture.us>
-References: <20230724011811.434148-1-christian@aperture.us>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aAWRpkHm5LHA for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 17:34:02 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9304D40360
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 17:34:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9304D40360
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 84FEBFF803;
+ Tue,  8 Aug 2023 17:34:00 +0000 (UTC)
+Date: Tue, 8 Aug 2023 19:33:59 +0200
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20230808193359.4e622af5@windsurf>
+In-Reply-To: <20230808003527.1469175-3-adam.duskett@amarulasolutions.com>
+References: <20230808003527.1469175-1-adam.duskett@amarulasolutions.com>
+ <20230808003527.1469175-3-adam.duskett@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691515748;
+ d=bootlin.com; s=gm1; t=1691516041;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=PQoBkvj1lbdQcxfJx3Nx3hvNLKZevDo7xpkoCw6bx5Q=;
- b=L2J+eMYyhPnJb2iZDtlJAX4/usPttfMXxp9RvllZuenMadLIjtTtoD29zzS0ytVN7+gCc3
- mItQFXcBBS8frpuZzZsl5iU9h+TtFYIBpk3D6tJDLJO0EJM/ALN9QKWcF/9PQUtGZQDxyC
- UpaZ46PN2hsZIw88HmDqIXzLJVpIlwOYp9+EES4EXiusEifXv/arTuwg4Q03kqoeoEKibp
- z8C3lu71GwwkNkNtI8aGPP0W8Vserm9eYo9lsTF1HuhpTsmJf1ElhkmF5IDC1oUFEscpz/
- yuSS32HDCrUB0KN+qZ2igAbPwhFv/LSotB1C5u0aLofHdJNur1QsXC3dhJCLrA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=ICfSiVTLIiRVtE0qdR2VAuqUBOWZAqr3Di45l/7YWc0=;
+ b=OHroo7frr8vCkA5sDdht3ZxFm+H/asApQ7oMOD4D7JOJCTDK2aMq9FQy7Xkgje8/Bs52kQ
+ IYkgU+KeGKSFbj0welnHY0X4pCJmPpxDPgV/5dS3iTyBw6/WX8+GAZUzRQA11P+3cGDHwY
+ /rikKsnKH1GvcpWRaY6+Nts7o4I0lj0rCn+QsWZrZfV5GWGcTEK0oV7pPkvZn+kD1v4W9j
+ 3NFZ9iVdoowj6wrfxcMsceEZA997yyFUBDU0xS1i7C8zdqXE0DwSF9APlqT456sIKvXGHx
+ GWaPszjeIKckas/Rmqz/D636GAFZIECqnwH66E3VUjfZpXzyjaNEixgtK+qHAQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=L2J+eMYy
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go-bootstrap-stage2: bump
- version to 1.19.11
+ header.s=gm1 header.b=OHroo7fr
+Subject: Re: [Buildroot] [PATCH/next vRFCv2 2/3] package/depot-tools: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,52 +78,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart <christian@aperture.us>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 23 Jul 2023 18:18:11 -0700
-Christian Stewart via buildroot <buildroot@buildroot.org> wrote:
+On Mon,  7 Aug 2023 18:35:26 -0600
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> While it's not strictly necessary to update go-bootstrap-stage2, we can
-> continue to update the package to the latest 1.19.x until Go 1.19.x is
-> discontinued, at which point we can leave it at the final 1.19.x
-> version.
-> 
-> This package is only used when bootstrapping host-go.
-> 
-> go1.19.11 includes a security fix to the net/http package, as well as
-> bug fixes to cgo, the cover tool, the go command, the runtime, and the
-> go/printer package.
-> 
-> https://go.dev/doc/devel/release#go1.19.minor
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
-> ---
->  package/go-bootstrap-stage2/go-bootstrap-stage2.hash | 3 ++-
->  package/go-bootstrap-stage2/go-bootstrap-stage2.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/go-bootstrap-stage2/go-bootstrap-stage2.hash b/package/go-bootstrap-stage2/go-bootstrap-stage2.hash
-> index 874737ea2d..a698adaa23 100644
-> --- a/package/go-bootstrap-stage2/go-bootstrap-stage2.hash
-> +++ b/package/go-bootstrap-stage2/go-bootstrap-stage2.hash
-> @@ -1,3 +1,4 @@
->  # From https://go.dev/dl
-> -sha256  13755bcce529747d5f2930dee034730c86d02bd3e521ab3e2bbede548d3b953f  go1.19.10.src.tar.gz
-> +sha256  e25c9ab72d811142b7f41ff6da5165fec2d1be5feec3ef2c66bc0bdecb431489  go1.19.11.src.tar.gz
->  sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-> +
+> +DEPOT_TOOLS_VERSION = 4e87f5bfe244e903f712408ea68dc3c3a6fe2d00
+> +DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
+> +DEPOT_TOOLS_SITE_METHOD = git
+> +DEPOT_TOOLS_LICENSE = BSD-3-Clause
+> +DEPOT_TOOLS_LICENSE_FILES = LICENSE
+> +DEPOT_TOOLS_CPE_ID_VENDOR = google
+> +HOST_DEPOT_TOOLS_DEPENDENCIES = \
+> +	host-python3 \
+> +	host-python-httplib2 \
+> +	host-python-pyparsing \
+> +	host-python-six
 
-Addition of a useless empty newline here causing a check-package
-warning.
+I was a bit surprised, because that doesn't match the dependencies in
+the Config.in.host, but that's normal because not all host packages
+have Config.in options.
 
-Fixed that, and applied to master. I've applied to master because it's
-a low-risk update, with a security fix inside, even though admittedly
-go-bootstrap-stage2 doesn't go on the target.
+> +define HOST_DEPOT_TOOLS_INSTALL_CMDS
+> +	mkdir -p $(HOST_DIR)/share/depot_tools
+> +	cp -dprf $(@D)/* $(HOST_DIR)/share/depot_tools/
+
+I looked at whether there was a nicer way to install that. But in fact,
+it's just a big mess of random tools, so OK installing to some random
+folder in $(HOST_DIR)/share is probably the "right" thing.
+
+> +# Helper wrapper to make using gclient easier.
+> +DEPOT_TOOLS_GCLIENT=\
+
+Minor nit: spaces around = sign.
+
+> +	PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
+> +	DEPOT_TOOLS_UPDATE=0 \
+> +	$(HOST_DIR)/share/depot_tools/gclient.py
+
+Otherwise, looks good to me.
 
 Thomas
 -- 
