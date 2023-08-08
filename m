@@ -4,69 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F61BC001DB
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1415DC001DB
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D6638209C;
-	Tue,  8 Aug 2023 18:02:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D6638209C
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2F5682094;
+	Tue,  8 Aug 2023 18:07:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2F5682094
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id U1vg26sNGVBl; Tue,  8 Aug 2023 18:02:14 +0000 (UTC)
+	with ESMTP id ogW44kWSnvxp; Tue,  8 Aug 2023 18:07:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 597F68209D;
-	Tue,  8 Aug 2023 18:02:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 597F68209D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AD0741BF59C
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:02:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2AF28200F;
+	Tue,  8 Aug 2023 18:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2AF28200F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 37F9C1BF330
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85FC461186
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:02:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85FC461186
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C7544016E
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:07:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C7544016E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZFeRjbBNsGuh for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 18:02:10 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4D966119A
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:02:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4D966119A
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:7690:354b:c655:f7b2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 7829678036C;
- Tue,  8 Aug 2023 20:02:00 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 08 Aug 2023 20:02:00 +0200
-Date: Tue, 8 Aug 2023 20:02:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20230808180200.GB421096@scaer>
-References: <20230808090407.558957-1-thomas@devoogdt.com>
- <20230808112016.226ac8be@windsurf>
- <CACXRmJhaDgbsEhKC+m60ifiv0bPd8rC10OmAN8pqi=RBs_vtJw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CACXRmJhaDgbsEhKC+m60ifiv0bPd8rC10OmAN8pqi=RBs_vtJw@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691517724;
- bh=5raD32BfHDnMA6y4+cykA7kWeSIrKGprXzeG6RGilDE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=o4ovKUR7/1wBE4W7nQDZ95TjcS0USX5YTZvB7vQf13g3Us6UlzX8hj9hxSbKjn+23
- bCCNOLhJr6rodbL+wuTqF1H+MzWkDnUks92T7uKSmu+dgkndQY9RFKwHo0bU67kdAm
- Bga2C0mEn4dALcf08qyYYFhI5MVMkhLPdrEsof+e697nrZ1N+iVaV6++CxsdpHbyvG
- AOIjQWdPD7zwbIpODLfYg6Yu4/dqoC/a8RqISyMA6ubzNupMC/EebUH6Gz2t6XOWp8
- OfRmLq6NjwtM3oC1MM/uTqeRT4CClZZxSFlG2A6Om3LKfWUFcteLtidN1djzSNM51+
- WYYfYUCme8fwA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=o4ovKUR7
-Subject: Re: [Buildroot] [PATCH v1,
- next] package/llvm-project/compiler-rt: fix build with Ninja
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t-mzQjytMC_G for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 18:07:37 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43D3B4008D
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D3B4008D
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2D98D84BC6; Tue,  8 Aug 2023 18:07:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 8 Aug 2023 20:04:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: df5fd7dec45eb26a2ac97c494cf1904123e29c5f
+X-Git-Newrev: 642b42928eeaf74db7dc7d7bf6670f37b7b7d274
+X-Patchwork-Hint: ignore
+Message-Id: <20230808180737.2D98D84BC6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ntpsec: security bump version to
+ 1.2.2a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,92 +56,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Lang <dalang@gmx.at>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas D., All,
+commit: https://git.buildroot.net/buildroot/commit/?id=642b42928eeaf74db7dc7d7bf6670f37b7b7d274
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-08-08 13:22 +0200, Thomas Devoogdt spake thusly:
-> > Not sure to understand: the default backend for CMake is still
-> > makefiles, and compiler-rt was not switched to using ninja. So?
-> 
-> No, ninja is not yet the default.
-> Yann did some tests to find out if it makes sense to make ninja the default.
-> If only a few packages break on it, then we can force them to use make.
-> But if there are too many of them, then we can just keep make as the default.
-> 
-> Either way, see this mail:
-> https://lore.kernel.org/buildroot/20230806205447.GW421096@scaer/,
-> where Yann told me that compiler-rt fails on ninja, so that's the
-> reason for the patch.
+Fixes CVE-2023-4012 (see [1] for details).
 
-Yes, but as Thomas P. explains, we only need to fix compiler-rt with
-ninja if it is actually switched over to using ninja, which your patch
-does not do.
+[1] https://gitlab.com/NTPsec/ntpsec/-/releases/NTPsec_1_2_2a
 
-Presumably, the build of compiler-rt succeeds now, so if it ain't
-broken, so why would we need to fix it by building out-of-source?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ntpsec/ntpsec.hash | 2 +-
+ package/ntpsec/ntpsec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-But if you had tested, you'd have noticed that the build *is* already
-broken even with makefiles. But make is (insanely) forgiving about
-circular dependencies, and just arbitrarily drops a circular dependency:
-
-    >>> compiler-rt 15.0.3 Building
-    PATH="..." /home/ymorin/dev/buildroot/O/next/per-package/compiler-rt/host/bin/cmake --build /home/ymorin/dev/buildroot/O/next/build/compiler-rt-15.0.3/ -j9 -- 
-    make[4]: Circular include/sanitizer/allocator_interface.h <- include/sanitizer/allocator_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/asan_interface.h <- include/sanitizer/asan_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/common_interface_defs.h <- include/sanitizer/common_interface_defs.h dependency dropped.
-    make[4]: Circular include/sanitizer/coverage_interface.h <- include/sanitizer/coverage_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/dfsan_interface.h <- include/sanitizer/dfsan_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/hwasan_interface.h <- include/sanitizer/hwasan_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/linux_syscall_hooks.h <- include/sanitizer/linux_syscall_hooks.h dependency dropped.
-    make[4]: Circular include/sanitizer/lsan_interface.h <- include/sanitizer/lsan_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/msan_interface.h <- include/sanitizer/msan_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/netbsd_syscall_hooks.h <- include/sanitizer/netbsd_syscall_hooks.h dependency dropped.
-    make[4]: Circular include/sanitizer/scudo_interface.h <- include/sanitizer/scudo_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/tsan_interface.h <- include/sanitizer/tsan_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/tsan_interface_atomic.h <- include/sanitizer/tsan_interface_atomic.h dependency dropped.
-    make[4]: Circular include/sanitizer/ubsan_interface.h <- include/sanitizer/ubsan_interface.h dependency dropped.
-    make[4]: Circular include/fuzzer/FuzzedDataProvider.h <- include/fuzzer/FuzzedDataProvider.h dependency dropped.
-    make[4]: Circular include/sanitizer/memprof_interface.h <- include/sanitizer/memprof_interface.h dependency dropped.
-    make[4]: Circular include/profile/MemProfData.inc <- include/profile/MemProfData.inc dependency dropped.
-    make[4]: Circular include/xray/xray_interface.h <- include/xray/xray_interface.h dependency dropped.
-    make[4]: Circular include/xray/xray_log_interface.h <- include/xray/xray_log_interface.h dependency dropped.
-    make[4]: Circular include/xray/xray_records.h <- include/xray/xray_records.h dependency dropped.
-    make[4]: Circular include/orc/c_api.h <- include/orc/c_api.h dependency dropped.
-    make[4]: Circular include/profile/InstrProfData.inc <- include/profile/InstrProfData.inc dependency dropped.
-
-In this case, this is OK because the file depends on itself, so breaking
-the circular dependency actually removes the spurious dependency.
-
-However, this is not correct, and thus we do need to build compiler-rt
-with out-of-source, even with makefile, because it *is* broken.
-
-So, the rationale is wrong: it is not broken because of ninja. It is
-broken despite ninja, but ninja exposes the breakage.
-
-Really, when we have a patch that fixes something, what is broken and
-why it is broken, is of the utmost most importance; the explanations for
-the technical fix is important too, but it only comes second, with the
-code actually being the less interesting thing.
-
-Can you please resubmit the patch, but with a corrected commit log that
-summarises the above explanations, please?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
+index 44e04b2403..8d98b5c411 100644
+--- a/package/ntpsec/ntpsec.hash
++++ b/package/ntpsec/ntpsec.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  ad45f5b88d08a159bc9f44ecb79e08358d26d3d22bb6c96ab7aaa3734de130e6  ntpsec-NTPsec_1_2_2.tar.bz2
++sha256  ef901df5a05d486563db22f4d0dad3840a3bf5d0a9aceb8c3ecaeb396c67a805  ntpsec-NTPsec_1_2_2a.tar.bz2
+ sha256  899261d6eb6c922cf8f051225411f27b738ba0014be18c2eaf6afbf30d421bb1  LICENSES/BSD-2
+ sha256  5fe38d8724c53ff4e69f0a3492a368b4a6719700ac16f706efeb01a45c62f2b5  LICENSES/BSD-3
+ sha256  9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411  LICENSES/CC-BY-4.0
+diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+index e612e982ec..f6262cdaca 100644
+--- a/package/ntpsec/ntpsec.mk
++++ b/package/ntpsec/ntpsec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NTPSEC_VERSION = 1.2.2
++NTPSEC_VERSION = 1.2.2a
+ NTPSEC_SOURCE = ntpsec-NTPsec_$(subst .,_,$(NTPSEC_VERSION)).tar.bz2
+ NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(subst .,_,$(NTPSEC_VERSION))
+ NTPSEC_LICENSE = BSD-2-Clause, NTP, BSD-3-Clause, MIT, CC-BY-4.0 (docs)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
