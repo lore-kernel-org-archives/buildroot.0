@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23D69EC8737
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:17:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66BB6EC8738
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D161B822FA;
-	Thu,  7 Sep 2023 15:17:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D161B822FA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1AAB182CFA;
+	Thu,  7 Sep 2023 15:18:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AAB182CFA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eOiJNGDJ3ssp; Thu,  7 Sep 2023 15:17:50 +0000 (UTC)
+	with ESMTP id bozYNg0CGSau; Thu,  7 Sep 2023 15:18:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11D6B83A38;
-	Thu,  7 Sep 2023 15:17:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11D6B83A38
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 08BAF1BF3BB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6AE6882CC7;
+	Thu,  7 Sep 2023 15:18:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AE6882CC7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 12E9A1BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 59E4B6128D
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59E4B6128D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C9D641E24
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C9D641E24
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id COVkcSDQlJRd for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XgitScgYclSr for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9601C612B4
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9601C612B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33EF241D8D
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33EF241D8D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 856EA86A25; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id 30D22869E0; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 10:15:16 +0200
+Date: Tue, 8 Aug 2023 21:54:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86fac42015cb10c8d2926a30882d8e3645e585c8
-X-Git-Newrev: c82de32369d9c5c298058896c87b3e6fa9b465de
+X-Git-Oldrev: d4d7761fc0107e286eb080084e5a149378809448
+X-Git-Newrev: a20f8a87aaf5d8d16755fd645263d4d286ef52de
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.856EA86A25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-firmware: add new option for
- Marvell prestera firmware
+Message-Id: <20230907145128.30D22869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pylibfdt: add host python
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,64 +64,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c82de32369d9c5c298058896c87b3e6fa9b465de
+commit: https://git.buildroot.net/buildroot/commit/?id=a20f8a87aaf5d8d16755fd645263d4d286ef52de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add the Marvell prestera ethernet cards firmwares.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-firmware/Config.in           | 5 +++++
- package/linux-firmware/linux-firmware.hash | 1 +
- package/linux-firmware/linux-firmware.mk   | 6 ++++++
- 3 files changed, 12 insertions(+)
+ package/python-pylibfdt/python-pylibfdt.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 3ae72564cc..46e538776d 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -489,6 +489,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_ICE
- 	  Firmware files for Intel Ethernet 800 Series Network Adapters
- 	  (ice)
+diff --git a/package/python-pylibfdt/python-pylibfdt.mk b/package/python-pylibfdt/python-pylibfdt.mk
+index 5511bd12b3..9591439b01 100644
+--- a/package/python-pylibfdt/python-pylibfdt.mk
++++ b/package/python-pylibfdt/python-pylibfdt.mk
+@@ -11,5 +11,7 @@ PYTHON_PYLIBFDT_SETUP_TYPE = pep517
+ PYTHON_PYLIBFDT_LICENSE = BSD-2-Clause or GPL-2.0+
+ PYTHON_PYLIBFDT_LICENSE_FILES = BSD-2-Clause GPL
+ PYTHON_PYLIBFDT_DEPENDENCIES = host-python-setuptools-scm host-swig
++HOST_PYTHON_PYLIBFDT_DEPENDENCIES = host-python-setuptools-scm host-swig
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MARVELL_PRESTERA
-+	bool "Marvell Prestera"
-+	help
-+	  Firmware files for Marvell Prestera ethernet cards
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
- 	bool "Microchip VSC85xx PHYs"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 7ba9537dd8..31bbfddfaa 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -17,6 +17,7 @@ sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENC
- sha256  8c45a83562a69f7ac4207e4cb5c0063af2e545791b3947bc81dc82305481c15c  LICENSE.ice_enhanced
- sha256  0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d  LICENCE.it913x
- sha256  16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5  LICENCE.iwlwifi_firmware
-+sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
- sha256  0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3  LICENCE.microchip
- sha256  59ae206c89108905ebdc9ad4c9336526bd2c0d50fbf988c21e8c2a82719d42a4  LICENCE.moxa
- sha256  0bd9f7cae3cf72b12a63359a725ccbb76ddbd6831372695a9162144329800dd0  LICENCE.qat_firmware
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index a1cec90de2..f8c239d816 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -616,6 +616,12 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8411-2.fw
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MARVELL_PRESTERA),y)
-+LINUX_FIRMWARE_FILES += \
-+	mrvl/prestera/mvsw_prestera_fw*.img
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XCx000),y)
- LINUX_FIRMWARE_FILES += \
- 	dvb-fe-xc4000-1.4.1.fw \
+ $(eval $(python-package))
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
