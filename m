@@ -4,86 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85F5AC001DB
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 00:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAEB3EB64DD
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 00:50:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 350C881F2C;
-	Tue,  8 Aug 2023 00:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 350C881F2C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5F2CC81EF0;
+	Tue,  8 Aug 2023 00:50:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F2CC81EF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id co-9iWrEyNJP; Tue,  8 Aug 2023 00:36:13 +0000 (UTC)
+	with ESMTP id MhAovj2nvl3W; Tue,  8 Aug 2023 00:50:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D79381F06;
-	Tue,  8 Aug 2023 00:36:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D79381F06
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28B6881EF6;
+	Tue,  8 Aug 2023 00:50:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28B6881EF6
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 503AC1BF30B
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 00:35:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6885A1BF966
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 00:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2211440E46
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 00:35:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2211440E46
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A24B40951
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 00:50:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A24B40951
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wTsHRT0kOMlr for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 00:35:35 +0000 (UTC)
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
- [IPv6:2607:f8b0:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E34CB40F4E
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 00:35:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E34CB40F4E
-Received: by mail-pl1-x62c.google.com with SMTP id
- d9443c01a7336-1bc7e65ea44so2664435ad.1
- for <buildroot@buildroot.org>; Mon, 07 Aug 2023 17:35:34 -0700 (PDT)
+ with ESMTP id Thnuw8T0AbcN for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 00:50:48 +0000 (UTC)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com
+ [IPv6:2607:f8b0:4864:20::b49])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 496EF40948
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 00:50:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 496EF40948
+Received: by mail-yb1-xb49.google.com with SMTP id
+ 3f1490d57ef6-c6dd0e46a52so5674254276.2
+ for <buildroot@buildroot.org>; Mon, 07 Aug 2023 17:50:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691454933; x=1692059733;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=84qflSXhIj0T53xT8N99eA+3xFLhs68B2NeHMh/l32I=;
- b=EoyUy+1P+HF89W2MRhNApbPaoEP6BV+JNuDgxQvdDd9cKq0xa3f/4XozavRarv27LV
- cc+Dj5H4MvAVdVfX5+qqbe06YaQ3xJmxYGSEy5m47ktAkje+B/6SUNfVJciZnlQbr4O9
- dS7FqkF8vONkbv2PGlVc1v5hZbtBzkAvO8ov3I95sAt17f06PcOvmjqr/C7fwnW3fnxC
- kILInbUBm2L3qVx0+BMURQpOFUdKslkshHMAaCY1Hrlowm+U2r5WBJm/4UxUwDo/r8oI
- H0oIde4WZE4FioSlA+2m0Q8We4LS8+9aLJqkzmo6AE/IMQmMovNynmAej3TQOvadIyxE
- imTg==
-X-Gm-Message-State: AOJu0YzHY0zalDXaw5BYeDjGcglbfeWaAiRXQKgJ3fUPPS3yL6Ilkt4I
- SdaLzuxIu4aqVdNO5O9xOSHYXEzKx/DLn2jVDr1W8w==
-X-Google-Smtp-Source: AGHT+IG78Wf+rtoFUHMgrJEWAuzkKG+c8GnNVliv9uSLOSr8r5IKF0Tewg46GH/qD+7yXagAtWLRFQ==
-X-Received: by 2002:a17:902:c211:b0:1b6:783d:9ba7 with SMTP id
- 17-20020a170902c21100b001b6783d9ba7mr9133989pll.27.1691454933150; 
- Mon, 07 Aug 2023 17:35:33 -0700 (PDT)
-Received: from fedora.amarulasolutions.com ([174.27.153.162])
- by smtp.gmail.com with ESMTPSA id
- ix10-20020a170902f80a00b001b03b7f8adfsm7531923plb.246.2023.08.07.17.35.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Aug 2023 17:35:32 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ d=1e100.net; s=20221208; t=1691455847; x=1692060647;
+ h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=RIPdpUmtUDmK/oA6YSen3uoj7qRenjnGP1290Yi4Z3w=;
+ b=dr+hFnXCYCXBAxSzfBCT4ZC1j19SZDo0r8mCGspLUI1cmcLXBZEoqA5bxg41POk2Cb
+ JaPXSSr/6zf8Q6SXVI43QGQBHdVHR1ztgNOIWi2Qg91FRbl2S5E8CkgmLw3XR7BQVJz4
+ zovU0yMJDTI7N2g3lScmNgauzyQLCtS6R+rKFoyFKVZYtma4Xs5iKbJPq1QnAiRzUl6t
+ gEF4PZwRlPelpN9tuvFxviZk3Pse21vxgpd8EVp8PM6bwOsyodeedzAuG2CuqKgV3nyM
+ geuHvSaydJeTQabJ43BR7R/8eVdOdTJSJqj9FSrXzTCMpqYYpEUd/78GwQNb4haXd3ax
+ dPgA==
+X-Gm-Message-State: AOJu0YxiseL4K/RUSrzIwe9RmWOi7owJD9XD/c2v5ix+AxB+tLoLYxFk
+ iFRbP5g20JXACSq9KBOnWoLZMXU6R3vnpJ6H9Ownm3ThMA0WxnhbCFVA8oEG/HE8kFDIYe+2QHm
+ We2r0flLlAk+gAgMYhkCMWwi7KfCWlCV4bDqWTUtBSZU8z0FrbtygjKu954IMmECIKtTe
+X-Google-Smtp-Source: AGHT+IFHo05TcqYCDFCDJjwrMwCMpySzgCLFMwlxX1woPGZIxdYxqGiB1BzP4a+Jjv+Tii+QzQAuqfyJGMjkig==
+X-Received: from drinkcat.c.googlers.com
+ ([fda3:e722:ac3:cc00:3:22c1:c0a8:1b08])
+ (user=drinkcat job=sendgmr) by 2002:a5b:94d:0:b0:d09:17f2:d3b0 with SMTP id
+ x13-20020a5b094d000000b00d0917f2d3b0mr73890ybq.9.1691455846926; Mon, 07 Aug
+ 2023 17:50:46 -0700 (PDT)
+Date: Tue,  8 Aug 2023 00:50:17 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
+Message-ID: <20230808005041.3995439-1-drinkcat@google.com>
 To: buildroot@buildroot.org
-Date: Mon,  7 Aug 2023 18:35:27 -0600
-Message-ID: <20230808003527.1469175-4-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230808003527.1469175-1-adam.duskett@amarulasolutions.com>
-References: <20230808003527.1469175-1-adam.duskett@amarulasolutions.com>
-MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1691454933; x=1692059733;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=84qflSXhIj0T53xT8N99eA+3xFLhs68B2NeHMh/l32I=;
- b=qmsiLt9/Oqd8pLJ2A3kh0ZeuNSQRrb4/FDI/fU53wzSh3RZLcduGyxWul6nyauLtUS
- Xeio+Woo0Dyoi/QrJbKUpn+6tbA4HJ/8AT59J7BTgD1+zW2R1AZonoFqamJZi+P2CUMQ
- WYgHeEPqqz5T3oVrFkfazIXEWfQY2E1FDQwzI=
+ d=google.com; s=20221208; t=1691455847; x=1692060647;
+ h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=RIPdpUmtUDmK/oA6YSen3uoj7qRenjnGP1290Yi4Z3w=;
+ b=XzSf0n+OngtWxxzHFfmNTO28lpobeINSmFnB5MiAi6o0JXmuUaOo8vajGSqvZjbYf3
+ p6zk+PvCx2NOyGhC1XMsXToKr/iRKj6KqgEAY/VN+pxBPs1QYA7xV11DiFXDv8KqM3EA
+ WQ4D/9cN5/LygVYU/wDGF+oW0TbZaFw24agtSfN1jHwOiqi1/YhGndY+18xybUeShUC4
+ khKWhMMuqI3WJTwDqJQUClsWuqZ9WQGBtkw3puHPwGglzF8MStgK3c88uJ5G6cWZcRsz
+ /SQst8KSX1n9BkGaGOX2D/RrX5vcZEKgdHDl6T0/h4g+cBct65ViSzmrO5Q7L8Rg+Lef
+ c29A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=qmsiLt9/
-Subject: [Buildroot] [PATCH/next vRFCv2 3/3] package/flutter-engine: new
- package
+ dkim=pass (2048-bit key) header.d=google.com header.i=@google.com
+ header.a=rsa-sha256 header.s=20221208 header.b=XzSf0n+O
+Subject: [Buildroot] [PATCH v2 1/1] package/screenfetch: Add mawk/gawk
+ dependency, and upstream detection patch.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,726 +90,847 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
+From: Nicolas Boichat via buildroot <buildroot@buildroot.org>
+Reply-To: Nicolas Boichat <drinkcat@google.com>
+Cc: Nicolas Boichat <drinkcat@google.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There are many issues with this package:
+screenfetch requires an "awk" implementation: add that to dependencies.
 
-- The release tarballs from https://github.com/flutter/engine are in no state
-  to compile. They are only for the use of gclient to download a source
-  directory structure suitable to build the Flutter engine! If you download,
-  extract and attempt to run `./tools/gn --no-goma --no-prebuilt-dart-sdk`, you
-  receive the error message:
-  `No such file or directory: 'flutter/flutter/third_party/gn/gn.'
+Also, upstream would only use an executable called "awk": pick up
+upstream patch that can autodetect awk implementation, so that
+"mawk" can be used.
 
-  But wait! Wasn't the gn binary just called? No, that's a wrapper in the
-  Flutter source tree that formats arguments to call the real gn binary.
-  The real gn is not provided in the tarball but is downloaded via gclient
-  (among many other supporting repositories.)
-
-  Even worse, the flutter buildsystem depends on the .git dirs being present.
-  (https://github.com/meta-flutter/meta-flutter/issues/271) This dependency
-  means it is not possible to create a reproducible tarball from the downloaded
-  sources, which is why there is no .hash file provided.
-
-  I have asked the flutter project to release full tarballs suitable for
-  compiling here: https://github.com/flutter/flutter/issues/130734
-
-- Flutter engine includes a patched copy of clang that must be used to compile.
-  Using a Buildroot-build clang results in linking warning and errors.
-  As such, we depend on LLVM_ARCH_SUPPORTS but use the included clang for
-  building. On the plus side, this saves time having to compile clang.
-
-Tested with:
-  - Debian 11 and 12
-  - Ubuntu 18.04, 20.04, and 22.04
-  - Fedora 38
-  - Per package directory enabled and disabled
-  - x86_64, arm64
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Nicolas Boichat <drinkcat@google.com>
 ---
+
 Changes v1 -> v2:
-  - Use the flutter-engine provided clang.
-  - Remove 0003-disable-undefined-version.patch
-  - Add 0003-fix-toolchain-paths.patch
-  - Fix signed-off-by lines in the patches [Yann]
-  - Remove "Runtime mode" option in favor of checking BR2_ENABLE_RUNTIME_DEBUG [Yann]
-  - Use positive logic in flutter-engine.mk [Yann]
-  - Add comments when --disable-${option} doesn't exist. [Yann]
-  - Remove unecessary subshells in flutter-engine.mk [Yann]
-  - Rename flutter-engine/gclient to flutter-engine/dot-gclient [Yann]
-  - Create flutter-engine/gen-tarball to generate the flutter-engine tarball. [Yann]
-  - Remove finding and copying crtbeginS.o crtendS.o libgcc.a as it's
-    unecessary when using the flutter-engine provided clang.
-  - FLUTTER_ENGINE_INSTALL_STAGING_FILES -> FLUTTER_ENGINE_INSTALL_FILES [Yann]
-  - Reword comments at the top of flutter-engine.mk for clarity.
+ - Busybox's awk also works, so add that as a possible dependency [Thomas]
+   - Tried to use "select" instead of "depends" as suggested, but that
+     creates a circular dependency.
+ - Fixed boolean logic in "comment" part (&& not ||)
 
- DEVELOPERS                                    |   1 +
- package/Config.in                             |   1 +
- .../0001-disable-pre-canned-sysroot.patch     |  32 +++
- .../0002-remove-explicit-x11-dependency.patch |  33 +++
- .../0003-fix-toolchain-paths.patch            |  40 +++
- ...onfig.py-do-not-prepend-sysroot-path.patch |  34 +++
- package/flutter-engine/Config.in              |  60 +++++
- package/flutter-engine/dot-gclient            |  16 ++
- package/flutter-engine/flutter-engine.mk      | 239 ++++++++++++++++++
- package/flutter-engine/gen-tarball            | 108 ++++++++
- 10 files changed, 564 insertions(+)
- create mode 100644 package/flutter-engine/0001-disable-pre-canned-sysroot.patch
- create mode 100644 package/flutter-engine/0002-remove-explicit-x11-dependency.patch
- create mode 100644 package/flutter-engine/0003-fix-toolchain-paths.patch
- create mode 100644 package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch
- create mode 100644 package/flutter-engine/Config.in
- create mode 100644 package/flutter-engine/dot-gclient
- create mode 100644 package/flutter-engine/flutter-engine.mk
- create mode 100755 package/flutter-engine/gen-tarball
+ .../0001-Detect-which-awk-to-use.patch        | 783 ++++++++++++++++++
+ package/screenfetch/Config.in                 |   4 +
+ 2 files changed, 787 insertions(+)
+ create mode 100644 package/screenfetch/0001-Detect-which-awk-to-use.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2093ad857f..126a3e95cc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -28,6 +28,7 @@
- 
- N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools
-+F:	package/flutter-engine
- 
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
-diff --git a/package/Config.in b/package/Config.in
-index e12ee34e9f..12f147a55d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -344,6 +344,7 @@ comment "Graphic libraries"
- 	source "package/fbset/Config.in"
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
-+	source "package/flutter-engine/Config.in"
- 	source "package/freerdp/Config.in"
- 	source "package/graphicsmagick/Config.in"
- 	source "package/imagemagick/Config.in"
-diff --git a/package/flutter-engine/0001-disable-pre-canned-sysroot.patch b/package/flutter-engine/0001-disable-pre-canned-sysroot.patch
+diff --git a/package/screenfetch/0001-Detect-which-awk-to-use.patch b/package/screenfetch/0001-Detect-which-awk-to-use.patch
 new file mode 100644
-index 0000000000..953705e33b
+index 0000000000..86e51e5511
 --- /dev/null
-+++ b/package/flutter-engine/0001-disable-pre-canned-sysroot.patch
-@@ -0,0 +1,32 @@
-+From 49a14e693124dc34f2cccbfb755d01a1198aa6bf Mon Sep 17 00:00:00 2001
-+From: Joel Winarske <joel.winarsk@gmail.com>
-+Date: Wed, 19 Jul 2023 15:24:22 -0700
-+Subject: [PATCH] disable pre-canned sysroot
++++ b/package/screenfetch/0001-Detect-which-awk-to-use.patch
+@@ -0,0 +1,783 @@
++From 39b6eec51f0c2fa5f2b0e876b14dcfc9c1febf97 Mon Sep 17 00:00:00 2001
++From: Nicolas Boichat <drinkcat@google.com>
++Date: Fri, 4 Aug 2023 12:55:36 +0000
++Subject: [PATCH] Detect which awk to use
 +
-+Override should be enabled if a custom sysroot using --target-sysroot is
-+specified. If --target-sysroot is not set, then it should default to the
-+pre-canned sysroot.
++Some embedded distributions (e.g. buildroot) may only provide mawk,
++without a symlink to awk.
 +
-+Upstream: https://github.com/flutter/flutter/issues/123073
-+Signed-off-by: Joel Winarske <joel.winarsk@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++At first glance, awk scripts to appear to work fine with either
++gawk or mawk.
++
++Signed-off-by: Nicolas Boichat <drinkcat@google.com>
++Upstream: https://github.com/KittyKatt/screenFetch/commit/b49a2334b8ba806dbc532219e86363886a85d9c8
++[rebased on 3.9.1]
 +---
-+ build/config/sysroot.gni | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ screenfetch-dev | 245 +++++++++++++++++++++++++-----------------------
++ 1 file changed, 130 insertions(+), 115 deletions(-)
 +
-+diff --git a/build/config/sysroot.gni b/build/config/sysroot.gni
-+index 7987e519d..1de694263 100644
-+--- a/build/config/sysroot.gni
-++++ b/build/config/sysroot.gni
-+@@ -14,7 +14,7 @@ declare_args() {
++diff --git a/screenfetch-dev b/screenfetch-dev
++index 1e53b2c..765930f 100755
++--- a/screenfetch-dev
+++++ b/screenfetch-dev
++@@ -352,9 +352,9 @@ colorNumberToCode () {
 + 
-+   # Whether to use the default sysroot when building for Linux, if an explicit
-+   # sysroot isn't set.
-+-  use_default_linux_sysroot = true
-++  use_default_linux_sysroot = false
++ detectColors () {
++ 	my_colors=$(sed 's/^,/na,/;s/,$/,na/;s/,/ /' <<< "${OPTARG}")
++-	my_lcolor=$(awk -F' ' '{print $1}' <<< "${my_colors}")
+++	my_lcolor=$("${AWK}" -F' ' '{print $1}' <<< "${my_colors}")
++ 	my_lcolor=$(colorNumberToCode "${my_lcolor}")
++-	my_hcolor=$(awk -F' ' '{print $2}' <<< "${my_colors}")
+++	my_hcolor=$("${AWK}" -F' ' '{print $2}' <<< "${my_colors}")
++ 	my_hcolor=$(colorNumberToCode "${my_hcolor}")
 + }
 + 
-+ if (current_toolchain == default_toolchain && target_sysroot != "") {
-+-- 
-+2.41.0
-+
-diff --git a/package/flutter-engine/0002-remove-explicit-x11-dependency.patch b/package/flutter-engine/0002-remove-explicit-x11-dependency.patch
-new file mode 100644
-index 0000000000..23d7ec9b06
---- /dev/null
-+++ b/package/flutter-engine/0002-remove-explicit-x11-dependency.patch
-@@ -0,0 +1,33 @@
-+From b1a5db9318ca33a03f2700758d5debad907d21b6 Mon Sep 17 00:00:00 2001
-+From: Joel Winarske <joel.winarsk@gmail.com>
-+Date: Wed, 19 Jul 2023 15:26:40 -0700
-+Subject: [PATCH] remove explicit x11 dependency
-+
-+This is superfluous and may conflict with the actual rendering system used in
-+gtk3 (e.g. wayland.)
-+
-+Upstream: https://github.com/flutter/flutter/issues/123073
-+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ flutter/shell/platform/linux/config/BUILD.gn | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/flutter/shell/platform/linux/config/BUILD.gn b/flutter/shell/platform/linux/config/BUILD.gn
-+index da0ac056b..70c7a0ea1 100644
-+--- a/flutter/shell/platform/linux/config/BUILD.gn
-++++ b/flutter/shell/platform/linux/config/BUILD.gn
-+@@ -5,10 +5,6 @@
-+ import("//build/config/linux/pkg_config.gni")
-+ import("//flutter/shell/platform/glfw/config.gni")
++@@ -462,7 +462,22 @@ case $1 in
++ 	--version) displayVersion; exit 0;;
++ esac
 + 
-+-pkg_config("x11") {
-+-  packages = [ "x11" ]
-+-}
-+-
-+ pkg_config("gtk") {
-+   packages = [ "gtk+-3.0" ]
+++# Detect which awk to use (unless already specified in environment)
+++if [[ -z "${AWK}" ]]; then
+++	for awk in awk gawk mawk; do
+++		if command -v "${awk}" > /dev/null; then
+++			AWK="${awk}"
+++			break
+++		fi
+++	done
+++fi
+++
+++if ! command -v "${AWK}" > /dev/null; then
+++	errorOut "No awk interpreter available (AWK=\"${AWK}\")."
+++	exit 1
+++fi
++ 
+++# Parse the rest of the flags (some of these functions require awk)
++ while getopts ":hsu:evVEnLNtlS:A:D:o:c:d:pa:w" flags; do
++ 	case $flags in
++ 		h) displayHelp; exit 0 ;;
++@@ -608,8 +623,8 @@ detectdistro () {
++ 				"Debian")
++ 					if [[ -f /etc/crunchbang-lsb-release || -f /etc/lsb-release-crunchbang ]]; then
++ 						distro="CrunchBang"
++-						distro_release=$(awk -F'=' '/^DISTRIB_RELEASE=/ {print $2}' /etc/lsb-release-crunchbang)
++-						distro_codename=$(awk -F'=' '/^DISTRIB_DESCRIPTION=/ {print $2}' /etc/lsb-release-crunchbang)
+++						distro_release=$("${AWK}" -F'=' '/^DISTRIB_RELEASE=/ {print $2}' /etc/lsb-release-crunchbang)
+++						distro_codename=$("${AWK}" -F'=' '/^DISTRIB_DESCRIPTION=/ {print $2}' /etc/lsb-release-crunchbang)
++ 					elif [[ -f /etc/siduction-version ]]; then
++ 						distro="Siduction"
++ 						distro_release="(Debian Sid)"
++@@ -620,10 +635,10 @@ detectdistro () {
++ 					elif [[ -f /etc/os-release ]]; then
++ 						if grep -q -i 'Raspbian' /etc/os-release ; then
++ 							distro="Raspbian"
++-							distro_release=$(awk -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
+++							distro_release=$("${AWK}" -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
++ 						elif grep -q -i 'BlankOn' /etc/os-release ; then
++ 							distro='BlankOn'
++-							distro_release=$(awk -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
+++							distro_release=$("${AWK}" -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
++ 						else
++ 							distro="Debian"
++ 						fi
++@@ -639,7 +654,7 @@ detectdistro () {
++ 					;;
++ 				"Sulin")
++ 					distro="Sulin"
++-					distro_release=$(awk -F'=' '/^ID_LIKE=/ {print $2}' /etc/os-release)
+++					distro_release=$("${AWK}" -F'=' '/^ID_LIKE=/ {print $2}' /etc/os-release)
++ 					distro_codename="Roolling donkey" # this is not wrong :D
++ 					;;
++ 				"KaOS"|"kaos")
++@@ -718,7 +733,7 @@ detectdistro () {
++ 						if grep -q 'SailfishOS' /etc/os-release; then
++ 							distro="SailfishOS"
++ 							distro_codename="$(grep 'VERSION=' /etc/os-release | cut -d '(' -f2 | cut -d ')' -f1)"
++-							distro_release="$(awk -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
+++							distro_release="$("${AWK}" -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
++ 						fi
++ 					fi
++ 					;;
++@@ -753,7 +768,7 @@ detectdistro () {
++ 						if grep -q -i 'SUSE Linux Enterprise' /etc/os-release ; then
++ 							distro="SUSE Linux Enterprise"
++ 							distro_codename="n/a"
++-							distro_release=$(awk -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
+++							distro_release=$("${AWK}" -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
++ 						fi
++ 					fi
++ 					if [[ "${distro_codename}" == "Tumbleweed" ]]; then
++@@ -789,7 +804,7 @@ detectdistro () {
++ 					distro="SailfishOS"
++ 					if [[ -f /etc/os-release ]]; then
++ 						distro_codename="$(grep 'VERSION=' /etc/os-release | cut -d '(' -f2 | cut -d ')' -f1)"
++-						distro_release="$(awk -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
+++						distro_release="$("${AWK}" -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
++ 					fi
++ 					;;
++ 				"Sparky"|"SparkyLinux")
++@@ -863,12 +878,12 @@ detectdistro () {
++ 					;;
++ 					"Haiku")
++ 						distro="Haiku"
++-						distro_more="$(uname -v | awk '/^hrev/ {print $1}')"
+++						distro_more="$(uname -v | "${AWK}" '/^hrev/ {print $1}')"
++ 					;;
++ 					"GNU/Linux")
++ 						if type -p crux >/dev/null 2>&1; then
++ 							distro="CRUX"
++-							distro_more="$(crux | awk '{print $3}')"
+++							distro_more="$(crux | "${AWK}" '{print $3}')"
++ 						fi
++ 						if type -p nixos-version >/dev/null 2>&1; then
++ 							distro="NixOS"
++@@ -944,7 +959,7 @@ detectdistro () {
++ 					[[ "${distro}" == "Neon" ]] && distro="KDE neon"
++ 					[[ "${distro}" == "SLED" || "${distro}" == "sled" || "${distro}" == "SLES" || "${distro}" == "sles" ]] && distro="SUSE Linux Enterprise"
++ 					if [[ "${distro}" == "SUSE Linux Enterprise" && -f /etc/os-release ]]; then
++-						distro_more="$(awk -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')"
+++						distro_more="$("${AWK}" -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')"
++ 					fi
++ 					if [[ "${distro}" == "Debian" && -f /usr/bin/pveversion ]]; then
++ 						distro="Proxmox VE"
++@@ -955,7 +970,7 @@ detectdistro () {
++ 
++ 			if [[ "${distro}" == "Unknown" && "${OSTYPE}" =~ "linux" && -f /etc/lsb-release ]]; then
++ 				LSB_RELEASE=$(</etc/lsb-release)
++-				distro=$(echo "${LSB_RELEASE}" | awk 'BEGIN {
+++				distro=$(echo "${LSB_RELEASE}" | "${AWK}" 'BEGIN {
++ 					distro = "Unknown"
++ 				}
++ 				{
++@@ -1001,7 +1016,7 @@ detectdistro () {
++ 					if [ -f /etc/os-release ]; then
++ 						if grep -q -i 'SUSE Linux Enterprise' /etc/os-release ; then
++ 							distro="SUSE Linux Enterprise"
++-							distro_more=$(awk -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
+++							distro_more=$("${AWK}" -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
++ 						fi
++ 					fi
++ 					if [[ "${distro_more}" =~ "Tumbleweed" ]]; then
++@@ -1051,7 +1066,7 @@ detectdistro () {
++ 					if [[ -x /usr/bin/sw_vers ]] && /usr/bin/sw_vers | grep -i 'Mac OS X' >/dev/null; then
++ 						distro="Mac OS X"
++ 					elif [[ -f /var/run/dmesg.boot ]]; then
++-						distro=$(awk 'BEGIN {
+++						distro=$("${AWK}" 'BEGIN {
++ 							distro = "Unknown"
++ 						}
++ 						{
++@@ -1080,7 +1095,7 @@ detectdistro () {
++ 
++ 			if [[ "${distro}" == "Unknown" ]] && [[ "${OSTYPE}" =~ "linux" || "${OSTYPE}" == "gnu" ]]; then
++ 				if [[ -f /etc/issue ]]; then
++-					distro=$(awk 'BEGIN {
+++					distro=$("${AWK}" 'BEGIN {
++ 						distro = "Unknown"
++ 					}
++ 					{
++@@ -1123,8 +1138,8 @@ detectdistro () {
++ 					fi
++ 				elif [[ -f /etc/lsb-release ]]; then
++ 					if grep -q -i 'CHROMEOS_RELEASE_NAME' /etc/lsb-release; then
++-						distro="$(awk -F'=' '/^CHROMEOS_RELEASE_NAME=/ {print $2}' /etc/lsb-release)"
++-						distro_more="$(awk -F'=' '/^CHROMEOS_RELEASE_VERSION=/ {print $2}' /etc/lsb-release)"
+++						distro="$("${AWK}" -F'=' '/^CHROMEOS_RELEASE_NAME=/ {print $2}' /etc/lsb-release)"
+++						distro_more="$("${AWK}" -F'=' '/^CHROMEOS_RELEASE_VERSION=/ {print $2}' /etc/lsb-release)"
++ 					fi
++ 				fi
++ 			fi
++@@ -1301,7 +1316,7 @@ detectuptime () {
++ 		now=$(date +%s)
++ 		uptime=$((now - boot))
++ 	elif [[ "${distro}" == "Haiku" ]]; then
++-		uptime=$(uptime | awk -F', up ' '{gsub(/ *hours?,/, "h"); gsub(/ *minutes?/, "m"); print $2;}')
+++		uptime=$(uptime | "${AWK}" -F', up ' '{gsub(/ *hours?,/, "h"); gsub(/ *minutes?/, "m"); print $2;}')
++ 	else
++ 		if [[ -f /proc/uptime ]]; then
++ 			uptime=$(</proc/uptime)
++@@ -1322,9 +1337,9 @@ detectuptime () {
++ 		fi
++ 	else
++ 		if [[ "$distro" =~ "NetBSD" ]]; then
++-			uptime=$(awk -F. '{print $1}' /proc/uptime)
+++			uptime=$("${AWK}" -F. '{print $1}' /proc/uptime)
++ 		elif [[ "$distro" =~ "BSD" ]]; then
++-			uptime=$(uptime | awk '{$1=$2=$(NF-6)=$(NF-5)=$(NF-4)=$(NF-3)=$(NF-2)=$(NF-1)=$NF=""; sub(" days","d");sub(",","");sub(":","h ");sub(",","m"); print}')
+++			uptime=$(uptime | "${AWK}" '{$1=$2=$(NF-6)=$(NF-5)=$(NF-4)=$(NF-3)=$(NF-2)=$(NF-1)=$NF=""; sub(" days","d");sub(",","");sub(":","h ");sub(",","m"); print}')
++ 		fi
++ 	fi
++ 	verboseOut "Finding current uptime...found as '${uptime}'"
++@@ -1483,21 +1498,21 @@ detectcpu () {
++ 			cpu="Unknown"
++ 		fi
++ 	elif [ "$distro" == "FreeBSD" ]; then
++-		cpu=$(dmesg | awk -F': ' '/^CPU/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
+++		cpu=$(dmesg | "${AWK}" -F': ' '/^CPU/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
++ 	elif [ "$distro" == "DragonFlyBSD" ]; then
++ 		cpu=$(sysctl -n hw.model)
++ 	elif [ "$distro" == "OpenBSD" ]; then
++ 		cpu=$(sysctl -n hw.model | sed 's/@.*//')
++ 	elif [ "$distro" == "Haiku" ]; then
++-		cpu=$(sysinfo -cpu | awk -F': ' '/^CPU #0/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
+++		cpu=$(sysinfo -cpu | "${AWK}" -F': ' '/^CPU #0/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
++ 	else
++-		cpu=$(awk -F':' '/^model name/ {split($2, A, " @"); print A[1]; exit}' /proc/cpuinfo)
+++		cpu=$("${AWK}" -F':' '/^model name/ {split($2, A, " @"); print A[1]; exit}' /proc/cpuinfo)
++ 		cpun=$(grep -c '^processor' /proc/cpuinfo)
++ 		if [ -z "$cpu" ]; then
++-			cpu=$(awk 'BEGIN{FS=":"} /Hardware/ { print $2; exit }' /proc/cpuinfo)
+++			cpu=$("${AWK}" 'BEGIN{FS=":"} /Hardware/ { print $2; exit }' /proc/cpuinfo)
++ 		fi
++ 		if [ -z "$cpu" ]; then
++-			cpu=$(awk 'BEGIN{FS=":"} /^cpu/ { gsub(/  +/," ",$2); print $2; exit}' /proc/cpuinfo | sed 's/, altivec supported//;s/^ //')
+++			cpu=$("${AWK}" 'BEGIN{FS=":"} /^cpu/ { gsub(/  +/," ",$2); print $2; exit}' /proc/cpuinfo | sed 's/, altivec supported//;s/^ //')
++ 			if [[ $cpu =~ ^(PPC)*9.+ ]]; then
++ 				model="IBM PowerPC G5 "
++ 			elif [[ $cpu =~ 740/750 ]]; then
++@@ -1541,15 +1556,15 @@ detectcpu () {
++ 		bl="${loc}/bios_limit"
++ 		smf="${loc}/scaling_max_freq"
++ 		if [ -f "$bl" ] && [ -r "$bl" ]; then
++-			cpu_mhz=$(awk '{print $1/1000}' "$bl")
+++			cpu_mhz=$("${AWK}" '{print $1/1000}' "$bl")
++ 		elif [ -f "$smf" ] && [ -r "$smf" ]; then
++-			cpu_mhz=$(awk '{print $1/1000}' "$smf")
+++			cpu_mhz=$("${AWK}" '{print $1/1000}' "$smf")
++ 		else
++-			cpu_mhz=$(awk -F':' '/cpu MHz/{ print int($2+.5) }' /proc/cpuinfo | head -n 1)
+++			cpu_mhz=$("${AWK}" -F':' '/cpu MHz/{ print int($2+.5) }' /proc/cpuinfo | head -n 1)
++ 		fi
++ 		if [ -n "$cpu_mhz" ]; then
++ 			if [ "${cpu_mhz%.*}" -ge 1000 ]; then
++-				cpu_ghz=$(awk '{print $1/1000}' <<< "${cpu_mhz}")
+++				cpu_ghz=$("${AWK}" '{print $1/1000}' <<< "${cpu_mhz}")
++ 				cpufreq="${cpu_ghz}GHz"
++ 			else
++ 				cpufreq="${cpu_mhz}MHz"
++@@ -1603,16 +1618,16 @@ detectgpu () {
++ 			# gpu=$(sed 's/.*device.*= //' <<< "${gpu_info}" | sed "s/'//g")
++ 		fi
++ 	elif [[ "${distro}" == "OpenBSD" ]]; then
++-		gpu=$(glxinfo 2> /dev/null | awk '/OpenGL renderer string/ { sub(/OpenGL renderer string: /,""); print }')
+++		gpu=$(glxinfo 2> /dev/null | "${AWK}" '/OpenGL renderer string/ { sub(/OpenGL renderer string: /,""); print }')
++ 	elif [[ "${distro}" == "Mac OS X" ]]; then
++-		gpu=$(system_profiler SPDisplaysDataType | awk -F': ' '/^ *Chipset Model:/ {print $2}' | awk '{ printf "%s / ", $0 }' | sed -e 's/\/ $//g')
+++		gpu=$(system_profiler SPDisplaysDataType | "${AWK}" -F': ' '/^ *Chipset Model:/ {print $2}' | "${AWK}" '{ printf "%s / ", $0 }' | sed -e 's/\/ $//g')
++ 	elif [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" ]]; then
++ 		gpu=$(wmic path Win32_VideoController get caption | sed -n '2p')
++ 	elif [[ "${distro}" == "Haiku" ]]; then
++-		gpu="$(listdev | grep -A2 -e 'device Display controller' | awk -F': ' '/^ +device/ {print $2}')"
+++		gpu="$(listdev | grep -A2 -e 'device Display controller' | "${AWK}" -F': ' '/^ +device/ {print $2}')"
++ 	else
++ 		if [[ -n "$(PATH="/opt/bin:$PATH" type -p nvidia-smi)" ]]; then
++-			gpu=$($(PATH="/opt/bin:$PATH" type -p nvidia-smi | cut -f1) -q | awk -F':' '/Product Name/ {gsub(/: /,":"); print $2}' | sed ':a;N;$!ba;s/\n/, /g')
+++			gpu=$($(PATH="/opt/bin:$PATH" type -p nvidia-smi | cut -f1) -q | "${AWK}" -F':' '/Product Name/ {gsub(/: /,":"); print $2}' | sed ':a;N;$!ba;s/\n/, /g')
++ 		elif [[ -n "$(PATH="/usr/sbin:$PATH" type -p glxinfo)" && -z "${gpu}" ]]; then
++ 			gpu_info=$($(PATH="/usr/sbin:$PATH" type -p glxinfo | cut -f1) 2>/dev/null)
++ 			gpu=$(grep "OpenGL renderer string" <<< "${gpu_info}" | cut -d ':' -f2 | sed -n -e '1h;2,$H;${g;s/\n/, /g' -e 'p' -e '}')
++@@ -1650,12 +1665,12 @@ detectgpu () {
++ # Run it only on Intel Processors if GPU is unknown
++ DetectIntelGPU() {
++ 	if [ -r /proc/fb ]; then
++-		gpu=$(awk 'BEGIN {ORS = " &"} {$1="";print}' /proc/fb | sed  -r s/'^\s+|\s*&$'//g)
+++		gpu=$("${AWK}" 'BEGIN {ORS = " &"} {$1="";print}' /proc/fb | sed  -r s/'^\s+|\s*&$'//g)
++ 	fi
++ 
++ 	case $gpu in
++ 		*mfb)
++-			gpu=$(lspci | grep -i vga | awk -F ": " '{print $2}') 
+++			gpu=$(lspci | grep -i vga | "${AWK}" -F ": " '{print $2}')
++ 			;;
++ 		*intel*)
++ 			gpu="intel"
++@@ -1667,7 +1682,7 @@ DetectIntelGPU() {
++ 
++ 	if [[ "$gpu" = "intel" ]]; then
++ 		#Detect CPU
++-		local CPU=$(uname -p | awk '{print $3}')
+++		local CPU=$(uname -p | "${AWK}" '{print $3}')
++ 		CPU=${CPU#*'-'}; #Detect CPU number
++ 
++ 		#Detect Intel GPU
++@@ -1710,7 +1725,7 @@ detectdisk () {
++ 		if [[ "${distro}" =~ (Free|Net|DragonFly)BSD ]]; then
++ 			totaldisk=$(df -h -c 2>/dev/null | tail -1)
++ 		elif [[ "${distro}" == "OpenBSD" ]]; then
++-			totaldisk=$(df -Pk 2> /dev/null | awk '
+++			totaldisk=$(df -Pk 2> /dev/null | "${AWK}" '
++ 				/^\// {total+=$2; used+=$3; avail+=$4}
++ 				END{printf("total %.1fG %.1fG %.1fG %d%%\n", total/1048576, used/1048576, avail/1048576, used*100/total)}')
++ 		elif [[ "${distro}" == "Mac OS X" ]]; then
++@@ -1718,9 +1733,9 @@ detectdisk () {
++ 		else
++ 			totaldisk=$(df -h -x aufs -x tmpfs -x overlay --total 2>/dev/null | tail -1)
++ 		fi
++-		disktotal=$(awk '{print $2}' <<< "${totaldisk}")
++-		diskused=$(awk '{print $3}' <<< "${totaldisk}")
++-		diskusedper=$(awk '{print $5}' <<< "${totaldisk}")
+++		disktotal=$("${AWK}" '{print $2}' <<< "${totaldisk}")
+++		diskused=$("${AWK}" '{print $3}' <<< "${totaldisk}")
+++		diskusedper=$("${AWK}" '{print $5}' <<< "${totaldisk}")
++ 		diskusage="${diskused} / ${disktotal} (${diskusedper})"
++ 		diskusage_verbose=$(sed 's/%/%%/' <<< "$diskusage")
++ 	fi
++@@ -1733,17 +1748,17 @@ detectdisk () {
++ detectmem () {
++ 	if [ "$distro" == "Mac OS X" ]; then
++ 		totalmem=$(echo "$(sysctl -n hw.memsize)" / 1024^2 | bc)
++-		wiredmem=$(vm_stat | grep wired | awk '{ print $4 }' | sed 's/\.//')
++-		activemem=$(vm_stat | grep ' active' | awk '{ print $3 }' | sed 's/\.//')
++-		compressedmem=$(vm_stat | grep occupied | awk '{ print $5 }' | sed 's/\.//')
+++		wiredmem=$(vm_stat | grep wired | "${AWK}" '{ print $4 }' | sed 's/\.//')
+++		activemem=$(vm_stat | grep ' active' | "${AWK}" '{ print $3 }' | sed 's/\.//')
+++		compressedmem=$(vm_stat | grep occupied | "${AWK}" '{ print $5 }' | sed 's/\.//')
++ 		if [[ ! -z "$compressedmem | tr -d" ]]; then  # FIXME: is this line correct?
++ 			compressedmem=0
++ 		fi
++ 		usedmem=$(((wiredmem + activemem + compressedmem) * 4 / 1024))
++ 	elif [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" ]]; then
++-		total_mem=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
+++		total_mem=$("${AWK}" '/MemTotal/ { print $2 }' /proc/meminfo)
++ 		totalmem=$((total_mem / 1024))
++-		free_mem=$(awk '/MemFree/ { print $2 }' /proc/meminfo)
+++		free_mem=$("${AWK}" '/MemFree/ { print $2 }' /proc/meminfo)
++ 		used_mem=$((total_mem - free_mem))
++ 		usedmem=$((used_mem / 1024))
++ 	elif [[ "$distro" == "FreeBSD"  || "$distro" == "DragonFlyBSD" ]]; then
++@@ -1769,21 +1784,21 @@ detectmem () {
++ 		usedmem=$((used_mem / 1024 / 1024))
++ 	elif [ "$distro" == "OpenBSD" ]; then
++ 		totalmem=$(($(sysctl -n hw.physmem) / 1024 / 1024))
++-		usedmem=$(vmstat | awk '!/[a-z]/{gsub("M",""); print $3}')
+++		usedmem=$(vmstat | "${AWK}" '!/[a-z]/{gsub("M",""); print $3}')
++ 	elif [ "$distro" == "NetBSD" ]; then
++-		phys_mem=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
+++		phys_mem=$("${AWK}" '/MemTotal/ { print $2 }' /proc/meminfo)
++ 		totalmem=$((phys_mem / 1024))
++ 		if grep -q 'Cached' /proc/meminfo; then
++-			cache=$(awk '/Cached/ {print $2}' /proc/meminfo)
+++			cache=$("${AWK}" '/Cached/ {print $2}' /proc/meminfo)
++ 			usedmem=$((cache / 1024))
++ 		else
++-			free_mem=$(awk '/MemFree/ { print $2 }' /proc/meminfo)
+++			free_mem=$("${AWK}" '/MemFree/ { print $2 }' /proc/meminfo)
++ 			used_mem=$((phys_mem - free_mem))
++ 			usedmem=$((used_mem / 1024))
++ 		fi
++ 	elif [ "$distro" == "Haiku" ]; then
++-		totalmem=$(sysinfo -mem | awk 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $6/1024**2)}')
++-		usedmem=$(sysinfo -mem | awk 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $5/1024**2)}')
+++		totalmem=$(sysinfo -mem | "${AWK}" 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $6/1024**2)}')
+++		usedmem=$(sysinfo -mem | "${AWK}" 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $5/1024**2)}')
++ 	else
++ 		# MemUsed = Memtotal + Shmem - MemFree - Buffers - Cached - SReclaimable
++ 		# Source: https://github.com/dylanaraps/neofetch/pull/391/files#diff-e863270127ca6116fd30e708cdc582fc
++@@ -1798,7 +1813,7 @@ detectmem () {
++ 		#done
++ 		#usedmem=$((usedmem / 1024))
++ 		#totalmem=$((totalmem / 1024))
++-		mem=$(free -b | awk 'NR==2{print $2"-"$7}')
+++		mem=$(free -b | "${AWK}" 'NR==2{print $2"-"$7}')
++ 		usedmem=$((mem / 1024 / 1024))
++ 		totalmem=$((${mem//-*} / 1024 / 1024))
++ 	fi
++@@ -1823,7 +1838,7 @@ detectshell_ver () {
++ 	esac
++ 
++ 	if [[ -n $version_data ]];then
++-		version=$(awk '
+++		version=$("${AWK}" '
++ 		BEGIN {
++ 			IGNORECASE=1
++ 		}
++@@ -1842,7 +1857,7 @@ detectshell () {
++ 	if [[ ! "${shell_type}" ]]; then
++ 		if [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" || "${distro}" == "Haiku" || "${distro}" == "Alpine Linux" ||
++ 			"${distro}" == "Mac OS X" || "${distro}" == "TinyCore" || "${distro}" == "Raspbian" || "${OSTYPE}" == "gnu" ]]; then
++-			shell_type=$(echo "$SHELL" | awk -F'/' '{print $NF}')
+++			shell_type=$(echo "$SHELL" | "${AWK}" -F'/' '{print $NF}')
++ 		elif readlink -f "$SHELL" 2>&1 | grep -q -i 'busybox'; then
++ 			shell_type="BusyBox"
++ 		else
++@@ -1851,7 +1866,7 @@ detectshell () {
++ 			elif [[ "${distro}" =~ "BSD" ]]; then
++ 				shell_type=$(ps -p $PPID -o command | tail -1)
++ 			else
++-				shell_type=$(ps -p "$(ps -p $PPID | awk '$1 !~ /PID/ {print $1}')" | awk 'FNR>1 {print $1}')
+++				shell_type=$(ps -p "$(ps -p $PPID | "${AWK}" '$1 !~ /PID/ {print $1}')" | "${AWK}" 'FNR>1 {print $1}')
++ 			fi
++ 			shell_type=${shell_type/-}
++ 			shell_type=${shell_type//*\/}
++@@ -1881,7 +1896,7 @@ detectshell () {
++ 			shell_version_data=$( detectshell_ver "$shell_type" "^zsh" "2" )
++ 			;;
++ 		fish)
++-			shell_version_data=$( fish --version | awk '{print $3}' )
+++			shell_version_data=$( fish --version | "${AWK}" '{print $3}' )
++ 			;;
++ 	esac
++ 
++@@ -1899,17 +1914,17 @@ detectshell () {
++ detectres () {
++ 	xResolution="No X Server"
++ 	if [[ ${distro} == "Mac OS X" ]]; then
++-		xResolution=$(system_profiler SPDisplaysDataType | awk '/Resolution:/ {print $2"x"$4" "}')
+++		xResolution=$(system_profiler SPDisplaysDataType | "${AWK}" '/Resolution:/ {print $2"x"$4" "}')
++ 		if [[ "$(echo "$xResolution" | wc -l)" -ge 1 ]]; then
++ 			xResolution=$(echo "$xResolution" | tr "\\n" "," | sed 's/\(.*\),/\1/')
++ 		fi
++ 	elif [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" ]]; then
++-		xResolution=$(wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution | awk 'NR==2 {print $1"x"$2}')
+++		xResolution=$(wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution | "${AWK}" 'NR==2 {print $1"x"$2}')
++ 	elif [[ "${distro}" == "Haiku" ]]; then
++-		xResolution="$(screenmode | grep Resolution | awk '{gsub(/,/,""); print $2"x"$3}')"
+++		xResolution="$(screenmode | grep Resolution | "${AWK}" '{gsub(/,/,""); print $2"x"$3}')"
++ 	elif [[ -n ${DISPLAY} ]]; then
++ 		if type -p xdpyinfo >/dev/null 2>&1; then
++-			xResolution=$(xdpyinfo | awk '/^ +dimensions/ {print $2}')
+++			xResolution=$(xdpyinfo | "${AWK}" '/^ +dimensions/ {print $2}')
++ 		fi
++ 	fi
++ 	verboseOut "Finding current resolution(s)...found as '$xResolution'"
++@@ -1937,7 +1952,7 @@ detectde () {
++ 		if type -p xprop >/dev/null 2>&1;then
++ 			xprop_root="$(xprop -root 2>/dev/null)"
++ 			if [[ -n ${xprop_root} ]]; then
++-				DE=$(echo "${xprop_root}" | awk 'BEGIN {
+++				DE=$(echo "${xprop_root}" | "${AWK}" 'BEGIN {
++ 					de = "Not Present"
++ 				}
++ 				{
++@@ -2099,7 +2114,7 @@ detectde () {
++ 				elif [[ ${KDE_FULL_SESSION} == 'true' ]]; then
++ 					DE="KDE"
++ 					DEver_data=$(kded --version 2>/dev/null)
++-					DEver=$(grep -si '^KDE:' <<< "$DEver_data" | awk '{print $2}')
+++					DEver=$(grep -si '^KDE:' <<< "$DEver_data" | "${AWK}" '{print $2}')
++ 				fi
++ 			fi
++ 		fi
++@@ -2154,7 +2169,7 @@ detectde () {
++ 				fi
++ 			elif [[ ${DE} == "LXQt" ]]; then
++ 				if type -p lxqt-about >/dev/null 2>&1; then
++-					DEver=$(lxqt-about --version | awk '/^liblxqt/ {print $2}')
+++					DEver=$(lxqt-about --version | "${AWK}" '/^liblxqt/ {print $2}')
++ 					DE="${DE} ${DEver}"
++ 				fi
++ 			elif [[ ${DE} == "MATE" ]]; then
++@@ -2169,12 +2184,12 @@ detectde () {
++ 				fi
++ 			elif [[ ${DE} == "Deepin" ]]; then
++ 				if [[ -f /etc/deepin-version ]]; then
++-					DEver="$(awk -F '=' '/Version/ {print $2}' /etc/deepin-version)"
+++					DEver="$("${AWK}" -F '=' '/Version/ {print $2}' /etc/deepin-version)"
++ 					DE="${DE} ${DEver//* }"
++ 				fi
++ 			elif [[ ${DE} == "Trinity" ]]; then
++ 				if type -p tde-config >/dev/null 2>&1; then
++-					DEver="$(tde-config --version | awk -F ' ' '/TDE:/ {print $2}')"
+++					DEver="$(tde-config --version | "${AWK}" -F ' ' '/TDE:/ {print $2}')"
++ 					DE="${DE} ${DEver//* }"
++ 				fi
++ 			fi
++@@ -2418,7 +2433,7 @@ detectwmtheme () {
++ 			else
++ 				themeFile="$(reg query 'HKCU\Software\Microsoft\Windows\CurrentVersion\Themes' /v 'CurrentTheme')"
++ 			fi
++-			Win_theme=$(echo "$themeFile" | awk -F"\\" '{print $NF}' | sed 's|\.theme$||')
+++			Win_theme=$(echo "$themeFile" | "${AWK}" -F"\\" '{print $NF}' | sed 's|\.theme$||')
++ 		fi
++ 	else
++ 		case $WM in
++@@ -2433,7 +2448,7 @@ detectwmtheme () {
++ 			;;
++ 			'BlackBox')
++ 				if [ -f "$HOME/.blackboxrc" ]; then
++-					Win_theme="$(awk -F"/" '/styleFile/ {print $NF}' "$HOME/.blackboxrc")"
+++					Win_theme="$("${AWK}" -F"/" '/styleFile/ {print $NF}' "$HOME/.blackboxrc")"
++ 				fi
++ 			;;
++ 			'BudgieWM')
++@@ -2465,11 +2480,11 @@ detectwmtheme () {
++ 				fi
++ 			;;
++ 			'E16')
++-				Win_theme="$(awk -F"= " '/theme.name/ {print $2}' "$HOME/.e16/e_config--0.0.cfg")"
+++				Win_theme="$("${AWK}" -F"= " '/theme.name/ {print $2}' "$HOME/.e16/e_config--0.0.cfg")"
++ 			;;
++ 			'E17'|'Enlightenment')
++ 				if [ "$(which eet 2>/dev/null)" ]; then
++-					econfig="$(eet -d "$HOME/.e/e/config/standard/e.cfg" config | awk '/value \"file\" string.*.edj/{ print $4 }')"
+++					econfig="$(eet -d "$HOME/.e/e/config/standard/e.cfg" config | "${AWK}" '/value \"file\" string.*.edj/{ print $4 }')"
++ 					econfigend="${econfig##*/}"
++ 					Win_theme=${econfigend%.*}
++ 				elif [ -n "${E_CONF_PROFILE}" ]; then
++@@ -2485,12 +2500,12 @@ detectwmtheme () {
++ 			;;
++ 			'FluxBox'|'Fluxbox')
++ 				if [ -f "$HOME/.fluxbox/init" ]; then
++-					Win_theme="$(awk -F"/" '/styleFile/ {print $NF}' "$HOME/.fluxbox/init")"
+++					Win_theme="$("${AWK}" -F"/" '/styleFile/ {print $NF}' "$HOME/.fluxbox/init")"
++ 				fi
++ 			;;
++ 			'IceWM')
++ 				if [ -f "$HOME/.icewm/theme" ]; then
++-					Win_theme="$(awk -F"[\",/]" '!/#/ {print $2}' "$HOME/.icewm/theme")"
+++					Win_theme="$("${AWK}" -F"[\",/]" '!/#/ {print $2}' "$HOME/.icewm/theme")"
++ 				fi
++ 			;;
++ 			'KWin'*)
++@@ -2507,14 +2522,14 @@ detectwmtheme () {
++ 					Win_theme="Not Applicable"
++ 					KDE_CONFIG_DIR=${KDE_CONFIG_DIR%/}
++ 					if [[ -f $KDE_CONFIG_DIR/share/config/kwinrc ]]; then
++-						Win_theme="$(awk '/PluginLib=kwin3_/{gsub(/PluginLib=kwin3_/,"",$0); print $0; exit}' "$KDE_CONFIG_DIR/share/config/kwinrc")"
+++						Win_theme="$("${AWK}" '/PluginLib=kwin3_/{gsub(/PluginLib=kwin3_/,"",$0); print $0; exit}' "$KDE_CONFIG_DIR/share/config/kwinrc")"
++ 						if [[ -z "$Win_theme" ]]; then
++ 							Win_theme="Not Applicable"
++ 						fi
++ 					fi
++ 					if [[ "$Win_theme" == "Not Applicable" ]]; then
++ 						if [[ -f $KDE_CONFIG_DIR/share/config/kdebugrc ]]; then
++-							Win_theme="$(awk '/(decoration)/ {gsub(/\[/,"",$1); print $1; exit}' "$KDE_CONFIG_DIR/share/config/kdebugrc")"
+++							Win_theme="$("${AWK}" '/(decoration)/ {gsub(/\[/,"",$1); print $1; exit}' "$KDE_CONFIG_DIR/share/config/kdebugrc")"
++ 							if [[ -z "$Win_theme" ]]; then
++ 								Win_theme="Not Applicable"
++ 							fi
++@@ -2522,7 +2537,7 @@ detectwmtheme () {
++ 					fi
++ 					if [[ "$Win_theme" == "Not Applicable" ]]; then
++ 						if [[ -f $KDE_CONFIG_DIR/share/config/kdeglobals ]]; then
++-							Win_theme="$(awk '/\[General\]/ {flag=1;next} /^$/{flag=0} flag {print}' "$KDE_CONFIG_DIR/share/config/kdeglobals" | grep -oP 'Name=\K.*')"
+++							Win_theme="$("${AWK}" '/\[General\]/ {flag=1;next} /^$/{flag=0} flag {print}' "$KDE_CONFIG_DIR/share/config/kdeglobals" | grep -oP 'Name=\K.*')"
++ 							if [[ -z "$Win_theme" ]]; then
++ 								Win_theme="Not Applicable"
++ 							fi
++@@ -2552,20 +2567,20 @@ detectwmtheme () {
++ 			;;
++ 			'OpenBox'|'Openbox')
++ 				if [ -f "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/rc.xml" ]; then
++-					Win_theme="$(awk -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/rc.xml")";
+++					Win_theme="$("${AWK}" -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/rc.xml")";
++ 				elif [[ -f ${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxde-rc.xml && "${DE}" == "LXDE" ]]; then
++-					Win_theme="$(awk -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxde-rc.xml")";
+++					Win_theme="$("${AWK}" -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxde-rc.xml")";
++ 				elif [[ -f ${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxqt-rc.xml && "${DE}" =~ "LXQt" ]]; then
++-					Win_theme="$(awk -F'=' '/^theme/ {print $2}' ${HOME}/.config/lxqt/lxqt.conf)"
+++					Win_theme="$("${AWK}" -F'=' '/^theme/ {print $2}' ${HOME}/.config/lxqt/lxqt.conf)"
++ 				fi
++ 			;;
++ 			'PekWM')
++ 				if [ -f "$HOME/.pekwm/config" ]; then
++-					Win_theme="$(awk -F"/" '/Theme/ {gsub(/\"/,""); print $NF}' "$HOME/.pekwm/config")"
+++					Win_theme="$("${AWK}" -F"/" '/Theme/ {gsub(/\"/,""); print $NF}' "$HOME/.pekwm/config")"
++ 				fi
++ 			;;
++ 			'Sawfish')
++-				Win_theme="$(awk -F")" '/\(quote default-frame-style/{print $2}' "$HOME/.sawfish/custom" | sed 's/ (quote //')"
+++				Win_theme="$("${AWK}" -F")" '/\(quote default-frame-style/{print $2}' "$HOME/.sawfish/custom" | sed 's/ (quote //')"
++ 			;;
++ 			'TWin')
++ 				if [[ -z $TDE_CONFIG_DIR ]]; then
++@@ -2576,7 +2591,7 @@ detectwmtheme () {
++ 				if [[ -n $TDE_CONFIG_DIR ]]; then
++ 					TDE_CONFIG_DIR=${TDE_CONFIG_DIR%/}
++ 					if [[ -f $TDE_CONFIG_DIR/share/config/kcmthememanagerrc ]]; then
++-						Win_theme=$(awk '/CurrentTheme=/ {gsub(/CurrentTheme=/,"",$0); print $0; exit}' "$TDE_CONFIG_DIR/share/config/kcmthememanagerrc")
+++						Win_theme=$("${AWK}" '/CurrentTheme=/ {gsub(/CurrentTheme=/,"",$0); print $0; exit}' "$TDE_CONFIG_DIR/share/config/kcmthememanagerrc")
++ 					fi
++ 					if [[ -z $Win_theme ]]; then
++ 						Win_theme="Not Applicable"
++@@ -2672,31 +2687,31 @@ detectgtk () {
++ 
++ 				if [[ -n ${KDE_CONFIG_FILE} ]]; then
++ 					if grep -q 'widgetStyle=' "${KDE_CONFIG_FILE}"; then
++-						gtk2Theme=$(awk -F"=" '/widgetStyle=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtk2Theme=$("${AWK}" -F"=" '/widgetStyle=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					elif grep -q 'colorScheme=' "${KDE_CONFIG_FILE}"; then
++-						gtk2Theme=$(awk -F"=" '/colorScheme=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtk2Theme=$("${AWK}" -F"=" '/colorScheme=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					fi
++ 
++ 					if grep -q 'Theme=' "${KDE_CONFIG_FILE}"; then
++-						gtkIcons=$(awk -F"=" '/Theme=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtkIcons=$("${AWK}" -F"=" '/Theme=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					fi
++ 
++ 					if grep -q 'Font=' "${KDE_CONFIG_FILE}"; then
++-						gtkFont=$(awk -F"=" '/font=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtkFont=$("${AWK}" -F"=" '/font=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					fi
++ 				fi
++ 
++ 				if [[ -f $HOME/.gtkrc-2.0 ]]; then
++-					gtk2Theme=$(grep '^gtk-theme-name' "$HOME"/.gtkrc-2.0 | awk -F'=' '{print $2}')
+++					gtk2Theme=$(grep '^gtk-theme-name' "$HOME"/.gtkrc-2.0 | "${AWK}" -F'=' '{print $2}')
++ 					gtk2Theme=${gtk2Theme//\"/}
++-					gtkIcons=$(grep '^gtk-icon-theme-name' "$HOME"/.gtkrc-2.0 | awk -F'=' '{print $2}')
+++					gtkIcons=$(grep '^gtk-icon-theme-name' "$HOME"/.gtkrc-2.0 | "${AWK}" -F'=' '{print $2}')
++ 					gtkIcons=${gtkIcons//\"/}
++-					gtkFont=$(grep 'font_name' "$HOME"/.gtkrc-2.0 | awk -F'=' '{print $2}')
+++					gtkFont=$(grep 'font_name' "$HOME"/.gtkrc-2.0 | "${AWK}" -F'=' '{print $2}')
++ 					gtkFont=${gtkFont//\"/}
++ 				fi
++ 
++ 				if [[ -f $HOME/.config/gtk-3.0/settings.ini ]]; then
++-					gtk3Theme=$(grep '^gtk-theme-name=' "$HOME"/.config/gtk-3.0/settings.ini | awk -F'=' '{print $2}')
+++					gtk3Theme=$(grep '^gtk-theme-name=' "$HOME"/.config/gtk-3.0/settings.ini | "${AWK}" -F'=' '{print $2}')
++ 				fi
++ 			;;
++ 			'Cinnamon'*) # Desktop Environment found as "Cinnamon"
++@@ -2728,7 +2743,7 @@ detectgtk () {
++ 					gtkFont=$(gconftool-2 -g /desktop/gnome/interface/font_name)
++ 					if [ "$background_detect" == "1" ]; then
++ 						gtkBackgroundFull=$(gconftool-2 -g /desktop/gnome/background/picture_filename)
++-						gtkBackground=$(echo "$gtkBackgroundFull" | awk -F"/" '{print $NF}')
+++						gtkBackground=$(echo "$gtkBackgroundFull" | "${AWK}" -F"/" '{print $NF}')
++ 					fi
++ 				fi
++ 			;;
++@@ -2745,10 +2760,10 @@ detectgtk () {
++ 			;;
++ 			'Xfce'*) # Desktop Environment found as "Xfce"
++ 				if [ "$distro" == "BunsenLabs" ] ; then
++-					gtk2Theme=$(awk -F'"' '/^gtk-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
++-					gtk3Theme=$(awk -F'=' '/^gtk-theme-name/ {print $2}' "$HOME"/.config/gtk-3.0/settings.ini)
++-					gtkIcons=$(awk -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
++-					gtkFont=$(awk -F'"' '/^gtk-font-name/ {print $2}' "$HOME"/.gtkrc-2.0)
+++					gtk2Theme=$("${AWK}" -F'"' '/^gtk-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
+++					gtk3Theme=$("${AWK}" -F'=' '/^gtk-theme-name/ {print $2}' "$HOME"/.config/gtk-3.0/settings.ini)
+++					gtkIcons=$("${AWK}" -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
+++					gtkFont=$("${AWK}" -F'"' '/^gtk-font-name/ {print $2}' "$HOME"/.gtkrc-2.0)
++ 				else
++ 					if type -p xfconf-query >/dev/null 2>&1; then
++ 						gtk2Theme=$(xfconf-query -c xsettings -p /Net/ThemeName 2>/dev/null)
++@@ -2779,15 +2794,15 @@ detectgtk () {
++ 				fi
++ 
++ 				if grep -q 'sNet\/ThemeName' "${config_home}${lxdeconf}" 2>/dev/null; then
++-					gtk2Theme=$(awk -F'=' '/sNet\/ThemeName/ {print $2}' "${config_home}${lxdeconf}")
+++					gtk2Theme=$("${AWK}" -F'=' '/sNet\/ThemeName/ {print $2}' "${config_home}${lxdeconf}")
++ 				fi
++ 
++ 				if grep -q 'IconThemeName' "${config_home}${lxdeconf}" 2>/dev/null; then
++-					gtkIcons=$(awk -F'=' '/sNet\/IconThemeName/ {print $2}' "${config_home}${lxdeconf}")
+++					gtkIcons=$("${AWK}" -F'=' '/sNet\/IconThemeName/ {print $2}' "${config_home}${lxdeconf}")
++ 				fi
++ 
++ 				if grep -q 'FontName' "${config_home}${lxdeconf}" 2>/dev/null; then
++-					gtkFont=$(awk -F'=' '/sGtk\/FontName/ {print $2}' "${config_home}${lxdeconf}")
+++					gtkFont=$("${AWK}" -F'=' '/sGtk\/FontName/ {print $2}' "${config_home}${lxdeconf}")
++  				fi
++ 			;;
++ 
++@@ -2796,15 +2811,15 @@ detectgtk () {
++ 			*)	# Lightweight or No DE Found
++ 				if [ -f "$HOME/.gtkrc-2.0" ]; then
++ 					if grep -q 'gtk-theme' "$HOME/.gtkrc-2.0"; then
++-						gtk2Theme=$(awk -F'"' '/^gtk-theme/ {print $2}' "$HOME/.gtkrc-2.0")
+++						gtk2Theme=$("${AWK}" -F'"' '/^gtk-theme/ {print $2}' "$HOME/.gtkrc-2.0")
++ 					fi
++ 
++ 					if grep -q 'icon-theme' "$HOME/.gtkrc-2.0"; then
++-						gtkIcons=$(awk -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME/.gtkrc-2.0")
+++						gtkIcons=$("${AWK}" -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME/.gtkrc-2.0")
++ 					fi
++ 
++ 					if grep -q 'font' "$HOME/.gtkrc-2.0"; then
++-						gtkFont=$(awk -F'"' '/^gtk-font-name/ {print $2}' "$HOME/.gtkrc-2.0")
+++						gtkFont=$("${AWK}" -F'"' '/^gtk-font-name/ {print $2}' "$HOME/.gtkrc-2.0")
++ 					fi
++ 				fi
++ 				# $HOME/.gtkrc.mine theme detect only
++@@ -2815,37 +2830,37 @@ detectgtk () {
++ 				fi
++ 				if [ -f "$minegtkrc" ]; then
++ 					if grep -q '^include' "$minegtkrc"; then
++-						gtk2Theme=$(grep '^include.*gtkrc' "$minegtkrc" | awk -F "/" '{ print $5 }')
+++						gtk2Theme=$(grep '^include.*gtkrc' "$minegtkrc" | "${AWK}" -F "/" '{ print $5 }')
++ 					fi
++ 					if grep -q '^gtk-icon-theme-name' "$minegtkrc"; then
++-						gtkIcons=$(grep '^gtk-icon-theme-name' "$minegtkrc" | awk -F '"' '{print $2}')
+++						gtkIcons=$(grep '^gtk-icon-theme-name' "$minegtkrc" | "${AWK}" -F '"' '{print $2}')
++ 					fi
++ 				fi
++ 				# /etc/gtk-2.0/gtkrc compatibility
++ 				if [[ -f /etc/gtk-2.0/gtkrc && ! -f "$HOME/.gtkrc-2.0" && ! -f "$HOME/.gtkrc.mine" && ! -f "$HOME/.gtkrc-2.0.mine" ]]; then
++ 					if grep -q 'gtk-theme-name' /etc/gtk-2.0/gtkrc; then
++-						gtk2Theme=$(awk -F'"' '/^gtk-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtk2Theme=$("${AWK}" -F'"' '/^gtk-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 					if grep -q 'gtk-fallback-theme-name' /etc/gtk-2.0/gtkrc  && ! [ "x$gtk2Theme" = "x" ]; then
++-						gtk2Theme=$(awk -F'"' '/^gtk-fallback-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtk2Theme=$("${AWK}" -F'"' '/^gtk-fallback-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 
++ 					if grep -q 'icon-theme' /etc/gtk-2.0/gtkrc; then
++-						gtkIcons=$(awk -F'"' '/^icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtkIcons=$("${AWK}" -F'"' '/^icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 					if  grep -q 'gtk-fallback-icon-theme' /etc/gtk-2.0/gtkrc  && ! [ "x$gtkIcons" = "x" ]; then
++-						gtkIcons=$(awk -F'"' '/^gtk-fallback-icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtkIcons=$("${AWK}" -F'"' '/^gtk-fallback-icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 
++ 					if grep -q 'font' /etc/gtk-2.0/gtkrc; then
++-						gtkFont=$(awk -F'"' '/^gtk-font-name/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtkFont=$("${AWK}" -F'"' '/^gtk-font-name/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 				fi
++ 
++ 				# EXPERIMENTAL gtk3 Theme detection
++ 				if [[ "$gtk3Theme" = "Not Found" && -f "$HOME/.config/gtk-3.0/settings.ini" ]]; then
++ 					if grep -q 'gtk-theme-name' "$HOME/.config/gtk-3.0/settings.ini"; then
++-						gtk3Theme=$(awk -F'=' '/^gtk-theme-name/ {print $2}' "$HOME/.config/gtk-3.0/settings.ini")
+++						gtk3Theme=$("${AWK}" -F'=' '/^gtk-theme-name/ {print $2}' "$HOME/.config/gtk-3.0/settings.ini")
++ 					fi
++ 				fi
++ 
++@@ -2859,7 +2874,7 @@ detectgtk () {
++ 
++ 				# ROX-Filer icon detect only
++ 				if [ -a "${XDG_CONFIG_HOME:-${HOME}/.config}/rox.sourceforge.net/ROX-Filer/Options" ]; then
++-					gtkIcons=$(awk -F'[>,<]' '/icon_theme/ {print $3}' "${XDG_CONFIG_HOME:-${HOME}/.config}/rox.sourceforge.net/ROX-Filer/Options")
+++					gtkIcons=$("${AWK}" -F'[>,<]' '/icon_theme/ {print $3}' "${XDG_CONFIG_HOME:-${HOME}/.config}/rox.sourceforge.net/ROX-Filer/Options")
++ 				fi
++ 
++ 				# E17 detection
++@@ -2872,10 +2887,10 @@ detectgtk () {
++ 				# Background Detection (feh, nitrogen)
++ 				if [ "$background_detect" == "1" ]; then
++ 					if [ -a "$HOME/.fehbg" ]; then
++-						gtkBackgroundFull=$(awk -F"'" '/feh --bg/{print $2}' "$HOME/.fehbg" 2>/dev/null)
++-						gtkBackground=$(echo "$gtkBackgroundFull" | awk -F"/" '{print $NF}')
+++						gtkBackgroundFull=$("${AWK}" -F"'" '/feh --bg/{print $2}' "$HOME/.fehbg" 2>/dev/null)
+++						gtkBackground=$(echo "$gtkBackgroundFull" | "${AWK}" -F"/" '{print $NF}')
++ 					elif [ -a "${XDG_CONFIG_HOME:-${HOME}/.config}/nitrogen/bg-saved.cfg" ]; then
++-						gtkBackground=$(awk -F"/" '/file=/ {print $NF}' "${XDG_CONFIG_HOME:-${HOME}/.config}/nitrogen/bg-saved.cfg")
+++						gtkBackground=$("${AWK}" -F"/" '/file=/ {print $NF}' "${XDG_CONFIG_HOME:-${HOME}/.config}/nitrogen/bg-saved.cfg")
++ 					fi
++ 				fi
++ 
++@@ -2910,7 +2925,7 @@ detectdroid () {
++ 		rom=$(getprop ro.build.display.id)
++ 	fi
++ 	baseband=$(getprop ro.baseband)
++-	cpu=$(awk -F': ' '/^Processor/ {P=$2} /^Hardware/ {H=$2} END {print H != "" ? H : P}' /proc/cpuinfo)
+++	cpu=$("${AWK}" -F': ' '/^Processor/ {P=$2} /^Hardware/ {H=$2} END {print H != "" ? H : P}' /proc/cpuinfo)
 + }
++ 
++ 
++@@ -6032,7 +6047,7 @@ asciiText () {
++ 		#n=${#fulloutput[*]}
++ 		for ((i=0; i<${#fulloutput[*]}; i++)); do
++ 			# echo "${out_array[@]}"
++-			case $(awk 'BEGIN{srand();print int(rand()*(1000-1))+1 }') in
+++			case $("${AWK}" 'BEGIN{srand();print int(rand()*(1000-1))+1 }') in
++ 				411|188|15|166|609)
++ 					f_size=${#fulloutput[*]}
++ 					o_size=${#out_array[*]}
 +-- 
-+2.41.0
++2.41.0.640.ga95def55d0-goog
 +
-diff --git a/package/flutter-engine/0003-fix-toolchain-paths.patch b/package/flutter-engine/0003-fix-toolchain-paths.patch
-new file mode 100644
-index 0000000000..ba5d5f8023
---- /dev/null
-+++ b/package/flutter-engine/0003-fix-toolchain-paths.patch
-@@ -0,0 +1,40 @@
-+From ca175ef5bf7f96db57fb5aa562602dc424fab81c Mon Sep 17 00:00:00 2001
-+From: Joel Winarske <joel.winarsk@gmail.com>
-+Date: Sun, 5 Mar 2023 10:43:02 -0800
-+Subject: [PATCH] fix toolchain paths
+diff --git a/package/screenfetch/Config.in b/package/screenfetch/Config.in
+index c0e7100f38..db177004c1 100644
+--- a/package/screenfetch/Config.in
++++ b/package/screenfetch/Config.in
+@@ -2,8 +2,12 @@ config BR2_PACKAGE_SCREENFETCH
+ 	bool "screenfetch"
+ 	depends on BR2_USE_MMU # bash
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
++	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_GAWK || BR2_PACKAGE_MAWK # awk
+ 	select BR2_PACKAGE_BASH # runtime dependency
+ 	help
+ 	  screenFetch is a bash script to display distro info.
+ 
+ 	  https://github.com/KittyKatt/screenFetch
 +
-+Flutter includes a copy of clang which is required to build. However, by
-+default, build/toolchain/custom/BUILD.gn attempts to use several gcc utilities
-+such as ar, readelf, nm, and strip. Change these to the proper llvm provided
-+utility.
-+
-+Upstream: https://github.com/flutter/flutter/issues/123073
-+
-+Signed-off-by: Joel Winarske <joel.winarsk@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ build/toolchain/custom/BUILD.gn | 4 +++++------
-+ 1 file changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/build/toolchain/custom/BUILD.gn b/build/toolchain/custom/BUILD.gn
-+index 65b1623..8b3f6f8 100644
-+--- a/build/toolchain/custom/BUILD.gn
-++++ b/build/toolchain/custom/BUILD.gn
-+@@ -12,11 +12,11 @@ toolchain("custom") {
-+   # these values in our scope.
-+   cc = "${toolchain_bin}/clang"
-+   cxx = "${toolchain_bin}/clang++"
-+-  ar = "${toolchain_bin}/${custom_target_triple}-ar"
-++  ar = "${toolchain_bin}/llvm-ar"
-+   ld = "${toolchain_bin}/clang++"
-+-  readelf = "${toolchain_bin}/${custom_target_triple}-readelf"
-+-  nm = "${toolchain_bin}/${custom_target_triple}-nm"
-+-  strip = "${toolchain_bin}/${custom_target_triple}-strip"
-++  readelf = "${toolchain_bin}/llvm-readelf"
-++  nm = "${toolchain_bin}/llvm-nm"
-++  strip = "${toolchain_bin}/llvm-strip"
-+ 
-+   target_triple_flags = "--target=${custom_target_triple}"
-+   sysroot_flags = "--sysroot ${custom_sysroot}"
-+-- 
-+2.39.2
-diff --git a/package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch b/package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch
-new file mode 100644
-index 0000000000..94da49fdf8
---- /dev/null
-+++ b/package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch
-@@ -0,0 +1,34 @@
-+From 51e8fed854fd9d373bb9b20d7ed8e7cf6ef12312 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <aduskett@gmail.com>
-+Date: Wed, 19 Jul 2023 11:48:59 -0700
-+Subject: [PATCH] pkg-config.py: do not prepend sysroot path
-+
-+The pkg-config script provided by Buildroot already includes the sysroot
-+path, causing the pkg-config.py script to double prepend the sysroot path.
-+
-+IE: output/host/.../sysroot/output/host/.../sysroot
-+
-+Upstream: Buildroot specific
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ build/config/linux/pkg-config.py | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/build/config/linux/pkg-config.py b/build/config/linux/pkg-config.py
-+index b4a6aff17..44ffdcaea 100644
-+--- a/build/config/linux/pkg-config.py
-++++ b/build/config/linux/pkg-config.py
-+@@ -207,9 +207,7 @@ def main():
-+   all_flags = flag_string.strip().split(' ')
-+ 
-+ 
-+-  sysroot = options.sysroot
-+-  if not sysroot:
-+-    sysroot = ''
-++  sysroot = ''
-+ 
-+   includes = []
-+   cflags = []
-+-- 
-+2.41.0
-+
-diff --git a/package/flutter-engine/Config.in b/package/flutter-engine/Config.in
-new file mode 100644
-index 0000000000..ba59e1c8ac
---- /dev/null
-+++ b/package/flutter-engine/Config.in
-@@ -0,0 +1,60 @@
-+config BR2_PACKAGE_FLUTTER_ENGINE
-+	bool "flutter-engine"
-+	# Flutter includes a patched copy of clang which is mandatory to use for
-+	# compiling. However, we should still depend on LLVM_ARCH_SUPPORTS as it
-+	# gives a complete list of supported clang architectures.
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthreads
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR # std::wstring
-+	depends on BR2_HOST_GCC_AT_LEAST_5
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HOST_DEPOT_TOOLS
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Flutter is Google's SDK for crafting beautiful, fast user
-+	  experience for mobile, web, and desktop from a single
-+	  codebase. Flutter works with existing code, is used by
-+	  developers and organizations around the world, and is
-+	  free and open source.
-+
-+	  The Flutter Engine is a portable runtime for hosting
-+	  Flutter applications. It implements Flutter's core
-+	  libraries, including animation and graphics, file and
-+	  network I/O, accessibility support, plugin architecture,
-+	  and a Dart runtime and compile toolchain. Most developers
-+	  will interact with Flutter via the Flutter Framework,
-+	  which provides a modern, reactive framework, and a rich
-+	  set of platform, layout and foundation widgets.
-+
-+	  https://github.com/flutter/engine
-+
-+if BR2_PACKAGE_FLUTTER_ENGINE
-+
-+config BR2_PACKAGE_FLUTTER_ENGINE_ARTIFACTS
-+	bool "build the development artifacts"
-+	help
-+	  Build the development artifacts used for compiling
-+	  flutter applications. This significantly increases the time
-+	  to compile.
-+
-+endif #if BR2_PACKAGE_FLUTTER_ENGINE
-+
-+comment "flutter-engine needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "flutter-engine needs a glibc toolchain w/ wchar, C++, gcc >= 5, dynamic library, host gcc >= 5, NPTL"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
-+		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
-+		|| !BR2_HOST_GCC_AT_LEAST_5
-+
-+comment "flutter-engine needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/flutter-engine/dot-gclient b/package/flutter-engine/dot-gclient
-new file mode 100644
-index 0000000000..168e9a368d
---- /dev/null
-+++ b/package/flutter-engine/dot-gclient
-@@ -0,0 +1,16 @@
-+# This file is taken from the output of meta-flutter/lib/gn.py
-+
-+solutions = [{
-+    "managed": False,
-+    "name": "src/flutter",
-+    "url": "https://github.com/flutter/engine.git@!FLUTTER_VERSION!",
-+    "custom_vars": {
-+        "download_android_deps": False,
-+        "download_windows_deps": False,
-+        "download_linux_deps": False
-+    },
-+    "custom_deps": {
-+        "src/third_party/dart/third_party/pkg/tools":
-+        "https://dart.googlesource.com/tools.git@unified_analytics-v1.1.0"
-+    }
-+}]
-diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
-new file mode 100644
-index 0000000000..b5b99c4cad
---- /dev/null
-+++ b/package/flutter-engine/flutter-engine.mk
-@@ -0,0 +1,239 @@
-+################################################################################
-+#
-+# flutter-engine
-+#
-+################################################################################
-+
-+# Flutter-engine has a release on the GitHub page. However, that release is
-+# only for Google. Its intended purpose is for the gclient tool provided by
-+# Google in their depot-tools package. To use the source code, we must use
-+# gclient to download the flutter-engine source code along with several other
-+# projects. Unfortunately, the Buildroot download system does not have the
-+# capability of using gclient, and considering this package is the only
-+# package that uses gclient, we side-step the entire download process and
-+# perform the following steps if a tarball does not exist already:
-+#
-+#  - Copy the pre-made gclient config file to a temporary scratch directory.
-+#  - Run gclient sync to generate a source directory with the proper
-+#    flutter-engine source code in the correct places.
-+#  - Run mk_tar_gz to create a tarball.
-+#  - Copy the tarball to the $(FLUTTER_ENGINE_DL_DIR) directory to create a
-+#    tarball.
-+#
-+# There is no hash provided, as the gn binary (used for configuration) relies
-+# on the .git directories. As such, a reproducible tarball is not possible.
-+FLUTTER_ENGINE_VERSION = 3.10.6
-+
-+# There is nothing for Buildroot to download. This is handled by gclient.
-+FLUTTER_ENGINE_SITE =
-+FLUTTER_ENGINE_SOURCE =
-+FLUTTER_ENGINE_LICENSE = BSD-3-Clause
-+FLUTTER_ENGINE_LICENSE_FILES = LICENSE
-+FLUTTER_ENGINE_TARBALL_PATH = $(FLUTTER_ENGINE_DL_DIR)/flutter-$(FLUTTER_ENGINE_VERSION).tar.gz
-+FLUTTER_ENGINE_INSTALL_STAGING = YES
-+FLUTTER_ENGINE_DOWNLOAD_DEPENDENCIES = host-depot-tools
-+FLUTTER_ENGINE_DEPENDENCIES = \
-+	host-ninja \
-+	host-pkgconf \
-+	freetype \
-+	zlib
-+
-+# Dispatch all architectures of flutter
-+ifeq ($(BR2_i386),y)
-+FLUTTER_ENGINE_TARGET_ARCH = x86
-+FLUTTER_ENGINE_TARGET_TRIPPLE = x86-linux
-+else ifeq ($(BR2_x86_64),y)
-+FLUTTER_ENGINE_TARGET_ARCH = x64
-+FLUTTER_ENGINE_TARGET_TRIPPLE = x86_64-linux
-+else ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FLUTTER_ENGINE_TARGET_ARCH = arm
-+FLUTTER_ENGINE_TARGET_TRIPPLE = arm-linux
-+else ifeq ($(BR2_aarch64),y)
-+FLUTTER_ENGINE_TARGET_ARCH = arm64
-+FLUTTER_ENGINE_TARGET_TRIPPLE = aarch64-linux
-+endif
-+
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
-+FLUTTER_ENGINE_RUNTIME_MODE=debug
-+else
-+FLUTTER_ENGINE_RUNTIME_MODE=release
-+endif
-+
-+FLUTTER_ENGINE_BUILD_DIR = \
-+	$(@D)/out/linux_$(FLUTTER_ENGINE_RUNTIME_MODE)_$(FLUTTER_ENGINE_TARGET_ARCH)
-+
-+FLUTTER_ENGINE_INSTALL_FILES = \
-+	libflutter_engine.so \
-+	libflutter_linux_gtk.so
-+
-+# Flutter engine includes a bundled patched clang that must be used for
-+# compiling or else there are linking errors.
-+FLUTTER_ENGINE_CLANG_PATH = $(@D)/buildtools/linux-x64/clang
-+
-+FLUTTER_ENGINE_CONF_OPTS = \
-+	--clang \
-+	--depot-tools $(HOST_DIR)/share/depot_tools \
-+	--embedder-for-target \
-+	--linux-cpu $(FLUTTER_ENGINE_TARGET_ARCH) \
-+	--no-build-embedder-examples \
-+	--no-clang-static-analyzer \
-+	--no-enable-unittests \
-+	--no-goma \
-+	--no-prebuilt-dart-sdk \
-+	--runtime-mode $(FLUTTER_ENGINE_RUNTIME_MODE) \
-+	--target-os linux \
-+	--target-sysroot $(STAGING_DIR) \
-+	--target-toolchain $(FLUTTER_ENGINE_CLANG_PATH) \
-+	--target-triple $(FLUTTER_ENGINE_TARGET_TRIPPLE)
-+
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FLUTTER_ENGINE_CONF_OPTS += \
-+	--arm-float-abi $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+endif
-+
-+# We must specify a full path to ccache and a full path to the flutter-engine
-+# provided clang in order to use ccache, or else flutter-engine will error out
-+# attempting to find ccache in the target-toolchain provided path.
-+ifeq ($(BR2_CCACHE),y)
-+define FLUTTER_ENGINE_COMPILER_PATH_FIXUP
-+	$(SED) "s%cc =.*%cc = \"$(HOST_DIR)/bin/ccache $(FLUTTER_ENGINE_CLANG_PATH)/bin/clang\""%g \
-+		$(@D)/build/toolchain/custom/BUILD.gn
-+
-+	$(SED) "s%cxx =.*%cxx = \"$(HOST_DIR)/bin/ccache $(FLUTTER_ENGINE_CLANG_PATH)/bin/clang++\""%g \
-+		$(@D)/build/toolchain/custom/BUILD.gn
-+endef
-+FLUTTER_ENGINE_PRE_CONFIGURE_HOOKS += FLUTTER_ENGINE_COMPILER_PATH_FIXUP
-+endif
-+
-+ifeq ($(BR2_ENABLE_LTO),y)
-+FLUTTER_ENGINE_CONF_OPTS += --lto
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --no-lto
-+endif
-+
-+ifeq ($(BR2_OPTIMIZE_0),y)
-+FLUTTER_ENGINE_CONF_OPTS += --unoptimized
-+endif
-+
-+ifeq ($(BR2_STRIP_strip),y)
-+FLUTTER_ENGINE_CONF_OPTS += --stripped
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --no-stripped
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FLUTTER_ENGINE_ARTIFACTS),y)
-+FLUTTER_ENGINE_CONF_OPTS += --build-engine-artifacts
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --no-build-engine-artifacts
-+endif
-+
-+# There is no --disable-fontconfig option.
-+ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
-+FLUTTER_ENGINE_DEPENDENCIES += fontconfig
-+FLUTTER_ENGINE_CONF_OPTS += --enable-fontconfig
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libgl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGLFW),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libglfw
-+FLUTTER_ENGINE_CONF_OPTS += --build-glfw-shell
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --no-build-glfw-shell
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libgtk3
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --disable-desktop-embeddings
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D),y)
-+FLUTTER_ENGINE_DEPENDENCIES += mesa3d
-+endif
-+
-+# There is no --disable-vulkan option
-+ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
-+FLUTTER_ENGINE_CONF_OPTS += --enable-vulkan
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_LIBXCB),yy)
-+FLUTTER_ENGINE_DEPENDENCIES += libxcb
-+else
-+define FLUTTER_ENGINE_VULKAN_X11_SUPPORT_FIXUP
-+	$(SED) "s%vulkan_use_x11.*%vulkan_use_x11 = false%g" -i \
-+		$(@D)/build_overrides/vulkan_headers.gni
-+endef
-+FLUTTER_ENGINE_PRE_CONFIGURE_HOOKS += FLUTTER_ENGINE_VULKAN_X11_SUPPORT_FIXUP
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+FLUTTER_ENGINE_DEPENDENCIES += wayland
-+else
-+define FLUTTER_ENGINE_VULKAN_WAYLAND_SUPPORT_FIXUP
-+	$(SED) "s%vulkan_use_wayland.*%vulkan_use_wayland = false%g" \
-+		$(@D)/build_overrides/vulkan_headers.gni
-+endef
-+FLUTTER_ENGINE_PRE_CONFIGURE_HOOKS += FLUTTER_ENGINE_VULKAN_WAYLAND_SUPPORT_FIXUP
-+endif
-+
-+# Generate a tarball if one does not already exist.
-+define FLUTTER_ENGINE_GENERATE_TARBALL
-+	PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
-+	PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
-+	$(FLUTTER_ENGINE_PKGDIR)/gen-tarball \
-+		--dot-gclient $(FLUTTER_ENGINE_PKGDIR)/dot-gclient \
-+		--jobs $(PARALLEL_JOBS) \
-+		--scratch-dir $(@D)/dl-tmp \
-+		--tarball $(FLUTTER_ENGINE_TARBALL_PATH) \
-+		--version $(FLUTTER_ENGINE_VERSION)
-+endef
-+FLUTTER_ENGINE_POST_DOWNLOAD_HOOKS += FLUTTER_ENGINE_GENERATE_TARBALL
-+
-+define FLUTTER_ENGINE_EXTRACT_CMDS
-+	gzip -d -c $(FLUTTER_ENGINE_TARBALL_PATH) | tar --strip-components 1 -C $(@D) -xf -
-+endef
-+
-+define FLUTTER_ENGINE_CONFIGURE_CMDS
-+	cd $(@D)/ && \
-+		rm -rf $(FLUTTER_ENGINE_BUILD_DIR) && \
-+		PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
-+		./flutter/tools/gn \
-+			$(FLUTTER_ENGINE_CONF_OPTS)
-+endef
-+
-+define FLUTTER_ENGINE_BUILD_CMDS
-+	cd $(@D) && \
-+		PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
-+		$(HOST_DIR)/bin/ninja \
-+			-j $(PARALLEL_JOBS) \
-+			-C $(FLUTTER_ENGINE_BUILD_DIR)
-+endef
-+
-+define FLUTTER_ENGINE_INSTALL_STAGING_CMDS
-+	$(foreach i,$(FLUTTER_ENGINE_INSTALL_FILES),
-+		$(Q)if [ -e $(FLUTTER_ENGINE_BUILD_DIR)/$(i) ]; then \
-+			$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/$(i) \
-+				$(STAGING_DIR)/usr/lib/$(i); \
-+		fi \
-+	)
-+	$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/flutter_embedder.h \
-+		$(STAGING_DIR)/usr/include/flutter_embedder.h
-+endef
-+
-+define FLUTTER_ENGINE_INSTALL_TARGET_CMDS
-+	$(foreach i,$(FLUTTER_ENGINE_INSTALL_FILES),
-+		$(Q)if [ -e $(FLUTTER_ENGINE_BUILD_DIR)/$(i) ]; then \
-+			$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/$(i) \
-+				$(TARGET_DIR)/usr/lib/$(i); \
-+		fi \
-+	)
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/flutter-engine/gen-tarball b/package/flutter-engine/gen-tarball
-new file mode 100755
-index 0000000000..572c055bea
---- /dev/null
-+++ b/package/flutter-engine/gen-tarball
-@@ -0,0 +1,108 @@
-+#!/usr/bin/env bash
-+# Call gclient and generate a flutter-engine source tarball if one does not
-+# already exist.
-+#
-+# Author: Adam Duskett <adam.duskett@amarulasolutions.com>
-+set -eu
-+
-+DL_DIR=
-+DOT_GCLIENT=
-+JOBS=
-+SCRATCH_DIR=
-+TARBALL=
-+VERSION=
-+
-+# shellcheck disable=SC1091
-+. ./support/download/helpers
-+
-+# Print status messages in the same style Buildroot prints.
-+message() {
-+  term_bold="$(tput smso 2>/dev/null)"
-+  term_reset="$(tput rmso 2>/dev/null)"
-+  echo "${term_bold}>>> flutter-engine ${VERSION} ${1}${term_reset}"
-+}
-+
-+parse_opts(){
-+  local o O opts
-+
-+  o='d:j:s:t:v:'
-+  O='dot-gclient:,jobs:,scratch-dir:,tarball:,version:'
-+  opts="$(getopt -o "${o}" -l "${O}" -- "${@}")"
-+  eval set -- "${opts}"
-+
-+  while [ ${#} -gt 0 ]; do
-+    case "${1}" in
-+    (-d|--dot-gclient)
-+      DOT_GCLIENT="${2}"
-+      shift 2
-+      ;;
-+    (-j|--jobs)
-+      JOBS="${2}"
-+      shift 2
-+      ;;
-+    (-s|--scratch-dir)
-+      SCRATCH_DIR="${2}"
-+      shift 2
-+      ;;
-+    (-t|--tarball)
-+      DL_DIR=$(dirname "${2}")
-+      TARBALL="${2}"
-+      shift 2
-+      ;;
-+    (-v|--version)
-+      VERSION="${2}"
-+      shift 2
-+      ;;
-+    (--)
-+      shift
-+      break
-+      ;;
-+    esac
-+  done
-+}
-+
-+copy_dot_gclient(){
-+  rm -rf "${SCRATCH_DIR}"
-+  mkdir -p "${SCRATCH_DIR}"
-+  install -D -m 0755 "${DOT_GCLIENT}" "${SCRATCH_DIR}"/.gclient
-+  sed "s%!FLUTTER_VERSION!%${VERSION}%g" -i "${SCRATCH_DIR}"/.gclient
-+}
-+
-+run_gclient() {
-+  local gclient="${HOST_DIR}"/share/depot_tools/gclient.py
-+  if [[ ! -e "${gclient}" ]]; then
-+    message "${gclient} does not exist. Is host-depot-tools built and installed?"
-+    exit 1
-+  fi
-+  message "Downloading"
-+  cd "${SCRATCH_DIR}"
-+  "${gclient}" \
-+    sync \
-+    --delete_unversioned_trees \
-+    --no-history \
-+    --reset \
-+    --shallow \
-+    -j"${JOBS}"
-+}
-+
-+gen_tarball(){
-+  message "Generating tarball"
-+  mkdir -p "${DL_DIR}"
-+  mk_tar_gz \
-+    "${SCRATCH_DIR}"/src \
-+    flutter-"${VERSION}" \
-+    "$(git -C "${SCRATCH_DIR}"/src log -1 --pretty=format:%ci)" \
-+    "${TARBALL}"
-+  rm -rf "${SCRATCH_DIR}"
-+}
-+
-+main() {
-+  parse_opts "${@}"
-+  if [ ! -e "${TARBALL}" ]; then
-+    copy_dot_gclient
-+    run_gclient
-+    gen_tarball
-+  fi
-+}
-+
-+main "${@}"
++comment "screenfetch requires an awk implementation (busybox, gawk or mawk)"
++	depends on !BR2_PACKAGE_BUSYBOX && !BR2_PACKAGE_MAWK && !BR2_PACKAGE_GAWK
 -- 
-2.41.0
+2.41.0.640.ga95def55d0-goog
+
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
