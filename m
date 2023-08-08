@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C310FC001DB
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05D5EC001B0
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 18:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7579D82121;
-	Tue,  8 Aug 2023 18:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7579D82121
+	by smtp1.osuosl.org (Postfix) with ESMTP id B57FD81A6D;
+	Tue,  8 Aug 2023 18:53:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B57FD81A6D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KZBRsrp_9WI3; Tue,  8 Aug 2023 18:53:24 +0000 (UTC)
+	with ESMTP id VqsKMgfOecnw; Tue,  8 Aug 2023 18:53:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E00D82119;
-	Tue,  8 Aug 2023 18:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E00D82119
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D6F851BF330
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:53:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB59B81756;
+	Tue,  8 Aug 2023 18:53:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB59B81756
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C89441BF330
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0FF0402D4
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:53:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0FF0402D4
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE94C408A3
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 18:53:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE94C408A3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Hce8jCLIUATG for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 18:53:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0rk6XESXNC4C for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 18:53:13 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F2E7D401AD
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:53:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2E7D401AD
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 94717401D8
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 18:53:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94717401D8
 Received: from fli4l.lan.fli4l (p4fd6c649.dip0.t-ipconnect.de [79.214.198.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1DFCEA4C110B;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 32E4FA4C110C;
  Tue,  8 Aug 2023 20:51:10 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:48850)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qTRnR-0005AS-2w;
- Tue, 08 Aug 2023 20:51:09 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qTRnR-0005AS-3B;
+ Tue, 08 Aug 2023 20:51:10 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue,  8 Aug 2023 20:51:01 +0200
-Message-Id: <20230808185108.3787835-10-bernd@kuhls.net>
+Date: Tue,  8 Aug 2023 20:51:02 +0200
+Message-Id: <20230808185108.3787835-11-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230808185108.3787835-1-bernd@kuhls.net>
 References: <20230808185108.3787835-1-bernd@kuhls.net>
@@ -53,19 +53,19 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1691520670;
- bh=7w0Bsz6ZsDkRe+kD/ToF8gTQL04V9loXPmRx3OG38C4=;
+ bh=eAcFyvWpT1iuuK+qAgmnsuld6SrdX2rsGRtyx+SUAas=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=VLH/eIpJGPWHjuyp4NPwpE14Z+XciNZZbJqlPGxPmOBqFDyeOU/Dvk0/Ecx2vSa8m
- afcDp0832Kp/MmiYZAH95bsnT7gTk7k9jtHmOoiqd+xwtXviyBd5d4Er6GZ7fVvsxj
- EIUNvA+RnTl4r/DtfHAN7Rfk7ZePs1Rg/mqhbKuhCMXmoES6ldA3OUTEGmwS754yqt
- hMXDqY+CMd/wZxfgRPK4Dzh4YgwCJ9vcyZ3aVb7WOf0zBunHmL+toqB9T1wn0IS85f
- f4W8IJnoJA7mbmMnro6Ve7lrphZnRxtvwEWrbQS/JdtkAYuWnrulCvvBj1/cB4W7bk
- LHnAVaOVxTneg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=XddS9pFGTCMEFOz1TX/g8K+K9qEKoDOBSjqZZSUdPXk+NjBJ93FjBTAqvqUuyJ6ie
+ bvinTGhBpBNNJckcFtxRBz7Q/r/J7kJIEYDC66PFY1JpLJbebX/C2AGjP1+uW1Ul2t
+ ByHcEVqR8//aSdvX0grfGBn4ZnZDdBvfiB1HQ3LrwJnLvj9pb9AG6D4zFviHz+lmHD
+ 33ZNR4cev3TS86afDDhcbtr0e9VquzixRpbboucBrS6XUPtyU7OlgHue5GmgEf+WuV
+ /uuEiAzCQuhEkzeDyV3a+SrjrbwWpdMTwq+rJNRPtFXaY5FG9iUH9hWsDJkXNf/t77
+ TNYTpmmJLmfcw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=VLH/eIpJ
-Subject: [Buildroot] [PATCH/next 09/16] package/python3: use upstream build
- system to disable unicodedata module
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=XddS9pFG
+Subject: [Buildroot] [PATCH/next 10/16] package/python3: use upstream build
+ system to disable nis module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,21 +86,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...Add-an-option-to-disable-unicodedata.patch | 30 -------------------
+ .../0018-Add-an-option-to-disable-NIS.patch   | 33 -------------------
  package/python3/python3.mk                    |  4 +--
- 2 files changed, 2 insertions(+), 32 deletions(-)
- delete mode 100644 package/python3/0019-Add-an-option-to-disable-unicodedata.patch
+ 2 files changed, 2 insertions(+), 35 deletions(-)
+ delete mode 100644 package/python3/0018-Add-an-option-to-disable-NIS.patch
 
-diff --git a/package/python3/0019-Add-an-option-to-disable-unicodedata.patch b/package/python3/0019-Add-an-option-to-disable-unicodedata.patch
+diff --git a/package/python3/0018-Add-an-option-to-disable-NIS.patch b/package/python3/0018-Add-an-option-to-disable-NIS.patch
 deleted file mode 100644
-index 74702b67a5..0000000000
---- a/package/python3/0019-Add-an-option-to-disable-unicodedata.patch
+index 977955d1cb..0000000000
+--- a/package/python3/0018-Add-an-option-to-disable-NIS.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--From 4fe7f375a3d171d294caebdd7b7ce49bbc9ad9f3 Mon Sep 17 00:00:00 2001
+@@ -1,33 +0,0 @@
+-From 09fc9f72ebe60bb65e80732a6bd4f12a84159f6d Mon Sep 17 00:00:00 2001
 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 23 Dec 2015 11:50:27 +0100
--Subject: [PATCH] Add an option to disable unicodedata
+-Date: Wed, 23 Dec 2015 11:50:11 +0100
+-Subject: [PATCH] Add an option to disable NIS
+-
+-NIS is not necessarily available in uClibc, so we need an option to
+-not compile support for it.
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
@@ -108,17 +111,17 @@ index 74702b67a5..0000000000
 - 1 file changed, 6 insertions(+)
 -
 -diff --git a/configure.ac b/configure.ac
--index 1bdde7f69d..ba4b0e0c1c 100644
+-index ecdd7dbc07..1bdde7f69d 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -4200,6 +4200,12 @@ AC_ARG_ENABLE(nis,
--     	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
--   	  fi])
+-@@ -4194,6 +4194,12 @@ AC_ARG_ENABLE(codecs-cjk,
+- 		DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _codecs_kr _codecs_jp _codecs_cn _codecs_tw _codecs_hk _codecs_iso2022"
+- 	fi])
 - 
--+AC_ARG_ENABLE(unicodedata,
--+	AS_HELP_STRING([--disable-unicodedata], [disable unicodedata]),
+-+AC_ARG_ENABLE(nis,
+-+	AS_HELP_STRING([--disable-nis], [disable NIS]),
 -+	[ if test "$enableval" = "no"; then
--+    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} unicodedata"
+-+    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
 -+  	  fi])
 -+
 - AC_SUBST(TK)
@@ -128,34 +131,41 @@ index 74702b67a5..0000000000
 -2.34.1
 -
 diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 4a2a19eadf..e047cf8a56 100644
+index e047cf8a56..324c35838b 100644
 --- a/package/python3/python3.mk
 +++ b/package/python3/python3.mk
-@@ -27,7 +27,6 @@ HOST_PYTHON3_CONF_OPTS += \
+@@ -26,7 +26,6 @@ HOST_PYTHON3_CONF_OPTS += \
+ 	--disable-tk \
  	--with-expat=system \
  	--disable-codecs-cjk \
- 	--disable-nis \
--	--enable-unicodedata \
+-	--disable-nis \
  	--disable-test-modules \
  	--disable-idle3 \
  	--disable-ossaudiodev
-@@ -41,6 +40,7 @@ HOST_PYTHON3_CONF_ENV += \
+@@ -40,6 +39,7 @@ HOST_PYTHON3_CONF_ENV += \
  	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
  	py_cv_module__curses=n/a \
  	py_cv_module__curses_panel=n/a \
-+	py_cv_module_unicodedata=yes \
++	py_cv_module_nis=n/a \
+ 	py_cv_module_unicodedata=yes \
  	py_cv_module__uuid=n/a \
  	ac_cv_prog_HAS_HG=/bin/false
+@@ -167,6 +167,7 @@ PYTHON3_CONF_ENV += \
+ 	ac_cv_file__dev_ptmx=yes \
+ 	ac_cv_file__dev_ptc=yes \
+ 	ac_cv_working_tzset=yes \
++	py_cv_module_nis=n/a \
+ 	ac_cv_prog_HAS_HG=/bin/false
  
-@@ -130,7 +130,7 @@ PYTHON3_CONF_OPTS += --disable-codecs-cjk
- endif
+ # GCC is always compliant with IEEE754
+@@ -194,7 +195,6 @@ PYTHON3_CONF_OPTS += \
+ 	--disable-pydoc \
+ 	--disable-test-modules \
+ 	--disable-tk \
+-	--disable-nis \
+ 	--disable-idle3 \
+ 	--disable-pyc-build
  
- ifneq ($(BR2_PACKAGE_PYTHON3_UNICODEDATA),y)
--PYTHON3_CONF_OPTS += --disable-unicodedata
-+PYTHON3_CONF_ENV += py_cv_module_unicodedata=n/a
- endif
- 
- # Disable auto-detection of uuid.h (util-linux)
 -- 
 2.39.2
 
