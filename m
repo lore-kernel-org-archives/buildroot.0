@@ -4,67 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 755BAC001DB
-	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 22:12:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3989C001DB
+	for <buildroot@archiver.kernel.org>; Tue,  8 Aug 2023 22:18:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B5198210D;
-	Tue,  8 Aug 2023 22:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B5198210D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98C9B81455;
+	Tue,  8 Aug 2023 22:18:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98C9B81455
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GhLKGPHNXUDW; Tue,  8 Aug 2023 22:12:21 +0000 (UTC)
+	with ESMTP id mhlf2PgN7OLW; Tue,  8 Aug 2023 22:18:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47678812EF;
-	Tue,  8 Aug 2023 22:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47678812EF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B3411BF3A3
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:12:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEA808141D;
+	Tue,  8 Aug 2023 22:18:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEA808141D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 30A3D1BF3A3
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02B2D41761
- for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02B2D41761
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A84E40C0E
+ for <buildroot@lists.busybox.net>; Tue,  8 Aug 2023 22:18:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A84E40C0E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Sb_4uAyjjo-4 for <buildroot@lists.busybox.net>;
- Tue,  8 Aug 2023 22:12:16 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 915D44175E
- for <buildroot@buildroot.org>; Tue,  8 Aug 2023 22:12:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 915D44175E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F0B260003;
- Tue,  8 Aug 2023 22:12:13 +0000 (UTC)
-Date: Wed, 9 Aug 2023 00:12:12 +0200
-To: Peter Seiderer <ps.report@gmx.net>
-Message-ID: <20230809001212.0d61539b@windsurf>
-In-Reply-To: <20230808180959.28091-2-ps.report@gmx.net>
-References: <20230808180959.28091-1-ps.report@gmx.net>
- <20230808180959.28091-2-ps.report@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691532733;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mshztIKT5Xxo2BppzJSIpweQElxUsYSJ2TcO9GUg8ek=;
- b=MfWLnmLq3/W9sUySQdtWazxUWqi1ANp20qF0U3gCIOrGlOuVM45fQQAm7ZlEVJ5Vuk/V5w
- NVXTsnzxGRFYGZ70enc2xfCasQmsd49ynyQaz5tEuJUSHgmmEVNIXrdCcyo9ouU0bsBWz3
- R2tPDW/NE2gn42Ln46Y5XZwHlefDmqA/LnqvARQGbkFaCswFQ5iMdLs49GeafUHncWUyFF
- +lcBs1rhG2I/Fy4Rb45X+4NqgP2jXAGwY7EO1FQHbkM1Esyumik4TED10FpNNer1UOTb7Z
- p7E81YuOwDQchGd8CbuGaV58usqqoflodnoDqa0YBy0Qj3LG7f0eMZqvIwOCuQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MfWLnmLq
-Subject: Re: [Buildroot] [PATCH v1] board/raspberrypi/config*.txt: remove
- failing 'dtoverlay=krnbt=on'
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RKnum-Rk4wYt for <buildroot@lists.busybox.net>;
+ Tue,  8 Aug 2023 22:18:41 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5329E40494
+ for <buildroot@buildroot.org>; Tue,  8 Aug 2023 22:18:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5329E40494
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4135484F14; Tue,  8 Aug 2023 22:18:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 9 Aug 2023 00:12:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d74515a3e83b6139aed764a5ef0f40115dc92e22
+X-Git-Newrev: fc2a530c5b8a700978e29eae2ef6deef3cefe20c
+X-Patchwork-Hint: ignore
+Message-Id: <20230808221841.4135484F14@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dracut: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,40 +57,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  8 Aug 2023 20:09:59 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fc2a530c5b8a700978e29eae2ef6deef3cefe20c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove failing 'dtoverlay=krnbt=on' from config.txt introduced with commit
-> 689b9ac439 ("package/rpi-firmware: rework boot/config file handling") [1] by
-> changing an dtoverlay option wrongly to an extra line (instead of changing
-> to an proper dtparam line), but as no one complained since 2021 just
+dracut_project:dracut is a valid CPE ID:
+https://nvd.nist.gov/products/cpe/detail/8050B12A-93FB-453E-8459-9B8B9CC7544E?namingFormat=2.3&orderBy=CPEURI&keyword=dracut&status=FINAL
 
-I'm failing to pase the "changing an dtoverlay option wrongly to an
-extra line (instead of changing to an proper dtparam line)". I'm
-confused by the "to an extra line".
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dracut/dracut.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Do you mean that:
-
-dtoverlay=krnbt=on
-
-should have been:
-
-dtparam=krnbt=on
-
-?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+index 597492bc5e..3eb9bcc474 100644
+--- a/package/dracut/dracut.mk
++++ b/package/dracut/dracut.mk
+@@ -8,6 +8,7 @@ DRACUT_VERSION = 057
+ DRACUT_SITE = $(call github,dracutdevs,dracut,$(DRACUT_VERSION))
+ DRACUT_LICENSE = GPL-2.0
+ DRACUT_LICENSE_FILES = COPYING
++DRACUT_CPE_ID_VENDOR = dracut_project
+ 
+ HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-prelink-cross
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
