@@ -4,81 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FD86C001DE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:52:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11D9AC001B0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 22:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D50E4025F;
-	Wed,  9 Aug 2023 21:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D50E4025F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F0504187B;
+	Wed,  9 Aug 2023 22:05:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F0504187B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0V8cAcvv-Klj; Wed,  9 Aug 2023 21:52:30 +0000 (UTC)
+	with ESMTP id YdsSbv4L_Q3i; Wed,  9 Aug 2023 22:05:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEBC1417E0;
-	Wed,  9 Aug 2023 21:52:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EEBC1417E0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5C2C41BF28A
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:52:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 354B741894;
+	Wed,  9 Aug 2023 22:05:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354B741894
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A7E91BF82C
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:05:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4072B40223
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4072B40223
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2EF6941894
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:05:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EF6941894
 X-Virus-Scanned: amavisd-new at osuosl.org
-X-Amavis-Alert: BAD HEADER SECTION, Duplicate header field: "Content-Type"
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qqi8H60l3ntG for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 21:52:26 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D8F33400D9
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:52:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8F33400D9
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.fritz.box ([62.216.209.171]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MhlGq-1pqPby2HQG-00dkWl; Wed, 09 Aug 2023 23:52:22 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: buildroot@buildroot.org
-Date: Wed,  9 Aug 2023 23:52:21 +0200
-Message-ID: <20230809215221.29965-1-ps.report@gmx.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ukQY5LkcuEiu for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 22:05:28 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1B994187B
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 22:05:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1B994187B
+Received: by mail.gandi.net (Postfix) with ESMTPA id 8DEAC40002;
+ Wed,  9 Aug 2023 22:05:25 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>
+Date: Thu, 10 Aug 2023 00:05:14 +0200
+Message-ID: <20230809220514.2089980-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Ypn/QixqHBsLb1kLYKOTysSpxqgX2skuF3wheLDJAjCpUrpcaXQ
- Cr4ygSiFOe9X10totb44NsggwjHDGj6rbSHSN1FI3urbwEKbthX/YEnkJ5FPtvwmZe2iJoq
- DNPP9PAjJXzaoz0McCKCSY7wvdSOC1pbMdV3E3eLRC5N2lFIADLuHqcV3w7U17h7uQTFm14
- Y27X7mj++OasmmWvhKpwA==
-UI-OutboundReport: notjunk:1;M01:P0:efCEWoSOpGw=;HScvHHNDHLhQlJPiiWN6FNnlAMj
- kmvgP5AlgLSXpIMwRXfzjlo3MUqzyP69IERXcRtUpDEmSwOSN0BJSrqi8nb9CsdgqHtmBDfMS
- kzdUtd+hAnqLwWej5kP4pWv+C+2zfwlib+aKxSFgSloqzmlNdnyXl5KJE/asj2JHEv9PgkUJj
- meEqNvA+dcpOPPtstlnu6931mvE1CzIOOTigj554WGyeGwYJT33KLY9cUOmbyqyCyVyNMsnwM
- +xkOQIpz+JhuOIo5Hl5g9B7aOaaiAvRDjmNdVnIm2ywGz6fFYfcTxC+f2uqVWYTorGJIVtbYQ
- cv/z4+cgi+x0LPOeyiDqQukyLlZBNYIm7RXyEadOgN5mlo6sRip/h0I3QFKTzZ4e0LhOX1xmC
- zbc4v8/dV3l3M0rOQcpwB2jlzJwPonvy8nCy4HREW9NAuLE8gL9PrsEtyqrBSgx578OityIDN
- E8oy+VBNRA8o1OnZFd9K9XWchKP1tce03E3UMlZpsV8MRdld4RJSQ39n/my8Zguh29800D0IB
- zAldwyL/+z9IyAVh6Y+yXyvwGW7VAxt9gXzWRDrAsoTcIn39eFxp2+BOmILAeU1OQ1eOv0i/Q
- 7g+CFcHyJNx6XtSFjqLV893aSLScz+heAgWsB87JTX2j6RWeupGTNK3Og/pt6absXrN5MzovU
- wKvYRF+YeTnjJilu/5Y5w/XTdh1Sj0MHEpITO9CtTb91cxTb/fFKgx5I13JHTor1O18puolXr
- qOvnDLHExqUf83iOwXFZIpUkXbdDmgeYv7q6G90xZFEF6QSvcm/dj8IalBXj7oSyhXBj7hvNz
- 1GIPhZoCY2ZXzFwUnS5MFw7RV+ALvStuLM0BoAGB/t3NDUh2Yd0i5CB1xMRwMDCl0UR/k0BZC
- 3wsV5fx7P2ru1lJPh6uqut4xikdwydIYs2eInsI4Lkq/x6pblxgeds1H54dLnQAWNTTPnLCNM
- Cs49NxuSFRfEFWyGBiQvfDiUiTA=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1691617942; x=1692222742; i=ps.report@gmx.net;
- bh=c/pl+iz8NY17EIs4S1hcSmzpmU9EvmfKguEqHCi5wQg=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=VXUhqQ4M8Lfuu1+0w1VoR1i+sk7CUQjf0B2zAV0W9/DGUJGoIDWaFhdDZ8NpiPQ8b7xUvBm
- lShSI466Ohp9x7wjt1tXoUsl1Bl7TmZ/8O28/TR2csFiUHW23hdXTX8y7ibgunBeAG+RY+iMD
- cry+74iCc06M1ORmuDRWG/upubBqNpOHF/8XEQG4LC3YlzsITipKxAfaHzZhjkq6dTFz6o5Jm
- FnaWJjuhEKRWwlkw+a0fba/rc6GquXNshCRZkOdMMcFzdSN5a1cX4T7RXqb/9MRWoMy6Dl9Ft
- Y4TOInuuqvd9bhKr/vU7LeWdtGOFyNmsF0oxwdynFjyBAhQ1A9GQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=VXUhqQ4M
-Subject: [Buildroot] [PATCH v1] package/libserial: fix gcc-13.x compile (add
- patch to add missing cstdint include)
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691618726;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=x+vnRbU8ZswJ+qSp16W1UwQfcrM5jO1zQosekW0loNY=;
+ b=cWrSWR2PdFpitMbv5Bmnmy0TJ32CLO12+1EdtnW3DAC0rrt6X+HSlCRLB7oWapMmJZVjsD
+ y1HVgf/UR1SxB1XJyuwX7KMuz1nmYruRUAGyssBTwxBS5reuJODQWRdjllTnxZ7KJrDEw/
+ ttj47ybvqaKL48GpaZCTjR6j1F9eCj1s6eKP6mU0kzKHHJz4m9y2+YzjXG+d4c46Lmebh8
+ NCeKV+zWsa3qPVuSMcjm8ExI72boohVAMoXZ3A9gT9UsjAEnX+iFuwGeLU28AebL2R41uC
+ ne+KhG60D5AdIL2taK4AixTRfYqotLp0ebgzQqsA/rGCjx4SlEUMGB1Hc+VIWg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cWrSWR2P
+Subject: [Buildroot] [PATCH] package/swupdate: install headers at the
+ standard location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,46 +71,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Simon Dawson <spdawson@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Daniel Lang <d.lang@abatec.at>, Andrey Grafin <conquistador@yandex-team.ru>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIHBhdGNoIHRha2VuIGZyb20gdXBzdHJlYW0gcHVsbCByZXF1ZXN0IChbMV0pIHRvIGZpeCBn
-Y2MtMTMueCBjb21waWxlCmZhaWx1cmUgYmVjYXVzZSBvZiBhIG1pc3NpbmcgY3NkdGludCBpbmNs
-dWRlLgoKRml4ZXM6CgogIEluIGZpbGUgaW5jbHVkZWQgZnJvbSBsaWJzZXJpYWwvU2VyaWFsU3Ry
-ZWFtQnVmLmg6MzYsCiAgICAgICAgICAgICAgICAgICBmcm9tIFNlcmlhbFN0cmVhbUJ1Zi5jcHA6
-MzQ6CiAgLi9saWJzZXJpYWwvU2VyaWFsUG9ydENvbnN0YW50cy5oOjkzOjM3OiBlcnJvcjog4oCY
-dWludDhfdOKAmSB3YXMgbm90IGRlY2xhcmVkIGluIHRoaXMgc2NvcGUKICAgICA5MyB8ICAgICB1
-c2luZyBEYXRhQnVmZmVyID0gIHN0ZDo6dmVjdG9yPHVpbnQ4X3Q+IDsKICAgICAgICB8ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn4KClsxXSBodHRwczovL2dpdGh1
-Yi5jb20vY3JheXplZXd1bGYvbGlic2VyaWFsL3B1bGwvMTg2CgpTaWduZWQtb2ZmLWJ5OiBQZXRl
-ciBTZWlkZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+Ci0tLQogLi4uc2luZy1jc3RkaW50LWhlYWRl
-ci1mb3ItdWludDhfdC10eXBlLnBhdGNoIHwgMjggKysrKysrKysrKysrKysrKysrKwogMSBmaWxl
-IGNoYW5nZWQsIDI4IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xp
-YnNlcmlhbC8wMDAzLUFkZC1taXNzaW5nLWNzdGRpbnQtaGVhZGVyLWZvci11aW50OF90LXR5cGUu
-cGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYnNlcmlhbC8wMDAzLUFkZC1taXNzaW5nLWNz
-dGRpbnQtaGVhZGVyLWZvci11aW50OF90LXR5cGUucGF0Y2ggYi9wYWNrYWdlL2xpYnNlcmlhbC8w
-MDAzLUFkZC1taXNzaW5nLWNzdGRpbnQtaGVhZGVyLWZvci11aW50OF90LXR5cGUucGF0Y2gKbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uY2FmMDJkODRmNwotLS0gL2Rldi9u
-dWxsCisrKyBiL3BhY2thZ2UvbGlic2VyaWFsLzAwMDMtQWRkLW1pc3NpbmctY3N0ZGludC1oZWFk
-ZXItZm9yLXVpbnQ4X3QtdHlwZS5wYXRjaApAQCAtMCwwICsxLDI4IEBACitGcm9tIGI0YWUzMzEz
-ZmIzMTNiNmFjYjdmNzAxZDg5OGY4MzQxMzNmNWJkNTMgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAx
-CitGcm9tOiBKdXNzaSA8anVzc2kuaGlldGFuZW5AaWtpLmZpPgorRGF0ZTogTW9uLCAzIEp1bCAy
-MDIzIDE1OjU5OjA3ICswMzAwCitTdWJqZWN0OiBbUEFUQ0hdIEFkZCBtaXNzaW5nIGNzdGRpbnQg
-aGVhZGVyIGZvciB1aW50OF90IHR5cGUKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNl
-dD0idXRmLTgiCitDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisKK1Vwc3RyZWFtOiBo
-dHRwczovL2dpdGh1Yi5jb20vY3JheXplZXd1bGYvbGlic2VyaWFsL2NvbW1pdC8zYjUwYmMyYjc0
-NjRlZDUyN2QxNzA5YjVjN2JhODY2ODhlNmFhM2VjCitTaWduZWQtb2ZmLWJ5OiBQZXRlciBTZWlk
-ZXJlciA8cHMucmVwb3J0QGdteC5uZXQ+CistLS0KKyBzcmMvbGlic2VyaWFsL1NlcmlhbFBvcnRD
-b25zdGFudHMuaCB8IDEgKworIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQorCitkaWZm
-IC0tZ2l0IGEvc3JjL2xpYnNlcmlhbC9TZXJpYWxQb3J0Q29uc3RhbnRzLmggYi9zcmMvbGlic2Vy
-aWFsL1NlcmlhbFBvcnRDb25zdGFudHMuaAoraW5kZXggNGYwNWJkNS4uODhkY2EwYiAxMDA2NDQK
-Ky0tLSBhL3NyYy9saWJzZXJpYWwvU2VyaWFsUG9ydENvbnN0YW50cy5oCisrKysgYi9zcmMvbGli
-c2VyaWFsL1NlcmlhbFBvcnRDb25zdGFudHMuaAorQEAgLTMzLDYgKzMzLDcgQEAKKyAKKyAjcHJh
-Z21hIG9uY2UKKyAKKysjaW5jbHVkZSA8Y3N0ZGludD4KKyAjaW5jbHVkZSA8bGltaXRzPgorICNp
-bmNsdWRlIDxzdGRleGNlcHQ+CisgI2luY2x1ZGUgPHN0cmluZz4KKy0tIAorMi40MS4wCisKLS0g
-CjIuNDEuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In commit eb2f2886b2364e5b6a0867f55106bf83acb064e7 ("package/swupdate:
+add staging install"), the swupdate package was changed to also be
+installed in the staging directory, as it provides an API to external
+programs, through libraries and headers.
+
+Back then the commit log said:
+
+    This patch installs headers and libs to STAGING_DIR, to prevent a
+    header name collision a subdirectory /usr/include/swupdate creates.
+
+And indeed a custom INCLUDEDIR was specified. However, installing
+swupdate headers in /usr/include/swupdate/ doesn't work well, as
+progress_ipc.h (installed by swupdate) does a #include
+<swupdate_status.h>, which doesn't work as swupdate_status.h is also
+in /usr/include/swupdate/ instead of /usr/include/.
+
+To address this Daniel Lang submitted a patch [0], which was proposed
+to upstream swupdate to fix this header inclusion. The patch was
+rejected by upstream saying that the swupdate header files should be
+installed in /usr/include.
+
+Currently, swupdate installs only 3 headers files:
+
+  /usr/include/network_ipc.h
+  /usr/include/swupdate_status.h
+  /usr/include/progress_ipc.h
+
+To the best of our knowledge, this doesn't conflict with any other
+header files installed by other packages. A good proof of that is that
+even Debian (which has many more packages than Buildroot) also
+installs swupdate headers directly in /usr/include.
+
+In addition, the original submitter of
+eb2f2886b2364e5b6a0867f55106bf83acb064e7 said "I'm not remember what
+was a problem. Probably network_ipc.h but Im not sure now. I think
+it's safe to install this headers to /usr/include w/o subdir if this
+collision was met only in my environment. PS: currently I don't see
+any collisions with this files."
+
+So, we switch to installing swupdate into their standard location.
+
+[0] https://patchwork.ozlabs.org/project/buildroot/patch/VI1P190MB0493D233ECC579510F8C0FC69FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/swupdate/swupdate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 11a3946753..84905d2e0a 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -230,7 +230,7 @@ endef
+ define SWUPDATE_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
+-		INCLUDEDIR=/usr/include/swupdate install
++		install
+ endef
+ 
+ define SWUPDATE_INSTALL_TARGET_CMDS
+-- 
+2.41.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
