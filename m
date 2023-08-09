@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13121C001E0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 18:26:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 712DEC41513
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 18:27:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D37E418DD;
-	Wed,  9 Aug 2023 18:26:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D37E418DD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F0F5418E5;
+	Wed,  9 Aug 2023 18:27:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F0F5418E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B0-TpnhsRKSc; Wed,  9 Aug 2023 18:26:18 +0000 (UTC)
+	with ESMTP id EmdahWMXj4m5; Wed,  9 Aug 2023 18:26:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BF87418C4;
-	Wed,  9 Aug 2023 18:26:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BF87418C4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A11D61BF331
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 18:26:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED026418C5;
+	Wed,  9 Aug 2023 18:26:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED026418C5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4046D1BF331
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 18:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7804083A37
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 18:26:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7804083A37
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26AAD60AE5
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 18:26:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26AAD60AE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n6CCfEFpzgUG for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 18:26:12 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3E95F83A3E
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 18:26:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E95F83A3E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 64BCF20002;
- Wed,  9 Aug 2023 18:26:06 +0000 (UTC)
-Date: Wed, 9 Aug 2023 20:26:05 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230809202605.1fbe18f9@windsurf>
-In-Reply-To: <20230809173334.2514813-2-bernd@kuhls.net>
-References: <20230809173334.2514813-1-bernd@kuhls.net>
- <20230809173334.2514813-2-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691605569;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=l4qnb9ZfxDbPEwLpF2NqMkEmgtir6nwwSuAprNKPpTs=;
- b=H79KoGJdhI5ORJyW9Syt55TF//WnbR/0qrjgR/ZrUxkJMCsKWuJscpn2MFeKwf6TY2RJAb
- UYzYPY0MmT9sqrJY5x51Hk6GvF2k5vEmeu23LFiH2H/7ka87DTenu0Z+byEAkTWtHLoWl6
- WzaM5j6TIqj6Xor7Zs99yInXTVhaRzKdh+Nv1c08AhK08bEqd6rF6k9J1oZfRLoeKHcWNg
- Pqicsx6GvZ6AhoP4MD+Ed1JpoZa6+G0uAvkNaCOjmk4/A87pjbj9jxhK6mCUwJgSROIiAH
- 74nsN+u+hPzQTIX31e3Z4pGZpA6XKdQ2oZ8wOACrhN3TXEEsl8pZXoV/o3Nsqg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=H79KoGJd
-Subject: Re: [Buildroot] [PATCH/next v2 01/16] package/berkeleydb: add
- option for historic dbm interface
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MyCNtmKc4Ugz for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 18:26:55 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DB3560B1C
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 18:26:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DB3560B1C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2C69B851A6; Wed,  9 Aug 2023 18:26:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 9 Aug 2023 20:16:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 244a8c52ef25bafdee6577d08e47c091b2093cc8
+X-Git-Newrev: b84ffd85e2900741bb97325b53d09e170e941e6c
+X-Patchwork-Hint: ignore
+Message-Id: <20230809182655.2C69B851A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: berkeleydb support needs
+ the dbm interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,41 +58,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  9 Aug 2023 19:33:19 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b84ffd85e2900741bb97325b53d09e170e941e6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Berkeley DB support in python depends on dbm, when missing python fails
-> to detect libdb:
-> https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
-> 
-> quoting python configure log:
-> checking for libdb... no
-> 
-> quoting python config.log:
-> conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
-> 
-> This patch provides a configure option for the historic dbm interface
-> to be used by the python package.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/berkeleydb/Config.in     | 5 +++++
->  package/berkeleydb/berkeleydb.mk | 1 +
->  2 files changed, 6 insertions(+)
+Until now, the Python build system was building a _dbm.cpython-*.so
+native module when BR2_PACKAGE_PYTHON3_BERKELEYDB was enabled, but
+since the bump of Python to 3.11.x, it was no longer building this
+native module.
 
-Applied to master, thanks.
+Investigation this, we found out that Python 3.11 changed how libdb
+was detected [1] and that check now fails:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+quoting configure log:
+checking for libdb... no
+
+quoting python config.log:
+conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
+
+However, in fact it turns that this problem is not new in Python
+3.11. In Python 3.10, the build system was always producing the native
+module, but it was in fact not working at runtime:
+
+>>> from _dbm import *
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ImportError: /usr/lib/python3.10/lib-dynload/_dbm.cpython-310-arm-linux-gnueabihf.so: undefined symbol: __db_ndbm_delete
+
+It was not really visible because when one does "import dbm", it
+actually tries several "backends", including ndbm (which relies on
+_dbm above), and if it doesn't work, it falls back silently on a pure
+Python implementation.
+
+So the issue was never noticed, but has already been there,
+potentially forever.
+
+In order for this _dbm native module to be built (Python >= 3.11) or
+to work (Python < 3.11), the BerkeleyDB library need to be built with
+its so-called "dbm" interface, which we do by selecting select
+BR2_PACKAGE_BERKELEYDB_DBM.
+
+And now:
+
+>>> import _dbm
+>>>
+
+[1] https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Thomas: did more research to have a better explanation of what is
+happening, and realize the problem is not related to Python 3.11]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python3/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 761c38c850..38f0580aa4 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -48,6 +48,7 @@ config BR2_PACKAGE_PYTHON3_2TO3
+ config BR2_PACKAGE_PYTHON3_BERKELEYDB
+ 	bool "berkeleydb"
+ 	select BR2_PACKAGE_BERKELEYDB
++	select BR2_PACKAGE_BERKELEYDB_DBM
+ 	help
+ 	  berkeleydb module for Python3
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
