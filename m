@@ -4,69 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 080D0C001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 20:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FB84C0015E
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 20:31:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5EC760DA5;
-	Wed,  9 Aug 2023 20:22:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5EC760DA5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F99C60D51;
+	Wed,  9 Aug 2023 20:31:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F99C60D51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hNEGdO8kdTVR; Wed,  9 Aug 2023 20:22:18 +0000 (UTC)
+	with ESMTP id NBjRIBi_Dnsn; Wed,  9 Aug 2023 20:31:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEDD260BD1;
-	Wed,  9 Aug 2023 20:22:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEDD260BD1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68DFA60D79;
+	Wed,  9 Aug 2023 20:31:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68DFA60D79
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F32B1BF3EB
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:22:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 476171BF969
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38B4460BD1
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:22:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38B4460BD1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2057A60BA8
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:31:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2057A60BA8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eIZCPUbfe3DA for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 20:22:14 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 83C0660590
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 20:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83C0660590
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:7f53:5cb:7a96:c3a1])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id BFAF37802E5;
- Wed,  9 Aug 2023 22:22:04 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 09 Aug 2023 22:22:04 +0200
-Date: Wed, 9 Aug 2023 22:22:04 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20230809202204.GD421096@scaer>
-References: <20230808003527.1469175-1-adam.duskett@amarulasolutions.com>
- <20230808003527.1469175-4-adam.duskett@amarulasolutions.com>
- <20230808195621.1c5d4242@windsurf>
+ with ESMTP id phsT7H0xuijF for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 20:31:17 +0000 (UTC)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AD30A60D51
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 20:31:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD30A60D51
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-99bccc9ec02so35109366b.2
+ for <buildroot@buildroot.org>; Wed, 09 Aug 2023 13:31:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691613075; x=1692217875;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=liprsCcxPDqk1JButYg9vMBY2RmgXgAE+s+6MQXPTGw=;
+ b=CuC4icYrKlO8LR/3Tl3eOrPKhxVRVXhYY7JY2NDsQOh8rTDhlKCWa24wiO48hxUZk8
+ 20Db/4iM3vVVdDhxqxifelRwvjboKdl8Rvh7XQGpS8LgHluAkcLKiQEIGF4O0c5kb6Q/
+ +QPaDMrWVi76APBoqqiLzPDseUVTmpOpWO7ztY7FU2oT3hUZWCFiE52eVLy8k0AwA1hM
+ j5xuryN3ieo1yl6UOE0QLfF4IAqLxrqc93ehVMHvxQ7l/rmw5a+RCWyx3UFYmlFKifo+
+ M+zoYcSJDZRkUVJK1NCLMNpiqts6Hmnb/NzMtuZpEMCsywBus50TfCxaRlI12efLQv9Y
+ hvpw==
+X-Gm-Message-State: AOJu0YxbT67dVDogcjDTQtGE5eEgXQdM21T3GRUcXLM0cdbOX4JBhbu/
+ lKqEApkrFM/Nyxd7nQbIEbI4rA==
+X-Google-Smtp-Source: AGHT+IHu9HAyrW7pH1V1g7kUCz3rEgl1xuTfBA6aD4UZSBEP6d15tqQeeSeArba3EYIZ6DnheLeeHg==
+X-Received: by 2002:a17:907:7807:b0:99b:65fa:fc2b with SMTP id
+ la7-20020a170907780700b0099b65fafc2bmr130488ejc.35.1691613074744; 
+ Wed, 09 Aug 2023 13:31:14 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:dd61:254f:5a09:dc06?
+ (ptr-9fplejq6xo58kteed52.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:dd61:254f:5a09:dc06])
+ by smtp.gmail.com with ESMTPSA id
+ bv26-20020a170906b1da00b009926928d486sm8418600ejb.35.2023.08.09.13.31.13
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 09 Aug 2023 13:31:14 -0700 (PDT)
+Message-ID: <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
+Date: Wed, 9 Aug 2023 22:31:11 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230808195621.1c5d4242@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691612531;
- bh=42wRMOsK3W5Je7tGbfoq65OVxcc41jhzpraMf295574=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=J5q7vExcrmOsFg4lTVPyxg7rL5me312qiu/idFYkziPVuIbrpYSeiCzRlTQWAmVVf
- FEANFQ/qbwUWmOmPGMy5TNYCyjP8LOqQUadMSrTwEYlRiLth5iResCsbmxwZV9448e
- RYq1dd4NRIIsjveMZrIRXyhFcAp89oKMTM8iYkA892wV6rAKfL3mrPhrdkwOxABizw
- GZ+1dw4PV6ubCP7M34q2Qx52pVwvCqUCBeNtQ7x2l5ZspqDCYYriia4rQvo1h57Qbe
- 2naRXfOSIzlreFg10dagA0QKUgjmprFwOG+wdT/sTUZNhGtQ+WW3MfKBEtvaYg1YxK
- Vw/Bp9Vif4kZw==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Daniel Lang <dalang@gmx.at>
+References: <20230731201422.13543-1-dalang@gmx.at>
+ <20230731235236.60ddc54a@windsurf>
+ <47519c2e-9b64-68b1-79b2-21a2ddea976b@gmx.at>
+ <20230801161956.00715a06@windsurf>
+In-Reply-To: <20230801161956.00715a06@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1691613075; x=1692217875;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=liprsCcxPDqk1JButYg9vMBY2RmgXgAE+s+6MQXPTGw=;
+ b=M5oQ5Gg5Iia51RrgkhsNtvOlOaYauLLtd2G2SFagut22xEjJ4Zvb+7UbDJA2JXjvBq
+ CP+8iMFBq1k+UGzMpRcUmogOQ+G475WLYW4ZfNGp8O09SpsGdVmzmvsHcj3zLwUE4SxJ
+ mILFz0qwZa3uHMOBpnEIcXwcdn7bTwJeSAEF+7BVFZbVn1U3/VQxRNXRmbpjP6SKZ6el
+ +gBywiIontyOx/9iBzRiGROWijNPdOM4NtL4pfG+7EElklA2wgHmVvzkrViC9mNt1ctT
+ TjsSgwOFZ9ZpViI/GZPcfHevl92tWzl56TsE7kRNJxwq2JKuhKYcGHysWuqk5m/WhSNg
+ Y8UQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=J5q7vExc
-Subject: Re: [Buildroot] [PATCH/next vRFCv2 3/3] package/flutter-engine: new
- package
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=M5oQ5Gg5
+Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
+ version 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,129 +104,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Michael Trimarchi <michael@amarulasolutions.com>, buildroot@buildroot.org,
- Asaf Kahlon <asafka7@gmail.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
 
-On 2023-08-08 19:56 +0200, Thomas Petazzoni via buildroot spake thusly:
-> On Mon,  7 Aug 2023 18:35:27 -0600
-> Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
-> > index 0000000000..572c055bea
-> > --- /dev/null
-> > +++ b/package/flutter-engine/gen-tarball
-> > @@ -0,0 +1,108 @@
-> > +#!/usr/bin/env bash
-> > +# Call gclient and generate a flutter-engine source tarball if one does not
-> > +# already exist.
-> > +#
-> > +# Author: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-Authorship is not needed: it's tracked in git.
-
-Also, it is going to be wrong the moment someone else changes that file.
-Using the authorship from git will always be correct, though.
-
-[--SNIP--]
-> > +main() {
-> > +  parse_opts "${@}"
-> > +  if [ ! -e "${TARBALL}" ]; then
+On 01/08/2023 16:19, Thomas Petazzoni via buildroot wrote:
+> Hello Daniel,
 > 
-> I'm not sure about this condition. Why is there? If the tarball is
-> already there, I would expect this tool to re-generate it and overwrite
-> it, rather than "do nothing".
+> On Tue, 1 Aug 2023 16:13:03 +0200
+> Daniel Lang <dalang@gmx.at> wrote:
+> 
+>>> Wow, thanks for working on this! Is the storing of 200k files workable,
+>>> or do we need to consider some other option like a local sqlite
+>>> database or something?
+>>
+>>  From testing on my system I can say that it seems to be workable.
+>> Generating pkg-stats for all packages takes roughly the same time
+>>
+>> old: ./support/scripts/pkg-stats --html old.html --nvd-path dl/buildroot-nvd/ --disable url,upstream,cpe   252,39s user 45,10s system 100% cpu 4:54,85 total
+>> new: ./support/scripts/pkg-stats --html new.html --nvd-path dl/buildroot-nvd/ --disable url,upstream,cpe   250,04s user 46,24s system 100% cpu 4:53,72 total
+> 
+> Nice!
+> 
+> I see you have --disable cpe. Is the CPE database unchanged on the NVD
+> side?
 
-Well, we do not redownload an archive if it is already downloaded. This
-is what this test does: skip the download if the archive is already
-present lcally.
+  Using the CPE database is actually useless. I think we should drop it.
 
-We have the same test package/pkg-gemneric.mk line 190:
+  It actually doesn't matter at all if a CPE entry (including the version) is 
+found in the CPE database. If there's a CVE for it, then the entry will exist. 
+But usually, the CVE will have a version range. In that case, we anyway match 
+the version range without caring at all if the specific version exists in the 
+CPE database or not.
 
-    if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then
+  So, I think we should just construct a CPE string and match it against the 
+CVEs, without consulting the CPE database at all.
 
-and in the download wrapper, line 67-onward:
+  It _does_ make sense to do a lookup in the CPE database for the CPE string, 
+but with * as the version part. This allows us to validate if the 
+vendor/project/etc. are set correctly. But that's something we can do in 
+individual API calls for each package, like we do for release-monitoring.
 
-   67     # If the output file already exists and:
-   68     # - there's no .hash file: do not download it again and exit promptly
-   69     # - matches all its hashes: do not download it again and exit promptly
-   70     # - fails at least one of its hashes: force a re-download
-   71     # - there's no hash (but a .hash file): consider it a hard error
-   72     if [ -e "${output}" ]; then
-   73         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
-   74             exit 0
-
-So this test does exactly the same thing.
-
-Regards,
-Yann E. MORIN.
-
-> Thanks for this work. Seriously, it looks quite good, and close to a
-> state where it can be merged. I think it no longer needs to be in the
-> "RFC" state.
-
-Yes, this is a very good work overall, for such a complex stack.
-
-We've been discussing this series on IRC, too, and it looks like there
-are missing pieces. Adam will correct me where I'm wrong, but here's
-what I understood from our discussion:
-
- 1. flutter-engine is a set of libraries that implement the runtime,
-    this is what this package will provide, and flutter apps will have
-    to select it and have it in their _DEPENDENCIES;
-
- 2. there is a package, flutter-sdk-bin, that provides a compiler to
-    compiler flutter apps into Dart code; we'll need to have it packaged
-    as host-flutter-sdk-bin; flutter apps will need to have that in
-    their _DEPENDENCIES;
-
- 3. there is another package (which one?) that provide 'flutter', an
-    executable that is in charge of starting flutter apps on the target.
-    It looks like flutter-pi is such a package, but there might be
-    others.
-
-So, if I understood everything (far from granted!), the sequence is
-about to look like this:
-
-    flutter app source code
-        |
-        v
-    flutter-sdk-bin to compile
-        |
-        v
-    Dart code
-        |
-        v
-    Target in /usr/share/flutter/app-name
-
-    flutter-pi or other
-        |
-        v
-    Target in /usr/bin/flutter
-
-Then at runtime on the target:
-
-    $ /usr/bin/flutter app-name
-
-So, there are a lot more details to sort out, but it looks like the full
-stack is about this shape. More or less... Maybe less than more... Who
-knows?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  Regards,
+  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
