@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BCB9C0015E
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 20:55:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCCDAC001DE
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 20:55:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33C3560F3C;
-	Wed,  9 Aug 2023 20:55:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33C3560F3C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83C6A60AE9;
+	Wed,  9 Aug 2023 20:55:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83C6A60AE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rFKdTVJ12ZZN; Wed,  9 Aug 2023 20:55:10 +0000 (UTC)
+	with ESMTP id iGkJEdpWEXXJ; Wed,  9 Aug 2023 20:55:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7095760E1D;
-	Wed,  9 Aug 2023 20:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7095760E1D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B76EC1BF3EB
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:55:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC29960F27;
+	Wed,  9 Aug 2023 20:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC29960F27
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 276821BF3EB
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F4BF40891
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F4BF40891
+ by smtp3.osuosl.org (Postfix) with ESMTP id F246160E4D
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:55:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F246160E4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wFz3cLfTI7Ck for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 20:54:59 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 71F7C4086B
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 20:54:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71F7C4086B
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jV5bXqGjEYm5 for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 20:55:05 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 024FD60757
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 20:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 024FD60757
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2EB4C13F84C;
- Wed,  9 Aug 2023 22:54:54 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 2C8C913F85A;
+ Wed,  9 Aug 2023 22:54:59 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed,  9 Aug 2023 22:54:33 +0200
-Message-ID: <20230809205434.312601-2-ju.o@free.fr>
+Date: Wed,  9 Aug 2023 22:54:34 +0200
+Message-ID: <20230809205434.312601-3-ju.o@free.fr>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230809205434.312601-1-ju.o@free.fr>
 References: <20230809205434.312601-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691614497;
- bh=QBCgXwrY3Cz3+871/eifKHH6xx4AO93hH/5nM3Wb6Dc=;
+ d=free.fr; s=smtp-20201208; t=1691614502;
+ bh=pOiIyqfyvBTLFCoMW1F+LszRAUnXacBLuA9c5Fhxxak=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=bhIVzu1DCqXBRDIPhhOSrKxnGhGpiFcc8lFDopEfg9/uw7NtGjPBm32sU3Hgyp/dr
- dVWc23gRD+07I+yXrCH38GPgbgTMonN5HYua6TdPY0xA52WcncACbHT38SOMctEa8P
- AAXWBNKXXz/lfqVJzYJto0n6uJRsxStZlRbEbKpHmEPDEYelCxSvy62w5WuCQx4ckq
- qCxi9mmFkMFVx4jcnm/In9JD37qDgYerWp3uirH9XZJBWjcR21f7GH4wHoLQNRkqo+
- ozMbkmV0XFgkOynIq3iSGEveZAKhC2D2ZnGbgEX7fVWFB8Uhhk2hZPLV/SPazLnepV
- dgZO62+BHnHXA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=f/ITOFa/tX5oS1dIYYkgepOcjguF0C/2RttheuhUwkFsnelThSngchfWrVZoPKMW0
+ VEsU6EHNtP2HxGiSRhMT1VHH4CwqvEYrTBVtpEJqs3rZyKZ+ZJwcJ/sJgmFKRxr23Z
+ 5UWJI87hgurZs+tJJ1C0S0sW3YnyTbSwDJa6FSbjTWmxLsuxVA/o5sxy35F5jhR4bN
+ mKibHUCN/geUq+3wuH/Q6RLh5ZzqqgPBdC+ztRYEQAcZWE8jsH8sSuLLA/E3rKGoJj
+ ERzl+1Znu3QYfDqmiTMak5JuhQxTGtIgBlwGNg+ygP1uujrEP5uKuA6Zh8+52Nj+k8
+ 0YMHTKQ7cCY9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bhIVzu1D
-Subject: [Buildroot] [PATCH next 2/3] package/kmscube: add optional
- dependency to libpng
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=f/ITOFa/
+Subject: [Buildroot] [PATCH next 3/3] package/kmscube: add optional
+ gstreamer support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,29 +79,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-kmscube libpng support was added in:
-https://gitlab.freedesktop.org/mesa/kmscube/-/commit/a09d38f94e27dcc5fe52adf99404c821028e3e9d
+kmscube has a gstreamer video texture input since:
+https://gitlab.freedesktop.org/mesa/kmscube/-/commit/961c85f6eb42e4445513044c9944c83a0d9cb324
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/kmscube/kmscube.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/kmscube/Config.in  | 14 ++++++++++++++
+ package/kmscube/kmscube.mk |  7 +++++++
+ 2 files changed, 21 insertions(+)
 
+diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
+index 7379675609..f68f38b7a8 100644
+--- a/package/kmscube/Config.in
++++ b/package/kmscube/Config.in
+@@ -11,6 +11,20 @@ config BR2_PACKAGE_KMSCUBE
+ 
+ 	  https://cgit.freedesktop.org/mesa/kmscube/
+ 
++if BR2_PACKAGE_KMSCUBE
++
++config BR2_PACKAGE_KMSCUBE_GSTREAMER
++	bool "Enable gstreamer video support"
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	select BR2_PACKAGE_GSTREAMER1
++
++endif
++
+ comment "kmscube needs EGL, GBM and OpenGL ES, and a toolchain w/ thread support"
+ 	depends on \
+ 		!BR2_PACKAGE_HAS_LIBEGL || \
 diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
-index 699af0b6c4..a47df74f7b 100644
+index a47df74f7b..eeb22061fb 100644
 --- a/package/kmscube/kmscube.mk
 +++ b/package/kmscube/kmscube.mk
-@@ -10,4 +10,10 @@ KMSCUBE_LICENSE = MIT
+@@ -10,6 +10,13 @@ KMSCUBE_LICENSE = MIT
  KMSCUBE_LICENSE_FILES = COPYING
  KMSCUBE_DEPENDENCIES = host-pkgconf libdrm libegl libgbm libgles
  
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+KMSCUBE_DEPENDENCIES += libpng
-+# libpng is automatically detected in meson, there is no build
-+# configuration option to pass.
++ifeq ($(BR2_PACKAGE_KMSCUBE_GSTREAMER),y)
++KMSCUBE_DEPENDENCIES += gst1-plugins-base gstreamer1 libglib2
++KMSCUBE_CONF_OPTS += -Dgstreamer=enabled
++else
++KMSCUBE_CONF_OPTS += -Dgstreamer=disabled
 +endif
 +
- $(eval $(meson-package))
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ KMSCUBE_DEPENDENCIES += libpng
+ # libpng is automatically detected in meson, there is no build
 -- 
 2.41.0
 
