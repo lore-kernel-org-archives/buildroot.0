@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B983FC001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 17:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3B47C001B0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 17:40:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B399402FD;
-	Wed,  9 Aug 2023 17:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B399402FD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C1BD40442;
+	Wed,  9 Aug 2023 17:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C1BD40442
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SzE0CliylcxS; Wed,  9 Aug 2023 17:40:29 +0000 (UTC)
+	with ESMTP id wX800-HtytQE; Wed,  9 Aug 2023 17:40:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D18A4025B;
-	Wed,  9 Aug 2023 17:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D18A4025B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E8F61BF3B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F96B401FB;
+	Wed,  9 Aug 2023 17:40:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F96B401FB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 897F91BF97F
  for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 580D6414F1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61E3A83ABB
  for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 580D6414F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61E3A83ABB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ly56AkcsW5AN for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8KweaT9Y1mvG for <buildroot@lists.busybox.net>;
  Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D95540525
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31D3E83AA5
  for <buildroot@buildroot.org>; Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D95540525
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31D3E83AA5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1406D85168; Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
+ id 1DC1B85169; Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 19:21:21 +0200
+Date: Wed, 9 Aug 2023 19:21:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b10ceec75520fab80f76081f50daaaab9df890f5
-X-Git-Newrev: e763128b6b16becdb476f52af106302e18c26233
+X-Git-Oldrev: e763128b6b16becdb476f52af106302e18c26233
+X-Git-Newrev: fd5a01eee30404d95fc442eaf6a017b2754b4a37
 X-Patchwork-Hint: ignore
-Message-Id: <20230809174025.1406D85168@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/diffutils: add
- DIFFUTILS_CPE_ID_VENDOR
+Message-Id: <20230809174025.1DC1B85169@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dav1d: add DAV1D_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,40 +58,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4609883504548529372=="
+Content-Type: multipart/mixed; boundary="===============2172607111994861857=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4609883504548529372==
+--===============2172607111994861857==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e763128b6b16becdb476f52af106302e18c26233
+commit: https://git.buildroot.net/buildroot/commit/?id=fd5a01eee30404d95fc442eaf6a017b2754b4a37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:gnu:diffutils is a valid identifier for
+cpe:2.3:a:videolan:dav1d is a valid identifier for
 this package:
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=diffutils
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=dav1d
 
 Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/diffutils/diffutils.mk | 1 +
+ package/dav1d/dav1d.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 2c66434a9a..1119266863 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -10,6 +10,7 @@ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
- DIFFUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- DIFFUTILS_LICENSE = GPL-3.0+
- DIFFUTILS_LICENSE_FILES = COPYING
-+DIFFUTILS_CPE_ID_VENDOR = gnu
- 
- # Since glibc >= 2.26, don't try to use getopt_long replacement bundled
- # with diffutils. It will conflict with the one from glibc.
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 670a81d1c8..e90f53dc1a 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
+@@ -9,6 +9,7 @@ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.xz
+ DAV1D_SITE = https://download.videolan.org/pub/videolan/dav1d/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
+ DAV1D_LICENSE_FILES = COPYING
++DAV1D_CPE_ID_VENDOR = videolan
+ DAV1D_INSTALL_STAGING = YES
+ DAV1D_CONF_OPTS = \
+ 	-Denable_tests=false \
 
---===============4609883504548529372==
+--===============2172607111994861857==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -103,4 +102,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4609883504548529372==--
+--===============2172607111994861857==--
