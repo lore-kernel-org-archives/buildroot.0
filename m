@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3C7DEE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35C94EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C92441481;
-	Mon, 21 Aug 2023 20:17:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C92441481
+	by smtp2.osuosl.org (Postfix) with ESMTP id E54F740C5C;
+	Mon, 21 Aug 2023 20:17:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E54F740C5C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id oJ6x4f2kOry4; Mon, 21 Aug 2023 20:17:02 +0000 (UTC)
+	with ESMTP id LQo68V02NZ8E; Mon, 21 Aug 2023 20:17:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 959EB41484;
-	Mon, 21 Aug 2023 20:17:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 959EB41484
+	by smtp2.osuosl.org (Postfix) with ESMTP id 112DE41480;
+	Mon, 21 Aug 2023 20:17:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 112DE41480
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58FDE1BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A05B1BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2CFC841680
+ by smtp4.osuosl.org (Postfix) with ESMTP id 502C2409AA
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CFC841680
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 502C2409AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VQ07ESxwxhlR for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+ with ESMTP id oP1WLRhRhrnO for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25B4B4139E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 542E841525
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25B4B4139E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 542E841525
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1117286024; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+ id 4D5AC86023; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 12:20:52 +0200
+Date: Wed, 9 Aug 2023 19:21:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 35d97842a234b429531be8164028497d59446ca8
-X-Git-Newrev: e0a786a46733cc473f0e4c35064a3b09ccf548e6
+X-Git-Oldrev: 503cfb40c74bcb8bd6be9bcd977c9dbd1b22d0ed
+X-Git-Newrev: 144cacd07bd613bc4a293b8c0ec7c7304bdf8cc0
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200125.1117286024@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] {linux,
- linux-headers}: security bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1,
- 4}.x series
+Message-Id: <20230821200125.4D5AC86023@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/flite: add
+ FLITE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,91 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6045885908259657527=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0a786a46733cc473f0e4c35064a3b09ccf548e6
+--===============6045885908259657527==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=144cacd07bd613bc4a293b8c0ec7c7304bdf8cc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2022-40982:
-https://downfall.page/
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00828.html
-https://www.phoronix.com/news/Linux-Git-INCEPTION-DOWNFALL
+cpe:2.3:a:cmu:flite is a valid identifier for
+this package:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=flite
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ package/flite/flite.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1501df86e9..32940bc346 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/flite/flite.mk b/package/flite/flite.mk
+index 79b2288fe3..bee4c7394f 100644
+--- a/package/flite/flite.mk
++++ b/package/flite/flite.mk
+@@ -8,6 +8,7 @@ FLITE_VERSION = 2.2
+ FLITE_SITE = $(call github,festvox,flite,v$(FLITE_VERSION))
+ FLITE_LICENSE = BSD-4-Clause
+ FLITE_LICENSE_FILES = COPYING
++FLITE_CPE_ID_VENDOR = cmu
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.4.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.4.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index c9a0497d1a..ec879b21d9 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  c59f34e19e84db30206b9373041abf893f9d8a08765d163586570a5238c458b6  linux-6.4.8.tar.xz
--sha256  245248470a62d4e94b46f753afc01e19e45b9e6f3a0fa06e7f5da21fe845a808  linux-6.1.43.tar.xz
-+sha256  b8b8a29852b999f337c4e93eff6c91fb7fd2d49a6614cbcbeb6fa171ba55cc9f  linux-6.4.9.tar.xz
-+sha256  2e51d41fe11d082ae167cee05772bb07ca7f19448d2b46772d8ca2db7673a1a5  linux-6.1.44.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  00036a0260ad012aa832a8698a4afcf23b2410091527738ce48ce3fcc23f22ed  linux-5.15.124.tar.xz
--sha256  c9558bab35e23ae67661bfb3192c609c857f78582a035449ae63e33d04ab6112  linux-5.10.188.tar.xz
--sha256  bcb4953ed68131ef17f9f1ba52cac8b9d70007f5ab600bf3dee1fbf8beb218ca  linux-5.4.251.tar.xz
-+sha256  150f3846b76cd23a6135f49cef71372bade5a06e851cb4f8558df8b862d8fec7  linux-5.15.125.tar.xz
-+sha256  4c03516ae1d417571faaef175932d0892710bcbe0173e40550014d043d9098c9  linux-5.10.189.tar.xz
-+sha256  3a78587523940374a7319089b63357c7dc412b90f5879d512265e59173588267  linux-5.4.252.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  118f7411793868db8dcb043cdc82e9ac6f722fbec8dcdde30b07889d941aa3b3  linux-4.19.289.tar.xz
--sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
-+sha256  6ee30a46f3fa6576602085b7b4b0c640586f99d1c110982db411819308b5755c  linux-4.19.250.tar.xz
-+sha256  d0e32bd47a547cc20e0ce09ff45514282742edb2af38df5dc0a03f22d4321715  linux-4.14.321.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d528f88745..c7d725aa13 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -400,13 +400,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.251"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.188"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.124"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.43"	if BR2_KERNEL_HEADERS_6_1
--	default "6.4.8"		if BR2_KERNEL_HEADERS_6_4
-+	default "4.14.321"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.290"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.252"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.189"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.125"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.44"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.4.9"		if BR2_KERNEL_HEADERS_6_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ FLITE_INSTALL_STAGING = YES
+ # Patching configure.in
+
+--===============6045885908259657527==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6045885908259657527==--
