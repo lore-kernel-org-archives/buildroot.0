@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98DB2C001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 17:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03444C001E0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 17:41:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D47D40948;
-	Wed,  9 Aug 2023 17:41:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D47D40948
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4A2F418E5;
+	Wed,  9 Aug 2023 17:41:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4A2F418E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BcZdzxn226xF; Wed,  9 Aug 2023 17:41:10 +0000 (UTC)
+	with ESMTP id FVCLI1PbC-dN; Wed,  9 Aug 2023 17:41:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F005541931;
-	Wed,  9 Aug 2023 17:41:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F005541931
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4554C1BF97F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C9A541AE0;
+	Wed,  9 Aug 2023 17:41:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C9A541AE0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 453D91BF3B9
  for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FC4E40614
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1CD2983AA5
  for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:40:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FC4E40614
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CD2983AA5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6CUt4KcQbVhU for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QlNMO6sU_gBX for <buildroot@lists.busybox.net>;
  Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59831408CB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BC2B83AA6
  for <buildroot@buildroot.org>; Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59831408CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC2B83AA6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42B8385171; Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
+ id 2849C8516B; Wed,  9 Aug 2023 17:40:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 19:21:27 +0200
+Date: Wed, 9 Aug 2023 19:21:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 144cacd07bd613bc4a293b8c0ec7c7304bdf8cc0
-X-Git-Newrev: 084cc7df3f0e3f90cef55f5df82ae8320c3609d9
+X-Git-Oldrev: fd5a01eee30404d95fc442eaf6a017b2754b4a37
+X-Git-Newrev: 503cfb40c74bcb8bd6be9bcd977c9dbd1b22d0ed
 X-Patchwork-Hint: ignore
-Message-Id: <20230809174025.42B8385171@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: TestPolkitSystemd: fix
- systemctl exit code check on failure
+Message-Id: <20230809174025.2849C8516B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/composer: add
+ COMPOSER_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,75 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6041131288913808798=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=084cc7df3f0e3f90cef55f5df82ae8320c3609d9
+--===============6041131288913808798==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=503cfb40c74bcb8bd6be9bcd977c9dbd1b22d0ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As reported by [1] [2], the return code of systemctl command between
-systemd 253 and 254 has changed when the polkit authentication is
-refused:
+cpe:2.3:a:getcomposer:composer is a valid identifier for
+this package:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=getcomposer
 
-/bin/systemctl restart systemd-timesyncd.service
-
-The return code changed from 1 to 4. The Polkit test case
-"TestPolkitSystemd" expected 1 as return code [3].
-
-The service log is not the same either:
-
-systemd v253:
-Failed to restart systemd-timesyncd.service: Interactive authentication required.
-
-systemd v254:
-Failed to restart systemd-timesyncd.service: Access denied
-
-git bisect report this commit:
-https://github.com/systemd/systemd/commit/959301cf9f42418314abf027183dc25c08731b82
-
-From the PR (to get more context):
-https://github.com/systemd/systemd/pull/26365
-
-Note: systemd doesn't recommend using systemctl exit code to check unit states:
-"The mapping of LSB service states to systemd unit states is imperfect, so it is better to
-not rely on those return values but to look for specific unit states and substates instead."
-
-Since we only want to check if the command failed, update our test to
-check if systemctl returned a non zero code whatever the reason of the
-failure.
-
-Thanks to Yann E. MORIN for the brainstorming!
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561464 (TestPolkitSystemd)
-
-[1] http://lists.busybox.net/pipermail/buildroot/2023-August/671900.html
-[2] https://lists.freedesktop.org/archives/systemd-devel/2023-August/049362.html
-[3] https://git.buildroot.net/buildroot/tree/support/testing/tests/package/test_polkit.py?h=2023.08-rc1#n45
-[4] https://github.com/systemd/systemd/blob/v254/man/systemctl.xml#L2612
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_polkit.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/composer/composer.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/testing/tests/package/test_polkit.py b/support/testing/tests/package/test_polkit.py
-index 3da63c437b..3414fd5159 100644
---- a/support/testing/tests/package/test_polkit.py
-+++ b/support/testing/tests/package/test_polkit.py
-@@ -44,7 +44,7 @@ class TestPolkitSystemd(TestPolkitInfra):
-         for rule_path in TestPolkitInfra.rule_paths:
-             cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
-             _, exit_code = self.emulator.run(cmd, 10)
--            self.assertEqual(exit_code, 1)
-+            self.assertNotEqual(exit_code, 0)
+diff --git a/package/composer/composer.mk b/package/composer/composer.mk
+index fde5b48951..9bfabc28af 100644
+--- a/package/composer/composer.mk
++++ b/package/composer/composer.mk
+@@ -13,6 +13,7 @@ BASE_SITE = https://getcomposer.org/download/$(COMPOSER_VERSION)/composer.phar
+ COMPOSER_SITE = $(BASE_SITE)?n=f/$(COMPOSER_SOURCE)
+ COMPOSER_LICENSE = MIT
+ COMPOSER_LICENSE_FILES = LICENSE
++COMPOSER_CPE_ID_VENDOR = getcomposer
  
-             cmd = "cp /root/{file} {path}".format(file=rule_file, path=rule_path)
-             _, exit_code = self.emulator.run(cmd, 10)
+ HOST_COMPOSER_DEPENDENCIES = host-php
+ HOST_COMPOSER_EXTRACT_DEPENDENCIES = host-php
+
+--===============6041131288913808798==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6041131288913808798==--
