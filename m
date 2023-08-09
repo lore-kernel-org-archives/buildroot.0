@@ -4,80 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4636C0015E
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 17:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C42C001E0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 17:15:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65AE04076E;
-	Wed,  9 Aug 2023 17:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65AE04076E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 109F94086B;
+	Wed,  9 Aug 2023 17:15:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 109F94086B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kvFY3NXJkD_o; Wed,  9 Aug 2023 17:15:19 +0000 (UTC)
+	with ESMTP id MDeBxONGgEnQ; Wed,  9 Aug 2023 17:15:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CE4E4086B;
-	Wed,  9 Aug 2023 17:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CE4E4086B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B8DEB1BF3B9
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:15:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE794418DD;
+	Wed,  9 Aug 2023 17:15:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE794418DD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CBDB41BF3B9
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9EDDE60EA5
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:15:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EDDE60EA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id A53D040525
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 17:15:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A53D040525
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 22LS9O6z84Ni for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 17:15:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3KTSkkdz1XVM for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 17:15:18 +0000 (UTC)
 Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 83B6460DB7
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 17:15:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83B6460DB7
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BB2CA40280
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 17:15:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB2CA40280
 Received: from localhost (unknown [127.0.0.1])
- by mx.kolabnow.com (Postfix) with ESMTP id 4402AE8D
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 19:15:11 +0200 (CEST)
+ by mx.kolabnow.com (Postfix) with ESMTP id D39E0E8D
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 19:15:15 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at mykolab.com
 Received: from mx.kolabnow.com ([127.0.0.1])
  by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ebWtL6Jqgdel for <buildroot@buildroot.org>;
- Wed,  9 Aug 2023 19:15:08 +0200 (CEST)
+ with ESMTP id 7Syz2aohEP72 for <buildroot@buildroot.org>;
+ Wed,  9 Aug 2023 19:15:15 +0200 (CEST)
 Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
- by mx.kolabnow.com (Postfix) with ESMTPS id 85E0DB15
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 19:15:08 +0200 (CEST)
+ by mx.kolabnow.com (Postfix) with ESMTPS id 53433B15
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 19:15:15 +0200 (CEST)
 Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
- by int-mx002.mykolab.com (Postfix) with ESMTPS id 25B74369A;
- Wed,  9 Aug 2023 19:15:08 +0200 (CEST)
+ by int-mx002.mykolab.com (Postfix) with ESMTPS id F3AA1369A;
+ Wed,  9 Aug 2023 19:15:14 +0200 (CEST)
 From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 To: buildroot@buildroot.org
-Date: Wed,  9 Aug 2023 19:14:59 +0200
-Message-Id: <20230809171501.1329182-1-zgyarmati@zgyarmati.de>
+Date: Wed,  9 Aug 2023 19:15:01 +0200
+Message-Id: <20230809171501.1329182-3-zgyarmati@zgyarmati.de>
+In-Reply-To: <20230809171501.1329182-1-zgyarmati@zgyarmati.de>
+References: <20230809171501.1329182-1-zgyarmati@zgyarmati.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kolabnow.com; h=
- content-transfer-encoding:mime-version:message-id:date:date
- :subject:subject:from:from:received:received:received; s=
- dkim20160331; t=1691601308; x=1693415709; bh=yZJ1K+/bybm8+IIIb6z
- OIJonvf6qhN8OmeGwWeu9VGI=; b=2ww0btCP+p2rqnySUWzwrGHDJwSGuGC1c3n
- t1V34vG68LM4tumqiPMT8tHXoAwsGkHE8O8Qb7bLqUYtJ3H9StnQLYBCY0qoeUeV
- rIY7J1McCCvSUArtkLwTircF7Y8qvpFk4Qe/CgHSi6sS9o5W0NVJM10u80gw9iU3
- 9OVnj6tvUq+dIVEEKqmkSnex7na6vszmfIhTfIOuJh5vMz6htJLxLF/NG/NqEtKS
- Vkl1d0STPcTELeNLTdLBHPEda7mCMtoqGnS0Y/sMFHwR2hN6Hqy9glnuPOJ3BrjE
- H/z9potQvtF4gV6Mjs4Xt23VB+hn/agzGHxJh5gSb9cPrC1nnlMmxzp0KV9hXLW1
- jzw1YJOL/AtO0T9W3j8PIK7KBfLrolGNgMAR1zBPgEfSxcoSADkIJaFt19GGWGQz
- B0t1bfH+lqpjD1QaciJ+lYDOWK7cFsV1XD6gIrT5YWDcRiQxcxTJQLgkPxohuv12
- minRL5gNCUzoOVBjmktDQ2BGPxkzRt/PbdOLdLQ+JNCdKNuiOx1qfwgfcMnDn2BW
- KKU4XbwQiT3I4mAZWGl81vFcHLLX0Z2LNjsHcBjkbarBtPn96Q/GjRx+Xsm+LzQ1
- sCHcZQ5rD3O+nezAW4wxhFnssOp2XVzjAfg27J/IZ3AFPuotI5t9ty6AobdnDV99
- BVAKdohw=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:date:subject:subject:from:from:received
+ :received:received; s=dkim20160331; t=1691601315; x=1693415716;
+ bh=HcZNMKc0G5aab5Yt4UJ73VweQNTUzBv0fuwxyxMBh9A=; b=QLhl2tDIrLH1
+ ldkov5BjFa5QTM0jUDTCv7F2Ivsu5gf23FyIrLorSyACBln4yVXigQcHeQ2jizzU
+ XDSrJu5fleRwQT0Arqt94rsDSGQ0rG4yy3EYxTvQ3uHo447kK8oekNXwMVcN1Z5w
+ dpv+zwBmvOqw2PCqLD8pBXh0d8w7s+igGugwGpfrRixLSXu4L8S+NcbdIKDj4BNx
+ yynBvhUkuG34GH711lZY7nbrCxzG1hnqGX4hyJrxDdt3GEoCrQBsQX5DHp8iEMKY
+ FmKUkdrda1BX0E1ArI9GkOBtFZ9L+Wzkq56+dcSPrM2uZYC/1TiWMHgUUYVF4hxN
+ eTctRc1bz84Kv2bk0a5z1cEsLjNeqk4/hAhtCk2hLxIe2sEagR837d7LGqBqhhWC
+ 1400lfqFLWibF/hcfP0elwWh5PBJxraBiN1kCoSCnJAegnqs1ecqhOkB17z/Qv+s
+ y/0qUDQLK4Wi0wDtgo/K/RwuGJTZRxQq72SJi58ga6q7BVWsPFG65ifQ2RADra6U
+ Ip7XUnXM6tm58ZaPUnhYcCCU3BEFX/sTPncwnNEqeuszN9Gp3v4DNuIKy3zuLz4J
+ i9iFdED2iHag6+uYsfhg7uYqEXPKj7nXAUjsxaLDFrJvPnvQ8+DnuN26p3Jz5eJa
+ bEqNVH0vG5uX3ekkOkRMQNJjT4QvD2I=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (4096-bit key) header.d=kolabnow.com header.i=@kolabnow.com
- header.a=rsa-sha256 header.s=dkim20160331 header.b=2ww0btCP
+ header.a=rsa-sha256 header.s=dkim20160331 header.b=QLhl2tDI
 X-Mailman-Original-Authentication-Results: ext-mx-out001.mykolab.com
  (amavisd-new); 
  dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
  header.d=kolabnow.com
-Subject: [Buildroot] [PATCH v1 0/2] RFC Building packages both qt5/6
+Subject: [Buildroot] [PATCH v1 2/2] package/quazip: also enable for qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,29 +97,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is an attempt to enable quazip also for qt6. I couldn't find 
-an example package for this, so i would like to get some feedback
-whether this is the way we want implement this. Any comments
-are welcome. For quazip we also need the qt6core5compat package 
-as well, so that one is also added in this series, but i'm ok with 
-applying only that patch first.
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+---
+ package/Config.in        |  4 ++++
+ package/quazip/Config.in |  3 ++-
+ package/quazip/quazip.mk | 12 +++++++++---
+ 3 files changed, 15 insertions(+), 4 deletions(-)
 
-Zoltan Gyarmati (2):
-  package/qt6/qt6core5compat: add new package
-  package/quazip: also enable for qt6
-
- package/Config.in                             |  4 ++
- package/qt6/Config.in                         |  1 +
- package/qt6/qt6core5compat/Config.in          | 12 ++++++
- .../qt6/qt6core5compat/qt6core5compat.hash    | 10 +++++
- package/qt6/qt6core5compat/qt6core5compat.mk  | 39 +++++++++++++++++++
- package/quazip/Config.in                      |  3 +-
- package/quazip/quazip.mk                      | 12 ++++--
- 7 files changed, 77 insertions(+), 4 deletions(-)
- create mode 100644 package/qt6/qt6core5compat/Config.in
- create mode 100644 package/qt6/qt6core5compat/qt6core5compat.hash
- create mode 100644 package/qt6/qt6core5compat/qt6core5compat.mk
-
+diff --git a/package/Config.in b/package/Config.in
+index 1617f7488a..4715be25dc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -385,6 +385,10 @@ comment "QT libraries and helper libraries"
+ 	source "package/simple-mail/Config.in"
+ endif
+ 	source "package/qt6/Config.in"
++if BR2_PACKAGE_QT6
++comment "QT6 libraries and helper libraries"
++	source "package/quazip/Config.in"
++endif
+ 	source "package/tekui/Config.in"
+ 	source "package/weston/Config.in"
+ 	source "package/x11r7/Config.in"
+diff --git a/package/quazip/Config.in b/package/quazip/Config.in
+index bba5eddf3d..4c7a187571 100644
+--- a/package/quazip/Config.in
++++ b/package/quazip/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_QUAZIP
+ 	bool "quazip"
+-	depends on BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5 || BR2_PACKAGE_QT6
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_ZLIB_FORCE_LIBZLIB
++	select BR2_PACKAGE_QT6CORE5COMPAT if BR2_PACKAGE_QT6
+ 	help
+ 	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
+ 	  ZIP/UNZIP package that can be used to access ZIP
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index bf3b844624..665058d890 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
+@@ -7,9 +7,15 @@
+ QUAZIP_VERSION = 1.4
+ QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
+ QUAZIP_INSTALL_STAGING = YES
+-QUAZIP_DEPENDENCIES = \
+-	zlib \
+-	qt5base
++QUAZIP_DEPENDENCIES = zlib
++
++ifeq ($(BR2_PACKAGE_QT5BASE),y)
++QUAZIP_DEPENDENCIES +=  qt5base
++endif
++ifeq ($(BR2_PACKAGE_QT6BASE),y)
++QUAZIP_DEPENDENCIES +=  qt6base qt6core5compat
++endif
++
+ QUAZIP_LICENSE = LGPL-2.1
+ QUAZIP_LICENSE_FILES = COPYING
+ QUAZIP_CPE_ID_VENDOR = quazip_project
 -- 
 2.25.1
 
