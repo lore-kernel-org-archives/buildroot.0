@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E804C001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFAE5C001DE
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:15:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23CCD60FC0;
-	Wed,  9 Aug 2023 21:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23CCD60FC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4D3F60F5D;
+	Wed,  9 Aug 2023 21:15:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4D3F60F5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ah9hFpJ-tu3k; Wed,  9 Aug 2023 21:15:16 +0000 (UTC)
+	with ESMTP id ocYRzqT2yqUu; Wed,  9 Aug 2023 21:15:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24D4860E86;
-	Wed,  9 Aug 2023 21:15:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24D4860E86
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2DB001BF28A
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:15:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB79960E86;
+	Wed,  9 Aug 2023 21:15:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB79960E86
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 262F01BF97F
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06F364063C
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:15:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06F364063C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D2A88308B
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:15:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D2A88308B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 28fNB2_0xze1 for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 21:15:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id r6TVdBoGZ4cM for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 21:15:21 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 32425400D9
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:15:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32425400D9
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2D0E682F51
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:15:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D0E682F51
 Received: from fli4l.lan.fli4l (p4fd6c449.dip0.t-ipconnect.de [79.214.196.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 9C54DA4C110E;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9D4D8A4C1110;
  Wed,  9 Aug 2023 23:14:03 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:57460)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qTqVH-0001EZ-0Z;
+ (envelope-from <bernd@kuhls.net>) id 1qTqVH-0001EZ-1a;
  Wed, 09 Aug 2023 23:14:03 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  9 Aug 2023 23:13:56 +0200
-Message-Id: <20230809211401.3587177-10-bernd@kuhls.net>
+Date: Wed,  9 Aug 2023 23:13:59 +0200
+Message-Id: <20230809211401.3587177-13-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230809211401.3587177-1-bernd@kuhls.net>
 References: <20230809211401.3587177-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1691615643;
- bh=HBGGgL9C6WUUQQ9t60HfKAwdiQCLlo6X04F7DszC4tc=;
+ bh=iwguvN1IyZHDayRVPIlzKJ2VI4swrYwazR1GT3iBPAs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=0Iq7LCTEhRW8NEygTBYxAdw9bl/ATsaxP9ED1FK17gqBeF7E0wX3ADqi5e8zo8Ktg
- iDIKaNEB84MQtFm+QnKQOR4hFNGinAxfT0pnBxZPpJGnzty9etLNtD3F9joUMVugh9
- 4ZWz3Awets/q5nkVC0MshMdPq9pyPCFdA8G8Y7KkF36F2h62YuZ1qCtPNxq3af2DrK
- HA/crkbG/xZQ07Ne5bxmyAKImKPxVQkz6TNhGc+H2OimLjnGpzUvEl7ilkhOOABRM+
- 1CJmcmgg758KlWId6dbIK/hGZ4sZNgyapMmfzLFo16FW4kAzoAnOPRb4fV12ErGeyS
- hJ9VRiEmep+AA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=lqpmTRYKnBMyj6JyS7coeoSE66cPoLqe530NTymDdJkfp7B1tpb6Vr9T84MbtmFrK
+ jGdj2OiofvdicGgEGOqCxy58C/wkiSLg971z2+eovSvvA/5X9Oq6AwhSkDNPVlrxZY
+ KRHzrDsH2ECq5ZkMBxGvQjOVB+ZAYadngbeG34qvHi6r5ZpfkWHeaQydr+/TSYoPKu
+ PxUSGsFa6nMVaX8ntiME7V1G2/NIc5PNnqJPXylB4FBOOfhMZ3VvegXmFxR1JERrin
+ BDMmLz142NrVSi/qXMZYySgbc/NYC/QhjMiEuLr2m+0P+7+WuifavjUozd3/6CGapm
+ zpG/+EscXMKbg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=0Iq7LCTE
-Subject: [Buildroot] [PATCH/next v3 09/14] package/python3: use upstream
- build system to disable decimal module
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=lqpmTRYK
+Subject: [Buildroot] [PATCH/next v3 12/14] package/python3: use upstream
+ build system to disable sqlite3 module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,99 +87,120 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
  .checkpackageignore                           |  1 -
- ...021-Add-an-option-to-disable-decimal.patch | 54 -------------------
+ ...option-to-disable-the-sqlite3-module.patch | 62 -------------------
  package/python3/python3.mk                    |  4 +-
- 3 files changed, 2 insertions(+), 57 deletions(-)
- delete mode 100644 package/python3/0021-Add-an-option-to-disable-decimal.patch
+ 3 files changed, 2 insertions(+), 65 deletions(-)
+ delete mode 100644 package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 35f0f04380..fb29bc5d42 100644
+index 870dd9caaf..2be91b1147 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1226,7 +1226,6 @@ package/python3/0014-Add-an-option-to-disable-the-tk-module.patch Upstream
- package/python3/0016-Add-an-option-to-disable-expat.patch Upstream
- package/python3/0017-Add-an-option-to-disable-CJK-codecs.patch Upstream
+@@ -1221,7 +1221,6 @@ package/python3/0009-Do-not-adjust-the-shebang-of-Python-scripts-for-cros.patch
+ package/python3/0010-Misc-python-config.sh.in-ensure-sed-invocations-only.patch Upstream
+ package/python3/0011-Add-an-option-to-disable-pydoc.patch Upstream
+ package/python3/0012-Add-an-option-to-disable-lib2to3.patch Upstream
+-package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch Upstream
+ package/python3/0014-Add-an-option-to-disable-the-tk-module.patch Upstream
  package/python3/0020-Add-an-option-to-disable-IDLE.patch Upstream
--package/python3/0021-Add-an-option-to-disable-decimal.patch Upstream
  package/python3/0026-python-config.sh-don-t-reassign-prefix.patch Upstream
- package/python3/0028-fix-building-on-older-distributions.patch Upstream
- package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch Upstream
-diff --git a/package/python3/0021-Add-an-option-to-disable-decimal.patch b/package/python3/0021-Add-an-option-to-disable-decimal.patch
+diff --git a/package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch b/package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
 deleted file mode 100644
-index d683565f94..0000000000
---- a/package/python3/0021-Add-an-option-to-disable-decimal.patch
+index 795ea3b898..0000000000
+--- a/package/python3/0013-Add-option-to-disable-the-sqlite3-module.patch
 +++ /dev/null
-@@ -1,54 +0,0 @@
--From 7091fdf77f612425c178a75148560f9c3514e8b8 Mon Sep 17 00:00:00 2001
+@@ -1,62 +0,0 @@
+-From ef8c030e01b1be8be582e90c31298a5863094858 Mon Sep 17 00:00:00 2001
 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Wed, 23 Dec 2015 11:51:31 +0100
--Subject: [PATCH] Add an option to disable decimal
--
--This patch replaces the existing --with-system-libmpdec option with a
----with-libmpdec={system,builtin,none} option, which allows to tell
--Python whether we want to use the system libmpdec (already installed),
--the libmpdec builtin the Python sources, or no libmpdec at all.
+-Date: Wed, 22 Feb 2017 17:20:45 -0800
+-Subject: [PATCH] Add option to disable the sqlite3 module
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[aduskett@gmail.com: Update for python 3.7.0]
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-[ Andrey Smirnov: ported to Python 3.6 ]
+-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+-[ Adam Duskett: ported to Python 3.10.0 ]
 -Signed-off-by: Adam Duskett <aduskett@gmail.com>
--[james.hilliard1@gmail.com: adapt to python 3.9]
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ----
-- configure.ac | 19 +++++++++++++------
-- 1 file changed, 13 insertions(+), 6 deletions(-)
+- Makefile.pre.in | 5 ++++-
+- configure.ac    | 9 +++++++++
+- 2 files changed, 13 insertions(+), 1 deletion(-)
 -
+-diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index f5d0573067..9f4cdf14cf 100644
+---- a/Makefile.pre.in
+-+++ b/Makefile.pre.in
+-@@ -1920,7 +1920,6 @@ LIBSUBDIRS=	asyncio \
+- 		multiprocessing multiprocessing/dummy \
+- 		re \
+- 		site-packages \
+--		sqlite3 \
+- 		tkinter \
+- 		tomllib \
+- 		turtledemo \
+-@@ -2018,6 +2017,10 @@ TESTSUBDIRS += lib2to3/tests			\
+- 	lib2to3/tests/data/fixers/myfixes
+- endif
+- 
+-+ifeq (@SQLITE3@,yes)
+-+LIBSUBDIRS += sqlite3
+-+endif
+-+
+- TEST_MODULES=@TEST_MODULES@
+- libinstall:	all $(srcdir)/Modules/xxmodule.c
+- 	@for i in $(SCRIPTDIR) $(LIBDEST); \
 -diff --git a/configure.ac b/configure.ac
--index 5e6d72f7db..e6b1f1e9de 100644
+-index d8e10cf2b2..4cc0951ab9 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -3630,14 +3630,21 @@ fi
-- AC_SUBST(LIBFFI_INCLUDEDIR)
+-@@ -4171,6 +4171,15 @@ AS_VAR_IF([posix_threads], [stub], [
+-   AC_DEFINE([HAVE_PTHREAD_STUBS], [1], [Define if platform requires stubbed pthreads support])
+- ])
 - 
-- # Check for use of the system libmpdec library
---AC_MSG_CHECKING(for --with-system-libmpdec)
---AC_ARG_WITH(system_libmpdec,
---            AS_HELP_STRING([--with-system-libmpdec], [build _decimal module using an installed libmpdec library, see Doc/library/decimal.rst (default is no)]),
--+AC_MSG_CHECKING(for --with-libmpdec)
--+AC_ARG_WITH(libmpdec,
--+            AS_HELP_STRING([--with-libmpdec], [select which libmpdec version to use: system, builtin, none]),
--             [],
---            [with_system_libmpdec="no"])
---AC_MSG_RESULT($with_system_libmpdec)
--+            [with_libmpdec="builtin"])
--+AC_MSG_RESULT($with_libmpdec)
--+if test "$with_libmpdec" != "none"; then
--+   MPDEC=yes
--+else
--+   DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _decimal"
--+   MPDEC=no
+-+AC_SUBST(SQLITE3)
+-+AC_ARG_ENABLE(sqlite3,
+-+	AS_HELP_STRING([--disable-sqlite3], [disable sqlite3]),
+-+	[ SQLITE3="${enableval}" ], [ SQLITE3=yes ])
+-+
+-+if test "$SQLITE3" = "no" ; then
+-+   DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
 -+fi
--+AC_SUBST(MPDEC)
+-+
+- AC_SUBST(PYDOC)
 - 
---AS_VAR_IF([with_system_libmpdec], [yes], [
--+AS_VAR_IF([with_libmpdec], [system], [
--   LIBMPDEC_CFLAGS=${LIBMPDEC_CFLAGS-""}
--   LIBMPDEC_LDFLAGS=${LIBMPDEC_LDFLAGS-"-lmpdec"}
--   LIBMPDEC_INTERNAL=
+- AC_ARG_ENABLE(pydoc,
 --- 
 -2.34.1
 -
 diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 324c35838b..ea65a0c66b 100644
+index 87dc454185..215bbb6a03 100644
 --- a/package/python3/python3.mk
 +++ b/package/python3/python3.mk
-@@ -98,9 +98,9 @@ endif
+@@ -22,7 +22,6 @@ PYTHON3_IGNORE_CVES += CVE-2022-45061
+ HOST_PYTHON3_CONF_OPTS += \
+ 	--without-ensurepip \
+ 	--without-cxx-main \
+-	--disable-sqlite3 \
+ 	--disable-tk \
+ 	--with-system-expat \
+ 	--disable-test-modules \
+@@ -46,6 +45,7 @@ HOST_PYTHON3_CONF_ENV += \
+ 	py_cv_module__codecs_jp=n/a \
+ 	py_cv_module__codecs_kr=n/a \
+ 	py_cv_module__codecs_tw=n/a \
++	py_cv_module__sqlite3=n/a \
+ 	py_cv_module__uuid=n/a \
+ 	ac_cv_prog_HAS_HG=/bin/false
  
- ifeq ($(BR2_PACKAGE_PYTHON3_DECIMAL),y)
- PYTHON3_DEPENDENCIES += mpdecimal
--PYTHON3_CONF_OPTS += --with-libmpdec=system
-+PYTHON3_CONF_OPTS += --with-system-libmpdec
+@@ -118,7 +118,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
+ PYTHON3_DEPENDENCIES += sqlite
  else
--PYTHON3_CONF_OPTS += --with-libmpdec=none
-+PYTHON3_CONF_ENV += py_cv_module__decimal=n/a
+-PYTHON3_CONF_OPTS += --disable-sqlite3
++PYTHON3_CONF_ENV += py_cv_module__sqlite3=n/a
  endif
  
- ifeq ($(BR2_PACKAGE_PYTHON3_PYEXPAT),y)
+ ifeq ($(BR2_PACKAGE_PYTHON3_SSL),y)
 -- 
 2.39.2
 
