@@ -4,68 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D350C0015E
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 20:56:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60BE6C001B0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 20:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15D1E60E4D;
-	Wed,  9 Aug 2023 20:56:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15D1E60E4D
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18A2E60B73;
+	Wed,  9 Aug 2023 20:59:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18A2E60B73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nHsK0jsEhNX0; Wed,  9 Aug 2023 20:56:00 +0000 (UTC)
+	with ESMTP id TTy8q67-OGGY; Wed,  9 Aug 2023 20:59:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 425F060757;
-	Wed,  9 Aug 2023 20:55:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 425F060757
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5484760F5C;
+	Wed,  9 Aug 2023 20:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5484760F5C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A85241BF3EB
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:55:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 33EFA1BF3EB
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76B9A408FD
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:55:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76B9A408FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id F365A418EA
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:59:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F365A418EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uF5A1e90GStP for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 20:55:55 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 42EDD408F7
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 20:55:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42EDD408F7
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B19511C0004;
- Wed,  9 Aug 2023 20:55:51 +0000 (UTC)
-Date: Wed, 9 Aug 2023 22:55:50 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20230809225550.56b0d16f@windsurf>
-In-Reply-To: <20230809202204.GD421096@scaer>
-References: <20230808003527.1469175-1-adam.duskett@amarulasolutions.com>
- <20230808003527.1469175-4-adam.duskett@amarulasolutions.com>
- <20230808195621.1c5d4242@windsurf> <20230809202204.GD421096@scaer>
+ with ESMTP id 9xrVuvj3UJ2f for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 20:59:06 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 35C2D408DD
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 20:59:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35C2D408DD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E8CC1BF207;
+ Wed,  9 Aug 2023 20:59:02 +0000 (UTC)
+Date: Wed, 9 Aug 2023 22:59:01 +0200
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20230809225901.470e0270@windsurf>
+In-Reply-To: <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
+References: <20230731201422.13543-1-dalang@gmx.at>
+ <20230731235236.60ddc54a@windsurf>
+ <47519c2e-9b64-68b1-79b2-21a2ddea976b@gmx.at>
+ <20230801161956.00715a06@windsurf>
+ <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691614552;
+ d=bootlin.com; s=gm1; t=1691614743;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=UUEx6W3o0+Uwi+Mleo9QAjZo2OZuhim5PIf16h3A7TM=;
- b=bWNU36CPs0SiudTxziDUW29oDb/r8I2nPQxqNOIH3jgVks3RCDoYnN3Bok6JG+m0rQ7t6S
- wRotXb4+hj3DkRarWZ46v3rcJr5YbSIoFQ/9Y4tMzEa+QFMVIZOncDo4/2boLY7tA7deCF
- RWkSlcmW6aXjN+0l0I/vHqSKjh8HDK38J5JlM+zS9y1oR65ZBp9EE9J/Spu+VZ5VIAjX/8
- y2jSehWccVqj5JkTMK8yA9d5P0AfNuc5ydq3sYnrBfDjdy7UzDH+diPcpvRbU908akAUZm
- 17qaYn5xs1frtx1WvSokWNNSWWY0iQpjB18rPs+BbguQvoKsVMvk2kxw6/lTGQ==
+ bh=UqhvHWCF+jfr7IuWH7u3cZB45KIIl27OHDZIayimgbs=;
+ b=KzJZpQOftVdmY4Pl+FnLwWUK3DhcRV2fHwPwRd4lJUatw+TfKS7hKpbBZBBMaZ+dubVXcl
+ 1WSJTm6SxYP7trA8SEj1vjO+uTRZ3LIA7w3qULaNenbPTHJo6HP5naAUDPIz3/IpG7JMWE
+ qqNJTR+Kz7qmRK7lBZXXsGohOB855jUWNZbVXnk/G3vDSYkZBO4wHXZffwUA7cSRvsymyF
+ 38S8BuBGTEYpnbm71yjmPPLHm4YSjgpJt7QkDosVeK2t9G7U24U2wqtPnl0vF60vyT7YPm
+ eZMNQrw4sa+a6NdsA5I1p0XDsbNSL7wW38mte6HL4NYvCnhBYSJDrUQ1mVnWEg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bWNU36CP
-Subject: Re: [Buildroot] [PATCH/next vRFCv2 3/3] package/flutter-engine: new
- package
+ header.s=gm1 header.b=KzJZpQOf
+Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
+ version 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,96 +81,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Michael Trimarchi <michael@amarulasolutions.com>, buildroot@buildroot.org,
- Asaf Kahlon <asafka7@gmail.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: Daniel Lang <dalang@gmx.at>, clement.ramirez@bootlin.com,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Wed, 9 Aug 2023 22:31:11 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-On Wed, 9 Aug 2023 22:22:04 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>   Using the CPE database is actually useless. I think we should drop it.
 
-> Well, we do not redownload an archive if it is already downloaded. This
-> is what this test does: skip the download if the archive is already
-> present lcally.
-> 
-> We have the same test package/pkg-gemneric.mk line 190:
-> 
->     if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then
-> 
-> and in the download wrapper, line 67-onward:
-> 
->    67     # If the output file already exists and:
->    68     # - there's no .hash file: do not download it again and exit promptly
->    69     # - matches all its hashes: do not download it again and exit promptly
->    70     # - fails at least one of its hashes: force a re-download
->    71     # - there's no hash (but a .hash file): consider it a hard error
->    72     if [ -e "${output}" ]; then
->    73         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
->    74             exit 0
-> 
-> So this test does exactly the same thing.
+When I read this, I disagreed...
 
-Indeed, makes sense!
+>   It actually doesn't matter at all if a CPE entry (including the version) is 
+> found in the CPE database. If there's a CVE for it, then the entry will exist. 
+> But usually, the CVE will have a version range. In that case, we anyway match 
+> the version range without caring at all if the specific version exists in the 
+> CPE database or not.
+> 
+>   So, I think we should just construct a CPE string and match it against the 
+> CVEs, without consulting the CPE database at all.
+> 
+>   It _does_ make sense to do a lookup in the CPE database for the CPE string, 
+> but with * as the version part. This allows us to validate if the 
+> vendor/project/etc. are set correctly. But that's something we can do in 
+> individual API calls for each package, like we do for release-monitoring.
 
-> Yes, this is a very good work overall, for such a complex stack.
-> 
-> We've been discussing this series on IRC, too, and it looks like there
-> are missing pieces. Adam will correct me where I'm wrong, but here's
-> what I understood from our discussion:
-> 
->  1. flutter-engine is a set of libraries that implement the runtime,
->     this is what this package will provide, and flutter apps will have
->     to select it and have it in their _DEPENDENCIES;
-> 
->  2. there is a package, flutter-sdk-bin, that provides a compiler to
->     compiler flutter apps into Dart code; we'll need to have it packaged
->     as host-flutter-sdk-bin; flutter apps will need to have that in
->     their _DEPENDENCIES;
-> 
->  3. there is another package (which one?) that provide 'flutter', an
->     executable that is in charge of starting flutter apps on the target.
->     It looks like flutter-pi is such a package, but there might be
->     others.
-
-I think this part (3) is called an "embedder" in the Flutter
-terminology. flutter-pi is one. Another one is
-https://github.com/sony/flutter-elinux. See
-https://medium.com/snapp-x/flutter-on-embedded-devices-7070b5907b91. 
-
-> So, if I understood everything (far from granted!), the sequence is
-> about to look like this:
-> 
->     flutter app source code
->         |
->         v
->     flutter-sdk-bin to compile
->         |
->         v
->     Dart code
->         |
->         v
->     Target in /usr/share/flutter/app-name
-> 
->     flutter-pi or other
->         |
->         v
->     Target in /usr/bin/flutter
-> 
-> Then at runtime on the target:
-> 
->     $ /usr/bin/flutter app-name
-
-Thanks for this summary, makes sense to me.
-
-Do we want for the whole thing to be submitted to merge anything, or do
-we want to go ahead and merge flutter-engine first? I'm fine with
-merging things piece by piece.
+... but then you say we should still use the CPE database, and I agree
+on the why we should use it: to have some reasonable certainty that the
+CPE ID we create in Buildroot for each package has a chance of matching
+the CPEs that will be associated to the CVEs that will perhaps one day
+be reported against this software package. So yes, perhaps we should
+just match in the CPE database with version set to '*', so that we
+don't care if the CPE database isn't aware of the latest releases of
+software packages, which it rarely is.
 
 Thomas
 -- 
