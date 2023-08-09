@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 827F9C001DE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98BEC001DE
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:43:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FC1A4025F;
-	Wed,  9 Aug 2023 21:43:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FC1A4025F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67D6B418D2;
+	Wed,  9 Aug 2023 21:43:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67D6B418D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7F4bWxX9tWFi; Wed,  9 Aug 2023 21:43:08 +0000 (UTC)
+	with ESMTP id JDDQkn8gciwq; Wed,  9 Aug 2023 21:43:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01938400B2;
-	Wed,  9 Aug 2023 21:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01938400B2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B78E418AC;
+	Wed,  9 Aug 2023 21:43:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B78E418AC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A8DB81BF28A
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:43:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7F0E41BF28A
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80AD14017A
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80AD14017A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 562BD4089F
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:43:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 562BD4089F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id o-yHGgOBO2tn for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 21:43:04 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 57E9240029
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57E9240029
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 82F59C0003;
- Wed,  9 Aug 2023 21:43:02 +0000 (UTC)
-Date: Wed, 9 Aug 2023 23:43:01 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230809234301.02acbc04@windsurf>
-In-Reply-To: <20230809212345.1338243-1-giulio.benetti@benettiengineering.com>
-References: <20230809212345.1338243-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691617382;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SAgwK03MsTps13Ytt6ETyWKGzP+bjs/aAJw9U90R06I=;
- b=jhi6lsUg++pD9DngdY8JfdlkdxVarfILG+WMDGwKMkN+m56PoV5wXteN3ouONqsezdCMXf
- OgryX1yXuHujo90KyeutylYVPVs6kvsosK0rHQsW4nC2+DIUAcnQZKm/gaqa0/cavA7lzm
- Bl0IIUokPHEet5Vysy5FD95xYihaBoy0fWHcXuPotBgxYoqIdemm/9Qiksf/w9DXdz6Zhi
- HWZSVn5EBnTN/S22Gvuu8A0raEagjBxH+3rN3K6ymnDg58LubB+RFfjaHk2Ah1zs3bcOkU
- yyOdNWYyW1VragpJ6K778dNYyf39f6rnAQ+LHAT20pfuG/FQitU57KbqwWVhTA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jhi6lsUg
-Subject: Re: [Buildroot] [PATCH] package/esp-hosted: fix build failure when
- Linux CONFIG_PM is not defined
+ with ESMTP id jXCDeBXAtGSw for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 21:43:30 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5805240673
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:43:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5805240673
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 43A648541D; Wed,  9 Aug 2023 21:43:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 9 Aug 2023 23:43:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cebd9c7c04e355b8996d601c63602512106ca631
+X-Git-Newrev: 7b0565fc9d2ee8c9cf0a493712886c24f9cdc8dd
+X-Patchwork-Hint: ignore
+Message-Id: <20230809214330.43A648541D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-imagedecoder-heif: fix build
+ with gcc-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,36 +58,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  9 Aug 2023 23:23:45 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7b0565fc9d2ee8c9cf0a493712886c24f9cdc8dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add local patch pending upstream[1] to guard structure member wowlan that
-> is only present if CONFIG_PM is defined.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d47317640de39baabeefb8d9e04fa7f3e2dc873a
-> 
-> [1]: https://github.com/espressif/esp-hosted/pull/254
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...st-fix-build-failure-when-CONFIG_PM-.patch | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/esp-hosted/0001-esp_hosted_ng-host-fix-build-failure-when-CONFIG_PM-.patch
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...include-missing-cstdint-to-support-gcc-13.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-imagedecoder-heif/0001-include-missing-cstdint-to-support-gcc-13.patch b/package/kodi-imagedecoder-heif/0001-include-missing-cstdint-to-support-gcc-13.patch
+new file mode 100644
+index 0000000000..bd431545e1
+--- /dev/null
++++ b/package/kodi-imagedecoder-heif/0001-include-missing-cstdint-to-support-gcc-13.patch
+@@ -0,0 +1,31 @@
++From 47dcb3843e02abb69c52d6f0021bd2816b8317a5 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Thu, 27 Apr 2023 02:46:59 +1000
++Subject: [PATCH] include missing <cstdint> to support gcc-13
++
++gcc 13 moved some includes around and as a result <cstdint> is no longer transitively
++included [1]. Explicitly include it for uint{32,64}_t.
++
++[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
++
++Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
++
++Upstream: https://github.com/xbmc/imagedecoder.heif/commit/47dcb3843e02abb69c52d6f0021bd2816b8317a5
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ lib/TinyEXIF/TinyEXIF.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/TinyEXIF/TinyEXIF.h b/lib/TinyEXIF/TinyEXIF.h
++index 56354aa..b03d36b 100644
++--- a/lib/TinyEXIF/TinyEXIF.h
+++++ b/lib/TinyEXIF/TinyEXIF.h
++@@ -34,6 +34,7 @@
++ #ifndef __TINYEXIF_H__
++ #define __TINYEXIF_H__
++ 
+++#include <cstdint>
++ #include <string>
++ #include <vector>
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
