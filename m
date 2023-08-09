@@ -4,70 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60BE6C001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 20:59:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E4DDC001DE
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18A2E60B73;
-	Wed,  9 Aug 2023 20:59:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18A2E60B73
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBCAE60B26;
+	Wed,  9 Aug 2023 21:03:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBCAE60B26
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TTy8q67-OGGY; Wed,  9 Aug 2023 20:59:10 +0000 (UTC)
+	with ESMTP id CLy6VdnSxc1C; Wed,  9 Aug 2023 21:03:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5484760F5C;
-	Wed,  9 Aug 2023 20:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5484760F5C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 33EFA1BF3EB
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:59:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21E9760AFF;
+	Wed,  9 Aug 2023 21:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21E9760AFF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E2D3D1BF5F8
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:03:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F365A418EA
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 20:59:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F365A418EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9AF04063C
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:03:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9AF04063C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9xrVuvj3UJ2f for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 20:59:06 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 35C2D408DD
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 20:59:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35C2D408DD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E8CC1BF207;
- Wed,  9 Aug 2023 20:59:02 +0000 (UTC)
-Date: Wed, 9 Aug 2023 22:59:01 +0200
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20230809225901.470e0270@windsurf>
-In-Reply-To: <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
-References: <20230731201422.13543-1-dalang@gmx.at>
- <20230731235236.60ddc54a@windsurf>
- <47519c2e-9b64-68b1-79b2-21a2ddea976b@gmx.at>
- <20230801161956.00715a06@windsurf>
- <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id m4C-RMuRTxji for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 21:03:44 +0000 (UTC)
+Received: from smtpdh18-su.aruba.it (smtpdh18-su.aruba.it [62.149.155.144])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 29AB7400D9
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:03:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29AB7400D9
+Received: from localhost.localdomain ([95.47.160.93])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id TqLDqxom9iRfoTqLEq1Nz5; Wed, 09 Aug 2023 23:03:41 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Wed,  9 Aug 2023 23:03:38 +0200
+Message-Id: <20230809210338.1330998-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691614743;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UqhvHWCF+jfr7IuWH7u3cZB45KIIl27OHDZIayimgbs=;
- b=KzJZpQOftVdmY4Pl+FnLwWUK3DhcRV2fHwPwRd4lJUatw+TfKS7hKpbBZBBMaZ+dubVXcl
- 1WSJTm6SxYP7trA8SEj1vjO+uTRZ3LIA7w3qULaNenbPTHJo6HP5naAUDPIz3/IpG7JMWE
- qqNJTR+Kz7qmRK7lBZXXsGohOB855jUWNZbVXnk/G3vDSYkZBO4wHXZffwUA7cSRvsymyF
- 38S8BuBGTEYpnbm71yjmPPLHm4YSjgpJt7QkDosVeK2t9G7U24U2wqtPnl0vF60vyT7YPm
- eZMNQrw4sa+a6NdsA5I1p0XDsbNSL7wW38mte6HL4NYvCnhBYSJDrUQ1mVnWEg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KzJZpQOf
-Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
- version 2.0
+X-CMAE-Envelope: MS4xfKkN2J3/zsyIqEJGtU1d1pI4WvA/5MHUoYUgE6cJMxUivp4U8Mw6NOF4wLQQVSY0xkQxZIxGfVL3fQjcQ8aC1uFQ4jX4h+f5HkFenA2wd4rq1xdlY4OC
+ RL7hUjXvOE4BDkTHoJOadmSofWPOvl+3HcA0lqqObjqwmqOnCvDuFo81sHgUC4/J7CrHovmruQnLShot6r1AHeWwZfg9pFPxeN7MRntcWp2paKx3uzxL9HrQ
+ 1t0hNG3CsDhCCIzhUF94Bsk1U5qepiIcBVAjJfwpXZDXhPs27ZG1+fOSgGw3tfpVRymt17o2veWbj9vJHqf4JnubwpSx2Cufcrmi3HYOvts=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1691615021; bh=RAHGfp0aATPLiFucNk1Xj2WALDVRkRYTs0SmsSKTyaY=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=a+dRHlC8/2IdODQNkPxkCtu5Ebo/vx3nY2iUbB+PNtofRX68zZSXtT3T67uBSRHrZ
+ 4IMNb6jJfH0jV4CwKJiKz/AxG6M54yUOoUKX1W8RuaG27dvytDxJb4DgJ/Mr7F8YWa
+ ytzCtiRtOvACm/JBbQKBglBwvVl8yqyCLYnZtSXPN5lH9XPBqJsq6sUMmpIcIRNCnM
+ CtuXfLeiETJccmSvCloZAk0ytF3/yPiCddUVPIeU5miAw25030Wj7/pHTJcdxAmUb3
+ iD+uzXMdZM2izAYmiLC1BjzoNP8dHt21TWeXZ8z/EeVrUZ1k8eSO0xcl815ryLsrBb
+ +i/g7ET52bXxA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=a+dRHlC8
+Subject: [Buildroot] [PATCH] package/mmc-utils: fix build failure with
+ _FORTIFY_SOURCE=3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,50 +72,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Daniel Lang <dalang@gmx.at>, clement.ramirez@bootlin.com,
- buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 9 Aug 2023 22:31:11 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+At the moment mmc-utils doesn't support _FORTIFY_SOURCE=3 so let's set it
+to 2 at maximum by undefining _FORTIFY_SOURCE and redefining it to 2.
 
->   Using the CPE database is actually useless. I think we should drop it.
+Fixes:
+http://autobuild.buildroot.net/results/32d2f9894efc1e743ca6ae7d2fe3108ccf41c188
 
-When I read this, I disagreed...
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/mmc-utils/mmc-utils.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
->   It actually doesn't matter at all if a CPE entry (including the version) is 
-> found in the CPE database. If there's a CVE for it, then the entry will exist. 
-> But usually, the CVE will have a version range. In that case, we anyway match 
-> the version range without caring at all if the specific version exists in the 
-> CPE database or not.
-> 
->   So, I think we should just construct a CPE string and match it against the 
-> CVEs, without consulting the CPE database at all.
-> 
->   It _does_ make sense to do a lookup in the CPE database for the CPE string, 
-> but with * as the version part. This allows us to validate if the 
-> vendor/project/etc. are set correctly. But that's something we can do in 
-> individual API calls for each package, like we do for release-monitoring.
-
-... but then you say we should still use the CPE database, and I agree
-on the why we should use it: to have some reasonable certainty that the
-CPE ID we create in Buildroot for each package has a chance of matching
-the CPEs that will be associated to the CVEs that will perhaps one day
-be reported against this software package. So yes, perhaps we should
-just match in the CPE database with version set to '*', so that we
-don't care if the CPE database isn't aware of the latest releases of
-software packages, which it rarely is.
-
-Thomas
+diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
+index 9da9c30293..19013bcc1c 100644
+--- a/package/mmc-utils/mmc-utils.mk
++++ b/package/mmc-utils/mmc-utils.mk
+@@ -16,6 +16,11 @@ ifeq ($(BR2_PACKAGE_MMC_UTILS_ENABLE_DANGEROUS_COMMANDS),y)
+ MMC_UTILS_CFLAGS += -DDANGEROUS_COMMANDS_ENABLED
+ endif
+ 
++# disable _FORTIFY_SOURCE=3 and set it to 2
++ifeq ($(BR2_FORTIFY_SOURCE_3),y)
++MMC_UTILS_CFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
++endif
++
+ # override AM_CFLAGS as the project Makefile uses it to pass
+ # -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2, and the latter conflicts
+ # with the _FORTIFY_SOURCE that we pass when hardening options are
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
