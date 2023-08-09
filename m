@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F2D2EE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:15:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D461EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B177140B8C;
-	Mon, 21 Aug 2023 20:15:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B177140B8C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0524E40B7F;
+	Mon, 21 Aug 2023 20:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0524E40B7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cwcsAM6dy6ys; Mon, 21 Aug 2023 20:15:35 +0000 (UTC)
+	with ESMTP id wjoPcYP3fXit; Mon, 21 Aug 2023 20:15:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E69F140B7F;
-	Mon, 21 Aug 2023 20:15:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E69F140B7F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3AE354117D;
+	Mon, 21 Aug 2023 20:15:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AE354117D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 68A671BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 016911BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7ABF8414D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id B36FC41681
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ABF8414D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B36FC41681
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wZY6RLG5r4Hc for <buildroot@lists.busybox.net>;
+ with ESMTP id nVqBIFHo1NkB for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DBB6E409CB
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBB6E409CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25F5A414DE
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25F5A414DE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF36386025; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+ id 1E8B786023; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 00:12:35 +0200
+Date: Wed, 9 Aug 2023 12:20:56 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d74515a3e83b6139aed764a5ef0f40115dc92e22
-X-Git-Newrev: fc2a530c5b8a700978e29eae2ef6deef3cefe20c
+X-Git-Oldrev: e0a786a46733cc473f0e4c35064a3b09ccf548e6
+X-Git-Newrev: b10ceec75520fab80f76081f50daaaab9df890f5
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200124.CF36386025@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dracut: add CPE ID
+Message-Id: <20230821200125.1E8B786023@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-microcode:
+ security bump version to 20230808
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc2a530c5b8a700978e29eae2ef6deef3cefe20c
+commit: https://git.buildroot.net/buildroot/commit/?id=b10ceec75520fab80f76081f50daaaab9df890f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-dracut_project:dracut is a valid CPE ID:
-https://nvd.nist.gov/products/cpe/detail/8050B12A-93FB-453E-8459-9B8B9CC7544E?namingFormat=2.3&orderBy=CPEURI&keyword=dracut&status=FINAL
+Fixes CVE-2022-40982:
+https://downfall.page/
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00828.html
+https://www.phoronix.com/news/Linux-Git-INCEPTION-DOWNFALL
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dracut/dracut.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-index 597492bc5e..3eb9bcc474 100644
---- a/package/dracut/dracut.mk
-+++ b/package/dracut/dracut.mk
-@@ -8,6 +8,7 @@ DRACUT_VERSION = 057
- DRACUT_SITE = $(call github,dracutdevs,dracut,$(DRACUT_VERSION))
- DRACUT_LICENSE = GPL-2.0
- DRACUT_LICENSE_FILES = COPYING
-+DRACUT_CPE_ID_VENDOR = dracut_project
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 3f12b71191..64c50dd6f7 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  58f3321dcf900175d87d5b39455138c2a24e69df4ba997fb44e3e0d19e531ad1  intel-microcode-20230512.tar.gz
++sha256  fe49bb719441f20335ed6004090ab38cdc374134d36d4f5d30be7ed93b820313  intel-microcode-20230808.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 48c6340af8..0a89d3a603 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-prelink-cross
- 
+-INTEL_MICROCODE_VERSION = 20230512
++INTEL_MICROCODE_VERSION = 20230808
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
