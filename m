@@ -4,48 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09612EC8738
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC87EEC8738
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:23:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3A4F83BE4;
-	Thu,  7 Sep 2023 15:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3A4F83BE4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6476582ED2;
+	Thu,  7 Sep 2023 15:23:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6476582ED2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O6T8AnLHS_iz; Thu,  7 Sep 2023 15:23:00 +0000 (UTC)
+	with ESMTP id 5_KTe4StAmrD; Thu,  7 Sep 2023 15:23:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F212C83BE3;
-	Thu,  7 Sep 2023 15:22:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F212C83BE3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D2FA83163;
+	Thu,  7 Sep 2023 15:23:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D2FA83163
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 92C7C1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 280951BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E1B6041E4F
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1B6041E4F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B70F41DC7
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B70F41DC7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mGS3ZLOuvIto for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+ with ESMTP id xic3WrI0_w7l for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C70941DC7
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C70941DC7
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABAA841DC2
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABAA841DC2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2043B86A21; Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 97F2786A21; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 17:32:55 +0200
+Date: Wed, 9 Aug 2023 23:30:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d6dde8fc0cf44e631ce7d3df6f956cb35f8cf1e9
-X-Git-Newrev: 534c22dd606e200969fce49b8d23b27902dec94e
+X-Git-Oldrev: 2cc1902943b2032aca48e050816906e9caa355cd
+X-Git-Newrev: 930a6d9470efc5c46bcff358947c050540555a6c
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145129.2043B86A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/weston: fix the configuration of
- simple-clients
+Message-Id: <20230907145128.97F2786A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/orangepi_pc2: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,71 +55,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=534c22dd606e200969fce49b8d23b27902dec94e
+commit: https://git.buildroot.net/buildroot/commit/?id=930a6d9470efc5c46bcff358947c050540555a6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-commit 7329a0db442026c6b856e76ea964107fa3c730f3
-"weston: disable v4l simple dmabuf for headers < 3.8"
-disabled dmabuf-v4l-client when kernel headers are older than v3.8.
-This commit was made at the time the weston package was at version
-1.10.0, using the autotools package infra.
+This patch adds a new defconfig for OrangePI PC2 board.
 
-commit e672eb5c39fa626f8e924269cec2056be9e14ded
-"package/weston: bump to version 8.0.0"
-replaced the package infra to meson (since upstream deprecated
-autotools). This commit changed a disable of dmabuf-v4l-client in
-autotools, by enabling it only if supported. The end result is that
-the current meson package recipe disable ALL simple clients, or just
-enable dmabuf-v4l-client when supported. In all cases, all other
-weston simple clients are disabled. This behavior is not convenient
-since some of those simple clients are useful to test the correct
-operation of Weston and the rest of the graphic stack.
+It was supported before in Buildroot, however due to problems in
+building TF-A, it was removed in commit
+eeede611f81d8f83b72e4a6671cd7d1e46b266b0. This commit re-adds it, in a
+state that properly builds.
 
-This commit fixes this issue by enabling all supported simple clients.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Javad Rahimi <javad321javad@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/weston/weston.mk | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ DEVELOPERS                             |  4 ++++
+ board/orangepi/orangepi-pc2/readme.txt | 37 ++++++++++++++++++++++++++++++++++
+ configs/orangepi_pc2_defconfig         | 36 +++++++++++++++++++++++++++++++++
+ 3 files changed, 77 insertions(+)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 437c6f2e38..5f8d915d5a 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -22,13 +22,22 @@ WESTON_CONF_OPTS = \
- 	-Dlauncher-libseat=true \
- 	-Dtools=calibrator,debug,info,terminal,touch-calibrator
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a2948e8cb7..d41e717b45 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1507,6 +1507,10 @@ F:	package/quota/
+ N:	Jason Pruitt <jrspruitt@gmail.com>
+ F:	package/librtlsdr/
  
--# Uses VIDIOC_EXPBUF, only available from 3.8+
-+WESTON_SIMPLE_CLIENTS = \
-+	damage \
-+	dmabuf-egl \
-+	dmabuf-feedback \
-+	egl \
-+	im \
-+	shm \
-+	touch
++N:	Javad Rahimi <javad321javad@gmail.com>
++F:	board/orangepi/orangepi-pc2
++F:	configs/orangepi_pc2_defconfig
 +
- ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
--WESTON_CONF_OPTS += -Dsimple-clients=dmabuf-v4l
--else
--WESTON_CONF_OPTS += -Dsimple-clients=
-+# dmabuf-v4l uses VIDIOC_EXPBUF, only available from 3.8+
-+WESTON_SIMPLE_CLIENTS += dmabuf-v4l
- endif
+ N:	Jean Burgat <jeanburgat33@gmail.com>
+ F:	package/openfpgaloader/
  
-+WESTON_CONF_OPTS += -Dsimple-clients=$(subst $(space),$(comma),$(strip $(WESTON_SIMPLE_CLIENTS)))
+diff --git a/board/orangepi/orangepi-pc2/readme.txt b/board/orangepi/orangepi-pc2/readme.txt
+new file mode 100644
+index 0000000000..6c699244ce
+--- /dev/null
++++ b/board/orangepi/orangepi-pc2/readme.txt
+@@ -0,0 +1,37 @@
++Intro
++=====
 +
- ifeq ($(BR2_PACKAGE_JPEG),y)
- WESTON_CONF_OPTS += -Dimage-jpeg=true
- WESTON_DEPENDENCIES += jpeg
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Orangepi PC2. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Orangepi PC2 link:
++http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-PC-2.html
++
++Sunxi Wiki link:
++https://linux-sunxi.org/Xunlong_Orange_Pi_PC_2
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++How to build
++============
++
++    $ make orangepi_pc2_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your Orangepi PC2 and power it up. The console
++is on the serial line, 115200 8N1.
+diff --git a/configs/orangepi_pc2_defconfig b/configs/orangepi_pc2_defconfig
+new file mode 100644
+index 0000000000..3de067ae54
+--- /dev/null
++++ b/configs/orangepi_pc2_defconfig
+@@ -0,0 +1,36 @@
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi PC2"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16.1"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-pc2"
++BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc2"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
++BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
