@@ -1,72 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D145C04A6A
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 15:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB72C001B0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 16:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E9A3834CB;
-	Wed,  9 Aug 2023 15:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E9A3834CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE95E60F3F;
+	Wed,  9 Aug 2023 16:48:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE95E60F3F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hSmZy8WTF15d; Wed,  9 Aug 2023 16:48:06 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B65260681;
+	Wed,  9 Aug 2023 16:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B65260681
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DC3931BF5A3
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 16:48:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B60B583264
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 16:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B60B583264
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uBx9lZERnWeP; Wed,  9 Aug 2023 15:02:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A84EF834B9;
-	Wed,  9 Aug 2023 15:02:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A84EF834B9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 07BF11BF471
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 15:02:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4FAB403BF
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 15:02:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4FAB403BF
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FpvcnZCqKwGi for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 15:02:35 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5BEB04031E
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 15:02:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BEB04031E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E436760005;
- Wed,  9 Aug 2023 15:02:31 +0000 (UTC)
-Date: Wed, 9 Aug 2023 17:02:30 +0200
-To: <Jamie.Gibbons@microchip.com>
-Message-ID: <20230809170230.59759159@windsurf>
-In-Reply-To: <40906858eaa11edb306b0f56e425d7b13948e0b9.camel@microchip.com>
-References: <20230712125154.1361000-1-jamie.gibbons@microchip.com>
- <20230712125154.1361000-3-jamie.gibbons@microchip.com>
- <20230808235919.0002f19d@windsurf>
- <40906858eaa11edb306b0f56e425d7b13948e0b9.camel@microchip.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wszj02vALkkj for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 16:48:01 +0000 (UTC)
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com
+ [IPv6:2607:f8b0:4864:20::e29])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 624C883148
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 16:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 624C883148
+Received: by mail-vs1-xe29.google.com with SMTP id
+ ada2fe7eead31-447a4316052so18540137.0
+ for <buildroot@buildroot.org>; Wed, 09 Aug 2023 09:48:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691599680; x=1692204480;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=50IzQFY4gklMUl/ziEsliHe1S/Eh0r62/dyS5nMVN9I=;
+ b=Vp6c9XYCmcRjpfginPx/78Uz2HXIfkIP63ZngobknO271/WQf1tDa23friM58J4DNt
+ pTDZPXwEFQc4KWVEEFnfqOtDatQfNsevUqpdEd3Fqf8/73Z2M9nxm0yGWzJw/Tv9kV3A
+ D6w8+MWwwVKajn4CobF8V77o2LxEaVzpWa34quhexKUgrowXlFeFAaAEjsO5sP/CH7jB
+ n96cg8bO5WVEiBHwKSyHEsePXxPhkQdb+h1uGVFQvYM92s3Kr0IkKnYEbBGrXGBHB7Fa
+ XRu1cFpQw6X2ijF2Wr+oETSMBJ45BJyk9aTZnGTD40Kr6D6pSOxIsYB2wZahjKrl8+aq
+ 4QpA==
+X-Gm-Message-State: AOJu0Yy2lZ4Vb0m51NupkE7Au84kQjS1RSaVAepeeo1foqfylU3NdI19
+ JPchaRmKgMJSdxHhM8ShdqdTfZepMhMRl7DSiFE=
+X-Google-Smtp-Source: AGHT+IEFDjxelT/UJBsWFsSAKK7WNaGlf/buxuwWM7MjbuRI0U9Ehnxg+ZdnNBfkbs08WECQ448YJiZrYtJJ+3O/Aoo=
+X-Received: by 2002:a67:e3c4:0:b0:446:a477:804b with SMTP id
+ k4-20020a67e3c4000000b00446a477804bmr2964408vsm.11.1691599679946; Wed, 09 Aug
+ 2023 09:47:59 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+References: <20230808195753.19748-1-ju.o@free.fr>
+In-Reply-To: <20230808195753.19748-1-ju.o@free.fr>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Wed, 9 Aug 2023 12:47:34 -0400
+Message-ID: <CAKmqyKP8t6WtrTnCktmcPft5Yg0muReRUO+nqrBYRw7MFixvfA@mail.gmail.com>
+To: Julien Olivain <ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691593352;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=gv7q2ixkdY5A7uX5EnKTcXEjcg44pJINDafJYjGHfL8=;
- b=RY9hT2doiMnWn+GbrWsXaYVrAdpDiKuNgExBGYZc43ZHnyjUGNgt8i+Kjz+DWtToCTA7t7
- 6XVUewrMQ4T2DdCKQhHXjmcpjpSFJojAYVD8Y9AiVna6uZkHq1agHCOkOfdgZNgLhvjUOA
- kuEcrwq+VMRmMxnxp/AfHOwyiissP2eXoCiNyN7SJKXWh284WmqvirzXi4oALhtRInstTm
- hDLjCxrJJnibm5nBOS5Brish28He8fHGe3f/oaPzWyc8WxlJIDB6FNZu4TMV+okzM6s3IN
- k91GLrcG4wEgI24R+IagBv36Om9oZQ5KRF8VfNwIfhT7Q2UnBva78sD03enSVA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RY9hT2do
-Subject: Re: [Buildroot] [PATCH v3 2/2] configs/microchip_mpfs_icicle: add
- support for Microchip's Icicle Kit
+ d=gmail.com; s=20221208; t=1691599680; x=1692204480;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=50IzQFY4gklMUl/ziEsliHe1S/Eh0r62/dyS5nMVN9I=;
+ b=b/59BfzJWHpgGD2OPv6poJHx56txGhMgV2srEcPtyCpxXA2V1ebpt7OQXmtfjncVJV
+ SR8ZQDKlbB69u+x8c1Zc+g9Ct6zltevef1/zoZAI6im2lCwyeCiBk/kvOEMUVH4dtmPt
+ jGzHjoYElhcsK0/W4JCaiy3QFSxwteXexu9T4T6hfA4lfzSB1m6rNHfOo3t4spHSJiPE
+ iu5Os2lEaqt3u2uqkJIXpGv4UydF1wa92wC30bt8Qkeewd4cUOkHHM1BoGOhur2a6GPJ
+ bMmXc5wkf6E0gU0PnJ7b+Tw0b0ZdnAwm6vVZpH8uCs3Ot8I0zIWpovC90Rx9PLwhPUjS
+ wbsw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=b/59BfzJ
+Subject: Re: [Buildroot] [PATCH next 1/1] support/docker: add
+ qemu-system-misc for riscv runtime tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,95 +91,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
- Conor.Dooley@microchip.com, buildroot@buildroot.org,
- Valentina.FernandezAlanis@microchip.com, giulio.benetti@benettiengineering.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Jamie,
-
-On Wed, 9 Aug 2023 14:43:19 +0000
-<Jamie.Gibbons@microchip.com> wrote:
-
-> > Could you clarify what this "embedded in a Hart Software Services
-> > payload" means? Does it mean that there is additional code running on
-> > the target other than U-Boot, Linux and user-space? I don't see
-> > OpenSBI
-> > being compiled in this defconfig.
-> > 
-> > I'd like to make sure we have properly captured all the code that
-> > ends
-> > up running on the target, so that we are complete from a licensing
-> > stand-point.
-> >   
-> The HSS (Hart Software Services) acts as a zero-stage bootloader on the
-> Icicle kit.
-
-Where is this HSS code located? Is it build by Buildroot, or it is part
-of some kind of ROM code burned into the SoC?
-
-> The HSS reads an HSS formatted payload from eMMC/SD that
-> contains binary images (e.g. U-boot) to be booted via OpenSBI. The HSS
-> includes OpenSBI so we don't need to enable OpenSBI in the buildroot
-> defconfig.
-
-Who is building the OpenSBI code?
-
-Again, my concern is to make sure that we have properly captured the
-licensing of all software components built by Buildroot and that we're
-providing the relevant source code matching the software components
-that are built by Buildroot.
-
-Right now, it is clear that your defconfig is building U-Boot + Linux +
-rootfs, but it isn't clear where the HSS code and OpenSBI code comes
-from, and who builds it.
-
-> > So you're not a riscv_g core because you don't have the atomic
-> > extension?  
-> We have selected riscv_custom because we have compressed instructions
-> extension (RVC) which is not part of riscv_g.
-> 
-> While looking into that we noticed that we don't have
-> BR2_RISCV_ISA_CUSTOM_RVA in our defconfig which we need to add, this
-> was because BR2_RISCV_ISA_CUSTOM_RVA was selected in previous versions
-> of buildroot using riscv_custom, and now it isn't.
-> 
-> I can send a patch to add BR2_RISCV_ISA_CUSTOM_RVA?
-
-Yes.
-
-I am wondering if we also don't need to move the following options:
-
-config BR2_RISCV_ISA_CUSTOM_RVC
-	bool "Compressed Instructions (C)"
-	select BR2_RISCV_ISA_RVC
-
-config BR2_RISCV_ISA_CUSTOM_RVV
-	bool "Vector Instructions (V)"
-	select BR2_RISCV_ISA_RVV
-	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
-
-to be available/visible even when BR2_riscv_g is selected.
-
-Indeed to me riscv_g implies IMAFD, but you can have IMAFD + C or IMAFD
-+ V, so it should be possible to say "I have a RISC-V G core, which
-  also supports those extra C and/or V extensions".
-
-Does that make sense in the RISC-V world?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCBBdWcgOCwgMjAyMyBhdCAzOjU44oCvUE0gSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJl
+ZS5mcj4gd3JvdGU6Cj4KPiBUaGUgZG9ja2VyIGltYWdlIGN1cnJlbnRseSBjb250YWlucyBxZW11
+LXN5c3RlbS1hcm0gYW5kCj4gcWVtdS1zeXN0ZW0teDg2LiBFYWNoIHBhY2thZ2UgY29udGFpbnMg
+dGhlIDMyYml0IGFuZCA2NGJpdCB2YXJpYW50cy4KPiBUaGlzIGhhcyBiZWVuIHN1ZmZpY2llbnQg
+Zm9yIHRoZSB0aW1lIGJlaW5nLgo+Cj4gVGhlIFJJU0MtViBlY29zeXN0ZW0gaXMgZ3Jvd2luZyBy
+YXBpZGx5LiBJdCBpcyBzdGFydGluZyB0byBiZWNvbWUKPiBtYWluc3RyZWFtLiBUbyBpbmNyZWFz
+ZSB0aGUgZGl2ZXJzaXR5IGluIEJ1aWxkcm9vdCBydW50aW1lIHRlc3RzLAo+IHRoaXMgY29tbWl0
+IGFkZHMgdGhlIHFlbXUtc3lzdGVtLW1pc2MgcGFja2FnZSBpbiB0aGUgRG9ja2VyIGltYWdlLAo+
+IGluIG9yZGVyIHRvIGhhdmUgdGhlIGNvbW1hbmRzIHFlbXUtc3lzdGVtLXJpc2N2ezMyLDY0fS4g
+VGhpcyBwYWNrYWdlCj4gYWxzbyBjb250YWlucyBvdGhlciBhcmNoaXRlY3R1cmVzIChmb3IgZXhh
+bXBsZTogbWljcm9ibGF6ZSwgbmlvczIsCj4gczM5MHgsIHh0ZW5zYSwgLi4uKS4KPgo+IEZvciBE
+ZWJpYW4gcGFja2FnZSBkZXRhaWxzLCBzZWU6Cj4gaHR0cHM6Ly9wYWNrYWdlcy5kZWJpYW4ub3Jn
+L2J1bGxzZXllL3FlbXUtc3lzdGVtLW1pc2MKPgo+IFNpZ25lZC1vZmYtYnk6IEp1bGllbiBPbGl2
+YWluIDxqdS5vQGZyZWUuZnI+CgpSZXZpZXdlZC1ieTogQWxpc3RhaXIgRnJhbmNpcyA8YWxpc3Rh
+aXIuZnJhbmNpc0B3ZGMuY29tPgoKQWxpc3RhaXIKCj4gLS0tCj4gTm90ZTogSSBoYXZlIGFscmVh
+ZHkgdHdvIHdvcmstaW4tcHJvZ3Jlc3MgcGF0Y2ggc2VyaWVzIHVzaW5nCj4gcWVtdS1zeXN0ZW0t
+cmlzY3Y2NC4gSSdsbCB3YWl0IGZvciB0aGlzIHBhdGNoIHRvIGJlIGFjY2VwdGVkLCBhbmQKPiAu
+Z2l0bGFiLWNpLnltbCB0byBiZSB1cGRhdGVkIHRvIHVzZSB0aGUgaW1hZ2UgYmVmb3JlIHNlbmRp
+bmcgdGhvc2UuCj4gLS0tCj4gIHN1cHBvcnQvZG9ja2VyL0RvY2tlcmZpbGUgfCAxICsKPiAgMSBm
+aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCj4KPiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC9kb2Nr
+ZXIvRG9ja2VyZmlsZSBiL3N1cHBvcnQvZG9ja2VyL0RvY2tlcmZpbGUKPiBpbmRleCBhMTZjMWUz
+ODQ5Li44YzZlMmFkZDYwIDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvZG9ja2VyL0RvY2tlcmZpbGUK
+PiArKysgYi9zdXBwb3J0L2RvY2tlci9Eb2NrZXJmaWxlCj4gQEAgLTQ0LDYgKzQ0LDcgQEAgUlVO
+IGFwdC1nZXQgLW8gQVBUOjpSZXRyaWVzPTMgaW5zdGFsbCAteSAtLW5vLWluc3RhbGwtcmVjb21t
+ZW5kcyBcCj4gICAgICAgICAgcHl0aG9uMy1wZXhwZWN0IFwKPiAgICAgICAgICBweXRob24zLXB5
+dGVzdCBcCj4gICAgICAgICAgcWVtdS1zeXN0ZW0tYXJtIFwKPiArICAgICAgICBxZW11LXN5c3Rl
+bS1taXNjIFwKPiAgICAgICAgICBxZW11LXN5c3RlbS14ODYgXAo+ICAgICAgICAgIHJzeW5jIFwK
+PiAgICAgICAgICBzaGVsbGNoZWNrIFwKPiAtLQo+IDIuNDEuMAo+Cj4gX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0
+Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
