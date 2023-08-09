@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D7ABEE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65AE2EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:07:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBCD440B31;
-	Mon, 21 Aug 2023 20:07:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBCD440B31
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D1D640BE2;
+	Mon, 21 Aug 2023 20:07:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D1D640BE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qif90-rUNT_W; Mon, 21 Aug 2023 20:07:30 +0000 (UTC)
+	with ESMTP id qIPTHpgJaXOG; Mon, 21 Aug 2023 20:07:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 327B540BE5;
-	Mon, 21 Aug 2023 20:07:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 327B540BE5
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0E2FB1BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7349C40BDA;
+	Mon, 21 Aug 2023 20:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7349C40BDA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 743051BF8B4
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BEDBB415A6
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEDBB415A6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12E1C81D21
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12E1C81D21
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C-TMyGP0Z2rD for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XbDHfDrh-th0 for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E34B4410C5
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E34B4410C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 52F2D81AC1
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52F2D81AC1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2F6186029; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id 4317486028; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 22:13:45 +0200
+Date: Wed, 9 Aug 2023 19:21:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 876a365ea2a1c48477eabfe3ae600a9d48f1b4ab
-X-Git-Newrev: 6cdb48a0482a093dcdf73d0d748f5435262515ab
+X-Git-Oldrev: fd5a01eee30404d95fc442eaf6a017b2754b4a37
+X-Git-Newrev: 503cfb40c74bcb8bd6be9bcd977c9dbd1b22d0ed
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.D2F6186029@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mpd: ensure expat is
- enabled when BR2_PACKAGE_MPD_UPNP_NPUPNP=y
+Message-Id: <20230821200125.4317486028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/composer: add
+ COMPOSER_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,55 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3944171973283789273=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cdb48a0482a093dcdf73d0d748f5435262515ab
+--===============3944171973283789273==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=503cfb40c74bcb8bd6be9bcd977c9dbd1b22d0ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Just like BR2_PACKAGE_MPD_UPNP_PUPNP needs expat and curl support,
-BR2_PACKAGE_MPD_UPNP_NPUPNP also needs expat and curl. curl was
-already selected, but not expat. It didn't cause any visible issue, as
-BR2_PACKAGE_MPD_UPNP_NPUPNP selects BR2_PACKAGE_LIBNPUPNP, which
-itself select BR2_PACKAGE_EXPAT. But as mpd directly checks for the
-availability of expat, it makes sense to also select it directly.
+cpe:2.3:a:getcomposer:composer is a valid identifier for
+this package:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=getcomposer
 
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-[Thomas: extracted from a larger patch at
-https://patchwork.ozlabs.org/project/buildroot/patch/20221005091032.3014-5-br015@umbiko.net/]
+Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/Config.in | 1 +
- package/mpd/mpd.mk    | 1 +
- 2 files changed, 2 insertions(+)
+ package/composer/composer.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index f350b7e72a..902a3da779 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -407,6 +407,7 @@ config BR2_PACKAGE_MPD_UPNP_PUPNP
+diff --git a/package/composer/composer.mk b/package/composer/composer.mk
+index fde5b48951..9bfabc28af 100644
+--- a/package/composer/composer.mk
++++ b/package/composer/composer.mk
+@@ -13,6 +13,7 @@ BASE_SITE = https://getcomposer.org/download/$(COMPOSER_VERSION)/composer.phar
+ COMPOSER_SITE = $(BASE_SITE)?n=f/$(COMPOSER_SOURCE)
+ COMPOSER_LICENSE = MIT
+ COMPOSER_LICENSE_FILES = LICENSE
++COMPOSER_CPE_ID_VENDOR = getcomposer
  
- config BR2_PACKAGE_MPD_UPNP_NPUPNP
- 	bool "npupnp"
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBNPUPNP
- 	select BR2_PACKAGE_MPD_CURL
- 	help
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 0205208946..4b737c715c 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -312,6 +312,7 @@ MPD_DEPENDENCIES += \
- MPD_CONF_OPTS += -Dupnp=pupnp
- else ifeq ($(BR2_PACKAGE_MPD_UPNP_NPUPNP),y)
- MPD_DEPENDENCIES += \
-+	expat \
- 	libnpupnp
- MPD_CONF_OPTS += -Dupnp=npupnp
- else ifeq ($(BR2_PACKAGE_MPD_UPNP_DISABLED),y)
+ HOST_COMPOSER_DEPENDENCIES = host-php
+ HOST_COMPOSER_EXTRACT_DEPENDENCIES = host-php
+
+--===============3944171973283789273==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3944171973283789273==--
