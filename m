@@ -4,62 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11D9AC001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 22:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C87BDC001B0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 22:06:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F0504187B;
-	Wed,  9 Aug 2023 22:05:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F0504187B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65C5F41894;
+	Wed,  9 Aug 2023 22:06:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65C5F41894
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YdsSbv4L_Q3i; Wed,  9 Aug 2023 22:05:31 +0000 (UTC)
+	with ESMTP id 1TcEujU38UZH; Wed,  9 Aug 2023 22:06:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 354B741894;
-	Wed,  9 Aug 2023 22:05:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354B741894
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D97A41897;
+	Wed,  9 Aug 2023 22:06:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D97A41897
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4A7E91BF82C
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:05:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3E6031BF82C
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:06:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EF6941894
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:05:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EF6941894
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22E2D41897
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22E2D41897
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ukQY5LkcuEiu for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 22:05:28 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C1B994187B
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 22:05:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1B994187B
-Received: by mail.gandi.net (Postfix) with ESMTPA id 8DEAC40002;
- Wed,  9 Aug 2023 22:05:25 +0000 (UTC)
-To: Buildroot List <buildroot@buildroot.org>
-Date: Thu, 10 Aug 2023 00:05:14 +0200
-Message-ID: <20230809220514.2089980-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.41.0
+ with ESMTP id oVpGZw0RqnGc for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 22:06:28 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EA3B141894
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 22:06:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA3B141894
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D20BF1BF205;
+ Wed,  9 Aug 2023 22:06:24 +0000 (UTC)
+Date: Thu, 10 Aug 2023 00:06:23 +0200
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Message-ID: <20230810000623.210176d4@windsurf>
+In-Reply-To: <20230801002907.01f46d94@windsurf>
+References: <VI1P190MB0493D233ECC579510F8C0FC69FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM>
+ <20230801002907.01f46d94@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691618726;
+ d=bootlin.com; s=gm1; t=1691618785;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=x+vnRbU8ZswJ+qSp16W1UwQfcrM5jO1zQosekW0loNY=;
- b=cWrSWR2PdFpitMbv5Bmnmy0TJ32CLO12+1EdtnW3DAC0rrt6X+HSlCRLB7oWapMmJZVjsD
- y1HVgf/UR1SxB1XJyuwX7KMuz1nmYruRUAGyssBTwxBS5reuJODQWRdjllTnxZ7KJrDEw/
- ttj47ybvqaKL48GpaZCTjR6j1F9eCj1s6eKP6mU0kzKHHJz4m9y2+YzjXG+d4c46Lmebh8
- NCeKV+zWsa3qPVuSMcjm8ExI72boohVAMoXZ3A9gT9UsjAEnX+iFuwGeLU28AebL2R41uC
- ne+KhG60D5AdIL2taK4AixTRfYqotLp0ebgzQqsA/rGCjx4SlEUMGB1Hc+VIWg==
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=KSesY6Annepi8lDbP8zJN2AoYvvcES3GLmARujBh3cE=;
+ b=ZKkP+h5/9hLAI6y5aKZLWVLyX46ROO1Dtp1VHzpkskl9NmaxrpCAzGDg8Hpz8EzhL2iUDW
+ KEaShmGWFODCjWAv5ACEOlMczbLS4qz5byuRfAxWMcWPjHWe1u4oovd7gvpLCLHZpLtdKa
+ bESiERYjh5KwroKgZyalzBFg5F6H4sZWgGd5xstJPAehCxwLWycYO9by25ufBPLub9kcLW
+ pV9SuDg4/YKBluh7ddrmVL3fgMtKlqQzS3pLuPsvtN68fJutlEe4R65FbWo9KaHKzauqsr
+ AxCJ9Z4+jAkKLfvHiL+M1Jy5yEAPkhx4m1fV+WVp1RGAMvvco8kJzMQETVBaNg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cWrSWR2P
-Subject: [Buildroot] [PATCH] package/swupdate: install headers at the
- standard location
+ header.s=gm1 header.b=ZKkP+h5/
+Subject: Re: [Buildroot] [PATCH] package/swupdate: fix ipc header include
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,77 +77,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Daniel Lang <d.lang@abatec.at>, Andrey Grafin <conquistador@yandex-team.ru>,
+Cc: Lang Daniel <d.lang@abatec.at>, Andrey Grafin <conquistador@yandex-team.ru>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In commit eb2f2886b2364e5b6a0867f55106bf83acb064e7 ("package/swupdate:
-add staging install"), the swupdate package was changed to also be
-installed in the staging directory, as it provides an API to external
-programs, through libraries and headers.
+On Tue, 1 Aug 2023 00:29:07 +0200
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
 
-Back then the commit log said:
+> So I would be inclined to do what upstream suggests here and drop the
+> INCLUDEDIR=/usr/include/swupdate from swupdate.mk.
+> 
+> Thoughts?
 
-    This patch installs headers and libs to STAGING_DIR, to prevent a
-    header name collision a subdirectory /usr/include/swupdate creates.
+Following the discussion we had, I submitted:
 
-And indeed a custom INCLUDEDIR was specified. However, installing
-swupdate headers in /usr/include/swupdate/ doesn't work well, as
-progress_ipc.h (installed by swupdate) does a #include
-<swupdate_status.h>, which doesn't work as swupdate_status.h is also
-in /usr/include/swupdate/ instead of /usr/include/.
+  https://patchwork.ozlabs.org/project/buildroot/patch/20230809220514.2089980-1-thomas.petazzoni@bootlin.com/
 
-To address this Daniel Lang submitted a patch [0], which was proposed
-to upstream swupdate to fix this header inclusion. The patch was
-rejected by upstream saying that the swupdate header files should be
-installed in /usr/include.
+And I marked this patch proposed by Daniel Lang as Rejected. Let me
+know what you think of this other proposal.
 
-Currently, swupdate installs only 3 headers files:
+Thanks,
 
-  /usr/include/network_ipc.h
-  /usr/include/swupdate_status.h
-  /usr/include/progress_ipc.h
-
-To the best of our knowledge, this doesn't conflict with any other
-header files installed by other packages. A good proof of that is that
-even Debian (which has many more packages than Buildroot) also
-installs swupdate headers directly in /usr/include.
-
-In addition, the original submitter of
-eb2f2886b2364e5b6a0867f55106bf83acb064e7 said "I'm not remember what
-was a problem. Probably network_ipc.h but Im not sure now. I think
-it's safe to install this headers to /usr/include w/o subdir if this
-collision was met only in my environment. PS: currently I don't see
-any collisions with this files."
-
-So, we switch to installing swupdate into their standard location.
-
-[0] https://patchwork.ozlabs.org/project/buildroot/patch/VI1P190MB0493D233ECC579510F8C0FC69FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/swupdate/swupdate.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 11a3946753..84905d2e0a 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -230,7 +230,7 @@ endef
- define SWUPDATE_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
--		INCLUDEDIR=/usr/include/swupdate install
-+		install
- endef
- 
- define SWUPDATE_INSTALL_TARGET_CMDS
+Thomas
 -- 
-2.41.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
