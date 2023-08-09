@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73A74EE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A21EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:18:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F8BD40C43;
-	Mon, 21 Aug 2023 20:18:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F8BD40C43
+	by smtp2.osuosl.org (Postfix) with ESMTP id 945BA40B26;
+	Mon, 21 Aug 2023 20:18:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 945BA40B26
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AnorB_cVmtYI; Mon, 21 Aug 2023 20:18:29 +0000 (UTC)
+	with ESMTP id Vth7hQ0yIAxS; Mon, 21 Aug 2023 20:18:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 730C540CB3;
-	Mon, 21 Aug 2023 20:18:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 730C540CB3
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC4BD40BD7;
+	Mon, 21 Aug 2023 20:18:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC4BD40BD7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A788F1BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BC3B71BF94D
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B447D414E4
+ by smtp4.osuosl.org (Postfix) with ESMTP id C235541548
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B447D414E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C235541548
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uwpl3Paq4yGs for <buildroot@lists.busybox.net>;
+ with ESMTP id P4nFi72mAbVk for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A07A410A5
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A07A410A5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 873F541553
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 873F541553
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0697686025; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+ id 844DB86024; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 12:49:17 +0200
+Date: Wed, 9 Aug 2023 23:03:53 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ff6d6c79d3d0014b2111399fdf5353a825cc37a9
-X-Git-Newrev: 4de60e41c3487946712da6d889ef89d325c2032a
+X-Git-Oldrev: 3bdc3f58cc0bf50baa0f3b9a50e1ee61081c8cae
+X-Git-Newrev: a0fdd17ec254ecaca28b40254e0679e24078c5e5
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200126.0697686025@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gdb: disable
- source-highlight
+Message-Id: <20230821200125.844DB86024@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mpv: fix x11 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,40 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4de60e41c3487946712da6d889ef89d325c2032a
+commit: https://git.buildroot.net/buildroot/commit/?id=a0fdd17ec254ecaca28b40254e0679e24078c5e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The dependency is not provided by Buildroot, and it can potentially be
-found by gdb's build system from the host system, which results in the
-following build errors:
+xlib_libXpresent is needed with x11 to avoid the following build failure
+raised since bump to version 0.35.1 in commit
+61ba55e9cce6884295e47fdf33554e6877bd0747 and
+https://github.com/mpv-player/mpv/commit/3d459832a88a9bd2835b339cf6ca98f84aad0115:
 
-../../gdb/source-cache.c:37:10: fatal error: srchilite/sourcehighlight.h: No such file or directory
-   37 | #include <srchilite/sourcehighlight.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[4]: *** [Makefile:1645: source-cache.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
+Checking for X11: no ('x11 >= 1.0.0 xscrnsaver >= 1.0.0 xext >= 1.0.0 xinerama >= 1.0.0 xpresent >= 1.0.0 xrandr >= 1.2.0' not found)
+You manually enabled the feature 'x11', but the autodetection check failed.
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/1aace6210ba966bb4979d935c08507b2a34e0460
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gdb/gdb.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mpv/Config.in | 1 +
+ package/mpv/mpv.mk    | 8 +++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 4b9c5c6b70..cee7b37bcd 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -134,7 +134,8 @@ GDB_CONF_OPTS = \
- 	--with-system-zlib \
- 	--disable-werror \
- 	--enable-static \
--	--without-mpfr
-+	--without-mpfr \
-+	--disable-source-highlight
- 
- ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
- GDB_CONF_OPTS += \
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 8efb353c33..5c32f593fe 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -26,6 +26,7 @@ config BR2_PACKAGE_MPV
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXPRESENT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
+ 	help
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index e368b25736..cf37091186 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -205,7 +205,13 @@ endif
+ # xlib_libXrandr, xlib_libXScrnSaver.
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MPV_CONF_OPTS += --enable-x11
+-MPV_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXinerama xlib_libXrandr xlib_libXScrnSaver
++MPV_DEPENDENCIES += \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXinerama \
++	xlib_libXpresent \
++	xlib_libXrandr \
++	xlib_libXScrnSaver
+ # XVideo
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
+ MPV_CONF_OPTS += --enable-xv
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
