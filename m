@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEA82C001DE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:04:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6F4C001E0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:04:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A7D260D79;
-	Wed,  9 Aug 2023 21:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A7D260D79
+	by smtp3.osuosl.org (Postfix) with ESMTP id 306E160AFF;
+	Wed,  9 Aug 2023 21:04:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 306E160AFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZWTF-mHU88Q6; Wed,  9 Aug 2023 21:04:26 +0000 (UTC)
+	with ESMTP id F759EwxEhNQW; Wed,  9 Aug 2023 21:04:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8381260B1C;
-	Wed,  9 Aug 2023 21:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8381260B1C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3153C1BF28A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0314860EA7;
+	Wed,  9 Aug 2023 21:04:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0314860EA7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 400961BF97F
  for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:04:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18B134063C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24FC340901
  for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:04:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18B134063C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24FC340901
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nK3pbtT3oIiP for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wcbe_DxehdQB for <buildroot@lists.busybox.net>;
  Wed,  9 Aug 2023 21:04:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 179D7400D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24932400D2
  for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:04:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 179D7400D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24932400D2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03374852DA; Wed,  9 Aug 2023 21:04:22 +0000 (UTC)
+ id 0F3F8852E0; Wed,  9 Aug 2023 21:04:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 23:03:48 +0200
+Date: Wed, 9 Aug 2023 23:03:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b84ffd85e2900741bb97325b53d09e170e941e6c
-X-Git-Newrev: 3bdc3f58cc0bf50baa0f3b9a50e1ee61081c8cae
+X-Git-Oldrev: 3bdc3f58cc0bf50baa0f3b9a50e1ee61081c8cae
+X-Git-Newrev: a0fdd17ec254ecaca28b40254e0679e24078c5e5
 X-Patchwork-Hint: ignore
-Message-Id: <20230809210422.03374852DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xlib_libXpresent: new package
+Message-Id: <20230809210422.0F3F8852E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mpv: fix x11 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,102 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bdc3f58cc0bf50baa0f3b9a50e1ee61081c8cae
+commit: https://git.buildroot.net/buildroot/commit/?id=a0fdd17ec254ecaca28b40254e0679e24078c5e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed for mpv since version 0.35.0:
-https://github.com/mpv-player/mpv/commit/3d459832a88a9bd2835b339cf6ca98f84aad0115
+xlib_libXpresent is needed with x11 to avoid the following build failure
+raised since bump to version 0.35.1 in commit
+61ba55e9cce6884295e47fdf33554e6877bd0747 and
+https://github.com/mpv-player/mpv/commit/3d459832a88a9bd2835b339cf6ca98f84aad0115:
+
+Checking for X11: no ('x11 >= 1.0.0 xscrnsaver >= 1.0.0 xext >= 1.0.0 xinerama >= 1.0.0 xpresent >= 1.0.0 xrandr >= 1.2.0' not found)
+You manually enabled the feature 'x11', but the autodetection check failed.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1aace6210ba966bb4979d935c08507b2a34e0460
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Thomas: improved thanks to feedback from a similar patch submitted by
-Bernd Kuhls.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                          |  1 +
- package/x11r7/Config.in                             |  1 +
- package/x11r7/xlib_libXpresent/Config.in            |  9 +++++++++
- .../x11r7/xlib_libXpresent/xlib_libXpresent.hash    |  6 ++++++
- package/x11r7/xlib_libXpresent/xlib_libXpresent.mk  | 21 +++++++++++++++++++++
- 5 files changed, 38 insertions(+)
+ package/mpv/Config.in | 1 +
+ package/mpv/mpv.mk    | 8 +++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0f6cb75e0e..6ffa3ee693 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1025,6 +1025,7 @@ F:	package/tinycbor/
- F:	package/tinydtls/
- F:	package/tinymembench/
- F:	package/whois/
-+F:	package/x11r7/xlib_libXpresent/
- F:	package/zeek/
- 
- N:	Fabrice Goucem <fabrice.goucem@oss.nxp.com>
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 4de8922e0d..b91f97bb34 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -42,6 +42,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xlib_libXinerama/Config.in
- 		source package/x11r7/xlib_libXmu/Config.in
- 		source package/x11r7/xlib_libXpm/Config.in
-+		source package/x11r7/xlib_libXpresent/Config.in
- 		source package/x11r7/xlib_libXrandr/Config.in
- 		source package/x11r7/xlib_libXrender/Config.in
- 		source package/x11r7/xlib_libXres/Config.in
-diff --git a/package/x11r7/xlib_libXpresent/Config.in b/package/x11r7/xlib_libXpresent/Config.in
-new file mode 100644
-index 0000000000..f6e2d93fab
---- /dev/null
-+++ b/package/x11r7/xlib_libXpresent/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_XLIB_LIBXPRESENT
-+	bool "libXpresent"
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XORGPROTO
-+	help
-+	  X.Org Xpresent library
-diff --git a/package/x11r7/xlib_libXpresent/xlib_libXpresent.hash b/package/x11r7/xlib_libXpresent/xlib_libXpresent.hash
-new file mode 100644
-index 0000000000..e7f6ac9e5a
---- /dev/null
-+++ b/package/x11r7/xlib_libXpresent/xlib_libXpresent.hash
-@@ -0,0 +1,6 @@
-+# From https://lists.x.org/archives/xorg-announce/2022-October/003225.html
-+sha256  b964df9e5a066daa5e08d2dc82692c57ca27d00b8cc257e8e960c9f1cf26231b  libXpresent-1.0.1.tar.xz
-+sha512  a4551f49a68f4487eb70dc5b50b7f745fbc8b6842cfa60422afe3834af41c504a37bcfddb4e7e9ee084b250df256034290776c8eb7d8838e392eb626fff55d25  libXpresent-1.0.1.tar.xz
-+
-+# Locally calculated
-+sha256  d64e671ffeb483d4543f98c842788ab34c77427e27d83d6b082065a4438d4885  COPYING
-diff --git a/package/x11r7/xlib_libXpresent/xlib_libXpresent.mk b/package/x11r7/xlib_libXpresent/xlib_libXpresent.mk
-new file mode 100644
-index 0000000000..4cb4fd193a
---- /dev/null
-+++ b/package/x11r7/xlib_libXpresent/xlib_libXpresent.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# xlib_libXpresent
-+#
-+################################################################################
-+
-+XLIB_LIBXPRESENT_VERSION = 1.0.1
-+XLIB_LIBXPRESENT_SOURCE = libXpresent-$(XLIB_LIBXPRESENT_VERSION).tar.xz
-+XLIB_LIBXPRESENT_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXPRESENT_LICENSE = MIT
-+XLIB_LIBXPRESENT_LICENSE_FILES = COPYING
-+XLIB_LIBXPRESENT_INSTALL_STAGING = YES
-+
-+XLIB_LIBXPRESENT_DEPENDENCIES = \
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 8efb353c33..5c32f593fe 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -26,6 +26,7 @@ config BR2_PACKAGE_MPV
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXPRESENT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
+ 	help
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index e368b25736..cf37091186 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -205,7 +205,13 @@ endif
+ # xlib_libXrandr, xlib_libXScrnSaver.
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MPV_CONF_OPTS += --enable-x11
+-MPV_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXinerama xlib_libXrandr xlib_libXScrnSaver
++MPV_DEPENDENCIES += \
 +	xlib_libX11 \
 +	xlib_libXext \
-+	xlib_libXfixes \
++	xlib_libXinerama \
++	xlib_libXpresent \
 +	xlib_libXrandr \
-+	xorgproto
-+
-+$(eval $(autotools-package))
++	xlib_libXScrnSaver
+ # XVideo
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
+ MPV_CONF_OPTS += --enable-xv
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
