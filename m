@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1916CEE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E3C8EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:16:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBBED41451;
-	Mon, 21 Aug 2023 20:16:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBBED41451
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3AA2240C29;
+	Mon, 21 Aug 2023 20:16:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AA2240C29
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LN82u_XpElaf; Mon, 21 Aug 2023 20:16:12 +0000 (UTC)
+	with ESMTP id m2jcFYwyRxBf; Mon, 21 Aug 2023 20:16:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DAA4140C51;
-	Mon, 21 Aug 2023 20:16:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAA4140C51
+	by smtp2.osuosl.org (Postfix) with ESMTP id 64ED641450;
+	Mon, 21 Aug 2023 20:16:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64ED641450
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 158121BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 265BE1BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDF9B409CB
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDF9B409CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18E0C41522
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18E0C41522
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cniqm-mZrKfH for <buildroot@lists.busybox.net>;
+ with ESMTP id YXJg379cb59j for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60A2E409E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AA6241548
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60A2E409E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AA6241548
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 575F986024; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+ id 6320086026; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 19:21:27 +0200
+Date: Wed, 9 Aug 2023 20:16:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 144cacd07bd613bc4a293b8c0ec7c7304bdf8cc0
-X-Git-Newrev: 084cc7df3f0e3f90cef55f5df82ae8320c3609d9
+X-Git-Oldrev: 084cc7df3f0e3f90cef55f5df82ae8320c3609d9
+X-Git-Newrev: 244a8c52ef25bafdee6577d08e47c091b2093cc8
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200125.575F986024@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing:
- TestPolkitSystemd: fix systemctl exit code check on failure
+Message-Id: <20230821200125.6320086026@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/berkeleydb: add option
+ for historic dbm interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,69 +64,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=084cc7df3f0e3f90cef55f5df82ae8320c3609d9
+commit: https://git.buildroot.net/buildroot/commit/?id=244a8c52ef25bafdee6577d08e47c091b2093cc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As reported by [1] [2], the return code of systemctl command between
-systemd 253 and 254 has changed when the polkit authentication is
-refused:
+Berkeley DB support in python depends on dbm, when missing python fails
+to detect libdb:
+https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
 
-/bin/systemctl restart systemd-timesyncd.service
+quoting python configure log:
+checking for libdb... no
 
-The return code changed from 1 to 4. The Polkit test case
-"TestPolkitSystemd" expected 1 as return code [3].
+quoting python config.log:
+conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
 
-The service log is not the same either:
+This patch provides a configure option for the historic dbm interface
+to be used by the python package.
 
-systemd v253:
-Failed to restart systemd-timesyncd.service: Interactive authentication required.
-
-systemd v254:
-Failed to restart systemd-timesyncd.service: Access denied
-
-git bisect report this commit:
-https://github.com/systemd/systemd/commit/959301cf9f42418314abf027183dc25c08731b82
-
-From the PR (to get more context):
-https://github.com/systemd/systemd/pull/26365
-
-Note: systemd doesn't recommend using systemctl exit code to check unit states:
-"The mapping of LSB service states to systemd unit states is imperfect, so it is better to
-not rely on those return values but to look for specific unit states and substates instead."
-
-Since we only want to check if the command failed, update our test to
-check if systemctl returned a non zero code whatever the reason of the
-failure.
-
-Thanks to Yann E. MORIN for the brainstorming!
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4768561464 (TestPolkitSystemd)
-
-[1] http://lists.busybox.net/pipermail/buildroot/2023-August/671900.html
-[2] https://lists.freedesktop.org/archives/systemd-devel/2023-August/049362.html
-[3] https://git.buildroot.net/buildroot/tree/support/testing/tests/package/test_polkit.py?h=2023.08-rc1#n45
-[4] https://github.com/systemd/systemd/blob/v254/man/systemctl.xml#L2612
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_polkit.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/berkeleydb/Config.in     | 5 +++++
+ package/berkeleydb/berkeleydb.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/support/testing/tests/package/test_polkit.py b/support/testing/tests/package/test_polkit.py
-index 3da63c437b..3414fd5159 100644
---- a/support/testing/tests/package/test_polkit.py
-+++ b/support/testing/tests/package/test_polkit.py
-@@ -44,7 +44,7 @@ class TestPolkitSystemd(TestPolkitInfra):
-         for rule_path in TestPolkitInfra.rule_paths:
-             cmd = "su brtest -c '/bin/systemctl restart systemd-timesyncd.service'"
-             _, exit_code = self.emulator.run(cmd, 10)
--            self.assertEqual(exit_code, 1)
-+            self.assertNotEqual(exit_code, 0)
+diff --git a/package/berkeleydb/Config.in b/package/berkeleydb/Config.in
+index f32d13ab17..f8fbb5cc09 100644
+--- a/package/berkeleydb/Config.in
++++ b/package/berkeleydb/Config.in
+@@ -13,6 +13,11 @@ config BR2_PACKAGE_BERKELEYDB_COMPAT185
+ 	help
+ 	  Build and install DB 1.85 compatibility API.
  
-             cmd = "cp /root/{file} {path}".format(file=rule_file, path=rule_path)
-             _, exit_code = self.emulator.run(cmd, 10)
++config BR2_PACKAGE_BERKELEYDB_DBM
++	bool "historic dbm interface"
++	help
++	  Enable the historic dbm interface.
++
+ config BR2_PACKAGE_BERKELEYDB_TOOLS
+ 	bool "install tools"
+ 	help
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index 36b1894f34..1c121370db 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -39,6 +39,7 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 		--disable-java \
+ 		--disable-tcl \
+ 		$(if $(BR2_PACKAGE_BERKELEYDB_COMPAT185),--enable-compat185,--disable-compat185) \
++		$(if $(BR2_PACKAGE_BERKELEYDB_DBM),--enable-dbm,--disable-dbm) \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		--with-pic \
+ 		--enable-o_direct \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
