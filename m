@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E22C001DE
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 059AAC001B0
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:16:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59EDB60E83;
-	Wed,  9 Aug 2023 21:16:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59EDB60E83
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE2CE612AB;
+	Wed,  9 Aug 2023 21:16:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE2CE612AB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VqyfagXUOc6k; Wed,  9 Aug 2023 21:16:18 +0000 (UTC)
+	with ESMTP id avzVmK3se4gh; Wed,  9 Aug 2023 21:16:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5676761241;
-	Wed,  9 Aug 2023 21:16:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5676761241
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BEB601BF28A
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:16:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C34AC610B4;
+	Wed,  9 Aug 2023 21:16:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C34AC610B4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A0DDD1BF28A
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96E3741757
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96E3741757
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A95C4063C
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:16:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A95C4063C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id L_LTDPcJCMLx for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 21:16:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wLoOOpOW-K4h for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 21:16:20 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9085441745
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9085441745
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A68AD400D9
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:16:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A68AD400D9
 Received: from fli4l.lan.fli4l (p4fd6c449.dip0.t-ipconnect.de [79.214.196.73])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C0CCCA4C1116;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DBF6CA4C1118;
  Wed,  9 Aug 2023 23:14:03 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:57460)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qTqVG-0001EZ-2g;
- Wed, 09 Aug 2023 23:14:02 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qTqVF-0001EZ-2l;
+ Wed, 09 Aug 2023 23:14:01 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed,  9 Aug 2023 23:13:52 +0200
-Message-Id: <20230809211401.3587177-6-bernd@kuhls.net>
+Date: Wed,  9 Aug 2023 23:13:49 +0200
+Message-Id: <20230809211401.3587177-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230809211401.3587177-1-bernd@kuhls.net>
 References: <20230809211401.3587177-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202306131828; t=1691615643;
- bh=eICMZ1hOsJ0OuHrzQc0zsLus1rj0CfFVwTp8gZJJhqo=;
+ bh=SzzBp2TrUwecvNg8YMJmNWnMcq6FTBvVrL231gRqVVQ=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=M0uEca3o19t7/Dxj27hafopLIxDYA4laQYEl73XeMQv9zOj4ZIoxF60uXhfMQNmDa
- d7WYoXfXdtCEHo316RlDwP+17bsTLMJs6uijSncMIiXEeyiagxP0SVQ0TKEQ5fG10k
- GDh6Xp8wcz79i5/cBXyNgKL+y4BVxMRfrq4YSWeeIuycjgR56CNlaH86QroizzUFHo
- 8CRoOYgDQ9Qe4j/AwSl/wUCAr8XVntzvd70j9XAG7TBiryWAutuL/ZnyfmxZZTtEW5
- loYV343QZpu7o0sT4xI5N4PLCPIUL7JwWploJTionU9OjoTYhB78SgbBC9474j5ZOw
- bdY9cMNw0jTFw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=LxOgtyy2qlWp25Y3ErxaYso0aRmsA7v7L1iY03VdQfHeB3T5OBVl369YOO0ucg3qa
+ Zrezv9ips/D14AqZ91bTJDd+HFVc7MmgtCecs02dtD/1f1PY++cRdlGXff+idcaFRh
+ T8dFp/yIZeL0dg4m4h8vq5EL9rjR/DVzmq51NkG6wx8uFOuYZx2kzUzg1BCjE7EYm4
+ fShl61IfSI4+SyJXVvH5iEGcSTsyfIn0vphYunZuU6U4KXdE+LXpNyJZMycV1vuNsn
+ e3XAZ8yvqPSCEISVflSEGzf8LcNvDo8O6+sDdR3MZkIhpAPlXGbRKj3gfhPFjsp5hS
+ h5OAihm/SGHOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=M0uEca3o
-Subject: [Buildroot] [PATCH/next v3 05/14] package/python3: use upstream
- build system to disable ssl module
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=LxOgtyy2
+Subject: [Buildroot] [PATCH/next v3 02/14] package/python3: use upstream
+ build system to disable uuid module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,85 +87,91 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
  .checkpackageignore                           |  1 -
- ...an-option-to-disable-openssl-support.patch | 30 -------------------
- package/python3/python3.mk                    |  8 +++--
- 3 files changed, 6 insertions(+), 33 deletions(-)
- delete mode 100644 package/python3/0023-Add-an-option-to-disable-openssl-support.patch
+ ...Add-an-option-to-disable-uuid-module.patch | 33 -------------------
+ package/python3/python3.mk                    |  4 +--
+ 3 files changed, 2 insertions(+), 36 deletions(-)
+ delete mode 100644 package/python3/0027-Add-an-option-to-disable-uuid-module.patch
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index cbd62e499b..7f64de8cc6 100644
+index 303eb4ccad..91f351f87b 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1230,7 +1230,6 @@ package/python3/0019-Add-an-option-to-disable-unicodedata.patch Upstream
- package/python3/0020-Add-an-option-to-disable-IDLE.patch Upstream
- package/python3/0021-Add-an-option-to-disable-decimal.patch Upstream
- package/python3/0022-Add-an-option-to-disable-the-ossaudiodev-module.patch Upstream
--package/python3/0023-Add-an-option-to-disable-openssl-support.patch Upstream
+@@ -1235,7 +1235,6 @@ package/python3/0023-Add-an-option-to-disable-openssl-support.patch Upstream
+ package/python3/0024-Add-an-option-to-disable-the-readline-module.patch Upstream
+ package/python3/0025-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch Upstream
  package/python3/0026-python-config.sh-don-t-reassign-prefix.patch Upstream
+-package/python3/0027-Add-an-option-to-disable-uuid-module.patch Upstream
  package/python3/0028-fix-building-on-older-distributions.patch Upstream
  package/python3/0029-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch Upstream
-diff --git a/package/python3/0023-Add-an-option-to-disable-openssl-support.patch b/package/python3/0023-Add-an-option-to-disable-openssl-support.patch
+ package/python3/0031-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch Upstream
+diff --git a/package/python3/0027-Add-an-option-to-disable-uuid-module.patch b/package/python3/0027-Add-an-option-to-disable-uuid-module.patch
 deleted file mode 100644
-index d4c9fd43be..0000000000
---- a/package/python3/0023-Add-an-option-to-disable-openssl-support.patch
+index a9501ec189..0000000000
+--- a/package/python3/0027-Add-an-option-to-disable-uuid-module.patch
 +++ /dev/null
-@@ -1,30 +0,0 @@
--From 25c900e81a2fc0bbe35e7c94e2e5028cfbf6582a Mon Sep 17 00:00:00 2001
--From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
--Date: Wed, 22 Feb 2017 17:55:59 -0800
--Subject: [PATCH] Add an option to disable openssl support.
+@@ -1,33 +0,0 @@
+-From 58027d25c3cabcf654cb0b31a61d7cbd53dc68c0 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sat, 18 Aug 2018 10:54:56 +0200
+-Subject: [PATCH] Add an option to disable uuid module
 -
--Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- configure.ac | 6 ++++++
-- 1 file changed, 6 insertions(+)
+- configure.ac | 9 +++++++++
+- 1 file changed, 9 insertions(+)
 -
 -diff --git a/configure.ac b/configure.ac
--index db33d567ad..42fe6c8f5a 100644
+-index ca6c16491a..ed03b27fb1 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -4219,6 +4219,12 @@ AC_ARG_ENABLE(unicodedata,
--     	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} unicodedata"
--   	  fi])
+-@@ -4267,6 +4267,15 @@ if test "$CURSES" = "no"; then
+-    DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _curses _curses_panel"
+- fi
 - 
--+AC_ARG_ENABLE(openssl,
--+	AS_HELP_STRING([--disable-openssl], [disable openssl support]),
--+	[ if test "$enableval" = "no"; then
--+	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl _ssl _hashlib"
--+	  fi])
+-+AC_SUBST(UUID)
+-+AC_ARG_ENABLE(uuid,
+-+	AS_HELP_STRING([--disable-uuid], [disable uuid]),
+-+	[ UUID="${enableval}" ], [ UUID=yes ])
 -+
-- AC_SUBST(TK)
-- AC_ARG_ENABLE(tk,
-- 	AS_HELP_STRING([--disable-tk], [disable tk]),
+-+if test "$UUID" = "no"; then
+-+   DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _uuid"
+-+fi
+-+
+- AC_SUBST(PYDOC)
+- 
+- AC_ARG_ENABLE(pydoc,
 --- 
 -2.34.1
 -
 diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 3093ae0fab..596bf44b56 100644
+index 494c66c0b1..5d36917817 100644
 --- a/package/python3/python3.mk
 +++ b/package/python3/python3.mk
-@@ -62,7 +62,9 @@ endif
- ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
- HOST_PYTHON3_DEPENDENCIES += host-openssl
- else
--HOST_PYTHON3_CONF_OPTS += --disable-openssl
-+HOST_PYTHON3_CONF_ENV += \
-+	py_cv_module__hashlib=n/a \
-+	py_cv_module__ssl=n/a
- endif
+@@ -31,7 +31,6 @@ HOST_PYTHON3_CONF_OPTS += \
+ 	--enable-unicodedata \
+ 	--disable-test-modules \
+ 	--disable-idle3 \
+-	--disable-uuid \
+ 	--disable-ossaudiodev
  
- PYTHON3_INSTALL_STAGING = YES
-@@ -118,7 +120,9 @@ ifeq ($(BR2_PACKAGE_PYTHON3_SSL),y)
- PYTHON3_DEPENDENCIES += openssl
- PYTHON3_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
- else
--PYTHON3_CONF_OPTS += --disable-openssl
-+PYTHON3_CONF_ENV += \
-+	py_cv_module__hashlib=n/a \
-+	py_cv_module__ssl=n/a
- endif
+ # Make sure that LD_LIBRARY_PATH overrides -rpath.
+@@ -41,6 +40,7 @@ HOST_PYTHON3_CONF_OPTS += \
+ # communicate over the network during the build.
+ HOST_PYTHON3_CONF_ENV += \
+ 	LDFLAGS="$(HOST_LDFLAGS) -Wl,--enable-new-dtags" \
++	py_cv_module__uuid=n/a \
+ 	ac_cv_prog_HAS_HG=/bin/false
  
- ifneq ($(BR2_PACKAGE_PYTHON3_CODECSCJK),y)
+ PYTHON3_DEPENDENCIES = host-python3 libffi
+@@ -128,7 +128,7 @@ endif
+ # Disable auto-detection of uuid.h (util-linux)
+ # which would add _uuid module support, instead
+ # default to the pure python implementation
+-PYTHON3_CONF_OPTS += --disable-uuid
++PYTHON3_CONF_ENV += py_cv_module__uuid=n/a
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_BZIP2),y)
+ PYTHON3_DEPENDENCIES += bzip2
 -- 
 2.39.2
 
