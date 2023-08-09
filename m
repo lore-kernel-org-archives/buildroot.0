@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B8C1EE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1BAEEE49AA
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:09:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2347540BD1;
-	Mon, 21 Aug 2023 20:09:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2347540BD1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A2BB40B22;
+	Mon, 21 Aug 2023 20:09:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A2BB40B22
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Mg3k4QTElmEI; Mon, 21 Aug 2023 20:09:23 +0000 (UTC)
+	with ESMTP id 5HBTIEuDIH1K; Mon, 21 Aug 2023 20:09:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3180F40BFC;
-	Mon, 21 Aug 2023 20:09:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3180F40BFC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 444421BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9EFAB40C0A;
+	Mon, 21 Aug 2023 20:09:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EFAB40C0A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id ED5501BF8B4
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E81BC409FE
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E81BC409FE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 43C1960F60
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43C1960F60
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w3IGYLuwtJvu for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EoQErcaMrQZL for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2E79409FB
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2E79409FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C9B160E82
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C9B160E82
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C44686025; Mon, 21 Aug 2023 20:01:23 +0000 (UTC)
+ id 6D8D986025; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 15:44:32 +0200
+Date: Wed, 9 Aug 2023 20:16:38 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d79f9c9f416ac5da90cd428916cff0b5288cb03a
-X-Git-Newrev: d0349d5ba02df26c9f3d98b1e34ebd2c5c34192c
+X-Git-Oldrev: 244a8c52ef25bafdee6577d08e47c091b2093cc8
+X-Git-Newrev: b84ffd85e2900741bb97325b53d09e170e941e6c
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200123.9C44686025@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/elf2flt: fix build
- with binutils >= 2.41 due to libbfd location
+Message-Id: <20230821200125.6D8D986025@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python3: berkeleydb
+ support needs the dbm interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,76 +64,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0349d5ba02df26c9f3d98b1e34ebd2c5c34192c
+commit: https://git.buildroot.net/buildroot/commit/?id=b84ffd85e2900741bb97325b53d09e170e941e6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-elf2flt needs to link against libbfd.a and libiberty.a which are
-provided by host-binutils, but not installed, so we poke directly
-into the host-binutils build directory. While not very nice, it has
-already been like this for a long time. We could build host-binutils
-with --enable-install-libbfd and --enable-install-libiberty so that
-those libraries are installed, but we prefer to do this separately,
-and there is a serious potential for perturbations to other packages
-by having libbfd/libiberty installed in $(HOST_DIR).
+Until now, the Python build system was building a _dbm.cpython-*.so
+native module when BR2_PACKAGE_PYTHON3_BERKELEYDB was enabled, but
+since the bump of Python to 3.11.x, it was no longer building this
+native module.
 
-In the mean time, an issue of poking directly into the host-binutils
-build directory is that the location of libbfd.a has changed in
-binutils >= 2.41, so we special case binutils 2.39 and 2.40, which are
-the two remaining versions still using the "old" path".
+Investigation this, we found out that Python 3.11 changed how libdb
+was detected [1] and that check now fails:
 
-Note: the ARC-special binutils version is not considered because
-Buildroot only supports ARC CPUs with a MMU and therefore host-elf2flt
-is never used on ARC.
+quoting configure log:
+checking for libdb... no
 
-Fixes:
+quoting python config.log:
+conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
 
-gcc: error: /builds/buildroot.org/toolchains-builder/build/output/build/host-binutils-2.41/bfd/libbfd.a: No such file or directory
+However, in fact it turns that this problem is not new in Python
+3.11. In Python 3.10, the build system was always producing the native
+module, but it was in fact not working at runtime:
 
-When build host-elf2flt against host-binutils 2.41.
+>>> from _dbm import *
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ImportError: /usr/lib/python3.10/lib-dynload/_dbm.cpython-310-arm-linux-gnueabihf.so: undefined symbol: __db_ndbm_delete
 
-This issue is not visible in the autobuilders as it is hidden by the
-BFD_VMA_FMT issue fixed in the previous commit.
+It was not really visible because when one does "import dbm", it
+actually tries several "backends", including ndbm (which relies on
+_dbm above), and if it doesn't work, it falls back silently on a pure
+Python implementation.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+So the issue was never noticed, but has already been there,
+potentially forever.
+
+In order for this _dbm native module to be built (Python >= 3.11) or
+to work (Python < 3.11), the BerkeleyDB library need to be built with
+its so-called "dbm" interface, which we do by selecting select
+BR2_PACKAGE_BERKELEYDB_DBM.
+
+And now:
+
+>>> import _dbm
+>>>
+
+[1] https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Thomas: did more research to have a better explanation of what is
+happening, and realize the problem is not related to Python 3.11]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/elf2flt/elf2flt.mk | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ package/python3/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 6cd0786c3d..b970de48f2 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -14,12 +14,27 @@ HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
- # 0001-elf2flt-handle-binutils-2.34.patch
- HOST_ELF2FLT_AUTORECONF = YES
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 761c38c850..38f0580aa4 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -48,6 +48,7 @@ config BR2_PACKAGE_PYTHON3_2TO3
+ config BR2_PACKAGE_PYTHON3_BERKELEYDB
+ 	bool "berkeleydb"
+ 	select BR2_PACKAGE_BERKELEYDB
++	select BR2_PACKAGE_BERKELEYDB_DBM
+ 	help
+ 	  berkeleydb module for Python3
  
-+# elf2flt needs to link against libbfd.a and libiberty.a which are
-+# provided by host-binutils, but not installed, so we poke directly
-+# into the host-binutils build directory. Turns out that the location
-+# of libbfd.a has changed in binutils >= 2.41, so we special case
-+# binutils 2.39 and 2.40, which are the two remaining versions still
-+# using the "old" path". Note: the ARC-special binutils version is not
-+# considered because Buildroot only supports ARC CPUs with a MMU and
-+# therefore host-elf2flt is never used on ARC. libiberty.a has
-+# remained at the same location.
-+ifeq ($(BR2_BINUTILS_VERSION_2_39_X)$(BR2_BINUTILS_VERSION_2_40_X),y)
-+HOST_ELF2FLT_LIBBFD_PATH = $(HOST_BINUTILS_DIR)/bfd/libbfd.a
-+else
-+HOST_ELF2FLT_LIBBFD_PATH = $(HOST_BINUTILS_DIR)/bfd/.libs/libbfd.a
-+endif
-+
- # It is not exactly a host variant, but more a cross variant, which is
- # why we pass a special --target option.
- HOST_ELF2FLT_CONF_OPTS = \
- 	--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
- 	--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
--	--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
-+	--with-libbfd=$(HOST_ELF2FLT_LIBBFD_PATH) \
- 	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
- 	--target=$(GNU_TARGET_NAME) \
- 	--disable-werror
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
