@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6F4C001E0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12152C001DE
+	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 21:08:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 306E160AFF;
-	Wed,  9 Aug 2023 21:04:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 306E160AFF
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5D8260BC3;
+	Wed,  9 Aug 2023 21:08:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5D8260BC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id F759EwxEhNQW; Wed,  9 Aug 2023 21:04:39 +0000 (UTC)
+	with ESMTP id WytnTY0OUhty; Wed,  9 Aug 2023 21:08:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0314860EA7;
-	Wed,  9 Aug 2023 21:04:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0314860EA7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 400961BF97F
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:04:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F141560B1C;
+	Wed,  9 Aug 2023 21:08:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F141560B1C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9B32F1BF28A
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24FC340901
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:04:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24FC340901
+ by smtp2.osuosl.org (Postfix) with ESMTP id 722A940647
+ for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 21:08:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 722A940647
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wcbe_DxehdQB for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 21:04:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24932400D2
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:04:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24932400D2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F3F8852E0; Wed,  9 Aug 2023 21:04:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 23:03:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3bdc3f58cc0bf50baa0f3b9a50e1ee61081c8cae
-X-Git-Newrev: a0fdd17ec254ecaca28b40254e0679e24078c5e5
-X-Patchwork-Hint: ignore
-Message-Id: <20230809210422.0F3F8852E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpv: fix x11 build
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Mfz4My_kKOyr for <buildroot@lists.busybox.net>;
+ Wed,  9 Aug 2023 21:08:30 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7902D4063C
+ for <buildroot@buildroot.org>; Wed,  9 Aug 2023 21:08:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7902D4063C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 21AA4240002;
+ Wed,  9 Aug 2023 21:08:26 +0000 (UTC)
+Date: Wed, 9 Aug 2023 23:08:25 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230809230825.30ad5e95@windsurf>
+In-Reply-To: <20230319181100.23180-1-fontaine.fabrice@gmail.com>
+References: <20230319181100.23180-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691615307;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=R5vRb/Ndl02EMOYUT/YpAkLAUUSF86uGcoFcT6F2rLQ=;
+ b=Hj3qLySokbE0RmmgA2a6fJ0787xkytOKJ0eX/spG88SSCkbKkoH3DHxnzaghij9apUgiQ3
+ pgl2/JgBIOVNQunRa+l4mP0ZCUT/By+Gnru+QISNJzvCoZ4lxrLuLvIHgmn0UeL0O8h7yI
+ sTnDE5VxKCKk8ZvdlpEZRjgjnskhXoajtiKnB8uYvuVU5uUHBkyuscm+rej7ZdPckKMzNq
+ sdsARFiKYpY6CkHpv2gjgUYMBNOVeOXvwssH0RHBZzv0CNaOm3Vt5dotT2RRevryNqvx1S
+ NyUkv6a/EGxXCJRAforB2WhS8d0nrLz6MKasp9Te7G0QsL1LcJDlrqGh8v8m8A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Hj3qLySo
+Subject: Re: [Buildroot] [PATCH 1/2] package/xlib_libXpresent: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,64 +76,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0fdd17ec254ecaca28b40254e0679e24078c5e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 19 Mar 2023 19:10:59 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-xlib_libXpresent is needed with x11 to avoid the following build failure
-raised since bump to version 0.35.1 in commit
-61ba55e9cce6884295e47fdf33554e6877bd0747 and
-https://github.com/mpv-player/mpv/commit/3d459832a88a9bd2835b339cf6ca98f84aad0115:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/x11r7/Config.in                         |  1 +
+>  package/x11r7/xlib_libXpresent/Config.in        |  8 ++++++++
+>  .../xlib_libXpresent/xlib_libXpresent.hash      |  6 ++++++
+>  .../x11r7/xlib_libXpresent/xlib_libXpresent.mk  | 17 +++++++++++++++++
+>  4 files changed, 32 insertions(+)
+>  create mode 100644 package/x11r7/xlib_libXpresent/Config.in
+>  create mode 100644 package/x11r7/xlib_libXpresent/xlib_libXpresent.hash
+>  create mode 100644 package/x11r7/xlib_libXpresent/xlib_libXpresent.mk
 
-Checking for X11: no ('x11 >= 1.0.0 xscrnsaver >= 1.0.0 xext >= 1.0.0 xinerama >= 1.0.0 xpresent >= 1.0.0 xrandr >= 1.2.0' not found)
-You manually enabled the feature 'x11', but the autodetection check failed.
+Thanks, I've applied both patches, after addressing some issues pointed
+out by Bernd.
 
-Fixes:
- - http://autobuild.buildroot.org/results/1aace6210ba966bb4979d935c08507b2a34e0460
+Thanks!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mpv/Config.in | 1 +
- package/mpv/mpv.mk    | 8 +++++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 8efb353c33..5c32f593fe 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -26,6 +26,7 @@ config BR2_PACKAGE_MPV
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXINERAMA if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXPRESENT if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
- 	help
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index e368b25736..cf37091186 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -205,7 +205,13 @@ endif
- # xlib_libXrandr, xlib_libXScrnSaver.
- ifeq ($(BR2_PACKAGE_XORG7),y)
- MPV_CONF_OPTS += --enable-x11
--MPV_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXinerama xlib_libXrandr xlib_libXScrnSaver
-+MPV_DEPENDENCIES += \
-+	xlib_libX11 \
-+	xlib_libXext \
-+	xlib_libXinerama \
-+	xlib_libXpresent \
-+	xlib_libXrandr \
-+	xlib_libXScrnSaver
- # XVideo
- ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
- MPV_CONF_OPTS += --enable-xv
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
