@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28C21C001DE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:40:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60974C04A6A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:41:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D0E23417C7;
-	Thu, 10 Aug 2023 20:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0E23417C7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 142B6417E8;
+	Thu, 10 Aug 2023 20:41:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 142B6417E8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e5U5E9okVzcN; Thu, 10 Aug 2023 20:40:56 +0000 (UTC)
+	with ESMTP id cHpPVBnJ0nAe; Thu, 10 Aug 2023 20:41:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D1C3408D4;
-	Thu, 10 Aug 2023 20:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D1C3408D4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0C7CB1BF97F
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:40:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5A7B7417D2;
+	Thu, 10 Aug 2023 20:41:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A7B7417D2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EED9A1BF97F
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D897941DA0
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D897941DA0
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9E94408D4
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:41:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9E94408D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dFkMCtNK5tyu for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 20:40:52 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0B5141D77
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:40:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B5141D77
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C14E85731; Thu, 10 Aug 2023 20:40:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 10 Aug 2023 22:39:10 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 527e538a82754ad5ca412c1612328ec5e6d78b78
-X-Git-Newrev: 60cf00d3f4679069c1f1c0c8943e50626bbfb12a
-X-Patchwork-Hint: ignore
-Message-Id: <20230810204052.9C14E85731@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] arch/mips: re-add support for
- MIPS IV
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fayg3_SxMu0r for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 20:41:09 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C65F3417CD
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:41:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C65F3417CD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F34460002;
+ Thu, 10 Aug 2023 20:41:05 +0000 (UTC)
+Date: Thu, 10 Aug 2023 22:41:04 +0200
+To: Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <20230810224104.654c469d@windsurf>
+In-Reply-To: <20230808214153.1453666-1-f.fainelli@gmail.com>
+References: <20230808214153.1453666-1-f.fainelli@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691700065;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Hd/xqY0+0wwyQjRyXTdqrpSg64I4vUcY6XNk8jmCXhs=;
+ b=dmgA3x5D3VGU3BYDUhhELfgJM/7WnhANOlrjco3ml9wzZVtjHhc/KOTe8Qd+9cjm/9u0PU
+ UsyO9RhgrCAWrO86J7CBUasJG8LMnuN++QeoaYaYRWevPS8UKYJA3HBSBUh4isKtO9vy6J
+ MA81oeAJEO/aTxzUjgmAbda+u/fm6HcILh6tEKaO4WHe38M60/ndeZE58pfoGcsJS8TfID
+ ClzFNsPrZ3XPIHHKbYYGCl77+HNFKrx9PAQtTCUxUizm0RKUKC3V0yjatBI2/522FtnqFV
+ 2lvLMGQ934qDF1lgNWfWjSpSlh10BWSFl54KP6GJxHMSoJiyKCm/aaJhlh4xLA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dmgA3x5D
+Subject: Re: [Buildroot] [PATCH] arch/mips: Allow building for MIPS IV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +76,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60cf00d3f4679069c1f1c0c8943e50626bbfb12a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue,  8 Aug 2023 14:41:53 -0700
+Florian Fainelli <f.fainelli@gmail.com> wrote:
 
-Support for MIPS IV was dropped in commit
-dd45fe0efb678a8a674330ad46b7641a3284dff9 ("arch/mips: remove
-deprecated mips1/2/3/4 support"). However, even though it is an older
-ISA than R1, it is still useful to support older MIPS-based
-systems (e.g.: Cobalt Qube).
+> MIPS IV is an older ISA than R1 but is still useful to support older
+> MIPS-based systems (e.g.: Cobalt Qube).
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  arch/Config.in.mips | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- arch/Config.in.mips | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Applied to next with a slightly tweaked commit log, thanks.
 
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 7f44f06c9d..29b4180d21 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -40,8 +40,8 @@ choice
- 	help
- 	  Specific CPU variant to use
- 
--	  64bit capable: 64, 64r2, 64r3, 64r5, 64r6
--	  non-64bit capable: 32, 32r2, 32r3, 32r5, 32r6
-+	  64bit capable: mips4, 64, 64r2, 64r3, 64r5, 64r6
-+	  non-64bit capable: mips4, 32, 32r2, 32r3, 32r5, 32r6
- 
- config BR2_mips_32
- 	bool "Generic MIPS32"
-@@ -97,6 +97,8 @@ config BR2_mips_xburst
- 	  to be used in order to prevent emitting these instructions.
- 
- 	  See http://www.ingenic.com/en/?xburst.html
-+config BR2_mips4
-+	bool "MIPS IV"
- config BR2_mips_64
- 	bool "Generic MIPS64"
- 	depends on BR2_ARCH_IS_64
-@@ -262,6 +264,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "octeon2"	if BR2_mips_octeon2
- 	default "octeon3"	if BR2_mips_octeon3
- 	default "p6600"		if BR2_mips_p6600
-+	default "mips4"		if BR2_mips4
- 
- config BR2_MIPS_OABI32
- 	bool
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
