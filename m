@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2532FC001B0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 22:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83827C001B0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 22:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F899400DC;
-	Thu, 10 Aug 2023 22:06:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F899400DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CD7540A70;
+	Thu, 10 Aug 2023 22:06:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CD7540A70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BBPlccYqZJiP; Thu, 10 Aug 2023 22:06:21 +0000 (UTC)
+	with ESMTP id 04wuwUtrlFTI; Thu, 10 Aug 2023 22:06:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CAB8540A70;
-	Thu, 10 Aug 2023 22:06:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAB8540A70
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 218141BF83B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F88A417F0;
+	Thu, 10 Aug 2023 22:06:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F88A417F0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A0581BF982
  for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF68640A70
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF68640A70
+ by smtp1.osuosl.org (Postfix) with ESMTP id 233C683F26
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 233C683F26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bp2latkP2qwC for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Spdc89AYQOPO for <buildroot@lists.busybox.net>;
  Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 278FF400DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3071F8211D
  for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 278FF400DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3071F8211D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13A4E85A58; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
+ id 1EA6F85A5C; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Aug 2023 23:30:19 +0200
+Date: Fri, 11 Aug 2023 00:04:33 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b574a9606e62e79a3b7f8aa3e14199ea73fc6826
-X-Git-Newrev: 928b7219cd7079864eadadc66dbff21c5cd72804
+X-Git-Oldrev: 928b7219cd7079864eadadc66dbff21c5cd72804
+X-Git-Newrev: 21d5d592a427686b3421d694a50dd96004d23ce8
 X-Patchwork-Hint: ignore
-Message-Id: <20230810220619.13A4E85A58@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rauc-hawkbit-updater:
- new package
+Message-Id: <20230810220619.1EA6F85A5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fft_eval: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,120 +58,122 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1826583913473410974=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1826583913473410974==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=928b7219cd7079864eadadc66dbff21c5cd72804
+commit: https://git.buildroot.net/buildroot/commit/?id=21d5d592a427686b3421d694a50dd96004d23ce8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add useful tool for bridging RAUC with the Hawkbit API.
-
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                           |  3 +++
- package/Config.in                                    |  1 +
- package/rauc-hawkbit-updater/Config.in               | 20 ++++++++++++++++++++
- .../rauc-hawkbit-updater/rauc-hawkbit-updater.hash   |  3 +++
- package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk | 15 +++++++++++++++
- 5 files changed, 42 insertions(+)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/fft-eval/Config.in     | 13 +++++++++++++
+ package/fft-eval/fft-eval.hash |  5 +++++
+ package/fft-eval/fft-eval.mk   | 37 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 57 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0bed35fd8e..3f9b29fe46 100644
+index 3f9b29fe46..88b05e8ea8 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -638,6 +638,9 @@ N:	Clément Péron <peron.clem@gmail.com>
- F:	board/beelink/gs1/
- F:	configs/beelink_gs1_defconfig
+@@ -2405,6 +2405,7 @@ F:	support/testing/tests/package/test_docker_compose.py
  
-+N:	Colin Foster <colin.foster@in-advantage.com>
-+F:	package/rauc-hawkbit-updater/
-+
- N:	Corentin Guillevic <corentin.guillevic@smile.fr>
- F:	package/libloki/
- 
+ N:	Peter Seiderer <ps.report@gmx.net>
+ F:	package/dotconf/
++F:	package/fft-eval/
+ F:	package/python-blinker/
+ F:	package/qt5/qt5speech/
+ F:	package/speechd/
 diff --git a/package/Config.in b/package/Config.in
-index 9ee1893e45..4c763447e4 100644
+index 4c763447e4..79142315ce 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2715,6 +2715,7 @@ menu "System tools"
- 	source "package/quota/Config.in"
- 	source "package/quotatool/Config.in"
- 	source "package/rauc/Config.in"
-+	source "package/rauc-hawkbit-updater/Config.in"
- 	source "package/rsyslog/Config.in"
- 	source "package/runc/Config.in"
- 	source "package/s390-tools/Config.in"
-diff --git a/package/rauc-hawkbit-updater/Config.in b/package/rauc-hawkbit-updater/Config.in
+@@ -2243,6 +2243,7 @@ menu "Miscellaneous"
+ 	source "package/collectl/Config.in"
+ 	source "package/domoticz/Config.in"
+ 	source "package/empty/Config.in"
++	source "package/fft-eval/Config.in"
+ 	source "package/gitlab-runner/Config.in"
+ 	source "package/gnuradio/Config.in"
+ 	source "package/googlefontdirectory/Config.in"
+diff --git a/package/fft-eval/Config.in b/package/fft-eval/Config.in
 new file mode 100644
-index 0000000000..dafc2f883c
+index 0000000000..e979e7aeb4
 --- /dev/null
-+++ b/package/rauc-hawkbit-updater/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_RAUC_HAWKBIT_UPDATER
-+	bool "rauc-hawkbit-updater"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # rauc, json-glib
-+	depends on BR2_USE_MMU # rauc, json-glib
-+	depends on BR2_USE_WCHAR # rauc, json-glib
-+	select BR2_PACKAGE_JSON_GLIB
-+	select BR2_PACKAGE_LIBCURL
-+	# runtime
-+	select BR2_PACKAGE_RAUC
++++ b/package/fft-eval/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_FFT_EVAL
++	bool "fft-eval"
 +	help
-+	  rauc-hawkbit-updater is a link between Pengutronix RAUC and
-+	  the Eclipse Hawkbit API. Hawkbit can communicate to remote
-+	  update servers, and use the d-bus interface to trigger
-+	  updates from RAUC.
++	  Program to aid open source spectrum analyzer development for
++	  Qualcomm/Atheros AR92xx and AR93xx based chipsets.
 +
-+	  http://rauc.io/
++	  It visualizes the FFT data reported by the chips to help
++	  interpreting and understanding the data.
 +
-+comment "rauc-hawkbit-updater needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.hash b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.hash
++	  Enable sdl2 and sdl2_ttf for the graphic output tool
++	  fft_eval_sdl.
++
++	  https://github.com/simonwunderlich/FFT_eval
+diff --git a/package/fft-eval/fft-eval.hash b/package/fft-eval/fft-eval.hash
 new file mode 100644
-index 0000000000..c65ead3784
+index 0000000000..1ffa854be3
 --- /dev/null
-+++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.hash
-@@ -0,0 +1,3 @@
++++ b/package/fft-eval/fft-eval.hash
+@@ -0,0 +1,5 @@
 +# Locally calculated
-+sha256  42318e96a464e6c716edb45c48bd3ec3b874462973db902fbe099a395e4acb4b  rauc-hawkbit-updater-1.3.tar.xz
-+sha256  041234c81fd6fe6c531ea1a886b9e740b9ee06759d1a910a14edbd06f4aa62c7  LICENSE
-diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
++sha256  154f99c3567835bbbbc9ec4c58bc79961f9fa5342effb6f0bc41475fc9a6d11f  fft-eval-6a82b383ce79afc4c1ba26ffcf34b15d3e95894b.tar.gz
++sha256  6a573fb2f9082662978cf21fb153096df0a1981deaea7dbc10a11046fe005d9f  LICENSES/CC0-1.0.txt
++sha256  d1cf0896da7045d841fe45b0991cf35540bac1a17b5d11f4afcf8fcb950246b5  LICENSES/GPL-2.0-only.txt
++sha256  797832eda5ff4360a10fee3be94a3250995e76423b79675c9c44204c37ca492d  LICENSES/OFL-1.1.txt
+diff --git a/package/fft-eval/fft-eval.mk b/package/fft-eval/fft-eval.mk
 new file mode 100644
-index 0000000000..10ba91abbb
+index 0000000000..3dd3cec0b4
 --- /dev/null
-+++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
-@@ -0,0 +1,15 @@
++++ b/package/fft-eval/fft-eval.mk
+@@ -0,0 +1,37 @@
 +################################################################################
 +#
-+# rauc-hawkbit-updater
++# fft-eval
 +#
 +################################################################################
 +
-+RAUC_HAWKBIT_UPDATER_VERSION = 1.3
-+RAUC_HAWKBIT_UPDATER_SITE = https://github.com/rauc/rauc-hawkbit-updater/releases/download/v$(RAUC_HAWKBIT_UPDATER_VERSION)
-+RAUC_HAWKBIT_UPDATER_SOURCE = rauc-hawkbit-updater-$(RAUC_HAWKBIT_UPDATER_VERSION).tar.xz
-+RAUC_HAWKBIT_UPDATER_LICENSE = LGPL-2.1
-+RAUC_HAWKBIT_UPDATER_LICENSE_FILES = LICENSE
-+RAUC_HAWKBIT_UPDATER_CPE_ID_VENDOR = pengutronix
-+RAUC_HAWKBIT_UPDATER_DEPENDENCIES = json-glib libcurl
++FFT_EVAL_VERSION = 6a82b383ce79afc4c1ba26ffcf34b15d3e95894b
++FFT_EVAL_SITE = $(call github,simonwunderlich,FFT_eval,$(FFT_EVAL_VERSION))
++FFT_EVAL_LICENSE = CC0-1.0 (doc), GPL-2.0, OFL-1.1 (LiberationSans-Regular.ttf)
++FFT_EVAL_LICENSE_FILES = \
++	LICENSES/CC0-1.0.txt \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/OFL-1.1.txt
 +
-+$(eval $(meson-package))
-
---===============1826583913473410974==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++FFT_EVAL_CONV_OPTS = CONFIG_fft_eval_json=y
++FFT_EVAL_TARGETS = fft_eval_json
++
++ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_TTF),yy)
++FFT_EVAL_CONV_OPTS += CONFIG_fft_eval_sdl=y
++FFT_EVAL_DEPENDENCIES += sdl2 sdl2_ttf
++FFT_EVAL_TARGETS += fft_eval_sdl
++else
++FFT_EVAL_CONV_OPTS += CONFIG_fft_eval_sdl=n
++endif
++
++define FFT_EVAL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CROSS=$(STAGING_DIR)/usr/bin/ $(FFT_EVAL_CONV_OPTS) -C $(@D) all
++endef
++
++define FFT_EVAL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		CROSS=$(STAGING_DIR)/usr/bin/ $(FFT_EVAL_CONV_OPTS) \
++		-C $(@D) DESTDIR=$(TARGET_DIR) BINDIR=/usr/bin install
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1826583913473410974==--
