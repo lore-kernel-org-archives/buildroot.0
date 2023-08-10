@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F4D3C001B0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 22:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2532FC001B0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 22:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A25C9414B6;
-	Thu, 10 Aug 2023 22:02:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A25C9414B6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F899400DC;
+	Thu, 10 Aug 2023 22:06:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F899400DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p0LCZ5idsoC8; Thu, 10 Aug 2023 22:02:00 +0000 (UTC)
+	with ESMTP id BBPlccYqZJiP; Thu, 10 Aug 2023 22:06:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4B0F40A70;
-	Thu, 10 Aug 2023 22:01:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4B0F40A70
+	by smtp2.osuosl.org (Postfix) with ESMTP id CAB8540A70;
+	Thu, 10 Aug 2023 22:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAB8540A70
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9BB221BF4DB
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:01:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 218141BF83B
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7390C40A70
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:01:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7390C40A70
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF68640A70
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF68640A70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BxbKnXl_fN5G for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 22:01:55 +0000 (UTC)
-Received: from smtpcmd14173.aruba.it (smtpcmd14173.aruba.it [62.149.156.173])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 98962400DC
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98962400DC
-Received: from localhost.localdomain ([95.47.160.93])
- by Aruba Outgoing Smtp  with ESMTPSA
- id UDj5q0O7AXI7yUDj5qsdYf; Fri, 11 Aug 2023 00:01:52 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ with ESMTP id Bp2latkP2qwC for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 278FF400DC
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 278FF400DC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 13A4E85A58; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Aug 2023 00:01:46 +0200
-Message-Id: <20230810220146.11261-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230808231421.7f94494d@windsurf>
-References: <20230808231421.7f94494d@windsurf>
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGKwqx5HzN0Pm4vi7HxtSLNS4LmM+UrkOrXNRYVnaVleVAJFRXDgrIIPHcmFUsPgKj9OvfmTaQqbRf9JVPTnb1vKkJ71Scslgwan3bxRv53uGg8u0ylz
- IcaPSrYRJXq4GD7TYONulMQ/+jJu1EnyXNfRo2AJK0TINDEyxLi1K2dlOoZursa0hAbbh+NEPY2n8SrLffpO291uXpS/DBoyjct6DBZ8r7l25FQq4CHSrneK
- 9t5tqkSTk8S9/A0x7cSo17gNVejMm+JG+v7gN+thC+4fnVEtV1vmLH8p2VjOX4A+29kTYThjNHYf43DvjcD0Ww==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1691704912; bh=V8+HjDfEdV2+ImwDOqAXguZIUlqjN+qAelW4uq1YU+k=;
- h=From:To:Subject:Date:MIME-Version;
- b=h9i3s0mZZhvVwFykDOO2mXochlHGZ+ADVeGqLHEOilfdnaBdrnP17ztjwLq3a1hcK
- 7VyuSuvoZM2xfrC0j4FH8nQtS3usoMdDYqNM/cMeexPbi7MhEr09ijK9cwHwRhNpD8
- ieaSvIDHPUHRAUGr1lR46m3ZF0eFli7TjNJltUXF1krW2BPM1/0K+iv7Pglx7j3hAm
- Af+2FSswX+zyFzImb/c2wKXAs06y9JBMthPCOqJrw4u9dQJZCWAF+7NXUDaA+UHcl2
- nPtacWjMrhu1ZbeOVpLjlBIMIfHxTCuYN0YL4HESKNbG0VWze71v4fePpXN7ATe+O6
- 78gOegK2vIV6Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=h9i3s0mZ
-Subject: [Buildroot] [PATCH] configs/asus_tinker_rk3288_defconfig: switch to
- zImage and bump Linux to 6.1.44, U-Boot to 2023.07
+Date: Thu, 10 Aug 2023 23:30:19 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: b574a9606e62e79a3b7f8aa3e14199ea73fc6826
+X-Git-Newrev: 928b7219cd7079864eadadc66dbff21c5cd72804
+X-Patchwork-Hint: ignore
+Message-Id: <20230810220619.13A4E85A58@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rauc-hawkbit-updater:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,55 +56,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1826583913473410974=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-uImage is almost deprecated so let's switch to zImage. Let's also bump
-Linux version to 6.1.44, U-Boot to 2023.07 and remove
-BR2_TARGET_UBOOT_NEEDS_PYTHON3 since it's selected by
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT.
+--===============1826583913473410974==
+Content-Type: text/plain
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=928b7219cd7079864eadadc66dbff21c5cd72804
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Add useful tool for bridging RAUC with the Hawkbit API.
+
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/asus_tinker_rk3288_defconfig | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ DEVELOPERS                                           |  3 +++
+ package/Config.in                                    |  1 +
+ package/rauc-hawkbit-updater/Config.in               | 20 ++++++++++++++++++++
+ .../rauc-hawkbit-updater/rauc-hawkbit-updater.hash   |  3 +++
+ package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk | 15 +++++++++++++++
+ 5 files changed, 42 insertions(+)
 
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index 40f4125880..b3e4502a45 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -10,10 +10,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
-@@ -23,10 +22,8 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.44"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-tinker"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
--- 
-2.34.1
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0bed35fd8e..3f9b29fe46 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -638,6 +638,9 @@ N:	Clément Péron <peron.clem@gmail.com>
+ F:	board/beelink/gs1/
+ F:	configs/beelink_gs1_defconfig
+ 
++N:	Colin Foster <colin.foster@in-advantage.com>
++F:	package/rauc-hawkbit-updater/
++
+ N:	Corentin Guillevic <corentin.guillevic@smile.fr>
+ F:	package/libloki/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 9ee1893e45..4c763447e4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2715,6 +2715,7 @@ menu "System tools"
+ 	source "package/quota/Config.in"
+ 	source "package/quotatool/Config.in"
+ 	source "package/rauc/Config.in"
++	source "package/rauc-hawkbit-updater/Config.in"
+ 	source "package/rsyslog/Config.in"
+ 	source "package/runc/Config.in"
+ 	source "package/s390-tools/Config.in"
+diff --git a/package/rauc-hawkbit-updater/Config.in b/package/rauc-hawkbit-updater/Config.in
+new file mode 100644
+index 0000000000..dafc2f883c
+--- /dev/null
++++ b/package/rauc-hawkbit-updater/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_RAUC_HAWKBIT_UPDATER
++	bool "rauc-hawkbit-updater"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # rauc, json-glib
++	depends on BR2_USE_MMU # rauc, json-glib
++	depends on BR2_USE_WCHAR # rauc, json-glib
++	select BR2_PACKAGE_JSON_GLIB
++	select BR2_PACKAGE_LIBCURL
++	# runtime
++	select BR2_PACKAGE_RAUC
++	help
++	  rauc-hawkbit-updater is a link between Pengutronix RAUC and
++	  the Eclipse Hawkbit API. Hawkbit can communicate to remote
++	  update servers, and use the d-bus interface to trigger
++	  updates from RAUC.
++
++	  http://rauc.io/
++
++comment "rauc-hawkbit-updater needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.hash b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.hash
+new file mode 100644
+index 0000000000..c65ead3784
+--- /dev/null
++++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  42318e96a464e6c716edb45c48bd3ec3b874462973db902fbe099a395e4acb4b  rauc-hawkbit-updater-1.3.tar.xz
++sha256  041234c81fd6fe6c531ea1a886b9e740b9ee06759d1a910a14edbd06f4aa62c7  LICENSE
+diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+new file mode 100644
+index 0000000000..10ba91abbb
+--- /dev/null
++++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# rauc-hawkbit-updater
++#
++################################################################################
++
++RAUC_HAWKBIT_UPDATER_VERSION = 1.3
++RAUC_HAWKBIT_UPDATER_SITE = https://github.com/rauc/rauc-hawkbit-updater/releases/download/v$(RAUC_HAWKBIT_UPDATER_VERSION)
++RAUC_HAWKBIT_UPDATER_SOURCE = rauc-hawkbit-updater-$(RAUC_HAWKBIT_UPDATER_VERSION).tar.xz
++RAUC_HAWKBIT_UPDATER_LICENSE = LGPL-2.1
++RAUC_HAWKBIT_UPDATER_LICENSE_FILES = LICENSE
++RAUC_HAWKBIT_UPDATER_CPE_ID_VENDOR = pengutronix
++RAUC_HAWKBIT_UPDATER_DEPENDENCIES = json-glib libcurl
++
++$(eval $(meson-package))
+
+--===============1826583913473410974==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1826583913473410974==--
