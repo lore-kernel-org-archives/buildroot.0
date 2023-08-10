@@ -4,46 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83827C001B0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 22:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFC33C04A6A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 22:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2CD7540A70;
-	Thu, 10 Aug 2023 22:06:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CD7540A70
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47402417CD;
+	Thu, 10 Aug 2023 22:07:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47402417CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 04wuwUtrlFTI; Thu, 10 Aug 2023 22:06:34 +0000 (UTC)
+	with ESMTP id xbStyRErV0WI; Thu, 10 Aug 2023 22:07:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F88A417F0;
-	Thu, 10 Aug 2023 22:06:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F88A417F0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 86F32414B6;
+	Thu, 10 Aug 2023 22:07:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86F32414B6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A0581BF982
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:06:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BFF811BF83B
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 233C683F26
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:06:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 233C683F26
+ by smtp1.osuosl.org (Postfix) with ESMTP id A68FA83F26
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:07:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A68FA83F26
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Spdc89AYQOPO for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3071F8211D
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3071F8211D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1EA6F85A5C; Thu, 10 Aug 2023 22:06:19 +0000 (UTC)
+ with ESMTP id kHD80f8IiXRT for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 22:07:37 +0000 (UTC)
+Received: from smtpcmd12143.aruba.it (smtpcmd12143.aruba.it [62.149.156.143])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 312288211D
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:07:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 312288211D
+Received: from [192.168.1.205] ([95.47.160.93])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id UDocq6GEh8wqZUDocqZFvP; Fri, 11 Aug 2023 00:07:35 +0200
+Message-ID: <cc3dd6f5-9a38-70bb-7df5-ecebf9ca4bb6@benettiengineering.com>
+Date: Fri, 11 Aug 2023 00:07:33 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
 To: buildroot@buildroot.org
-Date: Fri, 11 Aug 2023 00:04:33 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 928b7219cd7079864eadadc66dbff21c5cd72804
-X-Git-Newrev: 21d5d592a427686b3421d694a50dd96004d23ce8
-X-Patchwork-Hint: ignore
-Message-Id: <20230810220619.1EA6F85A5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fft_eval: new package
+References: <20230808231421.7f94494d@windsurf>
+ <20230810220146.11261-1-giulio.benetti@benettiengineering.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230810220146.11261-1-giulio.benetti@benettiengineering.com>
+X-CMAE-Envelope: MS4xfFsbj5yJFVxc//34P8URxt1UF+PL16R+x1lqR8H2SDAfIHfbjXWlWUXbN952hRpKVFn5G35yFhzOxtoF0elLx5Rj7hVbO+BTH6cqiW7EJ36sGa1W3avZ
+ RuenmTWM+C67rIYKIVyIfHkLLHrUy3zYWhQqSc0LCUhBijW8zSzWBw1HRAyBgHo8PvtBSydIxHAKovUJ488MYKUAwSkXmqbNu7WMrqz3iedRva4+c2NezDoA
+ HJkQtZfB/5X93gxICu1e7w==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1691705255; bh=TDzVCneaG/USAJm36EoNuOFAe4MKpn0FYBOQOZGGJ60=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=QFaRw9N6JUVf28C4/vk8GDmy/rJqK/2hdN7f282fif/Eoslay5ri2anb3jKOSE2pR
+ OjTNPfrS10L+LkqaVAKSiKhU1m9TJT8nFiBY/i8ATD0StElTsRUTFjSA02lLFBVg9a
+ nQhxuX0W3p7K75zM3f1wKVxe0lw9A9WP5qpfR8Twq3xudsV2e56IWr5Ucp4ke8sIdt
+ SlmQcufKsYX4j8tEJL01uW++aqypUJvBK5xxo6tOhrlPYNkgFbTyyT2Nm9MidPKReM
+ qTwnsD5Vp//iUCSJWn/uEc3QX8U0y6/3eyMkpzgtihZfirsMkDfyMPM1PVCDa2ww3q
+ Ot560gaOQi5ow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=QFaRw9N6
+Subject: Re: [Buildroot] [PATCH] configs/asus_tinker_rk3288_defconfig:
+ switch to zImage and bump Linux to 6.1.44, U-Boot to 2023.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,124 +77,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Cc: Jagan Teki <jagan@amarulasolutions.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21d5d592a427686b3421d694a50dd96004d23ce8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Pardon,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/fft-eval/Config.in     | 13 +++++++++++++
- package/fft-eval/fft-eval.hash |  5 +++++
- package/fft-eval/fft-eval.mk   | 37 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 57 insertions(+)
+extlinux.conf wasn't staged. Need to send V2
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3f9b29fe46..88b05e8ea8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2405,6 +2405,7 @@ F:	support/testing/tests/package/test_docker_compose.py
- 
- N:	Peter Seiderer <ps.report@gmx.net>
- F:	package/dotconf/
-+F:	package/fft-eval/
- F:	package/python-blinker/
- F:	package/qt5/qt5speech/
- F:	package/speechd/
-diff --git a/package/Config.in b/package/Config.in
-index 4c763447e4..79142315ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2243,6 +2243,7 @@ menu "Miscellaneous"
- 	source "package/collectl/Config.in"
- 	source "package/domoticz/Config.in"
- 	source "package/empty/Config.in"
-+	source "package/fft-eval/Config.in"
- 	source "package/gitlab-runner/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
-diff --git a/package/fft-eval/Config.in b/package/fft-eval/Config.in
-new file mode 100644
-index 0000000000..e979e7aeb4
---- /dev/null
-+++ b/package/fft-eval/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_FFT_EVAL
-+	bool "fft-eval"
-+	help
-+	  Program to aid open source spectrum analyzer development for
-+	  Qualcomm/Atheros AR92xx and AR93xx based chipsets.
-+
-+	  It visualizes the FFT data reported by the chips to help
-+	  interpreting and understanding the data.
-+
-+	  Enable sdl2 and sdl2_ttf for the graphic output tool
-+	  fft_eval_sdl.
-+
-+	  https://github.com/simonwunderlich/FFT_eval
-diff --git a/package/fft-eval/fft-eval.hash b/package/fft-eval/fft-eval.hash
-new file mode 100644
-index 0000000000..1ffa854be3
---- /dev/null
-+++ b/package/fft-eval/fft-eval.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256  154f99c3567835bbbbc9ec4c58bc79961f9fa5342effb6f0bc41475fc9a6d11f  fft-eval-6a82b383ce79afc4c1ba26ffcf34b15d3e95894b.tar.gz
-+sha256  6a573fb2f9082662978cf21fb153096df0a1981deaea7dbc10a11046fe005d9f  LICENSES/CC0-1.0.txt
-+sha256  d1cf0896da7045d841fe45b0991cf35540bac1a17b5d11f4afcf8fcb950246b5  LICENSES/GPL-2.0-only.txt
-+sha256  797832eda5ff4360a10fee3be94a3250995e76423b79675c9c44204c37ca492d  LICENSES/OFL-1.1.txt
-diff --git a/package/fft-eval/fft-eval.mk b/package/fft-eval/fft-eval.mk
-new file mode 100644
-index 0000000000..3dd3cec0b4
---- /dev/null
-+++ b/package/fft-eval/fft-eval.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# fft-eval
-+#
-+################################################################################
-+
-+FFT_EVAL_VERSION = 6a82b383ce79afc4c1ba26ffcf34b15d3e95894b
-+FFT_EVAL_SITE = $(call github,simonwunderlich,FFT_eval,$(FFT_EVAL_VERSION))
-+FFT_EVAL_LICENSE = CC0-1.0 (doc), GPL-2.0, OFL-1.1 (LiberationSans-Regular.ttf)
-+FFT_EVAL_LICENSE_FILES = \
-+	LICENSES/CC0-1.0.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/OFL-1.1.txt
-+
-+FFT_EVAL_CONV_OPTS = CONFIG_fft_eval_json=y
-+FFT_EVAL_TARGETS = fft_eval_json
-+
-+ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_TTF),yy)
-+FFT_EVAL_CONV_OPTS += CONFIG_fft_eval_sdl=y
-+FFT_EVAL_DEPENDENCIES += sdl2 sdl2_ttf
-+FFT_EVAL_TARGETS += fft_eval_sdl
-+else
-+FFT_EVAL_CONV_OPTS += CONFIG_fft_eval_sdl=n
-+endif
-+
-+define FFT_EVAL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CROSS=$(STAGING_DIR)/usr/bin/ $(FFT_EVAL_CONV_OPTS) -C $(@D) all
-+endef
-+
-+define FFT_EVAL_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+		CROSS=$(STAGING_DIR)/usr/bin/ $(FFT_EVAL_CONV_OPTS) \
-+		-C $(@D) DESTDIR=$(TARGET_DIR) BINDIR=/usr/bin install
-+endef
-+
-+$(eval $(generic-package))
+-- 
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
+
+On 11/08/23 00:01, Giulio Benetti wrote:
+> uImage is almost deprecated so let's switch to zImage. Let's also bump
+> Linux version to 6.1.44, U-Boot to 2023.07 and remove
+> BR2_TARGET_UBOOT_NEEDS_PYTHON3 since it's selected by
+> BR2_TARGET_UBOOT_NEEDS_PYLIBFDT.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   configs/asus_tinker_rk3288_defconfig | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
+> index 40f4125880..b3e4502a45 100644
+> --- a/configs/asus_tinker_rk3288_defconfig
+> +++ b/configs/asus_tinker_rk3288_defconfig
+> @@ -10,10 +10,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+>   BR2_TARGET_UBOOT=y
+>   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
+>   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
+>   BR2_TARGET_UBOOT_NEEDS_DTC=y
+> -BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+>   BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+>   BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+>   BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+> @@ -23,10 +22,8 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
+>   # Kernel
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.2"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.44"
+>   BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+> -BR2_LINUX_KERNEL_UIMAGE=y
+> -BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>   BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-tinker"
+>   BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
