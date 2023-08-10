@@ -4,66 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8267DC001E0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 16:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D160CC001E0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 16:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 128D583FFA;
-	Thu, 10 Aug 2023 16:27:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 128D583FFA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FA2384007;
+	Thu, 10 Aug 2023 16:35:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FA2384007
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q0crFX5jfSRp; Thu, 10 Aug 2023 16:27:00 +0000 (UTC)
+	with ESMTP id cU9usiSl7tuo; Thu, 10 Aug 2023 16:35:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5066483F5F;
-	Thu, 10 Aug 2023 16:26:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5066483F5F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1EEAE1BF45A
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 16:26:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EBFF83F52;
+	Thu, 10 Aug 2023 16:35:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EBFF83F52
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 09B2B1BF45A
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 16:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0592583F5F
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 16:26:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0592583F5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5B824179D
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 16:35:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5B824179D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ccvvXdSMAhrW for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 16:26:55 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 256C883F57
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 16:26:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 256C883F57
-Received: from fli4l.lan.fli4l (p4fd6cd7b.dip0.t-ipconnect.de [79.214.205.123])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EB26AA4C0CAD;
- Thu, 10 Aug 2023 18:26:51 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:47834)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qU8Ut-0005H6-0Y;
- Thu, 10 Aug 2023 18:26:51 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Thu, 10 Aug 2023 18:26:51 +0200
-Message-Id: <20230810162651.24450-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h-jUD5TmYLTO for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 16:35:23 +0000 (UTC)
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com
+ [IPv6:2607:f8b0:4864:20::92c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CEAC541702
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 16:35:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CEAC541702
+Received: by mail-ua1-x92c.google.com with SMTP id
+ a1e0cc1a2514c-79a2216a22fso335796241.0
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 09:35:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691685321; x=1692290121;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Gu74OuqbzQ72zuECLvwkn2aeGC/vHxw1imBvTBXytVc=;
+ b=hDaNdZy4ido/62NJFcLaFIuf+ArPiICT3pOF2RSVuLVjqyP2WLmQ7Kja+gaMghxngY
+ jecp+Fo+5Iiq4HRLxCz+VzlUOpSkddJWyLROzg5BKg6Cn1ThiWs2vz5mXovGlt3++sVx
+ yicE/F2dITYbDBrKia84E/Q/9hlUkj479tCvafPY8kw7fyhgMxnniuNlNw77n7xwEmki
+ 2axUHfHnDARdu7MW1y5pswdjRIsBFslO/mR/SdZNzG+SxRkTR1KPWVi7iuY+e7j1tyPV
+ si/+ZG86YjzWlfyORoq6TcpNmkULrPE9mdjeQtfnC+IMiMNQXp3Q/M4bTm5lCaUgAZXB
+ yTBw==
+X-Gm-Message-State: AOJu0Yxo5DcnwNAZg2vmqTc4HVbAqRVu16xsWBVjICFF0z7+XulxFv2D
+ pi4A6Kv3E+s+cewmnkFPEjbFPaV+X7+IwHlRICWCKUYWsvGsCg==
+X-Google-Smtp-Source: AGHT+IF1gmnVBk50YohNwWsUb1hCauI2HzDPYGddFMQTKszQrmL+E++ghX2dwayYXVxEjUDAXJXIV+gCGLUxzsCUjr8=
+X-Received: by 2002:a67:f30d:0:b0:447:4e3f:216b with SMTP id
+ p13-20020a67f30d000000b004474e3f216bmr2333442vsf.25.1691685321466; Thu, 10
+ Aug 2023 09:35:21 -0700 (PDT)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+References: <2691942.mvXUDI8C0e@kilian-aisec>
+In-Reply-To: <2691942.mvXUDI8C0e@kilian-aisec>
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Thu, 10 Aug 2023 11:34:55 -0500
+Message-ID: <CAOCHtYjiGK+oKiYoPPosM6Ead+kcw1YEN8225FT3n=r=oqJ_Yw@mail.gmail.com>
+To: Kilian Zinnecker <kilian.zinnecker@mail.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1691684811;
- bh=BykmrYhSMwXFMXtJqlYbn08Ki5OS7rhxdok/z8yu1kA=;
- h=From:To:Cc:Subject:Date:From;
- b=sn09zPtUyB0aJnWfAIctd9C2gV0YxJG+91H2GOVBmI1ekWVWfkg9axQnKjuU4CZhL
- K9odu2q3m9P3nLArho2SsDJQdaTceQEoaZRcubZxXSwdmi7u+L/8tQP1kcBfxDf0kk
- T9YywwCwWBC5OUI0aCvSyHJKG7g0Xn9ujGMtb2i8JFqdPTJXOYVTvKr7UZ5Tf34rp7
- uEwdLwMFvupr6Z2DmB4wqnzeW92Cwkzf7v3Dhp+b5nmeSZnJeuZNBL4uJDVKg8QwFQ
- NeegpEAglQkGLT16npbgDSvxGrilJKImcr2hhLYfH9G42dQQdSHAp1jMt3aNEs+E7V
- +mtfmppoVvvdg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=sn09zPtU
-Subject: [Buildroot] [PATCH/next 1/1] package/intel-gmmlib: bump version to
- 22.3.10
+ d=gmail.com; s=20221208; t=1691685321; x=1692290121;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Gu74OuqbzQ72zuECLvwkn2aeGC/vHxw1imBvTBXytVc=;
+ b=nv5ek1aXnV43GujGZkn+w94yVWDrGyrSrr/GIlHOMwlBF9+pS8N771y++hPnUh9yQH
+ o1Z5JY1Xbcx88Bhfad9z4MhlgdwS9tJXooVx9IxS5gBnroExmT97QiliYASWZYD24ADo
+ 77576mVb4vSUMgbRXvZQiZM8R2Tbqzv7o9czMpVjG8Weteh5+sF8spfp3ASQ8FMd3lDe
+ w5g9JSGrW9oVTWetU5M6R7ffJ4+tiRZr4BZFlJ3nw8ZYhOb58kIP7hRx+fPF9CiLFR2d
+ gyt8gVx6B8hyHhxVNyTEpGh18YRLHTQhCygfS/HnrKrtqU2FH8HmfzituAtkjRX3Zir4
+ sGeA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=nv5ek1aX
+Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,44 +90,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index c164c78300..9f2c8cc1fd 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  62d2f8333f1da3361952546a83dd40d1eb23d8bddacf67a160e63f565b68b5a6  intel-gmmlib-22.3.9.tar.gz
-+sha256  8a6005440bf336309a2abbeeb3e006e229715c4b39ca31c6d0e510050e53dcc7  intel-gmmlib-22.3.10.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index c637b8a5b4..dddd1a13fd 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_GMMLIB_VERSION = 22.3.9
-+INTEL_GMMLIB_VERSION = 22.3.10
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gV2VkLCBBdWcgOSwgMjAyMyBhdCA4OjU34oCvQU0gS2lsaWFuIFppbm5lY2tlciB2aWEgYnVp
+bGRyb290CjxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cj4KPiBIZWxsbywKPgo+IEkg
+YW0gaW50ZXJlc3RlZCBpbiBhZGRpbmcgYm9hcmQgc3VwcG9ydCBmb3IgdGhlIEJlYWdsZVYtQWhl
+YWQuCj4KPiBJIGFscmVhZHkgc3RhcnRlZCB0cnlpbmcgdG8gc2V0dXAgdGhlIGJvYXJkIHN1cHBv
+cnQsIGJ1dCBhdCB0aGUgbW9tZW50IGl0IGRvZXMKPiBub3Qgd29yayB5ZXQsIGR1ZSB0byBzb21l
+IGdjYyAxMiBhbmQgemljc3IgYW5kIHppZmVuY2VpIFJpc2NWIGV4dGVuc2lvbiBpc3N1ZQo+IChz
+ZWUgYmVsb3cpLgoKQXdlc29tZSB3b3JrIQoKQlRXLCBpJ3ZlIGNyZWF0ZWQgYSBzcGVjaWFsIHUt
+Ym9vdCBicmFuY2ggZm9yIG1haW5saW5lIGdjYyBzaXR1YXRpb25zLAp3aXRoICotdWJ1bnR1IGV4
+dGVuc2lvbiBvbiB0aGUgYnJhbmNoLi4KCmh0dHBzOi8vZ2l0LmJlYWdsZWJvYXJkLm9yZy9iZWFn
+bGV2LWFoZWFkL2JlYWdsZXYtYWhlYWQtdS1ib290Ly0vdHJlZS9iZWFnbGV2LXYyMDIwLjAxLTEu
+MS4yLXVidW50dQoKVXNpbmcga2VybmVsLm9yZydzIHg4Nl82NC1nY2MtMTMuMi4wLW5vbGliYy1y
+aXNjdjY0LWxpbnV4LnRhci54egoKSSd2ZSBiZWVuIG1vc3RseSB3b3JraW5nIG9uIG1haW5saW5l
+IGZvciB0aGUgYm9hcmQgd2l0aCBARHJldyBGdXN0aW5pCgpPdGhlcndpc2Ugb24gdGhlIG1haW5s
+aW5lIHdlJ3ZlIGJlZW4gdXNpbmcgbWFpbiBicmFuY2ggb2Ygb3BlbnNiaSBhbmQKbGludSdzIDYu
+NS54LXJjIChvbmx5IGVNTUMgd2lwIHN1cHBvcnQpLi4gbm90IG11Y2ggZWxzZSBvbiB0aGUKbWFp
+bmxpbmUgYnJhbmNoIHlldC4uClJlZ2FyZHMsCgoKCi0tIApSb2JlcnQgTmVsc29uCmh0dHBzOi8v
+cmNuLWVlLmNvbS8KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
