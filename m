@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A05FFC001DE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:55:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F121EC001E0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4376341E05;
-	Thu, 10 Aug 2023 19:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4376341E05
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DB0B41C54;
+	Thu, 10 Aug 2023 19:55:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DB0B41C54
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QjRd0TIb3R2x; Thu, 10 Aug 2023 19:55:19 +0000 (UTC)
+	with ESMTP id ZFKDdQkOVrGJ; Thu, 10 Aug 2023 19:55:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E7BA41C54;
-	Thu, 10 Aug 2023 19:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E7BA41C54
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 879641BF5A6
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CA6C41603;
+	Thu, 10 Aug 2023 19:55:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA6C41603
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C96FC1BF5A6
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EC6C409A1
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EC6C409A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id A36AE82314
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A36AE82314
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aJwfxN54cD9v for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 19:55:05 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0379440948
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0379440948
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CAB2BC0004;
- Thu, 10 Aug 2023 19:55:01 +0000 (UTC)
-Date: Thu, 10 Aug 2023 21:55:00 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20230810215500.79a4819b@windsurf>
-In-Reply-To: <ZNR5SCVmNIOQ6YdI@waldemar-brodkorb.de>
-References: <ZNR5SCVmNIOQ6YdI@waldemar-brodkorb.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id njYEK28tvRuH for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 19:55:21 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 819AE822A3
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 819AE822A3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9802E240003;
+ Thu, 10 Aug 2023 19:55:19 +0000 (UTC)
+Date: Thu, 10 Aug 2023 21:55:18 +0200
+To: Peter Seiderer <ps.report@gmx.net>
+Message-ID: <20230810215518.0208983e@windsurf>
+In-Reply-To: <20230809215221.29965-1-ps.report@gmx.net>
+References: <20230809215221.29965-1-ps.report@gmx.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691697302;
+ d=bootlin.com; s=gm1; t=1691697320;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=utz1jmBCNRiOCmeuiM6zCrqekLXlSsJQD0YnIgKFFik=;
- b=dLin2EWccq2T9OosyaHMx7JBouP3CKGGfUOhGyod93WFc17jFIPpJC3yqM6MwIYcyJfK4O
- yO+6CrUpWtAJgXNgzFbalu4Lgr63JmG4N9gbbjzeRfrBLflrXMYHXltSFX/5OCnGBWoDKe
- 7ps142p+M4n3WDNKsROGlQJztlXStetTXMyuc5PSpxvxw4iDTbjh6IaCkWNui4Z+CAL1qZ
- Z8VCVQYX0xur0Y3A2lIdeElzbTWtHqmoD7VWWZThgsX0MZV849fDp5x8Gz4bx7sZpvqDlT
- DNqGwS7h8v7pE/jkbkHTPsifRGx3yMyZDy3Zb/svtgtOEN+Zk17b/1gyQ3mHAg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=sN4b70kL/Kih5ZJYQ/WB4bUaXbwPEmzUMzXfa9SYn+s=;
+ b=hBCRa9jB+9/IciJN97tYUwH+csQirG0Ibnj0e0qbON7uV+Ot5hASwdXwG3KS+Ltwcxciro
+ 1vvvTB3QXTb0pfZw3R8Xn/IC+Ipdf/KvjNzIaxDS3I5/1Wa/o9u6ej6ZYmj6UJCkKSPBgo
+ LpuRGGLbyFT0ePiF1MmBhnu3DTW1rkhO4jk/4N9trPOCsE45qXKaKjprX8AjrbdKfXpV21
+ jn8KXMIS8tq+aSkQu/7w/WxYutL8TKY8RenFxDlb77KNYHt381MySwRz0I6Dr5kEs3qHoo
+ Pa8a2ftxIO+bcbZzB1BkrT4Fzusn9uw/VNI9ZffN69fsNed74bKZCNsDDJ2P+Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dLin2EWc
-Subject: Re: [Buildroot] [PATCH/next] package/uclibc-ng-test: update to
- latest git
+ header.s=gm1 header.b=hBCRa9jB
+Subject: Re: [Buildroot] [PATCH v1] package/libserial: fix gcc-13.x compile
+ (add patch to add missing cstdint include)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 10 Aug 2023 07:44:40 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
-
-> - update to latest git version
-> - switch to https url for better access for users behind a proxy
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
->  package/uclibc-ng-test/uclibc-ng-test.mk   | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gV2VkLCAgOSBBdWcgMjAyMyAyMzo1MjoyMSArMDIwMApQZXRlciBTZWlkZXJlciA8cHMucmVw
+b3J0QGdteC5uZXQ+IHdyb3RlOgoKPiBBZGQgcGF0Y2ggdGFrZW4gZnJvbSB1cHN0cmVhbSBwdWxs
+IHJlcXVlc3QgKFsxXSkgdG8gZml4IGdjYy0xMy54IGNvbXBpbGUKPiBmYWlsdXJlIGJlY2F1c2Ug
+b2YgYSBtaXNzaW5nIGNzZHRpbnQgaW5jbHVkZS4KPiAKPiBGaXhlczoKPiAKPiAgIEluIGZpbGUg
+aW5jbHVkZWQgZnJvbSBsaWJzZXJpYWwvU2VyaWFsU3RyZWFtQnVmLmg6MzYsCj4gICAgICAgICAg
+ICAgICAgICAgIGZyb20gU2VyaWFsU3RyZWFtQnVmLmNwcDozNDoKPiAgIC4vbGlic2VyaWFsL1Nl
+cmlhbFBvcnRDb25zdGFudHMuaDo5MzozNzogZXJyb3I6IOKAmHVpbnQ4X3TigJkgd2FzIG5vdCBk
+ZWNsYXJlZCBpbiB0aGlzIHNjb3BlCj4gICAgICA5MyB8ICAgICB1c2luZyBEYXRhQnVmZmVyID0g
+IHN0ZDo6dmVjdG9yPHVpbnQ4X3Q+IDsKPiAgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgXn5+fn5+fgo+IAo+IFsxXSBodHRwczovL2dpdGh1Yi5jb20vY3JheXpl
+ZXd1bGYvbGlic2VyaWFsL3B1bGwvMTg2Cj4gCj4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgU2VpZGVy
+ZXIgPHBzLnJlcG9ydEBnbXgubmV0Pgo+IC0tLQo+ICAuLi5zaW5nLWNzdGRpbnQtaGVhZGVyLWZv
+ci11aW50OF90LXR5cGUucGF0Y2ggfCAyOCArKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBj
+aGFuZ2VkLCAyOCBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xp
+YnNlcmlhbC8wMDAzLUFkZC1taXNzaW5nLWNzdGRpbnQtaGVhZGVyLWZvci11aW50OF90LXR5cGUu
+cGF0Y2gKCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRh
+enpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5n
+Cmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
