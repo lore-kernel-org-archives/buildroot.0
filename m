@@ -4,84 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A645BC04A6A
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48982C04A6A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:32:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56D6C41DFD;
-	Thu, 10 Aug 2023 20:17:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56D6C41DFD
+	by smtp4.osuosl.org (Postfix) with ESMTP id A387141E0A;
+	Thu, 10 Aug 2023 20:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A387141E0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DBMPkxur06Qo; Thu, 10 Aug 2023 20:17:43 +0000 (UTC)
+	with ESMTP id 3GaH7Aqy6uyK; Thu, 10 Aug 2023 20:32:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48D2541E05;
-	Thu, 10 Aug 2023 20:17:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48D2541E05
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 246F01BF5DF
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:17:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92DCB41E0B;
+	Thu, 10 Aug 2023 20:32:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92DCB41E0B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EED0F1BF5DF
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 098F440A70
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 098F440A70
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5B5D83F96
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:32:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5B5D83F96
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gsauDMrYKA4W for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 20:17:40 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B005D408D4
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B005D408D4
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.8.36] ([89.144.222.147]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0X8o-1pXykP0IdQ-00wYX5; Thu, 10
- Aug 2023 22:17:37 +0200
-Message-ID: <182e39d0-d141-4edd-b7ca-f4eddf291dcb@gmx.at>
-Date: Thu, 10 Aug 2023 22:17:35 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tjad4cOPoV-s for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 20:32:26 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0470E83F37
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:32:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0470E83F37
+Received: from fli4l.lan.fli4l (p54a1bb7a.dip0.t-ipconnect.de [84.161.187.122])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1929AA4C0C45
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:32:23 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:45026)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qUCKU-0003pN-1u
+ for buildroot@buildroot.org; Thu, 10 Aug 2023 22:32:22 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 10 Aug 2023 22:32:22 +0200
+Message-Id: <20230810203222.3072070-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot List <buildroot@buildroot.org>
-References: <20230809220514.2089980-1-thomas.petazzoni@bootlin.com>
-From: Daniel Lang <dalang@gmx.at>
-In-Reply-To: <20230809220514.2089980-1-thomas.petazzoni@bootlin.com>
-X-Provags-ID: V03:K1:O6KdF3lkXWhV69R7ibcAfFlewEAEc02wOs244CpOUDv+TJv8QAP
- IhOewBU9hn+nSaXrn6MbbJTp6IoY+xcoicBHAa+qMIeKnSVSI/0HqXvEC1L+XblIDqoiU1c
- KhgAPqCL3frouzWh1D6O0aUHegkw9gx9StZFmTW8fry38wim4w2ZUPGn2T31eh4AXhqarBE
- aYop6l/WnzEYzqAwizUJg==
-UI-OutboundReport: notjunk:1;M01:P0:EsRVdVMySQo=;KGy509B9kpVoRBNm/W752/By4Cv
- CrraWx8RUrWwwi88oymHoPmAOpMtl92VdUR5zWQU3sz3jNQbytOyknYf2NPdLflwlmKTghoJ+
- Lz5E9WoGYd2lBEyiyTKshdEYo4QAEKG41hKoHHlBYUQ7OZsbqkqw5AcgkEwrgR/akUDUwSKuW
- b597GY3sAQxbx8TL5iSBbUyTwIoJObr2S3LevNwoycBGTDJn37CiEuFkEA6+AI1ZiMfJriVbW
- BNMeg73B+7E7PCbNzIn6Pr6H5DuRTFZu3JDo9VyQIaxddKv9oWxJaWjNuDmcqA0+U/ulrtfPz
- OfTMko0NVTkKK1IPzfiinqDTGn1xt0v9JI4D70PjSwtmXF2S/w5X8sQcvECIED9iX4ms9Wp8/
- SLvd7w1xmliT44pq9Fi6IckYN1f89zPiicBpgqqTUuIfzTpM9znTugapfXnuPwf6tSaqZo17m
- no1PhrjKuml35lgNGWQSe37FrPFydYE2bb3rBp1wbe+rx/zU1uDk5LY1hb3oewVdW4cvIhv1w
- ro9/rH87hP6V+D8LMfGr9BtaBpy7Jeb6vrJEfprJL6Z6o1kz6RRbmi8y61l0wUw0xgACle+20
- VNu4GUVPNlPLLEBhqmSaa77lELaa6WIHDhGYTdWLarQF0SnoA3zLzWrEV552UkYs98Upf2cCd
- udhbvdkt8atWmGhs7EpOf/GFk6pU+2JXd7MVFtsBkFozFUp/r0iYnhD5Vb1+mNPen2X/5UJdp
- rO0SsUtS7S7sZjDih9tYt8MY2HeWRfku3jdw9VXvta9JFDH/VxQcC+gdqv5YjUbtbuZqePd8H
- 646IFDoNN65n4otOd+JBCW1gOSWVWu+XF8NjmXyRaR0hNynmSzsY2TLM2Nl0Vb5/qoNgONy+2
- PtsmqZTUUbNvM6qWfKQr33mOXuaqBkGbXMcbNWMCD100fyCQ5mLbBHFqLk8prjfVBiPkvuF3U
- tJKZ5y6a15Z5K6ZqZuDIP2TQgGU=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; 
- s=s31663417; t=1691698657; x=1692303457; i=dalang@gmx.at;
- bh=NNII+ql2OfEhPl/CfbtGd+/QMuCmstnzYyNffK5N9fo=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=thKutpMwYd3pZY+audSEudlnDfpFhl+kGSZdb9ac0UuMsv+41CFmFZbV4Vy2ZPyslZKcYk+
- igYuS/8+TDNFkOnLw+UQR1ZpnIbELqMWACXFYdp/BDpNc5turCAMdalQ5++rH+PBQdxOAg+Zs
- H0KwG3MXj4NtF8T0aPfQuNU51z+WLnuL6n0+hnggOYU1kLhyis103Ag0sm9og9hEASUy6N9ah
- TLprdHt4lvFF4wfuYhVUGYIUvNA5GcmbXzikbxp9L/p4xIQXLB7UTFqkfgoNzhsLHsepBOszp
- a9M6DbF9KLdC5goRLPB3t4lmWfFe9J/hn/zPuEp5yVcNKZR4LpBw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=thKutpMw
-Subject: Re: [Buildroot] [PATCH] package/swupdate: install headers at the
- standard location
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1691699543;
+ bh=4SOLVE15YTy+IL1KwsjxWDIZPAaeOL2FJTkg1FGj220=;
+ h=From:To:Subject:Date:From;
+ b=urw4t9WSschNNmWLkteQ4cAMaET3oQfSGdan9yZ2mD7UBHxoInhVVLVCLuGtd235b
+ QoNjbLkqQP4Tl769jrj8BZ1iJwgZfZ26AOsCCPGy+DxQQxpoYD2fFRsDYJ4ZK7YcOd
+ kOf/1XoZp92NCTRhBO1ZSOpvqK6Bq2PeDpWErr8EcN6G52mxaxSNrZeKCbnO/aB7qk
+ TsXmekhbumxSu06wkL21yC4jOvhJzWObIyhM8YE9Lg5qxhXVoSkkk0vxefDX3fuVzT
+ gYncMNZjsdP18KdsRD9pa/xTv9mynh/t7RCRkcavNmN0MXgtUjoDiQAhEe2tjkMgQ8
+ k/rE9lpAc5NPA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=urw4t9WS
+Subject: [Buildroot] [PATCH 1/1] linux: fix hash for kernel 4.14.290
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,62 +74,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andrey Grafin <conquistador@yandex-team.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10.08.23 00:05, Thomas Petazzoni via buildroot wrote:
-> In commit eb2f2886b2364e5b6a0867f55106bf83acb064e7 ("package/swupdate:
-> add staging install"), the swupdate package was changed to also be
-> installed in the staging directory, as it provides an API to external
-> programs, through libraries and headers.
->
-> Back then the commit log said:
->
->     This patch installs headers and libs to STAGING_DIR, to prevent a
->     header name collision a subdirectory /usr/include/swupdate creates.
->
-> And indeed a custom INCLUDEDIR was specified. However, installing
-> swupdate headers in /usr/include/swupdate/ doesn't work well, as
-> progress_ipc.h (installed by swupdate) does a #include
-> <swupdate_status.h>, which doesn't work as swupdate_status.h is also
-> in /usr/include/swupdate/ instead of /usr/include/.
->
-> To address this Daniel Lang submitted a patch [0], which was proposed
-> to upstream swupdate to fix this header inclusion. The patch was
-> rejected by upstream saying that the swupdate header files should be
-> installed in /usr/include.
->
-> Currently, swupdate installs only 3 headers files:
->
->   /usr/include/network_ipc.h
->   /usr/include/swupdate_status.h
->   /usr/include/progress_ipc.h
->
-> To the best of our knowledge, this doesn't conflict with any other
-> header files installed by other packages. A good proof of that is that
-> even Debian (which has many more packages than Buildroot) also
-> installs swupdate headers directly in /usr/include.
->
-> In addition, the original submitter of
-> eb2f2886b2364e5b6a0867f55106bf83acb064e7 said "I'm not remember what
-> was a problem. Probably network_ipc.h but Im not sure now. I think
-> it's safe to install this headers to /usr/include w/o subdir if this
-> collision was met only in my environment. PS: currently I don't see
-> any collisions with this files."
->
-> So, we switch to installing swupdate into their standard location.
->
-> [0] https://patchwork.ozlabs.org/project/buildroot/patch/VI1P190MB0493D233ECC579510F8C0FC69FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM/
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Buildroot commit e0a786a46733cc473f0e4c35064a3b09ccf548e6 added a hash
+for the wrong file.
 
-Thanks for picking this up and investigating it.
-And sorry for not responding earlier.
+Fixes:
+http://autobuild.buildroot.net/results/fc0/fc0e253e3535bbc1413d150554e836d3da9e2042/
 
-Tested-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ linux/linux.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/linux/linux.hash b/linux/linux.hash
+index ec879b21d9..40ace29532 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -6,7 +6,7 @@ sha256  150f3846b76cd23a6135f49cef71372bade5a06e851cb4f8558df8b862d8fec7  linux-
+ sha256  4c03516ae1d417571faaef175932d0892710bcbe0173e40550014d043d9098c9  linux-5.10.189.tar.xz
+ sha256  3a78587523940374a7319089b63357c7dc412b90f5879d512265e59173588267  linux-5.4.252.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  6ee30a46f3fa6576602085b7b4b0c640586f99d1c110982db411819308b5755c  linux-4.19.250.tar.xz
++sha256  9fa5e24b7d791583f8cd001bcf02b52f569f261e276dc1dab2552974dca20ecf  linux-4.19.290.tar.xz
+ sha256  d0e32bd47a547cc20e0ce09ff45514282742edb2af38df5dc0a03f22d4321715  linux-4.14.321.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
