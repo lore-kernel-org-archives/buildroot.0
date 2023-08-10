@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF5D9C001DE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A05FFC001DE
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9183D40948;
-	Thu, 10 Aug 2023 19:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9183D40948
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4376341E05;
+	Thu, 10 Aug 2023 19:55:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4376341E05
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9ZHSLMxYzEFM; Thu, 10 Aug 2023 19:55:05 +0000 (UTC)
+	with ESMTP id QjRd0TIb3R2x; Thu, 10 Aug 2023 19:55:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8239140564;
-	Thu, 10 Aug 2023 19:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8239140564
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F412F1BF5A6
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E7BA41C54;
+	Thu, 10 Aug 2023 19:55:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E7BA41C54
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 879641BF5A6
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD9EA61037
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD9EA61037
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5EC6C409A1
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:55:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EC6C409A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id luQV-6mj9ND3 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aJwfxN54cD9v for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 19:55:05 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0379440948
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:55:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0379440948
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CAB2BC0004;
  Thu, 10 Aug 2023 19:55:01 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C236761034
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C236761034
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AFD97856A9; Thu, 10 Aug 2023 19:55:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 10 Aug 2023 21:52:29 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5cf69468751c0343a24d90e626265ef9306036d4
-X-Git-Newrev: 7da59a69b1a747671e46ae8a995f323849206c3e
-X-Patchwork-Hint: ignore
-Message-Id: <20230810195501.AFD97856A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/uclibc-ng-test: update
- to latest git
+Date: Thu, 10 Aug 2023 21:55:00 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230810215500.79a4819b@windsurf>
+In-Reply-To: <ZNR5SCVmNIOQ6YdI@waldemar-brodkorb.de>
+References: <ZNR5SCVmNIOQ6YdI@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691697302;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=utz1jmBCNRiOCmeuiM6zCrqekLXlSsJQD0YnIgKFFik=;
+ b=dLin2EWccq2T9OosyaHMx7JBouP3CKGGfUOhGyod93WFc17jFIPpJC3yqM6MwIYcyJfK4O
+ yO+6CrUpWtAJgXNgzFbalu4Lgr63JmG4N9gbbjzeRfrBLflrXMYHXltSFX/5OCnGBWoDKe
+ 7ps142p+M4n3WDNKsROGlQJztlXStetTXMyuc5PSpxvxw4iDTbjh6IaCkWNui4Z+CAL1qZ
+ Z8VCVQYX0xur0Y3A2lIdeElzbTWtHqmoD7VWWZThgsX0MZV849fDp5x8Gz4bx7sZpvqDlT
+ DNqGwS7h8v7pE/jkbkHTPsifRGx3yMyZDy3Zb/svtgtOEN+Zk17b/1gyQ3mHAg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dLin2EWc
+Subject: Re: [Buildroot] [PATCH/next] package/uclibc-ng-test: update to
+ latest git
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +77,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7da59a69b1a747671e46ae8a995f323849206c3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu, 10 Aug 2023 07:44:40 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-- update to latest git version
-- switch to https url for better access for users behind a proxy
+> - update to latest git version
+> - switch to https url for better access for users behind a proxy
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
+>  package/uclibc-ng-test/uclibc-ng-test.mk   | 5 +++--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
- package/uclibc-ng-test/uclibc-ng-test.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.hash b/package/uclibc-ng-test/uclibc-ng-test.hash
-index 4028bada4c..c4db6ebf83 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.hash
-+++ b/package/uclibc-ng-test/uclibc-ng-test.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  655c9d9732cf24d8230defac7ef4d6bd92ad05c070ab02fe99c1fb47c7a40039  uclibc-ng-test-6790eafe897b3a8c19a2caf50a5ecccf06647adf-br1.tar.gz
-+sha256  f261229c43c026e39178aca48f4f3caacd0bbe373ccd06d27954e7a5fa768fe8  uclibc-ng-test-0f303c63fab7f4038515ced6f2659242cf60ac19-br1.tar.gz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index a678bcf7f0..7d62401244 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--UCLIBC_NG_TEST_VERSION = 6790eafe897b3a8c19a2caf50a5ecccf06647adf
--UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
-+UCLIBC_NG_TEST_VERSION = 0f303c63fab7f4038515ced6f2659242cf60ac19
-+UCLIBC_NG_TEST_SITE = https://git.uclibc-ng.org/git/uclibc-ng-test.git
-+UCLIBC_NG_TEST_SITE_METHOD = git
- UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
- UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
