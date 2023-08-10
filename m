@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B46AFC04A6A
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28C21C001DE
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6652240A70;
-	Thu, 10 Aug 2023 20:39:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6652240A70
+	by smtp2.osuosl.org (Postfix) with ESMTP id D0E23417C7;
+	Thu, 10 Aug 2023 20:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0E23417C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GrE6OsDdhhNA; Thu, 10 Aug 2023 20:39:17 +0000 (UTC)
+	with ESMTP id e5U5E9okVzcN; Thu, 10 Aug 2023 20:40:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACE7F408D4;
-	Thu, 10 Aug 2023 20:39:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACE7F408D4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 992C91BF97F
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:38:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D1C3408D4;
+	Thu, 10 Aug 2023 20:40:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D1C3408D4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C7CB1BF97F
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D90561042
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:38:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D90561042
+ by smtp4.osuosl.org (Postfix) with ESMTP id D897941DA0
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:40:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D897941DA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XyvcEEBauye9 for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 20:38:52 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4B81F60A95
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:38:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B81F60A95
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 72A9CC0004;
- Thu, 10 Aug 2023 20:38:50 +0000 (UTC)
-Date: Thu, 10 Aug 2023 22:38:49 +0200
-To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Message-ID: <20230810223849.2c7ccab1@windsurf>
-In-Reply-To: <20230809092316.25721-1-nicolas.cavallari@green-communications.fr>
-References: <20230809083328.1348-1-nicolas.cavallari@green-communications.fr>
- <20230809092316.25721-1-nicolas.cavallari@green-communications.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691699930;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=29ThA+4vXby6GW3qnGwEXsEZPIq9Bz/UxZmHplq8K1o=;
- b=LiYV4vyHxMOiopTV4MOUHNk9mTTOsSrbvFLpAtmX0E10hECfP0g2Hp2o3iPMPzJz5QreIC
- rCzNuUi7AQPLxVGM1B7QHSQ6vgM5BXso6MYy7MUQ62Vu8A0roUN+oMX09NtM+6At1it0oL
- ET8DjTNwB9A0KHkH+dwv/x8UrncFo3fEROWxF22MQjQ1Csimfkvc8S9kq8K0un5BcszN0z
- JR2TPQmLU8iYk+aAKKNHgixJ2eRhxNCHAEh+Hqvvzeamhe402PArcFulLy9pWMOxOPtDsx
- vKejIKBFRRFReVI2YWWRwe9FbHtbNA8Xqt8HHMtONGu8Iwhig6wppRnL6eLL+A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=LiYV4vyH
-Subject: Re: [Buildroot] [PATCH next v2 1/1] package/libgit2: bump to 1.7.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dFkMCtNK5tyu for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 20:40:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0B5141D77
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:40:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B5141D77
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9C14E85731; Thu, 10 Aug 2023 20:40:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 10 Aug 2023 22:39:10 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 527e538a82754ad5ca412c1612328ec5e6d78b78
+X-Git-Newrev: 60cf00d3f4679069c1f1c0c8943e50626bbfb12a
+X-Patchwork-Hint: ignore
+Message-Id: <20230810204052.9C14E85731@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] arch/mips: re-add support for
+ MIPS IV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,34 +58,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  9 Aug 2023 11:23:16 +0200
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=60cf00d3f4679069c1f1c0c8943e50626bbfb12a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> This version makes it explicit that it uses libxdiff, a library which is
-> not maintained upstream since 2008.  It now have numerous forks, none of
-> them sticking out.  For now, use the one which is bundled in the libgit2
-> sources.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
-> v2: add sob and next prefix
->  package/libgit2/libgit2.hash | 2 +-
->  package/libgit2/libgit2.mk   | 6 ++++--
->  2 files changed, 5 insertions(+), 3 deletions(-)
+Support for MIPS IV was dropped in commit
+dd45fe0efb678a8a674330ad46b7641a3284dff9 ("arch/mips: remove
+deprecated mips1/2/3/4 support"). However, even though it is an older
+ISA than R1, it is still useful to support older MIPS-based
+systems (e.g.: Cobalt Qube).
 
-Applied to next, thanks.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ arch/Config.in.mips | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 7f44f06c9d..29b4180d21 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -40,8 +40,8 @@ choice
+ 	help
+ 	  Specific CPU variant to use
+ 
+-	  64bit capable: 64, 64r2, 64r3, 64r5, 64r6
+-	  non-64bit capable: 32, 32r2, 32r3, 32r5, 32r6
++	  64bit capable: mips4, 64, 64r2, 64r3, 64r5, 64r6
++	  non-64bit capable: mips4, 32, 32r2, 32r3, 32r5, 32r6
+ 
+ config BR2_mips_32
+ 	bool "Generic MIPS32"
+@@ -97,6 +97,8 @@ config BR2_mips_xburst
+ 	  to be used in order to prevent emitting these instructions.
+ 
+ 	  See http://www.ingenic.com/en/?xburst.html
++config BR2_mips4
++	bool "MIPS IV"
+ config BR2_mips_64
+ 	bool "Generic MIPS64"
+ 	depends on BR2_ARCH_IS_64
+@@ -262,6 +264,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "octeon2"	if BR2_mips_octeon2
+ 	default "octeon3"	if BR2_mips_octeon3
+ 	default "p6600"		if BR2_mips_p6600
++	default "mips4"		if BR2_mips4
+ 
+ config BR2_MIPS_OABI32
+ 	bool
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
