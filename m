@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AA1AC001E0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9AC7C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFF584025F;
-	Thu, 10 Aug 2023 19:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFF584025F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5601540246;
+	Thu, 10 Aug 2023 19:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5601540246
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id irW5eW1Qviex; Thu, 10 Aug 2023 19:49:53 +0000 (UTC)
+	with ESMTP id OsBncmdQNH9c; Thu, 10 Aug 2023 19:50:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 776D8405B7;
-	Thu, 10 Aug 2023 19:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 776D8405B7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EC1521BF5A6
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:49:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 241DB41E38;
+	Thu, 10 Aug 2023 19:50:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 241DB41E38
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 793EB1BF5A6
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C666E408D4
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:49:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C666E408D4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 526D9611B5
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:49:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 526D9611B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id enfViw7BgW9R for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Uh9m-MyPR1k5 for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 19:49:27 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E81B61037
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:49:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E81B61037
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 150C640005;
  Thu, 10 Aug 2023 19:49:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB80C40126
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:49:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB80C40126
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BB238567E; Thu, 10 Aug 2023 19:49:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 10 Aug 2023 21:48:03 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2a7c6816f02f45946e896577d78e3470331b2d63
-X-Git-Newrev: 6d35e63653b508a7d1a717436eb408c75cc85d35
-X-Patchwork-Hint: ignore
-Message-Id: <20230810194923.9BB238567E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-gmmlib: bump
- version to 22.3.10
+Date: Thu, 10 Aug 2023 21:49:23 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230810214923.538f39f5@windsurf>
+In-Reply-To: <ZNRnDHlV2LzgmGjI@waldemar-brodkorb.de>
+References: <ZNRnDHlV2LzgmGjI@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691696964;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4WOtRyk6F/ccgEhP7y+590rRzXPLV0ifxNuW15q+t5U=;
+ b=V1PyFTLOG+dEOY8SAEpguzxdJBqAUOmkvD1FV1ZIS4i0EyZr0oa3V7/Z+rylZAmVNwxOhT
+ vaQ5qp792m8Noy49hBQePdv/rdgSTs9egzdywaEsLni1LCv7tAmH6Swi3ZhCqbvz6ZIa18
+ m9fAKWIucA09AInfBgh4cA4arV0hnnJcHqSJ1OHeAwcres5D34eqFKiao6vyoTgQBckBWZ
+ hbD49zwk1TiCoWs1+7+E834HK9etLbUAXU/3I8x94NHX6Kk2yOeKwfT3qUfiSsufqHsWFE
+ kIdONrTVsApwYr1gek45KUHYMuJJ3qvaDs1vz8i7JYwsMlA2bBMA/8QxEJNbNw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=V1PyFTLO
+Subject: Re: [Buildroot] [PATCH/next] package/musl: enable m68k with MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,44 +76,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d35e63653b508a7d1a717436eb408c75cc85d35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu, 10 Aug 2023 06:26:52 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Support for m68k with MMU in musl was added in 2018 with
+> commit f81e44a0d96c88e052e51982f9fdd6fe0a212b46.
+> 
+> Tested with qemu_m68k_q800_defconfig.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/musl/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index c164c78300..9f2c8cc1fd 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  62d2f8333f1da3361952546a83dd40d1eb23d8bddacf67a160e63f565b68b5a6  intel-gmmlib-22.3.9.tar.gz
-+sha256  8a6005440bf336309a2abbeeb3e006e229715c4b39ca31c6d0e510050e53dcc7  intel-gmmlib-22.3.10.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index c637b8a5b4..dddd1a13fd 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_GMMLIB_VERSION = 22.3.9
-+INTEL_GMMLIB_VERSION = 22.3.10
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
