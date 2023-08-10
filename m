@@ -4,56 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76532C001DB
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 04:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9127C04A6A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 05:44:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 227384012E;
-	Thu, 10 Aug 2023 04:33:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 227384012E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 58EAC40B4D;
+	Thu, 10 Aug 2023 05:44:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58EAC40B4D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NCilBRZEU-v0; Thu, 10 Aug 2023 04:32:59 +0000 (UTC)
+	with ESMTP id 1NfixcaHIbjF; Thu, 10 Aug 2023 05:44:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C9B640332;
-	Thu, 10 Aug 2023 04:32:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C9B640332
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A9C3A1BF2AB
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 04:32:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B202408D0;
+	Thu, 10 Aug 2023 05:44:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B202408D0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ACA6F1BF3F6
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 05:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E0F140332
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 04:32:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E0F140332
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8840540232
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 05:44:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8840540232
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CHcQEQkVsQah for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 04:32:55 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3703B4012E
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 04:32:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3703B4012E
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wDW0DLMoCX5j for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 05:44:46 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B425D40087
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 05:44:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B425D40087
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id AD497352BD86; Thu, 10 Aug 2023 06:32:52 +0200 (CEST)
-Date: Thu, 10 Aug 2023 06:32:52 +0200
+ id 62757352BD86; Thu, 10 Aug 2023 07:44:40 +0200 (CEST)
+Date: Thu, 10 Aug 2023 07:44:40 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <ZNRodM7hgvo2nT4T@waldemar-brodkorb.de>
+Message-ID: <ZNR5SCVmNIOQ6YdI@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 5.10.0-21-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1691641972; bh=wLvN9R+7+G8Z1/emiCbFyRJYsIrKjMczhNvl5ksw9N4=;
+ t=1691646281; bh=TqiKzBsbHzKj7SjDCFsHbkW2o4N9JSWSWNCV5UGcoHI=;
  h=Date:From:To:Subject:From;
- b=hOvKXehymPvOQglIm/FGz68oNKUp+y9CdU9GVTVd1//VCaV/gqQjYeTQEWZtwNZbY
- btXkNMOGCZTSZm+OtsmOeP4BPajj8TQ4h5B6J23papGLGJvg9xO6PnX5ynl7bEEX6r
- fCdT9InJVVwOPcMQM78kDL3NHR8uBFCkJkUjZ2+H3//JBNzJMvun+zeoh3GKmLsbZG
- JOvZ0fliL/Hx218iaGSOItmWcWPqFfZyWr1iMD9UIIBDbGnuuTThEHbqrY6Sv8Dk8i
- mM94mY4RhLs8HEVTQ4u3O0yETsnr706WEmqnNTbEiX5pyprAPGsM0vjMCJ9NPMwucO
- Ztv5cvQDr7ckA==
-Subject: [Buildroot] [PATCH] package/gcc: fix powerpc toolchain issues
+ b=EePW465z6I4zeNS2H0fVpwDBOwm9zFfGVou051YZmkOxpTQgHV1ETyRSdiTRrIB+N
+ wqH2W2BGi5Dx3/x/jL8aiDXQLN6efQNiJg9iTDTr1yo41FoCloMBwS/YDVQTZwiCrw
+ Q4CsWmfeVzxeLFwPAAQJWvqWpqzRmGHnQeYm3XYLsalaTTa7lFg4tGffbpWGSk62uE
+ 6NuPIeWci8gC4tfRCKQexubt5p5VuC9Ov2rB/uTU3XN3daW0VBhN05XB4F8LRmIAZb
+ 3nO/aJgdcv9MK9t0YdGX6m/GfVOl+mQjvgnTCFswFpC4B5THGcDaew37/ceo0S89FD
+ LFQhAfxUhhSJg==
+Subject: [Buildroot] [PATCH/next] package/uclibc-ng-test: update to latest
+ git
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,52 +72,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some of the powerpc CPU's supported by Buildroot are dual mode CPU's,
-which means 32 Bit and 64 Bit mode is supported.
-
-See here the gcc documentation for details about --with-cpu-32:
-https://gcc.gnu.org/install/configure.html
-
-See here for a discussion on the musl mailinglist about the error:
-https://inbox.vuxu.org/musl/20220722162900.GB1320090@port70.net/
-
-Fixes:
- - http://autobuild.buildroot.net/results/450/4509d8cfb7d99beb4ef023f170490def1d90f92c
- - http://autobuild.buildroot.net/results/654/6545a464d49f9f3c6740a5208cfad7f09ec4cb8b
- - http://autobuild.buildroot.net/results/cf8/cf866d5320b069eb1e8b4f05e8e58de0ad2ec7b5
+- update to latest git version
+- switch to https url for better access for users behind a proxy
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
+ package/uclibc-ng-test/uclibc-ng-test.hash | 2 +-
+ package/uclibc-ng-test/uclibc-ng-test.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Thanks to Thomas Petazzoni for pointing me to the gcc docs and the
---with-cpu-32 option via IRC. 
-
----
- package/gcc/gcc.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 1ecbf7e9b4..3050229176 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -225,9 +225,17 @@ endif
- ifneq ($(GCC_TARGET_FP32_MODE),)
- HOST_GCC_COMMON_CONF_OPTS += --with-fp-32="$(GCC_TARGET_FP32_MODE)"
- endif
-+
-+# musl/uClibc-ng does not work with biarch powerpc toolchains, we
-+# need to configure gcc explicitely for 32 Bit for CPU's supporting
-+# 64 Bit and 32 Bit
- ifneq ($(GCC_TARGET_CPU),)
-+ifeq ($(BR2_powerpc),y)
-+HOST_GCC_COMMON_CONF_OPTS += --with-cpu-32=$(GCC_TARGET_CPU)
-+else
- HOST_GCC_COMMON_CONF_OPTS += --with-cpu=$(GCC_TARGET_CPU)
- endif
-+endif
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.hash b/package/uclibc-ng-test/uclibc-ng-test.hash
+index 4028bada4c..c4db6ebf83 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.hash
++++ b/package/uclibc-ng-test/uclibc-ng-test.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  655c9d9732cf24d8230defac7ef4d6bd92ad05c070ab02fe99c1fb47c7a40039  uclibc-ng-test-6790eafe897b3a8c19a2caf50a5ecccf06647adf-br1.tar.gz
++sha256  f261229c43c026e39178aca48f4f3caacd0bbe373ccd06d27954e7a5fa768fe8  uclibc-ng-test-0f303c63fab7f4038515ced6f2659242cf60ac19-br1.tar.gz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+index a678bcf7f0..7d62401244 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.mk
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
- ifneq ($(GCC_TARGET_FPU),)
- HOST_GCC_COMMON_CONF_OPTS += --with-fpu=$(GCC_TARGET_FPU)
+-UCLIBC_NG_TEST_VERSION = 6790eafe897b3a8c19a2caf50a5ecccf06647adf
+-UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
++UCLIBC_NG_TEST_VERSION = 0f303c63fab7f4038515ced6f2659242cf60ac19
++UCLIBC_NG_TEST_SITE = https://git.uclibc-ng.org/git/uclibc-ng-test.git
++UCLIBC_NG_TEST_SITE_METHOD = git
+ UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
+ UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
+ 
 -- 
 2.39.2
 
