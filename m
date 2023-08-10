@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C31CCEC8738
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:19:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D836EC8737
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:19:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BEF283B36;
-	Thu,  7 Sep 2023 15:19:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6BEF283B36
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD87080B61;
+	Thu,  7 Sep 2023 15:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD87080B61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2JHlwvFneQan; Thu,  7 Sep 2023 15:19:41 +0000 (UTC)
+	with ESMTP id dKJqeTrwmfAG; Thu,  7 Sep 2023 15:19:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92C9383A7A;
-	Thu,  7 Sep 2023 15:19:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92C9383A7A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CFFDD1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0A2982FEA;
+	Thu,  7 Sep 2023 15:19:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0A2982FEA
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 22CED1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0187E612B6
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0187E612B6
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0BCE41E3D
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0BCE41E3D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iPQuodi-9B5H for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mDX9PZoJd7Xi for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 171CF612B1
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 171CF612B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABA5F41DC0
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABA5F41DC0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0540A86A25; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
+ id A0F0D86A1F; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 17:49:15 +0200
+Date: Thu, 10 Aug 2023 21:45:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5c9f31041a2c36e3b97cd2f9577f68d88ee91174
-X-Git-Newrev: 2001d3758879bc25496e726edf3da99e9dbee38f
+X-Git-Oldrev: 930a6d9470efc5c46bcff358947c050540555a6c
+X-Git-Newrev: 2a7c6816f02f45946e896577d78e3470331b2d63
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145135.0540A86A25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/edk2-platforms: bump in sync with
- edk2-stable202308
+Message-Id: <20230907145128.A0F0D86A1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/squid: update to 6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,60 +58,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0663738939851964717=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0663738939851964717==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2001d3758879bc25496e726edf3da99e9dbee38f
+commit: https://git.buildroot.net/buildroot/commit/?id=2a7c6816f02f45946e896577d78e3470331b2d63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the edk2-platforms commit to the one corresponding to version
-edk2-stable202308 of edk2, based on the timestamps.
+See the release notes for Squid 6 for any news:
+http://www.squid-cache.org/Versions/v6/RELEASENOTES.html
 
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Vincent Stehlé <vincent.stehle@arm.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Tested with qemu_aarch64_virt_defconfig.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/edk2-platforms/edk2-platforms.hash | 2 +-
- package/edk2-platforms/edk2-platforms.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
-index ae88b672a6..4c74c7dfb6 100644
---- a/package/edk2-platforms/edk2-platforms.hash
-+++ b/package/edk2-platforms/edk2-platforms.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index b00d14011e..ec60a0e9d1 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v5/squid-5.7.tar.xz.asc
+-md5  7a3764a3c5833631a779d7827901cda7  squid-5.7.tar.xz
+-sha1  141e8007d6b1cfee34654127a9ca025125b37b58  squid-5.7.tar.xz
++# From http://www.squid-cache.org/Versions/v6/squid-6.2.tar.xz.asc
++md5  ad01b7d82b6a00ffd8cd39b97113d05a  squid-6.2.tar.xz
++sha1  29ddb4c522a36f1270e7cfa66f0dec8805fd2b57  squid-6.2.tar.xz
  # Locally calculated
--sha256  31257160ac51a4a5f63db92d26482d6a005286ed040dafe89d01f0ee906b111e  edk2-platforms-b71f2bda9e4fc183068eef5d1d90a631181a2506.tar.gz
-+sha256  c240a8ec7816bc5963d881c84eb18d880e9269c117cfc46a3106b0c5e6e80c66  edk2-platforms-e509ac5a729ebe2a3bc905aed1df23226aca4dc9.tar.gz
- sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
-diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
-index 9e8ff94156..7bd86ff159 100644
---- a/package/edk2-platforms/edk2-platforms.mk
-+++ b/package/edk2-platforms/edk2-platforms.mk
-@@ -5,7 +5,7 @@
+-sha256  6b0753aaba4c9c4efd333e67124caecf7ad6cc2d38581f19d2f0321f5b7ecd81  squid-5.7.tar.xz
++sha256  dd759e151e997d31786d91743d327b1b4b532f1caea66bf81100ec8ba04ec4c1  squid-6.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 355af0b902..167e9f67d8 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # Keep in sync with latest commit as of the release date for boot/edk2
--EDK2_PLATFORMS_VERSION = b71f2bda9e4fc183068eef5d1d90a631181a2506
-+EDK2_PLATFORMS_VERSION = e509ac5a729ebe2a3bc905aed1df23226aca4dc9
- EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
- EDK2_PLATFORMS_LICENSE = BSD-2-Clause-Patent
- EDK2_PLATFORMS_LICENSE_FILES = License.txt
-
---===============0663738939851964717==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-SQUID_VERSION = 5.7
++SQUID_VERSION = 6.2
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+-SQUID_SITE = http://www.squid-cache.org/Versions/v5
++SQUID_SITE = http://www.squid-cache.org/Versions/v6
+ SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+ SQUID_CPE_ID_VENDOR = squid-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0663738939851964717==--
