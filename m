@@ -4,74 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F8F0C001DB
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 13:42:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0F84C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 13:53:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1048404C2;
-	Thu, 10 Aug 2023 13:42:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1048404C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8F27840948;
+	Thu, 10 Aug 2023 13:53:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F27840948
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 30K7PpNzjlwq; Thu, 10 Aug 2023 13:42:50 +0000 (UTC)
+	with ESMTP id w05qYWbZ6Csy; Thu, 10 Aug 2023 13:53:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 13909405C2;
-	Thu, 10 Aug 2023 13:42:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13909405C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2CB3405C2;
+	Thu, 10 Aug 2023 13:53:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2CB3405C2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B58CF1BF4E2
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 13:42:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A31C91BF4E2
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 13:53:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 790D183F8B
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 13:42:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 790D183F8B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A8D283F9C
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 13:53:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A8D283F9C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0wFpCrvDDa18 for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 13:42:46 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F12D583BB4
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 13:42:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F12D583BB4
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9361CFF80C;
- Thu, 10 Aug 2023 13:42:42 +0000 (UTC)
-Date: Thu, 10 Aug 2023 15:42:41 +0200
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20230810154241.3faee0fc@windsurf>
-In-Reply-To: <12cfcd50-66e4-4c03-febd-b9a259bf10d7@mind.be>
-References: <20230731201422.13543-1-dalang@gmx.at>
- <20230731235236.60ddc54a@windsurf>
- <47519c2e-9b64-68b1-79b2-21a2ddea976b@gmx.at>
- <20230801161956.00715a06@windsurf>
- <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
- <20230809225901.470e0270@windsurf>
- <b1d7fd7a-4959-419b-b7ff-0778b1e99722@gmx.at>
- <20230810090721.1e052f35@windsurf>
- <12cfcd50-66e4-4c03-febd-b9a259bf10d7@mind.be>
+ with ESMTP id adrYUCh6-dDu for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 13:53:05 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7400B83FAA
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 13:53:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7400B83FAA
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EB0311C0004;
+ Thu, 10 Aug 2023 13:53:01 +0000 (UTC)
+Date: Thu, 10 Aug 2023 15:53:00 +0200
+To: <Jamie.Gibbons@microchip.com>
+Message-ID: <20230810155300.19ac971b@windsurf>
+In-Reply-To: <36d1e8110955931efe354356c9b09c29f332f8fb.camel@microchip.com>
+References: <20230712125154.1361000-1-jamie.gibbons@microchip.com>
+ <20230712125154.1361000-3-jamie.gibbons@microchip.com>
+ <20230808235919.0002f19d@windsurf>
+ <40906858eaa11edb306b0f56e425d7b13948e0b9.camel@microchip.com>
+ <20230809170230.59759159@windsurf>
+ <36d1e8110955931efe354356c9b09c29f332f8fb.camel@microchip.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691674963;
+ d=bootlin.com; s=gm1; t=1691675582;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ayqXQSU9ipyJjSZ0ty7tucQKJCaud1AE7jMhlIIQeb4=;
- b=SHnb/TNm3XAjkpiZui0p/VneQcczusIdvzH9o5fQ5s6RjpxZA0EJJ+8wcVvJHgPNLpSrw2
- rcYxwCLLg6AzW/LaDxzWvPpdL31gd04B2Iypt6EydTS/evAyOMthmcI7zp4CQXATNzdMMo
- xHXAZgVgYB2bK12CqhXoSyV3SsNrlG9t12SKzL/9RqNsJHqb11mtkjdRSwQhCUzrpSwsSW
- evoNDH9TpHGLHe0cY1U+FErnsScv1dmG8OLS7sb6/Jm8OmC6YN64WajU4S2qOqD4oGx1L/
- lPIv9olzuJecW48CT2QtJQiNnA99qnSTRGYAjpP6a/Bnnr3E2fwJos1RjS0ebA==
+ bh=PL3uKfJFXpEmTINDT4hdz1uf8JmjBu3D0dGdXKOOojQ=;
+ b=BQRbnPKQ7YJhyPT3erK4jPmAotT/4cbtBMDSB0G2wKK/u4quZPS5siy4COJSSE9HyXgC+B
+ mfA/XkdipUAlUvme+R4EcYS9pv4ws5ACZT9NcJQnK4tPQbK/Ok/qfmF+ME+2Ipvzq9nQ8A
+ XSC8C5riEVUCB01ESK8boYq6JNljLYShLnspeLjlU6QbJk4RL3O3ll+6YWMF9wReDc+L05
+ p1VLK7g5AkJMeqr3AuGbn6Pe89A13l6I8ymjYgu+pQ1UDlXb/Ci/A7fQDYjKuib3bDFLOW
+ Th8kqOqyB5zWmch40lC1xjXqML98WOwocL9cNtabN9KZZMamzrqmhTm0I/Y0tQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SHnb/TNm
-Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
- version 2.0
+ header.s=gm1 header.b=BQRbnPKQ
+Subject: Re: [Buildroot] [PATCH v3 2/2] configs/microchip_mpfs_icicle: add
+ support for Microchip's Icicle Kit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,36 +82,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Daniel Lang <dalang@gmx.at>, buildroot@buildroot.org,
- clement.ramirez@bootlin.com
+Cc: Conor.Dooley@microchip.com, Nicolas.Ferre@microchip.com,
+ Ludovic.Desroches@microchip.com, buildroot@buildroot.org,
+ Valentina.FernandezAlanis@microchip.com, giulio.benetti@benettiengineering.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 10 Aug 2023 15:18:42 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Hello Jamie,
 
-> > It could still be useful to have something to contribute new entries,
-> > for those packages that have no entry at all (regardless of their
-> > version number) in the CPE database.  
+On Thu, 10 Aug 2023 10:46:30 +0000
+<Jamie.Gibbons@microchip.com> wrote:
+
+> THe HSS code is located in eNVM of the Icicle kit for PolarFire SoC and
+> built outside of Buildroot.
+
+ACK.
+
+> The HSS paylaod generator which is a host tool to create HSS formatted
+> payloads is built by buildroot. This is covered in the microchip-hss-
+> payload-generator package. This tool is released under dual MIT/GPLv2+
+> licenses.
+> https://github.com/polarfire-soc/hart-software-services/blob/master/tools/hss-payload-generator/LICENSE.md
 > 
->   This makes no sense at all. The only reason to have a CPE database entry is in 
-> order to link it to a CVE. If there is already a CVE, then it should already 
-> have a CPE entry. If there's no CVE yet, then will the first person to ever 
-> submit a CVE for it use the same ID?
+> The HSS payload generator is the only software compnent here that is
+> built inside Buildroot. The HSS code and OpenSBI are both built outside
+> Buildroot, so their licences are not a concern.
+> 
+> I hope this clears things up further.
 
-Well, that would be my expectation indeed. A package in Buildroot has
-no CPE in the database, no CVE. We submit a CPE to the NVD database. My
-hope (but perhaps I'm dreaming too much) is that the day there is a CVE
-on this software component that CPE identifier that was submitted will
-be used, and therefore our CVE tracking will work.
+This is all clear.
 
-Maybe I'm dreaming here, but if it doesn't work like this, it basically
-means that for any package in Buildroot that never had any CVE, we have
-absolutely no guarantee that we will properly notice when the first CVE
-gets reported. Maybe that's life and we have to live with it, but it
-kinda sucks.
+Can this HSS code + OpenSBI stored in the eNVM be updated by the user?
+If it's the case, would it make sense for Buildroot to be able to build
+it?
+
+> > Does that make sense in the RISC-V world?  
+> 
+> After a discussion with colllegues we believe that the above two configs
+> should be available when BR2_riscv_g is selected as suggested. This does
+> make sense.
+
+Cool, we agree!
+
+> Would you like me to include this change in a patchset to fix the
+> configs for the microchip_mpfs_icicle_defconfig or do you want to make
+> this update yourself?
+
+Feel free to send a patch set :-)
+
+Thanks a lot!
 
 Thomas
 -- 
