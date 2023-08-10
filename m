@@ -1,49 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2065C001DE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B46AFC04A6A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:39:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5785241DC1;
-	Thu, 10 Aug 2023 20:39:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5785241DC1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6652240A70;
+	Thu, 10 Aug 2023 20:39:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6652240A70
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bqSYLzT2DuQv; Thu, 10 Aug 2023 20:39:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id GrE6OsDdhhNA; Thu, 10 Aug 2023 20:39:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31CD2417CE;
-	Thu, 10 Aug 2023 20:39:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31CD2417CE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3F4281BF97F
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:38:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACE7F408D4;
+	Thu, 10 Aug 2023 20:39:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACE7F408D4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 992C91BF97F
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:38:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17C4241847
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:38:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17C4241847
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D90561042
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:38:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D90561042
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m8mHbFXypyfm for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XyvcEEBauye9 for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 20:38:52 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4B81F60A95
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:38:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B81F60A95
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 72A9CC0004;
  Thu, 10 Aug 2023 20:38:50 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0AFA0417CE
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:38:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0AFA0417CE
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB473856F4; Thu, 10 Aug 2023 20:38:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 10 Aug 2023 22:15:10 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7da59a69b1a747671e46ae8a995f323849206c3e
-X-Git-Newrev: 527e538a82754ad5ca412c1612328ec5e6d78b78
-X-Patchwork-Hint: ignore
-Message-Id: <20230810203849.EB473856F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libgit2: bump to 1.7.0
+Date: Thu, 10 Aug 2023 22:38:49 +0200
+To: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Message-ID: <20230810223849.2c7ccab1@windsurf>
+In-Reply-To: <20230809092316.25721-1-nicolas.cavallari@green-communications.fr>
+References: <20230809083328.1348-1-nicolas.cavallari@green-communications.fr>
+ <20230809092316.25721-1-nicolas.cavallari@green-communications.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691699930;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=29ThA+4vXby6GW3qnGwEXsEZPIq9Bz/UxZmHplq8K1o=;
+ b=LiYV4vyHxMOiopTV4MOUHNk9mTTOsSrbvFLpAtmX0E10hECfP0g2Hp2o3iPMPzJz5QreIC
+ rCzNuUi7AQPLxVGM1B7QHSQ6vgM5BXso6MYy7MUQ62Vu8A0roUN+oMX09NtM+6At1it0oL
+ ET8DjTNwB9A0KHkH+dwv/x8UrncFo3fEROWxF22MQjQ1Csimfkvc8S9kq8K0un5BcszN0z
+ JR2TPQmLU8iYk+aAKKNHgixJ2eRhxNCHAEh+Hqvvzeamhe402PArcFulLy9pWMOxOPtDsx
+ vKejIKBFRRFReVI2YWWRwe9FbHtbNA8Xqt8HHMtONGu8Iwhig6wppRnL6eLL+A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LiYV4vyH
+Subject: Re: [Buildroot] [PATCH next v2 1/1] package/libgit2: bump to 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,67 +77,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=527e538a82754ad5ca412c1612328ec5e6d78b78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed,  9 Aug 2023 11:23:16 +0200
+Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
 
-This version makes it explicit that it uses libxdiff, a library which is
-not maintained upstream since 2008.  It now have numerous forks, none of
-them sticking out.  For now, use the one which is bundled in the libgit2
-sources.
+> This version makes it explicit that it uses libxdiff, a library which is
+> not maintained upstream since 2008.  It now have numerous forks, none of
+> them sticking out.  For now, use the one which is bundled in the libgit2
+> sources.
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> ---
+> v2: add sob and next prefix
+>  package/libgit2/libgit2.hash | 2 +-
+>  package/libgit2/libgit2.mk   | 6 ++++--
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 4dd6519ca3..1997c3ba8e 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d25866a4ee275a64f65be2d9a663680a5cf1ed87b7ee4c534997562c828e500d  libgit2-1.6.4.tar.gz
-+sha256  d9d0f84a86bf98b73e68997f5c1543cc5067d0ca9c7a5acaba3e8d117ecefef3  libgit2-1.7.0.tar.gz
- sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 9ddf2374bb..93505f7d85 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = 1.6.4
-+LIBGIT2_VERSION = 1.7.0
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
-@@ -12,7 +12,8 @@ LIBGIT2_LICENSE = \
- 	BSD-3-Clause (sha256), \
- 	wildmatch license (wildmatch), \
- 	CC0-1.0 (xoroshiro256), \
--	BSD-2-Clause (basename_r)
-+	BSD-2-Clause (basename_r), \
-+	LGPL-2.1+ (libxdiff)
- LIBGIT2_LICENSE_FILES = COPYING
- LIBGIT2_CPE_ID_VENDOR = libgit2_project
- LIBGIT2_INSTALL_STAGING = YES
-@@ -23,6 +24,7 @@ LIBGIT2_CONF_OPTS = \
- 	-DREGEX_BACKEND=regcomp \
- 	-DUSE_HTTP_PARSER=system \
- 	-DUSE_NTLMCLIENT=OFF \
-+	-DUSE_XDIFF=builtin \
- 	-DUSE_THREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
- 
- LIBGIT2_SUPPORTS_IN_SOURCE_BUILD = NO
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
