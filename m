@@ -4,83 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77F10C001DE
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88312C04A6A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 20:49:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 309F240A70;
-	Thu, 10 Aug 2023 20:46:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 309F240A70
+	by smtp2.osuosl.org (Postfix) with ESMTP id F3569409E6;
+	Thu, 10 Aug 2023 20:49:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3569409E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NiVR6GGDT8E0; Thu, 10 Aug 2023 20:45:59 +0000 (UTC)
+	with ESMTP id y2-PQyAmOB3e; Thu, 10 Aug 2023 20:49:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 72EBF408D4;
-	Thu, 10 Aug 2023 20:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72EBF408D4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE40B1BF97F
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:45:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F1EC4052B;
+	Thu, 10 Aug 2023 20:49:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F1EC4052B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AECE01BF97F
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:49:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B7EDA839CD
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:45:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7EDA839CD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 885AF60AD5
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 20:49:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 885AF60AD5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i4Tmp1EsxoYv for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 20:45:56 +0000 (UTC)
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com
- [IPv6:2607:f8b0:4864:20::f29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 67D668397F
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:45:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67D668397F
-Received: by mail-qv1-xf29.google.com with SMTP id
- 6a1803df08f44-63fc0b9e219so6831896d6.2
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 13:45:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691700355; x=1692305155;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mXtqUnywgU7NoY7p1giZwaoIzoYMYPmxIdGWd6c/oDI=;
- b=LbdoMOwje++T0o2+2g67T4WUe/oVdp5rcB4EP9Iw5ixEj/zxPGBF9kQ6oa6+BPpRB1
- QWdP5g9g6eOWYCbETtwDEfUnCXEG4MCYXGMRHcbfL0cfnHC5TOw+nnLnXZhMN9oGnmZC
- YZvpcj7L1vOcoANvnVfQMp0H9ZcwiXtsjL3i8D1nbAk4ohMwYVtFJH5V2muXAbh1YfRA
- sNjRK0QU+o0xGu0SxQ/pSKIbMXoxxRx2YZabwqi9Sc74LiWIN8S0zJo2JqlOMKP+Sehm
- oINygWT8/TlFhZVt2dYq3yKwzt6ty7pONZp84osu5msk1Zpb9VLwYsDbOXnBJ5CbcdE0
- WYhA==
-X-Gm-Message-State: AOJu0YzZ15qBvnXnvF9Qaq1Xs8XBEML4OfD05CWVJEKZOVdooaZGa/3A
- OZLcX//yl1LC094bEkZqyTaozreeHXAghqD5RVY=
-X-Google-Smtp-Source: AGHT+IE4BnGc2w5TLu7Xg2atCR8J5QZi+KsTfzR6DEU3bdJS5lyBVdHySU+NK611XxIP93k+s8Bd1D22TJpuyhRYdpw=
-X-Received: by 2002:a0c:ca92:0:b0:636:afa1:3448 with SMTP id
- a18-20020a0cca92000000b00636afa13448mr3064002qvk.13.1691700355200; Thu, 10
- Aug 2023 13:45:55 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WffLjFaxtRkd for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 20:49:19 +0000 (UTC)
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.142])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B60CF60AB0
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 20:49:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B60CF60AB0
+Received: from submission (posteo.de [185.67.36.169]) 
+ by mout02.posteo.de (Postfix) with ESMTPS id 0FBEA240103
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:49:16 +0200 (CEST)
+Received: from customer (localhost [127.0.0.1])
+ by submission (posteo.de) with ESMTPSA id 4RMJtz4tTQz9rxD;
+ Thu, 10 Aug 2023 22:49:15 +0200 (CEST)
+From: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero@schwaericke.email>
+To: buildroot@buildroot.org
+Date: Thu, 10 Aug 2023 20:48:44 +0000
+Message-Id: <20230810204844.803954-1-gero@schwaericke.email>
+In-Reply-To: <20221105194712.541286-1-gero@schwaericke.email>
+References: <20221105194712.541286-1-gero@schwaericke.email>
 MIME-Version: 1.0
-References: <2691942.mvXUDI8C0e@kilian-aisec>
- <845846062.0ifERbkFSE@kilian-aisec>
- <CAOCHtYgFMQMYvubF7nU53dgZwB4zF=hycJkX4WjyvjbFfs+iwA@mail.gmail.com>
- <3249536.44csPzL39Z@kilian-aisec>
-In-Reply-To: <3249536.44csPzL39Z@kilian-aisec>
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Thu, 10 Aug 2023 15:45:29 -0500
-Message-ID: <CAOCHtYhLi5cdJBYc_umDvNbdwLTyE6+X3c2fMDvvrN+_q65bEQ@mail.gmail.com>
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691700355; x=1692305155;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=mXtqUnywgU7NoY7p1giZwaoIzoYMYPmxIdGWd6c/oDI=;
- b=gwIuS96LESRgGDw2+TfOHfJw3c1oMSssf/mjgz7bL+WQ7dX+PgDDP6xqjgBHp33fxj
- NmscDqHmRw4r/XlnFx0/CdMsIz8ddTBJ94Mw6oCNstrV1owPVz9LjxbSvHM7OQsVB+Z9
- vKnuZGgYGuHHMaRGQ+Ok5CU9BjLvNZGSyuPrU+LiKRBRtbqXxdtEG+q/TN+0P2zqTHL9
- /Y+FOJrt9SQ+r3cfdaQwxvyw4DSXxHTPmk5hX5bPP3xzOJrKGK+kDO6FoTkrJBzXWmkk
- GRC6jE5ILRzivnQUu5fbAzGYwFoSVBWl89fyRe5vwdFnyqH2RS7GIht21AeYdNqn7tBi
- 9W1w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=gwIuS96L
-Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
+Subject: [Buildroot] [PATCH v2] configs/cubieboard1: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,41 +59,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero@schwaericke.email>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> > Side-note-extra credit.. We are working on distro extlinux support to
-> > just boot off microSD using the eMMC's parttion1/2 as a generic
-> > 'bootloader'..  We did have one user on our forum, get the "microSD"
-> > boto to actually work... once...  Vendor refused to share how to do
-> > that, i was amazed user got it to work, but since then it's not
-> > booting..  I think we are just going to asume eMMC will be the generic
-> > bootloader going forward..
->
-> Yeah, that "Kilian" on the BeagleBoard forum is actually me :D
-> I am super sorry: I cannot reproduce what I did myself and I also don't know
-> so much what is going on. The boot log I posted is really true. I still have
-> that exact SD card and today it still booted. I however could not reproduce it
-> with another SD card, which is of the same type. Tbh. I have no clue ...
-
-Oh Sweet!
-
-Yeah, your one boot 'showing' it actually worked 'once' is still way
-more info than we ever got from the vendor on requesting info on our
-goal of booting from external microSD!
-
-I was at the office for my job that day, and didn't have the board in
-my grab bag.
-
-Regards.
-
--- 
-Robert Nelson
-https://rcn-ee.com/
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U3VwcG9ydCBmb3IgQ3ViaWVib2FyZCAxIGZyb20gQ3ViaWV0ZWNoLgoKU2lnbmVkLW9mZi1ieTog
+R2VybyBTY2h3w6RyaWNrZSA8Z2Vyb0BzY2h3YWVyaWNrZS5lbWFpbD4KLS0tCkNoYW5nZXMgdjEg
+LT4gdjI6CiAgLSBmaXggY29tbWl0IHN1YmplY3QgZm9ybWF0CiAgLSBhZGQgbXlzZWxmIHRvIERF
+VkVMT1BFUlMKICAtIGFkZCBib2FyZC9jdWJpZWJvYXJkMS9yZWFkbWUudHh0CiAgLSB1c2UgZXh0
+bGludXguY29uZiBpbnN0ZWFkIG9mIGJvb3QuY21kCgogREVWRUxPUEVSUyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgIDQgKysrCiBib2FyZC9jdWJpZXRlY2gvY3ViaWVib2Fy
+ZDEvZ2VuaW1hZ2UuY2ZnICAgICAgfCAxNiArKysrKysrKysKIGJvYXJkL2N1YmlldGVjaC9jdWJp
+ZWJvYXJkMS9yZWFkbWUudHh0ICAgICAgICB8IDI5ICsrKysrKysrKysrKysrKysKIC4uLi9ib290
+L2V4dGxpbnV4L2V4dGxpbnV4LmNvbmYgICAgICAgICAgICAgICB8ICA1ICsrKwogY29uZmlncy9j
+dWJpZWJvYXJkMV9kZWZjb25maWcgICAgICAgICAgICAgICAgIHwgMzQgKysrKysrKysrKysrKysr
+KysrKwogNSBmaWxlcyBjaGFuZ2VkLCA4OCBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2
+NDQgYm9hcmQvY3ViaWV0ZWNoL2N1YmllYm9hcmQxL2dlbmltYWdlLmNmZwogY3JlYXRlIG1vZGUg
+MTAwNjQ0IGJvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9yZWFkbWUudHh0CiBjcmVhdGUgbW9k
+ZSAxMDA2NDQgYm9hcmQvY3ViaWV0ZWNoL2N1YmllYm9hcmQxL3Jvb3Rmc19vdmVybGF5L2Jvb3Qv
+ZXh0bGludXgvZXh0bGludXguY29uZgogY3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3MvY3ViaWVi
+b2FyZDFfZGVmY29uZmlnCgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5k
+ZXggNmZmYTNlZTY5My4uODJmMmY4YzhjZCAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9E
+RVZFTE9QRVJTCkBAIC0xMTM3LDYgKzExMzcsMTAgQEAgRjoJcGFja2FnZS9mbGFubmVsLwogTjoJ
+R2VvZmZyZXkgUmFnb3QgPGdlb2ZmcmV5cmFnb3RAZ21haWwuY29tPgogRjoJcGFja2FnZS9weXRo
+b24tcHl5YW1sLwoKK046CUdlcm8gU2Nod2Flcmlja2UgPGdlcm9Ac2Nod2Flcmlja2UuZW1haWw+
+CitGOglib2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEvCitGOgljb25maWdzL2N1YmllYm9hcmQx
+X2RlZmNvbmZpZworCiBOOglHaWxsZXMgVGFsaXMgPGdpbGxlcy50YWxpc0BnbWFpbC5jb20+CiBG
+Oglib2FyZC9mcmVlc2NhbGUvaW14OG1tZXZrLwogRjoJYm9hcmQvZnJpZW5kbHlhcm0vbmFub3Bp
+LXIycy8KZGlmZiAtLWdpdCBhL2JvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9nZW5pbWFnZS5j
+ZmcgYi9ib2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEvZ2VuaW1hZ2UuY2ZnCm5ldyBmaWxlIG1v
+ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjkyYzg2Nzc1NDUKLS0tIC9kZXYvbnVsbAorKysg
+Yi9ib2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEvZ2VuaW1hZ2UuY2ZnCkBAIC0wLDAgKzEsMTYg
+QEAKK2ltYWdlIHNkY2FyZC5pbWcgeworCWhkaW1hZ2UgeworCX0KKworCXBhcnRpdGlvbiB1LWJv
+b3QgeworCQlpbi1wYXJ0aXRpb24tdGFibGUgPSAibm8iCisJCWltYWdlID0gInUtYm9vdC1zdW54
+aS13aXRoLXNwbC5iaW4iCisJCW9mZnNldCA9IDhLCisJCXNpemUgPSAxMDE2SyAjIDFNQiAtIDhL
+QgorCX0KKworCXBhcnRpdGlvbiByb290ZnMgeworCQlwYXJ0aXRpb24tdHlwZSA9IDB4ODMKKwkJ
+aW1hZ2UgPSAicm9vdGZzLmV4dDQiCisJfQorfQpkaWZmIC0tZ2l0IGEvYm9hcmQvY3ViaWV0ZWNo
+L2N1YmllYm9hcmQxL3JlYWRtZS50eHQgYi9ib2FyZC9jdWJpZXRlY2gvY3ViaWVib2FyZDEvcmVh
+ZG1lLnR4dApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi4yOTRiNGU1ZWVj
+Ci0tLSAvZGV2L251bGwKKysrIGIvYm9hcmQvY3ViaWV0ZWNoL2N1YmllYm9hcmQxL3JlYWRtZS50
+eHQKQEAgLTAsMCArMSwyOSBAQAorQ3ViaWV0ZWNoIEN1YmllYm9hcmQxCis9PT09PT09PT09PT09
+PT09PT09PT0KKworTWluaW1hbCBjb25maWd1cmF0aW9uIGZvciB0aGUgQ3ViaWV0ZWNoIEN1Ymll
+Ym9hcmQxLiBJdCBpbmNsdWRlcyBqdXN0IHdoYXQgaXMKK25lZWRlZCB0byBib290IGEgYmFyZSBM
+aW51eCBhbmQgbG9naW4gdmlhIHNlcmlhbCBjb25zb2xlLgorCisKK0J1aWxkaW5nCis9PT09PT09
+PQorCitDb25maWd1cmUgYW5kIGJ1aWxkIHdpdGgKKworCW1ha2UgY3ViaWVib2FyZDFfZGVmY29u
+ZmlnCisJbWFrZQorCisKK0ZsYXNoaW5nCis9PT09PT09PQorCitGbGFzaCB0aGUgc2RjYXJkIGlt
+YWdlIG9udG8gYSBtaWNybyBzZGNhcmQgd2l0aAorCisJZGQgaWY9b3V0cHV0L2ltYWdlcy9zZGNh
+cmQuaW1nIG9mPS9kZXYvc2RYIGJzPTFNIGNvbnY9ZnN5bmMKKworCitSdW5uaW5nCis9PT09PT09
+CisKK0Nvbm5lY3QgYSAzVjMgc2VyaWFsIGludGVyZmFjZSB0byB0aGUgc2VyaWFsIGhlYWRlciBv
+biB0aGUgdG9wIHNpZGUgb2YgdGhlIGJvYXJkCisoYmV0d2VlbiB0aGUgVVNCIGphY2tzIGFuZCB0
+aGUgQTEwIGNoaXApLiBUaGVuIHByb3ZpZGUgcG93ZXIgdG8gdGhlIGJvYXJkLgpkaWZmIC0tZ2l0
+IGEvYm9hcmQvY3ViaWV0ZWNoL2N1YmllYm9hcmQxL3Jvb3Rmc19vdmVybGF5L2Jvb3QvZXh0bGlu
+dXgvZXh0bGludXguY29uZiBiL2JvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9yb290ZnNfb3Zl
+cmxheS9ib290L2V4dGxpbnV4L2V4dGxpbnV4LmNvbmYKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5k
+ZXggMDAwMDAwMDAwMC4uMmZkZTY4M2YzOAotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL2N1Ymll
+dGVjaC9jdWJpZWJvYXJkMS9yb290ZnNfb3ZlcmxheS9ib290L2V4dGxpbnV4L2V4dGxpbnV4LmNv
+bmYKQEAgLTAsMCArMSw1IEBACitERUZBVUxUIGxpbnV4CitMQUJFTCBsaW51eAorICBLRVJORUwg
+L2Jvb3QvekltYWdlCisgIERFVklDRVRSRUUgL2Jvb3Qvc3VuNGktYTEwLWN1YmllYm9hcmQuZHRi
+CisgIEFQUEVORCBjb25zb2xlPXR0eVMwLDExNTIwMCBlYXJseXByaW50ayByb290PS9kZXYvbW1j
+YmxrMHAxIHJvb3R3YWl0CmRpZmYgLS1naXQgYS9jb25maWdzL2N1YmllYm9hcmQxX2RlZmNvbmZp
+ZyBiL2NvbmZpZ3MvY3ViaWVib2FyZDFfZGVmY29uZmlnCm5ldyBmaWxlIG1vZGUgMTAwNjQ0Cmlu
+ZGV4IDAwMDAwMDAwMDAuLjdlZjIwZGI2NjkKLS0tIC9kZXYvbnVsbAorKysgYi9jb25maWdzL2N1
+YmllYm9hcmQxX2RlZmNvbmZpZwpAQCAtMCwwICsxLDM0IEBACisjIEFyY2hpdGVjdHVyZQorQlIy
+X2FybT15CitCUjJfY29ydGV4X2E4PXkKKworIyBUb29sY2hhaW4gb3B0aW9ucworQlIyX1BBQ0tB
+R0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzQ9eQorCisjIEJvb3Rsb2FkZXIKK0JSMl9U
+QVJHRVRfVUJPT1Q9eQorQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTj15CitCUjJfVEFS
+R0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIyMDIzLjA3IgorQlIyX1RBUkdFVF9VQk9P
+VF9CVUlMRF9TWVNURU1fS0NPTkZJRz15CitCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJ
+Rz0iQ3ViaWVib2FyZCIKK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfUFlMSUJGRFQ9eQorQlIyX1RB
+UkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkKK0JSMl9UQVJHRVRfVUJPT1RfU1BMPXkKK0JSMl9U
+QVJHRVRfVUJPT1RfU1BMX05BTUU9InUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCisKKyMgS2Vy
+bmVsCitCUjJfTElOVVhfS0VSTkVMPXkKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT049
+eQorQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi40LjkiCitCUjJfTElO
+VVhfS0VSTkVMX0RFRkNPTkZJRz0ic3VueGkiCitCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JU
+PXkKK0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJzdW40aS1hMTAtY3ViaWVib2Fy
+ZCIKK0JSMl9MSU5VWF9LRVJORUxfSU5TVEFMTF9UQVJHRVQ9eQorCisjIEZpbGVzeXN0ZW0KK0JS
+Ml9UQVJHRVRfUk9PVEZTX0VYVDI9eQorQlIyX1RBUkdFVF9ST09URlNfRVhUMl80PXkKK0JSMl9S
+T09URlNfT1ZFUkxBWT0iYm9hcmQvY3ViaWV0ZWNoL2N1YmllYm9hcmQxL3Jvb3Rmc19vdmVybGF5
+IgorQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15CitCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NS
+SVBUPSJzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCitCUjJfUk9PVEZTX1BPU1RfU0NSSVBU
+X0FSR1M9Ii1jIGJvYXJkL2N1YmlldGVjaC9jdWJpZWJvYXJkMS9nZW5pbWFnZS5jZmciCi0tCjIu
+MjUuMQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
