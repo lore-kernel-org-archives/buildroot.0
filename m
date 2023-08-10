@@ -4,83 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6BF1C001B0
-	for <buildroot@archiver.kernel.org>; Wed,  9 Aug 2023 22:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2B8C001B0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 00:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 604DD418A1;
-	Wed,  9 Aug 2023 22:11:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 604DD418A1
+	by smtp4.osuosl.org (Postfix) with ESMTP id C22A5402A5;
+	Thu, 10 Aug 2023 00:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C22A5402A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zHnQWJKhL7NT; Wed,  9 Aug 2023 22:11:29 +0000 (UTC)
+	with ESMTP id p-BvJbJqe--z; Thu, 10 Aug 2023 00:23:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E31F41897;
-	Wed,  9 Aug 2023 22:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E31F41897
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B0A5402C2;
+	Thu, 10 Aug 2023 00:23:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B0A5402C2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C6BD1BF82C
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:11:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C2AA41BF97F
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 00:23:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 55539607C9
- for <buildroot@lists.busybox.net>; Wed,  9 Aug 2023 22:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55539607C9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9C1D660B74
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 00:23:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C1D660B74
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JWQveVgG1z87 for <buildroot@lists.busybox.net>;
- Wed,  9 Aug 2023 22:11:25 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F41C160AA0
- for <buildroot@buildroot.org>; Wed,  9 Aug 2023 22:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F41C160AA0
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([62.216.209.171]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MfHEP-1ptQmn1vNj-00glYz; Thu, 10
- Aug 2023 00:11:22 +0200
-Date: Thu, 10 Aug 2023 00:11:21 +0200
-From: Peter Seiderer <ps.report@gmx.net>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20230810001121.63610cd5@gmx.net>
-In-Reply-To: <20230808200844.6db0eb89@windsurf>
-References: <20230808172625.20598-1-ps.report@gmx.net>
- <20230808200844.6db0eb89@windsurf>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
+ with ESMTP id t8ztiy8ZjXxs for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 00:23:15 +0000 (UTC)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9889D60AF6
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 00:23:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9889D60AF6
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-3fe12baec61so2751025e9.2
+ for <buildroot@buildroot.org>; Wed, 09 Aug 2023 17:23:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691626993; x=1692231793;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YA4aak8ZJgme2d6WHWSEpPNG6BVEzDvfpu0dKEao/1w=;
+ b=JX7J3+txfzwbmlGQyrtw2uCRZ7y1cgRMpMgV69t34ntYZ6IWmvtt+Py+wGGLSvEfcp
+ Jk4WDBBMNp68tWpX1ay4dGNLl2K/Aql28v5b4hxlsq13GodqbTa3ml+bssiMjFFy7dbk
+ 34/KYkM+8brVAgmzl3wRkWe1khNw77r/B+dmeF192sRteGaY0J+zhICnthgyi0vkP5kD
+ 6EY14aMyWOvom2usbz+KAkCocKOdXUXFo9XaIm6RQIA1dElYW4+MVK2A2+tPb6sS7iK+
+ geop4I0GqV5mGBmsZzuCGJdYOP5sSduoJIZ92fVKo300bt1Ma/u4AZBZ/BPNKgUP+b7q
+ ZUjg==
+X-Gm-Message-State: AOJu0YxS5C2dXPPzISLtzL2PMtxjwaTd5wwfVQylQoPp83+0lxkMrL51
+ MFbVeWEVFT7fsU1GTL10niy5BORNl3AdEc6clzBK0wwRTeWVQaXfLIxA3bGX
+X-Google-Smtp-Source: AGHT+IF7wIaDy6UVu3HrYHOay4PK5KEEuc0qmjLm2cGMRPu4+nDifuaZxlCjl8RNYOKR3LyVIyJzAA6FLO0Ihi1Kbyk=
+X-Received: by 2002:a7b:c8c1:0:b0:3fd:2f8e:2c69 with SMTP id
+ f1-20020a7bc8c1000000b003fd2f8e2c69mr528969wml.32.1691626993524; Wed, 09 Aug
+ 2023 17:23:13 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:TM+M9+wW00JryXz7r4GsmFl2NxljeT8iwdZQlxsKC5SZwUuIzGm
- uGYYFg2zb75ttvoMhtdD6AozjqYh8UAAp1TYYkvGAn4qcaaUzDzSJpUsS4Hu/MSa8FXrtzR
- sxZ/bl+SX42LAlZTpp+0yqTV5kVTUzmd4rTuCtBjxQHqxPVAHdVuqwFoPPrAOHDXOC9fdjK
- iMszoLdY7dOEzsXvM/+lg==
-UI-OutboundReport: notjunk:1;M01:P0:+2U4XAmjoEU=;kEdumiB01q6KYF0VsWzbrjB9QGm
- iMGI9R73qibjob0fbLDxYBcubow6p+EW6ZDZre+aLkafbe4C7Svs1+c0gAIfFCEBbVFATwoid
- yNmnPJb8BHRG2ZdBY6I3mvViqKb3EQ7TfK/s/sXk2iTck8iarN8WEbCpDo1Te4oZ/u8FRE1CU
- MpMLuicgjnHRepFF50fZdDPRecitFbVPqztrRcSVv5WggAGVmGwl43IyTMS2g2ElKOrY6+1ds
- TJ+Y+xKmGtuiSsr4d4c+BRH/Nul1gBP1V1a+5hstLdnqGBlmI+LBasSOgbUZgpM3tUhSvNVMa
- YXC122powamDyRTUFst2f8edo6uasmMk9A4Q943ooiG7IRvId6oniNDUV+hqmXdq9i7deMjFs
- +xaWw2U2WBzz9DoF9dTwP1/Bdl+iznZL3kUAVvMxDUcer9AMk1Tww7Bd2jClMtTk2hsg7dN2y
- ERCsKmAvEog8A/n8WPQqWy65orp1q6yeN8flH+Tgu1q7f/A01sPGkdZOK3Hj1OjH1ZMofT1pl
- rwL1RvmifxMoFo4chEiaDc61sv8TuYShgCpk9fVB/mzRwkGSOj49qjFbRy1drd/PMsdQcksg4
- QopuqVhl8+dZMAcB/mEYKOxe8cAjcTXCOerlFpW+s/km1ssev0brF3OJfCHx1qp37wlJWCINm
- LXuQp/RWGg/3SqSI9RPB9bHi3RbEWjAVNQ4TyG6ioBPWfMMX74ICAj/8RlFCotkzaO9GT4sbf
- tQt+z5Top9bFRGwoNRXnlifgC203B7jhbbuTsziv85dmM2bsSpL6jxm88720ObDKi3pJwHUTv
- SrPznA5nmbRZbykIHR6fFEOg+V9NqpHTBrahLFuM9MRh9Z09xHqsp4FMFAQGfEEsOmXUbTwHZ
- 4UXro3fvzFL+UG3fifUNH34B4LKdvB/+bMKSMqW4nZlfBHsuch72fFTLeawGIR15wWjaLNRDW
- b3bG+s2xIWLXIbugLiFafXDNYno=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.net; 
- s=s31663417; t=1691619082; x=1692223882; i=ps.report@gmx.net;
- bh=1KrXzMAzjqS/Q5rnq1ISBqrhP6Cl3pxwNTU6eHxQ1lg=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
- b=cV+1Zyr2kGYKfnUfT35bmvry0QOIKkLo2AV3DiPJyN7PKcForWPkU2kXFLS0eY/1KvuZos7
- LBgFmIK3+6/ebO/FrZGNvhR3NniY8OUSKoNMPtF3bWgrlvEbNmMpEJ/bsr4pMjqYTOZDTAtJW
- INa3wWGSvmKnooj+S88qrMYNMCp0pj2mMbR1xXoLSIMcLMJgGO+epkw2jncNYbFiaFGdgugk3
- ao06b4sgNCBHUAY3xgnwzCAZaIx8YNTWshyjbindohvfNhKRG6xWYLEbsGIS9biSvhoLS/yy8
- t0EQcFqQEqrC0iV9pVzEGiLDeMP0spz6n12LLj6IllodWvFMKxcw==
+References: <cover.1691616286.git.yann.morin.1998@free.fr>
+ <c9a96063bdc257e07f5288c68d017c9a7d9ac14c.1691616286.git.yann.morin.1998@free.fr>
+In-Reply-To: <c9a96063bdc257e07f5288c68d017c9a7d9ac14c.1691616286.git.yann.morin.1998@free.fr>
+Date: Thu, 10 Aug 2023 08:23:00 +0800
+Message-ID: <CAHRZCZVN4W6d_GEeMxjv36oyQ=Edp5dzoGhyojAxT0gGt9R8UA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=google.com; s=20221208; t=1691626993; x=1692231793;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=YA4aak8ZJgme2d6WHWSEpPNG6BVEzDvfpu0dKEao/1w=;
+ b=Z1YsGmOo0NYLtUCWfkT+QXHGeOWN2ep6pY/l+mogZ6OoZcDjGv9XgPn3wpW1nEjRd2
+ 4Iidfp2xqxS5+RlbdMaeUMVi5fFiM101DcNoubAL4uzvrORH1y5AmO+slRE4/Q5B8Hbv
+ xcoeB/bpVE9cklgOTOBFaPOCl4+83msUNP4sneK6SCdLye1X0vwIoU9Gb4KaR/4FAw7J
+ 00Ue0b5sNNj55pKH+PWyCHYhQVKBUFBuOp4fkxEttMQEo3vsPOPupOwinnfRawLQzIvu
+ 4D6zYz9XKYt/tYMQFKxG4DEOiI0sJ0dOojbVpJviLqDZT2a00Jhkbt2k6fos2hRa8d4K
+ ANXw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=cV+1Zyr2
-Subject: Re: [Buildroot] [PATCH v1] package/ntpsec: bump version to 1.2.2a
- (fixes CVE-2023-4012)
+ dkim=pass (2048-bit key) header.d=google.com header.i=@google.com
+ header.a=rsa-sha256 header.s=20221208 header.b=Z1YsGmOo
+Subject: Re: [Buildroot] [PATCH 3/5] utils/docker-run: bind mount
+ .git/objects if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,49 +90,147 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Nicolas Boichat via buildroot <buildroot@buildroot.org>
+Reply-To: Nicolas Boichat <drinkcat@google.com>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9077976649557515628=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+--===============9077976649557515628==
+Content-Type: multipart/alternative; boundary="0000000000000b0c7f0602869a70"
 
-On Tue, 8 Aug 2023 20:08:44 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+--0000000000000b0c7f0602869a70
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Hello Peter,
+On Thu, Aug 10, 2023 at 5:24=E2=80=AFAM Yann E. MORIN <yann.morin.1998@free=
+.fr>
+wrote:
+
+> From: Nicolas Boichat <drinkcat@google.com>
 >
-> On Tue,  8 Aug 2023 19:26:25 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
+> If buildroot is checked out as part of a 'repo' manifest, docker-run
+> doesn't fully bind mount the .git directory, leading to commands such
+> as `utils/docker-run make check-package` to fail.
 >
-> > Fixes CVE-2023-4012 (see [1] for details).
-> >
-> > [1] https://gitlab.com/NTPsec/ntpsec/-/releases/NTPsec_1_2_2a
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Nicolas Boichat <drinkcat@google.com>
+> [yann.morin.1998@free.fr: use newly introduced mountpoints list]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  utils/docker-run | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> For security bumps, we like the commit title to be:
+> diff --git a/utils/docker-run b/utils/docker-run
+> index 7b27a9b05c..ff903b96e9 100755
+> --- a/utils/docker-run
+> +++ b/utils/docker-run
+> @@ -33,6 +33,12 @@ if [ "${GIT_DIR}" ]; then
+>      # path already (in a wordir), then that's a noop.
+>      GIT_DIR=3D"$(cd "${MAIN_DIR}"; readlink -e "${GIT_DIR}")"
+>      mountpoints+=3D( "${GIT_DIR}" )
+> +
+> +    # 'repo' stores .git/objects separately.
+> +    if [ -L "${GIT_DIR}/objects" ]; then
+> +        OBJECTS_DIR=3D"$(cd "${MAIN_DIR}"; readlink -e
+> "${GIT_DIR}/objects")"
 >
-> 	package/ntpsec: security bump to version 1.2.2a
 
-O.k.
+I intentionally removed `cd "${MAIN_DIR}"` in my patch, as ${GIT_DIR} has
+already been made an absolute path, just above, so the cd operation is
+unnecessary.
 
+
+> +        mountpoints+=3D( "${OBJECTS_DIR}" )
 >
-> and have the details of which CVE is addressed in the rest of the
-> commit message.
+
+Otherwise, that's a nice cleanup ,-)
+
+Thanks!
+
+
+> +    fi
+>  fi
 >
-> I fixed that up when applying to master. Thanks!
-
-Thanks for fixing (and applying)!
-
-Regards,
-Peter
-
-
+>  if [ "${BR2_DL_DIR}" ]; then
+> --
+> 2.25.1
 >
-> Thomas
+>
+
+--0000000000000b0c7f0602869a70
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
+<div dir=3D"ltr" class=3D"gmail_attr">On Thu, Aug 10, 2023 at 5:24=E2=80=AF=
+AM Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">yann.morin.=
+1998@free.fr</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" styl=
+e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
+g-left:1ex">From: Nicolas Boichat &lt;<a href=3D"mailto:drinkcat@google.com=
+" target=3D"_blank">drinkcat@google.com</a>&gt;<br>
+<br>
+If buildroot is checked out as part of a &#39;repo&#39; manifest, docker-ru=
+n<br>
+doesn&#39;t fully bind mount the .git directory, leading to commands such<b=
+r>
+as `utils/docker-run make check-package` to fail.<br>
+<br>
+Signed-off-by: Nicolas Boichat &lt;<a href=3D"mailto:drinkcat@google.com" t=
+arget=3D"_blank">drinkcat@google.com</a>&gt;<br>
+[<a href=3D"mailto:yann.morin.1998@free.fr" target=3D"_blank">yann.morin.19=
+98@free.fr</a>: use newly introduced mountpoints list]<br>
+Signed-off-by: Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr"=
+ target=3D"_blank">yann.morin.1998@free.fr</a>&gt;<br>
+---<br>
+=C2=A0utils/docker-run | 6 ++++++<br>
+=C2=A01 file changed, 6 insertions(+)<br>
+<br>
+diff --git a/utils/docker-run b/utils/docker-run<br>
+index 7b27a9b05c..ff903b96e9 100755<br>
+--- a/utils/docker-run<br>
++++ b/utils/docker-run<br>
+@@ -33,6 +33,12 @@ if [ &quot;${GIT_DIR}&quot; ]; then<br>
+=C2=A0 =C2=A0 =C2=A0# path already (in a wordir), then that&#39;s a noop.<b=
+r>
+=C2=A0 =C2=A0 =C2=A0GIT_DIR=3D&quot;$(cd &quot;${MAIN_DIR}&quot;; readlink =
+-e &quot;${GIT_DIR}&quot;)&quot;<br>
+=C2=A0 =C2=A0 =C2=A0mountpoints+=3D( &quot;${GIT_DIR}&quot; )<br>
++<br>
++=C2=A0 =C2=A0 # &#39;repo&#39; stores .git/objects separately.<br>
++=C2=A0 =C2=A0 if [ -L &quot;${GIT_DIR}/objects&quot; ]; then<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 OBJECTS_DIR=3D&quot;$(cd &quot;${MAIN_DIR}&quo=
+t;; readlink -e &quot;${GIT_DIR}/objects&quot;)&quot;<br></blockquote><div>=
+<br></div><div>I intentionally removed `cd &quot;${MAIN_DIR}&quot;` in my p=
+atch, as ${GIT_DIR} has already been made an absolute path, just above, so =
+the cd operation is unnecessary.</div><div>=C2=A0</div><blockquote class=3D=
+"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(2=
+04,204,204);padding-left:1ex">
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 mountpoints+=3D( &quot;${OBJECTS_DIR}&quot; )<=
+br></blockquote><div><br></div><div>Otherwise, that&#39;s a nice cleanup ,-=
+)</div><div><br></div><div>Thanks!</div><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">
++=C2=A0 =C2=A0 fi<br>
+=C2=A0fi<br>
+<br>
+=C2=A0if [ &quot;${BR2_DL_DIR}&quot; ]; then<br>
+-- <br>
+2.25.1<br>
+<br>
+</blockquote></div></div>
+
+--0000000000000b0c7f0602869a70--
+
+--===============9077976649557515628==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9077976649557515628==--
