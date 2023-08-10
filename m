@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB28DC001E0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:48:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C47D2C001E0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 19:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53BBA41DEE;
-	Thu, 10 Aug 2023 19:48:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53BBA41DEE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65CC341603;
+	Thu, 10 Aug 2023 19:48:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65CC341603
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ay-KkiaRtPoo; Thu, 10 Aug 2023 19:48:27 +0000 (UTC)
+	with ESMTP id Kl0IQZFkOmFM; Thu, 10 Aug 2023 19:48:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A390401F4;
-	Thu, 10 Aug 2023 19:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A390401F4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 730321BF5A6
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:48:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74AF040246;
+	Thu, 10 Aug 2023 19:48:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74AF040246
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DA1D91BF5A6
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DEE641DD1
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DEE641DD1
+ by smtp2.osuosl.org (Postfix) with ESMTP id C0EBD408D4
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 19:48:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0EBD408D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6HRLFXj_5dAS for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 19:48:23 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CDCD241C54
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCD241C54
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B22920003;
- Thu, 10 Aug 2023 19:48:19 +0000 (UTC)
-Date: Thu, 10 Aug 2023 21:48:18 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230810214818.0254a233@windsurf>
-In-Reply-To: <20230810162651.24450-1-bernd@kuhls.net>
-References: <20230810162651.24450-1-bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fik1sJiXXPnq for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 19:48:47 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 946E440126
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 19:48:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 946E440126
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A36FB240003;
+ Thu, 10 Aug 2023 19:48:44 +0000 (UTC)
+Date: Thu, 10 Aug 2023 21:48:43 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230810214843.5f96f23a@windsurf>
+In-Reply-To: <20230810175319.1071011-1-ju.o@free.fr>
+References: <20230810175319.1071011-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691696900;
+ d=bootlin.com; s=gm1; t=1691696924;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=+zHLF7x/WX+fVeAV7eKRHFkuy3WK/WyXuwCM7ZjsKls=;
- b=oZbs0L9cy7mhxflcdQ35it7cp7vYfjVXhk5tALVLSyBtvxtFR8Uy0UIs17pgjoyJTwVit0
- zNtD8LYO6GSj6NBmSiDpsF9CDef+Vlx5NM+xophub+pjdi1NHZjcNjehtQy6oPC6KUU19a
- LWcXQiFDfH95aAv5+OrTgjpScRsnmKsRYSD8iTlCUUhnefeXQ85WGq0pyiLsFmyDgaZwBg
- 6/gHu3gj69+KDrnVHQQjnx3mlqbNP8/w+A3nFxgApo04jdMppqhEaXfFptvXKMX3zAicTy
- wyBIRA27skUwVs/Y8riQI+0RFuE/2O2XO70SlkkSJ0dtvhPkkTrmUCX6NtIsvA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=YdPH9zLepVdWtQZgmlW3waK58dMUzYBK60TzOZ9ff9I=;
+ b=pT0EPDAGuR+GfaF9mWtlfLydkuCQQ/hVfwAjWNDB4shZTLmwlEXr86gT6IkGGUyrAhybxW
+ yS9wwUFQGanmTlVnP4CXEHayKmt7gAzMfwPRVhWYig2KOYGl/EUL46xKiJYNvKtT2srWx4
+ IhlJxcfw1Cja5LFVGkqUhAIEGdcrQNRjkKNNFzxO6i8aiykkxLepaCJ4U9U2CfwYrjQ1bR
+ SGb8w0hvAykW1pY+jT+vB/0Rflb3tg75t7HKHK2EnkiRMfXw9NvPzspX0mjsenf10mfuU3
+ m9NSDdLBJ6VCBBlxRUlJMU4JUWF+Ow4LKnlUh6qL/OIgeScQww+CooRrHYfptw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oZbs0L9c
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/intel-gmmlib: bump version
- to 22.3.10
+ header.s=gm1 header.b=pT0EPDAG
+Subject: Re: [Buildroot] [PATCH next 1/1]
+ support/testing/tests/package/test_kmscube: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,20 +77,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Louis-Paul Cordier <lpdev@cordier.org>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 10 Aug 2023 18:26:51 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Thu, 10 Aug 2023 19:53:19 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/intel-gmmlib/intel-gmmlib.hash | 2 +-
->  package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Note:
+> This runtime test needs the kmscube update proposed in [1] to succeed.
 
 Applied to next, thanks.
 
