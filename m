@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 614F6EC873A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B04E9EC8739
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:21:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DC4C83BA6;
-	Thu,  7 Sep 2023 15:20:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DC4C83BA6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EC0782E19;
+	Thu,  7 Sep 2023 15:21:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EC0782E19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k1qR6j6UPobH; Thu,  7 Sep 2023 15:20:56 +0000 (UTC)
+	with ESMTP id f_ifCsU1fVWi; Thu,  7 Sep 2023 15:21:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D74D583BA3;
-	Thu,  7 Sep 2023 15:20:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D74D583BA3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87DE683BA9;
+	Thu,  7 Sep 2023 15:21:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87DE683BA9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1A0881BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 14E921BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3318241E3E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6645041E41
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3318241E3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6645041E41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hBuT0jVYIpRx for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+ with ESMTP id LhISNE0_iKC7 for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9298C41DB8
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD94341DC3
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9298C41DB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD94341DC3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F234869E0; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+ id ABA4886A22; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 23:23:26 +0200
+Date: Thu, 10 Aug 2023 21:48:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d582bf978fe6a9002a7950c6fd7c33fe1e0d5df5
-X-Git-Newrev: 2cc1902943b2032aca48e050816906e9caa355cd
+X-Git-Oldrev: 2a7c6816f02f45946e896577d78e3470331b2d63
+X-Git-Newrev: 6d35e63653b508a7d1a717436eb408c75cc85d35
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145128.8F234869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imxrt1050-evk: new defconfig
+Message-Id: <20230907145128.ABA4886A22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 22.3.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,205 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cc1902943b2032aca48e050816906e9caa355cd
+commit: https://git.buildroot.net/buildroot/commit/?id=6d35e63653b508a7d1a717436eb408c75cc85d35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add defconfig for imxrt1050-evk is a development board from NXP.
-
-The i.MXRTxxxx family spreads from i.MXRT1020 to i.MXRT1170 with the
-first one supporting 1 USB OTG & 100M ethernet with a cortex-M7@500Mhz
-up to the latter with i.MXRT1170 with cortex-M7@1Ghz and
-cortex-M4@400Mhz, 2MB of internal SRAM, 2D GPU, 2x 1Gb and 1x 100Mb
-ENET. The i.MXRT family is NXP's answer to STM32F7xx, as it uses only
-simple SDRAM, it gives the chance of a 4 or less layer PCBs. Seeing
-that these chips are comparable to the STM32F7xxs which have Buildroot
-ported to them it seems reasonable to add support for them.
-
-https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/i-mx-rt1050-evaluation-kit:MIMXRT1050-EVK
-
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                  |  6 ++++
- board/freescale/imxrt1050evk/genimage.cfg   | 40 ++++++++++++++++++++++++++
- board/freescale/imxrt1050evk/readme.txt     | 30 ++++++++++++++++++++
- board/freescale/imxrt1050evk/uboot.fragment |  2 ++
- configs/imxrt1050-evk_defconfig             | 44 +++++++++++++++++++++++++++++
- 5 files changed, 122 insertions(+)
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2c45786a83..a2948e8cb7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1169,12 +1169,14 @@ F:	package/xapian/
- N:	Giulio Benetti <giulio.benetti@benettiengineering.com>
- F:	board/bananapi/bananapi-m2-ultra/
- F:	board/freescale/imx6ullevk/
-+F:	board/freescale/imxrt1050evk/
- F:	board/olimex/a*
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
- F:	configs/bananapi_m2_ultra_defconfig
- F:	configs/freescale_imx6ullevk_defconfig
- F:	configs/imx6ullevk_defconfig
-+F:	configs/imxrt1050-evk_defconfig
- F:	configs/olimex_a*
- F:	package/at/
- F:	package/binutils/
-@@ -1533,6 +1535,10 @@ F:	package/strongswan/
- F:	package/wmctrl/
- F:	package/x11r7/xdriver_xf86-video-imx/
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index c164c78300..9f2c8cc1fd 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  62d2f8333f1da3361952546a83dd40d1eb23d8bddacf67a160e63f565b68b5a6  intel-gmmlib-22.3.9.tar.gz
++sha256  8a6005440bf336309a2abbeeb3e006e229715c4b39ca31c6d0e510050e53dcc7  intel-gmmlib-22.3.10.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index c637b8a5b4..dddd1a13fd 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Jesse Taube <Mr.Bossman075@gmail.com>
-+F:	board/freescale/imxrt1050evk/
-+F:	configs/imxrt1050-evk_defconfig
-+
- N:	Jesse Van Gavere <jesseevg@gmail.com>
- F:	package/qt6/
- 
-diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
-new file mode 100644
-index 0000000000..daa51bdbe0
---- /dev/null
-+++ b/board/freescale/imxrt1050evk/genimage.cfg
-@@ -0,0 +1,40 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"uImage",
-+			"imxrt1050-evk.dtb",
-+		}
-+	}
-+
-+	size = 8M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition SPL {
-+		in-partition-table = "no"
-+		image = "SPL"
-+		offset = 1K
-+		size = 127K
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot.img"
-+		offset = 128K
-+		size = 512K
-+	}
-+
-+	partition boot {
-+		partition-type = 0xc
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/freescale/imxrt1050evk/readme.txt b/board/freescale/imxrt1050evk/readme.txt
-new file mode 100644
-index 0000000000..1fc4edd88b
---- /dev/null
-+++ b/board/freescale/imxrt1050evk/readme.txt
-@@ -0,0 +1,30 @@
-+NXP i.MXRT1050 EVK board
-+------------------------
-+
-+i.MX RT1050 are NXP's crossover MCUs. They combine the high performance and high
-+level of integration of an applications processors with the ease-of-use and
-+real-time functionality of a microcontroller. The i.MX RT1050 MCU runs on the Arm
-+Cortex-M7 core at 600 MHz.
-+https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/i-mx-rt1050-evaluation-kit:MIMXRT1050-EVK
-+
-+To build a minimal support for this board:
-+
-+$ make imxrt1050-evk_defconfig
-+$ make
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be flashed into the SD card:
-+
-+$ dd if=output/images/sdcard.img of=/dev/sdX
-+Where 'sdX' is the device node of the uSD.
-+
-+Jumper settings:
-+
-+   SW7: 1 0 1 0
-+
-+Where 0 means bottom position and 1 means top position (from the
-+switch label numbers reference).
-+
-+Connect the USB cable between the EVK and the PC for the console.
-+
-+Insert the micro SD card in the board, power it up and U-Boot messages should come up.
-diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
-new file mode 100644
-index 0000000000..1c5bb6af35
---- /dev/null
-+++ b/board/freescale/imxrt1050evk/uboot.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_USE_BOOTCOMMAND=y
-+CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 uImage;bootm 0x80000000 - 0x80800000"
-diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
-new file mode 100644
-index 0000000000..af060fb9f4
---- /dev/null
-+++ b/configs/imxrt1050-evk_defconfig
-@@ -0,0 +1,44 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_m7=y
-+
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
-+
-+# Toolchain
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1"
-+BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
-+BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imxrt1050-evk"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="16M"
-+
-+# NOMMU Busybox
-+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="SPL"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+
-+# Required tools to create the SD card image
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+-INTEL_GMMLIB_VERSION = 22.3.9
++INTEL_GMMLIB_VERSION = 22.3.10
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
