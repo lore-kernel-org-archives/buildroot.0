@@ -4,98 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEAB7C001B0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 14:58:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32EABC001B0
+	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 15:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21B3683FC0;
-	Thu, 10 Aug 2023 14:58:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21B3683FC0
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6C6283F99;
+	Thu, 10 Aug 2023 15:25:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6C6283F99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LvKRJDd4Ewh7; Thu, 10 Aug 2023 14:58:22 +0000 (UTC)
+	with ESMTP id M9C6sMQ_vPPd; Thu, 10 Aug 2023 15:25:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6127883FBF;
-	Thu, 10 Aug 2023 14:58:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6127883FBF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0105B1BF3A9
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 14:58:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C874A83F95;
+	Thu, 10 Aug 2023 15:25:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C874A83F95
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E262C1BF4D7
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 15:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8BA540395
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 14:58:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8BA540395
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB2FE83F95
+ for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 15:25:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB2FE83F95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HmqjZ1mGI-y5 for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 14:58:19 +0000 (UTC)
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9AFB04016D
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 14:58:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AFB04016D
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-99c4923195dso143637866b.2
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 07:58:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691679496; x=1692284296;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=aaJxjgWWfoVNwG1UYQCwtPZQIp0wQh+txkTzoUERecs=;
- b=I+FzGqCW8k0snce8JiqRh0NNCC4GwSzIvhnGCsH4KXPLzCFWF2BCDW0eYbCUUqzsfy
- tkhcT1VGsRfmftmwdQeo4A0RCCn7BVHaoGhk8otFzUXRPhlW6VaLSP1yIJ4qbGEvrIiW
- NQQwLyveJwxy9KiipTlGTFJRio+zCNMtDACZnv3+T5Dphw+lk9ADQdRSfgkCfgNzS4Zv
- 28tcHLO8DE3StGng9jMFXPFp6pHQTYH7j/U8MZ3LsudYxT2i+y2dzeOdYGtWDXRfUD7B
- vOLHsNZP0mBSdLw0wyl28FpLbQX8C/lCJhn0pdKodoVq5tIEOuvDVwFbUkmMK+4j2h9N
- E7xg==
-X-Gm-Message-State: AOJu0YxMD5mEWPh9jX/h+GIiTpVL+3+hZ0hJsUow9kJ2bNpW5NoAU+ur
- Hpdeg6kOrZNqWvvCwDvhYOxSWQ==
-X-Google-Smtp-Source: AGHT+IECI7dn5iCFS0R6qN0rIkNXF+BkwxGzEE2MWvCXDn+iY5/W1iSEjllRkw0Vh1xqkn815X1MTg==
-X-Received: by 2002:a17:906:5a67:b0:99c:8906:4b25 with SMTP id
- my39-20020a1709065a6700b0099c89064b25mr2224258ejc.74.1691679496632; 
- Thu, 10 Aug 2023 07:58:16 -0700 (PDT)
-Received: from [10.1.0.195] (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- l7-20020a1709060e0700b0099ccee57ac2sm1041504eji.194.2023.08.10.07.58.15
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 10 Aug 2023 07:58:15 -0700 (PDT)
-Message-ID: <2dce28a5-8e0d-f240-9b11-d3ff08604e88@mind.be>
-Date: Thu, 10 Aug 2023 16:58:13 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MB1ylquQftqd for <buildroot@lists.busybox.net>;
+ Thu, 10 Aug 2023 15:25:03 +0000 (UTC)
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 051A983F89
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 15:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 051A983F89
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout01.mail.de (Postfix) with ESMTP id 272CBA035E;
+ Thu, 10 Aug 2023 17:25:01 +0200 (CEST)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix03.mail.de (Postfix) with ESMTP id 0B1DD801EC;
+ Thu, 10 Aug 2023 17:25:01 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 77A62100136;
+ Thu, 10 Aug 2023 17:25:00 +0200 (CEST)
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Date: Thu, 10 Aug 2023 17:25:00 +0200
+Message-ID: <2160318.Mh6RI2rZIc@kilian-aisec>
+In-Reply-To: <13322713.uLZWGnKmhe@kilian-aisec>
+References: <2691942.mvXUDI8C0e@kilian-aisec>
+ <20230809193855.60c6b89c@windsurf>
+ <13322713.uLZWGnKmhe@kilian-aisec>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230731201422.13543-1-dalang@gmx.at>
- <20230731235236.60ddc54a@windsurf>
- <47519c2e-9b64-68b1-79b2-21a2ddea976b@gmx.at>
- <20230801161956.00715a06@windsurf>
- <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
- <20230809225901.470e0270@windsurf>
- <b1d7fd7a-4959-419b-b7ff-0778b1e99722@gmx.at>
- <20230810090721.1e052f35@windsurf>
- <12cfcd50-66e4-4c03-febd-b9a259bf10d7@mind.be>
- <20230810154241.3faee0fc@windsurf>
-In-Reply-To: <20230810154241.3faee0fc@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1691679496; x=1692284296;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=aaJxjgWWfoVNwG1UYQCwtPZQIp0wQh+txkTzoUERecs=;
- b=TIvfYCKK0om+a65xag2gS5rLiKFWyVirLEaY5ujrUq872cYQ3v8UNtnuWzauJvih/T
- fFAVyVZDS5Y6Opu5+/T0eBC8vCaTDv3TVS0+VlZQnsrS6VZN2cD50sqgGeDnhVrQELGV
- Oq0zKhBTJYzvcc5t7YGbDbyAAd0esLT/qTfk+HnpMlQKq/0ebVzKSuWfa/ueMjSkWo+z
- r2zURL9yGGCIA7FQIytsbh4D+HKxtZt3ECEogLg8H/74UBD4xzFkfk40JJRWM4Q/J93W
- 8/9Y9w5M5B01sKxODdM+e85tQ/QQJ4Ji9TRvVCNT3SS0mD/iXAfyPzLCLYTfxGgsDmJU
- rXpg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=TIvfYCKK
-Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
- version 2.0
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 2808
+X-purgate-ID: 154282::1691681100-827FC7B6-E8E48257/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1691681101;
+ bh=1LRFyIVX78A9ClSFozGmne0Z9TQLUy2AaBGYJKLE8NU=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=f2NkaGV5jUMgrHd7wMRaawQzM9uVfKuwcJOQWW8KwggNQWU5fIwIWr8NcRodjVA8U
+ yQtYJ81Qx3pD3XqeVzHQ2nFTNIJYWEzn2C3JFE9TyTfx32sZq/0jEni5VtoMDn6BvE
+ nfw0O4nCprgpNeFKW6O4MwgrN1O9XXFlRihqWcbZLSzX9Ccyyd3EdrDnnnVgEjUDxC
+ I0TBZ+MYIe4LTt6Ps3V873kd40NOU7UXa8plLPwSFRh7YutErzBa0L89EZbXCSuvNq
+ VrmOVn2hlVlHtp7QV9PQsc8U0AXfukX0VWw/5CcGPohjZHqghTzpTCAIeCU5vntaix
+ fEl6vq3/vKyMg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
+ header.a=rsa-sha256 header.s=mailde202009 header.b=f2NkaGV5
+Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,54 +88,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Daniel Lang <dalang@gmx.at>, buildroot@buildroot.org,
- clement.ramirez@bootlin.com
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello Thomas,
+
+[--SNIP--]
+
+> I still have some other problem with the build at the moment, where I have
+> to look into (might be my very own fault - the errors about unknown vector
+> instructions are back for some reason). But as soon as I have questions or
+> news, I will send an update to the ML.
+
+It actually was not my own fault regarding the errors about unknown vector 
+instructions. It seems that the core of the TH1520 SoC - the Xuantie C910 - 
+implements a now obsolete version of the RiscV vector extension, namely 
+version 0.7.1 (see [1]). However, only past gcc version seem to have supported 
+this vector extension version. Recent gcc versions seem to not support it. 
+Regarding the Xuantie C906 core, I found out that there now exists some -
+mcpu=thead-c906 option (see [2]). However, I was not able to successfully 
+compile a dummy example with one of the v0.7.1 vector instructions myself, 
+using that option.
+
+Then I also found a RiscV toolchain, which has some "rvv-0.7.1" branch 
+(https://github.com/brucehoult/riscv-gnu-toolchain). However, I was not able 
+to build it (may be my own fault). But anyway the branch seems very old and I 
+am afraid, if I try to use it, I may run into other issues.
+
+So I decided to accept that I currently have a gcc which does not support the 
+old 0.7.1 version of the vector extension. Therefore, I disabled vector 
+extension support in the kernel config. This is part of my current 
+beaglev_ahead_defconfig:
+
+BR2_GCC_VERSION_13_X=y
+BR2_GLOBAL_PATCH_DIR="board/beaglev-ahead/patches"
+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglev-ahead/linux.fragment"
+
+The linux.fragment file overwrites the vector extension settings:
+
+CONFIG_VECTOR=n
+CONFIG_VECTOR_0_7=n
+
+Now, there was one more error in the custom kernel code: One function's 
+prototype and its implementation did not match, causing a -Werror=enum-int-
+mismatch:
+
+https://git.beagleboard.org/beaglev-ahead/beaglev-ahead-linux/-/blob/beaglev-v5.10.113-1.1.2/drivers/gpu-viv/hal/os/linux/kernel/gc_hal_kernel_linux.h#L338
+
+https://git.beagleboard.org/beaglev-ahead/beaglev-ahead-linux/-/blob/beaglev-v5.10.113-1.1.2/drivers/gpu-viv/hal/os/linux/kernel/gc_hal_kernel_os.c#L6144
+
+I changed the prototype accordingly and put a patch for this in my board/
+beaglev-ahead/patches/linux directory. After all this, it continued building 
+till the end.
+
+Now I don't know, whether the compiled uboot, kernel and rootfs would 
+function. I would have to test this. But to do so, I guess I would have to 
+figure out how to assemble these parts into an image and how to flash it into 
+the eMMC of the board.
+
+Best regards,
+Kilian
+
+[1] https://ftp.libre-soc.org/466100a052.pdf
+[2] https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/RISC-V-Options.html
 
 
-On 10/08/2023 15:42, Thomas Petazzoni wrote:
-> On Thu, 10 Aug 2023 15:18:42 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>> It could still be useful to have something to contribute new entries,
->>> for those packages that have no entry at all (regardless of their
->>> version number) in the CPE database.
->>
->>    This makes no sense at all. The only reason to have a CPE database entry is in
->> order to link it to a CVE. If there is already a CVE, then it should already
->> have a CPE entry. If there's no CVE yet, then will the first person to ever
->> submit a CVE for it use the same ID?
-> 
-> Well, that would be my expectation indeed. A package in Buildroot has
-> no CPE in the database, no CVE. We submit a CPE to the NVD database. My
-> hope (but perhaps I'm dreaming too much) is that the day there is a CVE
-> on this software component that CPE identifier that was submitted will
-> be used, and therefore our CVE tracking will work.
-
-  There is a decent change that they would, I guess. On the other hand, I guess 
-it's more likely that the CVE's CPE entry would be created by the maintainer of 
-the project, and I guess they would just assume that there is no CPE entry yet 
-and create something, without searching for a pre-existing name. They may even 
-search for it, see that it exists already, and decide that it's a conflict and 
-choose a different name...
-
-
-> Maybe I'm dreaming here, but if it doesn't work like this, it basically
-> means that for any package in Buildroot that never had any CVE, we have
-> absolutely no guarantee that we will properly notice when the first CVE
-> gets reported. Maybe that's life and we have to live with it, but it
-> kinda sucks.
-
-  Yup. That's why I claimed in my EOSS-ELC talk that the CPE approach is broken :-)
-
-  Regards,
-  Arnout
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
