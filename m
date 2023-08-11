@@ -1,63 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6435EEB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 05:40:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 136ACC0015E
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 06:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAAA341B97;
-	Fri, 11 Aug 2023 05:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAAA341B97
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wEwf_jYdGKIe; Fri, 11 Aug 2023 05:39:58 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 485C641BAB;
-	Fri, 11 Aug 2023 05:39:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 485C641BAB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BFCD91BF410
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 05:39:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85E644010D
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 05:39:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85E644010D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7406540449;
+	Fri, 11 Aug 2023 06:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7406540449
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tC4KJgw-SBBg for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 05:39:54 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EC52A400BB
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 05:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC52A400BB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 19B0860003
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 05:39:51 +0000 (UTC)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ODDbVWbCSsh6; Fri, 11 Aug 2023 06:52:03 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7B204026E;
+	Fri, 11 Aug 2023 06:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7B204026E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 316E51BF5A0
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 06:52:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09E4781FE2
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 06:52:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09E4781FE2
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id L1dWUSWQ8YQ5 for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 06:51:56 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E6A3A81F5C
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 06:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6A3A81F5C
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-5230df1ce4fso2091134a12.1
+ for <buildroot@buildroot.org>; Thu, 10 Aug 2023 23:51:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691736714; x=1692341514;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=dQBMd5EkM2915tF4osqCQUOo2Gr38Upl1gVKO/kLKus=;
+ b=GAM9YNKHsWOGxhAChEuvF/r5EUKRZjadOJCwRIkGCk7EgFrqSKgsWXQQNuyMJJM/H3
+ ZLc+t8CXN+1TgCzZ7JQEe2JrY7tKaLhq3IE9P2owTdR676KHRTu+rwKl+yM0ra8aJJsN
+ AW+twCIrpI++QfAfxYB3YahfW5HfFMOw//n0elzf8hTZgLMrx6eYpTsqNksPecDW1Tfa
+ sPndiFG7BxGQu3V+m4rZzDHR99G4waU07cYNgoPPEITc7nFtsaFITwOL1Q5wjOSKZXno
+ vnLEtva9ihAGEJKqVH/ZsVuBDbqu94fXjUP0qJTPdaDZMf2+egHJwnpezdu8RpaiZaUW
+ dPvg==
+X-Gm-Message-State: AOJu0YzhbnvStiaG14BAgOYRm5vxD/ZmpMWcoqIyFKJXSsnll+tnpQtY
+ kGJ2J++qgqlye1jpcvfIzP0M+Q==
+X-Google-Smtp-Source: AGHT+IGgzJdJM05dADrs7UpTx/SQJvWT6dg3kQQOCUqx+l3eGS3rF9UPEjSVQlatBkdBUkSPK4nLzw==
+X-Received: by 2002:a05:6402:2c5:b0:522:56e7:bafb with SMTP id
+ b5-20020a05640202c500b0052256e7bafbmr987725edx.19.1691736713815; 
+ Thu, 10 Aug 2023 23:51:53 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49?
+ (ptr-9fplejo7y5h55ppcgnd.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49])
+ by smtp.gmail.com with ESMTPSA id
+ y18-20020aa7ccd2000000b005227e53cec2sm1685880edt.50.2023.08.10.23.51.52
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 10 Aug 2023 23:51:53 -0700 (PDT)
+Message-ID: <b73735ba-c570-1a92-ae40-e6e0107c5a71@mind.be>
+Date: Fri, 11 Aug 2023 08:51:50 +0200
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-Date: Fri, 11 Aug 2023 05:39:51 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20230811053955.85E644010D@smtp2.osuosl.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Daniel Lang <dalang@gmx.at>
+References: <20230731201422.13543-1-dalang@gmx.at>
+ <20230731235236.60ddc54a@windsurf>
+ <47519c2e-9b64-68b1-79b2-21a2ddea976b@gmx.at>
+ <20230801161956.00715a06@windsurf>
+ <143fe7eb-b3ed-55f0-f1b7-9ea9d4582d50@mind.be>
+ <20230809225901.470e0270@windsurf>
+ <b1d7fd7a-4959-419b-b7ff-0778b1e99722@gmx.at>
+ <20230810090721.1e052f35@windsurf>
+ <12cfcd50-66e4-4c03-febd-b9a259bf10d7@mind.be>
+ <20230810154241.3faee0fc@windsurf>
+ <2dce28a5-8e0d-f240-9b11-d3ff08604e88@mind.be>
+ <88f0eecd-cde8-4069-a750-ee2cbab679fb@gmx.at>
+ <20230810231234.74e65cc9@windsurf>
+In-Reply-To: <20230810231234.74e65cc9@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1691732391; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=tPrM+125m+xoXNkWoorLYF9i6wYiUN1TVBG87AL75L8=;
- b=et9E+p7e5hlOEzs8fNr3tG0kPq2yxfgsOx6kPJ1gPbyNt0/bKiqWi4QYty52Ss+0kwJtw0
- SyyKhdf2sB6Y84UotXnKtLFNyGYzLJmjzZhHkky11p0NCkbwNZFp93m5coSH0VqG3dADLF
- BZUOg0Zu2tcRyB/IVQf3dXgXEEmk1KpQpoGJQZY6N/kQD+PjRSQO56apjl4/76dBTCJbBS
- EpbJh5oNGsZfhs2h69cn8VGrCGG888CcmECFpb4SDalUEm+SoBE908W9GT85WvVXmuhW+f
- cR/xmfdYCs3DPgGSARGY+d39q7hnglJOM2ZwzbSThGyH67xsVhd3RRoFenziXw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=et9E+p7e
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-08-10
+ d=mind.be; s=google; t=1691736714; x=1692341514;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=dQBMd5EkM2915tF4osqCQUOo2Gr38Upl1gVKO/kLKus=;
+ b=gBWS/hpUqS4vkyZW8UF6ULNwdUT8GuunzgCCa6EGKQS5TG1hyhFaioO0XwX8f6Vv4P
+ DGVsVfqohmBfp8wQ0QADfq1uszUft9TM2vqeTlh/wKxEVP/oFnML8Zd+BMLlIsDKc8//
+ JpHQ8NQovzRCLKlCnca0kYa6TOoJJd8/X/9EaUNG0xry6Pu/zzUSW6KOn89vdpC66ydI
+ V8XRX9nY1SQcSF8v6sJYYQ0iU0nY88+oCUMz+SMwnPpmp38tep3S0OC/+VUXALyv/J8n
+ cxxvKU9dCXHNfAlQfdsuHDucC3W+90lLxbeVbVB/BvEsiVPL3zaumghOS5a6ZC1tvyoz
+ /How==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=gBWS/hpU
+Subject: Re: [Buildroot] [PATCH] support/scripts/cve.py: switch to NVD JSON
+ version 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,140 +113,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: buildroot@buildroot.org, Matthew Weber <Matthew.Weber@collins.com>,
+ clement.ramirez@bootlin.com
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-Autobuild statistics for 2023-08-10
-===================================
-
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  3  |  1  |  0  |  4  |
-  2023.05.x  |  1  |  2  |  0  |  3  |
-    master   | 46  | 47  |  0  | 93  |
-
-Classification of failures by reason for master
------------------------------------------------
-
-  gobject-introspection-1.76.1 | 5 
-        linux-headers-4.19.290 | 5 
-                elfutils-0.189 | 4 
-                   linux-6.4.9 | 4 
-                       unknown | 3 
-                  check-0.15.2 | 2 
-         host-sentry-cli-2.8.0 | 2 
-                     lxc-5.0.2 | 2 
-              open62541-v1.3.6 | 2 
-rtl8189fs-75a566a830037c7d1... | 2 
-             util-linux-2.39.1 | 2 
-                  cairo-1.16.0 | 1 
-           dmraid-1.0.0.rc16-3 | 1 
-dvb-apps-3d43b280298c39a67d... | 1 
-esp-hosted-11e90f185a5a9922... | 1 
-                     exim-4.96 | 1 
-glibc-2.37-2-g9f8513dc64119... | 1 
-                     gmp-6.2.1 | 1 
-              host-rust-1.71.0 | 1 
-              libudfread-1.1.2 | 1 
-          lttng-modules-2.13.7 | 1 
-                     php-8.2.8 | 1 
-                python3-3.11.4 | 1 
-           uboot-tools-2021.07 | 1 
-ulog-0389d243352255f6182326... | 1 
 
 
-Detail of failures for master
------------------------------
+On 10/08/2023 23:12, Thomas Petazzoni wrote:
+> On Thu, 10 Aug 2023 22:12:36 +0200
+> Daniel Lang <dalang@gmx.at> wrote:
+> 
+>> The thing that's relevant for me in the current patchset [0]:
+>> Do we want to keep gen-missing-cpe or drop it?
+>> I'm asking because a lot of additional data needs to be stored
+>> to the database for gen-missing-cpe to work (title, reference urls...).
+>> Dropping that script would also mean simplifying the database,
+>> which is easier now than once transition happened.
+> 
+> On my side, I've never used it. In order to have all the entries in the
+> CPE database kept up-to-date with the zillions of version bumps getting
+> into Buildroot every day/week, there would be a massive work, I doubt
+> anyone is ever going to do this. So to me, gen-missing-cpe can probably
+> go away.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   xtensa    |          cairo-1.16.0          | NOK | http://autobuild.buildroot.net/results/f37134bdb9fc79395c6434d30eceac7f1a0b9808 |     
-   x86_64    |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/51574d5c1511f4b81bd9ec7c2bbe8540da35dfd4 | ORPH
-   x86_64    |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/39f53fe36699f7b4167cce399519d0e89dc9ee70 | ORPH
-microblazeel |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/8c66e6133e60885f80a82fff49516f61f038aa72 | ORPH
-    or1k     | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/dfc687b518ec266208edc25d073460d125fd5f38 |     
- microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/fd8155fdaf79a8b54ca5616b5e1dba79d4e0dd94 | ORPH
-microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/9c9345cbc30593c7d43fd800998f52c98bcddcd0 | ORPH
-microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/33f3d4de499edd3b32416e17ce40183c35fb260f | ORPH
- microblaze  |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/09d2ef3a44719e30e4c42cc68dc1d71be40ba72d | ORPH
-   s390x     | esp-hosted-11e90f185a5a9922... | NOK | http://autobuild.buildroot.net/results/8a944b4161a4a0ebee6df33383d6ae3edb0d8883 |     
-   armeb     |           exim-4.96            | NOK | http://autobuild.buildroot.net/results/6c1f829f03df2be8a5aa6d2070028808dc8464ec |     
-  powerpc    | glibc-2.37-2-g9f8513dc64119... | NOK | http://autobuild.buildroot.net/results/7c5df86589af6892ff891662fa83ea493e111e35 |     
-  riscv64    |           gmp-6.2.1            | NOK | http://autobuild.buildroot.net/results/0615a44fab7ceb1c01606672936122eecb5b77af | ORPH
-   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/00e46d51f2b5f7801027b0aaeb3b15423980afb6 | ORPH
-   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/394752c425e89925db845489936d786258cea766 | ORPH
-    or1k     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/57e98943288c789e61986e664ec78f661d13f319 | ORPH
-  sparc64    |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/fb05762366780d767f2c8778151cd97091424321 | ORPH
-   nios2     |  gobject-introspection-1.76.1  | NOK | http://autobuild.buildroot.net/results/211fdb6dbb2bcf2d77e5bdd23d1f9ae1077c33c3 | ORPH
-powerpc64le  |        host-rust-1.71.0        | NOK | http://autobuild.buildroot.net/results/fd4b32349f48f0df01d76174259ab8eda9eea3ab |     
-    i586     |     host-sentry-cli-2.8.0      | NOK | http://autobuild.buildroot.net/results/3c8a7b55e5e2f455ca09f9b3ba0987c6fd38d589 |     
-   nios2     |     host-sentry-cli-2.8.0      | NOK | http://autobuild.buildroot.net/results/d3d5faa918801161e59105b1fddad825b635a42e |     
-  riscv64    |        libudfread-1.1.2        | NOK | http://autobuild.buildroot.net/results/ac5da04044a963a81295def8eb4d6f0e976e7e51 |     
-   mips64    |          linux-6.4.9           | NOK | http://autobuild.buildroot.net/results/d11924c76508cee15b5ae2205a4bd530b0371c1a | ORPH
-   mips64    |          linux-6.4.9           | NOK | http://autobuild.buildroot.net/results/2bd35d27bd696a0c3ea9bb8ae56ecf691c55dfa6 | ORPH
-    mips     |          linux-6.4.9           | NOK | http://autobuild.buildroot.net/results/087910cd044c6699dd7172bb49285362f53475c6 | ORPH
-   mips64    |          linux-6.4.9           | NOK | http://autobuild.buildroot.net/results/62f32cf9dcf38a499c845c88cd2ac60661989caf | ORPH
-    arm      |     linux-headers-4.19.290     | NOK | http://autobuild.buildroot.net/results/fc0e253e3535bbc1413d150554e836d3da9e2042 | ORPH
-  aarch64    |     linux-headers-4.19.290     | NOK | http://autobuild.buildroot.net/results/3b4d710735e8de47de20efdf9598e4e4fc8bb45c | ORPH
-    mips     |     linux-headers-4.19.290     | NOK | http://autobuild.buildroot.net/results/0954fc0d6eadaf23b11cfab7413129da6059e8f3 | ORPH
-   sh4aeb    |     linux-headers-4.19.290     | NOK | http://autobuild.buildroot.net/results/33487b186d8222c05bb61483bcc0d226f3bb48fc | ORPH
- microblaze  |     linux-headers-4.19.290     | NOK | http://autobuild.buildroot.net/results/b2fd749a68a1ac39acf5d0b0ae9c7857fff69fcd | ORPH
- powerpc64   |      lttng-modules-2.13.7      | NOK | http://autobuild.buildroot.net/results/4d22c57fcfabfcc749a08f66bde95361b341ccef |     
-   s390x     |           lxc-5.0.2            | NOK | http://autobuild.buildroot.net/results/031dd62b5d8006ce3afae61ac446d1c3f7f2bb82 |     
-   armeb     |           lxc-5.0.2            | NOK | http://autobuild.buildroot.net/results/cdfe455eb6d188daaf8bc2389c6517b733136cf0 |     
-   nios2     |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/e1134863d1735c8daa4941e6e1f177b090f55ebc | ORPH
-powerpc64le  |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/b732bf46c3909f66742c435b7b2326a536c941dc | ORPH
-   armeb     |           php-8.2.8            | NOK | http://autobuild.buildroot.net/results/18752c925ce36c5f46f21b0f3ffb61af94bdba54 |     
-   x86_64    |         python3-3.11.4         | NOK | http://autobuild.buildroot.net/results/d6b7ad43524d86038054dab84609514527fba3a6 |     
-   xtensa    | rtl8189fs-75a566a830037c7d1... | NOK | http://autobuild.buildroot.net/results/18bf94a2fa82c2c99320f87ec831ca4b750dc43a |     
-  sparc64    | rtl8189fs-75a566a830037c7d1... | NOK | http://autobuild.buildroot.net/results/43d6c541741ee96a592c7e94f87a009c90c47479 |     
-  powerpc    |      uboot-tools-2021.07       | NOK | http://autobuild.buildroot.net/results/626d21070e940c2414a9a07a8fde2c057f2e2399 | ORPH
-  aarch64    | ulog-0389d243352255f6182326... | NOK | http://autobuild.buildroot.net/results/d31d7543ccc594ae5502167f7d2d04e135e81720 |     
-   xtensa    |            unknown             | NOK | http://autobuild.buildroot.net/results/df556f2aabe057edb9ec53fbbc3ebcb11a2adc4c |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/2f5d3c345287e656852669510f4eeb711009097a |     
-  sparc64    |            unknown             | NOK | http://autobuild.buildroot.net/results/12687becb8fc1fb23b6223149b49c99d72131b3a |     
-  powerpc    |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/0f607d3550062bbd5145db9ef693905a72e545b0 | ORPH
-   mipsel    |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/45d4c324696cd0bd7e801a6f8472f66664839efc | ORPH
+  Just to be sure, I'm putting Matt in Cc who originally contributed this, but I 
+know that he is no longer working with Buildroot at all so I doubt he cares.
 
+  When it is removed, its support in Makefile needs to be removed as well (cfr. 
+commits fd7312940aeffe015592396a9b24e014839e0eb3 and 
+1f187371d002fb321a175233afddb50b2b6c3607).
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
+  Regards,
+  Arnout
 
-              host-rust-1.67.1 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   s390x     |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/3c01bb9f68cac08d5c65d298e2e7c0093342c979 |     
-
-
-Classification of failures by reason for 2023.05.x
---------------------------------------------------
-
-               nfs-utils-2.6.3 | 1 
-                  xvisor-0.3.1 | 1 
-
-
-Detail of failures for 2023.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arc      |        nfs-utils-2.6.3         | NOK | http://autobuild.buildroot.net/results/e12949efff9318f43da873595a8f6eb2ed4a7712 |     
-  aarch64    |          xvisor-0.3.1          | NOK | http://autobuild.buildroot.net/results/07a59f1a8fae88e70b476158569601895900ad65 |     
-
-
-
--- 
-http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
