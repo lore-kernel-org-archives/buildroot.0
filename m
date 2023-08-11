@@ -1,94 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 225ADEB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 16:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2126C0015E
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 19:02:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A77644193A;
-	Fri, 11 Aug 2023 16:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A77644193A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 10D68417F8;
+	Fri, 11 Aug 2023 19:02:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10D68417F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EYwz8xXC4Oaw; Fri, 11 Aug 2023 16:28:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3tilh3cR8vzr; Fri, 11 Aug 2023 19:02:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA50F418C2;
-	Fri, 11 Aug 2023 16:28:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA50F418C2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 481171BF25B
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 16:28:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C0FA4049A;
+	Fri, 11 Aug 2023 19:02:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C0FA4049A
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 313ED1BF342
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 19:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2004E418C2
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 16:28:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2004E418C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FCE24049A
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 19:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FCE24049A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nFMUxLcLNNvC for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 16:28:47 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2C9BF40260
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 16:28:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C9BF40260
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-3fe4cdb72b9so19160315e9.0
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 09:28:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691771325; x=1692376125;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :cc:to:subject:from:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=EbqV7sN3lX0OZl/HUJiKvCqWjvQEuNnqt1rhawOYQyU=;
- b=lV2aXI3hOIZiItx4DJqCdu8DVAMHMa543NBcjo20U1YpwASeaO6e+n16YO7tc6nPfl
- 7KkRyzclTiWuqTWrye7AQqUHf5HcvpBQfkERDp85k+0mnAAdnuu/cIIHNsk4yzJJQV/E
- BRPiVXh41BrrNiTkj9b85fke3qjYeUdQqzsDXIOmi+2Yfi3z70tTFvCxXVkGt7wvHLtT
- cDherj5ccjVxUgtHus8LJerbf2WpvRTZ4mvQm8AZHPcO0yySmB1KHUmCEqDMlth4cRcn
- TRk8MIWHprWJT7Dkfnr4r2XwKb3Y7IhvAdw1XYPgfqrL2m3h5NZPD3gktLVUWK4bi5OI
- Jpjg==
-X-Gm-Message-State: AOJu0YwP52LXxwz5a1cdu4CxGxnpx8RWurkhm5T5ADb+GbaB1Tkljq6W
- OIJiqyTdj110FxV4/g5H5A0=
-X-Google-Smtp-Source: AGHT+IEI+meIMWGsCFDDoesjkDMNXV4Zb1rjuSXPUQaDhueJg2z1f69zK6ELKUFxuiR7+guebS2IfQ==
-X-Received: by 2002:a1c:7c10:0:b0:3fe:18d8:a61b with SMTP id
- x16-20020a1c7c10000000b003fe18d8a61bmr2071587wmc.29.1691771324921; 
- Fri, 11 Aug 2023 09:28:44 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:eca2:2100:1908:92af:1110:d41c?
- ([2a01:e34:eca2:2100:1908:92af:1110:d41c])
- by smtp.gmail.com with ESMTPSA id
- l24-20020a7bc458000000b003fbb25da65bsm5666231wmi.30.2023.08.11.09.28.44
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 11 Aug 2023 09:28:44 -0700 (PDT)
-Message-ID: <88906c88-9597-4f1d-a5d2-244337ac0fdf@gmail.com>
-Date: Fri, 11 Aug 2023 18:28:43 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id etrWwRRI-QxV for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 19:02:32 +0000 (UTC)
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06A4D400EF
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 19:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06A4D400EF
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout01.mail.de (Postfix) with ESMTP id 9251BA0C35;
+ Fri, 11 Aug 2023 21:02:29 +0200 (CEST)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix03.mail.de (Postfix) with ESMTP id 7392D801C7;
+ Fri, 11 Aug 2023 21:02:29 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 33D3C100135;
+ Fri, 11 Aug 2023 21:02:28 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Fri, 11 Aug 2023 21:02:28 +0200
+Message-ID: <10318288.nUPlyArG6x@kilian-aisec>
+In-Reply-To: <20230811162546.8088-2-robertoxmed@gmail.com>
+References: <20230811162546.8088-1-robertoxmed@gmail.com>
+ <20230811162546.8088-2-robertoxmed@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Roberto Medina <robertoxmed@gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230710212151.574040-1-robertoxmed@gmail.com>
- <20230710212151.574040-2-robertoxmed@gmail.com>
- <20230808230609.0eaa80e8@windsurf>
-Content-Language: fr
-In-Reply-To: <20230808230609.0eaa80e8@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691771325; x=1692376125;
- h=content-transfer-encoding:in-reply-to:content-language:references
- :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
- :cc:subject:date:message-id:reply-to;
- bh=EbqV7sN3lX0OZl/HUJiKvCqWjvQEuNnqt1rhawOYQyU=;
- b=Y+RRYFg9wAwGg8CSsr04nmfWgqDVxCN1Box3ZhB0d9qNIVbnlpBQT7SfL9Jst7zi45
- 770gDCfy6nAaqz/bvejVAJ/3oqgrQ3143EQkeU1gmzfNN8foyR9HhTlU6cG5avfcKEPH
- tPgUSacWYmsUd542QNs0JnYVQOS2SKunTvwKdgmpKdc6yhsLQWk+KeIo1mSY83y1f1jV
- qjQ/p3SrfbuxA6C40jDxZ7q+FWAygq1mZ/bvVgCcGp9wspZhAgdF/72aAzLkHx5CCNyk
- HvFU0Y3zTNVP2ZHd0CR7jOyx8JfjcaAA4/XBbetbgq1nRCrp4lUNQP4o/cRdhc1o29Po
- MHbA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Y+RRYFg9
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/roc_rk3399_pc: Bring back
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 1118
+X-purgate-ID: 154282::1691780549-5DFFD7B6-36E67075/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1691780549;
+ bh=o458y+BURCAQp4TuGv79oPbLi0LeONGa1/kdAuY8ALw=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=aXegunUbqkNwBgMxGfssqny82H9uPEmP6TdvkqO7ahwDw8e8bnsMdffFCW3Jq8Pb8
+ Q+OhoPn1RqOkrpUjZWFfq7wyKoGDJeAsFTYAE/pn12ZwV2PcDE854BtgsMcd6ATerX
+ wxN0WNLEqM28zavdxQUDxpHpvdQ0YlbcXU3nCriA6zAKHlv/WKUzBCx/vFkZycZit2
+ N2Sro7dEngc9IcEBGb6+KEjZLO8Fr/JbpNjBI5+dTGDVQOnp7XF2O86XHFiyDKpn+9
+ zWMR4r7RPdCPxZ5Zwau+QUHJ8bFUz40RmrDuO5Wb+/F21xQ33YtX3i/CyX6MG+GnSZ
+ kDBtKRAuNy+2g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key)
+ header.d=mail.de header.i=@mail.de header.a=rsa-sha256 header.s=mailde202009
+ header.b=aXegunUb
+Subject: Re: [Buildroot] [PATCH 1/1 v3] configs/roc_rk3399_pc: Bring back
  and update the configuration for the rockchip rk3399 built by firefly.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -101,29 +89,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: kilian.zinnecker@mail.de, buildroot@buildroot.org
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Roberto Medina <robertoxmed@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Hello Roberto,
 
-Thank you for your reviews. I submitted a v3 for review but I will 
-answer the following here as well.
+here are a few things, which could be improved:
 
-On 8/8/23 23:06, Thomas Petazzoni wrote:
-> Why this custom size rather than leaving the default?
+[--SNIP--]
 
-If I leave this value as default I will get the following error:
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 6ffa3ee693..5ebabd01cb 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2546,6 +2546,10 @@ F:	package/mhz/
+>  N:	Robert Rose <robertroyrose@gmail.com>
+>  F:	package/grpc/
+> 
+> +N:	Roberto Medina <robertoxmed@gmail.com>
+> +F:	configs/roc_pc_rk3399_defconfig
+> +F:	board/firefly/roc-rk3399
 
-Copying files into the device: __populate_fs: Could not alocate block in 
-ext2 filesystem while writing file "stm_core.ko".
+I think when it comes to repositories (i.e., board/firefly/roc-rk3399) it is 
+best practice to add a trailing space. I guess this way one can easily 
+distinguish directories from single files.
 
-The error message then suggests to increase the filesystem size.
+[--SNIP--]
 
-Best,
-Roberto
+In the defconfig:
+
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
+
+I think 2022.04 is actually the current default version of buildroot. So 
+unless you have reason to freeze it to this version on purpose (e.g., because 
+older and newer versions are known to be not working with this board - which I 
+don't believe is the case) you could simply omit these two lines.
+
+[--SNIP--]
+
+Best regards,
+Kilian Zinnecker
+
+
+
 
 _______________________________________________
 buildroot mailing list
