@@ -4,68 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF43EC001B0
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 14:49:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AAC6EB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 15:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6539F81DEF;
-	Fri, 11 Aug 2023 14:49:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6539F81DEF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F24F8408B;
+	Fri, 11 Aug 2023 15:18:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F24F8408B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cz1qm3UkXET8; Fri, 11 Aug 2023 14:49:05 +0000 (UTC)
+	with ESMTP id 8s0CuaeeW74y; Fri, 11 Aug 2023 15:18:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8055F81CD0;
-	Fri, 11 Aug 2023 14:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8055F81CD0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B3E81BF379
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 14:49:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CDE184089;
+	Fri, 11 Aug 2023 15:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CDE184089
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ECA181BF575
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA0CB60B01
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 14:49:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA0CB60B01
+ by smtp4.osuosl.org (Postfix) with ESMTP id D246F40260
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D246F40260
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id we6-X8YcaFYx for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 14:49:02 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9929160A5D
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 14:49:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9929160A5D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B7B66240007;
- Fri, 11 Aug 2023 14:48:59 +0000 (UTC)
-Date: Fri, 11 Aug 2023 16:48:58 +0200
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Message-ID: <20230811164858.36987e01@windsurf>
-In-Reply-To: <2160318.Mh6RI2rZIc@kilian-aisec>
-References: <2691942.mvXUDI8C0e@kilian-aisec>
- <20230809193855.60c6b89c@windsurf>
- <13322713.uLZWGnKmhe@kilian-aisec>
- <2160318.Mh6RI2rZIc@kilian-aisec>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Onku9QqmrnIE for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 15:18:06 +0000 (UTC)
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7EBDB401CD
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 15:18:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EBDB401CD
+Received: from pwmachine.localnet (85-170-34-233.rev.numericable.fr
+ [85.170.34.233])
+ by linux.microsoft.com (Postfix) with ESMTPSA id C750420FD0DE;
+ Fri, 11 Aug 2023 08:18:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C750420FD0DE
+From: Francis Laniel <flaniel@linux.microsoft.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 11 Aug 2023 17:18:02 +0200
+Message-ID: <1939790.PYKUYFuaPT@pwmachine>
+In-Reply-To: <20230731221843.61feafea@windsurf>
+References: <20230428152211.20394-1-flaniel@linux.microsoft.com>
+ <20230428152211.20394-2-flaniel@linux.microsoft.com>
+ <20230731221843.61feafea@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691765340;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LR0OS44upfYTmYEI0HocOth7VcnZxBtKzP2y3FTUOJE=;
- b=VUhew0pqyh0ELyqtg+9Grr35xm4gHcSHZlfaC8pycEX1NKVK3G+PR1hwogn9i55waawoqQ
- fnWRWCFg4utMdWvURF8qz65lXaAQt4Lh54uvlsQPnirBeeI0pjmEU7i3U7RtYb+0Vrx10P
- rLbSEe3dpUdNsC9nMYmN+E7kYHJEOqzdJEYlNoT17x+8migsmRYaf6mxF4KVi7VOe7vtz/
- Pt54iFG2O5rhnzqBUb1Vt4qeDRm0FnrjZlUWMQ/Ce2fPF2BN45PIBj7uhyxT9xE2UcWkG0
- PcYMbFaBTdRBRZgVnxE+hrU9pEmIzB8OOY4suojFxblWzfF5kCWVAz6WHBSoRA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VUhew0pq
-Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
+ d=linux.microsoft.com; 
+ s=default; t=1691767085;
+ bh=StsuznWeAWIiy/sbAJQVayobvvfQw1KXm9NWiwtjRLc=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=ablboCyfFuzux6MY7E4o59n0qt4EqL2k1R9bO/+vI6cN7CPUUEt3XsdTQeIzTNOaT
+ WAxm2isCaujBoXX2c9GPYo3NfFHL3QwqwBH03w+SM7nkYOaZVqYu9/eZ5OIlIqYi1i
+ Ldb0oBOZHYeTk2AB2iudyX346/+UA8EKjT9eJDOM=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=linux.microsoft.com
+ header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
+ header.b=ablboCyf
+Subject: Re: [Buildroot] [RFC PATCH v1 1/2] package/sysdig: bump to version
+ 0.31.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,87 +73,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Kilian,
+Hi.
 
-On Thu, 10 Aug 2023 17:25:00 +0200
-Kilian Zinnecker <kilian.zinnecker@mail.de> wrote:
+Le lundi 31 juillet 2023, 22:18:43 CEST Thomas Petazzoni a =E9crit :
+> Hello Francis (and perhaps Angelo who can help?),
+> =
 
-> It actually was not my own fault regarding the errors about unknown vector 
-> instructions. It seems that the core of the TH1520 SoC - the Xuantie C910 - 
-> implements a now obsolete version of the RiscV vector extension, namely 
-> version 0.7.1 (see [1]). However, only past gcc version seem to have supported 
-> this vector extension version. Recent gcc versions seem to not support it. 
-> Regarding the Xuantie C906 core, I found out that there now exists some -
-> mcpu=thead-c906 option (see [2]). However, I was not able to successfully 
-> compile a dummy example with one of the v0.7.1 vector instructions myself, 
-> using that option.
+> On Fri, 28 Apr 2023 16:22:10 +0100
+> =
 
-From the gcc documentation, it seems like there is no -mcpu=thead-c906,
-but only a -mtune=thead-c906, which only changes optimization
-"details", I don't think it will do anything in terms of supporting a
-non-standard vector extension. However, I'm not an expert in RISC-V
-extensions, so maybe I'm wrong on this.
+> Francis Laniel <flaniel@linux.microsoft.com> wrote:
+> > - Remove upstream patch as it is no more needed.
+> =
 
-> Then I also found a RiscV toolchain, which has some "rvv-0.7.1" branch 
-> (https://github.com/brucehoult/riscv-gnu-toolchain). However, I was not able 
-> to build it (may be my own fault). But anyway the branch seems very old and I 
-> am afraid, if I try to use it, I may run into other issues.
+> Actually I had to remove it from current master, because sysdig was
+> bumped to 0.29.3 already, which includes the patch... and so the patch
+> in Buildroot doesn't apply anymore.
+> =
 
-I also don't think this is a path worth pursuing.
+> I tested your version bump, and it fails to build with:
+> =
 
-> So I decided to accept that I currently have a gcc which does not support the 
-> old 0.7.1 version of the vector extension. Therefore, I disabled vector 
-> extension support in the kernel config. This is part of my current 
-> beaglev_ahead_defconfig:
-> 
-> BR2_GCC_VERSION_13_X=y
-> BR2_GLOBAL_PATCH_DIR="board/beaglev-ahead/patches"
-> BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglev-ahead/linux.fragment"
-> 
-> The linux.fragment file overwrites the vector extension settings:
-> 
-> CONFIG_VECTOR=n
-> CONFIG_VECTOR_0_7=n
+> CMake Error at
+> /home/thomas/projets/buildroot/output/build/falcosecurity-libs-e5c53d648f=
+3c
+> 4694385bbe488e7d47eaa36c229a/userspace/libscap/CMakeLists.txt:131
+> (add_subdirectory): The binary directory
+> =
 
-This seems like the right thing to do, at least in a first step.
+>    =
 
-> Now, there was one more error in the custom kernel code: One function's 
-> prototype and its implementation did not match, causing a -Werror=enum-int-
-> mismatch:
-> 
-> https://git.beagleboard.org/beaglev-ahead/beaglev-ahead-linux/-/blob/beaglev-v5.10.113-1.1.2/drivers/gpu-viv/hal/os/linux/kernel/gc_hal_kernel_linux.h#L338
-> 
-> https://git.beagleboard.org/beaglev-ahead/beaglev-ahead-linux/-/blob/beaglev-v5.10.113-1.1.2/drivers/gpu-viv/hal/os/linux/kernel/gc_hal_kernel_os.c#L6144
-> 
-> I changed the prototype accordingly and put a patch for this in my board/
-> beaglev-ahead/patches/linux directory. After all this, it continued building 
-> till the end.
+> /home/thomas/projets/buildroot/output/build/sysdig-0.31.4/buildroot-build=
+/d
+> river
+> =
 
-The Vivante mess, meh.
+>   is already used to build a source directory.  It cannot be used to build
+>   source directory
+> =
 
-> Now I don't know, whether the compiled uboot, kernel and rootfs would 
-> function. I would have to test this. But to do so, I guess I would have to 
-> figure out how to assemble these parts into an image and how to flash it into 
-> the eMMC of the board.
+>    =
 
-I only briefly started looking into this. Let me know if you want me to
-summarize my findings.
+> /home/thomas/projets/buildroot/output/build/falcosecurity-libs-e5c53d648f=
+3c
+> 4694385bbe488e7d47eaa36c229a/driver
+> =
 
-Best regards,
+>   Specify a unique binary directory name.
+> =
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+> during the configuration step of sysdig.
+> =
+
+> Configuration tested:
+> =
+
+> BR2_arm=3Dy
+> BR2_cortex_a9=3Dy
+> BR2_ARM_ENABLE_VFP=3Dy
+> BR2_TOOLCHAIN_EXTERNAL=3Dy
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=3Dy
+> BR2_INIT_NONE=3Dy
+> BR2_SYSTEM_BIN_SH_NONE=3Dy
+> BR2_LINUX_KERNEL=3Dy
+> BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
+> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.1"
+> BR2_LINUX_KERNEL_DEFCONFIG=3D"vexpress"
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_SYSDIG=3Dy
+> BR2_PACKAGE_LUA=3Dy
+> BR2_PACKAGE_LUA_5_1=3Dy
+> # BR2_TARGET_ROOTFS_TAR is not set
+
+> it would be good to have a runtime test for sysdig in support/testing/,
+> as it's not trivial to build, and the autobuilders never caught the
+> patching issue.
+
+Good idea! I will check how I can do that!
+
+> >  SYSDIG_CONF_OPTS +=3D
+> >  -DFALCOSECURITY_LIBS_SOURCE_DIR=3D$(FALCOSECURITY_LIBS_SRCDIR) \> =
+
+> > +	-DDRIVER_SOURCE_DIR=3D$(FALCOSECURITY_LIBS_SRCDIR)/driver \
+> =
+
+> So apparently something goes wrong with this. Perhaps because
+> falcosecurity-libs needs to be bumped first?
+
+As you advised, bumping first the libs then the binary removed the above =
+
+problem, thank you!
+Regarding this, I am wondering if I should bump both of them in the same =
+
+commit, as they are tightly coupled. What do you think?
+
+Note that, I had to make linux-menuconfig to add CONFIG_IPV6, to avoid some =
+
+compile errors due to some missing IPv6 related fields while compiling the =
+
+kernel module which is parts of the libs.
+
+> >  	-DVALIJSON_INCLUDE=3D$(BUILD_DIR)/valijson-0.6/include/valijson \
+> =
+
+> One thing that is a bit annoying with the packaging here is the fact
+> that sysdig needs to look into the source directory of
+> falcosecurity-libs and the source tree of valijson. Packages should
+> normally not need to access the source/build tree of other packages.
+> Not a strict requirement for this version bump, but would be good to
+> address on the long run.
+> =
+
+> By the way
+> -DVALIJSON_INCLUDE=3D$(BUILD_DIR)/valijson-0.6/include/valijson is truly
+> horrible, because if valijson gets updated to another version... like
+> it has:
+> =
+
+> VALIJSON_VERSION =3D 0.7
+> =
+
+> then this doesn't work anymore.
+> =
+
+> It needs to be VALIJSON_SRCDIR.
+> =
+
+> Curious that we can build sysdig today (I verified, it builds) with
+> this mistake. Probably means this option is irrelevant.
+> =
+
+> Could you have a look at all those issues?
+
+I removed everything about VALIJSON and it builds fine.
+Glad making it simpler permits to build it!
+
+> Thanks!
+> =
+
+> Thomas
+
+
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
