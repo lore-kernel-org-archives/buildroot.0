@@ -4,64 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF148EB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 15:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D868CEB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 15:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7899984089;
-	Fri, 11 Aug 2023 15:18:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7899984089
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77FC0840AA;
+	Fri, 11 Aug 2023 15:27:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77FC0840AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NLcD_lSzIzkU; Fri, 11 Aug 2023 15:18:22 +0000 (UTC)
+	with ESMTP id BGx2uDYXJexA; Fri, 11 Aug 2023 15:27:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8348A8409A;
-	Fri, 11 Aug 2023 15:18:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8348A8409A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C27551BF575
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7EB9840A7;
+	Fri, 11 Aug 2023 15:27:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7EB9840A7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 65FF41BF575
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AF2640260
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF2640260
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4C5FE403E0
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C5FE403E0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uHPG2_anxxVl for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 15:18:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O64_jqKVRTrh for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 15:27:15 +0000 (UTC)
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96619401CD
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 15:18:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96619401CD
-Received: from pwmachine.localnet (85-170-34-233.rev.numericable.fr
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9CF64033F
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 15:27:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9CF64033F
+Received: from pwmachine.numericable.fr (85-170-34-233.rev.numericable.fr
  [85.170.34.233])
- by linux.microsoft.com (Postfix) with ESMTPSA id 1E50720FD0DE;
- Fri, 11 Aug 2023 08:18:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1E50720FD0DE
+ by linux.microsoft.com (Postfix) with ESMTPSA id 9F3A520FD0DE;
+ Fri, 11 Aug 2023 08:27:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9F3A520FD0DE
 From: Francis Laniel <flaniel@linux.microsoft.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 Aug 2023 17:18:05 +0200
-Message-ID: <21975130.EfDdHjke4D@pwmachine>
-In-Reply-To: <20230731224956.0d3d88c7@windsurf>
-References: <20230428152211.20394-1-flaniel@linux.microsoft.com>
- <20230428152211.20394-3-flaniel@linux.microsoft.com>
- <20230731224956.0d3d88c7@windsurf>
+To: buildroot@buildroot.org
+Date: Fri, 11 Aug 2023 17:27:06 +0200
+Message-Id: <20230811152710.43564-1-flaniel@linux.microsoft.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=linux.microsoft.com; 
- s=default; t=1691767088;
- bh=tn4dI1bgUs/aEEsRTMpRy9Zja3Q7bC2GvO/ACMOCY0E=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=PepJokh4vo6Wq5uTzvmfCjGugsFoo6KoJ0c90ZEDM4Fe2ukn8LrjTOtd/+ScdcRnU
- XU2OrwmnkXO6mW1bu5yWrJL/5uPrEGvqt99beQZqMjh4xy/vszLeyLdeuZOuyu6CvH
- niV0dbNtWMoNLPIqgKlvDKuj0D5oA9ukm+dlYbPg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=default; t=1691767635;
+ bh=/ZOnUVcxcJ37sb5IG2t+hSea1xqQjwbZqoligNzbRvY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=isFvr9yfYK5+wc8DHJKOE0gG60U2JS8zqCpkIGiehDb5KPGWbEFvIsqcBWt9hUBLz
+ 9tyqJWMa7oaznrVyuqA3AWRc1S3bfi9fG5R0dfI6QJU8th5pJ9ClptdWzaS88upzQ4
+ xuu5jb5kZ9unhwTbVmHZYbZeXnrG2WEvtF1abXL8=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=linux.microsoft.com
  header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
- header.b=PepJokh4
-Subject: Re: [Buildroot] [RFC PATCH v1 2/2] package/falcosecurity-libs: bump
- to version 0.10.5
+ header.b=isFvr9yf
+Subject: [Buildroot] [RFC PATCH v2 0/3] Bump sysdig and falco libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,170 +69,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: Francis Laniel <flaniel@linux.microsoft.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi.
 
-Le lundi 31 juillet 2023, 22:49:56 CEST Thomas Petazzoni a =E9crit :
-> Hello Francis,
-> =
 
-> On Fri, 28 Apr 2023 16:22:11 +0100
-> =
+With this contribution, I bumped sysdig and falcosecurity-libs.
+Sadly, I am not fully satisfied with the result, hence the fact I marked it as
+RFC because I would like to get your feedback to make it better.
 
-> Francis Laniel <flaniel@linux.microsoft.com> wrote:
-> > diff --git
-> > a/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
-> > b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
-> > new file mode 100644
-> > index 0000000000..38a8bdd4f4
-> > --- /dev/null
-> > +++ b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.pa=
-tch
-> > @@ -0,0 +1,61 @@
-> > +From b6d847fe8aa0513c6d19bd8187133699b9c4efd3 Mon Sep 17 00:00:00 2001
-> > +From: Francis Laniel <flaniel@linux.microsoft.com>
-> > +Date: Fri, 28 Apr 2023 15:14:27 +0100
-> > +Subject: [PATCH] cmake: Install shared libraries.
-> > +
-> > +This is needed as sysdig is compiled as a non static binary which reli=
-es
-> > on +these libraries.
-> =
+First of all, sysdig builds and runs:
+Welcome to Buildroot
+buildroot login: root
+# sysdig --version
+sysdig version 0.31.4
+# sysdig | head
+scap: loading out-of-tree module taints kernel.
+scap: driver loading, scap
+scap: adding new consumer (____ptrval____)
+scap: initializing ring buffer for CPU 0
+scap: CPU buffer initialized, size=8388608
+26 15:12:28.226519423 0 sysdig (108) > switch next=0 pgft_maj=10 pgft_min=1348 vm_size=47288 vm_rss=19408 vm_swap=0
+27 15:12:28.227409149 0 <NA> (0) > switch next=13 pgft_maj=0 pgft_min=0 vm_size=0 vm_rss=0 vm_swap=0
+...
 
-> Not clear. An executable can use a mix of shared and static libraries.
+Nonetheless, I had to increase the minimal size of the image as libsinsp.a is
+quite big:
+# du -sh /sysdig/libsinsp.a
+171.4M  /sysdig/libsinsp.a
+I am not forcefully sure where this library is used, I will investigate and
+maybe we can run everything without it.
 
-Indeed, but it causes troubles without this modification (see below).
-Moreover, this whole magic causes a big increase in the rootfs image, as th=
-e =
+Secondly, I had to tweak heavily the libscap CMakeLists.txt to install several
+shared libraries.
+Indeed, the libraries are compiled as static, but the sysdig binary is not
+static, so it needs plenty of shared libraries to be run from the image.
+I am not really sure what is the best solution here (either compiling sysdig as
+static or not), but in any case my patch for CMakeLists.txt is not really clean.
 
-limit should be increased from 60 MB to 195 MB (more than 3 times).
+Finally, I had to modify the magical number in falcosecurity-libs.mk for
+API_VERSION and SCHEMA_VERSION.
+While this is not really a big pain, I am wondering if this is not possible to
+read the corresponding values from the corresponding files (i.e. API_VERSION and
+SCHEMA_VERSION).
+So, for future update we would not need to take care of it ourselves.
 
-> What is the upstream status of this? How is falcosecurity-libs supposed
-> to be used by sysdig according to upstream?
+Changes since:
+ v1:
+  * Removed everything regarding VALIJSON in sysdig.mk.
+  * Bumped first falcosecurity-libs to avoid problem when building it.
+  * Added runtime test for sysdig.
 
-Sadly, I do not have any clue on this.
-I will reach someone upstream to understand how everything is built because =
+Francis Laniel (3):
+  package/falcosecurity-libs: bump to version 0.10.5
+  package/sysdig: bump to version 0.31.4
+  support/testing/package: add new test for sysdig
 
-their way of building is totally incompatible with how Buildroot builds.
+ .../0002-cmake-Install-shared-libraries.patch | 61 +++++++++++++++++++
+ .../falcosecurity-libs.hash                   |  2 +-
+ .../falcosecurity-libs/falcosecurity-libs.mk  | 10 +--
+ package/sysdig/sysdig.hash                    |  2 +-
+ package/sysdig/sysdig.mk                      |  9 ++-
+ .../testing/tests/package/test_sysdig.config  |  1 +
+ support/testing/tests/package/test_sysdig.py  | 46 ++++++++++++++
+ 7 files changed, 122 insertions(+), 9 deletions(-)
+ create mode 100644 package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+ create mode 100644 support/testing/tests/package/test_sysdig.config
+ create mode 100644 support/testing/tests/package/test_sysdig.py
 
-> All patches now need to have an "Upstream: <link>" tag that indicates
-> where the patch has been submitted.
-
-I will ensure this once I would have deal with all the issues here.
-
-> > +diff --git a/cmake/modules/libelf.cmake b/cmake/modules/libelf.cmake
-> > +index 8ca2f4f7..73d13d26 100644
-> > +--- a/cmake/modules/libelf.cmake
-> > ++++ b/cmake/modules/libelf.cmake
-> > +@@ -10,7 +10,7 @@ if(LIBELF_INCLUDE)
-> > +     add_custom_target(libelf)
-> > + elseif(NOT USE_BUNDLED_LIBELF)
-> > +     find_path(LIBELF_INCLUDE elf.h PATH_SUFFIXES elf)
-> > +-    find_library(LIBELF_LIB NAMES libelf.a libelf.so)
-> > ++    find_library(LIBELF_LIB NAMES libelf.so)
-> =
-
-> Is this really related?
-
-We need this patch, otherwise, building sysdig fails with the following:
-[ 22%] Linking C shared library libscap_engine_bpf.so
-/home/francis-buildroot/buildroot/output/host/lib/gcc/x86_64-buildroot-linu=
-x-
-gnu/12.3.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: /home/francis-
-buildroot/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/=
-../
-lib64/libelf.a(elf_error.o): relocation R_X86_64_TPOFF32 against =
-
-`global_error' can not be used when making a shared object; recompile with -
-fPIC
-/home/francis-buildroot/buildroot/output/host/lib/gcc/x86_64-buildroot-linu=
-x-
-gnu/12.3.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: failed to set =
-
-dynamic section sizes: bad value
-
-> > diff --git a/package/falcosecurity-libs/falcosecurity-libs.hash
-> > b/package/falcosecurity-libs/falcosecurity-libs.hash index
-> > 2e239ca2fe..ef805cbcf6 100644
-> > --- a/package/falcosecurity-libs/falcosecurity-libs.hash
-> > +++ b/package/falcosecurity-libs/falcosecurity-libs.hash
-> > @@ -1,5 +1,5 @@
-> > =
-
-> >  # sha256 locally computed
-> > =
-
-> > -sha256  80903bc57b7f9c5f24298ecf1531cf66ef571681b4bd1e05f6e4db704ffb38=
-0b =
-
-> > falcosecurity-libs-e5c53d648f3c4694385bbe488e7d47eaa36c229a.tar.gz
-> > +sha256  2a4b37c08bec4ba81326314831f341385aff267062e8d44834379586896629=
-36
-> >  falcosecurity-libs-0.10.5.tar.gz> =
-
-> >  sha256  21ec9433a87459b3477faf542bacec419dc03af841309eac35edeffe481cf1=
-0b =
-
-> >  COPYING sha256 =
-
-> >  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 =
-
-> >  driver/GPL2.txt sha256 =
-
-> >  f17d3f2c2d565a74a7d5bf96f880c43701e141897e8dff0c8aa13e5d07aaf226 =
-
-> >  driver/MIT.txt> =
-
-> > diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk
-> > b/package/falcosecurity-libs/falcosecurity-libs.mk index
-> > 92d5c61832..acd46cf7a5 100644
-> > --- a/package/falcosecurity-libs/falcosecurity-libs.mk
-> > +++ b/package/falcosecurity-libs/falcosecurity-libs.mk
-> > @@ -4,7 +4,7 @@
-> > =
-
-> >  #
-> >  ######################################################################=
-###
-> >  #######> =
-
-> > -FALCOSECURITY_LIBS_VERSION =3D e5c53d648f3c4694385bbe488e7d47eaa36c229a
-> > +FALCOSECURITY_LIBS_VERSION =3D 0.10.5
-> > =
-
-> >  FALCOSECURITY_LIBS_SITE =3D $(call
-> >  github,falcosecurity,libs,$(FALCOSECURITY_LIBS_VERSION))
-> >  FALCOSECURITY_LIBS_LICENSE =3D Apache-2.0 (userspace), MIT or GPL-2.0
-> >  (driver) FALCOSECURITY_LIBS_LICENSE_FILES =3D COPYING driver/MIT.txt
-> >  driver/GPL2.txt> =
-
-> > @@ -57,17 +57,19 @@ endef
-> > =
-
-> >  # For the others, it was taken by inspecting
-> >  # falcosecurity-libs/*/CMakeLists.txt, which normally creates these
-> >  # files, but doesn't work well with the kernel-module infrastructure.
-> > =
-
-> > +# The magical number for API_VERSION and SCHEMA_VERSION are taken from
-> > +# corresponding files.
-> =
-
-> Which corresponding files? :-)
-
-I just removed this comment as the files were already mentioned above.
-
-> =
-
-> Thomas
-
-
-
+--
+2.34.1
 
 _______________________________________________
 buildroot mailing list
