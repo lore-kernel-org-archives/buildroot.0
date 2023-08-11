@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD483C001E0
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 18:02:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84F4AC001DE
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 00:54:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BA6241DBF;
-	Thu, 10 Aug 2023 18:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA6241DBF
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBB9841D8F;
+	Fri, 11 Aug 2023 00:54:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBB9841D8F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z-TzhCpxeZIK; Thu, 10 Aug 2023 18:02:16 +0000 (UTC)
+	with ESMTP id 2KGFH5depz2e; Fri, 11 Aug 2023 00:54:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5782641DC0;
-	Thu, 10 Aug 2023 18:02:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5782641DC0
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B676E1BF4D6
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 18:02:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAB4741D9D;
+	Fri, 11 Aug 2023 00:54:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAB4741D9D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E001F1BF98E
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 00:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8FDF383FBD
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 18:02:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FDF383FBD
+ by smtp3.osuosl.org (Postfix) with ESMTP id B9BA160A74
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 00:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9BA160A74
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6QWVYwmzzqRY for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 18:02:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mFUfXGOELyrj for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 00:54:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1B4083FA0
- for <buildroot@uclibc.org>; Thu, 10 Aug 2023 18:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1B4083FA0
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4F4F60A63
+ for <buildroot@uclibc.org>; Fri, 11 Aug 2023 00:54:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4F4F60A63
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 9EEFC84A58; Thu, 10 Aug 2023 18:02:12 +0000 (UTC)
+ id D06FD84944; Fri, 11 Aug 2023 00:54:26 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 10 Aug 2023 18:02:12 +0000
+Date: Fri, 11 Aug 2023 00:54:26 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
+X-Bugzilla-Version: 2023.02
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: arinc.unal@arinc9.com
+X-Bugzilla-Severity: trivial
+X-Bugzilla-Who: jimgeorge@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P5
@@ -57,11 +57,12 @@ X-Bugzilla-Flags:
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
  target_milestone
-Message-ID: <bug-15715-163@https.bugs.busybox.net/>
+Message-ID: <bug-15718-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15715] New: freeradius-server won't start
+Subject: [Buildroot] [Bug 15718] New: Cross-compiler called through
+ toolchain-wrapper generates bogus error messages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,58 +79,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15715
+https://bugs.busybox.net/show_bug.cgi?id=15718
 
-            Bug ID: 15715
-           Summary: freeradius-server won't start
+            Bug ID: 15718
+           Summary: Cross-compiler called through toolchain-wrapper
+                    generates bogus error messages
            Product: buildroot
-           Version: unspecified
+           Version: 2023.02
           Hardware: All
                 OS: Linux
             Status: NEW
-          Severity: normal
+          Severity: trivial
           Priority: P5
          Component: Other
           Assignee: unassigned@buildroot.uclibc.org
-          Reporter: arinc.unal@arinc9.com
+          Reporter: jimgeorge@gmail.com
                 CC: buildroot@uclibc.org
   Target Milestone: ---
 
-Tested on today's master branch.
+Cause:
+Invoking the cross-compiler from the package generated by 'make sdk' with no
+arguments
 
-# radiusd -X
-[...]
-/etc/raddb/mods-enabled/mschap[11]: Failed to link to module 'rlm_mschap':
-/usr/lib/rlm_mschap.so: cannot open shared object file: No such file or
-directory
+Expected behavior:
+Should print arm-linux-cc: fatal error: No input files
 
-After removing /etc/raddb/mods-enabled/mschap:
+Observed behavior:
+Output is:
+/path/to/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/11.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld:
+/path/to/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/Scrt1.o:
+in function `_start':
+(.text+0x40): undefined reference to `main'
+collect2: error: ld returned 1 exit status
 
-# radiusd -X
-[...]
-/etc/raddb/mods-enabled/realm[21]: Failed to link to module 'rlm_realm':
-/usr/lib/rlm_realm.so: cannot open shared object file: No such file or
-directory
+With BR2_DEBUG_WRAPPER set to 2, I get the following extra information:
 
-After removing /etc/raddb/mods-enabled/realm, something fails that I shouldn't
-remove:
+Toolchain wrapper was called with:
+    'buildroot-ts/buildroot/output/host/bin/arm-linux-cc'
+Toolchain wrapper executing:
+    '/path/to/buildroot/output/host/bin/arm-linux-cc.br_real'
+    '--sysroot'
+    '/path/to/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot'
+    '-fstack-protector-strong'
+    '-fPIE'
+    '-pie'
+    '-Wl,-z,now'
+    '-Wl,-z,relro'
 
-# radiusd -X
-[...]
-/etc/raddb/mods-enabled/ntlm_auth[17]: ...t-key --domain=MYDOMAIN
---username=%{mschap:User-Name} --password=%{User-Password}
-/etc/raddb/mods-enabled/ntlm_auth[17]:                                        
-^ Unknown module
-
-Upon investigating package/freeradius-server/freeradius-server.mk, I've seen
-that the rlm_mschap and rlm_realm modules are explicitly disabled because "we
-don't have the dependencies" for them. I have removed these two lines which
-disable these modules. The package compiled fine and the server started
-working.
-
-I don't know what was meant by not having the dependencies for these modules so
-I'm submitting a bug here to let someone with more experience in this project
-know.
+When invoking arm-linux-cc with an example program to compile, behavior is
+normal. It seems like the 'Wl' options are what trigger the errors from the
+underlying gcc. Adding this as a 'trivial' bug so that it could either be
+documented or calling toolchain-wrapper with no arguments is special-cased so
+other buildroot newbies aren't tripped up by this.
 
 -- 
 You are receiving this mail because:
