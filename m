@@ -4,213 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFDB2C0015E
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 22:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C54DDC0015E
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 22:54:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D552416F2;
-	Fri, 11 Aug 2023 22:34:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D552416F2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C5C341B71;
+	Fri, 11 Aug 2023 22:54:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C5C341B71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fXI5Az2_2qA1; Fri, 11 Aug 2023 22:34:50 +0000 (UTC)
+	with ESMTP id Jm8EfY0JGeBx; Fri, 11 Aug 2023 22:54:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3118B41E84;
-	Fri, 11 Aug 2023 22:34:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3118B41E84
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D9ED81BF5F6
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:34:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C33341EAC;
+	Fri, 11 Aug 2023 22:54:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C33341EAC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E57EC1BF5F6
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:54:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B89F741E84
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:34:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B89F741E84
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBE2D60AEE
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:54:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBE2D60AEE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Fh8rPeymWpxt for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 22:34:42 +0000 (UTC)
-Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com
- [148.163.158.9])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 918FC416F2
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 22:34:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 918FC416F2
-Received: from pps.filterd (m0297265.ppops.net [127.0.0.1])
- by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 37BHuEb8004387; Fri, 11 Aug 2023 15:34:38 -0700
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
- [149.117.87.133])
- by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3sd8yand8g-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Fri, 11 Aug 2023 15:34:38 -0700
-Received: from mailhost.synopsys.com (badc-mailhost4.synopsys.com
- [10.192.0.82])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits)
- client-signature RSA-PSS (2048 bits))
- (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
- by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5CA98404F3;
- Fri, 11 Aug 2023 22:34:36 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com
- [10.202.1.139])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
- (Client CN "o365relay-in.synopsys.com",
- Issuer "Entrust Certification Authority - L1K" (verified OK))
- by mailhost.synopsys.com (Postfix) with ESMTPS id 6DC48A00A6;
- Fri, 11 Aug 2023 22:34:34 +0000 (UTC)
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-sn1nam02lp2049.outbound.protection.outlook.com [104.47.57.49])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (Client CN "mail.protection.outlook.com",
- Issuer "DigiCert Cloud Services CA-1" (verified OK))
- by o365relay-in.synopsys.com (Postfix) with ESMTPS id 2A86540169;
- Fri, 11 Aug 2023 22:34:32 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g5W8XHMe3nGvkFnlNHL4h7R+1v/UDKJ/U9jrkrXZMmj7Q5L3o/T1nmPGl61dMRKobLhtFvHsBRuf+SDziiYhKgT40lWvihSwrVc2ES0gcLWEoZR45W7VbhHsz+vNWKRSBtHY/4fyki/jQk8HUNcJAuGNzwInEeL3bz/JtYJuq6ilLY7OEaKIpXo/wmgdCVMNHV7gZrRscV/DluAw5sazXRV06g71Z7RuaYrg9GASi5fok6qyHltSPxYP0MTCcabQrhsWp3zGkNPXiQL8Xm2Q9sAdK8Kq0uJcDgLFk5MPKJMALMRnfW8hJmMaczjQW03QnIVy9e0nt2dPlxElHh8RLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8fEU/i0WhDkR29CWGw082DPbyoHYEmqSvoKcwunFhyc=;
- b=EcegvYb4pl11331vdcJYnlG56dtcNw3Xy1Jj5cYa1L665TqVGGOa+/M+8WBdmQGnDasjrjUYWnuXMPURuJI9hTchNeNn3s8QdDWMka8WqFqBZzGzd8GQ6M2YfpzKeYkypl8JyP4c3QVeCAxwNRo4EqcQhJL7QAu146hDG7HAo7tS4/FLy3ystMAaTBpdG9HjH6BcPFu5X6fJeHeFtLsmJutoMkd7oI9pPlzQnSXlPkeVs3GqwRu1OIGJR4eFrzAAC9qbazZvANug8Vbf2I3mylllOYr0k0DudS2fHh/vKmIanw+tiNJRCk65n4Syz6JlCXLTTdizyQB4kC1j9T6Dgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-Received: from DS7PR12MB9041.namprd12.prod.outlook.com (2603:10b6:8:ea::19) by
- SJ0PR12MB6781.namprd12.prod.outlook.com (2603:10b6:a03:44b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Fri, 11 Aug
- 2023 22:34:28 +0000
-Received: from DS7PR12MB9041.namprd12.prod.outlook.com
- ([fe80::d13e:94be:b491:40c3]) by DS7PR12MB9041.namprd12.prod.outlook.com
- ([fe80::d13e:94be:b491:40c3%5]) with mapi id 15.20.6652.029; Fri, 11 Aug 2023
- 22:34:28 +0000
-X-SNPS-Relay: synopsys.com
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Arnout Vandecappelle
- <arnout@mind.be>
-Thread-Topic: [Buildroot] ARC support in Buildroot
-Thread-Index: AQHZxXxsyVL9JPLBBEuOxJgXjw3kZq/Xb51ngAAiRQCAAKOEy4ANXKsAgAAoToCAAAJ5vA==
-Date: Fri, 11 Aug 2023 22:34:27 +0000
-Message-ID: <DS7PR12MB904183FEC62ABB8A5A372E65A110A@DS7PR12MB9041.namprd12.prod.outlook.com>
-References: <20230802220321.6af766af@windsurf>
- <DS7PR12MB9041FA314EB2D49935CF2D85A10BA@DS7PR12MB9041.namprd12.prod.outlook.com>
- <20230803001230.284ba84d@windsurf>
- <DS7PR12MB9041C235443BB70E65A561FEA108A@DS7PR12MB9041.namprd12.prod.outlook.com>
- <cc38f5ec-c613-2323-e288-7fc1d0b186b6@mind.be>
- <20230812002503.33f6d5c3@windsurf>
-In-Reply-To: <20230812002503.33f6d5c3@windsurf>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS7PR12MB9041:EE_|SJ0PR12MB6781:EE_
-x-ms-office365-filtering-correlation-id: aed6b2eb-5e40-4ead-030d-08db9abb1f37
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vdLPGDNbKPMl6mP5VqTEwwOn+CWYnAnbVNcVLtjoIVMYd0XQiXOAbmZaVDgFSeDiJYHcRrZCymN8eAeXyvzTMTuAHshpS62n3zMkmI0ngYo/xaVnE/hdYHzefPpG8lDyw1Sq+gjPy8uv6aCukBOkYKcehNq2nT0RXiCUl1nl0XM8nAeT2j/5LTXnYN9zOV6SSO2HFeaszuGjLcv5KstQBR8A/7xmphq/OBj7PdkzayErENGOPsDCfe6F5wDorxVcUI24qZvG6RrA9ZsOh4H6Xt5GBCqImEVO/bfyePsgXtzNmJh8HR6liMT4kL+56wEJIFZR3nSftjFi5k0gRkaozBRuvEpqLLzMg3BGhuaB7ku+IwzmpGkZKrNFBo/eEz9UhaIizEUscPm+DtH+vIRjTiMBZlaRBXl7yh15DjWBoNSBHfdWZ/d7BEtxzcFsZ7lxnODYcht2GncWvzvKwJsyhx991bpYD4vHTkaKa9SHp5Q/OFX6WpxiaZAFsjGyLEGj2rKPGgv/O2PwEks4EP7zjwS5o8xLwj+KDW1lcDYpq5r9IhxnaRWBG2UVoy8D9P2ag06z8x8Hzvf6Whu8NZK/qG4T3UGmdVzmT37znu+mb5M=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DS7PR12MB9041.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230028)(39860400002)(366004)(396003)(346002)(376002)(136003)(1800799006)(186006)(451199021)(8936002)(8676002)(41300700001)(2906002)(38070700005)(66556008)(66446008)(66476007)(64756008)(316002)(76116006)(66946007)(4326008)(91956017)(5660300002)(38100700002)(52536014)(54906003)(110136005)(83380400001)(26005)(6506007)(478600001)(122000001)(86362001)(71200400001)(55016003)(7696005)(9686003)(33656002);
- DIR:OUT; SFP:1102; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?6hUssh+DVkDMdwOiYZS0e2aeKhcmgCjYfrOdfaFv4Sv+uypQ/vwSS1b79n?=
- =?iso-8859-1?Q?7jCuSTAOjZ9TfZQqkRy6oN4gGJlC68pZ050eU9W8/ZbRGLjd7yAgsOGEIo?=
- =?iso-8859-1?Q?md0+jX9TdOFxSE2ZYGxdJHh3KKG76W3IlXqRQaUTQmhKJkyHC/StREYtOy?=
- =?iso-8859-1?Q?EN2NOt8KdEfhbbBulNjPr+WvZ0/zIN20MepC7bxjHM2KC7FIbxdnp9aRd2?=
- =?iso-8859-1?Q?9lcdgn4OG3OWXEqyBKDe7WGoym21kgBmEXRrxH4SlKUIONf+u0H4+bCORl?=
- =?iso-8859-1?Q?sf6pmvAa62lzfS+jIML/hfIUI/Q7eMsgpRAYQgZFxFJTugn3GyjttbVLTy?=
- =?iso-8859-1?Q?Dmyi8WvKSfEA2flnfiHg++y5uYbsHcAU34zHTGmiB9agqpmQC7MhEY63tV?=
- =?iso-8859-1?Q?t12Y0Hop+xEtg09SzezTFXZXMLxBPgZjHz7fRujtuRveiQLOMERu2uTWbD?=
- =?iso-8859-1?Q?ZLiqfVfv/lT0lyWk5WYny0WGrx8b1CMfBGPr4g/A3YI/F/VINDLexaE7zP?=
- =?iso-8859-1?Q?XtYm2E3Kik7UgPIbQAw5o2BI5NTowQKjvUudvB2yqzPvBogEBcKlfva5/2?=
- =?iso-8859-1?Q?2fE6QicHJSdEvyixFzWkCmdl/h+SxEcykb2483sQmxdJGyfN+D5e2Dx7pw?=
- =?iso-8859-1?Q?iYK3nKDipo67ieER9qeYnF0CzcLxiV3Oq6XS0nqGAh9n3j2oEhoo5YjbqT?=
- =?iso-8859-1?Q?7CvqJWaQX4bPmloZuiMWE4KtmyjnDOjAJ1KfHqcTM73r/IGtQQDJOhXBRM?=
- =?iso-8859-1?Q?Yu1IHY463OMnzN3C+tYZdJQ5UsS6uch1ylCF2g3x4562CLZCy7I/RQ9QCQ?=
- =?iso-8859-1?Q?IP3TZMM7gexGvCEsvENKcle+cYA5KT17TeoRNjOAFudwnyUbRVuXHETJCZ?=
- =?iso-8859-1?Q?KPYYyd6sTIb2DwaQFAOaSEBMCVR2sPkejZ1ZHxLJQLg9RIl8h2M3A+4rXR?=
- =?iso-8859-1?Q?nWzi2wzDN2qv6h2rCWwxgLfo2WntLvAN+o6BiyT4VBuCo3SruHGb2CFvVa?=
- =?iso-8859-1?Q?745QGwQWp6ceR2Ceg7BvNokUaQ9x8fSV6VtEslS7m3Q8m5So6gdAO3Z60H?=
- =?iso-8859-1?Q?ss8Co0ELYYKxcP354ZNoxvqBfD9tb2E5QduQuUIHXYdnlLxWfT0CAKO58c?=
- =?iso-8859-1?Q?khLOsUkwKh+QBnXA6IN+xot4zqUAMCqjy7RtMU/uJ4xuR6jL89c/6mz2Fz?=
- =?iso-8859-1?Q?q4yCjKMXUPB3NzKdgoHQu7BlvOSES9xO/tRPjI2XCDS56hJ53gqWjGOyIn?=
- =?iso-8859-1?Q?jf9M+/54lHI6lBnhkJdQvxBr/0SaRzdEuX9GHuBXygqOTZpq3/o5hZLpbu?=
- =?iso-8859-1?Q?k8rpkWcspZpWg/SIUcyB116om2xzKQwZbQ09njO7Sbg6Xgak9nXIsAt/S2?=
- =?iso-8859-1?Q?v+7OHPPl6M6Bo9YmkifcZ4YDTz/Rtld+C8etd449/SBXYTj4qWvC6FkV8A?=
- =?iso-8859-1?Q?4wdPNCjvSW+e0UlYmiPOpoyZqLHqR2VayYRfklGTjtxy0uaTgX78MeENRu?=
- =?iso-8859-1?Q?M3nuGcVfP4QyoonIFdUU/XxmUk6LS/t5MAjONIUhj5YCpNikN9XNRYpMij?=
- =?iso-8859-1?Q?mo/lkk4VV1oJ1+zH6NZGC53dFTCX7gwB9ei4fHtGC2uLb2fOfa+nLoX/Ha?=
- =?iso-8859-1?Q?cIIdu+RsZPsGYB3M8nbkKNDN3pK1N+YmbY?=
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VnkOfbbzcTGv for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 22:54:17 +0000 (UTC)
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
+ [IPv6:2607:f8b0:4864:20::22b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BB1B860AE8
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 22:54:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB1B860AE8
+Received: by mail-oi1-x22b.google.com with SMTP id
+ 5614622812f47-3a7a180c3faso2158342b6e.2
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 15:54:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691794456; x=1692399256;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=MQR6g/QWNc1nUM1/Ho9fLs7L0iEh21FrPu17SlcC7dE=;
+ b=Te6ozX7rPV+5a7x3eeHoEvykYQ/Iw5PeB5U8IF3+O5/+8lu01gKFEMiehqXoOqBZFV
+ 5Q5Fm4P9pMSpN54brwHKV8bIJTqNAIamofub4L8uMSSCfsCfo6GmiCUqinaa7ihvtAPa
+ oPC0WVZXagEdYmQull9toQKYOKigKfakWZO2raR3XlJiSqLRbN5u7jBNkei3J3v8SWGx
+ iQSPsJ3zWjz1vRpbsONXDZX1My4pmPVvrhPqjZGCg206uJOY4fIYvUfffM4snDndL/jn
+ dwGY3NB4jzXy5GK9iQBi6GwPpTwxJ6uqZToeanam1q3Nj3gtHIxXuXiKEs1buiJpzgiT
+ 9k9A==
+X-Gm-Message-State: AOJu0Yyad9H4347fi/lEs5KEENhyRfu77QTyCpx9HFjwO5747Uyj8UYs
+ 0l8PcKrsDUVF2XDmR4dKRXiWwReT/5ckw5p70Ic=
+X-Google-Smtp-Source: AGHT+IFZc/T2H7arNG557c9L2/wR3kUeVD6i5RWEyr1Sr16caPc+30ywdKpSxisdodeWi+RmX8qcYyMh6+umugjpfPs=
+X-Received: by 2002:a05:6808:114b:b0:3a4:317d:eb7c with SMTP id
+ u11-20020a056808114b00b003a4317deb7cmr4562524oiu.0.1691794456682; Fri, 11 Aug
+ 2023 15:54:16 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: ef5x5cQuesQIuBl+dxloDB0ZH1hTAOyuXmN5itdb98ruXKQvWV2bhx1wxEM18pIRGq9Yhcsc2K5Ok+Puk4hT8n2qE0Kv07bdkEGEORAmN9qLfI2098HijdTsMTLtGY/GIOPQLCs7C5gUMxp3145HUZFeKKBiPzBCT/H5xp/TpfkmQs9fwbQXvK/I4FJ3S+Ld5B87pEndpYBvllT5F7TTfuiHKA6rRblufyDzzf+BJazfGq1QrAbkmifvfO/V28cnAr8jzhNZ35LGcVYtoqeCWyszoYLaDaWRqyA4Vc7zk0MURDIDrM09pqLJkgiQLZ2MWfNUykc+YCOM+O9EJyez9Xhp1QmP8U0pAYjLQ2xCDnX0nHYBmwkySecSCVOQajFtCnhXRaKXw8fRGu/gyQIHmur2zxIPTJS9XgBWi6Uez7xpRuVc9wUCnL2h4PgPcdjZUK98fxgkJ4gQMsLuRu+ZVmvIV6gWhGjk/1ZjIGYHhbMs1PQGZdQvgqVsEvtBr9yYbD2uCZdXwslk3KpHn8sVqWMm0vb7H5Km24baKBAWjwidx1I7GYvdUnMLPVSsFG1PqSLgiM4zYhVuLmmWDF7ENYq/WCI0RgJTeSPmr7wqGv5Mz6Nh/ZPyKzsDfBkRil+RaLR0GiSBp2zpQ4dWYUrR73wifTqexwnyujmY3Uq9QTb+Uxa3Cq8SZG7SkBX3FJTzH03efWJ6GGFXm/uale/H1aNCOpMJyrfqaaMGMtG6v347yas4Mi4Lop6S0YjaBdwm1rX221AxSn2BQdX6raGD0zG6cVhU/4XOe+eCNHQDUyvJWEIgLj5Sk57ACs3861Vr7Lk87IBBJG7YhECB0lI5QSxOnseq4riP3/PHYPhCjHE=
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9041.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aed6b2eb-5e40-4ead-030d-08db9abb1f37
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Aug 2023 22:34:27.5814 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HVD+2EKqktNyRRPpXFzWq3URI9MI7NR9JlfflW2H53UYp3SH2WeSZW7UbOvrOitc4E0QjiFeG9EJ7hUzv47PzA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6781
-X-Proofpoint-GUID: ZQRasqZ8ZVsULiQ8p4w12E9QorMNEHew
-X-Proofpoint-ORIG-GUID: ZQRasqZ8ZVsULiQ8p4w12E9QorMNEHew
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-11_15,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
- policy=outbound_active_cloned score=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 bulkscore=0 spamscore=0 phishscore=0
- priorityscore=1501 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2306200000 definitions=main-2308110206
+References: <2691942.mvXUDI8C0e@kilian-aisec>
+ <20230809193855.60c6b89c@windsurf>
+ <13322713.uLZWGnKmhe@kilian-aisec> <1766550.VLH7GnMWUR@kilian-aisec>
+ <20230811164145.2b978818@windsurf>
+ <CAOCHtYjoouGOSwOy1Fh4muYnU3E-yY6jp8GOcy1f=MhCaaAx8w@mail.gmail.com>
+In-Reply-To: <CAOCHtYjoouGOSwOy1Fh4muYnU3E-yY6jp8GOcy1f=MhCaaAx8w@mail.gmail.com>
+From: Robert Nelson <robertcnelson@gmail.com>
+Date: Fri, 11 Aug 2023 17:53:50 -0500
+Message-ID: <CAOCHtYiuJimX-pF-hUhuK35X+63eE1GJbK=xAZOR73gb8iZkog@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pfptdkimsnps;
- bh=8fEU/i0WhDkR29CWGw082DPbyoHYEmqSvoKcwunFhyc=;
- b=SpBtW7YweGckpcI/GWZokR1XYMktjKTPmxPAkWLVJa+vE48NMb3fZ2nZr7v2F8vbSzWm
- AcGeOavPkJUUm8NwY6L93t5nXVvB5VMMMF462MnSIc8dgEQ5SFz1CmCcbcw2DMyXX48z
- seRBsUy5Y6+yULmK6jI3GXtqRbBb5mwtNGGDD1FsoWzsNfNTMgNA2m/g7QZ31tAZvy4p
- 0gzdKnMXgyLV+FJw3vfdlEWMScs8/ElkjNsU7CWxw+NAISHdXaba9OUbLNrohhFHT9ix
- HClzSWtCmDu3e6a6mP0b5r24WiZUhD06nKQUnY3n7nv0VcfqaHE4p6a0XPIT6vu/HcIA yw== 
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=synopsys.com; s=mail; 
- t=1691793277; bh=d0kvqRKxAstxpwuREJZLXycSW84PZTdtUSLi7Eqq3t4=;
- h=From:To:CC:Subject:Date:References:In-Reply-To:From;
- b=EATIQujKfAqQy14L1YYfV3FU+m+Zs3D1h5AhrBDiAHkNUmrk0m0U7IJ7uiDOThSqF
- F07MylYPdXyrAsgsGsoLZ4GJjYk/9Ywu9ZEF4zBn8EwSSiMwwBLVQ+8hyRpA/gHva2
- v/XnfcAIrkYIEwowVvooARSKaXuvyDrBEQmYvqrafy06wOgfxUP8CZUA1TWYp4ATcI
- 84l0PhdgWR9jdNsruKOizAAOF5W80rKhg0aoxXcQjlmEzoa/ad4m5zABAqHp38Ip0I
- dlTWKdu6cmDY8xEx/AnR+pd9pT47QDG2lJVJLASifcOgrbBS48MmooWKhp+WeRKBtm
- b1hojLgCn3gsQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8fEU/i0WhDkR29CWGw082DPbyoHYEmqSvoKcwunFhyc=;
- b=hUnpkgdYITOmokOtO6X52Sy5hyT2BZACFVZ2qZPfZoqFm1Y4uoP3LjCpvWoSsfd+/l1ASIvytvAOFeKmobEYKwh4YO3AH1u42+51ZthCXh+oKa7p4l9GDMePATSGWJh5DlsaW24eDR3U9+gQKIV7FhWIrvnq4bWq00fdc63WS1o=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
- header.a=rsa-sha256 header.s=pfptdkimsnps header.b=SpBtW7Yw; 
- dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com
- header.a=rsa-sha256 header.s=mail header.b=EATIQujK; 
- dkim=fail reason="signature verification failed" (1024-bit key,
- unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256
- header.s=selector1 header.b=hUnpkgdY
-X-Mailman-Original-Authentication-Results: o365relay-in.synopsys.com;
- dmarc=pass (p=reject dis=none)
- header.from=synopsys.com
-X-Mailman-Original-Authentication-Results: o365relay-in.synopsys.com;
- spf=pass smtp.mailfrom=synopsys.com
-X-Mailman-Original-Authentication-Results: o365relay-in.synopsys.com;
- dkim=pass (1024-bit key;
- unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256
- header.s=selector1 header.b=hUnpkgdY; 
- dkim-atps=neutral
-Subject: Re: [Buildroot] ARC support in Buildroot
+ d=gmail.com; s=20221208; t=1691794456; x=1692399256;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=MQR6g/QWNc1nUM1/Ho9fLs7L0iEh21FrPu17SlcC7dE=;
+ b=D5DRoJ9D/3p6rXVfHzOTw6x9m3b3X0ek2Qjnd5BkvGoaXQGXRCqop3cImIam0dWIEc
+ DBFL36T2nd0+2yJPl82iatk/Ubj7iTiPr4tnfbvjMWR0s5G4xW/vv8xn27H9L2YhMMgc
+ ncWxFm0pkArW+BcbE3TAHXn0KTmWRU6m7FqtUvxgUGUJ3r+yY6ccorx2IyyJ7af60Wzx
+ ewR5E0cgvD5L1LX+6Rc4ytj/Cst65UVE8Ayu68fqH8h24UxTjOIvGfTTzBEtKjHmcOHh
+ 0cmQdBUoPkP3jbIm2FgZkNEX6IwYWFmEe2crk3gp/FFHGtu0vWbWyUSdsVb576dtIz0m
+ gaaw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=D5DRoJ9D
+Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -222,56 +94,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Alexey Brodkin via buildroot <buildroot@buildroot.org>
-Reply-To: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Cc: ARC Buildroot mailing list <arc-buildroot@synopsys.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>,
+ Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Arnout,
-
-> On Fri, 11 Aug 2023 22:00:48 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
-> > > So, in theory it should be OK to remove "arc-xxxx.yy" toolchains from Buildroot.
-> > > But since we were a bit late with ARCv3 changes for GCC 13, those will only
-> > > land in GCC 14 which is going to happen sometime in 2024, I guess. 
-> >
-> >   I think (Thomas correct me if I'm wrong) that we would actually prefer that
-> > ARC just uses the normal toolchain, and that when ARCv3 is introduced in
-> > Buildroot, the "special toolchain" will depend on
-> > BR2_arc_v3_or_whatever_it_will_be_called rather than BR2_arc.
-> 
-> [...]
-> 
-> >   Using the upstream toolchain components is preferred because that way the user
-> > has the version choice, rather than being forced to use the ARC-specific version
-> > of that moment. Also, when someone updates to a new GCC version, it immediately
-> > becomes available for ARC as well (instead of having to wait 3 years for the
-> > ARC-specific version to be updated...).
-> 
-> This is a very good point indeed.
-
-With that I agree.
-
-> Alexey: when do you expect to submit ARCv3 support in Buildroot?
-> Depending on when it comes we might decide to either drop or keep the
-> ARC-specific toolchain components, and if need be re-introduce them for
-> ARCv3.
-
-I'd say in coming weeks as I already started to work on clean-up and
-preparing for submission of first patches. In that sense I may handle that myself.
-One question to you though, if you prefer to have 2 patches:
- 1. Remove ARC-specific GCC & Binutils
- 2. Introduce ARCv3-specific tools: GCC, Binutils & glibc (uClibc is already upstreamed)
-
-Or do it in one patch?
-
--Alexey
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpLCBBdWcgMTEsIDIwMjMgYXQgNDozMOKAr1BNIFJvYmVydCBOZWxzb24gPHJvYmVydGNu
+ZWxzb25AZ21haWwuY29tPiB3cm90ZToKPgo+IE9uIEZyaSwgQXVnIDExLCAyMDIzIGF0IDk6NDLi
+gK9BTSBUaG9tYXMgUGV0YXp6b25pIHZpYSBidWlsZHJvb3QKPiA8YnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmc+IHdyb3RlOgo+ID4KPiA+IE9uIFRodSwgMTAgQXVnIDIwMjMgMTM6MDI6MzIgKzAyMDAK
+PiA+IEtpbGlhbiBaaW5uZWNrZXIgPGtpbGlhbi56aW5uZWNrZXJAbWFpbC5kZT4gd3JvdGU6Cj4g
+Pgo+ID4gPiBJIGFsc28gdGhpbmsgdGhhdCB0aGVyZSBpcyBhcmUgc2ltaWxhciBpc3N1ZXMgcmVn
+YXJkaW5nIHRoZSBiZWFnbGV2X2RlZmNvbmZpZwo+ID4gPiBhbmQgdGhlIHVzZWQsIHZlcnkgb2xk
+IG9wZW5zYmkgdmVyc2lvbiBhbmQgbWF5YmUgYWxzbyB0aGUgdXNlZCBzdGFyZml2ZSBjdXN0b20K
+PiA+ID4ga2VybmVsIHZlcnNpb24uCj4gPiA+Cj4gPiA+IEkgY291bGQgdHJ5IHRvIGJ1bXAgdGhl
+IHZlcnNpb25zIG9yIGFkZCBwYXRjaGVzIHVudGlsIGl0IGNvbXBpbGVzIGFnYWluLgo+ID4gPiBI
+b3dldmVyLCBJIGRvbid0IGhhdmUgYSBCZWFnbGVWIGN1cnJlbnRseSBhdCBoYW5kLCBzbyBJIHdv
+dWxkIG5vdCBiZSBhYmxlIHRvCj4gPiA+IHJlYWxseSB0ZXN0IHdoYXQgSSBwcm9kdWNlZCBhZnRl
+cndhcmRzLiBTbyBpdCBtaWdodCBiZSBiZXR0ZXIgc29tZW9uZSBlbHNlLAo+ID4gPiB3aGljaCBo
+YXMgYWNjZXNzIHRvIGEgQmVhZ2xlViwgaGFzIGEgbG9vay4KPiA+Cj4gPiBJIGRvIGhhdmUgYSBC
+ZWFnbGVWIChub3QgaGVyZSB3aXRoIG1lIHRob3VnaCksIGJ1dCBhcyBJIHJlcGxpZWQgdG8KPiA+
+IGFub3RoZXIgZS1tYWlsLCBJIHRoaW5rIHdlIGNvdWxkIHNpbXBseSBkcm9wIGJlYWdsZXZfZGVm
+Y29uZmlnIGFzIG5vdAo+ID4gbWFueSBzYW1wbGVzIG9mIHRoaXMgcGxhdGZvcm0gd2VyZSBzaGlw
+cGVkLCBhbmQgaXQncyBubyBsb25nZXIgcHJvZHVjZWQuCj4KPiBTbyB0aGUgcGxhbiBmcm9tIEJl
+YWdsZUJvYXJkLm9yZyBpczoKPgo+IGJlYWdsZXYtPGRldmljZT4KPgo+IFNvIHRoZSBUSDE1MjAg
+YmFzZWQgQmVhZ2xlViBpczogYmVhZ2xldi1haGVhZAo+Cj4gTG9va2luZyBhdCBhbGwgb3VyIGdp
+dGxhYiByZXBvcywgeWVhaCBpIGNhbGxlZCBldmVyeSBjb25maWcgYGJlYWdsZXZfYC4uLgo+Cj4g
+YWRkIHRoYXQgdG8gbXkgY2xlYW51cCBsaXN0Li4KCk9rYXkgS2lsaWFuLCB0aGVzZSBhbGwgYnVp
+bGQgd2l0aCB4ODZfNjQtZ2NjLTEzLjIuMC1ub2xpYmMtcmlzY3Y2NC1saW51eC50YXIueHoKCm9w
+ZW5zYmk6IGh0dHBzOi8vZ2l0LmJlYWdsZWJvYXJkLm9yZy9iZWFnbGV2LWFoZWFkL2JlYWdsZXYt
+YWhlYWQtb3BlbnNiaS8tL3RyZWUvMC45LTEuMS4yLXVidW50dQp1LWJvb3Q6IGh0dHBzOi8vZ2l0
+LmJlYWdsZWJvYXJkLm9yZy9iZWFnbGV2LWFoZWFkL2JlYWdsZXYtYWhlYWQtdS1ib290Ly0vdHJl
+ZS9iZWFnbGV2LXYyMDIwLjAxLTEuMS4yLXVidW50dQpsaW51eDogaHR0cHM6Ly9naXQuYmVhZ2xl
+Ym9hcmQub3JnL2JlYWdsZXYtYWhlYWQvYmVhZ2xldi1haGVhZC1saW51eC8tL3RyZWUvYmVhZ2xl
+di12NS4xMC4xMTMtMS4xLjItdWJ1bnR1CgpGb3IgYmFuZHdpZHRoIGlzc3VlcywgcGxlYXNlIHVz
+ZSB0aGUgZ2l0aHViIG1pcnJvcnMgZGlyZWN0bHkgaW4KcGF0Y2hlcyBmb3IgYnVpbGRyb290LCBh
+cyB0aGVzZSBhcmUgcHVzaCBtaXJyb3JlZCBmcm9tCmdpdC5iZWFnbGVib2FyZC5vcmcvICwgYXQg
+d29yc3QgdGhleSBsYWcgYnkgMTAgbWludXRlcyBhZnRlciBhIG5ldwpjb21taXQKCm9wZW5zYmk6
+IGh0dHBzOi8vZ2l0aHViLmNvbS9iZWFnbGVib2FyZC9iZWFnbGV2LWFoZWFkLW9wZW5zYmkvdHJl
+ZS8wLjktMS4xLjItdWJ1bnR1CnUtYm9vdDogaHR0cHM6Ly9naXRodWIuY29tL2JlYWdsZWJvYXJk
+L2JlYWdsZXYtYWhlYWQtdS1ib290L3RyZWUvYmVhZ2xldi12MjAyMC4wMS0xLjEuMi11YnVudHUK
+bGludXg6IGh0dHBzOi8vZ2l0aHViLmNvbS9iZWFnbGVib2FyZC9saW51eC90cmVlL2JlYWdsZXYt
+djUuMTAuMTEzLTEuMS4yLXVidW50dQoKVmVyaWZpY2F0aW9uIGNpIGltYWdlLCBhdmFpbGFibGUg
+Zm9yIHRoZSBuZXh0IDE0IGRheXMuLgoKaHR0cHM6Ly9naXQuYmVhZ2xlYm9hcmQub3JnL2JlYWds
+ZXYtYWhlYWQveHVhbnRpZS11YnVudHUvLS9qb2JzLzEzMzAzCgpgYGAKdm9vZG9vQGhlc3RpYTp+
+L0Rvd25sb2FkcyQgdW56aXAgeHVhbnRpZS11YnVudHUtMS4xLjItMTMzMDMuemlwCkFyY2hpdmU6
+ICB4dWFudGllLXVidW50dS0xLjEuMi0xMzMwMy56aXAKICBpbmZsYXRpbmc6IGRlcGxveS9ib290
+LmV4dDQueHoKICBpbmZsYXRpbmc6IGRlcGxveS9mYXN0Ym9vdF9lbW1jLnNoCiAgaW5mbGF0aW5n
+OiBkZXBsb3kvbWFjX2Zhc3Rib290X2VtbWMuc2gKICBpbmZsYXRpbmc6IGRlcGxveS9yb290LmV4
+dDQueHoKICBpbmZsYXRpbmc6IGRlcGxveS91LWJvb3Qtd2l0aC1zcGwuYmluCnZvb2Rvb0BoZXN0
+aWE6fi9Eb3dubG9hZHMkIGNkIGRlcGxveS8Kdm9vZG9vQGhlc3RpYTp+L0Rvd25sb2Fkcy9kZXBs
+b3kkIHN1ZG8gLi9mYXN0Ym9vdF9lbW1jLnNoCmBgYAoKQm9vdCBsb2c6IGh0dHBzOi8vZ2lzdC5n
+aXRodWIuY29tL1JvYmVydENOZWxzb24vNDJkZWIyNGM0MWE5MmNlNWU4OWU4MGRmZTA1OGUzZDgK
+CgpSZWdhcmRzLAoKLS0KUm9iZXJ0IE5lbHNvbgpodHRwczovL3Jjbi1lZS5jb20vCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
