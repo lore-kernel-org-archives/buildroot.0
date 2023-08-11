@@ -4,66 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D160CC0015E
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 22:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17E09C0015E
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 22:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E3B141E84;
-	Fri, 11 Aug 2023 22:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E3B141E84
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6F5541EB4;
+	Fri, 11 Aug 2023 22:27:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6F5541EB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DoHmYcX1lBmI; Fri, 11 Aug 2023 22:26:42 +0000 (UTC)
+	with ESMTP id PzeQ40DXzBuy; Fri, 11 Aug 2023 22:27:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7676E41E82;
-	Fri, 11 Aug 2023 22:26:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7676E41E82
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B9C0C1BF5F6
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:26:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C814741E82;
+	Fri, 11 Aug 2023 22:27:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C814741E82
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 90F1F1BF5F6
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9320D84060
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:26:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9320D84060
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A74C402D4
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:27:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A74C402D4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CB9-bFU1AlCF for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 22:26:39 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 251568404C
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 22:26:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 251568404C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F95B240002;
- Fri, 11 Aug 2023 22:26:35 +0000 (UTC)
-Date: Sat, 12 Aug 2023 00:26:34 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id f5YDEKw45Qrl for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 22:27:14 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 31F244027F
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 22:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31F244027F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE15A1C0002;
+ Fri, 11 Aug 2023 22:27:10 +0000 (UTC)
+Date: Sat, 12 Aug 2023 00:27:09 +0200
 To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20230812002634.45f2eff2@windsurf>
-In-Reply-To: <de5cac45-aa70-b155-d7b6-f29006d4214b@mind.be>
-References: <20230729212159.403148-1-thomas.petazzoni@bootlin.com>
- <de5cac45-aa70-b155-d7b6-f29006d4214b@mind.be>
+Message-ID: <20230812002709.20986967@windsurf>
+In-Reply-To: <03e35eba-6a35-f185-2d32-b7eab93beb05@mind.be>
+References: <20230806121729.3552502-1-drinkcat@google.com>
+ <20230806153308.4c0cf791@windsurf>
+ <CAHRZCZXdNk2w2965JOubzue=_+i+8DU1YvVvwUKv5PrsKeVMOA@mail.gmail.com>
+ <03e35eba-6a35-f185-2d32-b7eab93beb05@mind.be>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691792796;
+ d=bootlin.com; s=gm1; t=1691792831;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=WdWVifMQnA+2c6HtpSAC25A+QNFEZ8tJaCwwfqvukDk=;
- b=G94ioHP7sKAB4lkeUtmkrQz3DUmw+St/PD7e4V9t+btIQyvYTWrBWRfXi1ZK1v2cQUffRz
- zPlu6HsETxPng9QtnsjbAaqHRTnLOnVQP/Bj7BfnR9RZovRYFXtYd7btKB6kVyoId2c7kW
- rk9vBQ9o6y5qWGp5rXoGTKxqOtU3sPr4HKf9Tty0Ez9O/YGDISa7CgjVP4Ux/0SDniP5DN
- OWRUbwkZXnQ8PLm0hcBZRktxc4Mru8gtb9MfFF0J9sx0MJMC3G32wuwMqJKax18pvLeiQ7
- hnfuOFGRUlL9+igDdh/R0ZA88a1BQyFmpeii9Sw/ZcA2a6cluY2b8AlGcgVP5g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=xNkpQ5lIfcUqlC6JPxWQ9u6Wym0iRRX65dotQqohkE4=;
+ b=l1O9BRGQow0Dbhj8WOG5l1+K6dA7KugDN/ih6skT4cLBxiW2dgQWwIg827tu+bC1HIC6+A
+ D3WAGY0FMbMKqUVvx26PLoSVoWrnZcUL0qlaD2DCJq2Wxr02gCA236sqSVISOgfwui5uMC
+ /V3qi8QvuQFUw3R4fiAMPxbnt8wOhk1ZN3Ufg3/NOGLh03sGSRanyBgEbvsPwuXHnh1FmE
+ EuZihhPN+QKWK0PPXReV7AFUHiJDAZZ/ZPik3GBGzI1Jl0ZEeRIQ+RXDydA/spy7JtTl8p
+ TedofZJh3zrStTizvYxza9MZnLpW6UJaKUEfKfF64+pnqAuBySvpf8C0TMabHg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=G94ioHP7
-Subject: Re: [Buildroot] [PATCH] package/crun: allow building with uClibc
+ header.s=gm1 header.b=l1O9BRGQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/screenfetch: Add mawk/gawk
+ dependency, and upstream detection patch.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,43 +80,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Christian Stewart <christian@aperture.us>,
- Buildroot List <buildroot@buildroot.org>
+Cc: Nicolas Boichat <drinkcat@google.com>,
+ Nicolas Boichat via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 11 Aug 2023 22:06:40 +0200
+On Fri, 11 Aug 2023 22:18:15 +0200
 Arnout Vandecappelle <arnout@mind.be> wrote:
 
->   I believe this is going to create problems again, because we have a few 
-> toolchain configurations that are used in the autobuilders and that have really 
-> old uClibc versions.
+> > I had a quick try, and yes, I think busybox's awk is good enough.  
 > 
->   As I said in a previous mail, we may want to drop these and move to bootlin 
-> toolchains instead. But then, for some of them there is no bootlin toolchain 
-> equivalent...
+>   We assume that "normal tools" are available in the rootfs and don't add 
+> explicit selects for them. Normal tools include sed, sort, grep, and IMHO also 
+> awk. So I don't think there's a need for this at all.
 > 
->   Also, those autobuilder toolchains make sure we still have some testing of old 
-> GCC versions, which we probably do want to keep.
+>   And anyway, the presence of busybox doesn't guarantee at all that awk is 
+> present, because you can configure it out.
 > 
->   So, we should either:
-> 
-> - update all the autobuilder toolchains with newer uClibc;
-> - switch those toolchains to bootlin toolchains;
-> - switch those toolchains to internal toolchains;
-> - add autobuilder exceptions;
-> - add some Kconfig construct to identify fexecve availability.
+>   So I'd keep the patch, but not the rest of this commit.
 
-The autobuilders are now doing fully random testing I believe, so they
-are no longer testing some of those "special toolchains" we used to
-have. They are either using well-known external toolchains, or building
-internal toolchains.
-
-In any case, I don't think we should worry too much about uClibc
-features, and assume that people should have a recent uClibc, with the
-uClibc configuration as it is in Buildroot.
+That's a good point indeed.
 
 Thomas
 -- 
