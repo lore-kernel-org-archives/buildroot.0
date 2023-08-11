@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AAC6EB64DD
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 15:18:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF148EB64DD
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 15:18:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F24F8408B;
-	Fri, 11 Aug 2023 15:18:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F24F8408B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7899984089;
+	Fri, 11 Aug 2023 15:18:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7899984089
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8s0CuaeeW74y; Fri, 11 Aug 2023 15:18:10 +0000 (UTC)
+	with ESMTP id NLcD_lSzIzkU; Fri, 11 Aug 2023 15:18:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CDE184089;
-	Fri, 11 Aug 2023 15:18:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CDE184089
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8348A8409A;
+	Fri, 11 Aug 2023 15:18:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8348A8409A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id ECA181BF575
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C27551BF575
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D246F40260
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D246F40260
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AF2640260
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 15:18:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AF2640260
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Onku9QqmrnIE for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 15:18:06 +0000 (UTC)
+ with ESMTP id uHPG2_anxxVl for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 15:18:09 +0000 (UTC)
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7EBDB401CD
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 15:18:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EBDB401CD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 96619401CD
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 15:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96619401CD
 Received: from pwmachine.localnet (85-170-34-233.rev.numericable.fr
  [85.170.34.233])
- by linux.microsoft.com (Postfix) with ESMTPSA id C750420FD0DE;
- Fri, 11 Aug 2023 08:18:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C750420FD0DE
+ by linux.microsoft.com (Postfix) with ESMTPSA id 1E50720FD0DE;
+ Fri, 11 Aug 2023 08:18:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1E50720FD0DE
 From: Francis Laniel <flaniel@linux.microsoft.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 Aug 2023 17:18:02 +0200
-Message-ID: <1939790.PYKUYFuaPT@pwmachine>
-In-Reply-To: <20230731221843.61feafea@windsurf>
+Date: Fri, 11 Aug 2023 17:18:05 +0200
+Message-ID: <21975130.EfDdHjke4D@pwmachine>
+In-Reply-To: <20230731224956.0d3d88c7@windsurf>
 References: <20230428152211.20394-1-flaniel@linux.microsoft.com>
- <20230428152211.20394-2-flaniel@linux.microsoft.com>
- <20230731221843.61feafea@windsurf>
+ <20230428152211.20394-3-flaniel@linux.microsoft.com>
+ <20230731224956.0d3d88c7@windsurf>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=linux.microsoft.com; 
- s=default; t=1691767085;
- bh=StsuznWeAWIiy/sbAJQVayobvvfQw1KXm9NWiwtjRLc=;
+ s=default; t=1691767088;
+ bh=tn4dI1bgUs/aEEsRTMpRy9Zja3Q7bC2GvO/ACMOCY0E=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=ablboCyfFuzux6MY7E4o59n0qt4EqL2k1R9bO/+vI6cN7CPUUEt3XsdTQeIzTNOaT
- WAxm2isCaujBoXX2c9GPYo3NfFHL3QwqwBH03w+SM7nkYOaZVqYu9/eZ5OIlIqYi1i
- Ldb0oBOZHYeTk2AB2iudyX346/+UA8EKjT9eJDOM=
+ b=PepJokh4vo6Wq5uTzvmfCjGugsFoo6KoJ0c90ZEDM4Fe2ukn8LrjTOtd/+ScdcRnU
+ XU2OrwmnkXO6mW1bu5yWrJL/5uPrEGvqt99beQZqMjh4xy/vszLeyLdeuZOuyu6CvH
+ niV0dbNtWMoNLPIqgKlvDKuj0D5oA9ukm+dlYbPg=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=linux.microsoft.com
  header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default
- header.b=ablboCyf
-Subject: Re: [Buildroot] [RFC PATCH v1 1/2] package/sysdig: bump to version
- 0.31.4
+ header.b=PepJokh4
+Subject: Re: [Buildroot] [RFC PATCH v1 2/2] package/falcosecurity-libs: bump
+ to version 0.10.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,140 +81,156 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi.
 
-Le lundi 31 juillet 2023, 22:18:43 CEST Thomas Petazzoni a =E9crit :
-> Hello Francis (and perhaps Angelo who can help?),
+Le lundi 31 juillet 2023, 22:49:56 CEST Thomas Petazzoni a =E9crit :
+> Hello Francis,
 > =
 
-> On Fri, 28 Apr 2023 16:22:10 +0100
+> On Fri, 28 Apr 2023 16:22:11 +0100
 > =
 
 > Francis Laniel <flaniel@linux.microsoft.com> wrote:
-> > - Remove upstream patch as it is no more needed.
+> > diff --git
+> > a/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+> > b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+> > new file mode 100644
+> > index 0000000000..38a8bdd4f4
+> > --- /dev/null
+> > +++ b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.pa=
+tch
+> > @@ -0,0 +1,61 @@
+> > +From b6d847fe8aa0513c6d19bd8187133699b9c4efd3 Mon Sep 17 00:00:00 2001
+> > +From: Francis Laniel <flaniel@linux.microsoft.com>
+> > +Date: Fri, 28 Apr 2023 15:14:27 +0100
+> > +Subject: [PATCH] cmake: Install shared libraries.
+> > +
+> > +This is needed as sysdig is compiled as a non static binary which reli=
+es
+> > on +these libraries.
 > =
 
-> Actually I had to remove it from current master, because sysdig was
-> bumped to 0.29.3 already, which includes the patch... and so the patch
-> in Buildroot doesn't apply anymore.
+> Not clear. An executable can use a mix of shared and static libraries.
+
+Indeed, but it causes troubles without this modification (see below).
+Moreover, this whole magic causes a big increase in the rootfs image, as th=
+e =
+
+limit should be increased from 60 MB to 195 MB (more than 3 times).
+
+> What is the upstream status of this? How is falcosecurity-libs supposed
+> to be used by sysdig according to upstream?
+
+Sadly, I do not have any clue on this.
+I will reach someone upstream to understand how everything is built because =
+
+their way of building is totally incompatible with how Buildroot builds.
+
+> All patches now need to have an "Upstream: <link>" tag that indicates
+> where the patch has been submitted.
+
+I will ensure this once I would have deal with all the issues here.
+
+> > +diff --git a/cmake/modules/libelf.cmake b/cmake/modules/libelf.cmake
+> > +index 8ca2f4f7..73d13d26 100644
+> > +--- a/cmake/modules/libelf.cmake
+> > ++++ b/cmake/modules/libelf.cmake
+> > +@@ -10,7 +10,7 @@ if(LIBELF_INCLUDE)
+> > +     add_custom_target(libelf)
+> > + elseif(NOT USE_BUNDLED_LIBELF)
+> > +     find_path(LIBELF_INCLUDE elf.h PATH_SUFFIXES elf)
+> > +-    find_library(LIBELF_LIB NAMES libelf.a libelf.so)
+> > ++    find_library(LIBELF_LIB NAMES libelf.so)
 > =
 
-> I tested your version bump, and it fails to build with:
+> Is this really related?
+
+We need this patch, otherwise, building sysdig fails with the following:
+[ 22%] Linking C shared library libscap_engine_bpf.so
+/home/francis-buildroot/buildroot/output/host/lib/gcc/x86_64-buildroot-linu=
+x-
+gnu/12.3.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: /home/francis-
+buildroot/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/=
+../
+lib64/libelf.a(elf_error.o): relocation R_X86_64_TPOFF32 against =
+
+`global_error' can not be used when making a shared object; recompile with -
+fPIC
+/home/francis-buildroot/buildroot/output/host/lib/gcc/x86_64-buildroot-linu=
+x-
+gnu/12.3.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: failed to set =
+
+dynamic section sizes: bad value
+
+> > diff --git a/package/falcosecurity-libs/falcosecurity-libs.hash
+> > b/package/falcosecurity-libs/falcosecurity-libs.hash index
+> > 2e239ca2fe..ef805cbcf6 100644
+> > --- a/package/falcosecurity-libs/falcosecurity-libs.hash
+> > +++ b/package/falcosecurity-libs/falcosecurity-libs.hash
+> > @@ -1,5 +1,5 @@
+> > =
+
+> >  # sha256 locally computed
+> > =
+
+> > -sha256  80903bc57b7f9c5f24298ecf1531cf66ef571681b4bd1e05f6e4db704ffb38=
+0b =
+
+> > falcosecurity-libs-e5c53d648f3c4694385bbe488e7d47eaa36c229a.tar.gz
+> > +sha256  2a4b37c08bec4ba81326314831f341385aff267062e8d44834379586896629=
+36
+> >  falcosecurity-libs-0.10.5.tar.gz> =
+
+> >  sha256  21ec9433a87459b3477faf542bacec419dc03af841309eac35edeffe481cf1=
+0b =
+
+> >  COPYING sha256 =
+
+> >  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 =
+
+> >  driver/GPL2.txt sha256 =
+
+> >  f17d3f2c2d565a74a7d5bf96f880c43701e141897e8dff0c8aa13e5d07aaf226 =
+
+> >  driver/MIT.txt> =
+
+> > diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk
+> > b/package/falcosecurity-libs/falcosecurity-libs.mk index
+> > 92d5c61832..acd46cf7a5 100644
+> > --- a/package/falcosecurity-libs/falcosecurity-libs.mk
+> > +++ b/package/falcosecurity-libs/falcosecurity-libs.mk
+> > @@ -4,7 +4,7 @@
+> > =
+
+> >  #
+> >  ######################################################################=
+###
+> >  #######> =
+
+> > -FALCOSECURITY_LIBS_VERSION =3D e5c53d648f3c4694385bbe488e7d47eaa36c229a
+> > +FALCOSECURITY_LIBS_VERSION =3D 0.10.5
+> > =
+
+> >  FALCOSECURITY_LIBS_SITE =3D $(call
+> >  github,falcosecurity,libs,$(FALCOSECURITY_LIBS_VERSION))
+> >  FALCOSECURITY_LIBS_LICENSE =3D Apache-2.0 (userspace), MIT or GPL-2.0
+> >  (driver) FALCOSECURITY_LIBS_LICENSE_FILES =3D COPYING driver/MIT.txt
+> >  driver/GPL2.txt> =
+
+> > @@ -57,17 +57,19 @@ endef
+> > =
+
+> >  # For the others, it was taken by inspecting
+> >  # falcosecurity-libs/*/CMakeLists.txt, which normally creates these
+> >  # files, but doesn't work well with the kernel-module infrastructure.
+> > =
+
+> > +# The magical number for API_VERSION and SCHEMA_VERSION are taken from
+> > +# corresponding files.
 > =
 
-> CMake Error at
-> /home/thomas/projets/buildroot/output/build/falcosecurity-libs-e5c53d648f=
-3c
-> 4694385bbe488e7d47eaa36c229a/userspace/libscap/CMakeLists.txt:131
-> (add_subdirectory): The binary directory
-> =
+> Which corresponding files? :-)
 
->    =
+I just removed this comment as the files were already mentioned above.
 
-> /home/thomas/projets/buildroot/output/build/sysdig-0.31.4/buildroot-build=
-/d
-> river
-> =
-
->   is already used to build a source directory.  It cannot be used to build
->   source directory
-> =
-
->    =
-
-> /home/thomas/projets/buildroot/output/build/falcosecurity-libs-e5c53d648f=
-3c
-> 4694385bbe488e7d47eaa36c229a/driver
-> =
-
->   Specify a unique binary directory name.
-> =
-
-> during the configuration step of sysdig.
-> =
-
-> Configuration tested:
-> =
-
-> BR2_arm=3Dy
-> BR2_cortex_a9=3Dy
-> BR2_ARM_ENABLE_VFP=3Dy
-> BR2_TOOLCHAIN_EXTERNAL=3Dy
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=3Dy
-> BR2_INIT_NONE=3Dy
-> BR2_SYSTEM_BIN_SH_NONE=3Dy
-> BR2_LINUX_KERNEL=3Dy
-> BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
-> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.1"
-> BR2_LINUX_KERNEL_DEFCONFIG=3D"vexpress"
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_SYSDIG=3Dy
-> BR2_PACKAGE_LUA=3Dy
-> BR2_PACKAGE_LUA_5_1=3Dy
-> # BR2_TARGET_ROOTFS_TAR is not set
-
-> it would be good to have a runtime test for sysdig in support/testing/,
-> as it's not trivial to build, and the autobuilders never caught the
-> patching issue.
-
-Good idea! I will check how I can do that!
-
-> >  SYSDIG_CONF_OPTS +=3D
-> >  -DFALCOSECURITY_LIBS_SOURCE_DIR=3D$(FALCOSECURITY_LIBS_SRCDIR) \> =
-
-> > +	-DDRIVER_SOURCE_DIR=3D$(FALCOSECURITY_LIBS_SRCDIR)/driver \
-> =
-
-> So apparently something goes wrong with this. Perhaps because
-> falcosecurity-libs needs to be bumped first?
-
-As you advised, bumping first the libs then the binary removed the above =
-
-problem, thank you!
-Regarding this, I am wondering if I should bump both of them in the same =
-
-commit, as they are tightly coupled. What do you think?
-
-Note that, I had to make linux-menuconfig to add CONFIG_IPV6, to avoid some =
-
-compile errors due to some missing IPv6 related fields while compiling the =
-
-kernel module which is parts of the libs.
-
-> >  	-DVALIJSON_INCLUDE=3D$(BUILD_DIR)/valijson-0.6/include/valijson \
-> =
-
-> One thing that is a bit annoying with the packaging here is the fact
-> that sysdig needs to look into the source directory of
-> falcosecurity-libs and the source tree of valijson. Packages should
-> normally not need to access the source/build tree of other packages.
-> Not a strict requirement for this version bump, but would be good to
-> address on the long run.
-> =
-
-> By the way
-> -DVALIJSON_INCLUDE=3D$(BUILD_DIR)/valijson-0.6/include/valijson is truly
-> horrible, because if valijson gets updated to another version... like
-> it has:
-> =
-
-> VALIJSON_VERSION =3D 0.7
-> =
-
-> then this doesn't work anymore.
-> =
-
-> It needs to be VALIJSON_SRCDIR.
-> =
-
-> Curious that we can build sysdig today (I verified, it builds) with
-> this mistake. Probably means this option is irrelevant.
-> =
-
-> Could you have a look at all those issues?
-
-I removed everything about VALIJSON and it builds fine.
-Glad making it simpler permits to build it!
-
-> Thanks!
 > =
 
 > Thomas
