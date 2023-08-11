@@ -1,69 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3980C04A6A
-	for <buildroot@archiver.kernel.org>; Thu, 10 Aug 2023 22:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70AD1C001DE
+	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 01:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 79FF2417E8;
-	Thu, 10 Aug 2023 22:10:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79FF2417E8
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8CB841E08;
+	Fri, 11 Aug 2023 01:40:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8CB841E08
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id x_h7uJOPGMFt; Thu, 10 Aug 2023 22:10:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IsKBD5MKN7RX; Fri, 11 Aug 2023 01:40:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8FA6417D3;
-	Thu, 10 Aug 2023 22:10:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8FA6417D3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D6C01BF83B
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:10:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C61041E10;
+	Fri, 11 Aug 2023 01:40:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C61041E10
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D70B31BF3C3
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 01:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 671B88211D
- for <buildroot@lists.busybox.net>; Thu, 10 Aug 2023 22:10:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 671B88211D
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6E7B60AB1
+ for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 01:40:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6E7B60AB1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PJ_u1-fQ2jBM for <buildroot@lists.busybox.net>;
- Thu, 10 Aug 2023 22:10:25 +0000 (UTC)
-Received: from smtpcmd14173.aruba.it (smtpcmd14173.aruba.it [62.149.156.173])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 82E2B820C5
- for <buildroot@buildroot.org>; Thu, 10 Aug 2023 22:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82E2B820C5
-Received: from localhost.localdomain ([95.47.160.93])
- by Aruba Outgoing Smtp  with ESMTPSA
- id UDrKq0SZSXI7yUDrKqsfgY; Fri, 11 Aug 2023 00:10:23 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YcteVa3I-Hc4 for <buildroot@lists.busybox.net>;
+ Fri, 11 Aug 2023 01:40:05 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1AD1B60AA6
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 01:40:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AD1B60AA6
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id A4562352BD31; Fri, 11 Aug 2023 03:40:00 +0200 (CEST)
+Date: Fri, 11 Aug 2023 03:40:00 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Fri, 11 Aug 2023 00:10:20 +0200
-Message-Id: <20230810221020.12181-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cc3dd6f5-9a38-70bb-7df5-ecebf9ca4bb6@benettiengineering.com>
-References: <cc3dd6f5-9a38-70bb-7df5-ecebf9ca4bb6@benettiengineering.com>
+Message-ID: <ZNWRcJrlXwFFkUtG@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfOeNQd2vMveJuvBWBpXOgyk51m0e+3xzlyiufNYBDqDO1CPmJnVgVvIBKAzfnAkhqlN6Mu4wojaoX7rfQcEbRLX8bqzbgiWgTnLTAhbOyCl0b+jhCZ/U
- +py7DT9VxV96KLyMpiZkCAcTcQjeO3xVJeHbLTpAlc6jBXJrw0pnCqyLk4l2kIuyElXOjOaxSXCIlBN+3+0b7m+5vWWNpb/uqLlQ7sG4OFAvyttX3X810NeE
- 54vtr8Qu1m5Q/iEIOWHQxbBH8o4DmCzls3ouGOWDI3dhOYAkqxaylV/CHRHEkRdYf12stBVWbAaXtKwxuSYp7/e6gw1iTgkDanI7xQy8EiqsbmzTF027p4VJ
- +T91wgUY
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1691705423; bh=bQR1Crx1o5glYHQemcp2Jut8pYivFKPGVoVBqKeytxo=;
- h=From:To:Subject:Date:MIME-Version;
- b=HWX1W5lsNU9Lxyu9Hq5XrjmhmlfM61VpFXzQZm4HmQ+t8C5WXlIn/BP9ZM4l+SDRa
- KMdHKe8x7iryMO7ttFs9AV/bllFSpbxWh8rKYCXAEqikkcheusYJSVI3A2EoJEm1gq
- HaG4ZkSTnSqVFev6TUaZ5v51kI3cLgVtxhAl19ZL7nZwbAXPP0XjVeCJw+i9e1nJ72
- AMPQH47367qGVXJ64rYcHJLHm/ZGTh43HeyGTreiYFvhkExe1uieJuGVUNqwCysAck
- FUEb22FUJ66HX7Wozvh+D9DvyTlfOJO9+RH6nTw75ZUXDJdOtRJ78we13Vq30gMJvK
- aI/haFupstkZA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=HWX1W5ls
-Subject: [Buildroot] [PATCH v2] configs/asus_tinker_rk3288_defconfig: switch
- to zImage and bump Linux to 6.1.44, U-Boot to 2023.07
+ d=openadk.org; s=2022; 
+ t=1691718000; bh=b8diHUHpTGDhKvP+enUz8sjUJ/cTXgJ4YS0uURr4DLA=;
+ h=Date:From:To:Subject:From;
+ b=HmR4M7v9q9d2iCaoB0SCPi5FrBvyX92IXPCJxd6z4jtflX7Ym7XL32OegeU8b1j4V
+ sdUX+XYGGou+b36jRxxpRuAmx7PXDZmh7vBeQBhXGVNedO/K5eQqzJhB1Ap0qKqms1
+ v4Zyuic2CkQC4cfHbylEeNdyX26h9Q7F9tUpq76ykvr5d/udgl2GQg2A1TFP7P5LKZ
+ 2gkhvFj6T2m/41+M6/8un9sVr5NMhcVIGikrEN7EgjAZL2BYQ7j2B/O3zJzDgQnBgT
+ Lz4364Y7i+TLGsdvqTzgQentOuhglmIuGcXivAXI7jigukFrFRVByZfJNqv3R3+jn5
+ wz+k7tTbQYTbQ==
+Subject: [Buildroot] [PATCH v2] package/batman-adv: update to 2023.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,68 +65,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-uImage is almost deprecated so let's switch to zImage. Let's also bump
-Linux version to 6.1.44, U-Boot to 2023.07 and remove
-BR2_TARGET_UBOOT_NEEDS_PYTHON3 since it's selected by
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT.
+Older Batman-adv versions fail to build with kernel 6.4.x
+with following error message:
+bat_iv_ogm.c:283:18: error: implicit declaration of function 'prandom_u32_max'; did you mean 'prandom_u32_state'? [-Werror=implicit-function-declaration]
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* changed uImage to zImage in extlinux.conf
----
- board/asus/tinker/extlinux.conf      | 2 +-
- configs/asus_tinker_rk3288_defconfig | 7 ++-----
- 2 files changed, 3 insertions(+), 6 deletions(-)
+prandom_u32_max got removed in commit 3c202d14a9d73fb63c3dccb18feac5618c21e1c4
+from the Linux kernel.
 
-diff --git a/board/asus/tinker/extlinux.conf b/board/asus/tinker/extlinux.conf
-index bb96ddb893..be21e246ec 100644
---- a/board/asus/tinker/extlinux.conf
-+++ b/board/asus/tinker/extlinux.conf
-@@ -1,4 +1,4 @@
- label Tinker linux
--  kernel /boot/uImage
-+  kernel /boot/zImage
-   devicetree /boot/rk3288-tinker.dtb
-   append console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index 40f4125880..b3e4502a45 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -10,10 +10,9 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
-@@ -23,10 +22,8 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin tpl/u-boot-tpl.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.44"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-tinker"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+Fixes:
+ - http://autobuild.buildroot.net/results/205/2055ac3805d1941c148f1681a224570055dd83cd
+
+For other changes in this release, see:
+https://www.open-mesh.org/news/112
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1 -> v2:
+ - move locally computed sha256 hash to the right place, mentioned
+   by Thomas Petazzoni
+---
+ package/batman-adv/batman-adv.hash | 7 ++++---
+ package/batman-adv/batman-adv.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
+index 14a92c231a..b95dfa34dd 100644
+--- a/package/batman-adv/batman-adv.hash
++++ b/package/batman-adv/batman-adv.hash
+@@ -1,7 +1,8 @@
+-# From https://downloads.open-mesh.org/batman/releases/batman-adv-2022.2/batman-adv-2022.2.tar.gz.sha1
+-sha1  e1829e10fc37ea674a20cb9ba1d6c1483042fbfa  batman-adv-2022.2.tar.gz
++# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2023.1.tar.gz.sha1
++sha1  e3d6e8d4db772156d7ad021b9a166832633a2ea5  batman-adv-2023.1.tar.gz
++# locally computed
++sha256  f46a7286660a5ec3506a1be7ef60b471c51ac70550597d598040479ab7b936b8  batman-adv-2022.3.tar.gz
+ 
+ # Hash for license files
+-sha256  218ffb534fead1c9b5b0d90ec1b2fba688209cdf00e861bece1cbf469fe69953  batman-adv-2022.3.tar.gz
+ sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index 75b8292ee1..5b50572d11 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BATMAN_ADV_VERSION = 2022.3
++BATMAN_ADV_VERSION = 2023.1
+ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
+ BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
