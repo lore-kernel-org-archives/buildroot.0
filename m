@@ -4,53 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C82ACC001B0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 09:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E820AC001B0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 09:51:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22E884160D;
-	Sat, 12 Aug 2023 09:36:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22E884160D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DE80417C1;
+	Sat, 12 Aug 2023 09:51:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DE80417C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jHrvn_csOSIR; Sat, 12 Aug 2023 09:36:18 +0000 (UTC)
+	with ESMTP id WPb6QY4dPsUU; Sat, 12 Aug 2023 09:51:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20CB641615;
-	Sat, 12 Aug 2023 09:36:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20CB641615
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6EF391BF863
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 09:36:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53189417CC;
+	Sat, 12 Aug 2023 09:51:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53189417CC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CB461BF863
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 09:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F25640236
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 09:36:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F25640236
+ by smtp1.osuosl.org (Postfix) with ESMTP id 35EFC82034
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 09:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35EFC82034
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z_ojl9prSwsK for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 09:36:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id v26-mN9QUE1q for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 09:51:50 +0000 (UTC)
 Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 06C0540159
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 09:36:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06C0540159
-Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout02.mail.de (Postfix) with ESMTP id D77E9A011B;
- Sat, 12 Aug 2023 11:36:10 +0200 (CEST)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 04DE281F04
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 09:51:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04DE281F04
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout02.mail.de (Postfix) with ESMTP id 4D6D8A05A5;
+ Sat, 12 Aug 2023 11:51:48 +0200 (CEST)
 Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix03.mail.de (Postfix) with ESMTP id BAB3B8014D;
- Sat, 12 Aug 2023 11:36:10 +0200 (CEST)
+ by postfix01.mail.de (Postfix) with ESMTP id 3417A801B8;
+ Sat, 12 Aug 2023 11:51:48 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
  (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 3A1241001A8;
- Sat, 12 Aug 2023 11:36:10 +0200 (CEST)
-To: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Aug 2023 11:36:09 +0200
-Message-ID: <1859651.tdWV9SEqCh@kilian-aisec>
-In-Reply-To: <20230808231913.1d0a98e1@windsurf>
-References: <20230808050122.6788-1-kilian.zinnecker@mail.de>
- <1860848.tdWV9SEqCh@kilian-aisec> <20230808231913.1d0a98e1@windsurf>
+ by smtp01.mail.de (Postfix) with ESMTPSA id CA800100135;
+ Sat, 12 Aug 2023 11:51:47 +0200 (CEST)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Date: Sat, 12 Aug 2023 11:51:47 +0200
+Message-ID: <10318595.nUPlyArG6x@kilian-aisec>
+In-Reply-To: <CAOCHtYiuJimX-pF-hUhuK35X+63eE1GJbK=xAZOR73gb8iZkog@mail.gmail.com>
+References: <2691942.mvXUDI8C0e@kilian-aisec>
+ <CAOCHtYjoouGOSwOy1Fh4muYnU3E-yY6jp8GOcy1f=MhCaaAx8w@mail.gmail.com>
+ <CAOCHtYiuJimX-pF-hUhuK35X+63eE1GJbK=xAZOR73gb8iZkog@mail.gmail.com>
 MIME-Version: 1.0
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
@@ -60,23 +61,22 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 1493
-X-purgate-ID: 154282::1691832970-FEFFB7B6-C6FD838D/0/0
+X-purgate-size: 2294
+X-purgate-ID: 154282::1691833908-5DFFD7B6-97379F4A/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1691832970;
- bh=EmBLkQUd4+02KFSNmpcevlITxjw4ZLe2muEReJTvNqM=;
- h=From:To:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=c9yZaSUhN1AsdQ6OXlfSkQqpMDsGRIUIchnQYIHu745cJWKdy/7MQvEAgs+TakDec
- p/CYmKexvbrTjlJ6qSgno9NwAe3526d7jEfXD1SITO69eydoYXkZkAwD6bEZsf+tA3
- +gSyOI7cQD7e00nd+TLHNNQcoNSnRfjlrmYy1XFCYVlJTFmjV9TaE20QQ8nSWvSpCi
- yG+KRuPw3o938ddzQMsKH00BKWB1NnombKhKo5o0ExVCLmLAmTZTQIVXjlpUsK1IAO
- p5I+P5mUb66fFtcXcxYXLl5PFyFULKasE0k7AUJvnbNnOQYvHQiOPHHhknfS/ZE+Pi
- mrcZLDyyqIU7w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mail.de; s=mailde202009; t=1691833908;
+ bh=ROxl++X1w2Vz8AV+jDFWKHD8CO78MP/OrNDU3zrJgDA=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=QsGqZQD9lC0Tx108J+4LYPx32f9QjLrDDsOuCTaCnMq1psoVji+mIv4loJM8bthY1
+ WopFXaFrSyeJ+P8QmKWfymfuLrqPl3jcGE3fa83O33+GBB+3jFCqF6I1mCpvVS5Czx
+ MLjTM5YGVHMAiL3mRSG+ar/WpoeZlzoR9AvpKt7gv6VVa5awemrruRFAVC/UaLrROX
+ kw0ZUi41fyZjZg5V7Uga329e6xL0dvE76SuTPto1EOjzpfevaAaiu1vig6dyM+jBhX
+ gLdsvm1/hkbm+j30U8zp9PaAE4ZIsYvP8hDZ5Nvo/elStXWKoBdQlhfMR4Q1qb4fah
+ VBn0WPvEk4cug==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=c9yZaSUh
-Subject: Re: [Buildroot] [PATCH 0/2] Fix Rock 5B build,
- broken by gcc 12 warnings
+ header.a=rsa-sha256 header.s=mailde202009 header.b=QsGqZQD9
+Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,49 +90,73 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
 Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Robert Nelson <robertcnelson@gmail.com>,
+ Kilian Zinnecker via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Hello Robert,
+
+thanks for all the information you provided so far! It is much appreciated!
+
+However, I have to digest all of it, as I am not so familiar with a lot of 
+thinks and I will ask some "stupid" questions ;)
 
 [--SNIP--]
 
-> > Thanks for the info, I actually would not have known this! I think that
-> > the
-> > best way is to ask the maintainers of the Radxa custom kernel whether they
-> > may fix the remaining issues, so that the custom kernel compiles with gcc
-> > 12.x. I intend to do so.
+> Okay Kilian, these all build with
+> x86_64-gcc-13.2.0-nolibc-riscv64-linux.tar.xz
+
+Where exactly do I find kernel.org's x86_64-gcc-13.2.0-nolibc-riscv64-
+linux.tar.xz toolchain? (Yes, my questions are that stupid ;)) Should I prefer 
+it to the gcc 13.2 toolchain build by buildroot natively?
+
+> opensbi:
+> https://git.beagleboard.org/beaglev-ahead/beaglev-ahead-opensbi/-/tree/0.9-> 1.1.2-ubuntu u-boot:
+> https://git.beagleboard.org/beaglev-ahead/beaglev-ahead-u-boot/-/tree/beagl
+> ev-v2020.01-1.1.2-ubuntu linux:
+> https://git.beagleboard.org/beaglev-ahead/beaglev-ahead-linux/-/tree/beagle
+> v-v5.10.113-1.1.2-ubuntu
 > 
-> ACK.
+> For bandwidth issues, please use the github mirrors directly in
+> patches for buildroot, as these are push mirrored from
+> git.beagleboard.org/ , at worst they lag by 10 minutes after a new
+> commit
+> 
+> opensbi:
+> https://github.com/beagleboard/beaglev-ahead-opensbi/tree/0.9-1.1.2-ubuntu
+> u-boot:
+> https://github.com/beagleboard/beaglev-ahead-u-boot/tree/beaglev-v2020.01-1
+> .1.2-ubuntu linux:
+> https://github.com/beagleboard/linux/tree/beaglev-v5.10.113-1.1.2-ubuntu
 
-I opened up an issue in their git about this. However, I must admit, I really 
-doubt, that the Radxa people fix the warnings in their kernel in time for the 
-next buildroot release, or even at all: They seem to have issues, reported 
-last december, in their git, which they yet did not reply to. Now, I could 
-give it a try and try to fix the warnigs of their custom code, but at the 
-moment, I don't have the time, and I would rather like to focus on the 
-BeagleV-Ahead board support :)
+Yes, I saw the notes about the mirrors on github on the beagleboard gitlab 
+page. I will use the mirrors!
 
-So I would argue to simply fix the gcc version to 11x for now:
+> Verification ci image, available for the next 14 days..
+> 
+> https://git.beagleboard.org/beaglev-ahead/xuantie-ubuntu/-/jobs/13303
+> 
+> ```
+> voodoo@hestia:~/Downloads$ unzip xuantie-ubuntu-1.1.2-13303.zip
+> Archive:  xuantie-ubuntu-1.1.2-13303.zip
+>   inflating: deploy/boot.ext4.xz
+>   inflating: deploy/fastboot_emmc.sh
+>   inflating: deploy/mac_fastboot_emmc.sh
+>   inflating: deploy/root.ext4.xz
+>   inflating: deploy/u-boot-with-spl.bin
+> voodoo@hestia:~/Downloads$ cd deploy/
+> voodoo@hestia:~/Downloads/deploy$ sudo ./fastboot_emmc.sh
+> ```
 
-1. I think this is legit in such cases - why else would the option even exist 
-in buildroot.
-
-2. Even if version 11 of gcc will be removed in the near future, we would then 
-at least have one release version of buildroot, which features the Rock 5B. I 
-think that would be a plus for makers, hobbyists and professionals, e.g., who 
-use the Rock 5B to evaluate the RK3588 (I actually know one person who used 
-the Rock 5B for such purposes). Also, maybe in the future I find time to 
-prepare some patches, or maybe the Radxa people also fix it till then.
-
-[--SNIP--]
+Great, thanks! So this is then meant, that I can use it for myself to see that 
+my board boots with this and I can also look what is done in the scripts, so 
+that I can reproduce that in the buildroot board support?
 
 Best regards,
 Kilian
-
-
 
 
 _______________________________________________
