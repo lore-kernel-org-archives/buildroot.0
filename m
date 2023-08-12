@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DFA0C001E0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:29:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A5F1C001E0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:30:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA39B41591;
-	Sat, 12 Aug 2023 19:29:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA39B41591
+	by smtp4.osuosl.org (Postfix) with ESMTP id 261C441554;
+	Sat, 12 Aug 2023 19:30:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 261C441554
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Edj96yFFMlhD; Sat, 12 Aug 2023 19:29:55 +0000 (UTC)
+	with ESMTP id lDJLrU-N7skc; Sat, 12 Aug 2023 19:30:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C36341554;
-	Sat, 12 Aug 2023 19:29:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C36341554
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 15C511BF3CD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 317BD41570;
+	Sat, 12 Aug 2023 19:30:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 317BD41570
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 506E81BF3CD
  for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:29:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E38E281947
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:29:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E38E281947
+ by smtp2.osuosl.org (Postfix) with ESMTP id 29AC540500
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:29:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29AC540500
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fDp05FVxoNAF for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 19:29:32 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 634888193E
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FDWvicwmfNqC for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 19:29:31 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 464E540003
  for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 634888193E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 464E540003
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.localdomain ([89.144.222.147]) by mail.gmx.net
  (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MSt8Q-1qMc3q05UM-00UMyl; Sat, 12 Aug 2023 21:29:28 +0200
+ 1MiJVG-1ppVCf1kG6-00fOaN; Sat, 12 Aug 2023 21:29:23 +0200
 From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 21:28:33 +0200
-Message-ID: <20230812192842.135682-5-dalang@gmx.at>
+Date: Sat, 12 Aug 2023 21:28:32 +0200
+Message-ID: <20230812192842.135682-4-dalang@gmx.at>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230812192842.135682-1-dalang@gmx.at>
 References: <20230812192842.135682-1-dalang@gmx.at>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:eAdzxmkGyiunlYc93f4vuzxNWB1a1j72uS0brig7iCmxtgM9UGK
- Fpex+GpeSDiH47Se8FBWos4EUrPty5DcYrlOScs8Yuiw++EWzzQ1DpRVc/b525O6tgEl5cr
- IviIDESVuVXehb7xYo4QKjhtMH7+1g771cP5P/M/uGHDwN2ZyXYTLk46iKBC0NdG9WHtwvk
- jM+9QaRVrl43gerkXLaIw==
-UI-OutboundReport: notjunk:1;M01:P0:jvkcauqeWLg=;YgozbLvT3/yAhQOTHXbS8APCqOG
- cSHaxjZB9fUGAB4N0F1mIl8nxqAlsMpBCgpUCVdjYTnngB372IPk4r3YDHF2HgE3kSlNKcJaD
- pq62jTj9/3VBo7b2oAn7XPK8VdrEeKhlYAQ4p1xPMYXCm81q+C644iMQVT4biAAhbPJ9+4elt
- IJj2UxJrM+glUy9hyF3A4fs2L5KYbfM+Lf0sdMkuwJXIcAYmrK4EdezJA9Q3XzaihzVfITA14
- 3OPkya3WXi5cLFXzO7WzgveUS7JIJJq4tVFgjpQyWep0BX8XJNo+t12KYNs2kv/Xw4i5cWMru
- iHiMYNfiRtloF3bZXJSDjipQOtPE9Fq8Ltzv5rH1wRhyLrJUBTWgF4hh+qGKecu3FQTDCwSTN
- BBnF8bmX44AvKVu1Qq/sbQVzJyEwlNzs3y61rwHP7rZFPT4fUlBXVF4Rd/hHnk3DenzHqLPnv
- 77FQy0AFtbVeGA7OzcwWxtynxTo3C1jQFGSL143RByYXzj/O2M5P9aPgIzGBXjCt2v3sLXuWH
- r66R+dpcZnvpQV2wdBafS13EKOIkpJLzz0on6PEPnBI1Wb4PJUKwtq7C/pqcw95ZLaA0LFl5F
- r3KBj8/YJnHHl7iu7cnCamCDnHnyVvdtGzTRl5rc2LPaqcw/MHPsRdkIt/G2d7B2Vu1Vox/dr
- 7dH79MmzUqxVzF1gCcBRgXjIAPs4x97f4BLgLle7lYF06V32IaAbvZtCC1w7Bn+WQF54hq4gl
- SgJZ0RLtqn65T/KY2BBkxOo8mY26TdBkLAKxm7V5Whmvn/d/BTDC5zAuh3wKOohB7woHmJxiq
- d0O7CLfwyEp8UjAnVPcGpVZWQqTfM5HdwXhl3HzcgL9VM2CLMJJ6I0Yle8xrpeYekeLdCMZEO
- hWYiaVQkpvEfNlamGUIfQj1s2dbqW2cfu+HEY0O7s4NuDWCXn4VMx2SvegpsvkpDCywtVG0E3
- twvUjUO8F7n2UU9xCLACxb21OXM=
+X-Provags-ID: V03:K1:9lvBqe4KcmW4AX9AlJV71/bD5cgo1LacUhNUdvuY5OrOFT3KA+J
+ QMvO2mMIoW3/s+OgwxKpsDMFcDOCoDjIgE0+pIcZtgNzbpQxZNx9O0Tt1f2t4zNFyWgsCTf
+ D3epmBppm5RyCkskaUU0RXf3CsHrVD/hQG9P8nlhAprOafutroS2lcXnMJPS/MvPfZ0Dpfu
+ +sVaNucX9TDVfW49C2BwA==
+UI-OutboundReport: notjunk:1;M01:P0:gcFnjOHJYqQ=;TH4vH7A4YCgizJaYlR7VE/tAG4P
+ +Y98yfOJzueiwqbApZ7rCwIGtwCyhksQWyzQnATEV9lUnNjiv1uTpFcM712PXjTMQhXn1WHMp
+ xmDv6RKP4XoibqxjTpxBLACUcsFajUF/4m2wiQUlw77tZyh7ErU95twgiczBsBq5hyMrQvJTn
+ Cd6OBO2H/eLuBjLTrNAHe2G6s8ka8NC3tgjnbcG+XSm1QYY6BmJjB5PzDL+ZezZP66+hjR48S
+ tzsvzqARDeJyLN7GnEGDQLD+Bh1MXl5katI98yrsAGL8auTfjsmo+Ue2mcSg4x+6Sxl1fXuBM
+ DG344dLakiILWd6+R+4VU1Er+VUhLLPvDfpLJo3gt1HVQjxqY3eGOvIIPFP7o21VXD3JGfu6+
+ xj8jTQ4b3sZY8fA+6xJJD2SyrSJv52SDXwP3Er4N8OzFxRXU/ZSe0DhlhMNZEnLZtu5tAGm/B
+ 2k6IV0WX0jE91B3A35yzxt7o+FV+XujNaiClgXDr8QsMRqvVk/diSX5glEh+Yl921TRbAzcV1
+ LXiGvfcOJwckttDVHwb+Ns9XIt1Ff3SQiy7/Ep4BA7GZFx1JPhtQVvYRfOtD0jol4Xb00tGLv
+ mh2cc0hkZ2JSUJvhhX45xR/V8M/rsMcY4HcHf5tlN0kfFND0wMQcw3jL6VQ3LiJqdhZr8jCBD
+ +n4Yajp2uXFxW1H3QsCrjG99iUpDxZHQqy5pokntnsp8DKWGxKRx/mrJ/uqWB7bGpz1zYrEYk
+ RQYU1iCRoHxSxQ2Rw8C5Oq2qJeopYz1lKQsCTb9drM8D348BREaLXzqFcRKywq9+aCsER8Avn
+ oC/ZxgrY4APGRwucrM4XmwPcjD+N7c6DSReD2pj9Z4jA95fymgyxVhWJaqSwKySf1jU4f8U1I
+ RLBsUDnQ8Vy9HLA8yvp/JFo8+x7gDFyFOsQOH5AfahKQ2hPkrlbSSGZdr+hJ36rK6gtQMVnET
+ eQFkkM3prQyu2ea0W4t71BacgBk=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.at; 
- s=s31663417; t=1691868568; x=1692473368; i=dalang@gmx.at;
- bh=heq7SVinlq29NPxaQgVnUmrnTUPezi2ec+YXbMPoO/8=;
+ s=s31663417; t=1691868563; x=1692473363; i=dalang@gmx.at;
+ bh=NryfjNpK36Fqn09DbL/XP8pb796qAFXsYQcEYWMW1IY=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=rXf0FA9BSOyf23/ZMbn0ojyUgQtfPLDaSbwy/2p5rb/yxYyLdBUvoBU9brLvEE/WXQSHX/u
- LotuXpih5O46HzKD12Pcv8Qug5kyPdV32mzJ+s9IP6sActpdMhW5+4PofBy5LKLntU0EA3WSX
- ck8QXuzM3eVngiCXe64Iblb2UQUeqX5aTS14esvkfKMr083Ap1sKls5CTEmLLo1gEbk0+Nr5b
- onYo79NeclkdnMJVug+xo6u+InDEYtF15curfzn7Apsm4XA/OF7haCYaS0dyxIfDww6mBAein
- ZBfsYMEWRlIITzCzgW6yyZEdHiaFyF9oTk+TNb1gJiFZCok4M9ew==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=i5MQHbMg8hX8r2WyQxhdmwzbZuNInx9eT6ineZAc3FbT1Z6kMWnoHB3O7lGh6MFQ0iet1Q5
+ lPq6PIJKaRQEIS1sWf7hu4hZ+a1Sj2Pv2SBuvJId0AVak9JT2699dlnRUtFGoUPHJ4eal8E9Z
+ jqexBpa+hHI4wa14UcOnBh36OM8DsPnLYa6u9uPl2IJz0bcpfAtqEgrXkgp3ZpaYUrKI3SGqM
+ RiF7twQVkn/sObEocXVwm4Ch1+66oFtMd/Lfy4poKhEomFB2orvLT47Q7wgYFM8EiAcKZG2bn
+ l9dv4kSHFbFI2AKIxHpCtLozSS91dCvwlj2/Rhq3IHNh3cEs/a4w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=rXf0FA9B
-Subject: [Buildroot] [PATCH v3 5/8] support/scripts/nvd_api_v2.py: new
- helper class
+ header.a=rsa-sha256 header.s=s31663417 header.b=i5MQHbMg
+Subject: [Buildroot] [PATCH v3 4/8] support/scripts/gen-missing-cpe: remove
+ rarely used script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,183 +91,335 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Sen Hastings <sen@phobosdpl.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The current NVD data feeds used for CVE and CPE checking will be retired
-by 2023-12-05 [0]. Both have to be switched to the new v2 API. Since
-fetching data from both sources workes the same, a common base class is
-used to handle the API interaction.
-To store the data locally a sqlite database is used.
+As discussed on the mailing list [0] keeping up with version numbers of
+all registered CPE ID won't work.
+In addition the feed used to generated the XML files will be retired
+[1]. In the future an API needs to be used for fetching the data in
+connection with a local database.
+All of this works against keeping this script and porting it to the new
+API.
+As a last blow Matthew, the original author concluded [2]:
+Makes sense to drop it.  There never got to be enough momentum in the overall
+software community to make CVE or even the new identifier really accurate.
 
-[0]: https://nvd.nist.gov/General/News/change-timeline
+[0]: https://lists.buildroot.org/pipermail/buildroot/2023-August/672620.html
+[1]: https://nvd.nist.gov/General/News/change-timeline
+[2]: https://lists.buildroot.org/pipermail/buildroot/2023-August/672651.html
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
- DEVELOPERS                    |   1 +
- support/scripts/nvd_api_v2.py | 138 ++++++++++++++++++++++++++++++++++
- 2 files changed, 139 insertions(+)
- create mode 100755 support/scripts/nvd_api_v2.py
+v2 -> v3:
+- added this patch after feedback from Thomas
+---
+ Makefile                        |   9 --
+ support/scripts/cpedb.py        | 174 --------------------------------
+ support/scripts/gen-missing-cpe |  65 ------------
+ support/scripts/pkg-stats       |   2 +-
+ 4 files changed, 1 insertion(+), 249 deletions(-)
+ delete mode 100644 support/scripts/cpedb.py
+ delete mode 100755 support/scripts/gen-missing-cpe
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6ffa3ee693..81f809a4c0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -668,6 +668,7 @@ F:	package/paho-mqtt-cpp/
- F:	package/pangomm/
- F:	package/pangomm2_46/
- F:	package/sam-ba/
-+F:	support/scripts/nvd_api_v2.py
+diff --git a/Makefile b/Makefile
+index 080136bc9a..fd807cc3cc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -927,14 +927,6 @@ pkg-stats:
+ 		--html $(O)/pkg-stats.html \
+ 		--nvd-path $(DL_DIR)/buildroot-nvd
  
- N:	Damien Lanson <damien@kal-host.com>
- F:	package/libvdpau/
-diff --git a/support/scripts/nvd_api_v2.py b/support/scripts/nvd_api_v2.py
-new file mode 100755
-index 0000000000..3fdf32596f
---- /dev/null
-+++ b/support/scripts/nvd_api_v2.py
-@@ -0,0 +1,138 @@
-+#!/usr/bin/env python3
-+
-+from datetime import datetime, timezone
-+import os
-+import requests
-+import shutil
-+import sqlite3
-+import time
-+
-+NVD_API_VERSION = '2.0'
-+NVD_API_BASE_URL = 'https://services.nvd.nist.gov/rest/json'
-+
-+
-+class NVD_API:
-+    """
-+    A helper class that fetches data from a NVD API and
-+    helps manage a sqlite database.
-+    """
-+    def __init__(self, nvd_path, service, database_file_prefix):
-+        """
-+        Initialize a new NVD API endpoint with service
-+        as the URL postfix.
-+        """
-+        self.nvd_path = nvd_path
-+        self.service = service
-+        self.url = '%s/%s/%s' % (NVD_API_BASE_URL, service.lower(), NVD_API_VERSION)
-+        self.db_file = os.path.join(nvd_path, '%s-%s.sqlite' % (database_file_prefix, NVD_API_VERSION))
-+        self.db_file_tmp = '%s.tmp' % self.db_file
-+
-+    def init_db(self):
-+        """
-+        Needs to be implemented by derived classes.
-+        Used to make sure that database tables exist.
-+        """
-+        pass
-+
-+    def save_to_db(self, start_index, total_results, content):
-+        """
-+        Needs to be implemented by derived classes.
-+        Used to save the data given by a single API request
-+        to the database.
-+        """
-+        pass
-+
-+    def cleanup_db(self):
-+        """
-+        Clean up any files that where left by previously
-+        failed runs.
-+        """
-+        if os.path.exists(self.db_file_tmp):
-+            os.remove(self.db_file_tmp)
-+
-+    def open_db(self, tmp=False):
-+        """
-+        Open and return a connection to the sqlite database.
-+        """
-+        if tmp:
-+            return sqlite3.connect(self.db_file_tmp)
-+        return sqlite3.connect(self.db_file)
-+
-+    def download(self, last_update):
-+        """
-+        Download all entries from NVD since last_update (if not None).
-+        For each downloaded page save_to_db is called to together with
-+        progress information.
-+        NVD rate limiting allows 5 requests per 30 seconds or one every
-+        6 seconds.
-+        """
-+        args = {}
-+        start_index = 0
-+        total_results = 0
-+        results_per_page = 0
-+
-+        print('Downloading new %s' % self.service)
-+
-+        if (last_update is not None):
-+            args['lastModStartDate'] = last_update.isoformat()
-+            args['lastModEndDate'] = datetime.now(tz=timezone.utc).isoformat()
-+
-+        while True:
-+            args['startIndex'] = start_index
-+
-+            for attempt in range(5):
-+                try:
-+                    page = requests.get(self.url, params=args)
-+                    page.raise_for_status()
-+                    content = page.json()
-+                except Exception:
-+                    time.sleep(6)
-+                else:
-+                    break
-+
-+            if content is None:
-+                # Nothing was downloaded
-+                return False
-+
-+            results_per_page = content['resultsPerPage']
-+            total_results = content['totalResults']
-+            start_index = content['startIndex']
-+
-+            start_index += results_per_page
-+
-+            if self.save_to_db(start_index, total_results, content) is not True:
-+                return False
-+
-+            self.connection.commit()
-+
-+            if start_index >= total_results:
-+                return True
-+
-+            # Otherwise rate limiting will be hit.
-+            time.sleep(6)
-+
-+    def check_for_updates(self):
-+        """
-+        Check if the database file exists and if the last
-+        update was more than 24 hours ago.
-+        """
-+        self.cleanup_db()
-+        last_update = None
-+        if os.path.exists(self.db_file):
-+            last_update = os.stat(self.db_file).st_mtime
-+            if last_update >= time.time() - 86400:
-+                return []
-+            # NVD uses UTC timestamps
-+            last_update = datetime.fromtimestamp(last_update, tz=timezone.utc)
-+            shutil.copy2(self.db_file, self.db_file_tmp)
-+
-+        self.connection = self.open_db(True)
-+        self.init_db()
-+
-+        success = self.download(last_update)
-+        self.connection.close()
-+        if success:
-+            shutil.move(self.db_file_tmp, self.db_file)
-+        else:
-+            print("Update failed!")
-+            os.remove(self.db_file_tmp)
+-.PHONY: missing-cpe
+-missing-cpe:
+-	$(Q)mkdir -p $(CPE_UPDATES_DIR)
+-	$(Q)cd "$(CONFIG_DIR)" ; \
+-	$(TOPDIR)/support/scripts/gen-missing-cpe \
+-		--nvd-path $(DL_DIR)/buildroot-nvd \
+-		--output $(CPE_UPDATES_DIR)
+-
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ # Some subdirectories are also package names. To avoid that "make linux"
+@@ -1191,7 +1183,6 @@ help:
+ 	@echo '  legal-info             - generate info about license compliance'
+ 	@echo '  show-info              - generate info about packages, as a JSON blurb'
+ 	@echo '  pkg-stats              - generate info about packages as JSON and HTML'
+-	@echo '  missing-cpe            - generate XML snippets for missing CPE identifiers'
+ 	@echo '  printvars              - dump internal variables selected with VARS=...'
+ 	@echo '  show-vars              - dump all internal variables as a JSON blurb; use VARS=...'
+ 	@echo '                           to limit the list to variables names matching that pattern'
+diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
+deleted file mode 100644
+index f4daf56124..0000000000
+--- a/support/scripts/cpedb.py
++++ /dev/null
+@@ -1,174 +0,0 @@
+-#!/usr/bin/env python3
+-
+-import xml.etree.ElementTree as ET
+-from xml.etree.ElementTree import Element, SubElement
+-import gzip
+-import os
+-import requests
+-import time
+-from xml.dom import minidom
+-
+-VALID_REFS = ['VENDOR', 'VERSION', 'CHANGE_LOG', 'PRODUCT', 'PROJECT', 'ADVISORY']
+-
+-CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
+-
+-ns = {
+-    '': 'http://cpe.mitre.org/dictionary/2.0',
+-    'cpe-23': 'http://scap.nist.gov/schema/cpe-extension/2.3',
+-    'xml': 'http://www.w3.org/XML/1998/namespace'
+-}
+-
+-
+-class CPE:
+-    def __init__(self, cpe_str, titles, refs):
+-        self.cpe_str = cpe_str
+-        self.titles = titles
+-        self.references = refs
+-        self.cpe_cur_ver = "".join(self.cpe_str.split(":")[5:6])
+-
+-    def update_xml_dict(self):
+-        ET.register_namespace('', 'http://cpe.mitre.org/dictionary/2.0')
+-        cpes = Element('cpe-list')
+-        cpes.set('xmlns:cpe-23', "http://scap.nist.gov/schema/cpe-extension/2.3")
+-        cpes.set('xmlns:ns6', "http://scap.nist.gov/schema/scap-core/0.1")
+-        cpes.set('xmlns:scap-core', "http://scap.nist.gov/schema/scap-core/0.3")
+-        cpes.set('xmlns:config', "http://scap.nist.gov/schema/configuration/0.1")
+-        cpes.set('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance")
+-        cpes.set('xmlns:meta', "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2")
+-        cpes.set('xsi:schemaLocation', " ".join(["http://scap.nist.gov/schema/cpe-extension/2.3",
+-                                                 "https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary-extension_2.3.xsd",
+-                                                 "http://cpe.mitre.org/dictionary/2.0",
+-                                                 "https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary_2.3.xsd",
+-                                                 "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2",
+-                                                 "https://scap.nist.gov/schema/cpe/2.1/cpe-dictionary-metadata_0.2.xsd",
+-                                                 "http://scap.nist.gov/schema/scap-core/0.3",
+-                                                 "https://scap.nist.gov/schema/nvd/scap-core_0.3.xsd",
+-                                                 "http://scap.nist.gov/schema/configuration/0.1",
+-                                                 "https://scap.nist.gov/schema/nvd/configuration_0.1.xsd",
+-                                                 "http://scap.nist.gov/schema/scap-core/0.1",
+-                                                 "https://scap.nist.gov/schema/nvd/scap-core_0.1.xsd"]))
+-        item = SubElement(cpes, 'cpe-item')
+-        cpe_short_name = CPE.short_name(self.cpe_str)
+-        cpe_new_ver = CPE.version_update(self.cpe_str)
+-
+-        item.set('name', 'cpe:/' + cpe_short_name)
+-        self.titles[0].text.replace(self.cpe_cur_ver, cpe_new_ver)
+-        for title in self.titles:
+-            item.append(title)
+-        if self.references:
+-            item.append(self.references)
+-        cpe23item = SubElement(item, 'cpe-23:cpe23-item')
+-        cpe23item.set('name', self.cpe_str)
+-
+-        # Generate the XML as a string
+-        xmlstr = ET.tostring(cpes)
+-
+-        # And use minidom to pretty print the XML
+-        return minidom.parseString(xmlstr).toprettyxml(encoding="utf-8").decode("utf-8")
+-
+-    @staticmethod
+-    def version(cpe):
+-        return cpe.split(":")[5]
+-
+-    @staticmethod
+-    def product(cpe):
+-        return cpe.split(":")[4]
+-
+-    @staticmethod
+-    def short_name(cpe):
+-        return ":".join(cpe.split(":")[2:6])
+-
+-    @staticmethod
+-    def version_update(cpe):
+-        return ":".join(cpe.split(":")[5:6])
+-
+-    @staticmethod
+-    def no_version(cpe):
+-        return ":".join(cpe.split(":")[:5])
+-
+-
+-class CPEDB:
+-    def __init__(self, nvd_path):
+-        self.all_cpes = dict()
+-        self.all_cpes_no_version = dict()
+-        self.nvd_path = nvd_path
+-
+-    def get_xml_dict(self):
+-        print("CPE: Setting up NIST dictionary")
+-        if not os.path.exists(os.path.join(self.nvd_path, "cpe")):
+-            os.makedirs(os.path.join(self.nvd_path, "cpe"))
+-
+-        cpe_dict_local = os.path.join(self.nvd_path, "cpe", os.path.basename(CPEDB_URL))
+-        if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
+-            print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
+-            cpe_dict = requests.get(CPEDB_URL)
+-            open(cpe_dict_local, "wb").write(cpe_dict.content)
+-
+-        print("CPE: Unzipping xml manifest...")
+-        nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
+-        print("CPE: Converting xml manifest to dict...")
+-        tree = ET.parse(nist_cpe_file)
+-        all_cpedb = tree.getroot()
+-        self.parse_dict(all_cpedb)
+-
+-    def parse_dict(self, all_cpedb):
+-        # Cycle through the dict and build two dict to be used for custom
+-        # lookups of partial and complete CPE objects
+-        # The objects are then used to create new proposed XML updates if
+-        # if is determined one is required
+-        # Out of the different language titles, select English
+-        for cpe in all_cpedb.findall(".//{http://cpe.mitre.org/dictionary/2.0}cpe-item"):
+-            cpe_titles = []
+-            for title in cpe.findall('.//{http://cpe.mitre.org/dictionary/2.0}title[@xml:lang="en-US"]', ns):
+-                title.tail = None
+-                cpe_titles.append(title)
+-
+-            # Some older CPE don't include references, if they do, make
+-            # sure we handle the case of one ref needing to be packed
+-            # in a list
+-            cpe_ref = cpe.find(".//{http://cpe.mitre.org/dictionary/2.0}references")
+-            if cpe_ref:
+-                for ref in cpe_ref.findall(".//{http://cpe.mitre.org/dictionary/2.0}reference"):
+-                    ref.tail = None
+-                    ref.text = ref.text.upper()
+-                    if ref.text not in VALID_REFS:
+-                        ref.text = ref.text + "-- UPDATE this entry, here are some examples and just one word should be used -- " + ' '.join(VALID_REFS) # noqa E501
+-                cpe_ref.tail = None
+-                cpe_ref.text = None
+-
+-            cpe_str = cpe.find(".//{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item").get('name')
+-            item = CPE(cpe_str, cpe_titles, cpe_ref)
+-            cpe_str_no_version = CPE.no_version(cpe_str)
+-            # This dict must have a unique key for every CPE version
+-            # which allows matching to the specific obj data of that
+-            # NIST dict entry
+-            self.all_cpes.update({cpe_str: item})
+-            # This dict has one entry for every CPE (w/o version) to allow
+-            # partial match (no valid version) check (the obj is saved and
+-            # used as seed for suggested xml updates. By updating the same
+-            # non-version'd entry, it assumes the last update here is the
+-            # latest version in the NIST dict)
+-            self.all_cpes_no_version.update({cpe_str_no_version: item})
+-
+-    def find_partial(self, cpe_str):
+-        cpe_str_no_version = CPE.no_version(cpe_str)
+-        if cpe_str_no_version in self.all_cpes_no_version:
+-            return cpe_str_no_version
+-
+-    def find_partial_obj(self, cpe_str):
+-        cpe_str_no_version = CPE.no_version(cpe_str)
+-        if cpe_str_no_version in self.all_cpes_no_version:
+-            return self.all_cpes_no_version[cpe_str_no_version]
+-
+-    def find_partial_latest_version(self, cpe_str_partial):
+-        cpe_obj = self.find_partial_obj(cpe_str_partial)
+-        return cpe_obj.cpe_cur_ver
+-
+-    def find(self, cpe_str):
+-        if self.find_partial(cpe_str):
+-            if cpe_str in self.all_cpes:
+-                return cpe_str
+-
+-    def gen_update_xml(self, cpe_str):
+-        cpe = self.find_partial_obj(cpe_str)
+-        return cpe.update_xml_dict()
+diff --git a/support/scripts/gen-missing-cpe b/support/scripts/gen-missing-cpe
+deleted file mode 100755
+index 0b222f2659..0000000000
+--- a/support/scripts/gen-missing-cpe
++++ /dev/null
+@@ -1,65 +0,0 @@
+-#!/usr/bin/env python3
+-
+-import argparse
+-import sys
+-import json
+-import subprocess
+-import os
+-from cpedb import CPEDB, CPE
+-
+-
+-def gen_update_xml_reports(cpeids, cpedb, output):
+-    cpe_need_update = []
+-
+-    for cpe in cpeids:
+-        result = cpedb.find(cpe)
+-        if not result:
+-            result = cpedb.find_partial(CPE.no_version(cpe))
+-            if result:
+-                cpe_need_update.append(cpe)
+-            else:
+-                print("WARNING: no match found for '%s'" % cpe)
+-
+-    for cpe in cpe_need_update:
+-        xml = cpedb.gen_update_xml(cpe)
+-        fname = CPE.product(cpe) + '-' + CPE.version(cpe) + '.xml'
+-        print("Generating %s" % fname)
+-        with open(os.path.join(output, fname), 'w+') as fp:
+-            fp.write(xml)
+-
+-    print("Generated %d update files out of %d CPEs" % (len(cpe_need_update), len(cpeids)))
+-
+-
+-def get_cpe_ids():
+-    print("Getting list of CPE for enabled packages")
+-    cmd = ["make", "--no-print-directory", "show-info"]
+-    js = json.loads(subprocess.check_output(cmd).decode("utf-8"))
+-    return set([v["cpe-id"] for k, v in js.items() if "cpe-id" in v])
+-
+-
+-def resolvepath(path):
+-    return os.path.abspath(os.path.expanduser(path))
+-
+-
+-def parse_args():
+-    parser = argparse.ArgumentParser()
+-    parser.add_argument('--output', dest='output',
+-                        help='Path to the output CPE update files', type=resolvepath, required=True)
+-    parser.add_argument('--nvd-path', dest='nvd_path',
+-                        help='Path to the local NVD database', type=resolvepath, required=True)
+-    return parser.parse_args()
+-
+-
+-def __main__():
+-    args = parse_args()
+-    if not os.path.isdir(args.output):
+-        print("ERROR: output directory %s does not exist" % args.output)
+-        sys.exit(1)
+-    cpedb = CPEDB(args.nvd_path)
+-    cpedb.get_xml_dict()
+-    cpeids = get_cpe_ids()
+-    gen_update_xml_reports(cpeids, cpedb, args.output)
+-
+-
+-if __name__ == "__main__":
+-    __main__()
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index c124b8a9cf..3cb9da6a0b 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -37,10 +37,10 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
+ 
+ sys.path.append(os.path.join(brpath, "utils"))
+ from getdeveloperlib import parse_developers  # noqa: E402
+-from cpedb import CPEDB_URL  # noqa: E402
+ 
+ INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
+ URL_RE = re.compile(r"\s*https?://\S*\s*$")
++CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
+ 
+ RM_API_STATUS_ERROR = 1
+ RM_API_STATUS_FOUND_BY_DISTRO = 2
 -- 
 2.41.0
 
