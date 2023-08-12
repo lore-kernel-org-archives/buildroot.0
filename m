@@ -4,69 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E62C001DB
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 20:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52DDCC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 20:06:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7224040598;
-	Sat, 12 Aug 2023 20:00:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7224040598
+	by smtp2.osuosl.org (Postfix) with ESMTP id F07DC40477;
+	Sat, 12 Aug 2023 20:06:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F07DC40477
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ROrAnBz55AaK; Sat, 12 Aug 2023 20:00:35 +0000 (UTC)
+	with ESMTP id 1894Id9qef2A; Sat, 12 Aug 2023 20:06:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98F7040577;
-	Sat, 12 Aug 2023 20:00:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98F7040577
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D90A91BF3CD
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:00:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EF3840297;
+	Sat, 12 Aug 2023 20:06:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EF3840297
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CBD031BF4E4
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A1C78415CD
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:00:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1C78415CD
+ by smtp1.osuosl.org (Postfix) with ESMTP id A486481D02
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:06:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A486481D02
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id INVKlJO04Jnz for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 20:00:25 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5668741554
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 20:00:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5668741554
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2ED5E60002;
- Sat, 12 Aug 2023 20:00:23 +0000 (UTC)
-Date: Sat, 12 Aug 2023 22:00:22 +0200
-To: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Message-ID: <20230812220022.4a43443d@windsurf>
-In-Reply-To: <2696013.mvXUDI8C0e@kilian-aisec>
-References: <20230811162546.8088-1-robertoxmed@gmail.com>
- <10318288.nUPlyArG6x@kilian-aisec>
- <bf3eb1b7-2bee-4cbe-bc43-49660535c94c@gmail.com>
- <2696013.mvXUDI8C0e@kilian-aisec>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691870423;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=uGwZw6tbHWbt1gQANoKJ46dgeNJfwMa3wBP8PoLuRKI=;
- b=XrYyO422ylqud7BVQ0L/BWbdSZU3JrcNSXQTMKAvRBvFoOe4ED3bhuXnC2MBRoxQhm0FoF
- 073MmH7jqYU6Xv5sGCcg4UZbYjtqmxqyEPhFzcAGdhsB7m7lrMiyZjUmo9MYycqBb+CiKk
- wEvYJYu3QwA15X6+dHWFG5GE2Vudin/B/sm9iF1SP+FnPR1JDBvDPIjabF82JWHtc5ygv5
- LVnbFTVxaA8ocugCdr4Q9RHwsf3Jer27+wr7HHiemWyKo2oVflDLzvLi3GQrK7todxBL06
- +Qw/pZqiTHlyDP93cWKeBw7Hw7z/cfFYK2hNh8eg1H3jKdz/6h1RaiNe1RMZpA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XrYyO422
-Subject: Re: [Buildroot] [PATCH 1/1 v3] configs/roc_rk3399_pc: Bring back
- and update the configuration for the rockchip rk3399 built by firefly.
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mxLel7QYuiL6 for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 20:06:43 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8DE581CE9
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 20:06:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8DE581CE9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B536C854A9; Sat, 12 Aug 2023 20:06:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 12 Aug 2023 22:06:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0a5bb69982f759e64251e61dd29ec28ee3771fd4
+X-Git-Newrev: 283e6859f15473cc1d0b2eb336e1db6f4335b61b
+X-Patchwork-Hint: ignore
+Message-Id: <20230812200643.B536C854A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/genrandconfig: add ubi handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,39 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>,
- Roberto Medina <robertoxmed@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 11 Aug 2023 23:59:11 +0200
-Kilian Zinnecker via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=283e6859f15473cc1d0b2eb336e1db6f4335b61b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Actually in v2 of this patch, Thomas requested to set a fixed version
-> > for U-Boot (mail from 08/08). Which made sense to me as TFA and Linux
-> > have a fixed version as well.  
-> 
-> Ah, I see, makes sense ... then never mind my comment :)
+Add a custom case to make sure that a random configuration with an empty
+configuration file for ubi doesn't fail.
 
-Correct, our convention in defconfigs is that the version of the Linux
-kernel and bootloader/firmware should be fixed. Indeed, we want the
-defconfigs to be known working configurations, that have been tested on
-hardware. If we let them the default/latest Linux/U-Boot version, it
-means this version gets auto-updated, without the defconfig maintainer
-necessarily checking that it is still works OK on HW.
+ubinize: error!: no sections found the ini-file "/home/buildroot/autobuild/instance-2/output-1/build/ubinize.cfg"
 
-So: policy is to use fixed version for Linux kernel and bootloaders in
-defconfigs.
+Fixes:
+ - http://autobuild.buildroot.org/results/f678c17cc4df06fb2737467e769cd8f72a3ea420
 
-Best regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index b6154db344..52edad06d8 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -526,6 +526,12 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n')
+         configlines.append('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=41610\n')
+ 
++    if 'BR2_TARGET_ROOTFS_UBI=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE=""\n' in configlines:
++        configlines.remove('BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y\n')
++        configlines.remove('BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE=""\n')
++
+     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
+        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
+         configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
