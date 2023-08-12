@@ -4,67 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B840C0015E
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 21:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C9F4C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 21:20:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09EDB4093D;
-	Sat, 12 Aug 2023 21:14:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09EDB4093D
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1BC641553;
+	Sat, 12 Aug 2023 21:20:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1BC641553
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I_nYBeFpTEf5; Sat, 12 Aug 2023 21:14:36 +0000 (UTC)
+	with ESMTP id KZg4bTzoL7mi; Sat, 12 Aug 2023 21:20:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39188414D6;
-	Sat, 12 Aug 2023 21:14:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39188414D6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 661641BF5DC
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 21:14:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D40F4414E2;
+	Sat, 12 Aug 2023 21:20:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D40F4414E2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 034C51BF5DC
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 21:20:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BDA3414D6
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 21:14:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BDA3414D6
+ by smtp3.osuosl.org (Postfix) with ESMTP id D028560E8A
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 21:20:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D028560E8A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kyd_mrarooHq for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 21:14:33 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CA8AE4093D
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 21:14:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA8AE4093D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 15D4D60002;
- Sat, 12 Aug 2023 21:14:28 +0000 (UTC)
-Date: Sat, 12 Aug 2023 23:14:27 +0200
-To: Bin Meng <bmeng.cn@gmail.com>
-Message-ID: <20230812231427.7dee9cbb@windsurf>
-In-Reply-To: <20230626160030.93063-11-bmeng.cn@gmail.com>
-References: <20230626160030.93063-1-bmeng.cn@gmail.com>
- <20230626160030.93063-11-bmeng.cn@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yqmKnCFDjdQa for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 21:20:38 +0000 (UTC)
+Received: from smtpcmd03128.aruba.it (smtpcmd03128.aruba.it [62.149.158.128])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 00CF960E7E
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 21:20:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00CF960E7E
+Received: from localhost.localdomain ([95.47.160.93])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id Uw2CqCycR3M36Uw2Dq5NvC; Sat, 12 Aug 2023 23:20:33 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Sat, 12 Aug 2023 23:20:32 +0200
+Message-Id: <20230812212032.349673-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691874870;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Yu0m6FnuSwNgs2zzYu8XjHL8xwPM//GS7INHiXwJs6w=;
- b=cCWWccUK2e6KFC3XNDUKUxK5ZKLdKDZ44pOuKTWIn63ZDHwTBnrAE3Qpjs+jLDvfrO9Tg0
- Ilf7WYOSHEgP1n83EFJfiLW5oExt+5h0ITpaQ7zA6idLfVLHeoymssYcrI1FvvLHUaEikO
- igYn/fz/A3+xJWjTWm+ZtBVVpEFDFJBhcPZXi5mw0WuIKBiH29Ofkcnt3pbqqVa7tsD3dD
- aF1UVT07eltVu0LVqGyF23TaRED9psZHy8Hh+1qeSZ4YhUFU3opdTF/wA0ZuKhBD5BZiis
- qcSEsyduWHiBQqK2CtxKUH87DcRNmtP5K7h0V19yGdwYO6BQZnSD27xTkV7WnQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cCWWccUK
-Subject: Re: [Buildroot] [PATCH 10/10] board/sifive: hifive-unleashed:
- Include QEMU instructions in readme.txt
+X-CMAE-Envelope: MS4xfHGjYBtbFHKY68b8vBJwxrUzCW93awBLT1mM2NocGawBGXTEF7bXw8eLKPEPdMF6KI1oUItWDzBuZzdFxTVKQ7f9I08zYjiXIRvwLLsQjP4jjmiUNDto
+ wW58wbUDHTauuHcgiqaE2raGnhRcGCUr7GecRyin33FkS2jeJC8duYS85FDOCHyz+YtUm7dIJUB5H28heDItAAZ0VRTRwA006VZSJILhwxpehswEa/YRME5m
+ sluphZ85ba8ypa30gmhsKzcQI+TA2GZWEdiIYZRHbAI=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1691875233; bh=uOHx0UjK8zx9yZEc6N3wp+154hX2sFpxaYY/1jWgeLg=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=k61y0nVGCe1MBBApQhceEdcxQgIuVGfX/wTkzL66NKFVd9hTu+1mY+DecFUX+p4es
+ TSzKc2cl6V6B3o0aVrHky9dFo2iQujTA/EP7vJChSgp1XNI7FS3ERKCxxGqtkRbMCt
+ QSYsKxeh4wKMLhtgZUsBI7qj9wTpAbS7CcIZnGfG1+ZrbV+kQV4ncU1gfTySBVFz+2
+ alJ3d/fuksCgFS7eDGlwV4hAGkLaaub81t4B1B1RN06RBVO74AeW9TryPlv565do6E
+ 8w5HjBqPqpgebmX4ZsMhzbS9hI6144hE3zaM6V0vNBgQyNvMnk6sV0hB/Hwi63tn4M
+ Vpbw7ePMplnpQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=k61y0nVG
+Subject: [Buildroot] [PATCH] package/esp-hosted: fix build failure with
+ missing CONFIG_SPI/MMC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,50 +72,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@smile.fr>, Bin Meng <bmeng@tinylab.org>,
- Alistair Francis <alistair.francis@wdc.com>,
- Jan-Benedict Glaw <jbglaw@lug-owl.de>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Depending on the interface chosen we need to enable Linux CONFIG_SPI or
+CONFIG_MMC, so let's do that according to BR2_PACKAGE_ESP_HOSTED_SPI.
 
-+Romain Naour in Cc.
+Fixes:
+http://autobuild.buildroot.net/results/cdf65ad07aba1d86f195576a2317c83aeb3dfce2
 
-On Tue, 27 Jun 2023 00:00:30 +0800
-Bin Meng <bmeng.cn@gmail.com> wrote:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/esp-hosted/esp-hosted.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> From: Bin Meng <bmeng@tinylab.org>
-> 
-> The upstream QEMU 'sifive_u' machine supports running upstream U-Boot
-> for the SiFive HiFive Unleashed board out of the box.
-> 
-> Add the QEMU instructions for testing in readme.txt.
-> 
-> Signed-off-by: Bin Meng <bmeng@tinylab.org>
-> ---
-
-Applied to next, thanks.
-
-Now that this defconfig can be booted under Qemu, maybe it makes sense
-to ensure that our Gitlab CI does some actual testing of the
-"bootability" of this image under Qemu? Could you have a look at how
-our qemu_* defconfigs do this, and try to adapt the HiFive Unleashed
-defconfig to do the same? Romain Naour in Cc is the author/maintainer
-of this logic that all the testing of Qemu defconfigs in our CI, so I'm
-sure he can provide guidance if needed.
-
-Thanks!
-
-Thomas
+diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+index dcb0b3bd70..7491c46512 100644
+--- a/package/esp-hosted/esp-hosted.mk
++++ b/package/esp-hosted/esp-hosted.mk
+@@ -17,6 +17,9 @@ define ESP_HOSTED_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_MAC80211)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_BT)
++	$(if $(BR2_PACKAGE_ESP_HOSTED_SPI),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SPI),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_MMC))
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_ESP_HOSTED_SPI),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
