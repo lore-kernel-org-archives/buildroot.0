@@ -4,58 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A14AAC001B0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 11:45:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10EBFC001B0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 11:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22FA4608D8;
-	Sat, 12 Aug 2023 11:45:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22FA4608D8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84F3660E71;
+	Sat, 12 Aug 2023 11:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84F3660E71
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9NYFPl5S3E9z; Sat, 12 Aug 2023 11:45:07 +0000 (UTC)
+	with ESMTP id s3m47UTZOfBu; Sat, 12 Aug 2023 11:46:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6496060BB0;
-	Sat, 12 Aug 2023 11:45:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6496060BB0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 41B471BF282
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:45:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFDD260BB0;
+	Sat, 12 Aug 2023 11:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFDD260BB0
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EE5BA1BF282
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:46:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E65D4012F
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:45:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E65D4012F
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6B1D60BB0
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:46:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6B1D60BB0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E4aTeylEvsm9 for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 11:45:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DALkZtIcubut for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 11:46:09 +0000 (UTC)
 Received: from helium.openadk.org (helium.openadk.org
  [IPv6:2a00:1828:2000:679::23])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC450401F1
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 11:45:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC450401F1
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E675E608D8
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 11:46:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E675E608D8
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 3DD1F3520C37; Sat, 12 Aug 2023 13:44:52 +0200 (CEST)
-Date: Sat, 12 Aug 2023 13:44:51 +0200
+ id E81BD3520C44; Sat, 12 Aug 2023 13:46:06 +0200 (CEST)
+Date: Sat, 12 Aug 2023 13:46:06 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <ZNdwsocEpsgQ7U9J@waldemar-brodkorb.de>
+Message-ID: <ZNdw/pv2sHnp4tXJ@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 5.10.0-21-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1691840693; bh=ECm5DulraRo4jJDLNShcrcL+hb+omvvSKH75jlqSvX0=;
+ t=1691840766; bh=zjj6qJ15r4nu1ams0kcwuQ+ovUGKyafVT6PhqRmq54g=;
  h=Date:From:To:Subject:From;
- b=HNmEc4iw3cIfgl3Cp/WOU+8gcpSlpdsEtoCpAl6nZtCmI/7aqvVDVFT26DscRiuoj
- tKxjk46mPcXhzt/dt/KAFmgfUDNSX3kwibPKjageFA4GwsEheO7FIjKNhXT3Vw5aEx
- NDb+N4m/XGCeMQO6VjgefEwBis81CFqaSYzqtN0I9fjQ/wtd/H5AWilOVTsgPRyczx
- NLDn/7HAO9+yzv61NCgoi5WdBMsbm7Q/Xo7TU8/BLxaKgmjIbLqyNZgUNeCWclZv9s
- mpEoXLfT4z9b4RNmOI+a0MbAV1Z6qktRElP/f75rBxuqEykru4Cfw00MpeYX8EAgV4
- NQXdrASk4dAxA==
-Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
- BR2_TOOLCHAIN_HAS_GCC_BUG_111001
+ b=RpImt5qmT24T1/M8JmUp8qEl76Ta88yt3AUdM5W4fth6h+hOwIHDt6C0pUpJk8/5z
+ AZX30xEw8e1dxp+erGnGlTe59fYTUMKK6ndAiwE6WMMetWhv/v0sGpr96rdq2MvEf1
+ rBAAb8sXpjlD2TMXKGUi2y50CocMflPXrPn7+ZxzodR5tML/RR3pcbpPipJPu2L8CL
+ tdiUEVF1UL0jci0/u63BJYCLE/+a1EFYKRp7I8BQJHoyXD7K/pjcnMifF5a19Eh0Xz
+ c1PWRDlFIMBWlu4VNX9dGCnqd9igrJo1/dnDMq9/xXkt5R/n/IV1jjnbKrhvNF3Wro
+ x5xa3+oaIyJ8A==
+Subject: [Buildroot] [PATCH 2/2] package/e2fsprogs: fix compile error for SH
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,49 +71,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-e2fsprogs package fails to build for the SH4 architecture due to a gcc
-13.2.0 bug that leads to:
+Compile of e2fsprogs is failing because of gcc bug
+111001. Workaround it by forcing the usage of -Os.
+
+Compile fails with:
+	CC rw_bitmaps.c
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
 during RTL pass: sh_treg_combine2
-rw_bitmaps.c: In function read_bitmaps_range_start:
-internal compiler error: Aborted
+rw_bitmaps.c: In function 'read_bitmaps_range_start':
+rw_bitmaps.c:447:1: internal compiler error: Aborted
+  447 | }
+      | ^
+0x5e7a6f ???
+	../sysdeps/aarch64/start.S:81
+Please submit a full bug report, with preprocessed source (by using -freport-bug).
+Please include the complete backtrace with any bug report.
+See <http://bugs.buildroot.net/> for instructions.
 
-Let's add gcc bug to avoid to deal with architectures in packages
-when a gcc bug arises. Let's instead deal directly with gcc
-bug number.
+No need to backport, because gcc 13.2.0 was introduced recently in
+Buildroot commit: 3009095ba8a87a22f55f6b89e42f667487563b94
 
-It's been reported upstream:
-https://gcc.gnu.org/bugzilla//show_bug.cgi?id=111001
-
-No need to backport as gcc 13.20 was introduced recently in
-buildroot.
+Fixes:
+ - http://autobuild.buildroot.net/results/fb7/fb7e9c8b02b979b3a75185c0afa4ab0ca654f6f6
+ - http://autobuild.buildroot.net/results/659/659313b1783db491653bcc85b37da40c7b077225
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- toolchain/Config.in | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/e2fsprogs/e2fsprogs.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index a37933bc12..da6bf5f4c8 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -257,6 +257,17 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_110934
- 	bool
- 	default y if BR2_m68k
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 75214be8c7..80090621bf 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -70,6 +70,11 @@ ifeq ($(BR2_nios2),y)
+ E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
+ endif
  
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111001
-+# ICE: on SH4: during RTL pass: sh_treg_combine2
-+# This bug exist in gcc = 13.2.0
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_111001
-+	bool
-+	default y if BR2_sh
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_13
-+	depends on BR2_OPTIMIZE_1 || \
-+		   BR2_OPTIMIZE_2 || \
-+		   BR2_OPTIMIZE_3
++# workaround gcc bug 111001
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_111001),y)
++E2FSPROGS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -Os"
++endif
 +
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
+ E2FSPROGS_CONF_ENV += ac_cv_path_LDCONFIG=true
  
+ HOST_E2FSPROGS_CONF_ENV += ac_cv_path_LDCONFIG=true
 -- 
 2.39.2
 
