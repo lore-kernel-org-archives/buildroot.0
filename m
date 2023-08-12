@@ -4,57 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10EBFC001B0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 11:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BA5DC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 12:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84F3660E71;
-	Sat, 12 Aug 2023 11:46:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84F3660E71
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3E03608D8;
+	Sat, 12 Aug 2023 12:00:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3E03608D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s3m47UTZOfBu; Sat, 12 Aug 2023 11:46:14 +0000 (UTC)
+	with ESMTP id XVN1CSViCDU6; Sat, 12 Aug 2023 12:00:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFDD260BB0;
-	Sat, 12 Aug 2023 11:46:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFDD260BB0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EE5BA1BF282
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:46:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 352B960EB3;
+	Sat, 12 Aug 2023 12:00:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 352B960EB3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EC051BF282
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 12:00:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6B1D60BB0
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:46:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6B1D60BB0
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBCDB40533
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 12:00:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBCDB40533
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DALkZtIcubut for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 11:46:09 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E675E608D8
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 11:46:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E675E608D8
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id E81BD3520C44; Sat, 12 Aug 2023 13:46:06 +0200 (CEST)
-Date: Sat, 12 Aug 2023 13:46:06 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6A5hVAX5YdCV for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 12:00:07 +0000 (UTC)
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7FEBC40579
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 12:00:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FEBC40579
+Received: from postfix02.mail.de (postfix02.bt.mail.de [10.0.121.126])
+ by shout02.mail.de (Postfix) with ESMTP id 2F29CA046C;
+ Sat, 12 Aug 2023 14:00:04 +0200 (CEST)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix02.mail.de (Postfix) with ESMTP id 12216A03C3;
+ Sat, 12 Aug 2023 14:00:04 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 33DCE10012D;
+ Sat, 12 Aug 2023 14:00:01 +0200 (CEST)
 To: buildroot@buildroot.org
-Message-ID: <ZNdw/pv2sHnp4tXJ@waldemar-brodkorb.de>
+Date: Sat, 12 Aug 2023 14:00:00 +0200
+Message-ID: <2300152.ElGaqSPkdT@kilian-aisec>
+In-Reply-To: <20230812110359.27170-1-peterlin@andestech.com>
+References: <20230812110359.27170-1-peterlin@andestech.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 2405
+X-purgate-ID: 154282::1691841603-90D0F7B6-00C688E0/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1691840766; bh=zjj6qJ15r4nu1ams0kcwuQ+ovUGKyafVT6PhqRmq54g=;
- h=Date:From:To:Subject:From;
- b=RpImt5qmT24T1/M8JmUp8qEl76Ta88yt3AUdM5W4fth6h+hOwIHDt6C0pUpJk8/5z
- AZX30xEw8e1dxp+erGnGlTe59fYTUMKK6ndAiwE6WMMetWhv/v0sGpr96rdq2MvEf1
- rBAAb8sXpjlD2TMXKGUi2y50CocMflPXrPn7+ZxzodR5tML/RR3pcbpPipJPu2L8CL
- tdiUEVF1UL0jci0/u63BJYCLE/+a1EFYKRp7I8BQJHoyXD7K/pjcnMifF5a19Eh0Xz
- c1PWRDlFIMBWlu4VNX9dGCnqd9igrJo1/dnDMq9/xXkt5R/n/IV1jjnbKrhvNF3Wro
- x5xa3+oaIyJ8A==
-Subject: [Buildroot] [PATCH 2/2] package/e2fsprogs: fix compile error for SH
+ d=mail.de; s=mailde202009; t=1691841604;
+ bh=p1Nq/Aa5+WjN7M2liyDnkIOdi+T8oM7VkwNIzcG4CZ8=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=cwFBcFD+R3/InieNDvpAuuA1LcsWXZz/vkKzThfEP9gaLQaGnBsnUuMBxN8+QxNvE
+ QlX2sVTJG/qyFG8UPLqu6pMMpmORLeNs0CTzvOAxS0vZV4bArlvEBWYavfiA6/2t+T
+ DeYDBWnvwpmZw/B0/XxWCcDDLwj9vKJLzLTzSstQPoU3dpZycmDnFdeGct4tA3+fE4
+ lUPut892O+rOid904eBqlklKn5QxRiSOqJclBOs4ASz11RSTYvVdnwP1QBWcpIUpd2
+ Vbu6/8sT2PjonU9bD9moN8LwO5lLNss/o3W6Nq5gxOA+rTPdzUJ0ws8dkilH+bUn3U
+ b1GEAvLRDTEmg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
+ header.a=rsa-sha256 header.s=mailde202009 header.b=cwFBcFD+
+Subject: Re: [Buildroot] [PATCH] andes_ae350_45: Fix build issues of AE350
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,59 +86,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Yu Chien Peter Lin <peterlin@andestech.com>, ycliang@andestech.com,
+ thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Compile of e2fsprogs is failing because of gcc bug
-111001. Workaround it by forcing the usage of -Os.
+Hello Yu Chien Peter,
 
-Compile fails with:
-	CC rw_bitmaps.c
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-during RTL pass: sh_treg_combine2
-rw_bitmaps.c: In function 'read_bitmaps_range_start':
-rw_bitmaps.c:447:1: internal compiler error: Aborted
-  447 | }
-      | ^
-0x5e7a6f ???
-	../sysdeps/aarch64/start.S:81
-Please submit a full bug report, with preprocessed source (by using -freport-bug).
-Please include the complete backtrace with any bug report.
-See <http://bugs.buildroot.net/> for instructions.
+> - Select RVA extension so the toolchain uses glibc by default
+> - Enable Zifencei and Zicsr for gcc-12 to fix U-Boot build failure
 
-No need to backport, because gcc 13.2.0 was introduced recently in
-Buildroot commit: 3009095ba8a87a22f55f6b89e42f667487563b94
+Yeah, this zifencei_zicsr extension flag thing is annoying ...
 
-Fixes:
- - http://autobuild.buildroot.net/results/fb7/fb7e9c8b02b979b3a75185c0afa4ab0ca654f6f6
- - http://autobuild.buildroot.net/results/659/659313b1783db491653bcc85b37da40c7b077225
+> Fixes:
+> - https://gitlab.com/buildroot.org/buildroot/-/jobs/4839059655
+> 
+> Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+> ---
+>  configs/andes_ae350_45_defconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/configs/andes_ae350_45_defconfig
+> b/configs/andes_ae350_45_defconfig index 998276635b..faf29b8b6b 100644
+> --- a/configs/andes_ae350_45_defconfig
+> +++ b/configs/andes_ae350_45_defconfig
+> @@ -1,6 +1,7 @@
+>  BR2_riscv=y
+>  BR2_riscv_custom=y
+>  BR2_RISCV_ISA_CUSTOM_RVM=y
+> +BR2_RISCV_ISA_CUSTOM_RVA=y
+>  BR2_RISCV_ISA_CUSTOM_RVF=y
+>  BR2_RISCV_ISA_CUSTOM_RVD=y
+>  BR2_RISCV_ISA_CUSTOM_RVC=y
+> @@ -38,7 +39,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
+>  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+>  BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+>  BR2_TARGET_UBOOT_SPL=y
+> -BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="ARCH_FLAGS=-march=rv64imafdc"
+> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="ARCH_FLAGS=-march=rv64imafdc_zifencei_zic
+> sr" BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+>  BR2_PACKAGE_HOST_MTOOLS=y
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/e2fsprogs/e2fsprogs.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+I am not sure, whether you need to specify custom makeopts for uboot after 
+all: Looking at the current andes_ae350_45_defconfig (https://gitlab.com/
+buildroot.org/buildroot/-/blob/4de60e41c3487946712da6d889ef89d325c2032a/
+configs/andes_ae350_45_defconfig), it seems, that there is no special/custom gcc 
+version defined. Hence the gcc version should be buildroot's current default 
+version, i.e., v12.3.0. For this version, buildroot already adds the flags for 
+zifencei and zicsr extension, see here:
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 75214be8c7..80090621bf 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -70,6 +70,11 @@ ifeq ($(BR2_nios2),y)
- E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
- endif
- 
-+# workaround gcc bug 111001
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_111001),y)
-+E2FSPROGS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -Os"
-+endif
-+
- E2FSPROGS_CONF_ENV += ac_cv_path_LDCONFIG=true
- 
- HOST_E2FSPROGS_CONF_ENV += ac_cv_path_LDCONFIG=true
--- 
-2.39.2
+https://gitlab.com/buildroot.org/buildroot/-/blob/
+4de60e41c3487946712da6d889ef89d325c2032a/arch/arch.mk.riscv#L38-39
+
+And I also believe, that these defines should be sufficient to set the rv64imafdc 
+flags:
+
+>  BR2_RISCV_ISA_CUSTOM_RVM=y
+> +BR2_RISCV_ISA_CUSTOM_RVA=y
+>  BR2_RISCV_ISA_CUSTOM_RVF=y
+>  BR2_RISCV_ISA_CUSTOM_RVD=y
+>  BR2_RISCV_ISA_CUSTOM_RVC=y
+
+So I think setting BR2_RISCV_ISA_CUSTOM_RVA=y is correct. However, you could 
+try whether it works, if you then completely remove the 
+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS?
+
+Best regards,
+Kilian
+
+
 
 _______________________________________________
 buildroot mailing list
