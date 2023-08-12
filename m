@@ -4,46 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7A21EE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47098EE49A5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 945BA40B26;
-	Mon, 21 Aug 2023 20:18:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 945BA40B26
+	by smtp2.osuosl.org (Postfix) with ESMTP id 027A940C07;
+	Mon, 21 Aug 2023 20:18:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 027A940C07
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vth7hQ0yIAxS; Mon, 21 Aug 2023 20:18:41 +0000 (UTC)
+	with ESMTP id cYWtsOJCbEeJ; Mon, 21 Aug 2023 20:18:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC4BD40BD7;
-	Mon, 21 Aug 2023 20:18:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC4BD40BD7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 156AF414BA;
+	Mon, 21 Aug 2023 20:18:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 156AF414BA
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BC3B71BF94D
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C2BCB1BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C235541548
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C235541548
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B112409F4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B112409F4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P4nFi72mAbVk for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+ with ESMTP id 8gsh1RoZGh6o for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 873F541553
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 873F541553
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79D74410D5
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79D74410D5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 844DB86024; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+ id 7369786024; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Aug 2023 23:03:53 +0200
+Date: Sat, 12 Aug 2023 16:26:01 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3bdc3f58cc0bf50baa0f3b9a50e1ee61081c8cae
-X-Git-Newrev: a0fdd17ec254ecaca28b40254e0679e24078c5e5
+X-Git-Oldrev: 651429d0b87687d222ac801534fb03e3037b9503
+X-Git-Newrev: 55b47a406095085bad3dc7e147f1162ba9d2ff30
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200125.844DB86024@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mpv: fix x11 build
+Message-Id: <20230821200126.7369786024@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uclibc: add upstream
+ patch to fix missing f_owner_ex
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -55,66 +57,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0fdd17ec254ecaca28b40254e0679e24078c5e5
+commit: https://git.buildroot.net/buildroot/commit/?id=55b47a406095085bad3dc7e147f1162ba9d2ff30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-xlib_libXpresent is needed with x11 to avoid the following build failure
-raised since bump to version 0.35.1 in commit
-61ba55e9cce6884295e47fdf33554e6877bd0747 and
-https://github.com/mpv-player/mpv/commit/3d459832a88a9bd2835b339cf6ca98f84aad0115:
-
-Checking for X11: no ('x11 >= 1.0.0 xscrnsaver >= 1.0.0 xext >= 1.0.0 xinerama >= 1.0.0 xpresent >= 1.0.0 xrandr >= 1.2.0' not found)
-You manually enabled the feature 'x11', but the autodetection check failed.
+This was previously only defined for aarch64, define the missing
+stuff for all architectures.
+This is required for the zeek package.
 
 Fixes:
- - http://autobuild.buildroot.org/results/1aace6210ba966bb4979d935c08507b2a34e0460
+ - http://autobuild.buildroot.net/results/f32/f32777b27c6b4f5a41c255df53502164d21b0fd4
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mpv/Config.in | 1 +
- package/mpv/mpv.mk    | 8 +++++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ ...-declare-f_owner_ex-for-all-architectures.patch | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 8efb353c33..5c32f593fe 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -26,6 +26,7 @@ config BR2_PACKAGE_MPV
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXINERAMA if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXPRESENT if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
- 	help
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index e368b25736..cf37091186 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -205,7 +205,13 @@ endif
- # xlib_libXrandr, xlib_libXScrnSaver.
- ifeq ($(BR2_PACKAGE_XORG7),y)
- MPV_CONF_OPTS += --enable-x11
--MPV_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXinerama xlib_libXrandr xlib_libXScrnSaver
-+MPV_DEPENDENCIES += \
-+	xlib_libX11 \
-+	xlib_libXext \
-+	xlib_libXinerama \
-+	xlib_libXpresent \
-+	xlib_libXrandr \
-+	xlib_libXScrnSaver
- # XVideo
- ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
- MPV_CONF_OPTS += --enable-xv
+diff --git a/package/uclibc/0002-fcntl.h-declare-f_owner_ex-for-all-architectures.patch b/package/uclibc/0002-fcntl.h-declare-f_owner_ex-for-all-architectures.patch
+new file mode 100644
+index 0000000000..da0135a5e3
+--- /dev/null
++++ b/package/uclibc/0002-fcntl.h-declare-f_owner_ex-for-all-architectures.patch
+@@ -0,0 +1,85 @@
++From 98576ab8de710507419b016fbcfc82ed7c57f9c3 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 9 Aug 2023 10:31:28 +0200
++Subject: [PATCH] fcntl.h: declare f_owner_ex for all architectures
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=98576ab8de710507419b016fbcfc82ed7c57f9c3
++---
++ include/fcntl.h                         | 20 ++++++++++++++++++++
++ libc/sysdeps/linux/aarch64/bits/fcntl.h | 21 ---------------------
++ 2 files changed, 20 insertions(+), 21 deletions(-)
++
++diff --git a/include/fcntl.h b/include/fcntl.h
++index 136f64d70..ce15ceaf6 100644
++--- a/include/fcntl.h
+++++ b/include/fcntl.h
++@@ -296,6 +296,26 @@ int name_to_handle_at(int dirfd, const char *pathname,
++ int open_by_handle_at(int mount_fd, struct file_handle *handle, int flags);
++ #endif
++ 
+++#ifdef __USE_GNU
+++# define F_SETOWN_EX	15	/* Get owner (thread receiving SIGIO).  */
+++# define F_GETOWN_EX	16	/* Set owner (thread receiving SIGIO).  */
+++/* Owner types.  */
+++enum __pid_type
+++  {
+++    F_OWNER_TID = 0,		/* Kernel thread.  */
+++    F_OWNER_PID,		/* Process.  */
+++    F_OWNER_PGRP,		/* Process group.  */
+++    F_OWNER_GID = F_OWNER_PGRP	/* Alternative, obsolete name.  */
+++  };
+++
+++/* Structure to use with F_GETOWN_EX and F_SETOWN_EX.  */
+++struct f_owner_ex
+++  {
+++    enum __pid_type type;	/* Owner type of ID.  */
+++    __pid_t pid;		/* ID of owner.  */
+++  };
+++#endif
+++
++ __END_DECLS
++ 
++ #endif /* fcntl.h  */
++diff --git a/libc/sysdeps/linux/aarch64/bits/fcntl.h b/libc/sysdeps/linux/aarch64/bits/fcntl.h
++index c143ba9c9..dbe929351 100644
++--- a/libc/sysdeps/linux/aarch64/bits/fcntl.h
+++++ b/libc/sysdeps/linux/aarch64/bits/fcntl.h
++@@ -94,8 +94,6 @@
++ #ifdef __USE_GNU
++ # define F_SETSIG	10	/* Set number of signal to be sent.  */
++ # define F_GETSIG	11	/* Get number of signal to be sent.  */
++-# define F_SETOWN_EX	15	/* Get owner (thread receiving SIGIO).  */
++-# define F_GETOWN_EX	16	/* Set owner (thread receiving SIGIO).  */
++ #endif
++ 
++ 
++@@ -170,25 +168,6 @@ struct flock64
++   };
++ #endif
++ 
++-
++-#ifdef __USE_GNU
++-/* Owner types.  */
++-enum __pid_type
++-  {
++-    F_OWNER_TID = 0,		/* Kernel thread.  */
++-    F_OWNER_PID,		/* Process.  */
++-    F_OWNER_PGRP,		/* Process group.  */
++-    F_OWNER_GID = F_OWNER_PGRP	/* Alternative, obsolete name.  */
++-  };
++-
++-/* Structure to use with F_GETOWN_EX and F_SETOWN_EX.  */
++-struct f_owner_ex
++-  {
++-    enum __pid_type type;	/* Owner type of ID.  */
++-    __pid_t pid;		/* ID of owner.  */
++-  };
++-#endif
++-
++ /* Define some more compatibility macros to be backward compatible with
++    BSD systems which did not managed to hide these kernel macros.  */
++ #ifdef	__USE_BSD
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
