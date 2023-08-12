@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CD0BC001B0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40965C001B0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A439440518;
-	Sat, 12 Aug 2023 19:54:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A439440518
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECA6D40556;
+	Sat, 12 Aug 2023 19:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA6D40556
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PwX6MqxO-HXM; Sat, 12 Aug 2023 19:54:52 +0000 (UTC)
+	with ESMTP id FdbYhpjroFUl; Sat, 12 Aug 2023 19:55:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 00F634018B;
-	Sat, 12 Aug 2023 19:54:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00F634018B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B665F1BF3CD
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:54:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D3314051D;
+	Sat, 12 Aug 2023 19:55:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D3314051D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5BA341BF3CD
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F7958177C
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:54:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F7958177C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 34CC64052A
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:55:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34CC64052A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8iOEuzZJ7q7v for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 19:54:48 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 79C5E8176F
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:54:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79C5E8176F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BDB0D40003;
- Sat, 12 Aug 2023 19:54:45 +0000 (UTC)
-Date: Sat, 12 Aug 2023 21:54:44 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IuVvlQTPL9T9 for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 19:55:15 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 44EB44018B
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:55:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44EB44018B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A859EE0002;
+ Sat, 12 Aug 2023 19:55:11 +0000 (UTC)
+Date: Sat, 12 Aug 2023 21:55:10 +0200
 To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20230812215444.0af6eb62@windsurf>
-In-Reply-To: <ZNew/asuEOItVTZZ@waldemar-brodkorb.de>
-References: <ZNew/asuEOItVTZZ@waldemar-brodkorb.de>
+Message-ID: <20230812215510.602a4c92@windsurf>
+In-Reply-To: <ZNehEzTstrXcE4bf@waldemar-brodkorb.de>
+References: <ZNehEzTstrXcE4bf@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691870086;
+ d=bootlin.com; s=gm1; t=1691870112;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=GDvaK3TrEy4LngNK9ELmAUoCkjyof8xIdD6vzrzOfEw=;
- b=YtWRS2ZUk59bk92QqlHCWw05R+AZ+TQD/cZWmIsvStb60HHtnpwNu1ljBrz4+iN6YZl+zH
- cciA90+CIl40TyTAxZ55dNJDwZR1lJn3Rb8KNuYI5YAJpnGkmsJV0TStgM8PJvuk3tyol5
- ITjNSlgspmfefVRKS8JemfBZGYW8Se0B7gURP74+cJ7T/5lxJz5+TJ46j+fzpzxmfxmNZx
- vFE9YvO0buE3x6v3GjEsdVAhc53bQlg4QGo7v4cH0CDJSZkEI67XpsOfJm8Gkw2mT9Nq0d
- icF60ils/Gi638lihNijrDs5yDEimuJkTZR5UTesZIDUN/1FoY6zBW/F60qcvQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=6yYDtoa8hFhRc5FNUhqJYleA6txoTovBGHpivN1QbIQ=;
+ b=K2WUlqAw11Im66GETuHejd3HgXZkqdyvwZ1gYKB2AcMLC/gDZ79hGfDecxPixQTGbsvC13
+ NfVeIjwMiMhtybLiYnqp0l296OpMPt9CIRZrK5I/yEG0zTFE6HmVLFHXjpsM9litx0B9Oa
+ 46PZFClr/y9/xQVPoXD1YQB27CTBqrmbpQQl0Aez8Ma3qfTD2YQXYCbVSR+pRyXoAhMA0t
+ taSm4I3ZKgsnOLWmRIT63UILjX7mulKTEptDErWuOgQPQikRmoqpwE+gIUKTi+PolRB/UM
+ G7F5OyWp2Rxn8HXm/zedyk2dLC4Z79ZhklhJuzrsuXV5JKWGgCkvLUtoxm5kLw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YtWRS2ZU
-Subject: Re: [Buildroot] [PATCH] board/qemu/ppc64le-powernv8: fixup example
+ header.s=gm1 header.b=K2WUlqAw
+Subject: Re: [Buildroot] [PATCH] configs/qemu_or1k_defconfig: enable ethernet
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,26 +82,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 12 Aug 2023 18:19:09 +0200
+On Sat, 12 Aug 2023 17:11:15 +0200
 Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> Use full relative pathes for rootfs and kernel, like in other
-> readme's.
+> The issue seems to be fixed. I checked qemu and linux git repositories
+> but can not find any information when this is starting to work.
+> 
+> System gets successfully an IP, no further testing was done.
+> Tested with Qemu 8.0.3 and Linux 6.1.x.
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  board/qemu/ppc64le-powernv8/readme.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  board/qemu/or1k/readme.txt  | 2 --
+>  configs/qemu_or1k_defconfig | 3 +++
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-Applied to master, thanks. I was initially a bit confused because all
-those readme.txt files for Qemu configurations are used in our Gitlab
-CI infra to automatically boot the resulting kernel/rootfs images in
-Qemu, and the build/test was working fine in our CI.
-
-Turns out that board/qemu/post-image.sh strips output/images/, and then
-board/qemu/start-qemu.sh.in chdir into ${BINARIES_DIR}. So indeed, it
-makes sense that both this incorrect readme.txt, and all the other ones
-for Qemu defconfigs, that had output/images, worked.
+Applied to next, thanks.
 
 Thomas
 -- 
