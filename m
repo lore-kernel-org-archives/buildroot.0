@@ -4,80 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6BCFC001B0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 21:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E33FBC0015E
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 22:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50F2640577;
-	Sat, 12 Aug 2023 21:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 50F2640577
+	by smtp2.osuosl.org (Postfix) with ESMTP id 497D740111;
+	Sat, 12 Aug 2023 22:09:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 497D740111
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RWs1RJ1v_0yq; Sat, 12 Aug 2023 21:54:59 +0000 (UTC)
+	with ESMTP id kHP5chhnU7nL; Sat, 12 Aug 2023 22:09:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84CE7405A9;
-	Sat, 12 Aug 2023 21:54:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84CE7405A9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 420F41BF5DC
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 21:54:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A04BF40150;
+	Sat, 12 Aug 2023 22:08:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A04BF40150
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B8EBB1BF291
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 22:08:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 291D960D4E
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 21:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 291D960D4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 898A281213
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 22:08:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 898A281213
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nyPnH5pp4NQb for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 21:54:56 +0000 (UTC)
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F022860C33
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 21:54:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F022860C33
-Received: from localhost (unknown [127.0.0.1])
- by mx.kolabnow.com (Postfix) with ESMTP id 27E681065
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 23:54:54 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mykolab.com
-Received: from mx.kolabnow.com ([127.0.0.1])
- by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nUTkwKhYUj1b for <buildroot@buildroot.org>;
- Sat, 12 Aug 2023 23:54:50 +0200 (CEST)
-Received: from int-mx003.mykolab.com (unknown [10.9.13.3])
- by mx.kolabnow.com (Postfix) with ESMTPS id BFB72829
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 23:54:49 +0200 (CEST)
-Received: from ext-subm002.mykolab.com (unknown [10.9.6.2])
- by int-mx003.mykolab.com (Postfix) with ESMTPS id 52DD62558;
- Sat, 12 Aug 2023 23:54:49 +0200 (CEST)
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 23:54:46 +0200
-Message-Id: <20230812215446.1458038-1-zgyarmati@zgyarmati.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0i97nt1rDQTc for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 22:08:56 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8496B81212
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 22:08:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8496B81212
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F55F240005;
+ Sat, 12 Aug 2023 22:08:53 +0000 (UTC)
+Date: Sun, 13 Aug 2023 00:08:52 +0200
+To: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Message-ID: <20230813000852.21a575a5@windsurf>
+In-Reply-To: <6691f34e23b7c34d8458417421e7ea27@zgyarmati.de>
+References: <20230812175348.1449808-1-zgyarmati@zgyarmati.de>
+ <20230812215559.65936b40@windsurf>
+ <6691f34e23b7c34d8458417421e7ea27@zgyarmati.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kolabnow.com; h=
- content-transfer-encoding:mime-version:message-id:date:date
- :subject:subject:from:from:received:received:received; s=
- dkim20160331; t=1691877290; x=1693691691; bh=9wCfQtQQ03u7BiH8Oru
- 0YUrY6mI1s6w6D4z7qujKIf8=; b=kcOub/u2po1mocTtJue4MGOHrOwnwouKvdB
- amUvNdJH3VqBnhDFQmLUIX5caJOGy+rPGffchUtozfIUjAsho61nTP3LA+6GO1CQ
- 0R4kwHAf0XlJyuR/nuQ6jIIHMabs3fve1ZwHHbrETm+f1AnswplOmiWNlZbWizAE
- qjcCjrzNmlJT+owW3HtkFGZm2NOhYKnoXVE4JHHrn3fbN8unqSWDZf7++O2ZSOzg
- PjF2jC+Yn+USpd5itW9uigu3JyRkhB7bWy/En1Dz4DW16Ju8CNdzvGLVHIyfe5UY
- nsUKpPbMLof5weOo4QZGebwnaJJ8r4Fjl+xziLn0zBmUVCHESDMzJ4pE42p70EM1
- Ui8FqyvB9vsNjyabTnPkYwUIQuBYcNihxrraPRotLtddVm3V7k0JUjR2P9Pzh4Py
- PDGBzw4Qx4kj3ZHOw3/VhAqbk/GLfQ0a23LqUzPHNLTA5CLuMS2XsRU8UAD8aM25
- tjyeBavewSARrRN5dwI6ZI1E30j/71tfYB5dh2rMi33+UTXUNcAW4KaeyZwrnTdV
- ib8f+zNgxd26p/8sB2CeUCvkSfDtBd6OI67YlWeP8nzjSLusyiTFH5DR7cucasiP
- l0LXKCV+223+vesjcJCX5Yqi0MTdWa3/bkO40DhU0cgMnD6rVR0K8pFH84bJlVy3
- hLLile0M=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (4096-bit key) header.d=kolabnow.com header.i=@kolabnow.com
- header.a=rsa-sha256 header.s=dkim20160331 header.b=kcOub/u2
-X-Mailman-Original-Authentication-Results: ext-mx-out002.mykolab.com
- (amavisd-new); 
- dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
- header.d=kolabnow.com
-Subject: [Buildroot] [PATCH v2 1/1] package/libusb-compat: bump to 0.1.8
+ d=bootlin.com; s=gm1; t=1691878133;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=FUI9EBwY8nWggX6fKLMqMkiczaEHnCNmNBTkqc3RDdU=;
+ b=J/8y+RF/VDvn3FxHQk7+c6RPGtKPXHByMCQaJYbtT9s4Z7pM6zy9Ia6Zt+0zK1fYPIw6XZ
+ p4LvSI438slyiG3JCttkTAE3WPMF4kov2lQ2UAq4mXXcQuHpsy8G7jOWwjakMJES+Xbhui
+ 9DO/e/K3rlqb1yLqcQteCyIxUqsLSS3Qo/H+jdMieP8zazxupgFbGHmx9dAcFmpwZCKrzI
+ vpFycYNXgjcijQG17jVsAgSpXtYymkzWKRoMjGcYhS0IM1B5THxFYHqA4n9gfJnCmgJQmF
+ WZXY659mmj+K1hfGhqGsJJofsgQzRwTHYyhReMvnSAKVfZOHF5zOtBZRuLZUAA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=J/8y+RF/
+Subject: Re: [Buildroot] [PATCH 1/1] package/libusb-compat: bump to 0.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,95 +76,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Removing upstreamed patch and force autoreconf
+On Sat, 12 Aug 2023 23:54:03 +0200
+Zoltan Gyarmati <zgyarmati@zgyarmati.de> wrote:
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
----
- .../0001-fix-a-build-issue-on-linux.patch     | 32 -------------------
- package/libusb-compat/libusb-compat.hash      |  2 +-
- package/libusb-compat/libusb-compat.mk        |  5 ++-
- 3 files changed, 5 insertions(+), 34 deletions(-)
- delete mode 100644 package/libusb-compat/0001-fix-a-build-issue-on-linux.patch
+> Thanks for the feedback! Unfortunately this release tarball doesn't have 
+> the `configure` scripts and other files generated. Gonna send a v2 here 
+> and send a feedback to upstream.
 
-diff --git a/package/libusb-compat/0001-fix-a-build-issue-on-linux.patch b/package/libusb-compat/0001-fix-a-build-issue-on-linux.patch
-deleted file mode 100644
-index d2e26b321c..0000000000
---- a/package/libusb-compat/0001-fix-a-build-issue-on-linux.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From af07587e8775c25450cda8ba9e9a8b1a58072634 Mon Sep 17 00:00:00 2001
--From: Bartosz Golaszewski <brgl@bgdev.pl>
--Date: Mon, 3 Jul 2017 15:55:00 +0200
--Subject: [PATCH] fix a build issue on linux
--
--On linux PATH_MAX is defined in linux/limits.h. If we include usb.h
--without previously having indirectly included it, the build fails.
--
--Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-----
-- libusb/usb.h | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/libusb/usb.h b/libusb/usb.h
--index d2c30aa..7ad9a66 100644
----- a/libusb/usb.h
--+++ b/libusb/usb.h
--@@ -41,6 +41,11 @@ typedef unsigned __int32  uint32_t;
-- #include <stdint.h>
-- #endif
-- 
--+/* On linux PATH_MAX is defined in linux/limits.h. */
--+#if defined(__linux__)
--+#include <linux/limits.h>
--+#endif
--+
-- /*
--  * USB spec information
--  *
---- 
--2.9.3
--
-diff --git a/package/libusb-compat/libusb-compat.hash b/package/libusb-compat/libusb-compat.hash
-index 3acf3c3408..a198e76058 100644
---- a/package/libusb-compat/libusb-compat.hash
-+++ b/package/libusb-compat/libusb-compat.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8259f8d5b084fe43c47823a939e955e0ba21942b8d112266c39d228cc14764d6  libusb-compat-0.1.7.tar.bz2
-+sha256  698c76484f3dec1e0175067cbd1556c3021e94e7f2313ae3ea6a66d900e00827  libusb-compat-0.1.8.tar.bz2
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
-index 7c87b3c9d8..d49b753670 100644
---- a/package/libusb-compat/libusb-compat.mk
-+++ b/package/libusb-compat/libusb-compat.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBUSB_COMPAT_VERSION_MAJOR = 0.1
--LIBUSB_COMPAT_VERSION = $(LIBUSB_COMPAT_VERSION_MAJOR).7
-+LIBUSB_COMPAT_VERSION = $(LIBUSB_COMPAT_VERSION_MAJOR).8
- LIBUSB_COMPAT_SOURCE = libusb-compat-$(LIBUSB_COMPAT_VERSION).tar.bz2
- LIBUSB_COMPAT_SITE = https://github.com/libusb/libusb-compat-0.1/releases/download/v$(LIBUSB_COMPAT_VERSION)
- LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf libusb
-@@ -14,6 +14,9 @@ LIBUSB_COMPAT_INSTALL_STAGING = YES
- LIBUSB_COMPAT_CONFIG_SCRIPTS = libusb-config
- LIBUSB_COMPAT_LICENSE = LGPL-2.1+
- LIBUSB_COMPAT_LICENSE_FILES = COPYING
-+# 0.1.8 tarball was released without configure script by upstream
-+# discussed here: https://github.com/libusb/libusb-compat-0.1/issues/28
-+LIBUSB_COMPAT_AUTORECONF = YES
- 
- ifeq ($(BR2_STATIC_LIBS),)
- LIBUSB_COMPAT_CONF_ENV += \
+This is totally fine, just put a comment above the AUTORECONF = YES
+that explains this. Thanks a lot!
+
+Thomas
 -- 
-2.25.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
