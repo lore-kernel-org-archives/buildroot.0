@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE83BEE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80261EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A451F40C2C;
-	Mon, 21 Aug 2023 20:11:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A451F40C2C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B53640BBF;
+	Mon, 21 Aug 2023 20:11:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B53640BBF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lq-Hdc7H-KjC; Mon, 21 Aug 2023 20:11:14 +0000 (UTC)
+	with ESMTP id 6mZWfgbocyxj; Mon, 21 Aug 2023 20:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBF1040C2B;
-	Mon, 21 Aug 2023 20:11:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BBF1040C2B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6E4E11BF8B4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5D6A640BEB;
+	Mon, 21 Aug 2023 20:11:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D6A640BEB
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A9AA41BF8B4
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91F8A4138D
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91F8A4138D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25FAC6112B
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25FAC6112B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QescfHP9uXV7 for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LYNBvRwb-buS for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D9BA4136B
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D9BA4136B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 65E4A60E82
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65E4A60E82
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27ACF86023; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+ id 56B5A86026; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Aug 2023 22:22:13 +0200
+Date: Sat, 12 Aug 2023 15:50:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 88bff51ea610aba4f522748d88329f5f4f1e5f66
-X-Git-Newrev: 5328ac52b8b0f98d3aeaa3ca37d7125e4552d94a
+X-Git-Oldrev: 35749826b407d2f742ae79971dbd10811a335ef1
+X-Git-Newrev: 898bdbca1f11fe81e8be7924371326f85f466a27
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200124.27ACF86023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/nitrogen*: bump u-boot
- revision
+Message-Id: <20230821200126.56B5A86026@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/util-linux: fix
+ compile issue with older kernel headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,125 +57,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5328ac52b8b0f98d3aeaa3ca37d7125e4552d94a
+commit: https://git.buildroot.net/buildroot/commit/?id=898bdbca1f11fe81e8be7924371326f85f466a27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- improve 8ULP support (rev A1)
-- add mmc user fastboot support
-- add fastboot partconf support
-- add nitrogen8mp smarc support
+Linux added mnt_id member to struct statx in commit:
+fa2fcf4f1df1559a0a4ee0f46915b496cc2ebf60
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Linux 5.4.0 was released on 24. November 2019, but it seems this change
+never got backported to 5.4.252.
+
+Upstream added a patch to guard the use of the member in commit:
+https://github.com/util-linux/util-linux/commit/c0136ac0c98b18208508fbcfac31a843e0bb8a37
+
+Add the patch to fix an autobuild failure.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/d50/d502bc9236b577e2470a30ffc39c21579b038a1c
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/nitrogen6sx_defconfig | 2 +-
- configs/nitrogen6x_defconfig  | 2 +-
- configs/nitrogen7_defconfig   | 2 +-
- configs/nitrogen8m_defconfig  | 2 +-
- configs/nitrogen8mm_defconfig | 2 +-
- configs/nitrogen8mn_defconfig | 2 +-
- configs/nitrogen8mp_defconfig | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ .../0001-libmount-ifdef-statx-call.patch           | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index b4ea1b9112..c2ca324d53 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-v2022.04
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index ed9e13e6eb..f805ae94b0 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-v2022.04
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index c4520aeb89..068df6eb41 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-v2022.04
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index 20f492c045..4a2a259d54 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -40,7 +40,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-v2022.04
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index b7d62681db..bf98244b1e 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -40,7 +40,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-v2022.04
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index c205b90ebb..677640cf8d 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -40,7 +40,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-v2022.04
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
-index 3ab4f15167..6f49dfc839 100644
---- a/configs/nitrogen8mp_defconfig
-+++ b/configs/nitrogen8mp_defconfig
-@@ -40,7 +40,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mp_2gr0"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-v2022.04
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/c2042594.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot/archive/7e7eff74.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/package/util-linux/0001-libmount-ifdef-statx-call.patch b/package/util-linux/0001-libmount-ifdef-statx-call.patch
+new file mode 100644
+index 0000000000..ba44650bd3
+--- /dev/null
++++ b/package/util-linux/0001-libmount-ifdef-statx-call.patch
+@@ -0,0 +1,57 @@
++From c0136ac0c98b18208508fbcfac31a843e0bb8a37 Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Thu, 3 Aug 2023 12:39:19 +0200
++Subject: [PATCH] libmount: ifdef statx() call
++
++In this case the statx() is use to get mount ID. It's optional and not
++required. Let's #ifdef the statx() call and also check for stx_mnt_id
++struct member.
++
++Fixes: https://github.com/util-linux/util-linux/issues/2415
++Signed-off-by: Karel Zak <kzak@redhat.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/util-linux/util-linux/commit/c0136ac0c98b18208508fbcfac31a843e0bb8a37
++---
++ configure.ac              | 5 ++++-
++ libmount/src/hook_mount.c | 2 ++
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index a3cf330b5..ae721c7ac 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -525,7 +525,10 @@ AC_CHECK_MEMBERS([struct termios.c_line],,,
++     [[#include <termios.h>]])
++ 
++ AC_CHECK_MEMBERS([struct stat.st_mtim.tv_nsec],,,
++-	[#include <sys/stat.h>])
+++    [[#include <sys/stat.h>]])
+++
+++AC_CHECK_MEMBERS([struct statx.stx_mnt_id],,,
+++    [[#include <linux/stat.h>]])
++ 
++ AC_CHECK_DECLS([_NL_TIME_WEEK_1STDAY],[],[],[[#include <langinfo.h>]])
++ 
++diff --git a/libmount/src/hook_mount.c b/libmount/src/hook_mount.c
++index d69a018ec..056338c49 100644
++--- a/libmount/src/hook_mount.c
+++++ b/libmount/src/hook_mount.c
++@@ -294,6 +294,7 @@ static int hook_create_mount(struct libmnt_context *cxt,
++ 		/* cleanup after fail (libmount may only try the FS type) */
++ 		close_sysapi_fds(api);
++ 
+++#if defined(HAVE_STRUCT_STATX) && defined(HAVE_STRUCT_STATX_STX_MNT_ID)
++ 	if (!rc && cxt->fs) {
++ 		struct statx st;
++ 
++@@ -306,6 +307,7 @@ static int hook_create_mount(struct libmnt_context *cxt,
++ 				fs->id = cxt->fs->id;
++ 		}
++ 	}
+++#endif
++ 
++ done:
++ 	DBG(HOOK, ul_debugobj(hs, "create FS done [rc=%d, id=%d]", rc, cxt->fs ? cxt->fs->id : -1));
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
