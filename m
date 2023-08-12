@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88C46C0015E
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 10:20:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1387FC001B0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 10:41:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 172B4408BF;
-	Sat, 12 Aug 2023 10:20:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 172B4408BF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7612141B70;
+	Sat, 12 Aug 2023 10:41:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7612141B70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 10t7F8IIvyqO; Sat, 12 Aug 2023 10:20:00 +0000 (UTC)
+	with ESMTP id 8W10gokQtIxo; Sat, 12 Aug 2023 10:41:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28FCB4089F;
-	Sat, 12 Aug 2023 10:19:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28FCB4089F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 794B51BF2C7
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 10:19:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DE7341B1A;
+	Sat, 12 Aug 2023 10:41:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DE7341B1A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 81A131BF288
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 10:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 533EE81E69
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 10:19:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 533EE81E69
+ by smtp4.osuosl.org (Postfix) with ESMTP id 670E041B1A
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 10:41:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 670E041B1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4e-77Saa0iN0 for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 10:19:56 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1EC948179D
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 10:19:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EC948179D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EE8F440002;
- Sat, 12 Aug 2023 10:19:52 +0000 (UTC)
-Date: Sat, 12 Aug 2023 12:19:51 +0200
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Message-ID: <20230812121951.582dd68f@windsurf>
-In-Reply-To: <21974407.EfDdHjke4D@kilian-aisec>
-References: <2691942.mvXUDI8C0e@kilian-aisec> <2160318.Mh6RI2rZIc@kilian-aisec>
- <20230811164858.36987e01@windsurf>
- <21974407.EfDdHjke4D@kilian-aisec>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691835593;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JAsYepVAPVsa0s/J9YgwaJmn15e/bXQRmR7HWOV3v1E=;
- b=Pzf7xYdhG9gi4LoFqrk7FsA6ccxqmi+s8Yl+Ad+g7u7nGoSl0EVmhTvN4pRSuN6754X+8/
- 0bX0TO3OLMmMntPgv5zh2ga/5OOcKdFT5kwHvlBVkbW7G5ikGhuLGADENdneum8Fyx55BR
- b3iEbBadGNYRIGIcAdIwPmONB5oDgR0z/KsS69qz9alkdX8L6G4FNp1FiIjPYxojfkLAFc
- unhGdOMGc0dVJbfSrl4S/g4SlVZrlXyqREv+eV8q1YX72v5KkaeeCgqadT6/WeBLtdqwE6
- oQT5TDet/FkJ3oPlk2CAXdnOjxsyiDcm653td/9kEDJNyS+Gab09e6Xc4LL7wA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Pzf7xYdh
-Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FtoNx_BwMbDO for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 10:41:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6877A41B19
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 10:41:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6877A41B19
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4F3EB83711; Sat, 12 Aug 2023 10:41:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 12 Aug 2023 12:37:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 27dc49378071a82688d44a5cc592c0200b3991b4
+X-Git-Newrev: fe42fa8017b10602ed57ee066f8a9710f0f8e7ca
+X-Patchwork-Hint: ignore
+Message-Id: <20230812104102.4F3EB83711@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libedit: fix compile error with
+ uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,27 +58,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCAxMiBBdWcgMjAyMyAxMTo1Njo0NSArMDIwMApLaWxpYW4gWmlubmVja2VyIDxraWxp
-YW4uemlubmVja2VyQG1haWwuZGU+IHdyb3RlOgoKPiBZZXMsIEkgcmVhbGx5IGFwcHJlY2lhdGUg
-YWxsIGluZm9ybWF0aW9uIHRoYXQgbWF5IGhlbHAhIEkgYW0gbm90IHZlcnkgCj4gZXhwZXJpZW5j
-ZWQsIGVzcGVjaWFsbHkgd2hlbiBpdCBjb21lcyB0byBhc3NlbWJsaW5nIGEgYm9vdCBpbWFnZSBm
-cm9tIHRoZSAKPiBhcnRpZmFjdHMsIHNvIGl0IHdvdWxkIGJlIGEgZ3JlYXQgaGVscC4KCldhbnRl
-ZCB0byBleHBlcmltZW50IGEgYml0LiBUdXJucyBvdXQgdGhhdCB0aGUgVVNCIFRUTCBjYWJsZSBJ
-IGhhcHBlbgp0byBoYXZlIHdpdGggbWUgZmFsbHMgaW50byB0aGUgIkl0IGhhcyBiZWVuIG5vdGlj
-ZWQgdGhhdCA2cGluIEZUREkKY2FibGVzIGxpa2UgdGhpcyBkb2VzbuKAmXQgc2VlbSB3b3JrIHdp
-dGggQmVhZ2xlViBBaGVhZCBkZWJ1ZyBwb3J0IGFuZAp0aGVyZSBtaWdodCBiZSBvdGhlciBjYWJs
-ZXMvbW9kdWxlcyB0aGF0IHdpbGwgc2hvdyBnYXJiYWdlIHdoZW4KY29ubmVjdGVkIHRvIHRoZSBi
-b2FyZCIgYXQKaHR0cHM6Ly9kb2NzLmJlYWdsZWJvYXJkLm9yZy9sYXRlc3QvYm9hcmRzL2JlYWds
-ZXYvYWhlYWQvMDItcXVpY2stc3RhcnQuaHRtbCwKc28gSSBkb24ndCBoYXZlIGFjY2VzcyB0byB0
-aGUgYm9hcmQgVUFSVCB0byBleHBsb3JlIHRoaW5ncywgc2FkbHkuCgpUaG9tYXMKLS0gClRob21h
-cyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5k
-IEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=fe42fa8017b10602ed57ee066f8a9710f0f8e7ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+In Buildroot commit cc69dbf8fdef6619c4ea09a4aaa97cd5ad3ee423
+("package/libedit: bump version to 20221030-3.1"), the version of
+libedit was bumped from 20210910-3.1 to 20221030-3.1. This broke the
+build with uClibc:
+
+./sys.h:96:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
+
+Header file uses ssize_t so sys/types.h must be included.
+
+This commit adds a patch that fixes this issue.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/439538b23776a58ff81c38754a19ee92c3590a1f
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libedit/0002-add-sys-types_h.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/package/libedit/0002-add-sys-types_h.patch b/package/libedit/0002-add-sys-types_h.patch
+new file mode 100644
+index 0000000000..26aa906ee3
+--- /dev/null
++++ b/package/libedit/0002-add-sys-types_h.patch
+@@ -0,0 +1,15 @@
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: N/A only reachable via mail
++
++diff -Nur libedit-20221030-3.1.orig/src/sys.h libedit-20221030-3.1/src/sys.h
++--- libedit-20221030-3.1.orig/src/sys.h	2022-10-30 06:35:40.000000000 +0100
+++++ libedit-20221030-3.1/src/sys.h	2023-08-12 09:52:28.137223311 +0200
++@@ -40,7 +40,7 @@
++ #ifndef _h_sys
++ #define	_h_sys
++ 
++-#if defined(HAVE_SYS_TYPES_H) && defined(__sun)
+++#if defined(HAVE_SYS_TYPES_H)
++ #include <sys/types.h>
++ #endif
++ 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
