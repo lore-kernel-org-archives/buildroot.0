@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3E68EE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B85EE49A5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:03:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FA9540B71;
-	Mon, 21 Aug 2023 20:03:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FA9540B71
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2181540B82;
+	Mon, 21 Aug 2023 20:03:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2181540B82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H3p9sK8G_-zC; Mon, 21 Aug 2023 20:03:29 +0000 (UTC)
+	with ESMTP id nH6sfy-0Ytx9; Mon, 21 Aug 2023 20:03:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C075C40B56;
-	Mon, 21 Aug 2023 20:03:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C075C40B56
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5667140B61;
+	Mon, 21 Aug 2023 20:03:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5667140B61
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A58DC1BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 141711BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77B0F40B26
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA2104063C
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77B0F40B26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA2104063C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s87UHvvxK9l1 for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
+ with ESMTP id Twky-QJRGstg for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA9CF40B2F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7A2840B31
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA9CF40B2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A2840B31
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB3BB85FEB; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id D3CBD86026; Mon, 21 Aug 2023 20:01:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Aug 2023 19:45:19 +0200
+Date: Sat, 12 Aug 2023 12:37:15 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 503252d8b0951af306189b63ea852723c6540f5a
-X-Git-Newrev: a845276757085692601933541e510e1f02dae575
+X-Git-Oldrev: 27dc49378071a82688d44a5cc592c0200b3991b4
+X-Git-Newrev: fe42fa8017b10602ed57ee066f8a9710f0f8e7ca
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200125.BB3BB85FEB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/genradconfig: drop
- legacy lpc32xxcdl exclusion
+Message-Id: <20230821200125.D3CBD86026@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libedit: fix compile
+ error with uClibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,40 +56,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a845276757085692601933541e510e1f02dae575
+commit: https://git.buildroot.net/buildroot/commit/?id=fe42fa8017b10602ed57ee066f8a9710f0f8e7ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 503252d8b095 (boot/lpc32xxcdl: remove package) forgot to remove
-the special handling in genrandconfig. Since the package no longer
-exists, we don't need to special-case its symbol anymore, so drop it
-now.
+In Buildroot commit cc69dbf8fdef6619c4ea09a4aaa97cd5ad3ee423
+("package/libedit: bump version to 20221030-3.1"), the version of
+libedit was bumped from 20210910-3.1 to 20221030-3.1. This broke the
+build with uClibc:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+./sys.h:96:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
+
+Header file uses ssize_t so sys/types.h must be included.
+
+This commit adds a patch that fixes this issue.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/439538b23776a58ff81c38754a19ee92c3590a1f
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/genrandconfig | 4 ----
- 1 file changed, 4 deletions(-)
+ package/libedit/0002-add-sys-types_h.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 60922e871c..b6154db344 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -496,10 +496,6 @@ def fixup_config(sysinfo, configfile):
-        'BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS=""\n' in configlines:
-         return False
- 
--    if 'BR2_TARGET_LPC32XXCDL=y\n' in configlines and \
--       'BR2_TARGET_LPC32XXCDL_BOARDNAME=""\n' in configlines:
--        return False
--
-     if 'BR2_TARGET_OPTEE_OS=y\n' in configlines and \
-        'BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL=y\n' in configlines and \
-        'BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL_LOCATION=""\n' in configlines:
+diff --git a/package/libedit/0002-add-sys-types_h.patch b/package/libedit/0002-add-sys-types_h.patch
+new file mode 100644
+index 0000000000..26aa906ee3
+--- /dev/null
++++ b/package/libedit/0002-add-sys-types_h.patch
+@@ -0,0 +1,15 @@
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: N/A only reachable via mail
++
++diff -Nur libedit-20221030-3.1.orig/src/sys.h libedit-20221030-3.1/src/sys.h
++--- libedit-20221030-3.1.orig/src/sys.h	2022-10-30 06:35:40.000000000 +0100
+++++ libedit-20221030-3.1/src/sys.h	2023-08-12 09:52:28.137223311 +0200
++@@ -40,7 +40,7 @@
++ #ifndef _h_sys
++ #define	_h_sys
++ 
++-#if defined(HAVE_SYS_TYPES_H) && defined(__sun)
+++#if defined(HAVE_SYS_TYPES_H)
++ #include <sys/types.h>
++ #endif
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
