@@ -1,88 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C54DDC0015E
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 22:54:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CAE1EB64DD
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 01:01:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C5C341B71;
-	Fri, 11 Aug 2023 22:54:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C5C341B71
+	by smtp1.osuosl.org (Postfix) with ESMTP id E307B83FBD;
+	Sat, 12 Aug 2023 01:01:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E307B83FBD
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rnFn4S7WTyvX; Sat, 12 Aug 2023 01:01:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1B5B8402B;
+	Sat, 12 Aug 2023 01:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1B5B8402B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 19D071BF48D
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 01:01:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F265E41E7D
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 01:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F265E41E7D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jm8EfY0JGeBx; Fri, 11 Aug 2023 22:54:21 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C33341EAC;
-	Fri, 11 Aug 2023 22:54:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C33341EAC
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E57EC1BF5F6
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:54:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBE2D60AEE
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:54:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBE2D60AEE
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VnkOfbbzcTGv for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 22:54:17 +0000 (UTC)
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BB1B860AE8
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 22:54:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB1B860AE8
-Received: by mail-oi1-x22b.google.com with SMTP id
- 5614622812f47-3a7a180c3faso2158342b6e.2
- for <buildroot@buildroot.org>; Fri, 11 Aug 2023 15:54:17 -0700 (PDT)
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q_yrW0m6_nMg for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 01:01:24 +0000 (UTC)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com
+ [IPv6:2607:f8b0:4864:20::b49])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2374C41E7A
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 01:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2374C41E7A
+Received: by mail-yb1-xb49.google.com with SMTP id
+ 3f1490d57ef6-c5fc972760eso2667077276.1
+ for <buildroot@buildroot.org>; Fri, 11 Aug 2023 18:01:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691794456; x=1692399256;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=MQR6g/QWNc1nUM1/Ho9fLs7L0iEh21FrPu17SlcC7dE=;
- b=Te6ozX7rPV+5a7x3eeHoEvykYQ/Iw5PeB5U8IF3+O5/+8lu01gKFEMiehqXoOqBZFV
- 5Q5Fm4P9pMSpN54brwHKV8bIJTqNAIamofub4L8uMSSCfsCfo6GmiCUqinaa7ihvtAPa
- oPC0WVZXagEdYmQull9toQKYOKigKfakWZO2raR3XlJiSqLRbN5u7jBNkei3J3v8SWGx
- iQSPsJ3zWjz1vRpbsONXDZX1My4pmPVvrhPqjZGCg206uJOY4fIYvUfffM4snDndL/jn
- dwGY3NB4jzXy5GK9iQBi6GwPpTwxJ6uqZToeanam1q3Nj3gtHIxXuXiKEs1buiJpzgiT
- 9k9A==
-X-Gm-Message-State: AOJu0Yyad9H4347fi/lEs5KEENhyRfu77QTyCpx9HFjwO5747Uyj8UYs
- 0l8PcKrsDUVF2XDmR4dKRXiWwReT/5ckw5p70Ic=
-X-Google-Smtp-Source: AGHT+IFZc/T2H7arNG557c9L2/wR3kUeVD6i5RWEyr1Sr16caPc+30ywdKpSxisdodeWi+RmX8qcYyMh6+umugjpfPs=
-X-Received: by 2002:a05:6808:114b:b0:3a4:317d:eb7c with SMTP id
- u11-20020a056808114b00b003a4317deb7cmr4562524oiu.0.1691794456682; Fri, 11 Aug
- 2023 15:54:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <2691942.mvXUDI8C0e@kilian-aisec>
- <20230809193855.60c6b89c@windsurf>
- <13322713.uLZWGnKmhe@kilian-aisec> <1766550.VLH7GnMWUR@kilian-aisec>
- <20230811164145.2b978818@windsurf>
- <CAOCHtYjoouGOSwOy1Fh4muYnU3E-yY6jp8GOcy1f=MhCaaAx8w@mail.gmail.com>
-In-Reply-To: <CAOCHtYjoouGOSwOy1Fh4muYnU3E-yY6jp8GOcy1f=MhCaaAx8w@mail.gmail.com>
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Fri, 11 Aug 2023 17:53:50 -0500
-Message-ID: <CAOCHtYiuJimX-pF-hUhuK35X+63eE1GJbK=xAZOR73gb8iZkog@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ d=1e100.net; s=20221208; t=1691802083; x=1692406883;
+ h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=zul9YLXTAUnzr+cnXOKDpO2qvgxr073Qm4Fd4zgDKFg=;
+ b=RfZw6pzUbRNIL2TI1TycqxhOR49XRa7nsbbf8FCnWW54kN/99B3ZKPi83+v3ZjXqFj
+ FrdUsFs86bcH3B9riWPR5p78Y28KVMJdgzazHK7z/Flv9KzlEkHKCIW18+iiLiOXpR6U
+ ZYAkwa+GJH3N4cBxtLq7hMOtFhO1LPbJlyuMM+t0jn8Ax3QZn83Dv1xX4PYy0t5uKTip
+ 7pTf1F7ciX2vyKKG78EBvwNFbhBD+7uzlzfDxcBJV2hB6qYqMiHiENgBqVkEKcDzXjDs
+ k8SLgMM+6PqB8Y1auEuIoXv3HW9U3Xy7SdVk9HjgSzx06pCZMFjVVGLd5U+Ql6wrOrPg
+ 8AjA==
+X-Gm-Message-State: AOJu0YxiH13R16igR69zJ9VdmPG2mxWCOMC8c7Z6Ab9LtaHerMr9KjGr
+ IdnyU3qZeP56KUhgH5jDbpnE6XrjOZWkgCh6C5HNek0DL6FdIzWb7XlbfZYT2N8paue8AVILVs2
+ jAnnQqMowtHOmVJAHdJHWv6BxlX6QuADg0+dnteCgdt5WKhPRV9222+oNkUChnCAo4V6A
+X-Google-Smtp-Source: AGHT+IEDkr1VfGRxH/0SWNJDOgqy0G0Aexii3g0XjEp/7jZklkPI+4iU2snSBF6EfRE3iCEOsA+P7A4OedQ45w==
+X-Received: from drinkcat.c.googlers.com
+ ([fda3:e722:ac3:cc00:3:22c1:c0a8:1b08])
+ (user=drinkcat job=sendgmr) by 2002:a05:6902:4c7:b0:d0f:a0a6:8e87 with SMTP
+ id v7-20020a05690204c700b00d0fa0a68e87mr56035ybs.2.1691802082935; Fri, 11 Aug
+ 2023 18:01:22 -0700 (PDT)
+Date: Sat, 12 Aug 2023 01:01:17 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
+Message-ID: <20230812010118.2654653-1-drinkcat@google.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691794456; x=1692399256;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=MQR6g/QWNc1nUM1/Ho9fLs7L0iEh21FrPu17SlcC7dE=;
- b=D5DRoJ9D/3p6rXVfHzOTw6x9m3b3X0ek2Qjnd5BkvGoaXQGXRCqop3cImIam0dWIEc
- DBFL36T2nd0+2yJPl82iatk/Ubj7iTiPr4tnfbvjMWR0s5G4xW/vv8xn27H9L2YhMMgc
- ncWxFm0pkArW+BcbE3TAHXn0KTmWRU6m7FqtUvxgUGUJ3r+yY6ccorx2IyyJ7af60Wzx
- ewR5E0cgvD5L1LX+6Rc4ytj/Cst65UVE8Ayu68fqH8h24UxTjOIvGfTTzBEtKjHmcOHh
- 0cmQdBUoPkP3jbIm2FgZkNEX6IwYWFmEe2crk3gp/FFHGtu0vWbWyUSdsVb576dtIz0m
- gaaw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=D5DRoJ9D
-Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
+ d=google.com; s=20221208; t=1691802083; x=1692406883;
+ h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=zul9YLXTAUnzr+cnXOKDpO2qvgxr073Qm4Fd4zgDKFg=;
+ b=Stnts5z5X1vc3MmhAbKmrRuao2wpCGkQObkinbUH4ZmNJk9kanpmrjf61xo/aL2kd9
+ GVz/OfTk+lC/V9q0X8MceUxNZ78YXxH+Bhn2zJ+bZot9ecHTyJNWIdvBLmfkuYtvUSSt
+ bD1+4n6s48c+Bsr3ohHe1K6XWm/7cH2RP0H/uWBUygI6b9Lw6kKlkCFHcy+YHYvprOuQ
+ jq36H7K12lW39bQN7FJ9m3IyG1bqYDA1gvp9pz02U0LUV65OqjjFRlP+mj1fSpKGvUkc
+ IIT3Ol81++Fd3+kiyZL2i2Vk5OsbuLmIfYZQQJAFybs6JjoKyZ3KmZih4dgctRIBvZJ5
+ v1gQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=google.com header.i=@google.com
+ header.a=rsa-sha256 header.s=20221208 header.b=Stnts5z5
+Subject: [Buildroot] [PATCH v3 1/1] package/screenfetch: Add upstream awk
+ detection patch.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,61 +90,830 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>,
- Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Nicolas Boichat via buildroot <buildroot@buildroot.org>
+Reply-To: Nicolas Boichat <drinkcat@google.com>
+Cc: Nicolas Boichat <drinkcat@google.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCBBdWcgMTEsIDIwMjMgYXQgNDozMOKAr1BNIFJvYmVydCBOZWxzb24gPHJvYmVydGNu
-ZWxzb25AZ21haWwuY29tPiB3cm90ZToKPgo+IE9uIEZyaSwgQXVnIDExLCAyMDIzIGF0IDk6NDLi
-gK9BTSBUaG9tYXMgUGV0YXp6b25pIHZpYSBidWlsZHJvb3QKPiA8YnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmc+IHdyb3RlOgo+ID4KPiA+IE9uIFRodSwgMTAgQXVnIDIwMjMgMTM6MDI6MzIgKzAyMDAK
-PiA+IEtpbGlhbiBaaW5uZWNrZXIgPGtpbGlhbi56aW5uZWNrZXJAbWFpbC5kZT4gd3JvdGU6Cj4g
-Pgo+ID4gPiBJIGFsc28gdGhpbmsgdGhhdCB0aGVyZSBpcyBhcmUgc2ltaWxhciBpc3N1ZXMgcmVn
-YXJkaW5nIHRoZSBiZWFnbGV2X2RlZmNvbmZpZwo+ID4gPiBhbmQgdGhlIHVzZWQsIHZlcnkgb2xk
-IG9wZW5zYmkgdmVyc2lvbiBhbmQgbWF5YmUgYWxzbyB0aGUgdXNlZCBzdGFyZml2ZSBjdXN0b20K
-PiA+ID4ga2VybmVsIHZlcnNpb24uCj4gPiA+Cj4gPiA+IEkgY291bGQgdHJ5IHRvIGJ1bXAgdGhl
-IHZlcnNpb25zIG9yIGFkZCBwYXRjaGVzIHVudGlsIGl0IGNvbXBpbGVzIGFnYWluLgo+ID4gPiBI
-b3dldmVyLCBJIGRvbid0IGhhdmUgYSBCZWFnbGVWIGN1cnJlbnRseSBhdCBoYW5kLCBzbyBJIHdv
-dWxkIG5vdCBiZSBhYmxlIHRvCj4gPiA+IHJlYWxseSB0ZXN0IHdoYXQgSSBwcm9kdWNlZCBhZnRl
-cndhcmRzLiBTbyBpdCBtaWdodCBiZSBiZXR0ZXIgc29tZW9uZSBlbHNlLAo+ID4gPiB3aGljaCBo
-YXMgYWNjZXNzIHRvIGEgQmVhZ2xlViwgaGFzIGEgbG9vay4KPiA+Cj4gPiBJIGRvIGhhdmUgYSBC
-ZWFnbGVWIChub3QgaGVyZSB3aXRoIG1lIHRob3VnaCksIGJ1dCBhcyBJIHJlcGxpZWQgdG8KPiA+
-IGFub3RoZXIgZS1tYWlsLCBJIHRoaW5rIHdlIGNvdWxkIHNpbXBseSBkcm9wIGJlYWdsZXZfZGVm
-Y29uZmlnIGFzIG5vdAo+ID4gbWFueSBzYW1wbGVzIG9mIHRoaXMgcGxhdGZvcm0gd2VyZSBzaGlw
-cGVkLCBhbmQgaXQncyBubyBsb25nZXIgcHJvZHVjZWQuCj4KPiBTbyB0aGUgcGxhbiBmcm9tIEJl
-YWdsZUJvYXJkLm9yZyBpczoKPgo+IGJlYWdsZXYtPGRldmljZT4KPgo+IFNvIHRoZSBUSDE1MjAg
-YmFzZWQgQmVhZ2xlViBpczogYmVhZ2xldi1haGVhZAo+Cj4gTG9va2luZyBhdCBhbGwgb3VyIGdp
-dGxhYiByZXBvcywgeWVhaCBpIGNhbGxlZCBldmVyeSBjb25maWcgYGJlYWdsZXZfYC4uLgo+Cj4g
-YWRkIHRoYXQgdG8gbXkgY2xlYW51cCBsaXN0Li4KCk9rYXkgS2lsaWFuLCB0aGVzZSBhbGwgYnVp
-bGQgd2l0aCB4ODZfNjQtZ2NjLTEzLjIuMC1ub2xpYmMtcmlzY3Y2NC1saW51eC50YXIueHoKCm9w
-ZW5zYmk6IGh0dHBzOi8vZ2l0LmJlYWdsZWJvYXJkLm9yZy9iZWFnbGV2LWFoZWFkL2JlYWdsZXYt
-YWhlYWQtb3BlbnNiaS8tL3RyZWUvMC45LTEuMS4yLXVidW50dQp1LWJvb3Q6IGh0dHBzOi8vZ2l0
-LmJlYWdsZWJvYXJkLm9yZy9iZWFnbGV2LWFoZWFkL2JlYWdsZXYtYWhlYWQtdS1ib290Ly0vdHJl
-ZS9iZWFnbGV2LXYyMDIwLjAxLTEuMS4yLXVidW50dQpsaW51eDogaHR0cHM6Ly9naXQuYmVhZ2xl
-Ym9hcmQub3JnL2JlYWdsZXYtYWhlYWQvYmVhZ2xldi1haGVhZC1saW51eC8tL3RyZWUvYmVhZ2xl
-di12NS4xMC4xMTMtMS4xLjItdWJ1bnR1CgpGb3IgYmFuZHdpZHRoIGlzc3VlcywgcGxlYXNlIHVz
-ZSB0aGUgZ2l0aHViIG1pcnJvcnMgZGlyZWN0bHkgaW4KcGF0Y2hlcyBmb3IgYnVpbGRyb290LCBh
-cyB0aGVzZSBhcmUgcHVzaCBtaXJyb3JlZCBmcm9tCmdpdC5iZWFnbGVib2FyZC5vcmcvICwgYXQg
-d29yc3QgdGhleSBsYWcgYnkgMTAgbWludXRlcyBhZnRlciBhIG5ldwpjb21taXQKCm9wZW5zYmk6
-IGh0dHBzOi8vZ2l0aHViLmNvbS9iZWFnbGVib2FyZC9iZWFnbGV2LWFoZWFkLW9wZW5zYmkvdHJl
-ZS8wLjktMS4xLjItdWJ1bnR1CnUtYm9vdDogaHR0cHM6Ly9naXRodWIuY29tL2JlYWdsZWJvYXJk
-L2JlYWdsZXYtYWhlYWQtdS1ib290L3RyZWUvYmVhZ2xldi12MjAyMC4wMS0xLjEuMi11YnVudHUK
-bGludXg6IGh0dHBzOi8vZ2l0aHViLmNvbS9iZWFnbGVib2FyZC9saW51eC90cmVlL2JlYWdsZXYt
-djUuMTAuMTEzLTEuMS4yLXVidW50dQoKVmVyaWZpY2F0aW9uIGNpIGltYWdlLCBhdmFpbGFibGUg
-Zm9yIHRoZSBuZXh0IDE0IGRheXMuLgoKaHR0cHM6Ly9naXQuYmVhZ2xlYm9hcmQub3JnL2JlYWds
-ZXYtYWhlYWQveHVhbnRpZS11YnVudHUvLS9qb2JzLzEzMzAzCgpgYGAKdm9vZG9vQGhlc3RpYTp+
-L0Rvd25sb2FkcyQgdW56aXAgeHVhbnRpZS11YnVudHUtMS4xLjItMTMzMDMuemlwCkFyY2hpdmU6
-ICB4dWFudGllLXVidW50dS0xLjEuMi0xMzMwMy56aXAKICBpbmZsYXRpbmc6IGRlcGxveS9ib290
-LmV4dDQueHoKICBpbmZsYXRpbmc6IGRlcGxveS9mYXN0Ym9vdF9lbW1jLnNoCiAgaW5mbGF0aW5n
-OiBkZXBsb3kvbWFjX2Zhc3Rib290X2VtbWMuc2gKICBpbmZsYXRpbmc6IGRlcGxveS9yb290LmV4
-dDQueHoKICBpbmZsYXRpbmc6IGRlcGxveS91LWJvb3Qtd2l0aC1zcGwuYmluCnZvb2Rvb0BoZXN0
-aWE6fi9Eb3dubG9hZHMkIGNkIGRlcGxveS8Kdm9vZG9vQGhlc3RpYTp+L0Rvd25sb2Fkcy9kZXBs
-b3kkIHN1ZG8gLi9mYXN0Ym9vdF9lbW1jLnNoCmBgYAoKQm9vdCBsb2c6IGh0dHBzOi8vZ2lzdC5n
-aXRodWIuY29tL1JvYmVydENOZWxzb24vNDJkZWIyNGM0MWE5MmNlNWU4OWU4MGRmZTA1OGUzZDgK
-CgpSZWdhcmRzLAoKLS0KUm9iZXJ0IE5lbHNvbgpodHRwczovL3Jjbi1lZS5jb20vCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+screenfetch requires an "awk" implementation, but upstream would
+only use an executable called "awk": pick up upstream patch that
+can autodetect awk implementation, so that "mawk" can be used.
+
+Signed-off-by: Nicolas Boichat <drinkcat@google.com>
+---
+
+Changes v2 -> v3:
+ - Simply assume that an awk implementation is provided [Arnout Vandecappelle]
+
+Changes v1 -> v2:
+ - Busybox's awk also works, so add that as a possible dependency [Thomas Petazzoni]
+   - Tried to use "select" instead of "depends" as suggested, but that
+     creates a circular dependency.
+ - Fixed boolean logic in "comment" part (&& not ||)
+
+ .../0001-Detect-which-awk-to-use.patch        | 783 ++++++++++++++++++
+ 1 file changed, 783 insertions(+)
+ create mode 100644 package/screenfetch/0001-Detect-which-awk-to-use.patch
+
+diff --git a/package/screenfetch/0001-Detect-which-awk-to-use.patch b/package/screenfetch/0001-Detect-which-awk-to-use.patch
+new file mode 100644
+index 0000000000..86e51e5511
+--- /dev/null
++++ b/package/screenfetch/0001-Detect-which-awk-to-use.patch
+@@ -0,0 +1,783 @@
++From 39b6eec51f0c2fa5f2b0e876b14dcfc9c1febf97 Mon Sep 17 00:00:00 2001
++From: Nicolas Boichat <drinkcat@google.com>
++Date: Fri, 4 Aug 2023 12:55:36 +0000
++Subject: [PATCH] Detect which awk to use
++
++Some embedded distributions (e.g. buildroot) may only provide mawk,
++without a symlink to awk.
++
++At first glance, awk scripts to appear to work fine with either
++gawk or mawk.
++
++Signed-off-by: Nicolas Boichat <drinkcat@google.com>
++Upstream: https://github.com/KittyKatt/screenFetch/commit/b49a2334b8ba806dbc532219e86363886a85d9c8
++[rebased on 3.9.1]
++---
++ screenfetch-dev | 245 +++++++++++++++++++++++++-----------------------
++ 1 file changed, 130 insertions(+), 115 deletions(-)
++
++diff --git a/screenfetch-dev b/screenfetch-dev
++index 1e53b2c..765930f 100755
++--- a/screenfetch-dev
+++++ b/screenfetch-dev
++@@ -352,9 +352,9 @@ colorNumberToCode () {
++ 
++ detectColors () {
++ 	my_colors=$(sed 's/^,/na,/;s/,$/,na/;s/,/ /' <<< "${OPTARG}")
++-	my_lcolor=$(awk -F' ' '{print $1}' <<< "${my_colors}")
+++	my_lcolor=$("${AWK}" -F' ' '{print $1}' <<< "${my_colors}")
++ 	my_lcolor=$(colorNumberToCode "${my_lcolor}")
++-	my_hcolor=$(awk -F' ' '{print $2}' <<< "${my_colors}")
+++	my_hcolor=$("${AWK}" -F' ' '{print $2}' <<< "${my_colors}")
++ 	my_hcolor=$(colorNumberToCode "${my_hcolor}")
++ }
++ 
++@@ -462,7 +462,22 @@ case $1 in
++ 	--version) displayVersion; exit 0;;
++ esac
++ 
+++# Detect which awk to use (unless already specified in environment)
+++if [[ -z "${AWK}" ]]; then
+++	for awk in awk gawk mawk; do
+++		if command -v "${awk}" > /dev/null; then
+++			AWK="${awk}"
+++			break
+++		fi
+++	done
+++fi
+++
+++if ! command -v "${AWK}" > /dev/null; then
+++	errorOut "No awk interpreter available (AWK=\"${AWK}\")."
+++	exit 1
+++fi
++ 
+++# Parse the rest of the flags (some of these functions require awk)
++ while getopts ":hsu:evVEnLNtlS:A:D:o:c:d:pa:w" flags; do
++ 	case $flags in
++ 		h) displayHelp; exit 0 ;;
++@@ -608,8 +623,8 @@ detectdistro () {
++ 				"Debian")
++ 					if [[ -f /etc/crunchbang-lsb-release || -f /etc/lsb-release-crunchbang ]]; then
++ 						distro="CrunchBang"
++-						distro_release=$(awk -F'=' '/^DISTRIB_RELEASE=/ {print $2}' /etc/lsb-release-crunchbang)
++-						distro_codename=$(awk -F'=' '/^DISTRIB_DESCRIPTION=/ {print $2}' /etc/lsb-release-crunchbang)
+++						distro_release=$("${AWK}" -F'=' '/^DISTRIB_RELEASE=/ {print $2}' /etc/lsb-release-crunchbang)
+++						distro_codename=$("${AWK}" -F'=' '/^DISTRIB_DESCRIPTION=/ {print $2}' /etc/lsb-release-crunchbang)
++ 					elif [[ -f /etc/siduction-version ]]; then
++ 						distro="Siduction"
++ 						distro_release="(Debian Sid)"
++@@ -620,10 +635,10 @@ detectdistro () {
++ 					elif [[ -f /etc/os-release ]]; then
++ 						if grep -q -i 'Raspbian' /etc/os-release ; then
++ 							distro="Raspbian"
++-							distro_release=$(awk -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
+++							distro_release=$("${AWK}" -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
++ 						elif grep -q -i 'BlankOn' /etc/os-release ; then
++ 							distro='BlankOn'
++-							distro_release=$(awk -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
+++							distro_release=$("${AWK}" -F'=' '/^PRETTY_NAME=/ {print $2}' /etc/os-release)
++ 						else
++ 							distro="Debian"
++ 						fi
++@@ -639,7 +654,7 @@ detectdistro () {
++ 					;;
++ 				"Sulin")
++ 					distro="Sulin"
++-					distro_release=$(awk -F'=' '/^ID_LIKE=/ {print $2}' /etc/os-release)
+++					distro_release=$("${AWK}" -F'=' '/^ID_LIKE=/ {print $2}' /etc/os-release)
++ 					distro_codename="Roolling donkey" # this is not wrong :D
++ 					;;
++ 				"KaOS"|"kaos")
++@@ -718,7 +733,7 @@ detectdistro () {
++ 						if grep -q 'SailfishOS' /etc/os-release; then
++ 							distro="SailfishOS"
++ 							distro_codename="$(grep 'VERSION=' /etc/os-release | cut -d '(' -f2 | cut -d ')' -f1)"
++-							distro_release="$(awk -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
+++							distro_release="$("${AWK}" -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
++ 						fi
++ 					fi
++ 					;;
++@@ -753,7 +768,7 @@ detectdistro () {
++ 						if grep -q -i 'SUSE Linux Enterprise' /etc/os-release ; then
++ 							distro="SUSE Linux Enterprise"
++ 							distro_codename="n/a"
++-							distro_release=$(awk -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
+++							distro_release=$("${AWK}" -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
++ 						fi
++ 					fi
++ 					if [[ "${distro_codename}" == "Tumbleweed" ]]; then
++@@ -789,7 +804,7 @@ detectdistro () {
++ 					distro="SailfishOS"
++ 					if [[ -f /etc/os-release ]]; then
++ 						distro_codename="$(grep 'VERSION=' /etc/os-release | cut -d '(' -f2 | cut -d ')' -f1)"
++-						distro_release="$(awk -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
+++						distro_release="$("${AWK}" -F'=' '/^VERSION=/ {print $2}' /etc/os-release)"
++ 					fi
++ 					;;
++ 				"Sparky"|"SparkyLinux")
++@@ -863,12 +878,12 @@ detectdistro () {
++ 					;;
++ 					"Haiku")
++ 						distro="Haiku"
++-						distro_more="$(uname -v | awk '/^hrev/ {print $1}')"
+++						distro_more="$(uname -v | "${AWK}" '/^hrev/ {print $1}')"
++ 					;;
++ 					"GNU/Linux")
++ 						if type -p crux >/dev/null 2>&1; then
++ 							distro="CRUX"
++-							distro_more="$(crux | awk '{print $3}')"
+++							distro_more="$(crux | "${AWK}" '{print $3}')"
++ 						fi
++ 						if type -p nixos-version >/dev/null 2>&1; then
++ 							distro="NixOS"
++@@ -944,7 +959,7 @@ detectdistro () {
++ 					[[ "${distro}" == "Neon" ]] && distro="KDE neon"
++ 					[[ "${distro}" == "SLED" || "${distro}" == "sled" || "${distro}" == "SLES" || "${distro}" == "sles" ]] && distro="SUSE Linux Enterprise"
++ 					if [[ "${distro}" == "SUSE Linux Enterprise" && -f /etc/os-release ]]; then
++-						distro_more="$(awk -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')"
+++						distro_more="$("${AWK}" -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')"
++ 					fi
++ 					if [[ "${distro}" == "Debian" && -f /usr/bin/pveversion ]]; then
++ 						distro="Proxmox VE"
++@@ -955,7 +970,7 @@ detectdistro () {
++ 
++ 			if [[ "${distro}" == "Unknown" && "${OSTYPE}" =~ "linux" && -f /etc/lsb-release ]]; then
++ 				LSB_RELEASE=$(</etc/lsb-release)
++-				distro=$(echo "${LSB_RELEASE}" | awk 'BEGIN {
+++				distro=$(echo "${LSB_RELEASE}" | "${AWK}" 'BEGIN {
++ 					distro = "Unknown"
++ 				}
++ 				{
++@@ -1001,7 +1016,7 @@ detectdistro () {
++ 					if [ -f /etc/os-release ]; then
++ 						if grep -q -i 'SUSE Linux Enterprise' /etc/os-release ; then
++ 							distro="SUSE Linux Enterprise"
++-							distro_more=$(awk -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
+++							distro_more=$("${AWK}" -F'=' '/^VERSION_ID=/ {print $2}' /etc/os-release | tr -d '"')
++ 						fi
++ 					fi
++ 					if [[ "${distro_more}" =~ "Tumbleweed" ]]; then
++@@ -1051,7 +1066,7 @@ detectdistro () {
++ 					if [[ -x /usr/bin/sw_vers ]] && /usr/bin/sw_vers | grep -i 'Mac OS X' >/dev/null; then
++ 						distro="Mac OS X"
++ 					elif [[ -f /var/run/dmesg.boot ]]; then
++-						distro=$(awk 'BEGIN {
+++						distro=$("${AWK}" 'BEGIN {
++ 							distro = "Unknown"
++ 						}
++ 						{
++@@ -1080,7 +1095,7 @@ detectdistro () {
++ 
++ 			if [[ "${distro}" == "Unknown" ]] && [[ "${OSTYPE}" =~ "linux" || "${OSTYPE}" == "gnu" ]]; then
++ 				if [[ -f /etc/issue ]]; then
++-					distro=$(awk 'BEGIN {
+++					distro=$("${AWK}" 'BEGIN {
++ 						distro = "Unknown"
++ 					}
++ 					{
++@@ -1123,8 +1138,8 @@ detectdistro () {
++ 					fi
++ 				elif [[ -f /etc/lsb-release ]]; then
++ 					if grep -q -i 'CHROMEOS_RELEASE_NAME' /etc/lsb-release; then
++-						distro="$(awk -F'=' '/^CHROMEOS_RELEASE_NAME=/ {print $2}' /etc/lsb-release)"
++-						distro_more="$(awk -F'=' '/^CHROMEOS_RELEASE_VERSION=/ {print $2}' /etc/lsb-release)"
+++						distro="$("${AWK}" -F'=' '/^CHROMEOS_RELEASE_NAME=/ {print $2}' /etc/lsb-release)"
+++						distro_more="$("${AWK}" -F'=' '/^CHROMEOS_RELEASE_VERSION=/ {print $2}' /etc/lsb-release)"
++ 					fi
++ 				fi
++ 			fi
++@@ -1301,7 +1316,7 @@ detectuptime () {
++ 		now=$(date +%s)
++ 		uptime=$((now - boot))
++ 	elif [[ "${distro}" == "Haiku" ]]; then
++-		uptime=$(uptime | awk -F', up ' '{gsub(/ *hours?,/, "h"); gsub(/ *minutes?/, "m"); print $2;}')
+++		uptime=$(uptime | "${AWK}" -F', up ' '{gsub(/ *hours?,/, "h"); gsub(/ *minutes?/, "m"); print $2;}')
++ 	else
++ 		if [[ -f /proc/uptime ]]; then
++ 			uptime=$(</proc/uptime)
++@@ -1322,9 +1337,9 @@ detectuptime () {
++ 		fi
++ 	else
++ 		if [[ "$distro" =~ "NetBSD" ]]; then
++-			uptime=$(awk -F. '{print $1}' /proc/uptime)
+++			uptime=$("${AWK}" -F. '{print $1}' /proc/uptime)
++ 		elif [[ "$distro" =~ "BSD" ]]; then
++-			uptime=$(uptime | awk '{$1=$2=$(NF-6)=$(NF-5)=$(NF-4)=$(NF-3)=$(NF-2)=$(NF-1)=$NF=""; sub(" days","d");sub(",","");sub(":","h ");sub(",","m"); print}')
+++			uptime=$(uptime | "${AWK}" '{$1=$2=$(NF-6)=$(NF-5)=$(NF-4)=$(NF-3)=$(NF-2)=$(NF-1)=$NF=""; sub(" days","d");sub(",","");sub(":","h ");sub(",","m"); print}')
++ 		fi
++ 	fi
++ 	verboseOut "Finding current uptime...found as '${uptime}'"
++@@ -1483,21 +1498,21 @@ detectcpu () {
++ 			cpu="Unknown"
++ 		fi
++ 	elif [ "$distro" == "FreeBSD" ]; then
++-		cpu=$(dmesg | awk -F': ' '/^CPU/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
+++		cpu=$(dmesg | "${AWK}" -F': ' '/^CPU/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
++ 	elif [ "$distro" == "DragonFlyBSD" ]; then
++ 		cpu=$(sysctl -n hw.model)
++ 	elif [ "$distro" == "OpenBSD" ]; then
++ 		cpu=$(sysctl -n hw.model | sed 's/@.*//')
++ 	elif [ "$distro" == "Haiku" ]; then
++-		cpu=$(sysinfo -cpu | awk -F': ' '/^CPU #0/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
+++		cpu=$(sysinfo -cpu | "${AWK}" -F': ' '/^CPU #0/ {gsub(/ +/," "); gsub(/\([^\(\)]*\)|CPU /,"", $2); print $2; exit}')
++ 	else
++-		cpu=$(awk -F':' '/^model name/ {split($2, A, " @"); print A[1]; exit}' /proc/cpuinfo)
+++		cpu=$("${AWK}" -F':' '/^model name/ {split($2, A, " @"); print A[1]; exit}' /proc/cpuinfo)
++ 		cpun=$(grep -c '^processor' /proc/cpuinfo)
++ 		if [ -z "$cpu" ]; then
++-			cpu=$(awk 'BEGIN{FS=":"} /Hardware/ { print $2; exit }' /proc/cpuinfo)
+++			cpu=$("${AWK}" 'BEGIN{FS=":"} /Hardware/ { print $2; exit }' /proc/cpuinfo)
++ 		fi
++ 		if [ -z "$cpu" ]; then
++-			cpu=$(awk 'BEGIN{FS=":"} /^cpu/ { gsub(/  +/," ",$2); print $2; exit}' /proc/cpuinfo | sed 's/, altivec supported//;s/^ //')
+++			cpu=$("${AWK}" 'BEGIN{FS=":"} /^cpu/ { gsub(/  +/," ",$2); print $2; exit}' /proc/cpuinfo | sed 's/, altivec supported//;s/^ //')
++ 			if [[ $cpu =~ ^(PPC)*9.+ ]]; then
++ 				model="IBM PowerPC G5 "
++ 			elif [[ $cpu =~ 740/750 ]]; then
++@@ -1541,15 +1556,15 @@ detectcpu () {
++ 		bl="${loc}/bios_limit"
++ 		smf="${loc}/scaling_max_freq"
++ 		if [ -f "$bl" ] && [ -r "$bl" ]; then
++-			cpu_mhz=$(awk '{print $1/1000}' "$bl")
+++			cpu_mhz=$("${AWK}" '{print $1/1000}' "$bl")
++ 		elif [ -f "$smf" ] && [ -r "$smf" ]; then
++-			cpu_mhz=$(awk '{print $1/1000}' "$smf")
+++			cpu_mhz=$("${AWK}" '{print $1/1000}' "$smf")
++ 		else
++-			cpu_mhz=$(awk -F':' '/cpu MHz/{ print int($2+.5) }' /proc/cpuinfo | head -n 1)
+++			cpu_mhz=$("${AWK}" -F':' '/cpu MHz/{ print int($2+.5) }' /proc/cpuinfo | head -n 1)
++ 		fi
++ 		if [ -n "$cpu_mhz" ]; then
++ 			if [ "${cpu_mhz%.*}" -ge 1000 ]; then
++-				cpu_ghz=$(awk '{print $1/1000}' <<< "${cpu_mhz}")
+++				cpu_ghz=$("${AWK}" '{print $1/1000}' <<< "${cpu_mhz}")
++ 				cpufreq="${cpu_ghz}GHz"
++ 			else
++ 				cpufreq="${cpu_mhz}MHz"
++@@ -1603,16 +1618,16 @@ detectgpu () {
++ 			# gpu=$(sed 's/.*device.*= //' <<< "${gpu_info}" | sed "s/'//g")
++ 		fi
++ 	elif [[ "${distro}" == "OpenBSD" ]]; then
++-		gpu=$(glxinfo 2> /dev/null | awk '/OpenGL renderer string/ { sub(/OpenGL renderer string: /,""); print }')
+++		gpu=$(glxinfo 2> /dev/null | "${AWK}" '/OpenGL renderer string/ { sub(/OpenGL renderer string: /,""); print }')
++ 	elif [[ "${distro}" == "Mac OS X" ]]; then
++-		gpu=$(system_profiler SPDisplaysDataType | awk -F': ' '/^ *Chipset Model:/ {print $2}' | awk '{ printf "%s / ", $0 }' | sed -e 's/\/ $//g')
+++		gpu=$(system_profiler SPDisplaysDataType | "${AWK}" -F': ' '/^ *Chipset Model:/ {print $2}' | "${AWK}" '{ printf "%s / ", $0 }' | sed -e 's/\/ $//g')
++ 	elif [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" ]]; then
++ 		gpu=$(wmic path Win32_VideoController get caption | sed -n '2p')
++ 	elif [[ "${distro}" == "Haiku" ]]; then
++-		gpu="$(listdev | grep -A2 -e 'device Display controller' | awk -F': ' '/^ +device/ {print $2}')"
+++		gpu="$(listdev | grep -A2 -e 'device Display controller' | "${AWK}" -F': ' '/^ +device/ {print $2}')"
++ 	else
++ 		if [[ -n "$(PATH="/opt/bin:$PATH" type -p nvidia-smi)" ]]; then
++-			gpu=$($(PATH="/opt/bin:$PATH" type -p nvidia-smi | cut -f1) -q | awk -F':' '/Product Name/ {gsub(/: /,":"); print $2}' | sed ':a;N;$!ba;s/\n/, /g')
+++			gpu=$($(PATH="/opt/bin:$PATH" type -p nvidia-smi | cut -f1) -q | "${AWK}" -F':' '/Product Name/ {gsub(/: /,":"); print $2}' | sed ':a;N;$!ba;s/\n/, /g')
++ 		elif [[ -n "$(PATH="/usr/sbin:$PATH" type -p glxinfo)" && -z "${gpu}" ]]; then
++ 			gpu_info=$($(PATH="/usr/sbin:$PATH" type -p glxinfo | cut -f1) 2>/dev/null)
++ 			gpu=$(grep "OpenGL renderer string" <<< "${gpu_info}" | cut -d ':' -f2 | sed -n -e '1h;2,$H;${g;s/\n/, /g' -e 'p' -e '}')
++@@ -1650,12 +1665,12 @@ detectgpu () {
++ # Run it only on Intel Processors if GPU is unknown
++ DetectIntelGPU() {
++ 	if [ -r /proc/fb ]; then
++-		gpu=$(awk 'BEGIN {ORS = " &"} {$1="";print}' /proc/fb | sed  -r s/'^\s+|\s*&$'//g)
+++		gpu=$("${AWK}" 'BEGIN {ORS = " &"} {$1="";print}' /proc/fb | sed  -r s/'^\s+|\s*&$'//g)
++ 	fi
++ 
++ 	case $gpu in
++ 		*mfb)
++-			gpu=$(lspci | grep -i vga | awk -F ": " '{print $2}') 
+++			gpu=$(lspci | grep -i vga | "${AWK}" -F ": " '{print $2}')
++ 			;;
++ 		*intel*)
++ 			gpu="intel"
++@@ -1667,7 +1682,7 @@ DetectIntelGPU() {
++ 
++ 	if [[ "$gpu" = "intel" ]]; then
++ 		#Detect CPU
++-		local CPU=$(uname -p | awk '{print $3}')
+++		local CPU=$(uname -p | "${AWK}" '{print $3}')
++ 		CPU=${CPU#*'-'}; #Detect CPU number
++ 
++ 		#Detect Intel GPU
++@@ -1710,7 +1725,7 @@ detectdisk () {
++ 		if [[ "${distro}" =~ (Free|Net|DragonFly)BSD ]]; then
++ 			totaldisk=$(df -h -c 2>/dev/null | tail -1)
++ 		elif [[ "${distro}" == "OpenBSD" ]]; then
++-			totaldisk=$(df -Pk 2> /dev/null | awk '
+++			totaldisk=$(df -Pk 2> /dev/null | "${AWK}" '
++ 				/^\// {total+=$2; used+=$3; avail+=$4}
++ 				END{printf("total %.1fG %.1fG %.1fG %d%%\n", total/1048576, used/1048576, avail/1048576, used*100/total)}')
++ 		elif [[ "${distro}" == "Mac OS X" ]]; then
++@@ -1718,9 +1733,9 @@ detectdisk () {
++ 		else
++ 			totaldisk=$(df -h -x aufs -x tmpfs -x overlay --total 2>/dev/null | tail -1)
++ 		fi
++-		disktotal=$(awk '{print $2}' <<< "${totaldisk}")
++-		diskused=$(awk '{print $3}' <<< "${totaldisk}")
++-		diskusedper=$(awk '{print $5}' <<< "${totaldisk}")
+++		disktotal=$("${AWK}" '{print $2}' <<< "${totaldisk}")
+++		diskused=$("${AWK}" '{print $3}' <<< "${totaldisk}")
+++		diskusedper=$("${AWK}" '{print $5}' <<< "${totaldisk}")
++ 		diskusage="${diskused} / ${disktotal} (${diskusedper})"
++ 		diskusage_verbose=$(sed 's/%/%%/' <<< "$diskusage")
++ 	fi
++@@ -1733,17 +1748,17 @@ detectdisk () {
++ detectmem () {
++ 	if [ "$distro" == "Mac OS X" ]; then
++ 		totalmem=$(echo "$(sysctl -n hw.memsize)" / 1024^2 | bc)
++-		wiredmem=$(vm_stat | grep wired | awk '{ print $4 }' | sed 's/\.//')
++-		activemem=$(vm_stat | grep ' active' | awk '{ print $3 }' | sed 's/\.//')
++-		compressedmem=$(vm_stat | grep occupied | awk '{ print $5 }' | sed 's/\.//')
+++		wiredmem=$(vm_stat | grep wired | "${AWK}" '{ print $4 }' | sed 's/\.//')
+++		activemem=$(vm_stat | grep ' active' | "${AWK}" '{ print $3 }' | sed 's/\.//')
+++		compressedmem=$(vm_stat | grep occupied | "${AWK}" '{ print $5 }' | sed 's/\.//')
++ 		if [[ ! -z "$compressedmem | tr -d" ]]; then  # FIXME: is this line correct?
++ 			compressedmem=0
++ 		fi
++ 		usedmem=$(((wiredmem + activemem + compressedmem) * 4 / 1024))
++ 	elif [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" ]]; then
++-		total_mem=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
+++		total_mem=$("${AWK}" '/MemTotal/ { print $2 }' /proc/meminfo)
++ 		totalmem=$((total_mem / 1024))
++-		free_mem=$(awk '/MemFree/ { print $2 }' /proc/meminfo)
+++		free_mem=$("${AWK}" '/MemFree/ { print $2 }' /proc/meminfo)
++ 		used_mem=$((total_mem - free_mem))
++ 		usedmem=$((used_mem / 1024))
++ 	elif [[ "$distro" == "FreeBSD"  || "$distro" == "DragonFlyBSD" ]]; then
++@@ -1769,21 +1784,21 @@ detectmem () {
++ 		usedmem=$((used_mem / 1024 / 1024))
++ 	elif [ "$distro" == "OpenBSD" ]; then
++ 		totalmem=$(($(sysctl -n hw.physmem) / 1024 / 1024))
++-		usedmem=$(vmstat | awk '!/[a-z]/{gsub("M",""); print $3}')
+++		usedmem=$(vmstat | "${AWK}" '!/[a-z]/{gsub("M",""); print $3}')
++ 	elif [ "$distro" == "NetBSD" ]; then
++-		phys_mem=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
+++		phys_mem=$("${AWK}" '/MemTotal/ { print $2 }' /proc/meminfo)
++ 		totalmem=$((phys_mem / 1024))
++ 		if grep -q 'Cached' /proc/meminfo; then
++-			cache=$(awk '/Cached/ {print $2}' /proc/meminfo)
+++			cache=$("${AWK}" '/Cached/ {print $2}' /proc/meminfo)
++ 			usedmem=$((cache / 1024))
++ 		else
++-			free_mem=$(awk '/MemFree/ { print $2 }' /proc/meminfo)
+++			free_mem=$("${AWK}" '/MemFree/ { print $2 }' /proc/meminfo)
++ 			used_mem=$((phys_mem - free_mem))
++ 			usedmem=$((used_mem / 1024))
++ 		fi
++ 	elif [ "$distro" == "Haiku" ]; then
++-		totalmem=$(sysinfo -mem | awk 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $6/1024**2)}')
++-		usedmem=$(sysinfo -mem | awk 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $5/1024**2)}')
+++		totalmem=$(sysinfo -mem | "${AWK}" 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $6/1024**2)}')
+++		usedmem=$(sysinfo -mem | "${AWK}" 'NR == 1 {gsub(/[\(\)\/]/, ""); printf("%d", $5/1024**2)}')
++ 	else
++ 		# MemUsed = Memtotal + Shmem - MemFree - Buffers - Cached - SReclaimable
++ 		# Source: https://github.com/dylanaraps/neofetch/pull/391/files#diff-e863270127ca6116fd30e708cdc582fc
++@@ -1798,7 +1813,7 @@ detectmem () {
++ 		#done
++ 		#usedmem=$((usedmem / 1024))
++ 		#totalmem=$((totalmem / 1024))
++-		mem=$(free -b | awk 'NR==2{print $2"-"$7}')
+++		mem=$(free -b | "${AWK}" 'NR==2{print $2"-"$7}')
++ 		usedmem=$((mem / 1024 / 1024))
++ 		totalmem=$((${mem//-*} / 1024 / 1024))
++ 	fi
++@@ -1823,7 +1838,7 @@ detectshell_ver () {
++ 	esac
++ 
++ 	if [[ -n $version_data ]];then
++-		version=$(awk '
+++		version=$("${AWK}" '
++ 		BEGIN {
++ 			IGNORECASE=1
++ 		}
++@@ -1842,7 +1857,7 @@ detectshell () {
++ 	if [[ ! "${shell_type}" ]]; then
++ 		if [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" || "${distro}" == "Haiku" || "${distro}" == "Alpine Linux" ||
++ 			"${distro}" == "Mac OS X" || "${distro}" == "TinyCore" || "${distro}" == "Raspbian" || "${OSTYPE}" == "gnu" ]]; then
++-			shell_type=$(echo "$SHELL" | awk -F'/' '{print $NF}')
+++			shell_type=$(echo "$SHELL" | "${AWK}" -F'/' '{print $NF}')
++ 		elif readlink -f "$SHELL" 2>&1 | grep -q -i 'busybox'; then
++ 			shell_type="BusyBox"
++ 		else
++@@ -1851,7 +1866,7 @@ detectshell () {
++ 			elif [[ "${distro}" =~ "BSD" ]]; then
++ 				shell_type=$(ps -p $PPID -o command | tail -1)
++ 			else
++-				shell_type=$(ps -p "$(ps -p $PPID | awk '$1 !~ /PID/ {print $1}')" | awk 'FNR>1 {print $1}')
+++				shell_type=$(ps -p "$(ps -p $PPID | "${AWK}" '$1 !~ /PID/ {print $1}')" | "${AWK}" 'FNR>1 {print $1}')
++ 			fi
++ 			shell_type=${shell_type/-}
++ 			shell_type=${shell_type//*\/}
++@@ -1881,7 +1896,7 @@ detectshell () {
++ 			shell_version_data=$( detectshell_ver "$shell_type" "^zsh" "2" )
++ 			;;
++ 		fish)
++-			shell_version_data=$( fish --version | awk '{print $3}' )
+++			shell_version_data=$( fish --version | "${AWK}" '{print $3}' )
++ 			;;
++ 	esac
++ 
++@@ -1899,17 +1914,17 @@ detectshell () {
++ detectres () {
++ 	xResolution="No X Server"
++ 	if [[ ${distro} == "Mac OS X" ]]; then
++-		xResolution=$(system_profiler SPDisplaysDataType | awk '/Resolution:/ {print $2"x"$4" "}')
+++		xResolution=$(system_profiler SPDisplaysDataType | "${AWK}" '/Resolution:/ {print $2"x"$4" "}')
++ 		if [[ "$(echo "$xResolution" | wc -l)" -ge 1 ]]; then
++ 			xResolution=$(echo "$xResolution" | tr "\\n" "," | sed 's/\(.*\),/\1/')
++ 		fi
++ 	elif [[ "${distro}" == "Cygwin" || "${distro}" == "Msys" ]]; then
++-		xResolution=$(wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution | awk 'NR==2 {print $1"x"$2}')
+++		xResolution=$(wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution | "${AWK}" 'NR==2 {print $1"x"$2}')
++ 	elif [[ "${distro}" == "Haiku" ]]; then
++-		xResolution="$(screenmode | grep Resolution | awk '{gsub(/,/,""); print $2"x"$3}')"
+++		xResolution="$(screenmode | grep Resolution | "${AWK}" '{gsub(/,/,""); print $2"x"$3}')"
++ 	elif [[ -n ${DISPLAY} ]]; then
++ 		if type -p xdpyinfo >/dev/null 2>&1; then
++-			xResolution=$(xdpyinfo | awk '/^ +dimensions/ {print $2}')
+++			xResolution=$(xdpyinfo | "${AWK}" '/^ +dimensions/ {print $2}')
++ 		fi
++ 	fi
++ 	verboseOut "Finding current resolution(s)...found as '$xResolution'"
++@@ -1937,7 +1952,7 @@ detectde () {
++ 		if type -p xprop >/dev/null 2>&1;then
++ 			xprop_root="$(xprop -root 2>/dev/null)"
++ 			if [[ -n ${xprop_root} ]]; then
++-				DE=$(echo "${xprop_root}" | awk 'BEGIN {
+++				DE=$(echo "${xprop_root}" | "${AWK}" 'BEGIN {
++ 					de = "Not Present"
++ 				}
++ 				{
++@@ -2099,7 +2114,7 @@ detectde () {
++ 				elif [[ ${KDE_FULL_SESSION} == 'true' ]]; then
++ 					DE="KDE"
++ 					DEver_data=$(kded --version 2>/dev/null)
++-					DEver=$(grep -si '^KDE:' <<< "$DEver_data" | awk '{print $2}')
+++					DEver=$(grep -si '^KDE:' <<< "$DEver_data" | "${AWK}" '{print $2}')
++ 				fi
++ 			fi
++ 		fi
++@@ -2154,7 +2169,7 @@ detectde () {
++ 				fi
++ 			elif [[ ${DE} == "LXQt" ]]; then
++ 				if type -p lxqt-about >/dev/null 2>&1; then
++-					DEver=$(lxqt-about --version | awk '/^liblxqt/ {print $2}')
+++					DEver=$(lxqt-about --version | "${AWK}" '/^liblxqt/ {print $2}')
++ 					DE="${DE} ${DEver}"
++ 				fi
++ 			elif [[ ${DE} == "MATE" ]]; then
++@@ -2169,12 +2184,12 @@ detectde () {
++ 				fi
++ 			elif [[ ${DE} == "Deepin" ]]; then
++ 				if [[ -f /etc/deepin-version ]]; then
++-					DEver="$(awk -F '=' '/Version/ {print $2}' /etc/deepin-version)"
+++					DEver="$("${AWK}" -F '=' '/Version/ {print $2}' /etc/deepin-version)"
++ 					DE="${DE} ${DEver//* }"
++ 				fi
++ 			elif [[ ${DE} == "Trinity" ]]; then
++ 				if type -p tde-config >/dev/null 2>&1; then
++-					DEver="$(tde-config --version | awk -F ' ' '/TDE:/ {print $2}')"
+++					DEver="$(tde-config --version | "${AWK}" -F ' ' '/TDE:/ {print $2}')"
++ 					DE="${DE} ${DEver//* }"
++ 				fi
++ 			fi
++@@ -2418,7 +2433,7 @@ detectwmtheme () {
++ 			else
++ 				themeFile="$(reg query 'HKCU\Software\Microsoft\Windows\CurrentVersion\Themes' /v 'CurrentTheme')"
++ 			fi
++-			Win_theme=$(echo "$themeFile" | awk -F"\\" '{print $NF}' | sed 's|\.theme$||')
+++			Win_theme=$(echo "$themeFile" | "${AWK}" -F"\\" '{print $NF}' | sed 's|\.theme$||')
++ 		fi
++ 	else
++ 		case $WM in
++@@ -2433,7 +2448,7 @@ detectwmtheme () {
++ 			;;
++ 			'BlackBox')
++ 				if [ -f "$HOME/.blackboxrc" ]; then
++-					Win_theme="$(awk -F"/" '/styleFile/ {print $NF}' "$HOME/.blackboxrc")"
+++					Win_theme="$("${AWK}" -F"/" '/styleFile/ {print $NF}' "$HOME/.blackboxrc")"
++ 				fi
++ 			;;
++ 			'BudgieWM')
++@@ -2465,11 +2480,11 @@ detectwmtheme () {
++ 				fi
++ 			;;
++ 			'E16')
++-				Win_theme="$(awk -F"= " '/theme.name/ {print $2}' "$HOME/.e16/e_config--0.0.cfg")"
+++				Win_theme="$("${AWK}" -F"= " '/theme.name/ {print $2}' "$HOME/.e16/e_config--0.0.cfg")"
++ 			;;
++ 			'E17'|'Enlightenment')
++ 				if [ "$(which eet 2>/dev/null)" ]; then
++-					econfig="$(eet -d "$HOME/.e/e/config/standard/e.cfg" config | awk '/value \"file\" string.*.edj/{ print $4 }')"
+++					econfig="$(eet -d "$HOME/.e/e/config/standard/e.cfg" config | "${AWK}" '/value \"file\" string.*.edj/{ print $4 }')"
++ 					econfigend="${econfig##*/}"
++ 					Win_theme=${econfigend%.*}
++ 				elif [ -n "${E_CONF_PROFILE}" ]; then
++@@ -2485,12 +2500,12 @@ detectwmtheme () {
++ 			;;
++ 			'FluxBox'|'Fluxbox')
++ 				if [ -f "$HOME/.fluxbox/init" ]; then
++-					Win_theme="$(awk -F"/" '/styleFile/ {print $NF}' "$HOME/.fluxbox/init")"
+++					Win_theme="$("${AWK}" -F"/" '/styleFile/ {print $NF}' "$HOME/.fluxbox/init")"
++ 				fi
++ 			;;
++ 			'IceWM')
++ 				if [ -f "$HOME/.icewm/theme" ]; then
++-					Win_theme="$(awk -F"[\",/]" '!/#/ {print $2}' "$HOME/.icewm/theme")"
+++					Win_theme="$("${AWK}" -F"[\",/]" '!/#/ {print $2}' "$HOME/.icewm/theme")"
++ 				fi
++ 			;;
++ 			'KWin'*)
++@@ -2507,14 +2522,14 @@ detectwmtheme () {
++ 					Win_theme="Not Applicable"
++ 					KDE_CONFIG_DIR=${KDE_CONFIG_DIR%/}
++ 					if [[ -f $KDE_CONFIG_DIR/share/config/kwinrc ]]; then
++-						Win_theme="$(awk '/PluginLib=kwin3_/{gsub(/PluginLib=kwin3_/,"",$0); print $0; exit}' "$KDE_CONFIG_DIR/share/config/kwinrc")"
+++						Win_theme="$("${AWK}" '/PluginLib=kwin3_/{gsub(/PluginLib=kwin3_/,"",$0); print $0; exit}' "$KDE_CONFIG_DIR/share/config/kwinrc")"
++ 						if [[ -z "$Win_theme" ]]; then
++ 							Win_theme="Not Applicable"
++ 						fi
++ 					fi
++ 					if [[ "$Win_theme" == "Not Applicable" ]]; then
++ 						if [[ -f $KDE_CONFIG_DIR/share/config/kdebugrc ]]; then
++-							Win_theme="$(awk '/(decoration)/ {gsub(/\[/,"",$1); print $1; exit}' "$KDE_CONFIG_DIR/share/config/kdebugrc")"
+++							Win_theme="$("${AWK}" '/(decoration)/ {gsub(/\[/,"",$1); print $1; exit}' "$KDE_CONFIG_DIR/share/config/kdebugrc")"
++ 							if [[ -z "$Win_theme" ]]; then
++ 								Win_theme="Not Applicable"
++ 							fi
++@@ -2522,7 +2537,7 @@ detectwmtheme () {
++ 					fi
++ 					if [[ "$Win_theme" == "Not Applicable" ]]; then
++ 						if [[ -f $KDE_CONFIG_DIR/share/config/kdeglobals ]]; then
++-							Win_theme="$(awk '/\[General\]/ {flag=1;next} /^$/{flag=0} flag {print}' "$KDE_CONFIG_DIR/share/config/kdeglobals" | grep -oP 'Name=\K.*')"
+++							Win_theme="$("${AWK}" '/\[General\]/ {flag=1;next} /^$/{flag=0} flag {print}' "$KDE_CONFIG_DIR/share/config/kdeglobals" | grep -oP 'Name=\K.*')"
++ 							if [[ -z "$Win_theme" ]]; then
++ 								Win_theme="Not Applicable"
++ 							fi
++@@ -2552,20 +2567,20 @@ detectwmtheme () {
++ 			;;
++ 			'OpenBox'|'Openbox')
++ 				if [ -f "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/rc.xml" ]; then
++-					Win_theme="$(awk -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/rc.xml")";
+++					Win_theme="$("${AWK}" -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/rc.xml")";
++ 				elif [[ -f ${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxde-rc.xml && "${DE}" == "LXDE" ]]; then
++-					Win_theme="$(awk -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxde-rc.xml")";
+++					Win_theme="$("${AWK}" -F"[<,>]" '/<theme/ { getline; print $3 }' "${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxde-rc.xml")";
++ 				elif [[ -f ${XDG_CONFIG_HOME:-${HOME}/.config}/openbox/lxqt-rc.xml && "${DE}" =~ "LXQt" ]]; then
++-					Win_theme="$(awk -F'=' '/^theme/ {print $2}' ${HOME}/.config/lxqt/lxqt.conf)"
+++					Win_theme="$("${AWK}" -F'=' '/^theme/ {print $2}' ${HOME}/.config/lxqt/lxqt.conf)"
++ 				fi
++ 			;;
++ 			'PekWM')
++ 				if [ -f "$HOME/.pekwm/config" ]; then
++-					Win_theme="$(awk -F"/" '/Theme/ {gsub(/\"/,""); print $NF}' "$HOME/.pekwm/config")"
+++					Win_theme="$("${AWK}" -F"/" '/Theme/ {gsub(/\"/,""); print $NF}' "$HOME/.pekwm/config")"
++ 				fi
++ 			;;
++ 			'Sawfish')
++-				Win_theme="$(awk -F")" '/\(quote default-frame-style/{print $2}' "$HOME/.sawfish/custom" | sed 's/ (quote //')"
+++				Win_theme="$("${AWK}" -F")" '/\(quote default-frame-style/{print $2}' "$HOME/.sawfish/custom" | sed 's/ (quote //')"
++ 			;;
++ 			'TWin')
++ 				if [[ -z $TDE_CONFIG_DIR ]]; then
++@@ -2576,7 +2591,7 @@ detectwmtheme () {
++ 				if [[ -n $TDE_CONFIG_DIR ]]; then
++ 					TDE_CONFIG_DIR=${TDE_CONFIG_DIR%/}
++ 					if [[ -f $TDE_CONFIG_DIR/share/config/kcmthememanagerrc ]]; then
++-						Win_theme=$(awk '/CurrentTheme=/ {gsub(/CurrentTheme=/,"",$0); print $0; exit}' "$TDE_CONFIG_DIR/share/config/kcmthememanagerrc")
+++						Win_theme=$("${AWK}" '/CurrentTheme=/ {gsub(/CurrentTheme=/,"",$0); print $0; exit}' "$TDE_CONFIG_DIR/share/config/kcmthememanagerrc")
++ 					fi
++ 					if [[ -z $Win_theme ]]; then
++ 						Win_theme="Not Applicable"
++@@ -2672,31 +2687,31 @@ detectgtk () {
++ 
++ 				if [[ -n ${KDE_CONFIG_FILE} ]]; then
++ 					if grep -q 'widgetStyle=' "${KDE_CONFIG_FILE}"; then
++-						gtk2Theme=$(awk -F"=" '/widgetStyle=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtk2Theme=$("${AWK}" -F"=" '/widgetStyle=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					elif grep -q 'colorScheme=' "${KDE_CONFIG_FILE}"; then
++-						gtk2Theme=$(awk -F"=" '/colorScheme=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtk2Theme=$("${AWK}" -F"=" '/colorScheme=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					fi
++ 
++ 					if grep -q 'Theme=' "${KDE_CONFIG_FILE}"; then
++-						gtkIcons=$(awk -F"=" '/Theme=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtkIcons=$("${AWK}" -F"=" '/Theme=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					fi
++ 
++ 					if grep -q 'Font=' "${KDE_CONFIG_FILE}"; then
++-						gtkFont=$(awk -F"=" '/font=/ {print $2}' "${KDE_CONFIG_FILE}")
+++						gtkFont=$("${AWK}" -F"=" '/font=/ {print $2}' "${KDE_CONFIG_FILE}")
++ 					fi
++ 				fi
++ 
++ 				if [[ -f $HOME/.gtkrc-2.0 ]]; then
++-					gtk2Theme=$(grep '^gtk-theme-name' "$HOME"/.gtkrc-2.0 | awk -F'=' '{print $2}')
+++					gtk2Theme=$(grep '^gtk-theme-name' "$HOME"/.gtkrc-2.0 | "${AWK}" -F'=' '{print $2}')
++ 					gtk2Theme=${gtk2Theme//\"/}
++-					gtkIcons=$(grep '^gtk-icon-theme-name' "$HOME"/.gtkrc-2.0 | awk -F'=' '{print $2}')
+++					gtkIcons=$(grep '^gtk-icon-theme-name' "$HOME"/.gtkrc-2.0 | "${AWK}" -F'=' '{print $2}')
++ 					gtkIcons=${gtkIcons//\"/}
++-					gtkFont=$(grep 'font_name' "$HOME"/.gtkrc-2.0 | awk -F'=' '{print $2}')
+++					gtkFont=$(grep 'font_name' "$HOME"/.gtkrc-2.0 | "${AWK}" -F'=' '{print $2}')
++ 					gtkFont=${gtkFont//\"/}
++ 				fi
++ 
++ 				if [[ -f $HOME/.config/gtk-3.0/settings.ini ]]; then
++-					gtk3Theme=$(grep '^gtk-theme-name=' "$HOME"/.config/gtk-3.0/settings.ini | awk -F'=' '{print $2}')
+++					gtk3Theme=$(grep '^gtk-theme-name=' "$HOME"/.config/gtk-3.0/settings.ini | "${AWK}" -F'=' '{print $2}')
++ 				fi
++ 			;;
++ 			'Cinnamon'*) # Desktop Environment found as "Cinnamon"
++@@ -2728,7 +2743,7 @@ detectgtk () {
++ 					gtkFont=$(gconftool-2 -g /desktop/gnome/interface/font_name)
++ 					if [ "$background_detect" == "1" ]; then
++ 						gtkBackgroundFull=$(gconftool-2 -g /desktop/gnome/background/picture_filename)
++-						gtkBackground=$(echo "$gtkBackgroundFull" | awk -F"/" '{print $NF}')
+++						gtkBackground=$(echo "$gtkBackgroundFull" | "${AWK}" -F"/" '{print $NF}')
++ 					fi
++ 				fi
++ 			;;
++@@ -2745,10 +2760,10 @@ detectgtk () {
++ 			;;
++ 			'Xfce'*) # Desktop Environment found as "Xfce"
++ 				if [ "$distro" == "BunsenLabs" ] ; then
++-					gtk2Theme=$(awk -F'"' '/^gtk-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
++-					gtk3Theme=$(awk -F'=' '/^gtk-theme-name/ {print $2}' "$HOME"/.config/gtk-3.0/settings.ini)
++-					gtkIcons=$(awk -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
++-					gtkFont=$(awk -F'"' '/^gtk-font-name/ {print $2}' "$HOME"/.gtkrc-2.0)
+++					gtk2Theme=$("${AWK}" -F'"' '/^gtk-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
+++					gtk3Theme=$("${AWK}" -F'=' '/^gtk-theme-name/ {print $2}' "$HOME"/.config/gtk-3.0/settings.ini)
+++					gtkIcons=$("${AWK}" -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME"/.gtkrc-2.0)
+++					gtkFont=$("${AWK}" -F'"' '/^gtk-font-name/ {print $2}' "$HOME"/.gtkrc-2.0)
++ 				else
++ 					if type -p xfconf-query >/dev/null 2>&1; then
++ 						gtk2Theme=$(xfconf-query -c xsettings -p /Net/ThemeName 2>/dev/null)
++@@ -2779,15 +2794,15 @@ detectgtk () {
++ 				fi
++ 
++ 				if grep -q 'sNet\/ThemeName' "${config_home}${lxdeconf}" 2>/dev/null; then
++-					gtk2Theme=$(awk -F'=' '/sNet\/ThemeName/ {print $2}' "${config_home}${lxdeconf}")
+++					gtk2Theme=$("${AWK}" -F'=' '/sNet\/ThemeName/ {print $2}' "${config_home}${lxdeconf}")
++ 				fi
++ 
++ 				if grep -q 'IconThemeName' "${config_home}${lxdeconf}" 2>/dev/null; then
++-					gtkIcons=$(awk -F'=' '/sNet\/IconThemeName/ {print $2}' "${config_home}${lxdeconf}")
+++					gtkIcons=$("${AWK}" -F'=' '/sNet\/IconThemeName/ {print $2}' "${config_home}${lxdeconf}")
++ 				fi
++ 
++ 				if grep -q 'FontName' "${config_home}${lxdeconf}" 2>/dev/null; then
++-					gtkFont=$(awk -F'=' '/sGtk\/FontName/ {print $2}' "${config_home}${lxdeconf}")
+++					gtkFont=$("${AWK}" -F'=' '/sGtk\/FontName/ {print $2}' "${config_home}${lxdeconf}")
++  				fi
++ 			;;
++ 
++@@ -2796,15 +2811,15 @@ detectgtk () {
++ 			*)	# Lightweight or No DE Found
++ 				if [ -f "$HOME/.gtkrc-2.0" ]; then
++ 					if grep -q 'gtk-theme' "$HOME/.gtkrc-2.0"; then
++-						gtk2Theme=$(awk -F'"' '/^gtk-theme/ {print $2}' "$HOME/.gtkrc-2.0")
+++						gtk2Theme=$("${AWK}" -F'"' '/^gtk-theme/ {print $2}' "$HOME/.gtkrc-2.0")
++ 					fi
++ 
++ 					if grep -q 'icon-theme' "$HOME/.gtkrc-2.0"; then
++-						gtkIcons=$(awk -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME/.gtkrc-2.0")
+++						gtkIcons=$("${AWK}" -F'"' '/^gtk-icon-theme/ {print $2}' "$HOME/.gtkrc-2.0")
++ 					fi
++ 
++ 					if grep -q 'font' "$HOME/.gtkrc-2.0"; then
++-						gtkFont=$(awk -F'"' '/^gtk-font-name/ {print $2}' "$HOME/.gtkrc-2.0")
+++						gtkFont=$("${AWK}" -F'"' '/^gtk-font-name/ {print $2}' "$HOME/.gtkrc-2.0")
++ 					fi
++ 				fi
++ 				# $HOME/.gtkrc.mine theme detect only
++@@ -2815,37 +2830,37 @@ detectgtk () {
++ 				fi
++ 				if [ -f "$minegtkrc" ]; then
++ 					if grep -q '^include' "$minegtkrc"; then
++-						gtk2Theme=$(grep '^include.*gtkrc' "$minegtkrc" | awk -F "/" '{ print $5 }')
+++						gtk2Theme=$(grep '^include.*gtkrc' "$minegtkrc" | "${AWK}" -F "/" '{ print $5 }')
++ 					fi
++ 					if grep -q '^gtk-icon-theme-name' "$minegtkrc"; then
++-						gtkIcons=$(grep '^gtk-icon-theme-name' "$minegtkrc" | awk -F '"' '{print $2}')
+++						gtkIcons=$(grep '^gtk-icon-theme-name' "$minegtkrc" | "${AWK}" -F '"' '{print $2}')
++ 					fi
++ 				fi
++ 				# /etc/gtk-2.0/gtkrc compatibility
++ 				if [[ -f /etc/gtk-2.0/gtkrc && ! -f "$HOME/.gtkrc-2.0" && ! -f "$HOME/.gtkrc.mine" && ! -f "$HOME/.gtkrc-2.0.mine" ]]; then
++ 					if grep -q 'gtk-theme-name' /etc/gtk-2.0/gtkrc; then
++-						gtk2Theme=$(awk -F'"' '/^gtk-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtk2Theme=$("${AWK}" -F'"' '/^gtk-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 					if grep -q 'gtk-fallback-theme-name' /etc/gtk-2.0/gtkrc  && ! [ "x$gtk2Theme" = "x" ]; then
++-						gtk2Theme=$(awk -F'"' '/^gtk-fallback-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtk2Theme=$("${AWK}" -F'"' '/^gtk-fallback-theme-name/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 
++ 					if grep -q 'icon-theme' /etc/gtk-2.0/gtkrc; then
++-						gtkIcons=$(awk -F'"' '/^icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtkIcons=$("${AWK}" -F'"' '/^icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 					if  grep -q 'gtk-fallback-icon-theme' /etc/gtk-2.0/gtkrc  && ! [ "x$gtkIcons" = "x" ]; then
++-						gtkIcons=$(awk -F'"' '/^gtk-fallback-icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtkIcons=$("${AWK}" -F'"' '/^gtk-fallback-icon-theme/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 
++ 					if grep -q 'font' /etc/gtk-2.0/gtkrc; then
++-						gtkFont=$(awk -F'"' '/^gtk-font-name/ {print $2}' /etc/gtk-2.0/gtkrc)
+++						gtkFont=$("${AWK}" -F'"' '/^gtk-font-name/ {print $2}' /etc/gtk-2.0/gtkrc)
++ 					fi
++ 				fi
++ 
++ 				# EXPERIMENTAL gtk3 Theme detection
++ 				if [[ "$gtk3Theme" = "Not Found" && -f "$HOME/.config/gtk-3.0/settings.ini" ]]; then
++ 					if grep -q 'gtk-theme-name' "$HOME/.config/gtk-3.0/settings.ini"; then
++-						gtk3Theme=$(awk -F'=' '/^gtk-theme-name/ {print $2}' "$HOME/.config/gtk-3.0/settings.ini")
+++						gtk3Theme=$("${AWK}" -F'=' '/^gtk-theme-name/ {print $2}' "$HOME/.config/gtk-3.0/settings.ini")
++ 					fi
++ 				fi
++ 
++@@ -2859,7 +2874,7 @@ detectgtk () {
++ 
++ 				# ROX-Filer icon detect only
++ 				if [ -a "${XDG_CONFIG_HOME:-${HOME}/.config}/rox.sourceforge.net/ROX-Filer/Options" ]; then
++-					gtkIcons=$(awk -F'[>,<]' '/icon_theme/ {print $3}' "${XDG_CONFIG_HOME:-${HOME}/.config}/rox.sourceforge.net/ROX-Filer/Options")
+++					gtkIcons=$("${AWK}" -F'[>,<]' '/icon_theme/ {print $3}' "${XDG_CONFIG_HOME:-${HOME}/.config}/rox.sourceforge.net/ROX-Filer/Options")
++ 				fi
++ 
++ 				# E17 detection
++@@ -2872,10 +2887,10 @@ detectgtk () {
++ 				# Background Detection (feh, nitrogen)
++ 				if [ "$background_detect" == "1" ]; then
++ 					if [ -a "$HOME/.fehbg" ]; then
++-						gtkBackgroundFull=$(awk -F"'" '/feh --bg/{print $2}' "$HOME/.fehbg" 2>/dev/null)
++-						gtkBackground=$(echo "$gtkBackgroundFull" | awk -F"/" '{print $NF}')
+++						gtkBackgroundFull=$("${AWK}" -F"'" '/feh --bg/{print $2}' "$HOME/.fehbg" 2>/dev/null)
+++						gtkBackground=$(echo "$gtkBackgroundFull" | "${AWK}" -F"/" '{print $NF}')
++ 					elif [ -a "${XDG_CONFIG_HOME:-${HOME}/.config}/nitrogen/bg-saved.cfg" ]; then
++-						gtkBackground=$(awk -F"/" '/file=/ {print $NF}' "${XDG_CONFIG_HOME:-${HOME}/.config}/nitrogen/bg-saved.cfg")
+++						gtkBackground=$("${AWK}" -F"/" '/file=/ {print $NF}' "${XDG_CONFIG_HOME:-${HOME}/.config}/nitrogen/bg-saved.cfg")
++ 					fi
++ 				fi
++ 
++@@ -2910,7 +2925,7 @@ detectdroid () {
++ 		rom=$(getprop ro.build.display.id)
++ 	fi
++ 	baseband=$(getprop ro.baseband)
++-	cpu=$(awk -F': ' '/^Processor/ {P=$2} /^Hardware/ {H=$2} END {print H != "" ? H : P}' /proc/cpuinfo)
+++	cpu=$("${AWK}" -F': ' '/^Processor/ {P=$2} /^Hardware/ {H=$2} END {print H != "" ? H : P}' /proc/cpuinfo)
++ }
++ 
++ 
++@@ -6032,7 +6047,7 @@ asciiText () {
++ 		#n=${#fulloutput[*]}
++ 		for ((i=0; i<${#fulloutput[*]}; i++)); do
++ 			# echo "${out_array[@]}"
++-			case $(awk 'BEGIN{srand();print int(rand()*(1000-1))+1 }') in
+++			case $("${AWK}" 'BEGIN{srand();print int(rand()*(1000-1))+1 }') in
++ 				411|188|15|166|609)
++ 					f_size=${#fulloutput[*]}
++ 					o_size=${#out_array[*]}
++-- 
++2.41.0.640.ga95def55d0-goog
++
+-- 
+2.41.0.640.ga95def55d0-goog
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
