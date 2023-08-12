@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2E08C001B0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:53:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CD0BC001B0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:54:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5469D40518;
-	Sat, 12 Aug 2023 19:53:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5469D40518
+	by smtp2.osuosl.org (Postfix) with ESMTP id A439440518;
+	Sat, 12 Aug 2023 19:54:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A439440518
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dULMkKwdEo1D; Sat, 12 Aug 2023 19:53:20 +0000 (UTC)
+	with ESMTP id PwX6MqxO-HXM; Sat, 12 Aug 2023 19:54:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C5124018B;
-	Sat, 12 Aug 2023 19:53:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C5124018B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D17991BF3CD
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:53:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 00F634018B;
+	Sat, 12 Aug 2023 19:54:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00F634018B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B665F1BF3CD
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B791260E73
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:53:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B791260E73
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F7958177C
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:54:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F7958177C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id caTdBI2RZxLA for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 19:53:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CB3AD60E64
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:53:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB3AD60E64
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF64B84F4A; Sat, 12 Aug 2023 19:53:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 21:52:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2bd93a30a60ad224f0ee974878d9d9b5dd1206af
-X-Git-Newrev: 0a5bb69982f759e64251e61dd29ec28ee3771fd4
-X-Patchwork-Hint: ignore
-Message-Id: <20230812195316.AF64B84F4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/qemu/ppc64le-powernv8: fixup paths
- to images in qemu command line
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8iOEuzZJ7q7v for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 19:54:48 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 79C5E8176F
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79C5E8176F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BDB0D40003;
+ Sat, 12 Aug 2023 19:54:45 +0000 (UTC)
+Date: Sat, 12 Aug 2023 21:54:44 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230812215444.0af6eb62@windsurf>
+In-Reply-To: <ZNew/asuEOItVTZZ@waldemar-brodkorb.de>
+References: <ZNew/asuEOItVTZZ@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1691870086;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=GDvaK3TrEy4LngNK9ELmAUoCkjyof8xIdD6vzrzOfEw=;
+ b=YtWRS2ZUk59bk92QqlHCWw05R+AZ+TQD/cZWmIsvStb60HHtnpwNu1ljBrz4+iN6YZl+zH
+ cciA90+CIl40TyTAxZ55dNJDwZR1lJn3Rb8KNuYI5YAJpnGkmsJV0TStgM8PJvuk3tyol5
+ ITjNSlgspmfefVRKS8JemfBZGYW8Se0B7gURP74+cJ7T/5lxJz5+TJ46j+fzpzxmfxmNZx
+ vFE9YvO0buE3x6v3GjEsdVAhc53bQlg4QGo7v4cH0CDJSZkEI67XpsOfJm8Gkw2mT9Nq0d
+ icF60ils/Gi638lihNijrDs5yDEimuJkTZR5UTesZIDUN/1FoY6zBW/F60qcvQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YtWRS2ZU
+Subject: Re: [Buildroot] [PATCH] board/qemu/ppc64le-powernv8: fixup example
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,35 +76,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a5bb69982f759e64251e61dd29ec28ee3771fd4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 12 Aug 2023 18:19:09 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Use full relative pathes for rootfs and kernel, like in other
-readme's.
+> Use full relative pathes for rootfs and kernel, like in other
+> readme's.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  board/qemu/ppc64le-powernv8/readme.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/qemu/ppc64le-powernv8/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks. I was initially a bit confused because all
+those readme.txt files for Qemu configurations are used in our Gitlab
+CI infra to automatically boot the resulting kernel/rootfs images in
+Qemu, and the build/test was working fine in our CI.
 
-diff --git a/board/qemu/ppc64le-powernv8/readme.txt b/board/qemu/ppc64le-powernv8/readme.txt
-index 059f55fbc9..b57c97464a 100644
---- a/board/qemu/ppc64le-powernv8/readme.txt
-+++ b/board/qemu/ppc64le-powernv8/readme.txt
-@@ -1,5 +1,5 @@
- Run the emulation with:
- 
--qemu-system-ppc64 -M powernv9 -kernel vmlinux -append "console=hvc0 rootwait root=/dev/nvme0n1" -device nvme,bus=pcie.3,addr=0x0,drive=drive0,serial=1234 -drive file=./rootfs.ext2,if=none,id=drive0,format=raw,cache=none -device e1000e,netdev=net0,mac=C0:FF:EE:00:01:03,bus=pcie.1,addr=0x0  -netdev user,id=net0 -serial mon:stdio -nographic # qemu_ppc64le_powernv8_defconfig
-+qemu-system-ppc64 -M powernv9 -kernel output/images/vmlinux -append "console=hvc0 rootwait root=/dev/nvme0n1" -device nvme,bus=pcie.3,addr=0x0,drive=drive0,serial=1234 -drive file=output/images/rootfs.ext2,if=none,id=drive0,format=raw,cache=none -device e1000e,netdev=net0,mac=C0:FF:EE:00:01:03,bus=pcie.1,addr=0x0  -netdev user,id=net0 -serial mon:stdio -nographic # qemu_ppc64le_powernv8_defconfig
- 
- The login prompt will appear in the terminal window.
+Turns out that board/qemu/post-image.sh strips output/images/, and then
+board/qemu/start-qemu.sh.in chdir into ${BINARIES_DIR}. So indeed, it
+makes sense that both this incorrect readme.txt, and all the other ones
+for Qemu defconfigs, that had output/images, worked.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
