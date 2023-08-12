@@ -4,65 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92C84C001DB
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 10:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C66F6C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 11:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 244AB41B97;
-	Sat, 12 Aug 2023 10:50:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 244AB41B97
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51C9C415D9;
+	Sat, 12 Aug 2023 11:06:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51C9C415D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Qpst9Qs37uY; Sat, 12 Aug 2023 10:50:58 +0000 (UTC)
+	with ESMTP id NpI_Wiq6Dbe6; Sat, 12 Aug 2023 11:06:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2114040350;
-	Sat, 12 Aug 2023 10:50:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2114040350
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 87DA91BF288
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 10:50:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E9F9415BF;
+	Sat, 12 Aug 2023 11:06:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E9F9415BF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 51D091BF57C
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:06:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5407E60E30
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 10:50:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5407E60E30
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29644415BF
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:06:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29644415BF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Wn1CfjeUhPZb for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 10:50:54 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4C0C760C0E
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 10:50:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C0C760C0E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 591C3E0004;
- Sat, 12 Aug 2023 10:50:52 +0000 (UTC)
-Date: Sat, 12 Aug 2023 12:50:51 +0200
-To: Bartosz Bilas <b.bilas@grinn-global.com>
-Message-ID: <20230812125051.4b8b0b84@windsurf>
-In-Reply-To: <20230811093421.300794-1-b.bilas@grinn-global.com>
-References: <20230811093421.300794-1-b.bilas@grinn-global.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id if31cdp3n1pJ for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 11:06:10 +0000 (UTC)
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E6D634156E
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 11:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6D634156E
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout01.mail.de (Postfix) with ESMTP id 1AC81A07D8;
+ Sat, 12 Aug 2023 13:06:08 +0200 (CEST)
+Received: from smtp03.mail.de (smtp03.bt.mail.de [10.0.121.213])
+ by postfix01.mail.de (Postfix) with ESMTP id 0059B8020A;
+ Sat, 12 Aug 2023 13:06:07 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+ (No client certificate requested)
+ by smtp03.mail.de (Postfix) with ESMTPSA id C2D80A032E;
+ Sat, 12 Aug 2023 13:06:07 +0200 (CEST)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 12 Aug 2023 13:06:07 +0200
+Message-ID: <5967844.lOV4Wx5bFT@kilian-aisec>
+In-Reply-To: <20230812121951.582dd68f@windsurf>
+References: <2691942.mvXUDI8C0e@kilian-aisec>
+ <21974407.EfDdHjke4D@kilian-aisec>
+ <20230812121951.582dd68f@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691837452;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2D7UwhRLJCI9LKg2oHlR817iiuzoMjI4aU81N9G3kpU=;
- b=Jj81Gi9dOKyRIJWfr0bO2DL4oQ+LiZbOe3aHiWWMzxGfNc95zI9ClSazHEIg7LmF/A/tDJ
- mYGah6v8SJVX6pBf5kUcBYGb5ZUaKVHMEjnYP2RCVLbD/9vO8x18SL4jqI5baCHx/ezP6J
- sPUftxOSTqMmJAjCyHoeT9KM+XDOVtQHeWxft/gfmhpgTHSDg85iahE/WwTHah/6/elp4n
- MJV3L4DOmQPO1SLKB4ItyZVyetRmme3TfT5JT41NenNQf3k0hCfrAUuWhdR/V5Cvc4DUSr
- eMQQEG2OZjrh5GdDnALOVomYqTiY5ONJVVT01+QChLv1nvg/T5xQ54MSw9kfrg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Jj81Gi9d
-Subject: Re: [Buildroot] [PATCH] gdb: disable source-highlight
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 1135
+X-purgate-ID: 154282::1691838367-BBFFF647-8A5F1AD2/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1691838368;
+ bh=wN91Pz8+nWInBCFGH5z1Fy6MBBRKsS+IXRT1hGovL/I=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=Di3ohReETpOG0YlluZA/yZHQMe9cZYXKQ1q2lCIZuK0cwzCHeUIUSlW76oTcDAZ+7
+ Z5R94JKqzDZ5+axOwY0uR29Jz/7QfmiqX/HR+0hUeCS4CcfXY1lnRVsPliXbK2sC7F
+ YEnefzmkQdwxZg/y79zZmDZvm4JpSOeQFfcK2KQnX48klHTi6MS4lMTg30WI8iLtJk
+ /61cE8yoIFD/5Bu8NVDTgpzLB0mKqvYrV5R9SS31kiNzobknb7Y7ttlKIgha6WYigb
+ BcmMjH48rJQxGAidbSsTyIZduT4YlqlWme/CX8lXamJjbJUm7VdhZeiEtVyWyNuysM
+ IM0SKb4tYpxhw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
+ header.a=rsa-sha256 header.s=mailde202009 header.b=Di3ohReE
+Subject: Re: [Buildroot] Interested in board support for BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,45 +88,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 11 Aug 2023 11:34:21 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
-
-> It's being found from the host's source-highlight library
-> which results in the following build errors:
-> 
-> ../../gdb/source-cache.c:37:10: fatal error: srchilite/sourcehighlight.h: No such file or directory
->    37 | #include <srchilite/sourcehighlight.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[4]: *** [Makefile:1645: source-cache.o] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-
-Thanks patch applied to master, after updating the commit title to use
-"package/gdb: " as the prefix, to follow our convention.
-
-Also, I am wondering if the same should not be done for the host
-variant of gdb. Indeed, we don't want to rely on the system-provided
-source highlight if it's not built by Buildroot. Could you have a look
-into this, and if it makes sense, send a patch?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKPiA+IFllcywgSSByZWFsbHkgYXBwcmVjaWF0ZSBhbGwgaW5mb3JtYXRp
+b24gdGhhdCBtYXkgaGVscCEgSSBhbSBub3QgdmVyeQo+ID4gZXhwZXJpZW5jZWQsIGVzcGVjaWFs
+bHkgd2hlbiBpdCBjb21lcyB0byBhc3NlbWJsaW5nIGEgYm9vdCBpbWFnZSBmcm9tIHRoZQo+ID4g
+YXJ0aWZhY3RzLCBzbyBpdCB3b3VsZCBiZSBhIGdyZWF0IGhlbHAuCj4gCj4gV2FudGVkIHRvIGV4
+cGVyaW1lbnQgYSBiaXQuIFR1cm5zIG91dCB0aGF0IHRoZSBVU0IgVFRMIGNhYmxlIEkgaGFwcGVu
+Cj4gdG8gaGF2ZSB3aXRoIG1lIGZhbGxzIGludG8gdGhlICJJdCBoYXMgYmVlbiBub3RpY2VkIHRo
+YXQgNnBpbiBGVERJCj4gY2FibGVzIGxpa2UgdGhpcyBkb2VzbuKAmXQgc2VlbSB3b3JrIHdpdGgg
+QmVhZ2xlViBBaGVhZCBkZWJ1ZyBwb3J0IGFuZAo+IHRoZXJlIG1pZ2h0IGJlIG90aGVyIGNhYmxl
+cy9tb2R1bGVzIHRoYXQgd2lsbCBzaG93IGdhcmJhZ2Ugd2hlbgo+IGNvbm5lY3RlZCB0byB0aGUg
+Ym9hcmQiIGF0Cj4gaHR0cHM6Ly9kb2NzLmJlYWdsZWJvYXJkLm9yZy9sYXRlc3QvYm9hcmRzL2Jl
+YWdsZXYvYWhlYWQvMDItcXVpY2stc3RhcnQuaHRtbAo+ICwgc28gSSBkb24ndCBoYXZlIGFjY2Vz
+cyB0byB0aGUgYm9hcmQgVUFSVCB0byBleHBsb3JlIHRoaW5ncywgc2FkbHkuCgpZZXMsIHNhbWUg
+cHJvYmxlbSBvdmVyIGhlcmU6IE5vbmUgb2YgbXkgRlRESSBjYWJsZXMgd29ya3MuIFRoZXJlIGlz
+IGFsc28gYSAKZm9ydW0gcG9zdCBhYm91dCB0aGlzLiBJIGRpZCBoYXZlIG9uZSBjaGVhcCBhZGFw
+dGVyLCB0aGF0IGRpZCB3b3JrIGluZGVlZCwgCmhvd2V2ZXIgaXQgZGVjaWRlZCB0byBub3Qgd2Fu
+dCB0byBjb250aW51ZSB3b3JraW5nIGZvciBzb21lIHJlYXNvbi4gSSBvcmRlcmVkIAphIGZldyBv
+bmUgd2l0aCBhIENQMjEwMiwgbGlrZSBpdCB3YXMgc3VnZ2VzdGVkIG9uIHRoZSBmb3J1bS4gVGls
+bCB0aGV5IGFycml2ZSAKKGFyb3VuZCBtaWQgb2YgbmV4dCB3ZWVrKSB0aGVyZSBpcyBub3QgdG9v
+IG11Y2ggSSBjYW4gZG8sIHRvbyAuLi4KCkJlc3QgcmVnYXJkcywKS2lsaWFuCgoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
+bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
