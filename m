@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34646EE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:19:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EBB5EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:19:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBA8140B6D;
-	Mon, 21 Aug 2023 20:19:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBA8140B6D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5724240B96;
+	Mon, 21 Aug 2023 20:19:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5724240B96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SblWNwp0cnS3; Mon, 21 Aug 2023 20:19:19 +0000 (UTC)
+	with ESMTP id 5zG_MpuwyeTO; Mon, 21 Aug 2023 20:19:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B0EE4149F;
-	Mon, 21 Aug 2023 20:19:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B0EE4149F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9BBC940C99;
+	Mon, 21 Aug 2023 20:19:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BBC940C99
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D83141BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E939A1BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C826410D5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A8CD410C7
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C826410D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A8CD410C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s-7Wwb8s9UKy for <buildroot@lists.busybox.net>;
+ with ESMTP id FX1vZDjQ8oi8 for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB34F4136B
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC14C41612
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB34F4136B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC14C41612
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B622A86023; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+ id AA42B86025; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 22:21:55 +0200
+Date: Sat, 12 Aug 2023 22:06:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 283e6859f15473cc1d0b2eb336e1db6f4335b61b
-X-Git-Newrev: f7ebab67abc24b48035868dbaf2c362f47118a9a
+X-Git-Oldrev: 0a5bb69982f759e64251e61dd29ec28ee3771fd4
+X-Git-Newrev: 283e6859f15473cc1d0b2eb336e1db6f4335b61b
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200126.B622A86023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- toolchain/toolchain-external/toolchain-external-codescape-mti-mips: disable
- gdbserver
+Message-Id: <20230821200126.AA42B86025@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/genrandconfig: add ubi
+ handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,35 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7ebab67abc24b48035868dbaf2c362f47118a9a
+commit: https://git.buildroot.net/buildroot/commit/?id=283e6859f15473cc1d0b2eb336e1db6f4335b61b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following build failure:
+Add a custom case to make sure that a random configuration with an empty
+configuration file for ubi doesn't fail.
 
->>> toolchain-external-codescape-mti-mips 2018.09-02 Copying gdbserver
-Could not find gdbserver in external toolchain
+ubinize: error!: no sections found the ini-file "/home/buildroot/autobuild/instance-2/output-1/build/ubinize.cfg"
 
 Fixes:
- - http://autobuild.buildroot.org/results/ead304285a9cf32bf6b9dcc7fc30acece25ec680
+ - http://autobuild.buildroot.org/results/f678c17cc4df06fb2737467e769cd8f72a3ea420
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external/toolchain-external-codescape-mti-mips/Config.in   | 1 +
- 1 file changed, 1 insertion(+)
+ utils/genrandconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-index 8217ddc38c..720d705d14 100644
---- a/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codescape-mti-mips/Config.in
-@@ -5,6 +5,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_MIPS_CPU_MIPS32R2 || (BR2_MIPS_CPU_MIPS64R2 && !BR2_MIPS_SOFT_FLOAT)
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_EXTERNAL_HAS_NO_GDBSERVER
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index b6154db344..52edad06d8 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -526,6 +526,12 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n')
+         configlines.append('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=41610\n')
+ 
++    if 'BR2_TARGET_ROOTFS_UBI=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE=""\n' in configlines:
++        configlines.remove('BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y\n')
++        configlines.remove('BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE=""\n')
++
+     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
+        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
+         configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
