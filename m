@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D71BC0015E
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 11:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41DFFC001B0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 11:34:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFEBF40316;
-	Sat, 12 Aug 2023 11:18:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFEBF40316
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBC8D40994;
+	Sat, 12 Aug 2023 11:33:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBC8D40994
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rvsbymqPg9bY; Sat, 12 Aug 2023 11:18:11 +0000 (UTC)
+	with ESMTP id 709RvRoiQt6N; Sat, 12 Aug 2023 11:33:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6D8F4034F;
-	Sat, 12 Aug 2023 11:18:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6D8F4034F
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB30D4094B;
+	Sat, 12 Aug 2023 11:33:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB30D4094B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 651EA1BF282
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:18:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9FFE11BF282
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:33:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17C254031B
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:18:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17C254031B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77F2E4093B
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 11:33:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77F2E4093B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id J9OmuxJN3bAR for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 11:18:08 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E74E6402BA
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 11:18:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E74E6402BA
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 49A533520C44; Sat, 12 Aug 2023 13:18:05 +0200 (CEST)
-Date: Sat, 12 Aug 2023 13:18:05 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZNdqbZF3dTPmZbr3@waldemar-brodkorb.de>
-References: <ZNdBDn3B5k1Xgl4S@waldemar-brodkorb.de>
- <20230812124356.6dd3e574@windsurf>
+ with ESMTP id fVz-NDRuBi08 for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 11:33:54 +0000 (UTC)
+X-Greylist: delayed 1773 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 12 Aug 2023 11:33:54 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B8274092E
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
+ [60.248.80.70])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0B8274092E
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 11:33:53 +0000 (UTC)
+Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
+ by Atcsqr.andestech.com with ESMTP id 37CB4Too045986
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:04:29 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+ by Atcsqr.andestech.com with ESMTP id 37CB47H2045953;
+ Sat, 12 Aug 2023 19:04:07 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from atcfdc88.andestech.com (10.0.15.158) by ATCPCS16.andestech.com
+ (10.0.1.222) with Microsoft SMTP Server id 14.3.498.0;
+ Sat, 12 Aug 2023 19:04:05 +0800
+From: Yu Chien Peter Lin <peterlin@andestech.com>
+To: <buildroot@buildroot.org>
+Date: Sat, 12 Aug 2023 19:03:59 +0800
+Message-ID: <20230812110359.27170-1-peterlin@andestech.com>
+X-Mailer: git-send-email 2.38.0.68.ge85701b4af.dirty
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230812124356.6dd3e574@windsurf>
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1691839085; bh=EDfuRF3YMbU+5xzbZUO45WZnuSnAYHKV+lkQcsTsP0o=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=rAomD52Dt57OLxVB92+bBX+Mt0KKQrHrUjcUW8msVhfR5IURCgBL/dd9Hr+FW8+f9
- 7T/HCAN5c5T1MMV256tXNXcgbOOq7GJRBc5dInUh+oqZ8cdRTS2oXI9tfjKjdWmmyc
- hf7/rCiit9eY1BhAKF0tqqbqR5/5AVxvpA9E2Br/W+b3I37f3FpV5a59qykU3GX7bp
- o74rpjQIloe/VVouqwybrpCNvb3vo0xd0L+GRVmQbcpOlVL82yaIx6/0YEkm9WJuSs
- S9rSSjQWhUPqmFfFFN3XNSV4DQTKA6/mWFZjjEzs88RUZQ4rUJiRmHPhW+1or36WqK
- a6C36tU2gzCuw==
-Subject: Re: [Buildroot] [PATCH] package/libedit: fix compile error
+X-Originating-IP: [10.0.15.158]
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 37CB4Too045986
+Subject: [Buildroot] [PATCH] andes_ae350_45: Fix build issues of AE350
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,84 +69,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Yu Chien Peter Lin <peterlin@andestech.com>, ycliang@andestech.com,
+ thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+- Select RVA extension so the toolchain uses glibc by default
+- Enable Zifencei and Zicsr for gcc-12 to fix U-Boot build failure
 
-> Hello Waldemar,
-> 
-> On Sat, 12 Aug 2023 10:21:34 +0200
-> Waldemar Brodkorb <wbx@openadk.org> wrote:
-> 
-> > Header file uses ssize_t so sys/types.h must be included.
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.net/results/439/439538b23776a58ff81c38754a19ee92c3590a1f
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > ---
-> > Author was informed via email about the issue.
-> > ---
-> >  package/libedit/0002-add-sys-types_h.patch | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >  create mode 100644 package/libedit/0002-add-sys-types_h.patch
-> 
-> I have applied to master, but after significantly improving the commit
-> log. For all the "fixes" that you send, there is almost always a
-> critical information that is missing: since when is the problem
-> occurring. Indeed, we want to know if the fix needs to be backported to
-> one of our stable branches or not.
-> 
-> So here, I had to do that research myself, to realize it's the version
-> bump in commit cc69dbf8fdef6619c4ea09a4aaa97cd5ad3ee423 that introduced
-> the regression. Since this commit is no yet in any release (other than
-> 2023.08-rc1), there is no need to backport your fix to a previous
-> stable Buildroot branch. This is really a critical piece of information
-> that Peter Korsgaard will need when reviewing patches for backport to
-> stable branches.
-> 
-> So could you please always, always, always to this research and include
-> the relevant information in the commit log? It will make things a lot
-> easier when reviewing/merging the patches.
-> 
-> The final commit log looks like this:
-> 
-> commit fe42fa8017b10602ed57ee066f8a9710f0f8e7ca (HEAD -> master, official/master)
-> Author: Waldemar Brodkorb <wbx@openadk.org>
-> Date:   Sat Aug 12 10:21:34 2023 +0200
-> 
->     package/libedit: fix compile error with uClibc
->     
->     In Buildroot commit cc69dbf8fdef6619c4ea09a4aaa97cd5ad3ee423
->     ("package/libedit: bump version to 20221030-3.1"), the version of
->     libedit was bumped from 20210910-3.1 to 20221030-3.1. This broke the
->     build with uClibc:
->     
->     ./sys.h:96:1: error: unknown type name 'ssize_t'; did you mean 'size_t'?
->     
->     Header file uses ssize_t so sys/types.h must be included.
->     
->     This commit adds a patch that fixes this issue.
->     
->     Fixes:
->     
->       http://autobuild.buildroot.net/results/439538b23776a58ff81c38754a19ee92c3590a1f
->     
->     Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
->     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> Thanks!
+Fixes:
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/4839059655
 
-Okay, sorry for that. I promise I try to find the needed information
-for my next patches. See my conmon patch I sent today ;)
+Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+---
+ configs/andes_ae350_45_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-best regards
- Waldemar
+diff --git a/configs/andes_ae350_45_defconfig b/configs/andes_ae350_45_defconfig
+index 998276635b..faf29b8b6b 100644
+--- a/configs/andes_ae350_45_defconfig
++++ b/configs/andes_ae350_45_defconfig
+@@ -1,6 +1,7 @@
+ BR2_riscv=y
+ BR2_riscv_custom=y
+ BR2_RISCV_ISA_CUSTOM_RVM=y
++BR2_RISCV_ISA_CUSTOM_RVA=y
+ BR2_RISCV_ISA_CUSTOM_RVF=y
+ BR2_RISCV_ISA_CUSTOM_RVD=y
+ BR2_RISCV_ISA_CUSTOM_RVC=y
+@@ -38,7 +39,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+ BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="ARCH_FLAGS=-march=rv64imafdc"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="ARCH_FLAGS=-march=rv64imafdc_zifencei_zicsr"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
