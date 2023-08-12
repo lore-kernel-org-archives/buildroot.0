@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 793F4C0015E
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 20:22:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C732C0015E
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 20:23:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2DC55405A9;
-	Sat, 12 Aug 2023 20:22:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DC55405A9
+	by smtp2.osuosl.org (Postfix) with ESMTP id B473340576;
+	Sat, 12 Aug 2023 20:23:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B473340576
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pJKr3IBas9cT; Sat, 12 Aug 2023 20:22:55 +0000 (UTC)
+	with ESMTP id NREdupKzZQaY; Sat, 12 Aug 2023 20:23:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7D20F40577;
-	Sat, 12 Aug 2023 20:22:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D20F40577
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 130471BF4E4
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:22:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CC41440577;
+	Sat, 12 Aug 2023 20:23:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC41440577
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 241E71BF4E4
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EDCB181DAB
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:22:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDCB181DAB
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1E2040576
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 20:23:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1E2040576
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gVXHsuuXKWV1 for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 20:22:43 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E4BA181DA0
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 20:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4BA181DA0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C0B9EE0003;
- Sat, 12 Aug 2023 20:22:40 +0000 (UTC)
-Date: Sat, 12 Aug 2023 22:22:40 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230812222240.72cd8f9b@windsurf>
-In-Reply-To: <20230221160137.2904208-1-fontaine.fabrice@gmail.com>
-References: <20230221160137.2904208-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1691871761;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=W8geUQmNfEmJMsBs1Wqxu4/3JAL/Bo0bDf/70S4mC08=;
- b=pqm7y0r8U621r/lyfGYQNe1DGFVFkLzQSHZgmwkBPpRRuVu0PUA8T46l4BN4clXwyVM2Yh
- 2zbnNkeNUc81U7nLw4vQn8rY0v6FysKJ/pjzfScMVZN2MvyQhC5eULgdBoKDc0QLIgV188
- gt4ljoK/v2SDKBKcrZnl4afsLKQEdUE0hn2VKx55lB6s+fGip+5s9lf2pc7Bm1/tYwXvok
- /QV6TybF+SkQu7bYUHbvG0a5xxBEJKfNyIQoKF8gXuoW5yE38ccht9N0M+cVM//tOfqhgy
- tRVQS6e4vOo1EStPwYg0cudxGHZiCrS+Pmey1RHY37w5t+HCGL5Or6CjMZbrLg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pqm7y0r8
-Subject: Re: [Buildroot] [PATCH 1/1]
- toolchain/toolchain-external/toolchain-external-codescape-img-mips: disable
- gdbserver
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wtzuifO4ul-b for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 20:23:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 153C94052A
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 20:23:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 153C94052A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 04A1985785; Sat, 12 Aug 2023 20:23:45 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 12 Aug 2023 22:17:14 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: b86adfb89a8bd8765f1b0400e0f0b4285aea8f77
+X-Git-Newrev: 4a713568321c1802eba641c6373c0ad79d39c5d0
+X-Patchwork-Hint: ignore
+Message-Id: <20230812202345.04A1985785@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/arm-trusted-firmware:
+ introduce a choice to select the BL33 image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,40 +57,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 21 Feb 2023 17:01:37 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4a713568321c1802eba641c6373c0ad79d39c5d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Fix the following build failure:
-> 
-> >>> toolchain-external-codescape-img-mips 2018.09-02 Copying gdbserver  
-> Could not find gdbserver in external toolchain
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b0786965e0b249c8168df855682e54cfe95fa0cc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../toolchain-external-codescape-img-mips/Config.in              | 1 +
->  1 file changed, 1 insertion(+)
+We now have 3 different options to select an image as the BL33 stage
+of TF-A: Barebox, U-Boot or EDK2. Technically speaking, they are
+mutually exclusive: they all specify a BL33= variable to the TF-A
+build, and TF-A can only support a single BL33 stage.
 
-Applied to master, thanks.
+However, as pointed out by Vincent Fazio in [0] there is nothing that
+prevents selecting Barebox, U-Boot and EDK2 together, even though it
+doesn't make sense.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+To address this, this commit introduces a choice...endchoice block,
+into which the Barebox, U-Boot and EDK2 options are moved. An
+additional "none" option is added, which is the default, and
+corresponds to not having any BL33 image.
+
+Since we keep the same name for the options, no legacy handling is
+necessary.
+
+[0] https://lore.kernel.org/buildroot/PH1P110MB1603A4AA1638838DA56BAA069FDA9@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM/
+
+Reported-by: Vincent Fazio <vfazio@xes-inc.com>
+Cc: Vincent Fazio <vfazio@xes-inc.com>
+Cc: Casey Reeves <casey@xogium.me>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/arm-trusted-firmware/Config.in | 57 ++++++++++++++++++++++---------------
+ 1 file changed, 34 insertions(+), 23 deletions(-)
+
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index cb54c6c9d8..a5ac987172 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -129,8 +129,17 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
+ 
+ endchoice
+ 
++choice
++	prompt "BL33"
++	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_NONE_AS_BL33
++	help
++	  Select the image to include as BL33.
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NONE_AS_BL33
++	bool "None"
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
+-	bool "Use Barebox as BL33"
++	bool "Barebox"
+ 	depends on BR2_TARGET_BAREBOX
+ 	help
+ 	  This option allows to embed the Barebox generic BL33 image in
+@@ -139,6 +148,30 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
+ 	  variable pointing to the generic bl33 image is passed
+ 	  when building ATF.
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
++	bool "U-Boot"
++	depends on BR2_TARGET_UBOOT
++	help
++	  This option allows to embed u-boot.bin as the BL33 part of
++	  the ARM Trusted Firmware. It ensures that the u-boot package
++	  gets built before ATF, and that the appropriate BL33
++	  variable pointing to u-boot.bin is passed when building ATF.
++
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
++	bool "EDK2"
++	depends on BR2_TARGET_EDK2
++	help
++	  This option allows to embed EDK2 as the BL33 part of
++	  the ARM Trusted Firmware. It ensures that the EDK2 package
++	  gets built before ATF, and that the appropriate BL33
++	  variable pointing to the EDK2 is passed when building ATF.
++
++	  Do not choose this option if you intend to build ATF and EDK2
++	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
++	  build system, the dependency between ATF and EDK is reversed.
++
++endchoice
++
+ if BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
+@@ -150,15 +183,6 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
+ 
+ endif
+ 
+-config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+-	bool "Use U-Boot as BL33"
+-	depends on BR2_TARGET_UBOOT
+-	help
+-	  This option allows to embed u-boot.bin as the BL33 part of
+-	  the ARM Trusted Firmware. It ensures that the u-boot package
+-	  gets built before ATF, and that the appropriate BL33
+-	  variable pointing to u-boot.bin is passed when building ATF.
+-
+ if BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+ 
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+@@ -170,19 +194,6 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
+ 
+ endif
+ 
+-config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
+-	bool "Use EDK2 as BL33"
+-	depends on BR2_TARGET_EDK2
+-	help
+-	  This option allows to embed EDK2 as the BL33 part of
+-	  the ARM Trusted Firmware. It ensures that the EDK2 package
+-	  gets built before ATF, and that the appropriate BL33
+-	  variable pointing to the EDK2 is passed when building ATF.
+-
+-	  Do not choose this option if you intend to build ATF and EDK2
+-	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
+-	  build system, the dependency between ATF and EDK is reversed.
+-
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW
+ 	bool "Include NXP RCW in BL2"
+ 	depends on BR2_PACKAGE_HOST_QORIQ_RCW
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
