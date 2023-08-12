@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2ADBC001B0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 18:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E256C001B0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 18:33:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 757834052A;
-	Sat, 12 Aug 2023 18:33:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 757834052A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05E14400C1;
+	Sat, 12 Aug 2023 18:33:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05E14400C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yahI-y24K65z; Sat, 12 Aug 2023 18:33:20 +0000 (UTC)
+	with ESMTP id YtC8uzkNsHTF; Sat, 12 Aug 2023 18:33:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B3581404F7;
-	Sat, 12 Aug 2023 18:33:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3581404F7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FC5D40577;
+	Sat, 12 Aug 2023 18:33:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FC5D40577
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C3DD1BF41F
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 18:33:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B39B1BF41F
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 18:33:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3222C606A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32A80606AA
  for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 18:33:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3222C606A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32A80606AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DbPNluOiAgxK for <buildroot@lists.busybox.net>;
+ with ESMTP id pH74DGHNalPG for <buildroot@lists.busybox.net>;
  Sat, 12 Aug 2023 18:33:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36E3160674
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A4FD60648
  for <buildroot@buildroot.org>; Sat, 12 Aug 2023 18:33:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E3160674
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A4FD60648
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2092484798; Sat, 12 Aug 2023 18:33:17 +0000 (UTC)
+ id 15A6A8477C; Sat, 12 Aug 2023 18:33:17 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 17:44:45 +0200
+Date: Sat, 12 Aug 2023 17:32:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 534c22dd606e200969fce49b8d23b27902dec94e
-X-Git-Newrev: 40ff422160e1a5018bbfac53fd9acec702123d8f
+X-Git-Oldrev: d6dde8fc0cf44e631ce7d3df6f956cb35f8cf1e9
+X-Git-Newrev: 534c22dd606e200969fce49b8d23b27902dec94e
 X-Patchwork-Hint: ignore
-Message-Id: <20230812183317.2092484798@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/weston: introduce
- _SIMPLE_CLIENTS package option
+Message-Id: <20230812183317.15A6A8477C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/weston: fix the
+ configuration of simple-clients
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,95 +63,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40ff422160e1a5018bbfac53fd9acec702123d8f
+commit: https://git.buildroot.net/buildroot/commit/?id=534c22dd606e200969fce49b8d23b27902dec94e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-commit "package/weston: fix the configuration of simple-clients"
-fixed the configuration of Weston simple-clients by always enabling all
-supported applications.
+commit 7329a0db442026c6b856e76ea964107fa3c730f3
+"weston: disable v4l simple dmabuf for headers < 3.8"
+disabled dmabuf-v4l-client when kernel headers are older than v3.8.
+This commit was made at the time the weston package was at version
+1.10.0, using the autotools package infra.
 
-Since it is not desirable to always have all those applications
-installed on target, this commit introduces a new package Kconfig
-option to control this.
+commit e672eb5c39fa626f8e924269cec2056be9e14ded
+"package/weston: bump to version 8.0.0"
+replaced the package infra to meson (since upstream deprecated
+autotools). This commit changed a disable of dmabuf-v4l-client in
+autotools, by enabling it only if supported. The end result is that
+the current meson package recipe disable ALL simple clients, or just
+enable dmabuf-v4l-client when supported. In all cases, all other
+weston simple clients are disabled. This behavior is not convenient
+since some of those simple clients are useful to test the correct
+operation of Weston and the rest of the graphic stack.
 
-Since there is already a BR2_PACKAGE_WESTON_DEMO_CLIENTS option present,
-this commit also update the Kconfig "help" entries, to clarify the
-difference between those "demo clients" and "simple clients". Those
-clients groups are directly coming from the upstream package (and are
-directly mapped to Meson configure options).
+This commit fixes this issue by enabling all supported simple clients.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-[yann.morin.1998@free.fr:
-  - set -Dsimple-clients= only once, outside conditional block
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/weston/Config.in | 24 ++++++++++++++++++++++++
- package/weston/weston.mk |  2 ++
- 2 files changed, 26 insertions(+)
+ package/weston/weston.mk | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 1a7c27a715..db6a78ee8a 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -174,6 +174,18 @@ config BR2_PACKAGE_WESTON_SCREENSHARE
- 	bool "screenshare"
- 	default y
- 
-+config BR2_PACKAGE_WESTON_SIMPLE_CLIENTS
-+	bool "simple clients"
-+	help
-+	  Simple clients includes application such as:
-+	  damage, dmabuf-feedback, dmabuf-egl, dmabuf-v4l, egl
-+
-+	  In the target filesystem, simple client program binaries are
-+	  prefixed with "weston-simple-".
-+
-+	  Note: Weston has two sets of clients. See also the weston
-+	  "demo clients" option.
-+
- config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	bool "demo clients"
- 	depends on BR2_USE_MMU # pango
-@@ -188,6 +200,18 @@ config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	help
- 	  This enables the installation of Weston's demo clients.
- 
-+	  Demo clients includes application such as:
-+	  clickdot, confine, content_protection, dnd, editor,
-+	  eventdemo, flower, fullscreen, image, multi-resource,
-+	  presentation-shm, resizor, scaler, smoke, stacking,
-+	  subsurfaces, tablet, transformed...
-+
-+	  In the target filesystem, demo client program binaries are
-+	  prefixed with "weston-".
-+
-+	  Note: Weston has two sets of clients. See also the weston
-+	  "simple clients" option.
-+
- comment "demo clients needs an OpenGL ES provider, an OpenEGL-capable Wayland backend and a toolchain w/ wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 5f8d915d5a..6a5c0e57f5 100644
+index 437c6f2e38..5f8d915d5a 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -22,6 +22,7 @@ WESTON_CONF_OPTS = \
+@@ -22,13 +22,22 @@ WESTON_CONF_OPTS = \
  	-Dlauncher-libseat=true \
  	-Dtools=calibrator,debug,info,terminal,touch-calibrator
  
-+ifeq ($(BR2_PACKAGE_WESTON_SIMPLE_CLIENTS),y)
- WESTON_SIMPLE_CLIENTS = \
- 	damage \
- 	dmabuf-egl \
-@@ -35,6 +36,7 @@ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
- # dmabuf-v4l uses VIDIOC_EXPBUF, only available from 3.8+
- WESTON_SIMPLE_CLIENTS += dmabuf-v4l
+-# Uses VIDIOC_EXPBUF, only available from 3.8+
++WESTON_SIMPLE_CLIENTS = \
++	damage \
++	dmabuf-egl \
++	dmabuf-feedback \
++	egl \
++	im \
++	shm \
++	touch
++
+ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
+-WESTON_CONF_OPTS += -Dsimple-clients=dmabuf-v4l
+-else
+-WESTON_CONF_OPTS += -Dsimple-clients=
++# dmabuf-v4l uses VIDIOC_EXPBUF, only available from 3.8+
++WESTON_SIMPLE_CLIENTS += dmabuf-v4l
  endif
-+endif # BR2_PACKAGE_WESTON_SIMPLE_CLIENTS
  
- WESTON_CONF_OPTS += -Dsimple-clients=$(subst $(space),$(comma),$(strip $(WESTON_SIMPLE_CLIENTS)))
- 
++WESTON_CONF_OPTS += -Dsimple-clients=$(subst $(space),$(comma),$(strip $(WESTON_SIMPLE_CLIENTS)))
++
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ WESTON_CONF_OPTS += -Dimage-jpeg=true
+ WESTON_DEPENDENCIES += jpeg
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
