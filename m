@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A5F1C001E0
-	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:30:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88590C001E0
+	for <buildroot@archiver.kernel.org>; Sat, 12 Aug 2023 19:30:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 261C441554;
-	Sat, 12 Aug 2023 19:30:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 261C441554
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3870C41570;
+	Sat, 12 Aug 2023 19:30:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3870C41570
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lDJLrU-N7skc; Sat, 12 Aug 2023 19:30:09 +0000 (UTC)
+	with ESMTP id 96y0pzo56OMV; Sat, 12 Aug 2023 19:30:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 317BD41570;
-	Sat, 12 Aug 2023 19:30:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 317BD41570
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 506E81BF3CD
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:29:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B6FF415E7;
+	Sat, 12 Aug 2023 19:30:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B6FF415E7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BD65C1BF3CD
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:29:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29AC540500
- for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29AC540500
+ by smtp3.osuosl.org (Postfix) with ESMTP id 96A6760E2E
+ for <buildroot@lists.busybox.net>; Sat, 12 Aug 2023 19:29:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96A6760E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FDWvicwmfNqC for <buildroot@lists.busybox.net>;
- Sat, 12 Aug 2023 19:29:31 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 464E540003
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 464E540003
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K_-i6AtlW7uM for <buildroot@lists.busybox.net>;
+ Sat, 12 Aug 2023 19:29:42 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7C8A860DF6
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 19:29:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C8A860DF6
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.localdomain ([89.144.222.147]) by mail.gmx.net
  (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MiJVG-1ppVCf1kG6-00fOaN; Sat, 12 Aug 2023 21:29:23 +0200
+ 1N6sn1-1piaH33Fmx-018Mco; Sat, 12 Aug 2023 21:29:34 +0200
 From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 21:28:32 +0200
-Message-ID: <20230812192842.135682-4-dalang@gmx.at>
+Date: Sat, 12 Aug 2023 21:28:34 +0200
+Message-ID: <20230812192842.135682-6-dalang@gmx.at>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230812192842.135682-1-dalang@gmx.at>
 References: <20230812192842.135682-1-dalang@gmx.at>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:9lvBqe4KcmW4AX9AlJV71/bD5cgo1LacUhNUdvuY5OrOFT3KA+J
- QMvO2mMIoW3/s+OgwxKpsDMFcDOCoDjIgE0+pIcZtgNzbpQxZNx9O0Tt1f2t4zNFyWgsCTf
- D3epmBppm5RyCkskaUU0RXf3CsHrVD/hQG9P8nlhAprOafutroS2lcXnMJPS/MvPfZ0Dpfu
- +sVaNucX9TDVfW49C2BwA==
-UI-OutboundReport: notjunk:1;M01:P0:gcFnjOHJYqQ=;TH4vH7A4YCgizJaYlR7VE/tAG4P
- +Y98yfOJzueiwqbApZ7rCwIGtwCyhksQWyzQnATEV9lUnNjiv1uTpFcM712PXjTMQhXn1WHMp
- xmDv6RKP4XoibqxjTpxBLACUcsFajUF/4m2wiQUlw77tZyh7ErU95twgiczBsBq5hyMrQvJTn
- Cd6OBO2H/eLuBjLTrNAHe2G6s8ka8NC3tgjnbcG+XSm1QYY6BmJjB5PzDL+ZezZP66+hjR48S
- tzsvzqARDeJyLN7GnEGDQLD+Bh1MXl5katI98yrsAGL8auTfjsmo+Ue2mcSg4x+6Sxl1fXuBM
- DG344dLakiILWd6+R+4VU1Er+VUhLLPvDfpLJo3gt1HVQjxqY3eGOvIIPFP7o21VXD3JGfu6+
- xj8jTQ4b3sZY8fA+6xJJD2SyrSJv52SDXwP3Er4N8OzFxRXU/ZSe0DhlhMNZEnLZtu5tAGm/B
- 2k6IV0WX0jE91B3A35yzxt7o+FV+XujNaiClgXDr8QsMRqvVk/diSX5glEh+Yl921TRbAzcV1
- LXiGvfcOJwckttDVHwb+Ns9XIt1Ff3SQiy7/Ep4BA7GZFx1JPhtQVvYRfOtD0jol4Xb00tGLv
- mh2cc0hkZ2JSUJvhhX45xR/V8M/rsMcY4HcHf5tlN0kfFND0wMQcw3jL6VQ3LiJqdhZr8jCBD
- +n4Yajp2uXFxW1H3QsCrjG99iUpDxZHQqy5pokntnsp8DKWGxKRx/mrJ/uqWB7bGpz1zYrEYk
- RQYU1iCRoHxSxQ2Rw8C5Oq2qJeopYz1lKQsCTb9drM8D348BREaLXzqFcRKywq9+aCsER8Avn
- oC/ZxgrY4APGRwucrM4XmwPcjD+N7c6DSReD2pj9Z4jA95fymgyxVhWJaqSwKySf1jU4f8U1I
- RLBsUDnQ8Vy9HLA8yvp/JFo8+x7gDFyFOsQOH5AfahKQ2hPkrlbSSGZdr+hJ36rK6gtQMVnET
- eQFkkM3prQyu2ea0W4t71BacgBk=
+X-Provags-ID: V03:K1:DvlBgdTxHMaRLUHNzpm8KXbLFA462+wFYA4MaL8VcQTsc6qfUQ9
+ hSk0MA3j56s3G/dNAy9HWyE1ZdK3KZF6W+OGJZ2oiCcQEGPjHqaHFaTqIa52DvFMPtnEbzU
+ 84C00OpJkjQ6hgKh8enVLb3uuKGAG8L80eikpgdMaxJj1Ks9lX3egLhGw1fuvPlof+3i/+h
+ YfYElz/UCLLaoEZp7ddOA==
+UI-OutboundReport: notjunk:1;M01:P0:eqak3RvzjNA=;RDx0KtCwBjMBegg5rmnFf1S2s/U
+ zjxVFIckq9TJpzoLJU7pUFKIOcHaJ5l5Db/NPacdvppxXA0CCy6bkFf+N+d0ZSQ03XIOFCMGS
+ 7VM924tqzzUmLORMnDkFG//aSzcsXbq5Bnkjddk46k2ZeyVKFdwy3BYyREO8MZ5cG7dNjDhtC
+ Gke1qSkz853DzZOGupCMZNX6mjFEyv+bkFNAVDtIlA+/QTKX1ZyIbuPsP4F7rzhQr4AE0Z06I
+ RHH2zPl5NE0eoFp0AlCMHJuExDire1JSXls20vlOCeMu3UFUV7S0nl9634tqen1LDeNplDh0K
+ uoc+1agDKV4CKO5n272r2neO0/V307YbCIgLJnk2pnZgBkbz7OziORSYAypa3JLc94FSwdASp
+ 2fUq6P9B4tBHz5zSMf3JtFgqIPn38rU6XcG1FL7Tk6Del28GCCd1pe/XWGMSYGqnjDG4y3tfS
+ oNa1KqEbld4BZ0gYNPvHJiteeMyZ3Iay1JDNaBvA09jP6xVuiJHTm0IsVOGFHusvpV89r3x05
+ n7AZUP7DQxYeJ3pMJxV9BR9tI706EuErpxHBH9IPUTaLeymReJeNA2gEi4+YwaGknthSfjUZ1
+ VscfiLvAJD1bM4PRmrYxwAJzg47ilfvHb7HsP+U91n6Mazm+uUCzYL4gbMiCSTv/Rfy9IasJf
+ U36mwoPopH7XlzUJrhsliIbT5MO+BWv1Kfn3WmJYWdGERZ4C48CeTB1mIDK2led0AmReevDoH
+ fA2iAnio8+nliRZCxjC0GwILhK/LneEgXZJo5lWaLWiV/3CzTIgHoAiLuMWnQ1YDaMr2vNNG2
+ igCpms/pWtnbjPNfbW3ufbfTs2LiqLY4l7TlAndcYixQGWEZRZ3idxOIjiYU+IP5Gl7Xrm8QT
+ XJJkieulMrdARycUjj17THINHRZGd2C9nV919rRUQdyAQ3VnAiaDaEFFuwLy7ZxOG7/ZNXoKj
+ Fpuzky/8t8ZMXvZOJyw853z0wmg=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.at; 
- s=s31663417; t=1691868563; x=1692473363; i=dalang@gmx.at;
- bh=NryfjNpK36Fqn09DbL/XP8pb796qAFXsYQcEYWMW1IY=;
+ s=s31663417; t=1691868575; x=1692473375; i=dalang@gmx.at;
+ bh=Y/tkjzWvCPpGU69004Z/ksBE62Thu6g2NGQLJ+kwIes=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=i5MQHbMg8hX8r2WyQxhdmwzbZuNInx9eT6ineZAc3FbT1Z6kMWnoHB3O7lGh6MFQ0iet1Q5
- lPq6PIJKaRQEIS1sWf7hu4hZ+a1Sj2Pv2SBuvJId0AVak9JT2699dlnRUtFGoUPHJ4eal8E9Z
- jqexBpa+hHI4wa14UcOnBh36OM8DsPnLYa6u9uPl2IJz0bcpfAtqEgrXkgp3ZpaYUrKI3SGqM
- RiF7twQVkn/sObEocXVwm4Ch1+66oFtMd/Lfy4poKhEomFB2orvLT47Q7wgYFM8EiAcKZG2bn
- l9dv4kSHFbFI2AKIxHpCtLozSS91dCvwlj2/Rhq3IHNh3cEs/a4w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=Bt4p+iIl6g9D28jUOajgJkZymHcYeDf6pnGSbx7D7Z4sJjh9DNNxBuS/QUEFx7zlZpIKrb7
+ 3BJ8igGJEhe7sSpYyAQPJNf3NIt4A+Q7D255xh+5h3OU13Y4eAGadBZXDEolawY1H+Fzam43P
+ eOphyB519Yk6i8fHJP2LlH/duVJHvx8hVTIX84C9Flm5Wb+ns76AxFLWq/eGqQcFdonHus2wY
+ OK1B54IbXSTOHspCvrn6q8jL2xNsnS/EWN/HsKBe0piyOhFVuYvaIq+ASGU9rvQjOl7WrDucm
+ nHQbZvAGxc51OcSBZXsiauwNzd7txBYv/xax8pMKEiPaWnf81K2w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=i5MQHbMg
-Subject: [Buildroot] [PATCH v3 4/8] support/scripts/gen-missing-cpe: remove
- rarely used script
+ header.a=rsa-sha256 header.s=s31663417 header.b=Bt4p+iIl
+Subject: [Buildroot] [PATCH v3 6/8] support/scripts/cve.py: switch to NVD
+ API v2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,328 +98,559 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As discussed on the mailing list [0] keeping up with version numbers of
-all registered CPE ID won't work.
-In addition the feed used to generated the XML files will be retired
-[1]. In the future an API needs to be used for fetching the data in
-connection with a local database.
-All of this works against keeping this script and porting it to the new
-API.
-As a last blow Matthew, the original author concluded [2]:
-Makes sense to drop it.  There never got to be enough momentum in the overall
-software community to make CVE or even the new identifier really accurate.
+The currently used feed will be retired in December 2023 [0].
+As an alternative the new v2 API [1]. The new API allows downloading
+sets of CVEs (2k at a time) that were modified after a given
+UTC timestamp. Rate limiting of 5 requests in a sliding 30 seconds
+window is used [2].
 
-[0]: https://lists.buildroot.org/pipermail/buildroot/2023-August/672620.html
-[1]: https://nvd.nist.gov/General/News/change-timeline
-[2]: https://lists.buildroot.org/pipermail/buildroot/2023-August/672651.html
+[0]: https://nvd.nist.gov/General/News/change-timeline
+[1]: https://nvd.nist.gov/developers/vulnerabilities
+[2]: https://nvd.nist.gov/developers/start-here
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
-v2 -> v3:
-- added this patch after feedback from Thomas
----
- Makefile                        |   9 --
- support/scripts/cpedb.py        | 174 --------------------------------
- support/scripts/gen-missing-cpe |  65 ------------
- support/scripts/pkg-stats       |   2 +-
- 4 files changed, 1 insertion(+), 249 deletions(-)
- delete mode 100644 support/scripts/cpedb.py
- delete mode 100755 support/scripts/gen-missing-cpe
+v1 -> v2:
+- switch to sqlite database for a more future proof storage
+- CPE_ID class has been moved to a laster patch, therefore not used here
 
-diff --git a/Makefile b/Makefile
-index 080136bc9a..fd807cc3cc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -927,14 +927,6 @@ pkg-stats:
- 		--html $(O)/pkg-stats.html \
- 		--nvd-path $(DL_DIR)/buildroot-nvd
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+---
+ DEVELOPERS                |   1 +
+ support/scripts/cve.py    | 415 ++++++++++++++++++++------------------
+ support/scripts/pkg-stats |  31 ++-
+ 3 files changed, 238 insertions(+), 209 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 81f809a4c0..cd4a58f2e6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -668,6 +668,7 @@ F:	package/paho-mqtt-cpp/
+ F:	package/pangomm/
+ F:	package/pangomm2_46/
+ F:	package/sam-ba/
++F:	support/scripts/cve.py
+ F:	support/scripts/nvd_api_v2.py
  
--.PHONY: missing-cpe
--missing-cpe:
--	$(Q)mkdir -p $(CPE_UPDATES_DIR)
--	$(Q)cd "$(CONFIG_DIR)" ; \
--	$(TOPDIR)/support/scripts/gen-missing-cpe \
--		--nvd-path $(DL_DIR)/buildroot-nvd \
--		--output $(CPE_UPDATES_DIR)
--
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ N:	Damien Lanson <damien@kal-host.com>
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 7cd6fce4d8..4087df2ae3 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -17,40 +17,9 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  
- # Some subdirectories are also package names. To avoid that "make linux"
-@@ -1191,7 +1183,6 @@ help:
- 	@echo '  legal-info             - generate info about license compliance'
- 	@echo '  show-info              - generate info about packages, as a JSON blurb'
- 	@echo '  pkg-stats              - generate info about packages as JSON and HTML'
--	@echo '  missing-cpe            - generate XML snippets for missing CPE identifiers'
- 	@echo '  printvars              - dump internal variables selected with VARS=...'
- 	@echo '  show-vars              - dump all internal variables as a JSON blurb; use VARS=...'
- 	@echo '                           to limit the list to variables names matching that pattern'
-diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
-deleted file mode 100644
-index f4daf56124..0000000000
---- a/support/scripts/cpedb.py
-+++ /dev/null
-@@ -1,174 +0,0 @@
--#!/usr/bin/env python3
--
--import xml.etree.ElementTree as ET
--from xml.etree.ElementTree import Element, SubElement
--import gzip
+-import datetime
 -import os
--import requests
+-import requests  # URL checking
+ import distutils.version
 -import time
--from xml.dom import minidom
--
--VALID_REFS = ['VENDOR', 'VERSION', 'CHANGE_LOG', 'PRODUCT', 'PROJECT', 'ADVISORY']
--
--CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
--
--ns = {
--    '': 'http://cpe.mitre.org/dictionary/2.0',
--    'cpe-23': 'http://scap.nist.gov/schema/cpe-extension/2.3',
--    'xml': 'http://www.w3.org/XML/1998/namespace'
--}
--
--
--class CPE:
--    def __init__(self, cpe_str, titles, refs):
--        self.cpe_str = cpe_str
--        self.titles = titles
--        self.references = refs
--        self.cpe_cur_ver = "".join(self.cpe_str.split(":")[5:6])
--
--    def update_xml_dict(self):
--        ET.register_namespace('', 'http://cpe.mitre.org/dictionary/2.0')
--        cpes = Element('cpe-list')
--        cpes.set('xmlns:cpe-23', "http://scap.nist.gov/schema/cpe-extension/2.3")
--        cpes.set('xmlns:ns6', "http://scap.nist.gov/schema/scap-core/0.1")
--        cpes.set('xmlns:scap-core', "http://scap.nist.gov/schema/scap-core/0.3")
--        cpes.set('xmlns:config', "http://scap.nist.gov/schema/configuration/0.1")
--        cpes.set('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance")
--        cpes.set('xmlns:meta', "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2")
--        cpes.set('xsi:schemaLocation', " ".join(["http://scap.nist.gov/schema/cpe-extension/2.3",
--                                                 "https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary-extension_2.3.xsd",
--                                                 "http://cpe.mitre.org/dictionary/2.0",
--                                                 "https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary_2.3.xsd",
--                                                 "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2",
--                                                 "https://scap.nist.gov/schema/cpe/2.1/cpe-dictionary-metadata_0.2.xsd",
--                                                 "http://scap.nist.gov/schema/scap-core/0.3",
--                                                 "https://scap.nist.gov/schema/nvd/scap-core_0.3.xsd",
--                                                 "http://scap.nist.gov/schema/configuration/0.1",
--                                                 "https://scap.nist.gov/schema/nvd/configuration_0.1.xsd",
--                                                 "http://scap.nist.gov/schema/scap-core/0.1",
--                                                 "https://scap.nist.gov/schema/nvd/scap-core_0.1.xsd"]))
--        item = SubElement(cpes, 'cpe-item')
--        cpe_short_name = CPE.short_name(self.cpe_str)
--        cpe_new_ver = CPE.version_update(self.cpe_str)
--
--        item.set('name', 'cpe:/' + cpe_short_name)
--        self.titles[0].text.replace(self.cpe_cur_ver, cpe_new_ver)
--        for title in self.titles:
--            item.append(title)
--        if self.references:
--            item.append(self.references)
--        cpe23item = SubElement(item, 'cpe-23:cpe23-item')
--        cpe23item.set('name', self.cpe_str)
--
--        # Generate the XML as a string
--        xmlstr = ET.tostring(cpes)
--
--        # And use minidom to pretty print the XML
--        return minidom.parseString(xmlstr).toprettyxml(encoding="utf-8").decode("utf-8")
--
--    @staticmethod
--    def version(cpe):
--        return cpe.split(":")[5]
--
--    @staticmethod
--    def product(cpe):
--        return cpe.split(":")[4]
--
--    @staticmethod
--    def short_name(cpe):
--        return ":".join(cpe.split(":")[2:6])
--
--    @staticmethod
--    def version_update(cpe):
--        return ":".join(cpe.split(":")[5:6])
--
--    @staticmethod
--    def no_version(cpe):
--        return ":".join(cpe.split(":")[:5])
--
--
--class CPEDB:
--    def __init__(self, nvd_path):
--        self.all_cpes = dict()
--        self.all_cpes_no_version = dict()
--        self.nvd_path = nvd_path
--
--    def get_xml_dict(self):
--        print("CPE: Setting up NIST dictionary")
--        if not os.path.exists(os.path.join(self.nvd_path, "cpe")):
--            os.makedirs(os.path.join(self.nvd_path, "cpe"))
--
--        cpe_dict_local = os.path.join(self.nvd_path, "cpe", os.path.basename(CPEDB_URL))
--        if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
--            print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
--            cpe_dict = requests.get(CPEDB_URL)
--            open(cpe_dict_local, "wb").write(cpe_dict.content)
--
--        print("CPE: Unzipping xml manifest...")
--        nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
--        print("CPE: Converting xml manifest to dict...")
--        tree = ET.parse(nist_cpe_file)
--        all_cpedb = tree.getroot()
--        self.parse_dict(all_cpedb)
--
--    def parse_dict(self, all_cpedb):
--        # Cycle through the dict and build two dict to be used for custom
--        # lookups of partial and complete CPE objects
--        # The objects are then used to create new proposed XML updates if
--        # if is determined one is required
--        # Out of the different language titles, select English
--        for cpe in all_cpedb.findall(".//{http://cpe.mitre.org/dictionary/2.0}cpe-item"):
--            cpe_titles = []
--            for title in cpe.findall('.//{http://cpe.mitre.org/dictionary/2.0}title[@xml:lang="en-US"]', ns):
--                title.tail = None
--                cpe_titles.append(title)
--
--            # Some older CPE don't include references, if they do, make
--            # sure we handle the case of one ref needing to be packed
--            # in a list
--            cpe_ref = cpe.find(".//{http://cpe.mitre.org/dictionary/2.0}references")
--            if cpe_ref:
--                for ref in cpe_ref.findall(".//{http://cpe.mitre.org/dictionary/2.0}reference"):
--                    ref.tail = None
--                    ref.text = ref.text.upper()
--                    if ref.text not in VALID_REFS:
--                        ref.text = ref.text + "-- UPDATE this entry, here are some examples and just one word should be used -- " + ' '.join(VALID_REFS) # noqa E501
--                cpe_ref.tail = None
--                cpe_ref.text = None
--
--            cpe_str = cpe.find(".//{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item").get('name')
--            item = CPE(cpe_str, cpe_titles, cpe_ref)
--            cpe_str_no_version = CPE.no_version(cpe_str)
--            # This dict must have a unique key for every CPE version
--            # which allows matching to the specific obj data of that
--            # NIST dict entry
--            self.all_cpes.update({cpe_str: item})
--            # This dict has one entry for every CPE (w/o version) to allow
--            # partial match (no valid version) check (the obj is saved and
--            # used as seed for suggested xml updates. By updating the same
--            # non-version'd entry, it assumes the last update here is the
--            # latest version in the NIST dict)
--            self.all_cpes_no_version.update({cpe_str_no_version: item})
--
--    def find_partial(self, cpe_str):
--        cpe_str_no_version = CPE.no_version(cpe_str)
--        if cpe_str_no_version in self.all_cpes_no_version:
--            return cpe_str_no_version
--
--    def find_partial_obj(self, cpe_str):
--        cpe_str_no_version = CPE.no_version(cpe_str)
--        if cpe_str_no_version in self.all_cpes_no_version:
--            return self.all_cpes_no_version[cpe_str_no_version]
--
--    def find_partial_latest_version(self, cpe_str_partial):
--        cpe_obj = self.find_partial_obj(cpe_str_partial)
--        return cpe_obj.cpe_cur_ver
--
--    def find(self, cpe_str):
--        if self.find_partial(cpe_str):
--            if cpe_str in self.all_cpes:
--                return cpe_str
--
--    def gen_update_xml(self, cpe_str):
--        cpe = self.find_partial_obj(cpe_str)
--        return cpe.update_xml_dict()
-diff --git a/support/scripts/gen-missing-cpe b/support/scripts/gen-missing-cpe
-deleted file mode 100755
-index 0b222f2659..0000000000
---- a/support/scripts/gen-missing-cpe
-+++ /dev/null
-@@ -1,65 +0,0 @@
--#!/usr/bin/env python3
--
--import argparse
+-import gzip
 -import sys
--import json
--import subprocess
--import os
--from cpedb import CPEDB, CPE
+ import operator
 -
+-try:
+-    import ijson
+-    # backend is a module in < 2.5, a string in >= 2.5
+-    if 'python' in getattr(ijson.backend, '__name__', ijson.backend):
+-        try:
+-            import ijson.backends.yajl2_cffi as ijson
+-        except ImportError:
+-            sys.stderr.write('Warning: Using slow ijson python backend\n')
+-except ImportError:
+-    sys.stderr.write("You need ijson to parse NVD for CVE check\n")
+-    exit(1)
 -
--def gen_update_xml_reports(cpeids, cpedb, output):
--    cpe_need_update = []
+-sys.path.append('utils/')
 -
--    for cpe in cpeids:
--        result = cpedb.find(cpe)
--        if not result:
--            result = cpedb.find_partial(CPE.no_version(cpe))
--            if result:
--                cpe_need_update.append(cpe)
+-NVD_START_YEAR = 2002
+-NVD_JSON_VERSION = "1.1"
+-NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+-
+-ops = {
+-    '>=': operator.ge,
+-    '>': operator.gt,
+-    '<=': operator.le,
+-    '<': operator.lt,
+-    '=': operator.eq
+-}
++from nvd_api_v2 import NVD_API
+ 
+ 
+ # Check if two CPE IDs match each other
+@@ -77,141 +46,32 @@ class CVE:
+     CVE_DOESNT_AFFECT = 2
+     CVE_UNKNOWN = 3
+ 
+-    def __init__(self, nvd_cve):
+-        """Initialize a CVE from its NVD JSON representation"""
+-        self.nvd_cve = nvd_cve
+-
+-    @staticmethod
+-    def download_nvd_year(nvd_path, year):
+-        metaf = "nvdcve-%s-%s.meta" % (NVD_JSON_VERSION, year)
+-        path_metaf = os.path.join(nvd_path, metaf)
+-        jsonf_gz = "nvdcve-%s-%s.json.gz" % (NVD_JSON_VERSION, year)
+-        path_jsonf_gz = os.path.join(nvd_path, jsonf_gz)
+-
+-        # If the database file is less than a day old, we assume the NVD data
+-        # locally available is recent enough.
+-        if os.path.exists(path_jsonf_gz) and os.stat(path_jsonf_gz).st_mtime >= time.time() - 86400:
+-            return path_jsonf_gz
+-
+-        # If not, we download the meta file
+-        url = "%s/%s" % (NVD_BASE_URL, metaf)
+-        print("Getting %s" % url)
+-        page_meta = requests.get(url)
+-        page_meta.raise_for_status()
+-
+-        # If the meta file already existed, we compare the existing
+-        # one with the data newly downloaded. If they are different,
+-        # we need to re-download the database.
+-        # If the database does not exist locally, we need to redownload it in
+-        # any case.
+-        if os.path.exists(path_metaf) and os.path.exists(path_jsonf_gz):
+-            meta_known = open(path_metaf, "r").read()
+-            if page_meta.text == meta_known:
+-                return path_jsonf_gz
+-
+-        # Grab the compressed JSON NVD, and write files to disk
+-        url = "%s/%s" % (NVD_BASE_URL, jsonf_gz)
+-        print("Getting %s" % url)
+-        page_json = requests.get(url)
+-        page_json.raise_for_status()
+-        open(path_jsonf_gz, "wb").write(page_json.content)
+-        open(path_metaf, "w").write(page_meta.text)
+-        return path_jsonf_gz
+-
+-    @classmethod
+-    def read_nvd_dir(cls, nvd_dir):
+-        """
+-        Iterate over all the CVEs contained in NIST Vulnerability Database
+-        feeds since NVD_START_YEAR. If the files are missing or outdated in
+-        nvd_dir, a fresh copy will be downloaded, and kept in .json.gz
+-        """
+-        for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+-            filename = CVE.download_nvd_year(nvd_dir, year)
+-            try:
+-                content = ijson.items(gzip.GzipFile(filename), 'CVE_Items.item')
+-            except:  # noqa: E722
+-                print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
+-                raise
+-            for cve in content:
+-                yield cls(cve)
+-
+-    def each_product(self):
+-        """Iterate over each product section of this cve"""
+-        for vendor in self.nvd_cve['cve']['affects']['vendor']['vendor_data']:
+-            for product in vendor['product']['product_data']:
+-                yield product
+-
+-    def parse_node(self, node):
+-        """
+-        Parse the node inside the configurations section to extract the
+-        cpe information usefull to know if a product is affected by
+-        the CVE. Actually only the product name and the version
+-        descriptor are needed, but we also provide the vendor name.
+-        """
++    ops = {
++        '>=': operator.ge,
++        '>': operator.gt,
++        '<=': operator.le,
++        '<': operator.lt,
++        '=': operator.eq
++    }
+ 
+-        # The node containing the cpe entries matching the CVE can also
+-        # contain sub-nodes, so we need to manage it.
+-        for child in node.get('children', ()):
+-            for parsed_node in self.parse_node(child):
+-                yield parsed_node
+-
+-        for cpe in node.get('cpe_match', ()):
+-            if not cpe['vulnerable']:
+-                return
+-            product = cpe_product(cpe['cpe23Uri'])
+-            version = cpe_version(cpe['cpe23Uri'])
+-            # ignore when product is '-', which means N/A
+-            if product == '-':
+-                return
+-            op_start = ''
+-            op_end = ''
+-            v_start = ''
+-            v_end = ''
+-
+-            if version != '*' and version != '-':
+-                # Version is defined, this is a '=' match
+-                op_start = '='
+-                v_start = version
 -            else:
--                print("WARNING: no match found for '%s'" % cpe)
+-                # Parse start version, end version and operators
+-                if 'versionStartIncluding' in cpe:
+-                    op_start = '>='
+-                    v_start = cpe['versionStartIncluding']
 -
--    for cpe in cpe_need_update:
--        xml = cpedb.gen_update_xml(cpe)
--        fname = CPE.product(cpe) + '-' + CPE.version(cpe) + '.xml'
--        print("Generating %s" % fname)
--        with open(os.path.join(output, fname), 'w+') as fp:
--            fp.write(xml)
+-                if 'versionStartExcluding' in cpe:
+-                    op_start = '>'
+-                    v_start = cpe['versionStartExcluding']
 -
--    print("Generated %d update files out of %d CPEs" % (len(cpe_need_update), len(cpeids)))
+-                if 'versionEndIncluding' in cpe:
+-                    op_end = '<='
+-                    v_end = cpe['versionEndIncluding']
 -
+-                if 'versionEndExcluding' in cpe:
+-                    op_end = '<'
+-                    v_end = cpe['versionEndExcluding']
 -
--def get_cpe_ids():
--    print("Getting list of CPE for enabled packages")
--    cmd = ["make", "--no-print-directory", "show-info"]
--    js = json.loads(subprocess.check_output(cmd).decode("utf-8"))
--    return set([v["cpe-id"] for k, v in js.items() if "cpe-id" in v])
+-            yield {
+-                'id': cpe['cpe23Uri'],
+-                'v_start': v_start,
+-                'op_start': op_start,
+-                'v_end': v_end,
+-                'op_end': op_end
+-            }
 -
+-    def each_cpe(self):
+-        for node in self.nvd_cve['configurations']['nodes']:
+-            for cpe in self.parse_node(node):
+-                yield cpe
++    def __init__(self, nvd_cve):
++        """Initialize a CVE from the database tuple representation"""
++        self.id = nvd_cve[0]
++        self.match_criteria = nvd_cve[2]
++        self.v_start = nvd_cve[3]
++        self.v_end = nvd_cve[4]
++        self.op_start = nvd_cve[5]
++        self.op_end = nvd_cve[6]
+ 
+     @property
+     def identifier(self):
+         """The CVE unique identifier"""
+-        return self.nvd_cve['cve']['CVE_data_meta']['ID']
++        return self.id
+ 
+     @property
+-    def affected_products(self):
+-        """The set of CPE products referred by this CVE definition"""
+-        return set(cpe_product(p['id']) for p in self.each_cpe())
++    def affected_product(self):
++        """Name of the affected product"""
++        return cpe_product(self.match_criteria)
+ 
+     def affects(self, name, version, cve_ignore_list, cpeid=None):
+         """
+@@ -235,39 +95,208 @@ class CVE:
+         else:
+             pkg_version = distutils.version.LooseVersion(cpe_version(cpeid))
+ 
+-        for cpe in self.each_cpe():
+-            if not cpe_matches(cpe['id'], cpeid):
+-                continue
+-            if not cpe['v_start'] and not cpe['v_end']:
+-                return self.CVE_AFFECTS
+-            if not pkg_version:
++        if not cpe_matches(self.match_criteria, cpeid):
++            return self.CVE_DOESNT_AFFECT
++        if not self.v_start and not self.v_end:
++            return self.CVE_AFFECTS
++        if not pkg_version:
++            return self.CVE_DOESNT_AFFECT
++
++        if self.v_start:
++            try:
++                cve_affected_version = distutils.version.LooseVersion(self.v_start)
++                inrange = self.ops.get(self.op_start)(pkg_version, cve_affected_version)
++            except TypeError:
++                return self.CVE_UNKNOWN
++
++            # current package version is before v_start, so we're
++            # not affected by the CVE
++            if not inrange:
++                return self.CVE_DOESNT_AFFECT
++
++        if self.v_end:
++            try:
++                cve_affected_version = distutils.version.LooseVersion(self.v_end)
++                inrange = self.ops.get(self.op_end)(pkg_version, cve_affected_version)
++            except TypeError:
++                return self.CVE_UNKNOWN
++
++            # current package version is after v_end, so we're
++            # not affected by the CVE
++            if not inrange:
++                return self.CVE_DOESNT_AFFECT
++
++        # We're in the version range affected by this CVE
++        return self.CVE_AFFECTS
++
++
++class CVE_API(NVD_API):
++    """Download and manage CVEs in a sqlite database."""
++    def __init__(self, nvd_path):
++        """ Create a new API and database endpoint."""
++        NVD_API.__init__(self, nvd_path, 'CVEs', 'nvdcve')
++
++    def init_db(self):
++        """
++        Create all tables if the are missing.
++        """
++        cursor = self.connection.cursor()
++
++        cursor.execute('CREATE TABLE IF NOT EXISTS cves (\
++            id TEXT UNIQUE, \
++            description TEXT, \
++            metric2 REAL, \
++            metric3 REAL, \
++            severity TEXT)')
++
++        cursor.execute('CREATE TABLE IF NOT EXISTS cpe_matches (\
++            id TEXT UNIQUE, \
++            criteria TEXT, \
++            version_start TEXT, \
++            version_end TEXT, \
++            operator_start TEXT, \
++            operator_end TEXT)')
++
++        cursor.execute('CREATE TABLE IF NOT EXISTS configurations (\
++            cve_id TEXT, \
++            cpe_match_id TEXT, \
++            FOREIGN KEY (cve_id) REFERENCES cve (id) ON DELETE CASCADE, \
++            FOREIGN KEY (cpe_match_id) REFERENCES cpe_match (id) ON DELETE CASCADE, \
++            UNIQUE (cve_id, cpe_match_id))')
++
++        cursor.close()
++
++    def extract_cve_data(self, cve):
++        """Map CVE API data to database fields."""
++        description = ''
++        for d in cve['descriptions']:
++            if d['lang'] == 'en':
++                description = d['value']
++        metric2 = 0.0
++        metric3 = 0.0
++        severity = 'UNKNOWN'
++        if 'cvssMetricV31' in cve['metrics']:
++            metric3 = cve['metrics']['cvssMetricV31'][0]['cvssData']['baseScore']
++            severity = cve['metrics']['cvssMetricV31'][0]['cvssData']['baseSeverity']
++        elif 'cvssMetricV30' in cve['metrics']:
++            metric3 = cve['metrics']['cvssMetricV30'][0]['cvssData']['baseScore']
++            severity = cve['metrics']['cvssMetricV30'][0]['cvssData']['baseSeverity']
++        elif 'cvssMetricV2' in cve['metrics']:
++            metric2 = cve['metrics']['cvssMetricV2'][0]['cvssData']['baseScore']
++            severity = cve['metrics']['cvssMetricV2'][0]['baseSeverity']
++
++        return [cve['id'], description, metric2, metric3, severity]
++
++    def extract_cpe_match_data(self, cpe_match):
++        """Map CPE match information to database fields."""
++        product = cpe_product(cpe_match['criteria'])
++        version = cpe_version(cpe_match['criteria'])
++        # ignore when product is '-', which means N/A
++        if product == '-':
++            return
++        op_start = ''
++        op_end = ''
++        v_start = ''
++        v_end = ''
++
++        if version != '*' and version != '-':
++            # Version is defined, this is a '=' match
++            op_start = '='
++            v_start = version
++        else:
++            # Parse start version, end version and operators
++            if 'versionStartIncluding' in cpe_match:
++                op_start = '>='
++                v_start = cpe_match['versionStartIncluding']
++
++            if 'versionStartExcluding' in cpe_match:
++                op_start = '>'
++                v_start = cpe_match['versionStartExcluding']
++
++            if 'versionEndIncluding' in cpe_match:
++                op_end = '<='
++                v_end = cpe_match['versionEndIncluding']
++
++            if 'versionEndExcluding' in cpe_match:
++                op_end = '<'
++                v_end = cpe_match['versionEndExcluding']
++
++        return [
++            cpe_match['matchCriteriaId'],
++            cpe_match['criteria'],
++            v_start,
++            v_end,
++            op_start,
++            op_end
++        ]
++
++    def save_to_db(self, start_index, total_results, content):
++        """
++        Save the response of a single API request to the database
++        and report the progress.
++        """
++        cve_ids_changed = list()
++        cve_ids_dropped = list()
++        cves = list()
++        cpe_matches = list()
++        configurations = list()
++
++        for vul in content['vulnerabilities']:
++            if vul['cve']['vulnStatus'] == 'Rejected':
++                cve_ids_dropped.append((vul['cve']['id'],))
+                 continue
+ 
+-            if cpe['v_start']:
+-                try:
+-                    cve_affected_version = distutils.version.LooseVersion(cpe['v_start'])
+-                    inrange = ops.get(cpe['op_start'])(pkg_version, cve_affected_version)
+-                except TypeError:
+-                    return self.CVE_UNKNOWN
 -
--def resolvepath(path):
--    return os.path.abspath(os.path.expanduser(path))
+-                # current package version is before v_start, so we're
+-                # not affected by the CVE
+-                if not inrange:
+-                    continue
 -
+-            if cpe['v_end']:
+-                try:
+-                    cve_affected_version = distutils.version.LooseVersion(cpe['v_end'])
+-                    inrange = ops.get(cpe['op_end'])(pkg_version, cve_affected_version)
+-                except TypeError:
+-                    return self.CVE_UNKNOWN
 -
--def parse_args():
--    parser = argparse.ArgumentParser()
--    parser.add_argument('--output', dest='output',
--                        help='Path to the output CPE update files', type=resolvepath, required=True)
--    parser.add_argument('--nvd-path', dest='nvd_path',
--                        help='Path to the local NVD database', type=resolvepath, required=True)
--    return parser.parse_args()
+-                # current package version is after v_end, so we're
+-                # not affected by the CVE
+-                if not inrange:
+-                    continue
 -
--
--def __main__():
--    args = parse_args()
--    if not os.path.isdir(args.output):
--        print("ERROR: output directory %s does not exist" % args.output)
--        sys.exit(1)
--    cpedb = CPEDB(args.nvd_path)
--    cpedb.get_xml_dict()
--    cpeids = get_cpe_ids()
--    gen_update_xml_reports(cpeids, cpedb, args.output)
--
--
--if __name__ == "__main__":
--    __main__()
+-            # We're in the version range affected by this CVE
+-            return self.CVE_AFFECTS
++            cve_ids_changed.append((vul['cve']['id'],))
++            cves.append(self.extract_cve_data(vul['cve']))
++
++            for config in vul['cve'].get('configurations', ()):
++                for node in config['nodes']:
++                    for cpe_match in node['cpeMatch']:
++                        if not cpe_match['vulnerable']:
++                            continue
++                        match_data = self.extract_cpe_match_data(cpe_match)
++                        if not match_data:
++                            continue
++                        cpe_matches.append(match_data)
++                        configurations.append([vul['cve']['id'], match_data[0]])
++
++        cursor = self.connection.cursor()
++
++        # Drop all CVEs that are rejected, status might have changed
++        cursor.executemany('DELETE FROM cves WHERE id = ?', cve_ids_dropped)
++        # Delete configuration mapping for included CVEs, otherwise we can't detect
++        # upstream dropping configurations.
++        cursor.executemany('DELETE FROM configurations WHERE cve_id = ?', cve_ids_changed)
++        cursor.executemany('INSERT OR REPLACE INTO cves VALUES (?, ?, ?, ?, ?)', cves)
++        cursor.executemany('INSERT OR REPLACE INTO cpe_matches VALUES (?, ?, ?, ?, ?, ?)', cpe_matches)
++        cursor.executemany('INSERT OR REPLACE INTO configurations VALUES (?, ?)', configurations)
++
++        cursor.close()
+ 
+-        return self.CVE_DOESNT_AFFECT
++        print("[%06d/%06d]" % (start_index, total_results))
++
++        return True
++
++    def load_all(self):
++        """
++        Load all entries from the database and use CVE class
++        to yield each result individually.
++        Each yielded object represents one configuration that
++        the included CVE is vulnerable for.
++        """
++        self.check_for_updates()
++
++        self.connection = self.open_db()
++        cursor = self.connection.cursor()
++        sql = 'SELECT c.id as cve_id, m.id, m.criteria, m.version_start, m.version_end, \
++            m.operator_start, m.operator_end \
++            FROM configurations \
++            INNER JOIN cves AS c ON c.id = configurations.cve_id \
++            INNER JOIN cpe_matches AS m ON m.id = configurations.cpe_match_id \
++            ORDER BY cve_id'
++
++        for row in cursor.execute(sql):
++            yield CVE(row)
++
++        cursor.close()
++        self.connection.close()
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index c124b8a9cf..3cb9da6a0b 100755
+index 3cb9da6a0b..7be4ad9853 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -37,10 +37,10 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
+@@ -32,6 +32,7 @@ import time
+ import gzip
+ import xml.etree.ElementTree
+ import requests
++from cve import CVE_API, cpe_product
  
- sys.path.append(os.path.join(brpath, "utils"))
- from getdeveloperlib import parse_developers  # noqa: E402
--from cpedb import CPEDB_URL  # noqa: E402
+ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
  
- INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
- URL_RE = re.compile(r"\s*https?://\S*\s*$")
-+CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
+@@ -607,15 +608,17 @@ async def check_package_latest_version(packages):
  
- RM_API_STATUS_ERROR = 1
- RM_API_STATUS_FOUND_BY_DISTRO = 2
+ 
+ def check_package_cve_affects(cve, cpe_product_pkgs):
+-    for product in cve.affected_products:
+-        if product not in cpe_product_pkgs:
++    product = cve.affected_product
++    if product not in cpe_product_pkgs:
++        return
++    for pkg in cpe_product_pkgs[product]:
++        if cve.identifier in pkg.cves or cve.identifier in pkg.unsure_cves:
+             continue
+-        for pkg in cpe_product_pkgs[product]:
+-            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid)
+-            if cve_status == cve.CVE_AFFECTS:
+-                pkg.cves.append(cve.identifier)
+-            elif cve_status == cve.CVE_UNKNOWN:
+-                pkg.unsure_cves.append(cve.identifier)
++        cve_status = cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid)
++        if cve_status == cve.CVE_AFFECTS:
++            pkg.cves.append(cve.identifier)
++        elif cve_status == cve.CVE_UNKNOWN:
++            pkg.unsure_cves.append(cve.identifier)
+ 
+ 
+ def check_package_cves(nvd_path, packages):
+@@ -631,12 +634,13 @@ def check_package_cves(nvd_path, packages):
+             pkg.status['cve'] = ("na", "no version information available")
+             continue
+         if pkg.cpeid:
+-            cpe_product = cvecheck.cpe_product(pkg.cpeid)
+-            cpe_product_pkgs[cpe_product].append(pkg)
++            product = cpe_product(pkg.cpeid)
++            cpe_product_pkgs[product].append(pkg)
+         else:
+             cpe_product_pkgs[pkg.name].append(pkg)
+ 
+-    for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
++    cve_api = CVE_API(nvd_path)
++    for cve in cve_api.load_all():
+         check_package_cve_affects(cve, cpe_product_pkgs)
+ 
+     for pkg in packages:
+@@ -1285,13 +1289,8 @@ def parse_args():
+ 
+ 
+ def __main__():
+-    global cvecheck
+-
+     args = parse_args()
+ 
+-    if args.nvd_path:
+-        import cve as cvecheck
+-
+     show_info_js = None
+     if args.packages:
+         package_list = args.packages.split(",")
 -- 
 2.41.0
 
