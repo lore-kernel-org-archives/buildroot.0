@@ -4,57 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7277CEB64DD
-	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 13:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADBD0C001DB
+	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 16:07:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F9578175C;
-	Sun, 13 Aug 2023 13:27:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F9578175C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E9B281494;
+	Sun, 13 Aug 2023 16:07:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E9B281494
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id em6ZRz_VPkgI; Sun, 13 Aug 2023 13:27:34 +0000 (UTC)
+	with ESMTP id fMP3A_xeZmhZ; Sun, 13 Aug 2023 16:07:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B13081499;
-	Sun, 13 Aug 2023 13:27:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B13081499
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16D2881498;
+	Sun, 13 Aug 2023 16:07:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16D2881498
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 793901BF418
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 13:27:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AF1281BF293
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 16:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3094181499
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 13:27:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3094181499
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8825B81498
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 16:07:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8825B81498
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2CmZaSm1WzLC for <buildroot@lists.busybox.net>;
- Sun, 13 Aug 2023 13:27:30 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96A8B81498
- for <buildroot@buildroot.org>; Sun, 13 Aug 2023 13:27:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96A8B81498
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id A7E023520C2A; Sun, 13 Aug 2023 15:27:27 +0200 (CEST)
-Date: Sun, 13 Aug 2023 15:27:27 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ with ESMTP id 5bOjO0P3flls for <buildroot@lists.busybox.net>;
+ Sun, 13 Aug 2023 16:07:03 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB54681494
+ for <buildroot@buildroot.org>; Sun, 13 Aug 2023 16:07:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB54681494
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 91CA885C6F; Sun, 13 Aug 2023 16:07:03 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <ZNjaP1+VWZznRgtI@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1691933247; bh=ZnSKaBczDIGp4JN8GMGQJir8kQ3XNUfwEr1HKohIrBY=;
- h=Date:From:To:Subject:From;
- b=s5CORSKyZRpJ6PMl9P0LVPvHRK4ejUSaVosPlX12rj+LCxKjjeHvx2OrIODq4BH5B
- MZYGvcgfPwEnhFWL+E5ga1ieME9tGqQiIT30kg3HL/tw9TDsxexVnjZmcjc8oDF+Li
- K8HiezAPnqi8sQEYZuNjfB48phUx2Zd7LLrSTnhKhTesyHll4JaQZuX1rEYWKV+TVT
- k5R0J2WhGEUmepeHRA862KeKgzT5bXWHccFBVhepE9ufvKqMvJR/KXR+P0qRabs5jb
- ze3zUzmFhZjVxRGiCm6iTEJZnClAy8yaOoZdhW2N2x6MyLxdc1l2fFm6s6UmkZ35Hr
- NhiNNJP7Uy+8A==
-Subject: [Buildroot] [PATCH/next] package/libxcrypt: bump version to 4.4.36
+Date: Sun, 13 Aug 2023 17:51:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f3fab0defe8fa9e1d99e4a89ddb29776e3bdd7fd
+X-Git-Newrev: eed1670d8a6f0899f5fdfc26bd6d1609ebc19c7a
+X-Patchwork-Hint: ignore
+Message-Id: <20230813160703.91CA885C6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/toolchain-external: add
+ BR2_ARCH_NEEDS_GCC_AT_LEAST_X guards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,46 +57,230 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the NEWS here:
-https://github.com/besser82/libxcrypt/blob/develop/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=eed1670d8a6f0899f5fdfc26bd6d1609ebc19c7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Previously, it was possible to select an external toolchain that did not
+support the GCC arch tuning the user had selected. This is problematic
+because it can lead to confusing error messages during builds [0].
+
+Now, external toolchain selections will be filtered to only those that
+support the required GCC version specified by the target arch tuning.
+
+Note: this patch does not touch the Bootlin toolchain config file as it
+is generated by a script.
+
+Additional note: there is "soft" support for toolchains prior to GCC 4.8
+but there are no accompanying BR2_ARCH_NEEDS_GCC_AT_LEAST_X symbols.
+Instead of adding those, just use BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8 which
+is the minimum GCC version with claimed support [1].
+
+[0]: https://lists.buildroot.org/pipermail/buildroot/2023-August/671877.html
+[1]: https://buildroot.org/downloads/manual/manual.html#requirement-mandatory
+
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libxcrypt/libxcrypt.hash | 2 +-
- package/libxcrypt/libxcrypt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../toolchain-external-arm-aarch64-be/Config.in          |  1 +
+ .../toolchain-external-arm-aarch64/Config.in             |  1 +
+ .../toolchain-external-arm-arm/Config.in                 |  1 +
+ .../toolchain-external-custom/Config.in.options          | 16 ++++++++++++++++
+ .../toolchain-external-linaro-aarch64-be/Config.in       |  1 +
+ .../toolchain-external-linaro-aarch64/Config.in          |  1 +
+ .../toolchain-external-linaro-arm/Config.in              |  1 +
+ .../toolchain-external-linaro-armeb/Config.in            |  1 +
+ .../toolchain-external-synopsys-arc/Config.in            |  1 +
+ 9 files changed, 24 insertions(+)
 
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-index c13685e463..f021436b71 100644
---- a/package/libxcrypt/libxcrypt.hash
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  0a0c06bcd028fd0f0467f89f6a451112e8ec97c36e0f58e7464449a4c04607ed  libxcrypt-4.4.33.tar.gz
-+sha256  b979838d5f1f238869d467484793b72b8bca64c4eae696fdbba0a9e0b6c28453  libxcrypt-4.4.36.tar.gz
- sha256  f9b48b0bc67a92b752780710aa774cf08b62ec2ebaa3f4aebd00069fba6effd2  LICENSING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-index 079445e489..9ad030fbd2 100644
---- a/package/libxcrypt/libxcrypt.mk
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+index 62e5ea8667..466b1587c3 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
+ 	bool "Arm AArch64 BE 12.2.rel1"
+ 	depends on BR2_aarch64_be
+ 	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index 0c2e64192d..fc62b759e5 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+ 	bool "Arm AArch64 12.2.rel1"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 4aab41693d..9b314795cb 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -9,6 +9,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	depends on BR2_ARM_CPU_HAS_NEON
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
+ 	depends on BR2_ARM_EABIHF
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index d82c9b8a41..0f4f5eef2e 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -52,66 +52,82 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_13
  
--LIBXCRYPT_VERSION = 4.4.33
-+LIBXCRYPT_VERSION = 4.4.36
- LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
- LIBXCRYPT_LICENSE = LGPL-2.1+
- LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
--- 
-2.39.2
-
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_12
+ 	bool "12.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_11
+ 	bool "11.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_12
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_10
+ 	bool "10.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_11
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_9
+ 	bool "9.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_8
+ 	bool "8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 	bool "7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+ 	bool "6.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+ 	bool "5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+ 	bool "4.9.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+ 	bool "4.8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+ 	bool "4.7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+ 	bool "4.6.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+ 	bool "4.5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+ 	bool "4.4.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+ 	bool "older"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	help
+ 	  Use this option if your GCC version is older than any of the
+ 	  above.
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
+index 53d5dfd8f2..295a8987f1 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
+ 	bool "Linaro AArch64 BE 2018.05"
+ 	depends on BR2_aarch64_be
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+index c9b84b1d30..1b0ec7cd9f 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	bool "Linaro AArch64 2018.05"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+index 015e92f17c..8b3b4c844e 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABIHF
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+index b338a72bff..b143ee5e24 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABIHF
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index c3483f331c..985e7b1710 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	bool "Synopsys ARC 2019.09 toolchain"
+ 	depends on BR2_arc
+ 	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_ENABLE_LOCALE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
