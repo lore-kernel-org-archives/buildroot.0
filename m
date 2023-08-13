@@ -4,86 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A2CBC001B0
-	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 04:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE214C001DB
+	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 04:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAD734034F;
-	Sun, 13 Aug 2023 04:48:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAD734034F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 511404054E;
+	Sun, 13 Aug 2023 04:59:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 511404054E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WUX-GTpGUEa2; Sun, 13 Aug 2023 04:48:14 +0000 (UTC)
+	with ESMTP id BSgWTVwN_vHv; Sun, 13 Aug 2023 04:59:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61FE1403CC;
-	Sun, 13 Aug 2023 04:48:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61FE1403CC
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0AC8C1BF2B1
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 04:48:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55F0E40600;
+	Sun, 13 Aug 2023 04:59:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55F0E40600
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C7ED61BF21A
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 04:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D67FA4031B
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 04:48:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D67FA4031B
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEFA981842
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 04:59:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEFA981842
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 80vSTG0xrpge for <buildroot@lists.busybox.net>;
- Sun, 13 Aug 2023 04:48:09 +0000 (UTC)
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com
- [IPv6:2607:f8b0:4864:20::22b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B492040285
- for <buildroot@buildroot.org>; Sun, 13 Aug 2023 04:48:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B492040285
-Received: by mail-oi1-x22b.google.com with SMTP id
- 5614622812f47-3a78a2c0f81so2827876b6e.0
- for <buildroot@buildroot.org>; Sat, 12 Aug 2023 21:48:09 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IF-dH2uie2Uu for <buildroot@lists.busybox.net>;
+ Sun, 13 Aug 2023 04:59:20 +0000 (UTC)
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 62A2C81839
+ for <buildroot@buildroot.org>; Sun, 13 Aug 2023 04:59:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62A2C81839
+Received: by mail-oi1-x22c.google.com with SMTP id
+ 5614622812f47-3a43cbb432aso2731155b6e.3
+ for <buildroot@buildroot.org>; Sat, 12 Aug 2023 21:59:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691902088; x=1692506888;
+ d=1e100.net; s=20221208; t=1691902759; x=1692507559;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=gqGTOQp8yTnlHplTa/RmGdZfNiv3R6c4Y3gROnpY0TM=;
- b=kZMt2KVb8bvD8CzPYlaAvCeM8SKtOd7/CnsNX9iiFrquHcaYHAcmBHGhxEnbl6AZmF
- jT1BjxE8I6QJsGNsGb6rAxydQLgMCnH1FSgIsLrgJFHOH/YQBrMZe1DxHETnFTRhaA0a
- x7nbrmGFk7IX1ylm9py58RZdaalSXdXq4lRwhv8UeKlhu7nf/RWpvP5wnakvf/80+D9J
- cJnti68OAjkWpahwyZIcEa9ULTb7ljafOklA16/bdMgzeLCB2kLVi/Oszx37iEczdALF
- L6HPIs0Suhc/y9jm2cDesdV2OzPW0NcVy5SYnhhVSYJYw/FXbYXJmjldlJLNgY45P6Iv
- tyYw==
-X-Gm-Message-State: AOJu0YysLYJOFu3ovWJxvFE6TPdn+46yw8qVMBeByFV/yKeuUth5CQJl
- y+Wt0VZvvFo7OmUogHgd04VrucfSM+gPYg==
-X-Google-Smtp-Source: AGHT+IEsKVx2yp+YebNhqVs5a1yZA23dvIXr1NYlIkYwYXmtXQTPByfq+4Nc2GWDmEWT9kIYYkOKWQ==
-X-Received: by 2002:a05:6808:1312:b0:3a2:f91a:cb08 with SMTP id
- y18-20020a056808131200b003a2f91acb08mr8341990oiv.42.1691902087303; 
- Sat, 12 Aug 2023 21:48:07 -0700 (PDT)
+ bh=Rbbg+ZQ3DH11FbTx5BGh3MEEgE8jFqeBIeY0ko1eCdw=;
+ b=XiLdaGMtbQaqhlwK5kfdvVML0lqRNkVNleCCSvKKUGuPdVS8C5LfZ8M4cSLQhEJ3tG
+ UIZAM3yFlPscVvfNLMGc+U/Uqmti5AJ0V72LQCmoRksEimgPLnmX1+NiYlg3r5/zvZS+
+ 3/kcXYXu04zlcRNvEMjw4onk2hHQdOiA4R528Zl9nWYdA1z+Iv60vmBMWq8kDxJAkUvr
+ B8SO3zyt8fHxBVnKyPelvOA7W9jyZ+oJ2pnw+IwEsSE/Jq5jPBLc/6GZ70jzHjV+T0GU
+ PNCNvD3UULVdU3ZiMJx+YuMj4uQj7asTNspzhD7SHeZuX+ckmBroUAe2m12XQwOhTyic
+ lEXg==
+X-Gm-Message-State: AOJu0YxRYGR8OuiC6GaTDGfxvkDOEiEqGvXg+x6Bp2qWe+UpmCmbUdHx
+ hv9Lf9KWxm1i+6hbtg+SL5/kGI7vVHw=
+X-Google-Smtp-Source: AGHT+IHke4dgT6HoPWIXWNBvC0zC0GovpjpMErA024WhXFy1M6PGIOT4Tgl8ByLzUAHt+iA88+In8w==
+X-Received: by 2002:a05:6808:234c:b0:3a4:39e5:5c69 with SMTP id
+ ef12-20020a056808234c00b003a439e55c69mr6262445oib.53.1691902758753; 
+ Sat, 12 Aug 2023 21:59:18 -0700 (PDT)
 Received: from localhost.localdomain
  (76-250-43-185.lightspeed.mdsnwi.sbcglobal.net. [76.250.43.185])
  by smtp.gmail.com with ESMTPSA id
- y5-20020a4aaa45000000b0055975f57993sm3086715oom.42.2023.08.12.21.48.03
+ o8-20020a0568080bc800b003a75593746asm3326127oik.57.2023.08.12.21.59.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 12 Aug 2023 21:48:06 -0700 (PDT)
+ Sat, 12 Aug 2023 21:59:18 -0700 (PDT)
 From: Vincent Fazio <vfazio@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 23:47:50 -0500
-Message-Id: <20230813044750.5567-1-vfazio@gmail.com>
+Date: Sat, 12 Aug 2023 23:59:12 -0500
+Message-Id: <20230813045912.10404-1-vfazio@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691902088; x=1692506888;
+ d=gmail.com; s=20221208; t=1691902759; x=1692507559;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gqGTOQp8yTnlHplTa/RmGdZfNiv3R6c4Y3gROnpY0TM=;
- b=grzWvq3dZTih9DzjyX2qL3qdIcafu0KQUF/mABJan00ypYP9zj9akj6FhR3BHlCbf7
- UJZeJebUqNQfvA/2EyPJla1iZWF5h1k57bR5SIW1sAMXsHijxk5x1Ve9990Z2pxIHFrO
- ePF8CnABP97OjF2weq9U74jS0rpGUywpJAen431P3wNIciqz8ooF7EdZAfBFH/3xqImC
- PaMb2qAKJZshvvPUVJfDlSPmmwutIv638ACaGaSg147NdESR+me0h8noX+e1Gh6mv2Nq
- iryweTnLsC9RRYdzWHtsf+mjBXBsiZd3NYpdzTzapQq8wtpW4XsfL75LwyXHi+IdXReN
- LmZg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Rbbg+ZQ3DH11FbTx5BGh3MEEgE8jFqeBIeY0ko1eCdw=;
+ b=gQuaJR5ho89OVdqmCo1G/KwVMZkgW74DEFc6KqAtdSJTEWgkjlyZe5rIZ3rAaBWbbV
+ cLUNFccfSHNeg0X1cgSH1K98ozMzVdS3JOTkCS7AaixIy8LLReg/glRvFwOQrm2JWoji
+ PXeoAXzTUku6Nn2EcBr1/+nrB5yu4Dwbt6DSElCFGjKxFFvQ6IcXEfWFq4G9g+U0J0sq
+ 7lvKegoeVywoN/XGZODLQLWaPKEsksAt0LXTRGd3syNMRUv/ABzz4Um3G+Wb/8yXqSp4
+ 4guX/7Vfy5kPlIQB93YKt3fkZB6zdLrY/5Ij3E4sHkTSquzDLnQKS0+f74w1I1tNr9wo
+ 0R9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=grzWvq3d
-Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-external: add
- BR2_ARCH_NEEDS_GCC_AT_LEAST_X guards
+ header.a=rsa-sha256 header.s=20221208 header.b=gQuaJR5h
+Subject: [Buildroot] [PATCH 1/1] support/scripts/gen-bootlin-toolchains:
+ generate BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,229 +95,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Vincent Fazio <vfazio@gmail.com>
+Cc: Vincent Fazio <vfazio@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Previously, it was possible to select an external toolchain that did not
-support the GCC arch tuning the user had selected. This is problematic
-because it can lead to confusing error messages during builds [0].
+Previously, gen-bootlin-toolchains did not add a `depends` guard to
+limit the available toolchains based on the minimum required GCC version
+for the user selected CPU tuning.
 
-Now, external toolchain selections will be filtered to only those that
-support the required GCC version specified by the target arch tuning.
-
-Note: this patch does not touch the Bootlin toolchain config file as it
-is generated by a script.
-
-Additional note: there is "soft" support for toolchains prior to GCC 4.8
-but there are no accompanying BR2_ARCH_NEEDS_GCC_AT_LEAST_X symbols.
-Instead of adding those, just use BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8 which
-is the minimum GCC version with claimed support [1].
-
-[0]: https://lists.buildroot.org/pipermail/buildroot/2023-August/671877.html
-[1]: https://buildroot.org/downloads/manual/manual.html#requirement-mandatory
+Now, the proper BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard will be added based
+on the version of GCC provided by the toolchain.
 
 Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 ---
- .../toolchain-external-arm-aarch64-be/Config.in  |  1 +
- .../toolchain-external-arm-aarch64/Config.in     |  1 +
- .../toolchain-external-arm-arm/Config.in         |  1 +
- .../toolchain-external-custom/Config.in.options  | 16 ++++++++++++++++
- .../Config.in                                    |  1 +
- .../toolchain-external-linaro-aarch64/Config.in  |  1 +
- .../toolchain-external-linaro-arm/Config.in      |  1 +
- .../toolchain-external-linaro-armeb/Config.in    |  1 +
- .../toolchain-external-synopsys-arc/Config.in    |  1 +
- 9 files changed, 24 insertions(+)
+ support/scripts/gen-bootlin-toolchains | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-index 62e5ea8667..466b1587c3 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
-@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
- 	bool "Arm AArch64 BE 12.2.rel1"
- 	depends on BR2_aarch64_be
- 	depends on BR2_HOSTARCH = "x86_64"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-index 0c2e64192d..fc62b759e5 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
-@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
- 	bool "Arm AArch64 12.2.rel1"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index 4aab41693d..9b314795cb 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -9,6 +9,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	depends on BR2_ARM_CPU_HAS_NEON
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
- 	depends on BR2_ARM_EABIHF
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index d82c9b8a41..0f4f5eef2e 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -52,66 +52,82 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_13
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index 23ebfbdce9..4344221213 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -338,6 +338,8 @@ class Toolchain:
+                 m = re.match("^BR2_TOOLCHAIN_EXTERNAL_GCC_([0-9_]*)=y$", frag)
+                 assert m, "Cannot get gcc version for toolchain %s" % self.fname_prefix
+                 selects.append("BR2_TOOLCHAIN_GCC_AT_LEAST_%s" % m[1])
++                # respect the GCC requirement for the selected CPU/arch tuning
++                depends.append("!BR2_ARCH_NEEDS_GCC_AT_LEAST_%s" % str(int(m[1]) + 1))
  
- config BR2_TOOLCHAIN_EXTERNAL_GCC_12
- 	bool "12.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_11
- 	bool "11.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_12
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_10
- 	bool "10.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_11
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_9
- 	bool "9.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_8
- 	bool "8.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_7
- 	bool "7.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_6
- 	bool "6.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_5
- 	bool "5.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
- 	bool "4.9.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
- 	bool "4.8.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
- 	bool "4.7.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
- 	bool "4.6.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
- 	bool "4.5.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
- 	bool "4.4.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
- 	bool "4.3.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
- 	bool "older"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	help
- 	  Use this option if your GCC version is older than any of the
- 	  above.
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
-index 53d5dfd8f2..295a8987f1 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
-@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
- 	bool "Linaro AArch64 BE 2018.05"
- 	depends on BR2_aarch64_be
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-index c9b84b1d30..1b0ec7cd9f 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
-@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	bool "Linaro AArch64 2018.05"
- 	depends on BR2_aarch64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-index 015e92f17c..8b3b4c844e 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
-@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-index b338a72bff..b143ee5e24 100644
---- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
-@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABIHF
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-index c3483f331c..985e7b1710 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	bool "Synopsys ARC 2019.09 toolchain"
- 	depends on BR2_arc
- 	depends on BR2_HOSTARCH = "x86_64"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_ENABLE_LOCALE
+             # kernel headers version
+             if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HEADERS_"):
 -- 
 2.25.1
 
