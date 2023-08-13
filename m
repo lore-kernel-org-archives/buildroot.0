@@ -4,57 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FFC9C001DB
-	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 07:23:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C389FC001B0
+	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 07:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCEA6813F5;
-	Sun, 13 Aug 2023 07:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCEA6813F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A6F781434;
+	Sun, 13 Aug 2023 07:34:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6F781434
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bH0HqW96jkTf; Sun, 13 Aug 2023 07:23:51 +0000 (UTC)
+	with ESMTP id ROzZC41D5E6O; Sun, 13 Aug 2023 07:34:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A36D813C6;
-	Sun, 13 Aug 2023 07:23:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A36D813C6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6984D81435;
+	Sun, 13 Aug 2023 07:34:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6984D81435
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 26D711BF470
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:23:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 64F0B1BF470
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E717A60B1B
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:23:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E717A60B1B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3E58C60EE2
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:34:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E58C60EE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UkSXYDso4gVT for <buildroot@lists.busybox.net>;
- Sun, 13 Aug 2023 07:23:47 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E3D0260808
- for <buildroot@buildroot.org>; Sun, 13 Aug 2023 07:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3D0260808
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id CF292352BD3A; Sun, 13 Aug 2023 09:23:44 +0200 (CEST)
-Date: Sun, 13 Aug 2023 09:23:44 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZNiFAM4q72gwMume@waldemar-brodkorb.de>
+ with ESMTP id anjwhE3P1ljU for <buildroot@lists.busybox.net>;
+ Sun, 13 Aug 2023 07:34:10 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C15CD60E38
+ for <buildroot@buildroot.org>; Sun, 13 Aug 2023 07:34:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C15CD60E38
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:13dc:fe9:8e15:e643])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9175F780377;
+ Sun, 13 Aug 2023 09:34:05 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 13 Aug 2023 09:34:05 +0200
+Date: Sun, 13 Aug 2023 09:34:05 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francis Laniel <flaniel@linux.microsoft.com>
+Message-ID: <20230813073405.GU421096@scaer>
+References: <20230811152710.43564-1-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+In-Reply-To: <20230811152710.43564-1-flaniel@linux.microsoft.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1691911424; bh=B7A9iAQxHwL+ZfAPfXf5XsfskB84T+LEBmCVT4TKZEM=;
- h=Date:From:To:Cc:Subject:From;
- b=GnJeJ2MsAt6p2tEFYHL5Px1hJF/q+OK1ee3f/Kg9iZMoEIcyW/7r/9K/Tm0pjLtL+
- 0kpjJ+oRMv8SxsS5L6LBpWjaG2l6YbCd9kRo755tH2uVLpdA9cYNCz1mm2M3XfEEnm
- GWmDrkwVJ9lA8fMLQe1rt2A8sO93fDEewxgUE+8p+tCfABLMxhCTkJq+ilP3En5t33
- Kd4s2KVXMI/EJpYu+KhUXKXYB55MXkHh05R0vWX2Oopzbr83GclMSx9DiRTehm6g5Z
- gJCqIRiPVhDHMQd9RJ5dskJnLrpbzgcxx6ep+JywrVqi7AOg2cTvT21tHl37Qf3t+d
- RnTksUjMXniJA==
-Subject: [Buildroot] [PATCH 2/2] package/tcf-agent: fix uClibc-ng compile on
- ARM
+ d=free.fr; s=smtp-20201208; t=1691912047;
+ bh=XeMP9SWGbtwM+vfCUxHflP+6egmoL9EumC4cPzyPUR4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=u89YRDdnNhHNQ44b/mQkASsTdCxDi9rzygi8Qk4raUExPa73ZB/cC0WLifRlMBRLb
+ 4+d0fnLLdZOPXgp8qOqedvI2jpV2s2naCvKK2l4zF1DNeahiy7y7TkLu/zzXvbr9YZ
+ m0X9u3xY3p5ujXscYyo83hRuUt8HTtpl9UEdN4vDEZYYCgPwFKFvjbaLEgZknwBHg0
+ xDsuoA5DUJrsT7bzobb2vuekPOhIa9yCMGXJwvX0SjEPj36xptBoyGCrPJUuWBF8KZ
+ am0TxootbKlPKFa6WxWzXwv4GeDAkpgsbn0P6kjCNSnoZwJJoGQSNkhFxaF1WZrF/h
+ msj/rNGdyDYFA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=u89YRDdn
+Subject: Re: [Buildroot] [RFC PATCH v2 0/3] Bump sysdig and falco libs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,81 +75,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When a shared build is used, we can use getauxval and no ARM only
-instuctions are in use.
+Francis, All,
 
-When a static build is used, we need to override, as uClibc-ng only
-supports getauxval for shared case.
+On 2023-08-11 17:27 +0200, Francis Laniel spake thusly:
+> With this contribution, I bumped sysdig and falcosecurity-libs.
+> Sadly, I am not fully satisfied with the result, hence the fact I marked it as
+> RFC because I would like to get your feedback to make it better.
+> 
+> First of all, sysdig builds and runs:
+> Welcome to Buildroot
+> buildroot login: root
+> # sysdig --version
+> sysdig version 0.31.4
+> # sysdig | head
+> scap: loading out-of-tree module taints kernel.
+> scap: driver loading, scap
+> scap: adding new consumer (____ptrval____)
+> scap: initializing ring buffer for CPU 0
+> scap: CPU buffer initialized, size=8388608
+> 26 15:12:28.226519423 0 sysdig (108) > switch next=0 pgft_maj=10 pgft_min=1348 vm_size=47288 vm_rss=19408 vm_swap=0
+> 27 15:12:28.227409149 0 <NA> (0) > switch next=13 pgft_maj=0 pgft_min=0 vm_size=0 vm_rss=0 vm_swap=0
+> ...
+> 
+> Nonetheless, I had to increase the minimal size of the image as libsinsp.a is
+> quite big:
+> # du -sh /sysdig/libsinsp.a
+> 171.4M  /sysdig/libsinsp.a
+> I am not forcefully sure where this library is used, I will investigate and
+> maybe we can run everything without it.
 
-Fixes:
- - http://autobuild.buildroot.net/results/3b5/3b5c5519a3e5ee490308bc1a1b9579ce13417235
+There is no need to have static libs (.a files) on the target, as static
+libs are only used at linking phase, which happens on the build machine.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- .../0001-fix-uClibc-ng-compile.patch          | 27 +++++++++++++++++++
- package/tcf-agent/tcf-agent.mk                |  6 +++++
- 2 files changed, 33 insertions(+)
- create mode 100644 package/tcf-agent/0001-fix-uClibc-ng-compile.patch
+So, unless sysdig embeds a linker and generates an executalbe from
+those, it should be safe to remove.
 
-diff --git a/package/tcf-agent/0001-fix-uClibc-ng-compile.patch b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-new file mode 100644
-index 0000000000..b8f46f3c48
---- /dev/null
-+++ b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-@@ -0,0 +1,27 @@
-+From a78007cd139e1dea3d893f5fe1d1c3a47503e6a2 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 12 Aug 2023 18:27:02 +0200
-+Subject: [PATCH] fix uClibc-ng compile
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: N/A only mail available
-+---
-+ agent/machine/arm/tcf/cpudefs-mdep.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/agent/machine/arm/tcf/cpudefs-mdep.c b/agent/machine/arm/tcf/cpudefs-mdep.c
-+index 051631a0..7c4fbf3e 100644
-+--- a/agent/machine/arm/tcf/cpudefs-mdep.c
-++++ b/agent/machine/arm/tcf/cpudefs-mdep.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifndef USE_getauxval
-+ #  include <features.h>
-+-#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)))
-++#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) && defined(__HAVE_SHARED__)))
-+ #endif
-+ 
-+ #include <stddef.h>
-+-- 
-+2.39.2
-+
-diff --git a/package/tcf-agent/tcf-agent.mk b/package/tcf-agent/tcf-agent.mk
-index 2b8a61b66f..7859d0ed43 100644
---- a/package/tcf-agent/tcf-agent.mk
-+++ b/package/tcf-agent/tcf-agent.mk
-@@ -21,6 +21,12 @@ TCF_AGENT_CONF_OPTS = \
- 	-DBUILD_SHARED_LIBS=OFF \
- 	-DTCF_MACHINE=$(call qstrip,$(BR2_PACKAGE_TCF_AGENT_ARCH))
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
-+endif
-+endif
-+
- define TCF_AGENT_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/tcf-agent/tcf-agent.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/tcf-agent.service
+> Secondly, I had to tweak heavily the libscap CMakeLists.txt to install several
+> shared libraries.
+> Indeed, the libraries are compiled as static, but the sysdig binary is not
+> static, so it needs plenty of shared libraries to be run from the image.
+> I am not really sure what is the best solution here (either compiling sysdig as
+> static or not), but in any case my patch for CMakeLists.txt is not really clean.
+
+I don't quite understand this part.
+
+If the libraries are present as static libs at build time, then sysdig
+would be statically linked to those, even if sysdig is not itself a
+statically linked binary.
+
+Indeed, it's possible to have, say;
+
+    ld libfoo.a libbar.so main.o -o myprogram
+
+where myprogram would then be a dynamically linked executable,, which
+would have been linked with libfoo.a and dynamically linked with
+libbar.so.
+
+So you'll have to expand a bit on that part...
+
+Ah, I think I understand what you are trying to say: falcosecurity-libs
+build libscap.a and does not install it, but sysdig needs to link
+against it, right?
+
+If so, then it has nothing to do with the fact that sysdig is not
+static, but just about the fact that sysdig needs to link with those
+libraries.
+
+I'll also further reply to the sysdig bump...
+
+> Finally, I had to modify the magical number in falcosecurity-libs.mk for
+> API_VERSION and SCHEMA_VERSION.
+> While this is not really a big pain, I am wondering if this is not possible to
+> read the corresponding values from the corresponding files (i.e. API_VERSION and
+> SCHEMA_VERSION).
+> So, for future update we would not need to take care of it ourselves.
+
+That is what I was going to suggest while reviewing patch 1/3. I'll
+reply further there.
+
+Regards,
+Yann E. MORIN.
+
+> Changes since:
+>  v1:
+>   * Removed everything regarding VALIJSON in sysdig.mk.
+>   * Bumped first falcosecurity-libs to avoid problem when building it.
+>   * Added runtime test for sysdig.
+> 
+> Francis Laniel (3):
+>   package/falcosecurity-libs: bump to version 0.10.5
+>   package/sysdig: bump to version 0.31.4
+>   support/testing/package: add new test for sysdig
+> 
+>  .../0002-cmake-Install-shared-libraries.patch | 61 +++++++++++++++++++
+>  .../falcosecurity-libs.hash                   |  2 +-
+>  .../falcosecurity-libs/falcosecurity-libs.mk  | 10 +--
+>  package/sysdig/sysdig.hash                    |  2 +-
+>  package/sysdig/sysdig.mk                      |  9 ++-
+>  .../testing/tests/package/test_sysdig.config  |  1 +
+>  support/testing/tests/package/test_sysdig.py  | 46 ++++++++++++++
+>  7 files changed, 122 insertions(+), 9 deletions(-)
+>  create mode 100644 package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+>  create mode 100644 support/testing/tests/package/test_sysdig.config
+>  create mode 100644 support/testing/tests/package/test_sysdig.py
+> 
+> --
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.39.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
