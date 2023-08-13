@@ -1,70 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 318D7C001DB
-	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 16:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88CB6C001DB
+	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 17:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6F3A814B3;
-	Sun, 13 Aug 2023 16:09:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6F3A814B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1CA160B30;
+	Sun, 13 Aug 2023 17:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1CA160B30
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vIb5j05acUuo; Sun, 13 Aug 2023 16:09:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 52lTgzbMBOeI; Sun, 13 Aug 2023 17:17:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C40781497;
-	Sun, 13 Aug 2023 16:09:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C40781497
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B5541BF293
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 16:09:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AAB160B2B;
+	Sun, 13 Aug 2023 17:17:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AAB160B2B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 69C161BF414
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 17:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0206781497
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 16:09:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0206781497
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29F4C409E3
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 17:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29F4C409E3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pueYlIRVzsRM for <buildroot@lists.busybox.net>;
- Sun, 13 Aug 2023 16:09:05 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0288181489
- for <buildroot@buildroot.org>; Sun, 13 Aug 2023 16:09:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0288181489
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:13dc:fe9:8e15:e643])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4A99A780331;
- Sun, 13 Aug 2023 18:09:00 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 13 Aug 2023 18:09:00 +0200
-Date: Sun, 13 Aug 2023 18:09:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Vincent Fazio <vfazio@gmail.com>
-Message-ID: <20230813160900.GA421096@scaer>
-References: <20230813045912.10404-1-vfazio@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id swAY6qpjjNZ0 for <buildroot@lists.busybox.net>;
+ Sun, 13 Aug 2023 17:17:44 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8A7A409DF
+ for <buildroot@buildroot.org>; Sun, 13 Aug 2023 17:17:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8A7A409DF
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 0DD613520C2A; Sun, 13 Aug 2023 19:17:38 +0200 (CEST)
+Date: Sun, 13 Aug 2023 19:17:38 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZNkQMgmLXTtuItPp@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230813045912.10404-1-vfazio@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691942943;
- bh=LWSBR6Qj1daRY/x96xWbtkNgQPZG3jakIQAROWkPvbU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=XmVFJI+Ab1GveKstvGRa+/0Tn/4vIco2TnM82WI3qGPnkH0mVxDZyuIFvewXxqjK9
- RbMfsZy9G1R9HgUlYwJz4K3V323lOTGwuTZ6EURO2VfzWnW02PsAGv5fHSWGW8R4Gb
- dcWT+5VD3jYItr4F8mVXn9K+iKE/Jq5vsyqWawM64ZG0U6BlnbJXuAC1fj5pxlpDoC
- gR5XoiCCC/fTIhID4bEJMFuAJR1x5JB7oHuvn2l0PZJE72fvSEK5hyIupCpeN22YUz
- VoGc/5CbJXkCnVPxYyxi9zBAN88zRjMwm/HtiYcoqW8Lvst6rY2Aebr1szm+672zbZ
- CydNtxTswpB0w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XmVFJI+A
-Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/gen-bootlin-toolchains:
- generate BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard
+ d=openadk.org; s=2022; 
+ t=1691947059; bh=reymSxQz9fGbAwk3BWwFnQm39FUw5fODCFhOjA++A64=;
+ h=Date:From:To:Cc:Subject:From;
+ b=OyrvFcAJBl3LGhyWLWaIJCuDVbZuLy0gjMwGmg0zB3Tls397BAkL8Xj96I05jzIHi
+ WEOiL20uo8JbgPbku1IBwZUpNhCAtluxJP0jzT5exV2sKA36YxTG1m94CUCMax+iwS
+ hEbSwXqJtrUfhTcGOwNMUqhVIn9peB0Lwdpo6So4s07sWJleq/mgPasQsOeAHyN3Ii
+ ZCv7KIC7dIdyIV309qbySBvI3n+7F6QUK8vBX/pzuOog/mQ9PX3g8mpLARsR9pXLUD
+ /n0dR1KQk2XM2mNOoNpWbYnSPlg7/L0G4sNdEu8RAFKXqXcljb4R75CeEa04+kBFMg
+ yOn3hAK4wVslA==
+Subject: [Buildroot] [PATCH] package/f2fs-tools: fix musl compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,67 +65,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Grzegorz Blach <grzegorz@blach.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Vincent, All,
+musl 1.2.4 removed the lseek64 function, but kept a definition of lseek64
+when _LARGEFILE64_SOURCE is defined.
 
-On 2023-08-12 23:59 -0500, Vincent Fazio spake thusly:
-> Previously, gen-bootlin-toolchains did not add a `depends` guard to
-> limit the available toolchains based on the minimum required GCC version
-> for the user selected CPU tuning.
-> 
-> Now, the proper BR2_ARCH_NEEDS_GCC_AT_LEAST_X guard will be added based
-> on the version of GCC provided by the toolchain.
-> 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Overwrite configure logic to always use lseek64 for musl toolchains.
 
-s for the other external toolchains, this is a fix, so I applied to
-master.
+There is no need to backport it to older Buildroot releases, because musl 1.2.4
+is not part of any release.
 
-I did regenerate the toolchains, after adding a litle temporary kludge
-so that the latest Bootlin toolchain version was ignored.
+Fixes:
+ - http://autobuild.buildroot.net/results/17f/17f4ea7d62581cf8c574deeb98e1785220d5bd3f
 
-Applied to master, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/f2fs-tools/f2fs-tools.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/scripts/gen-bootlin-toolchains | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-> index 23ebfbdce9..4344221213 100755
-> --- a/support/scripts/gen-bootlin-toolchains
-> +++ b/support/scripts/gen-bootlin-toolchains
-> @@ -338,6 +338,8 @@ class Toolchain:
->                  m = re.match("^BR2_TOOLCHAIN_EXTERNAL_GCC_([0-9_]*)=y$", frag)
->                  assert m, "Cannot get gcc version for toolchain %s" % self.fname_prefix
->                  selects.append("BR2_TOOLCHAIN_GCC_AT_LEAST_%s" % m[1])
-> +                # respect the GCC requirement for the selected CPU/arch tuning
-> +                depends.append("!BR2_ARCH_NEEDS_GCC_AT_LEAST_%s" % str(int(m[1]) + 1))
->  
->              # kernel headers version
->              if frag.startswith("BR2_TOOLCHAIN_EXTERNAL_HEADERS_"):
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index a92ab4fe3e..f9be789940 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -16,6 +16,10 @@ F2FS_TOOLS_LICENSE = GPL-2.0
+ F2FS_TOOLS_LICENSE_FILES = COPYING
+ F2FS_TOOLS_CPE_ID_VENDOR = f2fs-tools_project
+ 
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++F2FS_TOOLS_CONF_ENV += ac_cv_func_lseek64=yes
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ F2FS_TOOLS_CONF_OPTS += --with-selinux
+ F2FS_TOOLS_DEPENDENCIES += libselinux
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
