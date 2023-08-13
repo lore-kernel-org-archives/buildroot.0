@@ -4,66 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C389FC001B0
-	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 07:34:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2027BC001DE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Aug 2023 07:52:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A6F781434;
-	Sun, 13 Aug 2023 07:34:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A6F781434
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5B8981A0D;
+	Sun, 13 Aug 2023 07:52:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5B8981A0D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ROzZC41D5E6O; Sun, 13 Aug 2023 07:34:15 +0000 (UTC)
+	with ESMTP id 8qTc60wgl4lu; Sun, 13 Aug 2023 07:52:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6984D81435;
-	Sun, 13 Aug 2023 07:34:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6984D81435
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 64F0B1BF470
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:34:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFABB819F8;
+	Sun, 13 Aug 2023 07:52:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFABB819F8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 542FB1BF470
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E58C60EE2
- for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:34:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E58C60EE2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2CC8D819F8
+ for <buildroot@lists.busybox.net>; Sun, 13 Aug 2023 07:52:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CC8D819F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id anjwhE3P1ljU for <buildroot@lists.busybox.net>;
- Sun, 13 Aug 2023 07:34:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Fb2p-_quByTX for <buildroot@lists.busybox.net>;
+ Sun, 13 Aug 2023 07:52:08 +0000 (UTC)
 Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C15CD60E38
- for <buildroot@buildroot.org>; Sun, 13 Aug 2023 07:34:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C15CD60E38
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E69AD819F6
+ for <buildroot@buildroot.org>; Sun, 13 Aug 2023 07:52:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E69AD819F6
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:13dc:fe9:8e15:e643])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id 9175F780377;
- Sun, 13 Aug 2023 09:34:05 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 294DA780333;
+ Sun, 13 Aug 2023 09:52:03 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 13 Aug 2023 09:34:05 +0200
-Date: Sun, 13 Aug 2023 09:34:05 +0200
+ Sun, 13 Aug 2023 09:52:02 +0200
+Date: Sun, 13 Aug 2023 09:52:02 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Francis Laniel <flaniel@linux.microsoft.com>
-Message-ID: <20230813073405.GU421096@scaer>
+Message-ID: <20230813075202.GV421096@scaer>
 References: <20230811152710.43564-1-flaniel@linux.microsoft.com>
+ <20230811152710.43564-2-flaniel@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230811152710.43564-1-flaniel@linux.microsoft.com>
+In-Reply-To: <20230811152710.43564-2-flaniel@linux.microsoft.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1691912047;
- bh=XeMP9SWGbtwM+vfCUxHflP+6egmoL9EumC4cPzyPUR4=;
+ d=free.fr; s=smtp-20201208; t=1691913125;
+ bh=lOk6wrfCL2M+2Kjb88aPdrUsa6zDbb7qvaRIyAlvtIg=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=u89YRDdnNhHNQ44b/mQkASsTdCxDi9rzygi8Qk4raUExPa73ZB/cC0WLifRlMBRLb
- 4+d0fnLLdZOPXgp8qOqedvI2jpV2s2naCvKK2l4zF1DNeahiy7y7TkLu/zzXvbr9YZ
- m0X9u3xY3p5ujXscYyo83hRuUt8HTtpl9UEdN4vDEZYYCgPwFKFvjbaLEgZknwBHg0
- xDsuoA5DUJrsT7bzobb2vuekPOhIa9yCMGXJwvX0SjEPj36xptBoyGCrPJUuWBF8KZ
- am0TxootbKlPKFa6WxWzXwv4GeDAkpgsbn0P6kjCNSnoZwJJoGQSNkhFxaF1WZrF/h
- msj/rNGdyDYFA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=cwv+8arJyZJlz6huLYjBREvhLG6YstMfiChIDqw7C03xoYxVMBVKVU0n+lgcVfQ3P
+ TXzYN0DgUCDSv7qro4DL1zUioYVfQdHPeHlIIaywH8UrYOrmEl4ECwJ9jtFV3iOD6U
+ uCuam5LrgNyIoIO2IEHF9UY+SKRBzuxUpwm7aWBqMYIj+GsilnG1+A6Q+AiXbAi6vq
+ tEgPrtQWc1cFOeSWsj64Q0S6H3RUkWH0GWnyLt0QfxASf+sZ3LOXC1Ndp7gwYMEgha
+ yY9t8t+7FYwg9RZCvm44uWPyBgz1ca5ywqfcCdencyBxd4v+h800oTFpoUZLamJfjt
+ i4PJKWL9bNs8Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=u89YRDdn
-Subject: Re: [Buildroot] [RFC PATCH v2 0/3] Bump sysdig and falco libs
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cwv+8arJ
+Subject: Re: [Buildroot] [RFC PATCH v2 1/3] package/falcosecurity-libs: bump
+ to version 0.10.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,108 +86,146 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Francis, All,
 
 On 2023-08-11 17:27 +0200, Francis Laniel spake thusly:
-> With this contribution, I bumped sysdig and falcosecurity-libs.
-> Sadly, I am not fully satisfied with the result, hence the fact I marked it as
-> RFC because I would like to get your feedback to make it better.
+> Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+
+You need to expand on the commit log. Having an overview in the cover
+letter as you did is very good to understand a series as a whole.
+
+But the cover letter is not going to get comitted to the git history,
+shile the commit logs are. So we really need to have the details of the
+change in the commit log.
+
+> ---
+>  .../0002-cmake-Install-shared-libraries.patch | 61 +++++++++++++++++++
+>  .../falcosecurity-libs.hash                   |  2 +-
+>  .../falcosecurity-libs/falcosecurity-libs.mk  | 10 +--
+>  3 files changed, 67 insertions(+), 6 deletions(-)
+>  create mode 100644 package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
 > 
-> First of all, sysdig builds and runs:
-> Welcome to Buildroot
-> buildroot login: root
-> # sysdig --version
-> sysdig version 0.31.4
-> # sysdig | head
-> scap: loading out-of-tree module taints kernel.
-> scap: driver loading, scap
-> scap: adding new consumer (____ptrval____)
-> scap: initializing ring buffer for CPU 0
-> scap: CPU buffer initialized, size=8388608
-> 26 15:12:28.226519423 0 sysdig (108) > switch next=0 pgft_maj=10 pgft_min=1348 vm_size=47288 vm_rss=19408 vm_swap=0
-> 27 15:12:28.227409149 0 <NA> (0) > switch next=13 pgft_maj=0 pgft_min=0 vm_size=0 vm_rss=0 vm_swap=0
-> ...
-> 
-> Nonetheless, I had to increase the minimal size of the image as libsinsp.a is
-> quite big:
-> # du -sh /sysdig/libsinsp.a
-> 171.4M  /sysdig/libsinsp.a
-> I am not forcefully sure where this library is used, I will investigate and
-> maybe we can run everything without it.
+> diff --git a/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+> new file mode 100644
+> index 0000000000..38a8bdd4f4
+> --- /dev/null
+> +++ b/package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
+> @@ -0,0 +1,61 @@
+> +From b6d847fe8aa0513c6d19bd8187133699b9c4efd3 Mon Sep 17 00:00:00 2001
+> +From: Francis Laniel <flaniel@linux.microsoft.com>
+> +Date: Fri, 28 Apr 2023 15:14:27 +0100
+> +Subject: [PATCH] cmake: Install shared libraries.
+> +
+> +This is needed as sysdig is compiled as a non static binary which relies on
+> +these libraries.
 
-There is no need to have static libs (.a files) on the target, as static
-libs are only used at linking phase, which happens on the build machine.
+As I said in the review of the cover letter, this has nothing to do with
+the fact that sysdig is static or not, but the fact that
+falcosecurity-libs does not install those libs while sysdig needs to
+link against them.
 
-So, unless sysdig embeds a linker and generates an executalbe from
-those, it should be safe to remove.
+So I think it would still work if you even installed just the static
+version of those libs (but I agree that it is nicer if they are shared).
 
-> Secondly, I had to tweak heavily the libscap CMakeLists.txt to install several
-> shared libraries.
-> Indeed, the libraries are compiled as static, but the sysdig binary is not
-> static, so it needs plenty of shared libraries to be run from the image.
-> I am not really sure what is the best solution here (either compiling sysdig as
-> static or not), but in any case my patch for CMakeLists.txt is not really clean.
+Otherwise, this change is not very intrusive. It would be nice to submit
+that upstream, indeed, so we don;t have to maintain it forever, but it
+is relatively clean.
 
-I don't quite understand this part.
+Is there a reason why the search for a shared libelf is done in the same
+patch that generates shared libs?
 
-If the libraries are present as static libs at build time, then sysdig
-would be statically linked to those, even if sysdig is not itself a
-statically linked binary.
+> +Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+> +---
+> + cmake/modules/libelf.cmake       |  2 +-
+> + userspace/libscap/CMakeLists.txt | 16 +++++++++++++++-
+> + 2 files changed, 16 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/cmake/modules/libelf.cmake b/cmake/modules/libelf.cmake
+> +index 8ca2f4f7..73d13d26 100644
+> +--- a/cmake/modules/libelf.cmake
+> ++++ b/cmake/modules/libelf.cmake
+> +@@ -10,7 +10,7 @@ if(LIBELF_INCLUDE)
+> +     add_custom_target(libelf)
+> + elseif(NOT USE_BUNDLED_LIBELF)
+> +     find_path(LIBELF_INCLUDE elf.h PATH_SUFFIXES elf)
+> +-    find_library(LIBELF_LIB NAMES libelf.a libelf.so)
+> ++    find_library(LIBELF_LIB NAMES libelf.so)
 
-Indeed, it's possible to have, say;
+Maybe keep libelf.a but in reverse order, so as to prefer the shared
+variant, and fallback to the static one?
 
-    ld libfoo.a libbar.so main.o -o myprogram
+    find_library(LIBELF_LIB NAMES libelf.so libelf.a)
 
-where myprogram would then be a dynamically linked executable,, which
-would have been linked with libfoo.a and dynamically linked with
-libbar.so.
+> +     if(LIBELF_LIB)
+> +         message(STATUS "Found LIBELF: include: ${LIBELF_INCLUDE}, lib: ${LIBELF_LIB}")
+> +     else()
+> +diff --git a/userspace/libscap/CMakeLists.txt b/userspace/libscap/CMakeLists.txt
+> +index ae4760df..59378fea 100644
+> +--- a/userspace/libscap/CMakeLists.txt
+> ++++ b/userspace/libscap/CMakeLists.txt
+> +@@ -70,7 +70,7 @@ endif()
+> + 
+> + include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+> + 
+> +-add_library(scap STATIC
+> ++add_library(scap SHARED
 
-So you'll have to expand a bit on that part...
+Rather than forcing staitic or shared, it should probably be left out
+entorely, to let the build decide based on BUILD_SHARED_LIBS:
 
-Ah, I think I understand what you are trying to say: falcosecurity-libs
-build libscap.a and does not install it, but sysdig needs to link
-against it, right?
+    https://cmake.org/cmake/help/v3.27/manual/cmake-variables.7.html#variables-that-change-behavior
+    https://cmake.org/cmake/help/v3.27/variable/BUILD_SHARED_LIBS.html
 
-If so, then it has nothing to do with the fact that sysdig is not
-static, but just about the fact that sysdig needs to link with those
-libraries.
+> ++install(TARGETS scap)
+> ++install(TARGETS scap_engine_udig)
+> ++install(TARGETS scap_engine_savefile)
+> ++install(TARGETS scap_engine_bpf)
+> ++install(TARGETS scap_engine_noop)
+> ++install(TARGETS scap_engine_source_plugin)
+> ++install(TARGETS scap_engine_kmod)
+> ++install(TARGETS scap_engine_nodriver)
+> ++install(TARGETS scap_event_schema)
+> ++install(TARGETS scap_platform)
+> ++install(TARGETS scap_engine_util)
+> ++install(TARGETS scap_error)
+> ++install(TARGETS driver_event_schema)
 
-I'll also further reply to the sysdig bump...
+You'd still need to install them, whether they are static or shared.
 
-> Finally, I had to modify the magical number in falcosecurity-libs.mk for
-> API_VERSION and SCHEMA_VERSION.
-> While this is not really a big pain, I am wondering if this is not possible to
-> read the corresponding values from the corresponding files (i.e. API_VERSION and
-> SCHEMA_VERSION).
-> So, for future update we would not need to take care of it ourselves.
+[--SNIP--]
+> diff --git a/package/falcosecurity-libs/falcosecurity-libs.mk b/package/falcosecurity-libs/falcosecurity-libs.mk
+> index 92d5c61832..039b64bd5c 100644
+> --- a/package/falcosecurity-libs/falcosecurity-libs.mk
+> +++ b/package/falcosecurity-libs/falcosecurity-libs.mk
+[--SNIP--]
+> @@ -63,11 +63,11 @@ define FALCOSECURITY_LIBS_MODULE_GEN_MAKEFILE
+>  	$(SED) 's/@DRIVER_NAME@/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/Makefile
+>  
+>  	$(INSTALL) -m 0644 $(@D)/driver/driver_config.h.in $(@D)/driver/driver_config.h
+> -	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
+> +	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MAJOR}/3/;' $(@D)/driver/driver_config.h
+>  	$(SED) 's/\$${PPM_API_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
+> -	$(SED) 's/\$${PPM_API_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
+> -	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MAJOR}/1/;' $(@D)/driver/driver_config.h
+> -	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MINOR}/0/;' $(@D)/driver/driver_config.h
+> +	$(SED) 's/\$${PPM_API_CURRENT_VERSION_PATCH}/1/;' $(@D)/driver/driver_config.h
+> +	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MAJOR}/2/;' $(@D)/driver/driver_config.h
+> +	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_MINOR}/2/;' $(@D)/driver/driver_config.h
 
-That is what I was going to suggest while reviewing patch 1/3. I'll
-reply further there.
+As you noticed in the cover letter, it would be much better to extract
+those from the files where they are defined, rather than hardcode them
+here, which as you noticed, is quite a burden to maintain.
+
+FTR, I did that for erlang and it was recently applied:
+
+    b574a9606e62  package/erlang: do not hard-code the Erlang Interface Version (EI_VSN)
+
+So yes, it'd be nice to do the same here.
 
 Regards,
 Yann E. MORIN.
 
-> Changes since:
->  v1:
->   * Removed everything regarding VALIJSON in sysdig.mk.
->   * Bumped first falcosecurity-libs to avoid problem when building it.
->   * Added runtime test for sysdig.
-> 
-> Francis Laniel (3):
->   package/falcosecurity-libs: bump to version 0.10.5
->   package/sysdig: bump to version 0.31.4
->   support/testing/package: add new test for sysdig
-> 
->  .../0002-cmake-Install-shared-libraries.patch | 61 +++++++++++++++++++
->  .../falcosecurity-libs.hash                   |  2 +-
->  .../falcosecurity-libs/falcosecurity-libs.mk  | 10 +--
->  package/sysdig/sysdig.hash                    |  2 +-
->  package/sysdig/sysdig.mk                      |  9 ++-
->  .../testing/tests/package/test_sysdig.config  |  1 +
->  support/testing/tests/package/test_sysdig.py  | 46 ++++++++++++++
->  7 files changed, 122 insertions(+), 9 deletions(-)
->  create mode 100644 package/falcosecurity-libs/0002-cmake-Install-shared-libraries.patch
->  create mode 100644 support/testing/tests/package/test_sysdig.config
->  create mode 100644 support/testing/tests/package/test_sysdig.py
-> 
-> --
+>  	$(SED) 's/\$${PPM_SCHEMA_CURRENT_VERSION_PATCH}/0/;' $(@D)/driver/driver_config.h
+>  	$(SED) 's/\$${DRIVER_VERSION}//;' $(@D)/driver/driver_config.h
+>  	$(SED) 's/\$${DRIVER_NAME}/$(FALCOSECURITY_LIBS_DRIVER_NAME)/;' $(@D)/driver/driver_config.h
+> -- 
 > 2.34.1
 > 
 > _______________________________________________
