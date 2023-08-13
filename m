@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A993AEE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7920EE49A5
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B7DC40BF0;
-	Mon, 21 Aug 2023 20:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B7DC40BF0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5913541476;
+	Mon, 21 Aug 2023 20:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5913541476
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4ElJZuWKs54L; Mon, 21 Aug 2023 20:21:49 +0000 (UTC)
+	with ESMTP id Gk5ySyI7Io1N; Mon, 21 Aug 2023 20:22:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D07054116C;
-	Mon, 21 Aug 2023 20:21:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D07054116C
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA1E741507;
+	Mon, 21 Aug 2023 20:22:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA1E741507
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 33C8A1BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 851551BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF90F4160A
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFCBE41610
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF90F4160A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFCBE41610
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qr5UEeDxPIsf for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:29 +0000 (UTC)
+ with ESMTP id cVwSpjCijbdY for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8456F4167B
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8456F4167B
+ by smtp4.osuosl.org (Postfix) with ESMTP id E01A841622
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E01A841622
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CC5786023; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+ id DC43786023; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 11:05:36 +0200
+Date: Sun, 13 Aug 2023 17:51:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9f1ca943d554afe855f7eca2a0199481cc2c0426
-X-Git-Newrev: d5162e790d1cc2724caf6b918dbca00971c96ae9
+X-Git-Oldrev: f3fab0defe8fa9e1d99e4a89ddb29776e3bdd7fd
+X-Git-Newrev: eed1670d8a6f0899f5fdfc26bd6d1609ebc19c7a
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200127.6CC5786023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/connman: security bump
- version to 1.42
+Message-Id: <20230821200126.DC43786023@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain/toolchain-external:
+ add BR2_ARCH_NEEDS_GCC_AT_LEAST_X guards
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,466 +63,224 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5162e790d1cc2724caf6b918dbca00971c96ae9
+commit: https://git.buildroot.net/buildroot/commit/?id=eed1670d8a6f0899f5fdfc26bd6d1609ebc19c7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The 1.42 version of connman comes with the following CVEs fixes :
- - CVE-2022-32292
- - CVE-2022-32293
- - CVE-2023-28488
+Previously, it was possible to select an external toolchain that did not
+support the GCC arch tuning the user had selected. This is problematic
+because it can lead to confusing error messages during builds [0].
 
-The first two CVEs have been fixed wuth upstream patches [0] which we
-carry since 2f2b4c80f44a (package/connman: fix CVE-2022-3229{2,3}), now
-included in this version bump; the third CVE [2] is also fixed by this
-version bump [3].
+Now, external toolchain selections will be filtered to only those that
+support the required GCC version specified by the target arch tuning.
 
-[0] https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d1a5ede5d255bde8ef707f8441b997563b9312bd
-    https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=72343929836de80727a27d6744c869dff045757c
-    https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=416bfaff988882c553c672e5bfc2d4f648d29e8a
+Note: this patch does not touch the Bootlin toolchain config file as it
+is generated by a script.
 
-[1] 2f2b4c80f4 package/connman: fix CVE-2022-3229{2,3}
+Additional note: there is "soft" support for toolchains prior to GCC 4.8
+but there are no accompanying BR2_ARCH_NEEDS_GCC_AT_LEAST_X symbols.
+Instead of adding those, just use BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8 which
+is the minimum GCC version with claimed support [1].
 
-[2] https://nvd.nist.gov/vuln/detail/CVE-2023-28488
+[0]: https://lists.buildroot.org/pipermail/buildroot/2023-August/671877.html
+[1]: https://buildroot.org/downloads/manual/manual.html#requirement-mandatory
 
-[3] https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138
-
-Signed-off-by: Clement Ramirez <ramirez.clement3@gmail.com>
-[yann.morin.1998@free.fr:
-  - squash CVE-2023-28488 backport with version bump
-  - reword commit log
-]
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                |   3 -
- .../0001-gweb-Fix-OOB-write-in-received_data.patch |  36 -----
- ...r-Add-reference-counter-to-portal-context.patch | 142 -----------------
- ...03-wispr-Update-portal-context-references.patch | 175 ---------------------
- package/connman/connman.hash                       |   2 +-
- package/connman/connman.mk                         |   9 +-
- 6 files changed, 2 insertions(+), 365 deletions(-)
+ .../toolchain-external-arm-aarch64-be/Config.in          |  1 +
+ .../toolchain-external-arm-aarch64/Config.in             |  1 +
+ .../toolchain-external-arm-arm/Config.in                 |  1 +
+ .../toolchain-external-custom/Config.in.options          | 16 ++++++++++++++++
+ .../toolchain-external-linaro-aarch64-be/Config.in       |  1 +
+ .../toolchain-external-linaro-aarch64/Config.in          |  1 +
+ .../toolchain-external-linaro-arm/Config.in              |  1 +
+ .../toolchain-external-linaro-armeb/Config.in            |  1 +
+ .../toolchain-external-synopsys-arc/Config.in            |  1 +
+ 9 files changed, 24 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index dfc1ba9001..e5c06b1e0a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -263,9 +263,6 @@ package/chrony/S49chrony Indent Shellcheck Variables
- package/cmake/0001-rename-cmake-rootfile.patch Upstream
- package/cmocka/0001-Don-t-redefine-uintptr_t.patch Upstream
- package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch Upstream
--package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch Upstream
--package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch Upstream
--package/connman/0003-wispr-Update-portal-context-references.patch Upstream
- package/connman/S45connman Variables
- package/copas/0001-Do-not-load-coxpcall-for-LuaJIT.patch Upstream
- package/coremark-pro/coremark-pro.sh.in Shellcheck
-diff --git a/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch b/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-deleted file mode 100644
-index d1a9d8f8fe..0000000000
---- a/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From d1a5ede5d255bde8ef707f8441b997563b9312bd Mon Sep 17 00:00:00 2001
--From: Nathan Crandall <ncrandall@tesla.com>
--Date: Tue, 12 Jul 2022 08:56:34 +0200
--Subject: gweb: Fix OOB write in received_data()
--
--There is a mismatch of handling binary vs. C-string data with memchr
--and strlen, resulting in pos, count, and bytes_read to become out of
--sync and result in a heap overflow.  Instead, do not treat the buffer
--as an ASCII C-string. We calculate the count based on the return value
--of memchr, instead of strlen.
--
--Fixes: CVE-2022-32292
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d1a5ede5d255bde8ef707f8441b997563b9312bd]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- gweb/gweb.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/gweb/gweb.c b/gweb/gweb.c
--index 12fcb1d8..13c6c5f2 100644
----- a/gweb/gweb.c
--+++ b/gweb/gweb.c
--@@ -918,7 +918,7 @@ static gboolean received_data(GIOChannel *channel, GIOCondition cond,
-- 		}
-- 
-- 		*pos = '\0';
---		count = strlen((char *) ptr);
--+		count = pos - ptr;
-- 		if (count > 0 && ptr[count - 1] == '\r') {
-- 			ptr[--count] = '\0';
-- 			bytes_read--;
---- 
--cgit 
--
-diff --git a/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch b/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-deleted file mode 100644
-index c2cebdfdcc..0000000000
---- a/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-+++ /dev/null
-@@ -1,142 +0,0 @@
--From 72343929836de80727a27d6744c869dff045757c Mon Sep 17 00:00:00 2001
--From: Daniel Wagner <wagi@monom.org>
--Date: Tue, 5 Jul 2022 08:32:12 +0200
--Subject: wispr: Add reference counter to portal context
--
--Track the connman_wispr_portal_context live time via a
--refcounter. This only adds the infrastructure to do proper reference
--counting.
--
--Fixes: CVE-2022-32293
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=72343929836de80727a27d6744c869dff045757c]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/wispr.c | 52 ++++++++++++++++++++++++++++++++++++++++++----------
-- 1 file changed, 42 insertions(+), 10 deletions(-)
--
--diff --git a/src/wispr.c b/src/wispr.c
--index a07896ca..bde7e63b 100644
----- a/src/wispr.c
--+++ b/src/wispr.c
--@@ -56,6 +56,7 @@ struct wispr_route {
-- };
-- 
-- struct connman_wispr_portal_context {
--+	int refcount;
-- 	struct connman_service *service;
-- 	enum connman_ipconfig_type type;
-- 	struct connman_wispr_portal *wispr_portal;
--@@ -97,6 +98,11 @@ static char *online_check_ipv4_url = NULL;
-- static char *online_check_ipv6_url = NULL;
-- static bool enable_online_to_ready_transition = false;
-- 
--+#define wispr_portal_context_ref(wp_context) \
--+	wispr_portal_context_ref_debug(wp_context, __FILE__, __LINE__, __func__)
--+#define wispr_portal_context_unref(wp_context) \
--+	wispr_portal_context_unref_debug(wp_context, __FILE__, __LINE__, __func__)
--+
-- static void connman_wispr_message_init(struct connman_wispr_message *msg)
-- {
-- 	DBG("");
--@@ -162,9 +168,6 @@ static void free_connman_wispr_portal_context(
-- {
-- 	DBG("context %p", wp_context);
-- 
---	if (!wp_context)
---		return;
---
-- 	if (wp_context->wispr_portal) {
-- 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-- 			wp_context->wispr_portal->ipv4_context = NULL;
--@@ -201,9 +204,38 @@ static void free_connman_wispr_portal_context(
-- 	g_free(wp_context);
-- }
-- 
--+static struct connman_wispr_portal_context *
--+wispr_portal_context_ref_debug(struct connman_wispr_portal_context *wp_context,
--+			const char *file, int line, const char *caller)
--+{
--+	DBG("%p ref %d by %s:%d:%s()", wp_context,
--+		wp_context->refcount + 1, file, line, caller);
--+
--+	__sync_fetch_and_add(&wp_context->refcount, 1);
--+
--+	return wp_context;
--+}
--+
--+static void wispr_portal_context_unref_debug(
--+		struct connman_wispr_portal_context *wp_context,
--+		const char *file, int line, const char *caller)
--+{
--+	if (!wp_context)
--+		return;
--+
--+	DBG("%p ref %d by %s:%d:%s()", wp_context,
--+		wp_context->refcount - 1, file, line, caller);
--+
--+	if (__sync_fetch_and_sub(&wp_context->refcount, 1) != 1)
--+		return;
--+
--+	free_connman_wispr_portal_context(wp_context);
--+}
--+
-- static struct connman_wispr_portal_context *create_wispr_portal_context(void)
-- {
---	return g_try_new0(struct connman_wispr_portal_context, 1);
--+	return wispr_portal_context_ref(
--+		g_new0(struct connman_wispr_portal_context, 1));
-- }
-- 
-- static void free_connman_wispr_portal(gpointer data)
--@@ -215,8 +247,8 @@ static void free_connman_wispr_portal(gpointer data)
-- 	if (!wispr_portal)
-- 		return;
-- 
---	free_connman_wispr_portal_context(wispr_portal->ipv4_context);
---	free_connman_wispr_portal_context(wispr_portal->ipv6_context);
--+	wispr_portal_context_unref(wispr_portal->ipv4_context);
--+	wispr_portal_context_unref(wispr_portal->ipv6_context);
-- 
-- 	g_free(wispr_portal);
-- }
--@@ -452,7 +484,7 @@ static void portal_manage_status(GWebResult *result,
-- 		connman_info("Client-Timezone: %s", str);
-- 
-- 	if (!enable_online_to_ready_transition)
---		free_connman_wispr_portal_context(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 
-- 	__connman_service_ipconfig_indicate_state(service,
-- 					CONNMAN_SERVICE_STATE_ONLINE, type);
--@@ -616,7 +648,7 @@ static void wispr_portal_request_wispr_login(struct connman_service *service,
-- 				return;
-- 		}
-- 
---		free_connman_wispr_portal_context(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 		return;
-- 	}
-- 
--@@ -952,7 +984,7 @@ static int wispr_portal_detect(struct connman_wispr_portal_context *wp_context)
-- 
-- 		if (wp_context->token == 0) {
-- 			err = -EINVAL;
---			free_connman_wispr_portal_context(wp_context);
--+			wispr_portal_context_unref(wp_context);
-- 		}
-- 	} else if (wp_context->timeout == 0) {
-- 		wp_context->timeout = g_idle_add(no_proxy_callback, wp_context);
--@@ -1001,7 +1033,7 @@ int __connman_wispr_start(struct connman_service *service,
-- 
-- 	/* If there is already an existing context, we wipe it */
-- 	if (wp_context)
---		free_connman_wispr_portal_context(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 
-- 	wp_context = create_wispr_portal_context();
-- 	if (!wp_context)
---- 
--cgit 
--
-diff --git a/package/connman/0003-wispr-Update-portal-context-references.patch b/package/connman/0003-wispr-Update-portal-context-references.patch
-deleted file mode 100644
-index 61c4e21f94..0000000000
---- a/package/connman/0003-wispr-Update-portal-context-references.patch
-+++ /dev/null
-@@ -1,175 +0,0 @@
--From 416bfaff988882c553c672e5bfc2d4f648d29e8a Mon Sep 17 00:00:00 2001
--From: Daniel Wagner <wagi@monom.org>
--Date: Tue, 5 Jul 2022 09:11:09 +0200
--Subject: wispr: Update portal context references
--
--Maintain proper portal context references to avoid UAF.
--
--Fixes: CVE-2022-32293
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=416bfaff988882c553c672e5bfc2d4f648d29e8a]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/wispr.c | 34 ++++++++++++++++++++++------------
-- 1 file changed, 22 insertions(+), 12 deletions(-)
--
--diff --git a/src/wispr.c b/src/wispr.c
--index bde7e63b..84bed33f 100644
----- a/src/wispr.c
--+++ b/src/wispr.c
--@@ -105,8 +105,6 @@ static bool enable_online_to_ready_transition = false;
-- 
-- static void connman_wispr_message_init(struct connman_wispr_message *msg)
-- {
---	DBG("");
---
-- 	msg->has_error = false;
-- 	msg->current_element = NULL;
-- 
--@@ -166,8 +164,6 @@ static void free_wispr_routes(struct connman_wispr_portal_context *wp_context)
-- static void free_connman_wispr_portal_context(
-- 		struct connman_wispr_portal_context *wp_context)
-- {
---	DBG("context %p", wp_context);
---
-- 	if (wp_context->wispr_portal) {
-- 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-- 			wp_context->wispr_portal->ipv4_context = NULL;
--@@ -483,9 +479,6 @@ static void portal_manage_status(GWebResult *result,
-- 				&str))
-- 		connman_info("Client-Timezone: %s", str);
-- 
---	if (!enable_online_to_ready_transition)
---		wispr_portal_context_unref(wp_context);
---
-- 	__connman_service_ipconfig_indicate_state(service,
-- 					CONNMAN_SERVICE_STATE_ONLINE, type);
-- 
--@@ -546,14 +539,17 @@ static void wispr_portal_request_portal(
-- {
-- 	DBG("");
-- 
--+	wispr_portal_context_ref(wp_context);
-- 	wp_context->request_id = g_web_request_get(wp_context->web,
-- 					wp_context->status_url,
-- 					wispr_portal_web_result,
-- 					wispr_route_request,
-- 					wp_context);
-- 
---	if (wp_context->request_id == 0)
--+	if (wp_context->request_id == 0) {
-- 		wispr_portal_error(wp_context);
--+		wispr_portal_context_unref(wp_context);
--+	}
-- }
-- 
-- static bool wispr_input(const guint8 **data, gsize *length,
--@@ -618,13 +614,15 @@ static void wispr_portal_browser_reply_cb(struct connman_service *service,
-- 		return;
-- 
-- 	if (!authentication_done) {
---		wispr_portal_error(wp_context);
-- 		free_wispr_routes(wp_context);
--+		wispr_portal_error(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 		return;
-- 	}
-- 
-- 	/* Restarting the test */
-- 	__connman_service_wispr_start(service, wp_context->type);
--+	wispr_portal_context_unref(wp_context);
-- }
-- 
-- static void wispr_portal_request_wispr_login(struct connman_service *service,
--@@ -700,11 +698,13 @@ static bool wispr_manage_message(GWebResult *result,
-- 
-- 		wp_context->wispr_result = CONNMAN_WISPR_RESULT_LOGIN;
-- 
--+		wispr_portal_context_ref(wp_context);
-- 		if (__connman_agent_request_login_input(wp_context->service,
-- 					wispr_portal_request_wispr_login,
---					wp_context) != -EINPROGRESS)
--+					wp_context) != -EINPROGRESS) {
-- 			wispr_portal_error(wp_context);
---		else
--+			wispr_portal_context_unref(wp_context);
--+		} else
-- 			return true;
-- 
-- 		break;
--@@ -753,6 +753,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 		if (length > 0) {
-- 			g_web_parser_feed_data(wp_context->wispr_parser,
-- 								chunk, length);
--+			wispr_portal_context_unref(wp_context);
-- 			return true;
-- 		}
-- 
--@@ -770,6 +771,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 
-- 	switch (status) {
-- 	case 000:
--+		wispr_portal_context_ref(wp_context);
-- 		__connman_agent_request_browser(wp_context->service,
-- 				wispr_portal_browser_reply_cb,
-- 				wp_context->status_url, wp_context);
--@@ -781,11 +783,14 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 		if (g_web_result_get_header(result, "X-ConnMan-Status",
-- 						&str)) {
-- 			portal_manage_status(result, wp_context);
--+			wispr_portal_context_unref(wp_context);
-- 			return false;
---		} else
--+		} else {
--+			wispr_portal_context_ref(wp_context);
-- 			__connman_agent_request_browser(wp_context->service,
-- 					wispr_portal_browser_reply_cb,
-- 					wp_context->redirect_url, wp_context);
--+		}
-- 
-- 		break;
-- 	case 300:
--@@ -798,6 +803,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 			!g_web_result_get_header(result, "Location",
-- 							&redirect)) {
-- 
--+			wispr_portal_context_ref(wp_context);
-- 			__connman_agent_request_browser(wp_context->service,
-- 					wispr_portal_browser_reply_cb,
-- 					wp_context->status_url, wp_context);
--@@ -808,6 +814,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 
-- 		wp_context->redirect_url = g_strdup(redirect);
-- 
--+		wispr_portal_context_ref(wp_context);
-- 		wp_context->request_id = g_web_request_get(wp_context->web,
-- 				redirect, wispr_portal_web_result,
-- 				wispr_route_request, wp_context);
--@@ -820,6 +827,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 
-- 		break;
-- 	case 505:
--+		wispr_portal_context_ref(wp_context);
-- 		__connman_agent_request_browser(wp_context->service,
-- 				wispr_portal_browser_reply_cb,
-- 				wp_context->status_url, wp_context);
--@@ -832,6 +840,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 	wp_context->request_id = 0;
-- done:
-- 	wp_context->wispr_msg.message_type = -1;
--+	wispr_portal_context_unref(wp_context);
-- 	return false;
-- }
-- 
--@@ -890,6 +899,7 @@ static void proxy_callback(const char *proxy, void *user_data)
-- 					xml_wispr_parser_callback, wp_context);
-- 
-- 	wispr_portal_request_portal(wp_context);
--+	wispr_portal_context_unref(wp_context);
-- }
-- 
-- static gboolean no_proxy_callback(gpointer user_data)
---- 
--cgit 
--
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index 6fc5edf29a..ea87f1ea17 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256  79fb40f4fdd5530c45aa8e592fb16ba23d3674f3a98cf10b89a6576f198de589  connman-1.41.tar.xz
-+sha256  a3e6bae46fc081ef2e9dae3caa4f7649de892c3de622c20283ac0ca81423c2aa  connman-1.42.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index fbd7318e4e..142a6583ad 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+index 62e5ea8667..466b1587c3 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
+ 	bool "Arm AArch64 BE 12.2.rel1"
+ 	depends on BR2_aarch64_be
+ 	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index 0c2e64192d..fc62b759e5 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+ 	bool "Arm AArch64 12.2.rel1"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 4aab41693d..9b314795cb 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -9,6 +9,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	depends on BR2_ARM_CPU_HAS_NEON
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "aarch64"
+ 	depends on BR2_ARM_EABIHF
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index d82c9b8a41..0f4f5eef2e 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -52,66 +52,82 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_13
  
--CONNMAN_VERSION = 1.41
-+CONNMAN_VERSION = 1.42
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus
-@@ -13,13 +13,6 @@ CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CPE_ID_VENDOR = intel
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_12
+ 	bool "12.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
  
--# 0001-gweb-Fix-OOB-write-in-received_data.patch
--CONNMAN_IGNORE_CVES += CVE-2022-32292
--
--# 0002-wispr-Add-reference-counter-to-portal-context.patch
--# 0003-wispr-Update-portal-context-references.patch
--CONNMAN_IGNORE_CVES += CVE-2022-32293
--
- CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_11
+ 	bool "11.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_12
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
  
- ifeq ($(BR2_INIT_SYSTEMD),y)
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_10
+ 	bool "10.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_11
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_9
+ 	bool "9.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_8
+ 	bool "8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 	bool "7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+ 	bool "6.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+ 	bool "5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+ 	bool "4.9.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+ 	bool "4.8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+ 	bool "4.7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+ 	bool "4.6.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+ 	bool "4.5.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+ 	bool "4.4.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+ 	bool "older"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	help
+ 	  Use this option if your GCC version is older than any of the
+ 	  above.
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
+index 53d5dfd8f2..295a8987f1 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
+ 	bool "Linaro AArch64 BE 2018.05"
+ 	depends on BR2_aarch64_be
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+index c9b84b1d30..1b0ec7cd9f 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	bool "Linaro AArch64 2018.05"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_INSTALL_LIBSTDCPP
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+index 015e92f17c..8b3b4c844e 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in
+@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABIHF
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+index b338a72bff..b143ee5e24 100644
+--- a/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-linaro-armeb/Config.in
+@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_ARM_EABIHF
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+index c3483f331c..985e7b1710 100644
+--- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
+@@ -2,6 +2,7 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	bool "Synopsys ARC 2019.09 toolchain"
+ 	depends on BR2_arc
+ 	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_ENABLE_LOCALE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
