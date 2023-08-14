@@ -4,83 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D673C001B0
-	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 14:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5761C04A6A
+	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 14:37:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3B1261076;
-	Mon, 14 Aug 2023 14:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3B1261076
+	by smtp3.osuosl.org (Postfix) with ESMTP id 031BE60A6D;
+	Mon, 14 Aug 2023 14:37:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 031BE60A6D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EpELxBMxTAuk; Mon, 14 Aug 2023 14:21:19 +0000 (UTC)
+	with ESMTP id d8vfE9flgoZE; Mon, 14 Aug 2023 14:37:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1259760F8C;
-	Mon, 14 Aug 2023 14:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1259760F8C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ADFD51BF385
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:21:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D39161076;
+	Mon, 14 Aug 2023 14:37:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D39161076
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C60181BF385
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:37:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 938BB8148D
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:21:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 938BB8148D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7023C40B5C
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:37:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7023C40B5C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XHPzwj1JVmp6 for <buildroot@lists.busybox.net>;
- Mon, 14 Aug 2023 14:21:15 +0000 (UTC)
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com
- [IPv6:2a00:1450:4864:20::642])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C696F8143E
- for <buildroot@buildroot.org>; Mon, 14 Aug 2023 14:21:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C696F8143E
-Received: by mail-ej1-x642.google.com with SMTP id
- a640c23a62f3a-99bf8e5ab39so598973866b.2
- for <buildroot@buildroot.org>; Mon, 14 Aug 2023 07:21:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692022872; x=1692627672;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=a6Cb0L12kMh5j5m7smsKHO+86upNAe3b3GKSHiufJBU=;
- b=GYjsRQjqwEgXSsZnnuMsp89MPxR4uMFQ3FK9G9yrMi0hnaTmgsVcr1wPk2/4pteeTv
- XK0MMH2A7gtAJeUgrJyhs3u9ytRKS2vZ8crwH0GGKMevwfjaN2xpVo1W+ce2HdDJ4hsv
- H18nxy+Nsi5agHxwFkMc9D20Wj+ZJByCYSg1ELhkRXYy5NZ0GLIt24bwpaLB72CZCOQR
- XNUjIbjP+liBVH4Ac3rSbN9ttmf6Jvic20Jb5rfYCZ/3kxhjtthZEeEJWAcmpvTavaoj
- CRjK4eiaRZwNjgmBElSRKbAJPZiXybLHhdGbpQwxOPhos/VmWXDEsbNvvfsJs3eBljzS
- bCLA==
-X-Gm-Message-State: AOJu0Yz6yk+SAMskRLq2VAYskfTyEnBjv3k+uJtABaS9oLLXMbbcVHWa
- EJSJcgStNEysWy46O3YCQe2vDS7T0r01Akk1uEmdOkWU
-X-Google-Smtp-Source: AGHT+IFfT2nNq9GgyUoofgRK4oDFHpBZMTQk2ZLGZTMbZIxKUZuU+w92lwPCUkxYrsBsxkoz5qE4aw==
-X-Received: by 2002:a17:906:32c3:b0:994:54ff:10f6 with SMTP id
- k3-20020a17090632c300b0099454ff10f6mr8501495ejk.30.1692022872608; 
- Mon, 14 Aug 2023 07:21:12 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-80-180-23-204.pool80180.interbusiness.it. [80.180.23.204])
- by smtp.gmail.com with ESMTPSA id
- kq20-20020a170906abd400b00988b86d6c7csm5742989ejb.132.2023.08.14.07.21.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Aug 2023 07:21:12 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Mon, 14 Aug 2023 16:21:06 +0200
-Message-Id: <20230814142106.141500-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qfdItMcPlSbF for <buildroot@lists.busybox.net>;
+ Mon, 14 Aug 2023 14:37:16 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 57157402F3
+ for <buildroot@buildroot.org>; Mon, 14 Aug 2023 14:37:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57157402F3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 027EA40009;
+ Mon, 14 Aug 2023 14:37:12 +0000 (UTC)
+Date: Mon, 14 Aug 2023 16:37:10 +0200
+To: Ismael Luceno <ismael@iodev.co.uk>
+Message-ID: <20230814163710.784dd6bf@windsurf>
+In-Reply-To: <20230814113416.27631-1-ismael@iodev.co.uk>
+References: <20230814113416.27631-1-ismael@iodev.co.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1692022872; x=1692627672;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=a6Cb0L12kMh5j5m7smsKHO+86upNAe3b3GKSHiufJBU=;
- b=UEQTEOsAMUK3C0l5vu/90xY/hICY+70UreYfhhl8VIir4VYHXl5/a41fLBEG28Rbp7
- 1b8r0DUUZPr7uTFSO1oPoPEZz7f+iCpkCgT0Usq8XKYYGboxmUQCvQNQrPr2Vi025ntT
- tnAYBag/vHAkfTaPsbj8yxZV+4v/dGrfIb8Fc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=UEQTEOsA
-Subject: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.125
+ d=bootlin.com; s=gm1; t=1692023833;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TLWogAu6HRXfpZB4TwSgZqIy187YhfnadvNEO94IcCE=;
+ b=T27icz4AiALBMIyl3C8W823Co4qEyFuz0sDge9H5qOwr13eZodf7F78iEVplR/ywnJdluu
+ T/JoHiE6RFMoxlQmJ1fMVFL0uDsG9uK7DdYkbmOc7bmnlvFp98JcBgSjuLVHwWAGV419pI
+ AKnRtiq7P+QAK220u+wY9RgAfvpl5HHxQh0JilDWFdU7E58p7bQlHvLhHe/p5X8u01UCf4
+ 3aXC7fWsFOJZY2vIHOVJDAdVkXPydwdAfGi61+wj9plmG2jVEkxZvt2UB6aSkdcHW/1KCI
+ WpydaNl9OuRcBTUAnPowpX0qYcOyll0kpM/9qXJ9WkfYAxl9in9lWa3EUm/YwQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=T27icz4A
+Subject: Re: [Buildroot] [PATCH] mawk 1.3.4-20230808
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,51 +74,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.125
+Hello,
 
-The changes to README.md are not related to license modifications.
+On Mon, 14 Aug 2023 13:34:16 +0200
+Ismael Luceno <ismael@iodev.co.uk> wrote:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/uuu/uuu.hash | 4 ++--
- package/uuu/uuu.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index f42e92a3793b..574cb48a3c28 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  6c99b82c55202f43583dc41198225dea7d5b050e33e13946751911e473aed4a5  uuu_source-uuu_1.5.109.tar.gz
-+sha256  085d7f6308ee6b77dfb131fac40704575525adf6da45cdc446c00a0b29e4c21a  uuu_source-uuu_1.5.125.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
--sha256  f68fb8c8002c797a14e63f91963ac247034fdfd44275e4f4a3226111cd0423db  README.md
-+sha256  52a715c7443f269ddeba360abd70694879e120213926553a000e9be9373ea731  README.md
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 14a8a5ef025d..5f3271066f81 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UUU_VERSION = 1.5.109
-+UUU_VERSION = 1.5.125
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+Minor nit: the commit title should be "package/mawk: bump version to 1.3.4-20230808"
+
+Thanks!
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
