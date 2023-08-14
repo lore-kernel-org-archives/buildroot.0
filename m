@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9B4C001DB
-	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 11:44:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC786C04A6A
+	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 11:44:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4C4F408C9;
-	Mon, 14 Aug 2023 11:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4C4F408C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17F8341722;
+	Mon, 14 Aug 2023 11:44:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17F8341722
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ubm_GvMvWadZ; Mon, 14 Aug 2023 11:44:23 +0000 (UTC)
+	with ESMTP id 3EX8JS4XXarr; Mon, 14 Aug 2023 11:44:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8384D4096E;
-	Mon, 14 Aug 2023 11:44:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8384D4096E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3B3F71BF3AF
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDC4641735;
+	Mon, 14 Aug 2023 11:44:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDC4641735
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B0D51BF951
  for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 11:44:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2151B81395
+ by smtp4.osuosl.org (Postfix) with ESMTP id 235464096E
  for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 11:44:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2151B81395
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 235464096E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2mtwHdNSnd3v for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XmhnnmIB0v1h for <buildroot@lists.busybox.net>;
  Mon, 14 Aug 2023 11:44:19 +0000 (UTC)
-X-Greylist: delayed 589 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 14 Aug 2023 11:44:18 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3C4581394
 Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3C4581394
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4102408C9
  for <buildroot@buildroot.org>; Mon, 14 Aug 2023 11:44:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4102408C9
 Received: from localhost (80.red-83-50-209.dynamicip.rima-tde.net
- [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id 654E120888E;
- Mon, 14 Aug 2023 13:36:43 +0200 (CEST)
+ [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id 83E3D208882;
+ Mon, 14 Aug 2023 13:34:26 +0200 (CEST)
 From: Ismael Luceno <ismael@iodev.co.uk>
 To: buildroot@buildroot.org
-Date: Mon, 14 Aug 2023 13:36:37 +0200
-Message-ID: <20230814113637.28134-1-ismael@iodev.co.uk>
+Date: Mon, 14 Aug 2023 13:34:16 +0200
+Message-ID: <20230814113416.27631-1-ismael@iodev.co.uk>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Spam: Yes
-Subject: [Buildroot] [PATCH] package/pounce: New package
+Subject: [Buildroot] [PATCH] mawk 1.3.4-20230808
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,97 +62,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Simple IRC bouncer.
-
 Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/pounce/Config.in   | 18 ++++++++++++++++++
- package/pounce/pounce.hash |  3 +++
- package/pounce/pounce.mk   | 14 ++++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 package/pounce/Config.in
- create mode 100644 package/pounce/pounce.hash
- create mode 100644 package/pounce/pounce.mk
+ package/mawk/mawk.hash | 2 +-
+ package/mawk/mawk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6ffa3ee693a8..4dad3d474ad0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1338,6 +1338,7 @@ F:	package/exempi/
- N:	Ismael Luceno <ismael@iodev.co.uk>
- F:	package/axel/
- F:	package/mawk/
-+F:	package/pounce/
+diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
+index 69761f77df57..0a31675ac8e9 100644
+--- a/package/mawk/mawk.hash
++++ b/package/mawk/mawk.hash
+@@ -1,2 +1,2 @@
+-sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
++sha256  88f55a632e2736ff5c5f69944abc151734d89d8298d5005921180f39ab7ba6d0  mawk-1.3.4-20230808.tgz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
+index c4a486215d5d..d747f887ce39 100644
+--- a/package/mawk/mawk.mk
++++ b/package/mawk/mawk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/amarula/
-diff --git a/package/Config.in b/package/Config.in
-index 54cddc39140d..783683dd5201 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2458,6 +2458,7 @@ endif
- 	source "package/phytool/Config.in"
- 	source "package/pimd/Config.in"
- 	source "package/pixiewps/Config.in"
-+	source "package/pounce/Config.in"
- 	source "package/pound/Config.in"
- 	source "package/pppd/Config.in"
- 	source "package/pptp-linux/Config.in"
-diff --git a/package/pounce/Config.in b/package/pounce/Config.in
-new file mode 100644
-index 000000000000..83bb66643652
---- /dev/null
-+++ b/package/pounce/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_POUNCE
-+	bool "pounce"
-+	select BR2_PACKAGE_LIBRESSL
-+	help
-+	  pounce is a multi-client, TLS-only IRC bouncer. It maintains a
-+	  persistent connection to an IRC server, acting as a proxy and
-+	  buffer for a number of clients. When a client connects, any
-+	  messages received since it last disconnected will be relayed to
-+	  it. Unlike some other bouncers, pounce uses a single buffer for
-+	  all IRC messages, which acts as a queue from which each client
-+	  reads messages independently.
-+
-+	  pounce speaks regular modern IRC to both servers and clients, using
-+	  the server-time extension to indicate when messages originally
-+	  occurred. Clients identify themselves to pounce by their IRC
-+	  usernames.
-+
-+	  https://git.causal.agency/pounce/
-diff --git a/package/pounce/pounce.hash b/package/pounce/pounce.hash
-new file mode 100644
-index 000000000000..a827bd389f40
---- /dev/null
-+++ b/package/pounce/pounce.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  97f245556b1cc940553fca18f4d7d82692e6c11a30f612415e5e391e5d96604e  pounce-3.1.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/pounce/pounce.mk b/package/pounce/pounce.mk
-new file mode 100644
-index 000000000000..b0a28efd91bd
---- /dev/null
-+++ b/package/pounce/pounce.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# pounce
-+#
-+################################################################################
-+
-+POUNCE_VERSION = 3.1
-+POUNCE_SITE = https://git.causal.agency/pounce/snapshot
-+POUNCE_SOURCE = pounce-$(POUNCE_VERSION).tar.gz
-+POUNCE_LICENSE = GPL-3.0+
-+POUNCE_LICENSE_FILES = LICENSE
-+POUNCE_DEPENDENCIES = libressl
-+
-+$(eval $(autotools-package))
+-MAWK_VERSION = 1.3.4-20200120
++MAWK_VERSION = 1.3.4-20230808
+ MAWK_SITE = https://invisible-mirror.net/archives/mawk
+ MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
+ MAWK_LICENSE = GPL-2.0
 -- 
 2.41.0
 
