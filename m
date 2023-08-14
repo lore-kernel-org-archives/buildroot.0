@@ -4,82 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 139AEC001DB
-	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 06:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BA4BC001B0
+	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 06:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6812D40A0F;
-	Mon, 14 Aug 2023 06:08:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6812D40A0F
+	by smtp2.osuosl.org (Postfix) with ESMTP id E613340972;
+	Mon, 14 Aug 2023 06:36:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E613340972
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 782NwDRqO4Dt; Mon, 14 Aug 2023 06:08:05 +0000 (UTC)
+	with ESMTP id PN_cHekdyoW6; Mon, 14 Aug 2023 06:36:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B55994095E;
-	Mon, 14 Aug 2023 06:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B55994095E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0ADCA401B2;
+	Mon, 14 Aug 2023 06:36:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ADCA401B2
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4F00D1BF3D1
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 06:08:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1BF921BF3D1
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 06:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 241D360F95
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 06:08:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 241D360F95
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8E5A60BE3
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 06:36:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8E5A60BE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UZ514v5ZqNSS for <buildroot@lists.busybox.net>;
- Mon, 14 Aug 2023 06:07:59 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0633960B88
- for <buildroot@buildroot.org>; Mon, 14 Aug 2023 06:07:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0633960B88
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-3110ab7110aso3772351f8f.3
- for <buildroot@buildroot.org>; Sun, 13 Aug 2023 23:07:58 -0700 (PDT)
+ with ESMTP id BjJh8Gba7ctK for <buildroot@lists.busybox.net>;
+ Mon, 14 Aug 2023 06:36:47 +0000 (UTC)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com
+ [209.85.128.48])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D3CB86059C
+ for <buildroot@buildroot.org>; Mon, 14 Aug 2023 06:36:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3CB86059C
+Received: by mail-wm1-f48.google.com with SMTP id
+ 5b1f17b1804b1-3fe426b8583so40541105e9.2
+ for <buildroot@buildroot.org>; Sun, 13 Aug 2023 23:36:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1691993277; x=1692598077;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ d=1e100.net; s=20221208; t=1691995004; x=1692599804;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ScO4ec3zmdI67TcP/0+yT+Aay2vMh60ePCPXwZgJOoc=;
- b=ejxqss9iYIW1AN+6pHgcoLKSZ+CwIFl7OSKKSgzrLH7Q1A9elmI+Ce62zfISiULD2n
- EbluTMsOcp94YbCAZLBJbQpsRrTcshcKJTuRSt/NiInKHVPSR3HlAQ1uZZegQZglXFVd
- D8Y/iOrsv0MCqusFZlj8gQAMu23VdtDCU8Bwa+udxANFeOun+YXqLWOxuWGIwOXQCXlL
- skXcWfyB9U69adYw1jaN0BjsLtiFpWlF2bot4prlvp5OpAP8OC8BXw0qi4T/f8ADI8Z+
- kr0YuKrW2KaUKarVbULYSzLbATq/ByAzazkOfEtxeB3ZAQC/E+INn4zbifydqa05/or1
- 4YCA==
-X-Gm-Message-State: AOJu0YwJHv9qA+DFnkPZisS9N2a12LagHtx333aqsZden35ZtXy6CUMy
- 5RJzF5gnXnxMFBzrbAh2KJ2YvjNQhU9IyTmv32m50tuBCKWtzy/xNnM=
-X-Google-Smtp-Source: AGHT+IEtFPBoAaUPX5fdO35+zNpnfEZH4VDphLismR2wip6+zVspKrvDwFRANPyeeHHunR16jGbs5HWT6zfaiYErAFE=
-X-Received: by 2002:a5d:510c:0:b0:313:f4e2:901d with SMTP id
- s12-20020a5d510c000000b00313f4e2901dmr5911981wrt.22.1691993276680; Sun, 13
- Aug 2023 23:07:56 -0700 (PDT)
+ bh=hiKNyck3v4ZGG2HJgo8FQib42rjo9P8MdNQDutge9S8=;
+ b=U1HxH51TTWtDXx2uVCBKZVDQssDywbloADcrXvTnuRLEYVVyuaNkIg0q2rNF+XsAnp
+ mYR9wOL1U/3GzTiqo36vjNrjO+xRmIaYDgD32DNsd5fpx151im7zg2AF1khEHXrsao1G
+ 0KeFqa8OmmQiJHn8ws2enqP0d4vhq9ueNfXEX90AjCpCZqiDrcwNfFbGLj6FBcJi2mwX
+ K5tStcGQYi/rgU7YlKePregMDAa/g5sbCpHvRAtFc/+xF/qGmPcfPJpACKbDxgUQFec7
+ 8Y4v9YJg7/SnAMNVW/tN+hPkUdWPc66tIh4LusSvbAHQT+xSUVJAW/yccG0k/AF2O7Uj
+ /E3g==
+X-Gm-Message-State: AOJu0YxhoPLGFvSS9XahRtAFzQUrcylxB+qOcNRUNx1Qpsx2AtKdLwFI
+ X84+WG32NoayhKOmiIFNo72nZz1R/IXmWw==
+X-Google-Smtp-Source: AGHT+IH8Gnllc75Enl+QTNNpA4oat++7/sNzc+hrYKeuhrwTexukS3dMxaZlrk3i26c6WT5kM+WEug==
+X-Received: by 2002:a05:600c:2055:b0:3fe:46ea:62c6 with SMTP id
+ p21-20020a05600c205500b003fe46ea62c6mr6833747wmg.21.1691995004189; 
+ Sun, 13 Aug 2023 23:36:44 -0700 (PDT)
+Received: from KORLIN44614.barco.com
+ ([2a02:a03f:eb68:2f00:4790:80ac:bb55:e50f])
+ by smtp.gmail.com with ESMTPSA id
+ q11-20020adff94b000000b00317c742ca9asm13211093wrr.43.2023.08.13.23.36.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 13 Aug 2023 23:36:43 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Mon, 14 Aug 2023 08:36:39 +0200
+Message-Id: <20230814063639.1145396-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230808180200.GB421096@scaer>
+References: <20230808180200.GB421096@scaer>
 MIME-Version: 1.0
-References: <20230315091729.1771792-1-javad321javad@gmail.com>
- <20230809233822.334dbbb5@windsurf>
-In-Reply-To: <20230809233822.334dbbb5@windsurf>
-From: Javad Rahimipetroudi <javad321javad@gmail.com>
-Date: Mon, 14 Aug 2023 09:37:45 +0330
-Message-ID: <CAL245asR8j3oaWJ4E3HT=SckVd-1-OdG7siim_UrhGTHg8DY1Q@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1691993277; x=1692598077;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ScO4ec3zmdI67TcP/0+yT+Aay2vMh60ePCPXwZgJOoc=;
- b=FKeBSsjZUqieGKHDdVfDlLXaYuK6L7+45MUagUdYilOubz+H5Lg5rTq+Fjl0e/LUZ4
- 7NrZws/a94E3xK5rSEknt25jvfy9LOzbFSsqPb4Ruz/KMYzNpuN0wWYW1idP2krPbcEU
- 29vHug/auZ8Of6MeobXgjEl4ccNFLH5+l8xAVjxilsgMMHdI4aREWgWMeSxwzGWBeKIx
- yQnp/3vTnBj3UmJ+RD6gTtiCuwMOwt1x1KpUVaWYcULzGmndbFNlsRzi77O7K0Clafz/
- clkJLBgEyhG3fOhtq1d/jQhlqcGKF5+ZHbjZN6CxwuNk374vL6DmEltMcQV4ijmHpYYW
- ixsw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=FKeBSsjZ
-Subject: Re: [Buildroot] [PATCH 1/3] configs/orangepi_pc2: add board support
+Subject: [Buildroot] [PATCH v2,
+ next] package/llvm-project/compiler-rt: fix circular dependency
+ warning
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,44 +84,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, Daniel Lang <dalang@gmx.at>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgVGhvbWFzLAoKT24gVGh1LCBBdWcgMTAsIDIwMjMgYXQgMTowOOKAr0FNIFRob21hcyBQZXRh
-enpvbmkKPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gSGVsbG8gSmF2
-YWQsCj4KPiBPbiBXZWQsIDE1IE1hciAyMDIzIDEyOjQ3OjI3ICswMzMwCj4gSmF2YWQgUmFoaW1p
-IDxqYXZhZDMyMWphdmFkQGdtYWlsLmNvbT4gd3JvdGU6Cj4KPiA+IFRoaXMgcGF0Y2ggYWRkcyBy
-ZXF1cmllZCBjb25maWd1cmF0aW9uIGZvciBPcmFuZ2VQSSBQQzIgYm9hcmQuCj4gPiBJdCB3YXMg
-c3VwcHJvdGVkIGJlZm9yZSwgaG93ZXZlciBkdWUgdG8gcHJvYmxlbXMgaW4KPiA+IGJ1aWxkaW5n
-IEFybSBUcnVzdGVkIFBMYXRmb3JtLCBpdCB3YXMgcmVtb3ZlZCBpbgo+ID4gIGNvbW1pdCAiZWVl
-ZGU2MTFmODFkOGY4M2I3MmU0YTY2NzFjZDdkMWU0NmIyNjZiMCIKPiA+Cj4gPiBTaWduZWQtb2Zm
-LWJ5OiBKYXZhZCBSYWhpbWkgPGphdmFkMzIxamF2YWRAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAg
-Y29uZmlncy9vcmFuZ2VwaV9wYzJfZGVmY29uZmlnIHwgMzYgKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAzNiBpbnNlcnRpb25zKCspCj4gPiAg
-Y3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3Mvb3JhbmdlcGlfcGMyX2RlZmNvbmZpZwo+Cj4gU29y
-cnkgZm9yIHRoZSBsb25nIGRlbGF5IGluIGdldHRpbmcgYmFjayB0byB5b3UuIEkgaGF2ZSBhcHBs
-aWVkIHlvdXIKPiBwYXRjaCBzZXJpZXMsIGJ1dCBhZnRlciBzcXVhc2hpbmcgdGhlIDMgcGF0Y2hl
-cyB0b2dldGhlciBpbiBvbmUgY29tbWl0Lgo+IFNwbGl0dGluZyBpdCBpbnRvIDMgZGlkbid0IG1h
-a2Ugc2Vuc2UgaW4gdGhpcyBjYXNlLgo+Cj4gSG93ZXZlciwgY291bGQgeW91IHdvcmsgb24gdXBk
-YXRpbmcgdGhlIHZlcnNpb24gb2YgdGhlIGNvbXBvbmVudHMgaW4KPiB0aGUgZGVmY29uZmlnPyBC
-dWlsZGluZyBMaW51eCA1LjE2LCBURi1BIDIuNSBhbmQgVS1Cb290IDIwMjIuMDEgaXMKPiBxdWl0
-ZSBvbGQuIENvdWxkIHlvdSBzdWJtaXQgYSBmb2xsb3dlZC11cCB0aGF0IHVwZGF0ZXMgdGhpcyBk
-ZWZjb25maWcKPiB0byBuZXdlciBMaW51eCwgbmV3ZXIgVEYtQSBhbmQgbmV3ZXIgVS1Cb290PyBQ
-bGVhc2UgbWFrZSBzdXJlIHRvIGJhc2UKPiB5b3VyIHBhdGNoIG9uIG91ciAibmV4dCIgYnJhbmNo
-LCBhcyBJIG1lcmdlZCB5b3VyIGNvbnRyaWJ1dGlvbiBpbnRvCj4gdGhpcyAibmV4dCIgYnJhbmNo
-Lgo+Cj4gICBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21t
-aXQvOTMwYTZkOTQ3MGVmYzVjNDZiY2ZmMzU4OTQ3YzA1MDU0MDU1NWE2Ywo+ClN1cmUsIEkgaGF2
-ZSB1cGRhdGVkIHRoZSBrZXJuZWwsIFRGLUEgYW5kIFVib290LgpIb3dldmVyLCBJIGhhdmUgZmFj
-ZWQgYSBwcm9ibGVtIHdpdGggIi9kZXYiIG1hbmFnZW1lbnQgYWZ0ZXIgdXBncmFkaW5nCnRoZSBw
-YWNrYWdlcy4gV2hlbiBpdCBpcyBpbiAiRHluYW1pYyB1c2luZyBkZXZ0bXBmcyBvbmx5IiBtb2Rl
-LCBubwprZXJuZWwgbW9kdWxlIGlzIGxvYWRlZCBhZnRlciBib290LiBCdXQgaW4gIkR5bmFtaWMg
-dXNpbmcgZGV2dG1wZnMgKwptZGV2IiBldmVyeXRoaW5nIHdvcmtzIGZpbmUuIENhbiBJIHB1dCBp
-dCBpbiB0aGlzIG1vZGU/Cj4gVGhhbmtzIGEgbG90IQo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMg
-UGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2lu
-ZWVyaW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQoKVGhhbmtzLApKYXZhZApfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+make[4]: Circular include/sanitizer/allocator_interface.h <- include/sanitizer/allocator_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/asan_interface.h <- include/sanitizer/asan_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/common_interface_defs.h <- include/sanitizer/common_interface_defs.h dependency dropped.
+make[4]: Circular include/sanitizer/coverage_interface.h <- include/sanitizer/coverage_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/dfsan_interface.h <- include/sanitizer/dfsan_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/hwasan_interface.h <- include/sanitizer/hwasan_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/linux_syscall_hooks.h <- include/sanitizer/linux_syscall_hooks.h dependency dropped.
+make[4]: Circular include/sanitizer/lsan_interface.h <- include/sanitizer/lsan_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/msan_interface.h <- include/sanitizer/msan_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/netbsd_syscall_hooks.h <- include/sanitizer/netbsd_syscall_hooks.h dependency dropped.
+make[4]: Circular include/sanitizer/scudo_interface.h <- include/sanitizer/scudo_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/tsan_interface.h <- include/sanitizer/tsan_interface.h dependency dropped.
+make[4]: Circular include/sanitizer/tsan_interface_atomic.h <- include/sanitizer/tsan_interface_atomic.h dependency dropped.
+make[4]: Circular include/sanitizer/ubsan_interface.h <- include/sanitizer/ubsan_interface.h dependency dropped.
+make[4]: Circular include/fuzzer/FuzzedDataProvider.h <- include/fuzzer/FuzzedDataProvider.h dependency dropped.
+make[4]: Circular include/sanitizer/memprof_interface.h <- include/sanitizer/memprof_interface.h dependency dropped.
+make[4]: Circular include/profile/MemProfData.inc <- include/profile/MemProfData.inc dependency dropped.
+make[4]: Circular include/xray/xray_interface.h <- include/xray/xray_interface.h dependency dropped.
+make[4]: Circular include/xray/xray_log_interface.h <- include/xray/xray_log_interface.h dependency dropped.
+make[4]: Circular include/xray/xray_records.h <- include/xray/xray_records.h dependency dropped.
+make[4]: Circular include/orc/c_api.h <- include/orc/c_api.h dependency dropped.
+make[4]: Circular include/profile/InstrProfData.inc <- include/profile/InstrProfData.inc dependency dropped.
+
+It's not clear why this cycle happens, but compiler-rt also proposes to
+create a separate build folder on their site: https://compiler-rt.llvm.org/.
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+v2:
+  - This patch was orignally submitted to fix the ninja build, which does a hard assert on circular dependencies.
+    Make is less strict on it, and retries with arbitrary dropping dependencies. The oringal git message was wrong
+    to mention that it fixes the ninja build since ninja is not enabled by default anyway. So in v2, I just
+    changed the git message to only mention the circular dependency warning.
+
+  - Original Ninja error:
+
+  ninja: error: dependency cycle: include/sanitizer/allocator_interface.h -> include/sanitizer/allocator_interface.h
+
+---
+ package/llvm-project/compiler-rt/compiler-rt.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/llvm-project/compiler-rt/compiler-rt.mk b/package/llvm-project/compiler-rt/compiler-rt.mk
+index 03dc76eaea..5d9c3d8fa8 100644
+--- a/package/llvm-project/compiler-rt/compiler-rt.mk
++++ b/package/llvm-project/compiler-rt/compiler-rt.mk
+@@ -11,6 +11,7 @@ COMPILER_RT_LICENSE = NCSA MIT
+ COMPILER_RT_LICENSE_FILES = LICENSE.TXT
+ COMPILER_RT_CPE_ID_VENDOR = llvm
+ COMPILER_RT_DEPENDENCIES = host-clang llvm
++COMPILER_RT_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ COMPILER_RT_INSTALL_STAGING = YES
+ COMPILER_RT_INSTALL_TARGET = NO
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
