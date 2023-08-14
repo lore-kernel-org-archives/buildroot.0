@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9B4C001DB
-	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 14:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF2F2C04A6A
+	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 14:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F216F61092;
-	Mon, 14 Aug 2023 14:40:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F216F61092
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5030760FB1;
+	Mon, 14 Aug 2023 14:53:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5030760FB1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 741_yFUgcem6; Mon, 14 Aug 2023 14:40:00 +0000 (UTC)
+	with ESMTP id 6Bg3oVscXZyL; Mon, 14 Aug 2023 14:53:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3435761084;
-	Mon, 14 Aug 2023 14:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3435761084
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 318431BF385
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:39:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0407D6107D;
+	Mon, 14 Aug 2023 14:53:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0407D6107D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0F9061BF385
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1F52814B6
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:39:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1F52814B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id D930840569
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:53:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D930840569
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FnlKr9uwNXMN for <buildroot@lists.busybox.net>;
- Mon, 14 Aug 2023 14:39:53 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 048A381465
- for <buildroot@buildroot.org>; Mon, 14 Aug 2023 14:39:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 048A381465
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E3781BF206;
- Mon, 14 Aug 2023 14:39:48 +0000 (UTC)
-Date: Mon, 14 Aug 2023 16:39:46 +0200
-To: Yu Chien Peter Lin <peterlin@andestech.com>
-Message-ID: <20230814163946.5bc5e75d@windsurf>
-In-Reply-To: <20230814024834.11369-2-peterlin@andestech.com>
-References: <20230814024834.11369-1-peterlin@andestech.com>
- <20230814024834.11369-2-peterlin@andestech.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P41SGrfyJtZq for <buildroot@lists.busybox.net>;
+ Mon, 14 Aug 2023 14:53:48 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C9B80402CE
+ for <buildroot@buildroot.org>; Mon, 14 Aug 2023 14:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9B80402CE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A3870FF80A;
+ Mon, 14 Aug 2023 14:53:45 +0000 (UTC)
+Date: Mon, 14 Aug 2023 16:53:43 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230814165343.2e3936c6@windsurf>
+In-Reply-To: <ZNiFAM4q72gwMume@waldemar-brodkorb.de>
+References: <ZNiFAM4q72gwMume@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692023990;
+ d=bootlin.com; s=gm1; t=1692024826;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=iNp4Ta2WuMg+UpyA7vQ6O8v6KvszCNQz4hC7xwwIITU=;
- b=NU3hBGnc1GwtBj9eBn0DRZAD4Wq2f2KjcPHmezRPPIJRsRBJeSA5ezLewJKp5vow5qJt6f
- tJ5gRd0613YwB5hMbfb66FkC2NQZFX7HycdBEc2IK2HanzCZVbvc/pUtNSGqbm7UDr2HG8
- tDvbnpF7qXg3mFShWvnnxn3vVe7kwHyC/5R/BGOyPQnrxSI3SBu29Xhf6Af8JfkmR1qLMj
- MxD1HC4MkW9imajNVi+sfUK4yxFEZpcL7wvB08SxHBiVxgEasMJ/qmCERgLuEg0N9rzFvu
- rsv2UYp0HvNQawkeKKJ3B02sCWQeoWoV1AKEpJl4GpdpdgzjpTIBTYuVMFjzaA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=khWVCZsBI6ZPjbo9Q60mfhNlXrdhgFSC4k4bw1v0tfw=;
+ b=o1G/GabpapsGDU9Lxfi2uRki/G+J5Kq5yEa8mHoSyYIjjXgkQPjCH0FxcSktgqwIDJ39nk
+ o4BurkcbyVmQdvVDOKE/MPKdBti9VhoHMoDezIol35OB9XrdUNj2+8Sjk/U4zQyEX4yuxo
+ TPHPoZ6bxsLe/sHXRuorKt4HofSyqAjK3io84TWGuBJeDiv4o0na3hwJu23GEazGaLjDcW
+ fnMzqBWP8H/yAaUVgh/HgM9TV2tsAKh73AVodUS6Fcvh5rRTFIZ1KHGl2HiUmRm54E3SoB
+ tRpirMbDgldgRHxMbA8Nnna/UQRElSMaFfCE8cQoQ5SFfdFe/pboZ2gbUK8TzA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NU3hBGnc
-Subject: Re: [Buildroot] [PATCH 2/2] configs/andes_ae350_45: Select RVA for
- AE350 platform
+ header.s=gm1 header.b=o1G/Gabp
+Subject: Re: [Buildroot] [PATCH 2/2] package/tcf-agent: fix uClibc-ng
+ compile on ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,23 +77,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: ycliang@andestech.com, kilian.zinnecker@mail.de, buildroot@buildroot.org
+Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 14 Aug 2023 10:48:34 +0800
-Yu Chien Peter Lin <peterlin@andestech.com> wrote:
+On Sun, 13 Aug 2023 09:23:44 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> The BR2_PACKAGE_GLIBC_ARCH_SUPPORTS requires the RVA extension,
-> so we select it to enable and use glibc by default.
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+> +TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
+> +endif
+> +endif
 
-Thanks for the patch. However, the commit log is not a proper
-justification. Indeed, BR2_RISCV_ISA_CUSTOM_RVA should be enabled if
-the hardware supports it, not because glibc needs it. If glibc needs
-it, but the hardware doesn't support this instruction set extension, it
-doesn't make sense to enable it.
+What is the situation with musl?
+
+With glibc, BR2_STATIC_LIBS=y is impossible.
+
+But with musl, BR2_STATIC_LIBS=y is possible. Is getauxval() always
+supported on musl, regardless of static or shared?
+
+Also, shouldn't the horrible "#  define USE_getauxval
+(defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 &&
+__GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) &&
+defined(__HAVE_SHARED__)))" be turned into a proper CMake test ?
+
+Thanks!
 
 Thomas
 -- 
