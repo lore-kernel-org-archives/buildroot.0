@@ -1,68 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71280C001DB
-	for <buildroot@archiver.kernel.org>; Fri, 11 Aug 2023 22:11:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 139AEC001DB
+	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 06:08:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1BB041E5E;
-	Fri, 11 Aug 2023 22:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1BB041E5E
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2p2DsaY-jrTT; Fri, 11 Aug 2023 22:11:27 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C257E41E5F;
-	Fri, 11 Aug 2023 22:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C257E41E5F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A5F801BF5F6
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:11:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D22E402D4
- for <buildroot@lists.busybox.net>; Fri, 11 Aug 2023 22:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D22E402D4
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6812D40A0F;
+	Mon, 14 Aug 2023 06:08:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6812D40A0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UfuiTyaUjSzl for <buildroot@lists.busybox.net>;
- Fri, 11 Aug 2023 22:11:23 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA37740169
- for <buildroot@uclibc.org>; Fri, 11 Aug 2023 22:11:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA37740169
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id A49248498A; Fri, 11 Aug 2023 22:11:23 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Fri, 11 Aug 2023 22:11:23 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: abrodkin@synopsys.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15721-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 782NwDRqO4Dt; Mon, 14 Aug 2023 06:08:05 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id B55994095E;
+	Mon, 14 Aug 2023 06:08:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B55994095E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F00D1BF3D1
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 06:08:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 241D360F95
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 06:08:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 241D360F95
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UZ514v5ZqNSS for <buildroot@lists.busybox.net>;
+ Mon, 14 Aug 2023 06:07:59 +0000 (UTC)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0633960B88
+ for <buildroot@buildroot.org>; Mon, 14 Aug 2023 06:07:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0633960B88
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3110ab7110aso3772351f8f.3
+ for <buildroot@buildroot.org>; Sun, 13 Aug 2023 23:07:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1691993277; x=1692598077;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=ScO4ec3zmdI67TcP/0+yT+Aay2vMh60ePCPXwZgJOoc=;
+ b=ejxqss9iYIW1AN+6pHgcoLKSZ+CwIFl7OSKKSgzrLH7Q1A9elmI+Ce62zfISiULD2n
+ EbluTMsOcp94YbCAZLBJbQpsRrTcshcKJTuRSt/NiInKHVPSR3HlAQ1uZZegQZglXFVd
+ D8Y/iOrsv0MCqusFZlj8gQAMu23VdtDCU8Bwa+udxANFeOun+YXqLWOxuWGIwOXQCXlL
+ skXcWfyB9U69adYw1jaN0BjsLtiFpWlF2bot4prlvp5OpAP8OC8BXw0qi4T/f8ADI8Z+
+ kr0YuKrW2KaUKarVbULYSzLbATq/ByAzazkOfEtxeB3ZAQC/E+INn4zbifydqa05/or1
+ 4YCA==
+X-Gm-Message-State: AOJu0YwJHv9qA+DFnkPZisS9N2a12LagHtx333aqsZden35ZtXy6CUMy
+ 5RJzF5gnXnxMFBzrbAh2KJ2YvjNQhU9IyTmv32m50tuBCKWtzy/xNnM=
+X-Google-Smtp-Source: AGHT+IEtFPBoAaUPX5fdO35+zNpnfEZH4VDphLismR2wip6+zVspKrvDwFRANPyeeHHunR16jGbs5HWT6zfaiYErAFE=
+X-Received: by 2002:a5d:510c:0:b0:313:f4e2:901d with SMTP id
+ s12-20020a5d510c000000b00313f4e2901dmr5911981wrt.22.1691993276680; Sun, 13
+ Aug 2023 23:07:56 -0700 (PDT)
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15721] New: fakeroot 1.32.1 fails to build on
- CentOS 7.x machines
+References: <20230315091729.1771792-1-javad321javad@gmail.com>
+ <20230809233822.334dbbb5@windsurf>
+In-Reply-To: <20230809233822.334dbbb5@windsurf>
+From: Javad Rahimipetroudi <javad321javad@gmail.com>
+Date: Mon, 14 Aug 2023 09:37:45 +0330
+Message-ID: <CAL245asR8j3oaWJ4E3HT=SckVd-1-OdG7siim_UrhGTHg8DY1Q@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1691993277; x=1692598077;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ScO4ec3zmdI67TcP/0+yT+Aay2vMh60ePCPXwZgJOoc=;
+ b=FKeBSsjZUqieGKHDdVfDlLXaYuK6L7+45MUagUdYilOubz+H5Lg5rTq+Fjl0e/LUZ4
+ 7NrZws/a94E3xK5rSEknt25jvfy9LOzbFSsqPb4Ruz/KMYzNpuN0wWYW1idP2krPbcEU
+ 29vHug/auZ8Of6MeobXgjEl4ccNFLH5+l8xAVjxilsgMMHdI4aREWgWMeSxwzGWBeKIx
+ yQnp/3vTnBj3UmJ+RD6gTtiCuwMOwt1x1KpUVaWYcULzGmndbFNlsRzi77O7K0Clafz/
+ clkJLBgEyhG3fOhtq1d/jQhlqcGKF5+ZHbjZN6CxwuNk374vL6DmEltMcQV4ijmHpYYW
+ ixsw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=FKeBSsjZ
+Subject: Re: [Buildroot] [PATCH 1/3] configs/orangepi_pc2: add board support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,89 +91,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15721
-
-            Bug ID: 15721
-           Summary: fakeroot 1.32.1 fails to build on CentOS 7.x machines
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: abrodkin@synopsys.com
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
-
-Starting from commit f1350977634f ("package/fakeroot: bump to version 1.32.1"),
-see [1], Buildroot fails to compile early that way:
------------------------>8-----------------------
-libtool: compile:  /usr/bin/gcc -std=gnu11 -DHAVE_CONFIG_H -I.
--D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64
--I.../buildroot/fakeroot/output/host/include -O2
--I.../buildroot/fakeroot/output/host/include -c libfakeroot_time64.c  -fPIC
--DPIC -o .libs/libfakeroot_time64_la-libfakeroot_time64.o
-In file included from libfakeroot_time64.c:13:0:
-/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with
--D_FILE_OFFSET_BITS==64"
- # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-   ^
-make[3]: *** [libfakeroot_time64_la-libfakeroot_time64.lo] Error 1
-make[3]: Leaving directory
-`.../buildroot/fakeroot/output/build/host-fakeroot-1.32.1'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`.../buildroot/fakeroot/output/build/host-fakeroot-1.32.1'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`.../buildroot/fakeroot/output/build/host-fakeroot-1.32.1'
------------------------>8-----------------------
-
-That happens due to a change in the fakeroot, see [2].
-It boils down to use of "fts.h" on 64-bit system with old glibc.
-I.e. support of "fts.h" was added in glibc 2.23, see [3]. And in its turn
-CentOS 7.x uses glibc 2.17, thus we see this (shamelessly copied from [4]):
------------------------>8-----------------------
-> cat test.c
-#include <fts.h>
-
-int main() {
-}
-
-> cc -D_FILE_OFFSET_BITS=64 test.c
-In file included from test.c:1:0:
-/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with
--D_FILE_OFFSET_BITS==64"
- # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-#include <fts.h>
-
-int main() {
-}
------------------------>8-----------------------
-
-Note, with older fakeroot, i.e. reverted [1] my simple build gets to the end
-successfully.
-
-[1]
-https://git.buildroot.net/buildroot/commit/?h=f1350977634f96f0404b9801e6f79cb7200cf26d
-[2]
-https://salsa.debian.org/clint/fakeroot/-/commit/c465f716856cd561dba3522a4f5c714ea8bedfbd
-[3]
-https://sourceware.org/git/?p=glibc.git;a=commit;h=8b7b7f75d91f7bac323dd6a370aeb3e9c5c4a7d5
-[4] https://github.com/mesonbuild/meson/issues/3519#issuecomment-386281558
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLAoKT24gVGh1LCBBdWcgMTAsIDIwMjMgYXQgMTowOOKAr0FNIFRob21hcyBQZXRh
+enpvbmkKPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gSGVsbG8gSmF2
+YWQsCj4KPiBPbiBXZWQsIDE1IE1hciAyMDIzIDEyOjQ3OjI3ICswMzMwCj4gSmF2YWQgUmFoaW1p
+IDxqYXZhZDMyMWphdmFkQGdtYWlsLmNvbT4gd3JvdGU6Cj4KPiA+IFRoaXMgcGF0Y2ggYWRkcyBy
+ZXF1cmllZCBjb25maWd1cmF0aW9uIGZvciBPcmFuZ2VQSSBQQzIgYm9hcmQuCj4gPiBJdCB3YXMg
+c3VwcHJvdGVkIGJlZm9yZSwgaG93ZXZlciBkdWUgdG8gcHJvYmxlbXMgaW4KPiA+IGJ1aWxkaW5n
+IEFybSBUcnVzdGVkIFBMYXRmb3JtLCBpdCB3YXMgcmVtb3ZlZCBpbgo+ID4gIGNvbW1pdCAiZWVl
+ZGU2MTFmODFkOGY4M2I3MmU0YTY2NzFjZDdkMWU0NmIyNjZiMCIKPiA+Cj4gPiBTaWduZWQtb2Zm
+LWJ5OiBKYXZhZCBSYWhpbWkgPGphdmFkMzIxamF2YWRAZ21haWwuY29tPgo+ID4gLS0tCj4gPiAg
+Y29uZmlncy9vcmFuZ2VwaV9wYzJfZGVmY29uZmlnIHwgMzYgKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKwo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAzNiBpbnNlcnRpb25zKCspCj4gPiAg
+Y3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3Mvb3JhbmdlcGlfcGMyX2RlZmNvbmZpZwo+Cj4gU29y
+cnkgZm9yIHRoZSBsb25nIGRlbGF5IGluIGdldHRpbmcgYmFjayB0byB5b3UuIEkgaGF2ZSBhcHBs
+aWVkIHlvdXIKPiBwYXRjaCBzZXJpZXMsIGJ1dCBhZnRlciBzcXVhc2hpbmcgdGhlIDMgcGF0Y2hl
+cyB0b2dldGhlciBpbiBvbmUgY29tbWl0Lgo+IFNwbGl0dGluZyBpdCBpbnRvIDMgZGlkbid0IG1h
+a2Ugc2Vuc2UgaW4gdGhpcyBjYXNlLgo+Cj4gSG93ZXZlciwgY291bGQgeW91IHdvcmsgb24gdXBk
+YXRpbmcgdGhlIHZlcnNpb24gb2YgdGhlIGNvbXBvbmVudHMgaW4KPiB0aGUgZGVmY29uZmlnPyBC
+dWlsZGluZyBMaW51eCA1LjE2LCBURi1BIDIuNSBhbmQgVS1Cb290IDIwMjIuMDEgaXMKPiBxdWl0
+ZSBvbGQuIENvdWxkIHlvdSBzdWJtaXQgYSBmb2xsb3dlZC11cCB0aGF0IHVwZGF0ZXMgdGhpcyBk
+ZWZjb25maWcKPiB0byBuZXdlciBMaW51eCwgbmV3ZXIgVEYtQSBhbmQgbmV3ZXIgVS1Cb290PyBQ
+bGVhc2UgbWFrZSBzdXJlIHRvIGJhc2UKPiB5b3VyIHBhdGNoIG9uIG91ciAibmV4dCIgYnJhbmNo
+LCBhcyBJIG1lcmdlZCB5b3VyIGNvbnRyaWJ1dGlvbiBpbnRvCj4gdGhpcyAibmV4dCIgYnJhbmNo
+Lgo+Cj4gICBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21t
+aXQvOTMwYTZkOTQ3MGVmYzVjNDZiY2ZmMzU4OTQ3YzA1MDU0MDU1NWE2Ywo+ClN1cmUsIEkgaGF2
+ZSB1cGRhdGVkIHRoZSBrZXJuZWwsIFRGLUEgYW5kIFVib290LgpIb3dldmVyLCBJIGhhdmUgZmFj
+ZWQgYSBwcm9ibGVtIHdpdGggIi9kZXYiIG1hbmFnZW1lbnQgYWZ0ZXIgdXBncmFkaW5nCnRoZSBw
+YWNrYWdlcy4gV2hlbiBpdCBpcyBpbiAiRHluYW1pYyB1c2luZyBkZXZ0bXBmcyBvbmx5IiBtb2Rl
+LCBubwprZXJuZWwgbW9kdWxlIGlzIGxvYWRlZCBhZnRlciBib290LiBCdXQgaW4gIkR5bmFtaWMg
+dXNpbmcgZGV2dG1wZnMgKwptZGV2IiBldmVyeXRoaW5nIHdvcmtzIGZpbmUuIENhbiBJIHB1dCBp
+dCBpbiB0aGlzIG1vZGU/Cj4gVGhhbmtzIGEgbG90IQo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMg
+UGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2lu
+ZWVyaW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQoKVGhhbmtzLApKYXZhZApfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
