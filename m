@@ -1,65 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C081EC04FE0
-	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 14:54:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53685C001B0
+	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 14:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41ECD61080;
-	Mon, 14 Aug 2023 14:54:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41ECD61080
+	by smtp1.osuosl.org (Postfix) with ESMTP id E08AC81A95;
+	Mon, 14 Aug 2023 14:58:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E08AC81A95
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lmd7YrDv652k; Mon, 14 Aug 2023 14:54:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id VE7S06JrtCHA; Mon, 14 Aug 2023 14:58:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 773AA6107D;
-	Mon, 14 Aug 2023 14:54:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 773AA6107D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7D971BF385
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:54:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A70981A4E;
+	Mon, 14 Aug 2023 14:58:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A70981A4E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A2AF91BF385
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1121403E0
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:54:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1121403E0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8876181A4E
+ for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 14:58:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8876181A4E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3pc7bZGfmcx9 for <buildroot@lists.busybox.net>;
- Mon, 14 Aug 2023 14:54:19 +0000 (UTC)
-Received: from smtpcmd02113.aruba.it (smtpcmd02113.aruba.it [62.149.158.113])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CC321402CE
- for <buildroot@buildroot.org>; Mon, 14 Aug 2023 14:54:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC321402CE
-Received: from localhost.localdomain ([95.47.160.93])
- by Aruba Outgoing Smtp  with ESMTPSA
- id VYxSqALT31pHiVYxTqFv8X; Mon, 14 Aug 2023 16:54:16 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n6yWnKaCWkA6 for <buildroot@lists.busybox.net>;
+ Mon, 14 Aug 2023 14:58:22 +0000 (UTC)
+Received: from aposti.net (aposti.net [89.234.176.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 071D581A3B
+ for <buildroot@buildroot.org>; Mon, 14 Aug 2023 14:58:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 071D581A3B
+From: Paul Cercueil <paul@crapouillou.net>
 To: buildroot@buildroot.org
-Date: Mon, 14 Aug 2023 16:54:13 +0200
-Message-Id: <20230814145413.2099039-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Mon, 14 Aug 2023 16:57:58 +0200
+Message-Id: <20230814145758.383366-1-paul@crapouillou.net>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfKcxMj7qyCIpo2WMbBUf0d8efeqe6D2Kcr5FUCb8ZQ/G3f8e+kxDoyzqc8t+p8+tHfLK8PR2cX7luCHRiqW4igUX+E0gEWReFUvGoUo8FyIotnbdYY4P
- FAFkLGuY+vmHRaEuICSLak0CnF6S+nlS22VWvNUoUFTaVo4A6Xw8FzWywbuvz1D3b7dpyrI1tkyqx5aNKSF/xr6lfyZT8c9mqAVcElm5elpTM6HdGHVQPQ3Y
- wocQRjUSA4mPIbYIqtAO1/CgeCHpUnxw5xEyOakXsPEdE83gvm32e9xUAbTqiOQONJMXOGplflzggF73yeTkwA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1692024856; bh=ybdh80SSE7IjuoA3Dc+VhxR2OqgIYyH6+LnvKystDdM=;
- h=From:To:Subject:Date:MIME-Version;
- b=MBm29G7GRcnKDFmsjz7L2YeTGhjjf9SVZqhQrerYCEvpDJ0xkqW6LkJJJ2rx9HUhL
- 9ZTDJONedtXgCct3ke2boqX0YHU8gt3AUpFBFHmb1iuxjmuCuXZ1e7UkwfqU4d8AeF
- uXY9lIRaluFLpFCDj33cLyEvbpvsxkFrSFFceWVt8BWk5sOes3b1+gfEwWyZVwtMEq
- +gXRngXPM4e5fYh5fhXO77lFwOeqRh3KGf/MR0BMyI9L999016YWmXOxOV2QI7IC51
- GBM625zZPcGsZBxKjptW8ITO6UPrzxzIgAs/zSFP3l9XetKIN5w4LEoKfeZ6jYMhwA
- 0REh0Gu0gpCTw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=MBm29G7G
-Subject: [Buildroot] [PATCH] package/libfuse3: bump to version 3.16.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=crapouillou.net; s=mail; t=1692025098;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Ef10kCf9/Zyl7+iX+bsNIrD9b4DlOYJAGLVQvKDq5Eo=;
+ b=ke6ZpoULWTcAt6i2blsBtVzUvCpwL5JNRVOlnP3UX8T0IcfPvkAcdLkbZlCSe0WP3XX2V9
+ nzfkqnFv4ntVk3ijW6od6XVVwRWCvnZmf1ShcEhMu7nDxlF6X5Mj1xIMizKfNtQv6iAOsP
+ fcb78KaG9/2CpDEuzFyf78eh66agbH4=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net
+ header.a=rsa-sha256 header.s=mail header.b=ke6ZpoUL
+Subject: [Buildroot] [PATCH v2 1/1] package/libiio: bump to version v0.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,97 +63,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Let's drop local patch that has been upstreamed:
-https://github.com/libfuse/libfuse/commit/b58a0014bff619f1810af49441d987d732c4244e
+The changelog is available here:
+https://github.com/analogdevicesinc/libiio/releases/tag/v0.25
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Remove the 0001 patch as it is included in the v0.25 version.
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+
 ---
- ...est-applications-for-cross-compiler-.patch | 43 -------------------
- package/libfuse3/libfuse3.hash                |  2 +-
- package/libfuse3/libfuse3.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 45 deletions(-)
- delete mode 100644 package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
+v2: Update .checkpackageignore file as well
 
-diff --git a/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch b/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ .checkpackageignore                           |  1 -
+ .../0001-iiod-serial.c-fix-sparc-build.patch  | 76 -------------------
+ package/libiio/libiio.hash                    |  2 +-
+ package/libiio/libiio.mk                      |  2 +-
+ 4 files changed, 2 insertions(+), 79 deletions(-)
+ delete mode 100644 package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index dfc1ba9001..a8255bffc2 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -709,7 +709,6 @@ package/libhid/0002-no-newline-in-ldflags.patch Upstream
+ package/libhid/0003-uclinux.patch Upstream
+ package/libical/0001-no-tests.patch Upstream
+ package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch Upstream
+-package/libiio/0001-iiod-serial.c-fix-sparc-build.patch Upstream
+ package/libiio/S99iiod Shellcheck Variables
+ package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch Upstream
+ package/libiqrf/0002-use-only-c-language.patch Upstream
+diff --git a/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
 deleted file mode 100644
-index b99b4c23f4..0000000000
---- a/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
+index 1c2d606e63..0000000000
+--- a/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
 +++ /dev/null
-@@ -1,43 +0,0 @@
--From b58a0014bff619f1810af49441d987d732c4244e Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Tue, 13 Jun 2023 20:02:01 +1000
--Subject: [PATCH] Wrapper around test applications for cross compiler
-- environment in meson.build (#804)
+@@ -1,76 +0,0 @@
+-From 40ffc5d9b8f6e47866292bf1365ac3a5d22cf123 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 25 Sep 2022 11:19:18 +0200
+-Subject: [PATCH] iiod/serial.c: fix sparc build
 -
--This enhances commit 7be56c57f93e3436b1fbd9ecc320de5c03a3e4b8 to allow build
--fuse to be built using a cross compiler
+-Fix the following sparc build failure raised since version 0.24 and
+-https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
+-
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+-  127 |         CASE_BPS(2500000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+-  127 |         CASE_BPS(2500000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
+-  128 |         CASE_BPS(3000000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
+-  129 |         CASE_BPS(3500000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
+-  130 |         CASE_BPS(4000000, &tty_attrs);
+-      |         ^~~~~~~~
 -
 -Fixes:
--../meson.build:180:12: ERROR: Can not run test applications in this cross environment.
+- - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
 -
--Upstream: https://github.com/libfuse/libfuse/commit/b58a0014bff619f1810af49441d987d732c4244e
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998@free.fr: actual backport now that upstream accepted it]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ----
-- meson.build | 10 ++++++----
-- 1 file changed, 6 insertions(+), 4 deletions(-)
+- iiod/serial.c | 8 ++++++++
+- 1 file changed, 8 insertions(+)
 -
--diff --git a/meson.build b/meson.build
--index 7aa4e0d..9707ea3 100644
----- a/meson.build
--+++ b/meson.build
--@@ -177,10 +177,12 @@ int main()
-- }
-- '''
-- 
---result = cc.run(detect_getmntent_needs_unescape)
---if result.compiled() and result.returncode() == 0 and result.stdout().strip() == 'needs escaping'
---  message('getmntent does not unescape')
---  add_project_arguments('-DGETMNTENT_NEEDS_UNESCAPING', language: 'c')
--+if not meson.is_cross_build()
--+  result = cc.run(detect_getmntent_needs_unescape)
--+  if result.compiled() and result.returncode() == 0 and result.stdout().strip() == 'needs escaping'
--+    message('getmntent does not unescape')
--+    add_project_arguments('-DGETMNTENT_NEEDS_UNESCAPING', language: 'c')
--+  endif
-- endif
-- 
-- # Write private test results into fuse_config.h (stored in build directory)
+-diff --git a/iiod/serial.c b/iiod/serial.c
+-index f829361d..b140d051 100644
+---- a/iiod/serial.c
+-+++ b/iiod/serial.c
+-@@ -124,10 +124,18 @@ static int serial_configure(int fd, unsigned int uart_bps,
+- 	CASE_BPS(1152000, &tty_attrs);
+- 	CASE_BPS(1500000, &tty_attrs);
+- 	CASE_BPS(2000000, &tty_attrs);
+-+#ifdef B2500000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(2500000, &tty_attrs);
+-+#endif
+-+#ifdef B3000000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(3000000, &tty_attrs);
+-+#endif
+-+#ifdef B3500000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(3500000, &tty_attrs);
+-+#endif
+-+#ifdef B4000000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(4000000, &tty_attrs);
+-+#endif
+- 	default:
+- 		IIO_ERROR("Invalid baud rate\n");
+- 		return -EINVAL;
 --- 
--2.34.1
+-2.25.1
 -
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index 0397efc542..cd990a6991 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
+diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
+index f497756eac..0f024af78c 100644
+--- a/package/libiio/libiio.hash
++++ b/package/libiio/libiio.hash
 @@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  cb93e170288804d2e83da9b69925d968655ed75883476773ba5268d08bb1d335  libfuse3-3.15.1.tar.gz
-+sha256  75a7140ce2d4589eda2784d2279be9d2b273a9b6b0f79ecb871dc4dded046fb5  libfuse3-3.16.1.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index 32e35ff32b..a4b1f08266 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
+ # Locally calculated
+-sha256  a2b5d848531ea64fd9f95327dfd5a588bd227d9577281ec375e822702c6a52d5  libiio-0.24.tar.gz
++sha256  21972599a3c143ab1f98002ad2b3f28f4aff927fde5f677478311cd4e517730c  libiio-0.25.tar.gz
+ sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  COPYING.txt
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 9e2cf454b5..733a0c90ed 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFUSE3_VERSION = 3.15.1
-+LIBFUSE3_VERSION = 3.16.1
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
+-LIBIIO_VERSION = 0.24
++LIBIIO_VERSION = 0.25
+ LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
+ LIBIIO_INSTALL_STAGING = YES
+ LIBIIO_LICENSE = LGPL-2.1+
 -- 
-2.34.1
+2.40.1
 
 _______________________________________________
 buildroot mailing list
