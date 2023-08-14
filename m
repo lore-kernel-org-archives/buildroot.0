@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD0FEE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:04:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D70D9EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:04:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42CB440B59;
-	Mon, 21 Aug 2023 20:04:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42CB440B59
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9355140B70;
+	Mon, 21 Aug 2023 20:04:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9355140B70
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mNi8_9nmZDW7; Mon, 21 Aug 2023 20:04:20 +0000 (UTC)
+	with ESMTP id m-EsCmbVyqSe; Mon, 21 Aug 2023 20:04:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5889940B84;
-	Mon, 21 Aug 2023 20:04:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5889940B84
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 48A571BF95F
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9B4A40B9D;
+	Mon, 21 Aug 2023 20:04:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9B4A40B9D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 333341BF94D
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC90481FA6
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC90481FA6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A9EF40B22
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A9EF40B22
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6w53XeRsrX-3 for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8N3b9heDaWkn for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 201FD8196E
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 201FD8196E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 231384063C
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 231384063C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DF9186028; Mon, 21 Aug 2023 20:01:24 +0000 (UTC)
+ id 12AD686028; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Aug 2023 22:22:10 +0200
+Date: Mon, 14 Aug 2023 13:06:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d1508c9d5cb6bcb297bf7945db20eade350ed613
-X-Git-Newrev: 88bff51ea610aba4f522748d88329f5f4f1e5f66
+X-Git-Oldrev: 00cb5f5e4ab9c6b7dc6a8d4c70648dd2f0cf7eca
+X-Git-Newrev: dedb686dd283a692376e000e61b64f6b055b1c42
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200124.1DF9186028@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/nitrogen8*: bump atf
- version to v2.8
+Message-Id: <20230821200127.12AD686028@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/llvm-project/compiler-rt: fix circular dependency warning
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,99 +57,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88bff51ea610aba4f522748d88329f5f4f1e5f66
+commit: https://git.buildroot.net/buildroot/commit/?id=dedb686dd283a692376e000e61b64f6b055b1c42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Based upon NXP lf-6.1.22-2.0.0 release
-- This version "fixes" the RXW segment permissions warning as well as
-the array-bounds errors
+The compiler-rt project intructs to build out of tree:
+    https://compiler-rt.llvm.org/
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673582
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556175
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673585
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556176
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673588
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556177
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673590
+Otherwise, the dependency chain declared in the include/CMakelLists.txt
+causes a circular dependency of source files upon themselves:
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+    make[4]: Circular include/sanitizer/allocator_interface.h <- include/sanitizer/allocator_interface.h dependency dropped.
+    make[4]: Circular include/sanitizer/asan_interface.h <- include/sanitizer/asan_interface.h dependency dropped.
+    make[4]: Circular include/sanitizer/common_interface_defs.h <- include/sanitizer/common_interface_defs.h dependency dropped.
+    [--snip 19 other files--]
+
+This is because include/CMakeLists.txt unconctional declares
+dependencies in this manner:
+
+    set(SANITIZER_HEADERS
+        sanitizer/allocator_interface.h
+        sanitizer/asan_interface.h
+        sanitizer/common_interface_defs.h
+        [...]
+        )
+
+    set(COMPILER_RT_HEADERS
+        ${SANITIZER_HEADERS}
+        [...])
+
+    set(output_dir ${COMPILER_RT_OUTPUT_DIR}/include)
+
+    foreach( f ${COMPILER_RT_HEADERS} )
+      set( src ${CMAKE_CURRENT_SOURCE_DIR}/${f} )
+      set( dst ${output_dir}/${f} )
+      add_custom_command(OUTPUT ${dst}
+        [...]
+      )
+      [...]
+    endforeach( f )
+
+The froeach() loop creates dependency rules between the files in
+output_dir and CMAKE_CURRENT_SOURCE_DIR, without provision for the
+case they are both the same directories, thus in-source builds are
+not supported.
+
+With the Makefiles backend, this only triggers the above warning
+from make, because make arbitrarily breaks circluar dependencies, and
+in this case it makes it work. But when we switch to the ninja backend,
+this is going to be a hard error.
+
+Anyway, ninja or make, compiler-rt does not support in-source builds.
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+[yann.morin.1998@free.fr: drastically expand commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/nitrogen8m_defconfig  | 4 ++--
- configs/nitrogen8mm_defconfig | 4 ++--
- configs/nitrogen8mn_defconfig | 4 ++--
- configs/nitrogen8mp_defconfig | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+ package/llvm-project/compiler-rt/compiler-rt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index dc9c1acf78..20f492c045 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-lf-5.15.52-2.1.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
-+# Latest revision of branch boundary-lf-6.1.22-2.0.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+diff --git a/package/llvm-project/compiler-rt/compiler-rt.mk b/package/llvm-project/compiler-rt/compiler-rt.mk
+index 03dc76eaea..5d9c3d8fa8 100644
+--- a/package/llvm-project/compiler-rt/compiler-rt.mk
++++ b/package/llvm-project/compiler-rt/compiler-rt.mk
+@@ -11,6 +11,7 @@ COMPILER_RT_LICENSE = NCSA MIT
+ COMPILER_RT_LICENSE_FILES = LICENSE.TXT
+ COMPILER_RT_CPE_ID_VENDOR = llvm
+ COMPILER_RT_DEPENDENCIES = host-clang llvm
++COMPILER_RT_SUPPORTS_IN_SOURCE_BUILD = NO
  
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index f021a30ad8..b7d62681db 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-lf-5.15.52-2.1.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
-+# Latest revision of branch boundary-lf-6.1.22-2.0.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index 88925cfda7..c205b90ebb 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-lf-5.15.52-2.1.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
-+# Latest revision of branch boundary-lf-6.1.22-2.0.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
-index 956c3b7bc1..3ab4f15167 100644
---- a/configs/nitrogen8mp_defconfig
-+++ b/configs/nitrogen8mp_defconfig
-@@ -29,8 +29,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-lf-5.15.52-2.1.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/697a8319.tar.gz"
-+# Latest revision of branch boundary-lf-6.1.22-2.0.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/7e3484cc.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
+ COMPILER_RT_INSTALL_STAGING = YES
+ COMPILER_RT_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
