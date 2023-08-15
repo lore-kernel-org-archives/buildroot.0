@@ -4,90 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3A60C001B0
-	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 17:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73B9EC04FE0
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 18:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E802410AD;
-	Tue, 15 Aug 2023 17:46:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E802410AD
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9A0A404FE;
+	Tue, 15 Aug 2023 18:29:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9A0A404FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ICgxEQ5jJCBK; Tue, 15 Aug 2023 17:46:21 +0000 (UTC)
+	with ESMTP id Ulk0rr8-746d; Tue, 15 Aug 2023 18:29:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8DD440A21;
-	Tue, 15 Aug 2023 17:46:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8DD440A21
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F21831BF47D
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 17:46:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3666D405B2;
+	Tue, 15 Aug 2023 18:29:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3666D405B2
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0DA5A1BF422
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 18:29:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D763840516
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 17:46:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D763840516
+ by smtp4.osuosl.org (Postfix) with ESMTP id D854F408A4
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 18:29:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D854F408A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UxRtaHElThiZ for <buildroot@lists.busybox.net>;
- Tue, 15 Aug 2023 17:46:07 +0000 (UTC)
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8324B40296
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 17:46:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8324B40296
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-31963263938so3385865f8f.2
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 10:46:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692121565; x=1692726365;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=cwfuwCr4cGkP3k9znu0jEPYJDsUpP5HId4EW8O05jCw=;
- b=l2YSHVG9oOHUdo40UnUey76rbQ1UmtQmozZOijAoaQUrdYrR0DFOwLRvRTXcO73oFi
- JQwTW6kRdFtc7Jp1paGBpOsV1FdpDNoATzXRuA7RumU8ZLLhSdFl9eqSjEH6dA+ZANR9
- RD+pNmyBLS47xrWnjBUJyYowFskAzS7Ysz3fuYwRM61P3ktd5snB1CN2aLbcUol4lOEo
- mDOKrPPYOkml6dic9LYsCZ2qQaPnFZPBsGQt1ZOA7/QQ+53SR0sbVrU+/Bl5NPolXMQa
- wd0ph2A8Np0kNZeQV/TThDqomnAX/RHfp/g7t4uCez8umj74prNNIwB0SdP51svbkkB/
- ktew==
-X-Gm-Message-State: AOJu0YycDuaEbdiQxnLMH+lSzWJGw5FPLDzgBxgxqay6KdWFor/1x5vE
- m7AUGKZddiOh1aS+ryd9XxqL+u0sCjw=
-X-Google-Smtp-Source: AGHT+IF7Jit0T53nCkOPjw5F4zgl2xZMcu9NlBTPISPkOYYZL77dVb5wTHRpFnuh0WjxchXHZ3b/1Q==
-X-Received: by 2002:adf:ed8f:0:b0:314:1ce9:3c86 with SMTP id
- c15-20020adfed8f000000b003141ce93c86mr9400290wro.0.1692121565309; 
- Tue, 15 Aug 2023 10:46:05 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
- [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
- by smtp.gmail.com with ESMTPSA id
- x7-20020a5d6507000000b003143b14848dsm18388028wru.102.2023.08.15.10.46.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Aug 2023 10:46:04 -0700 (PDT)
-From: Romain Naour <romain.naour@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E8t18awRKADI for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 18:29:20 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 57CEF4086E
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 18:29:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57CEF4086E
+Received: from fli4l.lan.fli4l (p4fd6c625.dip0.t-ipconnect.de [79.214.198.37])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 169DDA4C1105
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 20:29:17 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34430)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qVyn6-0002St-2G
+ for buildroot@buildroot.org; Tue, 15 Aug 2023 20:29:16 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 15 Aug 2023 19:46:00 +0200
-Message-ID: <20230815174600.290776-2-romain.naour@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230815174600.290776-1-romain.naour@gmail.com>
-References: <20230815174600.290776-1-romain.naour@gmail.com>
+Date: Tue, 15 Aug 2023 20:29:16 +0200
+Message-Id: <20230815182916.36363-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692121565; x=1692726365;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=cwfuwCr4cGkP3k9znu0jEPYJDsUpP5HId4EW8O05jCw=;
- b=nHoxZvw9XgMW3FQpXwAjAAl7mEyCGLbTWwMXHcaYrlZf8qI1zxzHc4eyy3ipwnlRCM
- hz9iNKyzSx6XIZGk6d3LJKV29MBy+omWGZTbTZNrCWtDDb1P1ljoB1YgQXgxWaCAb8eU
- 0LUYdAn1OdKGmtisbZ5I23MoRDMCHEwVuFnLMvdSr7duqnb0sCY7YC4zx0WUS1WDqqDx
- t4ahCNmbrDIrX0Gxhxmkp/wzSJPa4QiA8W+aJVE6SHU6Wp+pqy2lgxTT3dZ0/CClyIkP
- F2QX8E+hvdCLowvO/JmPK3c/ncdvSQCQddtzAD8k97KwxahkIBGWrkDxWwc5ee2urS0i
- 4lZw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=nHoxZvw9
-Subject: [Buildroot] [PATCH 2/2] configs/hifive_unleashed_defconfig: bump to
- kernel 5.10.190
+ d=kuhls.net; 
+ s=kas202306131828; t=1692124157;
+ bh=HUd5tnitSiB2Z0k8xEwa4A95fEnXhXm/9FuyNJSADB0=;
+ h=From:To:Subject:Date:From;
+ b=Tg9xlT9wvIfB7V50iOQMuq5ZbbwaeyiO64Nw1HpWjbtUtbF0fEGWNcPCE38J+6cBf
+ Q77m01nbJ5O8gPhpz/0CqEQB69j7rEN+u5dHHUF4GIiONW7j73HOWlRyBvhohkER4t
+ 5olRU523/CMU44Tm7ClNGrRFifopZuoOzxe0sdV1aXqrigVnr0BGCnx90nGhR2Y/eZ
+ 99TltOBhTkzMUaZJBEmWPKVevmtzIBc15VjM1GWPrhW0Bdu7DuN3NmVV0aSoqE6rPl
+ 9kyRGGoZM1dfSXptJFy2bkrhIeHZEJJFt5mnCGoItVGRywThxNfIRkM+JefAZNWLrI
+ fWnHNpm7sAezA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=Tg9xlT9w
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,44 +75,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We have to bump the kernel version to build with gcc >= 12 for riscv
-and zicsr/zifencei extension [1] [2].
-
-Similar to 0a4ac1e7fa715669aa2ab2a58b564fc875c07c68.
-
-Fixes:
-./arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
-./arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01', extension `zicsr' required
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=7486227fa47aa84b102be18fd9985f6e8e11e756
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0b077b22ea9ff698840ff9305d9382935fb41540
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- configs/hifive_unleashed_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
-index 37898284ac..c9d4a31ede 100644
---- a/configs/hifive_unleashed_defconfig
-+++ b/configs/hifive_unleashed_defconfig
-@@ -28,7 +28,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.190"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive-unleashed/linux.config.fragment"
- BR2_LINUX_KERNEL_IMAGE=y
+diff --git a/linux/Config.in b/linux/Config.in
+index 32940bc346..42b432eb90 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.4.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.4.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 40ace29532..e0cff76f95 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  b8b8a29852b999f337c4e93eff6c91fb7fd2d49a6614cbcbeb6fa171ba55cc9f  linux-6.4.9.tar.xz
+-sha256  2e51d41fe11d082ae167cee05772bb07ca7f19448d2b46772d8ca2db7673a1a5  linux-6.1.44.tar.xz
++sha256  980b3fb2a97788fd885cbd85ba4520980f76c7ae1d62bfc2e7477ee04df5f239  linux-6.4.10.tar.xz
++sha256  bd2343396e7ddad8974f3689a5a067ec931f4ade793e72b1070a85cd19f1f192  linux-6.1.45.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  150f3846b76cd23a6135f49cef71372bade5a06e851cb4f8558df8b862d8fec7  linux-5.15.125.tar.xz
+-sha256  4c03516ae1d417571faaef175932d0892710bcbe0173e40550014d043d9098c9  linux-5.10.189.tar.xz
+-sha256  3a78587523940374a7319089b63357c7dc412b90f5879d512265e59173588267  linux-5.4.252.tar.xz
++sha256  adf4aab9840f89ee151b837defbe16e9f388e8eef20df7ee94bf63be33b3ed6f  linux-5.15.126.tar.xz
++sha256  29723df01d40ff07ff6d254eaaf90c7b3ec3c70f4ebe089b80f785f46efaf597  linux-5.10.190.tar.xz
++sha256  1fb2ba5f09aa98fa2a5965372cac438564dcc5270e4abc526dfc19bea6ad26e7  linux-5.4.253.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  9fa5e24b7d791583f8cd001bcf02b52f569f261e276dc1dab2552974dca20ecf  linux-4.19.290.tar.xz
+-sha256  d0e32bd47a547cc20e0ce09ff45514282742edb2af38df5dc0a03f22d4321715  linux-4.14.321.tar.xz
++sha256  e6735b90d3d8cb20ac649d8a974eb19cd2a9db686a638d964c27f0992bc2b533  linux-4.19.291.tar.xz
++sha256  556b54b10b08370d97a562e19c08dc15372236f436a4dda3057159066e79e1e4  linux-4.14.322.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c7d725aa13..15f74992d1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -400,13 +400,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.321"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.290"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.252"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.189"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.125"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.44"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.4.9"		if BR2_KERNEL_HEADERS_6_4
++	default "4.14.322"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.291"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.253"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.190"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.126"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.45"	if BR2_KERNEL_HEADERS_6_1
++	default "6.4.10"	if BR2_KERNEL_HEADERS_6_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
