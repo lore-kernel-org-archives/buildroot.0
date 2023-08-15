@@ -1,87 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD5F4C04A94
-	for <buildroot@archiver.kernel.org>; Mon, 14 Aug 2023 21:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD2A7C001B0
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 01:11:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0E69C409D7;
-	Mon, 14 Aug 2023 21:52:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E69C409D7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D44160EA7;
+	Tue, 15 Aug 2023 01:11:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D44160EA7
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4Crvq334oItN; Tue, 15 Aug 2023 01:11:02 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6874360E96;
+	Tue, 15 Aug 2023 01:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6874360E96
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B9AB11BF312
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 01:10:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B95140600
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 01:10:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B95140600
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T_EjCarx2b8k; Mon, 14 Aug 2023 21:52:39 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 694BA405DB;
-	Mon, 14 Aug 2023 21:52:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 694BA405DB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C4091BF48B
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 21:52:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 21790817AB
- for <buildroot@lists.busybox.net>; Mon, 14 Aug 2023 21:52:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21790817AB
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bMbkW7pbb_qp for <buildroot@lists.busybox.net>;
- Mon, 14 Aug 2023 21:52:36 +0000 (UTC)
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com
- [IPv6:2607:f8b0:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7F9488176A
- for <buildroot@buildroot.org>; Mon, 14 Aug 2023 21:52:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F9488176A
-Received: by mail-pf1-x430.google.com with SMTP id
- d2e1a72fcca58-686fc0d3c92so3191100b3a.0
- for <buildroot@buildroot.org>; Mon, 14 Aug 2023 14:52:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692049956; x=1692654756;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OzNfbEm9rgdO/8Hci4wp1wDFdJ4tZxMMnA/UOJAvOm0=;
- b=ewB0ZN6CX3yFbYhkVbhl9ugLjXGrsDYfQTL2j9WSECGmMmEq5VBh3z2UAsRaJYp5No
- 8edhma4gfmjov6Q0VZzgt5a/KfeeFSmfFvpIVU9prWLOiaFzpeeRz5+U6VYzTN+z6Kvb
- QBE3WwtuefK8s/Z37O+oDOVY62vJq9J9lza6rdpUVLGfNAYDYtwjou/Rvl+7qQLyv2j/
- JzJet81h90HscGTosgdGCWnHdRWlyhvD4domGqxACFzHZ31RZTJvFMLlVhOsEYLtfp0G
- TAc1ygODZp5xbqVhyjanUNKOIE8EgA1DP3WirbCB7PoCqRZ3CfmTr59DuT/4b7CFqAVZ
- 4xng==
-X-Gm-Message-State: AOJu0YzYUd0RqzUnxQzT3fWC5zon67fS273ReD/2OkgMHsRXsQH380CI
- XT5HPvd92cZgN7H0ayp+jDKJQgV4naLw+A==
-X-Google-Smtp-Source: AGHT+IEEmlaJuq8VE27FIQ8jccw/rImjkvTTIvJElKRJmyViA2wh6m/8zzVMlxMlHGI4SrDTj9vwJw==
-X-Received: by 2002:a05:6a00:148e:b0:686:bd88:6062 with SMTP id
- v14-20020a056a00148e00b00686bd886062mr11420916pfu.24.1692049955533; 
- Mon, 14 Aug 2023 14:52:35 -0700 (PDT)
-Received: from localhost ([136.27.9.157]) by smtp.gmail.com with UTF8SMTPSA id
- b5-20020aa78705000000b0066e7a540ea5sm8370696pfo.205.2023.08.14.14.52.35
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 14 Aug 2023 14:52:35 -0700 (PDT)
-From: Gregor Haas <gregorhaas1997@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 14 Aug 2023 14:52:33 -0700
-Message-ID: <20230814215233.745573-1-gregorhaas1997@gmail.com>
-X-Mailer: git-send-email 2.41.0
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tef1DyZhkqYt for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 01:10:58 +0000 (UTC)
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
+ [60.248.80.70])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0E6824020B
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 01:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E6824020B
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+ by Atcsqr.andestech.com with ESMTP id 37F1AkSE013014;
+ Tue, 15 Aug 2023 09:10:46 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from APC323 (10.0.12.98) by ATCPCS16.andestech.com (10.0.1.222) with
+ Microsoft SMTP Server id 14.3.498.0; Tue, 15 Aug 2023 09:10:42 +0800
+Date: Tue, 15 Aug 2023 09:10:39 +0800
+From: Yu-Chien Peter Lin <peterlin@andestech.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZNrQj9u0v_PVxKEe@APC323>
+References: <20230814024834.11369-1-peterlin@andestech.com>
+ <20230814024834.11369-2-peterlin@andestech.com>
+ <20230814163946.5bc5e75d@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692049956; x=1692654756;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OzNfbEm9rgdO/8Hci4wp1wDFdJ4tZxMMnA/UOJAvOm0=;
- b=A/qeP8OeTGvHPZJOuCM2tLQjuYsyehV6RO073uNxscgJp3T1plMbbVrvy7iugzb/00
- GgQbCUErSfvqSUdx+KYqiyD0oXwiFxAsmwnaq3YUkl/lSt28Nhg9hRSqm1FH96n0UbiX
- iRgezik1DYaNQkPCjpSwBrZsD6ZvYy2B9prGV9+uzlgUecg5Nz2RcKyS32koRfd1QdnT
- Teq8gE7b30Tni8WgSRVHFWelVEhmOyQ0MHNjxqmoEcR5POP9v6sxXJLd87McwTy5uuvn
- 59zMFKiM95ba+JiftjQAHsnG+R9+KiDwquLOHmTysvNobQ9PUzl1O1Lgu9GXzqOwDvpK
- MzJQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=A/qeP8Oe
-Subject: [Buildroot] [PATCH 1/1] package/bmap-tools: add dependency on
- python-six
+Content-Disposition: inline
+In-Reply-To: <20230814163946.5bc5e75d@windsurf>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Originating-IP: [10.0.12.98]
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 37F1AkSE013014
+Subject: Re: [Buildroot] [PATCH 2/2] configs/andes_ae350_45: Select RVA for
+ AE350 platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,44 +68,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregor Haas <gregorhaas1997@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: ycliang@andestech.com, kilian.zinnecker@mail.de, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The core bmaptool program provided by this package depends on python-six to run.
-It is normally not an issue to use this program to e.g. finalize target images
-since all host dependencies are copied to the same place. However, it seems that
-bmaptool is configured (at package install time) to use the current host python
-interpreter -- and in the case of per-package builds, this is the interpreter in
-the per-package directory. Finally, without the explicit dependency on
-python-six, this per-package interpreter will not have the necessary packages.
-Therefore, add the required dependencies on python-six to ensure that the
-bmaptool program can work correctly
+On Mon, Aug 14, 2023 at 04:39:46PM +0200, Thomas Petazzoni wrote:
+> On Mon, 14 Aug 2023 10:48:34 +0800
+> Yu Chien Peter Lin <peterlin@andestech.com> wrote:
+> 
+> > The BR2_PACKAGE_GLIBC_ARCH_SUPPORTS requires the RVA extension,
+> > so we select it to enable and use glibc by default.
+> 
+> Thanks for the patch. However, the commit log is not a proper
+> justification. Indeed, BR2_RISCV_ISA_CUSTOM_RVA should be enabled if
+> the hardware supports it, not because glibc needs it. If glibc needs
+> it, but the hardware doesn't support this instruction set extension, it
+> doesn't make sense to enable it.
 
-Signed-off-by: Gregor Haas <gregorhaas1997@gmail.com>
----
- package/bmap-tools/bmap-tools.mk | 2 ++
- 1 file changed, 2 insertions(+)
+No problem, will reword properly in the next patch.
+Thanks!
 
-diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
-index 32399ca151..350286777c 100644
---- a/package/bmap-tools/bmap-tools.mk
-+++ b/package/bmap-tools/bmap-tools.mk
-@@ -9,6 +9,8 @@ BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
- BMAP_TOOLS_LICENSE = GPL-2.0
- BMAP_TOOLS_LICENSE_FILES = COPYING
- BMAP_TOOLS_SETUP_TYPE = setuptools
-+BMAP_TOOLS_DEPENDENCIES += python-six
-+HOST_BMAP_TOOLS_DEPENDENCIES += host-python-six
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
--- 
-2.41.0
+Peter Lin
 
+> Thomas
+> -- 
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
