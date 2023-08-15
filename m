@@ -4,47 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 503CAC001B0
-	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 20:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B2E5C001DF
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 22:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA62761192;
-	Tue, 15 Aug 2023 20:34:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA62761192
+	by smtp3.osuosl.org (Postfix) with ESMTP id 999BF60B10;
+	Tue, 15 Aug 2023 22:28:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 999BF60B10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Svwwbl9VjBNY; Tue, 15 Aug 2023 20:34:55 +0000 (UTC)
+	with ESMTP id 8Vhxq14JDzXL; Tue, 15 Aug 2023 22:28:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E6B461190;
-	Tue, 15 Aug 2023 20:34:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E6B461190
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 054271BF339
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 20:34:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 529B5611C0;
+	Tue, 15 Aug 2023 22:28:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 529B5611C0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F8F01BF47F
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 22:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFE5E418FD
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 20:34:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFE5E418FD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 40EC34149B
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 22:28:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40EC34149B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SgGl_ZO8Cuj0 for <buildroot@lists.busybox.net>;
- Tue, 15 Aug 2023 20:34:50 +0000 (UTC)
-Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC77140969
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 20:34:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC77140969
-Received: from localhost (80.red-83-50-209.dynamicip.rima-tde.net
- [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id C5A88209B00;
- Tue, 15 Aug 2023 22:34:48 +0200 (CEST)
-From: Ismael Luceno <ismael@iodev.co.uk>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lTlSe6wCOXAj for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 22:28:51 +0000 (UTC)
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
+ [IPv6:2607:f8b0:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2CF5541499
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 22:28:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CF5541499
+Received: by mail-pf1-x436.google.com with SMTP id
+ d2e1a72fcca58-68866e64bceso805011b3a.3
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 15:28:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1692138530; x=1692743330;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=R1ACUUlx+FKydQ71T9VEOtN15HgUPnb58+kVIWcwcc8=;
+ b=P5+dSgQtAf2MUJWVt9Holu8yu/dQlKlqqOCB8XZtHN8BX6dGWA8Hz/B6JOLLK12yU1
+ 87/yufdR7ViRvL41sAcwfbZuUCnJXR26OucSAP57HpDSDLIsfHeznHkUE233E/uIgzCU
+ QKy151BygcPuLzSQDMKbg4EJWaLBaC3XA+BcDCgcR5uwpBYn77sp66b5B5/TDEcG3lxO
+ tPg6S+X63NEqVi5eFAZD4bdJH0501pjVXhriWIfSIe8/ViHxV0SMzjk6zkN/gGJi7ZWO
+ RcBZqqjhHIY8m0M6PabG9xQTzk796NLsogTPOzMIGTwOvLECgnNbbXroEpHeLhkKid0F
+ fliw==
+X-Gm-Message-State: AOJu0Yw48LHLQK3vFT57xOlLg97N5XMpQtPMb2NQ5wc9dlCsdgbq9nuU
+ HAI/wARmOPBNgrvDuD1qaHgDiIB9X/w3rhW8KlY=
+X-Google-Smtp-Source: AGHT+IEGkeLvfNJ7f00MLxhzkLzISJTmbYdfkcIj+7zXacsm4a2BwHHv0D99QvyyXgJqJO6BJ/JUYQ==
+X-Received: by 2002:a05:6a00:23c1:b0:686:5a11:a434 with SMTP id
+ g1-20020a056a0023c100b006865a11a434mr102739pfc.3.1692138530244; 
+ Tue, 15 Aug 2023 15:28:50 -0700 (PDT)
+Received: from fedora.. ([174.27.153.162]) by smtp.gmail.com with ESMTPSA id
+ q24-20020a62e118000000b006873aa079aasm10177758pfh.171.2023.08.15.15.28.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 15 Aug 2023 15:28:49 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Aug 2023 22:34:47 +0200
-Message-ID: <20230815203447.25250-1-ismael@iodev.co.uk>
+Date: Tue, 15 Aug 2023 16:28:43 -0600
+Message-ID: <20230815222847.2460201-1-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Spam: Yes
-Subject: [Buildroot] [PATCH] package/mawk: bump version to 1.3.4-20230808
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1692138530; x=1692743330;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=R1ACUUlx+FKydQ71T9VEOtN15HgUPnb58+kVIWcwcc8=;
+ b=VL9eWN+cLz2ehgivbSTNtUkUmPUJG5m7Nxf8rXStFUZNMrICBpURDTHma7Va7xo+ym
+ ld3k8rpMogxmlbwB7N7xy/D7G9uOIEXokmLwtl09CaqW9mXfY60zpfGmiutS4GCy9iHY
+ JrXZjY86G2qk6vE06n3Kd5jF+ykoBafgfcxf0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=VL9eWN+c
+Subject: [Buildroot] [PATCH v2] package/python-httplib2: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,39 +90,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ismael Luceno <ismael@iodev.co.uk>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
----
- package/mawk/mawk.hash | 2 +-
- package/mawk/mawk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This is needed for the host-depot-tools package.
 
-diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
-index 69761f77df57..0a31675ac8e9 100644
---- a/package/mawk/mawk.hash
-+++ b/package/mawk/mawk.hash
-@@ -1,2 +1,2 @@
--sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
-+sha256  88f55a632e2736ff5c5f69944abc151734d89d8298d5005921180f39ab7ba6d0  mawk-1.3.4-20230808.tgz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
-index c4a486215d5d..d747f887ce39 100644
---- a/package/mawk/mawk.mk
-+++ b/package/mawk/mawk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/python-httplib2/python-httplib2.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+index 1093ecab39..2f4eb98356 100644
+--- a/package/python-httplib2/python-httplib2.mk
++++ b/package/python-httplib2/python-httplib2.mk
+@@ -14,3 +14,4 @@ PYTHON_HTTPLIB2_CPE_ID_VENDOR = httplib2_project
+ PYTHON_HTTPLIB2_CPE_ID_PRODUCT = httplib2
  
--MAWK_VERSION = 1.3.4-20200120
-+MAWK_VERSION = 1.3.4-20230808
- MAWK_SITE = https://invisible-mirror.net/archives/mawk
- MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
- MAWK_LICENSE = GPL-2.0
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.41.0
 
