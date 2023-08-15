@@ -4,87 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E64E0C04A6A
-	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 17:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3A60C001B0
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 17:46:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53FE840516;
-	Tue, 15 Aug 2023 17:46:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53FE840516
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6E802410AD;
+	Tue, 15 Aug 2023 17:46:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E802410AD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VwJb8PXkdX1g; Tue, 15 Aug 2023 17:46:09 +0000 (UTC)
+	with ESMTP id ICgxEQ5jJCBK; Tue, 15 Aug 2023 17:46:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94AFD4113A;
-	Tue, 15 Aug 2023 17:46:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94AFD4113A
+	by smtp2.osuosl.org (Postfix) with ESMTP id B8DD440A21;
+	Tue, 15 Aug 2023 17:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8DD440A21
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8EF901BF47D
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 17:46:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F21831BF47D
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 17:46:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 67507404BF
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 17:46:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67507404BF
+ by smtp2.osuosl.org (Postfix) with ESMTP id D763840516
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 17:46:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D763840516
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dZZwzAX0zpdv for <buildroot@lists.busybox.net>;
- Tue, 15 Aug 2023 17:46:06 +0000 (UTC)
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7C95C40296
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 17:46:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C95C40296
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3175f17a7baso4741865f8f.0
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 10:46:06 -0700 (PDT)
+ with ESMTP id UxRtaHElThiZ for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 17:46:07 +0000 (UTC)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8324B40296
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 17:46:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8324B40296
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-31963263938so3385865f8f.2
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 10:46:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692121564; x=1692726364;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=A37klMlX50NIIgdin9tz3XUlpcmztH3hgCGZBSXwiXI=;
- b=bZNGZPm1VDmhVs99/RhDByaew3aJdCXcLitC57WJ+sfn4+wNagSs2xnBlfIhVqQi2v
- CCVgimlVO5M/CsHPOm4Qr3uTzuO+pRGe5+X4CnT/EcqVzTajsJFcKFKcixGJYSeje0So
- i6mCA3y0shtwp2ujYv349FxHVqCArhOY8NA9l09FL1MGkrD+CHdiNhp878GKkEv6ZIfe
- DiNVLnO75vsMcpaK+KJ9EWs243LXUVnjpVwslVtlrMOxmgqUqinzNURvkltPu50ZERpW
- EfheMlCt7FlXhHW5Pq6CFv7ao7+ECv3mAbZkPlx9jmMmJ5G8Fp6DwpkdTTFqkZOw++oS
- xwDA==
-X-Gm-Message-State: AOJu0Yyo6PefQbpxwQR4SqbfL+CLAsD039xCHCj9CTMOgupoAF/aM8aZ
- I4dQpzVYfCkS5fzC+kaeAxdQnn/0bWU=
-X-Google-Smtp-Source: AGHT+IGZJ2qKOEvD660bpXPuOC8nHIaooL2pSUyEuJ8ceyb5/qjefHWjj6lEIDam8q71IlYGX915Ig==
-X-Received: by 2002:adf:cc91:0:b0:317:69d2:35c2 with SMTP id
- p17-20020adfcc91000000b0031769d235c2mr10418432wrj.2.1692121564387; 
- Tue, 15 Aug 2023 10:46:04 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1692121565; x=1692726365;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=cwfuwCr4cGkP3k9znu0jEPYJDsUpP5HId4EW8O05jCw=;
+ b=l2YSHVG9oOHUdo40UnUey76rbQ1UmtQmozZOijAoaQUrdYrR0DFOwLRvRTXcO73oFi
+ JQwTW6kRdFtc7Jp1paGBpOsV1FdpDNoATzXRuA7RumU8ZLLhSdFl9eqSjEH6dA+ZANR9
+ RD+pNmyBLS47xrWnjBUJyYowFskAzS7Ysz3fuYwRM61P3ktd5snB1CN2aLbcUol4lOEo
+ mDOKrPPYOkml6dic9LYsCZ2qQaPnFZPBsGQt1ZOA7/QQ+53SR0sbVrU+/Bl5NPolXMQa
+ wd0ph2A8Np0kNZeQV/TThDqomnAX/RHfp/g7t4uCez8umj74prNNIwB0SdP51svbkkB/
+ ktew==
+X-Gm-Message-State: AOJu0YycDuaEbdiQxnLMH+lSzWJGw5FPLDzgBxgxqay6KdWFor/1x5vE
+ m7AUGKZddiOh1aS+ryd9XxqL+u0sCjw=
+X-Google-Smtp-Source: AGHT+IF7Jit0T53nCkOPjw5F4zgl2xZMcu9NlBTPISPkOYYZL77dVb5wTHRpFnuh0WjxchXHZ3b/1Q==
+X-Received: by 2002:adf:ed8f:0:b0:314:1ce9:3c86 with SMTP id
+ c15-20020adfed8f000000b003141ce93c86mr9400290wro.0.1692121565309; 
+ Tue, 15 Aug 2023 10:46:05 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- x7-20020a5d6507000000b003143b14848dsm18388028wru.102.2023.08.15.10.46.03
+ x7-20020a5d6507000000b003143b14848dsm18388028wru.102.2023.08.15.10.46.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Aug 2023 10:46:03 -0700 (PDT)
+ Tue, 15 Aug 2023 10:46:04 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Aug 2023 19:45:59 +0200
-Message-ID: <20230815174600.290776-1-romain.naour@gmail.com>
+Date: Tue, 15 Aug 2023 19:46:00 +0200
+Message-ID: <20230815174600.290776-2-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230815174600.290776-1-romain.naour@gmail.com>
+References: <20230815174600.290776-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692121564; x=1692726364;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=A37klMlX50NIIgdin9tz3XUlpcmztH3hgCGZBSXwiXI=;
- b=LA2x3I6obRAfYZutphbUhba7Nf6gGCs+oWQ6pzrv+PIy1z8EDjaBCqL6UscT/I5+GU
- rfOsfYDr93aNQ46BoEmL0rmpf5GInmdxDopUFzHpBsE9vB2lgAOlWmQrJm6qC2S6F3Eu
- NvySl9KDFtHPWbZ3cjxJ/1+StJUdmxJHPdKPZNWxu1mVvf6nipaT4L0H+TirbAfrcxEP
- NpOXhleb3OP5Itv+RMhZbB0Xm4ji8dU/gKtib8JyX+8L9W4e/WoeuwMI/1Of7K0tj/JN
- 1Ou4JWXmate9PrIMoctAmfE7YATT6fRGFZLPyLrkunu6dEZuwPAj7y4taYFlQaLVLk8h
- 8yMQ==
+ d=gmail.com; s=20221208; t=1692121565; x=1692726365;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=cwfuwCr4cGkP3k9znu0jEPYJDsUpP5HId4EW8O05jCw=;
+ b=nHoxZvw9XgMW3FQpXwAjAAl7mEyCGLbTWwMXHcaYrlZf8qI1zxzHc4eyy3ipwnlRCM
+ hz9iNKyzSx6XIZGk6d3LJKV29MBy+omWGZTbTZNrCWtDDb1P1ljoB1YgQXgxWaCAb8eU
+ 0LUYdAn1OdKGmtisbZ5I23MoRDMCHEwVuFnLMvdSr7duqnb0sCY7YC4zx0WUS1WDqqDx
+ t4ahCNmbrDIrX0Gxhxmkp/wzSJPa4QiA8W+aJVE6SHU6Wp+pqy2lgxTT3dZ0/CClyIkP
+ F2QX8E+hvdCLowvO/JmPK3c/ncdvSQCQddtzAD8k97KwxahkIBGWrkDxWwc5ee2urS0i
+ 4lZw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=LA2x3I6o
-Subject: [Buildroot] [PATCH 1/2] configs/hifive_unleashed_defconfig: uboot
- needs pylibfdt
+ header.a=rsa-sha256 header.s=20221208 header.b=nHoxZvw9
+Subject: [Buildroot] [PATCH 2/2] configs/hifive_unleashed_defconfig: bump to
+ kernel 5.10.190
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,30 +105,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-uboot needs Python libfdt to build:
+We have to bump the kernel version to build with gcc >= 12 for riscv
+and zicsr/zifencei extension [1] [2].
 
-  pylibfdt does not seem to be available with python3
+Similar to 0a4ac1e7fa715669aa2ab2a58b564fc875c07c68.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060137
+./arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
+./arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01', extension `zicsr' required
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=7486227fa47aa84b102be18fd9985f6e8e11e756
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0b077b22ea9ff698840ff9305d9382935fb41540
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- configs/hifive_unleashed_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/hifive_unleashed_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
-index 80c5e48f96..37898284ac 100644
+index 37898284ac..c9d4a31ede 100644
 --- a/configs/hifive_unleashed_defconfig
 +++ b/configs/hifive_unleashed_defconfig
-@@ -48,6 +48,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_unleashed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
+@@ -28,7 +28,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.190"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive-unleashed/linux.config.fragment"
+ BR2_LINUX_KERNEL_IMAGE=y
 -- 
 2.41.0
 
