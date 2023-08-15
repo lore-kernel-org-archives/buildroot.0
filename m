@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67A68C001B0
-	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 19:38:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 503CAC001B0
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 20:34:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C44806114A;
-	Tue, 15 Aug 2023 19:38:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C44806114A
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA62761192;
+	Tue, 15 Aug 2023 20:34:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA62761192
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id q-doXLGJmccZ; Tue, 15 Aug 2023 19:38:26 +0000 (UTC)
+	with ESMTP id Svwwbl9VjBNY; Tue, 15 Aug 2023 20:34:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DC1260B8D;
-	Tue, 15 Aug 2023 19:38:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DC1260B8D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A48AD1BF239
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 19:38:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E6B461190;
+	Tue, 15 Aug 2023 20:34:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E6B461190
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 054271BF339
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 20:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D2F081FFB
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 19:38:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D2F081FFB
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFE5E418FD
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 20:34:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFE5E418FD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4yxvoOaIy6Sq for <buildroot@lists.busybox.net>;
- Tue, 15 Aug 2023 19:38:22 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E38F9812D0
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 19:38:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E38F9812D0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F240020004;
- Tue, 15 Aug 2023 19:38:17 +0000 (UTC)
-Date: Tue, 15 Aug 2023 21:38:16 +0200
-To: Jamie Gibbons via buildroot <buildroot@buildroot.org>
-Message-ID: <20230815213816.38960e1e@windsurf>
-In-Reply-To: <20230815100600.297932-2-jamie.gibbons@microchip.com>
-References: <20230815100600.297932-1-jamie.gibbons@microchip.com>
- <20230815100600.297932-2-jamie.gibbons@microchip.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SgGl_ZO8Cuj0 for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 20:34:50 +0000 (UTC)
+Received: from iodev.co.uk (iodev.co.uk [46.30.189.100])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC77140969
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 20:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC77140969
+Received: from localhost (80.red-83-50-209.dynamicip.rima-tde.net
+ [83.50.209.80]) by iodev.co.uk (Postfix) with ESMTPSA id C5A88209B00;
+ Tue, 15 Aug 2023 22:34:48 +0200 (CEST)
+From: Ismael Luceno <ismael@iodev.co.uk>
+To: buildroot@buildroot.org
+Date: Tue, 15 Aug 2023 22:34:47 +0200
+Message-ID: <20230815203447.25250-1-ismael@iodev.co.uk>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692128299;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=M7ZS62zQu8SGHUOX6NXpP8fkSx8VrbzM7ylNaSJjubE=;
- b=k2L2caD0MQdaRLFRP7GVbe/WxjqchZ2FRtN9DAS0vdtek33KsnFDVaBC072iAZpX3H0ZeO
- XyGH3wfR8kN5zwlqVoX4qSzzu9EtTH1LJ2NpkQMcTJhWIxAV+Tzm+GxaIYyfSbSGoeMGvq
- YySmpFmzVo1Jx2XHc+/1zftHXhDttm5SwOgn7Kb+qyfUdacQi7cjub7F98jYyfWKMubOvM
- GY26xk15NPZ6DhXEnLmlz8REbyIQRLWajQY2BbimNAt6uHesHlN3SGPg6B/azU7BDd3Ves
- MFrOCO5LPla58mqpz/ZBhOqG6fxzUibHONMTebySNFPfSHbI17BxMbBXTO4/rg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=k2L2caD0
-Subject: Re: [Buildroot] [PATCH 1/3] arch/Config.in.riscv: update
- instruction set ext
+X-Spam: Yes
+Subject: [Buildroot] [PATCH] package/mawk: bump version to 1.3.4-20230808
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,50 +56,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>,
- Jamie Gibbons <jamie.gibbons@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Conor Dooley <Conor.Dooley@microchip.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Ismael Luceno <ismael@iodev.co.uk>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 15 Aug 2023 11:05:58 +0100
-Jamie Gibbons via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+---
+ package/mawk/mawk.hash | 2 +-
+ package/mawk/mawk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +if BR2_riscv_g
-> +
-> +comment "Instruction Set Extensions"
-> +
-> +config BR2_RISCV_ISA_CUSTOM_RVC
-> +	bool "Compressed Instructions (C)"
-> +	select BR2_RISCV_ISA_RVC
-> +
-> +config BR2_RISCV_ISA_CUSTOM_RVV
-> +	bool "Vector Instructions (V)"
-> +	select BR2_RISCV_ISA_RVV
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
-> +
-> +endif
-
-I believe this is still not correct: now those options are only
-available for the BR2_riscv_g case, no longer for the custom RISC-V
-core case.
-
-Those two options should be available both as add-ons for the riscv_g
-*and* for the riscv custom cases.
-
-Best regards,
-
-Thomas
+diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
+index 69761f77df57..0a31675ac8e9 100644
+--- a/package/mawk/mawk.hash
++++ b/package/mawk/mawk.hash
+@@ -1,2 +1,2 @@
+-sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
++sha256  88f55a632e2736ff5c5f69944abc151734d89d8298d5005921180f39ab7ba6d0  mawk-1.3.4-20230808.tgz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
+index c4a486215d5d..d747f887ce39 100644
+--- a/package/mawk/mawk.mk
++++ b/package/mawk/mawk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MAWK_VERSION = 1.3.4-20200120
++MAWK_VERSION = 1.3.4-20230808
+ MAWK_SITE = https://invisible-mirror.net/archives/mawk
+ MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
+ MAWK_LICENSE = GPL-2.0
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
