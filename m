@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F88EE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:20:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6043EEE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D9F540BE6;
-	Mon, 21 Aug 2023 20:20:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D9F540BE6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19A7640B59;
+	Mon, 21 Aug 2023 20:20:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19A7640B59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VLtHbv9V7TGZ; Mon, 21 Aug 2023 20:20:33 +0000 (UTC)
+	with ESMTP id Q4mGRy67ZLlF; Mon, 21 Aug 2023 20:20:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8345C40B59;
-	Mon, 21 Aug 2023 20:20:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8345C40B59
+	by smtp2.osuosl.org (Postfix) with ESMTP id 10D6B414E9;
+	Mon, 21 Aug 2023 20:20:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10D6B414E9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 724401BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 067C11BF94D
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3276C41554
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2BB7C41529
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3276C41554
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BB7C41529
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HTqMz-MZWYnf for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 20:01:28 +0000 (UTC)
+ with ESMTP id GkOKHOGlB3Pa for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 20:01:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 840C6410DE
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 840C6410DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B4884163E
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B4884163E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63D4E86023; Mon, 21 Aug 2023 20:01:26 +0000 (UTC)
+ id 4521686025; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 16:23:21 +0200
+Date: Tue, 15 Aug 2023 17:16:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 898bdbca1f11fe81e8be7924371326f85f466a27
-X-Git-Newrev: 651429d0b87687d222ac801534fb03e3037b9503
+X-Git-Oldrev: 64490ea84c135a09b863de4d2ff75d0bfcfbdd96
+X-Git-Newrev: 94edad7ed5952f82823e3cd9e01e4e7010af9f96
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200126.63D4E86023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/mv-ddr-marvell: fix build
- with gcc 12
+Message-Id: <20230821200127.4521686025@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/trinity: fix compile
+ error with newer kernels
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,131 +63,177 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=651429d0b87687d222ac801534fb03e3037b9503
+commit: https://git.buildroot.net/buildroot/commit/?id=94edad7ed5952f82823e3cd9e01e4e7010af9f96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-gcc 12 added a warning that triggers on access to low addresses. Add a
-patch to allow access since this is normal for low level code.
-
-Rebase our existing patch on top. While at it, add also a proper
-Upstream tag.
+Add two patches from Upstream git to avoid compilation errors with
+Linux kernel 6.4.x.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4795673785
+ - http://autobuild.buildroot.net/results/7f9/7f9626827a315b54c42e49ccb0bf75f8b5ec971d
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                |  1 -
- ...Allow-access-to-low-addresses-with-gcc-12.patch | 49 ++++++++++++++++++++++
- ...> 0002-Makefile-disable-stack-protection.patch} | 11 +++--
- 3 files changed, 54 insertions(+), 7 deletions(-)
+ ...check-i810-mga-r128-and-savage-support-44.patch | 113 +++++++++++++++++++++
+ .../0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch   |  30 ++++++
+ 2 files changed, 143 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 627b0cc92b..dfc1ba9001 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -108,7 +108,6 @@ boot/at91dataflashboot/0001-do-not-install.patch Upstream
- boot/at91dataflashboot/0002-eabi-fixes.patch Upstream
- boot/grub2/0001-Makefile-Make-grub_fstest.pp-depend-on-config-util.h.patch Upstream
- boot/grub2/0002-grub-mkconfig-Restore-umask-for-the-grub.cfg.patch Upstream
--boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch Upstream
- boot/optee-os/3.13.0/0001-core-zlib-fix-build-warning-when-_LFS64_LARGEFILE-is.patch Upstream
- boot/syslinux/0001-bios-Fix-alignment-change-with-gcc-5.patch Upstream
- boot/syslinux/0002-Disable-PIE-to-avoid-FTBFS-on-amd64.patch Upstream
-diff --git a/boot/mv-ddr-marvell/0001-Allow-access-to-low-addresses-with-gcc-12.patch b/boot/mv-ddr-marvell/0001-Allow-access-to-low-addresses-with-gcc-12.patch
+diff --git a/package/trinity/0005-ioctls-drm-check-i810-mga-r128-and-savage-support-44.patch b/package/trinity/0005-ioctls-drm-check-i810-mga-r128-and-savage-support-44.patch
 new file mode 100644
-index 0000000000..5a623f28f9
+index 0000000000..b91fddb20b
 --- /dev/null
-+++ b/boot/mv-ddr-marvell/0001-Allow-access-to-low-addresses-with-gcc-12.patch
-@@ -0,0 +1,49 @@
-+From 4796a1eacc6a5ccb623e7d2e46a5196f8335e496 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 11 Aug 2023 11:19:49 +0300
-+Subject: [PATCH] Allow access to low addresses with gcc 12
++++ b/package/trinity/0005-ioctls-drm-check-i810-mga-r128-and-savage-support-44.patch
+@@ -0,0 +1,113 @@
++From 6823bacb3c2564bff5da3175c574fd6a6af4d8b2 Mon Sep 17 00:00:00 2001
++From: chuhu <chuhu@redhat.com>
++Date: Sat, 1 Jul 2023 01:02:37 +0800
++Subject: [PATCH] ioctls/drm: check i810,mga,r128 and savage support (#44)
 +
-+gcc 12 added a warning that triggers on access to low addresses. Add a
-+compile option that allows access to lower addresses.
++kernel v6.3-rc1 removed some drm drivers, so add the extra check to make
++the compile succeed.
 +
-+Add the 'cc_option' macro to avoid the compile option when the compiler
-+does not support it.
++7872bc2cb13e drm: Remove the obsolete driver-savage
++28483b8666bf drm: Remove the obsolete driver-r128
++96ed7db55bef drm: Remove the obsolete driver-mga
++cab18866fead drm: Remove the obsolete driver-i810
 +
-+This fixes build with TF-A. TF-A added a similar fix in commit
-+dea23e245fb89.
-+
-+See some more details in
-+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
-+
-+Upstream: https://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell/pull/42
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Signed-off-by: Chunyu Hu <chuhu@redhat.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/kernelslacker/trinity/commit/6823bacb3c2564bff5da3175c574fd6a6af4d8b2
 +---
-+ Makefile | 5 +++++
-+ 1 file changed, 5 insertions(+)
++ configure    |  4 ++++
++ ioctls/drm.c | 14 ++++++++++++++
++ 2 files changed, 18 insertions(+)
 +
-+diff --git a/Makefile b/Makefile
-+index 3f0dd89a7381..045284c30cbc 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -108,6 +108,10 @@ MV_DDR_VER_CSRC = mv_ddr_build_message.c
-+ # create mv_ddr build message and version string source file
-+ $(shell $(MV_DDR_ROOT)/scripts/localversion.sh $(MV_DDR_ROOT) $(MV_DDR_VER_CSRC) 2> /dev/null)
++diff --git a/configure b/configure
++index 944c8cf7..bbaf9afc 100755
++--- a/configure
+++++ b/configure
++@@ -320,6 +320,10 @@ check_header linux/irda.h USE_IRDA
++ check_header linux/rds.h USE_RDS
++ check_header linux/vfio.h USE_VFIO
++ check_header drm/drm.h USE_DRM
+++check_header drm/i810_drm.h USE_DRM_I810
+++check_header drm/mga_drm.h USE_DRM_MGA
+++check_header drm/r128_drm.h USE_DRM_R128
+++check_header drm/savage_drm.h USE_DRM_SAVAGE
++ check_header drm/exynos_drm.h USE_DRM_EXYNOS
++ check_header sound/compress_offload.h USE_SNDDRV_COMPRESS_OFFLOAD
++ check_header linux/kvm.h USE_KVM
++diff --git a/ioctls/drm.c b/ioctls/drm.c
++index 81ed3682..a07a8436 100644
++--- a/ioctls/drm.c
+++++ b/ioctls/drm.c
++@@ -8,13 +8,21 @@
++ #ifdef USE_DRM_EXYNOS
++ #include <drm/exynos_drm.h>
++ #endif
+++#ifdef USE_DRM_I810
++ #include <drm/i810_drm.h>
+++#endif
++ #include <drm/i915_drm.h>
+++#ifdef USE_DRM_MGA
++ #include <drm/mga_drm.h>
+++#endif
++ #include <drm/nouveau_drm.h>
+++#ifdef USE_DRM_R128
++ #include <drm/r128_drm.h>
+++#endif
++ #include <drm/radeon_drm.h>
+++#ifdef USE_DRM_SAVAGE
++ #include <drm/savage_drm.h>
+++#endif
 + 
-++define cc_option
-++	$(shell if $(CC) $(1) -c -x c /dev/null -o /dev/null >/dev/null 2>&1; then echo $(1); fi )
-++endef
-++
-+ # ******************
-+ # U-BOOT SPL SUPPORT
-+ # ******************
-+@@ -331,6 +335,7 @@ OBJ_DIR ?= $(MV_DDR_ROOT)
-+ CFLAGS = -DMV_DDR_ATF -DCONFIG_DDR4
-+ CFLAGS += -Wall -Werror -Os -ffreestanding -mlittle-endian -g -gdwarf-2 -nostdinc
-+ CFLAGS += -march=armv8-a -fpie
-++CFLAGS += $(call cc_option, --param=min-pagesize=0)
++ #include "ioctls.h"
++ #include "utils.h"
++@@ -293,6 +301,7 @@ static const struct ioctl drm_ioctls[] = {
++ #endif
++ #endif
 + 
-+ # PLATFORM is set in ble/ble.mk
-+ ifneq ($(findstring a80x0,$(PLATFORM)),)
+++#ifdef USE_DRM_I810
++ 	/* i810_drm.h */
++ 	IOCTL(DRM_IOCTL_I810_INIT),
++ 	IOCTL(DRM_IOCTL_I810_VERTEX),
++@@ -309,6 +318,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_I810_MC),
++ 	IOCTL(DRM_IOCTL_I810_RSTATUS),
++ 	IOCTL(DRM_IOCTL_I810_FLIP),
+++#endif
++ 
++ 	/* i915_drm.h */
++ 	IOCTL(DRM_IOCTL_I915_INIT),
++@@ -378,6 +388,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_I915_REG_READ),
++ #endif
++ 
+++#ifdef USE_DRM_MGA
++ 	/* mga_drm.h */
++ 	IOCTL(DRM_IOCTL_MGA_INIT),
++ 	IOCTL(DRM_IOCTL_MGA_FLUSH),
++@@ -401,6 +412,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GROBJ_ALLOC),
++ 	IOCTL(DRM_IOCTL_NOUVEAU_NOTIFIEROBJ_ALLOC),
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GPUOBJ_FREE),
+++#endif
++ #ifdef DRM_IOCTL_NOUVEAU_GEM_NEW
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GEM_NEW),
++ #endif
++@@ -417,6 +429,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GEM_INFO),
++ #endif
++ 
+++#ifdef USE_DRM_R128
++ 	/* r128_drm.h */
++ 	IOCTL(DRM_IOCTL_R128_INIT),
++ 	IOCTL(DRM_IOCTL_R128_CCE_START),
++@@ -435,6 +448,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_R128_FULLSCREEN),
++ 	IOCTL(DRM_IOCTL_R128_GETPARAM),
++ 	IOCTL(DRM_IOCTL_R128_FLIP),
+++#endif
++ 
++ 	/* radeon_drm.h */
++ 	IOCTL(DRM_IOCTL_RADEON_CP_INIT),
 +-- 
-+2.40.1
++2.39.2
 +
-diff --git a/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch b/boot/mv-ddr-marvell/0002-Makefile-disable-stack-protection.patch
-similarity index 80%
-rename from boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
-rename to boot/mv-ddr-marvell/0002-Makefile-disable-stack-protection.patch
-index 62b1000727..626279eb47 100644
---- a/boot/mv-ddr-marvell/0001-Makefile-disable-stack-protection.patch
-+++ b/boot/mv-ddr-marvell/0002-Makefile-disable-stack-protection.patch
-@@ -10,25 +10,24 @@ routines.
- The mv-ddr-marvell Makefile provides no way to add custom CFLAGS. Patch
- Makefile to disable stack protection.
- 
-+Upstream: not applicable; Buildroot specific
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: not applicable; Buildroot specific
- ---
-  Makefile | 1 +
-  1 file changed, 1 insertion(+)
- 
- diff --git a/Makefile b/Makefile
--index 3f0dd89a7381..feae75cc16e4 100644
-+index 045284c30cbc..9641354bcf86 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -331,6 +331,7 @@ OBJ_DIR ?= $(MV_DDR_ROOT)
-- CFLAGS = -DMV_DDR_ATF -DCONFIG_DDR4
-+@@ -336,6 +336,7 @@ CFLAGS = -DMV_DDR_ATF -DCONFIG_DDR4
-  CFLAGS += -Wall -Werror -Os -ffreestanding -mlittle-endian -g -gdwarf-2 -nostdinc
-  CFLAGS += -march=armv8-a -fpie
-+ CFLAGS += $(call cc_option, --param=min-pagesize=0)
- +CFLAGS += -fno-stack-protector
-  
-  # PLATFORM is set in ble/ble.mk
-  ifneq ($(findstring a80x0,$(PLATFORM)),)
- -- 
--2.35.1
-+2.40.1
- 
+diff --git a/package/trinity/0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch b/package/trinity/0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch
+new file mode 100644
+index 0000000000..4277983694
+--- /dev/null
++++ b/package/trinity/0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch
+@@ -0,0 +1,30 @@
++From ca07c86b2aeeb91213922eaf481c9e224679a7fd Mon Sep 17 00:00:00 2001
++From: Jiri Slaby <jirislaby@gmail.com>
++Date: Fri, 17 Mar 2023 20:28:24 +0100
++Subject: [PATCH] kvm: drop KVM_SET_MEMORY_REGION (#42)
++
++It was dropped in upstream in commit 61e15f871241 (KVM: Delete all
++references to removed KVM_SET_MEMORY_REGION ioctl).
++
++Co-authored-by: Jiri Slaby <jslaby@suse.cz>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/kernelslacker/trinity/commit/ca07c86b2aeeb91213922eaf481c9e224679a7fd
++---
++ ioctls/kvm.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/ioctls/kvm.c b/ioctls/kvm.c
++index 14c55ef1..30aeed7a 100644
++--- a/ioctls/kvm.c
+++++ b/ioctls/kvm.c
++@@ -8,7 +8,6 @@
++ #include "utils.h"
++ 
++ static const struct ioctl kvm_ioctls[] = {
++-	IOCTL(KVM_SET_MEMORY_REGION),
++ 	IOCTL(KVM_CREATE_VCPU),
++ 	IOCTL(KVM_GET_DIRTY_LOG),
++ 	IOCTL(KVM_SET_NR_MMU_PAGES),
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
