@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC4AEC001B0
-	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 09:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34CBBC001B0
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 09:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 32E9C40BC0;
-	Tue, 15 Aug 2023 09:39:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32E9C40BC0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6577240BD6;
+	Tue, 15 Aug 2023 09:54:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6577240BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4BiwTKG1ylAx; Tue, 15 Aug 2023 09:39:00 +0000 (UTC)
+	with ESMTP id Snh5COqHjMpi; Tue, 15 Aug 2023 09:54:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 819F540BE1;
-	Tue, 15 Aug 2023 09:38:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 819F540BE1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D04A21BF2FF
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 09:38:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A413140BEA;
+	Tue, 15 Aug 2023 09:54:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A413140BEA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C47341BF2FF
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 09:54:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B664B40BBF
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 09:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B664B40BBF
+ by smtp1.osuosl.org (Postfix) with ESMTP id A9C5680C1B
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 09:54:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9C5680C1B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jks50Kogw7xX for <buildroot@lists.busybox.net>;
- Tue, 15 Aug 2023 09:38:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1aeZVT6TtMhi for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 09:54:28 +0000 (UTC)
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B3AE040900
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 09:38:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3AE040900
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 084C780310
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 09:54:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 084C780310
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6A6FE13F8AF;
- Tue, 15 Aug 2023 11:38:51 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 12F2513F8D4;
+ Tue, 15 Aug 2023 11:54:24 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 15 Aug 2023 11:38:44 +0200
-Message-ID: <20230815093844.13369-1-ju.o@free.fr>
+Date: Tue, 15 Aug 2023 11:54:17 +0200
+Message-ID: <20230815095417.15951-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692092332;
- bh=N8FgvN4RR7D+z2ADCUIbIiMy/etF+1KfBPI2Nx0LADg=;
+ d=free.fr; s=smtp-20201208; t=1692093265;
+ bh=MZPGFEEnINJQRdwFGlE3Or9MljxFYuFi+UfVNJNdKOo=;
  h=From:To:Cc:Subject:Date:From;
- b=bFDwEwKc2Q+7HTQ1+8cn5AbaWmeYwMG4aYKWXQAgQjin7MZcU+PV5Rui8OT6qAGnq
- ZWK4nPNjMPRZM1naI4QROJLVc6FxWON/VBXbO8WnzwJuFZH8pkq4pICca3/MykCNL+
- joGy/2yEYp9XE+8KKdSpGMNFnOm17610KHzXxOpi1Mz8k1SbI2mi+sM6jRw/35AM8G
- 1Ciz7A15QQH0aeawPh4ZFgr7NgswlZ0yk4hkqx4XH00Ajz+lgQQqeRZLK4JIcvcive
- ZKf4m5yMeli/LaIDr2UmpyO7W13tLLANOxJ5aSCOLougdoPolieJffuTcFBjNU9Bqs
- d7el2n/KeEtdw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=gOrbNYeJ5I2LGFekdWtQfHrJ/4UWRdEtMysdYDrotk0ySL3jXRBU/l0dXY5C1jaj+
+ MrGsHAhZjZbtw39Hb8W3K4uK7js2cNO2rej2v1Rj/8JkvHnjux1gYAKCkKaUH0+uMX
+ wMhLzD/Guj9LFSZO3Ca6l/DTplYU9kfDt0oYiafG21Z7t9+NILLXqU4J+q15CHYje7
+ QiIir+7wKh25EiWBmYJIxKBgkJ0Xd970uFe1zZjxJCWBI3x8ncCm/wjYkT1R6sNejT
+ 727Jf5XYcV/zALJvYX8X7vNnAWd5jo+qCLBKcPm4/qk8xtrT8FANsq1N6bVlW38IM9
+ BMcYFdvScsQuw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=bFDwEwKc
-Subject: [Buildroot] [PATCH next 1/1] package/lsof: change _LICENSE_FILES to
- use COPYING
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=gOrbNYeJ
+Subject: [Buildroot] [PATCH next 1/1] DEVELOPERS: fix entry for
+ board/firefly/roc-rk3399-pc/
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,55 +77,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit e3322e2c7 "lsof: add license info" added the package license
-info. At that time, lsof was at version 4.85. The package was not
-including a dedicated license file. Instead, the license text was
-copied in many files (source files, readmes, ...). It was then decided
-to use the small source file "dialects/linux/dproto.h".
+commit b86adfb89a "configs/roc_rk3399_pc: new defconfig" introduced an
+incorrect DEVELOPERS file entry for the directory
+"board/firefly/roc-rk3399/". The correct directory name is
+"roc-rk3399-pc".
 
-Recently, lsof added a COPYING license file. See [1]. This commit was
-first included in lsof version 4.97.0. We can now use this file.
+Using the get-developers script on any file generates a warning,
+for example:
 
-The license file hash is updated due to formatting changes. As a side
-note, the copyright year in source file was 1997 (see [2]), whereas in
-the new license file it is 2002. Source files have different copyright
-dates, and can be as old as 1994, for example in [3]. The rest of the
-license text remains unchanged.
+    utils/get-developers DEVELOPERS
+    WARNING: 'board/firefly/roc-rk3399/' doesn't match any file, line 2584
+    git send-email --to buildroot@buildroot.org
 
-[1] https://github.com/lsof-org/lsof/commit/62dab61cae3ca9e4d41ec573ae5cda0c5689c326
-[2] https://github.com/lsof-org/lsof/blob/4.98.0/dialects/linux/dproto.h#L9
-[3] https://github.com/lsof-org/lsof/blob/4.98.0/arg.c#L7
+This commit fixes the issue by putting the correct directory name.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/lsof/lsof.hash | 2 +-
- package/lsof/lsof.mk   | 4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lsof/lsof.hash b/package/lsof/lsof.hash
-index b6a29b3cea..d9e85ac15c 100644
---- a/package/lsof/lsof.hash
-+++ b/package/lsof/lsof.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  80308a614508814ac70eb2ae1ed2c4344dcf6076fa60afc7734d6b1a79e62b16  lsof-4.98.0.tar.gz
--sha256  32a728188b19bf86917659d904ab29d0a294b4506e1c98b8b7f1c70ab4975fe1  dialects/linux/dproto.h
-+sha256  225222ff9bf38abc2cef7205e9b05c60935efa9ec28d1fd01e503c9316088718  COPYING
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 66911dddb9..66f346aa13 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -7,9 +7,7 @@
- LSOF_VERSION = 4.98.0
- LSOF_SITE = $(call github,lsof-org,lsof,$(LSOF_VERSION))
- LSOF_LICENSE = lsof license
--# License is repeated in each file, this is a relatively small one.
--# It is also defined in 00README, but that contains a lot of other cruft.
--LSOF_LICENSE_FILES = dialects/linux/dproto.h
-+LSOF_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 69ab723c0c..705aae9501 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2581,7 +2581,7 @@ N:	Robert Rose <robertroyrose@gmail.com>
+ F:	package/grpc/
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- LSOF_DEPENDENCIES += libtirpc
+ N:	Roberto Medina <robertoxmed@gmail.com>
+-F:	board/firefly/roc-rk3399/
++F:	board/firefly/roc-rk3399-pc/
+ F:	configs/roc_pc_rk3399_defconfig
+ 
+ N:	Rodrigo Rebello <rprebello@gmail.com>
 -- 
 2.41.0
 
