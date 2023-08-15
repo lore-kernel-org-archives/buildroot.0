@@ -4,74 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79C9FC001E0
-	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 10:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2764DC0015E
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 10:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3078640BF9;
-	Tue, 15 Aug 2023 10:06:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3078640BF9
+	by smtp2.osuosl.org (Postfix) with ESMTP id C4B4D400E7;
+	Tue, 15 Aug 2023 10:07:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4B4D400E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BL1m1kAAbC0R; Tue, 15 Aug 2023 10:06:32 +0000 (UTC)
+	with ESMTP id qDRBvssQ0iXY; Tue, 15 Aug 2023 10:07:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B9DC40BFF;
-	Tue, 15 Aug 2023 10:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B9DC40BFF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 47E521BF2C0
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 10:05:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C53CC40BE9;
+	Tue, 15 Aug 2023 10:07:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C53CC40BE9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A55C31BF2C0
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 10:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2032781ECC
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 10:05:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2032781ECC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7B2FF402D2
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 10:07:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B2FF402D2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WdGECKAnUguX for <buildroot@lists.busybox.net>;
- Tue, 15 Aug 2023 10:05:56 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.153.233])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 73EC081EC8
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 10:05:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73EC081EC8
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; d="scan'208";a="229879105"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
- by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 15 Aug 2023 03:05:56 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 15 Aug 2023 03:05:55 -0700
-Received: from jamie-dev.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 15 Aug 2023 03:05:53 -0700
-To: <buildroot@buildroot.org>
-Date: Tue, 15 Aug 2023 11:06:00 +0100
-Message-ID: <20230815100600.297932-4-jamie.gibbons@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230815100600.297932-1-jamie.gibbons@microchip.com>
-References: <20230815100600.297932-1-jamie.gibbons@microchip.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qaCpA_mqcdnr for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 10:07:13 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F3CC9402B3
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 10:07:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3CC9402B3
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id A7F5A35206C7; Tue, 15 Aug 2023 12:07:10 +0200 (CEST)
+Date: Tue, 15 Aug 2023 12:07:10 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZNtOTqtI6t+Uw/lK@waldemar-brodkorb.de>
 MIME-Version: 1.0
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1692093956; x=1723629956;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=aVyGqNfO9+GeKizI6+wSROTNgt/Ty+2s+p8XMZQdefM=;
- b=yPThx2a6wHoM+/npuKnEK9rFhbuP9DZFPgqgKSE9bqRUSU/YQ95q97rh
- PlkGStNrqEP2GF7tdwyGgESi6WIQeUQPDU6hhiUUbdU+sz09gbk0peQJD
- UOXiVUOj5O1ce8b74l3dnE34ppX4WptQ8qR0Lz8FFwFCI1DQp6HjddKD9
- Y6QOZxyw0wy+TUpYCofN4BEtLKQsKbs/iFziThNLMZ+e3pfFcSU5QYmc2
- vZuLtXjBp3sErJi1OZIZndXdm9b/UnceelOQk4oiGsnQRFW5frE7Pdl68
- lKMy04uVM7UmBVS77Vu2PEamM21V4+DvBesGdVGATRjk8/InbugpmdD1t
- w==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com
- header.a=rsa-sha256 header.s=mchp header.b=yPThx2a6
-Subject: [Buildroot] [PATCH 3/3] board/microchip/mpfs_icicle: update
- post-image script
+ d=openadk.org; s=2022; 
+ t=1692094030; bh=2+Tj9NDcUc4rBzDxqj34zAm+UkwdGUuWz4AzJ+tx7Ls=;
+ h=Date:From:To:Subject:From;
+ b=o22THSl7tjg7NHo2xZBXso1T9AnTuvanDD7fZL8QAECm91A7CLsv/hcL9CrikCDvz
+ lODIlWRvXH/cs0/JYoCPaLmRX8toVSay3bYmR/khcJU2WBYqTo34NHU6UAebjsPKhv
+ B7NzwdQS8SsOCTXNRSbiWd0fPV/n94L5gFWs+aQ27gTdlrlHSJLw255G1QUBUSunCL
+ DoGHxam/1hCh0+FvY1ckwe9p3NoXlUMWSFF0tTc6x/KArSLCt8my8SUGG/bWaE/Jxl
+ kD9Bf13X01czuh+Rl+T51POksCne4Pspl+MOCB7rr3OxocfS14ypIppP8loN8+NHyL
+ dHn7+eKdHe+EA==
+Subject: [Buildroot] [PATCH] package/trinity: fix compile error with newer
+ kernels
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,47 +67,182 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
-Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
-Cc: Conor Dooley <Conor.Dooley@microchip.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>, Jamie
- Gibbons <jamie.gibbons@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The hss-payload-generator could not find where u-boot.bin was when
-looking for it using the config.yaml. This needs to be ran in the
-same directory as the u-boot.bin file to enable it to find it. Fix the
-post image script to allow an image to get built.
+Add two patches from Upstream git to avoid compilation errors with
+Linux kernel 6.4.x.
 
-Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/7f9/7f9626827a315b54c42e49ccb0bf75f8b5ec971d
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- board/microchip/mpfs_icicle/post-image.sh | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...-i810-mga-r128-and-savage-support-44.patch | 113 ++++++++++++++++++
+ ...06-kvm-drop-KVM_SET_MEMORY_REGION-42.patch |  30 +++++
+ 2 files changed, 143 insertions(+)
+ create mode 100644 package/trinity/0005-ioctls-drm-check-i810-mga-r128-and-savage-support-44.patch
+ create mode 100644 package/trinity/0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch
 
-diff --git a/board/microchip/mpfs_icicle/post-image.sh b/board/microchip/mpfs_icicle/post-image.sh
-index 04b34bbd40..2368aa42f6 100755
---- a/board/microchip/mpfs_icicle/post-image.sh
-+++ b/board/microchip/mpfs_icicle/post-image.sh
-@@ -2,7 +2,9 @@
- HSS_PAYLOAD_GENERATOR=${HOST_DIR}/bin/hss-payload-generator
- MKIMAGE=${HOST_DIR}/bin/mkimage
- 
--"${HSS_PAYLOAD_GENERATOR}" -c board/microchip/mpfs_icicle/config.yaml "${BINARIES_DIR}"/payload.bin
--cp board/microchip/mpfs_icicle/mpfs_icicle.its "${BINARIES_DIR}"/mpfs_icicle.its
-+cd "${BINARIES_DIR}" || exit
-+"${HSS_PAYLOAD_GENERATOR}" -c "${CONFIG_DIR}"/board/microchip/mpfs_icicle/config.yaml payload.bin
-+cd "${CONFIG_DIR}" || exit
-+cp "${CONFIG_DIR}"/board/microchip/mpfs_icicle/mpfs_icicle.its "${BINARIES_DIR}"/mpfs_icicle.its
- (cd "${BINARIES_DIR}" && "${MKIMAGE}" -f mpfs_icicle.its mpfs_icicle.itb)
- support/scripts/genimage.sh -c board/microchip/mpfs_icicle/genimage.cfg
+diff --git a/package/trinity/0005-ioctls-drm-check-i810-mga-r128-and-savage-support-44.patch b/package/trinity/0005-ioctls-drm-check-i810-mga-r128-and-savage-support-44.patch
+new file mode 100644
+index 0000000000..b91fddb20b
+--- /dev/null
++++ b/package/trinity/0005-ioctls-drm-check-i810-mga-r128-and-savage-support-44.patch
+@@ -0,0 +1,113 @@
++From 6823bacb3c2564bff5da3175c574fd6a6af4d8b2 Mon Sep 17 00:00:00 2001
++From: chuhu <chuhu@redhat.com>
++Date: Sat, 1 Jul 2023 01:02:37 +0800
++Subject: [PATCH] ioctls/drm: check i810,mga,r128 and savage support (#44)
++
++kernel v6.3-rc1 removed some drm drivers, so add the extra check to make
++the compile succeed.
++
++7872bc2cb13e drm: Remove the obsolete driver-savage
++28483b8666bf drm: Remove the obsolete driver-r128
++96ed7db55bef drm: Remove the obsolete driver-mga
++cab18866fead drm: Remove the obsolete driver-i810
++
++Signed-off-by: Chunyu Hu <chuhu@redhat.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/kernelslacker/trinity/commit/6823bacb3c2564bff5da3175c574fd6a6af4d8b2
++---
++ configure    |  4 ++++
++ ioctls/drm.c | 14 ++++++++++++++
++ 2 files changed, 18 insertions(+)
++
++diff --git a/configure b/configure
++index 944c8cf7..bbaf9afc 100755
++--- a/configure
+++++ b/configure
++@@ -320,6 +320,10 @@ check_header linux/irda.h USE_IRDA
++ check_header linux/rds.h USE_RDS
++ check_header linux/vfio.h USE_VFIO
++ check_header drm/drm.h USE_DRM
+++check_header drm/i810_drm.h USE_DRM_I810
+++check_header drm/mga_drm.h USE_DRM_MGA
+++check_header drm/r128_drm.h USE_DRM_R128
+++check_header drm/savage_drm.h USE_DRM_SAVAGE
++ check_header drm/exynos_drm.h USE_DRM_EXYNOS
++ check_header sound/compress_offload.h USE_SNDDRV_COMPRESS_OFFLOAD
++ check_header linux/kvm.h USE_KVM
++diff --git a/ioctls/drm.c b/ioctls/drm.c
++index 81ed3682..a07a8436 100644
++--- a/ioctls/drm.c
+++++ b/ioctls/drm.c
++@@ -8,13 +8,21 @@
++ #ifdef USE_DRM_EXYNOS
++ #include <drm/exynos_drm.h>
++ #endif
+++#ifdef USE_DRM_I810
++ #include <drm/i810_drm.h>
+++#endif
++ #include <drm/i915_drm.h>
+++#ifdef USE_DRM_MGA
++ #include <drm/mga_drm.h>
+++#endif
++ #include <drm/nouveau_drm.h>
+++#ifdef USE_DRM_R128
++ #include <drm/r128_drm.h>
+++#endif
++ #include <drm/radeon_drm.h>
+++#ifdef USE_DRM_SAVAGE
++ #include <drm/savage_drm.h>
+++#endif
++ 
++ #include "ioctls.h"
++ #include "utils.h"
++@@ -293,6 +301,7 @@ static const struct ioctl drm_ioctls[] = {
++ #endif
++ #endif
++ 
+++#ifdef USE_DRM_I810
++ 	/* i810_drm.h */
++ 	IOCTL(DRM_IOCTL_I810_INIT),
++ 	IOCTL(DRM_IOCTL_I810_VERTEX),
++@@ -309,6 +318,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_I810_MC),
++ 	IOCTL(DRM_IOCTL_I810_RSTATUS),
++ 	IOCTL(DRM_IOCTL_I810_FLIP),
+++#endif
++ 
++ 	/* i915_drm.h */
++ 	IOCTL(DRM_IOCTL_I915_INIT),
++@@ -378,6 +388,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_I915_REG_READ),
++ #endif
++ 
+++#ifdef USE_DRM_MGA
++ 	/* mga_drm.h */
++ 	IOCTL(DRM_IOCTL_MGA_INIT),
++ 	IOCTL(DRM_IOCTL_MGA_FLUSH),
++@@ -401,6 +412,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GROBJ_ALLOC),
++ 	IOCTL(DRM_IOCTL_NOUVEAU_NOTIFIEROBJ_ALLOC),
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GPUOBJ_FREE),
+++#endif
++ #ifdef DRM_IOCTL_NOUVEAU_GEM_NEW
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GEM_NEW),
++ #endif
++@@ -417,6 +429,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_NOUVEAU_GEM_INFO),
++ #endif
++ 
+++#ifdef USE_DRM_R128
++ 	/* r128_drm.h */
++ 	IOCTL(DRM_IOCTL_R128_INIT),
++ 	IOCTL(DRM_IOCTL_R128_CCE_START),
++@@ -435,6 +448,7 @@ static const struct ioctl drm_ioctls[] = {
++ 	IOCTL(DRM_IOCTL_R128_FULLSCREEN),
++ 	IOCTL(DRM_IOCTL_R128_GETPARAM),
++ 	IOCTL(DRM_IOCTL_R128_FLIP),
+++#endif
++ 
++ 	/* radeon_drm.h */
++ 	IOCTL(DRM_IOCTL_RADEON_CP_INIT),
++-- 
++2.39.2
++
+diff --git a/package/trinity/0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch b/package/trinity/0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch
+new file mode 100644
+index 0000000000..4277983694
+--- /dev/null
++++ b/package/trinity/0006-kvm-drop-KVM_SET_MEMORY_REGION-42.patch
+@@ -0,0 +1,30 @@
++From ca07c86b2aeeb91213922eaf481c9e224679a7fd Mon Sep 17 00:00:00 2001
++From: Jiri Slaby <jirislaby@gmail.com>
++Date: Fri, 17 Mar 2023 20:28:24 +0100
++Subject: [PATCH] kvm: drop KVM_SET_MEMORY_REGION (#42)
++
++It was dropped in upstream in commit 61e15f871241 (KVM: Delete all
++references to removed KVM_SET_MEMORY_REGION ioctl).
++
++Co-authored-by: Jiri Slaby <jslaby@suse.cz>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/kernelslacker/trinity/commit/ca07c86b2aeeb91213922eaf481c9e224679a7fd
++---
++ ioctls/kvm.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/ioctls/kvm.c b/ioctls/kvm.c
++index 14c55ef1..30aeed7a 100644
++--- a/ioctls/kvm.c
+++++ b/ioctls/kvm.c
++@@ -8,7 +8,6 @@
++ #include "utils.h"
++ 
++ static const struct ioctl kvm_ioctls[] = {
++-	IOCTL(KVM_SET_MEMORY_REGION),
++ 	IOCTL(KVM_CREATE_VCPU),
++ 	IOCTL(KVM_GET_DIRTY_LOG),
++ 	IOCTL(KVM_SET_NR_MMU_PAGES),
++-- 
++2.39.2
++
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
