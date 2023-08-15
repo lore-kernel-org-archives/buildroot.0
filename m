@@ -4,60 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30714EB64DD
-	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 03:36:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC305C001B0
+	for <buildroot@archiver.kernel.org>; Tue, 15 Aug 2023 04:06:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9135940972;
-	Tue, 15 Aug 2023 03:36:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9135940972
+	by smtp2.osuosl.org (Postfix) with ESMTP id 444AC40114;
+	Tue, 15 Aug 2023 04:06:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 444AC40114
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eMViFDagW0Rp; Tue, 15 Aug 2023 03:36:24 +0000 (UTC)
+	with ESMTP id UxixcKl8xUnz; Tue, 15 Aug 2023 04:06:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0283340220;
-	Tue, 15 Aug 2023 03:36:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0283340220
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7CBBF4020B;
+	Tue, 15 Aug 2023 04:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7CBBF4020B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B71441BF380
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 03:36:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 31DEA1BF371
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 04:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 688F840931
- for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 03:36:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 688F840931
+ by smtp4.osuosl.org (Postfix) with ESMTP id 073FA4175C
+ for <buildroot@lists.busybox.net>; Tue, 15 Aug 2023 04:06:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 073FA4175C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 48i_sf4lp_oO for <buildroot@lists.busybox.net>;
- Tue, 15 Aug 2023 03:36:19 +0000 (UTC)
+ with ESMTP id WJz2J35FiIlw for <buildroot@lists.busybox.net>;
+ Tue, 15 Aug 2023 04:06:06 +0000 (UTC)
 Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EC8B340900
- for <buildroot@buildroot.org>; Tue, 15 Aug 2023 03:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC8B340900
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6B4BD41750
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 04:06:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B4BD41750
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id D24B03520B80; Tue, 15 Aug 2023 05:36:14 +0200 (CEST)
-Date: Tue, 15 Aug 2023 05:36:14 +0200
+ id 7CA0535206AA; Tue, 15 Aug 2023 06:06:04 +0200 (CEST)
+Date: Tue, 15 Aug 2023 06:06:04 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZNryrsoZV6f+TZll@waldemar-brodkorb.de>
-References: <ZNiFAM4q72gwMume@waldemar-brodkorb.de>
- <20230814165343.2e3936c6@windsurf>
+To: buildroot@buildroot.org
+Message-ID: <ZNr5rFHGHQd11YNe@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230814165343.2e3936c6@windsurf>
 X-Operating-System: Linux 5.10.0-21-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1692070574; bh=aA+Fnb60eDWCbkwp5nHePLhgu9rctmpk54NQ3zs7Ra0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Q7xxQ4CNGkP/vV7Jn2Kb10Sopj35irKdycPitvXh/625a6GuO5g7Q3rv39wDeCOfN
- xx7xp+HHHL9dAK8OUxsLn6YmJ+3LTAyxh4Q2drLY01KbFSy87oLI41BOBHpJC44xT/
- gVT1vC8qjl3+a9J+c8HuUl+mL86wNsRHgTu3ZdfY/iHYeNeIC7yVUv8jXj+ZvsTmRV
- d+sqt4svhC/SrBNm1hyhKOXd6iWIU2wWVbgfKPeWHBgZKlFqfQPpXkBH/mDn6rWG6Q
- N43DelfAHso8zFWjF9Z0d/GpUpcEXlq2UZWhO42F4H4J5aFDx2MLLDiRgHmrPY/hY2
- WeQWiGA/uLOXw==
-Subject: Re: [Buildroot] [PATCH 2/2] package/tcf-agent: fix uClibc-ng
- compile on ARM
+ t=1692072364; bh=Z5GnToupyUAJ4EF/xfR/HcixtHgbGrGpmYYpFYOl1/U=;
+ h=Date:From:To:Subject:From;
+ b=dM2N17mBwA0Z+7lqKVn/SoyHyZpN3FJcW21Ot9Qy8GgZ2BYu0WVoNaqE96YQWVjbc
+ fyueCZx5TxlsEaOsyLYo4qfrgUgy3jDnBU+rYP1YNK0yk+iTW9Ms4HfzWAzjlhJFOW
+ 80Z4e8VAueJkvfA2PwtcAEDu/gehStR5fwNer0xqPuSF0SgJu/400/Rtf4hN96Tleu
+ qtuWHp6a6AHL4f3Y4G4fcCgS8MCd3qqNjCMxZ3KPf+DMpvnHD01PokX6eYtBgiYCQC
+ GQ5kNfMh4xcdj2t5BLNA5/Fy2yh5rezr7HBZb/UrEJTiXZRR9YSStC0AlxKHqb5NFw
+ mbyv5zgNrOiIQ==
+Subject: [Buildroot] [PATCH] package/dmraid: fix compile issue with musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,46 +65,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>,
- buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Musl removed LFS64 alias of lseek in 1.2.4.
+Tested wth qemu_mips32r6_malta_defconfig.
 
-> On Sun, 13 Aug 2023 09:23:44 +0200
-> Waldemar Brodkorb <wbx@openadk.org> wrote:
-> 
-> > +ifeq ($(BR2_STATIC_LIBS),y)
-> > +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-> > +TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
-> > +endif
-> > +endif
-> 
-> What is the situation with musl?
+No need to backport to older Buildroot releases.
 
-Musl works fine with static and shared without this patch.
-How should a v2 look like? 
- 
-> With glibc, BR2_STATIC_LIBS=y is impossible.
-> 
-> But with musl, BR2_STATIC_LIBS=y is possible. Is getauxval() always
-> supported on musl, regardless of static or shared?
+Fixes:
+ - http://autobuild.buildroot.net/results/c6f/c6fc3a7f03171cced5a26246d14113c29e641086
 
-Yes.
- 
-> Also, shouldn't the horrible "#  define USE_getauxval
-> (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 &&
-> __GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) &&
-> defined(__HAVE_SHARED__)))" be turned into a proper CMake test ?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/dmraid/0002-remove-lseek64.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/dmraid/0002-remove-lseek64.patch
 
-That might be something upstream should do. :)
+diff --git a/package/dmraid/0002-remove-lseek64.patch b/package/dmraid/0002-remove-lseek64.patch
+new file mode 100644
+index 0000000000..1e6636bf31
+--- /dev/null
++++ b/package/dmraid/0002-remove-lseek64.patch
+@@ -0,0 +1,19 @@
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: N/A upstream appears dormant
++diff -Nur dmraid.orig/1.0.0.rc16-3/dmraid/lib/misc/file.c dmraid/1.0.0.rc16-3/dmraid/lib/misc/file.c
++--- dmraid.orig/1.0.0.rc16-3/dmraid/lib/misc/file.c	2010-01-11 17:19:29.000000000 +0100
+++++ dmraid/1.0.0.rc16-3/dmraid/lib/misc/file.c	2023-08-11 13:18:25.762988533 +0200
++@@ -68,12 +68,7 @@
++ 	if ((fd = open(path, flags, lc->mode)) == -1)
++ 		LOG_ERR(lc, 0, "opening \"%s\"", path);
++ 
++-#ifdef __KLIBC__
++-#define	DMRAID_LSEEK	lseek
++-#else
++-#define	DMRAID_LSEEK	lseek64
++-#endif
++-	if (offset && (o = DMRAID_LSEEK(fd, offset, SEEK_SET)) == (loff_t) - 1)
+++	if (offset && (o = lseek(fd, offset, SEEK_SET)) == (loff_t) - 1)
++ 		log_err(lc, "%s: seeking device \"%s\" to %" PRIu64,
++ 			who, path, offset);
++ 	else if (rw->func(fd, buffer, size) != size)
+-- 
+2.39.2
 
-best regards
- Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
