@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 843D9C25B7D
-	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 20:14:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B0CC25B7D
+	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 20:21:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1511E61336;
-	Wed, 16 Aug 2023 20:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1511E61336
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE5E1613C9;
+	Wed, 16 Aug 2023 20:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE5E1613C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dTcpplR_Xbxf; Wed, 16 Aug 2023 20:14:37 +0000 (UTC)
+	with ESMTP id kWIm0dfLMdGm; Wed, 16 Aug 2023 20:21:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50C7260F6E;
-	Wed, 16 Aug 2023 20:14:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50C7260F6E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F22E31BF381
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:14:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8A5A61336;
+	Wed, 16 Aug 2023 20:21:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8A5A61336
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A8061BF381
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBC3F60F6E
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:14:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBC3F60F6E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F56841730
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:21:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F56841730
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dLiSVK_9r7vl for <buildroot@lists.busybox.net>;
- Wed, 16 Aug 2023 20:14:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id P2vBKUr7yBRE for <buildroot@lists.busybox.net>;
+ Wed, 16 Aug 2023 20:21:49 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C95A160A82
- for <buildroot@buildroot.org>; Wed, 16 Aug 2023 20:14:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C95A160A82
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5FDE2400EF
+ for <buildroot@buildroot.org>; Wed, 16 Aug 2023 20:21:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FDE2400EF
 Received: from fli4l.lan.fli4l (p4fd6c625.dip0.t-ipconnect.de [79.214.198.37])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id A088EA4C09F0
- for <buildroot@buildroot.org>; Wed, 16 Aug 2023 22:14:31 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:33088)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 79AA2A4C0824;
+ Wed, 16 Aug 2023 22:21:47 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40346)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qWMuV-00055c-1E
- for buildroot@buildroot.org; Wed, 16 Aug 2023 22:14:31 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qWN1X-0006OM-0o;
+ Wed, 16 Aug 2023 22:21:47 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 16 Aug 2023 22:14:31 +0200
-Message-Id: <20230816201431.1401207-1-bernd@kuhls.net>
+Date: Wed, 16 Aug 2023 22:21:47 +0200
+Message-Id: <20230816202147.1790367-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1692216871;
- bh=UbkHuT9Qp9gmcu+NyAu0Y2T8eaZv6v0ULDItSGeQEyY=;
- h=From:To:Subject:Date:From;
- b=c8gvAZfh2aXN3syvPHUd3VJtxDUDTP/39UFCe5C1yrIj+J6Asbv/UrfogOjMY8Jxt
- OG7RVp9j2sPU0DFy0FCiec2ATcHxz5loROC8Oez6QD/KCQh4NkUPAw6xyJDF4KCQVp
- qW+58rEMgEsD0StvwKrGlnl8Nq64ua2ehbx13mJqMIf9n9okBZELvI9FDfKpj4rMu1
- GGOoIE7WTWWhcLDUkEfedqdc1zc58z/jL4ctm7SqW7PTnTXlAKOb9aVlltWtd/Hz1t
- Vg0hv2WiIBV6JKiKwEDwk9KgRt1hYyubvVdK3Y9BBu8vHnozqwXNBmVJ+upSOj8MVw
- Qo15SBboiaNyQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202306131828; t=1692217307;
+ bh=hgQad15U81YbtTGTngk40T7a4Jnx0GEr1Bx9J1jSEEA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=IMBu8myJ6hpVxXBGdjj24dMlVNu8AUoSU9kp0BBTH35u5vwNwKw9AqwhUG1d6H9Nz
+ qKItIHi73Qz+FYw4mroEGb1V1jEi80o1AL5Xc/ISlgZ7wuTgVwRbJ94jSwDKi5wmdk
+ mG99MNcDC3fmXYU6GX3ut6IlhRh+k4sMSEtiMU45NIIMSgsTEuU2E5PiMlCc9AGhUS
+ Z7zmdtoU8/yaHUSn/IpzEhqGCfYKkZRkL9rcgNH3Vgoc3FSVA07hM4fjki4E2RyO6v
+ OMNlqHZG2P0WDo4E6UBxuGTBbwOCrQz8IEFy8A256xygBM02zNIc+vm5kMNSPr6KLo
+ mn6KZyN7Txuhg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=c8gvAZfh
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.{4, 10, 15}.x / 6.{1, 4}.x series
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=IMBu8myJ
+Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 23.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,81 +75,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-August/000727.html
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 32940bc346..d3448ba744 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index e602953a3f..5dbf984735 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.4.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.4.11" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 40ace29532..0177988c45 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  b8b8a29852b999f337c4e93eff6c91fb7fd2d49a6614cbcbeb6fa171ba55cc9f  linux-6.4.9.tar.xz
--sha256  2e51d41fe11d082ae167cee05772bb07ca7f19448d2b46772d8ca2db7673a1a5  linux-6.1.44.tar.xz
-+sha256  546b68b5097d3c0d74722de62aae217729d98e45fbb6bd458b490ac21ea40918  linux-6.4.11.tar.xz
-+sha256  f5f67bcfccd47f8d9db2d5ba24e33af7778f40a777577d1fba424f4a1712a296  linux-6.1.46.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  150f3846b76cd23a6135f49cef71372bade5a06e851cb4f8558df8b862d8fec7  linux-5.15.125.tar.xz
--sha256  4c03516ae1d417571faaef175932d0892710bcbe0173e40550014d043d9098c9  linux-5.10.189.tar.xz
--sha256  3a78587523940374a7319089b63357c7dc412b90f5879d512265e59173588267  linux-5.4.252.tar.xz
-+sha256  add0a575341b263a06e93599fc220a5dd34cb4ca5b9d05097a5db2a061928f26  linux-5.15.127.tar.xz
-+sha256  cb54660ed4917cc4f9a9ab93d117defefd8bcbe745ec6082d909bbfd5ae962c2  linux-5.10.191.tar.xz
-+sha256  51608da961b5e34d6a9452a7b302699e109633f769a4253c74b1048abba8d9c7  linux-5.4.254.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  9fa5e24b7d791583f8cd001bcf02b52f569f261e276dc1dab2552974dca20ecf  linux-4.19.290.tar.xz
--sha256  d0e32bd47a547cc20e0ce09ff45514282742edb2af38df5dc0a03f22d4321715  linux-4.14.321.tar.xz
-+sha256  349728d3d143fcee484b34e34e536fe48dfb8bb71263f81a66fd572cc9162137  linux-4.19.292.tar.xz
-+sha256  6f0a9010b2451e7ab5b28e38c81b3c5149277ab5fe0e08059e60eb602b804ebc  linux-4.14.323.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c7d725aa13..8a25067003 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -400,13 +400,13 @@ endchoice
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 23.1.5
++MESA3D_HEADERS_VERSION = 23.1.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 3606cca56d..95133d3de9 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000726.html
+-sha256  3cf88576fdebf24fc4047067936131c90cb6541c27365996b79b661dec1fb153  mesa-23.1.5.tar.xz
+-sha512  c5eac5a497561374eaf931214aebc9001820c5ab49f9b8c5634b62af081b03b2f21c169c936524b2953c8815eb27dfb5c8c12276b9b1c119722cd6fea0b22d85  mesa-23.1.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000727.html
++sha256  f4c7fd8e7b472a88da7d83e9a48f6f3bd17d4ea2cc4386f7231b796f3964157a  mesa-23.1.6.tar.xz
++sha512  24f1c626fa05a82bcdfb24b67b8e5f96f94d5748309631b83e8d7a62142853cd3be90b92c56bac3bc4d223bf40b424d6d6a9977537b899107295b7d45d7e2575  mesa-23.1.6.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index add9232d2f..8f3d224417 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.321"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.290"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.252"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.189"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.125"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.44"	if BR2_KERNEL_HEADERS_6_1
--	default "6.4.9"		if BR2_KERNEL_HEADERS_6_4
-+	default "4.14.323"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.292"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.254"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.191"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.127"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.46"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.4.11"	if BR2_KERNEL_HEADERS_6_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 23.1.5
++MESA3D_VERSION = 23.1.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.39.2
 
