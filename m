@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 918E8C19F4F
-	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 20:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73276C25B5C
+	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 20:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3118960E47;
-	Wed, 16 Aug 2023 20:00:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3118960E47
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15773613FE;
+	Wed, 16 Aug 2023 20:03:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15773613FE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wCciYDRyLfYJ; Wed, 16 Aug 2023 20:00:11 +0000 (UTC)
+	with ESMTP id AddoJugBHCPb; Wed, 16 Aug 2023 20:03:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 305B2613FE;
-	Wed, 16 Aug 2023 20:00:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 305B2613FE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63964613FA;
+	Wed, 16 Aug 2023 20:03:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63964613FA
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6E3231BF38A
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:00:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1A9E51BF38A
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:03:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 450CD41735
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:00:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 450CD41735
+ by smtp2.osuosl.org (Postfix) with ESMTP id E78124011A
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:03:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E78124011A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cRDVQDnaapcf for <buildroot@lists.busybox.net>;
- Wed, 16 Aug 2023 20:00:01 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BC264400EF
- for <buildroot@buildroot.org>; Wed, 16 Aug 2023 20:00:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC264400EF
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 800FC13F87C;
- Wed, 16 Aug 2023 21:59:53 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:54430])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 16 Aug 2023 21:59:53 +0200
+ with ESMTP id hfO75tTLBCCk for <buildroot@lists.busybox.net>;
+ Wed, 16 Aug 2023 20:03:13 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A3D9A400EF
+ for <buildroot@buildroot.org>; Wed, 16 Aug 2023 20:03:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3D9A400EF
+Received: from fli4l.lan.fli4l (p4fd6c625.dip0.t-ipconnect.de [79.214.198.37])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id B7370A4C09F0
+ for <buildroot@buildroot.org>; Wed, 16 Aug 2023 22:03:10 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42790)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qWMjW-00039N-1f
+ for buildroot@buildroot.org; Wed, 16 Aug 2023 22:03:10 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Wed, 16 Aug 2023 22:03:10 +0200
+Message-Id: <20230816200310.1363595-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Date: Wed, 16 Aug 2023 21:59:53 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-In-Reply-To: <20230816180916.2608831-1-yann.morin.1998@free.fr>
-References: <20230816180916.2608831-1-yann.morin.1998@free.fr>
-User-Agent: Webmail Free/1.6.1
-Message-ID: <70538fc0d2c87eb5add488433d3cd0d9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692215997;
- bh=EEPxYVwygSrkpD70AHrbguLYvlOgaeB5e2hwmUdowEU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=AHPIDwduJruztLBWYBmfOZIK5RSEegr1i83VYVUP7IEPLvDsNb3LL/YyTtczwMmrS
- 1DFHyUlsxj6dl6qpdhblA+jK95X/2F/HVhI1VOok4fdBWKsCXBGAHDnzbC7vYg7GBq
- okMumM8vMSgpuYyNnVfcbg7JWhsnm8ScjI7po+HdMnOQeLU29xX5rsfpda4N97gpBY
- PMk1OU489/QWrcNeVeBcsUCRLEqfWnv/5lV/V4onNpPT7EbYUM8VEBJD91496c24MV
- m/SnFKiX1WMYlB7z8jKQL0oeySkJXbVMpN1oO92Ly6W9KUNlQJDSTsZYAkkLIvv6Zi
- iKvW+HutUrxBg==
+X-Spamd-Bar: +++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1692216190;
+ bh=CyL9b8XX8aWFg5HIx9rvdo0pWhZJw1vDb0NFQl1Sx4w=;
+ h=From:To:Subject:Date:From;
+ b=RIJj9NLX23DQMGDD/m+ORV17kwPlC3YgzYXHJw5n6//SOKHdE6AQHGUQUuiUUdfFU
+ bgBy/xVIbfC5E1dVTuodUjBrzxvtyCIM4ydoI1dRjgI9JgArmNYP8CnlVC1ZnFF95B
+ o9szN6txatQ6A2On1C38HopDYLZwWMqDgpWjGojC6zgJPsLLFwDQ7ccMECID3/6RXx
+ +HfrlhP2wqRzjQrA+ZFipKbK361JyaccVEgzAwLS8/bGbYO0RSUCZK17S+HODYFIpK
+ KPLaxumf/Vacw23Nh3bl4Zk82KRbpPNJYIFZfNix4yITzOYvpa2beCW1v5MiWmMKSb
+ EwPC/miJU54vg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=AHPIDwdu
-Subject: Re: [Buildroot] [PATCH] package/nftables: fix the build of the
- pyhon bindings
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=RIJj9NLX
+Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version to
+ 1.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,182 +75,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>,
- buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann, all,
+Release notes: https://blog.clamav.net/2023/07/2023-08-16-releases.html
 
-Thanks for the patch!
+Fixes CVE-2023-20197 & CVE-2023-20212.
 
-I successfully tested this patch on master branch at commit 94edad7
-with few known broken configurations. While at it, I also successfully
-tested on branch next at commit eea0c9f, which was the point
-on which I have initially hit the issue. I used the same commands as
-reported in:
-https://lists.buildroot.org/pipermail/buildroot/2023-August/672864.html
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 16/08/2023 20:09, Yann E. MORIN wrote:
-> nftables provides python bindings; it uses setuptools to install them.
-> We currently install those bindings by telling nftables buildsystem,
-> autotools, to install the python bindings.
-> 
-> However, we do not pass any of the environment variables that are 
-> needed
-> for setuptools packages. When host-python-setuptools is installed 
-> before
-> nftables is built [0], this breaks the system at runtime, as the
-> bindings are not installed; only the egg is, resulting in runtime 
-> errors
-> like:
-> 
->     # python -c 'import nftables'
->     Traceback (most recent call last):
->       File "<string>", line 1, in <module>
->     ModuleNotFoundError: No module named 'nftables'
-> 
-> Upstream has been doing some changes on their python handling, but it 
-> is
-> not in a released version, and we can't backport those changes either,
-> due to other big changes.
-> 
-> Instead, we split the pyhon bindings to their own package.
-> 
-> For legacy hadnling, we make that package default to y, so that 
-> existing
-> (def)config still work. The only novelty is that it can be disabled 
-> now.
-> 
-> Many thanks to Julien for testing and finding the offending dependency,
-> to James for suggesting the package split, and to Adam for, well,
-> trigerring the issue in the first place! ;-p
-> 
-> [0] This can happen when another python package using setuptools is
->     built before nftables. However, with PPD, this never happens 
-> because
->     host-python-setuptools is never in the dependency chain of 
-> nftables.
-> 
-> Reported-by: Julien Olivain <ju.o@free.fr>
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index ad9d1c9264..9a41806d1e 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  0872dc1b82ff4cd7e8e4323faf5ee41a1f66ae80865d05429085b946355d86ee  clamav-1.0.1.tar.gz
++sha256  71dd39fe0d3937747fc280ea07c15cc990269257c4abb12dc438b4409d1b44c7  clamav-1.0.2.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 68a1799bfc..e677c3375a 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLAMAV_VERSION = 1.0.1
++CLAMAV_VERSION = 1.0.2
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = \
+-- 
+2.39.2
 
-Tested-by: Julien Olivain <ju.o@free.fr>
-
-> Suggested-by: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/nftables/Config.in                    |  5 +++++
->  package/nftables/nftables-python/Config.in    |  4 ++++
->  .../nftables-python/nftables-python.hash      |  1 +
->  .../nftables-python/nftables-python.mk        | 22 +++++++++++++++++++
->  package/nftables/nftables.mk                  | 10 +++------
->  5 files changed, 35 insertions(+), 7 deletions(-)
->  create mode 100644 package/nftables/nftables-python/Config.in
->  create mode 120000 
-> package/nftables/nftables-python/nftables-python.hash
->  create mode 100644 package/nftables/nftables-python/nftables-python.mk
-> 
-> diff --git a/package/nftables/Config.in b/package/nftables/Config.in
-> index 8d172b7256..833a3a38a2 100644
-> --- a/package/nftables/Config.in
-> +++ b/package/nftables/Config.in
-> @@ -13,5 +13,10 @@ config BR2_PACKAGE_NFTABLES
-> 
->  	  http://www.netfilter.org/projects/nftables/index.html
-> 
-> +# Legacy: this used to be handled in nftables.mk
-> +if BR2_PACKAGE_NFTABLES
-> +source "package/nftables/nftables-python/Config.in"
-> +endif
-> +
->  comment "nftables needs a toolchain w/ wchar, headers >= 3.12"
->  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> diff --git a/package/nftables/nftables-python/Config.in 
-> b/package/nftables/nftables-python/Config.in
-> new file mode 100644
-> index 0000000000..b16e2d0ad1
-> --- /dev/null
-> +++ b/package/nftables/nftables-python/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_NFTABLES_PYTHON
-> +	bool "python bindings"
-> +	default y # legacy
-> +	depends on BR2_PACKAGE_PYTHON3
-> diff --git a/package/nftables/nftables-python/nftables-python.hash 
-> b/package/nftables/nftables-python/nftables-python.hash
-> new file mode 120000
-> index 0000000000..9ac74580e7
-> --- /dev/null
-> +++ b/package/nftables/nftables-python/nftables-python.hash
-> @@ -0,0 +1 @@
-> +../nftables.hash
-> \ No newline at end of file
-> diff --git a/package/nftables/nftables-python/nftables-python.mk 
-> b/package/nftables/nftables-python/nftables-python.mk
-> new file mode 100644
-> index 0000000000..908bacd99a
-> --- /dev/null
-> +++ b/package/nftables/nftables-python/nftables-python.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# nftables-python
-> +#
-> +################################################################################
-> +
-> +# The following assignments work only because nftables.mk is included 
-> before
-> +# this file is.
-> +NFTABLES_PYTHON_VERSION = $(NFTABLES_VERSION)
-> +NFTABLES_PYTHON_SOURCE = $(NFTABLES_SOURCE)
-> +NFTABLES_PYTHON_SITE = $(NFTABLES_SITE)
-> +NFTABLES_PYTHON_LICENSE = $(NFTABLES_LICENSE)
-> +NFTABLES_PYTHON_LICENSE_FILES = $(NFTABLES_LICENSE_FILES)
-> +
-> +# We share the same source code as nftables
-> +NFTABLES_PYTHON_DL_SUBDIR = nftables
-> +
-> +NFTABLES_PYTHON_SUBDIR = py
-> +
-> +NFTABLES_PYTHON_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> diff --git a/package/nftables/nftables.mk 
-> b/package/nftables/nftables.mk
-> index b0a14bd429..aa88203ab5 100644
-> --- a/package/nftables/nftables.mk
-> +++ b/package/nftables/nftables.mk
-> @@ -42,13 +42,6 @@ else
->  NFTABLES_CONF_OPTS += --without-json
->  endif
-> 
-> -ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> -NFTABLES_CONF_OPTS += --enable-python
-> -NFTABLES_DEPENDENCIES += python3
-> -else
-> -NFTABLES_CONF_OPTS += --disable-python
-> -endif
-> -
->  NFTABLES_CONF_ENV = LIBS="$(NFTABLES_LIBS)"
-> 
->  define NFTABLES_LINUX_CONFIG_FIXUPS
-> @@ -58,3 +51,6 @@ define NFTABLES_LINUX_CONFIG_FIXUPS
->  endef
-> 
->  $(eval $(autotools-package))
-> +
-> +# Legacy: we used to handle it in this .mk
-> +include package/nftables/nftables-python/nftables-python.mk
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
