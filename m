@@ -1,72 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCDE2C001E0
-	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 15:04:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF00C04A6A
+	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 18:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D3B142015;
-	Wed, 16 Aug 2023 15:04:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D3B142015
+	by smtp2.osuosl.org (Postfix) with ESMTP id D95FC41704;
+	Wed, 16 Aug 2023 18:09:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D95FC41704
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EoCPm-Ny3WXU; Wed, 16 Aug 2023 15:04:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id gpeqNAGEBPGm; Wed, 16 Aug 2023 18:09:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E9E042059;
-	Wed, 16 Aug 2023 15:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E9E042059
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9AEB4170A;
+	Wed, 16 Aug 2023 18:09:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9AEB4170A
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 83BF41BF3AD
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 15:04:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D3A8E1BF38A
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 18:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C08D60EFB
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 15:04:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C08D60EFB
+ by smtp3.osuosl.org (Postfix) with ESMTP id B55D9613B9
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 18:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B55D9613B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nxXRTaIpkpvl for <buildroot@lists.busybox.net>;
- Wed, 16 Aug 2023 15:04:53 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A8AAC60DF4
- for <buildroot@buildroot.org>; Wed, 16 Aug 2023 15:04:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8AAC60DF4
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:1e73:3be7:eb1a:9d05])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 5C3515FFAB;
- Wed, 16 Aug 2023 17:04:42 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Wed, 16 Aug 2023 17:04:42 +0200
-Date: Wed, 16 Aug 2023 17:04:42 +0200
+ with ESMTP id IKSRvhKgp7kE for <buildroot@lists.busybox.net>;
+ Wed, 16 Aug 2023 18:09:20 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6F0B4613B7
+ for <buildroot@buildroot.org>; Wed, 16 Aug 2023 18:09:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F0B4613B7
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-3fe490c05c9so849405e9.0
+ for <buildroot@buildroot.org>; Wed, 16 Aug 2023 11:09:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1692209358; x=1692814158;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=C4I/eTgJeHDcxqa/cd63OSelD7IU2Z0wuqA64OBFJD4=;
+ b=XA0vPxPQdm06S5djrvYY9E9X/KdfT99h3Lacopwc1P1+bPckmEGSF72i8mOwDrill/
+ wsLn2r+3Ev4KNEhF2n8Q7ZIaACY0yiZFBWruO9jOIGzkTXPTc23dLtPSQFQ/NrIf+Cdq
+ UQG2BVDT/Xxe3fPkRlfToa0cw2z3YTRTDSS1w5jEvv21lom/+08kQkNjAi28iyTrYmc2
+ EdU73m6o22PoRHe11stv5VmfdTq+sce8ixKcGcxxSSQOElLqJP34QisTjcnK6Lj7aw5s
+ OXMlL7pqZTcOsNfGqLZYGj0IMv7CIBIuGhfOMWgOtu4XLgEhM2UE53z+4ksaX7/mUrR9
+ snqg==
+X-Gm-Message-State: AOJu0YzNuFFr/0f/KWHJ72qDWxyWqdLCqd0mMut791XubAZk/UCwDVka
+ v/ScHuEV6iAZSO619XookpYjrBfpZTw=
+X-Google-Smtp-Source: AGHT+IHSZgdGY40miJewHtVWjdnkEG493AaB3lKXUCmk1m1V7e4/ZzCdF3Y2riFAct18WWcaaG30yw==
+X-Received: by 2002:a05:600c:4f45:b0:3fb:e1d0:6417 with SMTP id
+ m5-20020a05600c4f4500b003fbe1d06417mr305935wmq.19.1692209358104; 
+ Wed, 16 Aug 2023 11:09:18 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:cb19:8b44:b00:1e73:3be7:eb1a:9d05])
+ by smtp.gmail.com with ESMTPSA id
+ s14-20020a05600c044e00b003fe1a092925sm143058wmb.19.2023.08.16.11.09.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 16 Aug 2023 11:09:17 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20230816150442.GB1340200@scaer>
-References: <20230816092439.570839-1-jamie.gibbons@microchip.com>
- <20230816092439.570839-2-jamie.gibbons@microchip.com>
- <20230816142316.76d45449@windsurf>
+To: buildroot@buildroot.org
+Date: Wed, 16 Aug 2023 20:09:16 +0200
+Message-Id: <20230816180916.2608831-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230816142316.76d45449@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692198289;
- bh=YpFb3NN2hGqEZMseJKjo/Cn2n2Vhd0ZKDbDadV7Evh0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=SvH492A097whOmeJscA0+vJLoQmZXXNgyyjwebEUmJNl9BUQnUXfeR0abOGqJoxKP
- yhmWcJNrZZurUvAwOFEL8REYkiFa2YD9FlaR5yyTxeSoOPU7jQrxIT0WrTWhW410rg
- LIsln+zBxF1T8RiH3PVtOwYmyHcOSrbxxLRLdh9f752zK49CcQ/d6Ze5SdkL6Rip62
- ZQld8ccNySSN/b5yX9yHwn8CP3kEQitojLm6u09v+DNvhuRp0lQ1SQDSj9MjRJSZ1M
- q/1swEOvUsgherJn+tj67B84X7MqzYRvnDAP+95RZrniJ1IU9+KCkdyUBhdegYOZHl
- GndDqijanA7QA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1692209358; x=1692814158;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=C4I/eTgJeHDcxqa/cd63OSelD7IU2Z0wuqA64OBFJD4=;
+ b=G3ljiLvBnmVcD6mnnVNu1rd8f8+MF7xcxrbQuDDXikFs9bwcVk7I6dJ+HjJplLgZVB
+ LMGxyL3C7wS35cHqP6fuNaWG+vLypI8MxZMCIHM4ClPfY9toaM3nFJps+CPNt3hCfo3A
+ GjIoa9uE7v8AFBEWoyCUIDqVq8mBLBlhlUqJ6/CylpTM5LoFgDc6YLaBnW+9SU3B238V
+ KLkFkwKrtr686aF7HH9F31DYnBJU9Xs+nZeUM4FBasyx6v2TObKgEPQMOx9SiK4SoyoI
+ 5XvUtBFUiC6HYnSjbE3S5Mhg6bnMnOnCLj49Xsr4MoRntIiveSL8kqCIVlnCDNWNT8ZP
+ PV0A==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SvH492A0
-Subject: Re: [Buildroot] [PATCH v2 1/3] arch/Config.in.riscv: update
- instruction set ext
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=G3ljiLvB
+Subject: [Buildroot] [PATCH] package/nftables: fix the build of the pyhon
+ bindings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,142 +94,151 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Conor Dooley <Conor.Dooley@microchip.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>, buildroot@buildroot.org,
- Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>,
- Jamie Gibbons <jamie.gibbons@microchip.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Jamie, Thomas, All,
+nftables provides python bindings; it uses setuptools to install them.
+We currently install those bindings by telling nftables buildsystem,
+autotools, to install the python bindings.
 
-On 2023-08-16 14:23 +0200, Thomas Petazzoni via buildroot spake thusly:
-> On Wed, 16 Aug 2023 10:24:37 +0100
-> Jamie Gibbons <jamie.gibbons@microchip.com> wrote:
-> 
-> > Allow a RISC-V G core to support C and V. Copy custom RVC and RVV
-> > instructions from RISC-V custom core to RISC-V general core.
-> > 
-> > v1 -> v2 changes:
-> > - copied RVC and RVV kconfigs to both riscv_g and riscv_custom
-> 
-> We don't want to *copy* them. We want to make them available in both
-> cases.
+However, we do not pass any of the environment variables that are needed
+for setuptools packages. When host-python-setuptools is installed before
+nftables is built [0], this breaks the system at runtime, as the
+bindings are not installed; only the egg is, resulting in runtime errors
+like:
 
-Basically, I think what Thomas expects is something like:
+    # python -c 'import nftables'
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+    ModuleNotFoundError: No module named 'nftables'
 
-    diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
-    index 3dfbb4165f..997f7a631d 100644
-    --- a/arch/Config.in.riscv
-    +++ b/arch/Config.in.riscv
-    @@ -1,26 +1,5 @@
-     # RISC-V CPU ISA extensions.
-     
-    -config BR2_RISCV_ISA_RVI
-    -    bool
-    -
-    -config BR2_RISCV_ISA_RVM
-    -    bool
-    -
-    -config BR2_RISCV_ISA_RVA
-    -    bool
-    -
-    -config BR2_RISCV_ISA_RVF
-    -    bool
-    -
-    -config BR2_RISCV_ISA_RVD
-    -    bool
-    -
-    -config BR2_RISCV_ISA_RVC
-    -    bool
-    -
-    -config BR2_RISCV_ISA_RVV
-    -    bool
-    -
-     choice
-         prompt "Target Architecture Variant"
-         default BR2_riscv_g
-    @@ -41,38 +20,28 @@ config BR2_riscv_custom
+Upstream has been doing some changes on their python handling, but it is
+not in a released version, and we can't backport those changes either,
+due to other big changes.
 
-     endchoice
+Instead, we split the pyhon bindings to their own package.
 
-    -if BR2_riscv_custom
-    -
-     comment "Instruction Set Extensions"
+For legacy hadnling, we make that package default to y, so that existing
+(def)config still work. The only novelty is that it can be disabled now.
 
-    -config BR2_RISCV_ISA_CUSTOM_RVM
-    +config BR2_RISCV_ISA_RVM
-         bool "Integer Multiplication and Division (M)"
-    -    select BR2_RISCV_ISA_RVM
+Many thanks to Julien for testing and finding the offending dependency,
+to James for suggesting the package split, and to Adam for, well,
+trigerring the issue in the first place! ;-p
 
-    -config BR2_RISCV_ISA_CUSTOM_RVA
-    +config BR2_RISCV_ISA_RVA
-         bool "Atomic Instructions (A)"
-    -    select BR2_RISCV_ISA_RVA
+[0] This can happen when another python package using setuptools is
+    built before nftables. However, with PPD, this never happens because
+    host-python-setuptools is never in the dependency chain of nftables.
 
-    -config BR2_RISCV_ISA_CUSTOM_RVF
-    +config BR2_RISCV_ISA_RVF
-         bool "Single-precision Floating-point (F)"
-    -    select BR2_RISCV_ISA_RVF
+Reported-by: Julien Olivain <ju.o@free.fr>
+Suggested-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nftables/Config.in                    |  5 +++++
+ package/nftables/nftables-python/Config.in    |  4 ++++
+ .../nftables-python/nftables-python.hash      |  1 +
+ .../nftables-python/nftables-python.mk        | 22 +++++++++++++++++++
+ package/nftables/nftables.mk                  | 10 +++------
+ 5 files changed, 35 insertions(+), 7 deletions(-)
+ create mode 100644 package/nftables/nftables-python/Config.in
+ create mode 120000 package/nftables/nftables-python/nftables-python.hash
+ create mode 100644 package/nftables/nftables-python/nftables-python.mk
 
-    -config BR2_RISCV_ISA_CUSTOM_RVD
-    +config BR2_RISCV_ISA_RVD
-         bool "Double-precision Floating-point (D)"
-         depends on BR2_RISCV_ISA_RVF
-    -    select BR2_RISCV_ISA_RVD
-
-    -config BR2_RISCV_ISA_CUSTOM_RVC
-    +config BR2_RISCV_ISA_RVC
-         bool "Compressed Instructions (C)"
-    -    select BR2_RISCV_ISA_RVC
-
-    -config BR2_RISCV_ISA_CUSTOM_RVV
-    +config BR2_RISCV_ISA_RVV
-         bool "Vector Instructions (V)"
-    -    select BR2_RISCV_ISA_RVV
-         select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
-
-    -endif
-    -
-     choice
-         prompt "Target Architecture Size"
-         default BR2_RISCV_64
-
-Thomas?
-
-Regards,
-Yann E. MORIN.
-
-> Also, the changelog shouldn't go inside the commit log but...
-> 
-> > 
-> > Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
-> > ---
-> 
-> ... here, after the "---" line.
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+index 8d172b7256..833a3a38a2 100644
+--- a/package/nftables/Config.in
++++ b/package/nftables/Config.in
+@@ -13,5 +13,10 @@ config BR2_PACKAGE_NFTABLES
+ 
+ 	  http://www.netfilter.org/projects/nftables/index.html
+ 
++# Legacy: this used to be handled in nftables.mk
++if BR2_PACKAGE_NFTABLES
++source "package/nftables/nftables-python/Config.in"
++endif
++
+ comment "nftables needs a toolchain w/ wchar, headers >= 3.12"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+diff --git a/package/nftables/nftables-python/Config.in b/package/nftables/nftables-python/Config.in
+new file mode 100644
+index 0000000000..b16e2d0ad1
+--- /dev/null
++++ b/package/nftables/nftables-python/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_NFTABLES_PYTHON
++	bool "python bindings"
++	default y # legacy
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/nftables/nftables-python/nftables-python.hash b/package/nftables/nftables-python/nftables-python.hash
+new file mode 120000
+index 0000000000..9ac74580e7
+--- /dev/null
++++ b/package/nftables/nftables-python/nftables-python.hash
+@@ -0,0 +1 @@
++../nftables.hash
+\ No newline at end of file
+diff --git a/package/nftables/nftables-python/nftables-python.mk b/package/nftables/nftables-python/nftables-python.mk
+new file mode 100644
+index 0000000000..908bacd99a
+--- /dev/null
++++ b/package/nftables/nftables-python/nftables-python.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# nftables-python
++#
++################################################################################
++
++# The following assignments work only because nftables.mk is included before
++# this file is.
++NFTABLES_PYTHON_VERSION = $(NFTABLES_VERSION)
++NFTABLES_PYTHON_SOURCE = $(NFTABLES_SOURCE)
++NFTABLES_PYTHON_SITE = $(NFTABLES_SITE)
++NFTABLES_PYTHON_LICENSE = $(NFTABLES_LICENSE)
++NFTABLES_PYTHON_LICENSE_FILES = $(NFTABLES_LICENSE_FILES)
++
++# We share the same source code as nftables
++NFTABLES_PYTHON_DL_SUBDIR = nftables
++
++NFTABLES_PYTHON_SUBDIR = py
++
++NFTABLES_PYTHON_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index b0a14bd429..aa88203ab5 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -42,13 +42,6 @@ else
+ NFTABLES_CONF_OPTS += --without-json
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-NFTABLES_CONF_OPTS += --enable-python
+-NFTABLES_DEPENDENCIES += python3
+-else
+-NFTABLES_CONF_OPTS += --disable-python
+-endif
+-
+ NFTABLES_CONF_ENV = LIBS="$(NFTABLES_LIBS)"
+ 
+ define NFTABLES_LINUX_CONFIG_FIXUPS
+@@ -58,3 +51,6 @@ define NFTABLES_LINUX_CONFIG_FIXUPS
+ endef
+ 
+ $(eval $(autotools-package))
++
++# Legacy: we used to handle it in this .mk
++include package/nftables/nftables-python/nftables-python.mk
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
