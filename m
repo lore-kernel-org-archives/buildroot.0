@@ -4,60 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47A7DC001B0
-	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 05:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1598BC001B0
+	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 05:44:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C4B041DBC;
-	Wed, 16 Aug 2023 05:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C4B041DBC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4385641BAE;
+	Wed, 16 Aug 2023 05:44:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4385641BAE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p5h4776CakkP; Wed, 16 Aug 2023 05:40:25 +0000 (UTC)
+	with ESMTP id t2xxku2tURZT; Wed, 16 Aug 2023 05:44:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63FA741DB9;
-	Wed, 16 Aug 2023 05:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63FA741DB9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0563D41D67;
+	Wed, 16 Aug 2023 05:44:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0563D41D67
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 54D7D1BF407
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 05:40:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 710A31BF407
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 05:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C17841DB9
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 05:40:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C17841DB9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4753E41D67
+ for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 05:44:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4753E41D67
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id arwMRfhfpttm for <buildroot@lists.busybox.net>;
- Wed, 16 Aug 2023 05:40:19 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4305D41DB6
- for <buildroot@buildroot.org>; Wed, 16 Aug 2023 05:40:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4305D41DB6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 35F0E60005
- for <buildroot@buildroot.org>; Wed, 16 Aug 2023 05:40:16 +0000 (UTC)
+ with ESMTP id 3bXFlbYvYAj1 for <buildroot@lists.busybox.net>;
+ Wed, 16 Aug 2023 05:44:29 +0000 (UTC)
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com
+ [IPv6:2607:f8b0:4864:20::c33])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D170E41BAE
+ for <buildroot@buildroot.org>; Wed, 16 Aug 2023 05:44:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D170E41BAE
+Received: by mail-oo1-xc33.google.com with SMTP id
+ 006d021491bc7-56c4c4e822eso4541779eaf.3
+ for <buildroot@buildroot.org>; Tue, 15 Aug 2023 22:44:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1692164667; x=1692769467;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=1rZ4G5XjMbM3ru9neSlDcML/lkb8wHlSQuHfYUNCpF0=;
+ b=AyzuwpzyTUEf9jG7QDNj0OSRdMDrJNPEXcjQf4/xzGYTZxjAur5X68wIpWuvGg1y29
+ SPPNRVKIN3GPj2uYQxan/ctAVVgHo+EE98YSi8HhKWiXixJAE+YbnDDNsJ1KjQ+nXiL2
+ 1/IM5poDOFi4pSp4nbGUrQfuPKUjdOvz/zJ+hpA870drdLp5uLEic73alox+aMt03VxA
+ WLLS1DQuL0pUcVJPj40XNP7FIrjD0cbrDs5/zUW5G/M0uvUZ8BmAR2HDD4QTylsAl8iT
+ iLwQhhY7fYDhvZcbBSz58QIMUUuPPh9nqLhv2D1E9BANILenwWqI/Ym7I5poqoQwa9Xv
+ K9Lg==
+X-Gm-Message-State: AOJu0YywEuvu9dv/MdnSfogXskOWDqblSwkN40APgD4EWTse76tK8K66
+ ACjR9BIVSSUeit8ejV6+pfnrk862M0s/o7lMaInyCvko
+X-Google-Smtp-Source: AGHT+IEnpWF1BbUU/Dp0Zxin0sHcwlruhK7/U2M7bQX+RANZMJhKhzUr310SnLSomJyJUQzqRxiGeU15jIjxKDZ0Uyo=
+X-Received: by 2002:a4a:6c56:0:b0:56e:5a8e:654f with SMTP id
+ u22-20020a4a6c56000000b0056e5a8e654fmr862957oof.8.1692164667516; Tue, 15 Aug
+ 2023 22:44:27 -0700 (PDT)
 MIME-Version: 1.0
+References: <CADYjeStRcjcU0o3u1y7h5H3p6=of8ZB5+5-zPKdO7r9=Y1bMJA@mail.gmail.com>
+In-Reply-To: <CADYjeStRcjcU0o3u1y7h5H3p6=of8ZB5+5-zPKdO7r9=Y1bMJA@mail.gmail.com>
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Wed, 16 Aug 2023 07:44:16 +0200
+Message-ID: <CADYjeStqc2-PSZ3oOm_tXxg1pA_WG2hRi1m2Gfo+U6Zp9TbXtQ@mail.gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 16 Aug 2023 05:40:16 -0000
-X-GND-Sasl: bot@bootlin.com
-Message-Id: <20230816054022.0C17841DB9@smtp4.osuosl.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; 
- t=1692164416; h=from:from:reply-to:subject:subject:date:date:to:to:cc:
- mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=IisDMZtEx5vQOqiLnguFE2dGekmg3tgvMBeK5R09k24=;
- b=ex1BwxP/UY1O3jPeSiSxB8BFAIOEb/uXo8Y4Moyq6WknElzIerXTiiuS/LskgM4KwNOfPk
- wFO0cDuOv9DkrOSU8m7Q27PkDdYeLIHsnuKgj1q+WkHWWdz6WnmnbLLgEAv5YRHBHtEIq7
- Hc7indRJBzdx+mcdzkVLPZvSLeTi1Be3fktfQgAX/iHzJUxVBGjTWYLs9HtajaNRGKjAoR
- wkZ1TdL+rPsgPPEYzgaeTtVcsXsZ3Oo/uS5t4UXgiumCuuZ/hO/qU2qoWfxEoYMVpBRCYH
- 3nMBlaYhtMmTX3O3e/0kXUEIlTubCmeB+Ti55EDsiM9h8tlrtNvCZDS1SrCknA==
+ d=gmail.com; s=20221208; t=1692164667; x=1692769467;
+ h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=1rZ4G5XjMbM3ru9neSlDcML/lkb8wHlSQuHfYUNCpF0=;
+ b=ZXl7xe5h4d8OI6EEOcI0PUi2QWurzgZ9wW5tONrEdiWWDqcngaxhOHsEgBTSg5MmKz
+ EbwwayKZ1CAB90FEcGFs2oxMfIxuQ8xFfmOaRQ7pGtv7jkCStJjfbYlukBVULII15KWa
+ fKJxJMxfQUrkKHn4De0rLc/76VXYyByLo0pV5taptNt6EL4c9PngO2mmPXSYFnCPzZV4
+ M8YsPxFuZm6teJ9kiSGnedmNBr3tGlTivY6cWO5dMsNL1fQTLSQoEFyYHMClQT0baGF9
+ TKkIJE0vRAMav3XILyswCzRZx2K8FWGgyVNMeya+IDZ5tjugV4lFgGfMqJFa2XRspegp
+ YDWA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ex1BwxP/
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2023-08-15
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=ZXl7xe5h
+Subject: Re: [Buildroot] Error while generating buildroot package using
+ scanpypi tool
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,101 +89,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1597894128553803722=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============1597894128553803722==
+Content-Type: multipart/alternative; boundary="000000000000e8ada0060303c95d"
 
-Autobuild statistics for 2023-08-15
-===================================
+--000000000000e8ada0060303c95d
+Content-Type: text/plain; charset="UTF-8"
 
-      branch |  OK | NOK | TIM | TOT |
-  2023.02.x  |  8  |  1  |  1  | 10  |
-  2023.05.x  |  8  |  1  |  1  | 10  |
-    master   | 12  | 16  |  0  | 28  |
+Can anyone please provide an update on this?
+Your support would be much appreciated.
 
-Classification of failures by reason for master
------------------------------------------------
+Best Regards,
+Sourabh
 
-           dmraid-1.0.0.rc16-3 | 2 
-              open62541-v1.3.6 | 2 
-  binutils-arc-2020.09-release | 1 
-                  boost-1.82.0 | 1 
-                  check-0.15.2 | 1 
-                elfutils-0.189 | 1 
-              fftw-quad-3.3.10 | 1 
-                   guile-3.0.9 | 1 
-              host-rust-1.71.0 | 1 
-         host-sentry-cli-2.8.0 | 1 
-              libxcrypt-4.4.33 | 1 
-                   trinity-1.9 | 1 
-             util-linux-2.39.1 | 1 
-                xenomai-3.0.10 | 1 
+On Tue, 15 Aug 2023 at 17:23, Sourabh Hegde <hrsourabh011@gmail.com> wrote:
 
+> Hello All,
+>
+> I am trying to generate a Buildroot package for a Python package available
+> from https://pypi.org/ using utils/scanpypi tool.
+>
+> utils/scanpypi loguru black -o package/
+>
+> But this is giving an error:
+>
+> Traceback (most recent call last):
+>   File "utils/scanpypi", line 743, in <module>
+>     main()
+>   File "utils/scanpypi", line 691, in main
+>     package.load_setup()
+>   File "utils/scanpypi", line 299, in load_setup
+>     s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+>   File "/usr/lib/python3.8/imp.py", line 296, in find_module
+>     raise ImportError(_ERR_MSG.format(name), name=name)
+> ImportError: No module named 'setup'
+>
+> I have installed python3-setuptools and  pip3 install setuptools. Still
+> the same error.
+>
+> Can anyone please let me know what is the issue here and how to resolve it?
+>
+> Thanks in advance.
+>
+>
 
-Detail of failures for master
------------------------------
+--000000000000e8ada0060303c95d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arc      |  binutils-arc-2020.09-release  | NOK | http://autobuild.buildroot.net/results/daa621728e087d92c37e1294c18d925b0bb4f2f9 |     
-   arceb     |          boost-1.82.0          | NOK | http://autobuild.buildroot.net/results/fca45077c70d1869efc2dbd121c3d596999eebe5 |     
-    arc      |          check-0.15.2          | NOK | http://autobuild.buildroot.net/results/bc631c563c1502f2027058b9a0dadce816e33094 | ORPH
-    i686     |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/e035c75607180610e901681c237a351c38f0bfff | ORPH
-   mips64    |      dmraid-1.0.0.rc16-3       | NOK | http://autobuild.buildroot.net/results/af7b75bd4e9a4f403aae126b7df1fdbdfbda99eb | ORPH
-microblazeel |         elfutils-0.189         | NOK | http://autobuild.buildroot.net/results/9075c711043eaff3cbb279229a6356e570bb8710 | ORPH
-powerpc64le  |        fftw-quad-3.3.10        | NOK | http://autobuild.buildroot.net/results/4f03302e1e12570a7f64fcced0e15bc9c3c22d62 | ORPH
- powerpc64   |          guile-3.0.9           | NOK | http://autobuild.buildroot.net/results/adb962babdedb70cb973cb48fb4f695d430adc8c |     
-  aarch64    |        host-rust-1.71.0        | NOK | http://autobuild.buildroot.net/results/115426388cd7f0e74fd6b9f01f69ffda0810fc68 |     
-    i586     |     host-sentry-cli-2.8.0      | NOK | http://autobuild.buildroot.net/results/4959dfd767f833a6135d1275607ba3ee704267b1 |     
-    m68k     |        libxcrypt-4.4.33        | NOK | http://autobuild.buildroot.net/results/127820631a2ef620f59bf0a6b2bd9cee29b31459 |     
-   nios2     |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/2aa1e2a2591ff7f5392faf0ebc721b7e7a53776f | ORPH
-  sparc64    |        open62541-v1.3.6        | NOK | http://autobuild.buildroot.net/results/fa521a110a420b916bc6c3e7be814f91ea356f96 | ORPH
-   mipsel    |          trinity-1.9           | NOK | http://autobuild.buildroot.net/results/7f9626827a315b54c42e49ccb0bf75f8b5ec971d | ORPH
-   mips64    |       util-linux-2.39.1        | NOK | http://autobuild.buildroot.net/results/245ec6452c95a10f6bbfba2874bae540ef18ca51 | ORPH
-   armeb     |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/d156379cd5d14a5b13829eb7cead09f134aa2fb4 |     
+<div dir=3D"ltr">Can anyone please provide an update on this?=C2=A0<br><div=
+>Your support would be much appreciated.</div><div><br></div><div>Best Rega=
+rds,</div><div>Sourabh</div></div><br><div class=3D"gmail_quote"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Tue, 15 Aug 2023 at 17:23, Sourabh Hegde &=
+lt;<a href=3D"mailto:hrsourabh011@gmail.com">hrsourabh011@gmail.com</a>&gt;=
+ wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=
+=3D"ltr">Hello All,<div><br></div><div>I am trying to generate a Buildroot =
+package for a Python package available from=C2=A0<a href=3D"https://pypi.or=
+g/" target=3D"_blank">https://pypi.org/</a> using utils/scanpypi tool.=C2=
+=A0</div><div><br></div><div>utils/scanpypi loguru black -o package/<br></d=
+iv><div><br></div><div>But this=C2=A0is giving an error:</div><div><br></di=
+v><div>Traceback (most recent call last):<br>=C2=A0 File &quot;utils/scanpy=
+pi&quot;, line 743, in &lt;module&gt;<br>=C2=A0 =C2=A0 main()<br>=C2=A0 Fil=
+e &quot;utils/scanpypi&quot;, line 691, in main<br>=C2=A0 =C2=A0 package.lo=
+ad_setup()<br>=C2=A0 File &quot;utils/scanpypi&quot;, line 299, in load_set=
+up<br>=C2=A0 =C2=A0 s_file, s_path, s_desc =3D imp.find_module(&#39;setup&#=
+39;, [self.tmp_extract])<br>=C2=A0 File &quot;/usr/lib/python3.8/imp.py&quo=
+t;, line 296, in find_module<br>=C2=A0 =C2=A0 raise ImportError(_ERR_MSG.fo=
+rmat(name), name=3Dname)<br>ImportError: No module named &#39;setup&#39;<br=
+></div><div><br></div><div>I have installed python3-setuptools and=C2=A0=C2=
+=A0pip3 install setuptools. Still the same error.</div><div><br></div><div>=
+Can anyone please let me know what is the issue here and how to resolve it?=
+</div><div><br></div><div>Thanks in advance.</div><div><br></div></div>
+</blockquote></div>
 
+--000000000000e8ada0060303c95d--
 
-Classification of failures by reason for 2023.02.x
---------------------------------------------------
+--===============1597894128553803722==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-         gobject-introspection | 1 
-              host-rust-1.67.1 | 1 
-
-
-Detail of failures for 2023.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/0c90b498780f75cee51da33c6751d8b79b498288 |     
-   x86_64    |        host-rust-1.67.1        | NOK | http://autobuild.buildroot.net/results/02e315b87ddb251ea0e6881fbb18b21cd92988d2 |     
-
-
-Classification of failures by reason for 2023.05.x
---------------------------------------------------
-
-         gobject-introspection | 1 
-                libgeos-3.11.2 | 1 
-
-
-Detail of failures for 2023.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-microblazeel |     gobject-introspection      | TIM | http://autobuild.buildroot.net/results/4606c3f05f33ee0c0e63c9897f8aa4e6577a0076 |     
-    or1k     |         libgeos-3.11.2         | NOK | http://autobuild.buildroot.net/results/a3657ee35ea671668b51ecb3dba35069bc48f646 |     
-
-
-
--- 
-http://autobuild.buildroot.net
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1597894128553803722==--
