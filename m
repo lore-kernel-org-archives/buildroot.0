@@ -1,89 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4793C64EB4
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 21:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E7EC678DD
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 23:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E8F883A92;
-	Thu, 17 Aug 2023 21:00:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E8F883A92
+	by smtp3.osuosl.org (Postfix) with ESMTP id E85E360E2E;
+	Thu, 17 Aug 2023 23:08:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E85E360E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pg-1gy6pELgC; Thu, 17 Aug 2023 21:00:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Tr1cfPN67Exx; Thu, 17 Aug 2023 23:08:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86CD583F4C;
-	Thu, 17 Aug 2023 21:00:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86CD583F4C
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 98AB41BF215
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 20:59:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B09A60DFC;
+	Thu, 17 Aug 2023 23:08:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B09A60DFC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E59981BF476
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FD7183EDF
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 20:59:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FD7183EDF
+ by smtp2.osuosl.org (Postfix) with ESMTP id C63D94054E
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C63D94054E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e3lbjFtQqcfz for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 20:59:06 +0000 (UTC)
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
- [IPv6:2607:f8b0:4864:20::1032])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C678383EC1
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 20:59:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C678383EC1
-Received: by mail-pj1-x1032.google.com with SMTP id
- 98e67ed59e1d1-268299d5d9fso169415a91.1
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 13:59:05 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id doYRthlOGtns for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 23:08:51 +0000 (UTC)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7631740111
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 23:08:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7631740111
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-3159d5e409dso972761f8f.0
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 16:08:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692305945; x=1692910745;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=MephcDPz60kU/2quEjJVDlF0o5+gcG/LwM9axdjsPbE=;
- b=ck+ICV6WKmvAJbLgJAnkNztoEhyRKMVVYRZBMBXQpMhzYmsYANFrMYi2NUQTP+yHLa
- zDPmHEFRuU9boJageE0gT0UTbjiOc4tCscVZY/ycKtOkLoVikaDj2Ew65g+8CIe8U28L
- Mbv786/x9KmsyHl+A6/SKn2M2YYQzdb1LtSvfskPQavotdDdJl5HqfmnyD+XBUZWb/dF
- tgWffA/oKFD2IrdZq+86Wrig9W2jrweSrigllccXrn3P7Fy1ZLGo8sec7PZlnyykUSOJ
- w+m43NxVZuzSL4UonbTffx+n1ENWMok6FTH7zRF45lLfByzo/E34AkAle6DAxyTx5Tef
- dJFg==
-X-Gm-Message-State: AOJu0Yx3uZO27t2PWH1TaOA1i5g08UZXEnRNZsrKs5gCNQzYR2kJsA/t
- gao4kwUcbDwIDq9gWU9Bgp3JD+TMjTTiKSMp4qc=
-X-Google-Smtp-Source: AGHT+IHBd35lxX+KjvUVU5cTj5YKPe8dgsMBJg2KHdK1/IkEhLeG8tD8RdSIeE9jJGfop8ZtuSls9w==
-X-Received: by 2002:a17:90a:2a01:b0:26b:e80:11de with SMTP id
- i1-20020a17090a2a0100b0026b0e8011demr597820pjd.25.1692305944783; 
- Thu, 17 Aug 2023 13:59:04 -0700 (PDT)
-Received: from fedora.amarulasolutions.com ([75.174.130.12])
+ d=1e100.net; s=20221208; t=1692313729; x=1692918529;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=tuKwcodJYxviREZ/7uYhxPfnHYHyRVQoJsUQ9tY99L4=;
+ b=O+RroP01AafweNKWVXeTV46le1CyYGgjsnlgy5PIVGndtRKOnfpKNfJJzwdP2nJMQI
+ G0d7hbLpJezATrLV18CccSzH0C9sWxS+1dnSA78jMaUrKzPCtspEZ2yBLRzApmzJEHzR
+ aeEqREy6h91u8YBvaKfo9z8bPTBNwar+cKgIJQXxhVYOx1R8jRox5GDNHdipNF++3hQ+
+ YiVTYevw4XXxbGzra5TRLPpVkKRJuEkFUyE7AgyUHWHFx+8pfUezJ+rJt+O0OCaZW8CU
+ /BVMjE0a3q38oHwZq6QMkKF7TRKmJSIEjF5Nr0XiR7HTjzkPbYK225eWsMH2Io6qfCeA
+ 7AMw==
+X-Gm-Message-State: AOJu0YxWy7V5vxoBMOCUD5axYOCYtgtycAed4Z15fFYkmZQZCCNWuLKq
+ 2+JD81ZdH82OzcEPBG0yqOclX/3Fzi8=
+X-Google-Smtp-Source: AGHT+IHlgT7i3dHRgRamObm4A1VHscIe8UetAyWoWjBhB7j8VMpYQYs5hSaxEfOL0wUheSObA5WVXg==
+X-Received: by 2002:adf:f20b:0:b0:315:a235:8aa8 with SMTP id
+ p11-20020adff20b000000b00315a2358aa8mr3623942wro.2.1692313729321; 
+ Thu, 17 Aug 2023 16:08:49 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- l22-20020a17090a3f1600b0026d034f6badsm243143pjc.38.2023.08.17.13.59.04
+ 26-20020a05600c021a00b003fa95f328afsm4409479wmi.29.2023.08.17.16.08.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Aug 2023 13:59:04 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Thu, 17 Aug 2023 16:08:48 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Aug 2023 14:58:55 -0600
-Message-ID: <20230817205855.1556239-8-adam.duskett@amarulasolutions.com>
+Date: Fri, 18 Aug 2023 01:08:41 +0200
+Message-ID: <20230817230844.450092-1-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230817205855.1556239-1-adam.duskett@amarulasolutions.com>
-References: <20230817205855.1556239-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1692305945; x=1692910745;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=MephcDPz60kU/2quEjJVDlF0o5+gcG/LwM9axdjsPbE=;
- b=FO1EZ+D/rn5uTUPSRKOfQdLGcQ+0kaSJFM+wZls7lrHDU69Wk/j4QAGC6Lp7J+CqSN
- 43AkdDhCLuUVj4iXChmXk8QsbhXcwFf3x2JgKn64CaCcBg2ty3gVWYZOyvVXQ/oxfOvf
- tgx7Dix/q4/Z3KA7N+AQ7R3ICRmaWe1dKeHG0=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=FO1EZ+D/
-Subject: [Buildroot] [PATCH v4] configs/flutter_x86_64_efi_demo_defconfig:
- new flutter demo config
+ d=gmail.com; s=20221208; t=1692313729; x=1692918529;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=tuKwcodJYxviREZ/7uYhxPfnHYHyRVQoJsUQ9tY99L4=;
+ b=gZ67oho1p5M9YJqohPwdsgr5pne9Vs9JdrtUzlwkTOvoYB7b/56/y1kvoQu3mV2jHK
+ qflecdBi36uRZiUR6D3rGAu1GYAUxA+uGEEtwdrPtunruaqZKuETB+VXFeUYvoomV09t
+ 8NLhp9n4KIH7BoK9nPzJup9gUUem59ZR68PokRS3CeiRj0vUUDud+40q0qqBoz9mCr+z
+ 0caESVMbxbbHvPu4AeKh5uuH8K5pzT81/QqGmIUslv0VgZ91M49EquJRzAed3ALJT1+d
+ 57GfbqpCgvrI4owlymId7FBjMVoskCmD/4QkY+7hrtCSZAYxCslB7nKOkYgHhWQswj33
+ JB0g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=gZ67oho1
+Subject: [Buildroot] [PATCH 1/4] configs/sipeed_maix_{bit,
+ dock}_sdcard_defconfig: fix build with binutils >= 2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,174 +96,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Adam Duskett <adam.duskett@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This config uses board/flutter_x86_64 to demonstrate Buildroots new flutter
-capabilities. When ran, flutter-gallery automatically starts on boot.
+Backport an upstream patch fixing the build with binutils >= 2.38
+for riscv's for Zicsr and Zifencei.
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060608
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060605
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-Changes v3 -> v4:
-  - Add BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y to  flutter_x86_64_efi_demo_defconfig
+ ...iscv-Fix-build-against-binutils-2.38.patch | 58 +++++++++++++++++++
+ configs/sipeed_maix_bit_sdcard_defconfig      |  1 +
+ configs/sipeed_maix_dock_sdcard_defconfig     |  1 +
+ 3 files changed, 60 insertions(+)
+ create mode 100644 board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
 
- DEVELOPERS                                    |  2 +
- board/flutter_x86_64/linux-vkms.fragment      |  2 +
- .../flutter-gallery.service                   |  1 +
- .../systemd/system/flutter-gallery.service    | 10 +++
- board/flutter_x86_64/readme.txt               | 18 ++++++
- configs/flutter_x86_64_efi_demo_defconfig     | 63 +++++++++++++++++++
- 6 files changed, 96 insertions(+)
- create mode 100644 board/flutter_x86_64/linux-vkms.fragment
- create mode 120000 board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
- create mode 100644 board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service
- create mode 100644 board/flutter_x86_64/readme.txt
- create mode 100644 configs/flutter_x86_64_efi_demo_defconfig
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1988c265fb..73ea022044 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -27,6 +27,8 @@
- #   modify packages that use this infrastructure.
+diff --git a/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch b/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
+new file mode 100644
+index 0000000000..52b496f054
+--- /dev/null
++++ b/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
+@@ -0,0 +1,58 @@
++From 0cf11f3c0478f4286adcfb09bf9137f8b00212e3 Mon Sep 17 00:00:00 2001
++From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
++Date: Mon, 3 Oct 2022 18:07:54 +0200
++Subject: [PATCH] riscv: Fix build against binutils 2.38
++
++The following description is copied from the equivalent patch for the
++Linux Kernel proposed by Aurelien Jarno:
++
++>From version 2.38, binutils default to ISA spec version 20191213. This
++means that the csr read/write (csrr*/csrw*) instructions and fence.i
++instruction has separated from the `I` extension, become two standalone
++extensions: Zicsr and Zifencei. As the kernel uses those instruction,
++this causes the following build failure:
++
++arch/riscv/cpu/mtrap.S: Assembler messages:
++arch/riscv/cpu/mtrap.S:65: Error: unrecognized opcode `csrr a0,scause'
++arch/riscv/cpu/mtrap.S:66: Error: unrecognized opcode `csrr a1,sepc'
++arch/riscv/cpu/mtrap.S:67: Error: unrecognized opcode `csrr a2,stval'
++arch/riscv/cpu/mtrap.S:70: Error: unrecognized opcode `csrw sepc,a0'
++
++Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
++Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
++Tested-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
++Tested-by: Heiko Stuebner <heiko@sntech.de>
++Tested-by: Christian Stewart <christian@paral.in>
++Reviewed-by: Rick Chen <rick@andestech.com>
++(cherry picked from commit 1dde977518f13824b847e23275001191139bc384)
++Upstream: https://gitlab.com/u-boot/u-boot/-/commit/1dde977518f13824b847e23275001191139bc384
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ arch/riscv/Makefile | 11 ++++++++++-
++ 1 file changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
++index 0b80eb8d864..53d1194ffb6 100644
++--- a/arch/riscv/Makefile
+++++ b/arch/riscv/Makefile
++@@ -24,7 +24,16 @@ ifeq ($(CONFIG_CMODEL_MEDANY),y)
++ 	CMODEL = medany
++ endif
++ 
++-ARCH_FLAGS = -march=$(ARCH_BASE)$(ARCH_A)$(ARCH_C) -mabi=$(ABI) \
+++RISCV_MARCH = $(ARCH_BASE)$(ARCH_A)$(ARCH_C)
+++
+++# Newer binutils versions default to ISA spec version 20191213 which moves some
+++# instructions from the I extension to the Zicsr and Zifencei extensions.
+++toolchain-need-zicsr-zifencei := $(call cc-option-yn, -mabi=$(ABI) -march=$(RISCV_MARCH)_zicsr_zifencei)
+++ifeq ($(toolchain-need-zicsr-zifencei),y)
+++	RISCV_MARCH := $(RISCV_MARCH)_zicsr_zifencei
+++endif
+++
+++ARCH_FLAGS = -march=$(RISCV_MARCH) -mabi=$(ABI) \
++ 	     -mcmodel=$(CMODEL)
++ 
++ PLATFORM_CPPFLAGS	+= $(ARCH_FLAGS)
++-- 
++2.41.0
++
+diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
+index 34769eeca8..0cfff26337 100644
+--- a/configs/sipeed_maix_bit_sdcard_defconfig
++++ b/configs/sipeed_maix_bit_sdcard_defconfig
+@@ -17,6 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+ # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
++BR2_GLOBAL_PATCH_DIR="board/canaan/k210-soc/patches"
  
- N:	Adam Duskett <adam.duskett@amarulasolutions.com>
-+F:	board/flutter_x86_64/
-+F:	configs/flutter_x86_64_efi_demo_defconfig
- F:	package/depot-tools/
- F:	package/flutter-engine/
- F:	package/flutter-gallery/
-diff --git a/board/flutter_x86_64/linux-vkms.fragment b/board/flutter_x86_64/linux-vkms.fragment
-new file mode 100644
-index 0000000000..3fc7a5dded
---- /dev/null
-+++ b/board/flutter_x86_64/linux-vkms.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_DEBUG_FS=y
-+CONFIG_DRM_VKMS=y
-diff --git a/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service b/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
-new file mode 120000
-index 0000000000..40993fb16c
---- /dev/null
-+++ b/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
-@@ -0,0 +1 @@
-+../../../../usr/lib/systemd/system/flutter-gallery.service
-\ No newline at end of file
-diff --git a/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service
-new file mode 100644
-index 0000000000..0cf66d9ce4
---- /dev/null
-+++ b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=flutter-gallery daemon
-+After=dbus.service systemd-udevd.service
-+
-+[Service]
-+ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/gallery/3.10.6/release/
-+Type=notify
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/board/flutter_x86_64/readme.txt b/board/flutter_x86_64/readme.txt
-new file mode 100644
-index 0000000000..ec4e527b1c
---- /dev/null
-+++ b/board/flutter_x86_64/readme.txt
-@@ -0,0 +1,18 @@
-+Run the emulation with:
-+
-+qemu-system-x86_64 -enable-kvm -M pc \
-+-m 512 \
-+-cpu IvyBridge \
-+-kernel output/images/bzImage \
-+-append "rootwait root=/dev/vda console=tty1 console=ttyS0" \
-+-drive file=output/images/rootfs.ext2,if=virtio,format=raw \
-+-usb -device usb-tablet \
-+-net nic,model=virtio \
-+-serial stdio \
-+-vga virtio \
-+-display sdl,show-cursor=on
-+
-+
-+Optionally add -smp N to emulate a SMP system with N CPUs.
-+
-+The flutter-gallery app will automatically run.
-diff --git a/configs/flutter_x86_64_efi_demo_defconfig b/configs/flutter_x86_64_efi_demo_defconfig
-new file mode 100644
-index 0000000000..426eb98e73
---- /dev/null
-+++ b/configs/flutter_x86_64_efi_demo_defconfig
-@@ -0,0 +1,63 @@
-+BR2_x86_64=y
-+BR2_x86_corei7_avx=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_CCACHE=y
-+BR2_CCACHE_DIR="$(HOME)/Downloads/ccache/flutter-x86_64"
-+BR2_CCACHE_INITIAL_SETUP="--max-size=5G"
-+BR2_PER_PACKAGE_DIRECTORIES=y
-+BR2_INIT_SYSTEMD=y
-+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-+BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
-+BR2_ROOTFS_OVERLAY="$(TOPDIR)/board/flutter_x86_64/overlay"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.45"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(TOPDIR)/board/flutter_x86_64/linux-vkms.fragment"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-+BR2_PACKAGE_FLUTTER_PI=y
-+BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN=y
-+BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
-+BR2_PACKAGE_FLUTTER_GALLERY=y
-+BR2_PACKAGE_MESA3D=y
-+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
-+BR2_PACKAGE_MESA3D_OPENGL_ES=y
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
-+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=y
-+BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-+BR2_PACKAGE_ACPID=y
-+BR2_PACKAGE_FLUTTER_ENGINE=y
-+BR2_PACKAGE_CONNMAN=y
-+BR2_PACKAGE_CONNMAN_WIFI=y
-+BR2_PACKAGE_CONNMAN_CLIENT=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-+BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O 64bit"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_X86_64_EFI=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
+index 62f6a0e0b8..db075360cc 100644
+--- a/configs/sipeed_maix_dock_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
+@@ -17,6 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+ # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
++BR2_GLOBAL_PATCH_DIR="board/canaan/k210-soc/patches"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 -- 
 2.41.0
 
