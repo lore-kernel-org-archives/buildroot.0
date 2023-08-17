@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0069FC3062F
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 14:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BA9DC3062E
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 14:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6539140272;
-	Thu, 17 Aug 2023 14:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6539140272
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7FD340272;
+	Thu, 17 Aug 2023 14:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7FD340272
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AK-rGvlEY5Pr; Thu, 17 Aug 2023 14:48:28 +0000 (UTC)
+	with ESMTP id LXzUJW-zbksj; Thu, 17 Aug 2023 14:51:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96987418D6;
-	Thu, 17 Aug 2023 14:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96987418D6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 81AFA1BF3BC
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 14:48:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DFF4A418BD;
+	Thu, 17 Aug 2023 14:51:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFF4A418BD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 194EE1BF3BC
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 14:51:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2DA984019D
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 14:48:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DA984019D
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4BE9418BD
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 14:51:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4BE9418BD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3FKvfbyrADKX for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 14:48:24 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 458FA40219
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 14:48:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 458FA40219
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K6vm0GKN-URM for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 14:51:41 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4FA7240272
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 14:51:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FA7240272
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id E9D69352BDB7; Thu, 17 Aug 2023 16:48:19 +0200 (CEST)
-Date: Thu, 17 Aug 2023 16:48:19 +0200
+ id CD933352BDB7; Thu, 17 Aug 2023 16:51:38 +0200 (CEST)
+Date: Thu, 17 Aug 2023 16:51:38 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <ZN4zM862Ivoe10FG@waldemar-brodkorb.de>
+Message-ID: <ZN4z+n37WMFvHgsF@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 5.10.0-21-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1692283700; bh=hJt8ZpDmT60wCLM2brdq2iid5af2pUrCbZsnWJFwjyI=;
- h=Date:From:To:Subject:From;
- b=Q6oICc6mzG1D4OYR1QJxvgh46jHeCD/+lthR2z8/Y6zW9K2T5TTVp0N3V/tRilLzy
- ZLrdHucdGU6UHGdF/Q+tGC7jmd9ba7tHbl6L4DNdqsiUhoSVz8QwPk5nwU8U9f2feX
- g3MeE/65hPNI5yHopA0F5RBck7Undeeitx6oQf9h6AgF+BlS8fQC4EdTWIz4dTBABc
- pcDmpuIhbvYFxfPM317zQ5BldrUJUz6uH19tjvwBf9Si7WCVvg3TmJbpc+h07pKS/5
- j+vUZZMtT/nYTQb4paQYbgu+T4M7WmBR6r7fF7COwsD302MaUrkNyChKrL2w7eoSW9
- 7JY5v2g4iWAow==
-Subject: [Buildroot] [PATCHv2 1/2] package/uclibc: add hwcap header for arm
+ t=1692283898; bh=W2lCJhuajJBTkFheSBicMO4V8A4azYRnqpARJDJoTvo=;
+ h=Date:From:To:Cc:Subject:From;
+ b=SF0fELA2lOlUYizcD7TFRNHBk8Ju87fsmLSoWG0cnX4eRTzKqH9GfyE0pxgGQg4J9
+ RA4k7jlP3NtlajAEIYFCxj1CuKKUWrY3P2XI2mQ/MrH83z8wRZoozufUw5udUO2tPZ
+ OxWByMrwSEYDgDMfrMUlWWRMr2n/KhFX5Ndn8os9aOK13OSziUDekLaYRg0agn9jVW
+ QPFplqkNHXMtCebZqaLaVj16p5dJEc0tmi6V0Y/BrP7DtS959Jj74rGwiWECiEFZqF
+ X5R64QxHE2qnud45cVzWZmsd9ZUc0W5b2yCq1aMgbiuW9JfaMXLix64nTrX3nljxh/
+ gKaS/pr1V+8KQ==
+Subject: [Buildroot] [PATCHv2 2/2] package/tcf-agent: fix uClibc-ng compile
+ on ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,99 +66,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is used by package tcf-agent when getauxval is used.
+When a shared build is used, we can use getauxval and no ARM only
+instuctions are in use.
+
+When a static build is used, we need to override CFLAGS to use
+arm instructions, as uClibc-ng only supports getauxval for shared case.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/3b5/3b5c5519a3e5ee490308bc1a1b9579ce13417235
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
 v1 -> v2:
-  - no change
----
- .../0003-arm-add-hwcap-header-file.patch      | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/uclibc/0003-arm-add-hwcap-header-file.patch
+  - musl is not affected, change requested by Thomas Petazzoni
 
-diff --git a/package/uclibc/0003-arm-add-hwcap-header-file.patch b/package/uclibc/0003-arm-add-hwcap-header-file.patch
+---
+ .../0001-fix-uClibc-ng-compile.patch          | 27 +++++++++++++++++++
+ package/tcf-agent/tcf-agent.mk                |  7 +++++
+ 2 files changed, 34 insertions(+)
+ create mode 100644 package/tcf-agent/0001-fix-uClibc-ng-compile.patch
+
+diff --git a/package/tcf-agent/0001-fix-uClibc-ng-compile.patch b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
 new file mode 100644
-index 0000000000..9a74d79c8e
+index 0000000000..b8f46f3c48
 --- /dev/null
-+++ b/package/uclibc/0003-arm-add-hwcap-header-file.patch
-@@ -0,0 +1,71 @@
-+From 3d781a52bae133907ba61bfbe987604f8cb00373 Mon Sep 17 00:00:00 2001
++++ b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
+@@ -0,0 +1,27 @@
++From a78007cd139e1dea3d893f5fe1d1c3a47503e6a2 Mon Sep 17 00:00:00 2001
 +From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 12 Aug 2023 19:48:40 +0200
-+Subject: [PATCH] arm: add hwcap header file
++Date: Sat, 12 Aug 2023 18:27:02 +0200
++Subject: [PATCH] fix uClibc-ng compile
 +
 +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3d781a52bae133907ba61bfbe987604f8cb00373
++Upstream: N/A only mail available
 +---
-+ libc/sysdeps/linux/arm/bits/hwcap.h | 50 +++++++++++++++++++++++++++++
-+ 1 file changed, 50 insertions(+)
-+ create mode 100644 libc/sysdeps/linux/arm/bits/hwcap.h
++ agent/machine/arm/tcf/cpudefs-mdep.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/libc/sysdeps/linux/arm/bits/hwcap.h b/libc/sysdeps/linux/arm/bits/hwcap.h
-+new file mode 100644
-+index 000000000..0a741b469
-+--- /dev/null
-++++ b/libc/sysdeps/linux/arm/bits/hwcap.h
-+@@ -0,0 +1,50 @@
-++/* Defines for bits in AT_HWCAP.  ARM Linux version.
-++   Copyright (C) 2012-2023 Free Software Foundation, Inc.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <https://www.gnu.org/licenses/>.  */
-++
-++#if !defined (_SYS_AUXV_H) && !defined (_LINUX_ARM_SYSDEP_H)
-++# error "Never include <bits/hwcap.h> directly; use <sys/auxv.h> instead."
-++#endif
-++
-++/* The following must match the kernel's <asm/hwcap.h>.  */
-++#define HWCAP_ARM_SWP		1
-++#define HWCAP_ARM_HALF		2
-++#define HWCAP_ARM_THUMB		4
-++#define HWCAP_ARM_26BIT		8
-++#define HWCAP_ARM_FAST_MULT	16
-++#define HWCAP_ARM_FPA		32
-++#define HWCAP_ARM_VFP		64
-++#define HWCAP_ARM_EDSP		128
-++#define HWCAP_ARM_JAVA		256
-++#define HWCAP_ARM_IWMMXT	512
-++#define HWCAP_ARM_CRUNCH	1024
-++#define HWCAP_ARM_THUMBEE	2048
-++#define HWCAP_ARM_NEON		4096
-++#define HWCAP_ARM_VFPv3		8192
-++#define HWCAP_ARM_VFPv3D16	16384
-++#define HWCAP_ARM_TLS		32768
-++#define HWCAP_ARM_VFPv4		65536
-++#define HWCAP_ARM_IDIVA		131072
-++#define HWCAP_ARM_IDIVT		262144
-++#define HWCAP_ARM_VFPD32	524288
-++#define HWCAP_ARM_LPAE		1048576
-++#define HWCAP_ARM_EVTSTRM	2097152
-++#define HWCAP_FPHP		4194304
-++#define HWCAP_ASIMDHP		8388608
-++#define HWCAP_ASIMDDP		16777216
-++#define HWCAP_ASIMDFHM		33554432
-++#define HWCAP_ASIMDBF16		67108864
-++#define HWCAP_I8MM		134217728
++diff --git a/agent/machine/arm/tcf/cpudefs-mdep.c b/agent/machine/arm/tcf/cpudefs-mdep.c
++index 051631a0..7c4fbf3e 100644
++--- a/agent/machine/arm/tcf/cpudefs-mdep.c
+++++ b/agent/machine/arm/tcf/cpudefs-mdep.c
++@@ -21,7 +21,7 @@
++ 
++ #ifndef USE_getauxval
++ #  include <features.h>
++-#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)))
+++#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) && defined(__HAVE_SHARED__)))
++ #endif
++ 
++ #include <stddef.h>
 +-- 
-+2.30.2
++2.39.2
 +
+diff --git a/package/tcf-agent/tcf-agent.mk b/package/tcf-agent/tcf-agent.mk
+index 2b8a61b66f..7c25df864a 100644
+--- a/package/tcf-agent/tcf-agent.mk
++++ b/package/tcf-agent/tcf-agent.mk
+@@ -21,6 +21,13 @@ TCF_AGENT_CONF_OPTS = \
+ 	-DBUILD_SHARED_LIBS=OFF \
+ 	-DTCF_MACHINE=$(call qstrip,$(BR2_PACKAGE_TCF_AGENT_ARCH))
+ 
++# tcf-agent uses some arm instructions in case getauxval is not available.
++# unfortunately the uClibc-ng implementation of getauxval uses some features
++# of ld.so to work
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_ARM_INSTRUCTIONS_THUMB),yyy)
++TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
++endif
++
+ define TCF_AGENT_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/tcf-agent/tcf-agent.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/tcf-agent.service
 -- 
 2.39.2
 
