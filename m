@@ -4,84 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5C1CC531DC
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 19:48:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A808C5479A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 20:25:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E61E60F0C;
-	Thu, 17 Aug 2023 19:48:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E61E60F0C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E36660A5E;
+	Thu, 17 Aug 2023 20:25:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E36660A5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id krb2vuGPxXXz; Thu, 17 Aug 2023 19:48:13 +0000 (UTC)
+	with ESMTP id RJnpi6mEde2g; Thu, 17 Aug 2023 20:25:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B85761249;
-	Thu, 17 Aug 2023 19:48:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B85761249
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E0EE81BF37F
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2919A60A69;
+	Thu, 17 Aug 2023 20:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2919A60A69
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A22841BF360
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 20:25:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2BA84221C
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2BA84221C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89B26400C1
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 20:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89B26400C1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lRoJmR3WPNq0 for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
- [IPv6:2607:f8b0:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 305F34221B
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 305F34221B
-Received: by mail-pl1-x62c.google.com with SMTP id
- d9443c01a7336-1bdf4752c3cso1393045ad.2
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 12:46:46 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LBf1sV7lw_n5 for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 20:25:23 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E584C40003
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 20:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E584C40003
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-51a52a7d859so2836819a12.0
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 13:25:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692301605; x=1692906405;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Nqf1RXq5JSRQdnsSzn+0kdGB/Q/i8lkxkvJpp3SDtGs=;
- b=D6qKzbmSTWavARav0EVm2TJi4xUNNfhBg8wIojLba6fXmsIkAh1qxGKfdXnW82FwVq
- H8iGsZvaPiwoiRZmi2n5miss1x+17yyxKwKsD/Uaai34nCARQ1mrfzI86i5xUav77ob6
- boJfO3DY94XB5/DDhkKWqidpIdKV4ApRyTjOlFJxJex3qO4FDrcHW+Qf71B34zsoa6sj
- l5C5powQ8oQAQlO6OYzKgDixbbg4FWs05SzIt0w+nfzDDwL4/liF4kwqEWXlZvZVEFPM
- OnHf3MstP68eiWZbegW/b41wUUC0YrPkbYhAyvSbpbS4k8+odrWNNXjJHO7V10ACPkzX
- 5aKw==
-X-Gm-Message-State: AOJu0Yz1TkHo3dYlXkazR7kG0JFKodz9F2inMPA6M/cBUdBexQGjdt7G
- IR1khLHF6A3NZuqEtcI6LtTdhDFBGy/++xJhZ6E=
-X-Google-Smtp-Source: AGHT+IFvhLuabm4TBbiIU8bMzf8u/AqheOhaS5lpHJLMLS20BDZs/Uof2yHDgNis5+pz/Q/knPrh9g==
-X-Received: by 2002:a17:902:ead2:b0:1bd:f71c:3af3 with SMTP id
- p18-20020a170902ead200b001bdf71c3af3mr425489pld.32.1692301604836; 
- Thu, 17 Aug 2023 12:46:44 -0700 (PDT)
-Received: from fedora.. ([75.174.130.12]) by smtp.gmail.com with ESMTPSA id
- 13-20020a170902c20d00b001bdd62cf7a1sm137569pll.236.2023.08.17.12.46.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Aug 2023 12:46:44 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Thu, 17 Aug 2023 13:46:35 -0600
-Message-ID: <20230817194638.780863-5-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230817194638.780863-1-adam.duskett@amarulasolutions.com>
-References: <20230817194638.780863-1-adam.duskett@amarulasolutions.com>
+ d=1e100.net; s=20221208; t=1692303921; x=1692908721;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8NnlV79hnC+4ulE2naTXkpNnq1g2i0SujAAdzDn1SDU=;
+ b=mCbf5Cf68SVT1HSs6UtPkhJ2Dc//oI7S+9FrS5fgdf3cyIazkN09TfXQO7Kj7ZV0vb
+ k1wTSDkaJmygtaJU8N1oFbvSSJyt7btzqBEoWIly3B2Zi03fm/JSSt3CNxkThmWXDIte
+ mLR8nz4W9VvXC1AMqWCECSN1VUl47xkfNeLXBw9yzhNAkH0a9F4G6fxmSjqmlRr0jKdX
+ EJx4Dei2sbtoVXyyESMc0FI6O3XK3ooORyV1PooV4U3k/jFcAZHAx6PbdtCEo9yTCgPW
+ 2IOr0J3vqktEOtJNIFxZBRGkLG4PfTg1mA07U/PNlLlwU5buCUis5PilzPRuIsfDG6Le
+ ao2w==
+X-Gm-Message-State: AOJu0YzF7iKtw4E/sUQXfRAuQib3CjYNcLXkOIdLGmZpLgdbYYOAayPc
+ Rlaor87q+kBTT7yAGUg8O3uDNE5irf2PiZRZM0ZHAmL5KZE+XPdPGUA=
+X-Google-Smtp-Source: AGHT+IEukI13Zg3ByRGxdjUM0ruISw6tEdoAcEn2TZYKvh5uQj6tRmpVcbucGzqNlEC9ysc6uCyDtvpgNfZiLulFUbk=
+X-Received: by 2002:a17:907:6091:b0:993:f664:ce25 with SMTP id
+ ht17-20020a170907609100b00993f664ce25mr5248126ejc.19.1692303920393; Thu, 17
+ Aug 2023 13:25:20 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230817194638.780863-1-adam.duskett@amarulasolutions.com>
+ <20230817194638.780863-8-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20230817194638.780863-8-adam.duskett@amarulasolutions.com>
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Thu, 17 Aug 2023 14:25:09 -0600
+Message-ID: <CAHDQB6OXX_wttQO75x6Hbp4C8oof+9cPvu5-EiQn8Xxg1UNuxQ@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1692301605; x=1692906405;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Nqf1RXq5JSRQdnsSzn+0kdGB/Q/i8lkxkvJpp3SDtGs=;
- b=DaARMY1WH4QTt01jlJHOLy5gMRbn82WwkxF5hqpWv6RixZvoRegBZ4bUgwZRzku8R3
- UrKxxbY0mKJtQPHA/5zQt8qKOEFhuE+SsrVgAOL7l1fDPhOFprOrTqrsBbTgQiqyz02M
- fedXueM+9vxGqwhqO8hj9O26VB0BUbmNpX0fg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1692303921; x=1692908721;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=8NnlV79hnC+4ulE2naTXkpNnq1g2i0SujAAdzDn1SDU=;
+ b=Gf+acBvtHElbbqkX7xf0SX2mcDWnSuH1xb2/5HhqO6k91L0mw7qU2cBjNwpzWHwAOk
+ p8XJgGpfsvapM21OJQpfl0+mFmhLcGxi+fbyVKSIEVeVkPwJMvwwJgbYZvY9YwHFjjsF
+ mmSr2xSMMYBdhFjMm66cH139zrK75JpOyA1IA=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=DaARMY1W
-Subject: [Buildroot] [PATCH v3] package/flutter-engine: new package
+ header.b=Gf+acBvt
+Subject: Re: [Buildroot] [PATCH v3]
+ configs/flutter_x86_64_efi_demo_defconfig: new flutter demo config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,785 +89,494 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
  Michael Trimarchi <michael@amarulasolutions.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: multipart/mixed; boundary="===============2423824152290031086=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-There are many issues with this package:
+--===============2423824152290031086==
+Content-Type: multipart/alternative; boundary="0000000000000703a70603243688"
 
-- The release tarballs from https://github.com/flutter/engine are in no state
-  to compile. They are only for the use of gclient to download a source
-  directory structure suitable to build the Flutter engine! If you download,
-  extract and attempt to run `./tools/gn --no-goma --no-prebuilt-dart-sdk`, you
-  receive the error message:
-  `No such file or directory: 'flutter/flutter/third_party/gn/gn.'
+--0000000000000703a70603243688
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-  But wait! Wasn't the gn binary just called? No, that's a wrapper in the
-  Flutter source tree that formats arguments to call the real gn binary.
-  The real gn is not provided in the tarball but is downloaded via gclient
-  (among many other supporting repositories.)
+All;
 
-  Even worse, the flutter buildsystem depends on the .git dirs being present.
-  (https://github.com/meta-flutter/meta-flutter/issues/271) This dependency
-  means it is not possible to create a reproducible tarball from the downloaded
-  sources, which is why there is no .hash file provided.
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=3Dy needs to be added to the defconfig
+before testing.
+Thomas or Yann, I can submit a new patch series later if you want me to.
 
-  I have asked the flutter project to release full tarballs suitable for
-  compiling here: https://github.com/flutter/flutter/issues/130734
+Sorry about that!
 
-- Flutter engine includes a patched copy of clang that must be used to compile.
-  Using a Buildroot-build clang results in linking warning and errors.
-  As such, we depend on LLVM_ARCH_SUPPORTS but use the included clang for
-  building. On the plus side, this saves time having to compile clang.
+Adam Duskett
 
-Tested with:
-  - Debian 11 and 12
-  - Ubuntu 18.04, 20.04, and 22.04
-  - Fedora 38
-  - Per package directory enabled and disabled
-  - x86_64, arm64
+Senior Embedded Systems Developer
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
-Changes v2 -> v3:
-  - Remove host-flutter-sdk-bin as a dependency.
-  - Reorder FLUTTER_ENGINE_TARGET_ARCH and FLUTTER_ENGINE_TARGET_TRIPPLE to be
-    alphabetical
-  - FLUTTER_ENGINE_INSTALL_SDK -> FLUTTER_ENGINE_INSTALL_GEN_SNAPSHOT and
-    only install the gen_snapshot tool.
+M. +1208-515-8102
 
-Changes v1 -> v2:
-  - Clean up .mk header
-  - Set proper FLUTTER_ENGINE_TARGET_TRIPPLE strings and add a comment as to
-    where the names came from.
-  - Change --tarball to --tarball-dl-path for clarity
-  - Remove uneeded :$(HOST_DIR)/share/depot_tools when calling ninja.
-  - Install the flutter-engine-sdk tools to the host directory. These tools are
-    used to turn a flutter application into a useable .so file.
-  - Install icudtl.dat to both the staging directory and the target. Used by
-    flutter-pi when running an application.
+adam.duskett@amarulasolutions.com
 
-  - Swap from using mk_tar_gz to calling tar -C directly. For unknown reasons,
-    calling mk_tar_gz breaks the gen_snapshot tool in half. Even though no
-    warnings or errors are reported when compiling, calling gen_snapshot from
-    a tarball created iwwth mk_tar_gz results in the cryptic error:
-    "Can't load kernel binary: Invalid SDK hash." However, using the exact same
-    utility from a tarball created with tar -C works properly. No, I do not know
-    what voodoo magic is happening, please don't ask. :)
-  - Add a check for TARBALL_DL_PATH in gen-tarball. [Yann]
+__________________________________
 
-Changes rfc v2 -> v1:
-  - DEVELOPERS file format cleanup [Thomas]
 
-  - Add upstream issue for 0004-pkg-config.py-do-not-prepend-sysroot-path.patch
-    (https://github.com/flutter/flutter/issues/132152) [Thomas]
+Amarula Solutions BV
 
-  - Changed BR2_PACKAGE_LLVM_ARCH_SUPPORTS to BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
-    [Thomas]
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
 
-  - Fixed alphabetic ordering of selects in Config.in [Thomas]
+T. +31 (0)85 111 9170
+info@amarulasolutions.com
 
-  - Removed BR2_PACKAGE_FLUTTER_ENGINE_ARTIFACTS option from Config.in. That
-    option builds binaries used for compiling on the device, which Buildroot
-    doesn't need nor want.
+www.amarulasolutions.com
 
-  - Added BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS to the
-    "flutter-engine needs an OpenGL backend" line. [Thomas]
 
-  - Added --no-stripped unconditionally [Thomas]
 
-  - Removed check for mesa3d, as libgl and libgles take care of that. [Thomas]
+On Thu, Aug 17, 2023 at 1:46=E2=80=AFPM Adam Duskett <
+adam.duskett@amarulasolutions.com> wrote:
 
-  - Moved libflutter_linux_gtk.so into the ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-    conditional check, which removes the need to check if the
-    FLUTTER_ENGINE_INSTALL_FILES exist in the INSTALL_STAGING and
-    INSTALL_TARGET commands. [Thomas]
+> This config uses board/flutter_x86_64 to demonstrate Buildroots new flutt=
+er
+> capabilities. When ran, flutter-gallery automatically starts on boot.
+>
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+>  DEVELOPERS                                    |  2 +
+>  board/flutter_x86_64/linux-vkms.fragment      |  2 +
+>  .../flutter-gallery.service                   |  1 +
+>  .../systemd/system/flutter-gallery.service    | 10 +++
+>  board/flutter_x86_64/readme.txt               | 18 ++++++
+>  configs/flutter_x86_64_efi_demo_defconfig     | 62 +++++++++++++++++++
+>  6 files changed, 95 insertions(+)
+>  create mode 100644 board/flutter_x86_64/linux-vkms.fragment
+>  create mode 120000
+> board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/f=
+lutter-gallery.service
+>  create mode 100644
+> board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.servi=
+ce
+>  create mode 100644 board/flutter_x86_64/readme.txt
+>  create mode 100644 configs/flutter_x86_64_efi_demo_defconfig
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 1988c265fb..73ea022044 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -27,6 +27,8 @@
+>  #   modify packages that use this infrastructure.
+>
+>  N:     Adam Duskett <adam.duskett@amarulasolutions.com>
+> +F:     board/flutter_x86_64/
+> +F:     configs/flutter_x86_64_efi_demo_defconfig
+>  F:     package/depot-tools/
+>  F:     package/flutter-engine/
+>  F:     package/flutter-gallery/
+> diff --git a/board/flutter_x86_64/linux-vkms.fragment
+> b/board/flutter_x86_64/linux-vkms.fragment
+> new file mode 100644
+> index 0000000000..3fc7a5dded
+> --- /dev/null
+> +++ b/board/flutter_x86_64/linux-vkms.fragment
+> @@ -0,0 +1,2 @@
+> +CONFIG_DEBUG_FS=3Dy
+> +CONFIG_DRM_VKMS=3Dy
+> diff --git
+> a/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants=
+/flutter-gallery.service
+> b/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants=
+/flutter-gallery.service
+> new file mode 120000
+> index 0000000000..40993fb16c
+> --- /dev/null
+> +++
+> b/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants=
+/flutter-gallery.service
+> @@ -0,0 +1 @@
+> +../../../../usr/lib/systemd/system/flutter-gallery.service
+> \ No newline at end of file
+> diff --git
+> a/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.ser=
+vice
+> b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.ser=
+vice
+> new file mode 100644
+> index 0000000000..0cf66d9ce4
+> --- /dev/null
+> +++
+> b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.ser=
+vice
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=3Dflutter-gallery daemon
+> +After=3Ddbus.service systemd-udevd.service
+> +
+> +[Service]
+> +ExecStart=3D/usr/bin/flutter-pi --release
+> /usr/share/flutter/gallery/3.10.6/release/
+> +Type=3Dnotify
+> +
+> +[Install]
+> +WantedBy=3Dmulti-user.target
+> diff --git a/board/flutter_x86_64/readme.txt
+> b/board/flutter_x86_64/readme.txt
+> new file mode 100644
+> index 0000000000..ec4e527b1c
+> --- /dev/null
+> +++ b/board/flutter_x86_64/readme.txt
+> @@ -0,0 +1,18 @@
+> +Run the emulation with:
+> +
+> +qemu-system-x86_64 -enable-kvm -M pc \
+> +-m 512 \
+> +-cpu IvyBridge \
+> +-kernel output/images/bzImage \
+> +-append "rootwait root=3D/dev/vda console=3Dtty1 console=3DttyS0" \
+> +-drive file=3Doutput/images/rootfs.ext2,if=3Dvirtio,format=3Draw \
+> +-usb -device usb-tablet \
+> +-net nic,model=3Dvirtio \
+> +-serial stdio \
+> +-vga virtio \
+> +-display sdl,show-cursor=3Don
+> +
+> +
+> +Optionally add -smp N to emulate a SMP system with N CPUs.
+> +
+> +The flutter-gallery app will automatically run.
+> diff --git a/configs/flutter_x86_64_efi_demo_defconfig
+> b/configs/flutter_x86_64_efi_demo_defconfig
+> new file mode 100644
+> index 0000000000..640a82bb91
+> --- /dev/null
+> +++ b/configs/flutter_x86_64_efi_demo_defconfig
+> @@ -0,0 +1,62 @@
+> +BR2_x86_64=3Dy
+> +BR2_x86_corei7_avx=3Dy
+> +BR2_TOOLCHAIN_EXTERNAL=3Dy
+> +BR2_CCACHE=3Dy
+> +BR2_CCACHE_DIR=3D"$(HOME)/Downloads/ccache/flutter-x86_64"
+> +BR2_CCACHE_INITIAL_SETUP=3D"--max-size=3D5G"
+> +BR2_PER_PACKAGE_DIRECTORIES=3Dy
+> +BR2_INIT_SYSTEMD=3Dy
+> +BR2_TARGET_GENERIC_GETTY_PORT=3D"tty1"
+> +BR2_SYSTEM_DEFAULT_PATH=3D"/bin:/sbin:/usr/bin:/usr/sbin"
+> +BR2_ROOTFS_OVERLAY=3D"$(TOPDIR)/board/flutter_x86_64/overlay"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT=3D"board/pc/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"board/pc/post-image-efi.sh"
+> +BR2_LINUX_KERNEL=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.1.45"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=3Dy
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=3D"board/pc/linux.config"
+>
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=3D"$(TOPDIR)/board/flutter_x86_64=
+/linux-vkms.fragment"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy
+> +BR2_PACKAGE_FLUTTER_PI=3Dy
+> +BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN=3Dy
+> +BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=3Dy
+> +BR2_PACKAGE_FLUTTER_GALLERY=3Dy
+> +BR2_PACKAGE_MESA3D=3Dy
+> +BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=3Dy
+> +BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=3Dy
+> +BR2_PACKAGE_MESA3D_OPENGL_ES=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=3Dy
+> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=3Dy
+> +BR2_PACKAGE_ACPID=3Dy
+> +BR2_PACKAGE_FLUTTER_ENGINE=3Dy
+> +BR2_PACKAGE_CONNMAN=3Dy
+> +BR2_PACKAGE_CONNMAN_WIFI=3Dy
+> +BR2_PACKAGE_CONNMAN_CLIENT=3Dy
+> +BR2_TARGET_ROOTFS_EXT2=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_4=3Dy
+> +BR2_TARGET_ROOTFS_EXT2_SIZE=3D"512M"
+> +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS=3D"-O 64bit"
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_GRUB2=3Dy
+> +BR2_TARGET_GRUB2_X86_64_EFI=3Dy
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
+> +BR2_PACKAGE_HOST_GENIMAGE=3Dy
+> +BR2_PACKAGE_HOST_MTOOLS=3Dy
+> --
+> 2.41.0
+>
+>
 
-  - Install .so files from the so.unstripped/ directory. [Thomas]
-  
-  - Remove the check in gen-tarball that checks if the tarball already exists.
-    Always re-create the tarball when running the gen-tarball script. [Thomas]
+--0000000000000703a70603243688
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Changes rfc v1 -> rfc v2:
-  - Use the flutter-engine provided clang.
-  - Remove 0003-disable-undefined-version.patch
-  - Add 0003-fix-toolchain-paths.patch
-  - Fix signed-off-by lines in the patches [Yann]
-  - Remove "Runtime mode" option in favor of checking BR2_ENABLE_RUNTIME_DEBUG [Yann]
-  - Use positive logic in flutter-engine.mk [Yann]
-  - Add comments when --disable-${option} doesn't exist. [Yann]
-  - Remove unecessary subshells in flutter-engine.mk [Yann]
-  - Rename flutter-engine/gclient to flutter-engine/dot-gclient [Yann]
-  - Create flutter-engine/gen-tarball to generate the flutter-engine tarball. [Yann]
-  - Remove finding and copying crtbeginS.o crtendS.o libgcc.a as it's
-    unecessary when using the flutter-engine provided clang.
-  - FLUTTER_ENGINE_INSTALL_STAGING_FILES -> FLUTTER_ENGINE_INSTALL_FILES [Yann]
-  - Reword comments at the top of flutter-engine.mk for clarity.
+<div dir=3D"ltr"><div>All;</div><div><br></div><div>BR2_LINUX_KERNEL_NEEDS_=
+HOST_LIBELF=3Dy needs to be added to the defconfig before testing.</div><di=
+v>Thomas or Yann, I can submit a new patch series later if you want me to.<=
+/div><div><br></div><div>Sorry about that!</div><div><br></div><div><div><d=
+iv dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail_signature"=
+><div dir=3D"ltr"><span><p dir=3D"ltr" style=3D"line-height:1.7999999999999=
+998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-fa=
+mily:Ubuntu,sans-serif;color:rgb(0,0,0);background-color:transparent;vertic=
+al-align:baseline;white-space:pre-wrap">Adam Duskett</span></p><p dir=3D"lt=
+r" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt=
+"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospa=
+ce;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;wh=
+ite-space:pre-wrap">Senior Embedded Systems Developer</span></p><p dir=3D"l=
+tr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0p=
+t"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monosp=
+ace;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;w=
+hite-space:pre-wrap">M. +1208-515-8102</span></p><p dir=3D"ltr" style=3D"li=
+ne-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=
+=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
+0,0,0);background-color:transparent;vertical-align:baseline;white-space:pre=
+-wrap"><a href=3D"mailto:adam.duskett@amarulasolutions.com" target=3D"_blan=
+k">adam.duskett@amarulasolutions.com</a></span></p><p dir=3D"ltr" style=3D"=
+line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span styl=
+e=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb=
+(0,0,0);background-color:transparent;vertical-align:baseline;white-space:pr=
+e-wrap">__________________________________</span></p><p dir=3D"ltr" style=
+=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span =
+style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color=
+:rgb(0,0,0);background-color:transparent;vertical-align:baseline;white-spac=
+e:pre-wrap"><br></span><span style=3D"font-size:10pt;font-family:Ubuntu,san=
+s-serif;color:rgb(0,0,0);background-color:transparent;vertical-align:baseli=
+ne;white-space:pre-wrap">Amarula Solutions BV</span></p><p dir=3D"ltr" styl=
+e=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span=
+ style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;colo=
+r:rgb(0,0,0);background-color:transparent;vertical-align:baseline;white-spa=
+ce:pre-wrap">Joop Geesinkweg 125, 1114 AB, Amsterdam, NL</span></p><p dir=
+=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bott=
+om:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,m=
+onospace;color:rgb(0,0,0);background-color:transparent;vertical-align:basel=
+ine;white-space:pre-wrap">T. +31 (0)85 111 9170</span><span style=3D"font-s=
+ize:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);bac=
+kground-color:transparent;vertical-align:baseline;white-space:pre-wrap"><br=
+></span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,m=
+onospace;color:rgb(0,0,0);background-color:transparent;vertical-align:basel=
+ine;white-space:pre-wrap"><a href=3D"mailto:info@amarulasolutions.com" targ=
+et=3D"_blank">info@amarulasolutions.com</a></span></p><p dir=3D"ltr" style=
+=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><a hre=
+f=3D"http://www.amarulasolutions.com/" target=3D"_blank"><span style=3D"fon=
+t-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);=
+background-color:transparent;vertical-align:baseline;white-space:pre-wrap">=
+www.amarulasolutions.com</span></a></p><div><br></div></span></div></div></=
+div><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=
+=3D"gmail_attr">On Thu, Aug 17, 2023 at 1:46=E2=80=AFPM Adam Duskett &lt;<a=
+ href=3D"mailto:adam.duskett@amarulasolutions.com">adam.duskett@amarulasolu=
+tions.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">This config uses board/flutter_x86_64 to demonstrate Buildroots =
+new flutter<br>
+capabilities. When ran, flutter-gallery automatically starts on boot.<br>
+<br>
+Signed-off-by: Adam Duskett &lt;<a href=3D"mailto:adam.duskett@amarulasolut=
+ions.com" target=3D"_blank">adam.duskett@amarulasolutions.com</a>&gt;<br>
+---<br>
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
+2 +<br>
+=C2=A0board/flutter_x86_64/linux-vkms.fragment=C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
+2 +<br>
+=C2=A0.../flutter-gallery.service=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+=C2=A0.../systemd/system/flutter-gallery.service=C2=A0 =C2=A0 | 10 +++<br>
+=C2=A0board/flutter_x86_64/readme.txt=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0| 18 ++++++<br>
+=C2=A0configs/flutter_x86_64_efi_demo_defconfig=C2=A0 =C2=A0 =C2=A0| 62 +++=
+++++++++++++++++<br>
+=C2=A06 files changed, 95 insertions(+)<br>
+=C2=A0create mode 100644 board/flutter_x86_64/linux-vkms.fragment<br>
+=C2=A0create mode 120000 board/flutter_x86_64/overlay/etc/systemd/system/mu=
+lti-user.target.wants/flutter-gallery.service<br>
+=C2=A0create mode 100644 board/flutter_x86_64/overlay/usr/lib/systemd/syste=
+m/flutter-gallery.service<br>
+=C2=A0create mode 100644 board/flutter_x86_64/readme.txt<br>
+=C2=A0create mode 100644 configs/flutter_x86_64_efi_demo_defconfig<br>
+<br>
+diff --git a/DEVELOPERS b/DEVELOPERS<br>
+index 1988c265fb..73ea022044 100644<br>
+--- a/DEVELOPERS<br>
++++ b/DEVELOPERS<br>
+@@ -27,6 +27,8 @@<br>
+=C2=A0#=C2=A0 =C2=A0modify packages that use this infrastructure.<br>
+<br>
+=C2=A0N:=C2=A0 =C2=A0 =C2=A0Adam Duskett &lt;<a href=3D"mailto:adam.duskett=
+@amarulasolutions.com" target=3D"_blank">adam.duskett@amarulasolutions.com<=
+/a>&gt;<br>
++F:=C2=A0 =C2=A0 =C2=A0board/flutter_x86_64/<br>
++F:=C2=A0 =C2=A0 =C2=A0configs/flutter_x86_64_efi_demo_defconfig<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/depot-tools/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/flutter-engine/<br>
+=C2=A0F:=C2=A0 =C2=A0 =C2=A0package/flutter-gallery/<br>
+diff --git a/board/flutter_x86_64/linux-vkms.fragment b/board/flutter_x86_6=
+4/linux-vkms.fragment<br>
+new file mode 100644<br>
+index 0000000000..3fc7a5dded<br>
+--- /dev/null<br>
++++ b/board/flutter_x86_64/linux-vkms.fragment<br>
+@@ -0,0 +1,2 @@<br>
++CONFIG_DEBUG_FS=3Dy<br>
++CONFIG_DRM_VKMS=3Dy<br>
+diff --git a/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.tar=
+get.wants/flutter-gallery.service b/board/flutter_x86_64/overlay/etc/system=
+d/system/multi-user.target.wants/flutter-gallery.service<br>
+new file mode 120000<br>
+index 0000000000..40993fb16c<br>
+--- /dev/null<br>
++++ b/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wan=
+ts/flutter-gallery.service<br>
+@@ -0,0 +1 @@<br>
++../../../../usr/lib/systemd/system/flutter-gallery.service<br>
+\ No newline at end of file<br>
+diff --git a/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-ga=
+llery.service b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter=
+-gallery.service<br>
+new file mode 100644<br>
+index 0000000000..0cf66d9ce4<br>
+--- /dev/null<br>
++++ b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.s=
+ervice<br>
+@@ -0,0 +1,10 @@<br>
++[Unit]<br>
++Description=3Dflutter-gallery daemon<br>
++After=3Ddbus.service systemd-udevd.service<br>
++<br>
++[Service]<br>
++ExecStart=3D/usr/bin/flutter-pi --release /usr/share/flutter/gallery/3.10.=
+6/release/<br>
++Type=3Dnotify<br>
++<br>
++[Install]<br>
++WantedBy=3Dmulti-user.target<br>
+diff --git a/board/flutter_x86_64/readme.txt b/board/flutter_x86_64/readme.=
+txt<br>
+new file mode 100644<br>
+index 0000000000..ec4e527b1c<br>
+--- /dev/null<br>
++++ b/board/flutter_x86_64/readme.txt<br>
+@@ -0,0 +1,18 @@<br>
++Run the emulation with:<br>
++<br>
++qemu-system-x86_64 -enable-kvm -M pc \<br>
++-m 512 \<br>
++-cpu IvyBridge \<br>
++-kernel output/images/bzImage \<br>
++-append &quot;rootwait root=3D/dev/vda console=3Dtty1 console=3DttyS0&quot=
+; \<br>
++-drive file=3Doutput/images/rootfs.ext2,if=3Dvirtio,format=3Draw \<br>
++-usb -device usb-tablet \<br>
++-net nic,model=3Dvirtio \<br>
++-serial stdio \<br>
++-vga virtio \<br>
++-display sdl,show-cursor=3Don<br>
++<br>
++<br>
++Optionally add -smp N to emulate a SMP system with N CPUs.<br>
++<br>
++The flutter-gallery app will automatically run.<br>
+diff --git a/configs/flutter_x86_64_efi_demo_defconfig b/configs/flutter_x8=
+6_64_efi_demo_defconfig<br>
+new file mode 100644<br>
+index 0000000000..640a82bb91<br>
+--- /dev/null<br>
++++ b/configs/flutter_x86_64_efi_demo_defconfig<br>
+@@ -0,0 +1,62 @@<br>
++BR2_x86_64=3Dy<br>
++BR2_x86_corei7_avx=3Dy<br>
++BR2_TOOLCHAIN_EXTERNAL=3Dy<br>
++BR2_CCACHE=3Dy<br>
++BR2_CCACHE_DIR=3D&quot;$(HOME)/Downloads/ccache/flutter-x86_64&quot;<br>
++BR2_CCACHE_INITIAL_SETUP=3D&quot;--max-size=3D5G&quot;<br>
++BR2_PER_PACKAGE_DIRECTORIES=3Dy<br>
++BR2_INIT_SYSTEMD=3Dy<br>
++BR2_TARGET_GENERIC_GETTY_PORT=3D&quot;tty1&quot;<br>
++BR2_SYSTEM_DEFAULT_PATH=3D&quot;/bin:/sbin:/usr/bin:/usr/sbin&quot;<br>
++BR2_ROOTFS_OVERLAY=3D&quot;$(TOPDIR)/board/flutter_x86_64/overlay&quot;<br=
+>
++BR2_ROOTFS_POST_BUILD_SCRIPT=3D&quot;board/pc/post-build.sh&quot;<br>
++BR2_ROOTFS_POST_IMAGE_SCRIPT=3D&quot;board/pc/post-image-efi.sh&quot;<br>
++BR2_LINUX_KERNEL=3Dy<br>
++BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy<br>
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D&quot;6.1.45&quot;<br>
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=3Dy<br>
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=3D&quot;board/pc/linux.config&quot;<br=
+>
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=3D&quot;$(TOPDIR)/board/flutter_x86=
+_64/linux-vkms.fragment&quot;<br>
++BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy<br>
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy<br>
++BR2_PACKAGE_FLUTTER_PI=3Dy<br>
++BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN=3Dy<br>
++BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=3Dy<br>
++BR2_PACKAGE_FLUTTER_GALLERY=3Dy<br>
++BR2_PACKAGE_MESA3D=3Dy<br>
++BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=3Dy<br>
++BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=3Dy<br>
++BR2_PACKAGE_MESA3D_OPENGL_ES=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=3Dy<br>
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=3Dy<br>
++BR2_PACKAGE_ACPID=3Dy<br>
++BR2_PACKAGE_FLUTTER_ENGINE=3Dy<br>
++BR2_PACKAGE_CONNMAN=3Dy<br>
++BR2_PACKAGE_CONNMAN_WIFI=3Dy<br>
++BR2_PACKAGE_CONNMAN_CLIENT=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2_4=3Dy<br>
++BR2_TARGET_ROOTFS_EXT2_SIZE=3D&quot;512M&quot;<br>
++BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS=3D&quot;-O 64bit&quot;<br>
++# BR2_TARGET_ROOTFS_TAR is not set<br>
++BR2_TARGET_GRUB2=3Dy<br>
++BR2_TARGET_GRUB2_X86_64_EFI=3Dy<br>
++BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy<br>
++BR2_PACKAGE_HOST_GENIMAGE=3Dy<br>
++BR2_PACKAGE_HOST_MTOOLS=3Dy<br>
+-- <br>
+2.41.0<br>
+<br>
+</blockquote></div>
 
- DEVELOPERS                                    |   1 +
- package/Config.in                             |   1 +
- .../0001-disable-pre-canned-sysroot.patch     |  32 +++
- .../0002-remove-explicit-x11-dependency.patch |  33 +++
- .../0003-fix-toolchain-paths.patch            |  40 +++
- ...onfig.py-do-not-prepend-sysroot-path.patch |  37 +++
- package/flutter-engine/Config.in              |  56 +++++
- package/flutter-engine/dot-gclient            |  16 ++
- package/flutter-engine/flutter-engine.mk      | 237 ++++++++++++++++++
- package/flutter-engine/gen-tarball            | 111 ++++++++
- 10 files changed, 564 insertions(+)
- create mode 100644 package/flutter-engine/0001-disable-pre-canned-sysroot.patch
- create mode 100644 package/flutter-engine/0002-remove-explicit-x11-dependency.patch
- create mode 100644 package/flutter-engine/0003-fix-toolchain-paths.patch
- create mode 100644 package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch
- create mode 100644 package/flutter-engine/Config.in
- create mode 100644 package/flutter-engine/dot-gclient
- create mode 100644 package/flutter-engine/flutter-engine.mk
- create mode 100755 package/flutter-engine/gen-tarball
+--0000000000000703a70603243688--
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 25eb374fae..3b3b0be145 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -28,6 +28,7 @@
- 
- N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools/
-+F:	package/flutter-engine/
- F:	package/flutter-sdk-bin/
- 
- N:	Adam Duskett <aduskett@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 15b1866630..6f385ff697 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1580,6 +1580,7 @@ menu "Graphics"
- 	source "package/exempi/Config.in"
- 	source "package/exiv2/Config.in"
- 	source "package/fltk/Config.in"
-+	source "package/flutter-engine/Config.in"
- 	source "package/fontconfig/Config.in"
- 	source "package/freetype/Config.in"
- 	source "package/gd/Config.in"
-diff --git a/package/flutter-engine/0001-disable-pre-canned-sysroot.patch b/package/flutter-engine/0001-disable-pre-canned-sysroot.patch
-new file mode 100644
-index 0000000000..953705e33b
---- /dev/null
-+++ b/package/flutter-engine/0001-disable-pre-canned-sysroot.patch
-@@ -0,0 +1,32 @@
-+From 49a14e693124dc34f2cccbfb755d01a1198aa6bf Mon Sep 17 00:00:00 2001
-+From: Joel Winarske <joel.winarsk@gmail.com>
-+Date: Wed, 19 Jul 2023 15:24:22 -0700
-+Subject: [PATCH] disable pre-canned sysroot
-+
-+Override should be enabled if a custom sysroot using --target-sysroot is
-+specified. If --target-sysroot is not set, then it should default to the
-+pre-canned sysroot.
-+
-+Upstream: https://github.com/flutter/flutter/issues/123073
-+Signed-off-by: Joel Winarske <joel.winarsk@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ build/config/sysroot.gni | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/build/config/sysroot.gni b/build/config/sysroot.gni
-+index 7987e519d..1de694263 100644
-+--- a/build/config/sysroot.gni
-++++ b/build/config/sysroot.gni
-+@@ -14,7 +14,7 @@ declare_args() {
-+ 
-+   # Whether to use the default sysroot when building for Linux, if an explicit
-+   # sysroot isn't set.
-+-  use_default_linux_sysroot = true
-++  use_default_linux_sysroot = false
-+ }
-+ 
-+ if (current_toolchain == default_toolchain && target_sysroot != "") {
-+-- 
-+2.41.0
-+
-diff --git a/package/flutter-engine/0002-remove-explicit-x11-dependency.patch b/package/flutter-engine/0002-remove-explicit-x11-dependency.patch
-new file mode 100644
-index 0000000000..23d7ec9b06
---- /dev/null
-+++ b/package/flutter-engine/0002-remove-explicit-x11-dependency.patch
-@@ -0,0 +1,33 @@
-+From b1a5db9318ca33a03f2700758d5debad907d21b6 Mon Sep 17 00:00:00 2001
-+From: Joel Winarske <joel.winarsk@gmail.com>
-+Date: Wed, 19 Jul 2023 15:26:40 -0700
-+Subject: [PATCH] remove explicit x11 dependency
-+
-+This is superfluous and may conflict with the actual rendering system used in
-+gtk3 (e.g. wayland.)
-+
-+Upstream: https://github.com/flutter/flutter/issues/123073
-+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ flutter/shell/platform/linux/config/BUILD.gn | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/flutter/shell/platform/linux/config/BUILD.gn b/flutter/shell/platform/linux/config/BUILD.gn
-+index da0ac056b..70c7a0ea1 100644
-+--- a/flutter/shell/platform/linux/config/BUILD.gn
-++++ b/flutter/shell/platform/linux/config/BUILD.gn
-+@@ -5,10 +5,6 @@
-+ import("//build/config/linux/pkg_config.gni")
-+ import("//flutter/shell/platform/glfw/config.gni")
-+ 
-+-pkg_config("x11") {
-+-  packages = [ "x11" ]
-+-}
-+-
-+ pkg_config("gtk") {
-+   packages = [ "gtk+-3.0" ]
-+ }
-+-- 
-+2.41.0
-+
-diff --git a/package/flutter-engine/0003-fix-toolchain-paths.patch b/package/flutter-engine/0003-fix-toolchain-paths.patch
-new file mode 100644
-index 0000000000..ba5d5f8023
---- /dev/null
-+++ b/package/flutter-engine/0003-fix-toolchain-paths.patch
-@@ -0,0 +1,40 @@
-+From ca175ef5bf7f96db57fb5aa562602dc424fab81c Mon Sep 17 00:00:00 2001
-+From: Joel Winarske <joel.winarsk@gmail.com>
-+Date: Sun, 5 Mar 2023 10:43:02 -0800
-+Subject: [PATCH] fix toolchain paths
-+
-+Flutter includes a copy of clang which is required to build. However, by
-+default, build/toolchain/custom/BUILD.gn attempts to use several gcc utilities
-+such as ar, readelf, nm, and strip. Change these to the proper llvm provided
-+utility.
-+
-+Upstream: https://github.com/flutter/flutter/issues/123073
-+
-+Signed-off-by: Joel Winarske <joel.winarsk@gmail.com>
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ build/toolchain/custom/BUILD.gn | 4 +++++------
-+ 1 file changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/build/toolchain/custom/BUILD.gn b/build/toolchain/custom/BUILD.gn
-+index 65b1623..8b3f6f8 100644
-+--- a/build/toolchain/custom/BUILD.gn
-++++ b/build/toolchain/custom/BUILD.gn
-+@@ -12,11 +12,11 @@ toolchain("custom") {
-+   # these values in our scope.
-+   cc = "${toolchain_bin}/clang"
-+   cxx = "${toolchain_bin}/clang++"
-+-  ar = "${toolchain_bin}/${custom_target_triple}-ar"
-++  ar = "${toolchain_bin}/llvm-ar"
-+   ld = "${toolchain_bin}/clang++"
-+-  readelf = "${toolchain_bin}/${custom_target_triple}-readelf"
-+-  nm = "${toolchain_bin}/${custom_target_triple}-nm"
-+-  strip = "${toolchain_bin}/${custom_target_triple}-strip"
-++  readelf = "${toolchain_bin}/llvm-readelf"
-++  nm = "${toolchain_bin}/llvm-nm"
-++  strip = "${toolchain_bin}/llvm-strip"
-+ 
-+   target_triple_flags = "--target=${custom_target_triple}"
-+   sysroot_flags = "--sysroot ${custom_sysroot}"
-+-- 
-+2.39.2
-diff --git a/package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch b/package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch
-new file mode 100644
-index 0000000000..a31be7d77f
---- /dev/null
-+++ b/package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch
-@@ -0,0 +1,37 @@
-+From 51e8fed854fd9d373bb9b20d7ed8e7cf6ef12312 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <adam.duskett@amarulasolutions.com>
-+Date: Wed, 19 Jul 2023 11:48:59 -0700
-+Subject: [PATCH] pkg-config.py: do not prepend sysroot path
-+
-+Buildroot uses the standard PKG_CONFIG_SYSROOT_DIR variable, so what the
-+pkg-config.py script is doing doesn't make sense. There is no need to prepend
-+the sysroot, and flutter should let pkg-config use the PKG_CONFIG_SYSROOT_DIR
-+variable.
-+
-+Without this patch, the pkg-config.py script double prepends the sysroot path.
-+IE: output/host/.../sysroot/output/host/.../sysroot
-+
-+Upstream: https://github.com/flutter/flutter/issues/132152
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ build/config/linux/pkg-config.py | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/build/config/linux/pkg-config.py b/build/config/linux/pkg-config.py
-+index b4a6aff17..44ffdcaea 100644
-+--- a/build/config/linux/pkg-config.py
-++++ b/build/config/linux/pkg-config.py
-+@@ -207,9 +207,7 @@ def main():
-+   all_flags = flag_string.strip().split(' ')
-+ 
-+ 
-+-  sysroot = options.sysroot
-+-  if not sysroot:
-+-    sysroot = ''
-++  sysroot = ''
-+ 
-+   includes = []
-+   cflags = []
-+-- 
-+2.41.0
-+
-diff --git a/package/flutter-engine/Config.in b/package/flutter-engine/Config.in
-new file mode 100644
-index 0000000000..aad0fc6108
---- /dev/null
-+++ b/package/flutter-engine/Config.in
-@@ -0,0 +1,56 @@
-+# Flutter includes a vender copy of clang which is mandatory to use for
-+# compiling. These are the supported architectures.
-+config BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+
-+config BR2_PACKAGE_FLUTTER_ENGINE
-+	bool "flutter-engine"
-+	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthreads
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR # std::wstring
-+	depends on BR2_HOST_GCC_AT_LEAST_5
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_HOST_DEPOT_TOOLS
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Flutter is Google's SDK for crafting beautiful, fast user
-+	  experience for mobile, web, and desktop from a single
-+	  codebase. Flutter works with existing code, is used by
-+	  developers and organizations around the world, and is
-+	  free and open source.
-+
-+	  The Flutter Engine is a portable runtime for hosting
-+	  Flutter applications. It implements Flutter's core
-+	  libraries, including animation and graphics, file and
-+	  network I/O, accessibility support, plugin architecture,
-+	  and a Dart runtime and compile toolchain. Most developers
-+	  will interact with Flutter via the Flutter Framework,
-+	  which provides a modern, reactive framework, and a rich
-+	  set of platform, layout and foundation widgets.
-+
-+	  https://github.com/flutter/engine
-+
-+comment "flutter-engine needs an OpenGL or OpenGLES backend"
-+	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "flutter-engine needs a glibc toolchain w/ wchar, C++, gcc >= 5, dynamic library, host gcc >= 5, NPTL"
-+	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 \
-+		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
-+		|| !BR2_HOST_GCC_AT_LEAST_5
-+
-+comment "flutter-engine needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/flutter-engine/dot-gclient b/package/flutter-engine/dot-gclient
-new file mode 100644
-index 0000000000..168e9a368d
---- /dev/null
-+++ b/package/flutter-engine/dot-gclient
-@@ -0,0 +1,16 @@
-+# This file is taken from the output of meta-flutter/lib/gn.py
-+
-+solutions = [{
-+    "managed": False,
-+    "name": "src/flutter",
-+    "url": "https://github.com/flutter/engine.git@!FLUTTER_VERSION!",
-+    "custom_vars": {
-+        "download_android_deps": False,
-+        "download_windows_deps": False,
-+        "download_linux_deps": False
-+    },
-+    "custom_deps": {
-+        "src/third_party/dart/third_party/pkg/tools":
-+        "https://dart.googlesource.com/tools.git@unified_analytics-v1.1.0"
-+    }
-+}]
-diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
-new file mode 100644
-index 0000000000..dddf7d9d63
---- /dev/null
-+++ b/package/flutter-engine/flutter-engine.mk
-@@ -0,0 +1,237 @@
-+################################################################################
-+#
-+# flutter-engine
-+#
-+################################################################################
-+
-+# Flutter-engine has a release on the GitHub page. However, that release is
-+# only for Google. Its intended purpose is for the gclient tool provided by
-+# Google in their depot-tools package. To use the source code, we must use
-+# gclient to download the flutter-engine source code along with several other
-+# projects. Unfortunately, the Buildroot download system does not have the
-+# capability of using gclient, and considering this package is the only
-+# package that uses gclient, we side-step the entire download process and
-+# perform the following steps if a tarball does not exist already:
-+#
-+#  - Copy the pre-made gclient config file to a temporary scratch directory.
-+#  - Run gclient sync to generate a source directory with the proper
-+#    flutter-engine source code in the correct places.
-+#  - Create a source tarball.
-+#  - Copy the source tarball to the $(FLUTTER_ENGINE_DL_DIR) directory.
-+#
-+# There is no hash provided, as the gn binary (used for configuration) relies
-+# on the .git directories. As such, a reproducible tarball is not possible.
-+FLUTTER_ENGINE_VERSION = 3.10.6
-+
-+# There is nothing for Buildroot to download. This is handled by gclient.
-+FLUTTER_ENGINE_SITE =
-+FLUTTER_ENGINE_SOURCE =
-+FLUTTER_ENGINE_LICENSE = BSD-3-Clause
-+FLUTTER_ENGINE_LICENSE_FILES = LICENSE
-+FLUTTER_ENGINE_TARBALL_PATH = $(FLUTTER_ENGINE_DL_DIR)/flutter-$(FLUTTER_ENGINE_VERSION).tar.gz
-+FLUTTER_ENGINE_INSTALL_STAGING = YES
-+FLUTTER_ENGINE_DOWNLOAD_DEPENDENCIES = host-depot-tools
-+FLUTTER_ENGINE_DEPENDENCIES = \
-+	host-ninja \
-+	host-pkgconf \
-+	freetype \
-+	zlib
-+
-+# Dispatch all architectures of flutter
-+# FLUTTER_ENGINE_TARGET_TRIPPLE must match the directory name found in
-+# buildtools/linux-x64/clang/lib/clang/*/lib
-+ifeq ($(BR2_aarch64),y)
-+FLUTTER_ENGINE_TARGET_ARCH = arm64
-+FLUTTER_ENGINE_TARGET_TRIPPLE = aarch64-unknown-linux-gnu
-+else ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FLUTTER_ENGINE_TARGET_ARCH = arm
-+FLUTTER_ENGINE_TARGET_TRIPPLE = armv7-unknown-linux-gnueabihf
-+else ifeq ($(BR2_i386),y)
-+FLUTTER_ENGINE_TARGET_ARCH = x86
-+FLUTTER_ENGINE_TARGET_TRIPPLE = i386-unknown-linux-gnu
-+else ifeq ($(BR2_x86_64),y)
-+FLUTTER_ENGINE_TARGET_ARCH = x64
-+FLUTTER_ENGINE_TARGET_TRIPPLE = x86_64-unknown-linux-gnu
-+endif
-+
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
-+FLUTTER_ENGINE_RUNTIME_MODE=debug
-+else
-+FLUTTER_ENGINE_RUNTIME_MODE=release
-+endif
-+
-+FLUTTER_ENGINE_BUILD_DIR = \
-+	$(@D)/out/linux_$(FLUTTER_ENGINE_RUNTIME_MODE)_$(FLUTTER_ENGINE_TARGET_ARCH)
-+
-+FLUTTER_ENGINE_INSTALL_FILES = libflutter_engine.so
-+
-+# Flutter engine includes a bundled patched clang that must be used for
-+# compiling or else there are linking errors.
-+FLUTTER_ENGINE_CLANG_PATH = $(@D)/buildtools/linux-x64/clang
-+
-+FLUTTER_ENGINE_CONF_OPTS = \
-+	--clang \
-+	--embedder-for-target \
-+	--linux-cpu $(FLUTTER_ENGINE_TARGET_ARCH) \
-+	--no-build-embedder-examples \
-+	--no-clang-static-analyzer \
-+	--no-enable-unittests \
-+	--no-goma \
-+	--no-prebuilt-dart-sdk \
-+	--no-stripped \
-+	--runtime-mode $(FLUTTER_ENGINE_RUNTIME_MODE) \
-+	--target-os linux \
-+	--target-sysroot $(STAGING_DIR) \
-+	--target-toolchain $(FLUTTER_ENGINE_CLANG_PATH) \
-+	--target-triple $(FLUTTER_ENGINE_TARGET_TRIPPLE)
-+
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
-+FLUTTER_ENGINE_CONF_OPTS += \
-+	--arm-float-abi $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+endif
-+
-+# We must specify a full path to ccache and a full path to the flutter-engine
-+# provided clang in order to use ccache, or else flutter-engine will error out
-+# attempting to find ccache in the target-toolchain provided path.
-+ifeq ($(BR2_CCACHE),y)
-+define FLUTTER_ENGINE_COMPILER_PATH_FIXUP
-+	$(SED) "s%cc =.*%cc = \"$(HOST_DIR)/bin/ccache $(FLUTTER_ENGINE_CLANG_PATH)/bin/clang\""%g \
-+		$(@D)/build/toolchain/custom/BUILD.gn
-+
-+	$(SED) "s%cxx =.*%cxx = \"$(HOST_DIR)/bin/ccache $(FLUTTER_ENGINE_CLANG_PATH)/bin/clang++\""%g \
-+		$(@D)/build/toolchain/custom/BUILD.gn
-+endef
-+FLUTTER_ENGINE_PRE_CONFIGURE_HOOKS += FLUTTER_ENGINE_COMPILER_PATH_FIXUP
-+endif
-+
-+ifeq ($(BR2_ENABLE_LTO),y)
-+FLUTTER_ENGINE_CONF_OPTS += --lto
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --no-lto
-+endif
-+
-+ifeq ($(BR2_OPTIMIZE_0),y)
-+FLUTTER_ENGINE_CONF_OPTS += --unoptimized
-+endif
-+
-+# There is no --disable-fontconfig option.
-+ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
-+FLUTTER_ENGINE_DEPENDENCIES += fontconfig
-+FLUTTER_ENGINE_CONF_OPTS += --enable-fontconfig
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libgl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGLFW),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libglfw
-+FLUTTER_ENGINE_CONF_OPTS += --build-glfw-shell
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --no-build-glfw-shell
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+FLUTTER_ENGINE_DEPENDENCIES += libgtk3
-+FLUTTER_ENGINE_INSTALL_FILES += libflutter_linux_gtk.so
-+else
-+FLUTTER_ENGINE_CONF_OPTS += --disable-desktop-embeddings
-+endif
-+
-+# There is no --disable-vulkan option
-+ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
-+FLUTTER_ENGINE_CONF_OPTS += --enable-vulkan
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_LIBXCB),yy)
-+FLUTTER_ENGINE_DEPENDENCIES += libxcb
-+else
-+define FLUTTER_ENGINE_VULKAN_X11_SUPPORT_FIXUP
-+	$(SED) "s%vulkan_use_x11.*%vulkan_use_x11 = false%g" -i \
-+		$(@D)/build_overrides/vulkan_headers.gni
-+endef
-+FLUTTER_ENGINE_PRE_CONFIGURE_HOOKS += FLUTTER_ENGINE_VULKAN_X11_SUPPORT_FIXUP
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+FLUTTER_ENGINE_DEPENDENCIES += wayland
-+else
-+define FLUTTER_ENGINE_VULKAN_WAYLAND_SUPPORT_FIXUP
-+	$(SED) "s%vulkan_use_wayland.*%vulkan_use_wayland = false%g" \
-+		$(@D)/build_overrides/vulkan_headers.gni
-+endef
-+FLUTTER_ENGINE_PRE_CONFIGURE_HOOKS += FLUTTER_ENGINE_VULKAN_WAYLAND_SUPPORT_FIXUP
-+endif
-+
-+# Generate a tarball if one does not already exist.
-+define FLUTTER_ENGINE_GENERATE_TARBALL
-+	PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
-+	PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
-+	$(FLUTTER_ENGINE_PKGDIR)/gen-tarball \
-+		--dot-gclient $(FLUTTER_ENGINE_PKGDIR)/dot-gclient \
-+		--jobs $(PARALLEL_JOBS) \
-+		--scratch-dir $(@D)/dl-tmp \
-+		--tarball-dl-path $(FLUTTER_ENGINE_TARBALL_PATH) \
-+		--version $(FLUTTER_ENGINE_VERSION)
-+endef
-+FLUTTER_ENGINE_POST_DOWNLOAD_HOOKS += FLUTTER_ENGINE_GENERATE_TARBALL
-+
-+define FLUTTER_ENGINE_EXTRACT_CMDS
-+	gzip -d -c $(FLUTTER_ENGINE_TARBALL_PATH) | tar --strip-components 1 -C $(@D) -xf -
-+endef
-+
-+define FLUTTER_ENGINE_CONFIGURE_CMDS
-+	cd $(@D) && \
-+		rm -rf $(FLUTTER_ENGINE_BUILD_DIR) && \
-+		PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
-+		./flutter/tools/gn \
-+			$(FLUTTER_ENGINE_CONF_OPTS)
-+endef
-+
-+define FLUTTER_ENGINE_BUILD_CMDS
-+	cd $(@D) && \
-+		PATH=$(BR_PATH) \
-+		$(HOST_DIR)/bin/ninja \
-+			-j $(PARALLEL_JOBS) \
-+			-C $(FLUTTER_ENGINE_BUILD_DIR)
-+endef
-+
-+# Flutter-engine builds several host applications use for flutter development.
-+# One of those applications is gen_snapshot, which turns applications into
-+# usable .so files for the target architecture. Compiling a host version of
-+# flutter-engine would result in binaries producing host-architecture
-+# flutter applications .so files. As such, copy gen_snapshot to the host
-+# directory here and name it flutter_gen_snapshot for clarity.
-+FLUTTER_ENGINE_GEN_SNAPSHOT = $(HOST_DIR)/bin/flutter_gen_snapshot
-+define FLUTTER_ENGINE_INSTALL_GEN_SNAPSHOT
-+	$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/clang_x64/gen_snapshot \
-+		$(HOST_DIR)/bin/flutter_gen_snapshot
-+endef
-+FLUTTER_ENGINE_POST_INSTALL_STAGING_HOOKS += FLUTTER_ENGINE_INSTALL_GEN_SNAPSHOT
-+
-+define FLUTTER_ENGINE_INSTALL_STAGING_CMDS
-+	$(foreach i,$(FLUTTER_ENGINE_INSTALL_FILES),
-+		$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/so.unstripped/$(i) \
-+			$(STAGING_DIR)/usr/lib/$(i); \
-+	)
-+	$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/flutter_embedder.h \
-+		$(STAGING_DIR)/usr/include/flutter_embedder.h
-+
-+	$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/icudtl.dat \
-+		$(STAGING_DIR)/usr/share/flutter/$(FLUTTER_ENGINE_VERSION)/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat
-+endef
-+
-+define FLUTTER_ENGINE_INSTALL_TARGET_CMDS
-+	$(foreach i,$(FLUTTER_ENGINE_INSTALL_FILES),
-+		$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/so.unstripped/$(i) \
-+			$(TARGET_DIR)/usr/lib/$(i); \
-+	)
-+	$(INSTALL) -D -m 0755 $(FLUTTER_ENGINE_BUILD_DIR)/icudtl.dat \
-+		$(TARGET_DIR)/usr/share/flutter/$(FLUTTER_ENGINE_VERSION)/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/flutter-engine/gen-tarball b/package/flutter-engine/gen-tarball
-new file mode 100755
-index 0000000000..e040beac75
---- /dev/null
-+++ b/package/flutter-engine/gen-tarball
-@@ -0,0 +1,111 @@
-+#!/usr/bin/env bash
-+# Call gclient and generate a flutter-engine source tarball if one does not
-+# already exist.
-+set -eu
-+
-+DL_DIR=
-+DOT_GCLIENT=
-+JOBS=
-+SCRATCH_DIR=
-+TARBALL_DL_PATH=
-+VERSION=
-+TARBALL_NAME=
-+
-+# Print status messages in the same style Buildroot prints.
-+message() {
-+  term_bold="$(tput smso 2>/dev/null)"
-+  term_reset="$(tput rmso 2>/dev/null)"
-+  echo "${term_bold}>>> flutter-engine ${VERSION} ${1}${term_reset}"
-+}
-+
-+parse_opts() {
-+  local o O opts
-+
-+  o='d:j:s:t:v:'
-+  O='dot-gclient:,jobs:,scratch-dir:,tarball-dl-path:,version:'
-+  opts="$(getopt -o "${o}" -l "${O}" -- "${@}")"
-+  eval set -- "${opts}"
-+
-+  while [ ${#} -gt 0 ]; do
-+    case "${1}" in
-+    (-d|--dot-gclient)
-+      DOT_GCLIENT="${2}"
-+      shift 2
-+      ;;
-+    (-j|--jobs)
-+      JOBS="${2}"
-+      shift 2
-+      ;;
-+    (-s|--scratch-dir)
-+      SCRATCH_DIR="${2}"
-+      shift 2
-+      ;;
-+    (-t|--tarball-dl-path)
-+      DL_DIR=$(dirname "${2}")
-+      TARBALL_DL_PATH="${2}"
-+      shift 2
-+      ;;
-+    (-v|--version)
-+      VERSION="${2}"
-+      TARBALL_NAME=flutter-"${VERSION}".tar.gz
-+      shift 2
-+      ;;
-+    (--)
-+      shift
-+      break
-+      ;;
-+    esac
-+  done
-+}
-+
-+copy_dot_gclient() {
-+  rm -rf "${SCRATCH_DIR}"
-+  mkdir -p "${SCRATCH_DIR}"
-+  install -D -m 0755 "${DOT_GCLIENT}" "${SCRATCH_DIR}"/.gclient
-+  sed "s%!FLUTTER_VERSION!%${VERSION}%g" -i "${SCRATCH_DIR}"/.gclient
-+  cd "${SCRATCH_DIR}"
-+}
-+
-+run_gclient() {
-+  local gclient="${HOST_DIR}"/share/depot_tools/gclient.py
-+  if [[ ! -e "${gclient}" ]]; then
-+    message "${gclient} does not exist. Is host-depot-tools built and installed?"
-+    exit 1
-+  fi
-+  message "Downloading"
-+  "${gclient}" \
-+    sync \
-+    --delete_unversioned_trees \
-+    --no-history \
-+    --reset \
-+    --shallow \
-+    -j"${JOBS}"
-+}
-+
-+gen_tarball() {
-+  message "Generating tarball"
-+  mkdir -p "${DL_DIR}"
-+  # We would use the mk_tar_gz helper method from the support/download/helpers
-+  # script here. However, due to unknown reasons other than what I can
-+  # articulate as "Google," this is not possible. Even though creating a
-+  # tarball using the mk_tar_gz command results in a tarball that extracts and
-+  # builds flutter-engine without warnings or errors, the gen_snapshot host
-+  # utility, which turns dart applications into usable .so files for the
-+  # flutter engine, results in the error:
-+  # "Can't load kernel binary: Invalid SDK hash." As we are not interested in
-+  # creating a reproducible tarball, we need to use tar -C instead.
-+  tar -C "${SCRATCH_DIR}"/src -czf "${TARBALL_NAME}" .
-+  mv "${TARBALL_NAME}" "${TARBALL_DL_PATH}"
-+  rm -rf "${SCRATCH_DIR}"
-+}
-+
-+main() {
-+  parse_opts "${@}"
-+  if [[ ! -e "${TARBALL_DL_PATH}" ]]; then
-+    copy_dot_gclient
-+    run_gclient
-+    gen_tarball
-+  fi
-+}
-+
-+main "${@}"
--- 
-2.41.0
+--===============2423824152290031086==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2423824152290031086==--
