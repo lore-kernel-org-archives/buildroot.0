@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAAAFC2FC22
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 19:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43658C5320E
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 19:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91276614CA;
-	Thu, 17 Aug 2023 19:47:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91276614CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0EC361531;
+	Thu, 17 Aug 2023 19:47:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0EC361531
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GKI34Mn-L4I9; Thu, 17 Aug 2023 19:47:35 +0000 (UTC)
+	with ESMTP id LGujK9Q9YH-9; Thu, 17 Aug 2023 19:47:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9823761149;
-	Thu, 17 Aug 2023 19:47:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9823761149
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DE26C1BF37F
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05A1960F19;
+	Thu, 17 Aug 2023 19:47:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05A1960F19
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 79C611BF37F
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4F0160C16
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4F0160C16
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53D78839A4
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53D78839A4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PveowYuDCD1y for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
- [IPv6:2607:f8b0:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7D48460D94
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D48460D94
-Received: by mail-pl1-x62e.google.com with SMTP id
- d9443c01a7336-1bc3d94d40fso1453235ad.3
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 12:46:46 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 88nILZqshO_0 for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 19:46:48 +0000 (UTC)
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
+ [IPv6:2607:f8b0:4864:20::636])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 203BC83955
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 19:46:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 203BC83955
+Received: by mail-pl1-x636.google.com with SMTP id
+ d9443c01a7336-1bdc8081147so9451865ad.1
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 12:46:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692301605; x=1692906405;
+ d=1e100.net; s=20221208; t=1692301607; x=1692906407;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=7BXwdEEaHHnsPw50OCVi6gLyBOYtjBcQsD1sxDviJOc=;
- b=kz+/g2AzJ6c3qy5gD0PYkIoiL81vSWXPck4qJxtPLC6hwMHA9ee5oYiGbBMNBnC0HR
- iP0iF5reXuQm0L/NBBDhCtTYFA0cq8CV8rSjRheuivjJ08e0HdJ2ozhy4VwBz2TIEPHU
- 10VOV+9VspmiAtGWHAhm11a7PQ4NhXlIVZQqNSAyrCJNKJTM9BQ30WddqI6TykR7TtZV
- RvJNIvqELezCqLK8erYFoG2u+4Nl32HEVB48C6NSDscLKo4pjDKubrZ2WEL7aOjkhXib
- 2QrGjilBKcq+pzwcP/V8Tiiglcmumnx/T9/XhLzLLQ81S0LAZeZeTzAj2PyZMdzQ4suP
- MQoQ==
-X-Gm-Message-State: AOJu0YwzX4ZO4/XVJjBDSM/JnTDLykYoVNgC8KJlUW88/FxfDxSgMIa5
- tdvKOMEKxsHVUiWqtBHlBYkgJzFF3QUWqT+lqnE=
-X-Google-Smtp-Source: AGHT+IEsanf94NLYNQqAKjjkD910EKWQae3/Z4rutjttjt4d1Qb2cHJmOfGmWFGL8HQLpEJzMuDp4A==
-X-Received: by 2002:a17:902:c94d:b0:1b8:88c5:2d2f with SMTP id
- i13-20020a170902c94d00b001b888c52d2fmr471101pla.64.1692301605584; 
- Thu, 17 Aug 2023 12:46:45 -0700 (PDT)
+ bh=p6q6lO3c3SQLz9agIWJRDmoN2xHEUbY+Ky0F/55EsMQ=;
+ b=F1OZdecJ4dQuJRJQ17sIPbf70I9GkTzwqp990vkDuKVmC2B7hULEv3i7yRzICccizZ
+ u8pLUZrRMz8Olye4wO3QJS7/twOdoNhcEdyOJG+4Q3zUHiAPgWnZTT2qd9OU4begfum0
+ WPchgeI16JcuQwtD6pwqlW3gNlmjuLwa1To8ifthP4rFNYOMAbyY/v4D3R3GOf7rfr6S
+ JmRSxukUsrkgJAZxrbB8Y7iCkshWX+F8F9VA6qg/IrgJnDqDmuIlbK19tfqbwzz9wsL+
+ btzwMPeMsW76q9IoSN09SxmBRjPf7psexVe6QpFXF+SZrrWwb+iypsMm0aHVMC6Jmih6
+ 5tow==
+X-Gm-Message-State: AOJu0YxzY93/XRB29CeXMOufBPDnjjSkciKaGjESDqyoyswmKS4VUzBQ
+ rNYvEc0xQagzBD8Cna2NeiTPnXFduAQ2mnVYTNY=
+X-Google-Smtp-Source: AGHT+IHeZxjQ/pGM1qLg1eNR3++L7aqq6aictHBnVMAuqWWjqgIOVUtzRALtJFUdpCU3zhnxF5elUA==
+X-Received: by 2002:a17:902:d2c4:b0:1bc:7837:366a with SMTP id
+ n4-20020a170902d2c400b001bc7837366amr382966plc.19.1692301607165; 
+ Thu, 17 Aug 2023 12:46:47 -0700 (PDT)
 Received: from fedora.. ([75.174.130.12]) by smtp.gmail.com with ESMTPSA id
- 13-20020a170902c20d00b001bdd62cf7a1sm137569pll.236.2023.08.17.12.46.44
+ 13-20020a170902c20d00b001bdd62cf7a1sm137569pll.236.2023.08.17.12.46.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Aug 2023 12:46:45 -0700 (PDT)
+ Thu, 17 Aug 2023 12:46:46 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Aug 2023 13:46:36 -0600
-Message-ID: <20230817194638.780863-6-adam.duskett@amarulasolutions.com>
+Date: Thu, 17 Aug 2023 13:46:38 -0600
+Message-ID: <20230817194638.780863-8-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230817194638.780863-1-adam.duskett@amarulasolutions.com>
 References: <20230817194638.780863-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1692301605; x=1692906405;
+ d=amarulasolutions.com; s=google; t=1692301607; x=1692906407;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=7BXwdEEaHHnsPw50OCVi6gLyBOYtjBcQsD1sxDviJOc=;
- b=Euajj7esb6bdU/2iIfe4M4rw+4age9AGqiL1eQ1uC8PA9Fiwdd/rHDTwmSXI2N0ZFh
- oI+Gyk7wa63VPfupz5aCY1e7YskDzhoY1G33gzWka/lemy28AWq4TV+ilyVB9IdZrvaU
- GJLTnUPGRpq8rqYmLCPk+pilSmNPwVD1fW6Fk=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=p6q6lO3c3SQLz9agIWJRDmoN2xHEUbY+Ky0F/55EsMQ=;
+ b=HvnhRcFXniTcVfJFet3qFRC+qJLVKw6VyYln07QUB30c91Gx8aJxrjisXU3D8HCVOX
+ CJLNNYe6cO/VnVb8Ui3+V/tfZzXATMyq24rdcmNK6KTRpjm5jid2GtQrF15Z1WzYIu5D
+ OQB6M0fM/l43/ko6IA7n/6C3eMh6zaKzs1OAw=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Euajj7es
-Subject: [Buildroot] [PATCH v3] package/flutter-pi: new package
+ header.b=HvnhRcFX
+Subject: [Buildroot] [PATCH v3] configs/flutter_x86_64_efi_demo_defconfig:
+ new flutter demo config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,166 +104,161 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-flutter-pi is one of many flutter-embedders. However, flutter-pi is unique
-because it doesn't require X or Wayland to run. So long as there is support for
-KMS and DRI flutter-pi should run on any platform that flutter-engine supports.
+This config uses board/flutter_x86_64 to demonstrate Buildroots new flutter
+capabilities. When ran, flutter-gallery automatically starts on boot.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-v2 -> v3:
-  - Add -DFILESYSTEM_LAYOUT=meta-flutter to conf_opts. This is used to check
-    where the icudtl.dat file is located. Without this change, flutter apps
-    fail to start.
-
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/flutter-pi/Config.in       | 41 +++++++++++++++++++++++
- package/flutter-pi/flutter-pi.hash |  3 ++
- package/flutter-pi/flutter-pi.mk   | 53 ++++++++++++++++++++++++++++++
- 5 files changed, 99 insertions(+)
- create mode 100644 package/flutter-pi/Config.in
- create mode 100644 package/flutter-pi/flutter-pi.hash
- create mode 100644 package/flutter-pi/flutter-pi.mk
+ DEVELOPERS                                    |  2 +
+ board/flutter_x86_64/linux-vkms.fragment      |  2 +
+ .../flutter-gallery.service                   |  1 +
+ .../systemd/system/flutter-gallery.service    | 10 +++
+ board/flutter_x86_64/readme.txt               | 18 ++++++
+ configs/flutter_x86_64_efi_demo_defconfig     | 62 +++++++++++++++++++
+ 6 files changed, 95 insertions(+)
+ create mode 100644 board/flutter_x86_64/linux-vkms.fragment
+ create mode 120000 board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+ create mode 100644 board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service
+ create mode 100644 board/flutter_x86_64/readme.txt
+ create mode 100644 configs/flutter_x86_64_efi_demo_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3b3b0be145..5292315bcb 100644
+index 1988c265fb..73ea022044 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -29,6 +29,7 @@
+@@ -27,6 +27,8 @@
+ #   modify packages that use this infrastructure.
+ 
  N:	Adam Duskett <adam.duskett@amarulasolutions.com>
++F:	board/flutter_x86_64/
++F:	configs/flutter_x86_64_efi_demo_defconfig
  F:	package/depot-tools/
  F:	package/flutter-engine/
-+F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
- 
- N:	Adam Duskett <aduskett@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 6f385ff697..bf29825752 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -343,6 +343,7 @@ comment "Graphic libraries"
- 	source "package/fbset/Config.in"
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
-+	source "package/flutter-pi/Config.in"
- 	source "package/freerdp/Config.in"
- 	source "package/graphicsmagick/Config.in"
- 	source "package/imagemagick/Config.in"
-diff --git a/package/flutter-pi/Config.in b/package/flutter-pi/Config.in
+ F:	package/flutter-gallery/
+diff --git a/board/flutter_x86_64/linux-vkms.fragment b/board/flutter_x86_64/linux-vkms.fragment
 new file mode 100644
-index 0000000000..e816af46c3
+index 0000000000..3fc7a5dded
 --- /dev/null
-+++ b/package/flutter-pi/Config.in
-@@ -0,0 +1,41 @@
-+config BR2_PACKAGE_FLUTTER_PI
-+	bool "flutter-pi"
-+	depends on BR2_PACKAGE_FLUTTER_ENGINE
-+	depends on BR2_PACKAGE_SYSTEMD # Event loop and dbus support
-+	select BR2_PACKAGE_LIBINPUT
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	help
-+	  A light-weight Flutter Engine Embedder. Flutter-pi also
-+	  runs without X11, so you don't need to boot into a
-+	  Desktop & have X11 or Wayland load up; just boot into the
-+	  command-line.
-+
-+	  Although flutter-pi is only tested on a Rasberry Pi 4
-+	  2GB, it should work fine on other linux platforms supported
-+	  by Flutter so long as there is support for KMS and DRI.
-+
-+	  https://github.com/ardera/flutter-pi
-+
-+if BR2_PACKAGE_FLUTTER_PI
-+
-+config BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN
-+	bool "text input plugin"
-+	help
-+	  Include the text input plugin in the finished binary.
-+	  Enables text input (to flutter text fields, for example)
-+	  via attached keyboards.
-+
-+config BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN
-+	bool "keyboard plugin"
-+	help
-+	  Include the raw keyboard plugin in the finished binary.
-+	  Enables raw keycode listening in flutter via the flutter
-+	  RawKeyboard interface.
-+
-+endif
-+
-+comment "flutter-pi needs flutter-engine"
-+	depends on !BR2_PACKAGE_FLUTTER_ENGINE
-+
-+comment "flutter-pi needs systemd"
-+	depends on !BR2_PACKAGE_SYSTEMD
-diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
++++ b/board/flutter_x86_64/linux-vkms.fragment
+@@ -0,0 +1,2 @@
++CONFIG_DEBUG_FS=y
++CONFIG_DRM_VKMS=y
+diff --git a/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service b/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+new file mode 120000
+index 0000000000..40993fb16c
+--- /dev/null
++++ b/board/flutter_x86_64/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+@@ -0,0 +1 @@
++../../../../usr/lib/systemd/system/flutter-gallery.service
+\ No newline at end of file
+diff --git a/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service
 new file mode 100644
-index 0000000000..8491a727df
+index 0000000000..0cf66d9ce4
 --- /dev/null
-+++ b/package/flutter-pi/flutter-pi.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  06b5544c8538bb4a56cb49aa91e97bc0e319ca95a53414c8cfcc78aad2fda616  flutter-pi-004efdaa31bb9ca97938a6b05695496163fe1179-br1.tar.gz
-+sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
-diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
++++ b/board/flutter_x86_64/overlay/usr/lib/systemd/system/flutter-gallery.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=flutter-gallery daemon
++After=dbus.service systemd-udevd.service
++
++[Service]
++ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/gallery/3.10.6/release/
++Type=notify
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/board/flutter_x86_64/readme.txt b/board/flutter_x86_64/readme.txt
 new file mode 100644
-index 0000000000..504d823265
+index 0000000000..ec4e527b1c
 --- /dev/null
-+++ b/package/flutter-pi/flutter-pi.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# flutter-pi
-+#
-+################################################################################
++++ b/board/flutter_x86_64/readme.txt
+@@ -0,0 +1,18 @@
++Run the emulation with:
 +
-+FLUTTER_PI_VERSION = 004efdaa31bb9ca97938a6b05695496163fe1179
-+FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
-+FLUTTER_PI_SITE_METHOD = git
-+FLUTTER_PI_LICENSE = MIT
-+FLUTTER_PI_LICENSE_FILES = LICENSE
-+FLUTTER_PI_DEPENDENCIES = \
-+	flutter-engine \
-+	libinput \
-+	libxkbcommon \
-+	systemd
++qemu-system-x86_64 -enable-kvm -M pc \
++-m 512 \
++-cpu IvyBridge \
++-kernel output/images/bzImage \
++-append "rootwait root=/dev/vda console=tty1 console=ttyS0" \
++-drive file=output/images/rootfs.ext2,if=virtio,format=raw \
++-usb -device usb-tablet \
++-net nic,model=virtio \
++-serial stdio \
++-vga virtio \
++-display sdl,show-cursor=on
 +
-+FLUTTER_PI_CONF_OPTS = \
-+	-DFLUTTER_EMBEDDER_HEADER=$(STAGING_DIR)/usr/include/flutter_embedder.h \
-+	-DFILESYSTEM_LAYOUT=meta-flutter
 +
-+ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
-+FLUTTER_PI_DEPENDENCIES += gstreamer1 gst1-plugins-base
-+FLUTTER_PI_CONF_OPTS += -DBUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=ON
-+else
-+FLUTTER_PI_CONF_OPTS += -DBUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=OFF
-+endif
++Optionally add -smp N to emulate a SMP system with N CPUs.
 +
-+ifeq ($(BR2_PACKAGE_FLUTTER_PI_INPUT_PLUGIN),y)
-+FLUTTER_PI_DEPENDENCIES += libinput libxkbcommon
-+FLUTTER_PI_CONF_OPTS += -DBUILD_TEXT_INPUT_PLUGIN=ON
-+else
-+FLUTTER_PI_CONF_OPTS += -DBUILD_TEXT_INPUT_PLUGIN=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN),y)
-+FLUTTER_PI_CONF_OPTS += -DBUILD_RAW_KEYBOARD_PLUGIN=ON
-+else
-+FLUTTER_PI_CONF_OPTS += -DBUILD_RAW_KEYBOARD_PLUGIN=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OMXPLAYER),y)
-+FLUTTER_PI_DEPENDENCIES += omxplayer
-+FLUTTER_PI_CONF_OPTS += \
-+	-DBUILD_OMXPLAYER_VIDEO_PLAYER_PLUGIN=ON \
-+	-DOMXPLAYER_SUPPORTS_RUNTIME_ROTATION=ON
-+else
-+FLUTTER_PI_CONF_OPTS += \
-+	-DBUILD_OMXPLAYER_VIDEO_PLAYER_PLUGIN=OFF \
-+	-DOMXPLAYER_SUPPORTS_RUNTIME_ROTATION=OFF
-+endif
-+
-+$(eval $(cmake-package))
++The flutter-gallery app will automatically run.
+diff --git a/configs/flutter_x86_64_efi_demo_defconfig b/configs/flutter_x86_64_efi_demo_defconfig
+new file mode 100644
+index 0000000000..640a82bb91
+--- /dev/null
++++ b/configs/flutter_x86_64_efi_demo_defconfig
+@@ -0,0 +1,62 @@
++BR2_x86_64=y
++BR2_x86_corei7_avx=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_CCACHE=y
++BR2_CCACHE_DIR="$(HOME)/Downloads/ccache/flutter-x86_64"
++BR2_CCACHE_INITIAL_SETUP="--max-size=5G"
++BR2_PER_PACKAGE_DIRECTORIES=y
++BR2_INIT_SYSTEMD=y
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
++BR2_ROOTFS_OVERLAY="$(TOPDIR)/board/flutter_x86_64/overlay"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pc/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pc/post-image-efi.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.45"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(TOPDIR)/board/flutter_x86_64/linux-vkms.fragment"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_FLUTTER_PI=y
++BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN=y
++BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
++BR2_PACKAGE_FLUTTER_GALLERY=y
++BR2_PACKAGE_MESA3D=y
++BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
++BR2_PACKAGE_MESA3D_OPENGL_ES=y
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9170=y
++BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3168=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7265D=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C=y
++BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265=y
++BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
++BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
++BR2_PACKAGE_ACPID=y
++BR2_PACKAGE_FLUTTER_ENGINE=y
++BR2_PACKAGE_CONNMAN=y
++BR2_PACKAGE_CONNMAN_WIFI=y
++BR2_PACKAGE_CONNMAN_CLIENT=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
++BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O 64bit"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_X86_64_EFI=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.41.0
 
