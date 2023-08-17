@@ -4,87 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E7EC678DD
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 23:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B219FC678DC
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 23:09:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E85E360E2E;
-	Thu, 17 Aug 2023 23:08:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E85E360E2E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41D4060E86;
+	Thu, 17 Aug 2023 23:09:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41D4060E86
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Tr1cfPN67Exx; Thu, 17 Aug 2023 23:08:55 +0000 (UTC)
+	with ESMTP id O1KvtjXMWTDZ; Thu, 17 Aug 2023 23:09:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B09A60DFC;
-	Thu, 17 Aug 2023 23:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B09A60DFC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D35660E7C;
+	Thu, 17 Aug 2023 23:09:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D35660E7C
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E59981BF476
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 616B31BF476
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C63D94054E
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C63D94054E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A39540111
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A39540111
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id doYRthlOGtns for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 23:08:51 +0000 (UTC)
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7631740111
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 23:08:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7631740111
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-3159d5e409dso972761f8f.0
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 16:08:51 -0700 (PDT)
+ with ESMTP id HoJPp6bukh3t for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 23:08:52 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5542E40363
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 23:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5542E40363
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3fe4b95c371so1997935e9.1
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 16:08:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692313729; x=1692918529;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=tuKwcodJYxviREZ/7uYhxPfnHYHyRVQoJsUQ9tY99L4=;
- b=O+RroP01AafweNKWVXeTV46le1CyYGgjsnlgy5PIVGndtRKOnfpKNfJJzwdP2nJMQI
- G0d7hbLpJezATrLV18CccSzH0C9sWxS+1dnSA78jMaUrKzPCtspEZ2yBLRzApmzJEHzR
- aeEqREy6h91u8YBvaKfo9z8bPTBNwar+cKgIJQXxhVYOx1R8jRox5GDNHdipNF++3hQ+
- YiVTYevw4XXxbGzra5TRLPpVkKRJuEkFUyE7AgyUHWHFx+8pfUezJ+rJt+O0OCaZW8CU
- /BVMjE0a3q38oHwZq6QMkKF7TRKmJSIEjF5Nr0XiR7HTjzkPbYK225eWsMH2Io6qfCeA
- 7AMw==
-X-Gm-Message-State: AOJu0YxWy7V5vxoBMOCUD5axYOCYtgtycAed4Z15fFYkmZQZCCNWuLKq
- 2+JD81ZdH82OzcEPBG0yqOclX/3Fzi8=
-X-Google-Smtp-Source: AGHT+IHlgT7i3dHRgRamObm4A1VHscIe8UetAyWoWjBhB7j8VMpYQYs5hSaxEfOL0wUheSObA5WVXg==
-X-Received: by 2002:adf:f20b:0:b0:315:a235:8aa8 with SMTP id
- p11-20020adff20b000000b00315a2358aa8mr3623942wro.2.1692313729321; 
- Thu, 17 Aug 2023 16:08:49 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1692313730; x=1692918530;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gkSF+zwAa90bcUEqjlgCQTBp9ijH/K1q66iuqmtdn5I=;
+ b=FRDv61JdAKE3xjJYHCW6/S2zcEiRmRK4QzOCIsQMRwPuutiGZAzF3irFNPsEAvKNwe
+ 0rCFOZvSbmh/KG2i1HhC48UmMht13mqv9SHFDWQYB/hwql/fJzZORUsvAxtB9ZQz+lKG
+ Q1jAIhoFv/6VAwasLfRXyk/z0YKVisBr00pUzxGLyZoABz3dazLc/olXWq6spLfe/ksG
+ LMdZ/PczC75RwF/ApOtKkgT8ESBhrN8lVBAfoIwoPilKNWVrjU+b5EjPWm0UosMf0fRu
+ e6BzITu46Ge5kvjsz1BYx6yledzUHpnbWFSQJOhGzmF0RbGjmIm5VBgGTFqurYM7LNtB
+ NTDw==
+X-Gm-Message-State: AOJu0Yx3KK0d6O4oBr0avFl/j0VbJ0vcNTBJpbgrCH/fzO8rjEJQ0nTD
+ aPKzmbch81XcVX34YRTcCQSll5tE8Oo=
+X-Google-Smtp-Source: AGHT+IFpor84FpqU0Y7/MqD4b7K5hWqjpvQqHkBm+EicT2b7P5zpTToZyIYs0yC34m4vz1zdkkFK+w==
+X-Received: by 2002:a05:600c:3490:b0:3fa:88b4:bff3 with SMTP id
+ a16-20020a05600c349000b003fa88b4bff3mr3367529wmq.11.1692313730155; 
+ Thu, 17 Aug 2023 16:08:50 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- 26-20020a05600c021a00b003fa95f328afsm4409479wmi.29.2023.08.17.16.08.48
+ 26-20020a05600c021a00b003fa95f328afsm4409479wmi.29.2023.08.17.16.08.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Aug 2023 16:08:48 -0700 (PDT)
+ Thu, 17 Aug 2023 16:08:49 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Aug 2023 01:08:41 +0200
-Message-ID: <20230817230844.450092-1-romain.naour@gmail.com>
+Date: Fri, 18 Aug 2023 01:08:42 +0200
+Message-ID: <20230817230844.450092-2-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230817230844.450092-1-romain.naour@gmail.com>
+References: <20230817230844.450092-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692313729; x=1692918529;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tuKwcodJYxviREZ/7uYhxPfnHYHyRVQoJsUQ9tY99L4=;
- b=gZ67oho1p5M9YJqohPwdsgr5pne9Vs9JdrtUzlwkTOvoYB7b/56/y1kvoQu3mV2jHK
- qflecdBi36uRZiUR6D3rGAu1GYAUxA+uGEEtwdrPtunruaqZKuETB+VXFeUYvoomV09t
- 8NLhp9n4KIH7BoK9nPzJup9gUUem59ZR68PokRS3CeiRj0vUUDud+40q0qqBoz9mCr+z
- 0caESVMbxbbHvPu4AeKh5uuH8K5pzT81/QqGmIUslv0VgZ91M49EquJRzAed3ALJT1+d
- 57GfbqpCgvrI4owlymId7FBjMVoskCmD/4QkY+7hrtCSZAYxCslB7nKOkYgHhWQswj33
- JB0g==
+ d=gmail.com; s=20221208; t=1692313730; x=1692918530;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gkSF+zwAa90bcUEqjlgCQTBp9ijH/K1q66iuqmtdn5I=;
+ b=rxT7yITl+FhaFEE6kCD1YqbrfHP30JFOARvBkW2r16zUs7STXhkKzJrV98lwrkG3pM
+ ngtDqnhha93hCEBP6lMGMnavFXbmSEgRVH4xRTfGOrVxaMsIBzOGaiHINGcCT5MYNvtc
+ 6slzGnnBIZXXSl8/3KlPCnUmj8bdD+dbYhY3NqzfhDxIalqg9ht/kRt0HW9r2CJyfryN
+ bx2CHoOzJiOHcDlvkckuS8v/3Wni/EYqScNIvJ2a65HeeLoBZaNBHoWBrvfcJPQN765k
+ iJP8VJK95+oWdRcZxyavSVInTp6pAHDW9lT/H0C6kYJeWyMiNhmAgLQYazB0Jk5CvH0M
+ W8gw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=gZ67oho1
-Subject: [Buildroot] [PATCH 1/4] configs/sipeed_maix_{bit,
- dock}_sdcard_defconfig: fix build with binutils >= 2.38
+ header.a=rsa-sha256 header.s=20221208 header.b=rxT7yITl
+Subject: [Buildroot] [PATCH 2/4] configs/pc_x86_64_{bios,
+ efi}_defconfig: add midding libelf kernel dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,109 +105,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport an upstream patch fixing the build with binutils >= 2.38
-for riscv's for Zicsr and Zifencei.
+objtool built by the kernel requires libelf
+
+ldd output/build/linux-6.1.24/tools/objtool/objtool
+  linux-vdso.so.1
+  libelf.so.1 => output/host/lib/libelf.so.1
+
+While updating the kernel [1] we forgot to select
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF to provide Buildroot's host-libelf.
+Using host-libelf avoid linking with libelf installed on the host or
+failing to build objtool if libelf is not installed.
+
+[1] d45538f2e7acc1b330b191d559a81e8c1a961648
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060608
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060605
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436869
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436872
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- ...iscv-Fix-build-against-binutils-2.38.patch | 58 +++++++++++++++++++
- configs/sipeed_maix_bit_sdcard_defconfig      |  1 +
- configs/sipeed_maix_dock_sdcard_defconfig     |  1 +
- 3 files changed, 60 insertions(+)
- create mode 100644 board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
+ configs/pc_x86_64_bios_defconfig | 1 +
+ configs/pc_x86_64_efi_defconfig  | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch b/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
-new file mode 100644
-index 0000000000..52b496f054
---- /dev/null
-+++ b/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
-@@ -0,0 +1,58 @@
-+From 0cf11f3c0478f4286adcfb09bf9137f8b00212e3 Mon Sep 17 00:00:00 2001
-+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-+Date: Mon, 3 Oct 2022 18:07:54 +0200
-+Subject: [PATCH] riscv: Fix build against binutils 2.38
-+
-+The following description is copied from the equivalent patch for the
-+Linux Kernel proposed by Aurelien Jarno:
-+
-+>From version 2.38, binutils default to ISA spec version 20191213. This
-+means that the csr read/write (csrr*/csrw*) instructions and fence.i
-+instruction has separated from the `I` extension, become two standalone
-+extensions: Zicsr and Zifencei. As the kernel uses those instruction,
-+this causes the following build failure:
-+
-+arch/riscv/cpu/mtrap.S: Assembler messages:
-+arch/riscv/cpu/mtrap.S:65: Error: unrecognized opcode `csrr a0,scause'
-+arch/riscv/cpu/mtrap.S:66: Error: unrecognized opcode `csrr a1,sepc'
-+arch/riscv/cpu/mtrap.S:67: Error: unrecognized opcode `csrr a2,stval'
-+arch/riscv/cpu/mtrap.S:70: Error: unrecognized opcode `csrw sepc,a0'
-+
-+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-+Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-+Tested-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-+Tested-by: Heiko Stuebner <heiko@sntech.de>
-+Tested-by: Christian Stewart <christian@paral.in>
-+Reviewed-by: Rick Chen <rick@andestech.com>
-+(cherry picked from commit 1dde977518f13824b847e23275001191139bc384)
-+Upstream: https://gitlab.com/u-boot/u-boot/-/commit/1dde977518f13824b847e23275001191139bc384
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ arch/riscv/Makefile | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-+index 0b80eb8d864..53d1194ffb6 100644
-+--- a/arch/riscv/Makefile
-++++ b/arch/riscv/Makefile
-+@@ -24,7 +24,16 @@ ifeq ($(CONFIG_CMODEL_MEDANY),y)
-+ 	CMODEL = medany
-+ endif
-+ 
-+-ARCH_FLAGS = -march=$(ARCH_BASE)$(ARCH_A)$(ARCH_C) -mabi=$(ABI) \
-++RISCV_MARCH = $(ARCH_BASE)$(ARCH_A)$(ARCH_C)
-++
-++# Newer binutils versions default to ISA spec version 20191213 which moves some
-++# instructions from the I extension to the Zicsr and Zifencei extensions.
-++toolchain-need-zicsr-zifencei := $(call cc-option-yn, -mabi=$(ABI) -march=$(RISCV_MARCH)_zicsr_zifencei)
-++ifeq ($(toolchain-need-zicsr-zifencei),y)
-++	RISCV_MARCH := $(RISCV_MARCH)_zicsr_zifencei
-++endif
-++
-++ARCH_FLAGS = -march=$(RISCV_MARCH) -mabi=$(ABI) \
-+ 	     -mcmodel=$(CMODEL)
-+ 
-+ PLATFORM_CPPFLAGS	+= $(ARCH_FLAGS)
-+-- 
-+2.41.0
-+
-diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
-index 34769eeca8..0cfff26337 100644
---- a/configs/sipeed_maix_bit_sdcard_defconfig
-+++ b/configs/sipeed_maix_bit_sdcard_defconfig
-@@ -17,6 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
- # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-+BR2_GLOBAL_PATCH_DIR="board/canaan/k210-soc/patches"
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index a057ddd259..6032544d2d 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -32,6 +32,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
  
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
-index 62f6a0e0b8..db075360cc 100644
---- a/configs/sipeed_maix_dock_sdcard_defconfig
-+++ b/configs/sipeed_maix_dock_sdcard_defconfig
-@@ -17,6 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
- BR2_BINFMT_FLAT=y
- BR2_BINFMT_FLAT_ONE=y
- # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-+BR2_GLOBAL_PATCH_DIR="board/canaan/k210-soc/patches"
+ # Firmware
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index efa603f0c0..afb652f3fc 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -33,6 +33,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
  
- # Kernel
- BR2_LINUX_KERNEL=y
+ # Firmware
+ BR2_PACKAGE_LINUX_FIRMWARE=y
 -- 
 2.41.0
 
