@@ -4,68 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73937C531DC
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 19:14:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0F30C41513
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 19:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BE5460A6A;
-	Thu, 17 Aug 2023 19:14:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BE5460A6A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BBBA60D89;
+	Thu, 17 Aug 2023 19:15:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BBBA60D89
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Nj6fjomff2i; Thu, 17 Aug 2023 19:14:34 +0000 (UTC)
+	with ESMTP id IIctGpWuxvsX; Thu, 17 Aug 2023 19:15:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F5A660B5D;
-	Thu, 17 Aug 2023 19:14:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F5A660B5D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 396231BF37F
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:14:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B409D60AE2;
+	Thu, 17 Aug 2023 19:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B409D60AE2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 090511BF37F
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:15:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 111D141694
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:14:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 111D141694
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6A008186E
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:14:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6A008186E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zzN__YbwijdV for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 19:14:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6EJ2Q4G05lMv for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 19:14:59 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C2CDF40999
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 19:14:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2CDF40999
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E133B81521
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 19:14:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E133B81521
 Received: from fli4l.lan.fli4l (p4fd6c625.dip0.t-ipconnect.de [79.214.198.37])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DD621A4C1153
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 21:14:14 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37434)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 8840BA4C025A;
+ Thu, 17 Aug 2023 21:14:55 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46860)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qWiRi-00046p-25
- for buildroot@buildroot.org; Thu, 17 Aug 2023 21:14:14 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qWiSN-0004E6-17;
+ Thu, 17 Aug 2023 21:14:55 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 17 Aug 2023 21:14:14 +0200
-Message-Id: <20230817191414.106738-2-bernd@kuhls.net>
+Date: Thu, 17 Aug 2023 21:14:55 +0200
+Message-Id: <20230817191455.106828-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230817191414.106738-1-bernd@kuhls.net>
-References: <20230817191414.106738-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1692299654;
- bh=oMCsMC3mwHnTRW9yRhzoKOROMWDmX9+ybkQQkvlaom4=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=qv4eJ6XfQFIeEcvFfpWx0S61RNCJseqfYFt4TTaq0OzUNLbiU6OM5nbJxNs9bh7+U
- 8CnXav8GjRrAZUjdsurvdIHB1o8QzqED6pLcOxLNmi2F4PWvYUHTKEVzZP7jmcnYx7
- 0YS1B9OLsqbej4K/9QuPabjkRBzq1l90UxKNYFr58GPTgzGLls0tagz1c+Daa891vz
- gka+qU5sqtapNZN00vqrsCeKwjWUFUZwAoP3hmuISCG5//VyTndQhANUqa9imAknMA
- fgZqE+bL1plETfBySfYSZKjacGC9cL27jgap2HpO04kIdOhYhnQqrZhUQc7cE+i3h+
- xjdVUvoD4zy1w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ s=kas202306131828; t=1692299695;
+ bh=6HWHdOBKCnwBHI6mx0x62/HGN5QYWES2XRrbhJZAxvg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hk5VRO/McIltaJ8eM++C3L3S75UFGUP7F+b4O2/FPqI3TSkTv8/xrOo2AT9Tk+A6E
+ pXdOHSD0Q5NHU2dDCpkA+ae8cnrbI3Xh7flW8OP7PMV9KoZmAWCUOq7Ws/WvNJmpAk
+ BysHw83QewlETcj0KxEysVOjcHt244B5Umsbu5E7xAXUkfWAVJqLT4bfOmUNx+TNBy
+ GrD57ARufqXQTn07n95sEDi8H7jLHWmJKdWcvUQf6YS7/RN8sHh4Pu3CqcP5Wl5Lg/
+ PTYCkP9HENx1TYtGne6v5axG3/Yo2PQ4dKoyae68oeIBz3yF68ffq8E4hbnYv2GQQv
+ 31TJmLs2NHRwg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=qv4eJ6Xf
-Subject: [Buildroot] [PATCH 2/2] package/freeswitch: security bump version
- to 1.10.10
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=hk5VRO/M
+Subject: [Buildroot] [PATCH/next 1/1] package/fmt: bump version to 10.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,47 +74,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Semyon Kolganov <semenak94@mail.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/signalwire/freeswitch/releases/tag/v1.10.10
-"This is a major release containing critical security fixes, adding
- Debian 12 Bookworm, OpenSSL 3 and FFmpeg5 support."
+Changelog: https://github.com/fmtlib/fmt/blob/master/ChangeLog.rst
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fmt/fmt.hash | 2 +-
+ package/fmt/fmt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 3497a3283f..f12446dfef 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,5 +1,5 @@
--# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.9.-release.tar.xz.sha256
--sha256  f649d53af7beccb59c1d03864cd8f2d287e4ea26ef652b5c4969d29121ced063  freeswitch-1.10.9.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.10.-release.tar.xz.sha256
-+sha256  d2c702c7f4bd6eca539c3981cf859ad5c1846d9283829e24cd75686f2322b9df freeswitch-1.10.10.-release.tar.xz
- # Locally computed
- sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
- sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 7497cc4964..07d436cf0b 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index 279f071262..688c86243a 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4943cb165f3f587f26da834d3056ee8733c397e024145ca7d2a8a96bb71ac281  fmt-10.0.0.zip
++sha256  d725fa83a8b57a3cedf238828fa6b167f963041e8f9f7327649bddc68ae316f4  fmt-10.1.0.zip
+ sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE.rst
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index f2c94b8231..8332b89605 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.10.9
-+FREESWITCH_VERSION = 1.10.10
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
- FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
+-FMT_VERSION = 10.0.0
++FMT_VERSION = 10.1.0
+ FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
+ FMT_SOURCE = fmt-$(FMT_VERSION).zip
+ FMT_LICENSE = MIT with exception
 -- 
 2.39.2
 
