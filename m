@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D1E9C531DC
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 19:47:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAAAFC2FC22
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 19:47:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37C3961241;
-	Thu, 17 Aug 2023 19:47:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37C3961241
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91276614CA;
+	Thu, 17 Aug 2023 19:47:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91276614CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1VnbzBtV_cWt; Thu, 17 Aug 2023 19:47:23 +0000 (UTC)
+	with ESMTP id GKI34Mn-L4I9; Thu, 17 Aug 2023 19:47:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 295AC61122;
-	Thu, 17 Aug 2023 19:47:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 295AC61122
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E16811BF982
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9823761149;
+	Thu, 17 Aug 2023 19:47:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9823761149
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DE26C1BF37F
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB8C5403B8
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB8C5403B8
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4F0160C16
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 19:46:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4F0160C16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4nkPz2rf4Bm0 for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 19:46:45 +0000 (UTC)
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E0A4F400C1
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 19:46:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0A4F400C1
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-1bbc87ded50so1454475ad.1
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 12:46:44 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PveowYuDCD1y for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7D48460D94
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 19:46:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D48460D94
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-1bc3d94d40fso1453235ad.3
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 12:46:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692301604; x=1692906404;
+ d=1e100.net; s=20221208; t=1692301605; x=1692906405;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=wUdi7naGBEnbu7LKhAPqBDR9nE27blsFl+64gr3aEl4=;
- b=IgLSV8rlJOt3bP78bB3TRL7ihxmQSB6tUdbs5rEatTaaYXXWfjGii4NdlizoC88ikd
- BwB53QQGz8oTMVaAvl7i5yhmv/mQiSmwVFxNPAbNBQvDunv11rrZoXxaeqsfHg/vxfAe
- fSU6eNvjaBcTtw90EURW1FJ2DDlJEoXmkvFhQD35CyX2JZeXKseywyW/znaZsFG+Vhuc
- shN5RHiGcuDAcF3J+xVxGavIc8ephdacbwxQNq14px0YSI5ZeXlhmajyOWrlBCzztqXE
- WEOzaAfqztJUAqE38yG+7f7q8x/C17Mc5Pc2JdfMgp29lTO5RId8FilhEbqUXaryD6H1
- IiOA==
-X-Gm-Message-State: AOJu0Yy4YIqDxSy5+5vIubNiuG6i/N51XcYJSUXvP9XjcliRxYRB1DR5
- 5YLycUmG1xwB+Ss97W3ixyjk+HLawGwzWjnxrOw=
-X-Google-Smtp-Source: AGHT+IG26zDtKdTENtpufQE++Nnj0SIQQx2UdHsXPmT6PhSwuoCbWzS2a1ltzLuzNkmeGN1DDyhB7Q==
-X-Received: by 2002:a17:902:db0f:b0:1b8:936f:c34d with SMTP id
- m15-20020a170902db0f00b001b8936fc34dmr474682plx.27.1692301604012; 
- Thu, 17 Aug 2023 12:46:44 -0700 (PDT)
+ bh=7BXwdEEaHHnsPw50OCVi6gLyBOYtjBcQsD1sxDviJOc=;
+ b=kz+/g2AzJ6c3qy5gD0PYkIoiL81vSWXPck4qJxtPLC6hwMHA9ee5oYiGbBMNBnC0HR
+ iP0iF5reXuQm0L/NBBDhCtTYFA0cq8CV8rSjRheuivjJ08e0HdJ2ozhy4VwBz2TIEPHU
+ 10VOV+9VspmiAtGWHAhm11a7PQ4NhXlIVZQqNSAyrCJNKJTM9BQ30WddqI6TykR7TtZV
+ RvJNIvqELezCqLK8erYFoG2u+4Nl32HEVB48C6NSDscLKo4pjDKubrZ2WEL7aOjkhXib
+ 2QrGjilBKcq+pzwcP/V8Tiiglcmumnx/T9/XhLzLLQ81S0LAZeZeTzAj2PyZMdzQ4suP
+ MQoQ==
+X-Gm-Message-State: AOJu0YwzX4ZO4/XVJjBDSM/JnTDLykYoVNgC8KJlUW88/FxfDxSgMIa5
+ tdvKOMEKxsHVUiWqtBHlBYkgJzFF3QUWqT+lqnE=
+X-Google-Smtp-Source: AGHT+IEsanf94NLYNQqAKjjkD910EKWQae3/Z4rutjttjt4d1Qb2cHJmOfGmWFGL8HQLpEJzMuDp4A==
+X-Received: by 2002:a17:902:c94d:b0:1b8:88c5:2d2f with SMTP id
+ i13-20020a170902c94d00b001b888c52d2fmr471101pla.64.1692301605584; 
+ Thu, 17 Aug 2023 12:46:45 -0700 (PDT)
 Received: from fedora.. ([75.174.130.12]) by smtp.gmail.com with ESMTPSA id
- 13-20020a170902c20d00b001bdd62cf7a1sm137569pll.236.2023.08.17.12.46.43
+ 13-20020a170902c20d00b001bdd62cf7a1sm137569pll.236.2023.08.17.12.46.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Aug 2023 12:46:43 -0700 (PDT)
+ Thu, 17 Aug 2023 12:46:45 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 17 Aug 2023 13:46:34 -0600
-Message-ID: <20230817194638.780863-4-adam.duskett@amarulasolutions.com>
+Date: Thu, 17 Aug 2023 13:46:36 -0600
+Message-ID: <20230817194638.780863-6-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230817194638.780863-1-adam.duskett@amarulasolutions.com>
 References: <20230817194638.780863-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1692301604; x=1692906404;
+ d=amarulasolutions.com; s=google; t=1692301605; x=1692906405;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=wUdi7naGBEnbu7LKhAPqBDR9nE27blsFl+64gr3aEl4=;
- b=SbsDrbPXyyJ7y5c30Hx9C+ZEMer/UxzTxZndxSmKwmrj68k3G+7q0TG8oO9Pp3eIc7
- v9zaFsUcv4qpLtaK8An3WSP3U2KSsh+e+LegXk6aMFJtkGozEMxT4yiyToezTJnWjW0M
- SATqbiOeq0srQKZcqLPlXcxPVakOU2fkdj6hA=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=7BXwdEEaHHnsPw50OCVi6gLyBOYtjBcQsD1sxDviJOc=;
+ b=Euajj7esb6bdU/2iIfe4M4rw+4age9AGqiL1eQ1uC8PA9Fiwdd/rHDTwmSXI2N0ZFh
+ oI+Gyk7wa63VPfupz5aCY1e7YskDzhoY1G33gzWka/lemy28AWq4TV+ilyVB9IdZrvaU
+ GJLTnUPGRpq8rqYmLCPk+pilSmNPwVD1fW6Fk=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=SbsDrbPX
-Subject: [Buildroot] [PATCH v3] package/flutter-sdk-bin: new package
+ header.b=Euajj7es
+Subject: [Buildroot] [PATCH v3] package/flutter-pi: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,132 +103,166 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-flutter-sdk-bin is a collection of host tools and plugins used to compile
-flutter applications.
+flutter-pi is one of many flutter-embedders. However, flutter-pi is unique
+because it doesn't require X or Wayland to run. So long as there is support for
+KMS and DRI flutter-pi should run on any platform that flutter-engine supports.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- DEVELOPERS                                   |  1 +
- package/flutter-sdk-bin/flutter-sdk-bin.hash |  3 +
- package/flutter-sdk-bin/flutter-sdk-bin.mk   | 87 ++++++++++++++++++++
- 3 files changed, 91 insertions(+)
- create mode 100644 package/flutter-sdk-bin/flutter-sdk-bin.hash
- create mode 100644 package/flutter-sdk-bin/flutter-sdk-bin.mk
+v2 -> v3:
+  - Add -DFILESYSTEM_LAYOUT=meta-flutter to conf_opts. This is used to check
+    where the icudtl.dat file is located. Without this change, flutter apps
+    fail to start.
+
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/flutter-pi/Config.in       | 41 +++++++++++++++++++++++
+ package/flutter-pi/flutter-pi.hash |  3 ++
+ package/flutter-pi/flutter-pi.mk   | 53 ++++++++++++++++++++++++++++++
+ 5 files changed, 99 insertions(+)
+ create mode 100644 package/flutter-pi/Config.in
+ create mode 100644 package/flutter-pi/flutter-pi.hash
+ create mode 100644 package/flutter-pi/flutter-pi.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index fde00567fd..25eb374fae 100644
+index 3b3b0be145..5292315bcb 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -28,6 +28,7 @@
- 
+@@ -29,6 +29,7 @@
  N:	Adam Duskett <adam.duskett@amarulasolutions.com>
  F:	package/depot-tools/
-+F:	package/flutter-sdk-bin/
+ F:	package/flutter-engine/
++F:	package/flutter-pi/
+ F:	package/flutter-sdk-bin/
  
  N:	Adam Duskett <aduskett@gmail.com>
- F:	package/firewalld/
-diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.hash b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+diff --git a/package/Config.in b/package/Config.in
+index 6f385ff697..bf29825752 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -343,6 +343,7 @@ comment "Graphic libraries"
+ 	source "package/fbset/Config.in"
+ 	source "package/fbterm/Config.in"
+ 	source "package/fbv/Config.in"
++	source "package/flutter-pi/Config.in"
+ 	source "package/freerdp/Config.in"
+ 	source "package/graphicsmagick/Config.in"
+ 	source "package/imagemagick/Config.in"
+diff --git a/package/flutter-pi/Config.in b/package/flutter-pi/Config.in
 new file mode 100644
-index 0000000000..13e588cd83
+index 0000000000..e816af46c3
 --- /dev/null
-+++ b/package/flutter-sdk-bin/flutter-sdk-bin.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  7048e51a89c99a5b6cac6d8ae416121264effa76da34dba5c0e7cf85519c8e98  flutter_linux_3.10.6-stable.tar.xz
-+sha256  a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20  LICENSE
-diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
-new file mode 100644
-index 0000000000..87dd035faf
---- /dev/null
-+++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
-@@ -0,0 +1,87 @@
-+################################################################################
-+#
-+# host-flutter-sdk-bin
-+#
-+################################################################################
++++ b/package/flutter-pi/Config.in
+@@ -0,0 +1,41 @@
++config BR2_PACKAGE_FLUTTER_PI
++	bool "flutter-pi"
++	depends on BR2_PACKAGE_FLUTTER_ENGINE
++	depends on BR2_PACKAGE_SYSTEMD # Event loop and dbus support
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  A light-weight Flutter Engine Embedder. Flutter-pi also
++	  runs without X11, so you don't need to boot into a
++	  Desktop & have X11 or Wayland load up; just boot into the
++	  command-line.
 +
-+FLUTTER_SDK_BIN_VERSION = 3.10.6
-+FLUTTER_SDK_BIN_SITE = https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
-+FLUTTER_SDK_BIN_SOURCE = flutter_linux_$(FLUTTER_SDK_BIN_VERSION)-stable.tar.xz
-+FLUTTER_SDK_BIN_LICENSE = BSD-3-Clause
-+FLUTTER_SDK_BIN_LICENSE_FILES = LICENSE
++	  Although flutter-pi is only tested on a Rasberry Pi 4
++	  2GB, it should work fine on other linux platforms supported
++	  by Flutter so long as there is support for KMS and DRI.
 +
-+HOST_FLUTTER_SDK_BIN_SDK = $(HOST_DIR)/share/flutter/sdk
-+HOST_FLUTTER_SDK_BIN_SDK_ENGINE = $(HOST_FLUTTER_SDK_BIN_SDK)/bin/cache/artifacts/engine
-+HOST_FLUTTER_SDK_BIN_DART_SDK = $(HOST_FLUTTER_SDK_BIN_SDK)/bin/cache/dart-sdk
++	  https://github.com/ardera/flutter-pi
 +
-+HOST_FLUTTER_SDK_BIN_ENV = \
-+	PATH=$(BR_PATH):$(HOST_FLUTTER_SDK_BIN_SDK):$(HOST_FLUTTER_SDK_BIN_SDK)/bin \
-+	PUB_CACHE=$(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
++if BR2_PACKAGE_FLUTTER_PI
 +
-+# The following config options must be ran one at a time.
-+define HOST_FLUTTER_SDK_BIN_CONFIGURE_CMDS
-+	cd $(@D) && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config --clear-features && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config --enable-linux-desktop && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config --enable-custom-devices && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config --no-analytics && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/dart --disable-analytics
-+endef
++config BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN
++	bool "text input plugin"
++	help
++	  Include the text input plugin in the finished binary.
++	  Enables text input (to flutter text fields, for example)
++	  via attached keyboards.
 +
-+# Remove the cache, as we will run precache after setting up flutter and dart
-+# with the new config options.
-+define HOST_FLUTTER_SDK_BIN_BUILD_CMDS
-+	mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
-+	rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
-+	rm -rf $(@D)/bin/cache
-+	cd $(@D) && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter precache && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config && \
-+		rm -rf $(@D)/bin/cache/pkg/sky_engine
-+		rm -rf $(@D)/bin/cache/artifacts/*
-+endef
++config BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN
++	bool "keyboard plugin"
++	help
++	  Include the raw keyboard plugin in the finished binary.
++	  Enables raw keycode listening in flutter via the flutter
++	  RawKeyboard interface.
 +
-+define HOST_FLUTTER_SDK_BIN_INSTALL_CMDS
-+	mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
-+	cp -rT $(@D)/. $(HOST_FLUTTER_SDK_BIN_SDK)/
-+endef
-+
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
-+HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
-+	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk
-+HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = false
-+else
-+HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
-+	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk_product
-+HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = true
 +endif
 +
-+# The Order matters.Taken from:
-+# https://github.com/meta-flutter/meta-flutter/blob/kirkstone/classes/flutter-app.inc
-+HOST_FLUTTER_SDK_BIN_DART_ARGS = \
-+	--verbose \
-+	--disable-analytics \
-+	--disable-dart-dev $(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/linux-x64/frontend_server.dart.snapshot \
-+	--sdk-root $(HOST_FLUTTER_SDK_BIN_SDK_ROOT) \
-+	--target=flutter \
-+	--no-print-incremental-dependencies \
-+	-Ddart.vm.profile=false \
-+	-Ddart.vm.product=$(HOST_FLUTTER_SDK_BIN_SDK_PRODUCT) \
-+	--aot \
-+	--tfa \
-+	--packages .dart_tool/package_config.json \
-+	--output-dill .dart_tool/flutter_build/*/app.dill \
-+	--depfile .dart_tool/flutter_build/*/kernel_snapshot.d
++comment "flutter-pi needs flutter-engine"
++	depends on !BR2_PACKAGE_FLUTTER_ENGINE
 +
-+# Helper wrapper to run flutter when building flutter applications.
-+HOST_FLUTTER_SDK_BIN_FLUTTER = \
-+	$(HOST_FLUTTER_SDK_BIN_ENV) \
-+	$(HOST_FLUTTER_SDK_BIN_SDK)/bin/flutter
++comment "flutter-pi needs systemd"
++	depends on !BR2_PACKAGE_SYSTEMD
+diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
+new file mode 100644
+index 0000000000..8491a727df
+--- /dev/null
++++ b/package/flutter-pi/flutter-pi.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  06b5544c8538bb4a56cb49aa91e97bc0e319ca95a53414c8cfcc78aad2fda616  flutter-pi-004efdaa31bb9ca97938a6b05695496163fe1179-br1.tar.gz
++sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
+diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
+new file mode 100644
+index 0000000000..504d823265
+--- /dev/null
++++ b/package/flutter-pi/flutter-pi.mk
+@@ -0,0 +1,53 @@
++################################################################################
++#
++# flutter-pi
++#
++################################################################################
 +
-+# Helper wrapper to run dart when building flutter applications.
-+HOST_FLUTTER_SDK_BIN_DART_BIN = \
-+	$(HOST_FLUTTER_SDK_BIN_ENV) \
-+	$(HOST_FLUTTER_SDK_BIN_DART_SDK)/bin/dart \
-+	$(HOST_FLUTTER_SDK_BIN_DART_ARGS)
++FLUTTER_PI_VERSION = 004efdaa31bb9ca97938a6b05695496163fe1179
++FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
++FLUTTER_PI_SITE_METHOD = git
++FLUTTER_PI_LICENSE = MIT
++FLUTTER_PI_LICENSE_FILES = LICENSE
++FLUTTER_PI_DEPENDENCIES = \
++	flutter-engine \
++	libinput \
++	libxkbcommon \
++	systemd
 +
-+$(eval $(host-generic-package))
++FLUTTER_PI_CONF_OPTS = \
++	-DFLUTTER_EMBEDDER_HEADER=$(STAGING_DIR)/usr/include/flutter_embedder.h \
++	-DFILESYSTEM_LAYOUT=meta-flutter
++
++ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
++FLUTTER_PI_DEPENDENCIES += gstreamer1 gst1-plugins-base
++FLUTTER_PI_CONF_OPTS += -DBUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=ON
++else
++FLUTTER_PI_CONF_OPTS += -DBUILD_GSTREAMER_VIDEO_PLAYER_PLUGIN=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_FLUTTER_PI_INPUT_PLUGIN),y)
++FLUTTER_PI_DEPENDENCIES += libinput libxkbcommon
++FLUTTER_PI_CONF_OPTS += -DBUILD_TEXT_INPUT_PLUGIN=ON
++else
++FLUTTER_PI_CONF_OPTS += -DBUILD_TEXT_INPUT_PLUGIN=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_FLUTTER_PI_KEYBOARD_PLUGIN),y)
++FLUTTER_PI_CONF_OPTS += -DBUILD_RAW_KEYBOARD_PLUGIN=ON
++else
++FLUTTER_PI_CONF_OPTS += -DBUILD_RAW_KEYBOARD_PLUGIN=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OMXPLAYER),y)
++FLUTTER_PI_DEPENDENCIES += omxplayer
++FLUTTER_PI_CONF_OPTS += \
++	-DBUILD_OMXPLAYER_VIDEO_PLAYER_PLUGIN=ON \
++	-DOMXPLAYER_SUPPORTS_RUNTIME_ROTATION=ON
++else
++FLUTTER_PI_CONF_OPTS += \
++	-DBUILD_OMXPLAYER_VIDEO_PLAYER_PLUGIN=OFF \
++	-DOMXPLAYER_SUPPORTS_RUNTIME_ROTATION=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
 2.41.0
 
