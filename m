@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30B0CC25B7D
-	for <buildroot@archiver.kernel.org>; Wed, 16 Aug 2023 20:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE1A4C27C7A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 07:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE5E1613C9;
-	Wed, 16 Aug 2023 20:21:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE5E1613C9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 409C483C1D;
+	Thu, 17 Aug 2023 07:40:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 409C483C1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kWIm0dfLMdGm; Wed, 16 Aug 2023 20:21:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 5niV1ipBsn2W; Thu, 17 Aug 2023 07:40:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8A5A61336;
-	Wed, 16 Aug 2023 20:21:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8A5A61336
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D09F83C19;
+	Thu, 17 Aug 2023 07:40:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D09F83C19
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8A8061BF381
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:21:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 76BDF1BF3EF
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 07:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F56841730
- for <buildroot@lists.busybox.net>; Wed, 16 Aug 2023 20:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F56841730
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F925417DE
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 07:40:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F925417DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P2vBKUr7yBRE for <buildroot@lists.busybox.net>;
- Wed, 16 Aug 2023 20:21:49 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5FDE2400EF
- for <buildroot@buildroot.org>; Wed, 16 Aug 2023 20:21:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FDE2400EF
-Received: from fli4l.lan.fli4l (p4fd6c625.dip0.t-ipconnect.de [79.214.198.37])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 79AA2A4C0824;
- Wed, 16 Aug 2023 22:21:47 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40346)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qWN1X-0006OM-0o;
- Wed, 16 Aug 2023 22:21:47 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Wed, 16 Aug 2023 22:21:47 +0200
-Message-Id: <20230816202147.1790367-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+ with ESMTP id JqPeyulUJASL for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 07:40:21 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8E7E6400B8
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 07:40:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E7E6400B8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 66BAB1BF209;
+ Thu, 17 Aug 2023 07:40:16 +0000 (UTC)
+Date: Thu, 17 Aug 2023 09:40:15 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20230817094015.5324e023@windsurf>
+In-Reply-To: <20230816150442.GB1340200@scaer>
+References: <20230816092439.570839-1-jamie.gibbons@microchip.com>
+ <20230816092439.570839-2-jamie.gibbons@microchip.com>
+ <20230816142316.76d45449@windsurf> <20230816150442.GB1340200@scaer>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1692217307;
- bh=hgQad15U81YbtTGTngk40T7a4Jnx0GEr1Bx9J1jSEEA=;
- h=From:To:Cc:Subject:Date:From;
- b=IMBu8myJ6hpVxXBGdjj24dMlVNu8AUoSU9kp0BBTH35u5vwNwKw9AqwhUG1d6H9Nz
- qKItIHi73Qz+FYw4mroEGb1V1jEi80o1AL5Xc/ISlgZ7wuTgVwRbJ94jSwDKi5wmdk
- mG99MNcDC3fmXYU6GX3ut6IlhRh+k4sMSEtiMU45NIIMSgsTEuU2E5PiMlCc9AGhUS
- Z7zmdtoU8/yaHUSn/IpzEhqGCfYKkZRkL9rcgNH3Vgoc3FSVA07hM4fjki4E2RyO6v
- OMNlqHZG2P0WDo4E6UBxuGTBbwOCrQz8IEFy8A256xygBM02zNIc+vm5kMNSPr6KLo
- mn6KZyN7Txuhg==
+ d=bootlin.com; s=gm1; t=1692258017;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1wj+CM0P9xVqoX5ivQbundj9EiyGmCzs01BR0jwEhVk=;
+ b=VaDvhpX5PC2OHqoe0yNDo7LUZjxLAAravuhQZYg8LJgA3qS+P3UMT+Rw7dVrhPsgQ6gIXA
+ ODiVLjiCm2l5/WsicNeo/5WJvfZK3mexzTUVAYVwBmMpeMOVKvtDlyEGqYF6CXqdEqGjn1
+ fnsQpUQdw4A7EQPuSlxLKuQfUcEyeKIFXgENuLsD+Vf51tPTt7RvY8u6tx3jsEn9AUbFqp
+ V8N/W3gaO6gGiztSgSt3Gu2T5AGFfX33HJbCCHkgczdaJ+Kt95vvQpAnZ48S12bV2BxcMw
+ U/WsyGksL8ajowg0P5OYeAYtMFLJ2zOLw0btuBdj0W22RRlA9prX6v05zu7ccQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=IMBu8myJ
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 23.1.6
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=VaDvhpX5
+Subject: Re: [Buildroot] [PATCH v2 1/3] arch/Config.in.riscv: update
+ instruction set ext
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,65 +77,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Conor Dooley <Conor.Dooley@microchip.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>, buildroot@buildroot.org,
+ Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>,
+ Jamie Gibbons <jamie.gibbons@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2023-August/000727.html
+On Wed, 16 Aug 2023 17:04:42 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+> Basically, I think what Thomas expects is something like:
+> 
+>     diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+>     index 3dfbb4165f..997f7a631d 100644
+>     --- a/arch/Config.in.riscv
+>     +++ b/arch/Config.in.riscv
+>     @@ -1,26 +1,5 @@
+>      # RISC-V CPU ISA extensions.
+>      
+>     -config BR2_RISCV_ISA_RVI
+>     -    bool
+>     -
+>     -config BR2_RISCV_ISA_RVM
+>     -    bool
+>     -
+>     -config BR2_RISCV_ISA_RVA
+>     -    bool
+>     -
+>     -config BR2_RISCV_ISA_RVF
+>     -    bool
+>     -
+>     -config BR2_RISCV_ISA_RVD
+>     -    bool
+>     -
+>     -config BR2_RISCV_ISA_RVC
+>     -    bool
+>     -
+>     -config BR2_RISCV_ISA_RVV
+>     -    bool
+>     -
+>      choice
+>          prompt "Target Architecture Variant"
+>          default BR2_riscv_g
+>     @@ -41,38 +20,28 @@ config BR2_riscv_custom
+> 
+>      endchoice
+> 
+>     -if BR2_riscv_custom
+>     -
+>      comment "Instruction Set Extensions"
+> 
+>     -config BR2_RISCV_ISA_CUSTOM_RVM
+>     +config BR2_RISCV_ISA_RVM
+>          bool "Integer Multiplication and Division (M)"
+>     -    select BR2_RISCV_ISA_RVM
+> 
+>     -config BR2_RISCV_ISA_CUSTOM_RVA
+>     +config BR2_RISCV_ISA_RVA
+>          bool "Atomic Instructions (A)"
+>     -    select BR2_RISCV_ISA_RVA
+> 
+>     -config BR2_RISCV_ISA_CUSTOM_RVF
+>     +config BR2_RISCV_ISA_RVF
+>          bool "Single-precision Floating-point (F)"
+>     -    select BR2_RISCV_ISA_RVF
+> 
+>     -config BR2_RISCV_ISA_CUSTOM_RVD
+>     +config BR2_RISCV_ISA_RVD
+>          bool "Double-precision Floating-point (D)"
+>          depends on BR2_RISCV_ISA_RVF
+>     -    select BR2_RISCV_ISA_RVD
+> 
+>     -config BR2_RISCV_ISA_CUSTOM_RVC
+>     +config BR2_RISCV_ISA_RVC
+>          bool "Compressed Instructions (C)"
+>     -    select BR2_RISCV_ISA_RVC
+> 
+>     -config BR2_RISCV_ISA_CUSTOM_RVV
+>     +config BR2_RISCV_ISA_RVV
+>          bool "Vector Instructions (V)"
+>     -    select BR2_RISCV_ISA_RVV
+>          select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
+> 
+>     -endif
+>     -
+>      choice
+>          prompt "Target Architecture Size"
+>          default BR2_RISCV_64
+> 
+> Thomas?
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index e602953a3f..5dbf984735 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+Not quite, because we want the IMAFD options to remain under the
+"custom" option.
+
+Essentially what happens today is:
+
+ - RISC-V G implies IMAFD, but there is no way to say I have G + C + V
+
+ - RISC-V custom allows any combination of IMAFDCV
+
+What we want is:
+
+ - RISC-V G implies IMAFD, but also allows to select C and V
+
+ - RISC-V custom allows any combination of IMAFDCV
+
+So something like this:
+
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index 3dfbb4165f..df8499c7a0 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -41,10 +41,10 @@ config BR2_riscv_custom
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 23.1.5
-+MESA3D_HEADERS_VERSION = 23.1.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 3606cca56d..95133d3de9 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000726.html
--sha256  3cf88576fdebf24fc4047067936131c90cb6541c27365996b79b661dec1fb153  mesa-23.1.5.tar.xz
--sha512  c5eac5a497561374eaf931214aebc9001820c5ab49f9b8c5634b62af081b03b2f21c169c936524b2953c8815eb27dfb5c8c12276b9b1c119722cd6fea0b22d85  mesa-23.1.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000727.html
-+sha256  f4c7fd8e7b472a88da7d83e9a48f6f3bd17d4ea2cc4386f7231b796f3964157a  mesa-23.1.6.tar.xz
-+sha512  24f1c626fa05a82bcdfb24b67b8e5f96f94d5748309631b83e8d7a62142853cd3be90b92c56bac3bc4d223bf40b424d6d6a9977537b899107295b7d45d7e2575  mesa-23.1.6.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index add9232d2f..8f3d224417 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ endchoice
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 23.1.5
-+MESA3D_VERSION = 23.1.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-if BR2_riscv_custom
+-
+ comment "Instruction Set Extensions"
+ 
++if BR2_riscv_custom
++
+ config BR2_RISCV_ISA_CUSTOM_RVM
+ 	bool "Integer Multiplication and Division (M)"
+ 	select BR2_RISCV_ISA_RVM
+@@ -62,6 +62,8 @@ config BR2_RISCV_ISA_CUSTOM_RVD
+ 	depends on BR2_RISCV_ISA_RVF
+ 	select BR2_RISCV_ISA_RVD
+ 
++endif
++
+ config BR2_RISCV_ISA_CUSTOM_RVC
+ 	bool "Compressed Instructions (C)"
+ 	select BR2_RISCV_ISA_RVC
+@@ -71,8 +73,6 @@ config BR2_RISCV_ISA_CUSTOM_RVV
+ 	select BR2_RISCV_ISA_RVV
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
+ 
+-endif
+-
+ choice
+ 	prompt "Target Architecture Size"
+ 	default BR2_RISCV_64
+
+Note that indeed the blind options BR2_RISCV_ISA_RVC and
+BR2_RISCV_ISA_RVV are no longer very useful, but I guess I would keep
+them anyway to keep the symmetry with BR2_RISCV_ISA_RV{I,M,A,F,D} blind
+options.
+
+Thoughts?
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
