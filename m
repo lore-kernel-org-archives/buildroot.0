@@ -1,60 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BA9DC3062E
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 14:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2549C52CDC
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 16:22:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A7FD340272;
-	Thu, 17 Aug 2023 14:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7FD340272
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0473141E42;
+	Thu, 17 Aug 2023 16:22:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0473141E42
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LXzUJW-zbksj; Thu, 17 Aug 2023 14:51:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id uyp20i5emKbX; Thu, 17 Aug 2023 16:22:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DFF4A418BD;
-	Thu, 17 Aug 2023 14:51:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFF4A418BD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 194EE1BF3BC
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 14:51:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08B4041E4B;
+	Thu, 17 Aug 2023 16:22:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08B4041E4B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F09371BF34C
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 16:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4BE9418BD
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 14:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4BE9418BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id D7EC981204
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 16:22:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7EC981204
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K6vm0GKN-URM for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 14:51:41 +0000 (UTC)
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4FA7240272
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 14:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FA7240272
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id CD933352BDB7; Thu, 17 Aug 2023 16:51:38 +0200 (CEST)
-Date: Thu, 17 Aug 2023 16:51:38 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7qj0GaCcu7S8 for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 16:22:53 +0000 (UTC)
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 441A583FBC
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 16:22:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 441A583FBC
+Received: from fli4l.lan.fli4l (p4fd6c625.dip0.t-ipconnect.de [79.214.198.37])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 40AC3A4C00BA;
+ Thu, 17 Aug 2023 18:22:50 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:46138)
+ by fli4l.lan.fli4l with esmtp (Exim 4.96)
+ (envelope-from <bernd@kuhls.net>) id 1qWflp-0007vJ-1z;
+ Thu, 17 Aug 2023 18:22:49 +0200
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Message-ID: <ZN4z+n37WMFvHgsF@waldemar-brodkorb.de>
+Date: Thu, 17 Aug 2023 18:22:49 +0200
+Message-Id: <20230817162249.449943-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-21-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1692283898; bh=W2lCJhuajJBTkFheSBicMO4V8A4azYRnqpARJDJoTvo=;
- h=Date:From:To:Cc:Subject:From;
- b=SF0fELA2lOlUYizcD7TFRNHBk8Ju87fsmLSoWG0cnX4eRTzKqH9GfyE0pxgGQg4J9
- RA4k7jlP3NtlajAEIYFCxj1CuKKUWrY3P2XI2mQ/MrH83z8wRZoozufUw5udUO2tPZ
- OxWByMrwSEYDgDMfrMUlWWRMr2n/KhFX5Ndn8os9aOK13OSziUDekLaYRg0agn9jVW
- QPFplqkNHXMtCebZqaLaVj16p5dJEc0tmi6V0Y/BrP7DtS959Jj74rGwiWECiEFZqF
- X5R64QxHE2qnud45cVzWZmsd9ZUc0W5b2yCq1aMgbiuW9JfaMXLix64nTrX3nljxh/
- gKaS/pr1V+8KQ==
-Subject: [Buildroot] [PATCHv2 2/2] package/tcf-agent: fix uClibc-ng compile
- on ARM
+X-Spamd-Bar: ++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202306131828; t=1692289370;
+ bh=qiBgb4iN3gBV20X4QLv54a2VM6u172WIaqTkQtVnntk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hGvb9G2OsqD9rTV2inrWjg0suIH42IbQxGY+meL6ESZOB5DDq1iniimLAfZQJGdHa
+ fDdDFBviu3JODEpHIlkCVIcGqenyKIN6mrx29l7GGQKJh3dXBnBV25XcwZqRnCzATZ
+ QYy85SDIbfwK1hce9WLTBClt4wBpib3+DvgwbZ3hyX80j0UfjAUmyZWDOX0UFNQk9C
+ ci9L2hLN3Dk8n4muBwjN0DeNR6BtQ2ePWKzHGPJsnBtrus9fWQXGg8uXs6tRaQc1MS
+ LZnsJ3D1bTTq2h28Oc9DMr/V4O5krgnmTuDSF35VvJ4J7tKIKKr95gM/ED38VAhIMt
+ gidmynj8bPBaA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=hGvb9G2O
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump version
+ to 15.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,83 +75,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When a shared build is used, we can use getauxval and no ARM only
-instuctions are in use.
+Release notes:
+https://www.postgresql.org/about/news/postgresql-154-149-1312-1216-1121-and-postgresql-16-beta-3-released-2689/
 
-When a static build is used, we need to override CFLAGS to use
-arm instructions, as uClibc-ng only supports getauxval for shared case.
+Fixes CVE-2023-39417 & CVE-2023-39418.
 
-Fixes:
- - http://autobuild.buildroot.net/results/3b5/3b5c5519a3e5ee490308bc1a1b9579ce13417235
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-v1 -> v2:
-  - musl is not affected, change requested by Thomas Petazzoni
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
----
- .../0001-fix-uClibc-ng-compile.patch          | 27 +++++++++++++++++++
- package/tcf-agent/tcf-agent.mk                |  7 +++++
- 2 files changed, 34 insertions(+)
- create mode 100644 package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-
-diff --git a/package/tcf-agent/0001-fix-uClibc-ng-compile.patch b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-new file mode 100644
-index 0000000000..b8f46f3c48
---- /dev/null
-+++ b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-@@ -0,0 +1,27 @@
-+From a78007cd139e1dea3d893f5fe1d1c3a47503e6a2 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 12 Aug 2023 18:27:02 +0200
-+Subject: [PATCH] fix uClibc-ng compile
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: N/A only mail available
-+---
-+ agent/machine/arm/tcf/cpudefs-mdep.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/agent/machine/arm/tcf/cpudefs-mdep.c b/agent/machine/arm/tcf/cpudefs-mdep.c
-+index 051631a0..7c4fbf3e 100644
-+--- a/agent/machine/arm/tcf/cpudefs-mdep.c
-++++ b/agent/machine/arm/tcf/cpudefs-mdep.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifndef USE_getauxval
-+ #  include <features.h>
-+-#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)))
-++#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) && defined(__HAVE_SHARED__)))
-+ #endif
-+ 
-+ #include <stddef.h>
-+-- 
-+2.39.2
-+
-diff --git a/package/tcf-agent/tcf-agent.mk b/package/tcf-agent/tcf-agent.mk
-index 2b8a61b66f..7c25df864a 100644
---- a/package/tcf-agent/tcf-agent.mk
-+++ b/package/tcf-agent/tcf-agent.mk
-@@ -21,6 +21,13 @@ TCF_AGENT_CONF_OPTS = \
- 	-DBUILD_SHARED_LIBS=OFF \
- 	-DTCF_MACHINE=$(call qstrip,$(BR2_PACKAGE_TCF_AGENT_ARCH))
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index da6ec7f311..0640f883a7 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v15.3/postgresql-15.3.tar.bz2.sha256
+-sha256  ffc7d4891f00ffbf5c3f4eab7fbbced8460b8c0ee63c5a5167133b9e6599d932  postgresql-15.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v15.4/postgresql-15.4.tar.bz2.sha256
++sha256  baec5a4bdc4437336653b6cb5d9ed89be5bd5c0c58b94e0becee0a999e63c8f9  postgresql-15.4.tar.bz2
+ # License file, Locally calculated
+ sha256  1a7d13c3ab31961b91ba256f77d6e82e0b54bf992253060fe93bdb5466df416a  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index ca11a8191f..b951b14aa0 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# tcf-agent uses some arm instructions in case getauxval is not available.
-+# unfortunately the uClibc-ng implementation of getauxval uses some features
-+# of ld.so to work
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_ARM_INSTRUCTIONS_THUMB),yyy)
-+TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
-+endif
-+
- define TCF_AGENT_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/tcf-agent/tcf-agent.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/tcf-agent.service
+-POSTGRESQL_VERSION = 15.3
++POSTGRESQL_VERSION = 15.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
 2.39.2
 
