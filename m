@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B43C678DC
-	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 23:09:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A817C678DC
+	for <buildroot@archiver.kernel.org>; Thu, 17 Aug 2023 23:09:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77C1360FCB;
-	Thu, 17 Aug 2023 23:09:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77C1360FCB
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE41C60FF5;
+	Thu, 17 Aug 2023 23:09:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE41C60FF5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7upshszOreUe; Thu, 17 Aug 2023 23:09:19 +0000 (UTC)
+	with ESMTP id ZP1N_sZBcxUX; Thu, 17 Aug 2023 23:09:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C73D160EFF;
-	Thu, 17 Aug 2023 23:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C73D160EFF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 55F871BF476
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25CE860E79;
+	Thu, 17 Aug 2023 23:09:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25CE860E79
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 664071BF476
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CF0D40111
- for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF0D40111
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A02841901
+ for <buildroot@lists.busybox.net>; Thu, 17 Aug 2023 23:08:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A02841901
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6f2o03BKaUs9 for <buildroot@lists.busybox.net>;
- Thu, 17 Aug 2023 23:08:53 +0000 (UTC)
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CF06740576
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 23:08:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF06740576
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-3fea0640d7aso3742585e9.0
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 16:08:52 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0whtPKZ5EOvn for <buildroot@lists.busybox.net>;
+ Thu, 17 Aug 2023 23:08:54 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E6698418DD
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 23:08:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6698418DD
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3fe501e0b4cso3571245e9.1
+ for <buildroot@buildroot.org>; Thu, 17 Aug 2023 16:08:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692313731; x=1692918531;
+ d=1e100.net; s=20221208; t=1692313732; x=1692918532;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=RXp7KP+IuRiL9/r5pejSmhKjAk67Uvji4n5mgqZvPCw=;
- b=TSsU8o/+iak6ZlgftmJ/txLtfoxFpIFeZy4owYMF+HdSRDTWEra2HqpggyzB89yQ8y
- ivokpKOYompgXZ9cDdyAH99cvejKTnCpyf8s5YfmYfbleuRysdp3jvLLvk5DRhV8bcGk
- 8XQqs6ck57qJCkgRJNt0kT/B6VKI+CXrhUrylP4XSWVDVPNJLsiCHkCOkGCQ0OlXWoMQ
- VHWoV3uSQ3UfgMwOTauGTDC3nmiqydb1YQFbtrYGczSJ96V8nILVecPoCxv4XNadenE2
- O7uidLUEPMsEkaXpx/BnCCdZs7HERMPTqFVkZo09OES40l7agFOalnFxdQ6ZsGlQgLN6
- Fjtw==
-X-Gm-Message-State: AOJu0Yx0hGN5kEM4mxdHuqUdi9E3fqB04nxN/UZlFutGfeeKGavyV0rE
- xMDBizUny7qFZO7cdZOjjn3o5WxbaWU=
-X-Google-Smtp-Source: AGHT+IEMCfedjQ6Y7j37LeTIiD8ilQ5Saz3IuTcGCI9GeAUx6X96CgHpwMSesLKfA1p7v1SLZE9obw==
-X-Received: by 2002:a05:600c:1c9b:b0:3fd:e86b:f095 with SMTP id
- k27-20020a05600c1c9b00b003fde86bf095mr823182wms.13.1692313731045; 
+ bh=RSXOxyu+5pyP6114YLUDgXWU2+GmZdqkBYA5WfOcAj0=;
+ b=IQ7BilP7VK81FqmsoHU07665ZLvBSogauvUBa6FUREcL59yWoD0Jkw6GNcxbtJ+qo8
+ KOmw1nhOxgNU70lSCr0GGPFjRKQBOzmZJed385hAFbIDNbRBtGR5Z9u/pjM5/j2pgzS0
+ vKZK3uh/Hy8AevcZBvyBa8kXO3eYXRkKzSZfwTjeIZjjLOAubymzHmTkBx0WmdDzZ6Kz
+ Nts9RxYDyDK2x6gF7DioEl0kZPlMChgpS47G8wEdSz2I5WRDhYriQiFal2gd7i3KzS1m
+ wVhijXvDAwJ+98xhdSNPoa3dwSYUgdHoAbcnWqOz8uXoa+yNH2J6LpAvMue/f2RVh3I4
+ C3OQ==
+X-Gm-Message-State: AOJu0YxI1E2yCmN25RejoE12v9VAdG5QkzzZ2fVSCwrmhrBoy7FdRHNm
+ ZfimM9D/ao/8nHppjzOb3HmDMONH1E8=
+X-Google-Smtp-Source: AGHT+IHYE8AGVAQYU61GKrpi9ELS19RC3qGFVL4ank1JiHQ3o4PUQ8aIqVuHWitYrQ1sYfGGEIj15Q==
+X-Received: by 2002:a7b:cd8c:0:b0:3fe:108d:7f88 with SMTP id
+ y12-20020a7bcd8c000000b003fe108d7f88mr840427wmj.36.1692313731782; 
  Thu, 17 Aug 2023 16:08:51 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
  [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
  by smtp.gmail.com with ESMTPSA id
- 26-20020a05600c021a00b003fa95f328afsm4409479wmi.29.2023.08.17.16.08.50
+ 26-20020a05600c021a00b003fa95f328afsm4409479wmi.29.2023.08.17.16.08.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Aug 2023 16:08:50 -0700 (PDT)
+ Thu, 17 Aug 2023 16:08:51 -0700 (PDT)
 From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 18 Aug 2023 01:08:43 +0200
-Message-ID: <20230817230844.450092-3-romain.naour@gmail.com>
+Date: Fri, 18 Aug 2023 01:08:44 +0200
+Message-ID: <20230817230844.450092-4-romain.naour@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230817230844.450092-1-romain.naour@gmail.com>
 References: <20230817230844.450092-1-romain.naour@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692313731; x=1692918531;
+ d=gmail.com; s=20221208; t=1692313732; x=1692918532;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=RXp7KP+IuRiL9/r5pejSmhKjAk67Uvji4n5mgqZvPCw=;
- b=jb8zaV+e56TzaZT55JEMBgOeDQUDPnwXCjw+ye2t25Md5V5fp3wkgf37GVYuFe+KGZ
- gJqGnuXfFXkzx18/DBuzFTkYlW2l4iA3TFyUEWAVbX3I2ZOfJQjlU20vRg8p3LA5m/jx
- UxvclfeGGQaiOnnq7M0CYHSEGGC7xdHBUZ88rDVTTQXnwA4znts0DRQRyi9b8yyv7HCr
- GFdrpsGq5um63bWz7FPMgrHsR16EBx6ayC8aDc8j6bdtFqeVG6ObqL5HYvDqFqqqdpCv
- SHFXNLTgtLEF5t2G3+vpMSxrNeABNYhyla/vXcSOQ2rUlpusH5QQPWupyuYFoehCNBKV
- CczQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=RSXOxyu+5pyP6114YLUDgXWU2+GmZdqkBYA5WfOcAj0=;
+ b=CtPODKUvuIcqh3IFTOjISU4k7klmRmDJ2nv+q6+b+58MLuP/tltKTdv+XwWqFofEDx
+ eF6sNZtjj/5dA5LCoMd5yaoSJlcyv/LU6qTHzJpZrkFWVRlZcq80+u1xs/rv6Av83nTX
+ 3WtmTG2qpapiIBN1uURe3UuhPAsnVyB5uuPxMk0Q1VH+62Xx+NkopnDJKpdS51U8O1N3
+ /930VYMrB+/3+CTpV2WV++eh8ZInv0ldQun/sKfFvsAziEmjAa4j+F65gjwSiu3RR8J4
+ mz30Sse/2SYw9g5XJ4Ihuear5r8Z4Vh8c4drrXOr+lEmmSfQ5J1C65XPoKrATSjsYtut
+ ehLw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=jb8zaV+e
-Subject: [Buildroot] [PATCH 3/4] configs/ci20_defconfig: bump to kernel
- 5.4.254
+ header.a=rsa-sha256 header.s=20221208 header.b=CtPODKUv
+Subject: [Buildroot] [PATCH 4/4] configs/avenger96_defconfig: bump ATF
+ version to 2.9 for binutils 2.39+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,41 +105,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump the kernel to the latest release of 5.4 kernel series
-to fix an issue with gcc 12.
+This new binutils version break the ATF build due to new linker warnings:
 
-arch/mips/jz4740/setup.c: In function 'plat_mem_setup':
-arch/mips/jz4740/setup.c:64:25: error: comparison between two arrays [-Werror=array-compare]
-   64 |         if (__dtb_start != __dtb_end)
-      |                         ^~
-arch/mips/jz4740/setup.c:64:25: note: use '&__dtb_start[0] != &__dtb_end[0]' to compare the addresses
-  CC      fs/debugfs/file.o
-cc1: all warnings being treated as errors
+ ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
 
-Fixed in v5.4.195:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a60def7568216684f62b117c199429c4a9a89570
+From [1]
+"Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
+ of a new warning when linking the bl*.elf in the form:
+
+ ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
+ ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
+ ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
+
+These new warnings are enbaled by default to secure elf binaries:
+  - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
+  - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
+"
+
+Bump the ATF custom version to 2.9 for binutils 2.39+ support.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436573
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436283
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- configs/ci20_defconfig | 2 +-
+ configs/avenger96_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index 09eddc4e68..7e119376e1 100644
---- a/configs/ci20_defconfig
-+++ b/configs/ci20_defconfig
-@@ -15,7 +15,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci20/genimage.cfg"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.254"
- BR2_LINUX_KERNEL_DEFCONFIG="ci20"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
+diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
+index 1f8e7a50d1..adfd7585c4 100644
+--- a/configs/avenger96_defconfig
++++ b/configs/avenger96_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
 -- 
 2.41.0
 
