@@ -1,88 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B3B1C2FC0E
-	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 00:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97DCFC001DE
+	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 05:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3FD260ECA;
-	Fri, 18 Aug 2023 00:32:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3FD260ECA
+	by smtp4.osuosl.org (Postfix) with ESMTP id E64FA41E4D;
+	Fri, 18 Aug 2023 05:47:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E64FA41E4D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t-8xA8ab891F; Fri, 18 Aug 2023 00:32:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YFdlor8vIDyi; Fri, 18 Aug 2023 05:47:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0692160E85;
-	Fri, 18 Aug 2023 00:32:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0692160E85
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2AC181BF98E
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 00:31:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE2F041E50;
+	Fri, 18 Aug 2023 05:47:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE2F041E50
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 08AE31BF38E
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 05:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 088EB83D12
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 00:31:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 088EB83D12
+ by smtp4.osuosl.org (Postfix) with ESMTP id D556B41E5B
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 05:47:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D556B41E5B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A2prq83Az9F1 for <buildroot@lists.busybox.net>;
- Fri, 18 Aug 2023 00:31:52 +0000 (UTC)
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com
- [IPv6:2607:f8b0:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DF63683D11
- for <buildroot@buildroot.org>; Fri, 18 Aug 2023 00:31:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF63683D11
-Received: by mail-pf1-x429.google.com with SMTP id
- d2e1a72fcca58-6889c748c44so57624b3a.0
- for <buildroot@buildroot.org>; Thu, 17 Aug 2023 17:31:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692318711; x=1692923511;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=EPmrCREQq/fD5/TI7NGEji7f5TL3iLNGW+kA+ZRlN+M=;
- b=IuDarbEpEBj3dceCniz/BkXUD2o18GpzWlS3A4v5fgnEdNg4ZKaPTHtZjS8z7I3sUn
- FL5gJ6dS6bPnyi+lBvfuxBOWu5pkx/MElGH7qRHFritEo0IL0zsgR7t3JVIskC1aXJC1
- AVlO78TZ9Hsa7/nfMjvFoOYC0PG5VR68p7RzWIVmXMB6+ebAHvFzfqiWmKEpknKfPamJ
- PXEke6nIKHKdrSh7a/HqDrfWj7x6rgjMPvgMgtYTdDrnjVdX2SKCt2/BJKruf6dhdIG2
- TP6yPH2d5F8re4itsOoKiWMOUyYolO/1IHyPMW9QuFXD5nqZRsUgRbZNAVVl8HApTeC3
- GMng==
-X-Gm-Message-State: AOJu0YyyNAw3e5ChmQuTvX3RUG3MejNLMWxsu//ckGgbQVFee4V03Kss
- HdwUezfkRgvr43aAB9W9oR5fzQ==
-X-Google-Smtp-Source: AGHT+IHbOMVsPJN+mNMAu0ckU71dBnuonGVkS2Vbab8+KqjNWtFLOYALpBG0O+iwV+SPo3f+iUG7ZA==
-X-Received: by 2002:a05:6a00:1d85:b0:681:9fe0:b543 with SMTP id
- z5-20020a056a001d8500b006819fe0b543mr1145768pfw.2.1692318711233; 
- Thu, 17 Aug 2023 17:31:51 -0700 (PDT)
-Received: from lbrmn-mmayer.ric.broadcom.net ([192.19.161.248])
- by smtp.gmail.com with ESMTPSA id
- b1-20020aa78701000000b0068895d26b79sm354260pfo.10.2023.08.17.17.31.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Aug 2023 17:31:50 -0700 (PDT)
-Received: by lbrmn-mmayer.ric.broadcom.net (Postfix, from userid 1000)
- id D0FC06DC; Thu, 17 Aug 2023 17:31:49 -0700 (PDT)
-To: Buildroot mailing list <buildroot@buildroot.org>
-Date: Thu, 17 Aug 2023 17:31:24 -0700
-Message-Id: <20230818003124.3770152-3-mmayer@broadcom.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230818003124.3770152-1-mmayer@broadcom.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X9WecliXSuS0 for <buildroot@lists.busybox.net>;
+ Fri, 18 Aug 2023 05:47:43 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3D27D41E4D
+ for <buildroot@buildroot.org>; Fri, 18 Aug 2023 05:47:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D27D41E4D
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:1576:5fbf:4d05:9159])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id ECB14B0058E;
+ Fri, 18 Aug 2023 07:47:37 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 18 Aug 2023 07:47:37 +0200
+Date: Fri, 18 Aug 2023 07:47:37 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Markus Mayer <mmayer@broadcom.com>
+Message-ID: <20230818054737.GD1340200@scaer>
 References: <20230818003124.3770152-1-mmayer@broadcom.com>
+ <20230818003124.3770152-3-mmayer@broadcom.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=broadcom.com; s=google; t=1692318711; x=1692923511;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=EPmrCREQq/fD5/TI7NGEji7f5TL3iLNGW+kA+ZRlN+M=;
- b=bqVBWIbNbddMXClK9OUHBsU9pTe4Bqg9/OfF+V9+zE30FgOH56hiOrzZ/W/GEzlBRH
- h2gRFHKjrMMZJdCxVVeLCIwuESSMyxRbFoZQeviFamtLhUAMIYr58fDSXQ5GkimlQ/uB
- VRjuWAwG+8SNJUNuP6GBhRWFnC3nL8n8EG8ng=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com
- header.a=rsa-sha256 header.s=google header.b=bqVBWIbN
-Subject: [Buildroot] [PATCH 2/2] Revert "package/util-linux: add missing
+Content-Disposition: inline
+In-Reply-To: <20230818003124.3770152-3-mmayer@broadcom.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1692337660;
+ bh=IvSq+EGMg7s1Rhsi4na5xRD4hDTcfcPzltOvoDM50hU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=WkX+ijo7NtRISHzsUkX1lwSNDkv/eLDBuPeozvDNn/fj/xTtZUgwHwE4jWjMyaPra
+ Ppy/NMSAXfyTVYBxwC5ysJ3VPu1E6m2OpIDhzSojFyyd0kku3xHlThsrVxvJ9Rv2hZ
+ XQwwE9X/0UnTPtcopAuIJfILWsDTpH87QUl0f1l1TkmkKjzbL6pgKTLg+faXDo1MMm
+ no8vNVlMLuM460CBu1qR4VgU8NjpUkZm9o+OCASFjHFOj6f9TNW87xub1McnP47bdX
+ nUNyfPLZC63CPW7a59VvtkwRAlVg6YGb+VmYys0vJu9HjYfwP26kJQuo0vSG/aPH4+
+ 4MkIoViK8jKmg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WkX+ijo7
+Subject: Re: [Buildroot] [PATCH 2/2] Revert "package/util-linux: add missing
  autoreconf"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -95,43 +77,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Markus Mayer via buildroot <buildroot@buildroot.org>
-Reply-To: Markus Mayer <mmayer@broadcom.com>
-Cc: "Yann E . Morin" <yann.morin.1998@free.fr>,
- Markus Mayer <mmayer@broadcom.com>
+Cc: Buildroot mailing list <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This reverts commit f3fab0defe8fa9e1d99e4a89ddb29776e3bdd7fd.
+Markus, All,
 
-With 0001-libmount-ifdef-statx-call.patch no longer required (due to the
-release of util-linux 2.39.2), we no longer need to run autoreconf.
+On 2023-08-17 17:31 -0700, Markus Mayer via buildroot spake thusly:
+> This reverts commit f3fab0defe8fa9e1d99e4a89ddb29776e3bdd7fd.
+> 
+> With 0001-libmount-ifdef-statx-call.patch no longer required (due to the
+> release of util-linux 2.39.2), we no longer need to run autoreconf.
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
----
- package/util-linux/util-linux.mk | 4 ----
- 1 file changed, 4 deletions(-)
+The AUTORECONF=YES should have been dropped in the previous patch.
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 73eda5c17134..4a40d5afec85 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -30,10 +30,6 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
- 	Documentation/licenses/COPYING.LGPL-2.1-or-later
- 
- UTIL_LINUX_CPE_ID_VENDOR = kernel
--
--# 0001-libmount-ifdef-statx-call.patch
--UTIL_LINUX_AUTORECONF = YES
--
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = \
- 	host-pkgconf \
+Indeed, the bump and associated removal of the patch is what means
+autoreconf is not needed; it is all a semantically atomice change: bump,
+drop patch, remove autoreconf.
+
+Besides, a git-revert semantically means "the reverted commit was wrong
+even at the time it was introduced". But here, using autoreconf was
+correct when we introduced it, so it should not be "git-reverted".
+
+No need to respin, the two commits can be squashed when applying.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+> ---
+>  package/util-linux/util-linux.mk | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 73eda5c17134..4a40d5afec85 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -30,10 +30,6 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
+>  	Documentation/licenses/COPYING.LGPL-2.1-or-later
+>  
+>  UTIL_LINUX_CPE_ID_VENDOR = kernel
+> -
+> -# 0001-libmount-ifdef-statx-call.patch
+> -UTIL_LINUX_AUTORECONF = YES
+> -
+>  UTIL_LINUX_INSTALL_STAGING = YES
+>  UTIL_LINUX_DEPENDENCIES = \
+>  	host-pkgconf \
+> -- 
+> 2.40.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.40.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
