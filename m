@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81EBFC05052
-	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 10:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D58FCC05052
+	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 10:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A00E83F2F;
-	Fri, 18 Aug 2023 10:51:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A00E83F2F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 784C18405F;
+	Fri, 18 Aug 2023 10:53:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 784C18405F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s-5P7ECg89xq; Fri, 18 Aug 2023 10:51:45 +0000 (UTC)
+	with ESMTP id 94xtZq_As-Hh; Fri, 18 Aug 2023 10:53:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87A8083F23;
-	Fri, 18 Aug 2023 10:51:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87A8083F23
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 759A31BF364
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 10:51:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C343983F83;
+	Fri, 18 Aug 2023 10:53:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C343983F83
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8857A1BF364
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 10:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C489615B9
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 10:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C489615B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61D28811F6
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 10:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61D28811F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7kd65RgbN-Ga for <buildroot@lists.busybox.net>;
- Fri, 18 Aug 2023 10:51:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8RKBWDFSnHsU for <buildroot@lists.busybox.net>;
+ Fri, 18 Aug 2023 10:53:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A70A56159D
- for <buildroot@uclibc.org>; Fri, 18 Aug 2023 10:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A70A56159D
+ by smtp1.osuosl.org (Postfix) with ESMTP id F38F483F68
+ for <buildroot@uclibc.org>; Fri, 18 Aug 2023 10:53:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F38F483F68
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 9707285D66; Fri, 18 Aug 2023 10:51:42 +0000 (UTC)
+ id E33B785D66; Fri, 18 Aug 2023 10:53:17 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 18 Aug 2023 10:51:42 +0000
+Date: Fri, 18 Aug 2023 10:53:17 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -54,8 +54,8 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: 2023.08
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: target_milestone rep_platform
-Message-ID: <bug-15730-163-NEVnD57DKZ@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: cf_target cf_build cf_host
+Message-ID: <bug-15730-163-loT06GgYwK@https.bugs.busybox.net/>
 In-Reply-To: <bug-15730-163@https.bugs.busybox.net/>
 References: <bug-15730-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -85,8 +85,10 @@ trung.le@ruby-journal.com changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Target Milestone|---                         |2023.08
-           Hardware|All                         |Other
+             Target|                            |PPC64LE
+              Build|                            |Compile on the Fedora 39
+                   |                            |ppc64le
+               Host|                            |PPC64LE
 
 -- 
 You are receiving this mail because:
