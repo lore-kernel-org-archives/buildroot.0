@@ -4,88 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF63DEE498F
-	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 20:06:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CFECEE4992
+	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 20:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 96673841BC;
-	Fri, 18 Aug 2023 20:06:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96673841BC
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF33582B94;
+	Fri, 18 Aug 2023 20:24:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF33582B94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O4Y9NzLF4U3w; Fri, 18 Aug 2023 20:06:19 +0000 (UTC)
+	with ESMTP id qrEaNeE8i7cv; Fri, 18 Aug 2023 20:24:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7EB0841C5;
-	Fri, 18 Aug 2023 20:06:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7EB0841C5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2AA201BF31D
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 20:06:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF0058300C;
+	Fri, 18 Aug 2023 20:24:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF0058300C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 40C191BF31D
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 20:24:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 125CF405E0
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 20:06:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 125CF405E0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C1ED615F3
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 20:24:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C1ED615F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2p7bC218WC9L for <buildroot@lists.busybox.net>;
- Fri, 18 Aug 2023 20:05:59 +0000 (UTC)
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D7962400BF
- for <buildroot@buildroot.org>; Fri, 18 Aug 2023 20:05:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7962400BF
-Received: by mail-lf1-x12c.google.com with SMTP id
- 2adb3069b0e04-4ff88239785so1900818e87.0
- for <buildroot@buildroot.org>; Fri, 18 Aug 2023 13:05:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692389156; x=1692993956;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=8FLx8DACQo/BMgHD1fAizCtwLEgkTc5+G5OzSVOG1KU=;
- b=GPneMCnXReyc5K0LmxibvCcatOJrrLhspMfO5TiE133qG3htoJQGOnWKzXUvXJKO+y
- HBRHFLArKjAvgdRyR795/3RzwXwECS84dALd+W0MNyc6AL3gpV8Jstz1iNWGDfBpm1hk
- hRRRBnK5C/rmuZzI6pi7G7VPjCEUpdJ4U6ZYukidOD1WTyeQz0Tij8JTK9fUWkG969pH
- jUqNirH7+AkliNzYnYVCHJLJ58WI46ftOTx2WRKeoXFzEaU3RvYHPz4rCIvsS7MJVk0q
- DUEwR78tADvAzRdPNq8mQnH7BnbPMBF0k01jSyhw9vvSo7y3Ekwda1RazG1ghoadItbn
- A8jg==
-X-Gm-Message-State: AOJu0Yw5l/wxi+VITk64HRRKCcthflGRAApk7UoGJZmYh/xaRQyZBxIa
- iq6fubHc10PfNfJq2J8RAGyZ3vMhRCcETCpL
-X-Google-Smtp-Source: AGHT+IFppIjJGJGPEsfsPOx+Nt9Z21Fm9SmBGJGXZKs46R1Ub9oCLdUsqJX622hW3wleOTVu7OvI3g==
-X-Received: by 2002:a05:6512:108d:b0:4ff:9095:a817 with SMTP id
- j13-20020a056512108d00b004ff9095a817mr157552lfg.57.1692389156194; 
- Fri, 18 Aug 2023 13:05:56 -0700 (PDT)
-Received: from iamthediyvecomputer.. ([2a02:8440:5141:73:73d9:45c8:67dd:2f42])
- by smtp.gmail.com with ESMTPSA id
- k9-20020a056402048900b0052540e85390sm1411062edv.43.2023.08.18.13.05.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 18 Aug 2023 13:05:55 -0700 (PDT)
-From: Clement Ramirez <ramirez.clement3@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 18 Aug 2023 22:05:29 +0200
-Message-Id: <20230818200529.41913-3-ramirez.clement3@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230818200529.41913-1-ramirez.clement3@gmail.com>
-References: <20230818200529.41913-1-ramirez.clement3@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9r-QFVg8D50h for <buildroot@lists.busybox.net>;
+ Fri, 18 Aug 2023 20:24:41 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 561D7615F2
+ for <buildroot@buildroot.org>; Fri, 18 Aug 2023 20:24:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 561D7615F2
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:104e:727c:a742:4ed7])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 0DC56200385;
+ Fri, 18 Aug 2023 22:24:34 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 18 Aug 2023 22:24:34 +0200
+Date: Fri, 18 Aug 2023 22:24:34 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20230818202434.GA1134940@scaer>
+References: <20230818151608.988723-1-bernd@kuhls.net>
+ <20230818220314.3178c964@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692389156; x=1692993956;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=8FLx8DACQo/BMgHD1fAizCtwLEgkTc5+G5OzSVOG1KU=;
- b=Zrp0nNMhfXIIghlnhDPBMYkqPHCHcO6cLbfrjkYPnqEoSCAPUYk8hmyGsW5QPsje1x
- G/dTIzZz/jIwhejfic/RpxxFZJC9dm4Lf9zjytR3cZWxECSaIIStWAowefy/K69plgBF
- 7v+OgHxwhpuWrhS+12/BPrl9/TjrfhS46Y0jaPexqcGGiVZ9idSK6TP69zM1yPYv4OM+
- ba88HdyNw6u2ksl17/Y9M7BQY/ZRoSusvUdGODGgQ17Q8FZI9iiWPyO7zyQ/GZrS4PuY
- IMPPrPLEIvY/iQThJHFoYzlh0ZH4vJhgeogGUZTpOnpqOfmqPo4gu3fY8tGzVBErFEap
- aOGQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Zrp0nNMh
-Subject: [Buildroot] [PATCH 2/2] package/connman: security bump version to
- 1.42
+Content-Disposition: inline
+In-Reply-To: <20230818220314.3178c964@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1692390278;
+ bh=24IY+0tlYcS11PgTXfoCxUZUPk6ekmwiASnWX5z2xkU=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=jAy+/XqgwmSVpNfpNguWpJppwHxRpLgyBZv+XZ56V7o63ntIe4dVrKYDRsJfwnebi
+ c98GDw+uy8xrREsMmiOF5gQpwfF4OWxG06DhHrG5I5AzVfqJ5PxUHraShKyvbP/Dtd
+ sLaSZDWSov4shWtTv5qDBGu43hiZYYNtH0URCfP4YVCDez8SDp9tQe68n22r8hHyX5
+ yfXNEtOWs38dSPgfk4Nu6lIeIOox61fs0pOBQXnq1Mcxz747O5lp8UqxDI5z9JTxyI
+ DnxMsIVtY6Q4kkrYKFJ+596VyR3QbMJBrmW6v9aJnHC4H047mnXnrFs7dftw9xrab8
+ 4dfLyoQpXOE+A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jAy+/Xqg
+Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix typo in
+ make target .stamp_built
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,543 +77,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Clement Ramirez <ramirez.clement3@gmail.com>,
- Martin Bark <martin@barkynet.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The 1.42 version of connman comes with the following CVEs fixes :
- - CVE-2022-32292
- - CVE-2022-32293
- - CVE-2023-28488
+On 2023-08-18 22:03 +0200, Thomas Petazzoni via buildroot spake thusly:
+> On Fri, 18 Aug 2023 17:16:08 +0200
+> Bernd Kuhls <bernd@kuhls.net> wrote:
+> 
+> > This fix can be backported because the offending line was added in 2009.
 
-These CVEs have been fixed with several patches (links in [0])
-introduced by 2 commits (SHAs in [1]), but are now deprecated
-due to this version bump ('git tag --contains ...' shows that
-the commits listed in [0] are on the 1.42 tag).
+What is actualy broken?
 
-[0] https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d1a5ede5d255bde8ef707f8441b997563b9312bd
-    https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=72343929836de80727a27d6744c869dff045757c
-    https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=416bfaff988882c553c672e5bfc2d4f648d29e8a
-    https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138
+As you noticed, the does has been there for moer than 14 years now, so
+if something obvious was broken, we'd have notriced by now.
 
-[1] 2f2b4c80f4 package/connman: fix CVE-2022-3229{2,3}
-    f31635b7fe package/connman: fix CVE-2023-28488
+So, if this is broken, it is not obvious, and we need to udnerstand how
+it is broken and why the fix is correct.
 
-Signed-off-by: Clement Ramirez <ramirez.clement3@gmail.com>
----
- .checkpackageignore                           |   4 -
- ...-gweb-Fix-OOB-write-in-received_data.patch |  36 ----
- ...-reference-counter-to-portal-context.patch | 142 --------------
- ...spr-Update-portal-context-references.patch | 175 ------------------
- ...ify-and-sanitize-packet-length-first.patch |  62 -------
- package/connman/connman.hash                  |   2 +-
- package/connman/connman.mk                    |  12 +-
- 7 files changed, 2 insertions(+), 431 deletions(-)
- delete mode 100644 package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
- delete mode 100644 package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
- delete mode 100644 package/connman/0003-wispr-Update-portal-context-references.patch
- delete mode 100644 package/connman/0004-gdhcp-Verify-and-sanitize-packet-length-first.patch
+Regards,
+Yann E. MORIN.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 54525e5d90..e5c06b1e0a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -263,10 +263,6 @@ package/chrony/S49chrony Indent Shellcheck Variables
- package/cmake/0001-rename-cmake-rootfile.patch Upstream
- package/cmocka/0001-Don-t-redefine-uintptr_t.patch Upstream
- package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch Upstream
--package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch Upstream
--package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch Upstream
--package/connman/0003-wispr-Update-portal-context-references.patch Upstream
--package/connman/0004-gdhcp-Verify-and-sanitize-packet-length-first.patch Upstream
- package/connman/S45connman Variables
- package/copas/0001-Do-not-load-coxpcall-for-LuaJIT.patch Upstream
- package/coremark-pro/coremark-pro.sh.in Shellcheck
-diff --git a/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch b/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-deleted file mode 100644
-index d1a9d8f8fe..0000000000
---- a/package/connman/0001-gweb-Fix-OOB-write-in-received_data.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From d1a5ede5d255bde8ef707f8441b997563b9312bd Mon Sep 17 00:00:00 2001
--From: Nathan Crandall <ncrandall@tesla.com>
--Date: Tue, 12 Jul 2022 08:56:34 +0200
--Subject: gweb: Fix OOB write in received_data()
--
--There is a mismatch of handling binary vs. C-string data with memchr
--and strlen, resulting in pos, count, and bytes_read to become out of
--sync and result in a heap overflow.  Instead, do not treat the buffer
--as an ASCII C-string. We calculate the count based on the return value
--of memchr, instead of strlen.
--
--Fixes: CVE-2022-32292
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d1a5ede5d255bde8ef707f8441b997563b9312bd]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- gweb/gweb.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/gweb/gweb.c b/gweb/gweb.c
--index 12fcb1d8..13c6c5f2 100644
----- a/gweb/gweb.c
--+++ b/gweb/gweb.c
--@@ -918,7 +918,7 @@ static gboolean received_data(GIOChannel *channel, GIOCondition cond,
-- 		}
-- 
-- 		*pos = '\0';
---		count = strlen((char *) ptr);
--+		count = pos - ptr;
-- 		if (count > 0 && ptr[count - 1] == '\r') {
-- 			ptr[--count] = '\0';
-- 			bytes_read--;
---- 
--cgit 
--
-diff --git a/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch b/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-deleted file mode 100644
-index c2cebdfdcc..0000000000
---- a/package/connman/0002-wispr-Add-reference-counter-to-portal-context.patch
-+++ /dev/null
-@@ -1,142 +0,0 @@
--From 72343929836de80727a27d6744c869dff045757c Mon Sep 17 00:00:00 2001
--From: Daniel Wagner <wagi@monom.org>
--Date: Tue, 5 Jul 2022 08:32:12 +0200
--Subject: wispr: Add reference counter to portal context
--
--Track the connman_wispr_portal_context live time via a
--refcounter. This only adds the infrastructure to do proper reference
--counting.
--
--Fixes: CVE-2022-32293
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=72343929836de80727a27d6744c869dff045757c]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/wispr.c | 52 ++++++++++++++++++++++++++++++++++++++++++----------
-- 1 file changed, 42 insertions(+), 10 deletions(-)
--
--diff --git a/src/wispr.c b/src/wispr.c
--index a07896ca..bde7e63b 100644
----- a/src/wispr.c
--+++ b/src/wispr.c
--@@ -56,6 +56,7 @@ struct wispr_route {
-- };
-- 
-- struct connman_wispr_portal_context {
--+	int refcount;
-- 	struct connman_service *service;
-- 	enum connman_ipconfig_type type;
-- 	struct connman_wispr_portal *wispr_portal;
--@@ -97,6 +98,11 @@ static char *online_check_ipv4_url = NULL;
-- static char *online_check_ipv6_url = NULL;
-- static bool enable_online_to_ready_transition = false;
-- 
--+#define wispr_portal_context_ref(wp_context) \
--+	wispr_portal_context_ref_debug(wp_context, __FILE__, __LINE__, __func__)
--+#define wispr_portal_context_unref(wp_context) \
--+	wispr_portal_context_unref_debug(wp_context, __FILE__, __LINE__, __func__)
--+
-- static void connman_wispr_message_init(struct connman_wispr_message *msg)
-- {
-- 	DBG("");
--@@ -162,9 +168,6 @@ static void free_connman_wispr_portal_context(
-- {
-- 	DBG("context %p", wp_context);
-- 
---	if (!wp_context)
---		return;
---
-- 	if (wp_context->wispr_portal) {
-- 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-- 			wp_context->wispr_portal->ipv4_context = NULL;
--@@ -201,9 +204,38 @@ static void free_connman_wispr_portal_context(
-- 	g_free(wp_context);
-- }
-- 
--+static struct connman_wispr_portal_context *
--+wispr_portal_context_ref_debug(struct connman_wispr_portal_context *wp_context,
--+			const char *file, int line, const char *caller)
--+{
--+	DBG("%p ref %d by %s:%d:%s()", wp_context,
--+		wp_context->refcount + 1, file, line, caller);
--+
--+	__sync_fetch_and_add(&wp_context->refcount, 1);
--+
--+	return wp_context;
--+}
--+
--+static void wispr_portal_context_unref_debug(
--+		struct connman_wispr_portal_context *wp_context,
--+		const char *file, int line, const char *caller)
--+{
--+	if (!wp_context)
--+		return;
--+
--+	DBG("%p ref %d by %s:%d:%s()", wp_context,
--+		wp_context->refcount - 1, file, line, caller);
--+
--+	if (__sync_fetch_and_sub(&wp_context->refcount, 1) != 1)
--+		return;
--+
--+	free_connman_wispr_portal_context(wp_context);
--+}
--+
-- static struct connman_wispr_portal_context *create_wispr_portal_context(void)
-- {
---	return g_try_new0(struct connman_wispr_portal_context, 1);
--+	return wispr_portal_context_ref(
--+		g_new0(struct connman_wispr_portal_context, 1));
-- }
-- 
-- static void free_connman_wispr_portal(gpointer data)
--@@ -215,8 +247,8 @@ static void free_connman_wispr_portal(gpointer data)
-- 	if (!wispr_portal)
-- 		return;
-- 
---	free_connman_wispr_portal_context(wispr_portal->ipv4_context);
---	free_connman_wispr_portal_context(wispr_portal->ipv6_context);
--+	wispr_portal_context_unref(wispr_portal->ipv4_context);
--+	wispr_portal_context_unref(wispr_portal->ipv6_context);
-- 
-- 	g_free(wispr_portal);
-- }
--@@ -452,7 +484,7 @@ static void portal_manage_status(GWebResult *result,
-- 		connman_info("Client-Timezone: %s", str);
-- 
-- 	if (!enable_online_to_ready_transition)
---		free_connman_wispr_portal_context(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 
-- 	__connman_service_ipconfig_indicate_state(service,
-- 					CONNMAN_SERVICE_STATE_ONLINE, type);
--@@ -616,7 +648,7 @@ static void wispr_portal_request_wispr_login(struct connman_service *service,
-- 				return;
-- 		}
-- 
---		free_connman_wispr_portal_context(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 		return;
-- 	}
-- 
--@@ -952,7 +984,7 @@ static int wispr_portal_detect(struct connman_wispr_portal_context *wp_context)
-- 
-- 		if (wp_context->token == 0) {
-- 			err = -EINVAL;
---			free_connman_wispr_portal_context(wp_context);
--+			wispr_portal_context_unref(wp_context);
-- 		}
-- 	} else if (wp_context->timeout == 0) {
-- 		wp_context->timeout = g_idle_add(no_proxy_callback, wp_context);
--@@ -1001,7 +1033,7 @@ int __connman_wispr_start(struct connman_service *service,
-- 
-- 	/* If there is already an existing context, we wipe it */
-- 	if (wp_context)
---		free_connman_wispr_portal_context(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 
-- 	wp_context = create_wispr_portal_context();
-- 	if (!wp_context)
---- 
--cgit 
--
-diff --git a/package/connman/0003-wispr-Update-portal-context-references.patch b/package/connman/0003-wispr-Update-portal-context-references.patch
-deleted file mode 100644
-index 61c4e21f94..0000000000
---- a/package/connman/0003-wispr-Update-portal-context-references.patch
-+++ /dev/null
-@@ -1,175 +0,0 @@
--From 416bfaff988882c553c672e5bfc2d4f648d29e8a Mon Sep 17 00:00:00 2001
--From: Daniel Wagner <wagi@monom.org>
--Date: Tue, 5 Jul 2022 09:11:09 +0200
--Subject: wispr: Update portal context references
--
--Maintain proper portal context references to avoid UAF.
--
--Fixes: CVE-2022-32293
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=416bfaff988882c553c672e5bfc2d4f648d29e8a]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/wispr.c | 34 ++++++++++++++++++++++------------
-- 1 file changed, 22 insertions(+), 12 deletions(-)
--
--diff --git a/src/wispr.c b/src/wispr.c
--index bde7e63b..84bed33f 100644
----- a/src/wispr.c
--+++ b/src/wispr.c
--@@ -105,8 +105,6 @@ static bool enable_online_to_ready_transition = false;
-- 
-- static void connman_wispr_message_init(struct connman_wispr_message *msg)
-- {
---	DBG("");
---
-- 	msg->has_error = false;
-- 	msg->current_element = NULL;
-- 
--@@ -166,8 +164,6 @@ static void free_wispr_routes(struct connman_wispr_portal_context *wp_context)
-- static void free_connman_wispr_portal_context(
-- 		struct connman_wispr_portal_context *wp_context)
-- {
---	DBG("context %p", wp_context);
---
-- 	if (wp_context->wispr_portal) {
-- 		if (wp_context->wispr_portal->ipv4_context == wp_context)
-- 			wp_context->wispr_portal->ipv4_context = NULL;
--@@ -483,9 +479,6 @@ static void portal_manage_status(GWebResult *result,
-- 				&str))
-- 		connman_info("Client-Timezone: %s", str);
-- 
---	if (!enable_online_to_ready_transition)
---		wispr_portal_context_unref(wp_context);
---
-- 	__connman_service_ipconfig_indicate_state(service,
-- 					CONNMAN_SERVICE_STATE_ONLINE, type);
-- 
--@@ -546,14 +539,17 @@ static void wispr_portal_request_portal(
-- {
-- 	DBG("");
-- 
--+	wispr_portal_context_ref(wp_context);
-- 	wp_context->request_id = g_web_request_get(wp_context->web,
-- 					wp_context->status_url,
-- 					wispr_portal_web_result,
-- 					wispr_route_request,
-- 					wp_context);
-- 
---	if (wp_context->request_id == 0)
--+	if (wp_context->request_id == 0) {
-- 		wispr_portal_error(wp_context);
--+		wispr_portal_context_unref(wp_context);
--+	}
-- }
-- 
-- static bool wispr_input(const guint8 **data, gsize *length,
--@@ -618,13 +614,15 @@ static void wispr_portal_browser_reply_cb(struct connman_service *service,
-- 		return;
-- 
-- 	if (!authentication_done) {
---		wispr_portal_error(wp_context);
-- 		free_wispr_routes(wp_context);
--+		wispr_portal_error(wp_context);
--+		wispr_portal_context_unref(wp_context);
-- 		return;
-- 	}
-- 
-- 	/* Restarting the test */
-- 	__connman_service_wispr_start(service, wp_context->type);
--+	wispr_portal_context_unref(wp_context);
-- }
-- 
-- static void wispr_portal_request_wispr_login(struct connman_service *service,
--@@ -700,11 +698,13 @@ static bool wispr_manage_message(GWebResult *result,
-- 
-- 		wp_context->wispr_result = CONNMAN_WISPR_RESULT_LOGIN;
-- 
--+		wispr_portal_context_ref(wp_context);
-- 		if (__connman_agent_request_login_input(wp_context->service,
-- 					wispr_portal_request_wispr_login,
---					wp_context) != -EINPROGRESS)
--+					wp_context) != -EINPROGRESS) {
-- 			wispr_portal_error(wp_context);
---		else
--+			wispr_portal_context_unref(wp_context);
--+		} else
-- 			return true;
-- 
-- 		break;
--@@ -753,6 +753,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 		if (length > 0) {
-- 			g_web_parser_feed_data(wp_context->wispr_parser,
-- 								chunk, length);
--+			wispr_portal_context_unref(wp_context);
-- 			return true;
-- 		}
-- 
--@@ -770,6 +771,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 
-- 	switch (status) {
-- 	case 000:
--+		wispr_portal_context_ref(wp_context);
-- 		__connman_agent_request_browser(wp_context->service,
-- 				wispr_portal_browser_reply_cb,
-- 				wp_context->status_url, wp_context);
--@@ -781,11 +783,14 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 		if (g_web_result_get_header(result, "X-ConnMan-Status",
-- 						&str)) {
-- 			portal_manage_status(result, wp_context);
--+			wispr_portal_context_unref(wp_context);
-- 			return false;
---		} else
--+		} else {
--+			wispr_portal_context_ref(wp_context);
-- 			__connman_agent_request_browser(wp_context->service,
-- 					wispr_portal_browser_reply_cb,
-- 					wp_context->redirect_url, wp_context);
--+		}
-- 
-- 		break;
-- 	case 300:
--@@ -798,6 +803,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 			!g_web_result_get_header(result, "Location",
-- 							&redirect)) {
-- 
--+			wispr_portal_context_ref(wp_context);
-- 			__connman_agent_request_browser(wp_context->service,
-- 					wispr_portal_browser_reply_cb,
-- 					wp_context->status_url, wp_context);
--@@ -808,6 +814,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 
-- 		wp_context->redirect_url = g_strdup(redirect);
-- 
--+		wispr_portal_context_ref(wp_context);
-- 		wp_context->request_id = g_web_request_get(wp_context->web,
-- 				redirect, wispr_portal_web_result,
-- 				wispr_route_request, wp_context);
--@@ -820,6 +827,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 
-- 		break;
-- 	case 505:
--+		wispr_portal_context_ref(wp_context);
-- 		__connman_agent_request_browser(wp_context->service,
-- 				wispr_portal_browser_reply_cb,
-- 				wp_context->status_url, wp_context);
--@@ -832,6 +840,7 @@ static bool wispr_portal_web_result(GWebResult *result, gpointer user_data)
-- 	wp_context->request_id = 0;
-- done:
-- 	wp_context->wispr_msg.message_type = -1;
--+	wispr_portal_context_unref(wp_context);
-- 	return false;
-- }
-- 
--@@ -890,6 +899,7 @@ static void proxy_callback(const char *proxy, void *user_data)
-- 					xml_wispr_parser_callback, wp_context);
-- 
-- 	wispr_portal_request_portal(wp_context);
--+	wispr_portal_context_unref(wp_context);
-- }
-- 
-- static gboolean no_proxy_callback(gpointer user_data)
---- 
--cgit 
--
-diff --git a/package/connman/0004-gdhcp-Verify-and-sanitize-packet-length-first.patch b/package/connman/0004-gdhcp-Verify-and-sanitize-packet-length-first.patch
-deleted file mode 100644
-index d5d81f17bf..0000000000
---- a/package/connman/0004-gdhcp-Verify-and-sanitize-packet-length-first.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 996d39df6f6c0f9d1e9968af8024bb0cde31d1e8 Mon Sep 17 00:00:00 2001
--From: Daniel Wagner <wagi@monom.org>
--Date: Tue, 11 Apr 2023 08:12:56 +0200
--Subject: gdhcp: Verify and sanitize packet length first
--
--Avoid overwriting the read packet length after the initial test. Thus
--move all the length checks which depends on the total length first
--and do not use the total lenght from the IP packet afterwards.
--
--Fixes CVE-2023-28488
--
--Reported by Polina Smirnova <moe.hwr@gmail.com>
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138]
--Signed-off-by: Clement Ramirez <ramirez.clement3@gmail.com>
-----
-- gdhcp/client.c | 16 +++++++++-------
-- 1 file changed, 9 insertions(+), 7 deletions(-)
--
--diff --git a/gdhcp/client.c b/gdhcp/client.c
--index 3016dfc2..28fa6066 100644
----- a/gdhcp/client.c
--+++ b/gdhcp/client.c
--@@ -1319,9 +1319,9 @@ static bool sanity_check(struct ip_udp_dhcp_packet *packet, int bytes)
-- static int dhcp_recv_l2_packet(struct dhcp_packet *dhcp_pkt, int fd,
-- 				struct sockaddr_in *dst_addr)
-- {
---	int bytes;
-- 	struct ip_udp_dhcp_packet packet;
-- 	uint16_t check;
--+	int bytes, tot_len;
-- 
-- 	memset(&packet, 0, sizeof(packet));
-- 
--@@ -1329,15 +1329,17 @@ static int dhcp_recv_l2_packet(struct dhcp_packet *dhcp_pkt, int fd,
-- 	if (bytes < 0)
-- 		return -1;
-- 
---	if (bytes < (int) (sizeof(packet.ip) + sizeof(packet.udp)))
---		return -1;
---
---	if (bytes < ntohs(packet.ip.tot_len))
--+	tot_len = ntohs(packet.ip.tot_len);
--+	if (bytes > tot_len) {
--+		/* ignore any extra garbage bytes */
--+		bytes = tot_len;
--+	} else if (bytes < tot_len) {
-- 		/* packet is bigger than sizeof(packet), we did partial read */
-- 		return -1;
--+	}
-- 
---	/* ignore any extra garbage bytes */
---	bytes = ntohs(packet.ip.tot_len);
--+	if (bytes < (int) (sizeof(packet.ip) + sizeof(packet.udp)))
--+		return -1;
-- 
-- 	if (!sanity_check(&packet, bytes))
-- 		return -1;
---- 
--2.34.1
--
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index 6fc5edf29a..ea87f1ea17 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256  79fb40f4fdd5530c45aa8e592fb16ba23d3674f3a98cf10b89a6576f198de589  connman-1.41.tar.xz
-+sha256  a3e6bae46fc081ef2e9dae3caa4f7649de892c3de622c20283ac0ca81423c2aa  connman-1.42.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 40ce99fa40..142a6583ad 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.41
-+CONNMAN_VERSION = 1.42
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus
-@@ -13,16 +13,6 @@ CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CPE_ID_VENDOR = intel
- 
--# 0001-gweb-Fix-OOB-write-in-received_data.patch
--CONNMAN_IGNORE_CVES += CVE-2022-32292
--
--# 0002-wispr-Add-reference-counter-to-portal-context.patch
--# 0003-wispr-Update-portal-context-references.patch
--CONNMAN_IGNORE_CVES += CVE-2022-32293
--
--# 0004-gdhcp-Verify-and-sanitize-packet-length-first.patch
--CONNMAN_IGNORE_CVES += CVE-2023-28488
--
- CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
- 
- ifeq ($(BR2_INIT_SYSTEMD),y)
+> > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> > ---
+> >  package/pkg-generic.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 5d1c1da128..9d40754939 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -286,7 +286,7 @@ $(BUILD_DIR)/%/.stamp_configured:
+> >  	$(Q)touch $@
+> >  
+> >  # Build
+> > -$(BUILD_DIR)/%/.stamp_built::
+> > +$(BUILD_DIR)/%/.stamp_built:
+> 
+> Note that double colon rules have a specific meaning in make:
+> 
+>   https://www.gnu.org/software/make/manual/html_node/Double_002dColon.html
+> 
+> I've read a few times the page, but I'm not sure I fully grasp what it
+> says, so I don't know if the double colon was intended (and needed at
+> the time) or was a typo.
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
