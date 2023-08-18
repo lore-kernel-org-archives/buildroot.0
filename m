@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B8E3EC8739
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B76EC8738
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3553C817BD;
-	Thu,  7 Sep 2023 15:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3553C817BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBAB5833C7;
+	Thu,  7 Sep 2023 15:24:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBAB5833C7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9jwfGPNHG8J1; Thu,  7 Sep 2023 15:24:02 +0000 (UTC)
+	with ESMTP id IA_DaYoDPXle; Thu,  7 Sep 2023 15:24:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F2CE813BE;
-	Thu,  7 Sep 2023 15:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F2CE813BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62D4580F07;
+	Thu,  7 Sep 2023 15:24:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62D4580F07
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 09ED51BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 12D341BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3C2541E61
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEE1641E66
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3C2541E61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEE1641E66
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lUm6ymZHTAYN for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+ with ESMTP id RPIi-HOxeg-A for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 634C641DCA
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0D8D41C01
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 634C641DCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0D8D41C01
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6012486A21; Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
+ id B795F86A21; Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Aug 2023 22:17:14 +0200
+Date: Fri, 18 Aug 2023 23:50:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b86adfb89a8bd8765f1b0400e0f0b4285aea8f77
-X-Git-Newrev: 4a713568321c1802eba641c6373c0ad79d39c5d0
+X-Git-Oldrev: cbd91e89e43d600172c62fd1cbd33aa74d0a851a
+X-Git-Newrev: 5e012a07041a4d9000da0a007dd4132f9a85e75a
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145129.6012486A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/arm-trusted-firmware: introduce a
- choice to select the BL33 image
+Message-Id: <20230907145129.B795F86A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/microchip_mpfs_icicle_defconfig:
+ update instruction sets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,128 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a713568321c1802eba641c6373c0ad79d39c5d0
+commit: https://git.buildroot.net/buildroot/commit/?id=5e012a07041a4d9000da0a007dd4132f9a85e75a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We now have 3 different options to select an image as the BL33 stage
-of TF-A: Barebox, U-Boot or EDK2. Technically speaking, they are
-mutually exclusive: they all specify a BL33= variable to the TF-A
-build, and TF-A can only support a single BL33 stage.
+Update the instruction sets for MPFS icicle kit to mirror the
+configuration update, i.e. It is now classed as a RISC-V G core with
+support for C, IMAFDC.
 
-However, as pointed out by Vincent Fazio in [0] there is nothing that
-prevents selecting Barebox, U-Boot and EDK2 together, even though it
-doesn't make sense.
-
-To address this, this commit introduces a choice...endchoice block,
-into which the Barebox, U-Boot and EDK2 options are moved. An
-additional "none" option is added, which is the default, and
-corresponds to not having any BL33 image.
-
-Since we keep the same name for the options, no legacy handling is
-necessary.
-
-[0] https://lore.kernel.org/buildroot/PH1P110MB1603A4AA1638838DA56BAA069FDA9@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM/
-
-Reported-by: Vincent Fazio <vfazio@xes-inc.com>
-Cc: Vincent Fazio <vfazio@xes-inc.com>
-Cc: Casey Reeves <casey@xogium.me>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/arm-trusted-firmware/Config.in | 57 ++++++++++++++++++++++---------------
- 1 file changed, 34 insertions(+), 23 deletions(-)
+ configs/microchip_mpfs_icicle_defconfig | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index cb54c6c9d8..a5ac987172 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -129,8 +129,17 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
- 
- endchoice
- 
-+choice
-+	prompt "BL33"
-+	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_NONE_AS_BL33
-+	help
-+	  Select the image to include as BL33.
-+
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NONE_AS_BL33
-+	bool "None"
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
--	bool "Use Barebox as BL33"
-+	bool "Barebox"
- 	depends on BR2_TARGET_BAREBOX
- 	help
- 	  This option allows to embed the Barebox generic BL33 image in
-@@ -139,6 +148,30 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
- 	  variable pointing to the generic bl33 image is passed
- 	  when building ATF.
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
-+	bool "U-Boot"
-+	depends on BR2_TARGET_UBOOT
-+	help
-+	  This option allows to embed u-boot.bin as the BL33 part of
-+	  the ARM Trusted Firmware. It ensures that the u-boot package
-+	  gets built before ATF, and that the appropriate BL33
-+	  variable pointing to u-boot.bin is passed when building ATF.
-+
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
-+	bool "EDK2"
-+	depends on BR2_TARGET_EDK2
-+	help
-+	  This option allows to embed EDK2 as the BL33 part of
-+	  the ARM Trusted Firmware. It ensures that the EDK2 package
-+	  gets built before ATF, and that the appropriate BL33
-+	  variable pointing to the EDK2 is passed when building ATF.
-+
-+	  Do not choose this option if you intend to build ATF and EDK2
-+	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
-+	  build system, the dependency between ATF and EDK is reversed.
-+
-+endchoice
-+
- if BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
-@@ -150,15 +183,6 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_BL33_IMAGE
- 
- endif
- 
--config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
--	bool "Use U-Boot as BL33"
--	depends on BR2_TARGET_UBOOT
--	help
--	  This option allows to embed u-boot.bin as the BL33 part of
--	  the ARM Trusted Firmware. It ensures that the u-boot package
--	  gets built before ATF, and that the appropriate BL33
--	  variable pointing to u-boot.bin is passed when building ATF.
--
- if BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
-@@ -170,19 +194,6 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE
- 
- endif
- 
--config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
--	bool "Use EDK2 as BL33"
--	depends on BR2_TARGET_EDK2
--	help
--	  This option allows to embed EDK2 as the BL33 part of
--	  the ARM Trusted Firmware. It ensures that the EDK2 package
--	  gets built before ATF, and that the appropriate BL33
--	  variable pointing to the EDK2 is passed when building ATF.
--
--	  Do not choose this option if you intend to build ATF and EDK2
--	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
--	  build system, the dependency between ATF and EDK is reversed.
--
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW
- 	bool "Include NXP RCW in BL2"
- 	depends on BR2_PACKAGE_HOST_QORIQ_RCW
+diff --git a/configs/microchip_mpfs_icicle_defconfig b/configs/microchip_mpfs_icicle_defconfig
+index 3fec246938..a3b3093982 100644
+--- a/configs/microchip_mpfs_icicle_defconfig
++++ b/configs/microchip_mpfs_icicle_defconfig
+@@ -1,9 +1,6 @@
+ BR2_riscv=y
+-BR2_riscv_custom=y
+-BR2_RISCV_ISA_RVM=y
+-BR2_RISCV_ISA_RVF=y
+-BR2_RISCV_ISA_RVD=y
+-BR2_RISCV_ISA_RVC=y
++BR2_riscv_g=y
++BR2_RISCV_ISA_CUSTOM_RVC=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_GENERIC_HOSTNAME="mpfs_icicle"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/microchip/mpfs_icicle/post-image.sh"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
