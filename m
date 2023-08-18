@@ -4,81 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3674EEE4980
-	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 17:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5425FEE498D
+	for <buildroot@archiver.kernel.org>; Fri, 18 Aug 2023 18:29:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE871840A4;
-	Fri, 18 Aug 2023 17:31:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE871840A4
+	by smtp1.osuosl.org (Postfix) with ESMTP id D417381A3E;
+	Fri, 18 Aug 2023 18:29:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D417381A3E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id izRIqSRoGdaW; Fri, 18 Aug 2023 17:31:12 +0000 (UTC)
+	with ESMTP id 1uG6jk8e9sse; Fri, 18 Aug 2023 18:29:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF3B4840A9;
-	Fri, 18 Aug 2023 17:31:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF3B4840A9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ECB361BF290
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 17:31:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9C0981A8E;
+	Fri, 18 Aug 2023 18:29:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9C0981A8E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EE8BF1BF355
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 18:29:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C81C540562
- for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 17:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C81C540562
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8DBD81A65
+ for <buildroot@lists.busybox.net>; Fri, 18 Aug 2023 18:29:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8DBD81A65
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id doTKl_QcY2CH for <buildroot@lists.busybox.net>;
- Fri, 18 Aug 2023 17:31:08 +0000 (UTC)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com
- [209.85.167.51])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76E4B4044B
- for <buildroot@buildroot.org>; Fri, 18 Aug 2023 17:31:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76E4B4044B
-Received: by mail-lf1-f51.google.com with SMTP id
- 2adb3069b0e04-4ff88239785so1695484e87.0
- for <buildroot@buildroot.org>; Fri, 18 Aug 2023 10:31:08 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YQ6zO6gKgPBn for <buildroot@lists.busybox.net>;
+ Fri, 18 Aug 2023 18:29:23 +0000 (UTC)
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C342581A3E
+ for <buildroot@busybox.net>; Fri, 18 Aug 2023 18:29:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C342581A3E
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-2b9cd6a554cso17490421fa.3
+ for <buildroot@busybox.net>; Fri, 18 Aug 2023 11:29:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692379866; x=1692984666;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20221208; t=1692383361; x=1692988161;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=XJzg9eaNSpA8bu+93j0nwReY6gd2tNgL1nLnozUeeuc=;
- b=YPueKHEwmoj9xeCq8vl+KCHwJY8UvuUFdBKz1Lo69doVxXbNkU3+xagP43IWtpcBS5
- PgB21pmDxnsXPCMRIZyOA4gs3KD66EXtn0AETD6Fmxmz+L94FYznwognZ3i/j3ZmO+WG
- MlfxUzjMi4wQZY2kQ8tZ3QCQWlc4geugUOP1+aJiGsYRA971OPjtkAsIusuiDccvoiGw
- yH5+eRSyS73ppIdE+I4MRBKU9s58IFWwpfU61KUYKq1aNKsV5SWKQaOXcc7p2jLB8CpD
- V8En9HF9oWrRw37C4YuD5GIsBctc9dQqZWj4na53vtbzkM+RMc3xGt5ugCtaWiQrF1CD
- 668w==
-X-Gm-Message-State: AOJu0YxSFcLQGpmwwOFeFEyH4bpFKGA1hv9t8ZtLh9DZeSGk2xw5sfSn
- NQTt0fzOjIu0GCK/vwhMfX7p9ynep2OG9A==
-X-Google-Smtp-Source: AGHT+IH+r5uvbimJajh9kXg0UOmTtT9BX5DgLzGTCxO6xzhnYLgkXMOZUAX8zbtpqxYmQxX9JO9QrA==
-X-Received: by 2002:a05:6512:3d0f:b0:4ff:793f:fbf8 with SMTP id
- d15-20020a0565123d0f00b004ff793ffbf8mr2669283lfv.51.1692379865555; 
- Fri, 18 Aug 2023 10:31:05 -0700 (PDT)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com.
- [209.85.208.182]) by smtp.gmail.com with ESMTPSA id
- s12-20020ac25fac000000b004f9c44b3e6dsm419796lfe.127.2023.08.18.10.31.04
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 18 Aug 2023 10:31:04 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id
- 38308e7fff4ca-2b9cdba1228so18488781fa.2
- for <buildroot@buildroot.org>; Fri, 18 Aug 2023 10:31:04 -0700 (PDT)
-X-Received: by 2002:a2e:87c8:0:b0:2b9:eaa7:c23f with SMTP id
- v8-20020a2e87c8000000b002b9eaa7c23fmr2231843ljj.49.1692379864611; Fri, 18 Aug
- 2023 10:31:04 -0700 (PDT)
+ bh=zTT+IvIHtYSWJGFa8WPjuNap5VyJb8T4p6a7SZqkCus=;
+ b=g5UZJZ3n5JwEQGPuu7z2ENsUAXzUm0KYEd97vIdogt2waqRNbsidP48LzUnCt2gkyw
+ m6rGw4ixGbxtIB6y/dsZfRbrkAyguO3wJNFHX/Hqi68YOPGsv3bdAsGT9AbcpYIgOwGY
+ Qtwqj0adpJRDOfEyoMm0/nXtpCEFjwdegHB3WWuT7EsHw5hdzTqCyCQ0bIX5b2jcrnci
+ jnJNShz2baWPcVlJiEkeyd4rn6Ah/eZIJZh28Uwp9xz5A/QbWeL9wZQGG/L7SyLe4aJm
+ 5cwyijLFsQpAJ6Vb2OAodWS5fCWBfb4+kz3IBN3Gl+JmwMrwrBOg03yztd9is6egBk/y
+ 22pQ==
+X-Gm-Message-State: AOJu0Yz0NcAzJyZw8mZX1OEyERXcoKTPS49n73hoqh5U2KWpRD+7anP8
+ PTiILK2ux5aRIw8K6MDiSuq69xEdy6o=
+X-Google-Smtp-Source: AGHT+IHgLXm3ivTKgL7lCtSHyNc0O1F1Zdd/Apk9ejSB35Q9O7g+D2V5sViA+StJm7f3tsAoY/aXCw==
+X-Received: by 2002:a2e:904d:0:b0:2b6:e2c2:d234 with SMTP id
+ n13-20020a2e904d000000b002b6e2c2d234mr8345ljg.33.1692383360351; 
+ Fri, 18 Aug 2023 11:29:20 -0700 (PDT)
+Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ r23-20020a170906351700b0098951bb4dc3sm1486867eja.184.2023.08.18.11.29.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 18 Aug 2023 11:29:19 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Fri, 18 Aug 2023 20:29:15 +0200
+Message-Id: <20230818182915.489874-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230622160212.2063472-1-dannenberg@ti.com>
- <20230622160212.2063472-10-dannenberg@ti.com>
- <20230625085950.GJ24952@scaer>
-In-Reply-To: <20230625085950.GJ24952@scaer>
-From: Bryce Johnson <bryce@redpinelabs.com>
-Date: Fri, 18 Aug 2023 11:30:52 -0600
-X-Gmail-Original-Message-ID: <CADXxVSKrBZay47f1s4_Tjmm6F1ULcsjZXU6Ge3Du7sgXfkBzjg@mail.gmail.com>
-Message-ID: <CADXxVSKrBZay47f1s4_Tjmm6F1ULcsjZXU6Ge3Du7sgXfkBzjg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Subject: Re: [Buildroot] [PATCH v9 09/11] package/ti-rogue-km: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1692383361; x=1692988161;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=zTT+IvIHtYSWJGFa8WPjuNap5VyJb8T4p6a7SZqkCus=;
+ b=hagNg95zA4g4x9SsRFV/woMXXxgpxZpTG42JomUKhLRlk2nKf7USVY4eFxE1EgELeV
+ JRlNUgGOd9etuvv22QFW5zmR+imErheGcBI5FZs1QelFSqD68vmrJaYPbKTPsgmCbGIC
+ a51Q76NN4X+LToctd9duZnU+vN1bOImNyeu+axnBXa3stHgm7ZO6MlJYmI9qDBjbShXC
+ 4mkx3/Ok0ZGAhROaKP2t4FdyKICglddaoETDV0X8yXt79oN6zogoftMx3s8QXSR1DDJa
+ NBYnZ4UgHGBm8S756K1fWsLhnbjUz5dcjALACHtpa/isQZnVcqO3U9ViyRrg3kBBWiDF
+ 8Crw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=hagNg95z
+Subject: [Buildroot] [PATCH] package/lua-rotas: bump to version 0.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,111 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, Andreas Dannenberg <dannenberg@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Andreas,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lua-rotas/lua-rotas.hash | 4 ++--
+ package/lua-rotas/lua-rotas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> On 2023-06-22 11:02 -0500, Andreas Dannenberg via buildroot spake thusly:
-> > This package adds the kernel module for the Rogue graphics
-> > accelerator of the following Texas Instuments SoCs: AM62,
-> > J721E, J721S2, and J784S4.
-> >
+diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
+index 6b33d94a8..eccff4426 100644
+--- a/package/lua-rotas/lua-rotas.hash
++++ b/package/lua-rotas/lua-rotas.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256  c1570d38552816c7b4a4881e491049a22214ddaa609f65d9edc8013b416cecf7  lua-rotas-0.3.0-1.src.rock
+-sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.3.0/COPYRIGHT
++sha256  90ed9305b68f49f2293a3a547b7ec7c290be5bcc1afbae87e2e860eb3b04f18b  lua-rotas-0.3.1-1.src.rock
++sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.3.1/COPYRIGHT
+diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
+index 79e1e4229..1f99dbaf0 100644
+--- a/package/lua-rotas/lua-rotas.mk
++++ b/package/lua-rotas/lua-rotas.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_ROTAS_VERSION = 0.3.0-1
++LUA_ROTAS_VERSION = 0.3.1-1
+ LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
+ LUA_ROTAS_LICENSE = MIT
+ LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
+-- 
+2.39.2
 
-
-I was attempting to build this with uclibc and I got this error:
-
-ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2-br1.tar.gz: OK
-(sha256: ef50124b3e79fb1d28d3a2b4135032505abbb5c6b337b24a9bed7223d521dcc1)
->>> ti-rogue-km 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2 Extracting
-gzip -d -c /home/johnsonb/dl/ti-rogue-km/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2-br1.tar.gz
-| tar --strip-components=1 -C
-/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2
-  -xf -
->>> ti-rogue-km 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2 Patching
->>> ti-rogue-km 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2 Configuring
->>> ti-rogue-km 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2 Building
-PATH="/home/johnsonb/buildroot1/output/host/bin:/home/johnsonb/buildroot1/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/wsl/lib:/snap/bin:/home/johnsonb/bin"
-/usr/bin/make -j21 -C
-/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2
-HOSTCC="/usr/bin/gcc -O2 -isystem
-/home/johnsonb/buildroot1/output/host/include
--L/home/johnsonb/buildroot1/output/host/lib
--Wl,-rpath,/home/johnsonb/buildroot1/output/host/lib" ARCH=arm64
-INSTALL_MOD_PATH=/home/johnsonb/buildroot1/output/target
-CROSS_COMPILE="/home/johnsonb/buildroot1/output/host/bin/aarch64-buildroot-linux-uclibc-"
-WERROR=0 REGENERATE_PARSERS=1
-DEPMOD=/home/johnsonb/buildroot1/output/host/sbin/depmod
-INSTALL_MOD_STRIP=1
-KERNELDIR=/home/johnsonb/buildroot1/output/build/linux-custom
-BUILD="release" PVR_BUILD_DIR="am62_linux" WINDOW_SYSTEM="wayland"
-make[1]: Entering directory
-'/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2'
-../config/preconfig.mk:316: Could not determine TARGET_OS so assuming Linux
-../config/compiler.mk:217:
-******************************************************
-../config/compiler.mk:217: Compiler target
-'aarch64-buildroot-linux-uclibc' not recognised
-../config/compiler.mk:217: (missing
-../config/compilers/aarch64-buildroot-linux-uclibc.mk file)
-../config/compiler.mk:217:
-******************************************************
-../config/compiler.mk:217: *** Compiler
-'aarch64-buildroot-linux-uclibc' not recognised.  Stop.
-make[1]: *** [Makefile:54: build] Error 2
-make[1]: Leaving directory
-'/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2'
-make: *** [package/pkg-generic.mk:293:
-/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2/.stamp_built]
-Error 2
-
-Also got a similiar error with musl
->>> ti-rogue-km 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2 Patching
->>> ti-rogue-km 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2 Configuring
->>> ti-rogue-km 1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2 Building
-PATH="/home/johnsonb/buildroot1/output/host/bin:/home/johnsonb/buildroot1/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/wsl/lib:/snap/bin:/home/johnsonb/bin"
-/usr/bin/make -j21 -C
-/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2
-HOSTCC="/usr/bin/gcc -O2 -isystem
-/home/johnsonb/buildroot1/output/host/include
--L/home/johnsonb/buildroot1/output/host/lib
--Wl,-rpath,/home/johnsonb/buildroot1/output/host/lib" ARCH=arm64
-INSTALL_MOD_PATH=/home/johnsonb/buildroot1/output/target
-CROSS_COMPILE="/home/johnsonb/buildroot1/output/host/bin/aarch64-buildroot-linux-musl-"
-WERROR=0 REGENERATE_PARSERS=1
-DEPMOD=/home/johnsonb/buildroot1/output/host/sbin/depmod
-INSTALL_MOD_STRIP=1
-KERNELDIR=/home/johnsonb/buildroot1/output/build/linux-custom
-BUILD="release" PVR_BUILD_DIR="am62_linux" WINDOW_SYSTEM="wayland"
-make[1]: Entering directory
-'/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2'
-../config/preconfig.mk:316: Could not determine TARGET_OS so assuming Linux
-../config/compiler.mk:217:
-******************************************************
-../config/compiler.mk:217: Compiler target
-'aarch64-buildroot-linux-musl' not recognised
-../config/compiler.mk:217: (missing
-../config/compilers/aarch64-buildroot-linux-musl.mk file)
-../config/compiler.mk:217:
-******************************************************
-../config/compiler.mk:217: *** Compiler 'aarch64-buildroot-linux-musl'
-not recognised.  Stop.
-make[1]: *** [Makefile:54: build] Error 2
-make[1]: Leaving directory
-'/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2'
-make: *** [package/pkg-generic.mk:293:
-/home/johnsonb/buildroot1/output/build/ti-rogue-km-1dd6291a5cad4f2b909fc2a14bd717a3bc5f0bb2/.stamp_built]
-Error 2
-
-If glibc is required I think there is a BR2_TOOLCHAIN_USES_GLIBC  you
-can add to the config.in for that package.
-
-
-
-Bryce
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
