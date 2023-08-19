@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84B47EE4993
-	for <buildroot@archiver.kernel.org>; Sat, 19 Aug 2023 12:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10641EE49A5
+	for <buildroot@archiver.kernel.org>; Sat, 19 Aug 2023 13:42:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 898DE41686;
-	Sat, 19 Aug 2023 12:57:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 898DE41686
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F5504151A;
+	Sat, 19 Aug 2023 13:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F5504151A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YcoA-EsQYzAJ; Sat, 19 Aug 2023 12:57:14 +0000 (UTC)
+	with ESMTP id oP5VVxWI_iJc; Sat, 19 Aug 2023 13:42:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F8334168C;
-	Sat, 19 Aug 2023 12:57:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F8334168C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E61431BF318
- for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 12:57:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BACD41DF6;
+	Sat, 19 Aug 2023 13:42:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BACD41DF6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C596B1BF476
+ for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 13:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B946B4168C
- for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 12:57:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B946B4168C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F18F60F69
+ for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 13:42:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F18F60F69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JnDKZZSsFlzd for <buildroot@lists.busybox.net>;
- Sat, 19 Aug 2023 12:57:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Jl-LbHWw9SPn for <buildroot@lists.busybox.net>;
+ Sat, 19 Aug 2023 13:42:48 +0000 (UTC)
 Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 633B641686
- for <buildroot@buildroot.org>; Sat, 19 Aug 2023 12:57:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 633B641686
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6055560B65
+ for <buildroot@buildroot.org>; Sat, 19 Aug 2023 13:42:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6055560B65
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:104e:727c:a742:4ed7])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 5BEF2200406;
- Sat, 19 Aug 2023 14:57:02 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id DF846200385;
+ Sat, 19 Aug 2023 15:42:38 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 19 Aug 2023 14:57:02 +0200
-Date: Sat, 19 Aug 2023 14:57:02 +0200
+ Sat, 19 Aug 2023 15:42:38 +0200
+Date: Sat, 19 Aug 2023 15:42:38 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230819125702.GG1134940@scaer>
-References: <20230818144231.976762-1-bernd@kuhls.net>
+To: Alexey Romanov <avromanov@sberdevices.ru>
+Message-ID: <20230819134039.GA1777680@scaer>
+References: <20230818101754.73199-1-avromanov@sberdevices.ru>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230818144231.976762-1-bernd@kuhls.net>
+In-Reply-To: <20230818101754.73199-1-avromanov@sberdevices.ru>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692449825;
- bh=f/Ji3qwKK6XIqCwzTcT13XydxH91gaRfchytNT7sUfU=;
+ d=free.fr; s=smtp-20201208; t=1692452565;
+ bh=gXXm/xptN8SrplvEfId6UG3SKyE8rGefEWmZmuXbs6s=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=mGgH71qG6ib133YmCC4lG5YuZtjqKU2KbhMwRCyqSJlURR1l8pAO/BTSg9L3/HtxE
- tm5Sl0R5BtPF6+JeqDTxFt6MXedjNbpVcTWNUiScXideQOpYOzDzGjJudecLXbegA6
- +n7mJnFq0qzoGD3Ql4NO6PWTdXlarGNJS/rcfUVqbyKrRbL1YyQmr7vK+Ql1rGRLW9
- liUx0Na/CzAe2yc8J5IM8l701hCZuM2xeZnGdL1JF126Y4jf8OJ6ihZ6C5dFZKTmye
- YWBldnYdRwN6F2nOk659CvLKOoWFsyZhYWQNsBJMofWvzYgcL4GDUkNITd7p69u4yh
- +As/4bi9Zxkcg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=rpT8N7ss34nWd5UNH+ImEpXvF9aXv9IsWnd+AsjHyvvvUeUbjm2UWdHMeGFdu+ZpE
+ yQjhAm7xlt6qDlJpWMdBEpUvj5Jmb2i9w5HJoUJwTXRzTBwICGDY6+DVSEpxkSBOFl
+ VdtEi5XRN1/nTLpcXypBClLWgwR7qUr+KPSUL2rFTm18Ol5wnwX1xV9Rlpa2AsLhHI
+ eAfGhnnctGs+44TNa+Z0S8Bn8q2aGAItSDYa2Hc82TIc0e8EArv59qypn6W56Hd4eG
+ 3LJGAdh75pSmZMb/AyyuaF6VlnaPGnGaEuFBlaF/zx94/QZTbNCwsycpxx+H+BK6Vm
+ DNPhq4KRfXs/w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mGgH71qG
-Subject: Re: [Buildroot] [PATCH/next v2 1/1] package/{gettext-gnu,
- libtextstyle}: bump to version 0.22
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rpT8N7ss
+Subject: Re: [Buildroot] [PATCH v1] pkg-config.mk: introduce savefragment
+ subcommand
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,86 +76,129 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: patrickdepinguin@gmail.com, kernel@sberdevices.ru,
+ Dmitry Rokosov <ddrokosov@sberdevices.ru>, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QmVybmQsIEFsbCwKCk9uIDIwMjMtMDgtMTggMTY6NDIgKzAyMDAsIEJlcm5kIEt1aGxzIHNwYWtl
-IHRodXNseToKPiBSZWxlYXNlIG5vdGVzOgo+IGh0dHBzOi8vbGlzdHMuZ251Lm9yZy9hcmNoaXZl
-L2h0bWwvaW5mby1nbnUvMjAyMC0wNy9tc2cwMDAwOS5odG1sCj4gaHR0cHM6Ly9saXN0cy5nbnUu
-b3JnL2FyY2hpdmUvaHRtbC9pbmZvLWdudS8yMDIzLTA2L21zZzAwMDAzLmh0bWwKPiAKPiBSZW1v
-dmVkIHBhdGNoIDAwMDEsIHRoZSBwYXRjaGVkIGZpbGUgaXMgbm90IHByZXNlbnQgaW4gdGhpcyBy
-ZWxlYXNlLgo+IFJlbW92ZWQgcGF0Y2ggMDAwMiB3aGljaCB3YXMgYXBwbGllZCB1cHN0cmVhbS4K
-PiAKPiBMaW5rIGxpYnRleHRzdHlsZS5oYXNoIHRvIGdldHRleHQtZ251Lmhhc2guCj4gCj4gQWRk
-ZWQgY29tbWVudHMgYWJvdXQgb3RoZXIgZmlsZXMgdG8gYmUgdXBkYXRlZCBkdXJpbmcgdmVyc2lv
-biBidW1wcy4KPiAKPiBTaW5jZSB1cHN0cmVhbSBjb21taXQKPiBodHRwczovL2dpdGh1Yi5jb20v
-YXV0b3Rvb2xzLW1pcnJvci9nZXR0ZXh0L2NvbW1pdC83ODVhODllNWRmOTk0YzJiMjQyZjA4MmQ2
-MGRlODllMmQ1MjBhYTRhCj4gZ2V0dGV4dC1ydW50aW1lIGlzIGEgYnVpbGQtZGVwZW5kZW5jeSBm
-b3IgZ2V0dGV4dC10b29scyBzbyB3ZSBhZGQgdGhlCj4gbmVlZGVkIEhPU1RfR0VUVEVYVF9HTlVf
-UFJFX3tDT05GSUdVUkUsIEJVSUxEfV9IT09LUy4KClstLVNOSVAtLV0KPiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9nZXR0ZXh0LWdudS9nZXR0ZXh0LWdudS5tayBiL3BhY2thZ2UvZ2V0dGV4dC1nbnUv
-Z2V0dGV4dC1nbnUubWsKPiBpbmRleCA5YTFlYWJkMGRmLi42NzA3NGU0MmJjIDEwMDY0NAo+IC0t
-LSBhL3BhY2thZ2UvZ2V0dGV4dC1nbnUvZ2V0dGV4dC1nbnUubWsKPiArKysgYi9wYWNrYWdlL2dl
-dHRleHQtZ251L2dldHRleHQtZ251Lm1rCj4gQEAgLTQsOCArNCw5IEBACj4gICMKPiAgIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMKPiAgCj4gLSMgUGxlYXNlIGtlZXAgaW4gc3luYyB3aXRoIHBhY2th
-Z2UvbGlidGV4dHN0eWxlL2xpYnRleHRzdHlsZS5tawo+IC1HRVRURVhUX0dOVV9WRVJTSU9OID0g
-MC4yMC4xCj4gKyMgUGxlYXNlIGtlZXAgaW4gc3luYyB3aXRoIHBhY2thZ2UvbGlidGV4dHN0eWxl
-L2xpYnRleHRzdHlsZS5tayBhbmQKPiArIyBHRVRURVhUX1RJTllfQVJDSElWRV9WRVJTSU9OIGlu
-IGdldHRleHQtdGlueS9nZXR0ZXh0LXRpbnkubWsKPiArR0VUVEVYVF9HTlVfVkVSU0lPTiA9IDAu
-MjIKClNvIHdlIG5vdyBoYXZlIHRocmVlIGZpbGVzIHRoYXQgbXVzdCBiZSBrZXB0IGluIHN5bmMs
-IGFuZCBleHBlcmllbmNlIGhhcwpzaG93biB0aGF0LCBldmVuIHRob3VnaCB3ZSBkbyBoYXZlIHN1
-Y2ggY29tbWVudHMgYWJvdXQga2VlcGluZyB0aGluZ3MgaW4Kc3luYywgcGVvcGxlIGFjdHVhbHkg
-ZG8gbm90IHJlYWQgdGhvc2UgY29tbWVudHMgYW5kIHdlIGhhdmUgc2VlbiBvbmUKcGFja2FnZSBi
-ZWluZyBidW1wZWQgYnV0IG5vdCB0aGUgb3RoZXIgKG5vdCBqdXN0IGFib3V0IGdldHRleHQsIGJ1
-dAptZXNhM2QsIGJsdWV6NSwgcHJvdG9idWYuLi4pCgpNYXliZSBpdCB3b3VkIG1ha2Ugc2Vuc2Ug
-dG8gaW50cm9kdWNlIGEgc2hhcmVkIHZlcnNpb24gc3RyaW5nLCDDoC1sYSBxdDU7CgogICAgcGFj
-a2FnZS9nZXR0ZXh0L2dldHRleHQubWsKICAgICAgICBHRVRURVhUX1ZFUlNJT04gPSAwLjIyCiAg
-ICAgICAgaW5jbHVkZSAkKHdpbGRjYXJkIHBhY2thZ2UvZ2V0dGV4dC8qLyoubWspCgogICAgcGFj
-a2FnZS9nZXR0ZXh0L2dldHRleHQtZ251L2dldHRlY3QtZ251Lm1rCiAgICAgICAgR0VUVEVYVF9H
-TlVfVkVSU0lPTiA9ICQoR0VUVEVYVF9WRVJTSU9OKQoKICAgIHBhY2thZ2UvZ2V0dGV4dC9nZXR0
-ZXh0LXRpbnkvZ2V0dGV4dC10aW55L21rCiAgICAgICAgJChTRUQpICdzLEBBUkNISVZFX1ZFUlNJ
-T05ALCQoR0VUVEVYVF9WRVJTSU9OKSwnICQoQEQpL2dldHRleHRpemUKCiAgICBwYWNrYWdlL2dl
-dHRleHQvbGlidGV4dHN0eWxlL2xpYnRleHRzdHlsZS5tawogICAgICAgIExJQlRFWFRTVFlMRV9W
-RVJTSU9OID0gJChHRVRURVhUX1ZFUlNJT04pCgpCdXQgc2VlIGJlbG93Li4uLgoKWy0tU05JUC0t
-XQo+ICsjIGdldHRleHQtdG9vbHMgZGVwZW5kcyBvbiBnZXR0ZXh0LXJ1bnRpbWUKPiArZGVmaW5l
-IEhPU1RfR0VUVEVYVF9HTlVfQ09ORklHVVJFX1JVTlRJTUUKPiArCWNkICQoQEQpLyQoR0VUVEVY
-VF9HTlVfU1VCRElSKTsgXAoKWW91J3JlIG1peGluZyB0aGUgdGFyZ2V0IF9TVUJESVIgd2l0aCBo
-b3N0IGJ1aWxkOyB0aGF0J3Mgbm90IGNsZWFuLgoKSWYgd2UgY2FuJ3QgaGF2ZSBwcm9wZXIgc2Vw
-YXJhdGlvbiBvZiB0aW9vbHMgYW5kIHJ1bnRpbWUgZm9yIHRoZSBob3N0CnZhcmlhbnQsIHRoZW4g
-bGV0J3MganVzdCBzdG9wIHRoaXMgZGFuY2UgYW5kIGJ1aWxkIGhvc3QtZ2V0dGV4dCBhdCB0aGUK
-cm9vdCBvZiB0aGUgcGFja2FnZSAoZS5nLiBsZXQncyBqdXN0IGRyb3AgSE9TVF9HRVRURUVYVF9H
-TlVfU1VCRElSKS4KCkFuZCBzZWUgYmVsb3cuLi4KCj4gKwkJJChIT1NUX0NPTkZJR1VSRV9PUFRT
-KSBcCj4gKwkJLi9jb25maWd1cmUgLS1wcmVmaXg9JChIT1NUX0RJUikgXAo+ICsJCSQoSE9TVF9H
-RVRURVhUX0dOVV9DT05GX09QVFMpCj4gK2VuZGVmCj4gK0hPU1RfR0VUVEVYVF9HTlVfUFJFX0NP
-TkZJR1VSRV9IT09LUyArPSBIT1NUX0dFVFRFWFRfR05VX0NPTkZJR1VSRV9SVU5USU1FCj4gKwo+
-ICtkZWZpbmUgSE9TVF9HRVRURVhUX0dOVV9CVUlMRF9SVU5USU1FCj4gKwkkKEhPU1RfTUFLRV9F
-TlYpICQoTUFLRSkgLUMgJChARCkvJChHRVRURVhUX0dOVV9TVUJESVIpIGluc3RhbGwKPiArZW5k
-ZWYKPiArSE9TVF9HRVRURVhUX0dOVV9QUkVfQlVJTERfSE9PS1MgKz0gSE9TVF9HRVRURVhUX0dO
-VV9CVUlMRF9SVU5USU1FCgpBcyBmYXIgYXMgSSB1bmRlcnN0YW5kLCB0aGlzIGluc3RhbGxzIHN0
-dWZmIGludG8gJChIT1NUX0RJUikgYXQKYnVpbGQgdGltZS4gVGhhdCBpcyBkZWZpbml0ZWx5IG5v
-dCBjb3JyZWN0LgoKV2hhdCBoYXBwZW5zIHdoZW4gZ2V0dGV4dCBpcyBidWlsdCBhcyBhIHdob2xl
-PyBDZXJ0YWlubHksIHRoZSBydW50aW1lCmxpYnJhcnkgaXMgbm90IGluc3RhbGxlZCBieSB0aGUg
-dGltZSB0aGUgdG9vbHMgYXJlIGJ1aWx0LCBzbyB0aGUgZ2V0dGV4dApidWlsZHN5c3RlbSBoYXMg
-cHJvdmlzaW5nIGZvciB1c2luZyBhcy15ZXQtdW5pbnN0YWxsZWQgbGlicmFyaWVzIHdoZW4KbGlu
-a2luZyB0aGUgdG9vbHMuCgpUaGUgcmVhc29uIHRvIG9ubHkgYnVpbGQgZ2V0dGV4dC10b29scyBm
-b3IgdGhlIGhvc3QgcGFja2FnZSwgd2FzIHRvIG5vdApzdWZmZXIgZnJvbSB0aGUgd2hvbGUgYnVp
-bGQgdGltZS4gQnV0IGlmIHdlIG5vdyBuZWVkIHRvIGJ1aWxkIHRoZQpydW50aW1lLCB0aGVuIHRo
-YXQgZ2FpbiBpbiBidWlsZHRpbWUgaXMgbm93IHZlcnkgbGltaXRlZC4KClNvLCBiYWNrIHRvIG15
-IHBvcnBvc2FsIGFib3ZlOiBpZiB3ZSBuZWVkIHRoZSBydW50aW1lIGZvciB0aGUgdG9vbHMsCnRo
-ZW4gbGV0J3MgYnVpbGQgdGhlIHdob2xlIHBhY2thZ2UuCgpBbmQgdGh1cyB3ZSBjYW4gZHJvcCBo
-b3N0LWxpYnRleHRzdHlsZSB0b28uCgpUaG91Z2h0cz8KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4u
-CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0t
-LS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRp
-bWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCAr
-MzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwg
-IF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0t
-LS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1v
-cmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29u
-c3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0t
-LS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9idWlsZHJvb3QK
+Alexey, All,
+
+On 2023-08-18 13:17 +0300, Alexey Romanov via buildroot spake thusly:
+> Useful subcommand designed for run savedefconfig with fragment files.
+> Simple example of usage:
+> 
+> m linux-savefragment fragment=radio1_a_debug.fragment
+
+Generating a new fragment is not usually that useful; indeed, whether a
+configuration item changed (enabled, disabled, set to something) is
+important, and only a human can decide what part of the configuration
+files such change in setting should go: main configuration file, or one
+of the following fragments.
+
+To help achioeve this, there is already a command to generate a diff of
+the current configuration against the "configured-known" one:
+
+    $ make linux-diff-config
+
+Then the user can decide to update the existing main configuration file,
+update an existing fragment, or create a new fragment.
+
+This is however not documented, and if we need something, it is
+documentation for that existing command rather than a new one;
+see lines 100-onward.
+
+Can you look into that instead, please?
+
+Regards,
+Yann E. MORIN.
+
+> The saved fragment for such fragment will be in:
+> 
+> out/$(target)/build/linux-custom/arch/$(arch)/configs/$(target).fragment
+> 
+> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  package/pkg-kconfig.mk | 40 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index 32dcfea0bc..7e5c7d88a1 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -37,6 +37,40 @@ define kconfig-package-savedefconfig
+>  		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) savedefconfig
+>  endef
+>  
+> +FRAGMENT_CONFIG_PATH=arch/$(KERNEL_ARCH)/configs
+> +
+> +# Macro to save the fragment file
+> +# $(1): the name of the package in upper-case letters
+> +# $(2): the fragment name
+> +define kconfig-package-savefragment
+> +	$(eval ORIG_CONFIG=$(shell mktemp))
+> +	$(eval CHANGED_CONFIG=$(shell mktemp))
+> +	$(eval DIFF_CONFIG=$(shell mktemp))
+> +	$(eval NEW_FRAGMENT=$(shell mktemp))
+> +
+> +	$(Q) cp $($(1)_DIR)/.config $(CHANGED_CONFIG)
+> +
+> +	$($(1)_MAKE_ENV) $($(1)_MAKE) -C $($(1)_DIR) \
+> +		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) \
+> +		$($(1)_KCONFIG_DEFCONFIG)
+> +
+> +	$(Q) cp $($(1)_DIR)/.config $(ORIG_CONFIG)
+> +
+> +	$(Q) $($(1)_DIR)/scripts/diffconfig -m $(ORIG_CONFIG) \
+> +		$(CHANGED_CONFIG) > $(DIFF_CONFIG)
+> +	$(Q) KCONFIG_CONFIG=$(NEW_FRAGMENT) \
+> +		$($(1)_DIR)/scripts/kconfig/merge_config.sh \
+> +		-m $($(1)_DIR)/$(FRAGMENT_CONFIG_PATH)/$(2) $(DIFF_CONFIG)
+> +	$(Q) sed -E -e 's/.*(CONFIG_[^ =]+).*/\1 \0/' $(NEW_FRAGMENT) \
+> +		| sort -k1 |  cut -d " " -f 2- > \
+> +		$($(1)_DIR)/$(FRAGMENT_CONFIG_PATH)/$(2)
+> +
+> +	$(Q) cp $(CHANGED_CONFIG) $($(1)_DIR)/.config
+> +
+> +	$(Q) rm -f $(ORIG_CONFIG) $(CHANGED_CONFIG) \
+> +		$(DIFF_CONFIG) $(NEW_FRAGMENT)
+> +endef
+> +
+>  # The correct way to regenerate a .config file is to use 'make olddefconfig'.
+>  # For historical reasons, the target name is 'oldnoconfig' between Linux kernel
+>  # versions 2.6.36 and 3.6, and remains as an alias in later versions.
+> @@ -282,6 +316,12 @@ $(1)-savedefconfig: $(1)-check-configuration-done
+>  	$$(call kconfig-package-savedefconfig,$(2))
+>  endif
+>  
+> +ifeq ($$($(2)_KCONFIG_SUPPORTS_DEFCONFIG),YES)
+> +.PHONY: $(1)-savefragment
+> +$(1)-savefragment: $(1)-check-configuration-done
+> +	$$(call kconfig-package-savefragment,$(2),$(fragment))
+> +endif
+> +
+>  ifeq ($$($(2)_KCONFIG_DEFCONFIG),)
+>  # Target to copy back the configuration to the source configuration file
+>  # Even though we could use 'cp --preserve-timestamps' here, the separate
+> -- 
+> 2.30.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
