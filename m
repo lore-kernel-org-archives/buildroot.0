@@ -4,65 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 926F1EE49A5
-	for <buildroot@archiver.kernel.org>; Sat, 19 Aug 2023 21:18:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DD6FEE49A6
+	for <buildroot@archiver.kernel.org>; Sat, 19 Aug 2023 21:18:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA3BB4000B;
-	Sat, 19 Aug 2023 21:18:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA3BB4000B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 010F1408FB;
+	Sat, 19 Aug 2023 21:18:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 010F1408FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yFEn158N0-cV; Sat, 19 Aug 2023 21:18:36 +0000 (UTC)
+	with ESMTP id rBFYq1S_72Lq; Sat, 19 Aug 2023 21:18:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D6096401B1;
-	Sat, 19 Aug 2023 21:18:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6096401B1
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 83F581BF372
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09DDA408E8;
+	Sat, 19 Aug 2023 21:18:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09DDA408E8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 88EAE1BF868
  for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 21:18:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A62B80BF3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63252415E6
  for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 21:18:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A62B80BF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63252415E6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QRjlzBDHdEUT for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AgoaoVxIUQwF for <buildroot@lists.busybox.net>;
  Sat, 19 Aug 2023 21:18:31 +0000 (UTC)
 Received: from smtpdh18-su.aruba.it (smtpdh18-su.aruba.it [62.149.155.144])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0EFF080A64
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0FD55415E3
  for <buildroot@buildroot.org>; Sat, 19 Aug 2023 21:18:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EFF080A64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FD55415E3
 Received: from localhost.localdomain ([95.47.160.93])
  by Aruba Outgoing Smtp  with ESMTPSA
- id XTL0qNyCoB4j9XTL2qWmIX; Sat, 19 Aug 2023 23:18:29 +0200
+ id XTL0qNyCoB4j9XTL0qWmIG; Sat, 19 Aug 2023 23:18:28 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Aug 2023 23:18:25 +0200
-Message-Id: <20230819211825.60854-2-giulio.benetti@benettiengineering.com>
+Date: Sat, 19 Aug 2023 23:18:24 +0200
+Message-Id: <20230819211825.60854-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230819211825.60854-1-giulio.benetti@benettiengineering.com>
-References: <20230819211825.60854-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfANNOMz6Y3BbSpLwD7kxRsfesuVYUfAqszNsojFrzfqIEN1zjpltLN9cy+cO7TXhO2OO/LJkXmjmGF5gLqgvWvbW0lEeWkhf9gp0WVcN3+JiSpAAA1ty
- qrv+NSLUkkNO2G1Apuq5ihzBsddDBGnNHuA3AQ+lZL6Z5PHPmRmv9QOiEX2qfUB/zstojvhsZ4RSH39vWOSwFMeYelHvmmMF9WKiKuc/g/DxlKjzwTNME0Hw
- 2WWBe2kyjST1JeDzkjDksWapfLTUPbIIk3qPLtJApgDYrq2vRbK9kRX84IyIks1pJK0M5t4BFn9Ho1oXx4kj1Lu8FqjFwyAwr0Hlgk0aHB2aLXecMdrin1K5
- mDA+7+s50KbmktfjBAwb3XTeN8/Lfg==
+X-CMAE-Envelope: MS4xfDG3IgGO0q5QzLn7QRB4kGGH87IOsh9d0lsrv+ThYpwjiZhzeBJwNI9ABkl8+NLZceOvvkD1eCnMut/rH+zFC7wW4WnTblHr+V1/Aad2tdTypmntozRC
+ MHLGduRw7s+FM3Ch3uJPyGJUENGgxkm/ARvCP6mjStEv0J6DG1q8rFSxpdM6kUj5Da709/kvX8J59MzbfJI0tvIV28XRTd8WQRUh911V3VEahSL/dZ1ICHrW
+ 1OSVsAEGgzBxqxFSkyK9pXXSqdW+Spx+w5rhliz+sFd7JoMNhGDuTIify89JSrlPT00qr2E+pvauqd+evHQDGh/4tN55xZOLMwS4ogQkxuXxCeR/1yP3X6L4
+ ZwU5U81KhzvSTXHkIbVuXIP++GMwWw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1692479909; bh=HuAqSgkKll+WBUXDkSoPX4MCErR1JzdTQwq6dGmmg7w=;
+ t=1692479908; bh=gxg04hdvhCxAbJMc50b/VV1UW3VLP8j1yiC5zbI1i5U=;
  h=From:To:Subject:Date:MIME-Version;
- b=UTou+yr0kohQ/T7wvV1Y3yMZ43c6SBATbtlfKxxbIio+2Jlq0GZWRGuDtTMeknXrD
- g3b3Y90KtmhYXyLdwtZFUdc0XN7edT5F9xZvPKgqdjJ7E1Kh3aRmUxzvQ3fqs9lNv7
- kYh+DsSro9uPGYLXokLClCjiUnBNVz46Z4ZoMCM+WOBlTomth6wXT6hexA4koV3v0S
- UGrY0AfY4Oe8KhvwBk9ad+UzLpV+4AXA5kg2qfqFzriOhpD2Pve3GoeASo8mkBvtQS
- JrKjtinNNaPPEiaq8/d2rPr+duq6upDeDdOhLir9monICzq6rvJrPrZ+XO/bq1y78H
- 13NK32GJ3QZpQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=JsuWOU3Xqn7GK9rMClN9dMEB+M28W1NWIgVPkbeMT7wD0XVGuDJQc2q0EXugwDNW+
+ BLc5m3Z1ZH5/Zji1xeQxHJnBpHlnbI1ikaMGsPwg5blxTaerXuxl7s2NhpusCGbp2s
+ iU1bpnkL9gCpPdPpZKutrpHRdB0YvrxV0jkpyze7B+veNNRNjBYGRSn0ihsUJJPWuR
+ Zxtxy2lfEmVx9qx7J8avxc8mBHzxRl8HkAoT7CQXpBV4eq/+rY2D2cHf9wJaHHqTwg
+ unRRvyM/4t2RudKtbpjmOpmRj54LfeETi7fUN86fDMf9ATxAKonYNGvZutpGQlsCJk
+ 7S8tuoPhSq+Vw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=UTou+yr0
-Subject: [Buildroot] [PATCH 1/1] docs/manual: add Sponsored-by tag
+ header.a=rsa-sha256 header.s=a1 header.b=JsuWOU3X
+Subject: [Buildroot] [PATCH 0/1] Document Sponsored-by tag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,46 +80,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sometimes it happens that a Company or a Physical Person sponsors the
-creation and/or the upstreaming process of a patch, but at the moment
-there is no way to give credits to it. In Linux there are some commit that
-include a sort of tag "Sponsored by" without the dash to avoid
-scripts/checkpatch.pl to complain but a real standard has not been defined.
-With this patch let's try to define a method to give credits consistently.
-The goal is to improve contributions from companies or physical persons
-that this way should gain visibility in Buildroot and so they should be
-more prone to let the work done for them for to be upstreamed.
+Hi All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
+I'm trying to add Sponsored-by tag to give credits to Companies or Physical
+Persons who sponsor the writing and/or the upstreaming process of a patch.
+The goal, as described in the commit log, is to increase their involvement
+into upstreaming patches that are otherwise kept private. The customers I work
+for are interested in this and I've recently sent a patch for this to Linux too:
+https://lore.kernel.org/all/20230817220957.41582-1-giulio.benetti@benettiengineering.com/
+where I've received 2 feedbacks more or less positive.
+I'm not promising that with the use of Sponsored-by: tag the patches will
+hugely increase, but for me it's worth to try.
+
+Let me know what you all think about it.
+
+Thank you!
+Best regards
+Giulio Benetti
+
+Giulio Benetti (1):
+  docs/manual: add Sponsored-by tag
+
  docs/manual/contribute.txt | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 94f1c64496..384fdb08c1 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -118,6 +118,11 @@ Acked-by:: Indicates that you code-reviewed the patch and you are
-   Reviewed-by is thus mainly that you are prepared to take the blame on
-   Acked patches, but not on Reviewed ones.
- 
-+Sponsored-by:: Indicates that someone sponsored the creation and/or the
-+  upstreaming process of the patch. Sponsored-by can contain a company
-+  name or a physical person name plus its e-mail the same way it's done
-+  for the other tags listed above.
-+
- If you reviewed a patch and have comments on it, you should simply reply
- to the patch stating these comments, without providing a Reviewed-by or
- Acked-by tag. These tags should only be provided if you judge the patch
-@@ -128,7 +133,7 @@ that testing has been performed. To indicate that you both reviewed and
- tested the patch, provide two separate tags (Reviewed/Acked-by and
- Tested-by).
- 
--Note also that _any developer_ can provide Tested/Reviewed/Acked-by
-+Note also that _any developer_ can provide Tested/Reviewed/Acked-by/Sponsored-by
- tags, without exception, and we encourage everyone to do this. Buildroot
- does not have a defined group of _core_ developers, it just so happens
- that some developers are more active than others. The maintainer will
 -- 
 2.34.1
 
