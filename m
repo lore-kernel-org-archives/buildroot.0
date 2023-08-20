@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B397EE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 342FAEE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33E0C60BF1;
-	Sun, 20 Aug 2023 21:13:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33E0C60BF1
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4A2B60BF1;
+	Sun, 20 Aug 2023 21:15:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4A2B60BF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H6-aPa961vYS; Sun, 20 Aug 2023 21:13:00 +0000 (UTC)
+	with ESMTP id DMcBH9hQGi2H; Sun, 20 Aug 2023 21:15:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C06E60BE8;
-	Sun, 20 Aug 2023 21:12:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C06E60BE8
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 817A51BF38D
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:12:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0816060BE8;
+	Sun, 20 Aug 2023 21:15:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0816060BE8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 123E11BF38D
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B2E9402B1
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:12:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B2E9402B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC7DF81AC1
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:15:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC7DF81AC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SYV7NtCgrSea for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 21:12:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7A3FB40136
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:12:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A3FB40136
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6785E85E6E; Sun, 20 Aug 2023 21:12:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:12:02 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bf2d7f8f5395253e42c234f24ba0803eb85215bf
-X-Git-Newrev: c252392fb557c8fb7c882cfdd44ca38978bc8908
-X-Patchwork-Hint: ignore
-Message-Id: <20230820211256.6785E85E6E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lua-rotas: bump to
- version 0.3.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Hsgl86nX8seD for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 21:15:12 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 03A3681A92
+ for <buildroot@busybox.net>; Sun, 20 Aug 2023 21:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03A3681A92
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D398020005;
+ Sun, 20 Aug 2023 21:15:07 +0000 (UTC)
+Date: Sun, 20 Aug 2023 23:15:06 +0200
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230820231506.19db2724@windsurf>
+In-Reply-To: <20230818182915.489874-1-francois.perrad@gadz.org>
+References: <20230818182915.489874-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692566108;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Zxw5efTEAPoFCxRaI0fUtzP+j7odyDL67xK2vy2eZl8=;
+ b=oWJf4ANd/428o88gj8EbFsoMNanv/emnzTkHxCXKKmGtyt4VnDAxc5+eXeXpmtPbG3neSM
+ g9JgC1w0P2arqAwh3G/3ok1e2u9tWhQHfKmkRlXbg1WIZP2xLH4WBOcN9sjNN/N0NuNPI6
+ GJKdwKVIFGdTeyo1yHmzqT6+o7V0ZXSrJqWCczQlmj2HtQzp0vyeK/8CL5/I//F5vgG89d
+ Ywi9xSz6fWZFIqxEUoi02Vg2XHepPzh2oXASsW0kk/EwuQVqYNdfF2HWu3VQWONk+paADZ
+ AjY3i0oz4gisNJIzy8NxoUcfy0ai2r3JOqmo1T2Gd8l2t+iVlSLtVIRHmiy2vw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oWJf4ANd
+Subject: Re: [Buildroot] [PATCH] package/lua-rotas: bump to version 0.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +76,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c252392fb557c8fb7c882cfdd44ca38978bc8908
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri, 18 Aug 2023 20:29:15 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lua-rotas/lua-rotas.hash | 4 ++--
- package/lua-rotas/lua-rotas.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/lua-rotas/lua-rotas.hash | 4 ++--
+>  package/lua-rotas/lua-rotas.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-rotas/lua-rotas.hash b/package/lua-rotas/lua-rotas.hash
-index 6b33d94a85..eccff44269 100644
---- a/package/lua-rotas/lua-rotas.hash
-+++ b/package/lua-rotas/lua-rotas.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  c1570d38552816c7b4a4881e491049a22214ddaa609f65d9edc8013b416cecf7  lua-rotas-0.3.0-1.src.rock
--sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.3.0/COPYRIGHT
-+sha256  90ed9305b68f49f2293a3a547b7ec7c290be5bcc1afbae87e2e860eb3b04f18b  lua-rotas-0.3.1-1.src.rock
-+sha256  1112307622ef36ed8ee3e8ddb15ed294e699a9db45f6251d89343534388ec3dd  lua-Rotas-0.3.1/COPYRIGHT
-diff --git a/package/lua-rotas/lua-rotas.mk b/package/lua-rotas/lua-rotas.mk
-index 79e1e42291..1f99dbaf08 100644
---- a/package/lua-rotas/lua-rotas.mk
-+++ b/package/lua-rotas/lua-rotas.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_ROTAS_VERSION = 0.3.0-1
-+LUA_ROTAS_VERSION = 0.3.1-1
- LUA_ROTAS_NAME_UPSTREAM = lua-Rotas
- LUA_ROTAS_LICENSE = MIT
- LUA_ROTAS_LICENSE_FILES = $(LUA_ROTAS_SUBDIR)/COPYRIGHT
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
