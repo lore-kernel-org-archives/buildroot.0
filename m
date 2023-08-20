@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CABA5EE4996
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:45:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1F6AEE4996
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E91841583;
-	Sun, 20 Aug 2023 21:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E91841583
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39BD54159F;
+	Sun, 20 Aug 2023 21:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39BD54159F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ohY92lvrnXnc; Sun, 20 Aug 2023 21:45:31 +0000 (UTC)
+	with ESMTP id uM6n1FrUupg3; Sun, 20 Aug 2023 21:49:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57A0041591;
-	Sun, 20 Aug 2023 21:45:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57A0041591
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 199CC1BF38D
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:45:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37299415E4;
+	Sun, 20 Aug 2023 21:49:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37299415E4
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8113D1BF38D
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:49:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF05760BB3
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:45:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF05760BB3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D6464032C
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:49:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D6464032C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3fjy912JZUPQ for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 21:45:26 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 195F160A6A
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:45:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 195F160A6A
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E3CBC0003;
- Sun, 20 Aug 2023 21:45:22 +0000 (UTC)
-Date: Sun, 20 Aug 2023 23:45:21 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230820234521.008e25e8@windsurf>
-In-Reply-To: <20230820154041.3984862-1-bernd@kuhls.net>
-References: <20230820154041.3984862-1-bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fNurqTqmPz-E for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 21:49:30 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 35B1440136
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:49:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35B1440136
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8644860003;
+ Sun, 20 Aug 2023 21:49:27 +0000 (UTC)
+Date: Sun, 20 Aug 2023 23:49:26 +0200
+To: Jesse Taube <mr.bossman075@gmail.com>
+Message-ID: <20230820234926.1dc52113@windsurf>
+In-Reply-To: <20230819030849.3966233-1-Mr.Bossman075@gmail.com>
+References: <20230819030849.3966233-1-Mr.Bossman075@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692567923;
+ d=bootlin.com; s=gm1; t=1692568168;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=25pvA/dsoOwVsM/dqJbsa6XuVe48iSqO3PVFbf2sOGs=;
- b=Y/9zeZn4v13fU5BH7RtBnKuxic2swSAMoBOUfpOHx26yjlaQA/pFaxDA+EczxZ4iFjnk+J
- uEBYx/eMNV4ZjE87avIDYElZHQpklhk9lhrNsMMXUCon3Zb/kyKUrARMJYNcOOowC+SOns
- 78EI9oWJR0NrCICFWxqD7z7QINJqsyO79ob2bWbtkwc5PctU33pl39sJq4dxQQg2RsFdz+
- VuGArp02kYymMJKsME28stazoUZQo/Vdwzx9FWtexJcMLVbcIw5UtTdKweakjo6L5DS6Zt
- MYj61MDBSjc81QikfmDO5tacMV5cmPGjNQtqRG9VcRWiNTrFcqIkO4yJhszhmQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=hVpvcdacaeUMjrD75sbB5ZdLDxILKkSJAPpOuyrIxxk=;
+ b=pvB3R419Gs2mPuvFYBXxGoCa1d13IlIzw4CU4wZP0gMcwKOh/etkdfuVUShHAdYmoN+CTj
+ Bt5Je+n6I7VP2JzHfIGXcUNhMNKxru0XajqYDkfPgaw0Dg+jOim8swzUxSl+5z5qhNxsoM
+ FX9AyDXkMIucVXq4MX2yKs9eJizYwAwOJpJf9JfErVHx9XQqe3P5e56OO7Ah2tCpTBmDEr
+ K5nDlDCPbF6Un8ETIeH3vqGyqpQ21DkByxH+qkYAM5nrniZQQOYQi9WPrrf6cPFwHZIO6I
+ Yg16quXeOMpID6yIw0YfKV+hlzvZzyI6aR0+DPiSBTGLr9AB2gT8buf8I+tuFg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Y/9zeZn4
-Subject: Re: [Buildroot] [PATCH 1/1] package/shared-mime-info: link with
- -latomic if needed
+ header.s=gm1 header.b=pvB3R419
+Subject: Re: [Buildroot] [PATCH] package/elf2flt: Fix build by updating to
+ v2023.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,45 +77,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>,
+ Niklas Cassel <niklas.cassel@wdc.com>, Damien Le Moal <damien.lemoal@wdc.com>,
+ Giulio Benetti <giulio.benetti@micronovasrl.com>,
+ Greg Ungerer <gerg@kernel.org>, buildroot@buildroot.org,
+ Romain Naour <romain.naour@smile.fr>, "Yann
+ E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 20 Aug 2023 17:40:41 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Hello Jesse,
 
-> Buildroot commit 3f9622fe3d85b4d9f734b879abc1d485afea19b2 added an
-> optional dependency to libatomic for libglib2 which caused the build
-> error fixed with this patch since glib-2.0.pc does not contain any
-> information about libatomic.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d25/d2563ce649188cec2025e4fc6e58c4bbd98ff939/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/shared-mime-info/shared-mime-info.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-> index 9932bd2db0..a9713ee639 100644
-> --- a/package/shared-mime-info/shared-mime-info.mk
-> +++ b/package/shared-mime-info/shared-mime-info.mk
-> @@ -25,6 +25,11 @@ SHARED_MIME_INFO_LICENSE_FILES = COPYING
->  HOST_SHARED_MIME_INFO_DEPENDENCIES = \
->  	host-pkgconf host-intltool host-libxml2 host-libglib2
->  
-> +# Uses __atomic_compare_exchange_4 from libglib2
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +SHARED_MIME_INFO_CONF_ENV += LIBS=-latomic
-> +endif
+On Fri, 18 Aug 2023 23:08:49 -0400
+Jesse Taube <mr.bossman075@gmail.com> wrote:
 
-Thanks, but I continue to think that this is not the proper way of
-fixing this. The proper way is for glib-2.0.pc to list -latomic in its
-Libs.private, so that it gets picked-up by shared-mime-info when
-statically linking.
+> In elf2flt Greg Ungerer committed "elf2flt: remove use of BFD_VMA_FMT":
+> 
+> "In binutils-2.40 the BFD_VMA_FMT definition used for printf style
+> formatting specifiers has been removed. For reference this was done in
+> commit b82817674f46 ("Don't use BFD_VMA_FMT in binutils") in the
+> binutils git development tree.
+> 
+> BFD_VMA_FMT is used in a number of places in the elf2flt code to output
+> bfd offsets, values and the like. So it is broken when using the bfd
+> code from binutils-2.40 and newer.
+> 
+> According to the binutils change PRIx64 (and friends) is used to replace
+> it, with appropriate casts to keep it clean for 32 and 64 bit platforms.
+> Change the elf2flt.c use of it in the same way to fix."
+> 
+> This patch updates elf2flt to version v2023.04, and rebases all the
+> Buildroot patches.
+> 
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+
+Could you clarify which build failure this is fixing? The commit title
+says "fix build" but you don't explain which build failure is being
+fixed.
+
+If it's the BFD_VMA_FMT issue, it has already been fixed by commit
+https://gitlab.com/buildroot.org/buildroot/-/commit/d79f9c9f416ac5da90cd428916cff0b5288cb03a
+in which we have backported the upstream commit you're referring to.
+
+That being said, bumping the version of elf2flt is certainly a good
+idea moving forward. However, we should be careful when doing this, as
+updating elf2flt has several times in the past proven to come with a
+number of regressions.
+
+Romain: do you have some suggestions of defconfigs/configurations to
+test/check after doing an elf2flt bump?
+
+Also, Jesse: your bump is not only rebasing all Buildroot patches, some
+are dropped. It would be good to mention which patches are dropped (and
+what is the corresponding upstream commit), and which patches are
+rebased.
+
+Thanks a lot!
 
 Thomas
 -- 
