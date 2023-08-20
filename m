@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15741EE49A6
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 14:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA0EEE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 14:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9F6981FAD;
-	Sun, 20 Aug 2023 14:21:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9F6981FAD
+	by smtp1.osuosl.org (Postfix) with ESMTP id D21408210E;
+	Sun, 20 Aug 2023 14:21:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D21408210E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z-qtYxFNBbux; Sun, 20 Aug 2023 14:21:34 +0000 (UTC)
+	with ESMTP id OIJR1ESOR_nm; Sun, 20 Aug 2023 14:21:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D1F381F9A;
-	Sun, 20 Aug 2023 14:21:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D1F381F9A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3E61D1BF86C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A9D581FFD;
+	Sun, 20 Aug 2023 14:21:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A9D581FFD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B6EB1BF8B4
  for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 14:21:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2588B60BFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2640E40167
  for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 14:21:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2588B60BFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2640E40167
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id s6TxebaF6z3I for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oDVKjAGroz_k for <buildroot@lists.busybox.net>;
  Sun, 20 Aug 2023 14:21:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6730F60B90
+ by smtp2.osuosl.org (Postfix) with ESMTP id 683E5404EC
  for <buildroot@buildroot.org>; Sun, 20 Aug 2023 14:21:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6730F60B90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 683E5404EC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 480E885E20; Sun, 20 Aug 2023 14:21:18 +0000 (UTC)
+ id 5577B85E21; Sun, 20 Aug 2023 14:21:18 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 16:20:48 +0200
+Date: Sun, 20 Aug 2023 16:20:51 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7fddbe25301aae024f7fc22498392387f6874506
-X-Git-Newrev: e71fb8f71c09ef93a9d9a543105de0f99f6c64c1
+X-Git-Oldrev: e71fb8f71c09ef93a9d9a543105de0f99f6c64c1
+X-Git-Newrev: db777eef134ac3034a7970511ab96312d356c83e
 X-Patchwork-Hint: ignore
-Message-Id: <20230820142118.480E885E20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/docker-run: bind mount
- .git/objects if needed
+Message-Id: <20230820142118.5577B85E21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/docker-run: also mount
+ current working directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e71fb8f71c09ef93a9d9a543105de0f99f6c64c1
+commit: https://git.buildroot.net/buildroot/commit/?id=db777eef134ac3034a7970511ab96312d356c83e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If buildroot is checked out as part of a 'repo' manifest, docker-run
-doesn't fully bind mount the .git directory, leading to commands such
-as `utils/docker-run make check-package` to fail.
+Currently, using utils/docker-run expects that the current working
+directory is the working copy. This means that it is not possible
+to use docker-run with an out-of-tree build (one using O=).
 
-Signed-off-by: Nicolas Boichat <drinkcat@google.com>
-[yann.morin.1998@free.fr: use newly introduced mountpoints list]
+Add the current working directory to the list of mountpoints, and
+use that as working directory in the container.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/docker-run | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ utils/docker-run | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/utils/docker-run b/utils/docker-run
-index 7b27a9b05c..40027514c5 100755
+index 40027514c5..e64b4f10c0 100755
 --- a/utils/docker-run
 +++ b/utils/docker-run
-@@ -33,6 +33,14 @@ if [ "${GIT_DIR}" ]; then
-     # path already (in a wordir), then that's a noop.
-     GIT_DIR="$(cd "${MAIN_DIR}"; readlink -e "${GIT_DIR}")"
-     mountpoints+=( "${GIT_DIR}" )
-+
-+    # 'repo' stores .git/objects separately.
-+    if [ -L "${GIT_DIR}/objects" ]; then
-+        # GITDIR is already an absolute path, but for symetry
-+        # with the above, keep the same cd+readlink construct.
-+        OBJECTS_DIR="$(cd "${MAIN_DIR}"; readlink -e "${GIT_DIR}/objects")"
-+        mountpoints+=( "${OBJECTS_DIR}" )
-+    fi
- fi
+@@ -17,10 +17,13 @@ declare -a docker_opts=(
+     -i
+     --rm
+     --user "$(id -u):$(id -g)"
+-    --workdir "${MAIN_DIR}"
++    --workdir "$(pwd)"
+ )
  
- if [ "${BR2_DL_DIR}" ]; then
+-declare -a mountpoints=( "${MAIN_DIR}" )
++declare -a mountpoints=(
++    "${MAIN_DIR}"
++    "$(pwd)"
++)
+ 
+ # Empty GIT_DIR means that we are not in a workdir, *and* git is too old
+ # to know about worktrees, so we're not in a worktree either. So it means
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
