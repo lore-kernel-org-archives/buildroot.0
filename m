@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34725EE4996
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:40:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A61B6EE49A5
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D28B8415F5;
-	Sun, 20 Aug 2023 21:40:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D28B8415F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 560024152D;
+	Sun, 20 Aug 2023 21:40:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 560024152D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jZJ-vX7pIN3u; Sun, 20 Aug 2023 21:40:44 +0000 (UTC)
+	with ESMTP id n88354wzaxSO; Sun, 20 Aug 2023 21:40:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9F4D415F1;
-	Sun, 20 Aug 2023 21:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9F4D415F1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1DF821BF86C
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1A14415EF;
+	Sun, 20 Aug 2023 21:40:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1A14415EF
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AF961BF38D
  for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBD5360F14
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBD5360F14
+ by smtp1.osuosl.org (Postfix) with ESMTP id 248BA81F16
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 248BA81F16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n__xOedWifTz for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id T3Qay-xWki5S for <buildroot@lists.busybox.net>;
  Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1CAF360EE5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C4C481F14
  for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CAF360EE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C4C481F14
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B1A385EF6; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
+ id 14DFD85EF7; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:38:51 +0200
+Date: Sun, 20 Aug 2023 23:39:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b661f635b5cc08ded6ab14c19f2370c9f478e52e
-X-Git-Newrev: 486a3ba4c3a78668eee1dd4f4b312a75a1b029c5
+X-Git-Oldrev: 486a3ba4c3a78668eee1dd4f4b312a75a1b029c5
+X-Git-Newrev: 27bf08e4addb78d30fb68992e35c5d8335d4e7c6
 X-Patchwork-Hint: ignore
-Message-Id: <20230820214028.0B1A385EF6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/ci20_defconfig: bump to kernel
- 5.4.254
+Message-Id: <20230820214028.14DFD85EF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/avenger96_defconfig: bump ATF
+ version to 2.9 for binutils 2.39+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=486a3ba4c3a78668eee1dd4f4b312a75a1b029c5
+commit: https://git.buildroot.net/buildroot/commit/?id=27bf08e4addb78d30fb68992e35c5d8335d4e7c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the kernel to the latest release of 5.4 kernel series
-to fix an issue with gcc 12.
+This new binutils version break the ATF build due to new linker warnings:
 
-arch/mips/jz4740/setup.c: In function 'plat_mem_setup':
-arch/mips/jz4740/setup.c:64:25: error: comparison between two arrays [-Werror=array-compare]
-   64 |         if (__dtb_start != __dtb_end)
-      |                         ^~
-arch/mips/jz4740/setup.c:64:25: note: use '&__dtb_start[0] != &__dtb_end[0]' to compare the addresses
-  CC      fs/debugfs/file.o
-cc1: all warnings being treated as errors
+ ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
 
-Fixed in v5.4.195:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a60def7568216684f62b117c199429c4a9a89570
+From [1]
+"Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
+ of a new warning when linking the bl*.elf in the form:
+
+ ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
+ ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
+ ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
+
+These new warnings are enbaled by default to secure elf binaries:
+  - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
+  - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
+"
+
+Bump the ATF custom version to 2.9 for binutils 2.39+ support.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436573
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436283
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/ci20_defconfig | 2 +-
+ configs/avenger96_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index 09eddc4e68..7e119376e1 100644
---- a/configs/ci20_defconfig
-+++ b/configs/ci20_defconfig
-@@ -15,7 +15,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci20/genimage.cfg"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.254"
- BR2_LINUX_KERNEL_DEFCONFIG="ci20"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
+diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
+index 1f8e7a50d1..adfd7585c4 100644
+--- a/configs/avenger96_defconfig
++++ b/configs/avenger96_defconfig
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
