@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9C5FEE4996
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:39:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B365EE4996
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97455404CE;
-	Sun, 20 Aug 2023 21:39:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97455404CE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 381D9415A6;
+	Sun, 20 Aug 2023 21:40:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 381D9415A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LaYRITPtv7R6; Sun, 20 Aug 2023 21:39:03 +0000 (UTC)
+	with ESMTP id HFxKEyFtOjJq; Sun, 20 Aug 2023 21:40:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41B7F40541;
-	Sun, 20 Aug 2023 21:39:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41B7F40541
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3896E41548;
+	Sun, 20 Aug 2023 21:40:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3896E41548
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8FFBA1BF38D
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:39:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ECE9C1BF38D
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7244140990
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:38:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7244140990
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4D2741548
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4D2741548
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A5w1uOfE6b8m for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 21:38:58 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1479404CE
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1479404CE
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DFC5E85ECC; Sun, 20 Aug 2023 21:38:57 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:37:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0293d131c9c56af24d4f58dfddcd2d8c971f5841
-X-Git-Newrev: bdd80863cf81a5b9034903ee1954d41a7ebbd1e7
-X-Patchwork-Hint: ignore
-Message-Id: <20230820213857.DFC5E85ECC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2023.08-rc2
+ with ESMTP id wdTG06obJXoJ for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 21:40:13 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 73C074152D
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73C074152D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8E3A4FF802;
+ Sun, 20 Aug 2023 21:40:11 +0000 (UTC)
+Date: Sun, 20 Aug 2023 23:40:10 +0200
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230820234010.3e5037ae@windsurf>
+In-Reply-To: <20230817230844.450092-1-romain.naour@gmail.com>
+References: <20230817230844.450092-1-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692567611;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=SjwCLfy/PTJ7FLodIgJxf21EurX08sOZXRbHU3zRQWM=;
+ b=Oihs/JPm23/rJD/1QgmLebJfajLce9zw9TKH9SSIUutOCLzt3YNhhBql8tFhJ0n6wsZ6eL
+ XU/UE90zQ9WZQu4AVYR2ZlAyJF3aG3rSYBIE+dHjFwE51zl/gmKRvMEUnpkfJeuCXR1rLO
+ 5Gvq3UuaBtmjHztmsYsDCFCKRN7wzGpN+lUA8j2QJMHBMHllTQ6fsdDNQfLhTigkQI92mi
+ MgT9smb8u9uAqtJ8r1Zf36iKUxE5nhe6Z2v4MyGlFxv+pETKqgKzSi1G+u6b8CNoaEAHTR
+ djjmbUD4t5UtXB/jXuCXxIB+XNR1wT5YpxTkS5v0D1mzpjpEK97aMo5SIz1EYg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Oihs/JPm
+Subject: Re: [Buildroot] [PATCH 1/4] configs/sipeed_maix_{bit,
+ dock}_sdcard_defconfig: fix build with binutils >= 2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,162 +75,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdd80863cf81a5b9034903ee1954d41a7ebbd1e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 18 Aug 2023 01:08:41 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    | 32 ++++++++++++++++++++++++++++++++
- Makefile                   |  4 ++--
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 4 files changed, 64 insertions(+), 11 deletions(-)
+> Backport an upstream patch fixing the build with binutils >= 2.38
+> for riscv's for Zicsr and Zifencei.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060608
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060605
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  ...iscv-Fix-build-against-binutils-2.38.patch | 58 +++++++++++++++++++
+>  configs/sipeed_maix_bit_sdcard_defconfig      |  1 +
+>  configs/sipeed_maix_dock_sdcard_defconfig     |  1 +
+>  3 files changed, 60 insertions(+)
+>  create mode 100644 board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
 
-diff --git a/CHANGES b/CHANGES
-index 5ed0568bec..d000ee9454 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,35 @@
-+2023.08-rc2, released August 20th, 2023
-+
-+	Fixes all over the tree.
-+
-+	Toolchains: Only show external toolchains based on a GCC
-+	version supporting the selected architecture
-+	variant. Correctly mark Codescape MIPS external toolchains as
-+	not providing a gdbserver.
-+
-+	Defconfigs: Andes ae350_45: Drop custom U-Boot march setting,
-+	breaking builds with GCC 12. Nitrogen*: Bump
-+	U-Boot/Linux. Nitrogen8*: Use ATF 2.8, fixing array bounds
-+	errors. QEMU m68k: Add Linux patch to fix build issue with
-+	binutils >= 2.41. Raspberrypi*: Enable console on HDMI when
-+	using systemd as well.
-+
-+	Updated/fixed packages: at91dataflashboot, aubio, berkeleydb,
-+	bwm-ng, ccache, check, chocolate-doom, compiler-rt, composer,
-+	conmon, connman, dav1d, diffutils, dracut, e2fsprogs, elf2flt,
-+	esp-hosted, flite, gcc, gdb, go-bootstrap-stage2,
-+	intel-microcode, kodi-imagedecoder-heif, less, libcoap,
-+	libedit, libglib2, libksba, liblo, libserial, log4cxx, lsof,
-+	luvi, meson, mosquitto, mpd, mpv, mv-ddr-marvell, nftables,
-+	ntpsec, openssh, optee-test, perftest, python-botocore,
-+	python-docker, python-pylibfdt, python3, screenfetch,
-+	sentry-cli, sngrep, stellarium, trinity, tvheadend, uboot,
-+	uclibc, util-linux, xfsprogs, yajl
-+
-+	New packages: nftables-python, xlib_libXpresent
-+
-+	Removed packages: lpc32xxcdl
-+
- 2023.08-rc1, released August 5, 2023
- 
- 	Numerous package updates and fixes, additional runtime tests.
-diff --git a/Makefile b/Makefile
-index 080136bc9a..f0ff9a1480 100644
---- a/Makefile
-+++ b/Makefile
-@@ -90,9 +90,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2023.08-rc1
-+export BR2_VERSION := 2023.08-rc2
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1691269000
-+BR2_VERSION_EPOCH = 1692567000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 3d5e2b37de..45d6bbeef3 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -76,37 +76,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest release candidate: <b>2023.08-rc1</b></h3>
-+      <h3 style="text-align: center;">Latest release candidate: <b>2023.08-rc2</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.08-rc1.tar.gz">buildroot-2023.08-rc1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.08-rc1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.08-rc2.tar.gz">buildroot-2023.08-rc2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.08-rc2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.08-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.08-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.08-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.08-rc1.tar.xz">buildroot-2023.08-rc1.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.08-rc1.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.08-rc2.tar.xz">buildroot-2023.08-rc2.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.08-rc2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index a338b15acf..8c7cc8a8c2 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.08-rc2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>20 August 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+        <p>2023.08-rc2 has been released with more cleanups and build fixes. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.08-rc2">CHANGES</a>
-+	  file for details.</p>
-+
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2023.08-rc2.tar.xz">2023.08-rc2
-+	  release candidate</a>, and report any problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+Thanks, series applied to master. However I believe it would be good to
+get some updates of those defconfigs by the people who originally
+submitted them, and who therefore have the hardware (or alternatively
+drop some of those defconfigs).
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
