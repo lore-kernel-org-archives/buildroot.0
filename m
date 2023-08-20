@@ -4,61 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B32E4EE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 09:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85FF5EE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 09:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29D8760797;
-	Sun, 20 Aug 2023 09:58:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29D8760797
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1667C60BFC;
+	Sun, 20 Aug 2023 09:58:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1667C60BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Sd5gImW0QoMM; Sun, 20 Aug 2023 09:58:35 +0000 (UTC)
+	with ESMTP id PnMPqxptJGxd; Sun, 20 Aug 2023 09:58:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6140A60BC2;
-	Sun, 20 Aug 2023 09:58:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6140A60BC2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EAD260BF0;
+	Sun, 20 Aug 2023 09:58:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EAD260BF0
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AE8E81BF5E6
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:58:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AC57E1BF5E6
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:58:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 910C080D6B
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 910C080D6B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84D2281B10
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:58:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84D2281B10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bszn4nEx4mBk for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 09:58:31 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 779EE80C37
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 09:58:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 779EE80C37
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1FA3E13F8B6;
- Sun, 20 Aug 2023 11:58:27 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id kXBMeoU9oN2g for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 09:58:41 +0000 (UTC)
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
+ [IPv6:2a00:1450:4864:20::129])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 185CF81A16
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 09:58:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 185CF81A16
+Received: by mail-lf1-x129.google.com with SMTP id
+ 2adb3069b0e04-4ffa94a7a47so2257470e87.1
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 02:58:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1692525518; x=1693130318;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=VGr0salNXg1Khxfoyj46jji7ux0O7lu5J/cdgx7uH5Q=;
+ b=DJ7QXxV5DrFcBbRZNmLfhP3jLdflmeqv/UHJvwLWJz4i8PnDr90mOHGvzK2AtfChiu
+ +vzSVtEsE3WALoUA452lqfHoKKYanXXszK9kp9WIep0pFN9lzYqzlgg1AmcjAA4zgL6z
+ 7+fQbjk+nyE+fbQ8vASzv6ym1/Ufxb/JEYbp7361bcJ1Rri+BKf7H2J7C307sqaQUp9P
+ IyQLveuiSOxXhZ/OlpyPwtuSaRivqnAyexAiFdSSmC3uynd9z1vuwIgtXvD1VOj1TZPN
+ yqUU2k75cce3hNXzn2c3yQr7AZ7pbxD/Vzvwykga0Cp++RpZLHv2YlrBVs3Nz234faoJ
+ 3mPg==
+X-Gm-Message-State: AOJu0YxGENJkmZx8NQDgYhG4kS1vh2Ef329qJDlYu88pR/Qws/eCPDa2
+ rWVbNhn5d3Hx1VTHO1A0nab4+fV7aGc=
+X-Google-Smtp-Source: AGHT+IGasVLQIwLqVwMrvjMH63S01dW5SFS+Iq8LLggtdr3Jz7ixSw2IfHYffxe2C0pWc2w7m+ToNA==
+X-Received: by 2002:a05:6512:78f:b0:4fb:7666:3bbf with SMTP id
+ x15-20020a056512078f00b004fb76663bbfmr2386024lfr.26.1692525518131; 
+ Sun, 20 Aug 2023 02:58:38 -0700 (PDT)
+Received: from user-PC.. ([92.51.95.194]) by smtp.gmail.com with ESMTPSA id
+ q22-20020ac24a76000000b004ff9f88b86esm1187344lfp.308.2023.08.20.02.58.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 20 Aug 2023 02:58:37 -0700 (PDT)
+From: Maksim Kiselev <bigunclemax@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 11:58:21 +0200
-Message-ID: <20230820095821.166705-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Date: Sun, 20 Aug 2023 12:58:32 +0300
+Message-Id: <20230820095833.602364-1-bigunclemax@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692525508;
- bh=wJT6TSHbIQHqWBkYjJYHupLiPTPKtzEHgPogS1VIhfg=;
- h=From:To:Cc:Subject:Date:From;
- b=OOz6V/JHjJ6AUE1mLzcuZ/Ut/ByOeN0UVA+CyEMDiLEvuzF0bAITjd44zMtSt8CUs
- QsEoGe4HZDTp9gk/O1dLoM2P3aAVE1ZBJVLjh2qyheVErZ2wBQzcobcv9JUEUeiNgN
- HXdnj2qGiF0kY5iqUMtd/CKj8Y0A0eI60YQOW2iuNjJrPsVmwxNG1U5akGALZM6+kf
- DKDCrbWvRxhz0DMGgjvTrsjmx21Z8TO6MPlNsmcFWN405s60Y5IEbDgfkf1xSiLUj3
- 3ggNKSnh0pCjRpV6b0TKlVvfovqeENYJjqXQ0tss4pRvGz6WJY9MYy3ABBnWweQfDy
- okCZRqkFSI3+Q==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1692525518; x=1693130318;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=VGr0salNXg1Khxfoyj46jji7ux0O7lu5J/cdgx7uH5Q=;
+ b=fpSQcZE9CvMEIC9cDnQfVj1MR6cDuVloPh1FFBpTd9b/gCn0cBexZyVos+J2rpI9S4
+ zVfEO+b1djCXo3NRIdSHSinDCtN4rZkKz6SHQ9jW9p/lZnmjQb1F7VpT/6Wxe2U/FPsq
+ nu+r0DqYQzjhHTNr/LmMstJ2taCJsYii+u6+WCwvlZTYd88932n3Z7bxzasMeD44vjhM
+ 3FgJdybwP8gp7ZOFEvNNmXyiOdFC7kRUGGdHg7dxShzoEA8HiPrO5OtYs2//wMjH0IJr
+ gkBqV/27e1e7EPK4xygSKmZRuX2RcS7wU3vvIosBTFe8aeeNQ6cdQf3uGdmc4ha7n8q3
+ zniw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OOz6V/JH
-Subject: [Buildroot] [PATCH next 1/1] package/opencsd: bump to version 1.4.1
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=fpSQcZE9
+Subject: [Buildroot] [PATCH v2 0/1] package/ledmon: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,55 +92,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Maksim Kiselev <bigunclemax@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://github.com/Linaro/OpenCSD/blob/v1.4.1/README.md?plain=1#L294
+Add Enclosure LED Utilities
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch next at commit c614a7d with commands:
+v2 changes:
+ - add an entry in the DEVELOPERS file for this package
+ - use "select" instead of "depends on" for For pciutils and sg3_utils
+ - add patches for musl builds
+ - drop "v" prefix for LEDMON_VERSION variable
+ - add host-pkgconf dependency
+ - add comment about licenses
+ - bump ledmon version to 0.97
 
-    utils/docker-run make check-package
-    ...
-    0 warnings generated
+Maksim Kiselev (1):
+  package/ledmon: new package
 
-    utils/test-pkg -p opencsd
-    ...
-    6 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/opencsd/opencsd.hash | 2 +-
- package/opencsd/opencsd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   1 +
+ ...nstandard-on_exit-function-by-atexit.patch | 223 ++++++++++++++++++
+ ...-Fix-unknown-type-name-ssize_t-error.patch |  44 ++++
+ .../ledmon/0003-Add-disable-doc-option.patch  |  63 +++++
+ package/ledmon/Config.in                      |  15 ++
+ package/ledmon/ledmon.hash                    |   3 +
+ package/ledmon/ledmon.mk                      |  18 ++
+ 8 files changed, 370 insertions(+)
+ create mode 100644 package/ledmon/0001-Replace-nonstandard-on_exit-function-by-atexit.patch
+ create mode 100644 package/ledmon/0002-Fix-unknown-type-name-ssize_t-error.patch
+ create mode 100644 package/ledmon/0003-Add-disable-doc-option.patch
+ create mode 100644 package/ledmon/Config.in
+ create mode 100644 package/ledmon/ledmon.hash
+ create mode 100644 package/ledmon/ledmon.mk
 
-diff --git a/package/opencsd/opencsd.hash b/package/opencsd/opencsd.hash
-index 84a762fb36..a3534976b5 100644
---- a/package/opencsd/opencsd.hash
-+++ b/package/opencsd/opencsd.hash
-@@ -1,3 +1,3 @@
- # Locally Computed:
--sha256  e1bb6d8d09e87974cb5ca6db2a13b0e1ba9e51117ca2ed71879df07ff7af4de2  opencsd-1.4.0.tar.gz
-+sha256  159a611535fd7d3bf179bcbdab3791852c6e7199401a6e59cdeef3ba2072edc4  opencsd-1.4.1.tar.gz
- sha256  980eef4b0744e63834e3ec0d50c2a4ff6d81d7ec62dd8ba8c66acae0ec5a2e88  LICENSE
-diff --git a/package/opencsd/opencsd.mk b/package/opencsd/opencsd.mk
-index 680364d01d..76135bf0b0 100644
---- a/package/opencsd/opencsd.mk
-+++ b/package/opencsd/opencsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCSD_VERSION = 1.4.0
-+OPENCSD_VERSION = 1.4.1
- OPENCSD_SITE = $(call github,Linaro,OpenCSD,v$(OPENCSD_VERSION))
- OPENCSD_LICENSE = BSD-3-Clause
- OPENCSD_LICENSE_FILES = LICENSE
 -- 
-2.41.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
