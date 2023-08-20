@@ -1,71 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D79EE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 16:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1132EEE4993
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 16:30:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F21781413;
-	Sun, 20 Aug 2023 16:08:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F21781413
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FXJA3ftKqmW1; Sun, 20 Aug 2023 16:08:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 446A680E4A;
-	Sun, 20 Aug 2023 16:08:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 446A680E4A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E23AC1BF373
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 16:08:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4F0460B69
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 16:08:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4F0460B69
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D93360A97;
+	Sun, 20 Aug 2023 16:30:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D93360A97
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nD7xFBE91CB7 for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 16:08:37 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 06FD560B0E
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 16:08:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06FD560B0E
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:73e4:5f06:f514:c64d])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id D958019F5A6;
- Sun, 20 Aug 2023 18:08:31 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 20 Aug 2023 18:08:31 +0200
-Date: Sun, 20 Aug 2023 18:08:31 +0200
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id xxktu5TnS-Be; Sun, 20 Aug 2023 16:30:36 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0A3F60AA4;
+	Sun, 20 Aug 2023 16:30:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0A3F60AA4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EFBE1BF373
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 16:30:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 189EE8146C
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 16:30:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 189EE8146C
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pvda6HZQ1pEg for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 16:30:33 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD24B8146A
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 16:30:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD24B8146A
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3fee87dd251so7616815e9.2
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 09:30:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1692549031; x=1693153831;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=U2L7My/sTZ6V1IGMjm9484NH2KnwHHxCo3evXqtONdc=;
+ b=W4JGFiCkhHaM/QFNr7elOuAwJbuojVqkpS29YfMWmLgFJZpLng9OA4g0dz0fGz80qr
+ 9h6BdHqmAg6xHzyf8Fuj8y0SUEJVtTd8voeLscWHixyDSsb1yF3n6xxzy9CFzH4REU7a
+ tNq7Bg90EAhpyPx3MuP+Y0nq3HtCZ2qf5cS8ol6x/6CltLV0KBl7SiUIcYXVw3wOWKGL
+ 6vlXhfGFo9CUFn9+zkcffgFSBgIaBXEomG92QAQhMIrbP/oRNwh4KbdgLR4smUvwHhMU
+ zsHH+GwOWt8L6v4k+QjCgAgDOocRzd+x3uIs5nm1An71KpQ1SZn7QxqOOf5yM6gswmx6
+ tp6w==
+X-Gm-Message-State: AOJu0Yyc2fjaRYg4/p8hV6KbQvaEPBqXi878crKQ1z+7vrh/+r3NfEaP
+ ISlES9JBdMTAG3I4/nz0fHt3yPPUays=
+X-Google-Smtp-Source: AGHT+IG/5WT8VLI3mGi7VmqsBDWai51Bux3NjZq3jXa7RBnVg4OzQL1XeP4drtwbliGB1V+n2SNpMQ==
+X-Received: by 2002:a5d:4573:0:b0:315:ad1a:5abc with SMTP id
+ a19-20020a5d4573000000b00315ad1a5abcmr3267406wrc.5.1692549030737; 
+ Sun, 20 Aug 2023 09:30:30 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:cb19:8b44:b00:73e4:5f06:f514:c64d])
+ by smtp.gmail.com with ESMTPSA id
+ v26-20020a05600c215a00b003fbb618f7adsm9783964wml.15.2023.08.20.09.30.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 20 Aug 2023 09:30:30 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Message-ID: <20230820160831.GP1778688@scaer>
-References: <20230820152011.81543-1-kilian.zinnecker@mail.de>
- <20230820152011.81543-2-kilian.zinnecker@mail.de>
+To: buildroot@buildroot.org
+Date: Sun, 20 Aug 2023 18:30:29 +0200
+Message-Id: <20230820163029.2720609-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230820152011.81543-2-kilian.zinnecker@mail.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692547714;
- bh=mbFiwYe4kS14yNXlIqQNh/xAhnr5mS5iIh0CrWSgpEI=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=EJGmvIF/J20LVCK5nNQrGoh7NwO5I4tgmnnay6IX2/csiwc8iGuQVKs4zZE4XlmTR
- 4uMDbQopdtrt18mG/UhzxJujCpi3h2Xd1QqoRHazAgtzULcvT3Ck/jyBLs9pFcf6px
- p6ULwK9megbldRlvVkPnb5QUIWY6NK8S1bSkRP/WEb3gtnhY/ykU+O1tgFGUJCQpp2
- D86Gv/FttX4dA0T2dRG/Xhkvbu9v+9Icw0AVe/uQ9BeVgCx+TO6WUjP/WFTWFDxQta
- jrbzgSv1LY8dit8cREQ5Rpb7ifgRJRaCounaeVgtABzs1dglN6RbnsG5I7wN8b4ZXa
- WXzQlC1WJV4xQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EJGmvIF/
-Subject: Re: [Buildroot] [PATCH v2 1/1] configs/rock5b: Add patches to fix
- gcc12 warnings
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1692549031; x=1693153831;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=U2L7My/sTZ6V1IGMjm9484NH2KnwHHxCo3evXqtONdc=;
+ b=WfOS39FDOkgwcttW1hL1/ORezSevt+MNX6Z4fdFLqF5qEsJROBlWl2IjFi3gc2Rs99
+ RI8146xFjdI+cyr8/Mo36akdny3bsf8/WHRpyq7DlmGzw/Xf/t7Rv5IQX1OQnBqTDhnJ
+ aurSvbZkxcVGW5v6r2OWSMBXwntBjICBjKgkf8TxWeA6JRxR9JdFMmBgl5hBa4S4uRAF
+ isbOJT/isU3HB0jVuLk0AoApIPeqLUa8fnzZFC8uBhD4XU6U7AiL3iGh4tkgJHcWn+X+
+ aIM2AsyAUsJKpxl80ZsyosusoeBIQCZe2sIV/zyzOBE+0CmTsG9NguaqtnmCe0T9NtO/
+ C5Uw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=WfOS39FD
+Subject: [Buildroot] [PATCH] arch/powerpc: drop ABI selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,175 +93,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-S2lsaWFuLCBBbGwsCgpPbiAyMDIzLTA4LTIwIDE3OjIwICswMjAwLCBLaWxpYW4gWmlubmVja2Vy
-IHZpYSBidWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IFRoaXMgcGF0Y2ggaW50cm9kdWNlcyBwYXRj
-aGVzIGZvciB0aGUgY3VzdG9tIGtlcm5lbCwgYXMgaXQgaXMKPiBjdXJyZW50bHkgdXNlZCBmb3Ig
-dGhlIFJhZHhhIFJvY2sgNUIuIFRoZSBwYXRjaGVzIGZpeCB0d28gZ2NjCj4gY29tcGlsZXIgd2Fy
-bmluZ3MsIHdoaWNoIHJlc3VsdCBpbiBhIGJ1aWxkIGVycm9yLCBpZiB0aGUga2VybmVsCj4gaXMg
-dXNlZCB3aXRoIGdjYyB2ZXJzaW9uIDEyLgo+IFNpbmNlIGFsc28gdGhlIGNvZGUgb2YgY3VzdG9t
-IGJvYXJkIGRyaXZlcnMgZm9yIFdpRmkgc3VwcG9ydCBpcwo+IGFmZmVjdGVkLCBhbmQgbm8gZml4
-ZXMgYXJlIHByb3ZpZGVkIGJ5IHRoZSB2ZW5kb3IsIHRoZSBjdXN0b20gV2lGaQo+IHN1cHBvcnQg
-aXMgZGlzYWJsZWQuCj4gCj4gU2lnbmVkLW9mZi1ieTogS2lsaWFuIFppbm5lY2tlciA8a2lsaWFu
-Lnppbm5lY2tlckBtYWlsLmRlPgo+IC0tLQo+ICBib2FyZC9yYWR4YS9yb2NrNWIvbGludXguZnJh
-Z21lbnQgICAgICAgICAgICAgfCAgMSArCj4gIC4uLnN0LWV0aGVyX2FkZHItcHJvdG90eXBlcy10
-by1zaWxlbmNlLS5wYXRjaCB8IDYyICsrKysrKysrKysrKysrKysrKysKPiAgLi4ueC1idWlsZGlu
-Zy1lcnJvci1vbi1XZXJyb3ItYXJyYXktY29tLnBhdGNoIHwgNDUgKysrKysrKysrKysrKysKPiAg
-Y29uZmlncy9yb2NrNWJfZGVmY29uZmlnICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICA0
-IGZpbGVzIGNoYW5nZWQsIDEwOSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBi
-b2FyZC9yYWR4YS9yb2NrNWIvcGF0Y2hlcy9saW51eC8wMDAxLWV0aGVyZGV2aWNlLUFkanVzdC1l
-dGhlcl9hZGRyLXByb3RvdHlwZXMtdG8tc2lsZW5jZS0ucGF0Y2gKPiAgY3JlYXRlIG1vZGUgMTAw
-NjQ0IGJvYXJkL3JhZHhhL3JvY2s1Yi9wYXRjaGVzL2xpbnV4LzAwMDItbW0tcGFnZV9hbGxvYy1m
-aXgtYnVpbGRpbmctZXJyb3Itb24tV2Vycm9yLWFycmF5LWNvbS5wYXRjaAo+IAo+IGRpZmYgLS1n
-aXQgYS9ib2FyZC9yYWR4YS9yb2NrNWIvbGludXguZnJhZ21lbnQgYi9ib2FyZC9yYWR4YS9yb2Nr
-NWIvbGludXguZnJhZ21lbnQKPiBpbmRleCA4MTFkNDJhNzliLi5kNDU1YjQ5MmI5IDEwMDY0NAo+
-IC0tLSBhL2JvYXJkL3JhZHhhL3JvY2s1Yi9saW51eC5mcmFnbWVudAo+ICsrKyBiL2JvYXJkL3Jh
-ZHhhL3JvY2s1Yi9saW51eC5mcmFnbWVudAo+IEBAIC0xICsxLDIgQEAKPiAgQ09ORklHX1I4MTY5
-PXkKPiArQ09ORklHX1dMX1JPQ0tDSElQPW4KCj1uIGlzIG5vdCB2YWxpZCBpbiBrY29uZmlnIHRv
-IGRpc2FibGUgYSBzeW1ib2w7IGluc3RlYWQsIHRoZXkgbXVzdCBiZQp1bnNldDoKCiAgICAjIENP
-TkZJR19XTF9ST0NLQ0hJUD1uCgpTZWUgZm9yIGV4YW1wbGU6CgogICAgYm9hcmQvb2xpbWV4L2Ey
-MF9vbGludXhpbm8vbGludXgtZGlzYWJsZS1saW1hLmZyYWdtZW50CiAgICBib2FyZC9zb2xpZHJ1
-bi9tYWNjaGlhdG9iaW4vdWJvb3QtZnJhZ21lbnQuY29uZmlnCiAgICBib2FyZC9zdG1pY3JvZWxl
-Y3Ryb25pY3Mvc3RtMzJmNzY5LWRpc2NvL2xpbnV4LXNkLmZyYWdtZW50CiAgICBib2FyZC9zb2xp
-ZHJ1bi9jbGVhcmZvZ19ndF84ay91Ym9vdC1mcmFnbWVudC5jb25maWcKCj4gZGlmZiAtLWdpdCBh
-L2JvYXJkL3JhZHhhL3JvY2s1Yi9wYXRjaGVzL2xpbnV4LzAwMDEtZXRoZXJkZXZpY2UtQWRqdXN0
-LWV0aGVyX2FkZHItcHJvdG90eXBlcy10by1zaWxlbmNlLS5wYXRjaCBiL2JvYXJkL3JhZHhhL3Jv
-Y2s1Yi9wYXRjaGVzL2xpbnV4LzAwMDEtZXRoZXJkZXZpY2UtQWRqdXN0LWV0aGVyX2FkZHItcHJv
-dG90eXBlcy10by1zaWxlbmNlLS5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXgg
-MDAwMDAwMDAwMC4uOGMxY2VjMmY0Nwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9yYWR4
-YS9yb2NrNWIvcGF0Y2hlcy9saW51eC8wMDAxLWV0aGVyZGV2aWNlLUFkanVzdC1ldGhlcl9hZGRy
-LXByb3RvdHlwZXMtdG8tc2lsZW5jZS0ucGF0Y2gKPiBAQCAtMCwwICsxLDYyIEBACj4gK0Zyb20g
-MjYxOGEwZGFlMDllZjM3NzI4ZGFiODlmZjYwNDE4Y2JlMjVhZTZiZCBNb24gU2VwIDE3IDAwOjAw
-OjAwIDIwMDEKPiArRnJvbTogS2VlcyBDb29rIDxrZWVzY29va0BjaHJvbWl1bS5vcmc+Cj4gK0Rh
-dGU6IFNhdCwgMTIgRmViIDIwMjIgMDk6MTQ6NDkgLTA4MDAKPiArU3ViamVjdDogW1BBVENIXSBl
-dGhlcmRldmljZTogQWRqdXN0IGV0aGVyX2FkZHIqIHByb3RvdHlwZXMgdG8gc2lsZW5jZQo+ICsg
-LVdzdHJpbmdvcC1vdmVyZWFkCj4gK01JTUUtVmVyc2lvbjogMS4wCj4gK0NvbnRlbnQtVHlwZTog
-dGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+ICtDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4
-Yml0Cj4gKwo+ICtXaXRoIEdDQyAxMiwgLVdzdHJpbmdvcC1vdmVycmVhZCB3YXMgd2FybmluZyBh
-Ym91dCBhbiBpbXBsaWNpdCBjYXN0IGZyb20KPiArY2hhcls2XSB0byBjaGFyWzhdLiBIb3dldmVy
-LCB0aGUgZXh0cmEgMiBieXRlcyBhcmUgYWx3YXlzIHRocm93biBhd2F5LAo+ICthbGlnbm1lbnQg
-ZG9lc24ndCBtYXR0ZXIsIGFuZCB0aGUgcmlzayBvZiBoaXR0aW5nIHRoZSBlZGdlIG9mIHVuYWxs
-b2NhdGVkCj4gK21lbW9yeSBoYXMgYmVlbiBhY2NlcHRlZCwgc28gdGhpcyBwcm90b3R5cGUgY2Fu
-IGp1c3QgYmUgY29udmVydGVkIHRvIGEKPiArcmVndWxhciBjaGFyICouIFNpbGVuY2VzOgo+ICsK
-PiArbmV0L2NvcmUvZGV2LmM6IEluIGZ1bmN0aW9uIOKAmGJwZl9wcm9nX3J1bl9nZW5lcmljX3hk
-cOKAmTogbmV0L2NvcmUvZGV2LmM6NDYxODoyMTogd2FybmluZzog4oCYZXRoZXJfYWRkcl9lcXVh
-bF82NGJpdHPigJkgcmVhZGluZyA4IGJ5dGVzIGZyb20gYSByZWdpb24gb2Ygc2l6ZSA2IFstV3N0
-cmluZ29wLW92ZXJyZWFkXQo+ICsgNDYxOCB8ICAgICAgICAgb3JpZ19ob3N0ID0gZXRoZXJfYWRk
-cl9lcXVhbF82NGJpdHMoZXRoLT5oX2Rlc3QsID4gc2tiLT5kZXYtPmRldl9hZGRyKTsKPiArICAg
-ICAgfCAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4gK25ldC9jb3JlL2Rldi5jOjQ2MTg6MjE6IG5vdGU6
-IHJlZmVyZW5jaW5nIGFyZ3VtZW50IDEgb2YgdHlwZSDigJhjb25zdCB1OFs4XeKAmSB7YWthIOKA
-mGNvbnN0IHVuc2lnbmVkIGNoYXJbOF3igJl9Cj4gK25ldC9jb3JlL2Rldi5jOjQ2MTg6MjE6IG5v
-dGU6IHJlZmVyZW5jaW5nIGFyZ3VtZW50IDIgb2YgdHlwZSDigJhjb25zdCB1OFs4XeKAmSB7YWth
-IOKAmGNvbnN0IHVuc2lnbmVkIGNoYXJbOF3igJl9Cj4gK0luIGZpbGUgaW5jbHVkZWQgZnJvbSBu
-ZXQvY29yZS9kZXYuYzo5MTogaW5jbHVkZS9saW51eC9ldGhlcmRldmljZS5oOjM3NToyMDogbm90
-ZTogaW4gYSBjYWxsIHRvIGZ1bmN0aW9uIOKAmGV0aGVyX2FkZHJfZXF1YWxfNjRiaXRz4oCZCj4g
-KyAgMzc1IHwgc3RhdGljIGlubGluZSBib29sIGV0aGVyX2FkZHJfZXF1YWxfNjRiaXRzKGNvbnN0
-IHU4IGFkZHIxWzYrMl0sCj4gKyAgICAgIHwgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+Cj4gKwo+ICtSZXBvcnRlZC1ieTogTWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBw
-ZW5ndXRyb25peC5kZT4KPiArVGVzdGVkLWJ5OiBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1
-dHJvbml4LmRlPgo+ICtMaW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9uZXRkZXYvMjAyMjAy
-MTIwOTA4MTEudXV6azZkNzZhZ3cydnY3M0BwZW5ndXRyb25peC5kZQo+ICtDYzogSmFrdWIgS2lj
-aW5za2kgPGt1YmFAa2VybmVsLm9yZz4KPiArQ2M6ICJEYXZpZCBTLiBNaWxsZXIiIDxkYXZlbUBk
-YXZlbWxvZnQubmV0Pgo+ICtDYzogbmV0ZGV2QHZnZXIua2VybmVsLm9yZwo+ICtTaWduZWQtb2Zm
-LWJ5OiBLZWVzIENvb2sgPGtlZXNjb29rQGNocm9taXVtLm9yZz4KPiArU2lnbmVkLW9mZi1ieTog
-RGF2aWQgUy4gTWlsbGVyIDxkYXZlbUBkYXZlbWxvZnQubmV0PgoKICAgICQgLi91dGlscy9kb2Nr
-ZXItcnVuIG1ha2UgY2hlY2stcGFja2FnZQogICAgYm9hcmQvcmFkeGEvcm9jazViL3BhdGNoZXMv
-bGludXgvMDAwMS1ldGhlcmRldmljZS1BZGp1c3QtZXRoZXJfYWRkci1wcm90b3R5cGVzLXRvLXNp
-bGVuY2UtLnBhdGNoOjA6IG1pc3NpbmcgVXBzdHJlYW0gaW4gdGhlIGhlYWRlciAoaHR0cDovL25p
-Z2h0bHkuYnVpbGRyb290Lm9yZy8jX2FkZGl0aW9uYWxfcGF0Y2hfZG9jdW1lbnRhdGlvbikKICAg
-IGJvYXJkL3JhZHhhL3JvY2s1Yi9wYXRjaGVzL2xpbnV4LzAwMDItbW0tcGFnZV9hbGxvYy1maXgt
-YnVpbGRpbmctZXJyb3Itb24tV2Vycm9yLWFycmF5LWNvbS5wYXRjaDowOiBtaXNzaW5nIFVwc3Ry
-ZWFtIGluIHRoZSBoZWFkZXIgKGh0dHA6Ly9uaWdodGx5LmJ1aWxkcm9vdC5vcmcvI19hZGRpdGlv
-bmFsX3BhdGNoX2RvY3VtZW50YXRpb24pCgpBbHNvLCBpdCBtaXNzZXMgeW91ciBvd24gU2lnbi1v
-ZmYgbGluZToKCiAgICBVcHN0cmVhbTogaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xp
-bnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0L2NvbW1pdC8/aWQ9MjYxOGEwZGFlMDll
-ZjM3NzI4ZGFiODlmZjYwNDE4Y2JlMjVhZTZiZAogICAgU2lnbmVkLW9mZi1ieTogS2lsaWFuIFpp
-bm5lY2tlciA8a2lsaWFuLnppbm5lY2tlckBtYWlsLmRlPgoKUmVnYXJkcywKWWFubiBFLiBNT1JJ
-Ti4KCj4gKy0tLQo+ICsgaW5jbHVkZS9saW51eC9ldGhlcmRldmljZS5oIHwgNSArKy0tLQo+ICsg
-MSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPiArCj4gK2Rp
-ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2V0aGVyZGV2aWNlLmggYi9pbmNsdWRlL2xpbnV4L2V0
-aGVyZGV2aWNlLmgKPiAraW5kZXggMmFkNzFjYzkwYjM3Li45MmIxMGU2N2Q1ZjggMTAwNjQ0Cj4g
-Ky0tLSBhL2luY2x1ZGUvbGludXgvZXRoZXJkZXZpY2UuaAo+ICsrKysgYi9pbmNsdWRlL2xpbnV4
-L2V0aGVyZGV2aWNlLmgKPiArQEAgLTEzNCw3ICsxMzQsNyBAQCBzdGF0aWMgaW5saW5lIGJvb2wg
-aXNfbXVsdGljYXN0X2V0aGVyX2FkZHIoY29uc3QgdTggKmFkZHIpCj4gKyAjZW5kaWYKPiArIH0K
-PiArIAo+ICstc3RhdGljIGlubGluZSBib29sIGlzX211bHRpY2FzdF9ldGhlcl9hZGRyXzY0Yml0
-cyhjb25zdCB1OCBhZGRyWzYrMl0pCj4gKytzdGF0aWMgaW5saW5lIGJvb2wgaXNfbXVsdGljYXN0
-X2V0aGVyX2FkZHJfNjRiaXRzKGNvbnN0IHU4ICphZGRyKQo+ICsgewo+ICsgI2lmIGRlZmluZWQo
-Q09ORklHX0hBVkVfRUZGSUNJRU5UX1VOQUxJR05FRF9BQ0NFU1MpICYmIEJJVFNfUEVSX0xPTkcg
-PT0gNjQKPiArICNpZmRlZiBfX0JJR19FTkRJQU4KPiArQEAgLTM3Miw4ICszNzIsNyBAQCBzdGF0
-aWMgaW5saW5lIGJvb2wgZXRoZXJfYWRkcl9lcXVhbChjb25zdCB1OCAqYWRkcjEsIGNvbnN0IHU4
-ICphZGRyMikKPiArICAqIFBsZWFzZSBub3RlIHRoYXQgYWxpZ25tZW50IG9mIGFkZHIxICYgYWRk
-cjIgYXJlIG9ubHkgZ3VhcmFudGVlZCB0byBiZSAxNiBiaXRzLgo+ICsgICovCj4gKyAKPiArLXN0
-YXRpYyBpbmxpbmUgYm9vbCBldGhlcl9hZGRyX2VxdWFsXzY0Yml0cyhjb25zdCB1OCBhZGRyMVs2
-KzJdLAo+ICstCQkJCQkgICBjb25zdCB1OCBhZGRyMls2KzJdKQo+ICsrc3RhdGljIGlubGluZSBi
-b29sIGV0aGVyX2FkZHJfZXF1YWxfNjRiaXRzKGNvbnN0IHU4ICphZGRyMSwgY29uc3QgdTggKmFk
-ZHIyKQo+ICsgewo+ICsgI2lmIGRlZmluZWQoQ09ORklHX0hBVkVfRUZGSUNJRU5UX1VOQUxJR05F
-RF9BQ0NFU1MpICYmIEJJVFNfUEVSX0xPTkcgPT0gNjQKPiArIAl1NjQgZm9sZCA9ICgqKGNvbnN0
-IHU2NCAqKWFkZHIxKSBeICgqKGNvbnN0IHU2NCAqKWFkZHIyKTsKPiArLS0gCj4gKzIuMzQuMQo+
-ICsKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvcmFkeGEvcm9jazViL3BhdGNoZXMvbGludXgvMDAwMi1t
-bS1wYWdlX2FsbG9jLWZpeC1idWlsZGluZy1lcnJvci1vbi1XZXJyb3ItYXJyYXktY29tLnBhdGNo
-IGIvYm9hcmQvcmFkeGEvcm9jazViL3BhdGNoZXMvbGludXgvMDAwMi1tbS1wYWdlX2FsbG9jLWZp
-eC1idWlsZGluZy1lcnJvci1vbi1XZXJyb3ItYXJyYXktY29tLnBhdGNoCj4gbmV3IGZpbGUgbW9k
-ZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4zNGVhZTljMTU4Cj4gLS0tIC9kZXYvbnVsbAo+
-ICsrKyBiL2JvYXJkL3JhZHhhL3JvY2s1Yi9wYXRjaGVzL2xpbnV4LzAwMDItbW0tcGFnZV9hbGxv
-Yy1maXgtYnVpbGRpbmctZXJyb3Itb24tV2Vycm9yLWFycmF5LWNvbS5wYXRjaAo+IEBAIC0wLDAg
-KzEsNDUgQEAKPiArRnJvbSA2OTg0OGY5NDg4YmMxMDg4YmNkOWE3Mzk4N2RmZjhkMmNiNDdhMDYw
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBYaW9uZ3dlaSBTb25nIDxzeHdqZWFu
-QGdtYWlsLmNvbT4KPiArRGF0ZTogRnJpLCAxNCBKYW4gMjAyMiAxNDowNzoyNCAtMDgwMAo+ICtT
-dWJqZWN0OiBbUEFUQ0hdIG1tOiBwYWdlX2FsbG9jOiBmaXggYnVpbGRpbmcgZXJyb3Igb24gLVdl
-cnJvcj1hcnJheS1jb21wYXJlCj4gKwo+ICtjb21taXQgY2E4MzFmMjlmOGYyNWM5NzE4MmU3MjY0
-MjliMzhjMDgwMjIwMGM4ZiB1cHN0cmVhbS4KPiArCj4gK0FydGh1ciBNYXJzaCByZXBvcnRlZCB3
-ZSB3b3VsZCBoaXQgdGhlIGVycm9yIGJlbG93IHdoZW4gYnVpbGRpbmcga2VybmVsCj4gK3dpdGgg
-Z2NjLTEyOgo+ICsKPiArICBDQyAgICAgIG1tL3BhZ2VfYWxsb2Mubwo+ICsgIG1tL3BhZ2VfYWxs
-b2MuYzogSW4gZnVuY3Rpb24gYG1lbV9pbml0X3ByaW50X2luZm8nOgo+ICsgIG1tL3BhZ2VfYWxs
-b2MuYzo4MTczOjI3OiBlcnJvcjogY29tcGFyaXNvbiBiZXR3ZWVuIHR3byBhcnJheXMgWy1XZXJy
-b3I9YXJyYXktY29tcGFyZV0KPiArICAgODE3MyB8ICAgICAgICAgICAgICAgICBpZiAoc3RhcnQg
-PD0gcG9zICYmIHBvcyA8IGVuZCAmJiBzaXplID4gYWRqKSBcCj4gKyAgICAgICAgfAo+ICsKPiAr
-SW4gQysrMjAsIHRoZSBjb21wYXJpc2lvbiBiZXR3ZWVuIGFycmF5cyBzaG91bGQgYmUgd2FybmVk
-Lgo+ICsKPiArTGluazogaHR0cHM6Ly9sa21sLmtlcm5lbC5vcmcvci8yMDIxMTEyNTEzMDkyOC4z
-MjQ2NS0xLXN4d2plYW5AbWUuY29tCj4gK1NpZ25lZC1vZmYtYnk6IFhpb25nd2VpIFNvbmcgPHN4
-d2plYW5AZ21haWwuY29tPgo+ICtSZXBvcnRlZC1ieTogQXJ0aHVyIE1hcnNoIDxhcnRodXIubWFy
-c2hAaW50ZXJub2RlLm9uLm5ldD4KPiArU2lnbmVkLW9mZi1ieTogQW5kcmV3IE1vcnRvbiA8YWtw
-bUBsaW51eC1mb3VuZGF0aW9uLm9yZz4KPiArU2lnbmVkLW9mZi1ieTogTGludXMgVG9ydmFsZHMg
-PHRvcnZhbGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPgo+ICtDYzogS2hlbSBSYWogPHJhai5raGVt
-QGdtYWlsLmNvbT4KPiArU2lnbmVkLW9mZi1ieTogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hA
-bGludXhmb3VuZGF0aW9uLm9yZz4KPiArLS0tCj4gKyBtbS9wYWdlX2FsbG9jLmMgfCAyICstCj4g
-KyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiArCj4gK2Rp
-ZmYgLS1naXQgYS9tbS9wYWdlX2FsbG9jLmMgYi9tbS9wYWdlX2FsbG9jLmMKPiAraW5kZXggZjAy
-MmUwMDI0ZThkLi5mMzQxOGVkYjEzNmIgMTAwNjQ0Cj4gKy0tLSBhL21tL3BhZ2VfYWxsb2MuYwo+
-ICsrKysgYi9tbS9wYWdlX2FsbG9jLmMKPiArQEAgLTc2NzgsNyArNzY3OCw3IEBAIHZvaWQgX19p
-bml0IG1lbV9pbml0X3ByaW50X2luZm8oY29uc3QgY2hhciAqc3RyKQo+ICsgCSAqLwo+ICsgI2Rl
-ZmluZSBhZGpfaW5pdF9zaXplKHN0YXJ0LCBlbmQsIHNpemUsIHBvcywgYWRqKSBcCj4gKyAJZG8g
-eyBcCj4gKy0JCWlmIChzdGFydCA8PSBwb3MgJiYgcG9zIDwgZW5kICYmIHNpemUgPiBhZGopIFwK
-PiArKwkJaWYgKCZzdGFydFswXSA8PSAmcG9zWzBdICYmICZwb3NbMF0gPCAmZW5kWzBdICYmIHNp
-emUgPiBhZGopIFwKPiArIAkJCXNpemUgLT0gYWRqOyBcCj4gKyAJfSB3aGlsZSAoMCkKPiArIAo+
-ICstLSAKPiArMi4zNC4xCj4gKwo+IGRpZmYgLS1naXQgYS9jb25maWdzL3JvY2s1Yl9kZWZjb25m
-aWcgYi9jb25maWdzL3JvY2s1Yl9kZWZjb25maWcKPiBpbmRleCA2ZTUyNWQ5Njc2Li5lZWQ2NTZl
-ZjVmIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3Mvcm9jazViX2RlZmNvbmZpZwo+ICsrKyBiL2NvbmZp
-Z3Mvcm9jazViX2RlZmNvbmZpZwo+IEBAIC01LDYgKzUsNyBAQCBCUjJfUk9PVEZTX1BPU1RfSU1B
-R0VfU0NSSVBUPSJib2FyZC9yYWR4YS9yb2NrNWIvcG9zdC1pbWFnZS5zaCIKPiAgQlIyX1JPT1RG
-U19QT1NUX1NDUklQVF9BUkdTPSIiCj4gIEJSMl9UQVJHRVRfR0VORVJJQ19IT1NUTkFNRT0icm9j
-azViIgo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfSVNTVUU9IldlbGNvbWUgdG8gdGhlIHJvY2s1YiBi
-b2FyZCIKPiArQlIyX0dMT0JBTF9QQVRDSF9ESVI9ImJvYXJkL3JhZHhhL3JvY2s1Yi9wYXRjaGVz
-Igo+ICBCUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJf
-TElOVVhfS0VSTkVMX0NVU1RPTV9HSVQ9eQo+IC0tIAo+IDIuMzQuMQo+IAo+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcg
-bGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0t
-LS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklC
-Qk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAg
-RGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMg
-NTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxl
-LyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8g
-fCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0t
-LS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Since it was introduced in 5a6087d62e5c (toolchain: add powerpc SPE ABI
+support), the CLASSIC vs. SPE choice for the ABI was never really a
+choice: CPU without SPE could only use the CLASSIC ABI, while CPUs with
+SPE could only use the SPE ABI.
+
+Commit b4c824562bb1 (powerpc: add BR2_POWERPC_CPU_HAS_SPE to replace
+adhoc deps/checks) added a blind option that CPUs with SPE would select
+rather than duplicate the ad-hoc dependencies in both CLASSIC and SPE
+ABI options. Since then, it was even more obvious that the ABI choice
+was really not a choice, as the two options have mutually exclusive
+conditions.
+
+Drop the useless choice, and directly use the blind option as selected
+by the specific CPUs.
+
+We don't need legacy handling, because the situation fixes itself.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Joel Stanley <joel@jms.id.au>
+---
+ arch/Config.in.powerpc     | 15 ---------------
+ package/Makefile.in        |  2 +-
+ package/gcc/Config.in.host | 10 +++++-----
+ package/gcc/gcc.mk         |  2 +-
+ package/glibc/Config.in    |  2 +-
+ package/musl/Config.in     |  2 +-
+ 6 files changed, 9 insertions(+), 24 deletions(-)
+
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index d4e204a463..3f4d348d5f 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -146,21 +146,6 @@ config BR2_powerpc_power9
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ endchoice
+ 
+-choice
+-	prompt "Target ABI"
+-	default BR2_powerpc_SPE if BR2_POWERPC_CPU_HAS_SPE
+-	default BR2_powerpc_CLASSIC
+-	help
+-	  Application Binary Interface to use
+-
+-config BR2_powerpc_CLASSIC
+-	bool "Classic"
+-	depends on !BR2_POWERPC_CPU_HAS_SPE
+-config BR2_powerpc_SPE
+-	bool "SPE"
+-	depends on BR2_POWERPC_CPU_HAS_SPE
+-endchoice
+-
+ config BR2_POWERPC_SOFT_FLOAT
+ 	bool "Use soft-float"
+ 	select BR2_SOFT_FLOAT
+diff --git a/package/Makefile.in b/package/Makefile.in
+index d70aded82b..4953d2d418 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -76,7 +76,7 @@ endif
+ endif
+ 
+ # For FSL PowerPC there's SPE
+-ifeq ($(BR2_powerpc_SPE),y)
++ifeq ($(BR2_POWERPC_CPU_HAS_SPE),y)
+ ABI = spe
+ # MPC8540s are e500v1 with single precision FP
+ ifeq ($(BR2_powerpc_8540),y)
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 4f2e47b9ea..fd721088ec 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_ARC if BR2_GCC_VERSION_4_8_ARC # legacy
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+-	default BR2_GCC_VERSION_POWERPC_SPE if BR2_powerpc_SPE
++	default BR2_GCC_VERSION_POWERPC_SPE if BR2_POWERPC_CPU_HAS_SPE
+ 	default BR2_GCC_VERSION_12_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+@@ -19,7 +19,7 @@ config BR2_GCC_VERSION_POWERPC_SPE
+ 	bool "gcc powerpc spe"
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+-	depends on BR2_powerpc_SPE
++	depends on BR2_POWERPC_CPU_HAS_SPE
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_GCC_VERSION_11_X
+@@ -27,7 +27,7 @@ config BR2_GCC_VERSION_11_X
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_12
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+-	depends on !BR2_powerpc_SPE
++	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
+@@ -37,7 +37,7 @@ config BR2_GCC_VERSION_12_X
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+-	depends on !BR2_powerpc_SPE
++	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
+@@ -46,7 +46,7 @@ config BR2_GCC_VERSION_13_X
+ 	bool "gcc 13.x"
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+-	depends on !BR2_powerpc_SPE
++	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	# ARC HS48 rel 31 only supported by gcc arc fork.
+ 	depends on !BR2_archs4x_rel31
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 1ecbf7e9b4..4929784f96 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -242,7 +242,7 @@ HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
+ endif
+ 
+ # Enable proper double/long double for SPE ABI
+-ifeq ($(BR2_powerpc_SPE),y)
++ifeq ($(BR2_POWERPC_CPU_HAS_SPE),y)
+ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--enable-obsolete \
+ 	--enable-e500_double \
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 71c50504ac..d894507b89 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -21,7 +21,7 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_microblaze
+ 	default y if BR2_nios2
+ 	default y if BR2_arc && BR2_ARC_ATOMIC_EXT
+-	depends on !BR2_powerpc_SPE
++	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
+ 	depends on BR2_USE_MMU
+ 
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index 34ffe8324a..cfe08052e1 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_MUSL_ARCH_SUPPORTS
+ 	default y if BR2_RISCV_64
+ 	default y if BR2_sh
+ 	default y if BR2_x86_64
+-	depends on !BR2_powerpc_SPE # not supported, build breaks
++	depends on !BR2_POWERPC_CPU_HAS_SPE # not supported, build breaks
+ 	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	# sh2 nommu is supported by musl, but we don't have support
+ 	# for it in Buildroot.
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
