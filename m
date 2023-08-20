@@ -4,67 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D19BDEE4993
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 09:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B32E4EE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 09:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 640B360BE1;
-	Sun, 20 Aug 2023 09:46:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 640B360BE1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29D8760797;
+	Sun, 20 Aug 2023 09:58:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29D8760797
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 400T9wzi4u7m; Sun, 20 Aug 2023 09:46:58 +0000 (UTC)
+	with ESMTP id Sd5gImW0QoMM; Sun, 20 Aug 2023 09:58:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9218A60BC0;
-	Sun, 20 Aug 2023 09:46:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9218A60BC0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6140A60BC2;
+	Sun, 20 Aug 2023 09:58:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6140A60BC2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC0471BF5E6
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:46:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AE8E81BF5E6
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A204181E97
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:46:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A204181E97
+ by smtp1.osuosl.org (Postfix) with ESMTP id 910C080D6B
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 09:58:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 910C080D6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FNRD9uxyG5kJ for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 09:46:55 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9AA9D81E26
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 09:46:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AA9D81E26
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:73e4:5f06:f514:c64d])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5CA3719F55C;
- Sun, 20 Aug 2023 11:46:47 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 20 Aug 2023 11:46:47 +0200
-Date: Sun, 20 Aug 2023 11:46:47 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ with ESMTP id bszn4nEx4mBk for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 09:58:31 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 779EE80C37
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 09:58:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 779EE80C37
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1FA3E13F8B6;
+ Sun, 20 Aug 2023 11:58:27 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <20230820094647.GH1778688@scaer>
-References: <20230817191130.1022405-1-yann.morin.1998@free.fr>
+Date: Sun, 20 Aug 2023 11:58:21 +0200
+Message-ID: <20230820095821.166705-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230817191130.1022405-1-yann.morin.1998@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692524812;
- bh=UWN8I18AAreKSukbjfnXmsPUg8jWHsTgv00Vj+YkNCU=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=L5s5b8mzxn79ChO4M4z9veuHZw7FOY5QyFRUaZCUwEf3HugLrJuaNGWgGcYalj5S/
- Yq8LGHP29S6jAyD9wmu6Dg/VG7hzUkqmroaOw72FLQgm6XP0sSwL/CcOxvtXD0buYk
- CxVre5Nl+34+xusRvPUn845Qvh4Do5yHXXcfJ/qzeTe/5TV2O0SUJwMW7s9vhiMBVC
- G+HOiEF8olBE/6E9pSUhK44Q1Szd/jZtQZJKadXYlXvMYDr+zGq77VjTwa75vqUU5/
- ujLYnlXlLbFkp7YQ6ZZlgW/p6jM8J6GFutXLZLdJIAwkUYL6FBdx3CKK+ceeTXsKOR
- hIHONp/NbuznQ==
+ d=free.fr; s=smtp-20201208; t=1692525508;
+ bh=wJT6TSHbIQHqWBkYjJYHupLiPTPKtzEHgPogS1VIhfg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=OOz6V/JHjJ6AUE1mLzcuZ/Ut/ByOeN0UVA+CyEMDiLEvuzF0bAITjd44zMtSt8CUs
+ QsEoGe4HZDTp9gk/O1dLoM2P3aAVE1ZBJVLjh2qyheVErZ2wBQzcobcv9JUEUeiNgN
+ HXdnj2qGiF0kY5iqUMtd/CKj8Y0A0eI60YQOW2iuNjJrPsVmwxNG1U5akGALZM6+kf
+ DKDCrbWvRxhz0DMGgjvTrsjmx21Z8TO6MPlNsmcFWN405s60Y5IEbDgfkf1xSiLUj3
+ 3ggNKSnh0pCjRpV6b0TKlVvfovqeENYJjqXQ0tss4pRvGz6WJY9MYy3ABBnWweQfDy
+ okCZRqkFSI3+Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=L5s5b8mz
-Subject: Re: [Buildroot] [PATCH] package/nftables: fix the build of the
- pyhon bindings
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OOz6V/JH
+Subject: [Buildroot] [PATCH next 1/1] package/opencsd: bump to version 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,64 +70,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Julien Olivain <ju.o@free.fr>, James Hilliard <james.hilliard1@gmail.com>,
- Adam Duskett <aduskett@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
+For change log, see:
+https://github.com/Linaro/OpenCSD/blob/v1.4.1/README.md?plain=1#L294
 
-On 2023-08-17 21:11 +0200, Yann E. MORIN spake thusly:
-[--SNIP--]
-> Instead, we split the pyhon bindings to their own package.
-[--SNIP--]
-> diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-> index b0a14bd429..aa88203ab5 100644
-> --- a/package/nftables/nftables.mk
-> +++ b/package/nftables/nftables.mk
-> @@ -42,13 +42,6 @@ else
->  NFTABLES_CONF_OPTS += --without-json
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> -NFTABLES_CONF_OPTS += --enable-python
-> -NFTABLES_DEPENDENCIES += python3
-> -else
-> -NFTABLES_CONF_OPTS += --disable-python
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested on branch next at commit c614a7d with commands:
 
-I moved --disable-python into the unconditional _CONF_OPTS.
+    utils/docker-run make check-package
+    ...
+    0 warnings generated
 
-Applied to master, thanks.
+    utils/test-pkg -p opencsd
+    ...
+    6 builds, 3 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+---
+ package/opencsd/opencsd.hash | 2 +-
+ package/opencsd/opencsd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> -endif
-> -
->  NFTABLES_CONF_ENV = LIBS="$(NFTABLES_LIBS)"
->  
->  define NFTABLES_LINUX_CONFIG_FIXUPS
-> @@ -58,3 +51,6 @@ define NFTABLES_LINUX_CONFIG_FIXUPS
->  endef
->  
->  $(eval $(autotools-package))
-> +
-> +# Legacy: we used to handle it in this .mk
-> +include package/nftables/nftables-python/nftables-python.mk
-> -- 
-> 2.25.1
-> 
-
+diff --git a/package/opencsd/opencsd.hash b/package/opencsd/opencsd.hash
+index 84a762fb36..a3534976b5 100644
+--- a/package/opencsd/opencsd.hash
++++ b/package/opencsd/opencsd.hash
+@@ -1,3 +1,3 @@
+ # Locally Computed:
+-sha256  e1bb6d8d09e87974cb5ca6db2a13b0e1ba9e51117ca2ed71879df07ff7af4de2  opencsd-1.4.0.tar.gz
++sha256  159a611535fd7d3bf179bcbdab3791852c6e7199401a6e59cdeef3ba2072edc4  opencsd-1.4.1.tar.gz
+ sha256  980eef4b0744e63834e3ec0d50c2a4ff6d81d7ec62dd8ba8c66acae0ec5a2e88  LICENSE
+diff --git a/package/opencsd/opencsd.mk b/package/opencsd/opencsd.mk
+index 680364d01d..76135bf0b0 100644
+--- a/package/opencsd/opencsd.mk
++++ b/package/opencsd/opencsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENCSD_VERSION = 1.4.0
++OPENCSD_VERSION = 1.4.1
+ OPENCSD_SITE = $(call github,Linaro,OpenCSD,v$(OPENCSD_VERSION))
+ OPENCSD_LICENSE = BSD-3-Clause
+ OPENCSD_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
