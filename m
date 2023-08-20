@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12C89EE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A19AEEE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:24:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95EEA41687;
-	Sun, 20 Aug 2023 21:23:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95EEA41687
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5059E4089E;
+	Sun, 20 Aug 2023 21:24:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5059E4089E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id svEu5yogG_86; Sun, 20 Aug 2023 21:23:17 +0000 (UTC)
+	with ESMTP id h9R-A5P8sxMb; Sun, 20 Aug 2023 21:24:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 153C34098B;
-	Sun, 20 Aug 2023 21:23:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 153C34098B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DF7771BF38D
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:23:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46B494048F;
+	Sun, 20 Aug 2023 21:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46B494048F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5823A1BF38D
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:24:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A87E0401EB
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:23:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A87E0401EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30FB84036A
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:24:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30FB84036A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qzy8Ta8uihK5 for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 21:23:13 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D96A4098B
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D96A4098B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDFD620003;
- Sun, 20 Aug 2023 21:23:10 +0000 (UTC)
-Date: Sun, 20 Aug 2023 23:23:09 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20230820232309.6a51f2fc@windsurf>
-In-Reply-To: <20230820163029.2720609-1-yann.morin.1998@free.fr>
-References: <20230820163029.2720609-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692566591;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pqek7YgFfSC+vMURCX9zUPweKkZxohWGFhkr/40fU2s=;
- b=T8jZ/3lfaGXGyN2b/UeTEL0WueNRU7D9uytRiNTHxa7xxShDo6bU4B36xFI6uU7ZbYdBJi
- bgaap065rG8xlETFC2zuQDG6TIP2iuMrUvtwq8SkiacrJmIn7z1BOqL6teeIAhI+Avgrm2
- oQ7qoLz+LalUNEzL3oY2MdmW/d8MESNeAqQy2LnRfuSF0kBho9rgIKass9/XvhgXTyqv74
- x2oVPJN+RE7NaSZwjdwu4J0qBxHVGutnDwxQWdCOuQdY50JAE+W87fdsZNjmm7SJF61wN3
- jTzC8k8aDB4VlNGHedLJRYwRjnfJKp3SVpYXnLJubYcylfy8ZfhZJsScSL5R4w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=T8jZ/3lf
-Subject: Re: [Buildroot] [PATCH] arch/powerpc: drop ABI selection
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id luLsQGbKg8gh for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 21:24:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FDAC40136
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FDAC40136
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5FECF85E9E; Sun, 20 Aug 2023 21:24:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 20 Aug 2023 23:23:17 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ebe2a113aba9f15e19c36c0c204e50980ba7e7ae
+X-Git-Newrev: f0ca197b0e2eb70355704d1202ef0437a2cec9ab
+X-Patchwork-Hint: ignore
+Message-Id: <20230820212409.5FECF85E9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/octave: bump package
+ to version 8.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,52 +58,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Joel Stanley <joel@jms.id.au>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 20 Aug 2023 18:30:29 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f0ca197b0e2eb70355704d1202ef0437a2cec9ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Since it was introduced in 5a6087d62e5c (toolchain: add powerpc SPE ABI
-> support), the CLASSIC vs. SPE choice for the ABI was never really a
-> choice: CPU without SPE could only use the CLASSIC ABI, while CPUs with
-> SPE could only use the SPE ABI.
-> 
-> Commit b4c824562bb1 (powerpc: add BR2_POWERPC_CPU_HAS_SPE to replace
-> adhoc deps/checks) added a blind option that CPUs with SPE would select
-> rather than duplicate the ad-hoc dependencies in both CLASSIC and SPE
-> ABI options. Since then, it was even more obvious that the ABI choice
-> was really not a choice, as the two options have mutually exclusive
-> conditions.
-> 
-> Drop the useless choice, and directly use the blind option as selected
-> by the specific CPUs.
-> 
-> We don't need legacy handling, because the situation fixes itself.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Joel Stanley <joel@jms.id.au>
-> ---
->  arch/Config.in.powerpc     | 15 ---------------
->  package/Makefile.in        |  2 +-
->  package/gcc/Config.in.host | 10 +++++-----
->  package/gcc/gcc.mk         |  2 +-
->  package/glibc/Config.in    |  2 +-
->  package/musl/Config.in     |  2 +-
->  6 files changed, 9 insertions(+), 24 deletions(-)
+See release note:
+https://octave.org/news/release/2023/08/08/octave-8.3.0-released.html
 
-Applied to next, thanks. To be honest, I think we should drop support
-for SPE PowerPC platforms. This requires keeping a gcc 8.x around,
-which is really annoying.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/octave/octave.hash | 4 ++--
+ package/octave/octave.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/octave/octave.hash b/package/octave/octave.hash
+index 6e82a589ec..a655f82849 100644
+--- a/package/octave/octave.hash
++++ b/package/octave/octave.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-# https://ftp.gnu.org/gnu/octave/octave-8.2.0.tar.lz.sig
++# https://ftp.gnu.org/gnu/octave/octave-8.3.0.tar.lz.sig
+ # using key DBD9C84E39FE1AAE99F04446B05F05B75D36644B
+-sha256  8ac875a9f8e44b8eb4b75ca8638531e2ca47cd9d13a6ca39d3a0eccd175f8a05  octave-8.2.0.tar.lz
++sha256  4dbd5da711b20ce640d75471895172b60e0bb9f45b75a0daa5ddf3050488d639  octave-8.3.0.tar.lz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+index 81954bbdd3..86f5564c02 100644
+--- a/package/octave/octave.mk
++++ b/package/octave/octave.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OCTAVE_VERSION = 8.2.0
++OCTAVE_VERSION = 8.3.0
+ OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
+ OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
+ OCTAVE_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
