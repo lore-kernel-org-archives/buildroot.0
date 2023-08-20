@@ -4,48 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C873EE49A5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 19:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9E14EE4996
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 19:29:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF7DC60ACD;
-	Sun, 20 Aug 2023 19:29:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF7DC60ACD
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EBDA60B3C;
+	Sun, 20 Aug 2023 19:29:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EBDA60B3C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G8iC2xifw8JD; Sun, 20 Aug 2023 19:29:09 +0000 (UTC)
+	with ESMTP id IeHaHUmbaxfk; Sun, 20 Aug 2023 19:29:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB43760AD0;
-	Sun, 20 Aug 2023 19:29:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB43760AD0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4E0F51BF403
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 19:29:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34AFE60BE1;
+	Sun, 20 Aug 2023 19:29:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34AFE60BE1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E48F1BF403
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 19:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2795C60AD0
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 19:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2795C60AD0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1635C4094D
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 19:29:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1635C4094D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pup_3qiukdUT for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 19:29:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0671A60ACD
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 19:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0671A60ACD
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2D5D85E64; Sun, 20 Aug 2023 19:29:05 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 21:28:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f4da6c3ebed8ff13f6298cc7363e551a6ca0911d
-X-Git-Newrev: 2a5d90a5951623ca0821b51c97dcc6bda8c4c26c
-X-Patchwork-Hint: ignore
-Message-Id: <20230820192905.E2D5D85E64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rock5b: Add patches to fix gcc12
- warnings
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sdbx1zRthUVg for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 19:29:16 +0000 (UTC)
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4AB1D4094C
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 19:29:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AB1D4094C
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:583d:50bb:f558:e336])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 7D23D19F5A1;
+ Sun, 20 Aug 2023 21:29:12 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 20 Aug 2023 21:29:12 +0200
+Date: Sun, 20 Aug 2023 21:29:12 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Message-ID: <20230820192912.GR1778688@scaer>
+References: <20230820190438.101920-1-kilian.zinnecker@mail.de>
+ <20230820190438.101920-2-kilian.zinnecker@mail.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230820190438.101920-2-kilian.zinnecker@mail.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1692559754;
+ bh=UGrH/iZaNEDW/ABerqLNtWrmVOnuyDIt7aj0tMCt670=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=KOjmsy73cdXj/p7FYERdmNx1Ue5khMBDPIVqgWwPViZEoe0WZ92yj+y9QKBKKHuYj
+ Eoo2SBozxpIfQdnt9+M4GlXjU8PtA03xhdDNm3j5gVHGi37aiJCwkxRYL2F4/iSb0k
+ HpCss0d6YXy8NwaB3Sr86NIt9GtRGWNg+Beoog2lXrYm0+NzRNy4F7h11IrtQpBlTi
+ KO2Azjb5AG+ZADcSKHHuA6WkbhjutHc2FWS3EhBVDmYcUCpHcrceCLYXyvO2FLbdvs
+ NuFl2LqZ8Sd9n17tX9ODXTo/mRahsycfwgi/Qn92ENIG2Okc0S1JX73R04VyaLyRaD
+ qsBIWOAcs2XYQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=KOjmsy73
+Subject: Re: [Buildroot] [PATCH v3 1/1] configs/rock5b: Add patches to fix
+ gcc12 warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,213 +77,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5750990114403640520=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5750990114403640520==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2a5d90a5951623ca0821b51c97dcc6bda8c4c26c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This patch introduces patches for the custom kernel, as it is
-currently used for the Radxa Rock 5B. The patches fix two gcc
-compiler warnings, which result in a build error, if the kernel
-is used with gcc version 12.
-Since also the code of custom board drivers for WiFi support is
-affected, and no fixes are provided by the vendor, the custom WiFi
-support is disabled.
-
-Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- board/radxa/rock5b/linux.fragment                  |  3 +
- ...-Adjust-ether_addr-prototypes-to-silence-.patch | 64 ++++++++++++++++++++++
- ...oc-fix-building-error-on-Werror-array-com.patch | 43 +++++++++++++++
- board/radxa/rock5b/readme.txt                      | 20 +++++++
- configs/rock5b_defconfig                           |  1 +
- 5 files changed, 131 insertions(+)
-
-diff --git a/board/radxa/rock5b/linux.fragment b/board/radxa/rock5b/linux.fragment
-index 811d42a79b..6d65cb7bb8 100644
---- a/board/radxa/rock5b/linux.fragment
-+++ b/board/radxa/rock5b/linux.fragment
-@@ -1 +1,4 @@
- CONFIG_R8169=y
-+# Disable Rockchip specific WiFi drivers, as the kernel
-+# code cannot be build with GCC 12 due to several Werrors
-+# CONFIG_WL_ROCKCHIP is not set
-diff --git a/board/radxa/rock5b/patches/0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch b/board/radxa/rock5b/patches/0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
-new file mode 100644
-index 0000000000..5632c5a627
---- /dev/null
-+++ b/board/radxa/rock5b/patches/0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
-@@ -0,0 +1,64 @@
-+From 2618a0dae09ef37728dab89ff60418cbe25ae6bd Mon Sep 17 00:00:00 2001
-+From: Kees Cook <keescook@chromium.org>
-+Date: Sat, 12 Feb 2022 09:14:49 -0800
-+Subject: etherdevice: Adjust ether_addr* prototypes to silence
-+ -Wstringop-overead
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+With GCC 12, -Wstringop-overread was warning about an implicit cast from
-+char[6] to char[8]. However, the extra 2 bytes are always thrown away,
-+alignment doesn't matter, and the risk of hitting the edge of unallocated
-+memory has been accepted, so this prototype can just be converted to a
-+regular char *. Silences:
-+
-+net/core/dev.c: In function ‘bpf_prog_run_generic_xdp’: net/core/dev.c:4618:21: warning: ‘ether_addr_equal_64bits’ reading 8 bytes from a region of size 6 [-Wstringop-overread]
-+ 4618 |         orig_host = ether_addr_equal_64bits(eth->h_dest, > skb->dev->dev_addr);
-+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+net/core/dev.c:4618:21: note: referencing argument 1 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
-+net/core/dev.c:4618:21: note: referencing argument 2 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
-+In file included from net/core/dev.c:91: include/linux/etherdevice.h:375:20: note: in a call to function ‘ether_addr_equal_64bits’
-+  375 | static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
-+      |                    ^~~~~~~~~~~~~~~~~~~~~~~
-+
-+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-+Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-+Link: https://lore.kernel.org/netdev/20220212090811.uuzk6d76agw2vv73@pengutronix.de
-+Cc: Jakub Kicinski <kuba@kernel.org>
-+Cc: "David S. Miller" <davem@davemloft.net>
-+Cc: netdev@vger.kernel.org
-+Signed-off-by: Kees Cook <keescook@chromium.org>
-+Signed-off-by: David S. Miller <davem@davemloft.net>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2618a0dae09ef37728dab89ff60418cbe25ae6bd
-+Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
-+---
-+ include/linux/etherdevice.h | 5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
-+index 2ad71cc90b37d..92b10e67d5f87 100644
-+--- a/include/linux/etherdevice.h
-++++ b/include/linux/etherdevice.h
-+@@ -134,7 +134,7 @@ static inline bool is_multicast_ether_addr(const u8 *addr)
-+ #endif
-+ }
-+ 
-+-static inline bool is_multicast_ether_addr_64bits(const u8 addr[6+2])
-++static inline bool is_multicast_ether_addr_64bits(const u8 *addr)
-+ {
-+ #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
-+ #ifdef __BIG_ENDIAN
-+@@ -372,8 +372,7 @@ static inline bool ether_addr_equal(const u8 *addr1, const u8 *addr2)
-+  * Please note that alignment of addr1 & addr2 are only guaranteed to be 16 bits.
-+  */
-+ 
-+-static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
-+-					   const u8 addr2[6+2])
-++static inline bool ether_addr_equal_64bits(const u8 *addr1, const u8 *addr2)
-+ {
-+ #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
-+ 	u64 fold = (*(const u64 *)addr1) ^ (*(const u64 *)addr2);
-+-- 
-+cgit 
-+
-diff --git a/board/radxa/rock5b/patches/0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch b/board/radxa/rock5b/patches/0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
-new file mode 100644
-index 0000000000..10de6c72d3
---- /dev/null
-+++ b/board/radxa/rock5b/patches/0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
-@@ -0,0 +1,43 @@
-+From ca831f29f8f25c97182e726429b38c0802200c8f Mon Sep 17 00:00:00 2001
-+From: Xiongwei Song <sxwjean@gmail.com>
-+Date: Fri, 14 Jan 2022 14:07:24 -0800
-+Subject: mm: page_alloc: fix building error on -Werror=array-compare
-+
-+Arthur Marsh reported we would hit the error below when building kernel
-+with gcc-12:
-+
-+  CC      mm/page_alloc.o
-+  mm/page_alloc.c: In function `mem_init_print_info':
-+  mm/page_alloc.c:8173:27: error: comparison between two arrays [-Werror=array-compare]
-+   8173 |                 if (start <= pos && pos < end && size > adj) \
-+        |
-+
-+In C++20, the comparision between arrays should be warned.
-+
-+Link: https://lkml.kernel.org/r/20211125130928.32465-1-sxwjean@me.com
-+Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
-+Reported-by: Arthur Marsh <arthur.marsh@internode.on.net>
-+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ca831f29f8f25c97182e726429b38c0802200c8f
-+Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
-+---
-+ mm/page_alloc.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-+index 806f317c2e7e2..c4ef450ac4428 100644
-+--- a/mm/page_alloc.c
-++++ b/mm/page_alloc.c
-+@@ -8228,7 +8228,7 @@ void __init mem_init_print_info(void)
-+ 	 */
-+ #define adj_init_size(start, end, size, pos, adj) \
-+ 	do { \
-+-		if (start <= pos && pos < end && size > adj) \
-++		if (&start[0] <= &pos[0] && &pos[0] < &end[0] && size > adj) \
-+ 			size -= adj; \
-+ 	} while (0)
-+ 
-+-- 
-+cgit 
-+
-diff --git a/board/radxa/rock5b/readme.txt b/board/radxa/rock5b/readme.txt
-index a88b9b46fa..f02f3d380e 100644
---- a/board/radxa/rock5b/readme.txt
-+++ b/board/radxa/rock5b/readme.txt
-@@ -60,3 +60,23 @@ Enter 'root' as login user, and the prompt is ready.
- wiki link:
- ----------
- https://forum.radxa.com/c/rock5
-+
-+Issues:
-+=======
-+
-+The custom Radxa kernel provides custom code to support WiFi. However,
-+that code does not compile with GCC 12, which is the current default
-+version in buildroot. Hence, the WiFi kernel drivers are disabled, until
-+the issues get fixed (if ever). If they are desperately needed, one may
-+apply the following workaround, as long as buildroot still supports GCC
-+version 11:
-+
-+1. Set GCC version 11, by adding the following line to
-+configs/rock5b_defconfig:
-+
-+BR2_GCC_VERSION_11_X=y
-+
-+2. Re-enable custom WiFi drivers by removing the following line from
-+board/radxa/rock5b/linux.fragment:
-+
-+# CONFIG_WL_ROCKCHIP is not set
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index 6e525d9676..eed656ef5f 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -5,6 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/radxa/rock5b/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS=""
- BR2_TARGET_GENERIC_HOSTNAME="rock5b"
- BR2_TARGET_GENERIC_ISSUE="Welcome to the rock5b board"
-+BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
- BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
-
---===============5750990114403640520==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5750990114403640520==--
+S2lsaWFuLCBBbGwsCgpPbiAyMDIzLTA4LTIwIDIxOjA0ICswMjAwLCBLaWxpYW4gWmlubmVja2Vy
+IHZpYSBidWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IFRoaXMgcGF0Y2ggaW50cm9kdWNlcyBwYXRj
+aGVzIGZvciB0aGUgY3VzdG9tIGtlcm5lbCwgYXMgaXQgaXMKPiBjdXJyZW50bHkgdXNlZCBmb3Ig
+dGhlIFJhZHhhIFJvY2sgNUIuIFRoZSBwYXRjaGVzIGZpeCB0d28gZ2NjCj4gY29tcGlsZXIgd2Fy
+bmluZ3MsIHdoaWNoIHJlc3VsdCBpbiBhIGJ1aWxkIGVycm9yLCBpZiB0aGUga2VybmVsCj4gaXMg
+dXNlZCB3aXRoIGdjYyB2ZXJzaW9uIDEyLgo+IFNpbmNlIGFsc28gdGhlIGNvZGUgb2YgY3VzdG9t
+IGJvYXJkIGRyaXZlcnMgZm9yIFdpRmkgc3VwcG9ydCBpcwo+IGFmZmVjdGVkLCBhbmQgbm8gZml4
+ZXMgYXJlIHByb3ZpZGVkIGJ5IHRoZSB2ZW5kb3IsIHRoZSBjdXN0b20gV2lGaQo+IHN1cHBvcnQg
+aXMgZGlzYWJsZWQuCj4gCj4gU2lnbmVkLW9mZi1ieTogS2lsaWFuIFppbm5lY2tlciA8a2lsaWFu
+Lnppbm5lY2tlckBtYWlsLmRlPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJlZ2FyZHMs
+Cllhbm4gRS4gTU9SSU4uCgo+IC0tLQo+ICBib2FyZC9yYWR4YS9yb2NrNWIvbGludXguZnJhZ21l
+bnQgICAgICAgICAgICAgfCAgMyArCj4gIC4uLnN0LWV0aGVyX2FkZHItcHJvdG90eXBlcy10by1z
+aWxlbmNlLS5wYXRjaCB8IDY0ICsrKysrKysrKysrKysrKysrKysKPiAgLi4ueC1idWlsZGluZy1l
+cnJvci1vbi1XZXJyb3ItYXJyYXktY29tLnBhdGNoIHwgNDMgKysrKysrKysrKysrKwo+ICBib2Fy
+ZC9yYWR4YS9yb2NrNWIvcmVhZG1lLnR4dCAgICAgICAgICAgICAgICAgfCAyMCArKysrKysKPiAg
+Y29uZmlncy9yb2NrNWJfZGVmY29uZmlnICAgICAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICA1
+IGZpbGVzIGNoYW5nZWQsIDEzMSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBi
+b2FyZC9yYWR4YS9yb2NrNWIvcGF0Y2hlcy8wMDAxLWV0aGVyZGV2aWNlLUFkanVzdC1ldGhlcl9h
+ZGRyLXByb3RvdHlwZXMtdG8tc2lsZW5jZS0ucGF0Y2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJv
+YXJkL3JhZHhhL3JvY2s1Yi9wYXRjaGVzLzAwMDItbW0tcGFnZV9hbGxvYy1maXgtYnVpbGRpbmct
+ZXJyb3Itb24tV2Vycm9yLWFycmF5LWNvbS5wYXRjaAo+IAo+IGRpZmYgLS1naXQgYS9ib2FyZC9y
+YWR4YS9yb2NrNWIvbGludXguZnJhZ21lbnQgYi9ib2FyZC9yYWR4YS9yb2NrNWIvbGludXguZnJh
+Z21lbnQKPiBpbmRleCA4MTFkNDJhNzliLi42ZDY1Y2I3YmI4IDEwMDY0NAo+IC0tLSBhL2JvYXJk
+L3JhZHhhL3JvY2s1Yi9saW51eC5mcmFnbWVudAo+ICsrKyBiL2JvYXJkL3JhZHhhL3JvY2s1Yi9s
+aW51eC5mcmFnbWVudAo+IEBAIC0xICsxLDQgQEAKPiAgQ09ORklHX1I4MTY5PXkKPiArIyBEaXNh
+YmxlIFJvY2tjaGlwIHNwZWNpZmljIFdpRmkgZHJpdmVycywgYXMgdGhlIGtlcm5lbAo+ICsjIGNv
+ZGUgY2Fubm90IGJlIGJ1aWxkIHdpdGggR0NDIDEyIGR1ZSB0byBzZXZlcmFsIFdlcnJvcnMKPiAr
+IyBDT05GSUdfV0xfUk9DS0NISVAgaXMgbm90IHNldAo+IGRpZmYgLS1naXQgYS9ib2FyZC9yYWR4
+YS9yb2NrNWIvcGF0Y2hlcy8wMDAxLWV0aGVyZGV2aWNlLUFkanVzdC1ldGhlcl9hZGRyLXByb3Rv
+dHlwZXMtdG8tc2lsZW5jZS0ucGF0Y2ggYi9ib2FyZC9yYWR4YS9yb2NrNWIvcGF0Y2hlcy8wMDAx
+LWV0aGVyZGV2aWNlLUFkanVzdC1ldGhlcl9hZGRyLXByb3RvdHlwZXMtdG8tc2lsZW5jZS0ucGF0
+Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjU2MzJjNWE2MjcK
+PiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvcmFkeGEvcm9jazViL3BhdGNoZXMvMDAwMS1l
+dGhlcmRldmljZS1BZGp1c3QtZXRoZXJfYWRkci1wcm90b3R5cGVzLXRvLXNpbGVuY2UtLnBhdGNo
+Cj4gQEAgLTAsMCArMSw2NCBAQAo+ICtGcm9tIDI2MThhMGRhZTA5ZWYzNzcyOGRhYjg5ZmY2MDQx
+OGNiZTI1YWU2YmQgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IEtlZXMgQ29vayA8
+a2Vlc2Nvb2tAY2hyb21pdW0ub3JnPgo+ICtEYXRlOiBTYXQsIDEyIEZlYiAyMDIyIDA5OjE0OjQ5
+IC0wODAwCj4gK1N1YmplY3Q6IGV0aGVyZGV2aWNlOiBBZGp1c3QgZXRoZXJfYWRkciogcHJvdG90
+eXBlcyB0byBzaWxlbmNlCj4gKyAtV3N0cmluZ29wLW92ZXJlYWQKPiArTUlNRS1WZXJzaW9uOiAx
+LjAKPiArQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRlbnQt
+VHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiArCj4gK1dpdGggR0NDIDEyLCAtV3N0cmluZ29wLW92
+ZXJyZWFkIHdhcyB3YXJuaW5nIGFib3V0IGFuIGltcGxpY2l0IGNhc3QgZnJvbQo+ICtjaGFyWzZd
+IHRvIGNoYXJbOF0uIEhvd2V2ZXIsIHRoZSBleHRyYSAyIGJ5dGVzIGFyZSBhbHdheXMgdGhyb3du
+IGF3YXksCj4gK2FsaWdubWVudCBkb2Vzbid0IG1hdHRlciwgYW5kIHRoZSByaXNrIG9mIGhpdHRp
+bmcgdGhlIGVkZ2Ugb2YgdW5hbGxvY2F0ZWQKPiArbWVtb3J5IGhhcyBiZWVuIGFjY2VwdGVkLCBz
+byB0aGlzIHByb3RvdHlwZSBjYW4ganVzdCBiZSBjb252ZXJ0ZWQgdG8gYQo+ICtyZWd1bGFyIGNo
+YXIgKi4gU2lsZW5jZXM6Cj4gKwo+ICtuZXQvY29yZS9kZXYuYzogSW4gZnVuY3Rpb24g4oCYYnBm
+X3Byb2dfcnVuX2dlbmVyaWNfeGRw4oCZOiBuZXQvY29yZS9kZXYuYzo0NjE4OjIxOiB3YXJuaW5n
+OiDigJhldGhlcl9hZGRyX2VxdWFsXzY0Yml0c+KAmSByZWFkaW5nIDggYnl0ZXMgZnJvbSBhIHJl
+Z2lvbiBvZiBzaXplIDYgWy1Xc3RyaW5nb3Atb3ZlcnJlYWRdCj4gKyA0NjE4IHwgICAgICAgICBv
+cmlnX2hvc3QgPSBldGhlcl9hZGRyX2VxdWFsXzY0Yml0cyhldGgtPmhfZGVzdCwgPiBza2ItPmRl
+di0+ZGV2X2FkZHIpOwo+ICsgICAgICB8ICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+
+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4KPiArbmV0L2NvcmUv
+ZGV2LmM6NDYxODoyMTogbm90ZTogcmVmZXJlbmNpbmcgYXJndW1lbnQgMSBvZiB0eXBlIOKAmGNv
+bnN0IHU4Wzhd4oCZIHtha2Eg4oCYY29uc3QgdW5zaWduZWQgY2hhcls4XeKAmX0KPiArbmV0L2Nv
+cmUvZGV2LmM6NDYxODoyMTogbm90ZTogcmVmZXJlbmNpbmcgYXJndW1lbnQgMiBvZiB0eXBlIOKA
+mGNvbnN0IHU4Wzhd4oCZIHtha2Eg4oCYY29uc3QgdW5zaWduZWQgY2hhcls4XeKAmX0KPiArSW4g
+ZmlsZSBpbmNsdWRlZCBmcm9tIG5ldC9jb3JlL2Rldi5jOjkxOiBpbmNsdWRlL2xpbnV4L2V0aGVy
+ZGV2aWNlLmg6Mzc1OjIwOiBub3RlOiBpbiBhIGNhbGwgdG8gZnVuY3Rpb24g4oCYZXRoZXJfYWRk
+cl9lcXVhbF82NGJpdHPigJkKPiArICAzNzUgfCBzdGF0aWMgaW5saW5lIGJvb2wgZXRoZXJfYWRk
+cl9lcXVhbF82NGJpdHMoY29uc3QgdTggYWRkcjFbNisyXSwKPiArICAgICAgfCAgICAgICAgICAg
+ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4KPiArCj4gK1JlcG9ydGVkLWJ5OiBNYXJj
+IEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPgo+ICtUZXN0ZWQtYnk6IE1hcmMgS2xl
+aW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+Cj4gK0xpbms6IGh0dHBzOi8vbG9yZS5rZXJu
+ZWwub3JnL25ldGRldi8yMDIyMDIxMjA5MDgxMS51dXprNmQ3NmFndzJ2djczQHBlbmd1dHJvbml4
+LmRlCj4gK0NjOiBKYWt1YiBLaWNpbnNraSA8a3ViYUBrZXJuZWwub3JnPgo+ICtDYzogIkRhdmlk
+IFMuIE1pbGxlciIgPGRhdmVtQGRhdmVtbG9mdC5uZXQ+Cj4gK0NjOiBuZXRkZXZAdmdlci5rZXJu
+ZWwub3JnCj4gK1NpZ25lZC1vZmYtYnk6IEtlZXMgQ29vayA8a2Vlc2Nvb2tAY2hyb21pdW0ub3Jn
+Pgo+ICtTaWduZWQtb2ZmLWJ5OiBEYXZpZCBTLiBNaWxsZXIgPGRhdmVtQGRhdmVtbG9mdC5uZXQ+
+Cj4gK1Vwc3RyZWFtOiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVs
+L2dpdC90b3J2YWxkcy9saW51eC5naXQvY29tbWl0Lz9pZD0yNjE4YTBkYWUwOWVmMzc3MjhkYWI4
+OWZmNjA0MThjYmUyNWFlNmJkCj4gK1NpZ25lZC1vZmYtYnk6IEtpbGlhbiBaaW5uZWNrZXIgPGtp
+bGlhbi56aW5uZWNrZXJAbWFpbC5kZT4KPiArLS0tCj4gKyBpbmNsdWRlL2xpbnV4L2V0aGVyZGV2
+aWNlLmggfCA1ICsrLS0tCj4gKyAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAzIGRl
+bGV0aW9ucygtKQo+ICsKPiArZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvZXRoZXJkZXZpY2Uu
+aCBiL2luY2x1ZGUvbGludXgvZXRoZXJkZXZpY2UuaAo+ICtpbmRleCAyYWQ3MWNjOTBiMzdkLi45
+MmIxMGU2N2Q1Zjg3IDEwMDY0NAo+ICstLS0gYS9pbmNsdWRlL2xpbnV4L2V0aGVyZGV2aWNlLmgK
+PiArKysrIGIvaW5jbHVkZS9saW51eC9ldGhlcmRldmljZS5oCj4gK0BAIC0xMzQsNyArMTM0LDcg
+QEAgc3RhdGljIGlubGluZSBib29sIGlzX211bHRpY2FzdF9ldGhlcl9hZGRyKGNvbnN0IHU4ICph
+ZGRyKQo+ICsgI2VuZGlmCj4gKyB9Cj4gKyAKPiArLXN0YXRpYyBpbmxpbmUgYm9vbCBpc19tdWx0
+aWNhc3RfZXRoZXJfYWRkcl82NGJpdHMoY29uc3QgdTggYWRkcls2KzJdKQo+ICsrc3RhdGljIGlu
+bGluZSBib29sIGlzX211bHRpY2FzdF9ldGhlcl9hZGRyXzY0Yml0cyhjb25zdCB1OCAqYWRkcikK
+PiArIHsKPiArICNpZiBkZWZpbmVkKENPTkZJR19IQVZFX0VGRklDSUVOVF9VTkFMSUdORURfQUND
+RVNTKSAmJiBCSVRTX1BFUl9MT05HID09IDY0Cj4gKyAjaWZkZWYgX19CSUdfRU5ESUFOCj4gK0BA
+IC0zNzIsOCArMzcyLDcgQEAgc3RhdGljIGlubGluZSBib29sIGV0aGVyX2FkZHJfZXF1YWwoY29u
+c3QgdTggKmFkZHIxLCBjb25zdCB1OCAqYWRkcjIpCj4gKyAgKiBQbGVhc2Ugbm90ZSB0aGF0IGFs
+aWdubWVudCBvZiBhZGRyMSAmIGFkZHIyIGFyZSBvbmx5IGd1YXJhbnRlZWQgdG8gYmUgMTYgYml0
+cy4KPiArICAqLwo+ICsgCj4gKy1zdGF0aWMgaW5saW5lIGJvb2wgZXRoZXJfYWRkcl9lcXVhbF82
+NGJpdHMoY29uc3QgdTggYWRkcjFbNisyXSwKPiArLQkJCQkJICAgY29uc3QgdTggYWRkcjJbNisy
+XSkKPiArK3N0YXRpYyBpbmxpbmUgYm9vbCBldGhlcl9hZGRyX2VxdWFsXzY0Yml0cyhjb25zdCB1
+OCAqYWRkcjEsIGNvbnN0IHU4ICphZGRyMikKPiArIHsKPiArICNpZiBkZWZpbmVkKENPTkZJR19I
+QVZFX0VGRklDSUVOVF9VTkFMSUdORURfQUNDRVNTKSAmJiBCSVRTX1BFUl9MT05HID09IDY0Cj4g
+KyAJdTY0IGZvbGQgPSAoKihjb25zdCB1NjQgKilhZGRyMSkgXiAoKihjb25zdCB1NjQgKilhZGRy
+Mik7Cj4gKy0tIAo+ICtjZ2l0IAo+ICsKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvcmFkeGEvcm9jazVi
+L3BhdGNoZXMvMDAwMi1tbS1wYWdlX2FsbG9jLWZpeC1idWlsZGluZy1lcnJvci1vbi1XZXJyb3It
+YXJyYXktY29tLnBhdGNoIGIvYm9hcmQvcmFkeGEvcm9jazViL3BhdGNoZXMvMDAwMi1tbS1wYWdl
+X2FsbG9jLWZpeC1idWlsZGluZy1lcnJvci1vbi1XZXJyb3ItYXJyYXktY29tLnBhdGNoCj4gbmV3
+IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4xMGRlNmM3MmQzCj4gLS0tIC9k
+ZXYvbnVsbAo+ICsrKyBiL2JvYXJkL3JhZHhhL3JvY2s1Yi9wYXRjaGVzLzAwMDItbW0tcGFnZV9h
+bGxvYy1maXgtYnVpbGRpbmctZXJyb3Itb24tV2Vycm9yLWFycmF5LWNvbS5wYXRjaAo+IEBAIC0w
+LDAgKzEsNDMgQEAKPiArRnJvbSBjYTgzMWYyOWY4ZjI1Yzk3MTgyZTcyNjQyOWIzOGMwODAyMjAw
+YzhmIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBYaW9uZ3dlaSBTb25nIDxzeHdq
+ZWFuQGdtYWlsLmNvbT4KPiArRGF0ZTogRnJpLCAxNCBKYW4gMjAyMiAxNDowNzoyNCAtMDgwMAo+
+ICtTdWJqZWN0OiBtbTogcGFnZV9hbGxvYzogZml4IGJ1aWxkaW5nIGVycm9yIG9uIC1XZXJyb3I9
+YXJyYXktY29tcGFyZQo+ICsKPiArQXJ0aHVyIE1hcnNoIHJlcG9ydGVkIHdlIHdvdWxkIGhpdCB0
+aGUgZXJyb3IgYmVsb3cgd2hlbiBidWlsZGluZyBrZXJuZWwKPiArd2l0aCBnY2MtMTI6Cj4gKwo+
+ICsgIENDICAgICAgbW0vcGFnZV9hbGxvYy5vCj4gKyAgbW0vcGFnZV9hbGxvYy5jOiBJbiBmdW5j
+dGlvbiBgbWVtX2luaXRfcHJpbnRfaW5mbyc6Cj4gKyAgbW0vcGFnZV9hbGxvYy5jOjgxNzM6Mjc6
+IGVycm9yOiBjb21wYXJpc29uIGJldHdlZW4gdHdvIGFycmF5cyBbLVdlcnJvcj1hcnJheS1jb21w
+YXJlXQo+ICsgICA4MTczIHwgICAgICAgICAgICAgICAgIGlmIChzdGFydCA8PSBwb3MgJiYgcG9z
+IDwgZW5kICYmIHNpemUgPiBhZGopIFwKPiArICAgICAgICB8Cj4gKwo+ICtJbiBDKysyMCwgdGhl
+IGNvbXBhcmlzaW9uIGJldHdlZW4gYXJyYXlzIHNob3VsZCBiZSB3YXJuZWQuCj4gKwo+ICtMaW5r
+OiBodHRwczovL2xrbWwua2VybmVsLm9yZy9yLzIwMjExMTI1MTMwOTI4LjMyNDY1LTEtc3h3amVh
+bkBtZS5jb20KPiArU2lnbmVkLW9mZi1ieTogWGlvbmd3ZWkgU29uZyA8c3h3amVhbkBnbWFpbC5j
+b20+Cj4gK1JlcG9ydGVkLWJ5OiBBcnRodXIgTWFyc2ggPGFydGh1ci5tYXJzaEBpbnRlcm5vZGUu
+b24ubmV0Pgo+ICtTaWduZWQtb2ZmLWJ5OiBBbmRyZXcgTW9ydG9uIDxha3BtQGxpbnV4LWZvdW5k
+YXRpb24ub3JnPgo+ICtTaWduZWQtb2ZmLWJ5OiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGlu
+dXgtZm91bmRhdGlvbi5vcmc+Cj4gK1Vwc3RyZWFtOiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1
+Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQvY29tbWl0Lz9pZD1jYTgz
+MWYyOWY4ZjI1Yzk3MTgyZTcyNjQyOWIzOGMwODAyMjAwYzhmCj4gK1NpZ25lZC1vZmYtYnk6IEtp
+bGlhbiBaaW5uZWNrZXIgPGtpbGlhbi56aW5uZWNrZXJAbWFpbC5kZT4KPiArLS0tCj4gKyBtbS9w
+YWdlX2FsbG9jLmMgfCAyICstCj4gKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEg
+ZGVsZXRpb24oLSkKPiArCj4gK2RpZmYgLS1naXQgYS9tbS9wYWdlX2FsbG9jLmMgYi9tbS9wYWdl
+X2FsbG9jLmMKPiAraW5kZXggODA2ZjMxN2MyZTdlMi4uYzRlZjQ1MGFjNDQyOCAxMDA2NDQKPiAr
+LS0tIGEvbW0vcGFnZV9hbGxvYy5jCj4gKysrKyBiL21tL3BhZ2VfYWxsb2MuYwo+ICtAQCAtODIy
+OCw3ICs4MjI4LDcgQEAgdm9pZCBfX2luaXQgbWVtX2luaXRfcHJpbnRfaW5mbyh2b2lkKQo+ICsg
+CSAqLwo+ICsgI2RlZmluZSBhZGpfaW5pdF9zaXplKHN0YXJ0LCBlbmQsIHNpemUsIHBvcywgYWRq
+KSBcCj4gKyAJZG8geyBcCj4gKy0JCWlmIChzdGFydCA8PSBwb3MgJiYgcG9zIDwgZW5kICYmIHNp
+emUgPiBhZGopIFwKPiArKwkJaWYgKCZzdGFydFswXSA8PSAmcG9zWzBdICYmICZwb3NbMF0gPCAm
+ZW5kWzBdICYmIHNpemUgPiBhZGopIFwKPiArIAkJCXNpemUgLT0gYWRqOyBcCj4gKyAJfSB3aGls
+ZSAoMCkKPiArIAo+ICstLSAKPiArY2dpdCAKPiArCj4gZGlmZiAtLWdpdCBhL2JvYXJkL3JhZHhh
+L3JvY2s1Yi9yZWFkbWUudHh0IGIvYm9hcmQvcmFkeGEvcm9jazViL3JlYWRtZS50eHQKPiBpbmRl
+eCBhODhiOWI0NmZhLi5mMDJmM2QzODBlIDEwMDY0NAo+IC0tLSBhL2JvYXJkL3JhZHhhL3JvY2s1
+Yi9yZWFkbWUudHh0Cj4gKysrIGIvYm9hcmQvcmFkeGEvcm9jazViL3JlYWRtZS50eHQKPiBAQCAt
+NjAsMyArNjAsMjMgQEAgRW50ZXIgJ3Jvb3QnIGFzIGxvZ2luIHVzZXIsIGFuZCB0aGUgcHJvbXB0
+IGlzIHJlYWR5Lgo+ICB3aWtpIGxpbms6Cj4gIC0tLS0tLS0tLS0KPiAgaHR0cHM6Ly9mb3J1bS5y
+YWR4YS5jb20vYy9yb2NrNQo+ICsKPiArSXNzdWVzOgo+ICs9PT09PT09Cj4gKwo+ICtUaGUgY3Vz
+dG9tIFJhZHhhIGtlcm5lbCBwcm92aWRlcyBjdXN0b20gY29kZSB0byBzdXBwb3J0IFdpRmkuIEhv
+d2V2ZXIsCj4gK3RoYXQgY29kZSBkb2VzIG5vdCBjb21waWxlIHdpdGggR0NDIDEyLCB3aGljaCBp
+cyB0aGUgY3VycmVudCBkZWZhdWx0Cj4gK3ZlcnNpb24gaW4gYnVpbGRyb290LiBIZW5jZSwgdGhl
+IFdpRmkga2VybmVsIGRyaXZlcnMgYXJlIGRpc2FibGVkLCB1bnRpbAo+ICt0aGUgaXNzdWVzIGdl
+dCBmaXhlZCAoaWYgZXZlcikuIElmIHRoZXkgYXJlIGRlc3BlcmF0ZWx5IG5lZWRlZCwgb25lIG1h
+eQo+ICthcHBseSB0aGUgZm9sbG93aW5nIHdvcmthcm91bmQsIGFzIGxvbmcgYXMgYnVpbGRyb290
+IHN0aWxsIHN1cHBvcnRzIEdDQwo+ICt2ZXJzaW9uIDExOgo+ICsKPiArMS4gU2V0IEdDQyB2ZXJz
+aW9uIDExLCBieSBhZGRpbmcgdGhlIGZvbGxvd2luZyBsaW5lIHRvCj4gK2NvbmZpZ3Mvcm9jazVi
+X2RlZmNvbmZpZzoKPiArCj4gK0JSMl9HQ0NfVkVSU0lPTl8xMV9YPXkKPiArCj4gKzIuIFJlLWVu
+YWJsZSBjdXN0b20gV2lGaSBkcml2ZXJzIGJ5IHJlbW92aW5nIHRoZSBmb2xsb3dpbmcgbGluZSBm
+cm9tCj4gK2JvYXJkL3JhZHhhL3JvY2s1Yi9saW51eC5mcmFnbWVudDoKPiArCj4gKyMgQ09ORklH
+X1dMX1JPQ0tDSElQIGlzIG5vdCBzZXQKPiBkaWZmIC0tZ2l0IGEvY29uZmlncy9yb2NrNWJfZGVm
+Y29uZmlnIGIvY29uZmlncy9yb2NrNWJfZGVmY29uZmlnCj4gaW5kZXggNmU1MjVkOTY3Ni4uZWVk
+NjU2ZWY1ZiAxMDA2NDQKPiAtLS0gYS9jb25maWdzL3JvY2s1Yl9kZWZjb25maWcKPiArKysgYi9j
+b25maWdzL3JvY2s1Yl9kZWZjb25maWcKPiBAQCAtNSw2ICs1LDcgQEAgQlIyX1JPT1RGU19QT1NU
+X0lNQUdFX1NDUklQVD0iYm9hcmQvcmFkeGEvcm9jazViL3Bvc3QtaW1hZ2Uuc2giCj4gIEJSMl9S
+T09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iIgo+ICBCUjJfVEFSR0VUX0dFTkVSSUNfSE9TVE5BTUU9
+InJvY2s1YiIKPiAgQlIyX1RBUkdFVF9HRU5FUklDX0lTU1VFPSJXZWxjb21lIHRvIHRoZSByb2Nr
+NWIgYm9hcmQiCj4gK0JSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9yYWR4YS9yb2NrNWIvcGF0
+Y2hlcyIKPiAgQlIyX1NZU1RFTV9ESENQPSJldGgwIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAg
+QlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fR0lUPXkKPiAtLSAKPiAyLjM0LjEKPiAKPiBfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKLS0gCi4tLS0tLS0tLS0tLS0tLS0t
+LS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0t
+LS0tLS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJ
+IFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdh
+cmUgIERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8Cnwg
+KzMzIDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8
+ICBcZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8v
+KlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0t
+LS0tLS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
+Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
