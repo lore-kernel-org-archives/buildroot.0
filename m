@@ -4,47 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A19AEEE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:24:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C171EE4996
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:29:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5059E4089E;
-	Sun, 20 Aug 2023 21:24:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5059E4089E
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCCFA409A0;
+	Sun, 20 Aug 2023 21:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCCFA409A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id h9R-A5P8sxMb; Sun, 20 Aug 2023 21:24:12 +0000 (UTC)
+	with ESMTP id EVleeG6qhWgm; Sun, 20 Aug 2023 21:29:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46B494048F;
-	Sun, 20 Aug 2023 21:24:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46B494048F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5823A1BF38D
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:24:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE2FC40959;
+	Sun, 20 Aug 2023 21:29:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE2FC40959
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CDF3C1BF38D
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:29:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30FB84036A
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:24:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30FB84036A
+ by smtp1.osuosl.org (Postfix) with ESMTP id B442F817AE
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:29:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B442F817AE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id luLsQGbKg8gh for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 21:24:09 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FDAC40136
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FDAC40136
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FECF85E9E; Sun, 20 Aug 2023 21:24:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:23:17 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ebe2a113aba9f15e19c36c0c204e50980ba7e7ae
-X-Git-Newrev: f0ca197b0e2eb70355704d1202ef0437a2cec9ab
-X-Patchwork-Hint: ignore
-Message-Id: <20230820212409.5FECF85E9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/octave: bump package
- to version 8.3.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SwQ5cVk8J7jZ for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 21:29:41 +0000 (UTC)
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC5608179A
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:29:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC5608179A
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:583d:50bb:f558:e336])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 090CF19F5A3;
+ Sun, 20 Aug 2023 23:29:35 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 20 Aug 2023 23:29:35 +0200
+Date: Sun, 20 Aug 2023 23:29:35 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Message-ID: <20230820212935.GU1778688@scaer>
+References: <20230820190438.101920-1-kilian.zinnecker@mail.de>
+ <20230820190438.101920-2-kilian.zinnecker@mail.de>
+ <20230820192912.GR1778688@scaer> <3517885.iIbC2pHGDl@kilian-aisec>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <3517885.iIbC2pHGDl@kilian-aisec>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1692566978;
+ bh=oi0HOOkMROyD4kKrx//SbQxlG2tKCIkuk81MN/8qqt4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=o8K48asqqSgFWjXEOajLSZAbuG7Y9/ibN1vqtI+2jILzg8nCJPF9OPBJY93INNxYq
+ JE6zxPv1TzCypftsrNTFsIC+4fWI8cskhLx/Jg9CbCL2PIuEhSSzZOmQOiinT45SSw
+ IvxUdsyTzbn9UxUZwGuH34q9Och+HYOb2aabcIOBbfBn6VjQlPFY1CFVmbRusTnZrl
+ GZsScdP0aGsklhOIaGhkRCN8PvUj3sFTDlOtN79/YIGCb32ThmPs2B/+Fn9UiwUUu5
+ dwjQbjh4bFZSaNekwIxrborjDvdPY/UBwYxLGDZjO/jVPn6nI8MWXj4P0bQa8ekW0D
+ dAKCyUouWEcTA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=o8K48asq
+Subject: Re: [Buildroot] [PATCH v3 1/1] configs/rock5b: Add patches to fix
+ gcc12 warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,52 +78,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0ca197b0e2eb70355704d1202ef0437a2cec9ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Kilian, All,
 
-See release note:
-https://octave.org/news/release/2023/08/08/octave-8.3.0-released.html
+On 2023-08-20 23:09 +0200, Kilian Zinnecker via buildroot spake thusly:
+> > Applied to master, thanks.
+> Ahh, I actually broke it - I am sorry! The current master now again does not 
+> build for the Rock 5B (for everything else it should still be fine). I guess 
+> the two backported patches from mainline linux should be put into a subfolder 
+> board/.../patches/linux and not into board/.../patches. I will test again and 
+> then send another patch to fix that then. I will take better care in the 
+> future.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/octave/octave.hash | 4 ++--
- package/octave/octave.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Ah, IO missed that, because in the previous iteration they were in the
+correct location...
 
-diff --git a/package/octave/octave.hash b/package/octave/octave.hash
-index 6e82a589ec..a655f82849 100644
---- a/package/octave/octave.hash
-+++ b/package/octave/octave.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--# https://ftp.gnu.org/gnu/octave/octave-8.2.0.tar.lz.sig
-+# https://ftp.gnu.org/gnu/octave/octave-8.3.0.tar.lz.sig
- # using key DBD9C84E39FE1AAE99F04446B05F05B75D36644B
--sha256  8ac875a9f8e44b8eb4b75ca8638531e2ca47cd9d13a6ca39d3a0eccd175f8a05  octave-8.2.0.tar.lz
-+sha256  4dbd5da711b20ce640d75471895172b60e0bb9f45b75a0daa5ddf3050488d639  octave-8.3.0.tar.lz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/octave/octave.mk b/package/octave/octave.mk
-index 81954bbdd3..86f5564c02 100644
---- a/package/octave/octave.mk
-+++ b/package/octave/octave.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OCTAVE_VERSION = 8.2.0
-+OCTAVE_VERSION = 8.3.0
- OCTAVE_SITE = https://ftp.gnu.org/gnu/octave
- OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
- OCTAVE_LICENSE = GPL-3.0+
+I'll push a fixup patch shortly...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
