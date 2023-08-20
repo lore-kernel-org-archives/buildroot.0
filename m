@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C517EEE4993
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 08:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4322EE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 08:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2412060797;
-	Sun, 20 Aug 2023 08:43:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2412060797
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52DFC60DA5;
+	Sun, 20 Aug 2023 08:59:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52DFC60DA5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mzGgC2IxOHBV; Sun, 20 Aug 2023 08:43:46 +0000 (UTC)
+	with ESMTP id o4LAaeG404To; Sun, 20 Aug 2023 08:59:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CAF860804;
-	Sun, 20 Aug 2023 08:43:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CAF860804
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 465821BF313
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 08:43:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BDD160B1B;
+	Sun, 20 Aug 2023 08:59:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BDD160B1B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 10D6C1BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 08:59:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2038C404F6
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 08:43:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2038C404F6
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBBF481B83
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 08:59:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBBF481B83
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wlp8HljziaRC for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 08:43:42 +0000 (UTC)
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 464AD40114
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 08:43:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 464AD40114
-Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 7841FD2DE2
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 08:36:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E8BB5FF803;
- Sun, 20 Aug 2023 08:36:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@48ers.dk>)
- id 1qXdux-0009BW-Pp; Sun, 20 Aug 2023 10:36:15 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3cgv033wIO75 for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 08:59:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F320D81B7B
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 08:59:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F320D81B7B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DF56985D69; Sun, 20 Aug 2023 08:59:20 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 10:36:13 +0200
-Message-Id: <20230820083613.35259-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/mosquitto: security bump to version
- 2.0.16
+Date: Sun, 20 Aug 2023 10:58:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: acfdf21f0b752e844a33c70a0fd2f82f4534a5a0
+X-Git-Newrev: 9f1ca943d554afe855f7eca2a0199481cc2c0426
+X-Patchwork-Hint: ignore
+Message-Id: <20230820085920.DF56985D69@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mosquitto: security bump to
+ version 2.0.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,11 +57,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9f1ca943d554afe855f7eca2a0199481cc2c0426
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issues:
 
@@ -87,6 +85,7 @@ For more details, see the changelog:
 https://mosquitto.org/ChangeLog.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/mosquitto/mosquitto.hash | 4 ++--
  package/mosquitto/mosquitto.mk   | 2 +-
@@ -118,9 +117,6 @@ index a95a2cac4d..f146a86d0a 100644
  MOSQUITTO_SITE = https://mosquitto.org/files/source
  MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
  MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
--- 
-2.30.2
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
