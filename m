@@ -4,65 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A382FEE4993
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 15:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A44EE4993
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 15:29:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04B9981E3E;
-	Sun, 20 Aug 2023 15:26:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04B9981E3E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88CEF81EB8;
+	Sun, 20 Aug 2023 15:29:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88CEF81EB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0NKgyrg-TUZT; Sun, 20 Aug 2023 15:26:48 +0000 (UTC)
+	with ESMTP id X7h4Hs7OGo-w; Sun, 20 Aug 2023 15:29:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D6C981E3B;
-	Sun, 20 Aug 2023 15:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D6C981E3B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 858E41BF277
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 15:26:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DAB5681EB4;
+	Sun, 20 Aug 2023 15:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAB5681EB4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 72F7F1BF277
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 15:29:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C632416B0
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 15:26:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C632416B0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C60281EB2
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 15:29:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C60281EB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C-VD1kPLkMNZ for <buildroot@lists.busybox.net>;
- Sun, 20 Aug 2023 15:26:44 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A1C1B416AE
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 15:26:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1C1B416AE
-Received: from fli4l.lan.fli4l (p4fd6c625.dip0.t-ipconnect.de [79.214.198.37])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 44A2CA4C00BA;
- Sun, 20 Aug 2023 17:26:40 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49784)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qXkK7-0005jw-2C;
- Sun, 20 Aug 2023 17:26:39 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 17:26:39 +0200
-Message-Id: <20230820152639.3867011-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 881RTLH39nNJ for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 15:29:53 +0000 (UTC)
+Received: from shout02.mail.de (shout02.mail.de [IPv6:2001:868:100:600::217])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A0F3B81EAF
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 15:29:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0F3B81EAF
+Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
+ by shout02.mail.de (Postfix) with ESMTP id 1B459A00B8;
+ Sun, 20 Aug 2023 17:29:52 +0200 (CEST)
+Received: from smtp01.mail.de (smtp02.bt.mail.de [10.0.121.212])
+ by postfix01.mail.de (Postfix) with ESMTP id 00D0180069;
+ Sun, 20 Aug 2023 17:29:51 +0200 (CEST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 92D62241248;
+ Sun, 20 Aug 2023 17:29:51 +0200 (CEST)
+To: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Date: Sun, 20 Aug 2023 17:29:51 +0200
+Message-ID: <1864236.tdWV9SEqCh@kilian-aisec>
+In-Reply-To: <20230808094348.1c7a8650@windsurf>
+References: <20230808050122.6788-1-kilian.zinnecker@mail.de>
+ <20230808094348.1c7a8650@windsurf>
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1692545200;
- bh=Ffx1AYvK979NzIGWABMT35jN+zexE90hfS7QsRhLNdY=;
- h=From:To:Cc:Subject:Date:From;
- b=Tb/hly6ff+5vPDPc5shUEnzsIPsphEx4i4X4HBmKgBLjGetarJIZsyT/Z7nXDCIW9
- /c/mt4jOeNIpvi91IDPfpOykMYphbdBGlf4McCXLTeABrG+811smR9PXKBPMUHLVET
- FoiMb4268ZRWDz7/MRT+qfpnTR6l8wfEWbzIUboonNd0AHNOB4pVJ42L+q0SDz/UAk
- aAHzXips9JeMzsFnaeiq6Q7j9JT94kfBwwO7d1hSdLWpua6FPLQ/fMDXHoCMPe3CTx
- uBrBJqckMkkbxXqiupfygTGqq7NdeOp3MWELoQ9mKLFY/d1sqFAz7HpNEvw93+YGDP
- 44z8bkqTw2pug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=Tb/hly6f
-Subject: [Buildroot] [PATCH 1/1] package/crun: fix linking with libargp
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 704
+X-purgate-ID: 154282::1692545391-E6FFC660-1BFB4D69/0/0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1692545392;
+ bh=PoBU1Fv+yhWw7+7ghVjZaYdyKKoewSz/U5Wq7a+mI2o=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=W6wQu9cnDdZjRXTf8QqWa3ttKu1hntCVrJBiShiwI0+TcjLrhDJ6vAikOv/InjHra
+ A5dX/HIGCQEb1H58PYFkyS6tNk5ED/eC8kKjKinrgcl9YG3Jzbp7zSrG1dbdEt4I/k
+ BXCmBquYc/YbcYWQJSy2ENd0JL46Hzct+IzVNlWhhy58uAtlycAZ4AKJ7Q5pBU4Tb8
+ mREtBpgCMNPOC8xSUbrOPR6uOyPAh+WcFVHiQwyfZ4BA3qP/cItcQeEXF7uozORqD1
+ D6qNFygOpjtU98ie/1fl2aXev1pyM5bVXhJkkD1LKgrK3t/1qDaDS/DoMwwJrmDc01
+ D6uEOJDYyzLHg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
+ header.a=rsa-sha256 header.s=mailde202009 header.b=W6wQu9cn
+Subject: Re: [Buildroot] [PATCH 0/2] Fix Rock 5B build,
+ broken by gcc 12 warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,41 +89,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-http://autobuild.buildroot.net/results/45f/45ff44284565c8e7deecfdc93995ec0ae4e89e2c/
+Hello Thomas,
 
-The bug existed since the dependency to argp-standalone was added with
-commit 0d9f268424558c37cd9538596358a537cd2f882d. The oldest build error
-I could find occured on Nov, 9th, 2022:
-http://autobuild.buildroot.net/results/ebe/ebea5d76c615d8509f87238d449e66da214fed73/
+[--SNIP--]
 
-Please note that using $LIBS does not fix the problem.
+> Also: gcc 11.x is currently the oldest version supported by Buildroot,
+> it means that as soon as gcc 14.x is released, we will drop support for
+> gcc 11.x. So clearly, the solution of sticking to gcc 11.x is not going
+> to work for a very long time.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/crun/crun.mk | 1 +
- 1 file changed, 1 insertion(+)
+I was thinking about this again, and I personally think the most cleanest 
+solution would be to simply disable the custom code parts, which throw 
+warnings not accepted by gcc 12. In this particular case this basically means 
+disabling WiFi support for the Rock5b. This is not nice, but I think it is the 
+cleanest way untill the issues are fixed. I did send a v2 of the patches.
 
-diff --git a/package/crun/crun.mk b/package/crun/crun.mk
-index 15438a44b3..9d904ccf1b 100644
---- a/package/crun/crun.mk
-+++ b/package/crun/crun.mk
-@@ -17,6 +17,7 @@ CRUN_CONF_OPTS = --disable-embedded-yajl
- 
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- CRUN_DEPENDENCIES += argp-standalone
-+CRUN_CONF_ENV += LDFLAGS=$(TARGET_NLS_LIBS)
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
--- 
-2.39.2
+Best regards,
+Kilian
+
 
 _______________________________________________
 buildroot mailing list
