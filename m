@@ -1,66 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DD6FEE49A6
-	for <buildroot@archiver.kernel.org>; Sat, 19 Aug 2023 21:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C517EEE4993
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 08:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 010F1408FB;
-	Sat, 19 Aug 2023 21:18:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 010F1408FB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2412060797;
+	Sun, 20 Aug 2023 08:43:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2412060797
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id mzGgC2IxOHBV; Sun, 20 Aug 2023 08:43:46 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CAF860804;
+	Sun, 20 Aug 2023 08:43:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CAF860804
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 465821BF313
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 08:43:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2038C404F6
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 08:43:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2038C404F6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rBFYq1S_72Lq; Sat, 19 Aug 2023 21:18:49 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 09DDA408E8;
-	Sat, 19 Aug 2023 21:18:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09DDA408E8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 88EAE1BF868
- for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 21:18:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63252415E6
- for <buildroot@lists.busybox.net>; Sat, 19 Aug 2023 21:18:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63252415E6
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AgoaoVxIUQwF for <buildroot@lists.busybox.net>;
- Sat, 19 Aug 2023 21:18:31 +0000 (UTC)
-Received: from smtpdh18-su.aruba.it (smtpdh18-su.aruba.it [62.149.155.144])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0FD55415E3
- for <buildroot@buildroot.org>; Sat, 19 Aug 2023 21:18:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FD55415E3
-Received: from localhost.localdomain ([95.47.160.93])
- by Aruba Outgoing Smtp  with ESMTPSA
- id XTL0qNyCoB4j9XTL0qWmIG; Sat, 19 Aug 2023 23:18:28 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wlp8HljziaRC for <buildroot@lists.busybox.net>;
+ Sun, 20 Aug 2023 08:43:42 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 464AD40114
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 08:43:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 464AD40114
+Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 7841FD2DE2
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 08:36:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E8BB5FF803;
+ Sun, 20 Aug 2023 08:36:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qXdux-0009BW-Pp; Sun, 20 Aug 2023 10:36:15 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 19 Aug 2023 23:18:24 +0200
-Message-Id: <20230819211825.60854-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 20 Aug 2023 10:36:13 +0200
+Message-Id: <20230820083613.35259-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfDG3IgGO0q5QzLn7QRB4kGGH87IOsh9d0lsrv+ThYpwjiZhzeBJwNI9ABkl8+NLZceOvvkD1eCnMut/rH+zFC7wW4WnTblHr+V1/Aad2tdTypmntozRC
- MHLGduRw7s+FM3Ch3uJPyGJUENGgxkm/ARvCP6mjStEv0J6DG1q8rFSxpdM6kUj5Da709/kvX8J59MzbfJI0tvIV28XRTd8WQRUh911V3VEahSL/dZ1ICHrW
- 1OSVsAEGgzBxqxFSkyK9pXXSqdW+Spx+w5rhliz+sFd7JoMNhGDuTIify89JSrlPT00qr2E+pvauqd+evHQDGh/4tN55xZOLMwS4ogQkxuXxCeR/1yP3X6L4
- ZwU5U81KhzvSTXHkIbVuXIP++GMwWw==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1692479908; bh=gxg04hdvhCxAbJMc50b/VV1UW3VLP8j1yiC5zbI1i5U=;
- h=From:To:Subject:Date:MIME-Version;
- b=JsuWOU3Xqn7GK9rMClN9dMEB+M28W1NWIgVPkbeMT7wD0XVGuDJQc2q0EXugwDNW+
- BLc5m3Z1ZH5/Zji1xeQxHJnBpHlnbI1ikaMGsPwg5blxTaerXuxl7s2NhpusCGbp2s
- iU1bpnkL9gCpPdPpZKutrpHRdB0YvrxV0jkpyze7B+veNNRNjBYGRSn0ihsUJJPWuR
- Zxtxy2lfEmVx9qx7J8avxc8mBHzxRl8HkAoT7CQXpBV4eq/+rY2D2cHf9wJaHHqTwg
- unRRvyM/4t2RudKtbpjmOpmRj54LfeETi7fUN86fDMf9ATxAKonYNGvZutpGQlsCJk
- 7S8tuoPhSq+Vw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=JsuWOU3X
-Subject: [Buildroot] [PATCH 0/1] Document Sponsored-by tag
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH] package/mosquitto: security bump to version
+ 2.0.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -72,40 +62,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi All,
+Fixes the following security issues:
 
-I'm trying to add Sponsored-by tag to give credits to Companies or Physical
-Persons who sponsor the writing and/or the upstreaming process of a patch.
-The goal, as described in the commit log, is to increase their involvement
-into upstreaming patches that are otherwise kept private. The customers I work
-for are interested in this and I've recently sent a patch for this to Linux too:
-https://lore.kernel.org/all/20230817220957.41582-1-giulio.benetti@benettiengineering.com/
-where I've received 2 feedbacks more or less positive.
-I'm not promising that with the use of Sponsored-by: tag the patches will
-hugely increase, but for me it's worth to try.
+- CVE-2023-28366: Fix memory leak in broker when clients send multiple QoS 2
+  messages with the same message ID, but then never respond to the PUBREC
+  commands.
+- CVE-2023-0809: Fix excessive memory being allocated based on malicious
+  initial packets that are not CONNECT packets.
+- CVE-2023-3592: Fix memory leak when clients send v5 CONNECT packets with a
+  will message that contains invalid property types.
+- Broker will now reject Will messages that attempt to publish to $CONTROL/.
+- Broker now validates usernames provided in a TLS certificate or TLS-PSK
+  identity are valid UTF-8.
+- Fix potential crash when loading invalid persistence file.
+- Library will no longer allow single level wildcard certificates, e.g. *.com
 
-Let me know what you all think about it.
+For more details, see the changelog:
+https://mosquitto.org/ChangeLog.txt
 
-Thank you!
-Best regards
-Giulio Benetti
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Giulio Benetti (1):
-  docs/manual: add Sponsored-by tag
-
- docs/manual/contribute.txt | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 2cfd0d9422..cbe54d6d1a 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.15.tar.gz.asc
+-sha256  4735b1d32e3f91c7a8896741d88a3022e89730a1ee897946decfa0df27039ac6  mosquitto-2.0.15.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.16.tar.gz.asc
++sha256  638db9e43e89d243ea98d10d66e76ff376131217780decd01abaffacc66d8035  mosquitto-2.0.16.tar.gz
+ 
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index a95a2cac4d..f146a86d0a 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 2.0.15
++MOSQUITTO_VERSION = 2.0.16
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 -- 
-2.34.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
