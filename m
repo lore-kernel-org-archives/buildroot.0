@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A61B6EE49A5
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:40:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB8AFEE4996
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:41:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 560024152D;
-	Sun, 20 Aug 2023 21:40:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 560024152D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80CFD415AE;
+	Sun, 20 Aug 2023 21:41:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80CFD415AE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n88354wzaxSO; Sun, 20 Aug 2023 21:40:58 +0000 (UTC)
+	with ESMTP id Kc8DO1LVHM_k; Sun, 20 Aug 2023 21:41:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1A14415EF;
-	Sun, 20 Aug 2023 21:40:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1A14415EF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4AF961BF38D
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76D95415F1;
+	Sun, 20 Aug 2023 21:41:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76D95415F1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B95091BF38D
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 248BA81F16
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90E9A60EE5
  for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 248BA81F16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90E9A60EE5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T3Qay-xWki5S for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id M5a2iCr8sfub for <buildroot@lists.busybox.net>;
  Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C4C481F14
- for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C4C481F14
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0887B60EC6
+ for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:40:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0887B60EC6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14DFD85EF7; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
+ id EC19385EF1; Sun, 20 Aug 2023 21:40:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:39:11 +0200
+Date: Sun, 20 Aug 2023 23:38:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 486a3ba4c3a78668eee1dd4f4b312a75a1b029c5
-X-Git-Newrev: 27bf08e4addb78d30fb68992e35c5d8335d4e7c6
+X-Git-Oldrev: bdd80863cf81a5b9034903ee1954d41a7ebbd1e7
+X-Git-Newrev: ef4eea32261ed3f21af119936a080cb2fc8897fa
 X-Patchwork-Hint: ignore
-Message-Id: <20230820214028.14DFD85EF7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/avenger96_defconfig: bump ATF
- version to 2.9 for binutils 2.39+ support
+Message-Id: <20230820214027.EC19385EF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/sipeed_maix_{bit,
+ dock}_sdcard_defconfig: fix build with binutils >= 2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,51 +64,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27bf08e4addb78d30fb68992e35c5d8335d4e7c6
+commit: https://git.buildroot.net/buildroot/commit/?id=ef4eea32261ed3f21af119936a080cb2fc8897fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This new binutils version break the ATF build due to new linker warnings:
-
- ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-
-From [1]
-"Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
- of a new warning when linking the bl*.elf in the form:
-
- ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
- ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
- ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
- ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-
-These new warnings are enbaled by default to secure elf binaries:
-  - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-  - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-"
-
-Bump the ATF custom version to 2.9 for binutils 2.39+ support.
+Backport an upstream patch fixing the build with binutils >= 2.38
+for riscv's for Zicsr and Zifencei.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436283
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060608
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060605
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/avenger96_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...001-riscv-Fix-build-against-binutils-2.38.patch | 58 ++++++++++++++++++++++
+ configs/sipeed_maix_bit_sdcard_defconfig           |  1 +
+ configs/sipeed_maix_dock_sdcard_defconfig          |  1 +
+ 3 files changed, 60 insertions(+)
 
-diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
-index 1f8e7a50d1..adfd7585c4 100644
---- a/configs/avenger96_defconfig
-+++ b/configs/avenger96_defconfig
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-avenger96.dtb"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
+diff --git a/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch b/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
+new file mode 100644
+index 0000000000..52b496f054
+--- /dev/null
++++ b/board/canaan/k210-soc/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
+@@ -0,0 +1,58 @@
++From 0cf11f3c0478f4286adcfb09bf9137f8b00212e3 Mon Sep 17 00:00:00 2001
++From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
++Date: Mon, 3 Oct 2022 18:07:54 +0200
++Subject: [PATCH] riscv: Fix build against binutils 2.38
++
++The following description is copied from the equivalent patch for the
++Linux Kernel proposed by Aurelien Jarno:
++
++>From version 2.38, binutils default to ISA spec version 20191213. This
++means that the csr read/write (csrr*/csrw*) instructions and fence.i
++instruction has separated from the `I` extension, become two standalone
++extensions: Zicsr and Zifencei. As the kernel uses those instruction,
++this causes the following build failure:
++
++arch/riscv/cpu/mtrap.S: Assembler messages:
++arch/riscv/cpu/mtrap.S:65: Error: unrecognized opcode `csrr a0,scause'
++arch/riscv/cpu/mtrap.S:66: Error: unrecognized opcode `csrr a1,sepc'
++arch/riscv/cpu/mtrap.S:67: Error: unrecognized opcode `csrr a2,stval'
++arch/riscv/cpu/mtrap.S:70: Error: unrecognized opcode `csrw sepc,a0'
++
++Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
++Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
++Tested-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
++Tested-by: Heiko Stuebner <heiko@sntech.de>
++Tested-by: Christian Stewart <christian@paral.in>
++Reviewed-by: Rick Chen <rick@andestech.com>
++(cherry picked from commit 1dde977518f13824b847e23275001191139bc384)
++Upstream: https://gitlab.com/u-boot/u-boot/-/commit/1dde977518f13824b847e23275001191139bc384
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ arch/riscv/Makefile | 11 ++++++++++-
++ 1 file changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
++index 0b80eb8d864..53d1194ffb6 100644
++--- a/arch/riscv/Makefile
+++++ b/arch/riscv/Makefile
++@@ -24,7 +24,16 @@ ifeq ($(CONFIG_CMODEL_MEDANY),y)
++ 	CMODEL = medany
++ endif
++ 
++-ARCH_FLAGS = -march=$(ARCH_BASE)$(ARCH_A)$(ARCH_C) -mabi=$(ABI) \
+++RISCV_MARCH = $(ARCH_BASE)$(ARCH_A)$(ARCH_C)
+++
+++# Newer binutils versions default to ISA spec version 20191213 which moves some
+++# instructions from the I extension to the Zicsr and Zifencei extensions.
+++toolchain-need-zicsr-zifencei := $(call cc-option-yn, -mabi=$(ABI) -march=$(RISCV_MARCH)_zicsr_zifencei)
+++ifeq ($(toolchain-need-zicsr-zifencei),y)
+++	RISCV_MARCH := $(RISCV_MARCH)_zicsr_zifencei
+++endif
+++
+++ARCH_FLAGS = -march=$(RISCV_MARCH) -mabi=$(ABI) \
++ 	     -mcmodel=$(CMODEL)
++ 
++ PLATFORM_CPPFLAGS	+= $(ARCH_FLAGS)
++-- 
++2.41.0
++
+diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
+index 34769eeca8..0cfff26337 100644
+--- a/configs/sipeed_maix_bit_sdcard_defconfig
++++ b/configs/sipeed_maix_bit_sdcard_defconfig
+@@ -17,6 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+ # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
++BR2_GLOBAL_PATCH_DIR="board/canaan/k210-soc/patches"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
+index 62f6a0e0b8..db075360cc 100644
+--- a/configs/sipeed_maix_dock_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
+@@ -17,6 +17,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_19=y
+ BR2_BINFMT_FLAT=y
+ BR2_BINFMT_FLAT_ONE=y
+ # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
++BR2_GLOBAL_PATCH_DIR="board/canaan/k210-soc/patches"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
