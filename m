@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AFFEEC8735
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82B21EC8735
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA67541D91;
-	Thu,  7 Sep 2023 14:55:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA67541D91
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D4DB41DC7;
+	Thu,  7 Sep 2023 14:55:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D4DB41DC7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JSZpd0vKnOQM; Thu,  7 Sep 2023 14:55:39 +0000 (UTC)
+	with ESMTP id Ah5pCqz2EoDS; Thu,  7 Sep 2023 14:55:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E3C641DF3;
-	Thu,  7 Sep 2023 14:55:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E3C641DF3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D0F1C1BF313
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D0FD41E36;
+	Thu,  7 Sep 2023 14:55:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D0FD41E36
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D47161BF3BB
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16510415B5
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16510415B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7E8081FFD
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7E8081FFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n4-RKmD_Cn7U for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HRp7NdTvp4Ac for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 648BE40488
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 648BE40488
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1654B81FF0
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1654B81FF0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6227C86A25; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+ id 0638486A27; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 18:06:16 +0200
+Date: Sun, 20 Aug 2023 16:20:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1cc378b004ddbb1bc351f12ab374a19fe6c8d90c
-X-Git-Newrev: 77fc07c9804d802acad27c7e8734549af54135dd
+X-Git-Oldrev: 7fddbe25301aae024f7fc22498392387f6874506
+X-Git-Newrev: e71fb8f71c09ef93a9d9a543105de0f99f6c64c1
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145126.6227C86A25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-backcall: switch from
- distutils to setuptools
+Message-Id: <20230907145130.0638486A27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/docker-run: bind mount .git/objects
+ if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,38 +57,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77fc07c9804d802acad27c7e8734549af54135dd
+commit: https://git.buildroot.net/buildroot/commit/?id=e71fb8f71c09ef93a9d9a543105de0f99f6c64c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-distutils will be dropped with python 3.12.
+If buildroot is checked out as part of a 'repo' manifest, docker-run
+doesn't fully bind mount the .git directory, leading to commands such
+as `utils/docker-run make check-package` to fail.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Nicolas Boichat <drinkcat@google.com>
+[yann.morin.1998@free.fr: use newly introduced mountpoints list]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-backcall/python-backcall.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/docker-run | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/python-backcall/python-backcall.mk b/package/python-backcall/python-backcall.mk
-index 2ead3421a8..ea9ffb863c 100644
---- a/package/python-backcall/python-backcall.mk
-+++ b/package/python-backcall/python-backcall.mk
-@@ -7,7 +7,7 @@
- PYTHON_BACKCALL_VERSION = 0.2.0
- PYTHON_BACKCALL_SOURCE = backcall-$(PYTHON_BACKCALL_VERSION).tar.gz
- PYTHON_BACKCALL_SITE = https://files.pythonhosted.org/packages/a2/40/764a663805d84deee23043e1426a9175567db89c8b3287b5c2ad9f71aa93
--PYTHON_BACKCALL_SETUP_TYPE = distutils
-+PYTHON_BACKCALL_SETUP_TYPE = setuptools
- PYTHON_BACKCALL_LICENSE = BSD-3-Clause
- PYTHON_BACKCALL_LICENSE_FILES = LICENSE
+diff --git a/utils/docker-run b/utils/docker-run
+index 7b27a9b05c..40027514c5 100755
+--- a/utils/docker-run
++++ b/utils/docker-run
+@@ -33,6 +33,14 @@ if [ "${GIT_DIR}" ]; then
+     # path already (in a wordir), then that's a noop.
+     GIT_DIR="$(cd "${MAIN_DIR}"; readlink -e "${GIT_DIR}")"
+     mountpoints+=( "${GIT_DIR}" )
++
++    # 'repo' stores .git/objects separately.
++    if [ -L "${GIT_DIR}/objects" ]; then
++        # GITDIR is already an absolute path, but for symetry
++        # with the above, keep the same cd+readlink construct.
++        OBJECTS_DIR="$(cd "${MAIN_DIR}"; readlink -e "${GIT_DIR}/objects")"
++        mountpoints+=( "${OBJECTS_DIR}" )
++    fi
+ fi
  
+ if [ "${BR2_DL_DIR}" ]; then
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
