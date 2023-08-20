@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CDADEE4996
-	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34725EE4996
+	for <buildroot@archiver.kernel.org>; Sun, 20 Aug 2023 21:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A84B41548;
-	Sun, 20 Aug 2023 21:40:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A84B41548
+	by smtp4.osuosl.org (Postfix) with ESMTP id D28B8415F5;
+	Sun, 20 Aug 2023 21:40:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D28B8415F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id v4wNOYLv8UBd; Sun, 20 Aug 2023 21:40:31 +0000 (UTC)
+	with ESMTP id jZJ-vX7pIN3u; Sun, 20 Aug 2023 21:40:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 462D2415EF;
-	Sun, 20 Aug 2023 21:40:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 462D2415EF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F39751BF38D
- for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9F4D415F1;
+	Sun, 20 Aug 2023 21:40:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9F4D415F1
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DF821BF86C
+ for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3DC14032C
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBD5360F14
  for <buildroot@lists.busybox.net>; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3DC14032C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBD5360F14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vm207xZyKAl9 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id n__xOedWifTz for <buildroot@lists.busybox.net>;
  Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1436840136
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1CAF360EE5
  for <buildroot@buildroot.org>; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1436840136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CAF360EE5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01C8B85EF4; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
+ id 0B1A385EF6; Sun, 20 Aug 2023 21:40:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:38:44 +0200
+Date: Sun, 20 Aug 2023 23:38:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef4eea32261ed3f21af119936a080cb2fc8897fa
-X-Git-Newrev: b661f635b5cc08ded6ab14c19f2370c9f478e52e
+X-Git-Oldrev: b661f635b5cc08ded6ab14c19f2370c9f478e52e
+X-Git-Newrev: 486a3ba4c3a78668eee1dd4f4b312a75a1b029c5
 X-Patchwork-Hint: ignore
-Message-Id: <20230820214028.01C8B85EF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/pc_x86_64_{bios,
- efi}_defconfig: add midding libelf kernel dependency
+Message-Id: <20230820214028.0B1A385EF6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/ci20_defconfig: bump to kernel
+ 5.4.254
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,57 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b661f635b5cc08ded6ab14c19f2370c9f478e52e
+commit: https://git.buildroot.net/buildroot/commit/?id=486a3ba4c3a78668eee1dd4f4b312a75a1b029c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-objtool built by the kernel requires libelf
+Bump the kernel to the latest release of 5.4 kernel series
+to fix an issue with gcc 12.
 
-ldd output/build/linux-6.1.24/tools/objtool/objtool
-  linux-vdso.so.1
-  libelf.so.1 => output/host/lib/libelf.so.1
+arch/mips/jz4740/setup.c: In function 'plat_mem_setup':
+arch/mips/jz4740/setup.c:64:25: error: comparison between two arrays [-Werror=array-compare]
+   64 |         if (__dtb_start != __dtb_end)
+      |                         ^~
+arch/mips/jz4740/setup.c:64:25: note: use '&__dtb_start[0] != &__dtb_end[0]' to compare the addresses
+  CC      fs/debugfs/file.o
+cc1: all warnings being treated as errors
 
-While updating the kernel [1] we forgot to select
-BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF to provide Buildroot's host-libelf.
-Using host-libelf avoid linking with libelf installed on the host or
-failing to build objtool if libelf is not installed.
-
-[1] d45538f2e7acc1b330b191d559a81e8c1a961648
+Fixed in v5.4.195:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a60def7568216684f62b117c199429c4a9a89570
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436869
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436872
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436573
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/pc_x86_64_bios_defconfig | 1 +
- configs/pc_x86_64_efi_defconfig  | 1 +
- 2 files changed, 2 insertions(+)
+ configs/ci20_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index a057ddd259..6032544d2d 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -32,6 +32,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 09eddc4e68..7e119376e1 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -15,7 +15,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci20/genimage.cfg"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.254"
+ BR2_LINUX_KERNEL_DEFCONFIG="ci20"
  BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
  
- # Firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index efa603f0c0..afb652f3fc 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -33,6 +33,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
- 
- # Firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
