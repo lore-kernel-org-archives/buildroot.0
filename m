@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBF4CEE49A5
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E761EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 20:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A1E67414ED;
-	Mon, 21 Aug 2023 20:21:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1E67414ED
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2934B41176;
+	Mon, 21 Aug 2023 20:21:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2934B41176
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4gt7yOtA-NjH; Mon, 21 Aug 2023 20:21:10 +0000 (UTC)
+	with ESMTP id N0P21oj3WCyx; Mon, 21 Aug 2023 20:21:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5919414F6;
-	Mon, 21 Aug 2023 20:21:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5919414F6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AA4641500;
+	Mon, 21 Aug 2023 20:21:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AA4641500
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C9CC71BF8B4
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7BA341BF8B4
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E114410DE
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF99F414EA
  for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 20:01:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E114410DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF99F414EA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ucagvRYYgFNN for <buildroot@lists.busybox.net>;
+ with ESMTP id coEXc3EQEnoA for <buildroot@lists.busybox.net>;
  Mon, 21 Aug 2023 20:01:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7E6641682
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9C6E4167E
  for <buildroot@buildroot.org>; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7E6641682
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9C6E4167E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B059886024; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
+ id E7A4486023; Mon, 21 Aug 2023 20:01:27 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:27:38 +0200
+Date: Mon, 21 Aug 2023 21:36:17 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2a5d90a5951623ca0821b51c97dcc6bda8c4c26c
-X-Git-Newrev: 0293d131c9c56af24d4f58dfddcd2d8c971f5841
+X-Git-Oldrev: bdd80863cf81a5b9034903ee1954d41a7ebbd1e7
+X-Git-Newrev: 2423d9f16b26e54e0e40fdcc01cc43a629561340
 X-Patchwork-Hint: ignore
-Message-Id: <20230821200127.B059886024@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/radxa/rock5b: fix kernel
- patch location
+Message-Id: <20230821200127.E7A4486023@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Merge tag '2023.08-rc2' into
+ next
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0293d131c9c56af24d4f58dfddcd2d8c971f5841
+commit: https://git.buildroot.net/buildroot/commit/?id=2423d9f16b26e54e0e40fdcc01cc43a629561340
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 2a5d90a59516 (configs/rock5b: Add patches to fix gcc12 warnings)
-introduced the kernel patches in an incorrect directory.
+Conflicts:
+  - .checkpackageignore
+  - Makefile
+  - board/versal/post-image.sh
+  - package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
+      => keep version in next
 
-Fix that by moving them in the proper location.
+  - Config.in.legacy
+      => merge, introduce legacy comment for 2023.11
 
-Reported-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch       | 0
- .../0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch       | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
+  - toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+      => regenerate, drop dependency on inexistant BR2_ARCH_NEEDS_GCC_AT_LEAST_14
 
-diff --git a/board/radxa/rock5b/patches/0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch b/board/radxa/rock5b/patches/linux/0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
-similarity index 100%
-rename from board/radxa/rock5b/patches/0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
-rename to board/radxa/rock5b/patches/linux/0001-etherdevice-Adjust-ether_addr-prototypes-to-silence-.patch
-diff --git a/board/radxa/rock5b/patches/0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch b/board/radxa/rock5b/patches/linux/0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
-similarity index 100%
-rename from board/radxa/rock5b/patches/0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
-rename to board/radxa/rock5b/patches/linux/0002-mm-page_alloc-fix-building-error-on-Werror-array-com.patch
+Patch is too large, so refusing to show it
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
