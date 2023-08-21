@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A3A0EC8733
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:11:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D550EC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7DC183A42;
-	Thu,  7 Sep 2023 15:11:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7DC183A42
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32B7383A77;
+	Thu,  7 Sep 2023 15:11:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32B7383A77
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4bHdJxMCtKVT; Thu,  7 Sep 2023 15:11:02 +0000 (UTC)
+	with ESMTP id Fbm_E0HtN0Ss; Thu,  7 Sep 2023 15:11:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26B7F83A75;
-	Thu,  7 Sep 2023 15:11:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26B7F83A75
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 049001BF313
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A30083A85;
+	Thu,  7 Sep 2023 15:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A30083A85
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9640C1BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFDD641D85
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFDD641D85
+ by smtp3.osuosl.org (Postfix) with ESMTP id C486B612AB
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C486B612AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HgKwwWfTF3aw for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mMUhUJhtJIhg for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4901741D9C
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4901741D9C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B338612A4
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B338612A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FBF686A1E; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+ id 08D9786A25; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 22:47:32 +0200
+Date: Mon, 21 Aug 2023 15:55:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 03b228fd1a0bcc1905cd62c8f9167facdad2cd5a
-X-Git-Newrev: 552a054d45f516990e6470338c18ce9f792c59b3
+X-Git-Oldrev: 619b5585d92c8f701cd92e0e26c0883a753125ad
+X-Git-Newrev: bfa4a7c8f243a0325573da6544543ffdd3ec6743
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145127.3FBF686A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/snps_arc700_nsim_defconfig: add
- ARC700 target for nSIM
+Message-Id: <20230907145131.08D9786A25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 23.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,110 +64,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=552a054d45f516990e6470338c18ce9f792c59b3
+commit: https://git.buildroot.net/buildroot/commit/?id=bfa4a7c8f243a0325573da6544543ffdd3ec6743
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add ARC700 image configuration for nSIM instruction set simulator.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2023-August/000727.html
 
-This is a nice starting point for ARC700 in nSIM.
-
-Signed-off-by: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                         |  4 ++++
- board/synopsys/nsim/readme.txt     | 43 ++++++++++++++++++++++++++++++++++++++
- configs/snps_arc700_nsim_defconfig | 18 ++++++++++++++++
- 3 files changed, 65 insertions(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0ae5f89d88..9915143a04 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2665,6 +2665,10 @@ F:	package/rtl8189fs/
- F:	package/wpa_supplicant/
- F:	package/xr819-xradio/
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index e602953a3f..5dbf984735 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
-+N:	Sergey Matyukevich <sergey.matyukevich@synopsys.com>
-+F:	board/synopsys/nsim/
-+F:	configs/snps_arc700_nsim_defconfig
-+
- N:	Sergio Prado <sergio.prado@e-labworks.com>
- F:	board/toradex/apalis-imx6/
- F:	configs/toradex_apalis_imx6_defconfig
-diff --git a/board/synopsys/nsim/readme.txt b/board/synopsys/nsim/readme.txt
-new file mode 100644
-index 0000000000..cc89cf87ac
---- /dev/null
-+++ b/board/synopsys/nsim/readme.txt
-@@ -0,0 +1,43 @@
-+How to build it
-+===============
-+
-+Configure build for the selected nSIM target. For instance, for
-+ARC700 nSIM target use the following defauilt configuration:
-+$ make snps_arc700_nsim_defconfig
-+
-+Optionally modify the configuration:
-+$ make menuconfig
-+
-+Build:
-+$ make
-+
-+How to use it
-+=============
-+
-+Resulting image can be booted using ARC nSIM instruction set simulator.
-+Free version of nSIM is available for download:
-+- https://www.synopsys.com/cgi-bin/dwarcnsim/req1.cgi
-+It provides nsimdrv binary for Linux that can be used stand-alone
-+or with GDB.
-+
-+To run ARC700 image use the following command:
-+$ nsimdrv \
-+	-prop=nsim_mem-dev=uart0,kind=dwuart,base=0xf0000000,irq=24 \
-+	-prop=icache=32768,64,2,0 \
-+	-prop=dcache=32768,64,4,0 \
-+	-prop=nsim_isa_enable_timer_0=1 \
-+	-prop=nsim_isa_enable_timer_1=1 \
-+	-prop=nsim_isa_host_timer=1 \
-+	-prop=nsim_mmu=3 \
-+	-prop=nsim_isa_family=a700 \
-+	-prop=nsim_isa_atomic_option=1 \
-+	-prop=nsim_isa_dpfp=none \
-+	-prop=nsim_isa_shift_option=2 \
-+	-prop=nsim_isa_swap_option=1 \
-+	-prop=nsim_isa_bitscan_option=1 \
-+	-prop=nsim_isa_sat=1 \
-+	-prop=nsim_isa_mpy32=1 \
-+	-prop=isa_counters=1 \
-+	-prop=nsim_isa_pct_counters=8 \
-+	-prop=nsim_isa_pct_size=48 \
-+	output/images/vmlinux
-diff --git a/configs/snps_arc700_nsim_defconfig b/configs/snps_arc700_nsim_defconfig
-new file mode 100644
-index 0000000000..3964924bed
---- /dev/null
-+++ b/configs/snps_arc700_nsim_defconfig
-@@ -0,0 +1,18 @@
-+# Architecture
-+BR2_arcle=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="arc700"
-+
-+# Linux headers same as kernel, a 6.0 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_0=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.0.8"
-+BR2_LINUX_KERNEL_DEFCONFIG="nsim_700"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-+# Rootfs
-+BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 23.1.5
++MESA3D_HEADERS_VERSION = 23.1.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 3606cca56d..95133d3de9 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000726.html
+-sha256  3cf88576fdebf24fc4047067936131c90cb6541c27365996b79b661dec1fb153  mesa-23.1.5.tar.xz
+-sha512  c5eac5a497561374eaf931214aebc9001820c5ab49f9b8c5634b62af081b03b2f21c169c936524b2953c8815eb27dfb5c8c12276b9b1c119722cd6fea0b22d85  mesa-23.1.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000727.html
++sha256  f4c7fd8e7b472a88da7d83e9a48f6f3bd17d4ea2cc4386f7231b796f3964157a  mesa-23.1.6.tar.xz
++sha512  24f1c626fa05a82bcdfb24b67b8e5f96f94d5748309631b83e8d7a62142853cd3be90b92c56bac3bc4d223bf40b424d6d6a9977537b899107295b7d45d7e2575  mesa-23.1.6.tar.xz
+ # License
+ sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index add9232d2f..8f3d224417 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 23.1.5
++MESA3D_VERSION = 23.1.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
