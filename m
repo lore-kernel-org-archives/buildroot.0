@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07A96EE4993
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 13:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4495AEE49A6
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 13:39:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E873409A6;
-	Mon, 21 Aug 2023 13:14:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E873409A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CBF24095E;
+	Mon, 21 Aug 2023 13:39:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CBF24095E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OTZxI5Jt7XG6; Mon, 21 Aug 2023 13:14:58 +0000 (UTC)
+	with ESMTP id R6tvMdE2-bE8; Mon, 21 Aug 2023 13:39:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5A18409A4;
-	Mon, 21 Aug 2023 13:14:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5A18409A4
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B113D1BF2F2
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:14:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F4B24092A;
+	Mon, 21 Aug 2023 13:39:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F4B24092A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BB9971BF2F2
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:39:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9867081EAB
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:14:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9867081EAB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FC2760B45
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:39:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FC2760B45
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hxpv7cwr3umg for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 13:14:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wcW0_RC8xU20 for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 13:39:21 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C256B81EAA
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 13:14:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C256B81EAA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8553E60AE3
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 13:39:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8553E60AE3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A931F85FA4; Mon, 21 Aug 2023 13:14:54 +0000 (UTC)
+ id 724DA85FAF; Mon, 21 Aug 2023 13:39:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 21 Aug 2023 15:14:22 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fd2fa74c5336d4efaaa3c9aabed625679d0e0265
-X-Git-Newrev: c68987b9c429fce0abc977ed73cd2d744fe46846
+Date: Mon, 21 Aug 2023 15:27:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b9a864d03d66b1132f484060f3724182f51cdfbc
+X-Git-Newrev: db46428e0ad00b6916fff2a41a33a45db8fb778f
 X-Patchwork-Hint: ignore
-Message-Id: <20230821131454.A931F85FA4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/openvpn: bump version
- to 2.6.6
+Message-Id: <20230821133921.724DA85FAF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cups: security bump version to
+ 2.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,42 +64,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c68987b9c429fce0abc977ed73cd2d744fe46846
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=db46428e0ad00b6916fff2a41a33a45db8fb778f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+Fixes CVE-2023-34241 (see [0] for details)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[0] https://github.com/OpenPrinting/cups/releases/tag/v2.4.6
+
+The number of changes between 2.4.4 and 2.4.6 is really small, and
+limited to bug fixes:
+
+9d614a4b3184205294c55355a1d2eb54d4532ccd (tag: v2.4.6) Update CHANGES.md
+6f6da74ec284e28c156f0b9f62f3bd610e61aa78 Fix use-after-free in cupsdAcceptClient() (fixes CVE-2023-34241)
+3f12185ca9cbb5350a6370d6046066907b8abc12 Merge pull request #735 from AtariDreams/Fixer
+f5281777c80cdf820a2a71c9e7f08b91f0e11160 Fix compilation on older macOS versions
+ee82c5b18409def3ec1424ce2eb343aabb0ff0d1 Merge pull request #730 from zdohnal/cupssinglefile_24x
+1504527b2415a4b67b0e3e17593b053f3628746f  cups/ppd-cache.c: Put cupsSingleFile into generated PPD
+3be1d5da8fe9ee13aab5ee6ecc11b2f9387821a6 Prepare files for next release
+c1f54ec966ccc5d5564eed95dcb540842af7b5ca (tag: v2.4.5) cups/cups.h: Update for 2.4.5
+70dba05b7511a96476ea0ef8fe1d92c6500c6e61 Finish hotfix release 2.4.5
+87f5cb7d8f0da8fa2835bb0aa3ca48b5e5a66a3f Merge pull request #727 from AtariDreams/hotfix
+61aa0b259183fe59124566f08ecf649bb806cd24 Regression: Certificate data is corrupted during base64 conversion
+7362f41c45d834564f876ffac536f59eece843ec Prepare files for next release
+
+Signed-off-by: Clement Ramirez <ramirez.clement3@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 16bffb7e57..b4fd3a9646 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  e34efdb9a3789a760cfc91d57349dfb1e31da169c98c06cb490c6a8a015638e2  openvpn-2.6.5.tar.gz
-+sha256  3b074f392818b31aa529b84f76e8b5e4ad03fca764924f46d906bceaaf421034  openvpn-2.6.6.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 7c2506870e..12c090ba3e 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index cc6fe25446..501d8c12a6 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  209259e8fe8df9112af49f4e5765f50dad6da1f869296de41d6eaab1b98003cb  cups-2.4.4-source.tar.gz
++sha256  58e970cf1955e1cc87d0847c32526d9c2ccee335e5f0e3882b283138ba0e7262  cups-2.4.6-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  5320b6e3c252423e4153eb2dd63e57e3b630afb21139f44e43b02d85fe33e279  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 7bbea9a218..a3bb2f8dfc 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.6.5
-+OPENVPN_VERSION = 2.6.6
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
+-CUPS_VERSION = 2.4.4
++CUPS_VERSION = 2.4.6
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
