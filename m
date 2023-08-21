@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6848EC8734
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:26:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4CADEC8734
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:26:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 706A783B0E;
-	Thu,  7 Sep 2023 15:26:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 706A783B0E
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4B3981586;
+	Thu,  7 Sep 2023 15:26:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4B3981586
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wVY8GudxO0w2; Thu,  7 Sep 2023 15:26:29 +0000 (UTC)
+	with ESMTP id RiVadbfOI5Nb; Thu,  7 Sep 2023 15:26:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91D3D836D5;
-	Thu,  7 Sep 2023 15:26:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91D3D836D5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01DFE81EF9;
+	Thu,  7 Sep 2023 15:26:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01DFE81EF9
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 196A91BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 207811BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 366B341D8B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52E4A41D93
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 366B341D8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52E4A41D93
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yutPI2uq-9mi for <buildroot@lists.busybox.net>;
+ with ESMTP id vYwG5gCo4nkt for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 982FB41DE0
+ by smtp4.osuosl.org (Postfix) with ESMTP id D046641DE7
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 982FB41DE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D046641DE7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 90D5786A1F; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
+ id CB1BB86A21; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 21 Aug 2023 10:12:38 +0200
+Date: Mon, 21 Aug 2023 14:59:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5b3641ea59c0fc5ad2359be0e8707070b9c23231
-X-Git-Newrev: a78241af67cc3c6f26d5f82f9504bd15506df0b5
+X-Git-Oldrev: 2298de68530283f329147f0da9c5acd039ff561c
+X-Git-Newrev: 80b56887006cfba50833881dc31f045d494af185
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145130.90D5786A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perftest: bump to version
- 23.07.0-0.27
+Message-Id: <20230907145130.CB1BB86A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/busybox: use minimal.config for no
+ MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,41 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a78241af67cc3c6f26d5f82f9504bd15506df0b5
+commit: https://git.buildroot.net/buildroot/commit/?id=80b56887006cfba50833881dc31f045d494af185
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log, see:
-https://github.com/linux-rdma/perftest/releases/tag/23.07.0-0.27
+By default, when Busybox is enabled, it uses the
+package/busybox/busybox.config configuration file, even on noMMU
+configurations. As this default configuration enables the 'ash' shell
+which isn't available for noMMU targets, Busybox falls back to
+enabling the 'hush' shell, but without enabling a number of its
+sub-options that are quite relevant. In particular, it doesn't enable
+umask, which is used in our startup scripts.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+In order to have a default configuration that is more sensible, this
+commit changes the Busybox package to use
+package/busybox/busybox-minimal.config by default for noMMU
+configurations.
+
+Signed-off-by: Jesse Taube <Mr-Bossman075@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perftest/perftest.hash | 2 +-
- package/perftest/perftest.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/perftest/perftest.hash b/package/perftest/perftest.hash
-index a9ea10ef44..e771d4f463 100644
---- a/package/perftest/perftest.hash
-+++ b/package/perftest/perftest.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c76f0fd5524a3486c335897357c596d0a6d4f82680f93fc1bc7120670fabd5f9  perftest-23.04.0-0.23.tar.gz
-+sha256  c5b437734b7f9d31dac0b044cd8510b5580eb932080871b470aeae7309884d3b  perftest-23.07.0-0.27.tar.gz
- sha256  763adb7d5094f2127b026adea8701f042d28d4b1f6fb8b6e828989227a9cf7f5  COPYING
-diff --git a/package/perftest/perftest.mk b/package/perftest/perftest.mk
-index 7101e318aa..d3259face5 100644
---- a/package/perftest/perftest.mk
-+++ b/package/perftest/perftest.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 5e5c586762..3c2aa515f8 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -13,6 +13,7 @@ if BR2_PACKAGE_BUSYBOX
  
--PERFTEST_VERSION = 23.04.0-0.23
-+PERFTEST_VERSION = 23.07.0-0.27
- PERFTEST_SITE = $(call github,linux-rdma,perftest,$(PERFTEST_VERSION))
- PERFTEST_LICENSE = GPL-2.0 or BSD-2-Clause
- PERFTEST_LICENSE_FILES = COPYING
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
++	default "package/busybox/busybox-minimal.config" if !BR2_USE_MMU
+ 	default "package/busybox/busybox.config"
+ 	help
+ 	  Some people may wish to use their own modified BusyBox
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
