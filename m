@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98FAEEE49A6
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 22:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19094EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 22:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 53174404AF;
-	Mon, 21 Aug 2023 22:11:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53174404AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1D2D4063C;
+	Mon, 21 Aug 2023 22:12:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1D2D4063C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0igmwWFekSqz; Mon, 21 Aug 2023 22:11:42 +0000 (UTC)
+	with ESMTP id jZPeXwATbQV3; Mon, 21 Aug 2023 22:12:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A184F40B4F;
-	Mon, 21 Aug 2023 22:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A184F40B4F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 055451BF35B
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:11:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1BB9640B53;
+	Mon, 21 Aug 2023 22:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BB9640B53
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C5841BF35B
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C58D060E24
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C58D060E24
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64BA64063C
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64BA64063C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id loVtCLhav9_R for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 22:11:32 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9E4C060A98
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 22:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E4C060A98
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 549CA20007;
- Mon, 21 Aug 2023 22:11:29 +0000 (UTC)
-Date: Tue, 22 Aug 2023 00:11:27 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230822001127.1967b570@windsurf>
-In-Reply-To: <20230821202217.474022-1-ju.o@free.fr>
-References: <20230821202217.474022-1-ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RcASe8a8HtNe for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 22:12:18 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 87AA0405B1
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 22:12:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87AA0405B1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F1E360006;
+ Mon, 21 Aug 2023 22:12:16 +0000 (UTC)
+Date: Tue, 22 Aug 2023 00:12:15 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230822001215.7b6c29de@windsurf>
+In-Reply-To: <ZONzIHca509hXEbx@waldemar-brodkorb.de>
+References: <ZONzIHca509hXEbx@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692655889;
+ d=bootlin.com; s=gm1; t=1692655936;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=IzTUYcY9GPQa8+2qUsDMFxTbHb3op/4Lke7Tgmpjotw=;
- b=F4NK7aj5WkUhTXssj/pqvClB3LQ4JNyvGq7ic8We/BAt17JDQChu5uM6PgctGvi3hcnJJN
- uY93LeMO0/HWKlulmYN6KB61e0RVfp2qsBE3Nd6jOFyIQLg9CT5zDGLwcuiNSZLyQJXEzW
- l6+yBd6nog4dhWov+ZjEWFl5n9Z7JZJniCQ41SNk/sske6bl3H6ElpFt9z4Fi2OW/Jl1tm
- vR7g8njbxz2+Fa9Q23cpFO9V1eutLSEyUTeST4PQgfMTiGBTR5hqFVfP+GRvn6ei4JqnBl
- VdP7Odf+t6zMPyVvWzaPd7bJyt/NfZrZfstWdRb4sA65vje4fM8CU9tk3C1AlA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=bKvLkXov/ycj6nTVvvP4wcGfkUVHkkXYCsIh20viUkU=;
+ b=kZ2NF4/nxpwZPTBBXHsicFI4hUtoN3SafSBmUy3QlBqKhcWFlFuefGrwmzmDZGPhGAqGKo
+ nB93S+riJSPn2fXxLMWsIgDg1/IR6G3s0bQjZyHWTvixSXXVCTFy9otQy+Gqz3CsAajS2b
+ LX0QOerCHMcVR9uzr+nTrxCc0i88dE14pzMqcyoBan/JWKCLbffkQ1zpeD8/vfIW1EPOAI
+ a6bMEWQF09O6aSsUZxsfva3NqkI97tg6fWeSYbpjrsKOUKdXdzCSVeFOsC/BVtQjEVeeB8
+ NtZ5m9kZNEIoBnxd5VFgKRppsKo6SNs3Q+jtUCKwpe693pKboY8czVLksOZfsw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=F4NK7aj5
-Subject: Re: [Buildroot] [PATCH next 1/2] package/libassuan: update _SITE
- url to use https
+ header.s=gm1 header.b=kZ2NF4/n
+Subject: Re: [Buildroot] [PATCH] package/gmp: bump version to 6.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,23 +82,22 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 21 Aug 2023 22:22:15 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+On Mon, 21 Aug 2023 16:22:24 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> This new _SITE url matches the one published upstream at:
-> https://gnupg.org/download/
+> See the Changelog here:
+> https://gmplib.org/gmp6.3
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  package/libassuan/libassuan.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Patch is applied upstream.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Both patches applied to next. Thanks!
+Thanks, but we already have gmp 6.3.0 in the next branch.
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
