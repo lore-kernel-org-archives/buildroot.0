@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38B8DEC8734
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CED51EC873A
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E103E82334;
-	Thu,  7 Sep 2023 15:30:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E103E82334
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8822483C59;
+	Thu,  7 Sep 2023 15:30:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8822483C59
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eqSO4y5E7de4; Thu,  7 Sep 2023 15:30:01 +0000 (UTC)
+	with ESMTP id dqNdHSH8CLVQ; Thu,  7 Sep 2023 15:30:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40F2783C59;
-	Thu,  7 Sep 2023 15:30:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40F2783C59
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C34783C64;
+	Thu,  7 Sep 2023 15:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C34783C64
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 173C51BF3BB
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 261A81BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABDA641DF2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97ADB41DF0
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABDA641DF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97ADB41DF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BEuZQhUkoqTd for <buildroot@lists.busybox.net>;
+ with ESMTP id VCERJQW2KmPK for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7EBC441DAD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EF5641D98
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EBC441DAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EF5641D98
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C813869E0; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+ id 4C2BA869E0; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 00:15:49 +0200
+Date: Tue, 22 Aug 2023 00:14:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 510c91244b0e66d0b39eacaf1a1c8fbd741bcbb1
-X-Git-Newrev: d6b2f14901b046fff443e32c52c9f24089277836
+X-Git-Oldrev: 0e19425c774fdcc46c6e3ee4bcf13e88f637e5c4
+X-Git-Newrev: 36e26a50673a6e394a317b09c662fa36a0af400d
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145131.6C813869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libstrophe: bump to version 0.12.3
+Message-Id: <20230907145131.4C2BA869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
+ 20.4.0-Nexus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,39 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b2f14901b046fff443e32c52c9f24089277836
+commit: https://git.buildroot.net/buildroot/commit/?id=36e26a50673a6e394a317b09c662fa36a0af400d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libstrophe/libstrophe.hash | 2 +-
- package/libstrophe/libstrophe.mk   | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
-index 3ccba06202..a6a529eb6c 100644
---- a/package/libstrophe/libstrophe.hash
-+++ b/package/libstrophe/libstrophe.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  b3c79b6deeafafc0f622ba3ee3ca67e9a8e7d75edb102588c6b6f52b38c9fa4b  libstrophe-0.12.2.tar.xz
-+sha256  d82e9e8585b8fc68fb91791377fbfb0051b98259a0ec64cf31c8a09bb7e2621e  libstrophe-0.12.3.tar.xz
- sha256  82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-index 43d55592fa..de9012e67f 100644
---- a/package/libstrophe/libstrophe.mk
-+++ b/package/libstrophe/libstrophe.mk
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index d0d6331364..ce8f68d3b5 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b1ad428bec882d3e852240cbef2378803635b530545a08421ff3baf0611a29e7  kodi-pvr-mythtv-20.3.2-Nexus.tar.gz
++sha256  344750ba617b261a4559ba8314107b7e90e9a37b6b1a6cccb9077e5b2f63694d  kodi-pvr-mythtv-20.4.0-Nexus.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index f67457480c..2038b9016e 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSTROPHE_VERSION = 0.12.2
-+LIBSTROPHE_VERSION = 0.12.3
- LIBSTROPHE_SOURCE = libstrophe-$(LIBSTROPHE_VERSION).tar.xz
- LIBSTROPHE_SITE = https://github.com/strophe/libstrophe/releases/download/$(LIBSTROPHE_VERSION)
- LIBSTROPHE_DEPENDENCIES = host-pkgconf
+-KODI_PVR_MYTHTV_VERSION = 20.3.2-Nexus
++KODI_PVR_MYTHTV_VERSION = 20.4.0-Nexus
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
