@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28F3BEC8734
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E830EC8734
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D81D083B85;
-	Thu,  7 Sep 2023 15:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D81D083B85
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0612F80F04;
+	Thu,  7 Sep 2023 15:27:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0612F80F04
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cZHMRqSbWfit; Thu,  7 Sep 2023 15:27:44 +0000 (UTC)
+	with ESMTP id UzkIQpDsZCZs; Thu,  7 Sep 2023 15:27:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08C4283BC2;
-	Thu,  7 Sep 2023 15:27:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08C4283BC2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47F2483C44;
+	Thu,  7 Sep 2023 15:27:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47F2483C44
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 122BD1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0436A1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A609041DA6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8491641DE0
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A609041DA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8491641DE0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aDAhUuxQ4jDs for <buildroot@lists.busybox.net>;
+ with ESMTP id uz4LKKaFUebN for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B8A141DE1
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5C4A41DEC
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B8A141DE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5C4A41DEC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85C2586A21; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
+ id D2CB086A1E; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Aug 2023 23:37:15 +0200
+Date: Mon, 21 Aug 2023 15:04:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0ca197b0e2eb70355704d1202ef0437a2cec9ab
-X-Git-Newrev: 5b3641ea59c0fc5ad2359be0e8707070b9c23231
+X-Git-Oldrev: 80b56887006cfba50833881dc31f045d494af185
+X-Git-Newrev: 875ab7d9e3d32990cd07fbab3c68f31dfa9927a4
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145130.85C2586A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libksba: bump to version 1.6.4
+Message-Id: <20230907145130.D2CB086A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/microchip/mpfs_icicle: update
+ post-image script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,75 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b3641ea59c0fc5ad2359be0e8707070b9c23231
+commit: https://git.buildroot.net/buildroot/commit/?id=875ab7d9e3d32990cd07fbab3c68f31dfa9927a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log, see [1] and [2].
+The hss-payload-generator cannot find where u-boot.bin is when looking
+for it using the config.yaml. Update syntax issues and working
+directories. Fix the post image script to allow an image to get built.
 
-This commit also change the comment in hash file to add a link to the
-integrity check procedure. It also includes SHA1 hash published
-upstream.
-
-The AUTHORS file hash is updated. It was reformatted, in upstream
-commit [3].
-
-libksba 1.6.4 updated its gpg-error.m4 macro files to detect
-gpgrt-config. Its path needs to be forced in _CONF_ENV to make sure it
-will work in all host environments. See the log entry of commit
-d7f2d8403e "package/gnupg2: fix build failure when host provides an
-old gpgrt-config" [4] for a complete explanation.
-
-[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libksba.git;a=log;h=libksba-1.6.4
-[2] https://dev.gnupg.org/T6543
-[3] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libksba.git;a=commitdiff;h=557999424ebd13e70d6fc17e648a5dd2a06f440b
-[4] https://git.buildroot.org/buildroot/commit/?id=d7f2d8403ec82f3b1772ec17bf1df8c42987a1f8
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libksba/libksba.hash | 7 ++++---
- package/libksba/libksba.mk   | 6 +++++-
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ board/microchip/mpfs_icicle/post-image.sh | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
-index 5c6c5eda7a..08b599dc0f 100644
---- a/package/libksba/libksba.hash
-+++ b/package/libksba/libksba.hash
-@@ -1,8 +1,9 @@
--# Locally calculated after checking pgp signature
--sha256  3f72c68db30971ebbf14367527719423f0a4d5f8103fc9f4a1c01a9fa440de5c  libksba-1.6.3.tar.bz2
-+# From https://www.gnupg.org/download/integrity_check.html
-+sha1  258c31c72adda2ef547d94038b7e0fd7bd93d03c  libksba-1.6.4.tar.bz2
-+sha256  bbb43f032b9164d86c781ffe42213a83bf4f2fee91455edfa4654521b8b03b6b  libksba-1.6.4.tar.bz2
+diff --git a/board/microchip/mpfs_icicle/post-image.sh b/board/microchip/mpfs_icicle/post-image.sh
+index 04b34bbd40..596bb21d78 100755
+--- a/board/microchip/mpfs_icicle/post-image.sh
++++ b/board/microchip/mpfs_icicle/post-image.sh
+@@ -1,8 +1,13 @@
+-#!/bin/sh
+-HSS_PAYLOAD_GENERATOR=${HOST_DIR}/bin/hss-payload-generator
+-MKIMAGE=${HOST_DIR}/bin/mkimage
++#!/bin/bash
++set -e
  
- # Hash for license files:
--sha256  8f1b87e551d97b2b23b6d3403a5d598c63ea89824cb8ee351f631f6cab2beaa5  AUTHORS
-+sha256  f9c59ea5a5e1dfdeebcd134e6a594c21eb088cc95f6653ee99ff2e187c105380  AUTHORS
- sha256  6197b98c6bf69838c624809c509d84333de1bc847155168c0e84527446a27076  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf  COPYING.GPLv3
-diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
-index b7c0508df8..6780d0d81b 100644
---- a/package/libksba/libksba.mk
-+++ b/package/libksba/libksba.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBKSBA_VERSION = 1.6.3
-+LIBKSBA_VERSION = 1.6.4
- LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
- LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
- LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
-@@ -14,4 +14,8 @@ LIBKSBA_INSTALL_STAGING = YES
- LIBKSBA_DEPENDENCIES = libgpg-error
- LIBKSBA_CONF_OPTS = --with-gpg-error-prefix=$(STAGING_DIR)/usr
- 
-+# Force the path to "gpgrt-config" (from the libgpg-error package) to
-+# avoid using the one on host, if present.
-+LIBKSBA_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
+-"${HSS_PAYLOAD_GENERATOR}" -c board/microchip/mpfs_icicle/config.yaml "${BINARIES_DIR}"/payload.bin
+-cp board/microchip/mpfs_icicle/mpfs_icicle.its "${BINARIES_DIR}"/mpfs_icicle.its
+-(cd "${BINARIES_DIR}" && "${MKIMAGE}" -f mpfs_icicle.its mpfs_icicle.itb)
+-support/scripts/genimage.sh -c board/microchip/mpfs_icicle/genimage.cfg
++HSS_PAYLOAD_GENERATOR="${HOST_DIR}"/bin/hss-payload-generator
++MKIMAGE="${HOST_DIR}"/bin/mkimage
++BOARD_DIR="$(pwd)"/"${0%/*}"
 +
- $(eval $(autotools-package))
++pushd "${BINARIES_DIR}"
++"${HSS_PAYLOAD_GENERATOR}" -c "${BOARD_DIR}"/config.yaml payload.bin
++cp "${BOARD_DIR}"/mpfs_icicle.its "${BINARIES_DIR}"/mpfs_icicle.its
++"${MKIMAGE}" -f mpfs_icicle.its mpfs_icicle.itb
++popd
++support/scripts/genimage.sh -c "${BOARD_DIR}"/genimage.cfg
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
