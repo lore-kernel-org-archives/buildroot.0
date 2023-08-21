@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCB43EE49A6
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 11:12:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3CD1EE4993
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 11:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6010881E6F;
-	Mon, 21 Aug 2023 11:12:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6010881E6F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4920281E66;
+	Mon, 21 Aug 2023 11:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4920281E66
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hfzGiffJhDTf; Mon, 21 Aug 2023 11:12:08 +0000 (UTC)
+	with ESMTP id 0DPbsbMSlGhA; Mon, 21 Aug 2023 11:17:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB62881E58;
-	Mon, 21 Aug 2023 11:12:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB62881E58
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 925D91BF361
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 11:12:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B74581E6F;
+	Mon, 21 Aug 2023 11:17:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B74581E6F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F00B11BF361
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 11:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 41C7881E6D
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 11:12:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41C7881E6D
+ by smtp2.osuosl.org (Postfix) with ESMTP id C69D740134
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 11:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C69D740134
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OjAeV1WSb6Pu for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 11:12:04 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E604981D46
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 11:12:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E604981D46
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A05AB40003;
- Mon, 21 Aug 2023 11:12:00 +0000 (UTC)
-Date: Mon, 21 Aug 2023 13:11:59 +0200
-To: Maksim Kiselev <bigunclemax@gmail.com>
-Message-ID: <20230821131159.46c0a6ff@windsurf>
-In-Reply-To: <20230820095833.602364-2-bigunclemax@gmail.com>
-References: <20230820095833.602364-1-bigunclemax@gmail.com>
- <20230820095833.602364-2-bigunclemax@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692616321;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CvA6+2IZUHcAOfGACzX9ikKXAbbuIwykUCoRp1wRktU=;
- b=YXp5lRQqWaXRstH91ab/v8oKvRxD0OvcxOXIEJYiUDgO4K4YCHx2DpGdtolTbYTm4+q91U
- or5VclvVZB5n0ZYkN13ibkngJZOwQ9R7p7Iy2AlPfdkDKBDtKHqBv/69cSwzepBgNzHtM9
- WZ+vghMeqgBWb4cZCYNzIyeD46QAofnxNGqrLVLPgYQ/dRl8bG/gtiy0tlzLIsj81buDG2
- MHJq1kxSoIQ+fqtXMJT094JAEpnyBMQWEOpOwuNhTq7ZVC5+EtbOVA82r/ZL+UgndKiE7h
- lkVKw5cbCANGDLwF6mTJRYdKrErUhi7MA5FnU1LsUQjBYC80yQhzvrFW7bYbAg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YXp5lRQq
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/ledmon: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Rm0txmKFFq6L for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 11:17:44 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A59DF400D7
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 11:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A59DF400D7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 92A9685F56; Mon, 21 Aug 2023 11:17:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 21 Aug 2023 13:16:24 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 57ff5f7d2a9d2cf49e76a0c1e874fc1698eb7778
+X-Git-Newrev: 2298de68530283f329147f0da9c5acd039ff561c
+X-Patchwork-Hint: ignore
+Message-Id: <20230821111744.92A9685F56@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/file: bump version to
+ 5.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,51 +58,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gTWFrc2ltLAoKT24gU3VuLCAyMCBBdWcgMjAyMyAxMjo1ODozMyArMDMwMApNYWtzaW0g
-S2lzZWxldiA8YmlndW5jbGVtYXhAZ21haWwuY29tPiB3cm90ZToKCj4gRW5jbG9zdXJlIExFRCBV
-dGlsaXRpZXMKPiAKPiBsZWRtb24gYW5kIGxlZGN0bCBhcmUgdXNlcnNwYWNlIHRvb2xzIGRlc2ln
-bmVkIHRvIGNvbnRyb2wgc3RvcmFnZQo+IGVuY2xvc3VyZSBMRURzLiBUaGUgdXNlciBtdXN0IGhh
-dmUgcm9vdCBwcml2aWxlZ2VzIHRvIHVzZSB0aGVzZSB0b29scy4KPiAKPiBUaGVzZSB0b29scyB1
-c2UgdGhlIFNHUElPIGFuZCBTRVMtMiBwcm90b2NvbHMgdG8gbW9uaXRvciBhbmQgY29udHJvbCBM
-RURzLgo+IFRoZXkgYmVlbiB2ZXJpZmllZCB0byB3b3JrIHdpdGggSW50ZWwoUikgc3RvcmFnZSBj
-b250cm9sbGVycyAoaS5lLiB0aGUKPiBJbnRlbChSKSBBSENJIGNvbnRyb2xsZXIpIGFuZCBoYXZl
-IG5vdCBiZWVuIHRlc3RlZCB3aXRoIHN0b3JhZ2UgY29udHJvbGxlcnMgb2YKPiBvdGhlciB2ZW5k
-b3JzIChlc3BlY2lhbGx5IFNBUy9TQ1NJIGNvbnRyb2xsZXJzKS4KPiAKPiBGb3IgYmFja3BsYW5l
-IGVuY2xvc3VyZXMgYXR0YWNoZWQgdG8gSVNDSSBjb250cm9sbGVycywgc3VwcG9ydCBpcyBsaW1p
-dGVkIHRvCj4gSW50ZWwoUikgSW50ZWxsaWdlbnQgQmFja3BsYW5lcy4KPiAKPiBTaWduZWQtb2Zm
-LWJ5OiBNYWtzaW0gS2lzZWxldiA8YmlndW5jbGVtYXhAZ21haWwuY29tPgoKVGhhbmtzLCBJJ3Zl
-IGFwcGxpZWQgdG8gb3VyIG5leHQgYnJhbmNoLCB3aXRoIHNvbWUgdmVyeSBzbWFsbCBjaGFuZ2Vz
-LiBTZWUgYmVsb3cuCgo+ICtEYXRlOiBNb24sIDE1IE1heSAyMDIzIDE0OjQ2OjU2ICswMzAwCj4g
-K1N1YmplY3Q6IFtQQVRDSCAxLzJdIFJlcGxhY2Ugbm9uc3RhbmRhcmQgb25fZXhpdCgpIGZ1bmN0
-aW9uIGJ5IGF0ZXhpdCgpCj4gKwo+ICtEYXRlOiBNb24sIDE1IE1heSAyMDIzIDE5OjI5OjQ1ICsw
-MzAwCj4gK1N1YmplY3Q6IFtQQVRDSCAyLzJdIEZpeCB1bmtub3duIHR5cGUgbmFtZSDigJhzc2l6
-ZV904oCZIGVycm9yCgpUaGUgcGF0Y2hlcyBpbiBCdWlsZHJvb3Qgc2hvdWxkIG5vdCBoYXZlIDEv
-MiwgMi8yLCBiZWNhdXNlIHRoaXMgZ2V0cwpxdWlja2x5IG91dCBvZiBzeW5jLiBBbmQgaW5kZWVk
-OiB5b3UgaGF2ZSAzIHBhdGNoZXMgZm9yIHRoaXMgcGFja2FnZSwKYW5kIHRoZXNlIDEvMiBhbmQg
-Mi8yIGFyZSBhbHJlYWR5IHdyb25nLiBTbyB3ZSBhc2sgcGVvcGxlIHRvIGdlbmVyYXRlCnBhdGNo
-ZXMgd2l0aCAiZ2l0IGZvcm1hdC1wYXRjaCAtTiIuIE5vdGUgdGhhdCB5b3UgY2FuIHJ1biAibWFr
-ZQpjaGVjay1wYWNrYWdlIiB3aGljaCB2YWxpZGF0ZXMgdGhpcyBraW5kIG9mIGNvZGluZyBzdHls
-ZSBpc3N1ZXMuCgo+ICtMRURNT05fVkVSU0lPTiA9IDAuOTcKPiArTEVETU9OX1NJVEUgPSAkKGNh
-bGwgZ2l0aHViLGludGVsLGxlZG1vbix2JChMRURNT05fVkVSU0lPTikpCj4gK0xFRE1PTl9ERVBF
-TkRFTkNJRVMgPSBob3N0LXBrZ2NvbmYgcGNpdXRpbHMgc2czX3V0aWxzIHVkZXYKPiArTEVETU9O
-X0xJQ0VOU0UgPSBHUEwtMi4wCj4gK0xFRE1PTl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwo+ICsj
-IFRoZSBjb2RlIGJhc2UgYWxzbyBpbmNsdWRlIGEgQ09QWUlORy5MSUIgZmlsZSB3aXRoIHRoZSBM
-R1BMLTIuMSB0ZXh0LAo+ICsjIGFuZCBzb21lIHNvdXJjZSBmaWxlcyBhcmUgcHVibGlzaGVkIHVu
-ZGVyIExHUEwtMi4xLCBidXQgYWxsIG9mIHRoZW0gYXJlCj4gKyMgYXQgc29tZSBwb2ludCBsaW5r
-ZWQgd2l0aCBHUEwtMi4wIGNvZGUsIG1ha2luZyB0aGUgcmVzdWx0aW5nIGJpbmFyaWVzCj4gKyMg
-R1BMLTIuMCBsaWNlbnNlZAoKSSd2ZSBtb3ZlZCB0aGlzIGNvbW1lbnQgYWJvdmUgTEVETU9OX0xJ
-Q0VOU0UsIGFzIHdlIGFsd2F5cyBwdXQgY29tbWVudHMKKmJlZm9yZSogdGhlIGNvZGUgdGhleSBj
-b3JyZXNwb25kIHRvLgoKPiArTEVETU9OX0FVVE9SRUNPTkYgPSBZRVMKCkkndmUgYWRkZWQgYSBj
-b21tZW50IGFib3ZlIHRoaXMgbGluZSB0aGF0IGV4cGxhaW5zIHdoeSBpdCBpcyBuZWVkZWQuCgpU
-aGFua3MgYSBsb3QhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBD
-RU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJh
-aW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=2298de68530283f329147f0da9c5acd039ff561c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Patch is included upstream.
+See here for Changes in 5.45:
+https://mailman.astron.com/pipermail/file/2023-July/001205.html
+See here for Changes in 5.44:
+https://mailman.astron.com/pipermail/file/2022-December/001042.html
+
+The hash of src/vasprintf.c, which is used as one of the license
+files, has been updated due to source code changes that do not affect
+the licensing terms.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  1 -
+ ...src-file.c-fix-build-without-wide-support.patch | 39 ----------------------
+ package/file/file.hash                             |  6 ++--
+ package/file/file.mk                               |  2 +-
+ 4 files changed, 4 insertions(+), 44 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e4a60e7aef..0956243143 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -449,7 +449,6 @@ package/ffmpeg/0003-libavutil-Fix-mips-build.patch Upstream
+ package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch Upstream
+ package/ficl/0001-fix-Makefile.patch Upstream
+ package/ficl/0002-Makefile.linux-pass-LDFLAGS.patch Upstream
+-package/file/0001-src-file.c-fix-build-without-wide-support.patch Upstream
+ package/flatbuffers/0001-include-flatbuffers-base.h-fix-build-on-musl.patch Upstream
+ package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch Upstream
+ package/flex/0002-build-make-it-possible-to-disable-the-build-of-the-f.patch Upstream
+diff --git a/package/file/0001-src-file.c-fix-build-without-wide-support.patch b/package/file/0001-src-file.c-fix-build-without-wide-support.patch
+deleted file mode 100644
+index 29be9fa2cd..0000000000
+--- a/package/file/0001-src-file.c-fix-build-without-wide-support.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From f2ab09d0e1388657f6b7e62bacc383ebea91f5b9 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 26 Oct 2022 00:23:32 +0200
+-Subject: [PATCH] src/file.c: fix build without wide support
+-
+-Fix the following build failure without wide support (e.g. on uclibc)
+-raised since version 5.43 and
+-https://github.com/file/file/commit/c80065fe6900be5e794941e29b32440e9969b1c3:
+-
+-file.c: In function 'fname_print':
+-file.c:605:10: error: macro "putc" requires 2 arguments, but only 1 given
+-  605 |    putc(c);
+-      |          ^
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/7ff1dd9f79408d2e6286c005302b6f3c505ab259
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://bugs.astron.com/view.php?id=398]
+----
+- src/file.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/file.c b/src/file.c
+-index f5f46524..1c23defc 100644
+---- a/src/file.c
+-+++ b/src/file.c
+-@@ -615,7 +615,7 @@ fname_print(const char *inname)
+- 	for (i = 0; i < n; i++) {
+- 		unsigned char c = CAST(unsigned char, inname[i]);
+- 		if (isprint(c)) {
+--			putc(c);
+-+			putc(c, stdout);
+- 			continue;
+- 		}
+- 		file_octal(c);
+--- 
+-2.35.1
+-
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 49fa9e1e1b..08e8497471 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after verifying signature
+-# ftp://ftp.astron.com/pub/file/file-5.43.tar.gz.asc
++# ftp://ftp.astron.com/pub/file/file-5.45.tar.gz.asc
+ # using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
+-sha256  8c8015e91ae0e8d0321d94c78239892ef9dbc70c4ade0008c0e95894abfb1991  file-5.43.tar.gz
++sha256  fc97f51029bb0e2c9f4e3bffefdaf678f0e039ee872b9de5c002a6d09c784d82  file-5.45.tar.gz
+ sha256  0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
+ sha256  4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
+-sha256  cc3d8704489d08eaefcaee8c639cc6436c6f0f6b2b03986d3ba7521a1a1d2fc9  src/vasprintf.c
++sha256  2e14b6fa9a74f952ebfde3c96527158df281c953cfaf35609eb854d4da30131c  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 9b751e2696..5fc540bc9d 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FILE_VERSION = 5.43
++FILE_VERSION = 5.45
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
