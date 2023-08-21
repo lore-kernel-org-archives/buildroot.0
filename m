@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69711EE4993
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 13:04:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F9AEEE4993
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 13:04:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2FEF40922;
-	Mon, 21 Aug 2023 13:04:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2FEF40922
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1037940545;
+	Mon, 21 Aug 2023 13:04:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1037940545
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WwHjtNWV77GM; Mon, 21 Aug 2023 13:04:09 +0000 (UTC)
+	with ESMTP id 2y7soh-VzixH; Mon, 21 Aug 2023 13:04:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC4EA408AB;
-	Mon, 21 Aug 2023 13:04:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4EA408AB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E887F1BF388
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:04:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 220E140928;
+	Mon, 21 Aug 2023 13:04:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 220E140928
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C23941BF2F2
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B3056408AB
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:04:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3056408AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 98BDD40134
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:04:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98BDD40134
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WsDyH-keiShl for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 13:04:05 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 635CE40545
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 13:04:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 635CE40545
-Received: by mail.gandi.net (Postfix) with ESMTPSA id ECAD220009;
- Mon, 21 Aug 2023 13:04:01 +0000 (UTC)
-Date: Mon, 21 Aug 2023 15:04:00 +0200
-To: Jesse Taube <mr.bossman075@gmail.com>
-Message-ID: <20230821150400.7f4a1f6c@windsurf>
-In-Reply-To: <20230819021623.3961269-1-Mr.Bossman075@gmail.com>
-References: <20230819021623.3961269-1-Mr.Bossman075@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692623042;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=FhGZK0ka5vcBcfYTO2egW8pADhN1X885UFVHlyaEipk=;
- b=WtNTf0JgInV2I4pAy2gvUUznGqNemVaF2yWpeQUYJMP4C4496qD1nVL1BULqsCq3FkSj4v
- reTEiT+YMSsR6CVKjN0T604l6U7QZOdFkbv99TSKSI2S99m2j8Cj0H1pwwYS0GFbkNAGUk
- 7/YRLydZdOo/Rumj2nUZJXbKp2uiLJ3U5r5miO1O5VSMKAt8nkxVJkE/VCy7ZVfKcZYdTg
- 48MmonzI/1Dad3HBFBHv4dxWckclRoJOpygA5U0+Gb54DreG0Pzywp8qycUdDQQLYM6M2e
- 3g05ak0pSQcZRYsRYK50PATMkbisJQimqTqkUVNFZtZbZmZ2MBVmS5FugNmXqQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WtNTf0Jg
-Subject: Re: [Buildroot] [PATCH] package/busybox: Use minimal.config for no
- MMU
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6J0WsLaYxcta for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 13:04:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4C324036E
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 13:04:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4C324036E
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BEF8585F9E; Mon, 21 Aug 2023 13:04:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 21 Aug 2023 15:04:36 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 875ab7d9e3d32990cd07fbab3c68f31dfa9927a4
+X-Git-Newrev: fd2fa74c5336d4efaaa3c9aabed625679d0e0265
+X-Patchwork-Hint: ignore
+Message-Id: <20230821130445.BEF8585F9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/microchip_mpfs_icicle_defconfig: update RVC config option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,39 +58,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Jesse Taube <Mr-Bossman075@gmail.com>,
- =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 18 Aug 2023 22:16:23 -0400
-Jesse Taube <mr.bossman075@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fd2fa74c5336d4efaaa3c9aabed625679d0e0265
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> When building Busybox for no MMU systems both umask and mask
-> are not built. During boot-up, they will be called even though they are
-> not present. This issue is fixed when using busybox-minimal.config
-> To prevent confusion for future no-mmu boards select minimal.config
-> for !MMU targets.
-> 
-> Signed-off-by: Jesse Taube <Mr-Bossman075@gmail.com>
-> ---
->  package/busybox/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Update the RISCV_ISA_RVC config option to match updated RISCV kconfig
+instruction set options.
 
-Applied to next with a reworked commit log, see
-https://gitlab.com/buildroot.org/buildroot/-/commit/80b56887006cfba50833881dc31f045d494af185
+Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/microchip_mpfs_icicle_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/microchip_mpfs_icicle_defconfig b/configs/microchip_mpfs_icicle_defconfig
+index a3b3093982..54a4d55a5f 100644
+--- a/configs/microchip_mpfs_icicle_defconfig
++++ b/configs/microchip_mpfs_icicle_defconfig
+@@ -1,6 +1,6 @@
+ BR2_riscv=y
+ BR2_riscv_g=y
+-BR2_RISCV_ISA_CUSTOM_RVC=y
++BR2_RISCV_ISA_RVC=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_GENERIC_HOSTNAME="mpfs_icicle"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/microchip/mpfs_icicle/post-image.sh"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
