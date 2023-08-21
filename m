@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46456EE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 22:15:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 811E9EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 22:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F230A40B56;
-	Mon, 21 Aug 2023 22:15:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F230A40B56
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B85E40B5D;
+	Mon, 21 Aug 2023 22:16:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B85E40B5D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OQgan70XgGRK; Mon, 21 Aug 2023 22:15:41 +0000 (UTC)
+	with ESMTP id n44bVdW8JskQ; Mon, 21 Aug 2023 22:16:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45D1D40B4A;
-	Mon, 21 Aug 2023 22:15:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45D1D40B4A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39AAC1BF35B
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:15:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8E4AB40B53;
+	Mon, 21 Aug 2023 22:16:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E4AB40B53
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C94AA1BF35B
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:16:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 117D740B4A
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:15:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 117D740B4A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95D6781B52
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:16:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95D6781B52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AXVA6v_DTQbp for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 22:15:38 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CFB8D405B1
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 22:15:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFB8D405B1
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0974320004;
- Mon, 21 Aug 2023 22:15:35 +0000 (UTC)
-Date: Tue, 22 Aug 2023 00:15:35 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230822001535.6b8ecfda@windsurf>
-In-Reply-To: <20230815125652.687317-1-ju.o@free.fr>
-References: <20230815125652.687317-1-ju.o@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 10wzABDIa04t for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 22:16:09 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 927F681B35
+ for <buildroot@busybox.net>; Mon, 21 Aug 2023 22:16:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 927F681B35
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D93EE0007;
+ Mon, 21 Aug 2023 22:16:07 +0000 (UTC)
+Date: Tue, 22 Aug 2023 00:16:06 +0200
+To: Michael Vetter <jubalh@iodoru.org>
+Message-ID: <20230822001606.699382b1@windsurf>
+In-Reply-To: <20230815075702.4177-1-jubalh@iodoru.org>
+References: <20230815075702.4177-1-jubalh@iodoru.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692656136;
+ d=bootlin.com; s=gm1; t=1692656168;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=hG4W899k5y4PYjbJTrSKITMtywklKNqUc5z2B72vptg=;
- b=fJt0SI1gvFNb0LhrIj1Qg41PesxcEvnjZQ4az3AZoEppHeXwAp2xIY4+ZMFedm3GU/oFUJ
- VWfP0g9llkMhfLXOAxBtVPloSfO3byZmS/rvm/gA9RprPrLD8AcS5Hzh8Us8YDg3rFnumY
- 0SaR+d1keCJbyaiWcuCMlZMIAPm+JhlYqWO+Y6HY747uLDIt/65eTuO9kue/dv3ljGhY4h
- ZMAdzThTS+lPHXTl6ctdiT+2m0dieznjGfTgzTAxXEUFm2iabgIrajMiVhWgFzLvhfYG0W
- 6fdjs8HFdXwpaotIGHlCXK9z3gt8FW7AE9eeXx39Jsoi93L6sCYCMBoKcEzKGQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=GfMras5lMyMVWKom3z177upDyCXUwAZr1eCALP60OZM=;
+ b=O+RmZy5Y8Hhu5zNCbO48TnZ2bB9S0Oi+eZU84ehwzc2CY3eFTZW5Y795mFuHyJsQe3hRRX
+ Ae/EpW4Pc0262UjHHB7O0GCyRNpBQDAsYXRpo6pqZr8rw6bPepid0j4Cq3xrCdyRfrG8tJ
+ dUll4ffxdfwU9rx9vuY8ifbzeusI8fTpenlJKF25FbZjg2h0DsAVhH2n3i73sM2SLvlWkl
+ bGxcjM099LGrF+ncrs+jihZPbHwcoVHvh2Os7S8SF3Sj2iKJ5PgMFs5SsNYOAy5DFbmea4
+ y6sSi61U6hD/IP+atOpPotRXFQ6QktTO4qfKRV6RvJufOzk6VweEUfKv6fCaoQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fJt0SI1g
-Subject: Re: [Buildroot] [PATCH next 1/2] package/libnftnl: bump to version
- 1.2.6
+ header.s=gm1 header.b=O+RmZy5Y
+Subject: Re: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version
+ 0.12.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,29 +77,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 15 Aug 2023 14:56:51 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+On Tue, 15 Aug 2023 09:57:02 +0200
+Michael Vetter <jubalh@iodoru.org> wrote:
 
-> For change log, see:
-> https://www.netfilter.org/projects/libnftnl/files/changes-libnftnl-1.2.6.txt
-> 
-> This commit also adds comments in hash file:
-> - that pgp signature was verified with links
-> - that the license file hash was locally computed
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 > ---
->  package/libnftnl/libnftnl.hash | 7 ++++++-
->  package/libnftnl/libnftnl.mk   | 2 +-
->  2 files changed, 7 insertions(+), 2 deletions(-)
+>  package/libstrophe/libstrophe.hash | 2 +-
+>  package/libstrophe/libstrophe.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to next, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
