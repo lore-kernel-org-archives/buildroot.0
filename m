@@ -1,88 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21950EE4993
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 17:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79913EE4996
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 19:32:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BBB240357;
-	Mon, 21 Aug 2023 17:58:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BBB240357
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pK-1R1nePzBp; Mon, 21 Aug 2023 17:58:51 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E0F940358;
-	Mon, 21 Aug 2023 17:58:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E0F940358
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 85B631BF3EC
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 17:58:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E6724021C
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 17:58:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E6724021C
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB1C640154;
+	Mon, 21 Aug 2023 19:32:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB1C640154
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tMD6nsSOD6AG for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 17:58:47 +0000 (UTC)
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
- [IPv6:2607:f8b0:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2332540106
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 17:58:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2332540106
-Received: by mail-pf1-x436.google.com with SMTP id
- d2e1a72fcca58-68a41035828so1002294b3a.1
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 10:58:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692640726; x=1693245526;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CxkGIMHuj5T/VOeNL03ODBD1z8SaZSybCLPOypzltTY=;
- b=lKYtpwryBlHGm+nJBweT74LWt6hFt+zpjRvLtI5+9G/WF4b6fm/Ofju/3IZdrJ/qzn
- 799BexMQy6huAuJJLdz169ZCaf6uZqJhfhikio83J8lQYq2ed4JZJJdCtJjqt9Eq0wZ/
- GTPi1nICFTe0OyUKb7/iX3F6wNStA7akhwmcnNwvH0VWs2rJlqvNOzOfuuZlUY5zNUhl
- hwDL9jTkYTqPkC9MgP8oNX0xcBI813PWYBFflCDGdM01NPzjgjEnD90qditEWJovSqKw
- h3KoJ0aZfgNE9fDkOw8s2MzHhsrFpqOZhWwRCmwfiFvujTgYlyZXTdeTyver5fDFGll8
- 3jeA==
-X-Gm-Message-State: AOJu0Yw68LJwZoiy1iQUCNGk8fD4cu6tdatU0dlKIet78YwxMHZAANr4
- Er2Jm2r75s+IsRYpi4r/Cdrj+VT1u3s=
-X-Google-Smtp-Source: AGHT+IFRj4g2MgxcpWc3UirclR33FYcaSTeE1hrTkn9ZijC+s1fMv0YTle5x8R3gKzemy7IGK/XGoA==
-X-Received: by 2002:a05:6a20:650:b0:135:62b8:2a35 with SMTP id
- 16-20020a056a20065000b0013562b82a35mr5656917pzm.32.1692640725809; 
- Mon, 21 Aug 2023 10:58:45 -0700 (PDT)
-Received: from localhost.localdomain ([12.125.190.90])
- by smtp.gmail.com with ESMTPSA id
- q10-20020a17090311ca00b001b83dc8649dsm7308842plh.250.2023.08.21.10.58.43
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Mon, 21 Aug 2023 10:58:45 -0700 (PDT)
-From: Charles Hardin <ckhardin@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 21 Aug 2023 10:58:28 -0700
-Message-Id: <20230821175828.42827-1-ckhardin@gmail.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Uv4TwKJHqKGA; Mon, 21 Aug 2023 19:32:45 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8D9B4026A;
+	Mon, 21 Aug 2023 19:32:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8D9B4026A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D6EB1BF27E
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 19:32:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E880C61112
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 19:32:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E880C61112
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u8P8iS1eaXvB for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 19:32:41 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 44F3860AC2
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 19:32:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44F3860AC2
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:9126:8dfb:db6:f9b5])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 1D1832003CE;
+ Mon, 21 Aug 2023 21:32:34 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Mon, 21 Aug 2023 21:32:33 +0200
+Date: Mon, 21 Aug 2023 21:32:33 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20230821193233.GW1778688@scaer>
+References: <20230731204947.2275706-1-bernd@kuhls.net>
+ <20230806162741.0e4d071f@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692640726; x=1693245526;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CxkGIMHuj5T/VOeNL03ODBD1z8SaZSybCLPOypzltTY=;
- b=rc8sgBhztxlDiUnMGHmnXzVnq9q1sFZsC7yCEyu31gZ6XIxWEaRaguywStg6QAy76H
- mZsDiZzmVIKBja58TBxR0eGBLlAvg1gtIYec8JHjaNwwPaKLB7jqG40jGZqItfj1SrGJ
- t7OWaowXH/SS1I4VvCEMYlI8opaU85tnAV6cDT1MhHF8ZWfwcUNq+MUfc4U+leEnssGP
- BmpblGGbl83IKby87RzNATVGjQTjwz5PQG0bq206TMwzd6bu2WwCqAQX/hiUSjZp0xo1
- oqYsfqXPayNMjnnjNQIQbDaOBKWZRN6kG7hFEEBvZk4JhNO3RYWV4xlNZ34E2SbObiLF
- UZVA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=rc8sgBhz
-Subject: [Buildroot] [PATCH 1/1] package/python-pykwalify: add required
- package for zephyr cmake
+Content-Disposition: inline
+In-Reply-To: <20230806162741.0e4d071f@windsurf>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1692646358;
+ bh=4hbvJNLsTG0rTAMzd/O/AljUxZ94WNR0s/S+bSCn3TA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=etNyKzft/Tcig9QDaAiV7fYbqTBSnM4FccK4ImdelssTuCkSwLWiwTYTDL/eHwJTR
+ JY51WmdYlYxLu+5g1TyD5Y5lTnMHE4rFWuWGScE62AesthtvPblNoSAPNZbgcXLk4l
+ q2+mqnw40ZCOSNgJw54m5C2j46Lwgo4HmTkB02ImJY/BxMB35NT219gx3D1FWBS3Hx
+ GTWyhOahERen1n9fICK7+gW80SN3cDLgQkUURcZU26E/Vv3iAOjU/V285EZB4HcBRn
+ ol9yDyC+kSM1EqjG/1pMZPGDHHw79FUm237gA4JzDgfkt1oDZRMZUXcek2YFPSsK/M
+ Rb8qTmCkWv5Hw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=etNyKzft
+Subject: Re: [Buildroot] [PATCH 1/2] package/sentry-cli: fix build with
+ OpenSSL 3.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,140 +77,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Charles Hardin <ckhardin@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, "Alvaro G . M" <alvaro.gamez@hazent.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When building zephyr based firmware, the cmake integrates with
-python scripts that can be run using the buildroot host-python
-dependencies. This is useful for the sdk setups and associated
-build steps for the firmware. In this use-case, a buildroot
-external project can be setup with recipes to build firmware
-images using eabi toolchains and the linux controller software
-to talk to those firmware images using one SDK. This might not
-be overtly obvious from the patches.
+Bernd, Thomas, All,
 
-Add the required host packages and additional pykwalify
+On 2023-08-06 16:27 +0200, Thomas Petazzoni via buildroot spake thusly:
+> On Mon, 31 Jul 2023 22:49:46 +0200
+> Bernd Kuhls <bernd@kuhls.net> wrote:
+> 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/4e2/4e24cb67402bad35ab57833d72e6c857b3eb4e07/
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> > ---
+> >  ...able-SSL-support-for-the-curl-module.patch | 62 +++++++++++++++++++
+> >  1 file changed, 62 insertions(+)
+> >  create mode 100644 package/sentry-cli/0001-Disable-SSL-support-for-the-curl-module.patch
+> 
+> Applied to both master and next, thanks.
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
----
- package/Config.in                             |  1 +
- package/python-dateutil/python-dateutil.mk    |  2 ++
- package/python-docopt/python-docopt.mk        |  1 +
- package/python-pykwalify/Config.in            |  9 ++++++++
- .../python-pykwalify/python-pykwalify.hash    |  6 +++++
- package/python-pykwalify/python-pykwalify.mk  | 23 +++++++++++++++++++
- .../python-ruamel-yaml/python-ruamel-yaml.mk  |  1 +
- 7 files changed, 43 insertions(+)
- create mode 100644 package/python-pykwalify/Config.in
- create mode 100644 package/python-pykwalify/python-pykwalify.hash
- create mode 100644 package/python-pykwalify/python-pykwalify.mk
+next still fails to build:
 
-diff --git a/package/Config.in b/package/Config.in
-index 54cddc3914..8eb6c2bf37 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1225,6 +1225,7 @@ menu "External python modules"
- 	source "package/python-pyicu/Config.in"
- 	source "package/python-pyinotify/Config.in"
- 	source "package/python-pyjwt/Config.in"
-+	source "package/python-pykwalify/Config.in"
- 	source "package/python-pylibfdt/Config.in"
- 	source "package/python-pylibftdi/Config.in"
- 	source "package/python-pylru/Config.in"
-diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
-index b75f510bce..d45a047ba8 100644
---- a/package/python-dateutil/python-dateutil.mk
-+++ b/package/python-dateutil/python-dateutil.mk
-@@ -10,5 +10,7 @@ PYTHON_DATEUTIL_SETUP_TYPE = setuptools
- PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
- PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
- PYTHON_DATEUTIL_DEPENDENCIES = host-python-setuptools-scm
-+HOST_PYTHON_DATEUTIL_DEPENDENCIES = host-python-setuptools-scm host-python-six
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
-diff --git a/package/python-docopt/python-docopt.mk b/package/python-docopt/python-docopt.mk
-index f87d2f85a6..d326f4f0aa 100644
---- a/package/python-docopt/python-docopt.mk
-+++ b/package/python-docopt/python-docopt.mk
-@@ -11,3 +11,4 @@ PYTHON_DOCOPT_LICENSE_FILES = LICENSE-MIT
- PYTHON_DOCOPT_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
-diff --git a/package/python-pykwalify/Config.in b/package/python-pykwalify/Config.in
-new file mode 100644
-index 0000000000..03afe31865
---- /dev/null
-+++ b/package/python-pykwalify/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYKWALIFY
-+	bool "python-pykwalify"
-+	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-+	select BR2_PACKAGE_PYTHON_DOCOPT # runtime
-+	select BR2_PACKAGE_PYTHON_RUAMEL_YAML # runtime
-+	help
-+	  Python lib/cli for JSON/YAML schema validation.
-+
-+	  http://github.com/grokzen/pykwalify
-diff --git a/package/python-pykwalify/python-pykwalify.hash b/package/python-pykwalify/python-pykwalify.hash
-new file mode 100644
-index 0000000000..6ddfb6306a
---- /dev/null
-+++ b/package/python-pykwalify/python-pykwalify.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/pykwalify/json
-+md5  153197598f8508a49aefc0f44156c2b8  pykwalify-1.8.0.tar.gz
-+sha256  796b2ad3ed4cb99b88308b533fb2f559c30fa6efb4fa9fda11347f483d245884  pykwalify-1.8.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  626fafd952ab0345edc227f2d565835fe1fd14067ae0d635ee3e47289b773dc4  LICENSE
-+sha256  f89f247ddd2b9fdff655668148da4b6feaa9175fa44dd244d233006d0f551cd5  docs/license.rst
-diff --git a/package/python-pykwalify/python-pykwalify.mk b/package/python-pykwalify/python-pykwalify.mk
-new file mode 100644
-index 0000000000..8a0bc6a227
---- /dev/null
-+++ b/package/python-pykwalify/python-pykwalify.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# python-pykwalify
-+#
-+################################################################################
-+
-+PYTHON_PYKWALIFY_VERSION = 1.8.0
-+PYTHON_PYKWALIFY_SOURCE = pykwalify-$(PYTHON_PYKWALIFY_VERSION).tar.gz
-+PYTHON_PYKWALIFY_SITE = https://files.pythonhosted.org/packages/d5/77/2d6849510dbfce5f74f1f69768763630ad0385ad7bb0a4f39b55de3920c7
-+PYTHON_PYKWALIFY_SETUP_TYPE = setuptools
-+PYTHON_PYKWALIFY_LICENSE = MIT
-+PYTHON_PYKWALIFY_LICENSE_FILES = LICENSE docs/license.rst
-+PYTHON_PYKWALIFY_DEPENDENCIES = \
-+	python-dateutil \
-+	python-docopt \
-+	python-ruamel-yaml
-+HOST_PYTHON_PYKWALIFY_DEPENDENCIES = \
-+	host-python-dateutil \
-+	host-python-docopt \
-+	host-python-ruamel-yaml
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
-diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.mk b/package/python-ruamel-yaml/python-ruamel-yaml.mk
-index a6fed3bc2c..4f5691c981 100644
---- a/package/python-ruamel-yaml/python-ruamel-yaml.mk
-+++ b/package/python-ruamel-yaml/python-ruamel-yaml.mk
-@@ -14,3 +14,4 @@ PYTHON_RUAMEL_YAML_CPE_ID_VENDOR = ruamel.yaml_project
- PYTHON_RUAMEL_YAML_CPE_ID_PRODUCT = ruamel.yaml
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
+error: failed to run custom build command for `openssl-sys v0.9.80`
+
+Caused by:
+  process didn't exit successfully: `/home/ymorin/dev/buildroot/O/next/build/host-sentry-cli-2.20.3/target/release/build/openssl-sys-a33e7c852d3bd3b4/build-script-main` (exit status: 101)
+  --- stdout
+  cargo:rustc-cfg=const_fn
+  cargo:rustc-cfg=openssl
+  cargo:rerun-if-env-changed=X86_64_UNKNOWN_LINUX_GNU_OPENSSL_LIB_DIR
+  X86_64_UNKNOWN_LINUX_GNU_OPENSSL_LIB_DIR unset
+  cargo:rerun-if-env-changed=OPENSSL_LIB_DIR
+  OPENSSL_LIB_DIR unset
+  cargo:rerun-if-env-changed=X86_64_UNKNOWN_LINUX_GNU_OPENSSL_INCLUDE_DIR
+  X86_64_UNKNOWN_LINUX_GNU_OPENSSL_INCLUDE_DIR unset
+  cargo:rerun-if-env-changed=OPENSSL_INCLUDE_DIR
+  OPENSSL_INCLUDE_DIR unset
+  cargo:rerun-if-env-changed=X86_64_UNKNOWN_LINUX_GNU_OPENSSL_DIR
+  X86_64_UNKNOWN_LINUX_GNU_OPENSSL_DIR unset
+  cargo:rerun-if-env-changed=OPENSSL_DIR
+  OPENSSL_DIR unset
+  cargo:rerun-if-env-changed=OPENSSL_NO_PKG_CONFIG
+  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG
+  cargo:rerun-if-env-changed=PKG_CONFIG
+  cargo:rerun-if-env-changed=OPENSSL_STATIC
+  cargo:rerun-if-env-changed=OPENSSL_DYNAMIC
+  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_STATIC
+  cargo:rerun-if-env-changed=PKG_CONFIG_ALL_DYNAMIC
+  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_PATH_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_PATH
+  cargo:rerun-if-env-changed=PKG_CONFIG_PATH
+  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_LIBDIR
+  cargo:rerun-if-env-changed=PKG_CONFIG_LIBDIR
+  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64-unknown-linux-gnu
+  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_x86_64_unknown_linux_gnu
+  cargo:rerun-if-env-changed=HOST_PKG_CONFIG_SYSROOT_DIR
+  cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR
+  run pkg_config fail: "Could not run `PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=\"1\" PKG_CONFIG_LIBDIR=\"/home/ymorin/dev/buildroot/O/next/host/lib/pkgconfig:/home/ymorin/dev/buildroot/O/next/host/share/pkgconfig\" PKG_CONFIG_SYSROOT_DIR=\"/\" \"/home/ymorin/dev/buildroot/O/next/host/bin/pkg-config\" \"--libs\" \"--cflags\" \"openssl\"`\nThe pkg-config command could not be found.\n\nMost likely, you need to install a pkg-config package for your OS.\nTry `apt install pkg-config`, or `yum install pkg-config`,\nor `pkg install pkg-config`, or `apk add pkgconfig` depending on your distribution.\n\nIf you've already installed it, ensure the pkg-config command is one of the\ndirectories in the PATH environment variable.\n\nIf you did not expect this build to link to a pre-installed system library,\nthen check documentation of the openssl-sys crate for an option to\nbuild the library from source, or disable features or dependencies\nthat require pkg-config."
+
+  --- stderr
+  thread 'main' panicked at '
+
+  Could not find directory of OpenSSL installation, and this `-sys` crate cannot
+  proceed without this knowledge. If OpenSSL is installed and this crate had
+  trouble finding it,  you can set the `OPENSSL_DIR` environment variable for the
+  compilation process.
+
+  Make sure you also have the development packages of openssl installed.
+  For example, `libssl-dev` on Ubuntu or `openssl-devel` on Fedora.
+
+  If you're in a situation where you think the directory *should* be found
+  automatically, please open a bug at https://github.com/sfackler/rust-openssl
+  and include information about your system as well as this message.
+
+  $HOST = x86_64-unknown-linux-gnu
+  $TARGET = x86_64-unknown-linux-gnu
+  openssl-sys = 0.9.80
+
+  ', /home/ymorin/dev/buildroot/O/next/build/host-sentry-cli-2.20.3/VENDOR/openssl-sys/build/find_normal.rs:191:5
+  note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+warning: build failed, waiting for other jobs to finish...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.39.2 (Apple Git-143)
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
