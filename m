@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEB5EEE4996
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 10:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ABA2EE49AA
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 10:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F6D681E45;
-	Mon, 21 Aug 2023 10:44:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F6D681E45
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2622C81E44;
+	Mon, 21 Aug 2023 10:44:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2622C81E44
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wXKSkYMBHKnT; Mon, 21 Aug 2023 10:44:43 +0000 (UTC)
+	with ESMTP id MrXqFeekXjIM; Mon, 21 Aug 2023 10:44:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6873981E43;
-	Mon, 21 Aug 2023 10:44:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6873981E43
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 842451BF2C9
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:44:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82AB281F68;
+	Mon, 21 Aug 2023 10:44:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82AB281F68
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 78CCB1BF2C9
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58E984044F
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:44:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58E984044F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4AE158186B
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:44:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AE158186B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WI2LvPB9JVcj for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 10:44:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75843400D7
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 10:44:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75843400D7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61BDB85F1F; Mon, 21 Aug 2023 10:44:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 21 Aug 2023 12:02:59 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a78241af67cc3c6f26d5f82f9504bd15506df0b5
-X-Git-Newrev: 8f1418b5dd80809dc90196d967d8d9665b794c8e
-X-Patchwork-Hint: ignore
-Message-Id: <20230821104439.61BDB85F1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gnupg2: bump to
- version 2.4.3
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id pHBhYjPQLUHC for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 10:44:53 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B6D7381EA2
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 10:44:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6D7381EA2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 83C621C0003;
+ Mon, 21 Aug 2023 10:44:49 +0000 (UTC)
+Date: Mon, 21 Aug 2023 12:44:48 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230821124448.64a393a7@windsurf>
+In-Reply-To: <20230820145659.1396012-1-ju.o@free.fr>
+References: <20230820145659.1396012-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692614689;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3xZ0K1PVOhM/fx4eJ597NupMm1PIEWhKa853WVPw3WA=;
+ b=b2vFn2xp0L/WG0vHU29wj6enJzoICmNWcdA5yu79UpaSa9xWT5iUYkc6PcOYiBLYCrbpnI
+ 0eIGQJiMPrKfrC7lDNmyRFy8FOTwEvXvs00VdtQSkBqgTqRhMhN/xy3HQKcOBUBNlEquz7
+ 9X9ZXpevsd/Yydv7IoSg54SGDj+aQHfGcW2vBJeBfvTt9yJXtPFovS9NMWpIypfr2iofri
+ WQEnt74UdZGE3ITvgtTAcKR6zB/TtRM5x69YNlVwlbFItXOmZQeto1mksnHKtIclT7cCyh
+ VWawxa94k5cBfGkwovTYG/4ZiTAkn7gVubqqugXuWd+n6I2FhbZPmnpM23WN2w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=b2vFn2xp
+Subject: Re: [Buildroot] [PATCH next 1/1] package/gnupg2: bump to version
+ 2.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f1418b5dd80809dc90196d967d8d9665b794c8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sun, 20 Aug 2023 16:56:59 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-See release announce:
-https://lists.gnupg.org/pipermail/gnupg-announce/2023q3/000480.html
+> See release announce:
+> https://lists.gnupg.org/pipermail/gnupg-announce/2023q3/000480.html
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on branch next at commit 80a1e72 with commands:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gnupg2/gnupg2.hash | 4 ++--
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index aa71881f41..4b770fa520 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,5 +1,5 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  3efd495a94dc81fd0ea8788bef6c69d1f13cedd7  gnupg-2.4.2.tar.bz2
--sha256  97eb47df8ae5a3ff744f868005a090da5ab45cb48ee9836dbf5ee739a4e5cf49  gnupg-2.4.2.tar.bz2
-+sha1  79a60c8e415e3daaa33d0546398174252a56f7ac  gnupg-2.4.3.tar.bz2
-+sha256  a271ae6d732f6f4d80c258ad9ee88dd9c94c8fdc33c3e45328c4d7c126bd219d  gnupg-2.4.3.tar.bz2
- # Locally calculated
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 760af3b05e..d21c1e242d 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.4.2
-+GNUPG2_VERSION = 2.4.3
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
