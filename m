@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87892EC8737
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:11:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C38AEC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 367128130A;
-	Thu,  7 Sep 2023 15:11:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 367128130A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16A7B82B75;
+	Thu,  7 Sep 2023 15:12:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16A7B82B75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5f3q0XuqkuSW; Thu,  7 Sep 2023 15:11:52 +0000 (UTC)
+	with ESMTP id neyNiZOk08WH; Thu,  7 Sep 2023 15:12:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8263F83A86;
-	Thu,  7 Sep 2023 15:11:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8263F83A86
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21A561BF313
+	by smtp1.osuosl.org (Postfix) with ESMTP id DAD5783AAE;
+	Thu,  7 Sep 2023 15:12:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAD5783AAE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A95881BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0300341DEE
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0300341DEE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E43961232
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E43961232
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XAb22BCITqPf for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Tu2bhtzDGdz2 for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4AE0D41D8F
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AE0D41D8F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 526B96128D
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 526B96128D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4893486A1F; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+ id 42BA386A21; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 17:39:15 +0200
+Date: Tue, 22 Aug 2023 00:09:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8aa64eecb0da4dfee7da41a66589d7b46c6730e5
-X-Git-Newrev: 78039eb59acfb2c3051ca81e7e161d9e281d3983
+X-Git-Oldrev: a9e36f73a76a079b6dde2eb4da776d7a3ddba677
+X-Git-Newrev: 0e19425c774fdcc46c6e3ee4bcf13e88f637e5c4
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145126.4893486A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/zynqmp: bump to xilinx-v2023.1
+Message-Id: <20230907145131.42BA386A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libassuan: bump to version 2.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,656 +63,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78039eb59acfb2c3051ca81e7e161d9e281d3983
+commit: https://git.buildroot.net/buildroot/commit/?id=0e19425c774fdcc46c6e3ee4bcf13e88f637e5c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps the zynqmp defconfigs to xilinx-v2023.1 which includes
-the following updates:
+For change log, see [1] and [2].
 
-- Linux v6.1.5
-- U-Boot v2023.01
-- ATF v2.8 (including mainline buildroot patches)
-- PMUFW xilinx_v2023.1
-- Updated pm_cfg_obj.c from Vitis v2023.1
-- Removed kria u-boot patch which is included with xilinx-v2023.1
+This commit also moves the archive SHA256 hash to the section of hashes
+published upstream.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+libassuan 2.5.6 updated its gpg-error.m4 macro files to detect
+gpgrt-config. Its path needs to be forced in _CONF_ENV to make sure it
+will work in all host environments. See the log entry of commit
+d7f2d8403e "package/gnupg2: fix build failure when host provides an
+old gpgrt-config" [3] for a complete explanation.
+
+[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libassuan.git;a=log;h=libassuan-2.5.6
+[2] https://dev.gnupg.org/T6542
+[3] https://git.buildroot.org/buildroot/commit/?id=d7f2d8403ec82f3b1772ec17bf1df8c42987a1f8
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- board/zynqmp/kria/kv260/pm_cfg_obj.c               | 69 ++--------------------
- .../v1-0001-makefile-add-multi_dtb_fit-dep.patch   | 32 ----------
- ...ild-add-support-for-new-binutils-versions.patch |  2 +-
- .../0002-build-tools-avoid-unnecessary-link.patch  |  1 +
- board/zynqmp/zcu102/pm_cfg_obj.c                   | 51 ++--------------
- board/zynqmp/zcu106/pm_cfg_obj.c                   | 51 ++--------------
- configs/zynqmp_kria_kv260_defconfig                | 15 ++---
- configs/zynqmp_zcu102_defconfig                    | 13 ++--
- configs/zynqmp_zcu106_defconfig                    | 13 ++--
- 10 files changed, 39 insertions(+), 209 deletions(-)
+ package/libassuan/libassuan.hash | 6 +++---
+ package/libassuan/libassuan.mk   | 6 +++++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1d96ae5ca0..d7fab118a9 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -101,7 +101,6 @@ board/udoo/common/post-build.sh Shellcheck
- board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch Upstream
- board/versal/post-build.sh Shellcheck
- board/versal/post-image.sh Shellcheck TrailingSpace
--board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch ApplyOrder Upstream
- boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch Upstream
- boot/at91bootstrap/0001-eabi-fix.patch Upstream
- boot/at91bootstrap/0002-gcc-4.6.x-ldscript-fix.patch Upstream
-diff --git a/board/zynqmp/kria/kv260/pm_cfg_obj.c b/board/zynqmp/kria/kv260/pm_cfg_obj.c
-index 019df6e237..fc6c4024c6 100644
---- a/board/zynqmp/kria/kv260/pm_cfg_obj.c
-+++ b/board/zynqmp/kria/kv260/pm_cfg_obj.c
-@@ -30,6 +30,9 @@
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index c817a3af63..89e3fea956 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
+@@ -1,8 +1,8 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  ec4f67c0117ccd17007c748a392ded96dc1b1ae9  libassuan-2.5.5.tar.bz2
++sha1  b1e8754dbf89b3a3eb175f5df75048dbca1fce57  libassuan-2.5.6.tar.bz2
++sha256  e9fd27218d5394904e4e39788f9b1742711c3e6b41689a31aa3380bd5aa4f426  libassuan-2.5.6.tar.bz2
+ # Locally calculated after checking signature
+-# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.5.tar.bz2.sig
++# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.6.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  8e8c2fcc982f9ca67dcbb1d95e2dc746b1739a4668bc20b3a3c5be632edb34e4  libassuan-2.5.5.tar.bz2
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index 0f69d1ba6b..fb95a6fd67 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- #define SUSPEND_TIMEOUT	0xFFFFFFFFU
+-LIBASSUAN_VERSION = 2.5.5
++LIBASSUAN_VERSION = 2.5.6
+ LIBASSUAN_SITE = https://gnupg.org/ftp/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
+@@ -15,4 +15,8 @@ LIBASSUAN_CONF_OPTS = \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ LIBASSUAN_CONFIG_SCRIPTS = libassuan-config
  
-+#define PM_CONFIG_OBJECT_TYPE_BASE	0x1U
++# Force the path to "gpgrt-config" (from the libgpg-error package) to
++# avoid using the one on host, if present.
++LIBASSUAN_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
 +
-+
- #define PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK    0x00000001
- #define PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK    0x00000100
- #define PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK    0x00000200
-@@ -51,7 +54,7 @@ __root const u32 XPm_ConfigObject[] =
- 	/* HEADER */
- 	2,	/* Number of remaining words in the header */
- 	8,	/* Number of sections included in config object */
--	1U,	/* Type of config object as base */
-+	PM_CONFIG_OBJECT_TYPE_BASE,	/* Type of config object as base */
- 	/**********************************************************************/
- 	/* MASTER SECTION */
- 	PM_CONFIG_MASTER_SECTION_ID, /* Master SectionID */
-@@ -81,7 +84,7 @@ __root const u32 XPm_ConfigObject[] =
- 
- 
- 	PM_CONFIG_SLAVE_SECTION_ID,	/* Section ID */
--	49,				/* Number of slaves */
-+	34,				/* Number of slaves */
- 
- 	NODE_OCM_BANK_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
-@@ -131,10 +134,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_USB_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_TTC_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -151,54 +150,22 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_SATA,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_ETH_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_ETH_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_ETH_2,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_ETH_3,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_UART_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_UART_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_SPI_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_SPI_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_I2C_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_I2C_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_SD_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_SD_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -215,10 +182,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_NAND,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_QSPI,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -227,14 +190,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_CAN_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_CAN_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_EXTERN,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -259,22 +214,10 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_PCIE,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_PCAP,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_RTC,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_VCU,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_PL,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -545,8 +488,6 @@ __root const u32 XPm_ConfigObject[] =
- 	/**********************************************************************/
- 	/* GPO SECTION */
- 	PM_CONFIG_GPO_SECTION_ID,		/* GPO Section ID */
--	PM_CONFIG_GPO1_BIT_2_MASK |
--	PM_CONFIG_GPO1_MIO_PIN_34_MAP |
- 	PM_CONFIG_GPO1_MIO_PIN_35_MAP |
- 	0,					/* State of GPO pins */
- };
-diff --git a/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch b/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch
-deleted file mode 100644
-index ddc04cacac..0000000000
---- a/board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 8b181bf582c17cf709a62cf499f9709c94f49d33 Mon Sep 17 00:00:00 2001
--From: Neal Frager <neal.frager@amd.com>
--Date: Wed, 21 Dec 2022 07:51:42 +0000
--Subject: [PATCH v1 1/1] makefile: add multi_dtb_fit dep
--
--With certain gcc compilers, the u-boot.itb is built immediately after dtb
--generation.  If CONFIG_MULTI_DTB_FIT is used, it is possible that the
--fit-dtb.blob is not finished in time.
--
--This patch adds a necessary dependency to guarantee that the fit-dtb.blob
--is built before attempting to build the u-boot.itb.
--
--Signed-off-by: Neal Frager <neal.frager@amd.com>
-----
-- Makefile | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/Makefile b/Makefile
--index b96e2ffa15..682a5d94fd 100644
----- a/Makefile
--+++ b/Makefile
--@@ -1425,6 +1425,7 @@ MKIMAGEFLAGS_u-boot.itb += -B 0x8
-- ifdef U_BOOT_ITS
-- u-boot.itb: u-boot-nodtb.bin \
-- 		$(if $(CONFIG_OF_SEPARATE)$(CONFIG_OF_EMBED)$(CONFIG_SANDBOX),dts/dt.dtb) \
--+		$(if $(CONFIG_MULTI_DTB_FIT),$(FINAL_DTB_CONTAINER)) \
-- 		$(U_BOOT_ITS) FORCE
-- 	$(call if_changed,mkfitimage)
-- 	$(BOARD_SIZE_CHECK)
---- 
--2.17.1
--
-diff --git a/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch b/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
-index 695cc80b94..8ad996914b 120000
---- a/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
-+++ b/board/zynqmp/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
-@@ -1 +1 @@
--../../../../boot/arm-trusted-firmware/v2.6/0001-feat-build-add-support-for-new-binutils-versions.patch
-\ No newline at end of file
-+../../../../boot/arm-trusted-firmware/v2.8/0001-feat-build-add-support-for-new-binutils-versions.patch
-\ No newline at end of file
-diff --git a/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch b/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
-new file mode 120000
-index 0000000000..fecdee5449
---- /dev/null
-+++ b/board/zynqmp/patches/arm-trusted-firmware/0002-build-tools-avoid-unnecessary-link.patch
-@@ -0,0 +1 @@
-+../../../../boot/arm-trusted-firmware/v2.8/0002-build-tools-avoid-unnecessary-link.patch
-\ No newline at end of file
-diff --git a/board/zynqmp/zcu102/pm_cfg_obj.c b/board/zynqmp/zcu102/pm_cfg_obj.c
-index 68557c4cb4..04bfb16e35 100644
---- a/board/zynqmp/zcu102/pm_cfg_obj.c
-+++ b/board/zynqmp/zcu102/pm_cfg_obj.c
-@@ -30,6 +30,9 @@
- 
- #define SUSPEND_TIMEOUT	0xFFFFFFFFU
- 
-+#define PM_CONFIG_OBJECT_TYPE_BASE	0x1U
-+
-+
- #define PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK    0x00000001
- #define PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK    0x00000100
- #define PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK    0x00000200
-@@ -51,7 +54,7 @@ __root const u32 XPm_ConfigObject[] =
- 	/* HEADER */
- 	2,	/* Number of remaining words in the header */
- 	8,	/* Number of sections included in config object */
--	1U,	/* Type of config object as base */
-+	PM_CONFIG_OBJECT_TYPE_BASE,	/* Type of config object as base */
- 	/**********************************************************************/
- 	/* MASTER SECTION */
- 	PM_CONFIG_MASTER_SECTION_ID, /* Master SectionID */
-@@ -81,7 +84,7 @@ __root const u32 XPm_ConfigObject[] =
- 
- 
- 	PM_CONFIG_SLAVE_SECTION_ID,	/* Section ID */
--	49,				/* Number of slaves */
-+	38,				/* Number of slaves */
- 
- 	NODE_OCM_BANK_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
-@@ -131,10 +134,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_USB_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_TTC_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -155,18 +154,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_ETH_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_ETH_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_ETH_2,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_ETH_3,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -179,14 +166,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_SPI_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_SPI_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_I2C_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -195,10 +174,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_SD_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_SD_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -215,10 +190,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_NAND,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_QSPI,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -227,10 +198,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_CAN_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_CAN_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -263,18 +230,10 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_PCAP,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_RTC,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_VCU,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_PL,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-diff --git a/board/zynqmp/zcu106/pm_cfg_obj.c b/board/zynqmp/zcu106/pm_cfg_obj.c
-index 6d15d510e9..54a1afa902 100644
---- a/board/zynqmp/zcu106/pm_cfg_obj.c
-+++ b/board/zynqmp/zcu106/pm_cfg_obj.c
-@@ -30,6 +30,9 @@
- 
- #define SUSPEND_TIMEOUT	0xFFFFFFFFU
- 
-+#define PM_CONFIG_OBJECT_TYPE_BASE	0x1U
-+
-+
- #define PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK    0x00000001
- #define PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK    0x00000100
- #define PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK    0x00000200
-@@ -51,7 +54,7 @@ __root const u32 XPm_ConfigObject[] =
- 	/* HEADER */
- 	2,	/* Number of remaining words in the header */
- 	8,	/* Number of sections included in config object */
--	1U,	/* Type of config object as base */
-+	PM_CONFIG_OBJECT_TYPE_BASE,	/* Type of config object as base */
- 	/**********************************************************************/
- 	/* MASTER SECTION */
- 	PM_CONFIG_MASTER_SECTION_ID, /* Master SectionID */
-@@ -81,7 +84,7 @@ __root const u32 XPm_ConfigObject[] =
- 
- 
- 	PM_CONFIG_SLAVE_SECTION_ID,	/* Section ID */
--	49,				/* Number of slaves */
-+	38,				/* Number of slaves */
- 
- 	NODE_OCM_BANK_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
-@@ -131,10 +134,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_USB_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_TTC_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -155,18 +154,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_ETH_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_ETH_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_ETH_2,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_ETH_3,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -179,14 +166,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_SPI_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_SPI_1,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_I2C_0,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -195,10 +174,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_SD_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_SD_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -215,10 +190,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_NAND,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_QSPI,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -227,10 +198,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_CAN_0,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_CAN_1,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-@@ -259,14 +226,6 @@ __root const u32 XPm_ConfigObject[] =
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
- 
--	NODE_PCIE,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
--	NODE_PCAP,
--	PM_SLAVE_FLAG_IS_SHAREABLE,
--	0U, /* IPI Mask */
--
- 	NODE_RTC,
- 	PM_SLAVE_FLAG_IS_SHAREABLE,
- 	PM_CONFIG_IPI_PSU_CORTEXA53_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_0_MASK | PM_CONFIG_IPI_PSU_CORTEXR5_1_MASK, /* IPI Mask */
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 8ceaa6983d..78b62a9ff8 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -1,12 +1,12 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kv260/kv260.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-@@ -15,27 +15,28 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/zynqmp/kria/uboot.fragment"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/kv260/kv260_pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/kv260-kria/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
--BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/zynqmp/patches"
-+BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches"
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index f4789b9d88..18230cf89b 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -1,12 +1,12 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-@@ -15,21 +15,22 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/zcu102/zcu102_pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/zcu102-zynqmp/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 516f1143ce..21f41a2d8f 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -1,12 +1,12 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v5.15_LTS_2022.2)/xlnx_rebase_v5.15_LTS_2022.2.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.1_LTS_2023.1)/xlnx_rebase_v6.1_LTS_2023.1.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-@@ -15,21 +15,22 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.6_2022.2)/xlnx_rebase_v2.6_2022.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.8_2023.1)/xlnx_rebase_v2.8_2023.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2022.01_2022.2)/xlnx_rebase_v2022.01_2022.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2023.01_2023.1)/xlnx_rebase_v2023.01_2023.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-revA"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
- BR2_TARGET_UBOOT_ZYNQMP=y
--BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/ubuntu-firmware/raw/2022.2_br_1/zcu106/zcu106_pmufw.elf"
-+BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/Xilinx/soc-prebuilt-firmware/raw/xilinx_v2023.1/zcu106-zynqmp/pmufw.elf"
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_FORMAT_ITB=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
