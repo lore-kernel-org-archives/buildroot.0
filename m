@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4536EE4993
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 13:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 906B4EE4996
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 13:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D869408AB;
-	Mon, 21 Aug 2023 13:05:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D869408AB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47EE6415F1;
+	Mon, 21 Aug 2023 13:05:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47EE6415F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CwN9sc2Cca0r; Mon, 21 Aug 2023 13:05:03 +0000 (UTC)
+	with ESMTP id jk77WY8iv2lD; Mon, 21 Aug 2023 13:05:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A11B40982;
-	Mon, 21 Aug 2023 13:05:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A11B40982
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E2B1C1BF94D
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:04:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6260940977;
+	Mon, 21 Aug 2023 13:05:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6260940977
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EA021BF2F2
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB2AF408AB
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB2AF408AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 187204036E
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 13:05:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 187204036E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tl7nitpVmewl for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 13:04:45 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCE8140545
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 13:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCE8140545
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B391285F9D; Mon, 21 Aug 2023 13:04:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 21 Aug 2023 15:04:31 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 80b56887006cfba50833881dc31f045d494af185
-X-Git-Newrev: 875ab7d9e3d32990cd07fbab3c68f31dfa9927a4
-X-Patchwork-Hint: ignore
-Message-Id: <20230821130445.B391285F9D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/microchip/mpfs_icicle:
- update post-image script
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 55Iiu4M2V96x for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 13:05:05 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A86540134
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 13:05:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A86540134
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 929BEC0004;
+ Mon, 21 Aug 2023 13:05:01 +0000 (UTC)
+Date: Mon, 21 Aug 2023 15:05:00 +0200
+To: Jamie Gibbons via buildroot <buildroot@buildroot.org>
+Message-ID: <20230821150500.7f4b51d5@windsurf>
+In-Reply-To: <20230821113034.2749571-1-jamie.gibbons@microchip.com>
+References: <20230821113034.2749571-1-jamie.gibbons@microchip.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692623102;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BbBq0gqn9Ygz7VTfHLrbMaf+FeCyQIcq+4ZxNBfihpE=;
+ b=Ji/us4wSQwVHMwSgrUtYz5/vyO5LgK/ngmzibXhQ6kjPhQqoSs+wBowks6T2TDMnnPWnsO
+ ladrz1kBDByt2KZuWAnEGSbMs50nh30iyTwLDk0M4vMHFRCjSt4nR8DdqUWhg0Vyv+8WH5
+ mfjsj9XgNi65PqFAFoi9Rlez4e8RkXhOCyHoGRHhRM74me5v0i/veWIvVU4Wc6dEbolqTA
+ 6Avd5dPGGDMav8DctmqoeZh17TvZdHLd/UREsWV/8W3LeynvYIOFwe+FK5M21vAdXBcyjN
+ L7qppW9/dDSuWlrACNcjV0dsgQIfFO/QmFDvM1+QSvDiXbZgAbGsCCErOnTbQA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Ji/us4wS
+Subject: Re: [Buildroot] [PATCH 0/2] Fixes for Microchip MPFS Icicle
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +76,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>,
+ Jamie Gibbons <jamie.gibbons@microchip.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Conor Dooley <Conor.Dooley@microchip.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=875ab7d9e3d32990cd07fbab3c68f31dfa9927a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon, 21 Aug 2023 12:30:32 +0100
+Jamie Gibbons via buildroot <buildroot@buildroot.org> wrote:
 
-The hss-payload-generator cannot find where u-boot.bin is when looking
-for it using the config.yaml. Update syntax issues and working
-directories. Fix the post image script to allow an image to get built.
+> Jamie Gibbons (2):
+>   board/microchip/mpfs_icicle: update post-image script
+>   configs/microchip_mpfs_icicle_defconfig: update RVC config option
 
-Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/microchip/mpfs_icicle/post-image.sh | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+Thanks, both applied to next!
 
-diff --git a/board/microchip/mpfs_icicle/post-image.sh b/board/microchip/mpfs_icicle/post-image.sh
-index 04b34bbd40..596bb21d78 100755
---- a/board/microchip/mpfs_icicle/post-image.sh
-+++ b/board/microchip/mpfs_icicle/post-image.sh
-@@ -1,8 +1,13 @@
--#!/bin/sh
--HSS_PAYLOAD_GENERATOR=${HOST_DIR}/bin/hss-payload-generator
--MKIMAGE=${HOST_DIR}/bin/mkimage
-+#!/bin/bash
-+set -e
- 
--"${HSS_PAYLOAD_GENERATOR}" -c board/microchip/mpfs_icicle/config.yaml "${BINARIES_DIR}"/payload.bin
--cp board/microchip/mpfs_icicle/mpfs_icicle.its "${BINARIES_DIR}"/mpfs_icicle.its
--(cd "${BINARIES_DIR}" && "${MKIMAGE}" -f mpfs_icicle.its mpfs_icicle.itb)
--support/scripts/genimage.sh -c board/microchip/mpfs_icicle/genimage.cfg
-+HSS_PAYLOAD_GENERATOR="${HOST_DIR}"/bin/hss-payload-generator
-+MKIMAGE="${HOST_DIR}"/bin/mkimage
-+BOARD_DIR="$(pwd)"/"${0%/*}"
-+
-+pushd "${BINARIES_DIR}"
-+"${HSS_PAYLOAD_GENERATOR}" -c "${BOARD_DIR}"/config.yaml payload.bin
-+cp "${BOARD_DIR}"/mpfs_icicle.its "${BINARIES_DIR}"/mpfs_icicle.its
-+"${MKIMAGE}" -f mpfs_icicle.its mpfs_icicle.itb
-+popd
-+support/scripts/genimage.sh -c "${BOARD_DIR}"/genimage.cfg
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
