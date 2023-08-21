@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD23EE4996
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 10:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15B1BEE4996
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 10:46:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7247B81E6D;
-	Mon, 21 Aug 2023 10:46:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7247B81E6D
+	by smtp1.osuosl.org (Postfix) with ESMTP id A96A481F85;
+	Mon, 21 Aug 2023 10:46:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A96A481F85
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K6_YRRgdTIZf; Mon, 21 Aug 2023 10:45:59 +0000 (UTC)
+	with ESMTP id Qx0vjHqe4Oec; Mon, 21 Aug 2023 10:46:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0B7E81E43;
-	Mon, 21 Aug 2023 10:45:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0B7E81E43
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 411FD1BF2C9
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:45:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2D7381E47;
+	Mon, 21 Aug 2023 10:46:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2D7381E47
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 634651BF2C9
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B3D081E43
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:45:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B3D081E43
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F08160D7B
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 10:46:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F08160D7B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2q8sAkY0cEIV for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 10:45:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C0858186B
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 10:45:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C0858186B
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B83B85F28; Mon, 21 Aug 2023 10:45:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 21 Aug 2023 12:44:55 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8f1418b5dd80809dc90196d967d8d9665b794c8e
-X-Git-Newrev: 90031397ed65078e88145397ec434b6574ff3459
-X-Patchwork-Hint: ignore
-Message-Id: <20230821104556.4B83B85F28@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/opencsd: bump to
- version 1.4.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id R8K__tNOlmIy for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 10:46:01 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AA42B607D6
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 10:46:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA42B607D6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F47DE0005;
+ Mon, 21 Aug 2023 10:45:57 +0000 (UTC)
+Date: Mon, 21 Aug 2023 12:45:56 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230821124556.6c6876f1@windsurf>
+In-Reply-To: <20230820095821.166705-1-ju.o@free.fr>
+References: <20230820095821.166705-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692614757;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ljPVXMqe4KFAeKVPJ7cIZ1at9ZhUqYPHocYC0twmKUk=;
+ b=AtxBEaRYR3e3p189oyexDOkOCqCuqpYn7X0v9Imfb4vQlRcePKUZlzzAdhSw1P+oLZZyQT
+ EPxWfGWAdhMtR907f901jI5tjsE2fJOEwbrev/UD7e4TwvHC9yXLRM94GIZtt87O9D5F4d
+ Nj6fWlvs4k9Q3qsrfxC3iFywSIdMzG77NxPl5+IYBAz/clxuh3n2+GbZy2yIpRLmgkVBY+
+ EbiazriiV8aUjWUKf25V1/rm4pjXBCt2Y4VkW4JVnM9eanw9Hsb/Z9KzcB+bolQQTwEA8p
+ QGvI4hqkODvQ7+8GJY3tCNMyDcZCNld3+TJ2Wusu3HqjRQmhGlHk3bNdVV9teg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AtxBEaRY
+Subject: Re: [Buildroot] [PATCH next 1/1] package/opencsd: bump to version
+ 1.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +77,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90031397ed65078e88145397ec434b6574ff3459
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sun, 20 Aug 2023 11:58:21 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-For change log, see:
-https://github.com/Linaro/OpenCSD/blob/v1.4.1/README.md?plain=1#L294
+> For change log, see:
+> https://github.com/Linaro/OpenCSD/blob/v1.4.1/README.md?plain=1#L294
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on branch next at commit c614a7d with commands:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/opencsd/opencsd.hash | 2 +-
- package/opencsd/opencsd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/opencsd/opencsd.hash b/package/opencsd/opencsd.hash
-index 84a762fb36..a3534976b5 100644
---- a/package/opencsd/opencsd.hash
-+++ b/package/opencsd/opencsd.hash
-@@ -1,3 +1,3 @@
- # Locally Computed:
--sha256  e1bb6d8d09e87974cb5ca6db2a13b0e1ba9e51117ca2ed71879df07ff7af4de2  opencsd-1.4.0.tar.gz
-+sha256  159a611535fd7d3bf179bcbdab3791852c6e7199401a6e59cdeef3ba2072edc4  opencsd-1.4.1.tar.gz
- sha256  980eef4b0744e63834e3ec0d50c2a4ff6d81d7ec62dd8ba8c66acae0ec5a2e88  LICENSE
-diff --git a/package/opencsd/opencsd.mk b/package/opencsd/opencsd.mk
-index 680364d01d..76135bf0b0 100644
---- a/package/opencsd/opencsd.mk
-+++ b/package/opencsd/opencsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCSD_VERSION = 1.4.0
-+OPENCSD_VERSION = 1.4.1
- OPENCSD_SITE = $(call github,Linaro,OpenCSD,v$(OPENCSD_VERSION))
- OPENCSD_LICENSE = BSD-3-Clause
- OPENCSD_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
