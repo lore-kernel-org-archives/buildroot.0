@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CF2FEE49A0
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 22:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4639EE49A0
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 22:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1565F40B5A;
-	Mon, 21 Aug 2023 22:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1565F40B5A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 998E7409F1;
+	Mon, 21 Aug 2023 22:11:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 998E7409F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3JVlLkjepv2h; Mon, 21 Aug 2023 22:09:18 +0000 (UTC)
+	with ESMTP id fYpdF6M-byI4; Mon, 21 Aug 2023 22:11:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66B9840B4F;
-	Mon, 21 Aug 2023 22:09:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66B9840B4F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D2B5C1BF35B
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:09:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C80204063C;
+	Mon, 21 Aug 2023 22:11:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C80204063C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B5E831BF35B
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ACDC640B4F
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:09:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACDC640B4F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9CD1F81426
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 22:11:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CD1F81426
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0sjfCxAdl8Sa for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 22:09:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xZxxHiQyoODU for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 22:11:13 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA94E40917
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 22:09:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA94E40917
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC73B81423
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 22:11:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC73B81423
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D585586064; Mon, 21 Aug 2023 22:09:14 +0000 (UTC)
+ id 9AD1486079; Mon, 21 Aug 2023 22:11:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 00:07:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c78799639b25ab1a90e699267ae821a279d87916
-X-Git-Newrev: c2612d918f460f1855121ca2ae845b2d18576332
+Date: Tue, 22 Aug 2023 00:09:26 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: a9e36f73a76a079b6dde2eb4da776d7a3ddba677
+X-Git-Newrev: 0e19425c774fdcc46c6e3ee4bcf13e88f637e5c4
 X-Patchwork-Hint: ignore
-Message-Id: <20230821220914.D585586064@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: security bump version to 8.2.9
+Message-Id: <20230821221113.9AD1486079@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libassuan: bump to
+ version 2.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +64,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2612d918f460f1855121ca2ae845b2d18576332
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=0e19425c774fdcc46c6e3ee4bcf13e88f637e5c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.2.9
-Release notes: https://www.php.net/releases/8_2_9.php
+For change log, see [1] and [2].
 
-Fixes CVE-2023-3823 & CVE-2023-3824.
+This commit also moves the archive SHA256 hash to the section of hashes
+published upstream.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+libassuan 2.5.6 updated its gpg-error.m4 macro files to detect
+gpgrt-config. Its path needs to be forced in _CONF_ENV to make sure it
+will work in all host environments. See the log entry of commit
+d7f2d8403e "package/gnupg2: fix build failure when host provides an
+old gpgrt-config" [3] for a complete explanation.
+
+[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libassuan.git;a=log;h=libassuan-2.5.6
+[2] https://dev.gnupg.org/T6542
+[3] https://git.buildroot.org/buildroot/commit/?id=d7f2d8403ec82f3b1772ec17bf1df8c42987a1f8
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libassuan/libassuan.hash | 6 +++---
+ package/libassuan/libassuan.mk   | 6 +++++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 9fb4aebec1..02cc1e6c7a 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  cfe1055fbcd486de7d3312da6146949aae577365808790af6018205567609801  php-8.2.8.tar.xz
-+sha256  1e6cb77f997613864ab3127fbfc6a8c7fdaa89a95e8ed6167617b913b4de4765  php-8.2.9.tar.xz
- 
- # License file
- sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 691436926b..836949a917 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index c817a3af63..89e3fea956 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
+@@ -1,8 +1,8 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  ec4f67c0117ccd17007c748a392ded96dc1b1ae9  libassuan-2.5.5.tar.bz2
++sha1  b1e8754dbf89b3a3eb175f5df75048dbca1fce57  libassuan-2.5.6.tar.bz2
++sha256  e9fd27218d5394904e4e39788f9b1742711c3e6b41689a31aa3380bd5aa4f426  libassuan-2.5.6.tar.bz2
+ # Locally calculated after checking signature
+-# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.5.tar.bz2.sig
++# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.6.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  8e8c2fcc982f9ca67dcbb1d95e2dc746b1739a4668bc20b3a3c5be632edb34e4  libassuan-2.5.5.tar.bz2
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index 0f69d1ba6b..fb95a6fd67 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.2.8
-+PHP_VERSION = 8.2.9
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-LIBASSUAN_VERSION = 2.5.5
++LIBASSUAN_VERSION = 2.5.6
+ LIBASSUAN_SITE = https://gnupg.org/ftp/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
+@@ -15,4 +15,8 @@ LIBASSUAN_CONF_OPTS = \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ LIBASSUAN_CONFIG_SCRIPTS = libassuan-config
+ 
++# Force the path to "gpgrt-config" (from the libgpg-error package) to
++# avoid using the one on host, if present.
++LIBASSUAN_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
