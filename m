@@ -4,76 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85064EE4993
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 09:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E480EE49A3
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 10:04:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED1ED81E65;
-	Tue, 22 Aug 2023 09:51:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED1ED81E65
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3EED81770;
+	Tue, 22 Aug 2023 10:04:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3EED81770
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XJt0hh9oMMMq; Tue, 22 Aug 2023 09:51:56 +0000 (UTC)
+	with ESMTP id MpT4-rl59uaU; Tue, 22 Aug 2023 10:04:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40E5781E53;
-	Tue, 22 Aug 2023 09:51:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40E5781E53
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F3C4A1BF359
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 09:51:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41A7681771;
+	Tue, 22 Aug 2023 10:04:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41A7681771
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 296921BF354
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 10:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC6CD60AE3
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 09:51:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC6CD60AE3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08B5781771
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 10:04:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08B5781771
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DlCOoNs9-_Sc for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 09:51:52 +0000 (UTC)
-X-Greylist: delayed 761 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 22 Aug 2023 09:51:51 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77672607EC
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 77672607EC
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 09:51:51 +0000 (UTC)
-Received: from Exchange2013.PRIMES.local ([80.154.17.251]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mg6qO-1q57u11zyg-00hap7 for <buildroot@buildroot.org>; Tue, 22 Aug 2023
- 11:39:07 +0200
-Received: from EXCHANGE2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca]) by
- Exchange2013.PRIMES.local ([fe80::55a6:8c84:95c:30ca%16]) with mapi id
- 14.03.0513.000; Tue, 22 Aug 2023 11:39:06 +0200
-From: Gerd Kautzmann <G.Kautzmann@PRIMES.de>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: Camera Driver diesn't provide 60 FPS
-Thread-Index: AdnU2JFWSd9ePUSRRI2XayX2o0v1OQ==
-Date: Tue, 22 Aug 2023 09:39:06 +0000
-Message-ID: <1619D009AA8C9E469331A8EE22395AEC8D762350@Exchange2013.PRIMES.local>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.117.177]
-MIME-Version: 1.0
-X-Provags-ID: V03:K1:L27vz+YYgWOJ4SoEeLzIuYiiOF105uZJRCShwS7bonDyJ96wlS4
- 4Exb+29ybr6BKus9vmVTWs7/mW4GDuaHwpS0FtwlYqL203GLsdUAbIE3VV2COhHYYW8nIbm
- mBaG8Z861de/H5bofVac9Yo5tEeKVzSMfp7pheBr+ZJQsh4kVzyitBPCHzAYc0TvKFGyVnH
- PT8IrldR+xaTOOzd3jKxw==
-UI-OutboundReport: notjunk:1;M01:P0:OF1+eXcjiD4=;Xjyp4WkFDeKS/UpkO9hjh9zxsLn
- 5X4ldjb9TQqWq7ZVFEUEbnGIwzwgh9+26fanJFHaghLNJrIYoPKFFLIHYp+9VEiuNsGOGls+g
- 4GRF9V4A9RD2XbH4NoPd5luUAjkenlzeTuQg/Okklv2KbHgWkBZ8MtXbURQtGMRJ9Ir/oHpGC
- HNjbhJbjO7TKS1ArJt7EbbvNZH7ZOB/zCycA4b5MhNqBdW1ytcYM43DdTF8X91PwrUHveXMLN
- Z7zR469wpFbUS6pnzgQpeD5n1iH6vI8oCUMybjnlBaU1BfRN/TLMN/yKDbzgo81fWwDiotgwd
- ln68E9yTPTnmpGFSOabFzoXU77WzF2uh72JM4uLcsQIkCzHwHanjt84MOWPCRpWO9tiDPUpxW
- 8SfATs5GCFJmVX+wrgE/HruJfaqyb0mXf0zfXaf490YtZQC9gQLqVyM0Pu1ieMZ1bcM1bTHxD
- qEs6vYtvn5N7qgEtgNyMJ0zwUqazse2m5pFVWu2sBPkiMOcxszVskFz+2eBgcQVPfWhmmw+4q
- uzmxmUuALMJtNA+v9pfJFkKLszcb0fZm/VGy9UZVYbjDLYl/OO8pliwM7BYeNxUfLWW67Muv/
- 2QqZqbVXjUgFja78K4Ku9H++wI2ci82KnP4XvGBKHHj8+7Rr+gjytFKNvU/KMZfDARTIEui+q
- zfCeBy5QqYKI5xleEhwJVZMNGX5I8CrrMwLdDmBH5g1gm6F0MlIdyX3d2M72mVsCaUOjJmzb8
- EaUoOcQdd3faWr1o5lUQ+C04tOg1FSTbqSY4bwYt9dhIVn+UthobYUiPjTfOUUKP8Fvf9gtIh
- 6KtNnHHSAeMnB1OG0AEPpN2ALYnKlPhB34El3WLUgwFptiug1eEEcSaGTtEluzZfLCfDJYasG
- wz7dXF/ywyLhUroPAraoyNHZY8dk3Nza3RWs=
-Subject: [Buildroot] Camera Driver diesn't provide 60 FPS
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a_ihFQzvU8ls for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 10:04:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 411DF8176C
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 10:04:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 411DF8176C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2B793860E8; Tue, 22 Aug 2023 10:04:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Aug 2023 00:15:49 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 510c91244b0e66d0b39eacaf1a1c8fbd741bcbb1
+X-Git-Newrev: d6b2f14901b046fff443e32c52c9f24089277836
+X-Patchwork-Hint: ignore
+Message-Id: <20230822100434.2B793860E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libstrophe: bump to
+ version 0.12.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,42 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dear audience,
+commit: https://git.buildroot.net/buildroot/commit/?id=d6b2f14901b046fff443e32c52c9f24089277836
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-I finally managed to build an linux image suporting my imx296 camera on the=
- Raspberry-Pi 4 (32 bit) over loadable kernel modules. There where good exa=
-mples for building a helloworld kernel module.
- =
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libstrophe/libstrophe.hash | 2 +-
+ package/libstrophe/libstrophe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-At first everything looked fine, but than I realised the camera is limited =
-to 30 frames per second. I compiled a test program confirming the problem u=
-nder the build root kernel. On a, standart Raspbi image (Debian) I got 60 f=
-ps using the same drivers (compiled and installed over dpkg) with the same =
-settings in the boot-filesystem. The driver is reporting the camera to be a=
-ble to do 60 fps but test program (and application) are only reaching 30 fp=
-s.
-
-Are there any ideas about settings in the configuration concerning cameras =
-I might have missed?
-
-Thanks for your patience
-
-
-PRIMES GmbH=A0=A0=A0 Max-Planck-Str. 2=A0=A0=A0 64319 Pfungstadt=A0=A0 Germ=
-any=A0=A0=A0 =
-
-T +49 6157 9878 0=A0=A0=A0 =
-
-CEO: Dr.-Ing. Reinhard Kramer, Dr. rer. nat. Thomas Umschlag=A0=A0=A0 =
-
-Local Court: Darmstadt HRB 5134
-g.kautzmann@primes.de=A0=A0=A0 www.primes.de=A0
-
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index 3ccba06202..a6a529eb6c 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  b3c79b6deeafafc0f622ba3ee3ca67e9a8e7d75edb102588c6b6f52b38c9fa4b  libstrophe-0.12.2.tar.xz
++sha256  d82e9e8585b8fc68fb91791377fbfb0051b98259a0ec64cf31c8a09bb7e2621e  libstrophe-0.12.3.tar.xz
+ sha256  82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 43d55592fa..de9012e67f 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSTROPHE_VERSION = 0.12.2
++LIBSTROPHE_VERSION = 0.12.3
+ LIBSTROPHE_SOURCE = libstrophe-$(LIBSTROPHE_VERSION).tar.xz
+ LIBSTROPHE_SITE = https://github.com/strophe/libstrophe/releases/download/$(LIBSTROPHE_VERSION)
+ LIBSTROPHE_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
