@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5987FEC8733
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:09:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80479EC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19FB680AE3;
-	Thu,  7 Sep 2023 15:09:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19FB680AE3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38B1282CF1;
+	Thu,  7 Sep 2023 15:10:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38B1282CF1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rBjBvg2uxdEQ; Thu,  7 Sep 2023 15:09:47 +0000 (UTC)
+	with ESMTP id fFOnEpP-JjzB; Thu,  7 Sep 2023 15:09:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 609D18392C;
-	Thu,  7 Sep 2023 15:09:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 609D18392C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3790C1BF313
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8183F839DC;
+	Thu,  7 Sep 2023 15:09:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8183F839DC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 65AA01BF3BB
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5DA3A41DDA
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DA3A41DDA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 64835612A6
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64835612A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TQFkggi8qxoZ for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KDEv1oyXXEIT for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1ADFE41D9A
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ADFE41D9A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E3F26128E
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E3F26128E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 045A986A1E; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+ id 9C8BC86A22; Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 18:06:47 +0200
+Date: Mon, 21 Aug 2023 12:02:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 77eba3436d3fbd0aaf0318774b66d30c098edf01
-X-Git-Newrev: 2bd1d9d812d529071e1ab9d8ed8344f8077286d3
+X-Git-Oldrev: a78241af67cc3c6f26d5f82f9504bd15506df0b5
+X-Git-Newrev: 8f1418b5dd80809dc90196d967d8d9665b794c8e
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145127.045A986A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-stack-data: switch from
- setuptools to pep517
+Message-Id: <20230907145130.9C8BC86A22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnupg2: bump to version 2.4.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,32 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bd1d9d812d529071e1ab9d8ed8344f8077286d3
+commit: https://git.buildroot.net/buildroot/commit/?id=8f1418b5dd80809dc90196d967d8d9665b794c8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed for building with python 3.12.
+See release announce:
+https://lists.gnupg.org/pipermail/gnupg-announce/2023q3/000480.html
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-stack-data/python-stack-data.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gnupg2/gnupg2.hash | 4 ++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-stack-data/python-stack-data.mk b/package/python-stack-data/python-stack-data.mk
-index 494ce8f454..1a85938311 100644
---- a/package/python-stack-data/python-stack-data.mk
-+++ b/package/python-stack-data/python-stack-data.mk
-@@ -7,8 +7,9 @@
- PYTHON_STACK_DATA_VERSION = 0.6.2
- PYTHON_STACK_DATA_SOURCE = stack_data-$(PYTHON_STACK_DATA_VERSION).tar.gz
- PYTHON_STACK_DATA_SITE = https://files.pythonhosted.org/packages/db/18/aa7f2b111aeba2cd83503254d9133a912d7f61f459a0c8561858f0d72a56
--PYTHON_STACK_DATA_SETUP_TYPE = setuptools
-+PYTHON_STACK_DATA_SETUP_TYPE = pep517
- PYTHON_STACK_DATA_LICENSE = MIT
- PYTHON_STACK_DATA_LICENSE_FILES = LICENSE.txt
-+PYTHON_STACK_DATA_DEPENDENCIES = host-python-setuptools-scm
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index aa71881f41..4b770fa520 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,5 +1,5 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  3efd495a94dc81fd0ea8788bef6c69d1f13cedd7  gnupg-2.4.2.tar.bz2
+-sha256  97eb47df8ae5a3ff744f868005a090da5ab45cb48ee9836dbf5ee739a4e5cf49  gnupg-2.4.2.tar.bz2
++sha1  79a60c8e415e3daaa33d0546398174252a56f7ac  gnupg-2.4.3.tar.bz2
++sha256  a271ae6d732f6f4d80c258ad9ee88dd9c94c8fdc33c3e45328c4d7c126bd219d  gnupg-2.4.3.tar.bz2
+ # Locally calculated
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 760af3b05e..d21c1e242d 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(python-package))
+-GNUPG2_VERSION = 2.4.2
++GNUPG2_VERSION = 2.4.3
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
