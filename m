@@ -1,78 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F290DEE49AA
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 11:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01A30EE4996
+	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 12:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9968081F30;
-	Mon, 21 Aug 2023 11:30:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9968081F30
+	by smtp4.osuosl.org (Postfix) with ESMTP id 664AA40650;
+	Mon, 21 Aug 2023 12:52:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 664AA40650
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lVBfQqVtGmGS; Mon, 21 Aug 2023 11:30:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pg7PuBLmZqiX; Mon, 21 Aug 2023 12:52:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D4CBE81F89;
-	Mon, 21 Aug 2023 11:30:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4CBE81F89
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CB8D40546;
+	Mon, 21 Aug 2023 12:52:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CB8D40546
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DDE2F1BF361
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 11:30:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8371A1BF388
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 12:52:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C526540134
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 11:30:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C526540134
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A04E4036E
+ for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 12:52:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A04E4036E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PylWejQi11mX for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 11:30:28 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.154.123])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EDB63400D7
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 11:30:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDB63400D7
-X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
-   d="scan'208";a="415512"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
- by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256;
- 21 Aug 2023 04:30:26 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 21 Aug 2023 04:30:26 -0700
-Received: from jamie-dev.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Mon, 21 Aug 2023 04:30:25 -0700
-To: <buildroot@buildroot.org>
-Date: Mon, 21 Aug 2023 12:30:34 +0100
-Message-ID: <20230821113034.2749571-3-jamie.gibbons@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230821113034.2749571-1-jamie.gibbons@microchip.com>
-References: <20230821113034.2749571-1-jamie.gibbons@microchip.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1692617427; x=1724153427;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=NZLRY3vxoBH+nlrTnT5RIE7e+gwnJ+Q1libMDTKFmxk=;
- b=TX5hxxMwwE5fkjPHlxva6THDktseaFlRP7UetYefBWklk7ceaXHmzxip
- bW9MT5mRhodYqzGf/Ytu3heNAp4KTXc8+IqszRcPkZX2x4F5ib/ZxM4Dn
- /9icAgDY9BAnOlS9kUjk9bqHpzyr9wFrb5P87BZjdZv8kTXr4OAb95ZwK
- CJIGb1Kj2IYFYIZNPu8hT1TTzCYzGXMYa5vt7rqp6jB6fadJ3XDrBEbFb
- m/HIMWaF8WXv6gtvUoTi+U7A+DIUo2/YBtE7M4daS+sxwWq3FQfSqVRGj
- jtjJTi/FmGRS0TcErqK1r6/8oAtIH/HwvQXPsG4HAQsmFF7eU81Tat8I/
- Q==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com
- header.a=rsa-sha256 header.s=mchp header.b=TX5hxxMw
-Subject: [Buildroot] [PATCH 2/2] configs/microchip_mpfs_icicle_defconfig:
- update RVC config option
+ with ESMTP id HjfPobCQtn7u for <buildroot@lists.busybox.net>;
+ Mon, 21 Aug 2023 12:52:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21F6E40134
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 12:52:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21F6E40134
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 103BB85F8C; Mon, 21 Aug 2023 12:52:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 21 Aug 2023 14:47:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 171977f4bf63a9a11da8c1b9b24269c6d73dd8c3
+X-Git-Newrev: b9a864d03d66b1132f484060f3724182f51cdfbc
+X-Patchwork-Hint: ignore
+Message-Id: <20230821125202.103BB85F8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: security bump version
+ to 1.10.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,42 +56,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
-Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
-Cc: Conor Dooley <Conor.Dooley@microchip.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>, Jamie
- Gibbons <jamie.gibbons@microchip.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update the RISCV_ISA_RVC config option to match updated RISCV kconfig
-instruction set options.
+commit: https://git.buildroot.net/buildroot/commit/?id=b9a864d03d66b1132f484060f3724182f51cdfbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Release notes:
+https://github.com/signalwire/freeswitch/releases/tag/v1.10.10
+"This is a major release containing critical security fixes, adding
+ Debian 12 Bookworm, OpenSSL 3 and FFmpeg5 support."
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/microchip_mpfs_icicle_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/microchip_mpfs_icicle_defconfig b/configs/microchip_mpfs_icicle_defconfig
-index a3b3093982..54a4d55a5f 100644
---- a/configs/microchip_mpfs_icicle_defconfig
-+++ b/configs/microchip_mpfs_icicle_defconfig
-@@ -1,6 +1,6 @@
- BR2_riscv=y
- BR2_riscv_g=y
--BR2_RISCV_ISA_CUSTOM_RVC=y
-+BR2_RISCV_ISA_RVC=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
- BR2_TARGET_GENERIC_HOSTNAME="mpfs_icicle"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/microchip/mpfs_icicle/post-image.sh"
--- 
-2.34.1
-
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 3497a3283f..504be12090 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,5 +1,5 @@
+-# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.9.-release.tar.xz.sha256
+-sha256  f649d53af7beccb59c1d03864cd8f2d287e4ea26ef652b5c4969d29121ced063  freeswitch-1.10.9.-release.tar.xz
++# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.10.-release.tar.xz.sha256
++sha256  d2c702c7f4bd6eca539c3981cf859ad5c1846d9283829e24cd75686f2322b9df  freeswitch-1.10.10.-release.tar.xz
+ # Locally computed
+ sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 7497cc4964..07d436cf0b 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREESWITCH_VERSION = 1.10.9
++FREESWITCH_VERSION = 1.10.10
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
+ FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
