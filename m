@@ -4,65 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2E27EE4993
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27A5FEE4993
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6279161202;
-	Tue, 22 Aug 2023 19:28:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6279161202
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBEA560A65;
+	Tue, 22 Aug 2023 19:34:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEA560A65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PkTobz-kwmUY; Tue, 22 Aug 2023 19:28:38 +0000 (UTC)
+	with ESMTP id KjDeenij-MC3; Tue, 22 Aug 2023 19:34:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3187606E6;
-	Tue, 22 Aug 2023 19:28:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3187606E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15B3F607F1;
+	Tue, 22 Aug 2023 19:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15B3F607F1
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id ABBE51BF370
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:28:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 23F391BF370
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:34:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 84FFE61214
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:28:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84FFE61214
+ by smtp3.osuosl.org (Postfix) with ESMTP id 06189607F1
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:34:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06189607F1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qIxMBBaVQ3sO for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 19:28:35 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E92D561202
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:28:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E92D561202
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BEE46FF804;
- Tue, 22 Aug 2023 19:28:31 +0000 (UTC)
-Date: Tue, 22 Aug 2023 21:28:30 +0200
-To: Paul Cercueil <paul@crapouillou.net>
-Message-ID: <20230822212830.236666b1@windsurf>
-In-Reply-To: <20230814145758.383366-1-paul@crapouillou.net>
-References: <20230814145758.383366-1-paul@crapouillou.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id GRRDLlwwzB6p for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 19:34:43 +0000 (UTC)
+Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 46D3D605AF
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:34:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46D3D605AF
+Received: from [192.168.50.162] ([146.241.122.243])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id YX9DqBLvxaHc9YX9EqiWkO; Tue, 22 Aug 2023 21:34:40 +0200
+Message-ID: <d440e7a8-da14-2db2-a17d-a38f548bd562@benettiengineering.com>
+Date: Tue, 22 Aug 2023 21:34:39 +0200
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692732512;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=WExWvtozKYeamgAjFElTBKpT580s0yZU/qZMQh+elaI=;
- b=Bo70VKlLPGcpXGHc+W/4j3HocrQnhcL6QuhP5QAxLNH6JNvtkC3LSEtG87mYy5z4eStjLH
- ZfjkBBJsRZ3JtXUMX5OA6s3cigpV4W9IOfP3yI426+UA+xWSqpgyIngFiPJ6Umc2fk7OoP
- H12hPhtdhrgBJa/ru+QzkIjANhw1HDTpXfYKsHcNdC1q2OAzx9DcmmasSsmGGeBwMwWkPs
- cG0+eWaZBJ0kYK13PD6wY6+bHqCLSnAabFzvXISj1D5FnooLZ5FPySv+GG+TmpYUB+Nqba
- mPXKVxsOnsuceF6oZI5gUE79EUs1tJK75TizFAhE+49uLQcZkSgKSyzlOLDWKg==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Content-Language: en-US
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230814145413.2099039-1-giulio.benetti@benettiengineering.com>
+ <20230822202821.4b750d61@windsurf>
+ <043c43d7-63a1-143c-aa75-a0f751b2ef6b@benettiengineering.com>
+ <20230822212341.490c9910@windsurf>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230822212341.490c9910@windsurf>
+X-CMAE-Envelope: MS4xfIAXbTubuYk/zHqniXuC6JPY251aum7nqzyyTcj1bYSMJ5Q0PEravxYuPpDN6yPlO8WBn88AsFm8EjmM1u6LPWfWcAfrIuAPvWYLNeU8dY4/ZoisYjZf
+ 4ILNcu4n1j5IUxRULmN+vXalelvPTxgqwz0SIOziG7a9cLkYDMIb6sYZKTOVrXpoLVFBzM2t5oMt7SBh7WiKnaJK87E3k4Hg4zb0S6lvU/fQjDrtF28+K56x
+ YgkBSaIMmBSjKqbS3uGPw4Erws6DBSuIHngGNBXjc4qBZC1lx8pgU1RDASTwghhl
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1692732880; bh=m2otATe1yCqqgUM6zKsM0WcmQJ94Sfgv8kKeXYUjVzo=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=LxSDx4sv5tg3Nt3dhie+5JA0b3KAYZHiLIouFnSk7cE6plm7wh/H7ElxG2zEBVozq
+ LKnP/MikznhHuDwk478LbO7ON4QnvdKToh1wEv2phdD4qQLiTYtaPF9Cf9bCigh3QT
+ A3rYdPGcZ/jTLcKuy6Zvy1OuYXpA6ia7XsQt1eW1zGNkyFCwutaYGjTFcK6gMEce5+
+ SmS1pcPKEafIErM16tFh/OAreKOZOSTWviAPgKYwktfhuGLaz8qLx7w9z94gc2Hjcj
+ 9MQvdH1JCjwLRFeRkgiZnQdzz/tSfNfzLXFS+4mJ7uBxiJv+My2Mel8RiwyOjzB5n3
+ B5Fk89dAGZPGw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Bo70VKlL
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/libiio: bump to version v0.25
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=LxSDx4sv
+Subject: Re: [Buildroot] [PATCH] package/libfuse3: bump to version 3.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,34 +78,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 14 Aug 2023 16:57:58 +0200
-Paul Cercueil <paul@crapouillou.net> wrote:
-
-> The changelog is available here:
-> https://github.com/analogdevicesinc/libiio/releases/tag/v0.25
+On 22/08/23 21:23, Thomas Petazzoni wrote:
+> On Tue, 22 Aug 2023 21:22:40 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 > 
-> Remove the 0001 patch as it is included in the v0.25 version.
+>> I still have that tarball, and indeed they very different each other.
+>> In the new version they dropped entirely the doc/html folder while
+>> instead adding some .gitignore file, the .github folder for CI/CD and
+>> a script called make_release_tarball.sh
+>>
+>> They don't mention on their Github repository[1] they've changed it, but
+>> they did it.
 > 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> ---
-> v2: Update .checkpackageignore file as well
+> This is annoying. Could you let them know that it is a problem by
+> filling an issue in their Github repo?
 
-Applied to next, thanks.
+Done:
+https://github.com/libfuse/libfuse/issues/829
+I went very soft since when you open an Issue you get this template:
+```
+PLEASE READ BEFORE REPORTING AN ISSUE
 
-Thomas
+libfuse does not have any active, regular contributors or developers. 
+The current maintainer continues to apply pull requests and tries to 
+make regular releases, but unfortunately has no capacity to do any 
+development beyond addressing high-impact issues. When reporting bugs, 
+please understand that unless you are including a pull request or are 
+reporting a critical issue, you will probably not get a response.
+
+To prevent the issue tracker from being flooded with issues that no-one 
+is intending to work on, and to give more visibility to critical issues 
+that users should be aware of and that most urgently need attention, I 
+will also close most bug reports once they've been inactive for a while.
+
+Please note that this isn't meant to imply that you haven't found a bug 
+- you most likely have and I'm grateful that you took the time to report 
+it. Unfortunately, libfuse is a purely volunteer driven project, and at 
+the moment there simply aren't any volunteers.
+```
+
+judging from this Issue:
+https://github.com/libfuse/libfuse/issues/816
+I don't think it will change that much.
+
+Best regards
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
