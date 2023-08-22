@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43278EE49AB
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 18:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54155EE49AE
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 18:31:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D59E4611D1;
-	Tue, 22 Aug 2023 18:30:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D59E4611D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D06160BD3;
+	Tue, 22 Aug 2023 18:31:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D06160BD3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id If-dz1j6GcAm; Tue, 22 Aug 2023 18:30:27 +0000 (UTC)
+	with ESMTP id nRkhNwKfUC7d; Tue, 22 Aug 2023 18:31:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BD9C60BD3;
-	Tue, 22 Aug 2023 18:30:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BD9C60BD3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 754801BF2BD
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:30:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F543611B3;
+	Tue, 22 Aug 2023 18:31:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F543611B3
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 793811BF2BD
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D3E240933
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:30:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D3E240933
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45B4440BBF
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:31:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45B4440BBF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WFtwHW_0JViV for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 18:30:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EtFAM-DKPLwG for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 18:30:59 +0000 (UTC)
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
  [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AC99440930
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 18:30:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC99440930
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BAC0AE0006;
- Tue, 22 Aug 2023 18:30:21 +0000 (UTC)
-Date: Tue, 22 Aug 2023 20:30:20 +0200
-To: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Message-ID: <20230822203020.6d72c2ed@windsurf>
-In-Reply-To: <20230812215446.1458038-1-zgyarmati@zgyarmati.de>
-References: <20230812215446.1458038-1-zgyarmati@zgyarmati.de>
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 462FA400D2
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 18:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 462FA400D2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 43E23E0002;
+ Tue, 22 Aug 2023 18:30:57 +0000 (UTC)
+Date: Tue, 22 Aug 2023 20:30:56 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230822203056.423a5e5b@windsurf>
+In-Reply-To: <ZNjaP1+VWZznRgtI@waldemar-brodkorb.de>
+References: <ZNjaP1+VWZznRgtI@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692729022;
+ d=bootlin.com; s=gm1; t=1692729057;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=CLDn6rOKkdLncJy+CIALF/n/eLoTnuzVp1O9mvqmrks=;
- b=kMyd7WDm2GcuOoFMCxXZmTvGHaA/wPh9z9yLT502u3kVRLZk6E/WzndAUPb3efiHXC1pJ5
- CJW6epAhI5ZXL3dMx6ymps3HGkC9scx9RPomBChE3HerpV+wCOx2/3UHS0vog8gttM7gyH
- 4s0BQau8lVE/+p7i+lBo85QNhSTR+TYGLRzwf4RsXWn7sXtYAB+SMcQdU90mdoKrUh7po/
- znNbGz2b9h9sov7OZSqSfuNQurdOYTVEHBSFyXaLMtQL4bBRxY5RcxSCX6fTef7iACzoLj
- s9yP8fGK1O+3flgZ0JRqTDi4MI+xJTTzGR0wx0ggQT2P/DWONlWstxdADrX/uA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=8Nn4KcAblS/0L1MgVcB82llq08Jl7HDGPA40Xond3v8=;
+ b=iB5rIfrmAdSUZ0dqywlsJ7nYXk6HJl1/9SJqdIfYQHZ2PaIfdXn4xJXORPQ42RK0vC26rO
+ PzM/JiyGuJijH2p1w7pF/llXvavSleSUntVZk7SSHOmR2HZqsKRrNW2ZUDGbtAQnBmf1+P
+ e3iKmWM+wHsS/uH2NTA7r2anh+TL1LHtdn65WxwXdAiwipBtbcvFQlkM3/pV+I2mt+FSoU
+ SHsxvI2BWwjUwTeUMG1K4eaN+5UcoxLQZkvOJsV8MKiqCVmfw6rld5b4h3IYs+2k46it/R
+ L6PT/vwx1N8Mkpsox1m3T6mm3B/UFFGz6IFmTyiebeqIuVrxvd12WkZzK6r2jg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kMyd7WDm
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/libusb-compat: bump to 0.1.8
+ header.s=gm1 header.b=iB5rIfrm
+Subject: Re: [Buildroot] [PATCH/next] package/libxcrypt: bump version to
+ 4.4.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,22 +83,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 12 Aug 2023 23:54:46 +0200
-Zoltan Gyarmati <zgyarmati@zgyarmati.de> wrote:
+On Sun, 13 Aug 2023 15:27:27 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> Removing upstreamed patch and force autoreconf
+> See the NEWS here:
+> https://github.com/besser82/libxcrypt/blob/develop/NEWS
 > 
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  .../0001-fix-a-build-issue-on-linux.patch     | 32 -------------------
->  package/libusb-compat/libusb-compat.hash      |  2 +-
->  package/libusb-compat/libusb-compat.mk        |  5 ++-
->  3 files changed, 5 insertions(+), 34 deletions(-)
->  delete mode 100644 package/libusb-compat/0001-fix-a-build-issue-on-linux.patch
+>  package/libxcrypt/libxcrypt.hash | 2 +-
+>  package/libxcrypt/libxcrypt.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks. You had forgotten to update the
-.checkpackageignore file with the patch removed, but I did it when
-applying. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
