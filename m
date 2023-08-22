@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C47DEC873A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76361EC873A
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08D2883C9C;
-	Thu,  7 Sep 2023 15:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08D2883C9C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FCFB8230B;
+	Thu,  7 Sep 2023 15:35:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FCFB8230B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aKiFryn6Ka6i; Thu,  7 Sep 2023 15:35:27 +0000 (UTC)
+	with ESMTP id sEB1o52T2DDf; Thu,  7 Sep 2023 15:35:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ECAD083C92;
-	Thu,  7 Sep 2023 15:35:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECAD083C92
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D41580F07;
+	Thu,  7 Sep 2023 15:35:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D41580F07
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 10F8A1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C8F61BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E61DE41E0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0270E41D8D
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E61DE41E0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0270E41D8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WlQ5qIUhyd_1 for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:38 +0000 (UTC)
+ with ESMTP id Cmsb6oEEzyYx for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6A8041E3B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B57841DA1
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6A8041E3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B57841DA1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4AB486A21; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+ id 071BB86A1E; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Aug 2023 23:43:28 +0200
+Date: Tue, 22 Aug 2023 21:20:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bdb15addcbf862182f82f70c2ff76124ba3538de
-X-Git-Newrev: 7412789bfd55efc7797945a83bef4e4741faaf0e
+X-Git-Oldrev: d5ed5799713588acc2a4c40645909a01b770bedd
+X-Git-Newrev: c66f26a12db322d9d40991098ba6d243bea47884
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145132.D4AB486A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-segno: new package
+Message-Id: <20230907145132.071BB86A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/chrony: bump to version 4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,131 +63,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7412789bfd55efc7797945a83bef4e4741faaf0e
+commit: https://git.buildroot.net/buildroot/commit/?id=c66f26a12db322d9d40991098ba6d243bea47884
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-segno 1.5.2 https://pypi.org/project/segno/
-
-Signed-off-by: Witold Lipieta <witold.lipieta@thaumatec.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                           |  5 +++++
- package/Config.in                                    |  1 +
- package/python-segno/Config.in                       |  7 +++++++
- package/python-segno/python-segno.hash               |  5 +++++
- package/python-segno/python-segno.mk                 | 14 ++++++++++++++
- support/testing/tests/package/sample_python_segno.py | 13 +++++++++++++
- support/testing/tests/package/test_python_segno.py   | 11 +++++++++++
- 7 files changed, 56 insertions(+)
+ package/chrony/chrony.hash | 4 ++--
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6fd1021e98..f91c4e9a2b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3110,6 +3110,11 @@ F:	package/time/
- N:	Will Wagner <will_wagner@carallon.com>
- F:	package/yaffs2utils/
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index 9c0e11757b..2cf6cca031 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://download.tuxfamily.org/chrony/chrony-4.3-tar-gz-asc.txt
+-sha256  9d0da889a865f089a5a21610ffb6713e3c9438ce303a63b49c2fb6eaff5b8804  chrony-4.3.tar.gz
++# https://download.tuxfamily.org/chrony/chrony-4.4-tar-gz-asc.txt
++sha256  eafb07e6daf92b142200f478856dfed6efc9ea2d146eeded5edcb09b93127088  chrony-4.4.tar.gz
+ # Locally calculated
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 86f23d9060..e7e6931a2a 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Witold Lipieta <witold.lipieta@thaumatec.com>
-+F:	package/python-segno/
-+F:	support/testing/tests/package/sample_python_segno.py
-+F:	support/testing/tests/package/test_python_segno.py
-+
- N:	Wojciech M. Zabolotny <wzab01@gmail.com>
- F:	package/avrdude/
- F:	package/jack2/
-diff --git a/package/Config.in b/package/Config.in
-index 3ce869f310..3d16ea37d1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1288,6 +1288,7 @@ menu "External python modules"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-secretstorage/Config.in"
- 	source "package/python-see/Config.in"
-+	source "package/python-segno/Config.in"
- 	source "package/python-selenium/Config.in"
- 	source "package/python-semver/Config.in"
- 	source "package/python-sentry-sdk/Config.in"
-diff --git a/package/python-segno/Config.in b/package/python-segno/Config.in
-new file mode 100644
-index 0000000000..3957cd79bf
---- /dev/null
-+++ b/package/python-segno/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SEGNO
-+	bool "python-segno"
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	help
-+	  QR Code and Micro QR Code generator for Python 2 and Python 3
-+
-+	  https://github.com/heuer/segno/
-diff --git a/package/python-segno/python-segno.hash b/package/python-segno/python-segno.hash
-new file mode 100644
-index 0000000000..286bdf3615
---- /dev/null
-+++ b/package/python-segno/python-segno.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/segno/json
-+md5  6d7c852f951501cd3af85ef061d6bee4  segno-1.5.2.tar.gz
-+sha256  983424b296e62189d70fc73460cd946cf56dcbe82b9bda18c066fc1b24371cdc  segno-1.5.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  98b0a86ca0cbf68c95051741bc983425a43fdece775fe0e2712e66be459cc9d1  LICENSE
-diff --git a/package/python-segno/python-segno.mk b/package/python-segno/python-segno.mk
-new file mode 100644
-index 0000000000..c832f38f4b
---- /dev/null
-+++ b/package/python-segno/python-segno.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-segno
-+#
-+################################################################################
-+
-+PYTHON_SEGNO_VERSION = 1.5.2
-+PYTHON_SEGNO_SOURCE = segno-$(PYTHON_SEGNO_VERSION).tar.gz
-+PYTHON_SEGNO_SITE = https://files.pythonhosted.org/packages/90/2a/2fedf1023f9273d8326362df7936748ebadef92ba53ab7970d9b8df1a6c2
-+PYTHON_SEGNO_SETUP_TYPE = setuptools
-+PYTHON_SEGNO_LICENSE = BSD-3-Clause
-+PYTHON_SEGNO_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_segno.py b/support/testing/tests/package/sample_python_segno.py
-new file mode 100644
-index 0000000000..c96d6087ce
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_segno.py
-@@ -0,0 +1,13 @@
-+import segno
-+import os
-+import tempfile
-+
-+qr = segno.make_qr('http:/www.example.org/')
-+with tempfile.NamedTemporaryFile('wb', suffix='.png', delete=False) as f:
-+    fn = f.name
-+qr.save(fn)
-+expected = b'\211PNG\r\n\032\n'  # PNG magic number
-+with open(fn, mode='rb') as f:
-+    val = f.read(len(expected))
-+os.unlink(fn)
-+assert expected == val
-diff --git a/support/testing/tests/package/test_python_segno.py b/support/testing/tests/package/test_python_segno.py
-new file mode 100644
-index 0000000000..75e7124399
---- /dev/null
-+++ b/support/testing/tests/package/test_python_segno.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Segno(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_SEGNO=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_segno.py"]
+-CHRONY_VERSION = 4.3
++CHRONY_VERSION = 4.4
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
