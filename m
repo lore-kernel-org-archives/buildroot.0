@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EC94EC873C
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0284EC873B
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB0CC83C96;
-	Thu,  7 Sep 2023 15:33:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB0CC83C96
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78F1E8123E;
+	Thu,  7 Sep 2023 15:33:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78F1E8123E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id a13Gph9I2Any; Thu,  7 Sep 2023 15:33:22 +0000 (UTC)
+	with ESMTP id 6grmuTtAmFVb; Thu,  7 Sep 2023 15:33:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0927E83CE8;
-	Thu,  7 Sep 2023 15:33:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0927E83CE8
+	by smtp1.osuosl.org (Postfix) with ESMTP id B086080C26;
+	Thu,  7 Sep 2023 15:33:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B086080C26
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 112621BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 15CA61BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1414541D77
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1670441DF4
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1414541D77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1670441DF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7FMVChVi7h3u for <buildroot@lists.busybox.net>;
+ with ESMTP id tOSyIRWsoMjW for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55B1541E0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26ACD41E03
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55B1541E0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26ACD41E03
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EF8E86A1E; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+ id 1D46086A21; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Aug 2023 20:57:48 +0200
+Date: Tue, 22 Aug 2023 22:10:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7b29c67e97072229fe5f836f51fa7a3a1f1db0aa
-X-Git-Newrev: 2b765178f41bed3720f16e9c850b0d0efc332531
+X-Git-Oldrev: 290f3985ddea38887818bd982cdb153f5698cdb1
+X-Git-Newrev: c93788350aa04a19884638ffa3c24446572d8169
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145132.4EF8E86A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-silva: bump to version 0.2.0
+Message-Id: <20230907145132.1D46086A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: install headers at the
+ standard location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +64,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b765178f41bed3720f16e9c850b0d0efc332531
+commit: https://git.buildroot.net/buildroot/commit/?id=c93788350aa04a19884638ffa3c24446572d8169
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff COPYRIGHT:
--Copyright (C) 2017-2021 Francois Perrad.
-+Copyright (C) 2017-2023 Francois Perrad
+In commit eb2f2886b2364e5b6a0867f55106bf83acb064e7 ("package/swupdate:
+add staging install"), the swupdate package was changed to also be
+installed in the staging directory, as it provides an API to external
+programs, through libraries and headers.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Back then the commit log said:
+
+    This patch installs headers and libs to STAGING_DIR, to prevent a
+    header name collision a subdirectory /usr/include/swupdate creates.
+
+And indeed a custom INCLUDEDIR was specified. However, installing
+swupdate headers in /usr/include/swupdate/ doesn't work well, as
+progress_ipc.h (installed by swupdate) does a #include
+<swupdate_status.h>, which doesn't work as swupdate_status.h is also
+in /usr/include/swupdate/ instead of /usr/include/.
+
+To address this Daniel Lang submitted a patch [0], which was proposed
+to upstream swupdate to fix this header inclusion. The patch was
+rejected by upstream saying that the swupdate header files should be
+installed in /usr/include.
+
+Currently, swupdate installs only 3 headers files:
+
+  /usr/include/network_ipc.h
+  /usr/include/swupdate_status.h
+  /usr/include/progress_ipc.h
+
+To the best of our knowledge, this doesn't conflict with any other
+header files installed by other packages. A good proof of that is that
+even Debian (which has many more packages than Buildroot) also
+installs swupdate headers directly in /usr/include.
+
+In addition, the original submitter of
+eb2f2886b2364e5b6a0867f55106bf83acb064e7 said "I'm not remember what
+was a problem. Probably network_ipc.h but Im not sure now. I think
+it's safe to install this headers to /usr/include w/o subdir if this
+collision was met only in my environment. PS: currently I don't see
+any collisions with this files."
+
+So, we switch to installing swupdate into their standard location.
+
+[0] https://patchwork.ozlabs.org/project/buildroot/patch/VI1P190MB0493D233ECC579510F8C0FC69FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-silva/lua-silva.hash | 4 ++--
- package/lua-silva/lua-silva.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/swupdate/swupdate.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lua-silva/lua-silva.hash b/package/lua-silva/lua-silva.hash
-index 418c3e9e43..3ceab6572b 100644
---- a/package/lua-silva/lua-silva.hash
-+++ b/package/lua-silva/lua-silva.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  0e656c42c71b64285d4a375fa7b8b1a910b05c4ab6d30f5b427b078fff204e1f  lua-silva-0.1.8-1.src.rock
--sha256  5b59ffbfc12d9d1cb907dd65b0f16d3453e1a43cc018c6128a00b00e08f6c485  lua-Silva-0.1.8/COPYRIGHT
-+sha256  fa838ed10b2e2c16f76fff9e47d52cde1f250efd73994865090d85218c2e5368  lua-silva-0.2.0-1.src.rock
-+sha256  638206532ac117ec92a04791045e274e6aa55c3d7f408cd2be993a00424c2f96  lua-Silva-0.2.0/COPYRIGHT
-diff --git a/package/lua-silva/lua-silva.mk b/package/lua-silva/lua-silva.mk
-index 91b1b77476..809ac3dd2d 100644
---- a/package/lua-silva/lua-silva.mk
-+++ b/package/lua-silva/lua-silva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 11a3946753..84905d2e0a 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -230,7 +230,7 @@ endef
+ define SWUPDATE_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
+-		INCLUDEDIR=/usr/include/swupdate install
++		install
+ endef
  
--LUA_SILVA_VERSION = 0.1.8-1
-+LUA_SILVA_VERSION = 0.2.0-1
- LUA_SILVA_NAME_UPSTREAM = lua-Silva
- LUA_SILVA_LICENSE = MIT
- LUA_SILVA_LICENSE_FILES = $(LUA_SILVA_SUBDIR)/COPYRIGHT
+ define SWUPDATE_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
