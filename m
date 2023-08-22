@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91DABEE49A5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38ACDEE49A5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CB9260AAE;
-	Tue, 22 Aug 2023 19:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CB9260AAE
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2DB460BF7;
+	Tue, 22 Aug 2023 19:48:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2DB460BF7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YS-EMPlMSd_j; Tue, 22 Aug 2023 19:48:28 +0000 (UTC)
+	with ESMTP id W-z2rkVYXc0O; Tue, 22 Aug 2023 19:48:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27FC6611B3;
-	Tue, 22 Aug 2023 19:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27FC6611B3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 954421BF35E
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A2B46120D;
+	Tue, 22 Aug 2023 19:48:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A2B46120D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DF76C1BF35E
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6E7D8401D8
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E7D8401D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5D6460AAE
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5D6460AAE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9lyKn-i7MSoe for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 19:48:09 +0000 (UTC)
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6D38E400D2
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:48:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D38E400D2
-Received: by mail-pf1-x42b.google.com with SMTP id
- d2e1a72fcca58-68a3cae6d94so2673085b3a.0
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 12:48:09 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SOM0urKqqUDl for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 19:48:10 +0000 (UTC)
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
+ [IPv6:2607:f8b0:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 99BDC60A70
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:48:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99BDC60A70
+Received: by mail-pf1-x434.google.com with SMTP id
+ d2e1a72fcca58-68a520dba33so1953045b3a.0
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 12:48:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692733688; x=1693338488;
+ d=1e100.net; s=20221208; t=1692733689; x=1693338489;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=8K51nkJETYfnhohPW+/64GzvHPeKR2lQo0V2hsu0xUk=;
- b=kqhmPVxj3VJOLnxJMSAnd3Pt1fkjnJIsB5sH3QHQDw+ARB6l8ckKRwNrwV1Fa6os4l
- eoSkf3MlZb5OMuR/nx+t/5MKmkOiQA0WW6LBn41ds3ITI2aSTMN26PL0M69kyobUs/rH
- 9bdvgwhBmh6RVk8LWWFe0eSF4M/iXE16DV/3jPr5FLnbGWVUWL9DG3eAwD++3T2ISMHi
- J/K9qd2UibMdmArs51KtfLbX6cLhlOsz9RhKgMxSgOaXw58i20fXgW0v89v7DiIAcWeP
- M4TJLj2CoHpIOge+YLjA+FUmkIkUJ49+egow1e5454CRJrFmb9Dzcav63RNK3USpgv93
- U4qw==
-X-Gm-Message-State: AOJu0Yw8Y/ZjfiXeBLiVxXJhhgM/lwvPpdeLt6jFhq//XB4IPyVipsRk
- 7arfjui4/LoBuiI5gBYEOFA/hqIZSoUg+IF8WVg=
-X-Google-Smtp-Source: AGHT+IH9b3gA1AuCWdtboiLh7AZrB4/aH64NAK5EDOWQ03GWOoU92KzAQzFokBlpX04aZmarOgXnSg==
-X-Received: by 2002:a05:6a00:1702:b0:68a:31b2:5219 with SMTP id
- h2-20020a056a00170200b0068a31b25219mr11160166pfc.22.1692733688239; 
- Tue, 22 Aug 2023 12:48:08 -0700 (PDT)
+ bh=xy42/ML6otHyi6EBLPshklNv7yVvTVxrcmPY2+PML2Y=;
+ b=EdJYT7xE7qeR5I+7L/eTYy+lfcK2Ge9aZcIkGbGgfLfThtHr0/Ak0hYehtP5oxz9Mi
+ ZSFKwiUuB55YsHfR2YZCzD9H0d1sMvd5WxavMKDmrhCKNgKdE4Jn6cVRdKaA8HWvHJP7
+ VWHKbkMzcdfIHWtH0/0Ts2S5pq6a0++iW64GamNyW7pJoVrPpNowiD6TI448lcXC84Ji
+ /gX8mxjh3L/erUszjRwl2wx/K+hvt4o36F3CQUNHHdP5iTHvi50yQ9tGu88FYLo/CKBz
+ mRte/zYsgNB9KROko1+CePe4TABPRfX18ij1lyi8nRbY1gLNAc9AhazyDwpbpDaojjN7
+ rC1g==
+X-Gm-Message-State: AOJu0YwTyLvQfN6AkNa7PUuwQhmD4xsyb/pCO9BfQ2270B3HhTfzULWc
+ 24vxH2BVh95Tl7Dh1SCX+h45pIjn/4xMV8n7KCU=
+X-Google-Smtp-Source: AGHT+IHVAr3WoufZ5OEW03L83T+vI/+gO0WyatgFBJHZ1GDbp9w3bggzVxfl2pb3D1WM23DogJAqcA==
+X-Received: by 2002:a05:6a00:14d4:b0:68a:cc7:12 with SMTP id
+ w20-20020a056a0014d400b0068a0cc70012mr12531835pfu.3.1692733689577; 
+ Tue, 22 Aug 2023 12:48:09 -0700 (PDT)
 Received: from localhost.localdomain ([172.56.201.202])
  by smtp.gmail.com with ESMTPSA id
- k12-20020aa792cc000000b0067aea93af40sm8128584pfa.2.2023.08.22.12.48.06
+ k12-20020aa792cc000000b0067aea93af40sm8128584pfa.2.2023.08.22.12.48.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Aug 2023 12:48:07 -0700 (PDT)
+ Tue, 22 Aug 2023 12:48:09 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 13:47:52 -0600
-Message-ID: <20230822194757.1004572-2-adam.duskett@amarulasolutions.com>
+Date: Tue, 22 Aug 2023 13:47:53 -0600
+Message-ID: <20230822194757.1004572-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230822194757.1004572-1-adam.duskett@amarulasolutions.com>
 References: <20230822194757.1004572-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1692733688; x=1693338488;
+ d=amarulasolutions.com; s=google; t=1692733689; x=1693338489;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8K51nkJETYfnhohPW+/64GzvHPeKR2lQo0V2hsu0xUk=;
- b=Ljj4ejgeNStgzqwmnh7hGYGHh6ACkZ8CDQwIymjHqXXhtnwsi1MqeY4FRmHnpHKqgZ
- nW0wyWs8Z/w2x1MWt4TSidXFyGHmq6c7lF37cHHeTgSMLC6L1Dgj29Ou2IuJY9KBOOSE
- khDHM6+BxznqRv3nVsYjUx/L/b6TnvSF5oXEc=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=xy42/ML6otHyi6EBLPshklNv7yVvTVxrcmPY2+PML2Y=;
+ b=fybB2zW6PtMHf/3FiJmoz6nuPdHSmpj4qoRPHRFQBhTvZPLziqorXwb0a+YUed9GQP
+ 30XeZwt1heGLV18iq3R0YuHA29cugGIGO4XkXB1SKr9lEEXL+N6eFujyqdb+mt1SEXW4
+ KfO1txh1EVr5inxCXsANa+nv9uN2TiKxzIVUA=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Ljj4ejge
-Subject: [Buildroot] [PATCH v5 2/7] package/depot-tools: new package
+ header.b=fybB2zW6
+Subject: [Buildroot] [PATCH v5 3/7] package/flutter-sdk-bin: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,137 +103,201 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Chromium and Chromium OS use a package of scripts called
-depot_tools to manage checkouts and code reviews. This package
-also includes the gclient utility.
+flutter-sdk-bin is a collection of host tools and plugins used to compile
+flutter applications.
 
-gclient is a Python script to manage a workspace of modular dependencies that
-are each checked out independently from different subversion or git
-repositories. Features include:
+- As this is a collection of pre-compiled tools, append -bin to the end of the
+  package name.
 
-  - Dependencies can be specified on a per-OS basis.
-  - Dependencies can be specified relative to their parent dependency.
-  - Variables can be used to abstract concepts.
-  - Hooks can be specified to be run after a checkout.
-  - .gclient and DEPS are Python scripts. You can hack in easily or add
-     additional configuration data.
+- We must set the HOME directory variable to the sdk directory or else the
+  flutter dart binaries place .dart, .dart-sdk, and .flutter in ~/.
 
-.gclient file: It's the primary file. It is, in fact, a Python script. It
-specifies the following variables:
-
-  - solutions: an array of dictionaries specifying the projects that will be
-               fetched.
-  - hooks: additional hooks to be run when this meta checkout is synced.
-  - target_os: an optional array of (target) operating systems to fetch
-               OS-specific dependencies for.
-  - cache_dir: Primarily for bots, multiple working sets use a single git
-               cache.
-
-gclient is necessary for checking out the flutter-engine source code, as the
-release tarballs provided on the flutter-engine github are in no state to
-compile. Google expects the use of gclient to download a source directory
-structure suitable to build the Flutter engine.
+- set --clear-features, --no-analytics and --disable-telemetry first to disable
+  google tracking as soon as possible.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-V2 -> V3:
-  - Re-added Config.in.host. It needs to select host-python3, host-python3-six,
-    and host-python3-ssl
+Changes v4 -> v5:
+  - Add a Config.in.host and set BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+    to only support x86_64 [Yann]
 
-V1 -> V2:
-  - Remove Config.in.host
-  - Remove DEPOT_TOOLS_GCLIENT helper wrapper as it is unused.
+  - Set the HOME variable when calling flutter and dart to prevent .dart,
+   .dart-sdk, and .flutter from showing up in ~/. Yes, this is insane, no, there
+    is not another option I could find. [Yann]
 
- DEVELOPERS                           |  3 +++
- package/Config.in.host               |  1 +
- package/depot-tools/Config.in.host   | 10 ++++++++++
- package/depot-tools/depot-tools.hash |  3 +++
- package/depot-tools/depot-tools.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
- create mode 100644 package/depot-tools/Config.in.host
- create mode 100644 package/depot-tools/depot-tools.hash
- create mode 100644 package/depot-tools/depot-tools.mk
+  - Add more disable config options to cut down on unecessary features.
+
+  - Call the config options in a loop.
+
+ DEVELOPERS                                   |   1 +
+ package/Config.in.host                       |   1 +
+ package/flutter-sdk-bin/Config.in.host       |  16 +++
+ package/flutter-sdk-bin/flutter-sdk-bin.hash |   3 +
+ package/flutter-sdk-bin/flutter-sdk-bin.mk   | 100 +++++++++++++++++++
+ 5 files changed, 121 insertions(+)
+ create mode 100644 package/flutter-sdk-bin/Config.in.host
+ create mode 100644 package/flutter-sdk-bin/flutter-sdk-bin.hash
+ create mode 100644 package/flutter-sdk-bin/flutter-sdk-bin.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c643469f17..0a71ccf8ce 100644
+index 0a71ccf8ce..46ef769462 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -26,6 +26,9 @@
- #   infrastructure, and will be CC'ed on all patches that add or
- #   modify packages that use this infrastructure.
+@@ -28,6 +28,7 @@
  
-+N:	Adam Duskett <adam.duskett@amarulasolutions.com>
-+F:	package/depot-tools/
-+
+ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
+ F:	package/depot-tools/
++F:	package/flutter-sdk-bin/
+ 
  N:	Adam Duskett <aduskett@gmail.com>
  F:	package/firewalld/
- 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index 22e0dc64d4..377dbed7d3 100644
+index 377dbed7d3..387a28cff2 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -19,6 +19,7 @@ menu "Host utilities"
- 	source "package/cryptsetup/Config.in.host"
- 	source "package/dbus-python/Config.in.host"
- 	source "package/delve/Config.in.host"
-+	source "package/depot-tools/Config.in.host"
- 	source "package/dfu-util/Config.in.host"
- 	source "package/dos2unix/Config.in.host"
- 	source "package/dosfstools/Config.in.host"
-diff --git a/package/depot-tools/Config.in.host b/package/depot-tools/Config.in.host
+@@ -36,6 +36,7 @@ menu "Host utilities"
+ 	source "package/faketime/Config.in.host"
+ 	source "package/fatcat/Config.in.host"
+ 	source "package/firmware-utils/Config.in.host"
++	source "package/flutter-sdk-bin/Config.in.host"
+ 	source "package/fwup/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+diff --git a/package/flutter-sdk-bin/Config.in.host b/package/flutter-sdk-bin/Config.in.host
 new file mode 100644
-index 0000000000..935331dedb
+index 0000000000..a48714ea7f
 --- /dev/null
-+++ b/package/depot-tools/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_DEPOT_TOOLS
-+	bool "host depot-tools"
-+	select BR2_PACKAGE_HOST_PYTHON3
-+	select BR2_PACKAGE_HOST_PYTHON3_SSL
-+	select BR2_PACKAGE_HOST_PYTHON_SIX
-+	help
-+	  Chromium and Chromium OS use a package of scripts called
-+	  depot_tools to manage checkouts and code reviews.
++++ b/package/flutter-sdk-bin/Config.in.host
+@@ -0,0 +1,16 @@
++# All host rust packages should depend on this option
++config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	bool
++	default y if BR2_HOSTARCH = "x86_64"
 +
-+	  https://www.chromium.org/developers/how-tos/install-depot-tools/
-diff --git a/package/depot-tools/depot-tools.hash b/package/depot-tools/depot-tools.hash
++config BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
++	bool "host flutter-sdk-bin"
++	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
++	help
++	  Flutter is Google's SDK for crafting beautiful, fast user
++	  experiences for mobile, web, and desktop from a single
++	  codebase. Flutter works with existing code, is used by
++	  developers and organizations around the world, and is
++	  free and open source.
++
++	  https://flutter.dev/
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.hash b/package/flutter-sdk-bin/flutter-sdk-bin.hash
 new file mode 100644
-index 0000000000..2109096901
+index 0000000000..13e588cd83
 --- /dev/null
-+++ b/package/depot-tools/depot-tools.hash
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  8e0bccdd6b1231f58d5453dc14a5e1d195295ac8d466dec34961e951e946b50b  depot-tools-4e87f5bfe244e903f712408ea68dc3c3a6fe2d00-br1.tar.gz
-+sha256  984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  LICENSE
-diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
++sha256  7048e51a89c99a5b6cac6d8ae416121264effa76da34dba5c0e7cf85519c8e98  flutter_linux_3.10.6-stable.tar.xz
++sha256  a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20  LICENSE
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
 new file mode 100644
-index 0000000000..e3b840f29a
+index 0000000000..6ec2aad774
 --- /dev/null
-+++ b/package/depot-tools/depot-tools.mk
-@@ -0,0 +1,25 @@
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+@@ -0,0 +1,100 @@
 +################################################################################
 +#
-+# depot-tools
++# host-flutter-sdk-bin
 +#
 +################################################################################
 +
-+DEPOT_TOOLS_VERSION = 4e87f5bfe244e903f712408ea68dc3c3a6fe2d00
-+DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
-+DEPOT_TOOLS_SITE_METHOD = git
-+DEPOT_TOOLS_LICENSE = BSD-3-Clause
-+DEPOT_TOOLS_LICENSE_FILES = LICENSE
-+DEPOT_TOOLS_CPE_ID_VENDOR = google
++FLUTTER_SDK_BIN_VERSION = 3.10.6
++FLUTTER_SDK_BIN_SITE = https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
++FLUTTER_SDK_BIN_SOURCE = flutter_linux_$(FLUTTER_SDK_BIN_VERSION)-stable.tar.xz
++FLUTTER_SDK_BIN_LICENSE = BSD-3-Clause
++FLUTTER_SDK_BIN_LICENSE_FILES = LICENSE
 +
-+HOST_DEPOT_TOOLS_DEPENDENCIES = \
-+	host-python3 \
-+	host-python-httplib2 \
-+	host-python-pyparsing \
-+	host-python-six
++HOST_FLUTTER_SDK_BIN_SDK = $(HOST_DIR)/share/flutter/sdk
++HOST_FLUTTER_SDK_BIN_SDK_ENGINE = $(HOST_FLUTTER_SDK_BIN_SDK)/bin/cache/artifacts/engine
++HOST_FLUTTER_SDK_BIN_DART_SDK = $(HOST_FLUTTER_SDK_BIN_SDK)/bin/cache/dart-sdk
 +
-+define HOST_DEPOT_TOOLS_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/share/depot_tools
-+	cp -dprf $(@D)/* $(HOST_DIR)/share/depot_tools/
++# We must set the home directory to the sdk directory or else flutter will
++# place .dart, .dart-sdk, and .flutter in ~/.
++HOST_FLUTTER_SDK_BIN_ENV = \
++	HOME=$(HOST_FLUTTER_SDK_BIN_SDK) \
++	PATH=$(BR_PATH):$(HOST_FLUTTER_SDK_BIN_SDK):$(HOST_FLUTTER_SDK_BIN_SDK)/bin \
++	PUB_CACHE=$(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
++
++# The following config options must be ran one at a time.
++HOST_FLUTTER_SDK_BIN_CONF_OPTS = \
++	--clear-features \
++	--no-analytics \
++	--disable-telemetry \
++	--enable-custom-devices \
++	--enable-linux-desktop \
++	--no-enable-android \
++	--no-enable-fuchsia \
++	--no-enable-ios \
++	--no-enable-macos-desktop \
++	--no-enable-windows-desktop
++
++define HOST_FLUTTER_SDK_BIN_CONFIGURE_CMDS
++	$(foreach i,$(HOST_FLUTTER_SDK_BIN_CONF_OPTS),
++		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config $(i); \
++	)
++	$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/dart --disable-analytics
 +endef
++
++# Remove the cache, as we will run precache after setting up flutter and dart
++# with the new config options.
++define HOST_FLUTTER_SDK_BIN_BUILD_CMDS
++	mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
++	rm -rf $(HOST_FLUTTER_SDK_BIN_SDK)/.pub-cache
++	rm -rf $(@D)/bin/cache
++	cd $(@D) && \
++		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter precache && \
++		$(HOST_FLUTTER_SDK_BIN_ENV) $(@D)/bin/flutter config && \
++		rm -rf $(@D)/bin/cache/pkg/sky_engine
++		rm -rf $(@D)/bin/cache/artifacts/*
++endef
++
++define HOST_FLUTTER_SDK_BIN_INSTALL_CMDS
++	mkdir -p $(HOST_FLUTTER_SDK_BIN_SDK)
++	cp -rT $(@D)/. $(HOST_FLUTTER_SDK_BIN_SDK)/
++endef
++
++ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),y)
++HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
++	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk
++HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = false
++else
++HOST_FLUTTER_SDK_BIN_SDK_ROOT = \
++	$(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/common/flutter_patched_sdk_product
++HOST_FLUTTER_SDK_BIN_SDK_PRODUCT = true
++endif
++
++# The Order matters.Taken from:
++# https://github.com/meta-flutter/meta-flutter/blob/kirkstone/classes/flutter-app.inc
++HOST_FLUTTER_SDK_BIN_DART_ARGS = \
++	--verbose \
++	--disable-analytics \
++	--disable-dart-dev $(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/linux-x64/frontend_server.dart.snapshot \
++	--sdk-root $(HOST_FLUTTER_SDK_BIN_SDK_ROOT) \
++	--target=flutter \
++	--no-print-incremental-dependencies \
++	-Ddart.vm.profile=false \
++	-Ddart.vm.product=$(HOST_FLUTTER_SDK_BIN_SDK_PRODUCT) \
++	--aot \
++	--tfa \
++	--packages .dart_tool/package_config.json \
++	--output-dill .dart_tool/flutter_build/*/app.dill \
++	--depfile .dart_tool/flutter_build/*/kernel_snapshot.d
++
++# Helper wrapper to run flutter when building flutter applications.
++HOST_FLUTTER_SDK_BIN_FLUTTER = \
++	$(HOST_FLUTTER_SDK_BIN_ENV) \
++	$(HOST_FLUTTER_SDK_BIN_SDK)/bin/flutter
++
++# Helper wrapper to run dart when building flutter applications.
++HOST_FLUTTER_SDK_BIN_DART_BIN = \
++	$(HOST_FLUTTER_SDK_BIN_ENV) \
++	$(HOST_FLUTTER_SDK_BIN_DART_SDK)/bin/dart \
++	$(HOST_FLUTTER_SDK_BIN_DART_ARGS)
 +
 +$(eval $(host-generic-package))
 -- 
