@@ -1,85 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF6EEE4996
-	for <buildroot@archiver.kernel.org>; Mon, 21 Aug 2023 23:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C224EE4996
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 01:33:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13AC0605D5;
-	Mon, 21 Aug 2023 23:45:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13AC0605D5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A5424063C;
+	Tue, 22 Aug 2023 01:33:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A5424063C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Y0gcwW-0MejK; Mon, 21 Aug 2023 23:45:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HJk8vR1Hs6wW; Tue, 22 Aug 2023 01:33:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B40961145;
-	Mon, 21 Aug 2023 23:45:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B40961145
+	by smtp2.osuosl.org (Postfix) with ESMTP id E8D78404DF;
+	Tue, 22 Aug 2023 01:33:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8D78404DF
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 83D531BF33A
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 23:45:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3574F1BF30A
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 01:33:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A81B40169
- for <buildroot@lists.busybox.net>; Mon, 21 Aug 2023 23:45:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A81B40169
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0BC28404DF
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 01:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BC28404DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IgT_td2BzPei for <buildroot@lists.busybox.net>;
- Mon, 21 Aug 2023 23:45:37 +0000 (UTC)
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E4F5400DA
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 23:45:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E4F5400DA
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-31969580797so3520896f8f.3
- for <buildroot@buildroot.org>; Mon, 21 Aug 2023 16:45:36 -0700 (PDT)
+ with ESMTP id tq3mUGOBaHAZ for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 01:33:39 +0000 (UTC)
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com
+ [IPv6:2607:f8b0:4864:20::1130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 528EC404BB
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 01:33:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 528EC404BB
+Received: by mail-yw1-x1130.google.com with SMTP id
+ 00721157ae682-58fc4d319d2so27164667b3.1
+ for <buildroot@buildroot.org>; Mon, 21 Aug 2023 18:33:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692661535; x=1693266335;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=LgE1djxyTvENpO7eYHeVkQYdk4oLlsewke2hLtGPLbc=;
- b=bE1WvKh4LV5hzJqntbwTwYUpp3qwf6Lu/8vroMh/2np4YUBbk0HhygPMfiNtSfwOSc
- hAWVtAITU9E3H1J621JOwnau3+d8nvparGKmGfiBfExeZvvtOIg2T11GBCUVhQSbN+Qe
- OIZH2LBmvOIjr19r03zqkSsw/jGlD/WYu2skNrNFDxL3LQMZud167aBKF2ZsAILAyUJC
- SDhSEpStESYUw6K7qr0IIITelHF191cfut8hu2+2NH/nn/DvNJelUIBS71dJKSpQg5uX
- S0iKKS3mIo1UGq/Kzo+8wbZvp7spAQIWjYc3H0hAg4PZOtW51ChG6qwua9zZUzlfDem0
- PT5Q==
-X-Gm-Message-State: AOJu0YxbIIEOcP3IcdXRo/PL5hbZWc5Y6vhB0IU4G4jJm8x6aK0x5rhl
- WXEUsfS132d6NXAN15EgbzyM9Jnm2IN6B+iqeB4=
-X-Google-Smtp-Source: AGHT+IFBO6DTdUJUablUBmw1e9x2Va8bHQXN0fNCwa6/nTRvJ2VLmIq53itWCLOjxkVmhi4E6l+rCXn1zMSiZbTlXKs=
-X-Received: by 2002:adf:e608:0:b0:316:f3cf:6f12 with SMTP id
- p8-20020adfe608000000b00316f3cf6f12mr5721266wrm.48.1692661534832; Mon, 21 Aug
- 2023 16:45:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230821175828.42827-1-ckhardin@gmail.com>
- <20230822001341.7256e67d@windsurf>
-In-Reply-To: <20230822001341.7256e67d@windsurf>
+ d=1e100.net; s=20221208; t=1692668017; x=1693272817;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=LKlGefgGWsUN7Pk7q3U3bEXV3Si+ACLsV1jkcrbxvG4=;
+ b=EjqR1GtPm97pJz5uhxMEOMEuJWdd05FVSUHgYKvzwS2QCKW/ntEjV4ZN4Bn0utPSmR
+ ANUciKpfG+Li6Lu0EQsA63oTCuQmBJp9cuDO1wVgt8ExiRYnnVUcxFU5ZsKmZkZmyjjF
+ DwDGYWvcGYkuinmusmKwBz1W9ElQ3p8Nr1VgesCwIRi6XBoRhl9KPH8vzQLrW2F13j6C
+ MNebhfV+hpWCBcq5r1lYXrAa5pVo1p5j3xc00/nGpRlS0YMQZ+lGGn4/0Nsj2OfdYSNu
+ Ir69UQh/l/PkzFLiDwYEwZSRpeYDRHoh1z07zGQfBWBi9IRyXsfN17gPVryfWB21LtYG
+ Emnw==
+X-Gm-Message-State: AOJu0YxfZwPjOlHhVGgEdm7LXvMxQQCKPbTJ4TLnkGjFjhvlYj00Wpcg
+ GOBSfojHw2hBXngkjETUf8z30D1KX5ZLRA==
+X-Google-Smtp-Source: AGHT+IEDl1xzqwlzBHX22lOdboLVJkaBelIyAVutGn2fwkjnfBTBH2tn0eQ9+43yDtNq0QbuobFWJg==
+X-Received: by 2002:a81:520b:0:b0:58d:7599:676a with SMTP id
+ g11-20020a81520b000000b0058d7599676amr10751295ywb.37.1692668017616; 
+ Mon, 21 Aug 2023 18:33:37 -0700 (PDT)
+Received: from purgatory.attlocal.net
+ ([2600:1700:65a0:14f0:55db:9e25:2c0a:ecb3])
+ by smtp.gmail.com with ESMTPSA id
+ n127-20020a0de485000000b0058451c12076sm2550229ywe.14.2023.08.21.18.33.36
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Mon, 21 Aug 2023 18:33:37 -0700 (PDT)
 From: Charles Hardin <ckhardin@gmail.com>
-Date: Mon, 21 Aug 2023 16:45:23 -0700
-Message-ID: <CAN=fXj29fRXvHHZVG03LfTfPQeBrzroV5VN3nwavTw3gejS90Q@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Mon, 21 Aug 2023 18:33:30 -0700
+Message-Id: <20230822013333.47036-1-ckhardin@gmail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230821175828.42827-1-ckhardin@gmail.com>
+References: <20230821175828.42827-1-ckhardin@gmail.com>
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692661535; x=1693266335;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=LgE1djxyTvENpO7eYHeVkQYdk4oLlsewke2hLtGPLbc=;
- b=ruVyo7bflR0gdlE7I5l6fg/h9RMW31GO0HdE6awJV6SmS3ONRWATEQOACG4D6m7C+T
- 2sA6zbttsLfKORUtz8g1nVx1n3Txt/wnRbmcNiuH8ef6NyvvKRF9xZgzInBV51L1cUve
- VIhmpEEaLy5JkrqlwUTIbJ55yGRxluE/4SvcEz1/l/V4nO2/4AJIFlhYewhWh0j5Ag5L
- Zaz1nZDSBDVwFnuXcCuDuZ2AnlFARTvnhKNKpwjiX+7dbeWP+XuTZfwY2+si5WtSH+8W
- iSioHZRDfJtDoNIZHs2P1FC4Es/yF9xo8IFzOY8N4Yz26Qbvv7WKHkkvvz+LM+FD1zzd
- g7fA==
+ d=gmail.com; s=20221208; t=1692668017; x=1693272817;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=LKlGefgGWsUN7Pk7q3U3bEXV3Si+ACLsV1jkcrbxvG4=;
+ b=GshDeQuKRC71fXkMIrL8OwT4bQvIkBSsaV84Yap6usCZURjWPvUvPrq4qebfjoUm+D
+ ly8otmfEGQVsvgD6V+Km82MLs4W7JbY+2NMI2AYofjO4Ku95llerH2dRmEJ9oorH8TVk
+ Zj5R8swaTcfiya2buxIYQXy3Npsd+yVGm05zYkkrMIGFNkJjTbul7QwfSUwZPAXqfPrO
+ VpfZ5EmHX9Gf7xbqoQYPFe/ua577MtEsU60ycLrfsYVdFdY5QE29CzXMBzMMH/DP9cKi
+ aKt2NQB+GGHccofYGuCqEQ7JwbptK1oa2TNozH0fjs1Cr1Q603E+yJTNHPpkB+xdBNE2
+ 9KpA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=ruVyo7bf
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pykwalify: add required
- package for zephyr cmake
+ header.a=rsa-sha256 header.s=20221208 header.b=GshDeQuK
+Subject: [Buildroot] [PATCH v2 1/4] package/python-dateutil: add host python
+ package for dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,224 +98,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Alvaro G . M" <alvaro.gamez@hazent.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2865186615367279234=="
+Cc: Charles Hardin <ckhardin@gmail.com>,
+ "Alvaro G . M" <alvaro.gamez@hazent.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2865186615367279234==
-Content-Type: multipart/alternative; boundary="000000000000823fb9060377798e"
+A host package for build support needs the dateutil module and
+so enable the dependency.
 
---000000000000823fb9060377798e
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+---
+ package/python-dateutil/python-dateutil.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-inline
-
-On Mon, Aug 21, 2023 at 3:13=E2=80=AFPM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Charles,
->
-> On Mon, 21 Aug 2023 10:58:28 -0700
-> Charles Hardin <ckhardin@gmail.com> wrote:
->
-> > When building zephyr based firmware, the cmake integrates with
-> > python scripts that can be run using the buildroot host-python
-> > dependencies. This is useful for the sdk setups and associated
-> > build steps for the firmware. In this use-case, a buildroot
-> > external project can be setup with recipes to build firmware
-> > images using eabi toolchains and the linux controller software
-> > to talk to those firmware images using one SDK. This might not
-> > be overtly obvious from the patches.
->
-> Could you clarify a bit what you call "zephyr cmake" and the use case
-> for this?
->
-
-https://github.com/zephyrproject-rtos
-
-The build is cmake derived but relies on calling into some python scripts t=
-o
-generate some build dependencies
-
-https://github.com/zephyrproject-rtos/zephyr/blob/main/scripts/requirements=
--base.txt
-
-
->
-> > Add the required host packages and additional pykwalify
->
-> This needs to be split into multiple patches, one per package affected.
-> But I think we also need to understand the bigger picture of what this
-> is useful for.
->
-
-So, we have various RTOS MCUs that are hooked up into linux controllers,
-and this is just a simple hook so that the same SDK can be handled to build
-both firmware for something like an STM32 and a Raspberry-pi
-
-Assume a reference to
-https://gist.github.com/titouanc/ea0685d9cd8592deb1c49d48e33b3eee to add
-the gcc eabi toolchain has been done in an external package, with the
-patches above we can actually build both firmware and the drivers in
-buildroot from one tree with external recipes like below
-
-env PATH=3D/opt/sdk/aarch64-buildroot-linux-gnu_sdk-buildroot/bin:$PATH cma=
-ke
-\
-
-    -DCMAKE_TOOLCHAIN_FILE=3D/opt/sdk/aarch64-buildroot-linux-gnu_sdk-build=
-root/share/buildroot/toolchainfile.cmake
-\
-
-
--DARMGNU_GCC_TOOLCHAIN_PREFIX=3D"/opt/sdk/aarch64-buildroot-linux-gnu_sdk-b=
-uildroot/share/gcc-arm-none-eabi"
-\
-
-    -DCMAKE_BUILD_TYPE=3DDebug \
-
-        ../buildroot-external
-
-make VERBOSE=3D1 -j$(nproc)
-
-
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
---000000000000823fb9060377798e
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">inline</div><br><div class=3D"gmail_quote=
-"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Aug 21, 2023 at 3:13=E2=80=
-=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">=
-thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote class=3D"g=
-mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
-,204,204);padding-left:1ex">Hello Charles,<br>
-<br>
-On Mon, 21 Aug 2023 10:58:28 -0700<br>
-Charles Hardin &lt;<a href=3D"mailto:ckhardin@gmail.com" target=3D"_blank">=
-ckhardin@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; When building zephyr based firmware, the cmake integrates with<br>
-&gt; python scripts that can be run using the buildroot host-python<br>
-&gt; dependencies. This is useful for the sdk setups and associated<br>
-&gt; build steps for the firmware. In this use-case, a buildroot<br>
-&gt; external project can be setup with recipes to build firmware<br>
-&gt; images using eabi toolchains and the linux controller software<br>
-&gt; to talk to those firmware images using one SDK. This might not<br>
-&gt; be overtly obvious from the patches.<br>
-<br>
-Could you clarify a bit what you call &quot;zephyr cmake&quot; and the use =
-case<br>
-for this?<br></blockquote><div><br></div><div><a href=3D"https://github.com=
-/zephyrproject-rtos">https://github.com/zephyrproject-rtos</a><br></div><di=
-v><br></div><div>The build is cmake derived but relies on calling into some=
- python scripts to</div><div>generate some build dependencies</div><div><br=
-></div><div><a href=3D"https://github.com/zephyrproject-rtos/zephyr/blob/ma=
-in/scripts/requirements-base.txt">https://github.com/zephyrproject-rtos/zep=
-hyr/blob/main/scripts/requirements-base.txt</a></div><div>=C2=A0</div><bloc=
-kquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:=
-1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-&gt; Add the required host packages and additional pykwalify<br>
-<br>
-This needs to be split into multiple patches, one per package affected.<br>
-But I think we also need to understand the bigger picture of what this<br>
-is useful for.<br></blockquote><div><br></div><div>So, we have various RTOS=
- MCUs that are hooked up into linux controllers, and this is just a simple =
-hook so that the same SDK can be handled to build both firmware for somethi=
-ng like an STM32 and a Raspberry-pi</div><div><br></div><div>Assume a refer=
-ence to=C2=A0<a href=3D"https://gist.github.com/titouanc/ea0685d9cd8592deb1=
-c49d48e33b3eee">https://gist.github.com/titouanc/ea0685d9cd8592deb1c49d48e3=
-3b3eee</a> to add the gcc eabi toolchain has been done in an external packa=
-ge, with the patches above we can actually build both firmware and the driv=
-ers in buildroot from one tree with external recipes like below</div><div><=
-br></div><div>
-
-
-
-
-
-<p class=3D"gmail-p1" style=3D"margin:0px;font-variant-numeric:normal;font-=
-variant-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;=
-font-feature-settings:normal;font-stretch:normal;font-size:11px;line-height=
-:normal;font-family:Menlo"><span class=3D"gmail-s1" style=3D"font-variant-l=
-igatures:no-common-ligatures"><font color=3D"#000000">env PATH=3D/opt/sdk/a=
-arch64-buildroot-linux-gnu_sdk-buildroot/bin:$PATH cmake=C2=A0</font></span=
-><span style=3D"color:rgb(0,0,0);font-variant-ligatures:no-common-ligatures=
-">\</span></p>
-<p class=3D"gmail-p1" style=3D"margin:0px;font-variant-numeric:normal;font-=
-variant-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;=
-font-feature-settings:normal;font-stretch:normal;font-size:11px;line-height=
-:normal;font-family:Menlo"><span class=3D"gmail-s1" style=3D"font-variant-l=
-igatures:no-common-ligatures"><font color=3D"#000000"><span class=3D"gmail-=
-Apple-converted-space">=C2=A0 =C2=A0 </span>-DCMAKE_TOOLCHAIN_FILE=3D/opt/s=
-dk/aarch64-buildroot-linux-gnu_sdk-buildroot/share/buildroot/toolchainfile.=
-cmake \</font></span></p><p class=3D"gmail-p1" style=3D"margin:0px;font-var=
-iant-numeric:normal;font-variant-east-asian:normal;font-variant-alternates:=
-normal;font-kerning:auto;font-feature-settings:normal;font-stretch:normal;f=
-ont-size:11px;line-height:normal;font-family:Menlo"><span class=3D"gmail-s1=
-" style=3D"font-variant-ligatures:no-common-ligatures"><span style=3D"color=
-:rgb(0,0,0)">=C2=A0 =C2=A0 -DARMGNU_GCC_TOOLCHAIN_PREFIX=3D&quot;/opt/sdk/a=
-arch64-buildroot-linux-gnu_sdk-buildroot/share/gcc-arm-none-eabi&quot; \</s=
-pan><font color=3D"#000000"><br></font></span></p>
-<p class=3D"gmail-p1" style=3D"margin:0px;font-variant-numeric:normal;font-=
-variant-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;=
-font-feature-settings:normal;font-stretch:normal;font-size:11px;line-height=
-:normal;font-family:Menlo"><span class=3D"gmail-s1" style=3D"font-variant-l=
-igatures:no-common-ligatures"><font color=3D"#000000"><span class=3D"gmail-=
-Apple-converted-space">=C2=A0 =C2=A0 </span>-DCMAKE_BUILD_TYPE=3DDebug \</f=
-ont></span></p>
-<p class=3D"gmail-p1" style=3D"margin:0px;font-variant-numeric:normal;font-=
-variant-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;=
-font-feature-settings:normal;font-stretch:normal;font-size:11px;line-height=
-:normal;font-family:Menlo"><span class=3D"gmail-s1" style=3D"font-variant-l=
-igatures:no-common-ligatures"><font color=3D"#000000"><span class=3D"gmail-=
-Apple-converted-space">=C2=A0 =C2=A0 =C2=A0 =C2=A0 </span>../buildroot-exte=
-rnal</font></span></p>
-<p class=3D"gmail-p1" style=3D"margin:0px;font-variant-numeric:normal;font-=
-variant-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;=
-font-feature-settings:normal;font-stretch:normal;font-size:11px;line-height=
-:normal;font-family:Menlo"><span class=3D"gmail-s1" style=3D"font-variant-l=
-igatures:no-common-ligatures"><font color=3D"#000000">make VERBOSE=3D1 </fo=
-nt></span><span style=3D"color:rgb(0,0,0);font-variant-ligatures:no-common-=
-ligatures">-j$(nproc)</span></p></div><div><br></div><div>=C2=A0</div><bloc=
-kquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:=
-1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-Thanks!<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div></div>
-
---000000000000823fb9060377798e--
-
---===============2865186615367279234==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
+index b75f510bce..d45a047ba8 100644
+--- a/package/python-dateutil/python-dateutil.mk
++++ b/package/python-dateutil/python-dateutil.mk
+@@ -10,5 +10,7 @@ PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+ PYTHON_DATEUTIL_LICENSE = BSD-3-Clause
+ PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
+ PYTHON_DATEUTIL_DEPENDENCIES = host-python-setuptools-scm
++HOST_PYTHON_DATEUTIL_DEPENDENCIES = host-python-setuptools-scm host-python-six
+ 
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+2.39.2 (Apple Git-143)
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2865186615367279234==--
