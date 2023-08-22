@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF45BEE49A5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 21:41:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31CB2EE49A5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 22:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A29F408C1;
-	Tue, 22 Aug 2023 21:41:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A29F408C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A1624154A;
+	Tue, 22 Aug 2023 22:01:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A1624154A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BUSiGiXz5Klo; Tue, 22 Aug 2023 21:41:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7DFb-Wn88Lpz; Tue, 22 Aug 2023 22:01:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C07714052A;
-	Tue, 22 Aug 2023 21:41:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C07714052A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B9A141610;
+	Tue, 22 Aug 2023 22:01:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B9A141610
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE45F1BF31A
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 21:41:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8F0781BF31A
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 22:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4D8581A5F
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 21:41:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4D8581A5F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4694981F6E
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 22:01:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4694981F6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HQcSWQXlgt89 for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 21:41:17 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 83C9681A58
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 21:41:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83C9681A58
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 650BA20005;
- Tue, 22 Aug 2023 21:41:14 +0000 (UTC)
-Date: Tue, 22 Aug 2023 23:41:13 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230822234113.12dd618b@windsurf>
-In-Reply-To: <20230822194922.71368-1-ju.o@free.fr>
-References: <20230822194922.71368-1-ju.o@free.fr>
+ with ESMTP id ntDWQTOB8Y37 for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 22:01:21 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BD88481F30
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 22:01:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD88481F30
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 88F74240002;
+ Tue, 22 Aug 2023 22:01:17 +0000 (UTC)
+Date: Wed, 23 Aug 2023 00:01:16 +0200
+To: Luca Ceresoli via buildroot <buildroot@buildroot.org>, Neal Frager
+ <neal.frager@amd.com>
+Message-ID: <20230823000116.5f8ec3c5@windsurf>
+In-Reply-To: <20230407171648.6fca3a4d@booty>
+References: <20230327170604.22854-1-neal.frager@amd.com>
+ <20230407171648.6fca3a4d@booty>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692740474;
+ d=bootlin.com; s=gm1; t=1692741678;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=pxhusukcSwohFmWkCk5jHOq1zg4WSg+hEzQqOmDbTds=;
- b=aBtXpsXAtxTPeUe+Tt3QvTo+inzoUbmQNBypMSVPYsTgrAX+MYcg+oYk9s3zUNcjbtwsdC
- oZnJY1IsnVK2EWNAtpmBcEzFX9f+dMgXdHGfh5fWBUdHktePedO4YeSiqfRa8tHA2ilixF
- pOGsII8gYOGVWKVGp7XJqHI2OiBvqZBxmZfB4Pd7d9MfR4fV75NX4JxjIfymTtE+51Ft9t
- 1MeGG5P/BYoaHRZGbjFvhv0NXYeTcY8zt2YvLJ0SDAwZvTf9/+TmldbK1Yu14vTwx6CkZO
- FqBZEtWc/U8NEIVs3XUWJmkd/QQISI9kjwHkP4YMzOBAqIch9WHUbqvhR6QAcg==
+ bh=SYyvlTz4C3R3XLQTx37KvX+Uy92HJOeQRy6W1nMrfeQ=;
+ b=LYT2/VUj1kXIzNL9VuFHVRVSjswj0svxJ2lQilrRFuC5u9ys+Gf79qzbe1WnRntBbJuxeG
+ D7R+LOmbfXTRyxAKNXw/c1UAhzVMKoRm7C9nrZqTvIfPUsbSh6WzzHDMa8RRX/4ieJG+bT
+ OEjGsKygb/JJ1IGEHhsvZBI3qYm8g3xbTLzjhgI33tYBPnnNwocA2nFOel7mqni4PwOvEO
+ sEPVc6tiEVHLEXGZXOqm0Mrpa6vrN1UTSb1ZH1Le9i9K6k3LUoiuMekSISL1HONqEM0Rim
+ WvumEBvLuKc4iYOgXcY0mfiL0FkWX2Y65Kte4Y1v8p4vgo52m7r3THdq4Wh4fw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aBtXpsXA
-Subject: Re: [Buildroot] [PATCH 1/2] package/screen: security bump to
- version 4.9.1
+ header.s=gm1 header.b=LYT2/VUj
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/zynqmp-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +78,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: michal.simek@amd.com, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ ibai.erkiaga-elorza@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 22 Aug 2023 21:49:21 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+On Fri, 7 Apr 2023 17:16:48 +0200
+Luca Ceresoli via buildroot <buildroot@buildroot.org> wrote:
 
-> See release announce:
-> https://lists.gnu.org/archive/html/screen-users/2023-08/msg00000.html
+> These two patches look good, and I appreciate a lot your effort, however
+> I'm not sure it's a good idea to support both an external and a
+> generated toolchain. It makes things more complicated on the Buildroot
+> side and I'm not aware of any actual benefits.
 > 
-> Fixes:
-> CVE-2023-24626: https://www.cve.org/CVERecord?id=CVE-2023-24626
+> Moreover if we take these patches now we would to some extent encourage
+> users to use an external Microblaze toolchain, possibly reducing usage
+> of the generated one for initial users. And I guess we would stick to
+> the external toolchain as a default for the future because it's what
+> was there initially.
 > 
-> Note: Buildroot installs screen as setuid, so the described scenario
-> in CVE applies.
+> So I would prefer waiting until we have a working
+> Buildroot-generated toolchain and initially support only that. Support
+> for an external toolchain can be added easily later, in case the
+> generated one were not suitable for good reasons.
 > 
-> This commit also rebases all patches on this release. Patch were
-> regenerated with 'git format-patch -N', so patch file name changed in
-> this process. The file .checkpackageignore is also updated accordingly.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Do you have any updates on your work to generate a minimal Microblaze
+> toolchain within Buildroot? Should you be facing any issues, remember
+> the Buildroot community can be very helpful!
 
-You posted this as PATCH 1/2, but I don't see any PATCH 2/2. Is this
-just a mistake?
+I agree with Luca, but I would relax a bit the requirement and say I
+would be fine with a pre-built external toolchain to be packaged, like
+package/arm-gnu-toolchain/ does for a pre-built ARM32 bare-metal
+toolchain.
+
+I looked a bit for such a pre-built Microblaze toolchain, but all what
+Xilinx provides is hidden inside multi-GB archives with zillions of
+things, and these archives are themselves accessible with a proper
+login on the Xilinx site.
+
+So either Xilinx puts online a bare-metal toolchain that we can package
+like package/arm-gnu-toolchain/, or we look at adding support for
+building a bare-metal toolchain in Buildroot.
 
 Thomas
 -- 
