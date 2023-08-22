@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D8B9EC873A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:32:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8284EC873A
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3548183CB5;
-	Thu,  7 Sep 2023 15:32:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3548183CB5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A43B83CC9;
+	Thu,  7 Sep 2023 15:32:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A43B83CC9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ss90t_siiTcj; Thu,  7 Sep 2023 15:32:04 +0000 (UTC)
+	with ESMTP id sy4Swh7CaGZF; Thu,  7 Sep 2023 15:32:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47CE283280;
-	Thu,  7 Sep 2023 15:32:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47CE283280
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FE6683CC2;
+	Thu,  7 Sep 2023 15:32:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FE6683CC2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 43C351BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 217381BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 791C241D6B
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD4C341DA5
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 791C241D6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD4C341DA5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id m49GmqrruYnx for <buildroot@lists.busybox.net>;
+ with ESMTP id vSSo0RXUBY03 for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E93FB41E06
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E93FB41E06
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B49541E08
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B49541E08
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E367B869E0; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+ id 3999486A27; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 21:12:32 +0200
+Date: Tue, 22 Aug 2023 22:36:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: be5e4a170823c94ebe3930b1a8069521d7fa96e7
-X-Git-Newrev: f5573b8a04a58ffd8154fc61632bd28641fc14e8
+X-Git-Oldrev: 29d8ce9c4130a3e4fb3fdf8ce0bfd896979072c8
+X-Git-Newrev: d06ca392909d1c03e1e471dc7ae401b3ee73a5fc
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145131.E367B869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/andes_ae350_45: enable RISC-V
- atomic extension
+Message-Id: <20230907145132.3999486A27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kmscube: add optional gstreamer
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,30 +64,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5573b8a04a58ffd8154fc61632bd28641fc14e8
+commit: https://git.buildroot.net/buildroot/commit/?id=d06ca392909d1c03e1e471dc7ae401b3ee73a5fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Let's select the RVA option as Andes 45-series CPUs support IMAFDC
-extensions.
+kmscube has a gstreamer video texture input since:
+https://gitlab.freedesktop.org/mesa/kmscube/-/commit/961c85f6eb42e4445513044c9944c83a0d9cb324
 
-Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/andes_ae350_45_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/kmscube/Config.in  | 14 ++++++++++++++
+ package/kmscube/kmscube.mk |  7 +++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/configs/andes_ae350_45_defconfig b/configs/andes_ae350_45_defconfig
-index 21b2d01a9a..a60c4b25a0 100644
---- a/configs/andes_ae350_45_defconfig
-+++ b/configs/andes_ae350_45_defconfig
-@@ -1,6 +1,7 @@
- BR2_riscv=y
- BR2_riscv_custom=y
- BR2_RISCV_ISA_RVM=y
-+BR2_RISCV_ISA_RVA=y
- BR2_RISCV_ISA_RVF=y
- BR2_RISCV_ISA_RVD=y
- BR2_RISCV_ISA_RVC=y
+diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
+index 7379675609..f68f38b7a8 100644
+--- a/package/kmscube/Config.in
++++ b/package/kmscube/Config.in
+@@ -11,6 +11,20 @@ config BR2_PACKAGE_KMSCUBE
+ 
+ 	  https://cgit.freedesktop.org/mesa/kmscube/
+ 
++if BR2_PACKAGE_KMSCUBE
++
++config BR2_PACKAGE_KMSCUBE_GSTREAMER
++	bool "Enable gstreamer video support"
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	select BR2_PACKAGE_GSTREAMER1
++
++endif
++
+ comment "kmscube needs EGL, GBM and OpenGL ES, and a toolchain w/ thread support"
+ 	depends on \
+ 		!BR2_PACKAGE_HAS_LIBEGL || \
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+index a47df74f7b..eeb22061fb 100644
+--- a/package/kmscube/kmscube.mk
++++ b/package/kmscube/kmscube.mk
+@@ -10,6 +10,13 @@ KMSCUBE_LICENSE = MIT
+ KMSCUBE_LICENSE_FILES = COPYING
+ KMSCUBE_DEPENDENCIES = host-pkgconf libdrm libegl libgbm libgles
+ 
++ifeq ($(BR2_PACKAGE_KMSCUBE_GSTREAMER),y)
++KMSCUBE_DEPENDENCIES += gst1-plugins-base gstreamer1 libglib2
++KMSCUBE_CONF_OPTS += -Dgstreamer=enabled
++else
++KMSCUBE_CONF_OPTS += -Dgstreamer=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ KMSCUBE_DEPENDENCIES += libpng
+ # libpng is automatically detected in meson, there is no build
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
