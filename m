@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CD2AEE49AB
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 20:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9DB5EE49AB
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 20:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43E0A40959;
-	Tue, 22 Aug 2023 20:11:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43E0A40959
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4647E4167B;
+	Tue, 22 Aug 2023 20:20:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4647E4167B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AF62C47Z3IUI; Tue, 22 Aug 2023 20:11:52 +0000 (UTC)
+	with ESMTP id pJLgJWdOFwzu; Tue, 22 Aug 2023 20:20:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3098441548;
-	Tue, 22 Aug 2023 20:11:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3098441548
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2DD641BF33D
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 20:11:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 494F741622;
+	Tue, 22 Aug 2023 20:20:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 494F741622
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C455D1BF33D
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 20:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14EAE81A1C
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 20:11:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14EAE81A1C
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABAC9401D8
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 20:20:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABAC9401D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tcEPVuUQFEIU for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 20:11:48 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E2E08175D
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 20:11:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E2E08175D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DC638618E; Tue, 22 Aug 2023 20:11:48 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 22:10:36 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 290f3985ddea38887818bd982cdb153f5698cdb1
-X-Git-Newrev: c93788350aa04a19884638ffa3c24446572d8169
-X-Patchwork-Hint: ignore
-Message-Id: <20230822201148.1DC638618E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/swupdate: install
- headers at the standard location
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SE5WV3QSphaT for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 20:20:37 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 842A7400D2
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 20:20:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 842A7400D2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D9F72000D;
+ Tue, 22 Aug 2023 20:20:34 +0000 (UTC)
+Date: Tue, 22 Aug 2023 22:20:33 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230822222033.3ef8fd5d@windsurf>
+In-Reply-To: <20230809210338.1330998-1-giulio.benetti@benettiengineering.com>
+References: <20230809210338.1330998-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692735634;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TBxUZ7WomfsGq+SXOIj7BybCVMO8UKCr1Ca/mVZRamI=;
+ b=gxsi+8w2W3ZYPqdLA79hlKhzAjvukLoQacG0gcxaPmYeXs9ScqYwauMMVrASlY5KUGpiWW
+ /gZG00zA06CeCUbNoHfbdyDFXDbOBq9xWWkGp2TDwCCZoVpY+S7CVRiN/mx6yuXBgWFZJM
+ flhHVcKOOCA7xHR2rHt1C9pYK2aDNZfckv3D4F9TFyOI4sV6daCgln1yYoC0iSoVmIhdrc
+ x4SJ8Xvsve4VILkAJFIcR1kgYGaZKAStVqvvnLNN2k7u6lLkMNV/qY5KnTaurIleGIs68p
+ 9raeG8d9/ZXROQoX5y7NO8Hn6bZqI1o7w2hNGTP3HVsa3YbXn1DqTXz1NBxe+A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gxsi+8w2
+Subject: Re: [Buildroot] [PATCH] package/mmc-utils: fix build failure with
+ _FORTIFY_SOURCE=3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,78 +77,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c93788350aa04a19884638ffa3c24446572d8169
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed,  9 Aug 2023 23:03:38 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-In commit eb2f2886b2364e5b6a0867f55106bf83acb064e7 ("package/swupdate:
-add staging install"), the swupdate package was changed to also be
-installed in the staging directory, as it provides an API to external
-programs, through libraries and headers.
+> +# disable _FORTIFY_SOURCE=3 and set it to 2
+> +ifeq ($(BR2_FORTIFY_SOURCE_3),y)
+> +MMC_UTILS_CFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
+> +endif
 
-Back then the commit log said:
+This is a work-around, not a proper fix, and actually the following
+defconfig builds just fine today:
 
-    This patch installs headers and libs to STAGING_DIR, to prevent a
-    header name collision a subdirectory /usr/include/swupdate creates.
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_FORTIFY_SOURCE_3=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_MMC_UTILS=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-And indeed a custom INCLUDEDIR was specified. However, installing
-swupdate headers in /usr/include/swupdate/ doesn't work well, as
-progress_ipc.h (installed by swupdate) does a #include
-<swupdate_status.h>, which doesn't work as swupdate_status.h is also
-in /usr/include/swupdate/ instead of /usr/include/.
+So there is really no reason to globally override _FORTIFY_SOURCE=3 for
+mmc-utils, it builds fine at least in some situations. So it needs to
+be narrowed down a little bit further, up to the point where we can see
+if it's a glibc bug, or a gcc bug, possibly architecture specific.
 
-To address this Daniel Lang submitted a patch [0], which was proposed
-to upstream swupdate to fix this header inclusion. The patch was
-rejected by upstream saying that the swupdate header files should be
-installed in /usr/include.
-
-Currently, swupdate installs only 3 headers files:
-
-  /usr/include/network_ipc.h
-  /usr/include/swupdate_status.h
-  /usr/include/progress_ipc.h
-
-To the best of our knowledge, this doesn't conflict with any other
-header files installed by other packages. A good proof of that is that
-even Debian (which has many more packages than Buildroot) also
-installs swupdate headers directly in /usr/include.
-
-In addition, the original submitter of
-eb2f2886b2364e5b6a0867f55106bf83acb064e7 said "I'm not remember what
-was a problem. Probably network_ipc.h but Im not sure now. I think
-it's safe to install this headers to /usr/include w/o subdir if this
-collision was met only in my environment. PS: currently I don't see
-any collisions with this files."
-
-So, we switch to installing swupdate into their standard location.
-
-[0] https://patchwork.ozlabs.org/project/buildroot/patch/VI1P190MB0493D233ECC579510F8C0FC69FB29@VI1P190MB0493.EURP190.PROD.OUTLOOK.COM/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Daniel Lang <dalang@gmx.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/swupdate/swupdate.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 11a3946753..84905d2e0a 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -230,7 +230,7 @@ endef
- define SWUPDATE_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(SWUPDATE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
--		INCLUDEDIR=/usr/include/swupdate install
-+		install
- endef
- 
- define SWUPDATE_INSTALL_TARGET_CMDS
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
