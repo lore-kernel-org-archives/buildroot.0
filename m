@@ -4,69 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27A5FEE4993
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:34:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B09E2EE49AB
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBEA560A65;
-	Tue, 22 Aug 2023 19:34:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBEA560A65
+	by smtp3.osuosl.org (Postfix) with ESMTP id 496D060A82;
+	Tue, 22 Aug 2023 19:35:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 496D060A82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KjDeenij-MC3; Tue, 22 Aug 2023 19:34:48 +0000 (UTC)
+	with ESMTP id un9eeEEdBYOM; Tue, 22 Aug 2023 19:35:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15B3F607F1;
-	Tue, 22 Aug 2023 19:34:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15B3F607F1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23F391BF370
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:34:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C35060A5F;
+	Tue, 22 Aug 2023 19:35:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C35060A5F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 81FCC1BF370
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06189607F1
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:34:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06189607F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C705401D8
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C705401D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GRRDLlwwzB6p for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 19:34:43 +0000 (UTC)
-Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 46D3D605AF
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:34:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46D3D605AF
-Received: from [192.168.50.162] ([146.241.122.243])
- by Aruba Outgoing Smtp  with ESMTPSA
- id YX9DqBLvxaHc9YX9EqiWkO; Tue, 22 Aug 2023 21:34:40 +0200
-Message-ID: <d440e7a8-da14-2db2-a17d-a38f548bd562@benettiengineering.com>
-Date: Tue, 22 Aug 2023 21:34:39 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1uBZMI-czEAA for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 19:35:42 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 127E6400D2
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:35:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 127E6400D2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D2631BF205;
+ Tue, 22 Aug 2023 19:35:40 +0000 (UTC)
+Date: Tue, 22 Aug 2023 21:35:39 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230822213539.331878ec@windsurf>
+In-Reply-To: <20230822192315.8180-1-ju.o@free.fr>
+References: <20230822192315.8180-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230814145413.2099039-1-giulio.benetti@benettiengineering.com>
- <20230822202821.4b750d61@windsurf>
- <043c43d7-63a1-143c-aa75-a0f751b2ef6b@benettiengineering.com>
- <20230822212341.490c9910@windsurf>
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230822212341.490c9910@windsurf>
-X-CMAE-Envelope: MS4xfIAXbTubuYk/zHqniXuC6JPY251aum7nqzyyTcj1bYSMJ5Q0PEravxYuPpDN6yPlO8WBn88AsFm8EjmM1u6LPWfWcAfrIuAPvWYLNeU8dY4/ZoisYjZf
- 4ILNcu4n1j5IUxRULmN+vXalelvPTxgqwz0SIOziG7a9cLkYDMIb6sYZKTOVrXpoLVFBzM2t5oMt7SBh7WiKnaJK87E3k4Hg4zb0S6lvU/fQjDrtF28+K56x
- YgkBSaIMmBSjKqbS3uGPw4Erws6DBSuIHngGNBXjc4qBZC1lx8pgU1RDASTwghhl
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1692732880; bh=m2otATe1yCqqgUM6zKsM0WcmQJ94Sfgv8kKeXYUjVzo=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=LxSDx4sv5tg3Nt3dhie+5JA0b3KAYZHiLIouFnSk7cE6plm7wh/H7ElxG2zEBVozq
- LKnP/MikznhHuDwk478LbO7ON4QnvdKToh1wEv2phdD4qQLiTYtaPF9Cf9bCigh3QT
- A3rYdPGcZ/jTLcKuy6Zvy1OuYXpA6ia7XsQt1eW1zGNkyFCwutaYGjTFcK6gMEce5+
- SmS1pcPKEafIErM16tFh/OAreKOZOSTWviAPgKYwktfhuGLaz8qLx7w9z94gc2Hjcj
- 9MQvdH1JCjwLRFeRkgiZnQdzz/tSfNfzLXFS+4mJ7uBxiJv+My2Mel8RiwyOjzB5n3
- B5Fk89dAGZPGw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=LxSDx4sv
-Subject: Re: [Buildroot] [PATCH] package/libfuse3: bump to version 3.16.1
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692732940;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=owJ7mpTf5qgrB/FKIaoeraKIpQGh8lrlPS2NnF0MlR8=;
+ b=cMXFMEh44rJGX+WS2VKlO8vqSED3s2LtTfCQ8+QMzMLVX7gzNYoTzMrlyaVWDJt6yHwm/r
+ 9oZiS3h2AMSDZ0QIDGS9T4bcWFa3U5auqLU8yA4YIYGoVWmEhgQ7ve3RAkd4+803z9E24i
+ N1f/ohGbyJa0Uw2Xq/NdgUw1kjoa2TEpT1sJhSJC8vxcTedFIl5PLIv9iHyu98v3faoMAA
+ 5ur6xyROK5fHNT8gifSabAT2Po6eGgziNTW1lrpA6ur0ct8emKshwEbMhQlhjm9kxjKW3q
+ Oma0sTJXfjTR1bsLhU0pD75A437sXtsXN0/Y18NkJiEg2UQlC/bs6T7AjacYqw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cMXFMEh4
+Subject: Re: [Buildroot] [PATCH next 1/1] package/kexec: fix link error when
+ BR2_OPTIMIZE_0=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,59 +75,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/08/23 21:23, Thomas Petazzoni wrote:
-> On Tue, 22 Aug 2023 21:22:40 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Tue, 22 Aug 2023 21:23:14 +0200
+Julien Olivain <ju.o@free.fr> wrote:
+
+> When BR2_OPTIMIZE_0, -O0 is passed in compiler CFLAGS. This means no
+> code optimization will be performed.
 > 
->> I still have that tarball, and indeed they very different each other.
->> In the new version they dropped entirely the doc/html folder while
->> instead adding some .gitignore file, the .github folder for CI/CD and
->> a script called make_release_tarball.sh
->>
->> They don't mention on their Github repository[1] they've changed it, but
->> they did it.
+> kexec code uses a trick to detect unaligned accesses at link time
+> which needs at least dead-code-removal to work. See
+> put/get_unaligned() macros in kexec/kexec.h. This code was re-enabled
+> in upstream commit [1].
 > 
-> This is annoying. Could you let them know that it is a problem by
-> filling an issue in their Github repo?
+> This commit sets at least -O1 (which include the sufficient
+> dead-code-removal) when BR2_OPTIMIZE_0=y, to fix those issues.
+> 
+> Fixes:
+> - http://autobuild.buildroot.org/results/8f8/8f8532f1dfbd71e52c51c00118934af9fa45e7cb
+> - http://autobuild.buildroot.org/results/528/528fd7baf9b0ad5549d22ec8e0623c5fa1f2d117
+> - http://autobuild.buildroot.org/results/499/499115439680adfb4b40042468e5bbb65d91ce6c
+> - ...and many others
+> 
+> [1] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=0723defb5308ac7fce296f8b596bff4df6803f01
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+> Patch tested on branch next at commit bfa4a7c with commands:
 
-Done:
-https://github.com/libfuse/libfuse/issues/829
-I went very soft since when you open an Issue you get this template:
-```
-PLEASE READ BEFORE REPORTING AN ISSUE
+Thanks for the research, but why is this tagged for next? You're saying
+the issue was introduced in kexec-tools commit
+0723defb5308ac7fce296f8b596bff4df6803f01, and this commit was initially
+part of the 2.0.1 release of kexec-tools, which we have in Buildroot
+since February 2010.
 
-libfuse does not have any active, regular contributors or developers. 
-The current maintainer continues to apply pull requests and tries to 
-make regular releases, but unfortunately has no capacity to do any 
-development beyond addressing high-impact issues. When reporting bugs, 
-please understand that unless you are including a pull request or are 
-reporting a critical issue, you will probably not get a response.
+Based on that, I would have expected this patch to be relevant for our
+master branch, but you explicitly say it should be merged in next,
+which to me doesn't make sense. Could you clarify?
 
-To prevent the issue tracker from being flooded with issues that no-one 
-is intending to work on, and to give more visibility to critical issues 
-that users should be aware of and that most urgently need attention, I 
-will also close most bug reports once they've been inactive for a while.
+Thanks a lot!
 
-Please note that this isn't meant to imply that you haven't found a bug 
-- you most likely have and I'm grateful that you took the time to report 
-it. Unfortunately, libfuse is a purely volunteer driven project, and at 
-the moment there simply aren't any volunteers.
-```
-
-judging from this Issue:
-https://github.com/libfuse/libfuse/issues/816
-I don't think it will change that much.
-
-Best regards
+Thomas
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
