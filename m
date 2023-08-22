@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41199EE49A5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 21:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CB6EEE49B1
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 21:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C95174064A;
-	Tue, 22 Aug 2023 21:40:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C95174064A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13D5640A6B;
+	Tue, 22 Aug 2023 21:40:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13D5640A6B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J6_Tx9W0qbRE; Tue, 22 Aug 2023 21:40:11 +0000 (UTC)
+	with ESMTP id B91QIbQaYFab; Tue, 22 Aug 2023 21:40:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 22DEB4052A;
-	Tue, 22 Aug 2023 21:40:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22DEB4052A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC3611BF31A
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 21:40:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 677DE40A5F;
+	Tue, 22 Aug 2023 21:40:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 677DE40A5F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 34CD41BF31A
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 21:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 934554052A
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 21:40:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 934554052A
+ by smtp1.osuosl.org (Postfix) with ESMTP id F120A819ED
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 21:40:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F120A819ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8SF-tcjFgl41 for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 21:40:07 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7386E40003
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 21:40:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7386E40003
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DB9B861AC; Tue, 22 Aug 2023 21:40:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 23:39:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 49a37916a8e1d60cfa763057927387d6f8d23998
-X-Git-Newrev: 9c61470c4bc0c88dbaba49468ee8cc4c983d2604
-X-Patchwork-Hint: ignore
-Message-Id: <20230822214007.5DB9B861AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpg123: fix linking error due to
- undefined symbol
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 61kNe7MhrJTO for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 21:40:20 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 895EF8198D
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 21:40:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 895EF8198D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C7B73C0006;
+ Tue, 22 Aug 2023 21:40:17 +0000 (UTC)
+Date: Tue, 22 Aug 2023 23:40:16 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230822234016.5c4f8f5a@windsurf>
+In-Reply-To: <ZNHmuZ6+nRwp71r/@waldemar-brodkorb.de>
+References: <ZNHmuZ6+nRwp71r/@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692740418;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JAQeB7bDxMReDhUdODsexWqQc3L1jLTXgkRGM7lX66E=;
+ b=k/j2QTndWA8HTfyEcCJojENvsCGX5XF35fU3BbnwGcyWMUC6J2eTpUHUDOoM4ZPU74Z8pb
+ 2+83x7y/D7DAYjK61c8HHed0yoFyJDyS3wT9tBYHaW6Zo5okr9Oyh1R0zmS+bW4aGP2DNH
+ JHhnFpxfgMy2s7sd/xex6ptvg/ibjPkUJi2BVbdjrKXkSmzbH72doLcAAb0via6gF+T0uP
+ T4azmOEUbhRtj4vTv7tdRAKrg2+AMIRA/k6lPgRzMEilqOnuQ28toicALNVEExgAEQOpBw
+ c95ZnFECxmfXI1nTt1sk7cxn4yP9mzPOV7sdHmA6xCEr66ttxqqaqlWlRbYYdQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=k/j2QTnd
+Subject: Re: [Buildroot] [PATCH v2] package/mpg123: fix linking error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,62 +76,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c61470c4bc0c88dbaba49468ee8cc4c983d2604
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 8 Aug 2023 08:54:49 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-This was introduced since commit
-f8af24707b196eb64121d29a829fc31b5506409c, which bumped mpg123 from
-1.25.15 to 1.31.3.
+> This was introduced since commit f8af24707b196eb64121d29a829fc31b5506409c.
+> 
+> Patch was provided by upstream:
+> https://sourceforge.net/p/mpg123/bugs/353/
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/74e/74e1522cc9328c98186ca730eeb7ce0cb5fbbcb5
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v1 -> v2:
+>  - add a specific autobuild failure
+>  - use Fixes: for link to autobuilder
+>  - add a reference to a buildroot commit, when the problem was
+>    introduced
+> ---
+>  package/mpg123/0001-mpg123-buildfix.patch | 24 +++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 package/mpg123/0001-mpg123-buildfix.patch
 
-Patch was provided by upstream:
-https://sourceforge.net/p/mpg123/bugs/353/
+Applied to master, thanks.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/74e1522cc9328c98186ca730eeb7ce0cb5fbbcb5
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mpg123/0001-mpg123-buildfix.patch | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/package/mpg123/0001-mpg123-buildfix.patch b/package/mpg123/0001-mpg123-buildfix.patch
-new file mode 100644
-index 0000000000..cc731ea967
---- /dev/null
-+++ b/package/mpg123/0001-mpg123-buildfix.patch
-@@ -0,0 +1,24 @@
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://sourceforge.net/p/mpg123/bugs/353/
-+
-+diff -Nur mpg123-1.31.3.orig/src/libmpg123/getcpuflags.h mpg123-1.31.3/src/libmpg123/getcpuflags.h
-+--- mpg123-1.31.3.orig/src/libmpg123/getcpuflags.h	2023-03-15 09:02:58.000000000 +0100
-++++ mpg123-1.31.3/src/libmpg123/getcpuflags.h	2023-08-07 15:57:19.444106173 +0200
-+@@ -44,6 +44,8 @@
-+ 
-+ unsigned int getcpuflags(struct cpuflags* cf);
-+ 
-++#if ((defined OPT_X86) || (defined OPT_X86_64) || (defined OPT_NEON) || (defined OPT_NEON64)) && (defined OPT_MULTI)
-++
-+ #ifdef WANT_GETCPUFLAGS
-+ #include <string.h>
-+ // Wrapper needed for ignorant clang memory sanitizer that chokes
-+@@ -55,8 +57,6 @@
-+ }
-+ #endif
-+ 
-+-#if ((defined OPT_X86) || (defined OPT_X86_64) || (defined OPT_NEON) || (defined OPT_NEON64)) && (defined OPT_MULTI)
-+-
-+ // We really evaluate the CPU flags.
-+ #define OPT_CPU_FLAGS
-+ 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
