@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46C1BEE4993
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 18:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C98DEE49AB
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 18:26:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F090961203;
-	Tue, 22 Aug 2023 18:12:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F090961203
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F217611C9;
+	Tue, 22 Aug 2023 18:26:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F217611C9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WakwuoHVdYl0; Tue, 22 Aug 2023 18:12:46 +0000 (UTC)
+	with ESMTP id MXi9aoqCjypV; Tue, 22 Aug 2023 18:26:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 537B1611E5;
-	Tue, 22 Aug 2023 18:12:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 537B1611E5
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF3121BF35E
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:12:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58A0560B21;
+	Tue, 22 Aug 2023 18:26:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58A0560B21
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D3911BF2BD
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:26:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AA80611E5
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:12:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AA80611E5
+ by smtp4.osuosl.org (Postfix) with ESMTP id E975640622
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 18:26:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E975640622
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jb1xqx5TyKVm for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 18:12:42 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0710E611C9
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 18:12:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0710E611C9
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BB7C660003;
- Tue, 22 Aug 2023 18:12:38 +0000 (UTC)
-Date: Tue, 22 Aug 2023 20:12:37 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230822201237.024570fd@windsurf>
-In-Reply-To: <20230814102453.102735-1-james.hilliard1@gmail.com>
-References: <20230814102453.102735-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692727959;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qNdoxrDCNjswwBtUsJTd+05c7E5wgLfy2Q4qJ1AGiQ0=;
- b=FuQ6kxZfwC8/lZ1BgxKYFaWrmx6DutQPFrYw+SA+CbTSh1aGY6NPsl8q4uC0TrP+BiZ5Kp
- YIAq6hAG8UCZyba18w57e/UoDXnQsbXh8GS5vNnLjPYGkG3rOTPC4Tzq1hvvu4SV145uNf
- q3WafWwyhYB8M4n+yww4+E51RIZHlTOgsEya6Xe75CzVslUn7O3+o2ubN/qgbU+CSonJRf
- ZbZ49sUCivhsJBZY3FCI7uThauvWF90vKtGVlCtA5ZxcLF63PTBNgsgHS3zFKYuW3ncWaf
- 7QvlTRG2WXEzepBTYcOCBb9CrJcdyDUUBvc8A5V3RQaU//48Jbc5WpuW7AVw/w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FuQ6kxZf
-Subject: Re: [Buildroot] [PATCH 1/1] package/{rust,
- rust-bin}: bump to version 1.71.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W-coICXRkWjO for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 18:26:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA05240901
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 18:26:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA05240901
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A2F4F8611C; Tue, 22 Aug 2023 18:26:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Aug 2023 20:12:49 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 97c06c5b593a05716a3bd8941d2e208fa592cb38
+X-Git-Newrev: 07c48f5cbafc28f185b12d7a08a7a51a1e9e1731
+X-Patchwork-Hint: ignore
+Message-Id: <20230822182635.A2F4F8611C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uuu: bump to version
+ 1.5.125
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,32 +58,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=07c48f5cbafc28f185b12d7a08a7a51a1e9e1731
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 14 Aug 2023 04:24:53 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Release notes:
+https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.125
 
-> Link to Rust 1.71.1 announcement: https://blog.rust-lang.org/2023/08/03/Rust-1.71.1.html
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+The changes to README.md are not related to license modifications.
 
-Did you run the Rust test cases after this version bump?
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uuu/uuu.hash | 4 ++--
+ package/uuu/uuu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-./support/testing/run-tests -o /output tests.package.test_rust.TestRust tests.package.test_rust.TestRustBin
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index f42e92a379..574cb48a3c 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-sha256  6c99b82c55202f43583dc41198225dea7d5b050e33e13946751911e473aed4a5  uuu_source-uuu_1.5.109.tar.gz
++sha256  085d7f6308ee6b77dfb131fac40704575525adf6da45cdc446c00a0b29e4c21a  uuu_source-uuu_1.5.125.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+-sha256  f68fb8c8002c797a14e63f91963ac247034fdfd44275e4f4a3226111cd0423db  README.md
++sha256  52a715c7443f269ddeba360abd70694879e120213926553a000e9be9373ea731  README.md
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index 14a8a5ef02..5f3271066f 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UUU_VERSION = 1.5.109
++UUU_VERSION = 1.5.125
+ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
