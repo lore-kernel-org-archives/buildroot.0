@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A7F2EE4996
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 10:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6DA4EE49A3
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 10:05:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1211181F59;
-	Tue, 22 Aug 2023 10:05:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1211181F59
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D1DD81F9B;
+	Tue, 22 Aug 2023 10:05:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D1DD81F9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bALt1F902ZPM; Tue, 22 Aug 2023 10:05:03 +0000 (UTC)
+	with ESMTP id D8ghoX3tcgiY; Tue, 22 Aug 2023 10:05:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D954B81EC6;
-	Tue, 22 Aug 2023 10:05:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D954B81EC6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2FEDB1BF354
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78F9E81F6F;
+	Tue, 22 Aug 2023 10:05:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78F9E81F6F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 451FF1BF951
  for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 10:04:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92A87402E8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CE438176C
  for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 10:04:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92A87402E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CE438176C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FcnHqDJtEbDe for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KixIRqxZA5p9 for <buildroot@lists.busybox.net>;
  Tue, 22 Aug 2023 10:04:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F59140A4E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68DE88176F
  for <buildroot@buildroot.org>; Tue, 22 Aug 2023 10:04:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F59140A4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68DE88176F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D3DC860ED; Tue, 22 Aug 2023 10:04:34 +0000 (UTC)
+ id 5774D860F3; Tue, 22 Aug 2023 10:04:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 12:01:08 +0200
+Date: Tue, 22 Aug 2023 12:01:38 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2389c76a95725b91ba538b56fb7da70877c7d3ad
-X-Git-Newrev: 6134872d2878f46f8f2800c81baf917281bc79b0
+X-Git-Oldrev: 6134872d2878f46f8f2800c81baf917281bc79b0
+X-Git-Newrev: 52ce606c05ee3ac869f8087292bc3dbb0d25b79b
 X-Patchwork-Hint: ignore
-Message-Id: <20230822100434.4D3DC860ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/ti-k3-image-gen: new
- package
+Message-Id: <20230822100434.5774D860F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/uboot: add support for
+ building the TI K3 DM into U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,234 +59,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4189058862006115094=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4189058862006115094==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=6134872d2878f46f8f2800c81baf917281bc79b0
+commit: https://git.buildroot.net/buildroot/commit/?id=52ce606c05ee3ac869f8087292bc3dbb0d25b79b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is the image generator that builds the initial boot binary,
-tiboot3.bin, for the R5 core on TI's K3 family of devices.
+Certain TI K3 devices such as AM62x and AM62Ax require a Device Manager
+(DM) firmnware to be made available to the U-Boot build, which will get
+packaged into the "tispl.bin" image tree blob during A53 SPL build.
+Without that DM firmware U-Boot will not be functional. To support this,
+add a config option called BR2_TARGET_UBOOT_NEEDS_TI_K3_DM to enable
+this feature, and another option BR2_TARGET_UBOOT_TI_K3_DM_SOC to allow
+setting the name of the SOC which needs to match the corresponding
+folder name in the ti-linux-firmware Git repository.
 
-This requires the R5 SPL output from the ti-k3-r5-loader package as
-well as some boot firmware from ti-k3-boot-firmware.
-
-Signed-off-by: Xuanhao Shi <x-shi@ti.com>
-Signed-off-by: Anand Gadiyar <gadiyar@ti.com>
 Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Acked-by: Andrew Davis <afd@ti.com>
-Tested-by: Bryan Brattlof <bb@ti.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Reviewed-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                |  2 +
- boot/Config.in                            |  1 +
- boot/ti-k3-image-gen/Config.in            | 77 +++++++++++++++++++++++++++++++
- boot/ti-k3-image-gen/ti-k3-image-gen.hash |  3 ++
- boot/ti-k3-image-gen/ti-k3-image-gen.mk   | 54 ++++++++++++++++++++++
- 5 files changed, 137 insertions(+)
+ boot/uboot/Config.in | 19 +++++++++++++++++++
+ boot/uboot/uboot.mk  |  6 ++++++
+ 2 files changed, 25 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3b60189c77..2a10bb44cd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -133,6 +133,7 @@ F:	package/python-docopt/
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8b726eaa57..21f19db890 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -240,6 +240,25 @@ config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE
+ 	  U-Boot, and that the TEE variable pointing to OPTEE's
+ 	  tee.elf, is passed during the Buildroot build.
  
- N:	Anand Gadiyar <gadiyar@ti.com>
- F:	boot/ti-k3-boot-firmware/
-+F:	boot/ti-k3-image-gen/
- F:	boot/ti-k3-r5-loader/
- 
- N:	André Zwing <nerv@dawncrow.de>
-@@ -3116,6 +3117,7 @@ F:	package/fwup/
- 
- N:	Xuanhao Shi <X15000177@gmail.com>
- F:	boot/ti-k3-boot-firmware/
-+F:	boot/ti-k3-image-gen/
- F:	boot/ti-k3-r5-loader/
- 
- N:	Yair Ben Avraham <yairba@protonmail.com>
-diff --git a/boot/Config.in b/boot/Config.in
-index 87e1b7c00e..e5fdf7ad43 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -20,6 +20,7 @@ source "boot/s500-bootloader/Config.in"
- source "boot/shim/Config.in"
- source "boot/syslinux/Config.in"
- source "boot/ti-k3-boot-firmware/Config.in"
-+source "boot/ti-k3-image-gen/Config.in"
- source "boot/ti-k3-r5-loader/Config.in"
- source "boot/uboot/Config.in"
- source "boot/vexpress-firmware/Config.in"
-diff --git a/boot/ti-k3-image-gen/Config.in b/boot/ti-k3-image-gen/Config.in
-new file mode 100644
-index 0000000000..d76cef82e9
---- /dev/null
-+++ b/boot/ti-k3-image-gen/Config.in
-@@ -0,0 +1,77 @@
-+config BR2_TARGET_TI_K3_IMAGE_GEN
-+	bool "ti-k3-image-gen"
-+	depends on BR2_TARGET_TI_K3_R5_LOADER
-+	select BR2_TARGET_TI_K3_BOOT_FIRMWARE
-+	# We need FIT support in uboot-tools, which is why we select a
-+	# host package
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
++config BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
++	bool "U-Boot needs TI K3 Device Manager (DM)"
++	# We use the SoC selection defined for the ti-k3-image-gen
++	# package
++	depends on BR2_TARGET_TI_K3_IMAGE_GEN
++	depends on BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX || BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
 +	help
-+	  Use TI's k3-image-gen to build a separate bare metal boot
-+	  binary from a separate SPL that is running on the R5 core.
++	  Some TI K3 devices need the Device Manager (DM) firmware to
++	  be available for the U-Boot build.
 +
-+	  https://git.ti.com/cgit/k3-image-gen/k3-image-gen/
++if BR2_TARGET_UBOOT_NEEDS_TI_K3_DM
 +
-+if BR2_TARGET_TI_K3_IMAGE_GEN
-+choice
-+	prompt "SoC family"
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
-+	bool "am62ax"
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
-+	bool "am62x"
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
-+	bool "am64x"
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
-+	bool "am65x"
-+
-+endchoice
-+
-+choice
-+	prompt "Security type"
-+	help
-+	  The target SoC security type option for image gen.  Valid
-+	  options are "gp" for General Purpose devices, "hs-fs" for
-+	  High Security - Field Securable devices, or "hs" for High
-+	  Security - Security Enforcing devices.  Note for all High
-+	  Security device variants the TI_SECURE_DEV_PKG environmental
-+	  variable must be defined at build time pointing to a valid
-+	  core-secdev-k3 folder location, otherwise the build will
-+	  fail, see
-+	  https://git.ti.com/cgit/security-development-tools/core-secdev-k3
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP
-+	bool "gp"
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS
-+	bool "hs-fs"
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
-+	bool "hs"
-+
-+endchoice
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SOC
++config BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME
 +	string
-+	default "am62ax" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
-+	default "am62x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
-+	default "am64x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
-+	default "am65x"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE
-+	string
-+	default "ti-fs"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
-+	default "ti-fs"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
-+	default "ti-sci" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM64X
-+	default "ti-sci" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM65X
-+
-+config BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE
-+	string
-+	default "gp"    if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP
-+	default "hs-fs" if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS_FS
-+	default "hs"    if BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_HS
++	default "am62axx" if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62AX
++	default "am62xx"  if BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X
 +
 +endif
-diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.hash b/boot/ti-k3-image-gen/ti-k3-image-gen.hash
-new file mode 100644
-index 0000000000..c968c5648f
---- /dev/null
-+++ b/boot/ti-k3-image-gen/ti-k3-image-gen.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  f89ea4b1f5c992455b1a682fde48359221b53f3294135df4bf20feea6aea90e4  k3-image-gen-08.06.00.007.tar.gz
-+sha256  f012e8d000d711d0539e5b4c812fc1d3a59c10fc1e3d6ea155556f5b78286845  LICENSE
-diff --git a/boot/ti-k3-image-gen/ti-k3-image-gen.mk b/boot/ti-k3-image-gen/ti-k3-image-gen.mk
-new file mode 100644
-index 0000000000..64be9a18f2
---- /dev/null
-+++ b/boot/ti-k3-image-gen/ti-k3-image-gen.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# ti-k3-image-gen
-+#
-+################################################################################
 +
-+TI_K3_IMAGE_GEN_VERSION = 08.06.00.007
-+TI_K3_IMAGE_GEN_SITE = https://git.ti.com/cgit/k3-image-gen/k3-image-gen/snapshot
-+TI_K3_IMAGE_GEN_SOURCE = k3-image-gen-$(TI_K3_IMAGE_GEN_VERSION).tar.gz
-+TI_K3_IMAGE_GEN_LICENSE = BSD-3-Clause
-+TI_K3_IMAGE_GEN_LICENSE_FILES = LICENSE
-+TI_K3_IMAGE_GEN_INSTALL_IMAGES = YES
+ config BR2_TARGET_UBOOT_NEEDS_OPENSBI
+ 	bool "U-Boot needs OpenSBI"
+ 	depends on BR2_TARGET_OPENSBI
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 9f81c0b842..dda606a880 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -186,6 +186,12 @@ UBOOT_DEPENDENCIES += optee-os
+ UBOOT_MAKE_OPTS += TEE=$(BINARIES_DIR)/tee.elf
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_TI_K3_DM),y)
++UBOOT_TI_K3_DM_SOCNAME = $(call qstrip,$(BR2_TARGET_UBOOT_TI_K3_DM_SOCNAME))
++UBOOT_DEPENDENCIES += ti-k3-boot-firmware
++UBOOT_MAKE_OPTS += DM=$(BINARIES_DIR)/ti-dm/$(UBOOT_TI_K3_DM_SOCNAME)/ipc_echo_testb_mcu1_0_release_strip.xer5f
++endif
 +
-+# - ti-k3-image-gen is used to build tiboot3.bin, using the
-+#   r5-u-boot-spl.bin file from the ti-k3-r5-loader package. Hence the
-+#   dependency on ti-k3-r5-loader.
-+# - the ti-k3-image-gen makefiles seem to need some feature from Make
-+#   v4.0, similar to u-boot.
-+TI_K3_IMAGE_GEN_DEPENDENCIES = \
-+	host-arm-gnu-toolchain \
-+	host-python3 \
-+	host-openssl \
-+	host-uboot-tools \
-+	ti-k3-r5-loader \
-+	ti-k3-boot-firmware \
-+	$(BR2_MAKE_HOST_DEPENDENCY)
-+
-+TI_K3_IMAGE_GEN_FW_TYPE = $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_FW_TYPE))
-+TI_K3_IMAGE_GEN_SOC = $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SOC))
-+TI_K3_IMAGE_GEN_SECTYPE = $(call qstrip,$(BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE))
-+
-+TI_K3_IMAGE_GEN_SYSFW = $(TI_K3_IMAGE_GEN_FW_TYPE)-firmware-$(TI_K3_IMAGE_GEN_SOC)-$(TI_K3_IMAGE_GEN_SECTYPE).bin
-+
-+define TI_K3_IMAGE_GEN_CONFIGURE_CMDS
-+	cp $(BINARIES_DIR)/ti-sysfw/$(TI_K3_IMAGE_GEN_SYSFW) $(@D)
-+endef
-+
-+define TI_K3_IMAGE_GEN_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) \
-+	$(BR2_MAKE) -C $(@D) \
-+		SOC=$(TI_K3_IMAGE_GEN_SOC) \
-+		SOC_TYPE=$(TI_K3_IMAGE_GEN_SECTYPE) \
-+		CONFIG=evm \
-+		CROSS_COMPILE=$(HOST_DIR)/bin/arm-none-eabi- \
-+		SBL=$(BINARIES_DIR)/r5-u-boot-spl.bin \
-+		O=$(@D)/tmp \
-+		BIN_DIR=$(@D)
-+endef
-+
-+define TI_K3_IMAGE_GEN_INSTALL_IMAGES_CMDS
-+	cp $(@D)/tiboot3.bin $(BINARIES_DIR)
-+endef
-+
-+$(eval $(generic-package))
-
---===============4189058862006115094==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI),y)
+ UBOOT_DEPENDENCIES += opensbi
+ UBOOT_MAKE_OPTS += OPENSBI=$(BINARIES_DIR)/fw_dynamic.bin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4189058862006115094==--
