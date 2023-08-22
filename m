@@ -4,62 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE41AEE4993
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3040FEE49B7
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:23:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CD15605BE;
-	Tue, 22 Aug 2023 19:23:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CD15605BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD9876125C;
+	Tue, 22 Aug 2023 19:23:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD9876125C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SMAYFzCVtWHr; Tue, 22 Aug 2023 19:23:43 +0000 (UTC)
+	with ESMTP id k1vUe4fagRTH; Tue, 22 Aug 2023 19:23:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D52D56121B;
-	Tue, 22 Aug 2023 19:23:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D52D56121B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 733661BF370
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:23:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26E0C6124D;
+	Tue, 22 Aug 2023 19:23:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26E0C6124D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E48CE1BF370
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59C5C401D8
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:23:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59C5C401D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id B0AD66121B
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:23:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0AD66121B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mrKlWGZqwRHT for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 19:23:28 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0199D400D2
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:23:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0199D400D2
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id F0B3513F85F;
- Tue, 22 Aug 2023 21:23:23 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 21:23:14 +0200
-Message-ID: <20230822192315.8180-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rGDpGxzcXIrZ for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 19:23:46 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B62E46120D
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:23:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B62E46120D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E3681BF204;
+ Tue, 22 Aug 2023 19:23:42 +0000 (UTC)
+Date: Tue, 22 Aug 2023 21:23:41 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230822212341.490c9910@windsurf>
+In-Reply-To: <043c43d7-63a1-143c-aa75-a0f751b2ef6b@benettiengineering.com>
+References: <20230814145413.2099039-1-giulio.benetti@benettiengineering.com>
+ <20230822202821.4b750d61@windsurf>
+ <043c43d7-63a1-143c-aa75-a0f751b2ef6b@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692732205;
- bh=bxHH6vGc5D63zgKt3qqayjYiqleSQ4R6DgjCOsy7Z4A=;
- h=From:To:Cc:Subject:Date:From;
- b=L9F5ctJt3cn1y4npI0DCVoYBeHAh293o77Adij+/nROQ6H+06PXGUdxDjRNZUlHFo
- dxES3WDxPXGhm1AlODy6rmI/E4WqwAUemHOQLtv7SjiJl2QUeapuPHeWv34g+szsW+
- TivZAszKtp3vVgztCo19EZPPoYQG0OUEfRtQN+rvQfSdwm7QPlNOuGtCaNbSfs/F76
- +a+Yya1gDw/kltRhrsSKXyb//7WO71pKdjbHgg+gfXaIVb+fLvC4UQ43sWnDbxkVKW
- 7zAVRQLkKJIwSPigd+ZS5x44K0LkiE8fWHtQ/oFoU/uBItgtMWULNJ+f1V+p8Am8Lw
- J9WI9nENeadCw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=L9F5ctJt
-Subject: [Buildroot] [PATCH next 1/1] package/kexec: fix link error when
- BR2_OPTIMIZE_0=y
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692732222;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=EVUKsGPdOFVbFMpunhDWzImLB/IqRFSfRoAfUQzyg+s=;
+ b=bFb+RM83rJn6cgAL+H39+rEYVq+fKn5jjk2voL6H7Y17In2fewdt3yTxrmGq3racrosHPP
+ owozfU0QMaInlv0N+vRx7ZnjbfPLPuHgvE6rzzbrpXu2kMOp7+JZdXIYjtHV3BfrkIOzlV
+ 5cWMlNnygmhKD88rS/8SQWq6odCwvC2Cvd6wvVbgbRBtxoLZWKIFjuXvFsQIWgEJ0fLYqG
+ xTy83bmCh3MWihpeqtO2bTGWnhZ29AwiSnSvbAIq4olzPnPzv9VbCanNnmOfcWPAuTPe97
+ +f3kHC5r5tQhUUHAY6wMn9a2r+82PZI7v6AStpr4RS0GSAptl7+r8o3kB8hPWg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=bFb+RM83
+Subject: Re: [Buildroot] [PATCH] package/libfuse3: bump to version 3.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,70 +76,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When BR2_OPTIMIZE_0, -O0 is passed in compiler CFLAGS. This means no
-code optimization will be performed.
+On Tue, 22 Aug 2023 21:22:40 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-kexec code uses a trick to detect unaligned accesses at link time
-which needs at least dead-code-removal to work. See
-put/get_unaligned() macros in kexec/kexec.h. This code was re-enabled
-in upstream commit [1].
+> I still have that tarball, and indeed they very different each other.
+> In the new version they dropped entirely the doc/html folder while
+> instead adding some .gitignore file, the .github folder for CI/CD and
+> a script called make_release_tarball.sh
+> 
+> They don't mention on their Github repository[1] they've changed it, but
+> they did it.
 
-This commit sets at least -O1 (which include the sufficient
-dead-code-removal) when BR2_OPTIMIZE_0=y, to fix those issues.
+This is annoying. Could you let them know that it is a problem by
+filling an issue in their Github repo?
 
-Fixes:
-- http://autobuild.buildroot.org/results/8f8/8f8532f1dfbd71e52c51c00118934af9fa45e7cb
-- http://autobuild.buildroot.org/results/528/528fd7baf9b0ad5549d22ec8e0623c5fa1f2d117
-- http://autobuild.buildroot.org/results/499/499115439680adfb4b40042468e5bbb65d91ce6c
-- ...and many others
+Thanks!
 
-[1] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=0723defb5308ac7fce296f8b596bff4df6803f01
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch next at commit bfa4a7c with commands:
-
-    make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_kexec
-    ...
-    OK
----
- package/kexec/kexec.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 562b09012b..6c7a6778ae 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -16,6 +16,14 @@ KEXEC_SELINUX_MODULES = kdump
- # Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
- KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
- 
-+# kexec requires at least -O1 optimization level. Its code uses a
-+# trick to detect unaligned accesses at link time which needs at least
-+# dead-code-removal to work. See put/get_unaligned() macros in
-+# kexec/kexec.h
-+ifeq ($(BR2_OPTIMIZE_0),y)
-+KEXEC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
-+endif
-+
- ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
- KEXEC_CONF_OPTS += --with-zlib
- KEXEC_DEPENDENCIES += zlib
+Thomas
 -- 
-2.41.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
