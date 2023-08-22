@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3040FEE49B7
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:23:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73E4BEE4993
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD9876125C;
-	Tue, 22 Aug 2023 19:23:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD9876125C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B0E1605AF;
+	Tue, 22 Aug 2023 19:28:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B0E1605AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k1vUe4fagRTH; Tue, 22 Aug 2023 19:23:56 +0000 (UTC)
+	with ESMTP id hCpG49srgJZ9; Tue, 22 Aug 2023 19:28:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26E0C6124D;
-	Tue, 22 Aug 2023 19:23:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26E0C6124D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E48CE1BF370
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:23:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58F3D605E3;
+	Tue, 22 Aug 2023 19:28:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58F3D605E3
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 63D3C1BF370
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:28:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0AD66121B
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0AD66121B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49B2A40627
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:28:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49B2A40627
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rGDpGxzcXIrZ for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 19:23:46 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B62E46120D
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:23:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B62E46120D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E3681BF204;
- Tue, 22 Aug 2023 19:23:42 +0000 (UTC)
-Date: Tue, 22 Aug 2023 21:23:41 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230822212341.490c9910@windsurf>
-In-Reply-To: <043c43d7-63a1-143c-aa75-a0f751b2ef6b@benettiengineering.com>
-References: <20230814145413.2099039-1-giulio.benetti@benettiengineering.com>
- <20230822202821.4b750d61@windsurf>
- <043c43d7-63a1-143c-aa75-a0f751b2ef6b@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692732222;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=EVUKsGPdOFVbFMpunhDWzImLB/IqRFSfRoAfUQzyg+s=;
- b=bFb+RM83rJn6cgAL+H39+rEYVq+fKn5jjk2voL6H7Y17In2fewdt3yTxrmGq3racrosHPP
- owozfU0QMaInlv0N+vRx7ZnjbfPLPuHgvE6rzzbrpXu2kMOp7+JZdXIYjtHV3BfrkIOzlV
- 5cWMlNnygmhKD88rS/8SQWq6odCwvC2Cvd6wvVbgbRBtxoLZWKIFjuXvFsQIWgEJ0fLYqG
- xTy83bmCh3MWihpeqtO2bTGWnhZ29AwiSnSvbAIq4olzPnPzv9VbCanNnmOfcWPAuTPe97
- +f3kHC5r5tQhUUHAY6wMn9a2r+82PZI7v6AStpr4RS0GSAptl7+r8o3kB8hPWg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bFb+RM83
-Subject: Re: [Buildroot] [PATCH] package/libfuse3: bump to version 3.16.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aY4zylLd60Ju for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 19:28:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFC7F405FB
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:28:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFC7F405FB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DB9ED8617C; Tue, 22 Aug 2023 19:28:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Aug 2023 21:22:45 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c66f26a12db322d9d40991098ba6d243bea47884
+X-Git-Newrev: 290f3985ddea38887818bd982cdb153f5698cdb1
+X-Patchwork-Hint: ignore
+Message-Id: <20230822192819.DB9ED8617C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libiio: bump to
+ version v0.25
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,33 +58,145 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 22 Aug 2023 21:22:40 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=290f3985ddea38887818bd982cdb153f5698cdb1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> I still have that tarball, and indeed they very different each other.
-> In the new version they dropped entirely the doc/html folder while
-> instead adding some .gitignore file, the .github folder for CI/CD and
-> a script called make_release_tarball.sh
-> 
-> They don't mention on their Github repository[1] they've changed it, but
-> they did it.
+The changelog is available here:
+https://github.com/analogdevicesinc/libiio/releases/tag/v0.25
 
-This is annoying. Could you let them know that it is a problem by
-filling an issue in their Github repo?
+Remove the 0001 patch as it is included in the v0.25 version.
 
-Thanks!
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  1 -
+ .../0001-iiod-serial.c-fix-sparc-build.patch       | 76 ----------------------
+ package/libiio/libiio.hash                         |  2 +-
+ package/libiio/libiio.mk                           |  2 +-
+ 4 files changed, 2 insertions(+), 79 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 356f181e76..5303a8f3d8 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -700,7 +700,6 @@ package/libhid/0002-no-newline-in-ldflags.patch Upstream
+ package/libhid/0003-uclinux.patch Upstream
+ package/libical/0001-no-tests.patch Upstream
+ package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch Upstream
+-package/libiio/0001-iiod-serial.c-fix-sparc-build.patch Upstream
+ package/libiio/S99iiod Shellcheck Variables
+ package/libiqrf/0001-cmake-handle-static-library-and-find-required-thread.patch Upstream
+ package/libiqrf/0002-use-only-c-language.patch Upstream
+diff --git a/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch b/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
+deleted file mode 100644
+index 1c2d606e63..0000000000
+--- a/package/libiio/0001-iiod-serial.c-fix-sparc-build.patch
++++ /dev/null
+@@ -1,76 +0,0 @@
+-From 40ffc5d9b8f6e47866292bf1365ac3a5d22cf123 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 25 Sep 2022 11:19:18 +0200
+-Subject: [PATCH] iiod/serial.c: fix sparc build
+-
+-Fix the following sparc build failure raised since version 0.24 and
+-https://github.com/analogdevicesinc/libiio/commit/2d3cae005f364742b3a9e7234d15b2fd2cbac664:
+-
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c: In function 'serial_configure':
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B2500000' undeclared (first use in this function); did you mean 'B1500000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+-  127 |         CASE_BPS(2500000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: note: each undeclared identifier is reported only once for each function it appears in
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:127:9: note: in expansion of macro 'CASE_BPS'
+-  127 |         CASE_BPS(2500000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3000000' undeclared (first use in this function); did you mean 'B1000000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:128:9: note: in expansion of macro 'CASE_BPS'
+-  128 |         CASE_BPS(3000000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B3500000' undeclared (first use in this function); did you mean 'B1500000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:129:9: note: in expansion of macro 'CASE_BPS'
+-  129 |         CASE_BPS(3500000, &tty_attrs);
+-      |         ^~~~~~~~
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:99:58: error: 'B4000000' undeclared (first use in this function); did you mean 'B1000000'?
+-   99 | #define CASE_BPS(bps, attr) case bps: (attr)->c_cflag |= B##bps; break
+-      |                                                          ^
+-/home/buildroot/autobuild/instance-0/output-1/build/libiio-0.24/iiod/serial.c:130:9: note: in expansion of macro 'CASE_BPS'
+-  130 |         CASE_BPS(4000000, &tty_attrs);
+-      |         ^~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/8a9902f6eddaab812ebce3506ed6de686f647e02
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[yann.morin.1998@free.fr: actual backport now that upstream accepted it]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+----
+- iiod/serial.c | 8 ++++++++
+- 1 file changed, 8 insertions(+)
+-
+-diff --git a/iiod/serial.c b/iiod/serial.c
+-index f829361d..b140d051 100644
+---- a/iiod/serial.c
+-+++ b/iiod/serial.c
+-@@ -124,10 +124,18 @@ static int serial_configure(int fd, unsigned int uart_bps,
+- 	CASE_BPS(1152000, &tty_attrs);
+- 	CASE_BPS(1500000, &tty_attrs);
+- 	CASE_BPS(2000000, &tty_attrs);
+-+#ifdef B2500000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(2500000, &tty_attrs);
+-+#endif
+-+#ifdef B3000000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(3000000, &tty_attrs);
+-+#endif
+-+#ifdef B3500000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(3500000, &tty_attrs);
+-+#endif
+-+#ifdef B4000000 /* Not available on all architectures, i.e. sparc */
+- 	CASE_BPS(4000000, &tty_attrs);
+-+#endif
+- 	default:
+- 		IIO_ERROR("Invalid baud rate\n");
+- 		return -EINVAL;
+--- 
+-2.25.1
+-
+diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
+index f497756eac..0f024af78c 100644
+--- a/package/libiio/libiio.hash
++++ b/package/libiio/libiio.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a2b5d848531ea64fd9f95327dfd5a588bd227d9577281ec375e822702c6a52d5  libiio-0.24.tar.gz
++sha256  21972599a3c143ab1f98002ad2b3f28f4aff927fde5f677478311cd4e517730c  libiio-0.25.tar.gz
+ sha256  102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  COPYING.txt
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 9e2cf454b5..733a0c90ed 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIIO_VERSION = 0.24
++LIBIIO_VERSION = 0.25
+ LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
+ LIBIIO_INSTALL_STAGING = YES
+ LIBIIO_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
