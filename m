@@ -4,66 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 309FBEE49A5
-	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:48:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 193EDEE49A5
+	for <buildroot@archiver.kernel.org>; Tue, 22 Aug 2023 19:48:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4027160A95;
-	Tue, 22 Aug 2023 19:48:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4027160A95
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADB1E611AA;
+	Tue, 22 Aug 2023 19:48:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADB1E611AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pQn4PxcvY_v2; Tue, 22 Aug 2023 19:48:03 +0000 (UTC)
+	with ESMTP id 1rag900f2gDl; Tue, 22 Aug 2023 19:48:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 827D260A70;
-	Tue, 22 Aug 2023 19:48:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 827D260A70
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8DE911BF35E
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2D0460BF7;
+	Tue, 22 Aug 2023 19:48:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2D0460BF7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 53A7E1BF35E
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 591CB40920
- for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 591CB40920
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A20F81350
+ for <buildroot@lists.busybox.net>; Tue, 22 Aug 2023 19:48:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A20F81350
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Qg3MWUs-y1ZC for <buildroot@lists.busybox.net>;
- Tue, 22 Aug 2023 19:47:59 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BA1724035C
- for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:47:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA1724035C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDE3820003;
- Tue, 22 Aug 2023 19:47:56 +0000 (UTC)
-Date: Tue, 22 Aug 2023 21:47:55 +0200
-To: Gregor Haas <gregorhaas1997@gmail.com>
-Message-ID: <20230822214755.1af65bb4@windsurf>
-In-Reply-To: <20230814215233.745573-1-gregorhaas1997@gmail.com>
-References: <20230814215233.745573-1-gregorhaas1997@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yHXCz16KQ3DN for <buildroot@lists.busybox.net>;
+ Tue, 22 Aug 2023 19:48:07 +0000 (UTC)
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8AAC68134D
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 19:48:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AAC68134D
+Received: by mail-pf1-x42e.google.com with SMTP id
+ d2e1a72fcca58-68a3cae6d94so2673073b3a.0
+ for <buildroot@buildroot.org>; Tue, 22 Aug 2023 12:48:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1692733686; x=1693338486;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=R1ACUUlx+FKydQ71T9VEOtN15HgUPnb58+kVIWcwcc8=;
+ b=bvL42/hs4pNftBr5IE9ltTDbB7vqTFErk4m0r4czKRj4QJaQxp6mu7Px/thJWRpw+m
+ FEy/iUWANxPTgEF6IKlCEO/6cj/sXMUbmlOrlxmTyekr8fVdxWH4YftJ8WrcOHNJQuGX
+ AW0DaF96/x42YldJljLuYVQSdAQg7EkBtlfPE4S9CQwIoyh7Sw+Suy9YDQ6OROWnaI8T
+ Uz1c/GwgMp8hq7msNfhMSVxTqRz3bbADl9tG0dkVzDiD5SrAgjl1c4nXhXSow19ejwPF
+ 3VMzoJu+nl4rZkgw1+cNONNvHqsWsgqyPF+gxGSIGJ1sQT+JYuBvROuPGMKe2RwXcgvJ
+ 6jmg==
+X-Gm-Message-State: AOJu0YxGxwO42+DfY0VNVJiWiB4X1JP9X8w/6djNSJz0R8rvYeUmyBYS
+ RdcDRphJ7tu/xT0YojVUD8VtFiwQSwwJ1UOuPFY=
+X-Google-Smtp-Source: AGHT+IFhJLE733kcJWOs8h1BFoeKh7ptWpZ584KUN8pvMAUFX5fHGkZSaU3gSlFrN5ubjw+efzMMWg==
+X-Received: by 2002:a05:6a20:548f:b0:143:4382:f836 with SMTP id
+ i15-20020a056a20548f00b001434382f836mr12965788pzk.14.1692733686357; 
+ Tue, 22 Aug 2023 12:48:06 -0700 (PDT)
+Received: from localhost.localdomain ([172.56.201.202])
+ by smtp.gmail.com with ESMTPSA id
+ k12-20020aa792cc000000b0067aea93af40sm8128584pfa.2.2023.08.22.12.48.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Aug 2023 12:48:05 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Tue, 22 Aug 2023 13:47:51 -0600
+Message-ID: <20230822194757.1004572-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692733677;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=q6vm3DIbBRXkwt+qHYeyYb3Olt0KT9PafelaQjYfewU=;
- b=dkKlQo78ulbx++7nYQ2uhOYCV6nP62+JHYQY/gajdt35dlWEre/Rmd+soOVMOR8GKjEgy9
- X1EW2AQVCAHTZuprpSrijtjZ27hEbuvAgelEy/Wd9MWwSpgaUqA1JrsByX53fIAtypSHsf
- Wfvr3MQZsv2Iw1p7QX4lRYtNhPStQ1ZiSjizGuaJcMZo2GFvTpqDUVQxSoN2OxSOyNafWQ
- U1LgjJrt4NOHgQFAPkOZX5aWwqTmLWHiD+dwRhGvtM63AEGGFeRQITCDy/2lbLyMsjwH0n
- ZNl01/gTvvsQSrh60MiJflTb9XN7s2AwEqXEPUFIC9Y1BaLdE/vwBYm4oXRytw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dkKlQo78
-Subject: Re: [Buildroot] [PATCH 1/1] package/bmap-tools: add dependency on
- python-six
+ d=amarulasolutions.com; s=google; t=1692733686; x=1693338486;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=R1ACUUlx+FKydQ71T9VEOtN15HgUPnb58+kVIWcwcc8=;
+ b=WFuvVWNZWTNb1a+ETTxFyj7USJ79jxb+jc4ifq3xsKEi6KC+cZkp2vgtThXy1fUKya
+ m38CRvyr7WyJ0Zcy5T+hYb9cUHsCnUQM0GRmUr95KAnI7DCF9UWUCYrNkEB1NdpQboGN
+ DZv6ZlT3HN21IgSThkuM5xikaa/61NXasUJe8=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=WFuvVWNZ
+Subject: [Buildroot] [PATCH v5 1/7] package/python-httplib2: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,92 +91,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Gregor,
+This is needed for the host-depot-tools package.
 
-On Mon, 14 Aug 2023 14:52:33 -0700
-Gregor Haas <gregorhaas1997@gmail.com> wrote:
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/python-httplib2/python-httplib2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> The core bmaptool program provided by this package depends on python-six to run.
-> It is normally not an issue to use this program to e.g. finalize target images
-> since all host dependencies are copied to the same place. However, it seems that
-> bmaptool is configured (at package install time) to use the current host python
-> interpreter -- and in the case of per-package builds, this is the interpreter in
-> the per-package directory. Finally, without the explicit dependency on
-> python-six, this per-package interpreter will not have the necessary packages.
-> Therefore, add the required dependencies on python-six to ensure that the
-> bmaptool program can work correctly
-> 
-> Signed-off-by: Gregor Haas <gregorhaas1997@gmail.com>
-> ---
->  package/bmap-tools/bmap-tools.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/bmap-tools/bmap-tools.mk b/package/bmap-tools/bmap-tools.mk
-> index 32399ca151..350286777c 100644
-> --- a/package/bmap-tools/bmap-tools.mk
-> +++ b/package/bmap-tools/bmap-tools.mk
-> @@ -9,6 +9,8 @@ BMAP_TOOLS_SITE = $(call github,intel,bmap-tools,v$(BMAP_TOOLS_VERSION))
->  BMAP_TOOLS_LICENSE = GPL-2.0
->  BMAP_TOOLS_LICENSE_FILES = COPYING
->  BMAP_TOOLS_SETUP_TYPE = setuptools
-> +BMAP_TOOLS_DEPENDENCIES += python-six
-
-I think this one should not be needed. The "select" in the Config.in
-should be sufficient.
-
-> +HOST_BMAP_TOOLS_DEPENDENCIES += host-python-six
-
-For the host package, I can indeed reproduce the problem. But I think
-the issue really is that in the final $(HOST_DIR), we keep the shebang
-of the Python interpreter pointing to the per-package directory.
-Indeed, my reasoning is that otherwise we will have many similar
-problems with other packages, as this is breaking a fundamental
-assumption in Buildroot.
-
-I'm thinking about something like this:
-
-diff --git a/Makefile b/Makefile
-index f0ff9a1480..00ce64ab15 100644
---- a/Makefile
-+++ b/Makefile
-@@ -713,6 +713,15 @@ STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.t
- host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
-        @$(call MESSAGE,"Finalizing host directory")
-        $(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR))
-+ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-+       $(Q)grep --binary-files=without-match -lrZ '$(PER_PACKAGE_DIR)/[^/]\+/host' $(HOST_DIR) \
-+       |while read -d '' f; do \
-+               file -b --mime-type "$${f}" | grep -q '^text/' || continue; \
-+               printf '%s\0' "$${f}"; \
-+       done \
-+       |xargs -0 --no-run-if-empty \
-+               $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/host:$(HOST_DIR):g'
-+endif
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+index 1093ecab39..2f4eb98356 100644
+--- a/package/python-httplib2/python-httplib2.mk
++++ b/package/python-httplib2/python-httplib2.mk
+@@ -14,3 +14,4 @@ PYTHON_HTTPLIB2_CPE_ID_VENDOR = httplib2_project
+ PYTHON_HTTPLIB2_CPE_ID_PRODUCT = httplib2
  
- .PHONY: staging-finalize
- staging-finalize: $(STAGING_DIR_SYMLINK)
-
-Yann, what do you think? (Logic is taken from package/pkg-generic.mk,
-which does the conversion from per-package directories of dependencies
-to the per-package directory of the package being built, the logic here
-is similar, but we switch from the per-package directories to the
-global host directory)
-
-Best regards,
-
-Thomas
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
