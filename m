@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 305BCEC8733
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F637EC8733
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 14:57:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D40EE41DD5;
-	Thu,  7 Sep 2023 14:57:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D40EE41DD5
+	by smtp4.osuosl.org (Postfix) with ESMTP id D79D541EA5;
+	Thu,  7 Sep 2023 14:57:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D79D541EA5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rrdfhFcRaS2M; Thu,  7 Sep 2023 14:57:16 +0000 (UTC)
+	with ESMTP id tc31-krHGC0W; Thu,  7 Sep 2023 14:57:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B622141E57;
-	Thu,  7 Sep 2023 14:57:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B622141E57
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 11CEB1BF990
+	by smtp4.osuosl.org (Postfix) with ESMTP id B00BC41E98;
+	Thu,  7 Sep 2023 14:57:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B00BC41E98
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F359D1BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48C1661232
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48C1661232
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB25781FFD
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB25781FFD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UU3VGFm4pnNB for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6jshu2t60fav for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 91DB761257
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91DB761257
+ by smtp1.osuosl.org (Postfix) with ESMTP id A272481FF0
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A272481FF0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9008386A22; Thu,  7 Sep 2023 14:51:26 +0000 (UTC)
+ id A06E786A27; Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 6 Aug 2023 18:06:25 +0200
+Date: Tue, 22 Aug 2023 12:04:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 464c37e350d85a97d1fb7c68ebf20eb0d4aa6956
-X-Git-Newrev: 5c9e66d87517bd2fadd33993741bb03b9b79a50d
+X-Git-Oldrev: 6b2329bb806b6eacc87a88d5a930d8c4d88b4984
+X-Git-Newrev: 4b8fddb060fbc2b8d5e92b2065ec44de2f1ff3c2
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145126.9008386A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-iowait: switch from
- distutils to setuptools
+Message-Id: <20230907145131.A06E786A27@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/ti_am62x_sk: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,36 +58,194 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5366814607862289129=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c9e66d87517bd2fadd33993741bb03b9b79a50d
+--===============5366814607862289129==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4b8fddb060fbc2b8d5e92b2065ec44de2f1ff3c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-distutils will be dropped with python 3.12.
+Adds support for TI's SK-AM62 board by introducing the
+am62x_sk_defconfig file and related support files.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+More information about the board can be found at:
+https://www.ti.com/tool/SK-AM62
+
+Signed-off-by: Xuanhao Shi <x-shi@ti.com>
+Signed-off-by: Andreas Dannenberg <dannenberg@ti.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-iowait/python-iowait.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS                     |  4 ++++
+ board/ti/am62x-sk/genimage.cfg | 27 ++++++++++++++++++++++++++
+ board/ti/am62x-sk/readme.txt   | 34 +++++++++++++++++++++++++++++++++
+ configs/ti_am62x_sk_defconfig  | 43 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 108 insertions(+)
 
-diff --git a/package/python-iowait/python-iowait.mk b/package/python-iowait/python-iowait.mk
-index e327053e8e..028001d7f3 100644
---- a/package/python-iowait/python-iowait.mk
-+++ b/package/python-iowait/python-iowait.mk
-@@ -7,7 +7,7 @@
- PYTHON_IOWAIT_VERSION = 0.2
- PYTHON_IOWAIT_SOURCE = iowait-$(PYTHON_IOWAIT_VERSION).tar.gz
- PYTHON_IOWAIT_SITE = https://pypi.python.org/packages/65/30/e953673fe9619938e9c74408401cf865f37716da89f61f6e5d9328c0f71e
--PYTHON_IOWAIT_SETUP_TYPE = distutils
-+PYTHON_IOWAIT_SETUP_TYPE = setuptools
- PYTHON_IOWAIT_LICENSE = LGPL-3.0+
- PYTHON_IOWAIT_LICENSE_FILES = COPYING.LESSER
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 679aeb89d5..c643469f17 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -132,10 +132,12 @@ F:	package/libxmlrpc/
+ F:	package/python-docopt/
  
+ N:	Anand Gadiyar <gadiyar@ti.com>
++F:	board/ti/am62x-sk/
+ F:	board/ti/am64x-sk/
+ F:	boot/ti-k3-boot-firmware/
+ F:	boot/ti-k3-image-gen/
+ F:	boot/ti-k3-r5-loader/
++F:	configs/ti_am62x_sk_defconfig
+ F:	configs/ti_am64x_sk_defconfig
+ 
+ N:	André Zwing <nerv@dawncrow.de>
+@@ -3118,10 +3120,12 @@ N:	Wojciech Niziński <niziak@spox.org>
+ F:	package/fwup/
+ 
+ N:	Xuanhao Shi <X15000177@gmail.com>
++F:	board/ti/am62x-sk/
+ F:	board/ti/am64x-sk/
+ F:	boot/ti-k3-boot-firmware/
+ F:	boot/ti-k3-image-gen/
+ F:	boot/ti-k3-r5-loader/
++F:	configs/ti_am62x_sk_defconfig
+ F:	configs/ti_am64x_sk_defconfig
+ 
+ N:	Yair Ben Avraham <yairba@protonmail.com>
+diff --git a/board/ti/am62x-sk/genimage.cfg b/board/ti/am62x-sk/genimage.cfg
+new file mode 100644
+index 0000000000..26304fe98f
+--- /dev/null
++++ b/board/ti/am62x-sk/genimage.cfg
+@@ -0,0 +1,27 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"tiboot3.bin",
++			"tispl.bin",
++			"u-boot.img",
++		}
++	}
++
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/ti/am62x-sk/readme.txt b/board/ti/am62x-sk/readme.txt
+new file mode 100644
+index 0000000000..f6251ea04a
+--- /dev/null
++++ b/board/ti/am62x-sk/readme.txt
+@@ -0,0 +1,34 @@
++Texas Instuments SK-AM62 Test and Development Board
++
++Description
++===========
++
++This configuration will build a complete image for the TI SK-AM62
++board: https://www.ti.com/tool/SK-AM62.
++
++How to Build
++============
++
++Select the default configuration for the target:
++
++$ make am62x_sk_defconfig
++
++Optional: modify the configuration:
++
++$ make menuconfig
++
++Build:
++
++$ make
++
++To copy the resultimg output image file to an SD card use dd:
++
++$ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
++
++How to Run
++==========
++
++Insert the SD card into the SK-AM62 board, and power it up through the
++USB Type-C connector. The system should come up. You can use a
++micro-USB cable to connect to the connector labeled UART to
++communicate with the board.
+diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
+new file mode 100644
+index 0000000000..b98a68ff15
+--- /dev/null
++++ b/configs/ti_am62x_sk_defconfig
+@@ -0,0 +1,43 @@
++BR2_aarch64=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
++BR2_TARGET_OPTEE_OS=y
++BR2_TARGET_OPTEE_OS_PLATFORM="k3"
++BR2_TARGET_TI_K3_IMAGE_GEN=y
++BR2_TARGET_TI_K3_IMAGE_GEN_SOC_AM62X=y
++BR2_TARGET_TI_K3_IMAGE_GEN_SECTYPE_GP=y
++BR2_TARGET_TI_K3_R5_LOADER=y
++BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.10"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am62x_evm_a53"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_TI_K3_DM=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="tispl.bin"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="TEE=$(BINARIES_DIR)/tee-pager_v2.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+
+--===============5366814607862289129==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5366814607862289129==--
