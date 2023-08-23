@@ -4,82 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14314EE4993
-	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 15:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBF5DC27C40
+	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 17:29:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92BD640C53;
-	Wed, 23 Aug 2023 15:38:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92BD640C53
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C4ED40C94;
+	Wed, 23 Aug 2023 17:29:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C4ED40C94
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Pt19BnzZcIqR; Wed, 23 Aug 2023 15:38:29 +0000 (UTC)
+	with ESMTP id 3C7aTdlTMvYU; Wed, 23 Aug 2023 17:29:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98F6540C18;
-	Wed, 23 Aug 2023 15:38:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98F6540C18
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4D0DA1BF263
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 15:38:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 567AE403E7;
+	Wed, 23 Aug 2023 17:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 567AE403E7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EAE01BF44A
+ for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 17:29:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26F1F813EA
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 15:38:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26F1F813EA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 25A61403E7
+ for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 17:29:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25A61403E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h5Y9842O7mzs for <buildroot@lists.busybox.net>;
- Wed, 23 Aug 2023 15:38:26 +0000 (UTC)
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com
- [IPv6:2607:f8b0:4864:20::a2d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2190813D1
- for <buildroot@buildroot.org>; Wed, 23 Aug 2023 15:38:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2190813D1
-Received: by mail-vk1-xa2d.google.com with SMTP id
- 71dfb90a1353d-48d05fdb8bfso1501108e0c.3
- for <buildroot@buildroot.org>; Wed, 23 Aug 2023 08:38:25 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HIGgA6p76aPR for <buildroot@lists.busybox.net>;
+ Wed, 23 Aug 2023 17:29:26 +0000 (UTC)
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com
+ [IPv6:2607:f8b0:4864:20::c35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4D8D84017A
+ for <buildroot@buildroot.org>; Wed, 23 Aug 2023 17:29:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D8D84017A
+Received: by mail-oo1-xc35.google.com with SMTP id
+ 006d021491bc7-571110eb31bso518365eaf.2
+ for <buildroot@buildroot.org>; Wed, 23 Aug 2023 10:29:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1692805105; x=1693409905;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=yjGWX4KgmvWT/4RTjiY9HMiVATo2ta4CBmtEKtWegkE=;
- b=HwNrcA4X9oFspHLl984lwnWZhfY+TMtl3PSB/QrQ3BcHtPCqbatIAq17kp34KG9By6
- AsTDeaZNJCx+Uo4XRQnvjL9sGL03acsXU7WoO5yAOQT9zn3eVD5dycxCDzmKqxU17zVy
- mhCm+jRPMLCruIXJ59Jw1xo/7tvco8K2sDxmrUvL/yc4fY6/HnCVhwSoUWinnsd9CcU/
- MnD72RIM3JRjJJnfPf7V/zckXe8avRzdnDnNFLc27Z6xSeojaY498SScntRqELIC/7Uj
- O/xyw3xfZreoKWNx4UzEJemkErUeuAI/pixMskMYhOKYIJdGaB2HobXZNbpgPgLORoYE
- BM/A==
-X-Gm-Message-State: AOJu0YxLZzpK2R/aQVwc2GjBrPSdLOcB1jR8LsmNbsjnwUV8wgxG6+/V
- vTuLHoUE/t4/ugHusIwdtY38+8SI/E/DT5IGH6M=
-X-Google-Smtp-Source: AGHT+IHH7NEMMiZMOOF6BO/8IUrNpDtMDsnIb5X6jLEgtW5DLuc9TAvRVIwQKlrRz+4oe63SZpsvB5YvgPZyFUM8kG8=
-X-Received: by 2002:a1f:7f0b:0:b0:48d:11c7:2c5a with SMTP id
- o11-20020a1f7f0b000000b0048d11c72c5amr8451981vki.1.1692805104695; Wed, 23 Aug
- 2023 08:38:24 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1692811765; x=1693416565;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=9omOLLmzLr3WrNAfmGJfCeWIh6MkHXFOyIYprFufrjk=;
+ b=kS8Ye8uXvLofH+CuCYNOyB9aGGwx6f588yL5O9uolPh4tC9gtLFQwzweoemSLeATDx
+ ULev66DQPJRvDVg3bIbEg0aolW7uCT8tF85ogw2e2GrN8bIPDpNuUwVV3IZeQx1dfmTd
+ DWK3jzUkisC/jgK4Z0A/FMm2RZDCsITTxA7Znd8GiHpKoScWbeKL9YdI+OtW4UXAs4kB
+ GuzeVqWX+mChdvN7CwaeLy9LIR/9+K9nfrpPjtmm987qXYw82tHjE6An7Sb8nm6oP9hq
+ 05RzuS2S6SF5kW6t9CVsrBcfECEDNpRd4mg/+LpvrHrcBvoZotsmpHYpABYS98q99gAO
+ 9Czg==
+X-Gm-Message-State: AOJu0YxZkDlbGJ8s+gQM1p9nTN4wevw3wLQTkPiSkyx3cvpPUCWIomBB
+ AJlVz5rsaG/GJPJoBsIA5zx5eYn08x8jtfBLy7eFMHwqnTc=
+X-Google-Smtp-Source: AGHT+IFDBzALZE46yOai8+qFJTlTHY/UJepVrXYwgVU4JtxcvaxkkmatQFT7gEYHauj/4B3P2AVJnKmVjjL7m+adY5A=
+X-Received: by 2002:a4a:d1cd:0:b0:571:2ad1:35be with SMTP id
+ a13-20020a4ad1cd000000b005712ad135bemr1165077oos.3.1692811765020; Wed, 23 Aug
+ 2023 10:29:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230821223337.9402-1-kilian.zinnecker@mail.de>
- <20230821223337.9402-3-kilian.zinnecker@mail.de>
-In-Reply-To: <20230821223337.9402-3-kilian.zinnecker@mail.de>
-From: Robert Nelson <robertcnelson@gmail.com>
-Date: Wed, 23 Aug 2023 10:37:58 -0500
-Message-ID: <CAOCHtYiTr1rKdoxBDZ1Y6xVcTXJFtkXuGOGdA7hLF55LuJrdOg@mail.gmail.com>
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+From: Floyd Brown <flobro30101@gmail.com>
+Date: Wed, 23 Aug 2023 13:27:37 -0400
+Message-ID: <CAKiD1a_1aCd5-67rG_Q1p18B3vynRbi0isa851QSCfYFGixYQg@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1692805105; x=1693409905;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=yjGWX4KgmvWT/4RTjiY9HMiVATo2ta4CBmtEKtWegkE=;
- b=OeuQdeVi6UycFVCS2wdgXtoSd/sXXkTX6QVNHAEnpps00aNSls/HElgsV1WqtX0jaS
- RNwYRS5y+S0jrUw/AfmqlzWfbs8YRYIe9cvdI2gfMxLh7k5CVclHm7obOl/58VBf0dWD
- 9UfmAiJk2lSzdK/8QCHh0ac821nivHFCa5lS1X1KNnpJUv7fuYTlyoJ7zuHSaGbIMZsW
- O7O8EplN8Sp/pzBEERkgtjDwDtJ2bA4uWrpJmpnGR7kN2hFtJkgnYr58t0zL6vm8lhIg
- a01a5/xhNughrljR4nAgEXGQoWKkpuBMpqx+6yYtv2ENuh8JTZ17xi0Chr/hqxaEAJg3
- rVsg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20221208; t=1692811765; x=1693416565;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=9omOLLmzLr3WrNAfmGJfCeWIh6MkHXFOyIYprFufrjk=;
+ b=gT+6qhg2+BG98LszY1Wi869CLMVI3Qa3azz+V/pVxif7NsGCu2+pbE4UdXJ+3jWSAz
+ Lh+S07ju3LTSDfEox9czfd1j7q1qh2KTrVlkBq5JtL4yG7y7qAu9j5QhEIOImm5osXcs
+ UfOq5aT4IhiS4NQSay5/OvRHYT0eU3t8IYkwtOH7Wr4HS1TKkYovADG32OZlhr1UqUrg
+ cEOLkudNPo4SDOKoAlSLBPpuARVDyigB2XrObFIgD7oYvCYOxtoLxnvteR8hFcsbkhk9
+ Qwd9+G0vhPfFhYBNgbblJF8LvJfiET8pE6n424NuKJ3xOjqmMJVptQb7yronBa5HWt0z
+ c7xw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=OeuQdeVi
-Subject: Re: [Buildroot] [PATCH v1 2/2] configs/beaglev_ahead: new defconfig
+ header.a=rsa-sha256 header.s=20221208 header.b=gT+6qhg2
+Subject: [Buildroot] buildroot building external kernel modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,128 +86,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8836389258204796891=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBBdWcgMjEsIDIwMjMgYXQgNTozM+KAr1BNIEtpbGlhbiBaaW5uZWNrZXIKPGtpbGlh
-bi56aW5uZWNrZXJAbWFpbC5kZT4gd3JvdGU6Cj4KPiBUaGlzIHBhdGNoIGFkZHMgYm9hcmQgc3Vw
-cG9ydCBmb3IgdGhlIEJlYWdsZVYtQWhlYWQuIEl0IHVzZXMgYQo+IGN1c3RvbSBrZXJuZWwgZm9y
-IHRoZSBib2FyZCdzIFNvQy4gQXMgdGhlIFNvQyBoYXMgYW4gb3V0ZGF0ZWQgYW5kCj4gY3VycmVu
-dGx5IG5vdCBzdXBwb3J0ZWQgdmVyc2lvbiBvZiB0aGUgUmlzY1YgdmVjdG9yIGV4dGVuc2lvbiwg
-dGhlCj4gdmVjdG9yIGV4dGVuc2lvbiBpcyBkaXNhYmxlZC4KPgo+IFNpZ25lZC1vZmYtYnk6IEtp
-bGlhbiBaaW5uZWNrZXIgPGtpbGlhbi56aW5uZWNrZXJAbWFpbC5kZT4KPiAtLS0KPiAgREVWRUxP
-UEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKwo+ICBib2FyZC9i
-ZWFnbGV2LWFoZWFkL2V4dGxpbnV4LmNvbmYgICAgICAgICAgICAgfCAgNiArKwo+ICBib2FyZC9i
-ZWFnbGV2LWFoZWFkL2dlbmltYWdlLmNmZyAgICAgICAgICAgICAgfCA2MyArKysrKysrKysrKysr
-KysrKwo+ICBib2FyZC9iZWFnbGV2LWFoZWFkL2xpbnV4LmZyYWdtZW50ICAgICAgICAgICAgfCAg
-MiArCj4gIC4uLi8wMDAxLU92ZXJ3cml0ZS1ib290Y21kLWJ5LWZvcmNlLnBhdGNoICAgICB8IDMw
-ICsrKysrKysrCj4gIGJvYXJkL2JlYWdsZXYtYWhlYWQvcG9zdC1pbWFnZS5zaCAgICAgICAgICAg
-ICB8IDEwICsrKwo+ICBib2FyZC9iZWFnbGV2LWFoZWFkL3JlYWRtZS50eHQgICAgICAgICAgICAg
-ICAgfCA2OSArKysrKysrKysrKysrKysrKysrCj4gIGJvYXJkL2JlYWdsZXYtYWhlYWQvdWJvb3Qu
-ZnJhZ21lbnQgICAgICAgICAgICB8ICA1ICsrCj4gIGNvbmZpZ3MvYmVhZ2xldl9haGVhZF9kZWZj
-b25maWcgICAgICAgICAgICAgICB8IDQ0ICsrKysrKysrKysrKwo+ICA5IGZpbGVzIGNoYW5nZWQs
-IDIzMSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWFnbGV2LWFo
-ZWFkL2V4dGxpbnV4LmNvbmYKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2JlYWdsZXYtYWhl
-YWQvZ2VuaW1hZ2UuY2ZnCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWFnbGV2LWFoZWFk
-L2xpbnV4LmZyYWdtZW50Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWFnbGV2LWFoZWFk
-L3BhdGNoZXMvdWJvb3QvMDAwMS1PdmVyd3JpdGUtYm9vdGNtZC1ieS1mb3JjZS5wYXRjaAo+ICBj
-cmVhdGUgbW9kZSAxMDA3NTUgYm9hcmQvYmVhZ2xldi1haGVhZC9wb3N0LWltYWdlLnNoCj4gIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWFnbGV2LWFoZWFkL3JlYWRtZS50eHQKPiAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IGJvYXJkL2JlYWdsZXYtYWhlYWQvdWJvb3QuZnJhZ21lbnQKPiAgY3JlYXRl
-IG1vZGUgMTAwNjQ0IGNvbmZpZ3MvYmVhZ2xldl9haGVhZF9kZWZjb25maWcKPgo+IGRpZmYgLS1n
-aXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IDVlY2MyZDNhZGYuLjhmODc0YmIx
-MGMgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsrKyBiL0RFVkVMT1BFUlMKPiBAQCAtMTgy
-Nyw3ICsxODI3LDkgQEAgTjogICAgICAgIEtpZXJhbiBCaW5naGFtIDxraWVyYW4uYmluZ2hhbUBp
-ZGVhc29uYm9hcmQuY29tPgo+ICBGOiAgICAgcGFja2FnZS9saWJjYW1lcmEvCj4KPiAgTjogICAg
-IEtpbGlhbiBaaW5uZWNrZXIgPGtpbGlhbi56aW5uZWNrZXJAbWFpbC5kZT4KPiArRjogICAgIGJv
-YXJkL2JlYWdsZXYtYWhlYWQvCj4gIEY6ICAgICBib2FyZC9yYWR4YS9yb2NrNWIvCj4gK0Y6ICAg
-ICBjb25maWdzL2JlYWdsZXZfYWhlYWRfZGVmY29uZmlnCj4gIEY6ICAgICBjb25maWdzL3JvY2s1
-Yl9kZWZjb25maWcKPiAgRjogICAgIHBhY2thZ2Uvcm9ja2NoaXAtcmtiaW4vCj4gIEY6ICAgICBw
-YWNrYWdlL3h1YW50aWUtYmlucy8KPiBkaWZmIC0tZ2l0IGEvYm9hcmQvYmVhZ2xldi1haGVhZC9l
-eHRsaW51eC5jb25mIGIvYm9hcmQvYmVhZ2xldi1haGVhZC9leHRsaW51eC5jb25mCj4gbmV3IGZp
-bGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi5mNWUwNWM3ZjZhCj4gLS0tIC9kZXYv
-bnVsbAo+ICsrKyBiL2JvYXJkL2JlYWdsZXYtYWhlYWQvZXh0bGludXguY29uZgo+IEBAIC0wLDAg
-KzEsNiBAQAo+ICtsYWJlbCBMaW51eCBlTU1DCj4gKyAga2VybmVsIC9JbWFnZQo+ICsgIGFwcGVu
-ZCByb290PS9kZXYvbW1jYmxrMHAzIHJvIHJvb3Rmc3R5cGU9ZXh0NCByb290d2FpdAo+ICtjb25z
-b2xlPXR0eVMwLDExNTIwMCBlYXJseWNvbiBjbGtfaWdub3JlX3VudXNlZCBuZXQuaWZuYW1lcz0w
-Cj4gKyAgZmR0ZGlyIC8KPiArICAjZmR0b3ZlcmxheXMgL292ZXJsYXlzLzxmaWxlPi5kdGJvCj4g
-ZGlmZiAtLWdpdCBhL2JvYXJkL2JlYWdsZXYtYWhlYWQvZ2VuaW1hZ2UuY2ZnIGIvYm9hcmQvYmVh
-Z2xldi1haGVhZC9nZW5pbWFnZS5jZmcKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAw
-MDAwMDAwMDAuLjllM2UxNWI3ZTQKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvYmVhZ2xl
-di1haGVhZC9nZW5pbWFnZS5jZmcKPiBAQCAtMCwwICsxLDYzIEBACj4gKyMgU0QgY2FyZCBpbWFn
-ZSBmb3IgQmVhZ2xlVi1BaGVhZAo+ICsKPiAraW1hZ2UgYm9vdC52ZmF0IHsKPiArICAgICAgIHZm
-YXQgewo+ICsgICAgICAgICAgICAgICBmaWxlcyA9IHsKPiArICAgICAgICAgICAgICAgICAgICAg
-ICAiZndfZHluYW1pYy5iaW4iLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICJJbWFnZSIsCj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgImxpZ2h0X2Fvbl9mcGdhLmJpbiIsCj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgImxpZ2h0LWJlYWdsZS5kdGIiLAo+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICJsaWdodF9jOTA2X2F1ZGlvLmJpbiIsCj4gKyAgICAgICAgICAgICAgIH0KPiArCj4gKyAg
-ICAgICAgICAgICAgIGZpbGUgb3ZlcmxheXMvQkJPUkdfTE9BRC0wMEEyLmR0Ym8gewo+ICsgICAg
-ICAgICAgICAgICAgICAgICAgIGltYWdlID0gIm92ZXJsYXlzL0JCT1JHX0xPQUQtMDBBMi5kdGJv
-Igo+ICsgICAgICAgICAgICAgICB9Cj4gKwo+ICsgICAgICAgICAgICAgICBmaWxlIG92ZXJsYXlz
-L0JCT1JHX1JFTEFZLTAwQTIuZHRibyB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgaW1hZ2Ug
-PSAib3ZlcmxheXMvQkJPUkdfUkVMQVktMDBBMi5kdGJvIgo+ICsgICAgICAgICAgICAgICB9Cj4g
-Kwo+ICsgICAgICAgICAgICAgICBmaWxlIG92ZXJsYXlzL0JPTkUtTEVEX1A4XzAzLmR0Ym8gewo+
-ICsgICAgICAgICAgICAgICAgICAgICAgIGltYWdlID0gIm92ZXJsYXlzL0JPTkUtTEVEX1A4XzAz
-LmR0Ym8iCj4gKyAgICAgICAgICAgICAgIH0KPiArCj4gKyAgICAgICAgICAgICAgIGZpbGUgb3Zl
-cmxheXMvQk9ORS1MRURfUDlfMTEuZHRibyB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgaW1h
-Z2UgPSAib3ZlcmxheXMvQk9ORS1MRURfUDlfMTEuZHRibyIKPiArICAgICAgICAgICAgICAgfQo+
-ICsKPiArICAgICAgICAgICAgICAgZmlsZSBvdmVybGF5cy9CVkEtTUlLUk9CVVMtMC5kdGJvIHsK
-PiArICAgICAgICAgICAgICAgICAgICAgICBpbWFnZSA9ICJvdmVybGF5cy9CVkEtTUlLUk9CVVMt
-MC5kdGJvIgo+ICsgICAgICAgICAgICAgICB9Cj4gKwo+ICsgICAgICAgICAgICAgICBmaWxlIGV4
-dGxpbnV4L2V4dGxpbnV4LmNvbmYgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIGltYWdlID0g
-ImV4dGxpbnV4LmNvbmYiCj4gKyAgICAgICAgICAgICAgIH0KPiArICAgICAgIH0KPiArICAgICAg
-IHNpemUgPSA0OE0KPiArfQo+ICsKPiAraW1hZ2Ugc2RjYXJkLmltZyB7Cj4gKyAgICAgICBoZGlt
-YWdlIHsKPiArICAgICAgICAgICAgICAgcGFydGl0aW9uLXRhYmxlLXR5cGUgPSAiZ3B0Igo+ICsg
-ICAgICAgICAgICAgICAjIGRlZmF1bHQgR1BUIGxvY2F0aW9uIGNvbmZsaWN0cyB3aXRoIGJvb3Rs
-b2FkZXJzLCBtb3ZlIGl0IGFmdGVyCj4gKyAgICAgICAgICAgICAgIGdwdC1sb2NhdGlvbiA9IDJN
-Cj4gKyAgICAgICB9Cj4gKwo+ICsgICAgICAgcGFydGl0aW9uIHVib290IHsKPiArICAgICAgICAg
-ICAgICAgaW4tcGFydGl0aW9uLXRhYmxlID0gImZhbHNlIgo+ICsgICAgICAgICAgICAgICBpbWFn
-ZSA9ICJ1LWJvb3Qtd2l0aC1zcGwuYmluIgo+ICsgICAgICAgICAgICAgICBvZmZzZXQgPSAwCj4g
-KyAgICAgICAgICAgICAgIGhvbGVzID0geyIoNDQwOyAxMDQ4NTc2KSJ9Cj4gKyAgICAgICB9Cj4g
-Kwo+ICsgICAgICAgcGFydGl0aW9uIGJvb3Qgewo+ICsgICAgICAgICAgICAgICBib290YWJsZSA9
-ICJ0cnVlIgo+ICsgICAgICAgICAgICAgICBpbWFnZSA9ICJib290LnZmYXQiCj4gKyAgICAgICB9
-Cj4gKwo+ICsgICAgICAgcGFydGl0aW9uIHJvb3RmcyB7Cj4gKyAgICAgICAgICAgICAgIGltYWdl
-ID0gInJvb3Rmcy5leHQyIgo+ICsgICAgICAgfQo+ICt9Cj4gKwo+IGRpZmYgLS1naXQgYS9ib2Fy
-ZC9iZWFnbGV2LWFoZWFkL2xpbnV4LmZyYWdtZW50IGIvYm9hcmQvYmVhZ2xldi1haGVhZC9saW51
-eC5mcmFnbWVudAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uNjlk
-YjAzNjgyYwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9ib2FyZC9iZWFnbGV2LWFoZWFkL2xpbnV4
-LmZyYWdtZW50Cj4gQEAgLTAsMCArMSwyIEBACj4gK0NPTkZJR19WRUNUT1I9bgo+ICtDT05GSUdf
-VkVDVE9SXzBfNz1uCj4gZGlmZiAtLWdpdCBhL2JvYXJkL2JlYWdsZXYtYWhlYWQvcGF0Y2hlcy91
-Ym9vdC8wMDAxLU92ZXJ3cml0ZS1ib290Y21kLWJ5LWZvcmNlLnBhdGNoIGIvYm9hcmQvYmVhZ2xl
-di1haGVhZC9wYXRjaGVzL3Vib290LzAwMDEtT3ZlcndyaXRlLWJvb3RjbWQtYnktZm9yY2UucGF0
-Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjRlNTIwZmUxZWUK
-PiAtLS0gL2Rldi9udWxsCj4gKysrIGIvYm9hcmQvYmVhZ2xldi1haGVhZC9wYXRjaGVzL3Vib290
-LzAwMDEtT3ZlcndyaXRlLWJvb3RjbWQtYnktZm9yY2UucGF0Y2gKPiBAQCAtMCwwICsxLDMwIEBA
-Cj4gK0Zyb20gODFkYjJkMTU1ZGI3NDE5MmUxMjdhZTFkOThkZDRlYzQxNWY1M2RkMyBNb24gU2Vw
-IDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogS2lsaWFuIFppbm5lY2tlciA8a2lsaWFuLnppbm5l
-Y2tlckBtYWlsLmRlPgo+ICtEYXRlOiBNb24sIDIxIEF1ZyAyMDIzIDIzOjUxOjU5ICswMjAwCj4g
-K1N1YmplY3Q6IFtQQVRDSF0gT3ZlcndyaXRlIGJvb3RjbWQgYnkgZm9yY2UKPiArCj4gK1RoaXMg
-cGF0Y2ggaXMgYSBkaXJ0eSBoYWNrOiBUcnlpbmcgdG8gb3ZlcndyaXRlIHRoZSBib290Y21kIHZp
-YSB0aGUKPiArdXN1YWwgQk9PVF9DT01NQU5EIGhhZCBubyBlZmZlY3Q6IFVwb24gYm9vdCB0aGUg
-Ym9vdGNtZCBkZWZhdWx0ZWQKPiArdG8gc29tZSBwcmVzZXQgdmFsdWUgYW5kIGNvdWxkIG5vdCBi
-ZSBjaGFuZ2VkIGVhc2lseS4gVGhlcmVmb3JlIGEKPiAraG9vayBpcyB1c2VkIHRvIGZvcmNlIHRo
-ZSBib290Y21kIHRvIGJlIG92ZXJ3cml0dGVuLgo+ICsKPiArU2lnbmVkLW9mZi1ieTogS2lsaWFu
-IFppbm5lY2tlciA8a2lsaWFuLnppbm5lY2tlckBtYWlsLmRlPgo+ICstLS0KPiArIGJvYXJkL3Ro
-ZWFkL2xpZ2h0LWM5MTAvbGlnaHQuYyB8IDEgKwo+ICsgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
-aW9uKCspCj4gKwo+ICtkaWZmIC0tZ2l0IGEvYm9hcmQvdGhlYWQvbGlnaHQtYzkxMC9saWdodC5j
-IGIvYm9hcmQvdGhlYWQvbGlnaHQtYzkxMC9saWdodC5jCj4gK2luZGV4IDhkNTQ3OGU5MTYuLjE0
-NDhkYjk3NGUgMTAwNjQ0Cj4gKy0tLSBhL2JvYXJkL3RoZWFkL2xpZ2h0LWM5MTAvbGlnaHQuYwo+
-ICsrKysgYi9ib2FyZC90aGVhZC9saWdodC1jOTEwL2xpZ2h0LmMKPiArQEAgLTIyODIsNiArMjI4
-Miw3IEBAIGludCBib2FyZF9sYXRlX2luaXQodm9pZCkKPiArICAgICAgIGxpZ2h0X3VzYl9ib290
-X2NoZWNrKCk7Cj4gKyAgICAgICBkb19maXJtd2FyZV9sb2FkKCk7Cj4gKyAgICAgICBhcF9wZXJp
-X2Nsa19kaXNhYmxlKCk7Cj4gKysgICAgICAodm9pZCllbnZfc2V0KCJib290Y21kIiwgImZhdGxv
-YWQgbW1jIDE6MSAke2tlcm5lbF9hZGRyX3J9IEltYWdlOyBmYXRsb2FkIG1tYyAxOjEgJHtmZHRf
-YWRkcl9yfSBsaWdodC1iZWFnbGUuZHRiOyBzZXRlbnYgYm9vdGFyZ3Mgcm9vdD0vZGV2L21tY2Js
-azFwMiByb290ZnN0eXBlPWV4dDQgcm9vdHdhaXQgcm8gY29uc29sZT10dHlTMCwxMTUyMDAgZWFy
-bHljb24gY2xrX2lnbm9yZV91bnVzZWQgbmV0LmlmbmFtZXM9MDsgYm9vdGkgJHtrZXJuZWxfYWRk
-cl9yfSAtICR7ZmR0X2FkZHJfcn07Iik7Cj4gKyAgICAgICByZXR1cm4gMDsKCnVob2ghISBJIHdh
-cyBob3BpbmcgZXh0bGludXguY29uZiBpbiB0aGUgZmlsZSBzeXN0ZW0gd2FzIGVub3VnaCwgd2UK
-bmVlZCB0byBmaXggdGhpcyBpbiBvdXIgdS1ib290IGJyYW5jaCBzbyBpdCBqdXN0IHNjYW5zIGZv
-cgpleHRsaW51eC5jb25mIChkaXN0cm9fYm9vdCkKClJlZ2FyZHMsCgotLSAKUm9iZXJ0IE5lbHNv
-bgpodHRwczovL3Jjbi1lZS5jb20vCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+--===============8836389258204796891==
+Content-Type: multipart/alternative; boundary="000000000000ecfbe406039a7359"
+
+--000000000000ecfbe406039a7359
+Content-Type: text/plain; charset="UTF-8"
+
+I am trying to build the brcm (broadcom) wifi modules for my old 4.9 kernel
+(ancient by todays standards) and I need to do the "make
+defconfig-brcmfmac" followed by the make modules...
+
+
+my package file started like this:
+
+BRCM_MODULES_VERSION = v4.14.77-2020_0115
+BRCM_MODULES_SITE = file:///$(TOPDIR)
+BRCM_MODULES_SOURCE =
+cypress-backports-$(BRCM_MODULES_VERSION)-module-src.tar.gz
+
+export BACKPORT_DIR=$(TOPDIR)/output/build/brcm-modules-v4.14.77-2020_0115
+$(eval $(kernel-module))
+$(eval $(generic-package))
+
+--------------------
+
+But it does not work correctly (I get modules but it apparently does not
+use the compat.ko module when the drivers are loaded resulting in the
+ability to not scan...
+
+So I then tried:
+
+BRCM_MODULES_VERSION = v4.14.77-2020_0115
+BRCM_MODULES_SITE = file:///$(TOPDIR)
+BRCM_MODULES_SOURCE =
+cypress-backports-$(BRCM_MODULES_VERSION)-module-src.tar.gz
+
+define BRCM_MODULES_BUILD_CMDS
+        $(MAKE) -C $LINUX_DIR  m=$(@D) defconfig-brcmfmac
+#        $(MAKE) -C $LINUX_DIR  m=$(@D) modules
+endef
+
+$(eval $(kernel-module))
+$(eval $(generic-package))
+
+----------------------------------
+
+But then I get
+>>> brcm-modules v4.14.77-2020_0115 Building
+/usr/bin/make -j17 -C buildroot/output/build/linux-custom
+M=buildroot/output/build/brcm-modules-v4.14.77-2020_0115 defconfig-brcmfmac
+make[1]: Entering directory 'buildroot/output/build/linux-custom'
+make[1]: *** No rule to make target 'defconfig-brcmfmac'.  Stop.
+make[1]: Leaving directory 'buildroot/output/build/linux-custom'
+make: *** [package/pkg-generic.mk:293:
+buildroot/output/build/brcm-modules-v4.14.77-2020_0115/.stamp_built] Error 2
+
+
+so it cant seem to find the module default config, also looks like it goes
+into the kernel build directory instead of the driver directory...
+I can't seem to find examples that do this type of thing...
+
+Any ideas?
+
+
+Thanks
+
+--000000000000ecfbe406039a7359
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>I am trying to build the brcm (broadcom) wifi modules=
+ for my old 4.9 kernel (ancient by todays standards) and I need to do the &=
+quot;make defconfig-brcmfmac&quot; followed by the make modules...</div><di=
+v><br></div><div><div><div dir=3D"ltr" class=3D"gmail_signature" data-smart=
+mail=3D"gmail_signature"><div dir=3D"ltr"><div><br></div><div>my package fi=
+le started like this:</div><div><br></div><div>BRCM_MODULES_VERSION =3D v4.=
+14.77-2020_0115<br>BRCM_MODULES_SITE =3D file:///$(TOPDIR)<br>BRCM_MODULES_=
+SOURCE =3D cypress-backports-$(BRCM_MODULES_VERSION)-module-src.tar.gz<br><=
+br>export BACKPORT_DIR=3D$(TOPDIR)/output/build/brcm-modules-v4.14.77-2020_=
+0115<br>$(eval $(kernel-module))<br>$(eval $(generic-package))<br></div><di=
+v><br></div><div>--------------------</div><div><br></div><div>But it does =
+not work correctly (I get modules but it apparently does not use the compat=
+.ko module when the drivers are loaded resulting in the ability to not scan=
+...<br></div><div><br></div><div>So I then tried:</div><div><br></div><div>=
+BRCM_MODULES_VERSION =3D v4.14.77-2020_0115<br>BRCM_MODULES_SITE =3D file:/=
+//$(TOPDIR)<br>BRCM_MODULES_SOURCE =3D cypress-backports-$(BRCM_MODULES_VER=
+SION)-module-src.tar.gz<br><br>define BRCM_MODULES_BUILD_CMDS<br>=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 $(MAKE) -C $LINUX_DIR=C2=A0 m=3D$(@D) defconfig-brcmfmac<=
+/div><div>#=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(MAKE) -C $LINUX_DIR=C2=A0 m=3D$(@D=
+) modules</div><div>endef<br><br>$(eval $(kernel-module))<br>$(eval $(gener=
+ic-package))<br></div><div><br></div><div>---------------------------------=
+-</div><div><br></div><div>But then I get <br></div><div>&gt;&gt;&gt; brcm-=
+modules v4.14.77-2020_0115 Building<br>/usr/bin/make -j17 -C buildroot/outp=
+ut/build/linux-custom M=3Dbuildroot/output/build/brcm-modules-v4.14.77-2020=
+_0115 defconfig-brcmfmac<br>make[1]: Entering directory &#39;buildroot/outp=
+ut/build/linux-custom&#39;<br>make[1]: *** No rule to make target &#39;defc=
+onfig-brcmfmac&#39;.=C2=A0 Stop.<br>make[1]: Leaving directory &#39;buildro=
+ot/output/build/linux-custom&#39;<br>make: *** [package/<a href=3D"http://p=
+kg-generic.mk:293">pkg-generic.mk:293</a>: buildroot/output/build/brcm-modu=
+les-v4.14.77-2020_0115/.stamp_built] Error 2<br></div><div><br></div><div><=
+br></div><div>so it cant seem to find the module default config, also looks=
+ like it goes into the kernel build directory instead of the driver directo=
+ry...<br></div><div>I can&#39;t seem to find examples that do this type of =
+thing...<br></div><div><br></div><div>Any ideas?</div><div><br></div><div><=
+br></div><div>Thanks<br><br></div><br></div></div></div></div></div>
+
+--000000000000ecfbe406039a7359--
+
+--===============8836389258204796891==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8836389258204796891==--
