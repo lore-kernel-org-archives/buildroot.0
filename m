@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 852A8EE4993
-	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 11:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 053DBEE4993
+	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 11:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85A35408CA;
-	Wed, 23 Aug 2023 11:25:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85A35408CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A717408D6;
+	Wed, 23 Aug 2023 11:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A717408D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p9OmYrP-cRXh; Wed, 23 Aug 2023 11:25:55 +0000 (UTC)
+	with ESMTP id drEhCqn-MlLH; Wed, 23 Aug 2023 11:26:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F4AC408D6;
-	Wed, 23 Aug 2023 11:25:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F4AC408D6
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3C9AE1BF2EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB71D408D9;
+	Wed, 23 Aug 2023 11:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB71D408D9
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A3B91BF982
  for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 11:25:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 236AE81A3E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2439760E5D
  for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 11:25:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 236AE81A3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2439760E5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uP90JtqRT99X for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id a2dKOOh6ZBRi for <buildroot@lists.busybox.net>;
  Wed, 23 Aug 2023 11:25:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1EC3F81A34
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2698B60E38
  for <buildroot@buildroot.org>; Wed, 23 Aug 2023 11:25:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1EC3F81A34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2698B60E38
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BF50861DE; Wed, 23 Aug 2023 11:25:51 +0000 (UTC)
+ id 14F77861DF; Wed, 23 Aug 2023 11:25:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Aug 2023 13:25:37 +0200
+Date: Wed, 23 Aug 2023 13:25:38 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: b38be2fcaed2ddf64564d0a9d77dd7077bf1ced3
-X-Git-Newrev: e66213ee55899d1989f693ea45d501f9a5e18476
+X-Git-Oldrev: e66213ee55899d1989f693ea45d501f9a5e18476
+X-Git-Newrev: 623add7dae547509e83f832dd3dd07ecb9d93c33
 X-Patchwork-Hint: ignore
-Message-Id: <20230823112551.0BF50861DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] DEVELOPERS: remove Bernd
- Kuhls from various packages
+Message-Id: <20230823112551.14F77861DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/gkrellm: link
+ with -latomic if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,83 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e66213ee55899d1989f693ea45d501f9a5e18476
+commit: https://git.buildroot.net/buildroot/commit/?id=623add7dae547509e83f832dd3dd07ecb9d93c33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Remove packages which are no longer runtime-tested here.
+Fixes:
+http://autobuild.buildroot.net/results/5df/5dffba341cfe5e4d41b3c88e58d92b0747318c07/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2b6ea18e47c88b899ac45d8e60d3a7bc2f983d66)
+(cherry picked from commit 36c29522ae6840eb8815a4e0c037f4cd17b1f126)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 12 ------------
- 1 file changed, 12 deletions(-)
+ package/gkrellm/gkrellm.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2119c52d93..ad3b634b7e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -321,8 +321,6 @@ F:	package/apr-util/
- F:	package/bcg729/
- F:	package/bento4/
- F:	package/bitcoin/
--F:	package/bluez-tools/
--F:	package/boinc/
- F:	package/clamav/
- F:	package/dav1d/
- F:	package/dht/
-@@ -343,13 +341,10 @@ F:	package/fstrcmp/
- F:	package/ghostscript/
- F:	package/giflib/
- F:	package/gkrellm/
--F:	package/gli/
--F:	package/glmark2/
- F:	package/gpsd/
- F:	package/gptfdisk/
- F:	package/hdparm/
- F:	package/hddtemp/
--F:	package/inih/
- F:	package/intel-gmmlib/
- F:	package/intel-mediadriver/
- F:	package/intel-mediasdk/
-@@ -401,7 +396,6 @@ F:	package/libsidplay2/
- F:	package/libsilk/
- F:	package/libsndfile/
- F:	package/libsoundtouch/
--F:	package/libsquish/
- F:	package/libudfread/
- F:	package/libunibreak/
- F:	package/liburiparser/
-@@ -450,7 +444,6 @@ F:	package/perl-www-robotrules/
- F:	package/php/
- F:	package/pixman/
- F:	package/pngquant/
--F:	package/pound/
- F:	package/pppd/
- F:	package/privoxy/
- F:	package/pure-ftpd/
-@@ -471,7 +464,6 @@ F:	package/rrdtool/
- F:	package/rtmpdump/
- F:	package/samba4/
- F:	package/sofia-sip/
--F:	package/softether/
- F:	package/spandsp/
- F:	package/sqlite/
- F:	package/stellarium/
-@@ -481,12 +473,8 @@ F:	package/tor/
- F:	package/transmission/
- F:	package/tvheadend/
- F:	package/unixodbc/
--F:	package/utf8proc/
--F:	package/vdr/
--F:	package/vdr-plugin-vnsiserver/
- F:	package/vlc/
- F:	package/vnstat/
--F:	package/waylandpp/
- F:	package/wget/
- F:	package/wireless-regdb/
- F:	package/wireless_tools/
+diff --git a/package/gkrellm/gkrellm.mk b/package/gkrellm/gkrellm.mk
+index 2a68722663..27a87be190 100644
+--- a/package/gkrellm/gkrellm.mk
++++ b/package/gkrellm/gkrellm.mk
+@@ -12,7 +12,13 @@ GKRELLM_LICENSE_FILES = COPYING COPYRIGHT
+ GKRELLM_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
+ GKRELLM_BUILD_OPTS = \
+ 	STRIP="" \
+-	SYS_LIBS=$(TARGET_NLS_LIBS)
++	SYS_LIBS="$(GKRELLM_SYS_LIBS)"
++
++GKRELLM_SYS_LIBS = $(TARGET_NLS_LIBS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++GKRELLM_SYS_LIBS += -latomic
++endif
+ 
+ ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
+ GKRELLM_DEPENDENCIES += lm-sensors
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
