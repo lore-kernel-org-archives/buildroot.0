@@ -1,83 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BA27C3DA66
-	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 18:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A779CC3DA66
+	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 19:12:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E82D7612C4;
-	Wed, 23 Aug 2023 18:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E82D7612C4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DDFA81CC3;
+	Wed, 23 Aug 2023 19:12:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DDFA81CC3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qXo6BNNTfIcY; Wed, 23 Aug 2023 18:43:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id lW8MXF6-DKfN; Wed, 23 Aug 2023 19:12:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29C8260E00;
-	Wed, 23 Aug 2023 18:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29C8260E00
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D83651BF343
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 18:43:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6088E81E61;
+	Wed, 23 Aug 2023 19:12:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6088E81E61
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B18C81BF340
+ for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 19:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0E7960E00
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 18:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0E7960E00
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B30E40CA6
+ for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 19:12:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B30E40CA6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y3AEKLU6YUcM for <buildroot@lists.busybox.net>;
- Wed, 23 Aug 2023 18:43:02 +0000 (UTC)
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0AC1060B2A
- for <buildroot@buildroot.org>; Wed, 23 Aug 2023 18:43:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AC1060B2A
-Received: from postfix01.mail.de (postfix01.bt.mail.de [10.0.121.125])
- by shout01.mail.de (Postfix) with ESMTP id 3AE19A080C;
- Wed, 23 Aug 2023 20:43:00 +0200 (CEST)
-Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix01.mail.de (Postfix) with ESMTP id 1F3A38029A;
- Wed, 23 Aug 2023 20:43:00 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id CFCB12409F9;
- Wed, 23 Aug 2023 20:42:59 +0200 (CEST)
-To: Robert Nelson <robertcnelson@gmail.com>
-Date: Wed, 23 Aug 2023 20:42:59 +0200
-Message-ID: <4852937.31r3eYUQgx@kilian-aisec>
-In-Reply-To: <CAOCHtYj+02YWQy7pTPwK=LH96fW4cRgPhXS0cE+CXHNmwZtL-A@mail.gmail.com>
-References: <20230821223337.9402-1-kilian.zinnecker@mail.de>
- <20230821223337.9402-2-kilian.zinnecker@mail.de>
- <CAOCHtYj+02YWQy7pTPwK=LH96fW4cRgPhXS0cE+CXHNmwZtL-A@mail.gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wcdYBQRCDBUi for <buildroot@lists.busybox.net>;
+ Wed, 23 Aug 2023 19:12:20 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06848400C8
+ for <buildroot@buildroot.org>; Wed, 23 Aug 2023 19:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06848400C8
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id BD89B780304;
+ Wed, 23 Aug 2023 21:12:15 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:54718])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 23 Aug 2023 21:12:15 +0200
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 1398
-X-purgate-ID: 154282::1692816180-E99476B4-EB1BAD7D/0/0
+Date: Wed, 23 Aug 2023 21:12:15 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20230822234113.12dd618b@windsurf>
+References: <20230822194922.71368-1-ju.o@free.fr>
+ <20230822234113.12dd618b@windsurf>
+User-Agent: Webmail Free/1.6.1
+Message-ID: <695d398827606c825566d544ee8665c5@free.fr>
+X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1692816180;
- bh=jSw4vA6bGofbWKsqsPXXBpbmsLy3hS1pdSgWB7LPh/k=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=yug03OqCQiyxmUg02yt85z0ErNvAUu9sMFFIMtvGqE+W/TRfadpI1ht37ts6aS9AB
- fuagebVUEC2ky4OJM9F6mhs0B5yRqvqhwByzrTvRCtsKTYt6oHvxbspXiTU5XgykfE
- m4KhyY1kk3ZwS+KaIfOoLPW+WPyUafpsblmP4fwTHwy6oZQp7Z+QH91QMK1maaJMYs
- NukpwcANJ0c6evPqjOBalgXnrgtD5jGnDrJ+OCI9Lgn2Fjlcwgylagx1z6hhxIYQDL
- 0FwoiN4tpLGQZHuo6FZ87jA95lTSvO8saKLyR3nWa+pDWsZOXz0jD+6ds9U9b9sNUZ
- nz6A0cZGPqdBw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mail.de header.i=@mail.de
- header.a=rsa-sha256 header.s=mailde202009 header.b=yug03OqC
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/xuantie-bins: new package
+ d=free.fr; s=smtp-20201208; t=1692817936;
+ bh=EH8US5fbEXkzyKHlGL3/wE2c0kIGAr6UpBR1MlMLq74=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=NgjEp23L8veGsH98Qos6P6GidNJ88254OLRAX03f4XDnOktqktCTCK2CsGlJWh0EV
+ 40KM/qoJvTe+QR/U4s9XKzQoGVZyx1Oo1mwvpMFdJz3uhRF8UCjppnE+OJRXdCSptz
+ AZXGhJWWMut73KQ+gbmBtWPWZzFzSGn628Imwd75lv1l994aN9m01nLMHvtgitcOF/
+ JioQN+2NRYp98SdhxkhIqygzYF4+QWIdix2ogz2vqxIxSpO72D9K/ALAX8HkmpgAv9
+ SYmT/c3V4CpRQ3nDc7CT1FflK3CHmrR0LxKnvD06cX8XpDm8wJunySbC0jMA5glvow
+ /AgxwftP9ASOQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NgjEp23L
+Subject: Re: [Buildroot] [PATCH 1/2] package/screen: security bump to
+ version 4.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,54 +78,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
-Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Robert,
 
-[--SNIP--]
+   Hi Thomas,
 
-> > +++ b/package/xuantie-bins/xuantie-bins.mk
-> > @@ -0,0 +1,27 @@
-> > +#########################################################################
-> > ####### +#
-> > +# xuantie-bins
-> > +#
-> > +#########################################################################
-> > ####### +
-> > +XUANTIE_BINS_VERSION = 604d86f6eb261ab9e53e987852e3aa397b4b16ad
-> > +XUANTIE_BINS_SITE = https://github.com/beagleboard/xuantie-ubuntu.git
+On 22/08/2023 23:41, Thomas Petazzoni wrote:
+> On Tue, 22 Aug 2023 21:49:21 +0200
+> Julien Olivain <ju.o@free.fr> wrote:
 > 
-> Oh, this might be too fast moving of a git repo for this package..
-> I've created a new repo for just the firmware:
+>> See release announce:
+>> https://lists.gnu.org/archive/html/screen-users/2023-08/msg00000.html
+>> 
+>> Fixes:
+>> CVE-2023-24626: https://www.cve.org/CVERecord?id=CVE-2023-24626
+>> 
+>> Note: Buildroot installs screen as setuid, so the described scenario
+>> in CVE applies.
+>> 
+>> This commit also rebases all patches on this release. Patch were
+>> regenerated with 'git format-patch -N', so patch file name changed in
+>> this process. The file .checkpackageignore is also updated 
+>> accordingly.
+>> 
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > 
-> https://git.beagleboard.org/beaglev-ahead/firmware
-> 
-> Since we don't have a source/changelog, Versions will be in different
-> directories based on the SDK release (1.1.2) today:
-> 
-> https://git.beagleboard.org/beaglev-ahead/firmware/-/tree/main/light/1.1.2
-> 
-> I've also added all the other boards from the repo, the `light-lpi4a`
-> is for the https://sipeed.com/licheepi4a
+> You posted this as PATCH 1/2, but I don't see any PATCH 2/2. Is this
+> just a mistake?
 
-Ah great! I will change my patches accordingly. And I will also then integrate 
-that these binaries are then actually used, i.e., actually loaded during boot. 
-One more question about the binaries: We still don't know the license for 
-those. Did you get any information about this? Or would you mind asking the 
-people you got the bins from, whether they may add a license?
+This is not a mistake. It is more an unfortunate technical issue. My
+original series was including a new screen runtime test in patch 2/2.
+
+I'll shortly explain, because this situation might happen again: my
+internet provider smtp (namely smtp.free.fr) decided few month ago to
+deploy an "AI based" anti-spam filter. Apparently, the thing was not
+trained enough on "git send-email" content. This generates many false
+positives, specifically on runtime tests. I'm working with the
+postmaster to solve the issue and complete this series when
+possible. Sorry about that.
 
 Best regards,
-Kilian
 
-
-
-
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
