@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2952CEE49B0
-	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 11:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BBD4EE49A0
+	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 11:27:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9F52408CA;
-	Wed, 23 Aug 2023 11:26:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9F52408CA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 162A1408CA;
+	Wed, 23 Aug 2023 11:27:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 162A1408CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zpvFf89RtG1o; Wed, 23 Aug 2023 11:26:22 +0000 (UTC)
+	with ESMTP id PeCsKu7lOpDH; Wed, 23 Aug 2023 11:27:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8051D408E0;
-	Wed, 23 Aug 2023 11:26:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8051D408E0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 910A71BF2EB
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 11:25:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E92C408D6;
+	Wed, 23 Aug 2023 11:27:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E92C408D6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0643C1BF2EB
+ for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 11:27:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6924A408D6
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 11:25:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6924A408D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id D43FE400CB
+ for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 11:27:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D43FE400CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8GbUOqMBJjGH for <buildroot@lists.busybox.net>;
- Wed, 23 Aug 2023 11:25:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xkd34SmmgUPG for <buildroot@lists.busybox.net>;
+ Wed, 23 Aug 2023 11:27:17 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 178FD408CA
- for <buildroot@buildroot.org>; Wed, 23 Aug 2023 11:25:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 178FD408CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 028AE405E2
+ for <buildroot@buildroot.org>; Wed, 23 Aug 2023 11:27:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 028AE405E2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 02A49861DD; Wed, 23 Aug 2023 11:25:50 +0000 (UTC)
+ id E441C861EB; Wed, 23 Aug 2023 11:27:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 23 Aug 2023 13:25:37 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7814dbce1580c51f62255105ae572da2c42f2eb4
-X-Git-Newrev: b38be2fcaed2ddf64564d0a9d77dd7077bf1ced3
+Date: Wed, 23 Aug 2023 13:26:04 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: dc7000f0de50a21355198d6ce814143a9d5af582
+X-Git-Newrev: 0cf3f7aed93ec0f49ab153a4b99e25b604f65c68
 X-Patchwork-Hint: ignore
-Message-Id: <20230823112551.02A49861DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] DEVELOPERS: add Bernd
+Message-Id: <20230823112716.E441C861EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] DEVELOPERS: add Bernd
  Kuhls to various packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b38be2fcaed2ddf64564d0a9d77dd7077bf1ced3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0cf3f7aed93ec0f49ab153a4b99e25b604f65c68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -75,7 +75,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 19 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index aaa7196455..2119c52d93 100644
+index 7e4d6ef764..a540317ae9 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -329,11 +329,13 @@ F:	package/dht/
