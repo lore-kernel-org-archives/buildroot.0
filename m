@@ -4,68 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60318C27C40
-	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 19:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70D16C3DA6F
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 19:28:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D101040908;
-	Thu, 24 Aug 2023 19:20:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D101040908
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9ABE40908;
+	Thu, 24 Aug 2023 19:28:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9ABE40908
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PfSdQEyXrQjN; Thu, 24 Aug 2023 19:20:29 +0000 (UTC)
+	with ESMTP id LDQnpnfss5up; Thu, 24 Aug 2023 19:28:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B0A540538;
-	Thu, 24 Aug 2023 19:20:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B0A540538
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0AA8F1BF852
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 19:20:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4B76640538;
+	Thu, 24 Aug 2023 19:28:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B76640538
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D16251BF852
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 19:28:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D872140538
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 19:20:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D872140538
+ by smtp3.osuosl.org (Postfix) with ESMTP id B79D3607FF
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 19:28:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B79D3607FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cctUiXWTKQ8l for <buildroot@lists.busybox.net>;
- Thu, 24 Aug 2023 19:20:24 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 52FB34159D
- for <buildroot@buildroot.org>; Thu, 24 Aug 2023 19:20:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52FB34159D
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:ced9:48d:9640:c8a7])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id D8AE819F5A6;
- Thu, 24 Aug 2023 21:20:16 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 24 Aug 2023 21:20:16 +0200
-Date: Thu, 24 Aug 2023 21:20:16 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20230824192016.GA3722679@scaer>
-References: <20230814215233.745573-1-gregorhaas1997@gmail.com>
- <20230822214755.1af65bb4@windsurf>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Qgf7EmZQUUUf for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 19:28:06 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 529D860769
+ for <buildroot@buildroot.org>; Thu, 24 Aug 2023 19:28:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 529D860769
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id A798513F88E;
+ Thu, 24 Aug 2023 21:28:01 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:53542])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 24 Aug 2023 21:28:01 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230822214755.1af65bb4@windsurf>
-User-Agent: Mutt/1.5.22 (2013-10-16)
+Date: Thu, 24 Aug 2023 21:28:01 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20230823230452.4552936c@windsurf>
+References: <20230822194922.71368-1-ju.o@free.fr>
+ <20230822234113.12dd618b@windsurf>
+ <695d398827606c825566d544ee8665c5@free.fr>
+ <20230823230452.4552936c@windsurf>
+User-Agent: Webmail Free/1.6.1
+Message-ID: <8eb47024f30a3a2f1ab8d42497da15e0@free.fr>
+X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1692904821;
- bh=YdYCNJhuFIjS1wQ8SaEMPYO7Z8RXhaySHnjaOgBapGs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ALKHz/elLVnQ075XIP/pnulcBJ18ZlE/37pT8BwTH8ZD4or4cKHi2RsCkX8kcOfLQ
- clSONTW8XhydhdeTdvIg02VV4NlKTvJeC36epuqrVGmCtsc6KKld/Rb90ttB6xROk1
- o9FWdl2NLTOL3mCMhE5q+LRWLZvHLq/rTbALk0wR+O7JwnDQOshLkcsOeP09ZVtCVF
- f7Ef3BRDXS1oibh6VQFFcvEwf6On39pG/Fmb9OHawyiYk2eR2+Y+Lc0qTcgTZ4IEis
- 4XRhQbIDE3x7Vbg6cbYlDRvAvkBlfHRnZY10IHDiSS+rbtmvJ5M/n/uW3IwdgVf1YY
- 3++pEQuq4uxwA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1692905282;
+ bh=Aj0cOg0WPZVVUtr9Fh5mv8px1Sl8Lu/D/NlRYtRPH84=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=SRAX3TzYEsRswcwQWX91QWOQo8fM+bEp+V/S6uUtJVZ/Tzt9Ej53U/2aEJzp5KIcr
+ eSHzWM5R0DwjMt58ygvDMA7eMUft9IIEQbfjFLeLmTVJxrF+O2O2VdjTAFdxVR04aP
+ qWP4TRybOZdCLS8bhJfh3ajQVEwgJHfccUASHp6dHarKZSOYf9GcTSVCk8GSFEtcu5
+ TOM/TxDPrjaS4KjHEoSpkpZs+7UhXd3+qyHOafIczYLksCUP/5x169/wuS+Xm52o/R
+ shGTaOoK51HKuZOTDwTQNKKayf3iN250CzJgdRoGyO8lUY6/rd/ys44148c4JgfgJq
+ FhpP+twXOEtzA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ALKHz/el
-Subject: Re: [Buildroot] [PATCH 1/1] package/bmap-tools: add dependency on
- python-six
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=SRAX3TzY
+Subject: Re: [Buildroot] [PATCH 1/2] package/screen: security bump to
+ version 4.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,102 +80,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregor Haas <gregorhaas1997@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+Hi Thomas,
 
-On 2023-08-22 21:47 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 14 Aug 2023 14:52:33 -0700
-> Gregor Haas <gregorhaas1997@gmail.com> wrote:
-> For the host package, I can indeed reproduce the problem. But I think
-> the issue really is that in the final $(HOST_DIR), we keep the shebang
-> of the Python interpreter pointing to the per-package directory.
-> Indeed, my reasoning is that otherwise we will have many similar
-> problems with other packages, as this is breaking a fundamental
-> assumption in Buildroot.
+On 23/08/2023 23:04, Thomas Petazzoni wrote:
+> Hello Julien,
 > 
-> I'm thinking about something like this:
+> On Wed, 23 Aug 2023 21:12:15 +0200
+> Julien Olivain <ju.o@free.fr> wrote:
 > 
-> diff --git a/Makefile b/Makefile
-> index f0ff9a1480..00ce64ab15 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -713,6 +713,15 @@ STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.t
->  host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
->         @$(call MESSAGE,"Finalizing host directory")
->         $(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR))
-> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-> +       $(Q)grep --binary-files=without-match -lrZ '$(PER_PACKAGE_DIR)/[^/]\+/host' $(HOST_DIR) \
-> +       |while read -d '' f; do \
-> +               file -b --mime-type "$${f}" | grep -q '^text/' || continue; \
-> +               printf '%s\0' "$${f}"; \
-> +       done \
-> +       |xargs -0 --no-run-if-empty \
-> +               $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/host:$(HOST_DIR):g'
-> +endif
->  
->  .PHONY: staging-finalize
->  staging-finalize: $(STAGING_DIR_SYMLINK)
+>> This is not a mistake. It is more an unfortunate technical issue. My
+>> original series was including a new screen runtime test in patch 2/2.
+>> 
+>> I'll shortly explain, because this situation might happen again: my
+>> internet provider smtp (namely smtp.free.fr) decided few month ago to
+>> deploy an "AI based" anti-spam filter. Apparently, the thing was not
+>> trained enough on "git send-email" content. This generates many false
+>> positives, specifically on runtime tests. I'm working with the
+>> postmaster to solve the issue and complete this series when
+>> possible. Sorry about that.
 > 
-> Yann, what do you think? (Logic is taken from package/pkg-generic.mk,
-> which does the conversion from per-package directories of dependencies
-> to the per-package directory of the package being built, the logic here
-> is similar, but we switch from the per-package directories to the
-> global host directory)
+> Ah ah, so free.fr thinks you are spamming us with too many runtime
+> tests? :-)
 
-Then we want to avoid code duplication, why can't we re-use the existing
-PPD_FIXUP_PATHS macro?
+Yes, it's true I have been spamming Buildroot with runtime tests
+lately... I just hoped this would have been identified as "good
+spam" ;)
 
-It might need a bit of tweaking, though:
+Anyways, this 1/2 screen security bump could still be applied to
+master without the runtime test. Do you want me to resend the bump
+as 1/1?
 
-  - first, we only need to fixup paths in $(HOST_DIR), and this is
-    already what we are doing.
+Until I fix this (probably by finding another email provider), I'll
+try to stick to standalone patches.
 
-  - second, we only need to fix path for host tools, libs et al., so
-    that they can still run, and paths for staging/ libs et al., so that
-    we can link against.
+Best regards,
 
-However, that second point is not what we are doing, as we are tweaking
-everything at the root of the PPD:
-
-    $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
-
-Furthermore, staging/ is a sub-directory of host/ and we already account
-for that as we are only grepping in $(HOST_DIR). But with the sed, we
-replace a shaloower path than HOST_DIR.
-
-So I think we can change the existing PPD_FIXUP_PATHS to:
-
-     define PPD_FIXUP_PATHS
-            $(Q)grep --binary-files=without-match -lrZ '$(PER_PACKAGE_DIR)/[^/]\+/' $(HOST_DIR) \
-            |while read -d '' f; do \
-                    file -b --mime-type "$${f}" | grep -q '^text/' || continue; \
-                    printf '%s\0' "$${f}"; \
-            done \
-            |xargs -0 --no-run-if-empty \
-    -               $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/:$(PER_PACKAGE_DIR)/$($(PKG)_NAME)/:g'
-    +               $(SED) 's:$(PER_PACKAGE_DIR)/[^/]\+/host/:$(HOST_DIR)/:g'
-     endef
-
-And then, we can expand that macro in both contexts: PPD_rsync and
-target-finalize.
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
