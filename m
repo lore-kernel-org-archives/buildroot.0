@@ -4,56 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18577C27C40
-	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 21:10:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1417AC27C40
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 21:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A9A9541D6D;
-	Thu, 24 Aug 2023 21:10:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A9A9541D6D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9893F41D87;
+	Thu, 24 Aug 2023 21:16:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9893F41D87
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d2alAezzuleI; Thu, 24 Aug 2023 21:10:33 +0000 (UTC)
+	with ESMTP id PwUiFeRWKQ-N; Thu, 24 Aug 2023 21:16:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBA5041B99;
-	Thu, 24 Aug 2023 21:10:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBA5041B99
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 20D3B1BF84C
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:10:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACA4941D7D;
+	Thu, 24 Aug 2023 21:16:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACA4941D7D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 962E01BF84C
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0130E833CA
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:10:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0130E833CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F687405ED
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:16:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F687405ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dgxWwWQQYSAh for <buildroot@lists.busybox.net>;
- Thu, 24 Aug 2023 21:10:29 +0000 (UTC)
-X-Greylist: delayed 121680 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 24 Aug 2023 21:10:28 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA00F83083
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AA00F83083
- for <buildroot@buildroot.org>; Thu, 24 Aug 2023 21:10:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 65CFF40003;
- Thu, 24 Aug 2023 21:10:25 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qZHay-002HpI-HM; Thu, 24 Aug 2023 23:10:24 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Afshin Pir <Afshin.Pir@gallagher.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zju2_r8zIMTh for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 21:16:19 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 658C8415ED
+ for <buildroot@buildroot.org>; Thu, 24 Aug 2023 21:16:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 658C8415ED
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 64D631BF204;
+ Thu, 24 Aug 2023 21:16:16 +0000 (UTC)
+Date: Thu, 24 Aug 2023 23:16:15 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20230824231615.44df3647@windsurf>
+In-Reply-To: <87y1i0cfjz.fsf@48ers.dk>
 References: <SY2PR01MB2778500474B41D29E8E7D54C940AA@SY2PR01MB2778.ausprd01.prod.outlook.com>
  <20230801121118.72610acf@windsurf>
  <SY2PR01MB2778DE94AA435DAE575AAFD7940BA@SY2PR01MB2778.ausprd01.prod.outlook.com>
-Date: Thu, 24 Aug 2023 23:10:24 +0200
-In-Reply-To: <SY2PR01MB2778DE94AA435DAE575AAFD7940BA@SY2PR01MB2778.ausprd01.prod.outlook.com>
- (Afshin Pir's message of "Wed, 2 Aug 2023 22:30:03 +0000")
-Message-ID: <87y1i0cfjz.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+ <87y1i0cfjz.fsf@48ers.dk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692911776;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2icj6gSL5oZxbVebAbHMf/uY7x706O1VI0/eELPxrJ8=;
+ b=B5XwO4PabEv/kz5ooIbQDyzVmQdPlZD9Co28cYSvdop9GJ9n3EKqjZoj93MtgDT3Bcj1ax
+ s9nN3GzxkaGpQEEJJIMQSCJHB7q0wBpfTYr9nwI1qihSFMaJ5b8NGNs+wRa0HdjBz4sxXf
+ Nt91t1ep71ig/+m0D9UA645QemU7/pmhUZmFlDWKkCY+mxfUGbAZJAlva74lNRpgXCf1yY
+ p2Q/hjzHoTZwgIX9BMjr8koFQp5DO00R3vA8FQHtfzn1zHgj68XDD63dASuXMuHmlNxsZo
+ TZKKbo0sDGdZW20/eipW+s38ZcMKkt6W84g0QsE1PGfkb7jy2FG0vfdzRQynbw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=B5XwO4Pa
 Subject: Re: [Buildroot] Update schedule of sources.buildroot.org
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,35 +77,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Afshin Pir <Afshin.Pir@gallagher.com>,
  "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Afshin" == Afshin Pir <Afshin.Pir@gallagher.com> writes:
+On Thu, 24 Aug 2023 23:10:24 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > Hi,
+> I'm back and now had time to investigate. The problem is the following
+> commit that got added at the end of July:
+> 
+> commit 08171f1fd0c31165a39d79389300ddf9adb5bbb6
+> Author: Bernd Kuhls <bernd@kuhls.net>
+> Date:   Sun Jul 16 09:28:33 2023 +0200
+> 
+>     support/dependencies/dependencies.sh: require IPC::Cmd perl package for libopenssl
+> 
+> The machine handling s.b.o did not have the IPC::Cmd perl module
+> installed, so all the source update runs would fail. I've now installed
+> that and started a s.b.o update.
 
- > I wonder if you have found out the problem and is there any ETA for
- > when it will be resolved?
+Thanks for fixing this!
 
-I'm back and now had time to investigate. The problem is the following
-commit that got added at the end of July:
+Do you think the script could somehow be robustified to let us know
+when it doesn't manage to do its job as expected?
 
-commit 08171f1fd0c31165a39d79389300ddf9adb5bbb6
-Author: Bernd Kuhls <bernd@kuhls.net>
-Date:   Sun Jul 16 09:28:33 2023 +0200
-
-    support/dependencies/dependencies.sh: require IPC::Cmd perl package for libopenssl
-
-The machine handling s.b.o did not have the IPC::Cmd perl module
-installed, so all the source update runs would fail. I've now installed
-that and started a s.b.o update.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
