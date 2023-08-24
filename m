@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1417AC27C40
-	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 21:16:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BAD1C27C40
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 21:17:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9893F41D87;
-	Thu, 24 Aug 2023 21:16:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9893F41D87
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAFAF41D88;
+	Thu, 24 Aug 2023 21:17:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CAFAF41D88
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PwUiFeRWKQ-N; Thu, 24 Aug 2023 21:16:22 +0000 (UTC)
+	with ESMTP id rLFvJlSBdxYC; Thu, 24 Aug 2023 21:17:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACA4941D7D;
-	Thu, 24 Aug 2023 21:16:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACA4941D7D
+	by smtp4.osuosl.org (Postfix) with ESMTP id DEB4241D7D;
+	Thu, 24 Aug 2023 21:17:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEB4241D7D
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 962E01BF84C
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:16:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AF23F1BF84C
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F687405ED
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:16:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F687405ED
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95C5841667
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:17:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95C5841667
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Zju2_r8zIMTh for <buildroot@lists.busybox.net>;
- Thu, 24 Aug 2023 21:16:19 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 658C8415ED
- for <buildroot@buildroot.org>; Thu, 24 Aug 2023 21:16:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 658C8415ED
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 64D631BF204;
- Thu, 24 Aug 2023 21:16:16 +0000 (UTC)
-Date: Thu, 24 Aug 2023 23:16:15 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20230824231615.44df3647@windsurf>
-In-Reply-To: <87y1i0cfjz.fsf@48ers.dk>
-References: <SY2PR01MB2778500474B41D29E8E7D54C940AA@SY2PR01MB2778.ausprd01.prod.outlook.com>
- <20230801121118.72610acf@windsurf>
- <SY2PR01MB2778DE94AA435DAE575AAFD7940BA@SY2PR01MB2778.ausprd01.prod.outlook.com>
- <87y1i0cfjz.fsf@48ers.dk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692911776;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2icj6gSL5oZxbVebAbHMf/uY7x706O1VI0/eELPxrJ8=;
- b=B5XwO4PabEv/kz5ooIbQDyzVmQdPlZD9Co28cYSvdop9GJ9n3EKqjZoj93MtgDT3Bcj1ax
- s9nN3GzxkaGpQEEJJIMQSCJHB7q0wBpfTYr9nwI1qihSFMaJ5b8NGNs+wRa0HdjBz4sxXf
- Nt91t1ep71ig/+m0D9UA645QemU7/pmhUZmFlDWKkCY+mxfUGbAZJAlva74lNRpgXCf1yY
- p2Q/hjzHoTZwgIX9BMjr8koFQp5DO00R3vA8FQHtfzn1zHgj68XDD63dASuXMuHmlNxsZo
- TZKKbo0sDGdZW20/eipW+s38ZcMKkt6W84g0QsE1PGfkb7jy2FG0vfdzRQynbw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B5XwO4Pa
-Subject: Re: [Buildroot] Update schedule of sources.buildroot.org
+ with ESMTP id LUkNzPV7NdSE for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 21:17:45 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEC0A415ED
+ for <buildroot@buildroot.org>; Thu, 24 Aug 2023 21:17:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEC0A415ED
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CD41E86277; Thu, 24 Aug 2023 21:17:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 24 Aug 2023 23:11:29 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: abbf59f643b5f67eb36fa3e0eadf52bc86802f6c
+X-Git-Newrev: 46f1cd6fe3b6a0f066e6217dec19ea8eb96d3923
+X-Patchwork-Hint: ignore
+Message-Id: <20230824211744.CD41E86277@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/Config.in: make QT
+ libraries entries visible with Qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,39 +58,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Afshin Pir <Afshin.Pir@gallagher.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 24 Aug 2023 23:10:24 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=46f1cd6fe3b6a0f066e6217dec19ea8eb96d3923
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> I'm back and now had time to investigate. The problem is the following
-> commit that got added at the end of July:
-> 
-> commit 08171f1fd0c31165a39d79389300ddf9adb5bbb6
-> Author: Bernd Kuhls <bernd@kuhls.net>
-> Date:   Sun Jul 16 09:28:33 2023 +0200
-> 
->     support/dependencies/dependencies.sh: require IPC::Cmd perl package for libopenssl
-> 
-> The machine handling s.b.o did not have the IPC::Cmd perl module
-> installed, so all the source update runs would fail. I've now installed
-> that and started a s.b.o update.
+For now the "QT libraries and helper libraries" section was only made
+visible when BR2_PACKAGE_QT5 was enabled. In preparation for enabling
+some of those libraries with Qt6, we now show this section when
+BR2_PACKAGE_QT5 || BR2_PACKAGE_QT6.
 
-Thanks for fixing this!
+All of the 8 packages in this section already had a (redundant)
+"depends on BR2_PACKAGE_QT5" in their own Config.in file, so the only
+functional change of this commit is that the comment "QT libraries and
+helper libraries" now becomes visible with Qt6, but it is not followed
+by any selectable option. This will be changed in a following commit
+enabling one of those libraries with Qt6.
 
-Do you think the script could somehow be robustified to let us know
-when it doesn't manage to do its job as expected?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/Config.in b/package/Config.in
+index 0378566305..3ce869f310 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -372,7 +372,8 @@ comment "Graphic libraries"
+ 
+ comment "Other GUIs"
+ 	source "package/qt5/Config.in"
+-if BR2_PACKAGE_QT5
++	source "package/qt6/Config.in"
++if BR2_PACKAGE_QT5 || BR2_PACKAGE_QT6
+ comment "QT libraries and helper libraries"
+ 	source "package/cutelyst/Config.in"
+ 	source "package/grantlee/Config.in"
+@@ -383,7 +384,6 @@ comment "QT libraries and helper libraries"
+ 	source "package/qwt/Config.in"
+ 	source "package/simple-mail/Config.in"
+ endif
+-	source "package/qt6/Config.in"
+ 	source "package/tekui/Config.in"
+ 	source "package/weston/Config.in"
+ 	source "package/x11r7/Config.in"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
