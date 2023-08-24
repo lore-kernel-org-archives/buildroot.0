@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB88BEC873A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:34:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26108EC873B
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:34:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FBD683BAC;
-	Thu,  7 Sep 2023 15:34:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FBD683BAC
+	by smtp1.osuosl.org (Postfix) with ESMTP id CDD6A81FF5;
+	Thu,  7 Sep 2023 15:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDD6A81FF5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7gMUJlga4FpY; Thu,  7 Sep 2023 15:34:36 +0000 (UTC)
+	with ESMTP id drzL9WofujaF; Thu,  7 Sep 2023 15:34:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B18E383C1F;
-	Thu,  7 Sep 2023 15:34:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B18E383C1F
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCAE183C35;
+	Thu,  7 Sep 2023 15:34:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCAE183C35
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 562C61BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3358C1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4EA8D41DB3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86BFA41DB0
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EA8D41DB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86BFA41DB0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EjikHd5JJLtl for <buildroot@lists.busybox.net>;
+ with ESMTP id N-Yu74c60lT1 for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:38 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9616C41E33
+ by smtp4.osuosl.org (Postfix) with ESMTP id C334E41D8D
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9616C41E33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C334E41D8D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9104986A22; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+ id B3DFA869E0; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Aug 2023 23:08:57 +0200
+Date: Thu, 24 Aug 2023 23:20:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 037133271495159ccaeed9e9d53c4829b164ea9e
-X-Git-Newrev: abbf59f643b5f67eb36fa3e0eadf52bc86802f6c
+X-Git-Oldrev: 6ca42939d6debc645fbfb431b99ace4b93b5cc0d
+X-Git-Newrev: 9c806e132ac64c61e4374b76c7e1d9aa14c4bbdd
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145132.9104986A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6core5compat: new package
+Message-Id: <20230907145132.B3DFA869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/Config.in: fix alphabetic
+ ordering
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,121 +64,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abbf59f643b5f67eb36fa3e0eadf52bc86802f6c
+commit: https://git.buildroot.net/buildroot/commit/?id=9c806e132ac64c61e4374b76c7e1d9aa14c4bbdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/qt6/Config.in                          |  1 +
- package/qt6/qt6core5compat/Config.in           | 12 ++++++++
- package/qt6/qt6core5compat/qt6core5compat.hash | 10 +++++++
- package/qt6/qt6core5compat/qt6core5compat.mk   | 39 ++++++++++++++++++++++++++
- 5 files changed, 63 insertions(+)
+ package/qt6/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c643469f17..6fd1021e98 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3257,6 +3257,7 @@ F:	package/libusb-compat/
- F:	package/proj/
- F:	package/python-iniparse/
- F:	package/qjson/
-+F:	package/qt6/qt6core5compat/
- F:	package/quazip/
- F:	package/shapelib/
- F:	package/simple-mail/
 diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 3788caa6a3..126bc22180 100644
+index 126bc22180..276a0217ab 100644
 --- a/package/qt6/Config.in
 +++ b/package/qt6/Config.in
-@@ -47,5 +47,6 @@ source "package/qt6/qt6base/Config.in"
+@@ -44,9 +44,9 @@ menuconfig BR2_PACKAGE_QT6
+ if BR2_PACKAGE_QT6
+ 
+ source "package/qt6/qt6base/Config.in"
++source "package/qt6/qt6core5compat/Config.in"
  source "package/qt6/qt6serialbus/Config.in"
  source "package/qt6/qt6serialport/Config.in"
  source "package/qt6/qt6svg/Config.in"
-+source "package/qt6/qt6core5compat/Config.in"
+-source "package/qt6/qt6core5compat/Config.in"
  
  endif
-diff --git a/package/qt6/qt6core5compat/Config.in b/package/qt6/qt6core5compat/Config.in
-new file mode 100644
-index 0000000000..9d9e087601
---- /dev/null
-+++ b/package/qt6/qt6core5compat/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_QT6CORE5COMPAT
-+	bool "qt6core5compat"
-+	select BR2_PACKAGE_QT6BASE_XML
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  The Qt 5 Core Compat module contains the Qt 5 Core APIs that
-+	  were removed in Qt 6. The module facilitates the transition
-+	  to Qt 6.
-+
-+	  https://doc.qt.io/qt-6/qtcore5-index.html
-diff --git a/package/qt6/qt6core5compat/qt6core5compat.hash b/package/qt6/qt6core5compat/qt6core5compat.hash
-new file mode 100644
-index 0000000000..0735df3af2
---- /dev/null
-+++ b/package/qt6/qt6core5compat/qt6core5compat.hash
-@@ -0,0 +1,10 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.4/6.4.3/submodules/qtserialport-everywhere-src-6.4.3.tar.xz.sha256
-+sha256  d4b249abb823d575eee9045c24d924ba8d1276e6be7735b287689991d998aa7a  qt5compat-everywhere-src-6.4.3.tar.xz
-+
-+# Hashes for license files:
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6core5compat/qt6core5compat.mk b/package/qt6/qt6core5compat/qt6core5compat.mk
-new file mode 100644
-index 0000000000..0b6d9369cb
---- /dev/null
-+++ b/package/qt6/qt6core5compat/qt6core5compat.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# qt6core5compat
-+#
-+################################################################################
-+
-+QT6CORE5COMPAT_VERSION = $(QT6_VERSION)
-+QT6CORE5COMPAT_SITE = $(QT6_SITE)
-+QT6CORE5COMPAT_SOURCE = qt5compat-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6CORE5COMPAT_VERSION).tar.xz
-+QT6CORE5COMPAT_INSTALL_STAGING = YES
-+QT6CORE5COMPAT_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+QT6CORE5COMPAT_CMAKE_BACKEND = ninja
-+
-+QT6CORE5COMPAT_LICENSE = \
-+	GPL-2.0+ or LGPL-3.0, \
-+	GPL-3.0 with exception (tools), \
-+	GFDL-1.3 (docs), \
-+	BSD-3-Clause
-+
-+QT6CORE5COMPAT_LICENSE_FILES = \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
-+
-+QT6CORE5COMPAT_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6CORE5COMPAT_DEPENDENCIES = \
-+	host-pkgconf \
-+	qt6base
-+
-+$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
