@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E36E7C27C40
-	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 20:24:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C3FDC6FA8F
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 20:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F491415C2;
-	Thu, 24 Aug 2023 20:24:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F491415C2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CD3041667;
+	Thu, 24 Aug 2023 20:31:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CD3041667
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q2Nwpue83S3t; Thu, 24 Aug 2023 20:24:08 +0000 (UTC)
+	with ESMTP id WnRkaDZU6M0X; Thu, 24 Aug 2023 20:31:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7320640AB1;
-	Thu, 24 Aug 2023 20:24:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7320640AB1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6D3A34159D;
+	Thu, 24 Aug 2023 20:31:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D3A34159D
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D4DA51BF27E
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:24:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 94C8F1BF27E
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEB3E60C08
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:24:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEB3E60C08
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D39760F65
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:31:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D39760F65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S9BK6BlgtoMG for <buildroot@lists.busybox.net>;
- Thu, 24 Aug 2023 20:24:03 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C139260BA4
- for <buildroot@buildroot.org>; Thu, 24 Aug 2023 20:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C139260BA4
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ADF2186247; Thu, 24 Aug 2023 20:24:03 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 24 Aug 2023 20:58:44 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2b765178f41bed3720f16e9c850b0d0efc332531
-X-Git-Newrev: 0389e298a65ae8d1bb96d55961a99d0cf1b4ee2a
-X-Patchwork-Hint: ignore
-Message-Id: <20230824202403.ADF2186247@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libfuse3: bump to
- version 3.16.1
+ with ESMTP id W6m8mh5IzJdu for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 20:31:00 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DB63D60F5E
+ for <buildroot@buildroot.org>; Thu, 24 Aug 2023 20:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB63D60F5E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A236920004;
+ Thu, 24 Aug 2023 20:30:56 +0000 (UTC)
+Date: Thu, 24 Aug 2023 22:30:55 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230824223055.64cf4169@windsurf>
+In-Reply-To: <20230822191634.92015-1-giulio.benetti@benettiengineering.com>
+References: <20230822191634.92015-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1692909057;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=B2bL8jbZbhySyIFDdu9JyPnpaUOW7geP9W/sLefTRHs=;
+ b=IgWRI3Z/qHTvedvCGpmeGw0fTnjB7bO6qg8kga/oMYbYBEYE/CPLrfNrp//xNtcWwBQjbh
+ LJHxyfBg6L3b9ONCIBigvAsetlG/CfYFci7JKCUtbv+CEgYqPLqelU2oTGYwLrUWLRDdVz
+ 9btDdbCVX6sCu/HhsHQP+1QnUiwYPd2D8xUdMcq81NH6YA364Z6OX0jCIb+B0zpE03UncA
+ 9unZ4YJ/liHu2jToaC5CG4xP4PtY8d+H/Kv4g0BLea+tN70w2foZeZoG9q0N3wPWgjM+hQ
+ 1wkZB9tZt3W5+22HG9tlG2834VZYYNEBFFBMHDh/R4KiickmjfNQ/1Y7RCfHJw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IgWRI3Z/
+Subject: Re: [Buildroot] [PATCH v2] package/libfuse3: bump to version 3.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,97 +76,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0389e298a65ae8d1bb96d55961a99d0cf1b4ee2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 22 Aug 2023 21:16:34 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Let's drop local patch that has been upstreamed:
-https://github.com/libfuse/libfuse/commit/b58a0014bff619f1810af49441d987d732c4244e
+> Let's drop local patch that has been upstreamed:
+> https://github.com/libfuse/libfuse/commit/b58a0014bff619f1810af49441d987d732c4244e
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * fix tarball sha256 hash
+> ---
+>  ...est-applications-for-cross-compiler-.patch | 43 -------------------
+>  package/libfuse3/libfuse3.hash                |  2 +-
+>  package/libfuse3/libfuse3.mk                  |  2 +-
+>  3 files changed, 2 insertions(+), 45 deletions(-)
+>  delete mode 100644 package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...und-test-applications-for-cross-compiler-.patch | 43 ----------------------
- package/libfuse3/libfuse3.hash                     |  2 +-
- package/libfuse3/libfuse3.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 45 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch b/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
-deleted file mode 100644
-index b99b4c23f4..0000000000
---- a/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From b58a0014bff619f1810af49441d987d732c4244e Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Tue, 13 Jun 2023 20:02:01 +1000
--Subject: [PATCH] Wrapper around test applications for cross compiler
-- environment in meson.build (#804)
--
--This enhances commit 7be56c57f93e3436b1fbd9ecc320de5c03a3e4b8 to allow build
--fuse to be built using a cross compiler
--
--Fixes:
--../meson.build:180:12: ERROR: Can not run test applications in this cross environment.
--
--Upstream: https://github.com/libfuse/libfuse/commit/b58a0014bff619f1810af49441d987d732c4244e
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- meson.build | 10 ++++++----
-- 1 file changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 7aa4e0d..9707ea3 100644
----- a/meson.build
--+++ b/meson.build
--@@ -177,10 +177,12 @@ int main()
-- }
-- '''
-- 
---result = cc.run(detect_getmntent_needs_unescape)
---if result.compiled() and result.returncode() == 0 and result.stdout().strip() == 'needs escaping'
---  message('getmntent does not unescape')
---  add_project_arguments('-DGETMNTENT_NEEDS_UNESCAPING', language: 'c')
--+if not meson.is_cross_build()
--+  result = cc.run(detect_getmntent_needs_unescape)
--+  if result.compiled() and result.returncode() == 0 and result.stdout().strip() == 'needs escaping'
--+    message('getmntent does not unescape')
--+    add_project_arguments('-DGETMNTENT_NEEDS_UNESCAPING', language: 'c')
--+  endif
-- endif
-- 
-- # Write private test results into fuse_config.h (stored in build directory)
---- 
--2.34.1
--
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index 0397efc542..e812bb81e8 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  cb93e170288804d2e83da9b69925d968655ed75883476773ba5268d08bb1d335  libfuse3-3.15.1.tar.gz
-+sha256  17c44c13f6a123c0c13d074fcf61c230a88531202a40c864187dee78f5851693  libfuse3-3.16.1.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index 32e35ff32b..a4b1f08266 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFUSE3_VERSION = 3.15.1
-+LIBFUSE3_VERSION = 3.16.1
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
