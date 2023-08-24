@@ -4,66 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F106C3DA6F
-	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 20:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9744C27C40
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 21:08:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F3BD41C3B;
-	Thu, 24 Aug 2023 20:38:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F3BD41C3B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CAE3404F5;
+	Thu, 24 Aug 2023 21:08:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CAE3404F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3w_wh3Q0wDpu; Thu, 24 Aug 2023 20:38:40 +0000 (UTC)
+	with ESMTP id drA-RRBcCIKv; Thu, 24 Aug 2023 21:08:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4E33416F8;
-	Thu, 24 Aug 2023 20:38:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4E33416F8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D79741BF27E
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:38:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 648E840438;
+	Thu, 24 Aug 2023 21:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 648E840438
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BCFE1BF84C
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 508A0416F8
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:38:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 508A0416F8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2564381A0D
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 21:08:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2564381A0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 75h--1MuGtQZ for <buildroot@lists.busybox.net>;
- Thu, 24 Aug 2023 20:38:35 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1ACFB4004A
- for <buildroot@buildroot.org>; Thu, 24 Aug 2023 20:38:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ACFB4004A
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 09CF620004;
- Thu, 24 Aug 2023 20:38:32 +0000 (UTC)
-Date: Thu, 24 Aug 2023 22:38:30 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230824223830.44b9f4a2@windsurf>
-In-Reply-To: <20230822194922.71368-1-ju.o@free.fr>
-References: <20230822194922.71368-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ORGPcP3dEjwQ for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 21:08:10 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DB52981766
+ for <buildroot@buildroot.org>; Thu, 24 Aug 2023 21:08:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB52981766
+Received: by mail.gandi.net (Postfix) with ESMTPA id B5E7160002;
+ Thu, 24 Aug 2023 21:08:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 24 Aug 2023 23:08:00 +0200
+Message-ID: <20230824210800.1589677-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692909513;
+ d=bootlin.com; s=gm1; t=1692911287;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4y8tHAWartyWgJa5weMjD8ILOuonYogTuFDQMmdY5d8=;
- b=oAVyW084DlgSrNyC9w8wqyjI0n8CGvQ/DAC3wehOQ6QmItAucEmcmFWjHyjkQeHozStk9m
- fN0/ROE0CZhj3lwkAWvXzdw1ndvhSC2zuby1hEMEmME+vy0qPgPlj/8UFwiLBJp0AA4oda
- Ust0l0J/J5AuauFWWDbRoZVtJaO8q0s5uATFIpoynkMoPAvq1Z9O78oFClTPnR0/UCDohN
- NGxYdupLd0KnA3Mc6sunp+B+ElqZDqvRbNrbOQeF/keNzfBkijz/bjBx9fQtnd5qLnYWx9
- aWNSZV02wRC9GJCOE9zH9XC7ZwML1KYT5qftPnhv3tie8+5u9cM6NhxCcXgYug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=02kjdlS/gpGAxnpsqbSfe2D3rWx01swz4lMbONSal9E=;
+ b=EQB543HKxHS5Rz6Y88jyDmryHrnFYWxsumcR4wx/NVctLRB1AAN9jG2W3ZfNImCf+PfEL0
+ e6U1ISh+0FqKkxmFc8XBbTFTS4+Uv5xCrvrNQtwOW3QiYbom6xs8Ur3eIGc/ZXbGpmQ0S8
+ 8RBb1Bqqv6YjDCTGM5B773IFXWJbCK9LhYXEEY6KAfa/lwHQn/fQ0eK5Evv3NbWWlW4o/o
+ XUlONcKvgpOYAzcvZXGf5H3i+P3BQKhk2dj39d0N4rWfnFmS2qNoS8wZnJt9yIQ+WlW4NW
+ sezzYNN9J77uYUFxp+dGPHRdY7ONarkMiSQpJrQxt0m7F6beUYEx1pAbvsyzZg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oAVyW084
-Subject: Re: [Buildroot] [PATCH 1/2] package/screen: security bump to
- version 4.9.1
+ header.s=gm1 header.b=EQB543HK
+Subject: [Buildroot] [PATCH] Makefile: remove $(TARGET_DIR)/usr/mkspecs in
+ target-finalize
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,42 +73,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 22 Aug 2023 21:49:21 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+qt6base installs things in /usr/mkspecs, but also the soon to be added
+qt6core5compat, and the existing package qwt as well. So let's move
+the removal of /usr/mkspecs in target-finalize, where we already
+remove lots of development-related directories.
 
-> See release announce:
-> https://lists.gnu.org/archive/html/screen-users/2023-08/msg00000.html
-> 
-> Fixes:
-> CVE-2023-24626: https://www.cve.org/CVERecord?id=CVE-2023-24626
-> 
-> Note: Buildroot installs screen as setuid, so the described scenario
-> in CVE applies.
-> 
-> This commit also rebases all patches on this release. Patch were
-> regenerated with 'git format-patch -N', so patch file name changed in
-> this process. The file .checkpackageignore is also updated accordingly.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Patch series tested on branch master at commit 6d8deb4 with commands:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile           | 1 +
+ package/qwt/qwt.mk | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks. It would be nice to upstream those 5 patches
-we have against screen :)
-
-Thanks!
-
-Thomas
+diff --git a/Makefile b/Makefile
+index da52a51716..f255b1e443 100644
+--- a/Makefile
++++ b/Makefile
+@@ -747,6 +747,7 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/info $(TARGET_DIR)/usr/share/info
+ 	rm -rf $(TARGET_DIR)/usr/doc $(TARGET_DIR)/usr/share/doc
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
++	rm -rf $(TARGET_DIR)/usr/mkspecs
+ 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
+ ifneq ($(BR2_ENABLE_DEBUG):$(BR2_STRIP_strip),y:)
+ 	rm -rf $(TARGET_DIR)/lib/debug $(TARGET_DIR)/usr/lib/debug
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index 9f0b78655f..f344ca4e3a 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -58,7 +58,6 @@ endef
+ 
+ define QWT_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
+-	rm -Rf $(TARGET_DIR)/usr/mkspecs
+ endef
+ 
+ $(eval $(qmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
