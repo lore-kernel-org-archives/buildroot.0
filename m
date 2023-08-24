@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDED6C6FA8F
-	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 20:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 229D8C6FA8F
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 20:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 97D9E41699;
-	Thu, 24 Aug 2023 20:32:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97D9E41699
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB6624168D;
+	Thu, 24 Aug 2023 20:33:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB6624168D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L5ti6yjjGTjw; Thu, 24 Aug 2023 20:32:29 +0000 (UTC)
+	with ESMTP id LNSq7aKuElDS; Thu, 24 Aug 2023 20:33:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D5AD54169E;
-	Thu, 24 Aug 2023 20:32:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5AD54169E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A969F1BF27E
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:32:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 293CD41667;
+	Thu, 24 Aug 2023 20:33:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 293CD41667
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5ED2D1BF27E
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:33:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8117C839C0
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:32:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8117C839C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3730341741
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 20:33:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3730341741
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K2OONCX20qVH for <buildroot@lists.busybox.net>;
- Thu, 24 Aug 2023 20:32:25 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3B4C7839BB
- for <buildroot@buildroot.org>; Thu, 24 Aug 2023 20:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B4C7839BB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B810BC0003;
- Thu, 24 Aug 2023 20:32:21 +0000 (UTC)
-Date: Thu, 24 Aug 2023 22:32:20 +0200
-To: Yu Chien Peter Lin <peterlin@andestech.com>
-Message-ID: <20230824223220.79999ada@windsurf>
-In-Reply-To: <20230823030745.22850-1-peterlin@andestech.com>
-References: <20230823030745.22850-1-peterlin@andestech.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692909142;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=X07ekmLIxFboHfQFrRpK5TnDIjIZrFRv1SOGTP982KA=;
- b=EP81IjPdSBFWbY91YTGGQNfrrsSHaNs49i5d8Pt8PtXm5+LOLfcfosIg2axu0WQ12Yqedt
- 2pzt/NMQz3lroEvMg9XtkjZSUjtims7m4v9o2tDsUXgfiItTVEkfHBQmujyGMMr0a1NSYE
- M34YBfMMgSzqAZSHAsk8KDkG0SeYJGZpgZI65/8uVv2yBne7OBgmnVZNeI40Seb4wgFaAx
- EQK4LI96U3dUSNKFhs6g/tBgOU0Uu3o0EZHmceGwmBPuoRo15UgF5rjpLmgEJdoaDJICYI
- Wsg2EHMn/OJaIjxfOF7oanx9SeHTdIjk3Ye0eMDt0s1ZdW4cBX4Yi9ONm0iBRw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EP81IjPd
-Subject: Re: [Buildroot] [PATCH] configs: andes_ae350_45: Update generic
- extensions
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nv1IeFTNvdkG for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 20:33:25 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BDC841722
+ for <buildroot@buildroot.org>; Thu, 24 Aug 2023 20:33:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BDC841722
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 02E4E86265; Thu, 24 Aug 2023 20:33:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 24 Aug 2023 22:33:08 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d1c32c703bb730da2db7facf35c186fb1a6fe331
+X-Git-Newrev: 037133271495159ccaeed9e9d53c4829b164ea9e
+X-Patchwork-Hint: ignore
+Message-Id: <20230824203325.02E4E86265@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/orangepi_pc2: bump
+ U-Boot version to 2023.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,33 +58,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: ycliang@andestech.com, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 23 Aug 2023 11:07:45 +0800
-Yu Chien Peter Lin <peterlin@andestech.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=037133271495159ccaeed9e9d53c4829b164ea9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> As of upstream commit cbd91e89e43d600172c62fd1cbd33aa74d0a851a
-> we can use the defualt BR2_riscv_g to select IMAFD extensions.
-> 
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
-> ---
-> https://patchwork.ozlabs.org/project/buildroot/patch/20230815054327.1436-1-peterlin@andestech.com/#3169699
-> ---
->  configs/andes_ae350_45_defconfig | 5 -----
->  1 file changed, 5 deletions(-)
+Signed-off-by: Javad Rahimi <javad321javad@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/orangepi_pc2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to next with slightly improved commit title and commit log. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/orangepi_pc2_defconfig b/configs/orangepi_pc2_defconfig
+index 29939ea1fb..46d04b34c8 100644
+--- a/configs/orangepi_pc2_defconfig
++++ b/configs/orangepi_pc2_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
