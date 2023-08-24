@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9872DC6FA8F
-	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 18:58:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24B47C27C40
+	for <buildroot@archiver.kernel.org>; Thu, 24 Aug 2023 18:59:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55AC3415B9;
-	Thu, 24 Aug 2023 18:58:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55AC3415B9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98E64415C4;
+	Thu, 24 Aug 2023 18:59:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98E64415C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hi9ul1HsU_kA; Thu, 24 Aug 2023 18:58:38 +0000 (UTC)
+	with ESMTP id gIrPYc0hccar; Thu, 24 Aug 2023 18:59:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A966C4159D;
-	Thu, 24 Aug 2023 18:58:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A966C4159D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 61F421BF853
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 18:58:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE51840569;
+	Thu, 24 Aug 2023 18:59:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE51840569
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D20F1BF20B
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 18:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 491F74159D
- for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 18:58:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 491F74159D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D8FC60F69
+ for <buildroot@lists.busybox.net>; Thu, 24 Aug 2023 18:59:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D8FC60F69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SmpdXB3naMFX for <buildroot@lists.busybox.net>;
- Thu, 24 Aug 2023 18:58:35 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5CD8040569
- for <buildroot@buildroot.org>; Thu, 24 Aug 2023 18:58:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CD8040569
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A8BEE0003;
- Thu, 24 Aug 2023 18:58:32 +0000 (UTC)
-Date: Thu, 24 Aug 2023 20:58:31 +0200
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
- <buildroot@buildroot.org>
-Message-ID: <20230824205831.5027a943@windsurf>
-In-Reply-To: <20230824150950.56165-1-raphael.melotte@mind.be>
-References: <20230824150950.56165-1-raphael.melotte@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692903512;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7f4kIdmm4t+1PfMhOb0kzV1efIv+0IP+aQtYzSWllGA=;
- b=B737FNySFYT0MMJ6Lu+sAp/B+kboftggUdPzmlK+XgHwlpaJYfpZUMnwxmvN4uqqrA9azh
- 0eNjw9617WmhI2b7LCNsj3IqHJMV3bIS9w0ypNIILxpsf3KERPMuN234tUBfaak9t/URnh
- 5tx2jEiAvJ8oLDtNbAWiqbUNMcboOp8HSCdXy8nMHBw8KIQOuM3FS0pmmOEhRgQt7MLFsv
- TpLh71oL/3quuerNKTZCHvTlFUhG9i/HC9GR727kmQzMMRxwwW3pLqxX2j2QG8Xy6fF5bt
- dit1RHSODvVnzmJQdazL86G5oxDZJS1nVMjNjsVf5lvG0+2C35Vu265/Yi+UBQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B737FNyS
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: remove
- leftover comment about headers
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t-O3OZWaUN5a for <buildroot@lists.busybox.net>;
+ Thu, 24 Aug 2023 18:59:35 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CE2E60BDA
+ for <buildroot@buildroot.org>; Thu, 24 Aug 2023 18:59:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CE2E60BDA
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6CAC28623C; Thu, 24 Aug 2023 18:59:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 24 Aug 2023 20:58:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 670329f057b656be06b217fab411d90695988b41
+X-Git-Newrev: bdaade3e34394aefe376d3578d598a863c2ba1a1
+X-Patchwork-Hint: ignore
+Message-Id: <20230824185935.6CAC28623C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: remove leftover
+ comment about headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,22 +58,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0943425082755569048=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCAyNCBBdWcgMjAyMyAxNzowOTo0OCArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSB2aWEg
-YnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IENvbW1pdCAwYThl
-ZjJmM2Y3YmMyMTFkMzhhNWEzNzAwN2JkZWI0ODliZDM3YWFlIGJ1bXBlZCB0aGUgaGVhZGVycwo+
-IHZlcnNpb24gcmVxdWlyZW1lbnRzLCBidXQgZGlkIG5vdCB1cGRhdGUgdGhlIGFzc29jaWF0ZWQg
-Y29tbWVudC4KPiAKPiBSZW1vdmUgdGhlIGNvbW1lbnQgZW50aXJlbHksIGFzIGl0IGRvZXMgbm90
-IGFwcGx5IGFueW1vcmUuCj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJh
-cGhhZWwubWVsb3R0ZUBtaW5kLmJlPgo+IC0tLQo+ICBwYWNrYWdlL25ldHdvcmstbWFuYWdlci9D
-b25maWcuaW4gfCAxIC0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkKCkFwcGxpZWQg
-dG8gbWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9v
-dGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxp
-bi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============0943425082755569048==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=bdaade3e34394aefe376d3578d598a863c2ba1a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit 0a8ef2f3f7bc211d38a5a37007bdeb489bd37aae bumped the headers
+version requirements, but did not update the associated comment.
+
+Remove the comment entirely, as it does not apply anymore.
+
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/network-manager/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 37c4a79d16..57d7543131 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	# Tested with 3.2, but may even work with earlier versions
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+
+--===============0943425082755569048==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0943425082755569048==--
