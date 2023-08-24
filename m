@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9D31EC873D
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:33:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EC94EC873C
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DBB981318;
-	Thu,  7 Sep 2023 15:33:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DBB981318
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB0CC83C96;
+	Thu,  7 Sep 2023 15:33:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB0CC83C96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nl2LuMw4MDlF; Thu,  7 Sep 2023 15:33:09 +0000 (UTC)
+	with ESMTP id a13Gph9I2Any; Thu,  7 Sep 2023 15:33:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7392583D0D;
-	Thu,  7 Sep 2023 15:33:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7392583D0D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0927E83CE8;
+	Thu,  7 Sep 2023 15:33:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0927E83CE8
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 155A11BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 112621BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15B2641DEC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1414541D77
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15B2641DEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1414541D77
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lIJ5Bhq3GTtS for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:38 +0000 (UTC)
+ with ESMTP id 7FMVChVi7h3u for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:37 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E5F441E0B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55B1541E0A
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E5F441E0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55B1541E0A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58A3686A1F; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+ id 4EF8E86A1E; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 24 Aug 2023 20:58:44 +0200
+Date: Thu, 24 Aug 2023 20:57:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b765178f41bed3720f16e9c850b0d0efc332531
-X-Git-Newrev: 0389e298a65ae8d1bb96d55961a99d0cf1b4ee2a
+X-Git-Oldrev: 7b29c67e97072229fe5f836f51fa7a3a1f1db0aa
+X-Git-Newrev: 2b765178f41bed3720f16e9c850b0d0efc332531
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145132.58A3686A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfuse3: bump to version 3.16.1
+Message-Id: <20230907145132.4EF8E86A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-silva: bump to version 0.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,91 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0389e298a65ae8d1bb96d55961a99d0cf1b4ee2a
+commit: https://git.buildroot.net/buildroot/commit/?id=2b765178f41bed3720f16e9c850b0d0efc332531
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Let's drop local patch that has been upstreamed:
-https://github.com/libfuse/libfuse/commit/b58a0014bff619f1810af49441d987d732c4244e
+diff COPYRIGHT:
+-Copyright (C) 2017-2021 Francois Perrad.
++Copyright (C) 2017-2023 Francois Perrad
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...und-test-applications-for-cross-compiler-.patch | 43 ----------------------
- package/libfuse3/libfuse3.hash                     |  2 +-
- package/libfuse3/libfuse3.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 45 deletions(-)
+ package/lua-silva/lua-silva.hash | 4 ++--
+ package/lua-silva/lua-silva.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch b/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
-deleted file mode 100644
-index b99b4c23f4..0000000000
---- a/package/libfuse3/0001-Wrapper-around-test-applications-for-cross-compiler-.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From b58a0014bff619f1810af49441d987d732c4244e Mon Sep 17 00:00:00 2001
--From: Rudi Heitbaum <rudi@heitbaum.com>
--Date: Tue, 13 Jun 2023 20:02:01 +1000
--Subject: [PATCH] Wrapper around test applications for cross compiler
-- environment in meson.build (#804)
--
--This enhances commit 7be56c57f93e3436b1fbd9ecc320de5c03a3e4b8 to allow build
--fuse to be built using a cross compiler
--
--Fixes:
--../meson.build:180:12: ERROR: Can not run test applications in this cross environment.
--
--Upstream: https://github.com/libfuse/libfuse/commit/b58a0014bff619f1810af49441d987d732c4244e
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- meson.build | 10 ++++++----
-- 1 file changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 7aa4e0d..9707ea3 100644
----- a/meson.build
--+++ b/meson.build
--@@ -177,10 +177,12 @@ int main()
-- }
-- '''
-- 
---result = cc.run(detect_getmntent_needs_unescape)
---if result.compiled() and result.returncode() == 0 and result.stdout().strip() == 'needs escaping'
---  message('getmntent does not unescape')
---  add_project_arguments('-DGETMNTENT_NEEDS_UNESCAPING', language: 'c')
--+if not meson.is_cross_build()
--+  result = cc.run(detect_getmntent_needs_unescape)
--+  if result.compiled() and result.returncode() == 0 and result.stdout().strip() == 'needs escaping'
--+    message('getmntent does not unescape')
--+    add_project_arguments('-DGETMNTENT_NEEDS_UNESCAPING', language: 'c')
--+  endif
-- endif
-- 
-- # Write private test results into fuse_config.h (stored in build directory)
---- 
--2.34.1
--
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index 0397efc542..e812bb81e8 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
+diff --git a/package/lua-silva/lua-silva.hash b/package/lua-silva/lua-silva.hash
+index 418c3e9e43..3ceab6572b 100644
+--- a/package/lua-silva/lua-silva.hash
++++ b/package/lua-silva/lua-silva.hash
 @@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  cb93e170288804d2e83da9b69925d968655ed75883476773ba5268d08bb1d335  libfuse3-3.15.1.tar.gz
-+sha256  17c44c13f6a123c0c13d074fcf61c230a88531202a40c864187dee78f5851693  libfuse3-3.16.1.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index 32e35ff32b..a4b1f08266 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
+ # computed by luarocks/buildroot
+-sha256  0e656c42c71b64285d4a375fa7b8b1a910b05c4ab6d30f5b427b078fff204e1f  lua-silva-0.1.8-1.src.rock
+-sha256  5b59ffbfc12d9d1cb907dd65b0f16d3453e1a43cc018c6128a00b00e08f6c485  lua-Silva-0.1.8/COPYRIGHT
++sha256  fa838ed10b2e2c16f76fff9e47d52cde1f250efd73994865090d85218c2e5368  lua-silva-0.2.0-1.src.rock
++sha256  638206532ac117ec92a04791045e274e6aa55c3d7f408cd2be993a00424c2f96  lua-Silva-0.2.0/COPYRIGHT
+diff --git a/package/lua-silva/lua-silva.mk b/package/lua-silva/lua-silva.mk
+index 91b1b77476..809ac3dd2d 100644
+--- a/package/lua-silva/lua-silva.mk
++++ b/package/lua-silva/lua-silva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFUSE3_VERSION = 3.15.1
-+LIBFUSE3_VERSION = 3.16.1
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
+-LUA_SILVA_VERSION = 0.1.8-1
++LUA_SILVA_VERSION = 0.2.0-1
+ LUA_SILVA_NAME_UPSTREAM = lua-Silva
+ LUA_SILVA_LICENSE = MIT
+ LUA_SILVA_LICENSE_FILES = $(LUA_SILVA_SUBDIR)/COPYRIGHT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
