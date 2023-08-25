@@ -4,66 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70388C7EE2C
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 21:33:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BE6BC7EE2C
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 21:35:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D557781282;
-	Fri, 25 Aug 2023 21:33:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D557781282
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5B8883542;
+	Fri, 25 Aug 2023 21:35:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5B8883542
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TslE5hg5uJXT; Fri, 25 Aug 2023 21:33:39 +0000 (UTC)
+	with ESMTP id x5a1yEu5oieA; Fri, 25 Aug 2023 21:35:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E897081251;
-	Fri, 25 Aug 2023 21:33:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E897081251
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 55D281BF2A5
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:33:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03CD483455;
+	Fri, 25 Aug 2023 21:35:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03CD483455
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A30FD1BF2A5
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D74241A32
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:33:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D74241A32
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C76C4184A
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:34:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C76C4184A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VTym_drAc_Ck for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 21:33:36 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 508B041951
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 21:33:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 508B041951
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 36C131BF208;
- Fri, 25 Aug 2023 21:33:30 +0000 (UTC)
-Date: Fri, 25 Aug 2023 23:33:28 +0200
-To: Sergey Romanov via buildroot <buildroot@buildroot.org>
-Message-ID: <20230825233328.35c4a920@windsurf>
-In-Reply-To: <20230525215103.37218-2-svromanov@sberdevices.ru>
-References: <20230525215103.37218-1-svromanov@sberdevices.ru>
- <20230525215103.37218-2-svromanov@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HACyQ4XJaKJF for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 21:34:56 +0000 (UTC)
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com
+ [IPv6:2607:f8b0:4864:20::22c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A495341843
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 21:34:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A495341843
+Received: by mail-oi1-x22c.google.com with SMTP id
+ 5614622812f47-3a9b342c398so508051b6e.3
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 14:34:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1692999295; x=1693604095;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=ockmL3QF9gQiPS/LtUKdPYUwxhwoyRFy/qu/jLF9DZI=;
+ b=Q0kHR25w0RXEtCK+V0IrUgisfpJhqDFhn395OQZ7cw6G6WeKsZf+ZDORJTvX9Klhmj
+ HseE8aCZL/IFLFUNSMeaMj9LaQdRq6WeNpOhV3n7fyiB+6Z0y9gjAo6ak1sDlYpJmUSm
+ RGQwluWj0OHtQsica0I3VlzOAL3cuVW5rkmGyQkzOP6Op746rMw/ve8CrG/DcsaxTPh4
+ Sspq3Qhh495/FOalt61OTCY2+ctdxDxaPGvCeflxVjQiof0qkMvlGWfS0MxhXIoXfWEZ
+ S7oQkPksLBPijvcyB5AxJPgckTPEEJIZnym6v197p70f92FXC8SdHaZPp992pSLpvEaT
+ a1fQ==
+X-Gm-Message-State: AOJu0YxX3khJC5eSI/fn6bH3tDV1pnM9WQ7oFYCUhUNVhzmzpQ9cx2SE
+ hzElTidF80vsrUqGH5C/bjvQJSJAa/UKgZGeq8Y=
+X-Google-Smtp-Source: AGHT+IHyYldzdTP88U7p7ZiHz1gItRyA3SzUu0v48ZLz04FcO7qKXAVax4F+6yDrNa0nMVUvE8vWrurI1yqMOV8Ex50=
+X-Received: by 2002:a05:6358:5e08:b0:13a:6748:9312 with SMTP id
+ q8-20020a0563585e0800b0013a67489312mr18727219rwn.19.1692999295632; Fri, 25
+ Aug 2023 14:34:55 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+References: <20230814102453.102735-1-james.hilliard1@gmail.com>
+ <20230822201237.024570fd@windsurf>
+In-Reply-To: <20230822201237.024570fd@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 25 Aug 2023 17:34:43 -0400
+Message-ID: <CADvTj4qSDJkeb7uEjjS1_ZW7B+bjbkKeu_uFTA=AABcHt5O7kQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692999212;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hjZqKoOXYfk0igORkNh9k3pNvpe1R3Yot+Lb005OzX4=;
- b=Egh23hkvNxA9RJl9lm8/VWiszudIMosqmSWOoC2eVzMeZfRJo/84K4G3aJhIW3HM2S3aEw
- wiCDJJkA02sCod2DtOE0MaNP7YCnxDFT9OkN5GhlNkwQel/bI3f9m/Tm+qjaYQo0XGi/NS
- zUOdIfhGB9/QDLGqlBgEjYzSVd8/84+xVVtiAL3u/d/I8zGrOmC+68/MbWe4wra5Lb1ezl
- l3yo+WpAB4JkweXg4+3dI6M1bagAKQkyEhBM7OuS1vSzVsRTUyXCWa1mRuqzJVEW7159f7
- QHr53CAxQOfqorTjNjU2kBbOGWAsKgcghKN8p2Sp0daTLgl21AhlOS6fv8tevA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Egh23hkv
-Subject: Re: [Buildroot] [RFC PATCH v1 1/2] package/ck: new package
+ d=gmail.com; s=20221208; t=1692999295; x=1693604095;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ockmL3QF9gQiPS/LtUKdPYUwxhwoyRFy/qu/jLF9DZI=;
+ b=nP9kCJL0FzYxoYiKXqzvv7rX919EneoAuxf1QYtytzstOSKAq5zasY2sFauwxxy+5R
+ L4F4gIdrltIgcvrd7yPiuiikucTrCaabsQ45EYyJJAzeOUPpCJhoaMKnBajEQ3GRn8tc
+ t1KbGg8azJcP6YAv+ys84QyyBSn8bdZDD+DhF+yiQsTa8N+bB+BZ2fAULs7nO6txXXd+
+ YlLhXrGvXxX6w9K76+hmI9f8KwSd8z0d/G0+Pt7kiIXgSxrBMT7YJQIyq7CaNcmQ7+5b
+ A3Wksxg+LO9EtV6yIGLdHqJ+yaU5/7vM7ARv78S26fiiPavPtqmXHEUs63/GG4n7XKvf
+ L/MA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=nP9kCJL0
+Subject: Re: [Buildroot] [PATCH 1/1] package/{rust,
+ rust-bin}: bump to version 1.71.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,218 +92,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Sergey Romanov <svromanov@sberdevices.ru>, chip-club@ya.ru,
- akopytov@gmail.com, sbahra@repnop.org, sdfw_system_team@sberdevices.ru,
- kernel@sberdevices.ru
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Sergey,
-
-On Fri, 26 May 2023 00:51:02 +0300
-Sergey Romanov via buildroot <buildroot@buildroot.org> wrote:
-
-> Concurrency primitives, safe memory reclamation
-> mechanisms and non-blocking data structures
-> for the research, design and implementation
-> of high performance concurrent systems.
-> 
-> https://github.com/concurrencykit/ck.git
-> 
-> Signed-off-by: Sergey Romanov <svromanov@sberdevices.ru>
-
-Sorry for the very slow feedback. I wanted to push this, but it doesn't
-build, and I don't see how it can build in a cross-compilation
-environment. Indeed, the configure script does this:
-
-$CC -o .1 .1.c
-COMPILER=`./.1 2> /dev/null`
-r=$?
-rm -f .1.c .1
-
-if test "$r" -ne 0; then
-        assert "" "update compiler"
-else
-        echo "success [$CC]"
-fi
-
-So it builds a program called .1 with the cross-compiler, and then it
-tries to run it. This obviously will never work in a cross-compilation
-context.
-
-Some more comments below (which I had addressed locally, but had to
-give up because of the above issue)
-
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index f2dea0dfd9..1be4e79a2b 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -286,6 +286,7 @@ package/cgroupfs-mount/S30cgroupfs Indent Shellcheck Variables
->  package/chipmunk/0001-Fix-build-failure-on-musl.patch Upstream
->  package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch Upstream
->  package/chrony/S49chrony Indent Shellcheck Variables
-> +package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch Upstream
-
-Please add a proper Upstream: tag instead of adding an exception. We
-don't want to add new entries in .checkpackageignore, only remove
-existing entries.
-
-> diff --git a/package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch b/package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch
-> new file mode 100644
-> index 0000000000..7e2cc85ba6
-> --- /dev/null
-> +++ b/package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch
-> @@ -0,0 +1,191 @@
-> +From 0b30b184538c0de485fe292e2ebb6bfea3c255bc Mon Sep 17 00:00:00 2001
-> +From: Sergey Romanov <svromanov@sberdevices.ru>
-> +Date: Thu, 25 May 2023 19:01:28 +0300
-> +Subject: [PATCH] Avoid buildroot's influence on LDFLAGS
-> +
-> +Upstream-status: Pending
-
-Pending where? Could you please provide some link to a pull request?
-
-Also, could you provide some more details on why this patch is needed.
-Apparently, the configure script is designed to allow passing custom
-LDFLAGS through the LDFLAGS variable, so why doesn't that just work?
-
-> diff --git a/package/ck/Config.in b/package/ck/Config.in
-> new file mode 100644
-> index 0000000000..d88eaa8413
-> --- /dev/null
-> +++ b/package/ck/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_CK_ARCH_SUPPORTS
-> +	bool
-> +	default y if ((BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 && \
-> +		!BR2_ARM_CPU_ARMV7M) || BR2_aarch64 || \
-> +		BR2_powerpc || BR2_powerpc64 || BR2_RISCV_64 || \
-> +		BR2_s390x || BR2_sparc_v9 || BR2_x86 || BR2_x86_64)
-
-BR2_x86 doesn't exist, it's BR2_i386. Also, please reformat as such:
-
-config BR2_PACKAGE_CK_ARCH_SUPPORTS
-        bool
-        default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 && !BR2_ARM_CPU_ARMV7M
-        default y if BR2_aarch64
-        default y if BR2_i386
-        default y if BR2_powerpc || BR2_powerpc64
-        default y if BR2_RISCV_64
-        default y if BR2_s390x
-        default y if BR2_sparc_v9
-        default y if BR2_x86_64
-
-> +config BR2_PACKAGE_CK_TOOLCHAIN_SUPPORTS
-> +	bool
-> +	default y if ((BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_USES_GLIBC) && \
-> +		!BR2_TOOLCHAIN_USES_UCLIBC)
-
-Please drop this.
-
-> +
-> +config BR2_PACKAGE_CK
-> +	bool "concurrency kit"
-> +	depends on BR2_PACKAGE_CK_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_CK_TOOLCHAIN_SUPPORTS
-
-And use:
-
-	# some comment here to explain the issue
-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-
-> +	help
-> +	  Concurrency primitives, safe memory reclamation
-> +	  mechanisms and non-blocking data structures
-> +	  for the research, design and implementation
-> +	  of high performance concurrent systems.
-> +
-> +	  https://github.com/concurrencykit/ck.git
-
-And add:
-
-comment "ck needs a toolchain w/ glibc or musl"
-        depends on BR2_PACKAGE_CK_ARCH_SUPPORTS
-        depends on BR2_TOOLCHAIN_USES_UCLIBC
-
-> +CK_INSTALL_STAGING = YES
-> +
-> +CK_PROFILE_PARAMS += --platform=$(BR2_ARCH)
-> +CK_PROFILE_PARAMS += --prefix="/usr"
-
-Please use:
-
-CK_CONF_OPTS = \
-	--platform=$(BR2_ARCH) \
-	--prefix="/usr"
-
-> +
-> +define CK_CONFIGURE_CMDS
-> +	( cd $(@D); \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(CK_PROFILE_CONF_ENV) \
-
-This variable doesn't exist.
-
-> +	./configure $(CK_PROFILE_PARAMS) )
-
-Please simplify to:
-
-        cd $(@D); \
-                $(TARGET_CONFIGURE_OPTS) \
-                ./configure $(CK_CONF_OPTS)
-
-
-> +endef
-> +
-> +define CK_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(CK_PROFILE_CONF_ENV) \
-> +	$(MAKE) -C $(@D)
-
-If you can simplify to:
-
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-
-it would be great.
-
-> +endef
-> +
-> +define CK_INSTALL_TARGET_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(CK_PROFILE_CONF_ENV) \
-> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-
-Simplify to:
-
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-
-if possible.
-
-> +endef
-> +
-> +define CK_INSTALL_STAGING_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(CK_PROFILE_CONF_ENV) \
-> +	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-
-Simplify to:
-
-        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-
-if possible.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCBBdWcgMjIsIDIwMjMgYXQgMjoxMuKAr1BNIFRob21hcyBQZXRhenpvbmkKPHRob21h
+cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gSGVsbG8gSmFtZXMsCj4KPiBPbiBN
+b24sIDE0IEF1ZyAyMDIzIDA0OjI0OjUzIC0wNjAwCj4gSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhp
+bGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+Cj4gPiBMaW5rIHRvIFJ1c3QgMS43MS4xIGFubm91
+bmNlbWVudDogaHR0cHM6Ly9ibG9nLnJ1c3QtbGFuZy5vcmcvMjAyMy8wOC8wMy9SdXN0LTEuNzEu
+MS5odG1sCj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxp
+YXJkMUBnbWFpbC5jb20+Cj4KPiBEaWQgeW91IHJ1biB0aGUgUnVzdCB0ZXN0IGNhc2VzIGFmdGVy
+IHRoaXMgdmVyc2lvbiBidW1wPwoKWWVhaCwgdGVzdHMgcGFzcy4KCj4KPiAuL3N1cHBvcnQvdGVz
+dGluZy9ydW4tdGVzdHMgLW8gL291dHB1dCB0ZXN0cy5wYWNrYWdlLnRlc3RfcnVzdC5UZXN0UnVz
+dCB0ZXN0cy5wYWNrYWdlLnRlc3RfcnVzdC5UZXN0UnVzdEJpbgo+Cj4gVGhhbmtzIQo+Cj4gVGhv
+bWFzCj4gLS0KPiBUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCj4g
+RW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKPiBodHRw
+czovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
