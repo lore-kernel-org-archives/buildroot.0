@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA3E1C71133
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 13:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20743C3DA66
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 13:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87EB661455;
-	Fri, 25 Aug 2023 13:22:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87EB661455
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4C7961463;
+	Fri, 25 Aug 2023 13:22:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4C7961463
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KGgEDVcdEnZY; Fri, 25 Aug 2023 13:22:07 +0000 (UTC)
+	with ESMTP id dZXAFkibOYYC; Fri, 25 Aug 2023 13:22:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7CDF61463;
-	Fri, 25 Aug 2023 13:22:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7CDF61463
+	by smtp3.osuosl.org (Postfix) with ESMTP id 074CB61465;
+	Fri, 25 Aug 2023 13:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 074CB61465
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9156B1BF82F
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 13:22:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A9DB31BF82F
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 13:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 766A260AE6
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 13:22:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 766A260AE6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 90B5061463
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 13:22:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90B5061463
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z2wbGoH_cTQy for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 13:22:00 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 59CF260FE0
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 13:22:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59CF260FE0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0125FFF804;
- Fri, 25 Aug 2023 13:21:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qZWlA-002uD9-1B; Fri, 25 Aug 2023 15:21:56 +0200
+ with ESMTP id 0FyGpo3JUSbG for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 13:22:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CDEC260FE0
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 13:22:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDEC260FE0
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BB75486317; Fri, 25 Aug 2023 13:22:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230708150322.1353246-1-bernd@kuhls.net>
-Date: Fri, 25 Aug 2023 15:21:56 +0200
-In-Reply-To: <20230708150322.1353246-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sat, 8 Jul 2023 17:03:22 +0200")
-Message-ID: <87edjrb6kr.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/igh-ethercat: bump to latest
- Git commit
+To: buildroot@buildroot.org
+Date: Fri, 25 Aug 2023 15:20:41 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 39245bdd908fac9742148fad8cd7487367a267b9
+X-Git-Newrev: 872d1ca1cc15a0f7df924371c7db31d2e64bf5c8
+X-Patchwork-Hint: ignore
+Message-Id: <20230825132221.BB75486317@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/ffmpeg: force arm
+ mode instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,30 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=872d1ca1cc15a0f7df924371c7db31d2e64bf5c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > Removed_POST_PATCH_HOOKS, not needed anymore due to upstream commit
- > https://gitlab.com/etherlab.org/ethercat/-/commit/3bc8703f5cf021d21730cd3ac3da839973b914e9
+Fix the following build failure:
+/tmp/ccw5V2Ti.s: Assembler messages:
+/tmp/ccw5V2Ti.s:2013: Error: selected processor does not support `itt gt' in Thumb mode
+/tmp/ccw5V2Ti.s:2014: Error: Thumb does not support conditional execution
+/tmp/ccw5V2Ti.s:2015: Error: Thumb does not support conditional execution
+/tmp/ccw5V2Ti.s:2017: Error: selected processor does not support `it le' in Thumb mode
+/tmp/ccw5V2Ti.s:2018: Error: Thumb does not support conditional execution
+/tmp/ccw5V2Ti.s:2020: Error: selected processor does not support `it gt' in Thumb mode
+/tmp/ccw5V2Ti.s:2021: Error: Thumb does not support conditional execution
 
- > This bump will only fix kernel 6.3-related build errors by upstream
- > commit
- > https://gitlab.com/etherlab.org/ethercat/-/commit/e35f35b25c43b9f6fa967b2ae92462034a14bc8d
+Fixes:
+http://autobuild.buildroot.net/results/3fc/3fc68f756cf1661673941c411c4a2477e901e361/
 
- > Fixes:
- > http://autobuild.buildroot.net/results/ffc/ffc00cc9f949bfc692edc287867ca1e3c86edea1/
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c8cc28b5ced34677a39de8e7bcc9a96d6e8df9fe)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ffmpeg/ffmpeg.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Committed to 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 9d9209706a..ce285bcc60 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -554,6 +554,10 @@ FFMPEG_CONF_OPTS += --disable-optimizations
+ FFMPEG_CFLAGS += -O0
+ endif
+ 
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++FFMPEG_CFLAGS += -marm
++endif
++
+ FFMPEG_CONF_ENV += CFLAGS="$(FFMPEG_CFLAGS)"
+ FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
