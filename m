@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF141C3DA6F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F6FAC3DA66
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:57:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92E2F61495;
-	Fri, 25 Aug 2023 16:56:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92E2F61495
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9E9D614C4;
+	Fri, 25 Aug 2023 16:57:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9E9D614C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uIGrZeV38ElH; Fri, 25 Aug 2023 16:56:42 +0000 (UTC)
+	with ESMTP id FvxZu3WIu2lz; Fri, 25 Aug 2023 16:57:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8F95614D3;
-	Fri, 25 Aug 2023 16:56:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8F95614D3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D77851BF995
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:56:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A85A614C0;
+	Fri, 25 Aug 2023 16:57:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A85A614C0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1AC261BF35E
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:57:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE0F441EA6
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:56:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE0F441EA6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 01DEA82321
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:57:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01DEA82321
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DxBM3olfw3tx for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 16:56:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id drroIDlKJDU0 for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 16:57:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA87241E95
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:56:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA87241E95
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F6AF82295
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:57:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F6AF82295
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B648A8636E; Fri, 25 Aug 2023 16:56:27 +0000 (UTC)
+ id 1F50A86375; Fri, 25 Aug 2023 16:57:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 18:51:18 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ce3c56527e2176a2cdaf57793b30791c0783f389
-X-Git-Newrev: 851a7195a55bf88a6b3cc6c06e6190c9288cdd8e
+Date: Fri, 25 Aug 2023 18:54:40 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 6d7f7b34593e4140837b9595a0a97349dcfd10fe
+X-Git-Newrev: 7b716b2017c812a33fa4bbbd0dcccd50c959ab50
 X-Patchwork-Hint: ignore
-Message-Id: <20230825165627.B648A8636E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libssh: fix build
- with Thumb
+Message-Id: <20230825165736.1F50A86375@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] utils/genrandconfig:
+ increase default target ubifs image size
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=851a7195a55bf88a6b3cc6c06e6190c9288cdd8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7b716b2017c812a33fa4bbbd0dcccd50c959ab50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-/home/buildroot/autobuild/instance-3/output-1/build/libssh-0.10.5/src/bignum.c:
- In function 'ssh_make_bignum_string':
-/home/buildroot/autobuild/instance-3/output-1/build/libssh-0.10.5/src/bignum.c:64:1:
- sorry, unimplemented: '-fstack-check=specific' for Thumb-1
+The new value is calculated based on:
+ROOTFS_SIZE = 5G (see commit 3c98eb26db6501a373cc405c80505ba72fde9e96)
+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE = 0x1f800
+
+5G / 0x1f800 = 41610
 
 Fixes:
-http://autobuild.buildroot.net/results/82c/82c8e3bb755bc8732a81f05a72f04a96ecc08b4e/
+http://autobuild.buildroot.net/results/f72/f72918d63510b170e5da01bfa9c247cf9dcf507f/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0368cd816307ee961bbd17ce2d3827b955b0c204)
+(cherry picked from commit 9b31b643825e5ffa0e5849b622de4925b5b73cb9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libssh/libssh.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ utils/genrandconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 3be6c6adaf..e770d2b924 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -17,6 +17,10 @@ LIBSSH_CONF_OPTS = \
- 	-DWITH_STACK_PROTECTOR=OFF \
- 	-DWITH_EXAMPLES=OFF
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 0938260c1b..60922e871c 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -525,6 +525,11 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_TARGET_ROOTFS_F2FS_SIZE="100M"\n')
+         configlines.append('BR2_TARGET_ROOTFS_F2FS_SIZE="%s"\n' % ROOTFS_SIZE)
  
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+LIBSSH_CONF_OPTS += -DWITH_STACK_CLASH_PROTECTION=OFF
-+endif
++    if 'BR2_TARGET_ROOTFS_UBIFS=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n' in configlines:
++        configlines.remove('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n')
++        configlines.append('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=41610\n')
 +
- ifeq ($(BR2_PACKAGE_LIBSSH_SERVER),y)
- LIBSSH_CONF_OPTS += -DWITH_SERVER=ON
- else
+     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
+        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
+         configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
