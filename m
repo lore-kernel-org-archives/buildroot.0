@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78B67C3DA6F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 17:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD1AFC3DA66
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 17:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20840614CF;
-	Fri, 25 Aug 2023 17:11:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20840614CF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60B13614A2;
+	Fri, 25 Aug 2023 17:12:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60B13614A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I9O4kuV5blMU; Fri, 25 Aug 2023 17:11:45 +0000 (UTC)
+	with ESMTP id kQRjQMqRgDD0; Fri, 25 Aug 2023 17:12:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 766FB614A2;
-	Fri, 25 Aug 2023 17:11:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 766FB614A2
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A2ED31BF35E
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 17:11:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4D35614E8;
+	Fri, 25 Aug 2023 17:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4D35614E8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1407C1BF35E
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 17:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CAE283CBD
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 17:11:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CAE283CBD
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2CD541BD7
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 17:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2CD541BD7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e7Fb3jhQPUTg for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 17:11:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XlG08uHR1ivu for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 17:11:58 +0000 (UTC)
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7C12283CBB
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 17:11:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C12283CBB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D56940004;
- Fri, 25 Aug 2023 17:11:38 +0000 (UTC)
-Date: Fri, 25 Aug 2023 19:11:36 +0200
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D500541BDD
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 17:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D500541BDD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C60D540002;
+ Fri, 25 Aug 2023 17:11:55 +0000 (UTC)
+Date: Fri, 25 Aug 2023 19:11:54 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230825191136.039830c8@windsurf>
-In-Reply-To: <20230825163335.403433-1-bernd@kuhls.net>
-References: <20230825163335.403433-1-bernd@kuhls.net>
+Message-ID: <20230825191154.34b0374b@windsurf>
+In-Reply-To: <20230825155001.349004-1-bernd@kuhls.net>
+References: <20230825155001.349004-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1692983498;
+ d=bootlin.com; s=gm1; t=1692983516;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=iXxOJLb83kw33TEggefZm48RsFm4CKDlFNLVek60+98=;
- b=OSGkFfpDDWnA4HZhwrajFUbPbRkc9HRFpF4sZJ7qub60oiIBXEeDE5SUMBXRSJwDujWJKq
- sQYQmpbB8EOQHKOFlVLQElfrvaqvnQszX3IIah9ZuJECln7MTB5xPVX1My+ou5skFljNFp
- TGbA0C2jNj0k9FoY5plXHo3F3DLjPDyhynXJhxMSZFOLwxxxR5q30CXkmZHjL4BVj+M74k
- hLX8MWIyDufItYN7e0eCfd+3QbZCRIQImAXTRxk9wNU7Fnhh/PMKbrWQCcBcD5H1mX02mT
- N9y/AcOeW8WR3cLOqGS0GPzd5PwEYtsUR5Ko7OriHvOE6DcquPdTqx6RMcmBRw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=MOl5z4eEPlsgIJReycJcAiCEzBQWKfqEASpImBQUWpA=;
+ b=ZjdZFopxISGPB/gHRTg8EggMVO+RmOyyClzNklokpKr1xNAbmuH2jBtas7X2LzB4IHJiuc
+ NA65+OkWCweSr/g57VCX7+rBvlts+UXWD7OBZcMoH59pOtmZ4gI1kwNtT4Ob0yTyCEaJoX
+ jA9mD/LfR7esRygY5Fjemi0vDrPBslpP5/Uqv/6YeqSwnpkTr6NaYch+u3RpEZZT5J6snK
+ +Yh7Lu4C6X1Kspz5fmHyIB7juzqh7sFQTNjDlKgCqnD0IZhlzE0Cll3mTJtrIgT6VYNNZo
+ h5yITQBG9R89HucXqdFEwpx4l3s4CLQJdhUzlcuQl2osSVyCRQpQEl4bNMRUCQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OSGkFfpD
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/ytree: bump version to 2.05
+ header.s=gm1 header.b=ZjdZFopx
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/tor: bump version to
+ 0.4.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,21 +83,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 25 Aug 2023 18:33:35 +0200
+On Fri, 25 Aug 2023 17:50:01 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Release notes: https://www.han.de/~werner/ytree.html
+> Release notes:
+> https://forum.torproject.org/t/stable-release-0-4-8-4/8884
 > 
-> Removed patch which was applied upstream in a slightly changed way.
+> Removed all patches due to upstream commit adding compatibility with
+> LibreSSL 3.5:
+> https://github.com/torproject/tor/commit/f3dabd705f26c56076934323f24b5b05ecdfd39c
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  .checkpackageignore               |  1 -
->  package/ytree/0001-fix-musl.patch | 26 --------------------------
->  package/ytree/ytree.hash          |  2 +-
->  package/ytree/ytree.mk            |  2 +-
->  4 files changed, 2 insertions(+), 29 deletions(-)
->  delete mode 100644 package/ytree/0001-fix-musl.patch
+> Build-tested using this defconfig
 
 Applied to next, thanks.
 
