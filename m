@@ -4,52 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 724D6C3DA6F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 17:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8B70C3DA6F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 18:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 215E2614A2;
-	Fri, 25 Aug 2023 17:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 215E2614A2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 044CF605B5;
+	Fri, 25 Aug 2023 18:28:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 044CF605B5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id H1b5R8D46YqY; Fri, 25 Aug 2023 17:23:16 +0000 (UTC)
+	with ESMTP id 5bfUAjQ6n9Mx; Fri, 25 Aug 2023 18:28:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58490605B3;
-	Fri, 25 Aug 2023 17:23:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58490605B3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D603614FC;
+	Fri, 25 Aug 2023 18:28:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D603614FC
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0BB6C1BF35E
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 17:23:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 98C611BF5A7
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 18:28:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5F8D83CBD
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 17:23:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5F8D83CBD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7298483D10
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 18:28:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7298483D10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id t5QS3V7sfOFs for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 17:23:12 +0000 (UTC)
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D3C6283C9D
- for <buildroot@busybox.net>; Fri, 25 Aug 2023 17:23:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3C6283C9D
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <glbb-buildroot@m.gmane-mx.org>) id 1qZaWb-0009ZH-Bh
- for buildroot@busybox.net; Fri, 25 Aug 2023 19:23:09 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@busybox.net
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Fri, 25 Aug 2023 19:22:51 +0200
-Message-ID: <pan$f21af$cc5eb5f6$18b75d96$2850ca3c@ID-313208.user.individual.net>
-References: <20230806140241.4155773-1-bernd@kuhls.net>
- <20230822225949.2b326664__48539.150941518$1692738023$gmane$org@windsurf>
- <pan$e13d2$de8bbe61$f0a8808c$96f93b15@ID-313208.user.individual.net>
- <20230825190532.43dfeb9b@windsurf>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-Subject: Re: [Buildroot] [PATCH/next v9 00/12] Introduce libudev (branch
- yem/libudev-6)
+ with ESMTP id Ixx51neJEHwo for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 18:28:18 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5426783D0C
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 18:28:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5426783D0C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A406FF805;
+ Fri, 25 Aug 2023 18:28:14 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qZbXa-0032Vs-07; Fri, 25 Aug 2023 20:28:14 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230825101535.661486-1-peter@korsgaard.com>
+ <20230825191851.41b3b155@windsurf>
+Date: Fri, 25 Aug 2023 20:28:13 +0200
+In-Reply-To: <20230825191851.41b3b155@windsurf> (Thomas Petazzoni's message of
+ "Fri, 25 Aug 2023 19:18:51 +0200")
+Message-ID: <87pm3b7z9e.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/mosquitto: bump to version 2.0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,34 +63,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@uclibc.org
+Cc: Titouan Christophe <titouanchristophe@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Fri, 25 Aug 2023 19:05:32 +0200 schrieb Thomas Petazzoni via buildroot:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> So you can apply complicated patches/changes, but you cannot adjust the
-> configuration of your system to use eudev? 
+ > On Fri, 25 Aug 2023 12:15:35 +0200
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Hi,
+ >> Bugfix release, fixing a number of regressions in 2.0.16
+ >> 
+ >> From the changelog
+ >> (https://github.com/eclipse/mosquitto/blob/master/ChangeLog.txt)
+ >> 
+ >> 2.0.17 - 2023-08-22
+ >> ===================
+ >> 
+ >> Broker:
+ >> - Fix `max_queued_messages 0` stopping clients from receiving messages.
+ >> Closes #2879.
+ >> - Fix `max_inflight_messages` not being set correctly. Closes #2876.
+ >> 
+ >> Apps:
+ >> - Fix `mosquitto_passwd -U` backup file creation. Closes #2873.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/mosquitto/mosquitto.hash | 4 ++--
+ >> package/mosquitto/mosquitto.mk   | 2 +-
+ >> 2 files changed, 3 insertions(+), 3 deletions(-)
 
-the init scripts of this system were created outside of buildroot and need 
-a statically-populated /dev. As I said, changing the configuration is not 
-possible, sorry.
+ > Applied to next, thanks.
 
-Due to upstream now supporting a daemon-less build I thought I try again 
-to get this series into buildroot. One of your arguments from 2016 was the 
-lack of upstream support for this feature:
-https://lists.buildroot.org/pipermail/buildroot/2016-July/470285.html
+Sorry if that wasn't clear, but given that it fixes regressions in
+2.0.16 (which is in master), I think it makes sense to apply it to
+master as well.
 
-We do not need to trick-around with the build system anymore, we just add 
-an option to build the package in a way which is supported by upstream 
-now.
-
-Regards, Bernd
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
