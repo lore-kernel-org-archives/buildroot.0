@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 292B8C001DB
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:12:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C8BDC001DB
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B702A83C86;
-	Fri, 25 Aug 2023 16:12:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B702A83C86
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C1E983C73;
+	Fri, 25 Aug 2023 16:12:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C1E983C73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d3mSNLcolH2W; Fri, 25 Aug 2023 16:12:18 +0000 (UTC)
+	with ESMTP id bSihLi0e5j9A; Fri, 25 Aug 2023 16:12:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1659883C73;
-	Fri, 25 Aug 2023 16:12:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1659883C73
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7487983C86;
+	Fri, 25 Aug 2023 16:12:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7487983C86
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 05D721BF2CB
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:12:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 672B21BF2CB
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:12:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFCAB41F75
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:12:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFCAB41F75
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C1F441EA0
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:12:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C1F441EA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HA7ZVgnUSOXa for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 16:12:14 +0000 (UTC)
+ with ESMTP id rDhTiW8jARgM for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 16:12:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D352C41EA0
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:12:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D352C41EA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2666941EC2
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:12:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2666941EC2
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA4D78633E; Fri, 25 Aug 2023 16:12:14 +0000 (UTC)
+ id 157828633E; Fri, 25 Aug 2023 16:12:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 18:11:08 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: c31651c2f2350011ac6c038f20736ab417ac39d6
-X-Git-Newrev: d41d079735b82c9f5fdce8d26903e91ce952fbdd
+Date: Fri, 25 Aug 2023 18:11:00 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 11dea30f52b69fad19f84dd0f8364ec6411c8b47
+X-Git-Newrev: 7821b1e64bfe3a68e50ed404a0f5a6f4b0bf2584
 X-Patchwork-Hint: ignore
-Message-Id: <20230825161214.BA4D78633E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python-iptables:
+Message-Id: <20230825161215.157828633E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/python-iptables:
  fix _find_library()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d41d079735b82c9f5fdce8d26903e91ce952fbdd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7821b1e64bfe3a68e50ed404a0f5a6f4b0bf2584
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 While the commit [1] already fixed some runtime issue with
 uClibc toolchain, the same test TestPythonPy3Iptables fail
