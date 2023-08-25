@@ -4,57 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D54BC3DA66
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 06:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD98EC3DA6F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 07:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94C8060EA7;
-	Fri, 25 Aug 2023 06:56:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94C8060EA7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 664AC60EA7;
+	Fri, 25 Aug 2023 07:07:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 664AC60EA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zdRDcYSP8xTG; Fri, 25 Aug 2023 06:56:44 +0000 (UTC)
+	with ESMTP id nGJdjZW6hTU0; Fri, 25 Aug 2023 07:07:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D801D60BAF;
-	Fri, 25 Aug 2023 06:56:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D801D60BAF
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D447B1BF329
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 06:56:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF79E60EA1;
+	Fri, 25 Aug 2023 07:07:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF79E60EA1
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 411E51BF404
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 07:07:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADD4A83459
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 06:56:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADD4A83459
+ by smtp2.osuosl.org (Postfix) with ESMTP id 171A44174D
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 07:07:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 171A44174D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3KcgLL5sIR-m for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 06:56:39 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3E7C483180
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 06:56:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E7C483180
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CC54FFF807;
- Fri, 25 Aug 2023 06:56:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OY_RziBOAWrC for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 07:07:51 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1BA494174C
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 07:07:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BA494174C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AEBC2240007;
+ Fri, 25 Aug 2023 07:07:47 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qZQkE-002c32-Uz; Fri, 25 Aug 2023 08:56:34 +0200
+ id 1qZQv4-002ceZ-Kv; Fri, 25 Aug 2023 09:07:46 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <SY2PR01MB2778500474B41D29E8E7D54C940AA@SY2PR01MB2778.ausprd01.prod.outlook.com>
- <20230801121118.72610acf@windsurf>
- <SY2PR01MB2778DE94AA435DAE575AAFD7940BA@SY2PR01MB2778.ausprd01.prod.outlook.com>
- <87y1i0cfjz.fsf@48ers.dk> <20230824231615.44df3647@windsurf>
- <87ttsocexi.fsf@48ers.dk> <20230824232658.616ff7e0@windsurf>
-Date: Fri, 25 Aug 2023 08:56:34 +0200
-In-Reply-To: <20230824232658.616ff7e0@windsurf> (Thomas Petazzoni's message of
- "Thu, 24 Aug 2023 23:26:58 +0200")
-Message-ID: <87pm3bd2zh.fsf@48ers.dk>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230824212810.4166630-1-yann.morin.1998@free.fr>
+Date: Fri, 25 Aug 2023 09:07:46 +0200
+In-Reply-To: <20230824212810.4166630-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Thu, 24 Aug 2023 23:28:10 +0200")
+Message-ID: <87ledzd2gt.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] Update schedule of sources.buildroot.org
+Subject: Re: [Buildroot] [PATCH] package/check: don;
+ t conflict with release archive
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,34 +63,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Afshin Pir <Afshin.Pir@gallagher.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > On Thu, 24 Aug 2023 23:23:53 +0200
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+ > In commit ee93213d18bc (package/check: fix compile issue due to missing
+ > source file), we switched from using the released tarball, to using the
+ > autogenerated tarball from github.
 
- >> It is unfortunately not right away clear to me how we can do that - Make
- >> source can fail for all kind of reasons.
- >> 
- >> Any ideas?
+ > However, that means that the filename of the archive did not change,
+ > while its content did change. The hash was promptly updated, but that
+ > means that the archive we cachec on s.b.o (and possibly the one users
+ > may also already have locally) will not match the new hash (and
+ > conversely).
 
- > You could run "make busybox-source" first, to see if at least we're
- > able to source a well known package that's known to work. If that fails
- > (it would have failed with the missing Perl thing), we can abort and
- > notify us.
+ > So we switch to using the sha1-hash of the commit conrresponding to the
+ > tag.
 
-Ah yes, I will have a look at implementing something like that.
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Waldemar Brodkorb <wbx@openadk.org>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-I BTW noticed that host-ccache no longer builds since the bump to 4.7.4
-(in 2023.05). According to
-https://ccache.dev/platform-compiler-language-support.html it needs
-GCC >= 8, and the machine uses GCC 4.8.5.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
