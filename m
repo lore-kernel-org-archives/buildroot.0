@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D43C001DB
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:09:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A9FC3DA6F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:11:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 659A883C66;
-	Fri, 25 Aug 2023 16:09:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 659A883C66
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F0FC83B9D;
+	Fri, 25 Aug 2023 16:11:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F0FC83B9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wL90BciF_WBN; Fri, 25 Aug 2023 16:09:57 +0000 (UTC)
+	with ESMTP id kmMTsxUBfK4q; Fri, 25 Aug 2023 16:11:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA05F83C6D;
-	Fri, 25 Aug 2023 16:09:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA05F83C6D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D79C41BF2CB
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:09:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2336832D8;
+	Fri, 25 Aug 2023 16:11:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2336832D8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 657D81BF2CB
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:11:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1E4F83C6F
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:09:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1E4F83C6F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3DF8B41EA0
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:11:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DF8B41EA0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xwBAqJA7AsKD for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 16:09:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ROpps8VDH_hO for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 16:11:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7EDC83C66
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:09:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7EDC83C66
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3998A41C3A
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:11:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3998A41C3A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3BF886334; Fri, 25 Aug 2023 16:09:53 +0000 (UTC)
+ id 27D6B86338; Fri, 25 Aug 2023 16:11:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 18:05:40 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 211ea14e6f63ef106ab4d9bd02512ba71e5e530f
-X-Git-Newrev: c31651c2f2350011ac6c038f20736ab417ac39d6
+Date: Fri, 25 Aug 2023 18:05:33 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 1bd74ab101725a06b4998fa717f307e3c191626d
+X-Git-Newrev: 11dea30f52b69fad19f84dd0f8364ec6411c8b47
 X-Patchwork-Hint: ignore
-Message-Id: <20230825160953.C3BF886334@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/go: security bump
+Message-Id: <20230825161110.27D6B86338@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/go: security bump
  to version 1.19.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c31651c2f2350011ac6c038f20736ab417ac39d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=11dea30f52b69fad19f84dd0f8364ec6411c8b47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 go1.19.11 (released 2023-07-11) includes a security fix to the net/http package,
 as well as bug fixes to cgo, the cover tool, the go command, the runtime, and
