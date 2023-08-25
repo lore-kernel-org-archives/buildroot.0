@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D339C6787B
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB2F3C3DA66
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45E6783B17;
-	Fri, 25 Aug 2023 16:49:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45E6783B17
+	by smtp1.osuosl.org (Postfix) with ESMTP id 78BA482284;
+	Fri, 25 Aug 2023 16:49:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78BA482284
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5Ls1LHtsv_-K; Fri, 25 Aug 2023 16:49:34 +0000 (UTC)
+	with ESMTP id 11SENZmuCXvt; Fri, 25 Aug 2023 16:49:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A289283AC2;
-	Fri, 25 Aug 2023 16:49:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A289283AC2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 12F121BF35E
+	by smtp1.osuosl.org (Postfix) with ESMTP id C723B83B98;
+	Fri, 25 Aug 2023 16:49:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C723B83B98
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 26D391BF995
  for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED84E6103B
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:49:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED84E6103B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B80341969
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B80341969
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h3FenNHciVX2 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wR1L6hUYQn8z for <buildroot@lists.busybox.net>;
  Fri, 25 Aug 2023 16:49:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C29360BAF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1715941939
  for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:49:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C29360BAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1715941939
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A5BC86369; Fri, 25 Aug 2023 16:49:31 +0000 (UTC)
+ id 016E886368; Fri, 25 Aug 2023 16:49:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 18:46:38 +0200
+Date: Fri, 25 Aug 2023 18:44:37 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 42a36db68e7bedd7d21987d0b87d971ee8c65c6c
-X-Git-Newrev: ce3c56527e2176a2cdaf57793b30791c0783f389
+X-Git-Oldrev: afef2ea19031d541f74a4e5c06b85596a1a3e192
+X-Git-Newrev: 42a36db68e7bedd7d21987d0b87d971ee8c65c6c
 X-Patchwork-Hint: ignore
-Message-Id: <20230825164931.0A5BC86369@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/wireless-regdb:
- bump version to 2023.05.03
+Message-Id: <20230825164931.016E886368@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] DEVELOPERS: update entry
+ for Daniel Lang
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce3c56527e2176a2cdaf57793b30791c0783f389
+commit: https://git.buildroot.net/buildroot/commit/?id=42a36db68e7bedd7d21987d0b87d971ee8c65c6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ecfa41b6f1b8c4cec9048acc0d241521811447db)
+(cherry picked from commit a1a2bfa429ebeb061059a00fdb6c2f9def494c78)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 36451f839d..b4e8dcaf54 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  fe81e8a8694dc4753a45087a1c4c7e1b48dee5a59f5f796ce374ea550f0b2e73  wireless-regdb-2023.02.13.tar.xz
-+sha256  f254d08ab3765aeae2b856222e11a95d44aef519a6663877c71ef68fae4c8c12  wireless-regdb-2023.05.03.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 68fbe35b8b..db9c7f42d5 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index adbf85ab17..c4a2557aba 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -649,7 +649,7 @@ F:	package/odroidc2-firmware/
+ N:	Daniel J. Leach <dleach@belcan.com>
+ F:	package/dacapo/
  
--WIRELESS_REGDB_VERSION = 2023.02.13
-+WIRELESS_REGDB_VERSION = 2023.05.03
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-N:	Daniel Lang <d.lang@abatec.at>
++N:	Daniel Lang <dalang@gmx.at>
+ F:	package/atkmm/
+ F:	package/atkmm2_28/
+ F:	package/cairomm/
+@@ -663,6 +663,7 @@ F:	package/libsigc2/
+ F:	package/paho-mqtt-cpp/
+ F:	package/pangomm/
+ F:	package/pangomm2_46/
++F:	package/sam-ba/
+ 
+ N:	Damien Lanson <damien@kal-host.com>
+ F:	package/libvdpau/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
