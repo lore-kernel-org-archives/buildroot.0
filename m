@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76361EC873A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C01EDEC873B
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FCFB8230B;
-	Thu,  7 Sep 2023 15:35:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FCFB8230B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7867983C0A;
+	Thu,  7 Sep 2023 15:35:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7867983C0A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sEB1o52T2DDf; Thu,  7 Sep 2023 15:35:39 +0000 (UTC)
+	with ESMTP id HUDHvPf72L5v; Thu,  7 Sep 2023 15:35:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D41580F07;
-	Thu,  7 Sep 2023 15:35:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D41580F07
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9B5983D1D;
+	Thu,  7 Sep 2023 15:35:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9B5983D1D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1C8F61BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 24CA01BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0270E41D8D
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0270E41D8D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FB2641E0B
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FB2641E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Cmsb6oEEzyYx for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:37 +0000 (UTC)
+ with ESMTP id IMamMMFJ2zUo for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B57841DA1
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B57841DA1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C8A241DB6
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C8A241DB6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 071BB86A1E; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
+ id 0F2FE86A1F; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Aug 2023 21:20:12 +0200
+Date: Fri, 25 Aug 2023 19:18:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5ed5799713588acc2a4c40645909a01b770bedd
-X-Git-Newrev: c66f26a12db322d9d40991098ba6d243bea47884
+X-Git-Oldrev: 447f645a210c74e538b4e04135345aa91380193b
+X-Git-Newrev: 4aa36a507c7321eabd4ba598750a05a37356d5fc
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145132.071BB86A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/chrony: bump to version 4.4
+Message-Id: <20230907145133.0F2FE86A1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mosquitto: bump to version 2.0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c66f26a12db322d9d40991098ba6d243bea47884
+commit: https://git.buildroot.net/buildroot/commit/?id=4aa36a507c7321eabd4ba598750a05a37356d5fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Bugfix release, fixing a number of regressions in 2.0.16
+
+From the changelog
+(https://github.com/eclipse/mosquitto/blob/master/ChangeLog.txt)
+
+2.0.17 - 2023-08-22
+===================
+
+Broker:
+- Fix `max_queued_messages 0` stopping clients from receiving messages.
+  Closes #2879.
+- Fix `max_inflight_messages` not being set correctly. Closes #2876.
+
+Apps:
+- Fix `mosquitto_passwd -U` backup file creation. Closes #2873.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/chrony/chrony.hash | 4 ++--
- package/chrony/chrony.mk   | 2 +-
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index 9c0e11757b..2cf6cca031 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://download.tuxfamily.org/chrony/chrony-4.3-tar-gz-asc.txt
--sha256  9d0da889a865f089a5a21610ffb6713e3c9438ce303a63b49c2fb6eaff5b8804  chrony-4.3.tar.gz
-+# https://download.tuxfamily.org/chrony/chrony-4.4-tar-gz-asc.txt
-+sha256  eafb07e6daf92b142200f478856dfed6efc9ea2d146eeded5edcb09b93127088  chrony-4.4.tar.gz
- # Locally calculated
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 86f23d9060..e7e6931a2a 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index cbe54d6d1a..df0a51df3a 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.16.tar.gz.asc
+-sha256  638db9e43e89d243ea98d10d66e76ff376131217780decd01abaffacc66d8035  mosquitto-2.0.16.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.17.tar.gz.asc
++sha256  3be7a911236567c1a9fbe25baf3e3167004ba4a0c151a448ef1f7fc077dba52f  mosquitto-2.0.17.tar.gz
+ 
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index f146a86d0a..0b85246f39 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CHRONY_VERSION = 4.3
-+CHRONY_VERSION = 4.4
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPL-2.0
- CHRONY_LICENSE_FILES = COPYING
+-MOSQUITTO_VERSION = 2.0.16
++MOSQUITTO_VERSION = 2.0.17
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
