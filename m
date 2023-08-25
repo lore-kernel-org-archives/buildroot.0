@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8A9FC3DA6F
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15BFEC3DA6F
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 16:11:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F0FC83B9D;
-	Fri, 25 Aug 2023 16:11:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F0FC83B9D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B8DA83C73;
+	Fri, 25 Aug 2023 16:11:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B8DA83C73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kmMTsxUBfK4q; Fri, 25 Aug 2023 16:11:13 +0000 (UTC)
+	with ESMTP id PHJJthRaHTVO; Fri, 25 Aug 2023 16:11:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2336832D8;
-	Fri, 25 Aug 2023 16:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2336832D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB0BD832E7;
+	Fri, 25 Aug 2023 16:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB0BD832E7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 657D81BF2CB
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:11:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2AE441BF2CB
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DF8B41EA0
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DF8B41EA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 024B041EA0
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 16:11:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 024B041EA0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ROpps8VDH_hO for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 16:11:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3998A41C3A
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:11:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3998A41C3A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27D6B86338; Fri, 25 Aug 2023 16:11:10 +0000 (UTC)
+ with ESMTP id 3FWwhRDbj9JC for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 16:11:55 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A1D441C3A
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 16:11:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A1D441C3A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 95B45C0002;
+ Fri, 25 Aug 2023 16:11:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qZZPb-002yqg-PK; Fri, 25 Aug 2023 18:11:51 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 18:05:33 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 1bd74ab101725a06b4998fa717f307e3c191626d
-X-Git-Newrev: 11dea30f52b69fad19f84dd0f8364ec6411c8b47
-X-Patchwork-Hint: ignore
-Message-Id: <20230825161110.27D6B86338@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/go: security bump
- to version 1.19.11
+To: Romain Naour <romain.naour@gmail.com>
+References: <20230608232859.1245497-1-romain.naour@gmail.com>
+Date: Fri, 25 Aug 2023 18:11:51 +0200
+In-Reply-To: <20230608232859.1245497-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Fri, 9 Jun 2023 01:28:43 +0200")
+Message-ID: <87sf879k54.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 01/17] package/python-iptables: fix
+ _find_library()
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +63,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11dea30f52b69fad19f84dd0f8364ec6411c8b47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-go1.19.11 (released 2023-07-11) includes a security fix to the net/http package,
-as well as bug fixes to cgo, the cover tool, the go command, the runtime, and
-the go/printer package.
+ > While the commit [1] already fixed some runtime issue with
+ > uClibc toolchain, the same test TestPythonPy3Iptables fail
+ > with Glibc toolchain.
 
-CVE-2023-29406 and Go issue https://go.dev/issue/60374
+ >   xtables_version = 12
+ >   if xtables_version:
+ >       _searchlib = "libxtables.so.%s" % (xtables_version,)
+ >   else:
+ >       _searchlib = "xtables"
+ >   _lib_xtables, xtables_version = find_library(_searchlib)
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fc957ece11e585f1980c51764aafc56fde5b0e15)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >   _lib_xtables and xtables_version are null with glibc
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 874737ea2d..6d4c718a40 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  13755bcce529747d5f2930dee034730c86d02bd3e521ab3e2bbede548d3b953f  go1.19.10.src.tar.gz
-+sha256  e25c9ab72d811142b7f41ff6da5165fec2d1be5feec3ef2c66bc0bdecb431489  go1.19.11.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 545d2117b7..22b8161e05 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.19.10
-+GO_VERSION = 1.19.11
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ > The implementation of find_library() rely on the custom
+ > _find_library() that try to use the IPTABLES_LIBDIR
+ > environment variable (that does not exist in the context
+ > of Buildroot).
+
+ > Within the scope of buildroot we can determine what
+ > IPTABLES_LIBDIR should be at build time and replace the
+ > calls to os.environ.get('IPTABLES_LIBDIR', None) with
+ > the correct value.
+
+ > [1] d341ec035067120b456f669a826e26eb594c0237
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > ---
+ > I don't know why TestPythonPy3Iptables pass succesfully
+ > with a uClibc toolchain but not with a glibc toolchain.
+ > The current python code searching for xtables, modules
+ > and libraries seems fragile...
+
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
