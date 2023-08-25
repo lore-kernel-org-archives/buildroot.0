@@ -1,51 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F898C3DA66
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 07:08:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D233C3DA66
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 10:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9197F60F8C;
-	Fri, 25 Aug 2023 07:08:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9197F60F8C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 748A183AA8;
+	Fri, 25 Aug 2023 10:22:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 748A183AA8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VfGIAE-gSTaF; Fri, 25 Aug 2023 07:08:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SNExwtPSBhV9; Fri, 25 Aug 2023 10:22:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC56C60FCF;
-	Fri, 25 Aug 2023 07:08:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC56C60FCF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 22FC61BF404
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 07:08:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8A9383A93;
+	Fri, 25 Aug 2023 10:22:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8A9383A93
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CC0A1BF404
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 10:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E94B741809
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 07:08:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E94B741809
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7328C41754
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 10:22:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7328C41754
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uElBEgriKKP3 for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 07:08:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D4DA4062E
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 07:08:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D4DA4062E
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69BCF862C1; Fri, 25 Aug 2023 07:08:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j6cJ9Ic0XLJX for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 10:21:57 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C175E40126
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 10:21:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C175E40126
+Received: from relay7-d.mail.gandi.net (unknown [217.70.183.200])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 81140D1D66
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 10:15:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 071E520004;
+ Fri, 25 Aug 2023 10:15:37 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peko@48ers.dk>)
+ id 1qZTqr-002m5x-0i; Fri, 25 Aug 2023 12:15:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 09:04:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 624814f4ec26d470606aefeb1a817a31399a04c2
-X-Git-Newrev: 87bc648720bb4e79ac99beff8a807019ac930233
-X-Patchwork-Hint: ignore
-Message-Id: <20230825070806.69BCF862C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/check: don't conflict with release
- archive
+Date: Fri, 25 Aug 2023 12:15:35 +0200
+Message-Id: <20230825101535.661486-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: [Buildroot] [PATCH] package/mosquitto: bump to version 2.0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,63 +61,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Titouan Christophe <titouanchristophe@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87bc648720bb4e79ac99beff8a807019ac930233
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bugfix release, fixing a number of regressions in 2.0.16
 
-In commit ee93213d18bc (package/check: fix compile issue due to missing
-source file), we switched from using the released tarball, to using the
-autogenerated tarball from github.
+From the changelog
+(https://github.com/eclipse/mosquitto/blob/master/ChangeLog.txt)
 
-However, that means that the filename of the archive did not change,
-while its content did change. The hash was promptly updated, but that
-means that the archive we cache on s.b.o (and possibly the one users
-may also already have locally) will not match the new hash (and
-conversely).
+2.0.17 - 2023-08-22
+===================
 
-So we switch to using the sha1-hash of the commit corresponding to the
-tag.
+Broker:
+- Fix `max_queued_messages 0` stopping clients from receiving messages.
+  Closes #2879.
+- Fix `max_inflight_messages` not being set correctly. Closes #2876.
 
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Apps:
+- Fix `mosquitto_passwd -U` backup file creation. Closes #2873.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/check/check.hash | 2 +-
- package/check/check.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/check/check.hash b/package/check/check.hash
-index 9b380ddc28..a8cec60d16 100644
---- a/package/check/check.hash
-+++ b/package/check/check.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  998d355294bb94072f40584272cf4424571c396c631620ce463f6ea97aa67d2e  check-0.15.2.tar.gz
-+sha256  20e7360f5774844c09fde696e5bf71d061e9f53b3d763d886d3318d8893fdda4  check-11970a7e112dfe243a2e68773f014687df2900e8.tar.gz
- # License files, locally calculated
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LESSER
-diff --git a/package/check/check.mk b/package/check/check.mk
-index 0bdc9b93ef..95fe5c9d57 100644
---- a/package/check/check.mk
-+++ b/package/check/check.mk
-@@ -4,7 +4,9 @@
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index cbe54d6d1a..df0a51df3a 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.16.tar.gz.asc
+-sha256  638db9e43e89d243ea98d10d66e76ff376131217780decd01abaffacc66d8035  mosquitto-2.0.16.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.17.tar.gz.asc
++sha256  3be7a911236567c1a9fbe25baf3e3167004ba4a0c151a448ef1f7fc077dba52f  mosquitto-2.0.17.tar.gz
+ 
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index f146a86d0a..0b85246f39 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CHECK_VERSION = 0.15.2
-+# This is the same as tag 0.15.2, but we can't use it, as to avoid conflict
-+# with the released tarball that was incomplete
-+CHECK_VERSION = 11970a7e112dfe243a2e68773f014687df2900e8
- CHECK_SITE = $(call github,libcheck,check,$(CHECK_VERSION))
- CHECK_INSTALL_STAGING = YES
- CHECK_DEPENDENCIES = host-pkgconf
+-MOSQUITTO_VERSION = 2.0.16
++MOSQUITTO_VERSION = 2.0.17
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+-- 
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
