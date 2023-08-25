@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0465C3DA66
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 14:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8DBEC3DA66
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 14:50:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58FDD4178B;
-	Fri, 25 Aug 2023 14:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58FDD4178B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BA6F417BF;
+	Fri, 25 Aug 2023 14:50:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BA6F417BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CMQudF79pcVf; Fri, 25 Aug 2023 14:49:55 +0000 (UTC)
+	with ESMTP id K_yhBS90ilXj; Fri, 25 Aug 2023 14:50:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9F31A4019E;
-	Fri, 25 Aug 2023 14:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F31A4019E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 680881BF357
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 14:49:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E22B94019E;
+	Fri, 25 Aug 2023 14:50:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E22B94019E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C25921BF357
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 14:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 41A0F61476
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 14:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41A0F61476
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9C9564019E
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 14:50:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C9564019E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TyW9TgWXbOGP for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 14:49:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id znyNq-0N4sjb for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 14:50:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E0296068B
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 14:49:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E0296068B
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDD4840025
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 14:50:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDD4840025
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A02686322; Fri, 25 Aug 2023 14:49:51 +0000 (UTC)
+ id BD79C8632F; Fri, 25 Aug 2023 14:50:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 16:41:53 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 00ab747055d0583aac073b8c2dac8625dabd348a
-X-Git-Newrev: 211ea14e6f63ef106ab4d9bd02512ba71e5e530f
+Date: Fri, 25 Aug 2023 16:39:25 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 5bf4f3e5169c0eaed0593edd4f5bf2495c3ed5f6
+X-Git-Newrev: 6989c715643793b7a65b80449d4b58bbc9584c4f
 X-Patchwork-Hint: ignore
-Message-Id: <20230825144951.5A02686322@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/rtl8189fs: bump
- version to 2023-07-08
+Message-Id: <20230825145054.BD79C8632F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/cryptodev-linux:
+ bump version to 1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=211ea14e6f63ef106ab4d9bd02512ba71e5e530f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6989c715643793b7a65b80449d4b58bbc9584c4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-This version fixes a wrong patching for Linux 6.1
+Changelog:
+https://github.com/cryptodev-linux/cryptodev-linux/blob/master/NEWS
+"* Fix compilation issues against Linux kernel 6.3"
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Fixes:
+http://autobuild.buildroot.net/results/9b9/9b9ad744d8a37fc46726461551a2dcb3c26a1341/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ee2f9c920ab33d23e07e439f440d549eb1bb4e09)
+(cherry picked from commit 947cf4125e87eaa193de37d3a3fc5fcb885ad531)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
+ package/cryptodev-linux/cryptodev-linux.hash | 2 +-
+ package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index 95a031b6f2..377812fba8 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index d649e8934a..300aa3bcd4 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  5d8aad48b8d124a313e5b8182c5dba2b94ecdbac2a9f1861a50c081b9034a543  rtl8189fs-c223a25b1000d64432eca4201a8f012414dfc7ce.tar.gz
-+sha256  9ff7aa9ee8cd7a8f386531d3b009e7bcbce1ff71bb676c187c40e538755eb8b5  rtl8189fs-75a566a830037c7d1309c5a9fe411562772a1cf2.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index dd35a166e5..ca8ea15c03 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
+-sha256  f51c2254749233b1b1d7ec9445158bd709f124f88e1c650fe2faac83c3a81938  cryptodev-linux-1.12.tar.gz
++sha256  33b7915c46eb39a37110e88c681423c0dd0df25d784b6e1475ac3196367f0db5  cryptodev-linux-1.13.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index d0c3bc5218..4704a75bee 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8189FS_VERSION = c223a25b1000d64432eca4201a8f012414dfc7ce
-+RTL8189FS_VERSION = 75a566a830037c7d1309c5a9fe411562772a1cf2
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+-CRYPTODEV_LINUX_VERSION = 1.12
++CRYPTODEV_LINUX_VERSION = 1.13
+ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,cryptodev-linux-$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
