@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BEA0C3DA66
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 13:14:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF00AC71133
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 13:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CA0461480;
-	Fri, 25 Aug 2023 13:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CA0461480
+	by smtp3.osuosl.org (Postfix) with ESMTP id A80506149E;
+	Fri, 25 Aug 2023 13:14:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A80506149E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DIsV9bcxiIKS; Fri, 25 Aug 2023 13:14:37 +0000 (UTC)
+	with ESMTP id 8X6acpClOnRq; Fri, 25 Aug 2023 13:14:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 871CC61487;
-	Fri, 25 Aug 2023 13:14:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 871CC61487
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0CFDF1BF995
+	by smtp3.osuosl.org (Postfix) with ESMTP id E129F61486;
+	Fri, 25 Aug 2023 13:14:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E129F61486
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 74A991BF82F
  for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 13:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB18F6145A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 699F541571
  for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 13:13:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB18F6145A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 699F541571
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id npyFd7TqJn6g for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 13:13:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zty_Ndf5E2lZ for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 13:13:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A02136146E
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6C494049F
  for <buildroot@buildroot.org>; Fri, 25 Aug 2023 13:13:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A02136146E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6C494049F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DB168630C; Fri, 25 Aug 2023 13:13:56 +0000 (UTC)
+ id 969F58630E; Fri, 25 Aug 2023 13:13:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 15:03:24 +0200
+Date: Fri, 25 Aug 2023 15:08:54 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 7cc57e0b73ca7687ce3dfbe417d5207c7486ce60
-X-Git-Newrev: 12c76f9be582264aa60172a4c45ea32cce006492
+X-Git-Oldrev: 12c76f9be582264aa60172a4c45ea32cce006492
+X-Git-Newrev: 63bea3d49f521cbbbd31b1a76853aae4f1d1dcdb
 X-Patchwork-Hint: ignore
-Message-Id: <20230825131356.8DB168630C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] DEVELOPERS: Remove
- Michael Rommel
+Message-Id: <20230825131356.969F58630E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ configs/beaglebone_qt5_defconfig: build am335x-bonegreen-wireless
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12c76f9be582264aa60172a4c45ea32cce006492
+commit: https://git.buildroot.net/buildroot/commit/?id=63bea3d49f521cbbbd31b1a76853aae4f1d1dcdb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Removal requested via email:
+Build the am335x-bonegreen-wireless.dtb device tree.
+  The genimage script which is shared between beaglebone and
+  beaglebone_qt5 was updated to support the bonegreen-wireless.
 
-could you somehow please remove me as maintainer from this package.
-I am since many years not using builtroot anymore and have no longer
-systems with which I could do patch requests.
-I am going into retirement.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 10dbb664e50e75ce7df2732d3cb483817147ffbf)
+(cherry picked from commit adc566856e95990ede1174faa0a2ff031b15d356)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 5 -----
- 1 file changed, 5 deletions(-)
+ configs/beaglebone_qt5_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6da1be8b48..adbf85ab17 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2057,11 +2057,6 @@ F:	package/protobuf/
- F:	package/re2/
- F:	package/spdlog/
- 
--N:	Michael Rommel <rommel@layer-7.net>
--F:	package/knock/
--F:	package/python-crc16/
--F:	package/python-pyzmq/
--
- N:	Michael Trimarchi <michael@amarulasolutions.com>
- F:	board/bsh/
- F:	configs/imx8mn_bsh_smm_s2_defconfig
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index ff03a05a8e..0038acfcfd 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -15,7 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,4.19.7
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-sgx.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
