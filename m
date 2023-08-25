@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 124E5C83F11
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2E4C83F11
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5683040377;
-	Sat, 26 Aug 2023 18:46:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5683040377
+	by smtp2.osuosl.org (Postfix) with ESMTP id E594C4059C;
+	Sat, 26 Aug 2023 18:48:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E594C4059C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6wq9s24AapeM; Sat, 26 Aug 2023 18:46:18 +0000 (UTC)
+	with ESMTP id k3yzDbI7pT-9; Sat, 26 Aug 2023 18:48:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BEF1840232;
-	Sat, 26 Aug 2023 18:46:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEF1840232
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EAAC31BF37C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:46:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F8C540232;
+	Sat, 26 Aug 2023 18:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F8C540232
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DF761BF37C
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFF084148B
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:46:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFF084148B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6575E60F0E
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6575E60F0E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pfi45FNTpU4v for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 18:46:16 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EAA2B41488
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:46:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAA2B41488
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D999440002;
- Sat, 26 Aug 2023 18:46:12 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qZyIW-00539b-1c; Sat, 26 Aug 2023 20:46:12 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PXrMUlsegYf2 for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A078A60B3C
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A078A60B3C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 84FDB863F4; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230720053915.34294-1-bernd@kuhls.net>
-Date: Sat, 26 Aug 2023 20:46:12 +0200
-In-Reply-To: <20230720053915.34294-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Thu, 20 Jul 2023 07:39:14 +0200")
-Message-ID: <87v8d17ibv.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] {linux, linux-headers}: bump 6.{1,
- 4}.x series
+To: buildroot@buildroot.org
+Date: Fri, 25 Aug 2023 21:32:38 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: ef926a0a44e49da84f619846f66028e7653e5c52
+X-Git-Newrev: ab72054281376ead3742ff9cbb8511562b0f7c53
+X-Patchwork-Hint: ignore
+Message-Id: <20230826184802.84FDB863F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] boot/uboot: set DTC path
+ when BR2_TARGET_UBOOT_NEEDS_DTC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,20 +57,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ab72054281376ead3742ff9cbb8511562b0f7c53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+In order for host-dtc to get picked up properly we need to set
+the DTC path passed to the build explicitly.
 
-Committed to 2023.02.x and 2023.05.x (without the 6.4.x bump), thanks.
+See:
+https://github.com/u-boot/u-boot/blob/v2023.07.02/Makefile#L420
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 231d79c81e9a1f8c2ef14861374a40fcdc5e6b33)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/uboot.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 4eae8e95c3..1a6e70a792 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -209,6 +209,7 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+ UBOOT_DEPENDENCIES += host-dtc
++UBOOT_MAKE_OPTS += DTC=$(HOST_DIR)/bin/dtc
+ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
