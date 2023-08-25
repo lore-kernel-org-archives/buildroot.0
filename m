@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB9AAC3DA66
-	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 21:05:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70388C7EE2C
+	for <buildroot@archiver.kernel.org>; Fri, 25 Aug 2023 21:33:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9846183EB5;
-	Fri, 25 Aug 2023 21:05:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9846183EB5
+	by smtp1.osuosl.org (Postfix) with ESMTP id D557781282;
+	Fri, 25 Aug 2023 21:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D557781282
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OVPT5g8mR7Cz; Fri, 25 Aug 2023 21:05:43 +0000 (UTC)
+	with ESMTP id TslE5hg5uJXT; Fri, 25 Aug 2023 21:33:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F251083E33;
-	Fri, 25 Aug 2023 21:05:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F251083E33
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 91D301BF284
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:05:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E897081251;
+	Fri, 25 Aug 2023 21:33:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E897081251
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 55D281BF2A5
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 78A8740135
- for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:05:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78A8740135
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D74241A32
+ for <buildroot@lists.busybox.net>; Fri, 25 Aug 2023 21:33:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D74241A32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iWlq2HoRX5AV for <buildroot@lists.busybox.net>;
- Fri, 25 Aug 2023 21:05:41 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 968F3405E6
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 21:05:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 968F3405E6
-Received: from fli4l.lan.fli4l (p5b3a06c4.dip0.t-ipconnect.de [91.58.6.196])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CFA8AA4C09E7
- for <buildroot@buildroot.org>; Fri, 25 Aug 2023 23:05:38 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42690)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qZdzu-0002Kp-20
- for buildroot@buildroot.org; Fri, 25 Aug 2023 23:05:38 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 23:05:38 +0200
-Message-Id: <20230825210538.10419-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VTym_drAc_Ck for <buildroot@lists.busybox.net>;
+ Fri, 25 Aug 2023 21:33:36 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 508B041951
+ for <buildroot@buildroot.org>; Fri, 25 Aug 2023 21:33:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 508B041951
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 36C131BF208;
+ Fri, 25 Aug 2023 21:33:30 +0000 (UTC)
+Date: Fri, 25 Aug 2023 23:33:28 +0200
+To: Sergey Romanov via buildroot <buildroot@buildroot.org>
+Message-ID: <20230825233328.35c4a920@windsurf>
+In-Reply-To: <20230525215103.37218-2-svromanov@sberdevices.ru>
+References: <20230525215103.37218-1-svromanov@sberdevices.ru>
+ <20230525215103.37218-2-svromanov@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1692997538;
- bh=DFl1ZzRdYIBnqDzs+MRGQGNH4Q4pJjIwKUW3SiZmMj8=;
- h=From:To:Subject:Date:From;
- b=IURKTMFBmuEIuOTec3mUEFI1vlCQUZaS+hjDuefN98aOGFSRz75PViM11LkoCrZtA
- vHwGyB4JuyjPZAeKY+PgspQUYf/QgmaDSotqeKaEd99XnnHxFxf3R0yu3pqanxELJ2
- kxWCWg5vnuK5hvNnj9syhiUTUkeIeT30O6QRcHoF4asqMmbPJh/nj7wLlXfcty7kuc
- wguIftmWjmxokT/qUO+3CwHOzIyTMaTBbby5d2qYov+zGaNHShil1HuYUXZL2pK3qg
- NyhM3U5/zj/6UYp3bbm22u4UO0KoLdmRnMLujtIToy7QWONbsQaaAEHkFjV9Aq49ve
- eVwQbC/mAH/UA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=IURKTMFB
-Subject: [Buildroot] [PATCH/next 1/1] package/kodi-pvr-nextpvr: bump version
- to 20.4.3-Nexus
+ d=bootlin.com; s=gm1; t=1692999212;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hjZqKoOXYfk0igORkNh9k3pNvpe1R3Yot+Lb005OzX4=;
+ b=Egh23hkvNxA9RJl9lm8/VWiszudIMosqmSWOoC2eVzMeZfRJo/84K4G3aJhIW3HM2S3aEw
+ wiCDJJkA02sCod2DtOE0MaNP7YCnxDFT9OkN5GhlNkwQel/bI3f9m/Tm+qjaYQo0XGi/NS
+ zUOdIfhGB9/QDLGqlBgEjYzSVd8/84+xVVtiAL3u/d/I8zGrOmC+68/MbWe4wra5Lb1ezl
+ l3yo+WpAB4JkweXg4+3dI6M1bagAKQkyEhBM7OuS1vSzVsRTUyXCWa1mRuqzJVEW7159f7
+ QHr53CAxQOfqorTjNjU2kBbOGWAsKgcghKN8p2Sp0daTLgl21AhlOS6fv8tevA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Egh23hkv
+Subject: Re: [Buildroot] [RFC PATCH v1 1/2] package/ck: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,42 +75,217 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Sergey Romanov <svromanov@sberdevices.ru>, chip-club@ya.ru,
+ akopytov@gmail.com, sbahra@repnop.org, sdfw_system_team@sberdevices.ru,
+ kernel@sberdevices.ru
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Sergey,
 
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 9ef0d4e758..dcbc504a23 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1ce85447426ddf6d443a5e3444145a2d3af65ce73d9fb583e42cd8afc9d599a5  kodi-pvr-nextpvr-20.4.2-Nexus.tar.gz
-+sha256  752dff532a277797f3fefc1ced7fea6efb8d92982d9040c4080c1e6dbab203a0  kodi-pvr-nextpvr-20.4.3-Nexus.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index 2629cd9147..e89aed7d0a 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_NEXTPVR_VERSION = 20.4.2-Nexus
-+KODI_PVR_NEXTPVR_VERSION = 20.4.3-Nexus
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
+On Fri, 26 May 2023 00:51:02 +0300
+Sergey Romanov via buildroot <buildroot@buildroot.org> wrote:
+
+> Concurrency primitives, safe memory reclamation
+> mechanisms and non-blocking data structures
+> for the research, design and implementation
+> of high performance concurrent systems.
+> 
+> https://github.com/concurrencykit/ck.git
+> 
+> Signed-off-by: Sergey Romanov <svromanov@sberdevices.ru>
+
+Sorry for the very slow feedback. I wanted to push this, but it doesn't
+build, and I don't see how it can build in a cross-compilation
+environment. Indeed, the configure script does this:
+
+$CC -o .1 .1.c
+COMPILER=`./.1 2> /dev/null`
+r=$?
+rm -f .1.c .1
+
+if test "$r" -ne 0; then
+        assert "" "update compiler"
+else
+        echo "success [$CC]"
+fi
+
+So it builds a program called .1 with the cross-compiler, and then it
+tries to run it. This obviously will never work in a cross-compilation
+context.
+
+Some more comments below (which I had addressed locally, but had to
+give up because of the above issue)
+
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index f2dea0dfd9..1be4e79a2b 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -286,6 +286,7 @@ package/cgroupfs-mount/S30cgroupfs Indent Shellcheck Variables
+>  package/chipmunk/0001-Fix-build-failure-on-musl.patch Upstream
+>  package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch Upstream
+>  package/chrony/S49chrony Indent Shellcheck Variables
+> +package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch Upstream
+
+Please add a proper Upstream: tag instead of adding an exception. We
+don't want to add new entries in .checkpackageignore, only remove
+existing entries.
+
+> diff --git a/package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch b/package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch
+> new file mode 100644
+> index 0000000000..7e2cc85ba6
+> --- /dev/null
+> +++ b/package/ck/0001-Avoid-buildroot-s-influence-on-LDFLAGS.patch
+> @@ -0,0 +1,191 @@
+> +From 0b30b184538c0de485fe292e2ebb6bfea3c255bc Mon Sep 17 00:00:00 2001
+> +From: Sergey Romanov <svromanov@sberdevices.ru>
+> +Date: Thu, 25 May 2023 19:01:28 +0300
+> +Subject: [PATCH] Avoid buildroot's influence on LDFLAGS
+> +
+> +Upstream-status: Pending
+
+Pending where? Could you please provide some link to a pull request?
+
+Also, could you provide some more details on why this patch is needed.
+Apparently, the configure script is designed to allow passing custom
+LDFLAGS through the LDFLAGS variable, so why doesn't that just work?
+
+> diff --git a/package/ck/Config.in b/package/ck/Config.in
+> new file mode 100644
+> index 0000000000..d88eaa8413
+> --- /dev/null
+> +++ b/package/ck/Config.in
+> @@ -0,0 +1,23 @@
+> +config BR2_PACKAGE_CK_ARCH_SUPPORTS
+> +	bool
+> +	default y if ((BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 && \
+> +		!BR2_ARM_CPU_ARMV7M) || BR2_aarch64 || \
+> +		BR2_powerpc || BR2_powerpc64 || BR2_RISCV_64 || \
+> +		BR2_s390x || BR2_sparc_v9 || BR2_x86 || BR2_x86_64)
+
+BR2_x86 doesn't exist, it's BR2_i386. Also, please reformat as such:
+
+config BR2_PACKAGE_CK_ARCH_SUPPORTS
+        bool
+        default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 && !BR2_ARM_CPU_ARMV7M
+        default y if BR2_aarch64
+        default y if BR2_i386
+        default y if BR2_powerpc || BR2_powerpc64
+        default y if BR2_RISCV_64
+        default y if BR2_s390x
+        default y if BR2_sparc_v9
+        default y if BR2_x86_64
+
+> +config BR2_PACKAGE_CK_TOOLCHAIN_SUPPORTS
+> +	bool
+> +	default y if ((BR2_TOOLCHAIN_USES_MUSL || BR2_TOOLCHAIN_USES_GLIBC) && \
+> +		!BR2_TOOLCHAIN_USES_UCLIBC)
+
+Please drop this.
+
+> +
+> +config BR2_PACKAGE_CK
+> +	bool "concurrency kit"
+> +	depends on BR2_PACKAGE_CK_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_CK_TOOLCHAIN_SUPPORTS
+
+And use:
+
+	# some comment here to explain the issue
+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+
+> +	help
+> +	  Concurrency primitives, safe memory reclamation
+> +	  mechanisms and non-blocking data structures
+> +	  for the research, design and implementation
+> +	  of high performance concurrent systems.
+> +
+> +	  https://github.com/concurrencykit/ck.git
+
+And add:
+
+comment "ck needs a toolchain w/ glibc or musl"
+        depends on BR2_PACKAGE_CK_ARCH_SUPPORTS
+        depends on BR2_TOOLCHAIN_USES_UCLIBC
+
+> +CK_INSTALL_STAGING = YES
+> +
+> +CK_PROFILE_PARAMS += --platform=$(BR2_ARCH)
+> +CK_PROFILE_PARAMS += --prefix="/usr"
+
+Please use:
+
+CK_CONF_OPTS = \
+	--platform=$(BR2_ARCH) \
+	--prefix="/usr"
+
+> +
+> +define CK_CONFIGURE_CMDS
+> +	( cd $(@D); \
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	$(CK_PROFILE_CONF_ENV) \
+
+This variable doesn't exist.
+
+> +	./configure $(CK_PROFILE_PARAMS) )
+
+Please simplify to:
+
+        cd $(@D); \
+                $(TARGET_CONFIGURE_OPTS) \
+                ./configure $(CK_CONF_OPTS)
+
+
+> +endef
+> +
+> +define CK_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	$(CK_PROFILE_CONF_ENV) \
+> +	$(MAKE) -C $(@D)
+
+If you can simplify to:
+
+        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+
+it would be great.
+
+> +endef
+> +
+> +define CK_INSTALL_TARGET_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	$(CK_PROFILE_CONF_ENV) \
+> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+
+Simplify to:
+
+        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+
+if possible.
+
+> +endef
+> +
+> +define CK_INSTALL_STAGING_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	$(CK_PROFILE_CONF_ENV) \
+> +	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+
+Simplify to:
+
+        $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+
+if possible.
+
+Thanks!
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
