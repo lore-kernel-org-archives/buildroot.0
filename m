@@ -4,66 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B51AC83F11
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 19:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F1C3C83F11
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 20:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2865C81F74;
-	Sat, 26 Aug 2023 19:58:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2865C81F74
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39B4981EEA;
+	Sat, 26 Aug 2023 20:04:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39B4981EEA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q9yXBw7k6xko; Sat, 26 Aug 2023 19:58:29 +0000 (UTC)
+	with ESMTP id S9OghRG44AAS; Sat, 26 Aug 2023 20:04:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C4C481F55;
-	Sat, 26 Aug 2023 19:58:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C4C481F55
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A08071BF82C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 19:58:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5549881EE5;
+	Sat, 26 Aug 2023 20:04:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5549881EE5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 65E021BF471
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 20:04:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 799E381F55
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 19:58:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 799E381F55
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3CE854151C
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 20:04:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CE854151C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id H7UCEc9l9ZEs for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 19:58:26 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 288E081F51
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 19:58:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 288E081F51
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 274BBFF804;
- Sat, 26 Aug 2023 19:58:23 +0000 (UTC)
-Date: Sat, 26 Aug 2023 21:58:21 +0200
-To: Maksim Kiselev <bigunclemax@gmail.com>
-Message-ID: <20230826215821.03533e1b@windsurf>
-In-Reply-To: <20230513155030.3207472-2-bigunclemax@gmail.com>
-References: <20230513155030.3207472-1-bigunclemax@gmail.com>
- <20230513155030.3207472-2-bigunclemax@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rPNU7Qrvf8rG for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 20:04:32 +0000 (UTC)
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com
+ [IPv6:2607:f8b0:4864:20::1131])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E22C54151A
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 20:04:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E22C54151A
+Received: by mail-yw1-x1131.google.com with SMTP id
+ 00721157ae682-58dfe2d5b9aso28173797b3.1
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 13:04:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693080271; x=1693685071;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ffqbMb/aXfjC5zCEds9GaxVqk8JaFuO/3DUFGd3u+0s=;
+ b=WxufFQ85oYJXWS5ezM98K9RlQMG1NVg+T6fnyV6crgjT47x7Mqa7MvV8swcVWI1G70
+ odmezPVVJ5G0B9ozGYpL6dkH/TYCcEt54pH+ygXlQD4PRXpO4eIoF4/i1SM6HAe6qGNJ
+ BVlTUDMvrjsHvimRMxi/VpuIR+zlBNcFpKzwYJ5y9hmjRhjbzbP6tkSNaopNoMOm+8LJ
+ hPfaGaxL8ydIexNexcznGUvWPmOwo+Pj0eQ0h8/6qCi1ONzJe1RTsZ/78D9J7+rLKua6
+ jralHFAKDqoTgJ25/HiNUU1rpEvE2O0/m24fRf9gkOhJEPsoErbsqZe1BMS4c6JWP0Kw
+ pIGg==
+X-Gm-Message-State: AOJu0YzY4ymXjC7qciaZkFTIB0eS2RH3uRyAPf2puCE3tHcZHmfITfli
+ tVWtFCBWbWCiwdYs8J4GmAp7260YWDZI9f1ZQ2E=
+X-Google-Smtp-Source: AGHT+IF3PuvAxUvwLmoAMfm7+/RCQt+LKe39EvLN84sRtrZkzqNGvctyWOTx5HlrA6VWIR71C2XCHeQfNwvxUr1+2sI=
+X-Received: by 2002:a81:9b04:0:b0:56f:f0db:759a with SMTP id
+ s4-20020a819b04000000b0056ff0db759amr1789354ywg.13.1693080270626; Sat, 26 Aug
+ 2023 13:04:30 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+References: <20230808172231.1114696-1-jesse.vangavere@scioteq.com>
+ <20230826214912.7821c07c@windsurf>
+In-Reply-To: <20230826214912.7821c07c@windsurf>
+From: Jesse Van Gavere <jesseevg@gmail.com>
+Date: Sat, 26 Aug 2023 22:04:19 +0200
+Message-ID: <CAMdwsN_TugJKe9iAYaQRsE77RWTkdRATNWPHLY1=5DN4j0AFgA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693079903;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=6NuCs5ITrDp6j3y3Biw4OqdFQVHvtph+IIcInr9s8+A=;
- b=Jsw5r7fdtgF4sS0WsDetxpFih5mkYO0PyECjUeYPv98QaoBeJ3Sn0DDp84Ol5T1CSbEg26
- agJloB8xWAliOQHK6woSAuojv/KQWIVhEbBbl4FC+1c7batf8FHGZP/TCpRwlYVd+UGoDh
- 2RzpHJk+100a5pVG9j1jZ7cTtLhJtECRaR/KTP3qSnOHWlEK97sSz3BNSg3Rx3V7fM0JnM
- 3LDX8DNKe2aKmNyvmm60xO7quUMNgsJyl/vJLrDPqLxkkjKN8XmplI2Ck4o2dARZwsIApD
- eSln4r1UIIDN5s3WkxKQUB1LI7yMDdg5lAS1xBc2Sqj60SgESWADR8SFXzrgdg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Jsw5r7fd
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/libdatachannel: new package
+ d=gmail.com; s=20221208; t=1693080271; x=1693685071;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=ffqbMb/aXfjC5zCEds9GaxVqk8JaFuO/3DUFGd3u+0s=;
+ b=pUfhq+SlthDtwsx8P79IJP9LXecX1NH3J3icB2TvAM+oNhBByRoP+AcCt23Tdp12Gj
+ RtSir99LYHipZZIS1dRrbejlTq8ku9Lzctc+WKi4CfAHsmgKZUBjP5UWEpLKU7bnc+/8
+ d59En+c13piuiOGc7raEf6rc+bnF4Y2WdhLJ7zcJIrEreAm7g/il2fBFDeT1D/colSWw
+ WJqtkxtFBgN2YxodVfPC4HzAzYqUVMp5gXYr2d12Bn3F/FCwK4a1IUY3eqa7cgUUA2CT
+ NcmGi7FzKsrXxJ0/tTReCPsWUUl+sqklz6emv1KRwAMzBxIdMPYcOsuZB7QFe2XR4ALl
+ nhbg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=pUfhq+Sl
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6shadertools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,116 +90,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>, "Yann E .
- MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Jesse Van Gavere <jesse.vangavere@scioteq.com>,
+ Buildroot Mailing List <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============6036492271469399484=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Maksim,
+--===============6036492271469399484==
+Content-Type: multipart/alternative; boundary="0000000000001b65c40603d8f85a"
 
-On Sat, 13 May 2023 18:50:30 +0300
-Maksim Kiselev <bigunclemax@gmail.com> wrote:
+--0000000000001b65c40603d8f85a
+Content-Type: text/plain; charset="UTF-8"
 
-> This patch adds a new package for libdatachannel.
-> 
-> libdatachannel is an open-source software library implementing WebRTC Data
-> Channels, WebRTC Media Transport, and WebSockets. It is written in C++17
-> and offers C bindings.
-> 
-> This library has a lot dependencies.
-> Some of them, such as libsrtp and libnice, can be resolved with standalone
-> buildroot packages if they enabled. Otherwise dependencies will be satisfy
-> by git submodules. Nlohmann JSON dependency will be skipped at all because
-> it is only required to build the examples.
-> 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+Hello Thomas,
 
-Thanks for your patch, and sorry for the very slow feedback. See below
-some comments. Could you take them into account, and send a v3 of this
-patch?
+Op za 26 aug. 2023 21:49 schreef Thomas Petazzoni <
+thomas.petazzoni@bootlin.com>:
 
-> ---
->  package/Config.in                          |  1 +
->  package/libdatachannel/Config.in           | 10 +++++++
->  package/libdatachannel/libdatachannel.hash |  3 ++
->  package/libdatachannel/libdatachannel.mk   | 34 ++++++++++++++++++++++
->  4 files changed, 48 insertions(+)
+> Hello Jesse,
+>
+> On Tue,  8 Aug 2023 19:22:31 +0200
+> Jesse Van Gavere <jesseevg@gmail.com> wrote:
+>
+> > Signed-off-by: Jesse Van Gavere <jesse.vangavere@scioteq.com>
+> > ---
+> >  package/qt6/Config.in                         |  1 +
+> >  package/qt6/qt6shadertools/Config.in          | 11 +++++
+> >  .../qt6/qt6shadertools/qt6shadertools.hash    | 13 +++++
+> >  package/qt6/qt6shadertools/qt6shadertools.mk  | 47 +++++++++++++++++++
+> >  4 files changed, 72 insertions(+)
+> >  create mode 100644 package/qt6/qt6shadertools/Config.in
+> >  create mode 100644 package/qt6/qt6shadertools/qt6shadertools.hash
+> >  create mode 100644 package/qt6/qt6shadertools/qt6shadertools.mk
+>
+> Thanks Jesse for your patch. It builds fine... but it doesn't install
+> anything. Indeed, it looks like qt6shadertools doesn't not
+> build/install anything when qt6base is not built with GUI support:
+>
+> Skipping the build as the condition "TARGET Qt::Gui" is not met.
+>
+You're right, forgot that dependency, I'll add it
 
-Could you please add an entry to the DEVELOPERS file associating you to
-this new package?
+>
+> For the target package, it would be easy to fix. But for the host
+> qt6base package, the story is a bit different. Does qt6shadertools
+> really need GUI support in host-qt6base? If so, how did you test that
+> as nothing in Buildroot right now allows to enable GUI support in
+> host-qt6base?
+>
+Yeah another oversight, I probably built it with GUI temporarily in and
+forgot about it, the host package is necessary though as this will install
+qsb which is a requirement for the follow-up qt declarative package I want
+to add (at least for QtQuick support) and I'm not aware of a mechanism that
+allows for conditional host package builds, if it's available though I'll
+take a look, otherwise I'll always do the host build jit for that case, but
+I'll at least check for adding the host GUI support, a slight casualty of
+Qt their new host/target split
 
-> diff --git a/package/libdatachannel/Config.in b/package/libdatachannel/Config.in
-> new file mode 100644
-> index 0000000000..103d933b50
-> --- /dev/null
-> +++ b/package/libdatachannel/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_LIBDATACHANNEL
-> +	bool "libdatachannel"
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # C++17
-> +	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  C/C++ WebRTC network library featuring Data Channels,
-> +	  Media Transport, and WebSockets.
-> +
-> +	  https://github.com/paullouisageneau/libdatachannel
+>
+> Could you have a look into this, and send a v2?
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
-You need a Config.in comment to help the user with the dependencies:
+--0000000000001b65c40603d8f85a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-comment "libdatachannel needs a toolchain w/ gcc >= 9, dynamic library"
-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_9 || BR2_STATIC_LIBS
+<div dir=3D"auto"><div>Hello Thomas,<br><br><div class=3D"gmail_quote"><div=
+ dir=3D"ltr" class=3D"gmail_attr">Op za 26 aug. 2023 21:49 schreef Thomas P=
+etazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzo=
+ni@bootlin.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hello Jesse=
+,<br>
+<br>
+On Tue,=C2=A0 8 Aug 2023 19:22:31 +0200<br>
+Jesse Van Gavere &lt;<a href=3D"mailto:jesseevg@gmail.com" target=3D"_blank=
+" rel=3D"noreferrer">jesseevg@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; Signed-off-by: Jesse Van Gavere &lt;<a href=3D"mailto:jesse.vangavere@=
+scioteq.com" target=3D"_blank" rel=3D"noreferrer">jesse.vangavere@scioteq.c=
+om</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 package/qt6/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
+&gt;=C2=A0 package/qt6/qt6shadertools/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 | 11 +++++<br>
+&gt;=C2=A0 .../qt6/qt6shadertools/qt6shadertools.hash=C2=A0 =C2=A0 | 13 +++=
+++<br>
+&gt;=C2=A0 package/qt6/qt6shadertools/<a href=3D"http://qt6shadertools.mk" =
+rel=3D"noreferrer noreferrer" target=3D"_blank">qt6shadertools.mk</a>=C2=A0=
+ | 47 +++++++++++++++++++<br>
+&gt;=C2=A0 4 files changed, 72 insertions(+)<br>
+&gt;=C2=A0 create mode 100644 package/qt6/qt6shadertools/Config.in<br>
+&gt;=C2=A0 create mode 100644 package/qt6/qt6shadertools/qt6shadertools.has=
+h<br>
+&gt;=C2=A0 create mode 100644 package/qt6/qt6shadertools/<a href=3D"http://=
+qt6shadertools.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">qt6shade=
+rtools.mk</a><br>
+<br>
+Thanks Jesse for your patch. It builds fine... but it doesn&#39;t install<b=
+r>
+anything. Indeed, it looks like qt6shadertools doesn&#39;t not<br>
+build/install anything when qt6base is not built with GUI support:<br>
+<br>
+Skipping the build as the condition &quot;TARGET Qt::Gui&quot; is not met.<=
+br></blockquote></div></div><div dir=3D"auto">You&#39;re right, forgot that=
+ dependency, I&#39;ll add it</div><div dir=3D"auto"><div class=3D"gmail_quo=
+te"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-lef=
+t:1px #ccc solid;padding-left:1ex"><br>
+For the target package, it would be easy to fix. But for the host<br>
+qt6base package, the story is a bit different. Does qt6shadertools<br>
+really need GUI support in host-qt6base? If so, how did you test that<br>
+as nothing in Buildroot right now allows to enable GUI support in<br>
+host-qt6base?<br></blockquote></div></div><div dir=3D"auto">Yeah another ov=
+ersight, I probably built it with GUI temporarily in and forgot about it, t=
+he host package is necessary though as this will install qsb which is a req=
+uirement for the follow-up qt declarative package I want to add (at least f=
+or QtQuick support) and I&#39;m not aware of a mechanism that allows for co=
+nditional host package builds, if it&#39;s available though I&#39;ll take a=
+ look, otherwise I&#39;ll always do the host build jit for that case, but I=
+&#39;ll at least check for adding the host GUI support, a slight casualty o=
+f Qt their new host/target split</div><div dir=3D"auto"><div class=3D"gmail=
+_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border=
+-left:1px #ccc solid;padding-left:1ex">
+<br>
+Could you have a look into this, and send a v2?<br>
+<br>
+Thanks a lot!<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, CTO, Bootlin<br>
+Embedded Linux and Kernel engineering<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer noreferrer" target=3D"_bl=
+ank">https://bootlin.com</a><br>
+</blockquote></div></div></div>
 
-> diff --git a/package/libdatachannel/libdatachannel.mk b/package/libdatachannel/libdatachannel.mk
-> new file mode 100644
-> index 0000000000..b8f25fc1c1
-> --- /dev/null
-> +++ b/package/libdatachannel/libdatachannel.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# libdatachannel
-> +#
-> +################################################################################
-> +
-> +LIBDATACHANNEL_VERSION = v0.18.4
-> +LIBDATACHANNEL_SITE_METHOD = git
-> +LIBDATACHANNEL_SITE = https://github.com/paullouisageneau/libdatachannel
-> +LIBDATACHANNEL_GIT_SUBMODULES = YES
-> +LIBDATACHANNEL_INSTALL_STAGING = YES
-> +LIBDATACHANNEL_LICENSE = MPL-2.0
-> +LIBDATACHANNEL_LICENSE_FILES = LICENSE
-> +
-> +LIBDATACHANNEL_DEPENDENCIES = libopenssl
+--0000000000001b65c40603d8f85a--
 
-You should depend on "openssl", not "libopenssl". Indeed, your package
-selects BR2_PACKAGE_OPENSSL, which means you need to use the "openssl"
-virtual-package, whose implementation can either be libopenssl (the
-original OpenSSL) or libressl.
+--===============6036492271469399484==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> +
-> +LIBDATACHANNEL_CONF_OPTS = -DNO_EXAMPLES=1 -DNO_TESTS=1 -DUSE_SYSTEM_JSON=0 \
-> +	-DUSE_SYSTEM_JUICE=0 -DUSE_SYSTEM_PLOG=0 -DUSE_SYSTEM_USRSCTP=0
-
-We really want to use the system version of all those libraries, by
-having separate Buildroot packages for them. This will allow you to
-drop LIBDATACHANNEL_GIT_SUBMODULES = YES, and generally have a nicer
-packaging.
-
-Could you have a look at doing this?
-
-Thanks a lot!
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6036492271469399484==--
