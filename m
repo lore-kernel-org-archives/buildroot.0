@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55E8FC83F15
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 17:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7293BC83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 17:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBE2B40216;
-	Sat, 26 Aug 2023 17:23:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBE2B40216
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0580F41607;
+	Sat, 26 Aug 2023 17:25:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0580F41607
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WK6ljtBaa9St; Sat, 26 Aug 2023 17:23:07 +0000 (UTC)
+	with ESMTP id VXYjYdeNLHG7; Sat, 26 Aug 2023 17:25:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0423C4009B;
-	Sat, 26 Aug 2023 17:23:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0423C4009B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E26BF1BF589
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:23:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19ACC41716;
+	Sat, 26 Aug 2023 17:25:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19ACC41716
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 36FE41BF589
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C880760E25
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:23:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C880760E25
+ by smtp2.osuosl.org (Postfix) with ESMTP id 106D840541
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:25:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 106D840541
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YX7o7mY2sUL1 for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 17:23:04 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CF7B860D9D
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 17:23:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF7B860D9D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7788F1BF203;
- Sat, 26 Aug 2023 17:22:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EZnt6TNTaO_6 for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 17:24:59 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D98384053C
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 17:24:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D98384053C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 55450FF802;
+ Sat, 26 Aug 2023 17:24:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qZwzy-003TDF-Lk; Sat, 26 Aug 2023 19:22:58 +0200
+ id 1qZx1q-003THS-Ag; Sat, 26 Aug 2023 19:24:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: yegorslists--- via buildroot <buildroot@buildroot.org>
-References: <20230717091727.2658078-1-yegorslists@googlemail.com>
-Date: Sat, 26 Aug 2023 19:22:57 +0200
-In-Reply-To: <20230717091727.2658078-1-yegorslists@googlemail.com>
- (yegorslists's message of "Mon, 17 Jul 2023 11:17:27 +0200")
-Message-ID: <87h6ol90r2.fsf@48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20230718213049.98A778747F@busybox.osuosl.org>
+Date: Sat, 26 Aug 2023 19:24:54 +0200
+In-Reply-To: <20230718213049.98A778747F@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Tue, 18 Jul 2023 23:30:14 +0200")
+Message-ID: <87cyz990nt.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/python-pysmb: add the missing
- runtime dependency
+Subject: Re: [Buildroot] [git commit] package/pipewire: drop consecutive
+ empty lines
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,18 +63,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: james.hilliard1@gmail.com, Asaf Kahlon <asafka7@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "yegorslists---" == yegorslists--- via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > python-tqdm dependency was introduced in 1.2.9.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=157089d34d06712b67f42b083bcfb16a9bdee1f0
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Fixes:
+
+ > package/pipewire/pipewire.mk:184: consecutive empty lines
+
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/4682253962/raw
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
