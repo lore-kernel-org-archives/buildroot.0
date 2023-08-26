@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2E4C83F11
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0188EC83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:48:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E594C4059C;
-	Sat, 26 Aug 2023 18:48:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E594C4059C
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC84B40232;
+	Sat, 26 Aug 2023 18:48:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC84B40232
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id k3yzDbI7pT-9; Sat, 26 Aug 2023 18:48:06 +0000 (UTC)
+	with ESMTP id he9obUrKVHAn; Sat, 26 Aug 2023 18:48:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F8C540232;
-	Sat, 26 Aug 2023 18:48:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F8C540232
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8DF761BF37C
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2A8F405B7;
+	Sat, 26 Aug 2023 18:48:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2A8F405B7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B4C041BF867
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6575E60F0E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99A1D41499
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6575E60F0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99A1D41499
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PXrMUlsegYf2 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rnSLiV_-6hJo for <buildroot@lists.busybox.net>;
  Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A078A60B3C
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7B5A409FC
  for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A078A60B3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7B5A409FC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84FDB863F4; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
+ id 93D2F8636D; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 21:32:38 +0200
+Date: Sat, 26 Aug 2023 19:17:10 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ef926a0a44e49da84f619846f66028e7653e5c52
-X-Git-Newrev: ab72054281376ead3742ff9cbb8511562b0f7c53
+X-Git-Oldrev: ab72054281376ead3742ff9cbb8511562b0f7c53
+X-Git-Newrev: a856114c6b1337fa81cf4390d4fbddccc1b9e0da
 X-Patchwork-Hint: ignore
-Message-Id: <20230826184802.84FDB863F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] boot/uboot: set DTC path
- when BR2_TARGET_UBOOT_NEEDS_DTC
+Message-Id: <20230826184802.93D2F8636D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/pipewire: remove
+ optional dependency to vulkan
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab72054281376ead3742ff9cbb8511562b0f7c53
+commit: https://git.buildroot.net/buildroot/commit/?id=a856114c6b1337fa81cf4390d4fbddccc1b9e0da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-In order for host-dtc to get picked up properly we need to set
-the DTC path passed to the build explicitly.
+Fixes:
+http://autobuild.buildroot.net/results/8b4/8b4d12de72a1407e74bd9b9b79f4e01ae86510ba/
 
-See:
-https://github.com/u-boot/u-boot/blob/v2023.07.02/Makefile#L420
+vulkan.pc is provided by the package vulkan-loader which is not
+part of buildroot yet.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 231d79c81e9a1f8c2ef14861374a40fcdc5e6b33)
+(cherry picked from commit ed20a4eccd7dd665cb7997537f170391b417c5e7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pipewire/pipewire.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4eae8e95c3..1a6e70a792 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -209,6 +209,7 @@ endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
-+UBOOT_MAKE_OPTS += DTC=$(HOST_DIR)/bin/dtc
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index ecf4a035ec..d6bd2434bf 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
+@@ -30,6 +30,7 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dvideoconvert=enabled \
+ 	-Dvideotestsrc=enabled \
+ 	-Dvolume=enabled \
++	-Dvulkan=disabled \
+ 	-Dsession-managers=[] \
+ 	-Dlegacy-rtkit=false \
+ 	-Davb=disabled \
+@@ -180,12 +181,6 @@ else
+ PIPEWIRE_CONF_OPTS += -Dlibusb=disabled
  endif
  
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
+-ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
+-PIPEWIRE_CONF_OPTS += -Dvulkan=enabled
+-PIPEWIRE_DEPENDENCIES += mesa3d
+-else
+-PIPEWIRE_CONF_OPTS += -Dvulkan=disabled
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+ PIPEWIRE_CONF_OPTS += -Dpw-cat=enabled -Dsndfile=enabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
