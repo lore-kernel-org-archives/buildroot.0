@@ -4,66 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11292C83F01
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 11:23:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F37A9C83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 16:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67EDC4042D;
-	Sat, 26 Aug 2023 11:23:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67EDC4042D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3A8454051B;
+	Sat, 26 Aug 2023 16:56:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A8454051B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ak6WwuidiGrI; Sat, 26 Aug 2023 11:23:31 +0000 (UTC)
+	with ESMTP id fLjMu1yQT79n; Sat, 26 Aug 2023 16:56:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BF23E4038E;
-	Sat, 26 Aug 2023 11:23:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF23E4038E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 57EF71BF5EA
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 11:23:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95CFA400AC;
+	Sat, 26 Aug 2023 16:56:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95CFA400AC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C2BFC1BF831
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 16:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E92383AB8
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 11:23:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E92383AB8
+ by smtp2.osuosl.org (Postfix) with ESMTP id A990D400DD
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 16:56:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A990D400DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SvA69wdo4Hh1 for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 11:23:27 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 957E883A8D
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 11:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 957E883A8D
-Received: from fli4l.lan.fli4l (p54a1bff9.dip0.t-ipconnect.de [84.161.191.249])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C0833A4C0980;
- Sat, 26 Aug 2023 13:23:22 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:40526)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qZrNx-00051N-1q;
- Sat, 26 Aug 2023 13:23:21 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cyreK7BsnLaY for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 16:56:34 +0000 (UTC)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4EE4400AC
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 16:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4EE4400AC
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-31c6d17aec4so1594576f8f.1
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 09:56:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693068992; x=1693673792;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=OV5yyLdpJiCZ2cefEzVc80SFbgeK3A+wmXKz7vuMAYQ=;
+ b=OZvzJCJ2hbb+Ky8BWgLnzaxOQA0jZSwh7omiAJ/WeTRVSG4BPVTvBcwjmYA6P58qdx
+ dBKg8my9zZeMU98IzV7WWjyQLJE1+IzxrOHz3bQf/vupd9dZPn9+MNobae6XqYPgBB+J
+ Cg+Vpt5rMErRbDi7SOlNVboXmeVWmFFdGeVx1aVbaHjwbKm9jOlQLITcieagpFsi0a5v
+ Dt/uE9VnIw/L6NAlG5+h0ZCeMXlPh0ETB+zM5E8/yExTlqIkfKa9j/fq0SICXSbWpWRB
+ DzMSYYSeAxw9m0J1Bd6MYnDuDtcYFt+0VPUODNZZzyqti8thI8Al9NTVh3IeDz4FOgS3
+ DioA==
+X-Gm-Message-State: AOJu0YxUNoRm+FWZoBdan2jEOLefnOCgie9iXQmO5XkfBa07w6jFtm9B
+ cdQDZUTuJRds0SU9v6k52qVX7hf5CFI=
+X-Google-Smtp-Source: AGHT+IFa96yMQx6brwUobYcftYJizwN56mJWBTBppczaXEMSA9K1av/oisY2m9dvLtROAW8rQXfNmw==
+X-Received: by 2002:adf:e543:0:b0:319:7bec:4f31 with SMTP id
+ z3-20020adfe543000000b003197bec4f31mr17025537wrm.10.1693068991624; 
+ Sat, 26 Aug 2023 09:56:31 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ hn1-20020a05600ca38100b003fbe4cecc3bsm8655744wmb.16.2023.08.26.09.56.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 26 Aug 2023 09:56:31 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 13:23:21 +0200
-Message-Id: <20230826112321.91916-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sat, 26 Aug 2023 18:56:27 +0200
+Message-ID: <20230826165628.31792-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1693049002;
- bh=oZ8gyWPjlUQcCeOxhXpIXY5Nzu4nHTEmNSyvnEirxkw=;
- h=From:To:Cc:Subject:Date:From;
- b=S0aF++4TW/Fol5RqIcntjEItaSSQM54GWvwj3/3Sd0rWGKc5/FAcHvkHVt23T5jLa
- AEBKLGddrKpA4dq38EgWL5fp7EGiECmGsejBpeKAvQUxkN1gBNMgz3157IyvTQaEOB
- b7o2JXKJ/ncR83zVQ8I1wNF+c+xP26V0IEwyQXC9C82zQG2ylRMaoRCFmRX3ULdgqJ
- Ty0SP8LxfvC40xzbhXOMrstAQgIbtwZqTtlTBWuKc+AKSpe7IbgnS4YRQp60K6DIZ3
- hFm1Uwiol5Y+1KIcBqnmaN+iYkoNgyGbZYrq7Im0i/LRJ+8jtPLuG5BDb2xbsd7du8
- 7EPvAtypesSGA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=S0aF++4T
-Subject: [Buildroot] [PATCH 1/1] package/python3: security bump version to
- 3.11.5
+ d=gmail.com; s=20221208; t=1693068992; x=1693673792;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=OV5yyLdpJiCZ2cefEzVc80SFbgeK3A+wmXKz7vuMAYQ=;
+ b=W0vJQ2UF3KEI5pQWbx5ZdMXgwpVK1L8xZ9VcvwV0u5URs5eS57tY6/XgxRTZn2R3nV
+ KDz2Fiw3afHWxmyyCnKbnkTKXOechDrrXz+MraVkq3mrw1r0aA6rjERpd729zr66xpn7
+ iyCgho5ZAaO6PH6z+46mKKgmEw6hyVUMzP0pe9QoxLstpwtvmGfanU+wXHmc6Imh8l1g
+ 6biQpOjwqjeZqGqFClIYvmQaRmHQIYBQZl5bHpXipcvsuex9ciq0NJa6b3fiHwLto/ty
+ UWW+GW3yIyFQ9Fl+5yuZ37sQRwI+aRhEQghi7hsF+XKApycJ9zwzxyb8tFH2pZo0pv71
+ 1Oxw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=W0vJQ2UF
+Subject: [Buildroot] [PATCH] configs/freescale_imx6qsabresd_defconfig: fix
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,51 +96,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added md5 hash provided by upstream.
+While switching ATF to github, the BR2_TARGET_UBOOT_CUSTOM_GIT=y
+symbol was not removed. Since then this defconfig fail to build
+in gitlab-ci due to invalid defconfig check.
 
-Release notes: https://www.python.org/downloads/release/python-3115/
+  WARN: defconfig ./configs/freescale_imx6qsabresd_defconfig can't be used:
+        Missing: BR2_TARGET_UBOOT_CUSTOM_GIT=y
 
-Fixes CVE-2023-40217.
+[1] dd42b159a5f752921ee602530d289c810ad7ee51
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436612
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/python3/python3.hash | 4 +++-
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+This defconfig will fail anyway due to too old ATF package (pre V2.9 version)
+and binutils 2.39+. But it should be backported up to 2023.02.
+---
+ configs/freescale_imx6qsabresd_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 6c43e01a44..1a0fee3290 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,3 +1,5 @@
-+# From https://www.python.org/downloads/release/python-3115/
-+md5  393856f1b7713aa8bba4b642ab9985d3  Python-3.11.5.tar.xz
- # Locally computed
--sha256  2f0e409df2ab57aa9fc4cbddfb976af44e4e55bf6f619eee6bc5c2297264a7f6  Python-3.11.4.tar.xz
-+sha256  85cd12e9cf1d6d5a45f17f7afe1cebe7ee628d3282281c492e86adf636defa3f  Python-3.11.5.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index bdb7cfd22f..5f8fa5b58d 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index 86513d8072..dddfaf5228 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -37,7 +37,6 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
