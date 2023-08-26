@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0188EC83F15
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABDF3C83F11
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC84B40232;
-	Sat, 26 Aug 2023 18:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC84B40232
+	by smtp2.osuosl.org (Postfix) with ESMTP id 54167405BF;
+	Sat, 26 Aug 2023 18:48:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54167405BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id he9obUrKVHAn; Sat, 26 Aug 2023 18:48:18 +0000 (UTC)
+	with ESMTP id ru4TDDUw1waO; Sat, 26 Aug 2023 18:48:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2A8F405B7;
-	Sat, 26 Aug 2023 18:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2A8F405B7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B4C041BF867
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B7C2405D6;
+	Sat, 26 Aug 2023 18:48:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B7C2405D6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CDD7C1BF37C
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99A1D41499
+ by smtp1.osuosl.org (Postfix) with ESMTP id B4C9081F49
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99A1D41499
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4C9081F49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rnSLiV_-6hJo for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3RjpoGdciozE for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7B5A409FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id E979A81F31
  for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7B5A409FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E979A81F31
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93D2F8636D; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
+ id D5C2A863F6; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 19:17:10 +0200
+Date: Sat, 26 Aug 2023 19:37:42 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ab72054281376ead3742ff9cbb8511562b0f7c53
-X-Git-Newrev: a856114c6b1337fa81cf4390d4fbddccc1b9e0da
+X-Git-Oldrev: 1e87afecbbe05e787be123ed379993e26b827ce7
+X-Git-Newrev: 96466e31910a1b1f59686d962e7714a706b18cbd
 X-Patchwork-Hint: ignore
-Message-Id: <20230826184802.93D2F8636D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pipewire: remove
- optional dependency to vulkan
+Message-Id: <20230826184802.D5C2A863F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/samba4: update
+ patch 0004
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a856114c6b1337fa81cf4390d4fbddccc1b9e0da
+commit: https://git.buildroot.net/buildroot/commit/?id=96466e31910a1b1f59686d962e7714a706b18cbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/8b4/8b4d12de72a1407e74bd9b9b79f4e01ae86510ba/
-
-vulkan.pc is provided by the package vulkan-loader which is not
-part of buildroot yet.
+Fix typo in title, add upstream URL
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ed20a4eccd7dd665cb7997537f170391b417c5e7)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 95b7465e746c9d51929e9dd6896ec9940188b3b5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pipewire/pipewire.mk | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ .../0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-index ecf4a035ec..d6bd2434bf 100644
---- a/package/pipewire/pipewire.mk
-+++ b/package/pipewire/pipewire.mk
-@@ -30,6 +30,7 @@ PIPEWIRE_CONF_OPTS += \
- 	-Dvideoconvert=enabled \
- 	-Dvideotestsrc=enabled \
- 	-Dvolume=enabled \
-+	-Dvulkan=disabled \
- 	-Dsession-managers=[] \
- 	-Dlegacy-rtkit=false \
- 	-Davb=disabled \
-@@ -180,12 +181,6 @@ else
- PIPEWIRE_CONF_OPTS += -Dlibusb=disabled
- endif
+diff --git a/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch b/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
+index 7eb31e5d07..aa55c09891 100644
+--- a/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
++++ b/package/samba4/0004-3rdparty-heindal-Use-perl-module-JSON-part-of-core-i.patch
+@@ -1,15 +1,15 @@
+ From bd8fc19c8383914b518a9d56f4c08fba3baeb967 Mon Sep 17 00:00:00 2001
+ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Date: Sun, 7 May 2023 11:02:26 +0200
+-Subject: [PATCH] 3rdparty/heindal: Use perl module JSON, part of core, instead
+- of JSON:PP package
++Subject: [PATCH] 3rdparty/heimdal: Use perl module JSON:PP, part of core, instead
++ of JSON package
  
--ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
--PIPEWIRE_CONF_OPTS += -Dvulkan=enabled
--PIPEWIRE_DEPENDENCIES += mesa3d
--else
--PIPEWIRE_CONF_OPTS += -Dvulkan=disabled
--endif
+ Downloaded from
+ https://github.com/openwrt/packages/blob/master/net/samba4/patches/105-perl-json-pp.patch
  
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- PIPEWIRE_CONF_OPTS += -Dpw-cat=enabled -Dsndfile=enabled
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: unknown
++Upstream: https://github.com/heimdal/heimdal/pull/1176
+ ---
+  third_party/heimdal/cf/make-proto.pl | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
