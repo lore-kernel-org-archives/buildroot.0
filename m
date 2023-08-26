@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDAEBC83F15
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 17:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55E8FC83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 17:23:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8097D40996;
-	Sat, 26 Aug 2023 17:17:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8097D40996
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBE2B40216;
+	Sat, 26 Aug 2023 17:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBE2B40216
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ehgg2AWXfIfE; Sat, 26 Aug 2023 17:17:36 +0000 (UTC)
+	with ESMTP id WK6ljtBaa9St; Sat, 26 Aug 2023 17:23:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4FE140914;
-	Sat, 26 Aug 2023 17:17:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4FE140914
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E06C31BF589
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:17:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0423C4009B;
+	Sat, 26 Aug 2023 17:23:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0423C4009B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E26BF1BF589
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA0A54053C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:17:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA0A54053C
+ by smtp3.osuosl.org (Postfix) with ESMTP id C880760E25
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C880760E25
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1pd1t4KHqRt0 for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 17:17:32 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 64F9F400DD
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 17:17:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64F9F400DD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D82640002;
- Sat, 26 Aug 2023 17:17:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YX7o7mY2sUL1 for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 17:23:04 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CF7B860D9D
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 17:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF7B860D9D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7788F1BF203;
+ Sat, 26 Aug 2023 17:22:59 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qZwue-003T3F-84; Sat, 26 Aug 2023 19:17:28 +0200
+ id 1qZwzy-003TDF-Lk; Sat, 26 Aug 2023 19:22:58 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230716085259.3684479-1-bernd@kuhls.net>
-Date: Sat, 26 Aug 2023 19:17:28 +0200
-In-Reply-To: <20230716085259.3684479-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 16 Jul 2023 10:52:59 +0200")
-Message-ID: <87ledx9107.fsf@48ers.dk>
+To: yegorslists--- via buildroot <buildroot@buildroot.org>
+References: <20230717091727.2658078-1-yegorslists@googlemail.com>
+Date: Sat, 26 Aug 2023 19:22:57 +0200
+In-Reply-To: <20230717091727.2658078-1-yegorslists@googlemail.com>
+ (yegorslists's message of "Mon, 17 Jul 2023 11:17:27 +0200")
+Message-ID: <87h6ol90r2.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: remove optional
- dependency to vulkan
+Subject: Re: [Buildroot] [PATCH] package/python-pysmb: add the missing
+ runtime dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,21 +63,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Cc: james.hilliard1@gmail.com, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+>>>>> "yegorslists---" == yegorslists--- via buildroot <buildroot@buildroot.org> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/8b4/8b4d12de72a1407e74bd9b9b79f4e01ae86510ba/
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > python-tqdm dependency was introduced in 1.2.9.
 
- > vulkan.pc is provided by the package vulkan-loader which is not
- > part of buildroot yet.
-
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
