@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18F95C83F11
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:51:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D21B8C83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:51:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BFA1A408D1;
-	Sat, 26 Aug 2023 18:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFA1A408D1
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8B73B40A5B;
+	Sat, 26 Aug 2023 18:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B73B40A5B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cr3CRVU-2T7L; Sat, 26 Aug 2023 18:51:33 +0000 (UTC)
+	with ESMTP id NZgr549iJfMJ; Sat, 26 Aug 2023 18:51:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12B4140A53;
-	Sat, 26 Aug 2023 18:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12B4140A53
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B13281BF37C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:49:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C16C340A65;
+	Sat, 26 Aug 2023 18:51:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C16C340A65
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1528E1BF37C
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:49:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B053812F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4956B4109B
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:49:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B053812F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4956B4109B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RI-o_Uhuv-6E for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dONyr5d09cMp for <buildroot@lists.busybox.net>;
  Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FA9981D4D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FFB8409FC
  for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FA9981D4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FFB8409FC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A56986413; Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
+ id 4004986417; Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 19:30:49 +0200
+Date: Sat, 26 Aug 2023 19:22:36 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7f1d37ef7bfaf82d3345febc8016b52b9eb55b6e
-X-Git-Newrev: 24fca3414c7b32560aa605eea572b1f64693a2aa
+X-Git-Oldrev: 29715b801e9deaca92929a2bd984b8dd3996de8f
+X-Git-Newrev: 2ed983f7cec80577ca083209a7b099f207cd0660
 X-Patchwork-Hint: ignore
-Message-Id: <20230826184906.5A56986413@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libuhttpd: fix
- comment
+Message-Id: <20230826184906.4004986417@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/python-pysmb: add
+ the missing runtime dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,27 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24fca3414c7b32560aa605eea572b1f64693a2aa
+commit: https://git.buildroot.net/buildroot/commit/?id=2ed983f7cec80577ca083209a7b099f207cd0660
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+python-tqdm dependency was introduced in 1.2.9 (bump occured in
+Buildroot commit 1ffc7b4bb1241eb64272aa78448aac35d67ff4ba).
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fbec4980061421c301d511ceeb57163079f07632)
+(cherry picked from commit 66d38cfcfdc1b09c7c1e80c71a9f8a7b7558a47b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuhttpd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-pysmb/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libuhttpd/Config.in b/package/libuhttpd/Config.in
-index a552a88f0c..d89f4541b6 100644
---- a/package/libuhttpd/Config.in
-+++ b/package/libuhttpd/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_LIBUHTTPD
- 
- comment "libuhttpd needs a toolchain w/ gcc >= 4.9"
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/python-pysmb/Config.in b/package/python-pysmb/Config.in
+index 61d7c2a03e..bb935dddf1 100644
+--- a/package/python-pysmb/Config.in
++++ b/package/python-pysmb/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_PYSMB
+ 	bool "python-pysmb"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_PYTHON_PYASN1
++	select BR2_PACKAGE_PYTHON_TQDM
+ 	help
+ 	  pysmb is an experimental SMB/CIFS library written in Python.
+ 	  It implements the client-side SMB/CIFS protocol (SMB1 and
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
