@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5CE7C83F15
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08DDAC83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:50:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9AAD840A38;
-	Sat, 26 Aug 2023 18:50:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AAD840A38
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7356408D4;
+	Sat, 26 Aug 2023 18:50:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7356408D4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I7ENGW6UwYdX; Sat, 26 Aug 2023 18:50:15 +0000 (UTC)
+	with ESMTP id SWl9thv3XWZ9; Sat, 26 Aug 2023 18:50:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C2A5B40A46;
-	Sat, 26 Aug 2023 18:50:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2A5B40A46
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB25E408BC;
+	Sat, 26 Aug 2023 18:50:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DB25E408BC
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3B3551BF37C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3E5461BF37C
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97E9160BAE
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97E9160BAE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6574D60D9D
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:48:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6574D60D9D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ix5_vx6hAUF0 for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
+ with ESMTP id X4bKoYu5HXVb for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24CE360E97
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24CE360E97
+ by smtp3.osuosl.org (Postfix) with ESMTP id CCBFB60B9D
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCBFB60B9D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23A5E8636D; Sat, 26 Aug 2023 18:48:03 +0000 (UTC)
+ id BC7A6863F4; Sat, 26 Aug 2023 18:48:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 20:23:15 +0200
+Date: Sat, 26 Aug 2023 19:34:38 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 543733c83083c493f225fdbf5670d6c89b728d5a
-X-Git-Newrev: b97e74be68bded4fc2515a86ef30b52dd5f71e23
+X-Git-Oldrev: 5e3e9b91ea15578050d8de5a620cfcfef5427cde
+X-Git-Newrev: d4c4fa9dfc3dae13d47faaba657544b1763414f7
 X-Patchwork-Hint: ignore
-Message-Id: <20230826184803.23A5E8636D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libcurl: security
- bump to version 8.2.0
+Message-Id: <20230826184802.BC7A6863F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/heimdal: bump
+ version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,81 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b97e74be68bded4fc2515a86ef30b52dd5f71e23
+commit: https://git.buildroot.net/buildroot/commit/?id=d4c4fa9dfc3dae13d47faaba657544b1763414f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes CVE-2023-32001:
-https://curl.se/docs/CVE-2023-32001.html
+Samba-4.16 bumped its internal heimdal code[1] which made it
+incompatible with asn1_compile built with heimdal-7.7.1:
 
-Changelog: https://curl.se/changes.html#8_2_0
+/home/user/buildroot/output/build/samba4-4.18.2/third_party/heimdal/lib/asn1/rfc2459.asn1:260: Ignoring char(_)
+/home/user/buildroot/output/build/samba4-4.18.2/third_party/heimdal/lib/asn1/rfc2459.asn1:260: syntax error
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 566e00adea17196dff8e041e36c9349ab6075e0f)
+Bump this package to the same version LibreELEC is using
+
+https://github.com/LibreELEC/LibreELEC.tv/commit/1dc0b5bf3e50500658c8a61e89f57a98dfc0468d
+https://github.com/LibreELEC/LibreELEC.tv/commit/1112a1879523fdff7f6dec5a083d4f2bc82e7017
+https://github.com/LibreELEC/LibreELEC.tv/commit/763eddbab10f89da42a380624192cc4039eed086
+
+to fix the build error.
+
+Removed HOST_HEIMDAL_MAKE_SYMLINK as asn1_compile is now installed in
+$(HOST_DIR)/bin/.
+
+[1] https://www.samba.org/samba/history/samba-4.16.0.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8e33cc012e53a3964ff7144df1492b3c61c14948)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/heimdal/heimdal.hash |  4 +---
+ package/heimdal/heimdal.mk   | 14 ++++----------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 18b2dbfd86..f606735c0f 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.1.2.tar.xz.asc
-+# https://curl.se/download/curl-8.2.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz
-+sha256  2859ec79e2cd96e976a99493547359b8001af1d1e21f3a3a3b846544ef54500f  curl-8.2.0.tar.xz
- sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 2be3415cb8..d0bf6ccead 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
+index cf822340da..250ddbbd4d 100644
+--- a/package/heimdal/heimdal.hash
++++ b/package/heimdal/heimdal.hash
+@@ -1,5 +1,3 @@
+-# From https://github.com/heimdal/heimdal/releases
+-sha1  a33fdc957f84ab13f39f164b04fe1deeaab3179e  heimdal-7.7.1.tar.gz
+-sha256  117cb1ede7848db24cf27311c46f7f735a99f9c836c22e80aec92b91efe56644  heimdal-7.7.1.tar.gz
+ # Locally computed
++sha256  2576c5e2d793db53c86e108fd117b278437bb02d6c6db2bec4d1b86958f1980a  heimdal-f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17.tar.gz
+ sha256  0c4b07bf5b98f7a1d01f8e60722d6c6747ef052c2aa6d2043daf690d4e1b0a7f  LICENSE
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index 21b6c0ccb3..59b64c358b 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 8.1.2
-+LIBCURL_VERSION = 8.2.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-HEIMDAL_VERSION = 7.7.1
+-HEIMDAL_SITE = https://github.com/heimdal/heimdal/releases/download/heimdal-$(HEIMDAL_VERSION)
++HEIMDAL_VERSION = f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17
++HEIMDAL_SITE = $(call github,heimdal,heimdal,$(HEIMDAL_VERSION))
+ HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
++HOST_HEIMDAL_AUTORECONF = YES
+ HEIMDAL_INSTALL_STAGING = YES
+ # static because of -fPIC issues with e2fsprogs on x86_64 host
+ HOST_HEIMDAL_CONF_OPTS = \
+@@ -39,14 +40,7 @@ define HOST_HEIMDAL_INSTALL_COMPILE_ET
+ 		$(HOST_DIR)/bin/compile_et
+ endef
+ 
+-# We need asn1_compile in the PATH for samba4
+-define HOST_HEIMDAL_MAKE_SYMLINK
+-	ln -sf $(HOST_DIR)/libexec/heimdal/asn1_compile \
+-		$(HOST_DIR)/bin/asn1_compile
+-endef
+-
+ HOST_HEIMDAL_POST_INSTALL_HOOKS += \
+-	HOST_HEIMDAL_INSTALL_COMPILE_ET \
+-	HOST_HEIMDAL_MAKE_SYMLINK
++	HOST_HEIMDAL_INSTALL_COMPILE_ET
+ 
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
