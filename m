@@ -4,47 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CF52C83F01
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4569C83F01
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:06:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F0085418F7;
-	Sat, 26 Aug 2023 18:06:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0085418F7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61F6E418DF;
+	Sat, 26 Aug 2023 18:06:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61F6E418DF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5PLI5F9azSKS; Sat, 26 Aug 2023 18:06:45 +0000 (UTC)
+	with ESMTP id VScY41Egmj-b; Sat, 26 Aug 2023 18:06:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A7B6418EB;
-	Sat, 26 Aug 2023 18:06:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A7B6418EB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FA5641B42;
+	Sat, 26 Aug 2023 18:06:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FA5641B42
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 499701BF37C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:06:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 657171BF37C
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAE03418DF
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:06:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAE03418DF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30496418EB
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30496418EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TLrSnLZZj0E5 for <buildroot@lists.busybox.net>;
+ with ESMTP id kk1H6wWcukdD for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 18:06:18 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C3462418D2
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3462418D2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9E8591BF204;
  Sat, 26 Aug 2023 18:06:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAFE8415DF
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:06:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAFE8415DF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4C81860EA; Sat, 26 Aug 2023 18:06:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 20:06:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01893c74ebee2fb7be5248d35ff33d387ca5a92d
-X-Git-Newrev: 0ee8ef970bab8680162175d127e388a04286791f
-X-Patchwork-Hint: ignore
-Message-Id: <20230826180615.A4C81860EA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx6qsabresd_defconfig:
- fix defconfig
+Date: Sat, 26 Aug 2023 20:06:14 +0200
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230826200614.41cda518@windsurf>
+In-Reply-To: <20230826165628.31792-2-romain.naour@gmail.com>
+References: <20230826165628.31792-1-romain.naour@gmail.com>
+ <20230826165628.31792-2-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693073175;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=lRUZFDpldKcCLbHkofy1JRBKesaZj5Yh4w9bGk+h4Q8=;
+ b=No1RqF2WwoCBSoIPx2x/p8Mp0yAimRmMdBE5hzzL4KJmE2HOoLXbHC9+5XQzAbTWjvX9N/
+ b7CIPCpcoTQ1h0AcrqkJT8G5yQBZi2/gpN6foa3W5FQVmDc63gD/5z3NAB3AqL6LZtc9zW
+ QMEOJ+I2H6DfF4MQUaCZO8lcCyjm4+fqpHtNEzd6wdBKMyuENIbqWLXLv8Ag9t3cXLLJba
+ K5In1Nd4/tSXOydUgSMTh3uNrsfPY2HEs9II782pRCswlOd1A2cUJcWYBZEq31WfvsFO5I
+ BvyRRMoZUkirrOtkC7S3pqItx5HJPf8oy+2Hv1+ag3HMIZVusDSxro8W8uHOuQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=No1RqF2W
+Subject: Re: [Buildroot] [PATCH] configs/sipeed_{maixduino,
+ maix_go}_sdcard_defconfig: fix build with binutils >= 2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,45 +78,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ee8ef970bab8680162175d127e388a04286791f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 26 Aug 2023 18:56:28 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-While switching ATF to github, the BR2_TARGET_UBOOT_CUSTOM_GIT=y
-symbol was not removed. Since then this defconfig fail to build
-in gitlab-ci due to invalid defconfig check.
+> Backport an upstream patch fixing the build with binutils >= 2.38
+> for riscv's for Zicsr and Zifencei.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949340
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949329
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> All four sipeed_maix* defconfigs sipeed_maix_bit_sdcard_defconfig,
+> sipeed_maix_dock_sdcard_defconfig, sipeed_maixduino_sdcard_defconfig
+> and sipeed_maix_go_sdcard_defconfig are using the same uboot version.
+> Only two were fixed by the previous commit ef4eea32261ed3f21af119936a080cb2fc8897fa
+> "configs/sipeed_maix_{bit, dock}_sdcard_defconfig: fix build with binutils >= 2.38"
+> ---
+>  configs/sipeed_maix_go_sdcard_defconfig   | 1 +
+>  configs/sipeed_maixduino_sdcard_defconfig | 1 +
+>  2 files changed, 2 insertions(+)
 
-  WARN: defconfig ./configs/freescale_imx6qsabresd_defconfig can't be used:
-        Missing: BR2_TARGET_UBOOT_CUSTOM_GIT=y
+Applied to master, thanks.
 
-[1] dd42b159a5f752921ee602530d289c810ad7ee51
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436612
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/freescale_imx6qsabresd_defconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 86513d8072..dddfaf5228 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -37,7 +37,6 @@ BR2_PACKAGE_HOST_MTOOLS=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
