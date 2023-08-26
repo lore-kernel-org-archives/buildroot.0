@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 885C8C83F11
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:51:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 679D5C83F11
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D18D40A4A;
-	Sat, 26 Aug 2023 18:51:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D18D40A4A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 19DC74086E;
+	Sat, 26 Aug 2023 18:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19DC74086E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YMBDY8L3zCTy; Sat, 26 Aug 2023 18:51:07 +0000 (UTC)
+	with ESMTP id SPmvdeZpBnnm; Sat, 26 Aug 2023 18:51:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C8D440A5C;
-	Sat, 26 Aug 2023 18:51:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C8D440A5C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 612C51BF37C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3251640A68;
+	Sat, 26 Aug 2023 18:51:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3251640A68
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7126F1BF867
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:49:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A14340F4E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58B426079B
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:49:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A14340F4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58B426079B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uEy2xSor0ZNn for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wsEnelv6QuYf for <buildroot@lists.busybox.net>;
  Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B995409AB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C61C606A9
  for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B995409AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C61C606A9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B98F86413; Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
+ id 6C5D386414; Sat, 26 Aug 2023 18:49:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Aug 2023 21:32:28 +0200
+Date: Sat, 26 Aug 2023 19:31:46 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7b716b2017c812a33fa4bbbd0dcccd50c959ab50
-X-Git-Newrev: 3408ccf38e107e7c314b04da22f7dc6f26900779
+X-Git-Oldrev: 24fca3414c7b32560aa605eea572b1f64693a2aa
+X-Git-Newrev: 9dd511431cccb9b0adfae9464770ccd6a8ac090e
 X-Patchwork-Hint: ignore
-Message-Id: <20230826184906.2B98F86413@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] boot/uboot: set DTC path
- when BR2_TARGET_UBOOT_NEEDS_DTC
+Message-Id: <20230826184906.6C5D386414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/samba4: security
+ bump version to 4.18.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3408ccf38e107e7c314b04da22f7dc6f26900779
+commit: https://git.buildroot.net/buildroot/commit/?id=9dd511431cccb9b0adfae9464770ccd6a8ac090e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-In order for host-dtc to get picked up properly we need to set
-the DTC path passed to the build explicitly.
+Release notes: https://www.samba.org/samba/history/samba-4.18.5.html
 
-See:
-https://github.com/u-boot/u-boot/blob/v2023.07.02/Makefile#L420
+Fixes the following CVEs:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+o CVE-2022-2127:
+When winbind is used for NTLM authentication, a maliciously
+crafted request can trigger an out-of-bounds read in winbind
+and possibly crash it.
+https://www.samba.org/samba/security/CVE-2022-2127.html
+
+o CVE-2023-3347:
+SMB2 packet signing is not enforced if an admin configured
+"server signing = required" or for SMB2 connections to Domain
+Controllers where SMB2 packet signing is mandatory.
+https://www.samba.org/samba/security/CVE-2023-3347.html
+
+o CVE-2023-34966:
+An infinite loop bug in Samba's mdssvc RPC service for
+Spotlight can be triggered by an unauthenticated attacker by
+issuing a malformed RPC request.
+https://www.samba.org/samba/security/CVE-2023-34966.html
+
+o CVE-2023-34967:
+Missing type validation in Samba's mdssvc RPC service for
+Spotlight can be used by an unauthenticated attacker to
+trigger a process crash in a shared RPC mdssvc worker process.
+https://www.samba.org/samba/security/CVE-2023-34967.html
+
+o CVE-2023-34968:
+As part of the Spotlight protocol Samba discloses the server-
+side absolute path of shares and files and directories in
+search results.
+https://www.samba.org/samba/security/CVE-2023-34968.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 231d79c81e9a1f8c2ef14861374a40fcdc5e6b33)
+(cherry picked from commit 83651e1833f3f1845132800ed286bf91321e54a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 4eae8e95c3..1a6e70a792 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -209,6 +209,7 @@ endif
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index cc7eee620f..1901707f3b 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.18.4.tar.asc
+-sha256  6ba7b3503cc59c9ff4f6fcb1b510c2c855fff93e0b366ab891a32a4732e88e53  samba-4.18.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.18.5.tar.asc
++sha256  095256ac332e1d9fbf9b7ff7823f92a3233d3ed658ce7fc9b33905c2243f447f  samba-4.18.5.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index a14cc63c01..edc0fee286 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
- UBOOT_DEPENDENCIES += host-dtc
-+UBOOT_MAKE_OPTS += DTC=$(HOST_DIR)/bin/dtc
- endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
+-SAMBA4_VERSION = 4.18.4
++SAMBA4_VERSION = 4.18.5
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
