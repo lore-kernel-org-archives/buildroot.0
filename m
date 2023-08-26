@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27EC0EC873B
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 787C3EC873B
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:38:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D44AF83BED;
-	Thu,  7 Sep 2023 15:38:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D44AF83BED
+	by smtp1.osuosl.org (Postfix) with ESMTP id 317DA80BDF;
+	Thu,  7 Sep 2023 15:38:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 317DA80BDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1rl5sBlZCEIx; Thu,  7 Sep 2023 15:38:22 +0000 (UTC)
+	with ESMTP id Q6hvqUKE56Dt; Thu,  7 Sep 2023 15:38:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D90583C53;
-	Thu,  7 Sep 2023 15:38:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D90583C53
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43FEF80B83;
+	Thu,  7 Sep 2023 15:38:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43FEF80B83
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1D3B71BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 194B31BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1614F41DB6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4DB2141DC0
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1614F41DB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DB2141DC0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AaHp7nIJXcZl for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:40 +0000 (UTC)
+ with ESMTP id rzMV3nUewh2G for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A5BC41DBA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A5EF41E43
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A5BC41DBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A5EF41E43
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74FAA86A1E; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+ id 6542886A21; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 12:37:56 +0200
+Date: Sat, 26 Aug 2023 23:04:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7b02ca842d5361253fe502747cdd380b67d94e47
-X-Git-Newrev: e5e9f5d78bf808e2ba8b97fd7a3f4b74e968b1a1
+X-Git-Oldrev: 6cfb3efaaf743696da02a45dedba49f1afb3b12f
+X-Git-Newrev: 7b02ca842d5361253fe502747cdd380b67d94e47
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145133.74FAA86A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/unrar: bump version to 6.2.10
+Message-Id: <20230907145133.6542886A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/pine64/pinecube: new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,41 +63,207 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5e9f5d78bf808e2ba8b97fd7a3f4b74e968b1a1
+commit: https://git.buildroot.net/buildroot/commit/?id=7b02ca842d5361253fe502747cdd380b67d94e47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-According to https://www.rarlab.com/vuln_rev3_names.html this package
-is not affected by CVE-2023-40477.
+Add support for PineCube with:
+- U-Boot 2022.04
+- Linux 5.15.61
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+PineCube is a low-powered, open source IP camera
+with the following specs:
+ - Allwinner S3 Cortex-A7
+ - 128 MiB DDR3
+ - 16 MiB SPI flash
+ - 5 MPx OV5640 camera
+ - MicroSD slot
+ - 10/100M Ethernet with passive PoE
+ - 802.11 b/g/n WiFi
+ - Bluetooth 4.1
+ - USB 2.0
+ - 26 pins GPIO header
+ - Microphone
+ - IR LEDs for night vision
+
+Board homepage: https://www.pine64.org/cube/
+Board wiki:     https://wiki.pine64.org/wiki/PineCube
+
+Signed-off-by: Jan Havran <havran.jan@email.cz>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/unrar/unrar.hash | 2 +-
- package/unrar/unrar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                          |  4 ++++
+ board/pine64/pinecube/extlinux.conf |  4 ++++
+ board/pine64/pinecube/genimage.cfg  | 34 ++++++++++++++++++++++++++++
+ board/pine64/pinecube/post-build.sh |  5 +++++
+ board/pine64/pinecube/readme.txt    | 31 +++++++++++++++++++++++++
+ configs/pine64_pinecube_defconfig   | 45 +++++++++++++++++++++++++++++++++++++
+ 6 files changed, 123 insertions(+)
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index bc8f986875..f0600af771 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0c2d4cbc8b34d0e3bec7b474e0f52bbcc6c4320ec089b4141223ee355f63c318  unrarsrc-6.2.6.tar.gz
-+sha256  55fe6ebd5e48d6655bfda3fd19b55438ca05e13c7e69772420caad9fdb68ef42  unrarsrc-6.2.10.tar.gz
- sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  license.txt
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index f59d199558..ac19225937 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f91c4e9a2b..241de082eb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1494,6 +1494,10 @@ F:	board/microchip/mpfs_icicle/
+ F:	configs/microchip_mpfs_icicle_defconfig
+ F:	package/microchip-hss-payload-generator/
  
--UNRAR_VERSION = 6.2.6
-+UNRAR_VERSION = 6.2.10
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = https://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
++N:	Jan Havran <havran.jan@email.cz>
++F:	board/pine64/pinecube/
++F:	configs/pine64_pinecube_defconfig
++
+ N:	Jan Heylen <jan.heylen@nokia.com>
+ F:	package/opentracing-cpp/
+ 
+diff --git a/board/pine64/pinecube/extlinux.conf b/board/pine64/pinecube/extlinux.conf
+new file mode 100644
+index 0000000000..6a18d9a2cb
+--- /dev/null
++++ b/board/pine64/pinecube/extlinux.conf
+@@ -0,0 +1,4 @@
++label buildroot
++  kernel /zImage
++  devicetree /sun8i-s3-pinecube.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait rw
+diff --git a/board/pine64/pinecube/genimage.cfg b/board/pine64/pinecube/genimage.cfg
+new file mode 100644
+index 0000000000..398d45e2f7
+--- /dev/null
++++ b/board/pine64/pinecube/genimage.cfg
+@@ -0,0 +1,34 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-s3-pinecube.dtb",
++			"extlinux"
++		}
++	}
++
++	size = 8M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++		size = 504K # 512KB - 8KB
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/pine64/pinecube/post-build.sh b/board/pine64/pinecube/post-build.sh
+new file mode 100755
+index 0000000000..8dae08a47c
+--- /dev/null
++++ b/board/pine64/pinecube/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$BINARIES_DIR"/extlinux/extlinux.conf
+diff --git a/board/pine64/pinecube/readme.txt b/board/pine64/pinecube/readme.txt
+new file mode 100644
+index 0000000000..4cf6df2110
+--- /dev/null
++++ b/board/pine64/pinecube/readme.txt
+@@ -0,0 +1,31 @@
++Intro
++=====
++
++This directory contains a Buildroot configuration for building a
++Pine64 PineCube.
++
++Board homepage: https://www.pine64.org/cube/
++Board wiki:     https://wiki.pine64.org/wiki/PineCube
++
++How to build it
++===============
++
++  $ make pine64_pinecube_defconfig
++  $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your PineCube and power it up. The console
++is on the serial port 2, 115200 8N1 (check Wiki for board pinout).
+diff --git a/configs/pine64_pinecube_defconfig b/configs/pine64_pinecube_defconfig
+new file mode 100644
+index 0000000000..8f60115f8f
+--- /dev/null
++++ b/configs/pine64_pinecube_defconfig
+@@ -0,0 +1,45 @@
++# Target options
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++
++# Toolchain options
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="pinecube"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Pine64 Pinecube"
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/pinecube/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/pinecube/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.61"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-s3-pinecube"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pinecube"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Required host utilities for building an SDCard image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
