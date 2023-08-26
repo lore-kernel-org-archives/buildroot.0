@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA6DC83F15
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:16:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5E5FC83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:16:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9093441B42;
-	Sat, 26 Aug 2023 18:16:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9093441B42
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DD2B41726;
+	Sat, 26 Aug 2023 18:16:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DD2B41726
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fl4rqY5WcO-t; Sat, 26 Aug 2023 18:16:03 +0000 (UTC)
+	with ESMTP id KQPJleWPVcqi; Sat, 26 Aug 2023 18:16:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7600B418F7;
-	Sat, 26 Aug 2023 18:16:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7600B418F7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E49F81BF867
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6B5241B37;
+	Sat, 26 Aug 2023 18:16:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6B5241B37
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EDFBE1BF868
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:15:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD50E41724
+ by smtp3.osuosl.org (Postfix) with ESMTP id C718660BE2
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:15:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD50E41724
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C718660BE2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WYZzrffmwf68 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KblaqmEo07_Y for <buildroot@lists.busybox.net>;
  Sat, 26 Aug 2023 18:15:46 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C254B41718
+ by smtp3.osuosl.org (Postfix) with ESMTP id A343860BBF
  for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:15:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C254B41718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A343860BBF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0B9C862D7; Sat, 26 Aug 2023 18:15:46 +0000 (UTC)
+ id 8E971862C3; Sat, 26 Aug 2023 18:15:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 20:08:53 +0200
+Date: Sat, 26 Aug 2023 20:08:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 43d5fad3e55f08f3b6f21c4996160976e5bec308
-X-Git-Newrev: 4befd0b3256caf6f882a91868717b67306b74350
+X-Git-Oldrev: 4aa36a507c7321eabd4ba598750a05a37356d5fc
+X-Git-Newrev: a2888f439cced45f48f35a51f2d4f9b0629ff28b
 X-Patchwork-Hint: ignore
-Message-Id: <20230826181546.B0B9C862D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-nextpvr: bump
- version to 20.4.3-Nexus
+Message-Id: <20230826181546.8E971862C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qemu: bump to version
+ 8.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,38 +64,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4befd0b3256caf6f882a91868717b67306b74350
+commit: https://git.buildroot.net/buildroot/commit/?id=a2888f439cced45f48f35a51f2d4f9b0629ff28b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Drop patch which is now upstream.
+
+Replace no longer supported --with-git-submodules config option with
+new --disable-download option.
+
+Replace no longer supported --meson config option with --python config
+option. The configure script expects --python to point to the python
+interpreter with the meson installation.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...n-install-keyboard-maps-only-if-necessary.patch | 38 ----------------------
+ package/qemu/qemu.hash                             |  2 +-
+ package/qemu/qemu.mk                               |  8 ++---
+ 3 files changed, 5 insertions(+), 43 deletions(-)
 
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 9ef0d4e758..dcbc504a23 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1ce85447426ddf6d443a5e3444145a2d3af65ce73d9fb583e42cd8afc9d599a5  kodi-pvr-nextpvr-20.4.2-Nexus.tar.gz
-+sha256  752dff532a277797f3fefc1ced7fea6efb8d92982d9040c4080c1e6dbab203a0  kodi-pvr-nextpvr-20.4.3-Nexus.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index 2629cd9147..e89aed7d0a 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qemu/0003-meson-install-keyboard-maps-only-if-necessary.patch b/package/qemu/0003-meson-install-keyboard-maps-only-if-necessary.patch
+deleted file mode 100644
+index 8ba7f3cf15..0000000000
+--- a/package/qemu/0003-meson-install-keyboard-maps-only-if-necessary.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 9d9b74f806f5dbca53df6630c1a0591eaedd4500 Mon Sep 17 00:00:00 2001
+-From: Carlos Santos <casantos@redhat.com>
+-Date: Sun, 1 Jan 2023 21:00:57 -0300
+-Subject: [PATCH] meson: install keyboard maps only if necessary
+-
+-They are required only for system emulation (i.e. have_system is true).
+-
+-Upstream: https://patchwork.kernel.org/project/qemu-devel/patch/20230327172147.196607-1-casantos@redhat.com/
+-Signed-off-by: Carlos Santos <casantos@redhat.com>
+-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+----
+- pc-bios/keymaps/meson.build | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/pc-bios/keymaps/meson.build b/pc-bios/keymaps/meson.build
+-index 158a3b410c..bff3083313 100644
+---- a/pc-bios/keymaps/meson.build
+-+++ b/pc-bios/keymaps/meson.build
+-@@ -47,7 +47,7 @@ if native_qemu_keymap.found()
+-                        build_by_default: true,
+-                        output: km,
+-                        command: [native_qemu_keymap, '-f', '@OUTPUT@', args.split()],
+--                       install: true,
+-+                       install: have_system,
+-                        install_dir: qemu_datadir / 'keymaps')
+-   endforeach
+- 
+-@@ -56,4 +56,6 @@ else
+-   install_data(keymaps.keys(), install_dir: qemu_datadir / 'keymaps')
+- endif
+- 
+--install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+-+if have_system
+-+  install_data(['sl', 'sv'], install_dir: qemu_datadir / 'keymaps')
+-+endif
+--- 
+-2.31.1
+-
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index e71742c243..506afa8bf3 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256  ecf4d32cbef9d397bfc8cc50e4d1e92a1b30253bf32e8ee73c7a8dcf9a232b09  qemu-8.0.3.tar.xz
++sha256  710c101198e334d4762eef65f649bc43fa8a5dd75303554b8acfec3eb25f0e55  qemu-8.1.0.tar.xz
+ sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index b341d0220d..84166958bb 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -6,7 +6,7 @@
  
--KODI_PVR_NEXTPVR_VERSION = 20.4.2-Nexus
-+KODI_PVR_NEXTPVR_VERSION = 20.4.3-Nexus
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
+ # When updating the version, check whether the list of supported targets
+ # needs to be updated.
+-QEMU_VERSION = 8.0.3
++QEMU_VERSION = 8.1.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = https://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+@@ -272,7 +272,7 @@ define QEMU_CONFIGURE_CMDS
+ 			--prefix=/usr \
+ 			--cross-prefix=$(TARGET_CROSS) \
+ 			--audio-drv-list= \
+-			--meson=$(HOST_DIR)/bin/meson \
++			--python=$(HOST_DIR)/bin/python3 \
+ 			--ninja=$(HOST_DIR)/bin/ninja \
+ 			--disable-alsa \
+ 			--disable-bpf \
+@@ -313,7 +313,7 @@ define QEMU_CONFIGURE_CMDS
+ 			--enable-attr \
+ 			--enable-kvm \
+ 			--enable-vhost-net \
+-			--with-git-submodules=ignore \
++			--disable-download \
+ 			--disable-hexagon-idef-parser \
+ 			$(QEMU_OPTS)
+ endef
+@@ -458,7 +458,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--host-cc="$(HOSTCC)" \
+ 		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
+ 		--extra-ldflags="$(HOST_LDFLAGS)" \
+-		--meson=$(HOST_DIR)/bin/meson \
++		--python=$(HOST_DIR)/bin/python3 \
+ 		--ninja=$(HOST_DIR)/bin/ninja \
+ 		--disable-alsa \
+ 		--disable-bpf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
