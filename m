@@ -1,51 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7886EC83F01
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 19:09:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC905C83F11
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 19:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 225FB405FA;
-	Sat, 26 Aug 2023 19:09:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 225FB405FA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FA5181E69;
+	Sat, 26 Aug 2023 19:23:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FA5181E69
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Q9VydP7P1PDc; Sat, 26 Aug 2023 19:09:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 9wt9tAZ8gJEB; Sat, 26 Aug 2023 19:23:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A649409D7;
-	Sat, 26 Aug 2023 19:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A649409D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3EAA91BF82C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 19:08:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88A9381E33;
+	Sat, 26 Aug 2023 19:23:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88A9381E33
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D1471BF82C
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 19:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A9F141769
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 19:08:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A9F141769
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45FED60BAE
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 19:23:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45FED60BAE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y3M_U-K0tekf for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 19:08:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12519417A1
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 19:08:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12519417A1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 02BDB86421; Sat, 26 Aug 2023 19:08:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 21:05:15 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: d04b0ad4c313d9d2ebf82d39607b25f31e976d7e
-X-Git-Newrev: 421edb89b4565496d12758b0104ac9e2b686fd17
-X-Patchwork-Hint: ignore
-Message-Id: <20230826190839.02BDB86421@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/wpebackend-fdo:
- bump version to 1.14.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O_hJI8Y-V3vE for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 19:23:50 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C501060BA6
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 19:23:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C501060BA6
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-3fee8b78097so17701075e9.0
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 12:23:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693077828; x=1693682628;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=RJIR195ClHcwvtwBKRiOJgcLPFv2JvNzj7K9TVpdbBo=;
+ b=aj3X9NGDHLx/l847f1OtMexbUZ91OTRzisMQAmzmvsNDInayLhGfw4rztKuhWa1L+T
+ rQ0q1v7n/3fpZ3RwqhdbggOVta9QqQaWVFUVTAtVFeoKzSfi3I1tJityZgMWdYuaE7Gd
+ UwBEzpTA0kF/ROs8lZrZ9960zBX7DbIDYdZtl4BIVY1Yz7ke7rNN8Qs5i++0tEVlgWgD
+ qlLq61vZwyOtL/TDwOWpY6Yputj2iM+2ujTkZzI4Z6UKSCrxZsYCVLjobwYbNxFdDJzQ
+ NiSGNboJzwdVjzr6VGYZEDBUMt9+D6ebvZHuvq7k+W40/nqDTL8TGt/nJ+5rYMALznVx
+ Tm9A==
+X-Gm-Message-State: AOJu0Yznjz/R4W5tqNzfPwfctHTdFiFAKQIdp4asdxuOlqGK4/iTNBpH
+ RUIBp3bOe5sTwjBaDaZpa/F//g==
+X-Google-Smtp-Source: AGHT+IHQNb2o3jDrIgukuIzUZ8aeWwDhpcDkxCnqktPO2mkS2ZClvRBmqXya6RbK7Q8X6A6W28xLZg==
+X-Received: by 2002:a7b:c453:0:b0:401:b7e0:a43c with SMTP id
+ l19-20020a7bc453000000b00401b7e0a43cmr3672037wmi.24.1693077827586; 
+ Sat, 26 Aug 2023 12:23:47 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31?
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ n17-20020a1c7211000000b003feef5b0baesm8902983wmc.26.2023.08.26.12.23.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 26 Aug 2023 12:23:47 -0700 (PDT)
+Message-ID: <4cf979f7-33e7-7d2c-694d-72bd9ad9c9f2@smile.fr>
+Date: Sat, 26 Aug 2023 21:23:46 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: fr, en-US
+To: Fabio Estevam <festevam@gmail.com>, Romain Naour <romain.naour@gmail.com>
+References: <20230826165628.31792-1-romain.naour@gmail.com>
+ <CAOMZO5CHX4adZ_kmdSEr5nR2ZYUUsN+Mk62e3h_6jm63h2tQSw@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+In-Reply-To: <CAOMZO5CHX4adZ_kmdSEr5nR2ZYUUsN+Mk62e3h_6jm63h2tQSw@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile-fr.20221208.gappssmtp.com; s=20221208; t=1693077828; x=1693682628;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=RJIR195ClHcwvtwBKRiOJgcLPFv2JvNzj7K9TVpdbBo=;
+ b=OhJ21ih1bigwyeyYQwNB/AVKF//Dc5gcONYEsRdbbB2iVT2QvxsxialuUagp7xL2ME
+ /oionDtZj8r0Cmso5+GkJ+P7BQiQeYWdlXJDlG7MhbZ/baS+jkaEQgehxs/VaC+vf8wH
+ z6PsYByWyoJuC+yNZIh8aPcDAYDCP1K18v5Z0WA7zQw3NxbwlnBSPIZ445MZn/oDUxf2
+ ZtBK6hGCCNg0Yr/l3zS3+MtFqDCIBO6lgih4lQOkfNxT6L6yrGngRLB/VAZvgRQBj03e
+ ROc1wTZK/wTqmB1m9GtNbxL6vF+LAgFksWlGdMFhE628HbcFXIKN4S4I3obqvgWTE0Os
+ mn4A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=smile-fr.20221208.gappssmtp.com
+ header.i=@smile-fr.20221208.gappssmtp.com header.a=rsa-sha256
+ header.s=20221208 header.b=OhJ21ih1
+Subject: Re: [Buildroot] [PATCH] configs/freescale_imx6qsabresd_defconfig:
+ fix defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +103,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=421edb89b4565496d12758b0104ac9e2b686fd17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
-
-Removed md5 hash.
-
-Release notes:
-https://lists.webkit.org/pipermail/webkit-wpe/2023-March/000590.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c9f59f49727058b26c33665d21d8e51a4fe769aa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wpebackend-fdo/wpebackend-fdo.hash | 7 +++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index d1a344a664..26ba121727 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,6 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.1.tar.xz.sums
--md5  2b49218cdd16075b028bbaf5a4f57890  wpebackend-fdo-1.14.1.tar.xz
--sha1  a68db2480d29d53d7fa24c69888bacbab6efea11  wpebackend-fdo-1.14.1.tar.xz
--sha256  01938dd93c62b3a47b18dd13c70d50490a8b8a6caec23c8550a3dbdbcc6bbb50  wpebackend-fdo-1.14.1.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.2.tar.xz.sums
-+sha1  f453f8d77e93f4ac6ac81c1874d4d6bdcb45c253  wpebackend-fdo-1.14.2.tar.xz
-+sha256  93c9766ae9864eeaeaee2b0a74f22cbca08df42c1a1bdb55b086f2528e380d38  wpebackend-fdo-1.14.2.tar.xz
- 
- # Hashes for license files:
- sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index c1e4e05796..7ef347b622 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEBACKEND_FDO_VERSION = 1.14.1
-+WPEBACKEND_FDO_VERSION = 1.14.2
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRmFiaW8sCgpMZSAyNi8wOC8yMDIzIMOgIDIwOjE4LCBGYWJpbyBFc3RldmFtIGEgw6lj
+cml0wqA6Cj4gSGkgUm9tYWluLAo+IAo+IE9uIFNhdCwgQXVnIDI2LCAyMDIzIGF0IDE6NTbigK9Q
+TSBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+IHdyb3RlOgo+Pgo+PiBXaGls
+ZSBzd2l0Y2hpbmcgQVRGIHRvIGdpdGh1YiwgdGhlIEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX0dJ
+VD15Cj4gCj4gQVRGPwoKTXkgYmFkLCBJIHdhcyBsb29raW5nIGF0IG90aGVyIGlteC9mcmVlc2Nh
+bGUgZGVmY29uZmlnIHdoaWxlIHdvcmtpbmcgb24gdGhpcwpvbmUuIEkndmUgcmVhZCBCUjJfVEFS
+R0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9HSVQ9eSAoSSBkb24ndCBrbm93IGhvdy4u
+LikKCj4gCj4gSSB0aGluayB5b3UgbWVhbnQ6Cj4gCj4gIldoaWxlIHN3aXRjaGluZyB0aGUga2Vy
+bmVsIHJlcG9zaXRvcnkgZnJvbSBjb2RlYXVyb3JhIHRvIGdpdGh1YiIKCkluZGVlZC4KCj4gCj4+
+IHN5bWJvbCB3YXMgbm90IHJlbW92ZWQuIFNpbmNlIHRoZW4gdGhpcyBkZWZjb25maWcgZmFpbCB0
+byBidWlsZAo+PiBpbiBnaXRsYWItY2kgZHVlIHRvIGludmFsaWQgZGVmY29uZmlnIGNoZWNrLgo+
+Pgo+PiAgIFdBUk46IGRlZmNvbmZpZyAuL2NvbmZpZ3MvZnJlZXNjYWxlX2lteDZxc2FicmVzZF9k
+ZWZjb25maWcgY2FuJ3QgYmUgdXNlZDoKPj4gICAgICAgICBNaXNzaW5nOiBCUjJfVEFSR0VUX1VC
+T09UX0NVU1RPTV9HSVQ9eQo+Pgo+PiBbMV0gZGQ0MmIxNTlhNWY3NTI5MjFlZTYwMjUzMGQyODlj
+ODEwYWQ3ZWU1MQo+Pgo+PiBGaXhlczoKPj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5v
+cmcvYnVpbGRyb290Ly0vam9icy80ODg5NDM2NjEyCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IFJvbWFp
+biBOYW91ciA8cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KPj4gLS0tCj4+IFRoaXMgZGVmY29uZmln
+IHdpbGwgZmFpbCBhbnl3YXkgZHVlIHRvIHRvbyBvbGQgQVRGIHBhY2thZ2UgKHByZSBWMi45IHZl
+cnNpb24pCj4+IGFuZCBiaW51dGlscyAyLjM5Ky4gQnV0IGl0IHNob3VsZCBiZSBiYWNrcG9ydGVk
+IHVwIHRvIDIwMjMuMDIuCj4gCj4gSSBhbSBjb25mdXNlZCBieSB0aGlzIHN0YXRlbWVudCBhcyB0
+aGlzIGRlZmNvbmZpZyBkb2VzIG5vdCB1c2UgQVRGLgoKTWUgdG9vIG5vdywgSSBzaG91bGQgZG91
+YmxlIGNoZWNrIGNvbW1pdHMgbWFkZSBsYXRlIGluIHRoZSBldmVuaW5nIGJlZm9yZQpzZW5kaW5n
+IGl0IHRvIHRoZSBtYWlsaW5nIGxpc3QuCgpJIGRpZCBhIGZ1bGwgYnVpbGQgd2l0aG91dCBhbnkg
+b3RoZXIgaXNzdWUuIFN0aWxsIHRoaXMgcGF0Y2ggbmVlZHMgdG8gYmUgYmFja3BvcnRlZC4KCkJl
+c3QgcmVnYXJkcywKUm9tYWluCgoKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwo+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwo+IGh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
