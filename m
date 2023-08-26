@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87A88C83F15
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D31C83F15
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 18:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2023B4191C;
-	Sat, 26 Aug 2023 18:07:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2023B4191C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4414E415FC;
+	Sat, 26 Aug 2023 18:08:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4414E415FC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s9Ha8XmNHuCI; Sat, 26 Aug 2023 18:07:51 +0000 (UTC)
+	with ESMTP id QgbDMUwDGwJu; Sat, 26 Aug 2023 18:08:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FBD741908;
-	Sat, 26 Aug 2023 18:07:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FBD741908
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 47B8D1BF37C
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:07:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 649BC415E5;
+	Sat, 26 Aug 2023 18:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 649BC415E5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 110661BF37C
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E63960BBF
- for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:07:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E63960BBF
+ by smtp1.osuosl.org (Postfix) with ESMTP id DEFD282EB5
+ for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 18:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEFD282EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dbddarmRbGKp for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 18:07:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 569AB60BA6
- for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:07:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 569AB60BA6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4781486126; Sat, 26 Aug 2023 18:07:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 20:06:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3214d9d2b8ed3decd33c99dcc01172add28cf94c
-X-Git-Newrev: a26fa40853ff6033647f034d16270cdc66e22469
-X-Patchwork-Hint: ignore
-Message-Id: <20230826180747.4781486126@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: security bump version to
- 3.11.5
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 22wmbbIfY7HO for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 18:08:16 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E551382E19
+ for <buildroot@buildroot.org>; Sat, 26 Aug 2023 18:08:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E551382E19
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 01B8F1BF205;
+ Sat, 26 Aug 2023 18:08:13 +0000 (UTC)
+Date: Sat, 26 Aug 2023 20:08:12 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230826200812.36063e9d@windsurf>
+In-Reply-To: <20230826180249.5467-1-bernd@kuhls.net>
+References: <20230826180249.5467-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693073294;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=iV0fX2vi10FUOeyeBy4bpXItct50j/oY72Y9qCh6hKw=;
+ b=GYfi5RWBXM3W7/V9Bb5l9AI49k9jn7szMv27cBGRhUDPaEYoUOilR25PBqYxFFoAT8xOSH
+ 4TLSENp4g6u7homqD8n7apFFu1XL3yqg63egJrLzkKBbe9fhGQXon36qDW3nc60egYuPC/
+ HKR9CiMdWxRNunNQur9Lxq4u9ypPVYLO8VGVkQ5B3p1BDnRc807aU4OnOsWh3IFxX+l4Lk
+ 2Vp6CuQRrJueYg04xznFZy1OX96e3vNlPmTgMtCYldVMr/J+R8ufy0+9hwOCxvum89P5rM
+ fxZZzh7/Vshak/SYG/BtnwGSjk6mHm/n5uzmc0nYAVZXnEMwRj8OHpA9F207HQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GYfi5RWB
+Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{10,
+ 15}.x / 6.1.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,52 +77,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a26fa40853ff6033647f034d16270cdc66e22469
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 26 Aug 2023 20:02:49 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Added md5 hash provided by upstream.
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  linux/linux.hash                     | 6 +++---
+>  package/linux-headers/Config.in.host | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
-Release notes: https://www.python.org/downloads/release/python-3115/
+Applied to master, thanks.
 
-Fixes CVE-2023-40217.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python3/python3.hash | 4 +++-
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 6c43e01a44..1a0fee3290 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,3 +1,5 @@
-+# From https://www.python.org/downloads/release/python-3115/
-+md5  393856f1b7713aa8bba4b642ab9985d3  Python-3.11.5.tar.xz
- # Locally computed
--sha256  2f0e409df2ab57aa9fc4cbddfb976af44e4e55bf6f619eee6bc5c2297264a7f6  Python-3.11.4.tar.xz
-+sha256  85cd12e9cf1d6d5a45f17f7afe1cebe7ee628d3282281c492e86adf636defa3f  Python-3.11.5.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index bdb7cfd22f..5f8fa5b58d 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
