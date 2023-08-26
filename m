@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B3CC83F01
-	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 17:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12977C83F01
+	for <buildroot@archiver.kernel.org>; Sat, 26 Aug 2023 17:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67779418A3;
-	Sat, 26 Aug 2023 17:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67779418A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id A642F418B3;
+	Sat, 26 Aug 2023 17:51:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A642F418B3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TMiaaaPQJluU; Sat, 26 Aug 2023 17:51:15 +0000 (UTC)
+	with ESMTP id 16THhr092r8y; Sat, 26 Aug 2023 17:51:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F02B41809;
-	Sat, 26 Aug 2023 17:51:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F02B41809
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 974FC1BF589
+	by smtp4.osuosl.org (Postfix) with ESMTP id C173F41911;
+	Sat, 26 Aug 2023 17:51:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C173F41911
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EE2A91BF589
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A5B360EEC
+ by smtp1.osuosl.org (Postfix) with ESMTP id D5E1283281
  for <buildroot@lists.busybox.net>; Sat, 26 Aug 2023 17:51:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A5B360EEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5E1283281
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DoxFGE3Bi5Da for <buildroot@lists.busybox.net>;
- Sat, 26 Aug 2023 17:51:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JYzJsIr5Uco6 for <buildroot@lists.busybox.net>;
+ Sat, 26 Aug 2023 17:51:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CFD260B97
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9880582ECF
  for <buildroot@buildroot.org>; Sat, 26 Aug 2023 17:51:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CFD260B97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9880582ECF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7842B85F55; Sat, 26 Aug 2023 17:51:11 +0000 (UTC)
+ id 8147685FA8; Sat, 26 Aug 2023 17:51:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 26 Aug 2023 19:50:56 +0200
+Date: Sat, 26 Aug 2023 19:50:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c11950fe4a2817c4bd1fa6d9c9e3cd3783b3f96f
-X-Git-Newrev: b6a96f8be27f98d3132cc2464ecd33594c2f1cd3
+X-Git-Oldrev: b6a96f8be27f98d3132cc2464ecd33594c2f1cd3
+X-Git-Newrev: 01893c74ebee2fb7be5248d35ff33d387ca5a92d
 X-Patchwork-Hint: ignore
-Message-Id: <20230826175111.7842B85F55@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/hifive_unleashed_defconfig: uboot
- needs pylibfdt
+Message-Id: <20230826175111.8147685FA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/hifive_unleashed_defconfig: bump
+ to kernel 5.10.190
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,34 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6a96f8be27f98d3132cc2464ecd33594c2f1cd3
+commit: https://git.buildroot.net/buildroot/commit/?id=01893c74ebee2fb7be5248d35ff33d387ca5a92d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uboot needs Python libfdt to build:
+We have to bump the kernel version to build with gcc >= 12 for riscv
+and zicsr/zifencei extension [1] [2].
 
-  pylibfdt does not seem to be available with python3
+Similar to 0a4ac1e7fa715669aa2ab2a58b564fc875c07c68.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4839060137
+./arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
+./arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01', extension `zicsr' required
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=7486227fa47aa84b102be18fd9985f6e8e11e756
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=0b077b22ea9ff698840ff9305d9382935fb41540
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/hifive_unleashed_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/hifive_unleashed_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
-index 80c5e48f96..37898284ac 100644
+index 37898284ac..c9d4a31ede 100644
 --- a/configs/hifive_unleashed_defconfig
 +++ b/configs/hifive_unleashed_defconfig
-@@ -48,6 +48,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_unleashed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
- BR2_TARGET_UBOOT_SPL=y
+@@ -28,7 +28,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.190"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive-unleashed/linux.config.fragment"
+ BR2_LINUX_KERNEL_IMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
