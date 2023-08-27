@@ -4,66 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3EB9C83F01
-	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 08:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 021D9C83F01
+	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 08:26:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A81060FC8;
-	Sun, 27 Aug 2023 08:11:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A81060FC8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B93560FB9;
+	Sun, 27 Aug 2023 08:26:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B93560FB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KghSCGI6e0Cy; Sun, 27 Aug 2023 08:11:36 +0000 (UTC)
+	with ESMTP id MI4nhn3S4VWD; Sun, 27 Aug 2023 08:26:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7B5460F99;
-	Sun, 27 Aug 2023 08:11:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7B5460F99
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2F8A11BF316
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:11:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFC2460E47;
+	Sun, 27 Aug 2023 08:26:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFC2460E47
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C28B1BF316
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:26:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ECA5A400FE
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA5A400FE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 45B3481F0D
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:26:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45B3481F0D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id j_CWKQl_1IuX for <buildroot@lists.busybox.net>;
- Sun, 27 Aug 2023 08:11:33 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B2235400C5
- for <buildroot@buildroot.org>; Sun, 27 Aug 2023 08:11:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2235400C5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A8C0C40002;
- Sun, 27 Aug 2023 08:11:29 +0000 (UTC)
-Date: Sun, 27 Aug 2023 10:11:28 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230827101128.61446f39@windsurf>
-In-Reply-To: <20230826210011.39269-1-romain.naour@gmail.com>
-References: <20230826210011.39269-1-romain.naour@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id W4xcj4xZd2xd for <buildroot@lists.busybox.net>;
+ Sun, 27 Aug 2023 08:26:33 +0000 (UTC)
+Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C887881F0C
+ for <buildroot@busybox.net>; Sun, 27 Aug 2023 08:26:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C887881F0C
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 6BD5E440836;
+ Sun, 27 Aug 2023 11:25:47 +0300 (IDT)
+To: buildroot@busybox.net
+Date: Sun, 27 Aug 2023 11:25:55 +0300
+Message-Id: <5ea37be6a88015fc6200d3b00bb03dacb73100d3.1693124755.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693123889;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ds+G7B1yuhsQUwYxDrNPbHeu4AuLr7lc/Re18ByFBsA=;
- b=dN6ZH9BYmP2Uj1DmkMPpjNH00lI3jiC2kmqt3CgeIBIOuS1IENwT9lQrbPVOHe2Oo5c28W
- FKoz42ZKfbM9YExCWzTyb97BV9l0ekmHJA00qwU0OzR0aALTCx+lV675FW5deE2h9eqixq
- qkG2/h+nJ/fyhLcfczRrWjGDvXmDqUIH/lQ0k86lWUAj36QhE8oxknOT8JBzKNla/q6/r1
- tnlht2iruxc3tQXAx9R4kIGTMpIxA+jNAC9n7l8nYqFoQdr0Qk3QtG82oPHVPdGTflHR1q
- rTAdRN+Sj1jXwAxg/B9sN6RoC69L7MXS/fQfdwnXZ5vfVwVuSCL4JuzdViw9jw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dN6ZH9BY
-Subject: Re: [Buildroot] [RFC] support/misc/gitlab-ci.yml.in: retry a job
- only if it failed due to a runner issue
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1693124747;
+ bh=qW0LdE3fdC1MEWcgPX+p39bUnGFMK29nxaN2qNL/HL0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=n5DI+cf5FXDFTDVIWrMbiCvjA72Uitmrw2aU7wyqxeYk6trBKz+ykPBX6/B1lGLPC
+ s/bxh16xJiQmExhMtsNzJtLYLKYaNrvlFuRpqXhJTZArjweRk35NZw9jbIkVwiYL8G
+ E2Mqs4uKXmRQ/dN8DkAaHODOLnhRgB1umagdrQFLxZD2QSRyWn0I46ug/PBCBlbCXx
+ thANwfDmx26YExJB4zm3enmIUf0nHFLzZlPuZJCrGWAoVAw6NKwb1S0es4zK5KFclf
+ mYke/MS2H8lCWl5bicY6T96gZLlU50bbLSodgw8MebjAwojP/htIbVyG5o/0pSAvaa
+ wcPWMFjKu4R5w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
+ header.a=rsa-sha256 header.s=default header.b=n5DI+cf5
+Subject: [Buildroot] [PATCH next] package/deamon: bump to version 0.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,59 +69,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 26 Aug 2023 23:00:11 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Update license info. COPYING hash updated because of added reference to
+additional licenses. Licenses for local snprintf and getopt
+implementations do not apply, since this code is not used for Linux
+targets.
 
-> Each time a new pipeline is trigged, some jobs may fail due to temporary
-> issue with a Gitlab runner (network, power supply, docker or maintainance).
-> 
-> Most of the problems are "runner system failure" [1] and requires to retart
-> each failed jobs manually by maintainers to complete the pipeline with only
-> real failure if any.
-> 
-> The "retry" keyword allows to configure how many time a job is retried if
-> it fails. "retry:when" allows to retry a failed job only on specific
-> failure types like "runner_system_failure".
-> 
-> While at it, retry a job if it failed due to a timeout failure (this
-> timeout means that the job was pending for more than 24h) [2].
-> 
-> Such timeout failure occurs on pipeline testing each Buildroot's defconfig
-> since there is not enough gitlab runner avaible to build all of them
-> within 24h.
-> 
-> Retry only jobs that are more likely to wait for a runner
-> (generate-gitlab-ci-yml, runtime_test_base, defconfig_base and test_pkg).
-> 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949397 (runner system failure)
-> [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949530 (timeout failure or the job got stuck)
-> 
-> https://docs.gitlab.com/ee/ci/yaml/#retrywhen
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  .gitlab-ci.yml                |  5 +++++
->  support/misc/gitlab-ci.yml.in | 15 +++++++++++++++
->  2 files changed, 20 insertions(+)
+Add Tatu Ylonen Permissive license of the code in pseudo.c.
 
-Excellent! I hope this will improve the reliability of Gitlab results.
-I've applied to master, after fixing some minor typos in the commit
-log. Thanks a lot!
+Add LGPL-2.0+ license text file.
 
-Thomas
+Rename BSD-3-Clause text file and update hash because of text formatting
+change.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/daemon/daemon.hash |  8 +++++---
+ package/daemon/daemon.mk   | 10 +++++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
+index 5ad7bf6ce2b5..f1346d269b87 100644
+--- a/package/daemon/daemon.hash
++++ b/package/daemon/daemon.hash
+@@ -1,7 +1,9 @@
+ # From http://www.libslack.org/daemon/
+-sha256  b34b37543bba43bd086e59f4b754c8102380ae5c1728b987c890d5da4b4cf3ca  daemon-0.8.2.tar.gz
++sha256  fa28859ad341cb0a0b012c11c271814f870482013b49f710600321d379887cd1  daemon-0.8.4.tar.gz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+-sha256  35e31504fc0aec878e86900dde1d90a04404833c182f50d5678d873910bb11eb  COPYING
+-sha256  5a93d5831e1297ab10fe643e1a631e83be392896da14ee2951285a79012df69d  LICENSES/BSD-3-Clause.txt
++sha256  34c8c7085e4d3920bfb8143b910d4f99194b9fc3e1cc3442c9b1b46db4382891  COPYING
++sha256  8587dc1ea896f33b657d9e57bd3bf03f0c11ce07d041f09e687f87e7a0087b38  LICENSES/LicenseRef-BSD-3-Clause-Almost.txt
+ sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
++sha256  61778e80a2fd85955b626b29aa2bcf06144c714277bded65633e4a81479d9fb3  LICENSES/LGPL-2.0-or-later.txt
++sha256  1aa57d2704f6783460f2750a9f3217d083ed5161eb95438ca43a5674213a7128  LICENSES/LicenseRef-Tatu-Ylonen-Permissive.txt
+diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
+index 5e7e497ff133..d7709e03eff4 100644
+--- a/package/daemon/daemon.mk
++++ b/package/daemon/daemon.mk
+@@ -4,10 +4,14 @@
+ #
+ ################################################################################
+ 
+-DAEMON_VERSION = 0.8.2
++DAEMON_VERSION = 0.8.4
+ DAEMON_SITE = http://libslack.org/daemon/download
+-DAEMON_LICENSE = GPL-2.0+, LGPL-2.0+, BSD-3-Clause
+-DAEMON_LICENSE_FILES = LICENSE COPYING LICENSES/BSD-3-Clause.txt LICENSES/GPL-2.0-or-later.txt
++DAEMON_LICENSE = GPL-2.0+, LGPL-2.0+, BSD-3-Clause, Tatu Ylonen permissive license
++DAEMON_LICENSE_FILES = LICENSE COPYING \
++	LICENSES/LicenseRef-BSD-3-Clause-Almost.txt \
++	LICENSES/GPL-2.0-or-later.txt \
++	LICENSES/LGPL-2.0-or-later.txt \
++	LICENSES/LicenseRef-Tatu-Ylonen-Permissive.txt
+ 
+ define DAEMON_CONFIGURE_CMDS
+ 	(cd $(@D); ./configure)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
