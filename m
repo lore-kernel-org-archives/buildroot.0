@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D997C83F01
-	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 08:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3EB9C83F01
+	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 08:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FF3C60F99;
-	Sun, 27 Aug 2023 08:10:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FF3C60F99
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A81060FC8;
+	Sun, 27 Aug 2023 08:11:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A81060FC8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id u8vd4iXOObzv; Sun, 27 Aug 2023 08:10:51 +0000 (UTC)
+	with ESMTP id KghSCGI6e0Cy; Sun, 27 Aug 2023 08:11:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36B2160B49;
-	Sun, 27 Aug 2023 08:10:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36B2160B49
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DBBCF1BF316
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:10:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7B5460F99;
+	Sun, 27 Aug 2023 08:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7B5460F99
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F8A11BF316
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2A3A60B49
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:10:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2A3A60B49
+ by smtp2.osuosl.org (Postfix) with ESMTP id ECA5A400FE
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:11:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECA5A400FE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1YBj8LiLEiGN for <buildroot@lists.busybox.net>;
- Sun, 27 Aug 2023 08:10:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B24A860AA7
- for <buildroot@buildroot.org>; Sun, 27 Aug 2023 08:10:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B24A860AA7
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9EC4986428; Sun, 27 Aug 2023 08:10:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 27 Aug 2023 10:09:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5acaac7122945c7588cf2328d928e1d4fb6488dd
-X-Git-Newrev: e0166ecba0109f7f6757415afa7e7a67b058d406
-X-Patchwork-Hint: ignore
-Message-Id: <20230827081047.9EC4986428@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/misc/gitlab-ci.yml.in: retry a job
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j_CWKQl_1IuX for <buildroot@lists.busybox.net>;
+ Sun, 27 Aug 2023 08:11:33 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B2235400C5
+ for <buildroot@buildroot.org>; Sun, 27 Aug 2023 08:11:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2235400C5
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A8C0C40002;
+ Sun, 27 Aug 2023 08:11:29 +0000 (UTC)
+Date: Sun, 27 Aug 2023 10:11:28 +0200
+To: Romain Naour <romain.naour@gmail.com>
+Message-ID: <20230827101128.61446f39@windsurf>
+In-Reply-To: <20230826210011.39269-1-romain.naour@gmail.com>
+References: <20230826210011.39269-1-romain.naour@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693123889;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ds+G7B1yuhsQUwYxDrNPbHeu4AuLr7lc/Re18ByFBsA=;
+ b=dN6ZH9BYmP2Uj1DmkMPpjNH00lI3jiC2kmqt3CgeIBIOuS1IENwT9lQrbPVOHe2Oo5c28W
+ FKoz42ZKfbM9YExCWzTyb97BV9l0ekmHJA00qwU0OzR0aALTCx+lV675FW5deE2h9eqixq
+ qkG2/h+nJ/fyhLcfczRrWjGDvXmDqUIH/lQ0k86lWUAj36QhE8oxknOT8JBzKNla/q6/r1
+ tnlht2iruxc3tQXAx9R4kIGTMpIxA+jNAC9n7l8nYqFoQdr0Qk3QtG82oPHVPdGTflHR1q
+ rTAdRN+Sj1jXwAxg/B9sN6RoC69L7MXS/fQfdwnXZ5vfVwVuSCL4JuzdViw9jw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dN6ZH9BY
+Subject: Re: [Buildroot] [RFC] support/misc/gitlab-ci.yml.in: retry a job
  only if it failed due to a runner issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,106 +77,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0166ecba0109f7f6757415afa7e7a67b058d406
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 26 Aug 2023 23:00:11 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Each time a new pipeline is triggered, some jobs may fail due to
-temporary issue with a Gitlab runner (network, power supply, docker or
-maintainance).
+> Each time a new pipeline is trigged, some jobs may fail due to temporary
+> issue with a Gitlab runner (network, power supply, docker or maintainance).
+> 
+> Most of the problems are "runner system failure" [1] and requires to retart
+> each failed jobs manually by maintainers to complete the pipeline with only
+> real failure if any.
+> 
+> The "retry" keyword allows to configure how many time a job is retried if
+> it fails. "retry:when" allows to retry a failed job only on specific
+> failure types like "runner_system_failure".
+> 
+> While at it, retry a job if it failed due to a timeout failure (this
+> timeout means that the job was pending for more than 24h) [2].
+> 
+> Such timeout failure occurs on pipeline testing each Buildroot's defconfig
+> since there is not enough gitlab runner avaible to build all of them
+> within 24h.
+> 
+> Retry only jobs that are more likely to wait for a runner
+> (generate-gitlab-ci-yml, runtime_test_base, defconfig_base and test_pkg).
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949397 (runner system failure)
+> [2] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949530 (timeout failure or the job got stuck)
+> 
+> https://docs.gitlab.com/ee/ci/yaml/#retrywhen
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  .gitlab-ci.yml                |  5 +++++
+>  support/misc/gitlab-ci.yml.in | 15 +++++++++++++++
+>  2 files changed, 20 insertions(+)
 
-Most of the problems are "runner system failure" [1] and require to
-retart each failed jobs manually by maintainers to complete the
-pipeline with only real failures if any.
+Excellent! I hope this will improve the reliability of Gitlab results.
+I've applied to master, after fixing some minor typos in the commit
+log. Thanks a lot!
 
-The "retry" keyword allows to configure how many times a job is retried
-if it fails. "retry:when" allows to retry a failed job only on
-specific failure types like "runner_system_failure".
-
-While at it, retry a job if it failed due to a timeout failure (this
-timeout means that the job was pending for more than 24h) [2].
-
-Such timeout failures occur on pipelines testing each Buildroot's
-defconfig since there is not enough gitlab runner available to build
-all of them within 24h.
-
-Retry only jobs that are more likely to wait for a runner
-(generate-gitlab-ci-yml, runtime_test_base, defconfig_base and test_pkg).
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949397 (runner system failure)
-[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949530 (timeout failure or the job got stuck)
-
-https://docs.gitlab.com/ee/ci/yaml/#retrywhen
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml                |  5 +++++
- support/misc/gitlab-ci.yml.in | 15 +++++++++++++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index ed17bb14b9..3d7719568f 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -10,6 +10,11 @@ stages:
- generate-gitlab-ci-yml:
-   stage: generate-gitlab-ci
-   script: ./support/scripts/generate-gitlab-ci-yml support/misc/gitlab-ci.yml.in > generated-gitlab-ci.yml
-+  retry:
-+    max: 2
-+    when:
-+      - runner_system_failure
-+      - stuck_or_timeout_failure
-   artifacts:
-     when: always
-     paths:
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 446132846f..4d9acbc3d3 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -67,6 +67,11 @@ before_script:
-                 tail -200 runtime-test.log
-                 exit 1
-             }
-+    retry:
-+        max: 2
-+        when:
-+            - runner_system_failure
-+            - stuck_or_timeout_failure
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-@@ -99,6 +104,11 @@ before_script:
-         - TEST_CASE_NAME=${CI_JOB_NAME}
-         - echo "Starting runtime test ${TEST_CASE_NAME}"
-         - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
-+    retry:
-+        max: 2
-+        when:
-+            - runner_system_failure
-+            - stuck_or_timeout_failure
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-@@ -119,6 +129,11 @@ before_script:
-     needs:
-         - pipeline: $PARENT_PIPELINE_ID
-           job: generate-gitlab-ci-yml
-+    retry:
-+        max: 2
-+        when:
-+            - runner_system_failure
-+            - stuck_or_timeout_failure
-     artifacts:
-         when: always
-         expire_in: 2 weeks
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
