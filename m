@@ -4,52 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53045C83F01
-	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 07:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D997C83F01
+	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 08:10:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B533E60FB4;
-	Sun, 27 Aug 2023 07:45:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B533E60FB4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FF3C60F99;
+	Sun, 27 Aug 2023 08:10:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FF3C60F99
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NVvk94NnZowR; Sun, 27 Aug 2023 07:45:36 +0000 (UTC)
+	with ESMTP id u8vd4iXOObzv; Sun, 27 Aug 2023 08:10:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB67760E43;
-	Sun, 27 Aug 2023 07:45:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB67760E43
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4CC291BF5F6
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 07:45:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36B2160B49;
+	Sun, 27 Aug 2023 08:10:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36B2160B49
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DBBCF1BF316
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:10:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 236774139E
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 07:45:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 236774139E
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2A3A60B49
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:10:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2A3A60B49
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C40ThbrWCa4z for <buildroot@lists.busybox.net>;
- Sun, 27 Aug 2023 07:45:32 +0000 (UTC)
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk
- [188.40.203.114])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 02523410DB
- for <buildroot@buildroot.org>; Sun, 27 Aug 2023 07:45:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02523410DB
-Received: from [211.234.180.1] (helo=pony)
- by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
- id 1qaASd-005RZI-Gb; Sun, 27 Aug 2023 08:45:28 +0100
-Message-ID: <5bd02ea41d82fd4cb947de8228cb79c398d60b5e.camel@codethink.co.uk>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tristan van Berkom
- via buildroot <buildroot@buildroot.org>
-Date: Sun, 27 Aug 2023 16:45:22 +0900
-In-Reply-To: <20230822232800.1901678d@windsurf>
-References: <049052a13b668b1243c1a035955b57e2b12c90dc.camel@codethink.co.uk>
- <20230822232800.1901678d@windsurf>
-Organization: Codethink
-User-Agent: Evolution 3.36.4-2 
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/mesa3d: Allow building patent
- encumbered video codecs
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1YBj8LiLEiGN for <buildroot@lists.busybox.net>;
+ Sun, 27 Aug 2023 08:10:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B24A860AA7
+ for <buildroot@buildroot.org>; Sun, 27 Aug 2023 08:10:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B24A860AA7
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9EC4986428; Sun, 27 Aug 2023 08:10:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 27 Aug 2023 10:09:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5acaac7122945c7588cf2328d928e1d4fb6488dd
+X-Git-Newrev: e0166ecba0109f7f6757415afa7e7a67b058d406
+X-Patchwork-Hint: ignore
+Message-Id: <20230827081047.9EC4986428@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/misc/gitlab-ci.yml.in: retry a job
+ only if it failed due to a runner issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,131 +56,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Tristan van Berkom via buildroot <buildroot@buildroot.org>
-Reply-To: Tristan van Berkom <tristan.vanberkom@codethink.co.uk>
-Cc: Romain Naour <romain.naour@gmail.com>, Bernd Kuhls <bernd@kuhls.net>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=e0166ecba0109f7f6757415afa7e7a67b058d406
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My inbox has been crowded and this email has escaped my attention since
-wednesday, thanks for your valuable attention to my patch :)
+Each time a new pipeline is triggered, some jobs may fail due to
+temporary issue with a Gitlab runner (network, power supply, docker or
+maintainance).
 
-Also, I only realized this now, but we also have a requirement to
-enable -Dgallium-va=enabled in order to use the codecs - while the
-codecs might only be relevant for the vulkan interfaces without also
-fixing that in buildroot.
+Most of the problems are "runner system failure" [1] and require to
+retart each failed jobs manually by maintainers to complete the
+pipeline with only real failures if any.
 
-Came to that conclusion at the end of writing this mail but thought I
-should lead with this, as it may make sense to hold back on this change
-until we can also safely turn on -Dgallium-va (and/or -Dgallium-vdpau).
+The "retry" keyword allows to configure how many times a job is retried
+if it fails. "retry:when" allows to retry a failed job only on
+specific failure types like "runner_system_failure".
 
-On Tue, 2023-08-22 at 23:28 +0200, Thomas Petazzoni wrote:
-> Hello Tristan,
-> 
-[...]
-> Thanks for your patch. I have one implementation suggestion (which I
-> had already implemented locally as I was about to merge your patch) but
-> also a more fundamental question that I was not able to answer directly.
-> 
+While at it, retry a job if it failed due to a timeout failure (this
+timeout means that the job was pending for more than 24h) [2].
 
-I've made your suggested changes and tested this locally and indeed
-this works well.
+Such timeout failures occur on pipelines testing each Buildroot's
+defconfig since there is not enough gitlab runner available to build
+all of them within 24h.
 
-> However, the more fundamental question is: what do those options do?
-> 
-> If I build a defconfig like this:
-> 
-> BR2_arm=y
-> BR2_cortex_a9=y
-> BR2_ARM_ENABLE_VFP=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_VIDEO_CODEC_VC1DEC=y
-> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H264DEC=y
-> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H264ENC=y
-> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H265DEC=y
-> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H265ENC=y
-> # BR2_TARGET_ROOTFS_TAR is not set
+Retry only jobs that are more likely to wait for a runner
+(generate-gitlab-ci-yml, runtime_test_base, defconfig_base and test_pkg).
 
-In one example case (we have several platforms which this affects), I
-believe it is the BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI which will
-lead to the installation of radeonsi_drv_video.so.
+[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949397 (runner system failure)
+[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949530 (timeout failure or the job got stuck)
 
+https://docs.gitlab.com/ee/ci/yaml/#retrywhen
 
-[...]
-> 
-> So essentially *not* defining those options only make this function
-> report that some codecs are not supported. Defining those options do
-> not seem to add any extra functionality to mesa3d.
-> 
-> Could you clarify what's happening here?
-> 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                |  5 +++++
+ support/misc/gitlab-ci.yml.in | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
 
-Interesting, I was not aware of the implementation detail and indeed I
-would have expected excluded files or #ifdef block being conditionally
-included at build time.
-
-> Also, since it's affecting code in src/gallium/, maybe those new
-> options need to be conditional on having at least one Gallium driver
-> enabled? That being said, even if I enable the swrast Gallium driver,
-> vl_codec.c doesn't get compiled in, so it's not just having a Gallium
-> driver enabled.
-
-I understand that your concern is whether this added option should be
-conditional to other options, and this is still a bit unclear to me.
-
-That said, I think it would be beneficial to lean towards the expressed
-intent of the added -Dvideo-codecs option in mesa, rather than the
-current implementation in code.
-
-Looking at the definition of the option:
-
-option(
-  'video-codecs',
-  type : 'array',
-  value : [],
-  choices: [
-    'vc1dec', 'h264dec', 'h264enc', 'h265dec', 'h265enc'
-  ],
-  description : 'List of patent encumbered codecs to build support for. ' +
-                'Distros might want to consult their legal department before ' +
-                'enabling these. This is used for all video APIs (vaapi, ' +
-                'vdpau, vulkan). Non-patent encumbered codecs will be ' +
-                'enabled by default.'
-)
-
-Here the upstream is telling us that the options are relevant for
-vaapi, vdpau and vulkan interfaces.
-
-Looking at the meson options, it seems that both va / vdpau are
-interfaces to the gallium drivers, and so I suppose one could say that
-these video codec options are only relevant if:
-
-  * At least one vulkan driver is selected
-  * At least one gallium driver is selected
-    * AND either -Dgallium-vdpau or -Dgallium-va enabled
-
-Now I realize, that we are actually ALSO carrying an ugly downstream
-patch in order to enable -Dgallium-va, and I will need to investigate
-whether it is still required (the claim is that libva has a link time
-requirement on mesa3d libraries while mesa3d requires the libva
-headers) - this part will be a bit more tricky to cleanup and upstream
-if the problem still exists.
-
-Cheers,
-    -Tristan
-
-[0]: https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/meson_options.txt#L626
-
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index ed17bb14b9..3d7719568f 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -10,6 +10,11 @@ stages:
+ generate-gitlab-ci-yml:
+   stage: generate-gitlab-ci
+   script: ./support/scripts/generate-gitlab-ci-yml support/misc/gitlab-ci.yml.in > generated-gitlab-ci.yml
++  retry:
++    max: 2
++    when:
++      - runner_system_failure
++      - stuck_or_timeout_failure
+   artifacts:
+     when: always
+     paths:
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index 446132846f..4d9acbc3d3 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -67,6 +67,11 @@ before_script:
+                 tail -200 runtime-test.log
+                 exit 1
+             }
++    retry:
++        max: 2
++        when:
++            - runner_system_failure
++            - stuck_or_timeout_failure
+     artifacts:
+         when: always
+         expire_in: 2 weeks
+@@ -99,6 +104,11 @@ before_script:
+         - TEST_CASE_NAME=${CI_JOB_NAME}
+         - echo "Starting runtime test ${TEST_CASE_NAME}"
+         - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
++    retry:
++        max: 2
++        when:
++            - runner_system_failure
++            - stuck_or_timeout_failure
+     artifacts:
+         when: always
+         expire_in: 2 weeks
+@@ -119,6 +129,11 @@ before_script:
+     needs:
+         - pipeline: $PARENT_PIPELINE_ID
+           job: generate-gitlab-ci-yml
++    retry:
++        max: 2
++        when:
++            - runner_system_failure
++            - stuck_or_timeout_failure
+     artifacts:
+         when: always
+         expire_in: 2 weeks
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
