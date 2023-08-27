@@ -4,83 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBD77C83F11
-	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 07:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53045C83F01
+	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 07:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5100960FE1;
-	Sun, 27 Aug 2023 07:03:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5100960FE1
+	by smtp3.osuosl.org (Postfix) with ESMTP id B533E60FB4;
+	Sun, 27 Aug 2023 07:45:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B533E60FB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VXTB3HQ1sbkA; Sun, 27 Aug 2023 07:03:49 +0000 (UTC)
+	with ESMTP id NVvk94NnZowR; Sun, 27 Aug 2023 07:45:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 762C360E43;
-	Sun, 27 Aug 2023 07:03:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 762C360E43
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 960271BF616
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 07:03:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB67760E43;
+	Sun, 27 Aug 2023 07:45:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB67760E43
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CC291BF5F6
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 07:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D2BD81DE1
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 07:03:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D2BD81DE1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 236774139E
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 07:45:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 236774139E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RBYfEQoh-47Y for <buildroot@lists.busybox.net>;
- Sun, 27 Aug 2023 07:03:45 +0000 (UTC)
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com
- [IPv6:2607:f8b0:4864:20::829])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 74D4C81D5A
- for <buildroot@buildroot.org>; Sun, 27 Aug 2023 07:03:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74D4C81D5A
-Received: by mail-qt1-x829.google.com with SMTP id
- d75a77b69052e-4122129390eso1931881cf.0
- for <buildroot@buildroot.org>; Sun, 27 Aug 2023 00:03:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693119824; x=1693724624;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=tuxtBrjYcrIGlTEl//8TEnvbzH26SJLcLJL2JpPFmgs=;
- b=WYXOBnKSnQEMMav5I3KmkNKSgP+sxKMIYKfJqqheduZiZRH8/uIOBpgjNrLzauHcHb
- ekdS9B0OG8Z4crNMlD6xuWP8R52nWZRGMBVP/wIUC29hOpPI/cSsNC2CgJ3bJ1WjlTrM
- m3b6DJXmN7z214tW0XxhBgqPXK+SAX+iLbQY2EM2aZDUtneciAKej7l7VnvG6LlaEPgm
- VSV1eg+CXnfp9dmsAJdtHbS6VkUVXSrOxQT6MymirGsaUzSjzKLP0nnOQGjQzFgeYnut
- gDRwYqwX2TsyDaWdfI5kh5yL4o6DhhfqzsxcPbo6O4GBabI53En/YPsogwfXCpar3fSN
- UaQg==
-X-Gm-Message-State: AOJu0YzjNaLeOrE5wMKCoD5emGEgcSU5wR99xTWoIZAlwBYGylcDObWQ
- uuEgjqaa09iHQTvaN5BJMQ3wv4ijgSDyHljFUo0=
-X-Google-Smtp-Source: AGHT+IFMAO+b86raL3wulEARh1oFiq4Gkj83R1cX9xJGhKPzGOmNu8AD0B//v/2RjM5Vfsh9GxMUfgfRVVZDjf24A7w=
-X-Received: by 2002:ac8:7f4f:0:b0:410:497b:fe19 with SMTP id
- g15-20020ac87f4f000000b00410497bfe19mr26010109qtk.46.1693119824170; Sun, 27
- Aug 2023 00:03:44 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id C40ThbrWCa4z for <buildroot@lists.busybox.net>;
+ Sun, 27 Aug 2023 07:45:32 +0000 (UTC)
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk
+ [188.40.203.114])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02523410DB
+ for <buildroot@buildroot.org>; Sun, 27 Aug 2023 07:45:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02523410DB
+Received: from [211.234.180.1] (helo=pony)
+ by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+ id 1qaASd-005RZI-Gb; Sun, 27 Aug 2023 08:45:28 +0100
+Message-ID: <5bd02ea41d82fd4cb947de8228cb79c398d60b5e.camel@codethink.co.uk>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tristan van Berkom
+ via buildroot <buildroot@buildroot.org>
+Date: Sun, 27 Aug 2023 16:45:22 +0900
+In-Reply-To: <20230822232800.1901678d@windsurf>
+References: <049052a13b668b1243c1a035955b57e2b12c90dc.camel@codethink.co.uk>
+ <20230822232800.1901678d@windsurf>
+Organization: Codethink
+User-Agent: Evolution 3.36.4-2 
 MIME-Version: 1.0
-References: <CAHfxMJ6M-R8oHY-8ChxdhanpcL2_04mYARHSxW=YS_gw7Npctg@mail.gmail.com>
- <20230826233915.2e1a535a@windsurf>
-In-Reply-To: <20230826233915.2e1a535a@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 27 Aug 2023 03:03:32 -0400
-Message-ID: <CADvTj4qGzkEf4u2Lu_EpcTcun3LxjHKDT-pVVizRzni-6QXb5w@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693119824; x=1693724624;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=tuxtBrjYcrIGlTEl//8TEnvbzH26SJLcLJL2JpPFmgs=;
- b=MCi7//C2BgbdtIa0URP+4fPSYU5Htoq71bRFUTE6WJYaiITbekmRRDw3XK3fap0RMu
- S9mR1r4BfqNRNBI3PBItk52W2XfuS8Rtl9oJZA1NJQu9LPnze89UJd2qDK678efdZBwD
- Ii4u66lStNh5Yw+WiEj87MGe8A3x4HiI5lMdfyAP0tfkXhATP5Jq8y/S1FEyve81Hdc+
- T8yj2F8K8e42w5T+Z7JxVlCkaGPDyXfjmvpjJc95s3bzdLbqEcVmQH9MSUwd3HiKwUJ9
- KAF/AQLV8hwU12mPwf2QmD/D2AkLfd+qZ6e4cBxWFR8yOSaM7tVkCQPL/vhNot4xC72d
- yNGQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=MCi7//C2
-Subject: Re: [Buildroot] [PATCH 1/1] utils/scanpypi: supply package name to
- setup() when not provided
+Subject: Re: [Buildroot] [PATCH] package/mesa3d: Allow building patent
+ encumbered video codecs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,75 +61,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: erichiggins@gmail.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Tristan van Berkom via buildroot <buildroot@buildroot.org>
+Reply-To: Tristan van Berkom <tristan.vanberkom@codethink.co.uk>
+Cc: Romain Naour <romain.naour@gmail.com>, Bernd Kuhls <bernd@kuhls.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCBBdWcgMjYsIDIwMjMgYXQgNTozOeKAr1BNIFRob21hcyBQZXRhenpvbmkKPHRob21h
-cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gSGVsbG8gRXJpYywKPgo+ICtKYW1l
-cyBpbiBDYy4KPgo+IFNvcnJ5IGZvciB0aGUgc3VwZXIgbG9uZyBsYWcuCj4KPiBPbiBTdW4sIDE4
-IFNlcCAyMDIyIDEyOjQ4OjMxIC0wNzAwCj4gZXJpY2hpZ2dpbnNAZ21haWwuY29tIHdyb3RlOgo+
-Cj4gPiBJc3N1ZSBkZXNjcmlwdGlvbjoKPiA+IFRoZSBgdXRpbHMvc2NhbnB5cGlgIHNjcmlwdCBt
-YWtlcyBhbiBlcnJvbmVvdXMgYXNzdW1wdGlvbiB0aGF0IFB5dGhvbgo+ID4gcGFja2FnZXMgd2ls
-bCBjYWxsIGBzZXR1cCgpYCB3aXRoIHRoZSBgbmFtZWAgYXJndW1lbnQuIEl0J3Mgbm90Cj4gPiBy
-ZXF1aXJlZCBhbmQgbm90IG9mdGVuIHVzZWQuIFRoaXMgY2F1c2VzIHRoZSBzY3JpcHQgdG8gZmFp
-bCB0byBsb2FkCj4gPiBtYW55IHBhY2thZ2VzIGZyb20gUHlwaS4KPiA+ICBGb3IgZXhhbXBsZSwg
-IGAuL3V0aWxzL3NjYW5weXBpIHdoZWVsYCByZXR1cm5zIHRoZSBmb2xsb3dpbmcgZXJyb3I6Cj4g
-PiA+IGBFcnJvcjogQ291bGQgbm90IGluc3RhbGwgcGFja2FnZSB3aGVlbDogJ25hbWUnYAo+Cj4g
-RG8geW91IGhhdmUgYSBjdXJyZW50IGV4YW1wbGUgdGhhdCBmYWlscyBkdWUgdG8gdGhpcz8gVGhl
-IHdoZWVsIHBhY2thZ2UKPiBkb2VzIHBhc3MgYSBuYW1lPSBhdHRyaWJ1dGUgdG8gaXRzIHNldHVw
-KCkgZnVuY3Rpb24sIGFuZCBpdCBoYXMgYmVlbgo+IGRvaW5nIHRoaXMgZm9yIG1hbnkgeWVhcnMu
-IExvb2tpbmcgYXQgdGhlIGluaXRpYWwgY29tbWl0IG9mCj4gaHR0cHM6Ly9naXRodWIuY29tL3B5
-cGEvd2hlZWw6Cj4KPiBkaWZmIC0tZ2l0IGEvc2V0dXAucHkgYi9zZXR1cC5weQo+IG5ldyBmaWxl
-IG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMC4uMDlhMTM4ZQo+IC0tLSAvZGV2L251bGwKPiAr
-KysgYi9zZXR1cC5weQo+IEBAIC0wLDAgKzEsMzMgQEAKPiAraW1wb3J0IG9zCj4gKwo+ICtmcm9t
-IHNldHVwdG9vbHMgaW1wb3J0IHNldHVwCj4gKwo+ICtoZXJlID0gb3MucGF0aC5hYnNwYXRoKG9z
-LnBhdGguZGlybmFtZShfX2ZpbGVfXykpCj4gK1JFQURNRSA9IG9wZW4ob3MucGF0aC5qb2luKGhl
-cmUsICdSRUFETUUudHh0JykpLnJlYWQoKQo+ICtDSEFOR0VTID0gb3Blbihvcy5wYXRoLmpvaW4o
-aGVyZSwgJ0NIQU5HRVMudHh0JykpLnJlYWQoKQo+ICsKPiArc2V0dXAobmFtZT0nd2hlZWwnLAo+
-ICsgICAgICB2ZXJzaW9uPScwLjEnLAo+ICsgICAgICBkZXNjcmlwdGlvbj0nQSBidWlsdC1wYWNr
-YWdlIGluc3RhbGxlciBmb3IgUHl0aG9uLicsCj4gKyAgICAgIGxvbmdfZGVzY3JpcHRpb249UkVB
-RE1FICsgJ1xuXG4nICsgIENIQU5HRVMsCj4gKyAgICAgIGNsYXNzaWZpZXJzPVsKPiArICAgICAg
-ICAiRGV2ZWxvcG1lbnQgU3RhdHVzIDo6IDEgLSAiLAo+ICsgICAgICAgICJJbnRlbmRlZCBBdWRp
-ZW5jZSA6OiBEZXZlbG9wZXJzIiwKPgo+IFNvIEknbSBhIGJpdCBwdXp6bGVkIGF0IGhvdyB5b3Ug
-Zm91bmQgYSB3aGVlbCBwYWNrYWdlIHRoYXQgZG9lc24ndCBwYXNzCj4gIm5hbWUiIGluIGl0cyBz
-ZXR1cCgpIGFyZ3VtZW50cy4KClRoZXJlJ3MgYmVlbiBhIGxvdCBvZiBicm9rZW5uZXNzIHdpdGgg
-aG93IHNldHVwdG9vbHMgaXMgaGFuZGxlZCBpbiBnZW5lcmFsCmJ5IHNjYW5weXBpIGZvciBhIHdo
-aWxlIGhlcmUsIEkgd2FzIHBsYW5uaW5nIHRvIGRvIHNvbWUgcmVmYWN0b3JpbmcKYWZ0ZXIgaW5p
-dGlhbApwZXA1MTcvZmxpdCBzdXBwb3J0IHdhcyBtZXJnZWQgYnkgYXR0ZW1wdGluZyB0byBtYWtl
-IHVzZSBvZiBwZXA1MTcgaG9va3M6Cmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVj
-dC9idWlsZHJvb3QvcGF0Y2gvMjAyMjExMjgxODMyMzAuMTkxNTU5Mi0xLWphbWVzLmhpbGxpYXJk
-MUBnbWFpbC5jb20vCgo+Cj4gPiBkaWZmIC0tZ2l0IGEvdXRpbHMvc2NhbnB5cGkgYi91dGlscy9z
-Y2FucHlwaQo+ID4gaW5kZXggNDUyYjRhM2ZjMy4uYTU1MjJhODc5ZSAxMDA3NTUKPiA+IC0tLSBh
-L3V0aWxzL3NjYW5weXBpCj4gPiArKysgYi91dGlscy9zY2FucHlwaQo+ID4gQEAgLTU4LDggKzU4
-LDkgQEAgZGVmIHNldHVwX2RlY29yYXRvcihmdW5jLCBtZXRob2QpOgo+ID4gICAgICBkZWYgY2xv
-c3VyZSgqYXJncywgKiprd2FyZ3MpOgo+ID4gICAgICAgICAgIyBBbnkgcHl0aG9uIHBhY2thZ2Vz
-IGNhbGxzIGl0cyBzZXR1cCBmdW5jdGlvbiB0byBiZSBpbnN0YWxsZWQuCj4gPiAgICAgICAgICAj
-IEFyZ3VtZW50ICduYW1lJyBvZiB0aGlzIHNldHVwIGZ1bmN0aW9uIGlzIHRoZSBwYWNrYWdlJ3Mg
-bmFtZQo+ID4gLSAgICAgICAgQnVpbGRyb290UGFja2FnZS5zZXR1cF9hcmdzW2t3YXJnc1snbmFt
-ZSddXSA9IGt3YXJncwo+ID4gLSAgICAgICAgQnVpbGRyb290UGFja2FnZS5zZXR1cF9hcmdzW2t3
-YXJnc1snbmFtZSddXVsnbWV0aG9kJ10gPSBtZXRob2QKPiA+ICsgICAgICAgIG5hbWUgPSBrd2Fy
-Z3MuZ2V0KCduYW1lJywgQnVpbGRyb290UGFja2FnZS5zZXR1cF9hcmdzWyduYW1lJ10pCj4gPiAr
-ICAgICAgICBCdWlsZHJvb3RQYWNrYWdlLnNldHVwX2FyZ3NbbmFtZV0gPSBrd2FyZ3MKPiA+ICsg
-ICAgICAgIEJ1aWxkcm9vdFBhY2thZ2Uuc2V0dXBfYXJnc1tuYW1lXVsnbWV0aG9kJ10gPSBtZXRo
-b2QKPiA+ICAgICAgcmV0dXJuIGNsb3N1cmUKPiA+Cj4gPiAgIyBtb25rZXkgcGF0Y2gKPiA+IEBA
-IC0xNDcsNiArMTQ4LDcgQEAgY2xhc3MgQnVpbGRyb290UGFja2FnZSgpOgo+ID4gICAgICAgICAg
-c2VsZi51cmwgPSBOb25lCj4gPiAgICAgICAgICBzZWxmLnZlcnNpb24gPSBOb25lCj4gPiAgICAg
-ICAgICBzZWxmLmxpY2Vuc2VfZmlsZXMgPSBbXQo+ID4gKyAgICAgICAgc2VsZi5zZXR1cF9hcmdz
-WyduYW1lJ10gPSBzZWxmLnJlYWxfbmFtZQo+Cj4gSSdtIG5vdCBhIGJpZyBmYW4gb2Ygc2hvZWhv
-cm5pbmcgJ25hbWUnIGluIHNldHVwX2FyZ3MsIHdoaWNoIGFzIEkKPiB1bmRlcnN0YW5kIGl0IGlz
-IGEgZGljdCB0aGF0IHNob3VsZCBjb250YWluIGEgc2luZ2xlIGtleSBuYW1lZCBhZnRlcgo+IHRo
-ZSBwYWNrYWdlLiBQZXJoYXBzIGl0IHdvdWxkIGJlIGJldHRlciB0byBtYWtlICJzZWxmLnJlYWxf
-bmFtZSIgYQo+IGNsYXNzIHZhcmlhYmxlIHJhdGhlciB0aGFuIGFuIGluc3RhbmNlIHZhcmlhYmxl
-LCBqdXN0IGxpa2Ugc2V0dXBfYXJncwo+IGlzIGFscmVhZHksIHNvIHRoYXQgc2V0dXBfZGVjb3Jh
-dG9yIGNhbiBhY2Nlc3MgaXQuIElmIEkgdW5kZXJzdGFuZCB0aGUKPiBjdXJyZW50IGltcGxlbWVu
-dGF0aW9uIGNvcnJlY3RseSwgaXQgYW55d2F5IGV4cGVjdHMgdGhlCj4gQnVpbGRyb290UGFja2Fn
-ZSgpIGNsYXNzIHRvIGhhdmUgb25seSBvbmUgaW5zdGFuY2UuCj4KPiBXaGF0IGRvIHlvdSB0aGlu
-az8KPgo+IEJlc3QgcmVnYXJkcywKPgo+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwg
-Y28tb3duZXIgYW5kIENFTywgQm9vdGxpbgo+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
-aW5lZXJpbmcgYW5kIHRyYWluaW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hello Thomas,
+
+My inbox has been crowded and this email has escaped my attention since
+wednesday, thanks for your valuable attention to my patch :)
+
+Also, I only realized this now, but we also have a requirement to
+enable -Dgallium-va=enabled in order to use the codecs - while the
+codecs might only be relevant for the vulkan interfaces without also
+fixing that in buildroot.
+
+Came to that conclusion at the end of writing this mail but thought I
+should lead with this, as it may make sense to hold back on this change
+until we can also safely turn on -Dgallium-va (and/or -Dgallium-vdpau).
+
+On Tue, 2023-08-22 at 23:28 +0200, Thomas Petazzoni wrote:
+> Hello Tristan,
+> 
+[...]
+> Thanks for your patch. I have one implementation suggestion (which I
+> had already implemented locally as I was about to merge your patch) but
+> also a more fundamental question that I was not able to answer directly.
+> 
+
+I've made your suggested changes and tested this locally and indeed
+this works well.
+
+> However, the more fundamental question is: what do those options do?
+> 
+> If I build a defconfig like this:
+> 
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_ARM_ENABLE_VFP=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_VIDEO_CODEC_VC1DEC=y
+> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H264DEC=y
+> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H264ENC=y
+> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H265DEC=y
+> BR2_PACKAGE_MESA3D_VIDEO_CODEC_H265ENC=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+
+In one example case (we have several platforms which this affects), I
+believe it is the BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI which will
+lead to the installation of radeonsi_drv_video.so.
+
+
+[...]
+> 
+> So essentially *not* defining those options only make this function
+> report that some codecs are not supported. Defining those options do
+> not seem to add any extra functionality to mesa3d.
+> 
+> Could you clarify what's happening here?
+> 
+
+Interesting, I was not aware of the implementation detail and indeed I
+would have expected excluded files or #ifdef block being conditionally
+included at build time.
+
+> Also, since it's affecting code in src/gallium/, maybe those new
+> options need to be conditional on having at least one Gallium driver
+> enabled? That being said, even if I enable the swrast Gallium driver,
+> vl_codec.c doesn't get compiled in, so it's not just having a Gallium
+> driver enabled.
+
+I understand that your concern is whether this added option should be
+conditional to other options, and this is still a bit unclear to me.
+
+That said, I think it would be beneficial to lean towards the expressed
+intent of the added -Dvideo-codecs option in mesa, rather than the
+current implementation in code.
+
+Looking at the definition of the option:
+
+option(
+  'video-codecs',
+  type : 'array',
+  value : [],
+  choices: [
+    'vc1dec', 'h264dec', 'h264enc', 'h265dec', 'h265enc'
+  ],
+  description : 'List of patent encumbered codecs to build support for. ' +
+                'Distros might want to consult their legal department before ' +
+                'enabling these. This is used for all video APIs (vaapi, ' +
+                'vdpau, vulkan). Non-patent encumbered codecs will be ' +
+                'enabled by default.'
+)
+
+Here the upstream is telling us that the options are relevant for
+vaapi, vdpau and vulkan interfaces.
+
+Looking at the meson options, it seems that both va / vdpau are
+interfaces to the gallium drivers, and so I suppose one could say that
+these video codec options are only relevant if:
+
+  * At least one vulkan driver is selected
+  * At least one gallium driver is selected
+    * AND either -Dgallium-vdpau or -Dgallium-va enabled
+
+Now I realize, that we are actually ALSO carrying an ugly downstream
+patch in order to enable -Dgallium-va, and I will need to investigate
+whether it is still required (the claim is that libva has a link time
+requirement on mesa3d libraries while mesa3d requires the libva
+headers) - this part will be a bit more tricky to cleanup and upstream
+if the problem still exists.
+
+Cheers,
+    -Tristan
+
+[0]: https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/meson_options.txt#L626
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
