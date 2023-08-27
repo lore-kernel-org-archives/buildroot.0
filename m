@@ -4,88 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EED1C83F11
-	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 19:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B70EC83F18
+	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 19:43:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7999440003;
-	Sun, 27 Aug 2023 19:40:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7999440003
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3003A403FD;
+	Sun, 27 Aug 2023 19:43:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3003A403FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vbJj1cXrl7NJ; Sun, 27 Aug 2023 19:40:25 +0000 (UTC)
+	with ESMTP id zh2-UXkS5sPV; Sun, 27 Aug 2023 19:43:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D25BA405A2;
-	Sun, 27 Aug 2023 19:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D25BA405A2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8CA57400AC;
+	Sun, 27 Aug 2023 19:43:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CA57400AC
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D581C1BF2E4
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 19:40:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C0A11BF2E4
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 19:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAC0E410D1
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 19:40:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAC0E410D1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 00EE6410D7
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 19:43:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00EE6410D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CBmO-9SncERV for <buildroot@lists.busybox.net>;
- Sun, 27 Aug 2023 19:40:11 +0000 (UTC)
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA174409FD
- for <buildroot@buildroot.org>; Sun, 27 Aug 2023 19:40:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA174409FD
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-79266c8617eso92570539f.3
- for <buildroot@buildroot.org>; Sun, 27 Aug 2023 12:40:10 -0700 (PDT)
+ with ESMTP id 51wfd82e2krD for <buildroot@lists.busybox.net>;
+ Sun, 27 Aug 2023 19:42:59 +0000 (UTC)
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E608409FD
+ for <buildroot@buildroot.org>; Sun, 27 Aug 2023 19:42:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E608409FD
+Received: by mail-io1-xd2c.google.com with SMTP id
+ ca18e2360f4ac-79268f36c49so92893939f.2
+ for <buildroot@buildroot.org>; Sun, 27 Aug 2023 12:42:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693165209; x=1693770009;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ikerNEZSU23Z6nekKQuwAo0VTZI/jYDWuA5fSuhwJ34=;
- b=I7WkILKJRJsJ8clq31d4JuWa5NgaEsr7GPD7io9QRykoMraM1ZhGLZi1V5bwNol3Jo
- QC2YuebTmAkCRb8one9nv4Rp4eO7OKeMq7n1/b2OAuciAcEv4dOn6kYP+B2MXTyF3b/V
- OsRLmUiNxeM4D50VABdZWu5NJowkfl6F1Awy9X27oQVIVlApb8MZK74Ze+scaOD9BMa3
- ArdgEZRpFJRWHDJuvW6YD3B3/0FymLlhM59QAAeluddNbPzqp7kivL47l0BXLoi3YYC1
- eNbEi9ozovJEeIvJYp+Iz6Ao6vKeNhCKmn1AI9vFihq7oj7YQL5Qxy4KFKo48Z/PbRQ7
- P7FA==
-X-Gm-Message-State: AOJu0YyKQU9aXP/ouPX40Z9UkvZ/fGC0CyNRC0P0G7XQ2WzKvwPMWm7i
- xTrPBlNsnQuk9n3Z4R8NsEIyNVF9UyM=
-X-Google-Smtp-Source: AGHT+IFXzLiu30ROjt15HI1VaEDnZW38X2rP4CbavXHyN9XOYra36IfxqfCbp6vB09UuHJfIG7SpYg==
-X-Received: by 2002:a6b:5c17:0:b0:794:cb39:efb5 with SMTP id
- z23-20020a6b5c17000000b00794cb39efb5mr1609570ioh.3.1693165209563; 
- Sun, 27 Aug 2023 12:40:09 -0700 (PDT)
+ d=1e100.net; s=20221208; t=1693165378; x=1693770178;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=665yElq2X7GmlWUvHLdSDIZPdCiFSxhVpXuvfez+7is=;
+ b=e+w0SGiOv4A8l6B01UrBIaK0zYNGotYp0xMnNS31Aq1t7DEPjsMrdwnnFqudBWO3kK
+ onJNXrrpwM8PYSqL9DWWY17hppk0JJdxtVRAeOllh6FANIvGTyOnQgbJq0rHbyoFuDkg
+ prOCz6WtO/jGLq60sOP5yWxILqSXoMJSOZ6Hw6vBh1jEJtxQQyb+CSrcvGCsJuoNZ9qW
+ Rzs8L3d28E6xEcom9KCj59jNV96BE1H91wnX/YcD6dxy8UktQt+m9G2eDoXSZMK8HcVQ
+ cO1wt6qFCTZ5LpQBmjEnSly08SohEXhpw5e3K2Eypus33i5I2tAUWOyvYyKbr64FN7iF
+ nVJA==
+X-Gm-Message-State: AOJu0YzR1o2jagBE1idfKbMYNZ2z5lEbOAQ7ut9CbuvhpR8kwBCJR1kS
+ Em84IeNuZY9jVIO27LqYRcqxBWZyKIQ=
+X-Google-Smtp-Source: AGHT+IEU24CFBF71oOxJv47GHPlvDN2hhYo7fN+XcSUMOSJNbJy8H+eRKX7njixxwyfwBDyPUWpXIA==
+X-Received: by 2002:a6b:4404:0:b0:792:bbd:6caf with SMTP id
+ r4-20020a6b4404000000b007920bbd6cafmr15787896ioa.12.1693165377816; 
+ Sun, 27 Aug 2023 12:42:57 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-146-15.hlrn.qwest.net.
  [97.118.146.15]) by smtp.gmail.com with ESMTPSA id
- z20-20020a029f14000000b0042bb5a8e074sm1993776jal.8.2023.08.27.12.40.08
+ w8-20020a029688000000b0042b69cca627sm1939287jai.137.2023.08.27.12.42.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Aug 2023 12:40:08 -0700 (PDT)
+ Sun, 27 Aug 2023 12:42:57 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Aug 2023 13:40:03 -0600
-Message-Id: <20230827194003.3387773-2-james.hilliard1@gmail.com>
+Date: Sun, 27 Aug 2023 13:42:54 -0600
+Message-Id: <20230827194254.3475756-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230827194003.3387773-1-james.hilliard1@gmail.com>
-References: <20230827194003.3387773-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693165209; x=1693770009;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ikerNEZSU23Z6nekKQuwAo0VTZI/jYDWuA5fSuhwJ34=;
- b=e/DbrXdOqtmGYaxQsIth2KKrEM4VnVAs2xpdnh2ybgI1XK/K2vLGVOYDKVyJyah97Z
- +S9AscFBHpus33DBh8xdRevb8CQZ9dah+qkixUjEIapcDzsbQKXPtQA9pnBPRM2eY7Pi
- NWpwtd5Yg1giZicvVpmTbgTDuzyw/rhfMpg45ni3y7t8GrFf7OU+5q+SUw8Y0hr+MNuB
- zJV11beF7y/TEdyuR5Bj0pFIlc83RtH/vIqcf59SjqA7EV4nfMiJnwVp5VAHxdl6IMq5
- 7frTLI3Li5QqohY1DK3jC0bUjFaFl42K/Gb8N0ZjqG0XqgxdQIvKU33un5RLy1HA8jqm
- dM/g==
+ d=gmail.com; s=20221208; t=1693165378; x=1693770178;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=665yElq2X7GmlWUvHLdSDIZPdCiFSxhVpXuvfez+7is=;
+ b=fABq+3BxPsKpQrjtj0QB8tqJB4x8nxkeR9o6Vu6sURWkW08lT+XAHgaflWAlE/NwiX
+ /OOKhoWHfFeoZA81eML1j1JfOCVPHEBMMZ4ayF0NMyxh/kfF5E+dURMCNzH+h6o72NEV
+ hB73HAJRHll5t4s4RNEwO54oYLWoenq2LeL8/2fQKr9Bu1k++38LEXZExgmQO0OyoPLt
+ q9EaVxmc2O0Nk0sjbAPi5lsJNWCPuZ3CGAcEoSHbY3yIWqpy0kQdOfj9y7HOoFbYiwCj
+ ENFNfk/d6Md82aeQ7vqc5Rf33IAyUHVlCV04Xbuy9qvMIttqyB8p75Vn7nqnIu8qVWqw
+ J/AQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=e/DbrXdO
-Subject: [Buildroot] [PATCH 2/2] package/qemu: add host-python-distlib
- dependency
+ header.a=rsa-sha256 header.s=20221208 header.b=fABq+3Bx
+Subject: [Buildroot] [PATCH 1/1] package/qemu: add pipewire support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,42 +93,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The qemu documentation recommends depending on this package.
+Add optional pipewire support introduced in qemu 8.1.0.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/qemu/qemu.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/qemu/qemu.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 84166958bb..4d2135a3c6 100644
+index 84166958bb..8379f32bf4 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -26,6 +26,7 @@ QEMU_DEPENDENCIES = \
- 	host-meson \
- 	host-pkgconf \
- 	host-python3 \
-+	host-python-distlib \
- 	libglib2 \
- 	zlib
+@@ -234,6 +234,13 @@ else
+ QEMU_OPTS += --disable-numa
+ endif
  
-@@ -339,6 +340,7 @@ HOST_QEMU_DEPENDENCIES = \
- 	host-pixman \
- 	host-pkgconf \
- 	host-python3 \
-+	host-python-distlib \
- 	host-slirp \
- 	host-zlib
- 
++ifeq ($(BR2_PACKAGE_PIPEWIRE),y)
++QEMU_OPTS += --enable-pipewire
++QEMU_DEPENDENCIES += pipewire
++else
++QEMU_OPTS += --disable-pipewire
++endif
++
+ ifeq ($(BR2_PACKAGE_SPICE),y)
+ QEMU_OPTS += --enable-spice
+ QEMU_DEPENDENCIES += spice
+@@ -476,6 +483,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--disable-netmap \
+ 		--disable-oss \
+ 		--disable-pa \
++		--disable-pipewire \
+ 		--disable-sdl \
+ 		--disable-selinux \
+ 		--disable-vde \
 -- 
 2.34.1
 
