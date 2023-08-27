@@ -1,63 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 021D9C83F01
-	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 08:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F69EC83F01
+	for <buildroot@archiver.kernel.org>; Sun, 27 Aug 2023 08:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B93560FB9;
-	Sun, 27 Aug 2023 08:26:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B93560FB9
+	by smtp1.osuosl.org (Postfix) with ESMTP id B931F81EC8;
+	Sun, 27 Aug 2023 08:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B931F81EC8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MI4nhn3S4VWD; Sun, 27 Aug 2023 08:26:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ZRlM8LxSm19x; Sun, 27 Aug 2023 08:36:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFC2460E47;
-	Sun, 27 Aug 2023 08:26:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFC2460E47
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0734B81EC3;
+	Sun, 27 Aug 2023 08:36:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0734B81EC3
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6C28B1BF316
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:26:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E19411BF316
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45B3481F0D
- for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45B3481F0D
+ by smtp1.osuosl.org (Postfix) with ESMTP id B53B381EC3
+ for <buildroot@lists.busybox.net>; Sun, 27 Aug 2023 08:36:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B53B381EC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W4xcj4xZd2xd for <buildroot@lists.busybox.net>;
- Sun, 27 Aug 2023 08:26:33 +0000 (UTC)
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C887881F0C
- for <buildroot@busybox.net>; Sun, 27 Aug 2023 08:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C887881F0C
+ with ESMTP id nm1sQv7hrXEp for <buildroot@lists.busybox.net>;
+ Sun, 27 Aug 2023 08:36:13 +0000 (UTC)
+Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8C12681EC2
+ for <buildroot@busybox.net>; Sun, 27 Aug 2023 08:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C12681EC2
 Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
  (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
  (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 6BD5E440836;
- Sun, 27 Aug 2023 11:25:47 +0300 (IDT)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 046F4440836;
+ Sun, 27 Aug 2023 11:35:27 +0300 (IDT)
 To: buildroot@busybox.net
-Date: Sun, 27 Aug 2023 11:25:55 +0300
-Message-Id: <5ea37be6a88015fc6200d3b00bb03dacb73100d3.1693124755.git.baruch@tkos.co.il>
+Date: Sun, 27 Aug 2023 11:35:41 +0300
+Message-Id: <d8ac1eb110bb5c6b9026175c2e52a3cdfa036b7a.1693125341.git.baruch@tkos.co.il>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1693124747;
- bh=qW0LdE3fdC1MEWcgPX+p39bUnGFMK29nxaN2qNL/HL0=;
+ d=tkos.co.il; s=default; t=1693125327;
+ bh=XiwXxiMkvtgmf3ewWoxNI5asRs4vCb/NecOQzViXStY=;
  h=From:To:Cc:Subject:Date:From;
- b=n5DI+cf5FXDFTDVIWrMbiCvjA72Uitmrw2aU7wyqxeYk6trBKz+ykPBX6/B1lGLPC
- s/bxh16xJiQmExhMtsNzJtLYLKYaNrvlFuRpqXhJTZArjweRk35NZw9jbIkVwiYL8G
- E2Mqs4uKXmRQ/dN8DkAaHODOLnhRgB1umagdrQFLxZD2QSRyWn0I46ug/PBCBlbCXx
- thANwfDmx26YExJB4zm3enmIUf0nHFLzZlPuZJCrGWAoVAw6NKwb1S0es4zK5KFclf
- mYke/MS2H8lCWl5bicY6T96gZLlU50bbLSodgw8MebjAwojP/htIbVyG5o/0pSAvaa
- wcPWMFjKu4R5w==
+ b=VGIpWmSEph0Ab0KLbZYl2255i61XPurkHWpdOfT1esFpojBoRbu23uuyCDDXqZIAo
+ Itpfl8ShIVJOUFkNlqe17Ea0VbVSofOxau7XpnFrQTNQFUgpFKYm+cEGYZEXgafVQC
+ CRdKnoL/bb+b+7cE9kx1J9mNG2M6cxVyZ6EDGHskVljsPYR/WiP6ITubPcjSgLsxyv
+ FL8j9IHBlTv35pUADwDI4rvInGqYxr816RFZhSFOL1sa5qAEayxL48vk/iwQXMzdKW
+ 8+fF3Y6ycV1IYQNxJr8atjbo8sjlUmOCWhbNhow3uVRcBjfB2ZLu7t/N40PMxdzrRC
+ X/1MBLBNvQ2Mw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=tkos.co.il header.i=@tkos.co.il
- header.a=rsa-sha256 header.s=default header.b=n5DI+cf5
-Subject: [Buildroot] [PATCH next] package/deamon: bump to version 0.8.4
+ header.a=rsa-sha256 header.s=default header.b=VGIpWmSE
+Subject: [Buildroot] [PATCH next v2] package/daemon: bump to version 0.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,6 +89,9 @@ Rename BSD-3-Clause text file and update hash because of text formatting
 change.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+
+v2: fix typo in subject
 ---
  package/daemon/daemon.hash |  8 +++++---
  package/daemon/daemon.mk   | 10 +++++++---
