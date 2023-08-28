@@ -4,85 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF351C83F12
-	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 18:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28AFFC71153
+	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 19:38:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5079F4049C;
-	Mon, 28 Aug 2023 18:56:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5079F4049C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EAEE408F2;
+	Mon, 28 Aug 2023 19:38:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EAEE408F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id knLl9FlnmgkN; Mon, 28 Aug 2023 18:56:38 +0000 (UTC)
+	with ESMTP id qTpW838bFX1q; Mon, 28 Aug 2023 19:38:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9DEC4054C;
-	Mon, 28 Aug 2023 18:56:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9DEC4054C
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 744411BF4E2
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 18:56:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20CC6408F4;
+	Mon, 28 Aug 2023 19:38:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20CC6408F4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0137A1BF276
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 19:38:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D78840A5B
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 18:56:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D78840A5B
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB6A281E3E
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 19:38:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB6A281E3E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Tydv1r44bvek for <buildroot@lists.busybox.net>;
- Mon, 28 Aug 2023 18:56:34 +0000 (UTC)
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
- [IPv6:2607:f8b0:4864:20::62e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 257F04041C
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 18:56:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 257F04041C
-Received: by mail-pl1-x62e.google.com with SMTP id
- d9443c01a7336-1bc8a2f71eeso20590845ad.0
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 11:56:34 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oRsAYHXixYwA for <buildroot@lists.busybox.net>;
+ Mon, 28 Aug 2023 19:38:16 +0000 (UTC)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3F8B881E36
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 19:38:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F8B881E36
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-99bc9e3cbf1so751765466b.0
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 12:38:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693248993; x=1693853793;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=79xyMySM7F45IDXOM9Hiw/PYJ6UYgEnaFMTKbRTJoTg=;
- b=Cbu1q7ZkgAJ7Ctl1ued11tyY1fMhzb7yrldE9iXPUF4y8nCSYoxgQox4u5CQ3hb41c
- 3yc0rQZ4v6qYB9vnW5GsWGwiCGWiIquACOS/zyrHAzyhOOa4A3sGA28yZun6nHffN5jC
- ehJ5gSCwULoPn8Nehnn+Ui/zdLUQ57sG5uL32v3tKmNpxSNlvsD6Ct+ai4IXzfHCOrnp
- QnyTfQN4e9rkaWAxouQpO10PVaZEL9ZJoHOvcNLdBkdmjj9oaEAtpWv5lZxiLol9bbjp
- s+FT/ttU+PKGfxiL5To62+VnX8H5Wt8wYUTa10biS9/MRTXl2ppwWiOi3OzuUz+GxjlV
- 2LGg==
-X-Gm-Message-State: AOJu0YzF1SS8qP3qsVsDuF3hISZRkwUrVnaba4qzQOFmuHYlDAgTwrhW
- CeZJyFGZOcD/pY00tps7rT7UfU6TSyE=
-X-Google-Smtp-Source: AGHT+IEelsjiouW1D9942lz2TL8tay72E7f9QFqX+V1qglBWK6pcyTM9WxeXTd+5hu6MvO4nBKHZBw==
-X-Received: by 2002:a17:903:41c8:b0:1b3:a928:18e7 with SMTP id
- u8-20020a17090341c800b001b3a92818e7mr25303264ple.59.1693248993058; 
- Mon, 28 Aug 2023 11:56:33 -0700 (PDT)
-Received: from DESKTOP-OI0KN2B.lan ([172.56.201.202])
+ d=1e100.net; s=20221208; t=1693251494; x=1693856294;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=n/7iTS3C9E8tE0KQgKmqp1aEto9lVz98TG2ipomv8II=;
+ b=Pcf+CrAG44rM3aElYw/UZSUTneimEUlrtNJrT3xW8hUIBWzKT4qhJl6NvhtONo91rm
+ WL3lGr5MoTsbgEzttYttFGdMWmADgg2Zyr8Pi4h8xXkeuMnw/Zixgd9ur3h2hZ2MQKkp
+ OU4n3F0oubg1vYv+c7KzUFQBEd+rZI/oDAGnwL2bgx1FxhgpC/FXggKoKOFKFn53NSnX
+ QHrhP4io27vsaKhpJ9oOkRyG5WGNuJcPvNHH8ijUpQCVxhdIWaKoPVyWfFhSY0uMVV5L
+ AQ3Q7rs2PahBoqCdQMm4sZU1j2d6vnqCvXEhkkBPz25Y783rCjr/pPqW8OSWKy1jpr1s
+ 1bew==
+X-Gm-Message-State: AOJu0YzLJZABLkqvSQ4lC/YGaT98EZAQ6OFeKqWNn+QkG6P7niU3raz5
+ iQNz0oi4NJYeA13TYGthOccxdA==
+X-Google-Smtp-Source: AGHT+IHtfItDs37Qm43Qe95OoaEJbmJ5lnSgVA+FlV1iOhxtOCWwT5RWE1vR+W4zWfx0L9D43C+/nA==
+X-Received: by 2002:a17:907:8a26:b0:9a1:f9c5:f612 with SMTP id
+ sc38-20020a1709078a2600b009a1f9c5f612mr571412ejc.5.1693251493825; 
+ Mon, 28 Aug 2023 12:38:13 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49?
+ (ptr-9fplejo7y5h55ppcgnd.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:5bb6:c9e9:e89b:2c49])
  by smtp.gmail.com with ESMTPSA id
- g4-20020a170902868400b001b9ecee459csm7718798plo.34.2023.08.28.11.56.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Aug 2023 11:56:32 -0700 (PDT)
-From: Adam Duskett <aduskett@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 28 Aug 2023 12:56:28 -0600
-Message-ID: <20230828185628.946326-1-aduskett@gmail.com>
-X-Mailer: git-send-email 2.41.0
+ e25-20020a170906081900b00992ea405a79sm5011204ejd.166.2023.08.28.12.38.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 28 Aug 2023 12:38:13 -0700 (PDT)
+Message-ID: <71359643-6efe-4a83-55e3-8eb3d87edfe5@mind.be>
+Date: Mon, 28 Aug 2023 21:38:11 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Peter Korsgaard <peter@korsgaard.com>,
+ Robert Smigielski <ptdropper@gmail.com>
+References: <CABWt4ev1G2+YQ0_TzmH-YM1sb8HkAVEySW_ALfw2vPgrfcy8kA@mail.gmail.com>
+ <877cpf7lln.fsf@48ers.dk> <650C7598-7ADF-4A94-8F2B-D8F1D555B12A@heine.tech>
+ <CABWt4eu5oYECnC+=68QWgkJywrPKLq5_CDcrFeZm+Um8gRYksA@mail.gmail.com>
+ <87r0nn5i61.fsf@48ers.dk>
+In-Reply-To: <87r0nn5i61.fsf@48ers.dk>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693248993; x=1693853793;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=79xyMySM7F45IDXOM9Hiw/PYJ6UYgEnaFMTKbRTJoTg=;
- b=SXm2xEG5W52E5aMH+4yb4THnWwFs2gsyaOYBsSfOuFR8SO1KU+Q22v3DYhqLm4ypV/
- VTeEX4qQ95R1izYVU0eRr2DKBH/vBlA9xBZjCVLi0awejqD8VaSp3YhioCuTTDG2G9zD
- vkpsRNHABbfM0A4EVWLCROCvKidUIFNDYbFSAQc55dQR5L8M6SWfhTcEhkOmsJehnbz4
- VIIlpQDE1oab74E1O4ORzI/jVAwESJlm1PGzg9f9+BxgTgK+yYrK2GW9vTUVCNn4Tv2W
- m5LQ8n7VWo6HKYqkljaFm9JKz6AJY9bU06Af8h/T57NuXRJ2OPA9AqYKVRAWGC104CfU
- lM4w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=SXm2xEG5
-Subject: [Buildroot] [PATCH v2 1/1] package/openjdk{-bin}: security bump
- versions to 11.0.19+7 and 17.0.7+7
+ d=mind.be; s=google; t=1693251494; x=1693856294; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=n/7iTS3C9E8tE0KQgKmqp1aEto9lVz98TG2ipomv8II=;
+ b=AIloUg6pjn0r458Qe/eyBPtOmSCm1QeImuWVIhcd9vwbHCiCkkr49hxI5m4de1kbqW
+ pmOylPAbpYdwXYhTlLKwycoKEInszD9t0b2T6mVTxuqCq0lcc93Rym4FQLNYhmGPZo40
+ ApJHCNbKwGaWA8ASL0HlYhpC9vqRr8v2ZG+qeZYC63+eUadi//uRRDxKUiUxwQY1dkj7
+ 1LMjgAvd3CtY2NiGGqJaxDAggHfZJiwT4D4oIZDnFhbhg82F3admdz7GuMK/IuzS0thB
+ hD2sxy7dQppL3LocJc4p81xD9DovW2G8M/3J23Ezw4FcuIsIO2uB2VLdtc/WTa2E5nLX
+ CEEw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=AIloUg6p
+Subject: Re: [Buildroot] CycloneDX SBOM support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,124 +103,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tudor Holton <buildroot@tudorholton.com>, Adam Duskett <aduskett@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
 
-* CVEs
-  - CVE-2023-21930
-  - CVE-2023-21937
-  - CVE-2023-21938
-  - CVE-2023-21939
-  - CVE-2023-21954
-  - CVE-2023-21967
-  - CVE-2023-21968
-* Security fixes
-  - JDK-8287404: Improve ping times
-  - JDK-8288436: Improve Xalan supports
-  - JDK-8294474: Better AES support
-  - JDK-8295304: Runtime support improvements
-  - JDK-8296676, JDK-8296622: Improve String platform support
-  - JDK-8296684: Improve String platform support
-  - JDK-8296692: Improve String platform support
-  - JDK-8296832: Improve Swing platform support
-  - JDK-8297371: Improve UTF8 representation redux
-  - JDK-8298191: Enhance object reclamation process
-  - JDK-8298310: Enhance TLS session negotiation
-  - JDK-8298667: Improved path handling
-  - JDK-8299129: Enhance NameService lookups
 
-For details, see the announcements:
-https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-April/021900.html
-https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-April/021899.html
+On 28/08/2023 16:57, Peter Korsgaard wrote:
+>>>>>> "Robert" == Robert Smigielski <ptdropper@gmail.com> writes:
+> 
+> Hi,
+> 
+>   > At this time I'm reading up on the difference between CPE and PURL. While
+>   > we have CPE information in their currently, it may be beneficial to have
+>   > PURL for some of the packages. I'm still new to the concept of what those
+>   > two formats provide. Your feedback is most welcome. Glad you are finding
+>   > this useful.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
-v1 -> v2:
-  - Add missing openjdk-bin updates
+  I mentioned PURL vs CPE in my talk at ELC this year. You can look it up on 
+youtube. It was near the end of the talk.
 
- package/openjdk-bin/openjdk-bin.hash                      | 8 ++++----
- package/openjdk-bin/openjdk-bin.mk                        | 4 ++--
- .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch   | 0
- package/openjdk/openjdk.hash                              | 4 ++--
- package/openjdk/openjdk.mk                                | 4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
- rename package/openjdk/{17.0.7+7 => 17.0.8+7}/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch (100%)
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index eb9d7396e3..401e83e75e 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,10 +1,10 @@
- # https://github.com/adoptium/temurin17-binaries/releases
--sha256  e9458b38e97358850902c2936a1bb5f35f6cffc59da9fcd28c63eab8dbbfbc3b  OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz
--sha256  0084272404b89442871e0a1f112779844090532978ad4d4191b8d03fc6adfade  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz
-+sha256  aa5fc7d388fe544e5d85902e68399d5299e931f9b280d358a3cbee218d6017b0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz
-+sha256  c43688163cfdcb1a6e6fe202cc06a51891df746b954c55dbd01430e7d7326d00  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz
- 
- # From https://github.com/adoptium/temurin11-binaries/releases
--sha256  5f19fb28aea3e28fcc402b73ce72f62b602992d48769502effe81c52ca39a581  OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
--sha256  0c7763a19b4af4ef5fbae831781b5184e988d6f131d264482399eeaf51b6e254  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.19_7.tar.gz
-+sha256  7a99258af2e3ee9047e90f1c0c1775fd6285085759501295358d934d662e01f9  OpenJDK11U-jdk_x64_linux_hotspot_11.0.20_8.tar.gz
-+sha256  eb821c049c2d2f7c3fbf8ddcce2d608d3aa7d488700e76bfbbebabba93021748  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.20_8.tar.gz
- 
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index dad846534b..616c8d917d 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.7_7
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.8_7
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 11
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.19_7
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.20_8
- endif
- 
- ifeq ($(HOSTARCH),x86_64)
-diff --git a/package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-similarity index 100%
-rename from package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-rename to package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 3b36289628..ba398b84be 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  43b80a5aec5fce908e80858e9b34efdf1b49255a12ce303650325af65141d3e8  openjdk-17.0.7+7.tar.gz
--sha256  25fd9ab3042a284aa4e6348969403016404bc2706a4a02c149a0054fbe477337  openjdk-11.0.19+7.tar.gz
-+sha256  643ff42dcdf8751e0fee716c1a1914ddc7348b174e871a5eb2636578a181f20d  openjdk-17.0.8+7.tar.gz
-+sha256  b2a37ef209ae7eaf8f34182b7c9aa3252af20a214d02970f96ce62242c805479  openjdk-11.0.20+8.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 39d461a87c..d1a2fa23ee 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.7+7
-+OPENJDK_VERSION_MINOR = 0.8+7
- else
- OPENJDK_VERSION_MAJOR = 11
--OPENJDK_VERSION_MINOR = 0.19+7
-+OPENJDK_VERSION_MINOR = 0.20+8
- endif
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
--- 
-2.41.0
+> Conceptually they seem quite similar, with PURL being more generic, but
+> I fail to see how we could use PURLS in Buildroot, E.G. how to do the
+> equivalent of the CPE matching we use to figure out if the version of a
+> package in Buildroot is vulnerable to a specific CVE?
+
+  I think Robert is not necessarily primarily concerned with finding 
+vulnerabilities, but rather with constructing a meaningful and accurate SBoM 
+(which is what dependencytrack does).
+
+  That said, it you want to use PURLs for vulnerabilities, you have to use a 
+vulnerability database that uses PURLs. To my knowledge, there is just one "open 
+source" one: https://osv.dev. (There's also Sonatype which can be used gratis 
+but is not free.) Since there are many, many CVEs that don't make it into OSV, 
+using _only_ PURLs is certainly not enough. But we could combine the two.
+
+
+  Another issue with PURLs is: which one do we use? PURLs are organised around 
+ecosystems. For PyPI it's clear, but for your typical C library/application it's 
+less so. E.g. openssl appears in the Debian, Alpine, AlmaLinux, RPM, RockyLinux 
+ecosystems (and possibly more), each with a distinct PURL. We could start our 
+own namespace, but that's kind of pointless unless we also issue advisories...
+
+
+  There's by the way another issue (which also exists for the CPE-based 
+approach): our "BoM" for the cargo and go packages is not correct: we vendor the 
+dependencies, but they're not taken into account in the BoM. The tarball we put 
+in legal-info does include the vendored dependencies, but they're not mentioned 
+in the manifest, and we don't scan their vulnerabilities.
+
+> I gave your generateBuildrootSBOM.py script a quick try here, and
+> noticed a few things:
+> 
+> - The purl links seems wrong (missing slash between site and filename):
+>    "purl": "pkg:generic/busybox@1.36.1?download_url=https://www.busybox.net/downloadsbusybox-1.36.1.tar.bz2"
+> 
+> - The patches are not mentioned in the SBOM. Adding the show-info data
+>    does bring the CPE identifiers, but E.G. doesn't include _IGNORE_CVES
+>    data (that we use to signal that a vulnerability is either not
+>    applicable to Buildroot or fixed by a backported patch). I don't know
+>    much about cyclonedx, but judging from
+>    https://github.com/DependencyTrack/dependency-track/issues/919 it
+>    sounds like such info can be represented in the SBOM.
+> 
+> - Latest version in git is 1.0.4 (using an non-annotated tag, whereas
+>    1.0.3 was annotated), but on pypi there is (only) a 1.0.5, which seems
+>    to match the 1.0.4 sources. It is marked as needing python > 3.10, and
+>    doesn't pull in the dependencies, so it doesn't work very well
+> 
+> - The output filename is used as a prefix, with .json .one.xml and .xml
+>    variants. I understand why you do this, but it is a bit confusing
+>    still. Is there any real use of the non-JSON formats / available
+>    tooling to convert if needed?
+> 
+> Is there a specific reason why you are maintaining it separately from
+> Buildroot? Given the fairly tight link to the Buildroot details that
+> may change in the future (not to mention ease of use/discovery) it seems
+> to me to be something that would be interesting to ship together with
+> our other python based tooling inside Buildroot?
+
+  I absolutely agree with that statement!
+
+  Regards,
+  Arnout
 
 _______________________________________________
 buildroot mailing list
