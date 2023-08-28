@@ -4,60 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5C37C71153
-	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 11:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5555AC71153
+	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 12:02:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B32340201;
-	Mon, 28 Aug 2023 11:48:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B32340201
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCAA6415A3;
+	Mon, 28 Aug 2023 12:02:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCAA6415A3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id X0CIhvjmDgCb; Mon, 28 Aug 2023 11:48:18 +0000 (UTC)
+	with ESMTP id Pb_oB2eXEsJY; Mon, 28 Aug 2023 12:02:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 222C340235;
-	Mon, 28 Aug 2023 11:48:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 222C340235
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 346D61BF410
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 11:48:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D13D5411C6;
+	Mon, 28 Aug 2023 12:02:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D13D5411C6
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F69C1BF410
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 12:01:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1AAF360E7A
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 11:48:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1AAF360E7A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 689B081F36
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 12:01:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 689B081F36
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n5SN927ou2Ai for <buildroot@lists.busybox.net>;
- Mon, 28 Aug 2023 11:48:12 +0000 (UTC)
-X-Greylist: delayed 561 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 28 Aug 2023 11:48:11 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9B8760AB9
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C9B8760AB9
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 11:48:11 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 100A01814B9; Mon, 28 Aug 2023 13:38:46 +0200 (CEST)
-Message-Id: <650C7598-7ADF-4A94-8F2B-D8F1D555B12A@heine.tech>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
-Date: Mon, 28 Aug 2023 13:38:36 +0200
-In-Reply-To: <877cpf7lln.fsf@48ers.dk>
-To: Peter Korsgaard <peter@korsgaard.com>,
- Robert Smigielski <ptdropper@gmail.com>
-References: <CABWt4ev1G2+YQ0_TzmH-YM1sb8HkAVEySW_ALfw2vPgrfcy8kA@mail.gmail.com>
- <877cpf7lln.fsf@48ers.dk>
-X-Last-TLS-Session-Version: TLSv1.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MqBWrGWOx1Dl for <buildroot@lists.busybox.net>;
+ Mon, 28 Aug 2023 12:01:58 +0000 (UTC)
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 69DEB81E11
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 12:01:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69DEB81E11
+Received: by mail-lf1-x131.google.com with SMTP id
+ 2adb3069b0e04-5009969be25so4936152e87.3
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 05:01:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693224116; x=1693828916;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=AQhHl2943H1tfWA0XcTVUy0ALVno6Goe2tRZ7eweT6U=;
+ b=hANEDPXhWnHvTaV3s0oylUOMvzUilJH+DUnBLnaHteJ2ADUyhJAavcAEFJdRaBhRFZ
+ sncilImkW4Ay0sg85Mya692ZfZPrfQ/pHWLMYPgKttxvzcv7pFiKeCYrWU66Wb8uNHBb
+ 2PN9baL+zqPJK5NttwvIQxqIggEIjF3KZp1PZWJu9uMNIj9qbq6eXkVhYmWLchuEIl0g
+ qMYu03GCO1bvsoojZ3FyhIUZobJeosw2M4L/gB8NfnTDOk90NaFxGKJ0HX1UoyLuwiU5
+ tAAHRrNK6E9YPPRVMYnmV0oeZ21b74bPN4a5IiyB6oxGxrpzx2WC1MgboH+kI6OkabJ0
+ auPw==
+X-Gm-Message-State: AOJu0YxOzw0/RtPh4oP19YkAmR4Cmj/GHaDn9iH7RSBYiEsKHMrnjyaP
+ dVti5lN34UwxqDXt7Y/d0PcgfH5d8kdr0A==
+X-Google-Smtp-Source: AGHT+IFLotX5GlSoQAmTKPW5BgLzw8DcAd/PaslmujhzLSM3rizLL1ESKpZDLTs2AfZSFxaJDKtwQw==
+X-Received: by 2002:a05:6512:3056:b0:500:bd75:77cf with SMTP id
+ b22-20020a056512305600b00500bd7577cfmr897182lfb.17.1693224115417; 
+ Mon, 28 Aug 2023 05:01:55 -0700 (PDT)
+Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
+ [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
+ q28-20020ac2511c000000b004fe1a35fd15sm1555753lfb.140.2023.08.28.05.01.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 28 Aug 2023 05:01:54 -0700 (PDT)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 28 Aug 2023 14:04:19 +0200
+Message-ID: <20230828120419.3297803-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1693222727; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- in-reply-to:references; bh=106wEKDDeClVTXy5IVjs5vHjCB03LhTT/yhcd9Adxq4=;
- b=qIHewb2LONCDmSXHv1I0JtTAxdBrxGF2SZqNaHOTdubpVdcf9ts9DxLITSyFAg/l2gyzAy
- 2jmgQHU5IPla0WUzT11jG740JHq43H0LrZ4jZnXyYWoKtQ18KsweqExhZS6lCtCh0pqIUY
- peEIVVd4W7Ew1TkewaUIH/oH11CCW7k=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=qIHewb2L
-Subject: Re: [Buildroot] CycloneDX SBOM support
+ d=gmail.com; s=20221208; t=1693224116; x=1693828916;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=AQhHl2943H1tfWA0XcTVUy0ALVno6Goe2tRZ7eweT6U=;
+ b=bKzBmW695Jm45Nj6EtDfPzXxZv8C50OcR/MBeSttI7wk3/0DP/DY+MFz9NItaMvxlZ
+ Q66ybwD9XivAn02rGfM9kn/yc6lbp2ZX9RT+EzNEmfVvkOxVwii6Syrexb81rBXxilfw
+ QiKLxHJkrOAPd2i1YPPqTRaVWWmV55CbmUjY+b5+WOev1QmTB2HxwKjKLAAXpd6cW03A
+ M8mJAGvI6FBF3QrT2Ph7j0AzVORk7/0iSbalq4GL65L1xszzb0t/iT52bgztRgqC8nm3
+ MCD/XiIYl8M6o5qANEgRo0DflqA6+yA1iqtZB02qQoJRvBu6hp6lNiQ3ghPgErWdfw7J
+ 3RnA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=bKzBmW69
+Subject: [Buildroot] [PATCH] package/libostree: bump to version 2023.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,143 +93,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8327167146527274484=="
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---===============8327167146527274484==
-Content-Type: multipart/alternative;
-	boundary="Apple-Mail=_683C7558-7FB4-4667-B3C9-9E321135BBB1"
-
-
---Apple-Mail=_683C7558-7FB4-4667-B3C9-9E321135BBB1
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
-
-Hi,
-
-> On 28. Aug 2023, at 08:00, Peter Korsgaard <peter@korsgaard.com> =
-wrote:
->=20
->>>>>> "Robert" =3D=3D Robert Smigielski <ptdropper@gmail.com> writes:
->=20
-> Hi,
->=20
->> Announcing CycloneDX support for the embedded / IOT / MIOT world. =
-Using
->> your Buildroot output, my project produces CycloneDX SBOM files for =
-supply
->> chain management and vulnerability management. I am a long time =
-Buildroot
->> user now in the device security space. Glad to provide CycloneDX SBOM
->> support for Buildroot users.
->=20
->> https://github.com/CycloneDX/cyclonedx-buildroot
->=20
->> https://pypi.org/project/CycloneDX-Buildroot/
-
-I=E2=80=99m just returning from vacation so it will take some days but I =
-will happily try this out.
-I recently built my own show-info to cyclone-dx python script but from =
-skimming through
-your package this looks way better than mine.
-
-So without further checking already: thanks for taking on this task!
-
->=20
-> Thanks! I think I have seen it earlier, where I noticed that it only
-> worked on the legal-info manifest - But we have quite a bit more
-> SBOM-related info in Buildroot nowadays visible in show-info. I see =
-that
-> you are now also using this info for the CPE data, so that is good.
->=20
-> So what is the status of this project? Anything missing? Anything you
-> are missing from Buildroot? What (open source) tools can consume the
-> generated SBOMs and do something interesting with it?
-
-There are multiple tools which can work with the cyclone-dx format and =
-from what
-I=E2=80=99m reading this might become the =E2=80=9Cde-facto SBOM =
-standard=E2=80=9D.
-
-What we are currently evaluating is Dependency Track =
-(https://dependencytrack.org/).
-It=E2=80=99s not perfect but it checks your SBOM frequently for new =
-Issues and generates
-management friendly Dashboard Views. In the end this is pretty new for =
-most of us I guess.
-
-Regards,
-Michael
-
-
-
---Apple-Mail=_683C7558-7FB4-4667-B3C9-9E321135BBB1
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/html;
-	charset=utf-8
-
-<html><head><meta http-equiv=3D"content-type" content=3D"text/html; =
-charset=3Dutf-8"></head><body style=3D"overflow-wrap: break-word; =
--webkit-nbsp-mode: space; line-break: =
-after-white-space;">Hi,<br><div><br><blockquote type=3D"cite"><div>On =
-28. Aug 2023, at 08:00, Peter Korsgaard &lt;peter@korsgaard.com&gt; =
-wrote:</div><br class=3D"Apple-interchange-newline"><div><div><blockquote =
-type=3D"cite"><blockquote type=3D"cite"><blockquote =
-type=3D"cite"><blockquote type=3D"cite"><blockquote type=3D"cite">"Robert"=
- =3D=3D Robert Smigielski &lt;ptdropper@gmail.com&gt; =
-writes:<br></blockquote></blockquote></blockquote></blockquote></blockquot=
-e><br>Hi,<br><br><blockquote type=3D"cite">Announcing CycloneDX support =
-for the embedded / IOT / MIOT world. Using<br>your Buildroot output, my =
-project produces CycloneDX SBOM files for supply<br>chain management and =
-vulnerability management. I am a long time Buildroot<br>user now in the =
-device security space. Glad to provide CycloneDX SBOM<br>support for =
-Buildroot users.<br></blockquote><br><blockquote =
-type=3D"cite">https://github.com/CycloneDX/cyclonedx-buildroot<br></blockq=
-uote><br><blockquote =
-type=3D"cite">https://pypi.org/project/CycloneDX-Buildroot/<br></blockquot=
-e></div></div></blockquote><div><br></div>I=E2=80=99m just returning =
-from vacation so it will take some days but I will happily try this =
-out.</div><div>I recently built my own show-info to cyclone-dx python =
-script but from skimming through</div><div>your package this looks way =
-better than mine.</div><div><br></div><div>So without further checking =
-already: thanks for taking on this task!</div><div><br><blockquote =
-type=3D"cite"><div><div><br>Thanks! I think I have seen it earlier, =
-where I noticed that it only<br>worked on the legal-info manifest - But =
-we have quite a bit more<br>SBOM-related info in Buildroot nowadays =
-visible in show-info. I see that<br>you are now also using this info for =
-the CPE data, so that is good.<br><br>So what is the status of this =
-project? Anything missing? Anything you<br>are missing from Buildroot? =
-What (open source) tools can consume the<br>generated SBOMs and do =
-something interesting with =
-it?<br></div></div></blockquote><div><br></div><div>There are multiple =
-tools which can work with the cyclone-dx format and from =
-what</div><div>I=E2=80=99m reading this might become the =E2=80=9Cde-facto=
- SBOM standard=E2=80=9D.</div><div><br></div><div>What we are currently =
-evaluating is Dependency Track (<a =
-href=3D"https://dependencytrack.org/">https://dependencytrack.org/</a>).</=
-div><div>It=E2=80=99s not perfect but it checks your SBOM frequently for =
-new Issues and generates</div><div>management friendly Dashboard Views. =
-In the end this is pretty new for most of us I =
-guess.</div><div><br></div><div>Regards,</div><div>Michael</div><br></div>=
-<br></body></html>=
-
---Apple-Mail=_683C7558-7FB4-4667-B3C9-9E321135BBB1--
-
---===============8327167146527274484==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 3b88b8200f..d122fee86e 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bc593afb31fe1ac3d50419f917fafe321a0a3561d7bb2ba498a83740fe3adb14  libostree-2023.5.tar.xz
++sha256  b43c4a373799681989bae12b3a1b94f453068dece6540b8e05a23b834c1037e2  libostree-2023.6.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index c61c1d1508..15093f4b7a 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2023.5
++LIBOSTREE_VERSION = 2023.6
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
+-- 
+2.41.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8327167146527274484==--
