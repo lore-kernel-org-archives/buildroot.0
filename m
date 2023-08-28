@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15965C83F11
-	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 14:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67D76C83F12
+	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 15:30:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EEEF81FD9;
-	Mon, 28 Aug 2023 14:57:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EEEF81FD9
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE9EC81AAC;
+	Mon, 28 Aug 2023 15:30:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE9EC81AAC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hi-7eYA56Z_y; Mon, 28 Aug 2023 14:57:18 +0000 (UTC)
+	with ESMTP id hEiaEFEc9pvj; Mon, 28 Aug 2023 15:30:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EB1281FD1;
-	Mon, 28 Aug 2023 14:57:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9EB1281FD1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C90C31BF8B4
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 14:57:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17066817C0;
+	Mon, 28 Aug 2023 15:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17066817C0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A11E11BF95F
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 15:30:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B068440558
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 14:57:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B068440558
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5F112817C0
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 15:30:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F112817C0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id y4WwY9K-5vRZ for <buildroot@lists.busybox.net>;
- Mon, 28 Aug 2023 14:57:15 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 01866402D7
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 14:57:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01866402D7
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C858C0007;
- Mon, 28 Aug 2023 14:57:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qadfy-005xnS-FW; Mon, 28 Aug 2023 16:57:10 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Robert Smigielski <ptdropper@gmail.com>
-References: <CABWt4ev1G2+YQ0_TzmH-YM1sb8HkAVEySW_ALfw2vPgrfcy8kA@mail.gmail.com>
- <877cpf7lln.fsf@48ers.dk>
- <650C7598-7ADF-4A94-8F2B-D8F1D555B12A@heine.tech>
- <CABWt4eu5oYECnC+=68QWgkJywrPKLq5_CDcrFeZm+Um8gRYksA@mail.gmail.com>
-Date: Mon, 28 Aug 2023 16:57:10 +0200
-In-Reply-To: <CABWt4eu5oYECnC+=68QWgkJywrPKLq5_CDcrFeZm+Um8gRYksA@mail.gmail.com>
- (Robert Smigielski's message of "Mon, 28 Aug 2023 08:11:34 -0400")
-Message-ID: <87r0nn5i61.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3qFJxvFpbzNW for <buildroot@lists.busybox.net>;
+ Mon, 28 Aug 2023 15:30:02 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0BFDE81583
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 15:30:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BFDE81583
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id A5149352BD8B; Mon, 28 Aug 2023 17:29:58 +0200 (CEST)
+Date: Mon, 28 Aug 2023 17:29:58 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZOy9diJAMsHJaqH6@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] CycloneDX SBOM support
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1693236598; bh=8wDEnAR02tgj2c89f2fA99bAGVmZ/WLQynpXrV7VXns=;
+ h=Date:From:To:Cc:Subject:From;
+ b=smEvokbxjRB0iHQklPXzXTUKsfQDiYMLA7vAttbS7h5nx1XCh8wniF/zGfqOZPnob
+ QC0h4ClZX9FqimGtFS4iNeD3mF59qc/uLVhafI0UUNJntXpKFdbfRY7AyTVxsIsLTD
+ gzBZXF34vT8pZzUsJ0U6oeRlHNxgROUNG+bjBlcoFB+kQUXuJqjemfb5KHpSKi/5PN
+ vWTvsq4psHckyQVqMt92HyX77g8K/aZtGrRhVn06+3X/IfKo2iK1U6Ns20LuZCkZRY
+ YNIvXKIG2f9/mabEgAJC6TvVNozwymdl12CrLRB903Qe2bDG7zx8zqszbUmf1Ic8CD
+ RqJriMcMyjuNQ==
+Subject: [Buildroot] [PATCH/next] package/mutt: bump version to 2.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,59 +65,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Robert" == Robert Smigielski <ptdropper@gmail.com> writes:
+See http://mutt.org/ for any news.
 
-Hi,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > At this time I'm reading up on the difference between CPE and PURL. While
- > we have CPE information in their currently, it may be beneficial to have
- > PURL for some of the packages. I'm still new to the concept of what those
- > two formats provide. Your feedback is most welcome. Glad you are finding
- > this useful.
-
-Conceptually they seem quite similar, with PURL being more generic, but
-I fail to see how we could use PURLS in Buildroot, E.G. how to do the
-equivalent of the CPE matching we use to figure out if the version of a
-package in Buildroot is vulnerable to a specific CVE?
-
-I gave your generateBuildrootSBOM.py script a quick try here, and
-noticed a few things:
-
-- The purl links seems wrong (missing slash between site and filename):
-  "purl": "pkg:generic/busybox@1.36.1?download_url=https://www.busybox.net/downloadsbusybox-1.36.1.tar.bz2"
-
-- The patches are not mentioned in the SBOM. Adding the show-info data
-  does bring the CPE identifiers, but E.G. doesn't include _IGNORE_CVES
-  data (that we use to signal that a vulnerability is either not
-  applicable to Buildroot or fixed by a backported patch). I don't know
-  much about cyclonedx, but judging from
-  https://github.com/DependencyTrack/dependency-track/issues/919 it
-  sounds like such info can be represented in the SBOM.
-
-- Latest version in git is 1.0.4 (using an non-annotated tag, whereas
-  1.0.3 was annotated), but on pypi there is (only) a 1.0.5, which seems
-  to match the 1.0.4 sources. It is marked as needing python > 3.10, and
-  doesn't pull in the dependencies, so it doesn't work very well
-
-- The output filename is used as a prefix, with .json .one.xml and .xml
-  variants. I understand why you do this, but it is a bit confusing
-  still. Is there any real use of the non-JSON formats / available
-  tooling to convert if needed?
-
-Is there a specific reason why you are maintaining it separately from
-Buildroot? Given the fairly tight link to the Buildroot details that
-may change in the future (not to mention ease of use/discovery) it seems
-to me to be something that would be interesting to ship together with
-our other python based tooling inside Buildroot?
-
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index c475641ab5..78bce76585 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fa531b231d58fe1f30ceda0ed626683ea9ebdfb76ce47ef8bb27c2f77422cffb  mutt-2.2.9.tar.gz
++sha256  12325cf66d5ff8ac4bd87fac8db52c869de52dd278fc301cfd57d5a1f9f465cc  mutt-2.2.11.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 5cf1b6bad2..c5e4e4a14e 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 2.2.9
++MUTT_VERSION = 2.2.11
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 -- 
-Bye, Peter Korsgaard
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
