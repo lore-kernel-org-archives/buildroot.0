@@ -4,95 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A67AC83F12
-	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 20:09:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 528E2C71153
+	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 20:31:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C52B4099E;
-	Mon, 28 Aug 2023 20:09:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C52B4099E
+	by smtp4.osuosl.org (Postfix) with ESMTP id C851140933;
+	Mon, 28 Aug 2023 20:31:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C851140933
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sn1rEC-7oZQW; Mon, 28 Aug 2023 20:09:48 +0000 (UTC)
+	with ESMTP id PQyoePVw7fi0; Mon, 28 Aug 2023 20:31:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 254E7408D2;
-	Mon, 28 Aug 2023 20:09:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 254E7408D2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8BE191BF2BC
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 20:09:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B857E40930;
+	Mon, 28 Aug 2023 20:31:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B857E40930
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F3BFF1BF2BC
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 20:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 57DA8607AA
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 20:09:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57DA8607AA
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA61A4054B
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 20:31:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA61A4054B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id O95IsER72hTL for <buildroot@lists.busybox.net>;
- Mon, 28 Aug 2023 20:09:44 +0000 (UTC)
-X-Greylist: delayed 423 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 28 Aug 2023 20:09:44 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A08DF60792
-Received: from 001.mia.mailroute.net (001.mia.mailroute.net [199.89.3.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A08DF60792
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:09:44 +0000 (UTC)
-Received: from 014.lax.mailroute.net (014.lax.mailroute.net [199.89.1.17])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by 001.mia.mailroute.net (Postfix) with ESMTPS id 4RZM0w1FYZzlhb6n
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:02:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by 014.lax.mailroute.net (Postfix) with ESMTP id 4RZM0s0Tfszlv8Qj
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:02:37 +0000 (UTC)
-X-Virus-Scanned: by MailRoute
-Received: from 014.lax.mailroute.net ([127.0.0.1])
- by localhost (014.lax [127.0.0.1]) (mroute_mailscanner, port 10026) with LMTP
- id JQn8zU6T3jwW for <buildroot@buildroot.org>;
- Mon, 28 Aug 2023 20:02:36 +0000 (UTC)
-Received: from mail.carnegierobotics.com (unknown [72.22.26.5])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by 014.lax.mailroute.net (Postfix) with ESMTPS id 4RZM0r017kzlwJ2t
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:02:35 +0000 (UTC)
-Received: from CRL-PGH-EX19-1.crl.local (10.1.7.176) by
- CRL-PGH-EX19-1.crl.local (10.1.7.176) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.858.15; Mon, 28 Aug 2023 16:02:34 -0400
-Received: from CRL-PGH-EX19-1.crl.local ([fe80::81d6:ea84:15d9:67d4]) by
- CRL-PGH-EX19-1.crl.local ([fe80::81d6:ea84:15d9:67d4%7]) with mapi id
- 15.02.0858.015; Mon, 28 Aug 2023 16:02:34 -0400
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: Github download helper possibly not working
-Thread-Index: AQHZ2eqW8N1URE8y9EqxWw4NqNowfw==
-Date: Mon, 28 Aug 2023 20:02:34 +0000
-Message-ID: <ad574a2a-a776-d7e5-8dcb-f3693d222558@carnegierobotics.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-x-originating-ip: [172.30.0.81]
-Content-ID: <1E0C69AA03765C4ABDE6D74C1D86F7C5@crl.local>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7j3aBg5HEGAF for <buildroot@lists.busybox.net>;
+ Mon, 28 Aug 2023 20:31:18 +0000 (UTC)
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com
+ [IPv6:2607:f8b0:4864:20::831])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CAE5D40546
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:31:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAE5D40546
+Received: by mail-qt1-x831.google.com with SMTP id
+ d75a77b69052e-4108ec645a1so23004921cf.0
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 13:31:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693254676; x=1693859476;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=EbGn9GOohTz36SmOicTuhGPXJQVFVKQejTQ8rENj29U=;
+ b=PJSqslZ2gQPyHIzbNoWa829nJugetOXWYyOOv9EuELVSy2ITndpvtVAKzdztB6cuZg
+ 9mjmRbadS/0Ee8UpIjLb5hhE4tqzmXJ0uQ3FavRDwmeTVdIUDBv0ADq1rZsu+Cjjg5BE
+ Z0svfuk7rv+7iMqrjkQIQJH2hHLNwH37Jg/Zl4Qhf14uwJribN0pPKrgNr/ZcciBHbjL
+ PBKgjX0wPANpRbUNvRfpqh9G+DNiiTOAAb62QD05a0fc8agp4EtE4HW4wWj9uUEG9zPJ
+ /IVIKZbbKadeQ7lUOb+ngZmK6MnS/6AAiJc43siXCVloA3z5O928drB4N5ua9rUru95K
+ IbPg==
+X-Gm-Message-State: AOJu0YwB9LBvNd8Krtz54Pkmv9jHS+JBElTLxuYaJ8GRppIaPsrl0oHy
+ ckoBhOTTlgbUxXIbqziZvXrH3VThdeo53xOde0U=
+X-Google-Smtp-Source: AGHT+IEQaj6DGudv9CZq8+hJ19sOyjHa9SRCNui1VGZtFtVz1DfuI3TadCFc+dD9JvUmxFuw2YR01NMg+pcMFtoar0Y=
+X-Received: by 2002:ac8:5903:0:b0:40f:dd5f:d36b with SMTP id
+ 3-20020ac85903000000b0040fdd5fd36bmr33051632qty.23.1693254676342; Mon, 28 Aug
+ 2023 13:31:16 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- carnegierobotics.com; h=mime-version:content-transfer-encoding
- :content-id:content-type:content-type:user-agent
- :content-language:accept-language:message-id:date:date:subject
- :subject:from:from:received:received:received:received; s=mr01;
- t=1693252956; x=1695844957; bh=HaPvsirN3R6nWyjWTtmNV+SHHEMj8BQj
- EoEw9VdC2iA=; b=BgFWqSRHFE2x4L76AG56NDCalZ3Cd9BYC81jhVCnTGR1/2BF
- SL24AUX3f79pSYKcW02qiUYhSzvNK70wkKYOlhjE6ns7F0vi/6mDd/fGpH3dK339
- /Z+sCYIFqVqM20YUBZXx3/RDsESQRBEEfJr+g6qew6s5iH5J922hyCVCllE490bP
- 7xCz3tHL+4CXHbvHSABbu2DxjgHxKruQ2hlBwmsmZG5tPfog80C/7B711gm+6/0O
- 2NVBhCZgyfMNwbwvxtbefcdHQXVSyXT3ldUS6hFCUbhYyubsK/im6W/O1JDRW8Ex
- cZu8OiNmDI5bDflvO8qDc6i2MV6eSC7fJlto2w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=carnegierobotics.com header.i=@carnegierobotics.com
- header.a=rsa-sha256 header.s=mr01 header.b=BgFWqSRH
-Subject: [Buildroot] Github download helper possibly not working
+References: <20230827194003.3387773-1-james.hilliard1@gmail.com>
+ <20230827194003.3387773-2-james.hilliard1@gmail.com>
+ <20230828215741.44c239d9@windsurf>
+In-Reply-To: <20230828215741.44c239d9@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 28 Aug 2023 16:31:04 -0400
+Message-ID: <CADvTj4o7G0t2CMmNKyOOJJcpOhFDSdZxtpiVUnw1=MbdNWoPHQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1693254676; x=1693859476;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=EbGn9GOohTz36SmOicTuhGPXJQVFVKQejTQ8rENj29U=;
+ b=W74gWTRHMwt/9W5yrZc1f27u+rkROeZdNx5pb8AdISoV7i9g+ChGewwqJusHLpCj7x
+ FC4bvPxqQsNEwxcGobXYbwDxjmx8HiMSALM66kArHohDhWn/XWaDVC6NxNKhK5JC7ACp
+ L0AHPeVAciFfqGjIgwLPHlusyYtFrklMhE8uZJVZzm3sfP6Mg5gSv2nGXExRWMS1miK9
+ UKX2ru5x6dnMZutyV2CQ/XeUTf3hjhkZ/4ISHQQUIrns2LFPj/EZWwD6xJ0hxwDrntiJ
+ pfdo5dc7cNEY2hR+f6gKac8MkJq4PAEIbvDBUtHVRdF7NQH1q8r507Gc8B499N32lwfP
+ 8t3w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=W74gWTRH
+Subject: Re: [Buildroot] [PATCH 2/2] package/qemu: add host-python-distlib
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,28 +93,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Woody Douglass via buildroot <buildroot@buildroot.org>
-Reply-To: Woody Douglass <wdouglass@carnegierobotics.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello all,
-
-I've noticed that packages that use the `github` download helper are 
-falling over to buildroot mirrors. I've tried with packages `yaml-cpp`, 
-`zlog`, `swupdate`, and `pcm-tools` -- all are redirected before 
-eventually getting a 403 from codeload.github.com and falling back to 
-sources.buildroot.net. Is anyone else seeing this behavior? I'm trying 
-to find a workaround now, but I'd appreciate any help!
-
-Thank you very much,
-
-Woodrow Douglass
-
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gTW9uLCBBdWcgMjgsIDIwMjMgYXQgMzo1N+KAr1BNIFRob21hcyBQZXRhenpvbmkKPHRob21h
+cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gT24gU3VuLCAyNyBBdWcgMjAyMyAx
+Mzo0MDowMyAtMDYwMAo+IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29t
+PiB3cm90ZToKPgo+ID4gVGhlIHFlbXUgZG9jdW1lbnRhdGlvbiByZWNvbW1lbmRzIGRlcGVuZGlu
+ZyBvbiB0aGlzIHBhY2thZ2UuCj4KPiBSZWNvbW1lbmRzIGZvciB3aGF0PyBEb2VzIGl0IHdvcmsg
+d2l0aG91dCBpdCwgb3Igbm90PyBJZiBpdCBpc24ndAo+IHRoZXJlLCB3aGF0IGlzIHRoZSBjb25z
+ZXF1ZW5jZT8KClRoZSBkb2NzIGhlcmU6Cmh0dHBzOi8vd2lraS5xZW11Lm9yZy9DaGFuZ2VMb2cv
+OC4xI0J1aWxkX0RlcGVuZGVuY2llcwoKSW5kaWNhdGU6Ckl0IGlzIHJlY29tbWVuZGVkIHRvIGlu
+c3RhbGwgZGlzdGxpYiBhcyB3ZWxsLCBidXQgdGhlIGJ1aWxkIHByb2Nlc3MKdHJpZXMgdG8gY29w
+ZSB3aXRoIGl0cyBhYnNlbmNlIGFuZCBpdCBzaG91bGRuJ3QgYmUgbmVjZXNzYXJ5LgoKSXQgZG9l
+cyBhcHBlYXIgdG8gd29yayB3aXRob3V0IGl0IHdoZW4gSSB0ZXN0ZWQgYnV0IHNlZW1zIHdvdWxk
+IGJlIGEKZ29vZCBpZGVhIHRvIGRlcGVuZCBvbiBpdC4KCj4KPiBUaGFua3MhCj4KPiBUaG9tYXMK
+PiAtLQo+IFRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KPiBFbWJl
+ZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwo+IGh0dHBzOi8v
+Ym9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
