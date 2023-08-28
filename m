@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 856BAC83F11
-	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 16:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3689FC83F11
+	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 16:30:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA6F440911;
-	Mon, 28 Aug 2023 16:24:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA6F440911
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2F40409E2;
+	Mon, 28 Aug 2023 16:30:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2F40409E2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1gg2rs9Zhpsp; Mon, 28 Aug 2023 16:24:25 +0000 (UTC)
+	with ESMTP id LhiFDH6m7ABy; Mon, 28 Aug 2023 16:30:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D766240907;
-	Mon, 28 Aug 2023 16:24:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D766240907
+	by smtp4.osuosl.org (Postfix) with ESMTP id 744ED408B6;
+	Mon, 28 Aug 2023 16:30:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 744ED408B6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A1ED1BF276
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 16:24:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 400CD1BF276
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 16:30:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B2328175A
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 16:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B2328175A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1849D818CD
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 16:30:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1849D818CD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oh8RkijfGzHx for <buildroot@lists.busybox.net>;
- Mon, 28 Aug 2023 16:24:21 +0000 (UTC)
+ with ESMTP id L9GaHrFq5nKR for <buildroot@lists.busybox.net>;
+ Mon, 28 Aug 2023 16:30:06 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFCA081638
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 16:24:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFCA081638
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F2B31817A9
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 16:30:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2B31817A9
 Received: from fli4l.lan.fli4l (p54a1bab3.dip0.t-ipconnect.de [84.161.186.179])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 92BFCA4C0173
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 18:24:17 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56610)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C83A2A4C0173
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 18:30:03 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54576)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qaf2H-00081O-0j
- for buildroot@buildroot.org; Mon, 28 Aug 2023 18:24:17 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qaf7r-0000Zn-1o
+ for buildroot@buildroot.org; Mon, 28 Aug 2023 18:30:03 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Mon, 28 Aug 2023 18:24:17 +0200
-Message-Id: <20230828162417.389154-1-bernd@kuhls.net>
+Date: Mon, 28 Aug 2023 18:30:03 +0200
+Message-Id: <20230828163003.818942-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1693239857;
- bh=zfmCmH/NQqJbL7VYp5Zi6+il54U1Y2krkk9FKYSRAUM=;
+ s=kas202306131828; t=1693240203;
+ bh=IIZqjLPUDxwdvr5VB40eKTavWiNqoT/kJNfwdgh4hBc=;
  h=From:To:Subject:Date:From;
- b=wZSSv0cZizjtc39L+/Zn6HDznOLpkmgywrcJXMxIhIvMs6KC6CYRMnJ7iVZNm7Z41
- oxyWyRZuVHhAkNctQ9B/d5q3OzJHBf9mOVfMDx0TLlL/GddJ1ylWMtMmJ53QxfwgIr
- peHoIEVZi16dULEcpVoxIqkCJeXpHoEB4H1rfb95xlzjFCX1qJvljBe4nxTiPtK9ZX
- 6hQdq/zjYo7H7YEsyTixrmcZ34D1ws/noAoQR+lkxDj3up59Osue6Zr1FLCpNUBE9F
- Fna4Ox8eSkmTYylNk3sAJ3t+58PQ7QHkkgjVftbavTqGXPS+fG4Zh5YvPsRnTRtTdV
- GYjE65PSy6HHQ==
+ b=TNXyNvSJMh/zyVCdFlyqJ7txYI7NBlY+FdU3FKqVMdNgL2R4dbPFiKu4Q9PVn4r+J
+ 7Li1NqcSqW8mX3FcUlRo4AAcb8msfdqsKuOCT+qIK42Or4kuPh7P7i5+G5ce8DIJLz
+ OghVejTywedGiMEtFMLkAc/mi1sNaM7IRTX1ZcSzzDnK7633jmbZ07mW911R8y1xA+
+ njiKwAWloFFOjvPJf3Bwl3ILWwq2IgL4uAmWz7FNQKkznKPfrA9d7ZQ/xfQjdjdaew
+ rcUqcPNwZBh0I0daSip3amSjHNe26uWWa8HIYUxeIHCkk/qyPEMzfeke9gZHZWevMi
+ Zs7xidyUphwbA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=wZSSv0cZ
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.1.x series
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=TNXyNvSJ
+Subject: [Buildroot] [PATCH/next 1/1] package/sqlite: bump version to 3.43.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,37 +79,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Release notes: https://sqlite.org/releaselog/3_43_0.html
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- linux/linux.hash                     | 2 +-
- package/linux-headers/Config.in.host | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d236dadad8..fb2bfebd61 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  cca91be956fe081f8f6da72034cded96fe35a50be4bfb7e103e354aa2159a674  linux-6.4.12.tar.xz
--sha256  c606cbd0353e677df6fae73cc16ba3c9244b98372ed7771d551024016f55ac31  linux-6.1.48.tar.xz
-+sha256  c9ea14231ca4ca6e3882a9339a8c3c414e4c91519d3e50af6822f47e99057a0f  linux-6.1.49.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  0f2eca845183fd76f53b0c867c97f12b9ace2d7e8ee2cdeec7eb2897651b80de  linux-5.15.128.tar.xz
- sha256  c40d11ee56e50a132429badbd1ba1c53e42b3312590b2a39be34c241d1b0b5b9  linux-5.10.192.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ba8d0f897c..deb3067b60 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -405,7 +405,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.254"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.192"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.128"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.48"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.1.49"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.4.12"	if BR2_KERNEL_HEADERS_6_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 39758f2b43..1a7f47edcd 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7abcfd161c6e2742ca5c6c0895d1f853c940f203304a0b49da4e1eca5d088ca6  sqlite-autoconf-3420000.tar.gz
++sha256  49008dbf3afc04d4edc8ecfc34e4ead196973034293c997adad2f63f01762ae1  sqlite-autoconf-3430000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 1576d6a3e1..5e676d5387 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3.42.0
+-SQLITE_TAR_VERSION = 3420000
++SQLITE_VERSION = 3.43.0
++SQLITE_TAR_VERSION = 3430000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2023
+ SQLITE_LICENSE = Public domain
 -- 
 2.39.2
 
