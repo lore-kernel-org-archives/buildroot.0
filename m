@@ -4,58 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E08DC83F11
-	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 19:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A67AC83F12
+	for <buildroot@archiver.kernel.org>; Mon, 28 Aug 2023 20:09:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7E64E4150F;
-	Mon, 28 Aug 2023 19:58:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E64E4150F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C52B4099E;
+	Mon, 28 Aug 2023 20:09:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C52B4099E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pJMaLVVrcdJo; Mon, 28 Aug 2023 19:58:03 +0000 (UTC)
+	with ESMTP id sn1rEC-7oZQW; Mon, 28 Aug 2023 20:09:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5CB7F4141D;
-	Mon, 28 Aug 2023 19:58:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CB7F4141D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DADC71BF276
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 19:57:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 254E7408D2;
+	Mon, 28 Aug 2023 20:09:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 254E7408D2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BE191BF2BC
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 20:09:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2DAE4141D
- for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 19:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2DAE4141D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57DA8607AA
+ for <buildroot@lists.busybox.net>; Mon, 28 Aug 2023 20:09:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57DA8607AA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xmcVV3NSgjdH for <buildroot@lists.busybox.net>;
- Mon, 28 Aug 2023 19:57:55 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 029DF41403
- for <buildroot@buildroot.org>; Mon, 28 Aug 2023 19:57:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 029DF41403
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B204AFF803;
- Mon, 28 Aug 2023 19:57:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qaiMx-006HkG-Mt; Mon, 28 Aug 2023 21:57:51 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <CABWt4ev1G2+YQ0_TzmH-YM1sb8HkAVEySW_ALfw2vPgrfcy8kA@mail.gmail.com>
- <877cpf7lln.fsf@48ers.dk>
- <650C7598-7ADF-4A94-8F2B-D8F1D555B12A@heine.tech>
- <CABWt4eu5oYECnC+=68QWgkJywrPKLq5_CDcrFeZm+Um8gRYksA@mail.gmail.com>
- <87r0nn5i61.fsf@48ers.dk>
- <71359643-6efe-4a83-55e3-8eb3d87edfe5@mind.be>
-Date: Mon, 28 Aug 2023 21:57:51 +0200
-In-Reply-To: <71359643-6efe-4a83-55e3-8eb3d87edfe5@mind.be> (Arnout
- Vandecappelle's message of "Mon, 28 Aug 2023 21:38:11 +0200")
-Message-ID: <87msyb548w.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O95IsER72hTL for <buildroot@lists.busybox.net>;
+ Mon, 28 Aug 2023 20:09:44 +0000 (UTC)
+X-Greylist: delayed 423 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 28 Aug 2023 20:09:44 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A08DF60792
+Received: from 001.mia.mailroute.net (001.mia.mailroute.net [199.89.3.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A08DF60792
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:09:44 +0000 (UTC)
+Received: from 014.lax.mailroute.net (014.lax.mailroute.net [199.89.1.17])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by 001.mia.mailroute.net (Postfix) with ESMTPS id 4RZM0w1FYZzlhb6n
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:02:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by 014.lax.mailroute.net (Postfix) with ESMTP id 4RZM0s0Tfszlv8Qj
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:02:37 +0000 (UTC)
+X-Virus-Scanned: by MailRoute
+Received: from 014.lax.mailroute.net ([127.0.0.1])
+ by localhost (014.lax [127.0.0.1]) (mroute_mailscanner, port 10026) with LMTP
+ id JQn8zU6T3jwW for <buildroot@buildroot.org>;
+ Mon, 28 Aug 2023 20:02:36 +0000 (UTC)
+Received: from mail.carnegierobotics.com (unknown [72.22.26.5])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by 014.lax.mailroute.net (Postfix) with ESMTPS id 4RZM0r017kzlwJ2t
+ for <buildroot@buildroot.org>; Mon, 28 Aug 2023 20:02:35 +0000 (UTC)
+Received: from CRL-PGH-EX19-1.crl.local (10.1.7.176) by
+ CRL-PGH-EX19-1.crl.local (10.1.7.176) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.858.15; Mon, 28 Aug 2023 16:02:34 -0400
+Received: from CRL-PGH-EX19-1.crl.local ([fe80::81d6:ea84:15d9:67d4]) by
+ CRL-PGH-EX19-1.crl.local ([fe80::81d6:ea84:15d9:67d4%7]) with mapi id
+ 15.02.0858.015; Mon, 28 Aug 2023 16:02:34 -0400
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: Github download helper possibly not working
+Thread-Index: AQHZ2eqW8N1URE8y9EqxWw4NqNowfw==
+Date: Mon, 28 Aug 2023 20:02:34 +0000
+Message-ID: <ad574a2a-a776-d7e5-8dcb-f3693d222558@carnegierobotics.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+x-originating-ip: [172.30.0.81]
+Content-ID: <1E0C69AA03765C4ABDE6D74C1D86F7C5@crl.local>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] CycloneDX SBOM support
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+ carnegierobotics.com; h=mime-version:content-transfer-encoding
+ :content-id:content-type:content-type:user-agent
+ :content-language:accept-language:message-id:date:date:subject
+ :subject:from:from:received:received:received:received; s=mr01;
+ t=1693252956; x=1695844957; bh=HaPvsirN3R6nWyjWTtmNV+SHHEMj8BQj
+ EoEw9VdC2iA=; b=BgFWqSRHFE2x4L76AG56NDCalZ3Cd9BYC81jhVCnTGR1/2BF
+ SL24AUX3f79pSYKcW02qiUYhSzvNK70wkKYOlhjE6ns7F0vi/6mDd/fGpH3dK339
+ /Z+sCYIFqVqM20YUBZXx3/RDsESQRBEEfJr+g6qew6s5iH5J922hyCVCllE490bP
+ 7xCz3tHL+4CXHbvHSABbu2DxjgHxKruQ2hlBwmsmZG5tPfog80C/7B711gm+6/0O
+ 2NVBhCZgyfMNwbwvxtbefcdHQXVSyXT3ldUS6hFCUbhYyubsK/im6W/O1JDRW8Ex
+ cZu8OiNmDI5bDflvO8qDc6i2MV6eSC7fJlto2w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=carnegierobotics.com header.i=@carnegierobotics.com
+ header.a=rsa-sha256 header.s=mr01 header.b=BgFWqSRH
+Subject: [Buildroot] Github download helper possibly not working
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,72 +104,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Robert Smigielski <ptdropper@gmail.com>, buildroot@buildroot.org
+From: Woody Douglass via buildroot <buildroot@buildroot.org>
+Reply-To: Woody Douglass <wdouglass@carnegierobotics.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hello all,
 
-Hello,
+I've noticed that packages that use the `github` download helper are 
+falling over to buildroot mirrors. I've tried with packages `yaml-cpp`, 
+`zlog`, `swupdate`, and `pcm-tools` -- all are redirected before 
+eventually getting a 403 from codeload.github.com and falling back to 
+sources.buildroot.net. Is anyone else seeing this behavior? I'm trying 
+to find a workaround now, but I'd appreciate any help!
 
- >  I mentioned PURL vs CPE in my talk at ELC this year. You can look it
- >  up on youtube. It was near the end of the talk.
+Thank you very much,
 
-OK, I'll have a look.
-
-
- >> Conceptually they seem quite similar, with PURL being more generic, but
- >> I fail to see how we could use PURLS in Buildroot, E.G. how to do the
- >> equivalent of the CPE matching we use to figure out if the version of a
- >> package in Buildroot is vulnerable to a specific CVE?
-
- >  I think Robert is not necessarily primarily concerned with finding
- >  vulnerabilities, but rather with constructing a meaningful and
- > accurate SBoM (which is what dependencytrack does).
-
-True. The monitoring stuff seems quite interesting for vulnerabilities
-though.
+Woodrow Douglass
 
 
- >  That said, it you want to use PURLs for vulnerabilities, you have to
- >  use a vulnerability database that uses PURLs. To my knowledge, there
- > is just one "open source" one: https://osv.dev. (There's also Sonatype
- > which can be used gratis but is not free.) Since there are many, many
- > CVEs that don't make it into OSV, using _only_ PURLs is certainly not
- > enough. But we could combine the two.
-
-OK. It doesn't sound like it will bring a lot of advantages for the
-effort to maintain PURL identifiers :/
-
-
- >  Another issue with PURLs is: which one do we use? PURLs are organised
- >  around ecosystems. For PyPI it's clear, but for your typical C
- > library/application it's less so. E.g. openssl appears in the Debian,
- > Alpine, AlmaLinux, RPM, RockyLinux ecosystems (and possibly more),
- > each with a distinct PURL. We could start our own namespace, but
- > that's kind of pointless unless we also issue advisories...
-
-I guess we should use the one matching where we get the source code from
-(if any). The cyclonedx tool uses a "generic"
-pkg:generic/$name?download_url=$site/$tarball, so we could default to
-that and just use pypi/github/whatever for the special cases where there
-is a more accurate one.
-
-
- >  There's by the way another issue (which also exists for the CPE-based
- >  approach): our "BoM" for the cargo and go packages is not correct: we
- > vendor the dependencies, but they're not taken into account in the
- > BoM. The tarball we put in legal-info does include the vendored
- > dependencies, but they're not mentioned in the manifest, and we don't
- > scan their vulnerabilities.
-
-True. I am not sure of a good way how to fix that though. That shouldn't
-stop us from generating a good SBOM for all the other packages.
-
--- 
-Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
