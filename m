@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1635BEC8742
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:39:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 574FFEC873B
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C54FF815CC;
-	Thu,  7 Sep 2023 15:38:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C54FF815CC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 134CC813D9;
+	Thu,  7 Sep 2023 15:39:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 134CC813D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id K81MiWJurfpw; Thu,  7 Sep 2023 15:38:59 +0000 (UTC)
+	with ESMTP id lIIPu0GxBbKH; Thu,  7 Sep 2023 15:39:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A2F582177;
-	Thu,  7 Sep 2023 15:38:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A2F582177
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52ED382256;
+	Thu,  7 Sep 2023 15:39:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52ED382256
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 14F421BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 046711BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D34341DB7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 79AFB41DBA
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D34341DB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79AFB41DBA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FyjEyKHcXtiy for <buildroot@lists.busybox.net>;
+ with ESMTP id 7B2qiTCyyuEr for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4CAE41E48
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD22041E46
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4CAE41E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD22041E46
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0DF686A1E; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+ id 9799886A21; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 23:28:38 +0200
+Date: Tue, 29 Aug 2023 14:41:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1f351a8db1bbf20c6b766bc4dacdf3eca767e45
-X-Git-Newrev: 1ae3f1748b93990436723a4c4f8434ba61fdc099
+X-Git-Oldrev: 4f4dd0d62fadc97b06e35aed2e947e387a6d6f6c
+X-Git-Newrev: a2ef47a4b56c5333bbc05ebc6f07e491646eb9ce
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145133.B0DF686A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgit2: bump version to 1.7.1
+Message-Id: <20230907145133.9799886A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libostree: bump to version 2023.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ae3f1748b93990436723a4c4f8434ba61fdc099
+commit: https://git.buildroot.net/buildroot/commit/?id=a2ef47a4b56c5333bbc05ebc6f07e491646eb9ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes a problem with the build system that would make it fail to
-use pkg-config to detect libssh2.  It worked anyway because -lssh2
-works.
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 1997c3ba8e..76d599b81e 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 3b88b8200f..d122fee86e 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  d9d0f84a86bf98b73e68997f5c1543cc5067d0ca9c7a5acaba3e8d117ecefef3  libgit2-1.7.0.tar.gz
-+sha256  17d2b292f21be3892b704dddff29327b3564f96099a1c53b00edc23160c71327  libgit2-1.7.1.tar.gz
- sha256  6f3c2cd59b057e366c1acc073b038135c52d77892bb33bd4d931c5369d3f062b  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 93505f7d85..92563d24bb 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
+-sha256  bc593afb31fe1ac3d50419f917fafe321a0a3561d7bb2ba498a83740fe3adb14  libostree-2023.5.tar.xz
++sha256  b43c4a373799681989bae12b3a1b94f453068dece6540b8e05a23b834c1037e2  libostree-2023.6.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index c61c1d1508..15093f4b7a 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGIT2_VERSION = 1.7.0
-+LIBGIT2_VERSION = 1.7.1
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
+-LIBOSTREE_VERSION = 2023.5
++LIBOSTREE_VERSION = 2023.6
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
