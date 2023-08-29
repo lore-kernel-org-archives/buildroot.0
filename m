@@ -4,48 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA45C83F14
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 08:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28FC8C6FA8F
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 09:08:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 518DC40C51;
-	Tue, 29 Aug 2023 08:56:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 518DC40C51
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0BAD40CA1;
+	Tue, 29 Aug 2023 09:08:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0BAD40CA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rMrdDq65tw2F; Tue, 29 Aug 2023 08:56:42 +0000 (UTC)
+	with ESMTP id WS-XvMptqoV0; Tue, 29 Aug 2023 09:08:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 956C440CA5;
-	Tue, 29 Aug 2023 08:56:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 956C440CA5
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDF5140C53;
+	Tue, 29 Aug 2023 09:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDF5140C53
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2827F1BF29D
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 08:56:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C2D2A1BF3D2
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 09:08:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0132F40C39
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 08:56:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0132F40C39
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81D6E40C53
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 09:08:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81D6E40C53
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id syCiSDk791Ys for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 08:56:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 33C53405AA
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 08:56:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33C53405AA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 22C97860E9; Tue, 29 Aug 2023 08:56:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 10:51:04 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 421edb89b4565496d12758b0104ac9e2b686fd17
-X-Git-Newrev: 4d98c3fdd5f0db1cd6477bbc867f5cc5d0a8f9c4
-X-Patchwork-Hint: ignore
-Message-Id: <20230829085639.22C97860E9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/dmidecode:
- security bump to version 3.5
+ with ESMTP id PNRGv6stM5Et for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 09:08:45 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 433C44018A
+ for <buildroot@buildroot.org>; Tue, 29 Aug 2023 09:08:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 433C44018A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 382DC20003;
+ Tue, 29 Aug 2023 09:08:42 +0000 (UTC)
+Date: Tue, 29 Aug 2023 11:08:41 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20230829110841.1bcf9128@windsurf>
+In-Reply-To: <87edjm5itv.fsf@48ers.dk>
+References: <20230627061104.9EB9285B2A@busybox.osuosl.org>
+ <20230828235935.4dcd6b5a@windsurf> <87edjm5itv.fsf@48ers.dk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693300122;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=p4a0vk48xILi9kaVzSBED3bNSZGg7NLFoLKL9MyDPlk=;
+ b=i6miuM3Dx3Xw4dYvkybRM1Nx1EGjNQTiWpldKoKhop/xnBbzuSUbvD8ug1xnjnMqvMJN+T
+ CX0wRE5NDPsDwVlvCuEShEB1VGRdSXEU2lngS5egh17uL3UDEPs/vxN3frM67OjQ8wdwTu
+ w5PgpwDLp7U33JLFpbl+EAy8iby0PW4JvIu2CuMzA79fsyjIr5hp4oE+DZIT0nlDHu2wRb
+ ruwia4uvGuzodoH8JlCxj8AtEr1XshdHRQQSEGmDQ+auo9X4nZDwbLLMI+Jxuk3X5c52Rr
+ /w9h/VFku7uTZu/ezaraVk7IM010bupVWyknkV4jeNpLKalognovZmpVJH8MZw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=i6miuM3D
+Subject: Re: [Buildroot] [git commit] package/dmidecode: bump to version 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,58 +75,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d98c3fdd5f0db1cd6477bbc867f5cc5d0a8f9c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+On Tue, 29 Aug 2023 10:55:08 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Fixes CVE-2023-30630: Dmidecode before 3.5 allows -dump-bin to overwrite a
-local file: https://nvd.nist.gov/vuln/detail/CVE-2023-30630
+>  > FYI: this is a security bump, as it fixes
+>  > https://nvd.nist.gov/vuln/detail/CVE-2023-30630. "Dmidecode before 3.5
+>  > allows -dump-bin to overwrite a local file. This has security relevance
+>  > because, for example, execution of Dmidecode via Sudo is plausible."  
+> 
+> OK. Somewhat unlikely threat model expecting people to run dmidecode
+> -dump-bin on untrusted machines in directories with other files, but oh well.
 
-For change log, see:
-https://git.savannah.gnu.org/cgit/dmidecode.git/tree/NEWS?h=dmidecode-3-5
+Yeah, but the CVE pops up in my list of CVEs to fix :-)
 
-Note: this patch also adds a comment about pgp signature verification in
-the hash file.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c97f27283b36ffc39dfb6223caee6055997b3234)
-[Peter: mark as security bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dmidecode/dmidecode.hash | 5 +++--
- package/dmidecode/dmidecode.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
-index ec5484e667..654c4cc537 100644
---- a/package/dmidecode/dmidecode.hash
-+++ b/package/dmidecode/dmidecode.hash
-@@ -1,3 +1,4 @@
--# Locally computed
--sha256  43cba851d8467c9979ccdbeab192eb6638c7d3a697eba5ddb779da8837542212  dmidecode-3.4.tar.xz
-+# Locally computed after checking pgp signature from:
-+# https://download.savannah.gnu.org/releases/dmidecode/dmidecode-3.5.tar.xz.sig
-+sha256  79d76735ee8e25196e2a722964cf9683f5a09581503537884b256b01389cc073  dmidecode-3.5.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index 352cdb106c..353978daa9 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DMIDECODE_VERSION = 3.4
-+DMIDECODE_VERSION = 3.5
- DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPL-2.0+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
