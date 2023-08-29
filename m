@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DB97C83F12
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 17:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0A4CC6FA8F
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 17:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9FCC4149D;
-	Tue, 29 Aug 2023 17:02:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9FCC4149D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77D62414B9;
+	Tue, 29 Aug 2023 17:02:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77D62414B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lfjSgaCHemQs; Tue, 29 Aug 2023 17:02:20 +0000 (UTC)
+	with ESMTP id dw9Ij0LWd8KY; Tue, 29 Aug 2023 17:02:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1BC36414BB;
-	Tue, 29 Aug 2023 17:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BC36414BB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 148B11BF97E
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB2A84150C;
+	Tue, 29 Aug 2023 17:02:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB2A84150C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 01ED31BF3EA
  for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 17:02:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF76082190
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE796408FF
  for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 17:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF76082190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE796408FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6G8CSWLp5FYd for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CKZqYuttkY_v for <buildroot@lists.busybox.net>;
  Tue, 29 Aug 2023 17:02:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0A55820CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id C1329408FC
  for <buildroot@buildroot.org>; Tue, 29 Aug 2023 17:02:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0A55820CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1329408FC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C01C886466; Tue, 29 Aug 2023 17:02:04 +0000 (UTC)
+ id ACF0586464; Tue, 29 Aug 2023 17:02:04 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 18:57:52 +0200
+Date: Tue, 29 Aug 2023 18:50:43 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: f004f2b0ed8b9209f98265e8ca7df82c29930b20
-X-Git-Newrev: ff0521a70c32c263d0375d31570c6665c63ff261
+X-Git-Oldrev: 73adf9831be13a94d0fb14d9d9e9a9de86a17fde
+X-Git-Newrev: f004f2b0ed8b9209f98265e8ca7df82c29930b20
 X-Patchwork-Hint: ignore
-Message-Id: <20230829170204.C01C886466@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/tpm2-tss:
- security bump version to 3.2.2
+Message-Id: <20230829170204.ACF0586464@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/gnuradio: fix
+ gnuradio python libraries for cross-compile
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff0521a70c32c263d0375d31570c6665c63ff261
+commit: https://git.buildroot.net/buildroot/commit/?id=f004f2b0ed8b9209f98265e8ca7df82c29930b20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes CVE-2023-22745.
+By default, module libraries have a suffix based on cpython version + host
+architecture: this is fine for a native compile when these libraries are used on
+the same computer (or similar computers). But when target architecture is not
+the same python is unable to find libraries due to the wrong suffix and produces
+unclear errors messages:
 
-Changelog:
-https://github.com/tpm2-software/tpm2-tss/blob/3.2.x/CHANGELOG.md
+# python3
+Python 3.11.3 (main, Jun 19 2023, 14:15:44) [GCC 11.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from gnuradio import blocks
+Traceback (most recent call last):
+  File "/home/xxx/buildroot/output/build/gnuradio-3.10.4.0/gr-blocks/python/blocks/__init__.py", line 18, in <module>
+ModuleNotFoundError: No module named 'gnuradio.blocks.blocks_python'
 
-Changed the ac_cv_prog variables due to an upstream commit which changed
-the detection of groupadd/useradd:
-https://github.com/tpm2-software/tpm2-tss/commit/7fde604383c62fc764a1e060dff48fc06f79860b
+During handling of the above exception, another exception occurred:
 
-Buildroot commit a85f5f2a412db894fdf548e10d12e7c56eda9107 bumped
-tpm2-pkcs11 to 1.8.0 which includes a commit bumping the required
-version of tpm2-tss to >= 3.2
-https://github.com/tpm2-software/tpm2-pkcs11/commit/940b661e330cac0ecc7d4db5d3626ef828ecdda8
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/xxx/buildroot/output/build/gnuradio-3.10.4.0/gr-blocks/python/blocks/__init__.py", line 22, in <module>
+ModuleNotFoundError: No module named 'gnuradio.blocks.blocks_python'
+>>>
 
-Fixes:
-http://autobuild.buildroot.net/results/6fd/6fddfee6f852ce835c5d1178e6913b6ab1b3fe50/
+By adding _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" at configure time, sysconfig will
+return correct informations (target architecture) instead of host architecture.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 598bfea96d9114ede3d04926f56d24e7b57db8af)
+(cherry picked from commit e22b450692a6d02da43a453f24ec057bb5517422)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/gnuradio/gnuradio.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index b6eb3c1f97..c9fa4e6ae0 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8900a6603f74310b749b65f23c3461cde6e2a23a5f61058b21004c25f9cf19e8  tpm2-tss-3.1.0.tar.gz
-+sha256  ba9e52117f254f357ff502e7d60fce652b3bfb26327d236bbf5ab634235e40f1  tpm2-tss-3.2.2.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 060883c377..10d605fc65 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TPM2_TSS_VERSION = 3.1.0
-+TPM2_TSS_VERSION = 3.2.2
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
-@@ -26,7 +26,8 @@ TPM2_TSS_CONF_OPTS = \
- 	ac_cv_prog_result_setfacl=yes \
- 	ac_cv_prog_systemd_sysusers=no \
- 	ac_cv_prog_systemd_tmpfiles=no \
--	ac_cv_prog_result_useradd=yes \
-+	ac_cv_prog_useradd=yes \
-+	ac_cv_prog_groupadd=yes \
- 	--with-crypto=ossl \
- 	--disable-doxygen-doc \
- 	--disable-defaultflags
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 1453b78493..8eb7778d99 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -119,6 +119,10 @@ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
+ # mandatory to avoid pybind11 to overwrite variables provided
+ # by gnuradio and buildroot
+ GNURADIO_CONF_OPTS += -DPYBIND11_PYTHONLIBS_OVERWRITE=OFF
++# mandatory to avoid pybind11 to force libraries extensions
++# with a name based on host architecture
++GNURADIO_CONF_ENV += _PYTHON_SYSCONFIGDATA_NAME="$(PKG_PYTHON_SYSCONFIGDATA_NAME)" \
++	PYTHONPATH=$(PYTHON3_PATH)
+ # mandatory to install python modules in site-packages and to use
+ # correct path for python libraries
+ GNURADIO_CONF_OPTS += -DGR_PYTHON_RELATIVE=ON \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
