@@ -1,68 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A5F3C71153
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 05:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4259C6FA8F
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 16:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9178A4089F;
-	Tue, 29 Aug 2023 05:00:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9178A4089F
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iwhtEynNaC-Y; Tue, 29 Aug 2023 05:00:19 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC4F640924;
-	Tue, 29 Aug 2023 05:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC4F640924
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D9001BF575
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 05:00:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 035D44016B
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 05:00:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 035D44016B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5A6B3414EF;
+	Tue, 29 Aug 2023 16:50:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A6B3414EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DxGOSFoKdYN8 for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 05:00:15 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8A44400EC
- for <buildroot@uclibc.org>; Tue, 29 Aug 2023 05:00:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8A44400EC
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id C502685B76; Tue, 29 Aug 2023 05:00:15 +0000 (UTC)
-From: bugzilla@busybox.net
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id UsJnCAdh8IsA; Tue, 29 Aug 2023 16:50:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD53F414B9;
+	Tue, 29 Aug 2023 16:50:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD53F414B9
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D36C1BF28D
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 16:50:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 170AA817AA
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 16:50:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 170AA817AA
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y2TbBAF6x97u for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 16:50:12 +0000 (UTC)
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0636B81770
+ for <buildroot@uclibc.org>; Tue, 29 Aug 2023 16:50:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0636B81770
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qb1uq-0000IS-A7
+ for buildroot@uclibc.org; Tue, 29 Aug 2023 18:50:08 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Tue, 29 Aug 2023 05:00:15 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bernd@kuhls.net
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: 2023.08
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status
-Message-ID: <bug-15730-163-oJ2E04ZHiF@https.bugs.busybox.net/>
-In-Reply-To: <bug-15730-163@https.bugs.busybox.net/>
-References: <bug-15730-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15730] 2023.08-rc1 gettext-gnu 0.20.1 failed to
- compile
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Tue, 29 Aug 2023 18:49:08 +0200
+Message-ID: <pan$7f2e1$e56ca666$581a337c$57ec5584@ID-313208.user.individual.net>
+References: <20230829051639.21063-1-bernd@kuhls.net>
+ <20230829123848.79d30d8b__11488.420416002$1693305556$gmane$org@windsurf>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+Subject: Re: [Buildroot] [PATCH/next 1/1] package/unrar: bump version to
+ 6.2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,24 +64,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15730
+Am Tue, 29 Aug 2023 12:38:48 +0200 schrieb Thomas Petazzoni via buildroot:
 
-Bernd Kuhls <bernd@kuhls.net> changed:
+> However, our current unrar version in master is marked as being affected
+> by CVE-2022-30333. Could you have a look?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+Hi Thomas,
 
---- Comment #5 from Bernd Kuhls <bernd@kuhls.net> ---
-(In reply to trung.le from comment #4)
+this CVE was fixed with buildroot commit 
+7564f1de067e9e3cf0aa2662cab79b9834b54ff1 back in May 2022.
 
-A follow-up version of the patch was committed to the next branch of buildroot:
-https://git.buildroot.net/buildroot/commit/?h=next&id=f6a6e3a8363a32e5443c9eadc2ee047853640d1a
+Regards, Bernd
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
