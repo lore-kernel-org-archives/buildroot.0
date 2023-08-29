@@ -4,68 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39A48C83F12
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 13:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C661C83F12
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 13:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA03182090;
-	Tue, 29 Aug 2023 13:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA03182090
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1CBD82023;
+	Tue, 29 Aug 2023 13:10:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1CBD82023
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fgkpXml5jyEt; Tue, 29 Aug 2023 13:03:12 +0000 (UTC)
+	with ESMTP id 6k38rwpUXPuR; Tue, 29 Aug 2023 13:10:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04F4C8213C;
-	Tue, 29 Aug 2023 13:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04F4C8213C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0217282018;
+	Tue, 29 Aug 2023 13:10:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0217282018
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 25D981BF46A
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 13:01:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 29A8B1BF3DF
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 13:10:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E27F82052
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 13:01:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E27F82052
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1B1782023
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 13:10:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1B1782023
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kDYKjj8H2PK5 for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 13:01:29 +0000 (UTC)
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A0EB82047
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 13:01:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A0EB82047
-Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 9362ED18FC
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 12:57:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2F6251C0009;
- Tue, 29 Aug 2023 12:55:30 +0000 (UTC)
-Date: Tue, 29 Aug 2023 14:55:29 +0200
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-Message-ID: <20230829145529.5c964b6f@windsurf>
-In-Reply-To: <d8ac1eb110bb5c6b9026175c2e52a3cdfa036b7a.1693125341.git.baruch@tkos.co.il>
-References: <d8ac1eb110bb5c6b9026175c2e52a3cdfa036b7a.1693125341.git.baruch@tkos.co.il>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id 05KZolILawQs for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 13:10:51 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1338C81A4E
+ for <buildroot@buildroot.org>; Tue, 29 Aug 2023 13:10:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1338C81A4E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 823E940008;
+ Tue, 29 Aug 2023 13:10:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qayUZ-006rJw-DS; Tue, 29 Aug 2023 15:10:47 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Robert Smigielski <ptdropper@gmail.com>
+References: <CABWt4ev1G2+YQ0_TzmH-YM1sb8HkAVEySW_ALfw2vPgrfcy8kA@mail.gmail.com>
+ <877cpf7lln.fsf@48ers.dk>
+ <650C7598-7ADF-4A94-8F2B-D8F1D555B12A@heine.tech>
+ <CABWt4eu5oYECnC+=68QWgkJywrPKLq5_CDcrFeZm+Um8gRYksA@mail.gmail.com>
+ <87r0nn5i61.fsf@48ers.dk>
+ <71359643-6efe-4a83-55e3-8eb3d87edfe5@mind.be>
+ <87msyb548w.fsf@48ers.dk>
+ <CABWt4etN4AfouYoaLc_-VgO=qU8F_o_ZU6RgMye8BzcB4w28Gg@mail.gmail.com>
+Date: Tue, 29 Aug 2023 15:10:47 +0200
+In-Reply-To: <CABWt4etN4AfouYoaLc_-VgO=qU8F_o_ZU6RgMye8BzcB4w28Gg@mail.gmail.com>
+ (Robert Smigielski's message of "Mon, 28 Aug 2023 19:19:08 -0400")
+Message-ID: <878r9u56zs.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693313732;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nlgmYoCCt1DXUN0d3wrdocyrcdjoJhMgwvjkXke+4D0=;
- b=dWSCJF0CJoF48TzL8SD7n6p7+U0XzZDn6droiW8J8l6LIYw1bU7Iu2bowJpY9D3/QQ4PO9
- w0IEZUsXTiVHRQ7xuqR2zfSaOlunnoz13J4gaQR36iwYjALyOuRPn3B4rCFiMoyXQhFoYp
- 2GW/Rkwf0KUpF6ycsIxgUpGnwrDaCWT+Zys8esMQBv4RuKlra4sWF/fYP3iYhQjjy4Q0Lo
- t8SqBxj8fN3pPMgbmYcRS5AUt8YK3aOyB2YQMrvwvS1IBeXElRXpCqq/l/dQy1xPcErisZ
- yMYx+DtUKSETFUzEszb4F4E7fCMW9ilC1ahN+HMYJ6b7Gtw1DdASYqKDVOKQ1w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dWSCJF0C
-Subject: Re: [Buildroot] [PATCH next v2] package/daemon: bump to version
- 0.8.4
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] CycloneDX SBOM support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,39 +69,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 27 Aug 2023 11:35:41 +0300
-Baruch Siach via buildroot <buildroot@buildroot.org> wrote:
+>>>>> "Robert" == Robert Smigielski <ptdropper@gmail.com> writes:
 
-> Update license info. COPYING hash updated because of added reference to
-> additional licenses. Licenses for local snprintf and getopt
-> implementations do not apply, since this code is not used for Linux
-> targets.
-> 
-> Add Tatu Ylonen Permissive license of the code in pseudo.c.
-> 
-> Add LGPL-2.0+ license text file.
-> 
-> Rename BSD-3-Clause text file and update hash because of text formatting
-> change.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
+Hi,
 
-Applied to next, thanks.
+ > Yes I am concerned with creating a valid CycloneDX official SBOM for use in
+ > other projects as an input. For example take the output file
+ > <product>.json as input to Dependency Track. It does work. That is exactly
+ > what I need for my daily work.
 
-Thomas
+And a generally useful thing!
+
+
+ > If data is not in the legal-info, then no problem, the CycloneDX-Buildroot
+ > project will not see it.
+
+Longer term I think that is a problem (which you now also see with the
+missing CPE identifiers). The legal-info format is very simple/old, so it
+misses a number of things present in show-info that could be interesting
+for a SBOM.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
