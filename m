@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36A45C83F17
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 20:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29B03C71153
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 20:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBF0C61100;
-	Tue, 29 Aug 2023 20:05:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBF0C61100
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEDD960FB6;
+	Tue, 29 Aug 2023 20:05:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BEDD960FB6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f6D_vVYD7dJy; Tue, 29 Aug 2023 20:05:00 +0000 (UTC)
+	with ESMTP id XVnjkl4Fbt_L; Tue, 29 Aug 2023 20:05:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33FC960FEC;
-	Tue, 29 Aug 2023 20:04:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33FC960FEC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 65E211BF59B
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 20:04:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2564F60C15;
+	Tue, 29 Aug 2023 20:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2564F60C15
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C8D911BF59B
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 20:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FD7640538
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 20:04:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FD7640538
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1D1B41827
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 20:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1D1B41827
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wMmJc_WK35pH for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 20:04:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LMfBnkRLZYRN for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 20:05:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BD4840195
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 20:04:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BD4840195
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95EF1417FA
+ for <buildroot@buildroot.org>; Tue, 29 Aug 2023 20:05:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95EF1417FA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66F6E864A0; Tue, 29 Aug 2023 20:04:44 +0000 (UTC)
+ id 82142864AA; Tue, 29 Aug 2023 20:05:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 21:58:32 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: e25f6feace525e022d5bf220814c662f168f1dea
-X-Git-Newrev: 36f6034477bf59ac55c9e0857cdc20ff0156230c
+Date: Tue, 29 Aug 2023 21:58:38 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: ff0521a70c32c263d0375d31570c6665c63ff261
+X-Git-Newrev: ae370839a3e613f24da781f27d3e235b23f8181a
 X-Patchwork-Hint: ignore
-Message-Id: <20230829200444.66F6E864A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/linux-tools:
+Message-Id: <20230829200550.82142864AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/linux-tools:
  disable libtracevent detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36f6034477bf59ac55c9e0857cdc20ff0156230c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ae370839a3e613f24da781f27d3e235b23f8181a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Since upstream Linux commit 6898e60f709b0047206110d3ec9f4612210e3ff7
 ("perf build: If libtraceevent isn't present error the build") present
