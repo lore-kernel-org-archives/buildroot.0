@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59679C83F12
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 08:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA45C83F14
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 08:56:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 029CE40C53;
-	Tue, 29 Aug 2023 08:55:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 029CE40C53
+	by smtp2.osuosl.org (Postfix) with ESMTP id 518DC40C51;
+	Tue, 29 Aug 2023 08:56:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 518DC40C51
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BZzOv0Nx4LeY; Tue, 29 Aug 2023 08:55:32 +0000 (UTC)
+	with ESMTP id rMrdDq65tw2F; Tue, 29 Aug 2023 08:56:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4583640C96;
-	Tue, 29 Aug 2023 08:55:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4583640C96
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1974D1BF29D
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 08:55:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 956C440CA5;
+	Tue, 29 Aug 2023 08:56:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 956C440CA5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2827F1BF29D
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 08:56:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E047860D77
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 08:55:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E047860D77
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0132F40C39
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 08:56:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0132F40C39
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eNDIEzicSyYr for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 08:55:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id syCiSDk791Ys for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 08:56:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11DB760B51
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 08:55:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11DB760B51
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33C53405AA
+ for <buildroot@buildroot.org>; Tue, 29 Aug 2023 08:56:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33C53405AA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2A478602B; Tue, 29 Aug 2023 08:55:28 +0000 (UTC)
+ id 22C97860E9; Tue, 29 Aug 2023 08:56:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 10:52:52 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 35ffaa834987b3aa4881e68ab0464e0406bf837f
-X-Git-Newrev: c8387e73ee3c78714e0a78df0ea216c0b0ac9db3
+Date: Tue, 29 Aug 2023 10:51:04 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 421edb89b4565496d12758b0104ac9e2b686fd17
+X-Git-Newrev: 4d98c3fdd5f0db1cd6477bbc867f5cc5d0a8f9c4
 X-Patchwork-Hint: ignore
-Message-Id: <20230829085528.F2A478602B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/dmidecode:
+Message-Id: <20230829085639.22C97860E9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/dmidecode:
  security bump to version 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8387e73ee3c78714e0a78df0ea216c0b0ac9db3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4d98c3fdd5f0db1cd6477bbc867f5cc5d0a8f9c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 Fixes CVE-2023-30630: Dmidecode before 3.5 allows -dump-bin to overwrite a
 local file: https://nvd.nist.gov/vuln/detail/CVE-2023-30630
