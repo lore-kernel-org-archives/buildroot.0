@@ -1,68 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D810C71153
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 05:16:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16D77C83F14
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 06:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E214C402E6;
-	Tue, 29 Aug 2023 05:16:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E214C402E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D6B660881;
+	Tue, 29 Aug 2023 06:34:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D6B660881
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KrmfuwWj-7MN; Tue, 29 Aug 2023 05:16:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id l4umhs139lkV; Tue, 29 Aug 2023 06:34:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A14B4016B;
-	Tue, 29 Aug 2023 05:16:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A14B4016B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 39C0D1BF317
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 05:16:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FFE660640;
+	Tue, 29 Aug 2023 06:34:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FFE660640
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 33A891BF41D
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 06:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FA6A4016B
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 05:16:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FA6A4016B
+ by smtp4.osuosl.org (Postfix) with ESMTP id C9F4240955
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 06:34:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9F4240955
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cdA-wBJSfs4q for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 05:16:42 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07131400EC
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 05:16:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07131400EC
-Received: from fli4l.lan.fli4l (p54a1b6f9.dip0.t-ipconnect.de [84.161.182.249])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AD4C8A4C0753
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 07:16:39 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56660)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qar5j-0001jI-1W
- for buildroot@buildroot.org; Tue, 29 Aug 2023 07:16:39 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Gn8zyoPtZe41 for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 06:34:04 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EC9684059D
+ for <buildroot@buildroot.org>; Tue, 29 Aug 2023 06:34:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC9684059D
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 3BFCC352BD7A; Tue, 29 Aug 2023 08:34:00 +0200 (CEST)
+Date: Tue, 29 Aug 2023 08:34:00 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 07:16:39 +0200
-Message-Id: <20230829051639.21063-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Message-ID: <ZO2RWByvuzXKowuR@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-Spamd-Bar: +++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1693286199;
- bh=HaMbElRGPyisZ7qMgDPkU6X//8Wg+AMwpJfC6BnxsMw=;
- h=From:To:Subject:Date:From;
- b=abPf2Ja4f81uCPtrxRe0nfwE2fMuAgpyb0IDGf7hFjVwGxi0+zrDhiOUg3he0f0E7
- 8pC4WRwSDlyr4HmUjLnDgpCjGTNr3331YND5EiyOu6cH0LKjySOm6ppiYICHtubOGB
- rv4TSO+6VpycXrvzrJnjcCqAmHcPXrKEW41T7E6NoJyigU7ZuoJf/vewetAOIKPrOT
- yIWydFzm5LFV1liCAy70tlQbYgPB+8L/+LJK79EBk+mdNrqOoB0av7Sey1SPz9Gib9
- 61V1XFYU2jPIl7jt7odCUQbuGc54X3YdSYQE23R1qur28d53jBiI2PyeeA3+uUJXfq
- +Pt7Y5r8EnOJw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=abPf2Ja4
-Subject: [Buildroot] [PATCH/next 1/1] package/unrar: bump version to 6.2.10
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1693290840; bh=bZOBGCaC+BvOGZTpYPZmw3ZMkWokc6/jRCAwFOgr+xU=;
+ h=Date:From:To:Subject:From;
+ b=tq6EgjXztsjrb5SGieePJQDtY4P3v/gtpidKpwFyyS7tfCooWoTrHjhmclNl89nFS
+ /kDZZGtubF5zIE6Cjq5ON5zzOCtvnNafv2GZx+0eXqxZNdmrxEBaTr+XqJI50w3fcW
+ iVwONnsRMg/Kd8Kv3Nzlg9b4dDiVUNenxaaS5OfDRuXWl7OtYicKGIKUWAnY3bT2vm
+ eMBEXaQu5a9MPlfVFyhdmcuwa0tNstTxmbP0DWCLZywUToZPOImrLL/Sg0D+eVeXDq
+ uht52B2+4R0UCou6vOI9ZdAEHywG9mmdDjoYaUY97ZCTx6JYhVYYWiWTtteuHtjRMD
+ D/dnGs0Efah/w==
+Subject: [Buildroot] [PATCH v2] package/f2fs-tools: fix musl compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,37 +70,491 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-According to https://www.rarlab.com/vuln_rev3_names.html this package
-is not affected by CVE-2023-40477.
+musl 1.2.4 removed the lseek64 function, but kept a definition of lseek64
+when _LARGEFILE64_SOURCE is defined.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Add patch from upstream to kill the usage of lseek64.
+
+There is no need to backport it to older Buildroot releases, because musl 1.2.4
+is not part of any release.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/17f/17f4ea7d62581cf8c574deeb98e1785220d5bd3f
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/unrar/unrar.hash | 2 +-
- package/unrar/unrar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v1 -> v2:
+  - add a patch from upstream to kill lseek64 entirely
+---
+ ...ls-convert-to-lseek-and-kill-lseek64.patch | 459 ++++++++++++++++++
+ 1 file changed, 459 insertions(+)
+ create mode 100644 package/f2fs-tools/0001-f2fs-tools-convert-to-lseek-and-kill-lseek64.patch
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index bc8f986875..f0600af771 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0c2d4cbc8b34d0e3bec7b474e0f52bbcc6c4320ec089b4141223ee355f63c318  unrarsrc-6.2.6.tar.gz
-+sha256  55fe6ebd5e48d6655bfda3fd19b55438ca05e13c7e69772420caad9fdb68ef42  unrarsrc-6.2.10.tar.gz
- sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  license.txt
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index f59d199558..ac19225937 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNRAR_VERSION = 6.2.6
-+UNRAR_VERSION = 6.2.10
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = https://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
+diff --git a/package/f2fs-tools/0001-f2fs-tools-convert-to-lseek-and-kill-lseek64.patch b/package/f2fs-tools/0001-f2fs-tools-convert-to-lseek-and-kill-lseek64.patch
+new file mode 100644
+index 0000000000..3ee42db7b6
+--- /dev/null
++++ b/package/f2fs-tools/0001-f2fs-tools-convert-to-lseek-and-kill-lseek64.patch
+@@ -0,0 +1,459 @@
++From b15b6cc56ac7764be17acbdbf96448f388992adc Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 23 Aug 2023 15:41:28 +0200
++Subject: [PATCH] f2fs-tools: convert to lseek() and kill lseek64
++
++This patch replaces lseek64 with lseek() having #define _FILE_OFFSET_BITS 64.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=b15b6cc56ac7764be17acbdbf96448f388992adc
++---
++ configure.ac              |  2 --
++ fsck/Makefile.am          |  2 +-
++ include/android_config.h  |  4 ----
++ lib/Makefile.am           |  2 +-
++ lib/libf2fs.c             |  3 ---
++ lib/libf2fs_io.c          | 47 +++++++++++++++------------------------
++ lib/libf2fs_zoned.c       |  1 -
++ mkfs/Makefile.am          |  4 ++--
++ mkfs/f2fs_format.c        |  2 --
++ mkfs/f2fs_format_main.c   |  2 --
++ mkfs/f2fs_format_utils.c  | 10 ---------
++ mkfs/f2fs_format_utils.h  |  2 --
++ tools/Makefile.am         |  2 +-
++ tools/f2fs_io/Makefile.am |  2 +-
++ tools/f2fs_io/f2fs_io.c   |  6 -----
++ tools/f2fs_io_parse.c     |  1 -
++ tools/f2fscrypt.c         |  9 --------
++ tools/fibmap.c            |  7 ------
++ 18 files changed, 24 insertions(+), 84 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index efab8d8..123ddbb 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -187,8 +187,6 @@ AC_CHECK_FUNCS_ONCE([
++ 	getmntent
++ 	getuid
++ 	keyctl
++-	llseek
++-	lseek64
++ 	memset
++ 	setmntent
++ 	clock_gettime
++diff --git a/fsck/Makefile.am b/fsck/Makefile.am
++index 579dd26..40d31b8 100644
++--- a/fsck/Makefile.am
+++++ b/fsck/Makefile.am
++@@ -1,7 +1,7 @@
++ ## Makefile.am
++ 
++ AM_CPPFLAGS = ${libuuid_CFLAGS} -I$(top_srcdir)/include
++-AM_CFLAGS = -Wall
+++AM_CFLAGS = -Wall -D_FILE_OFFSET_BITS=64
++ sbin_PROGRAMS = fsck.f2fs
++ noinst_HEADERS = common.h dict.h dqblk_v2.h f2fs.h fsck.h node.h quotaio.h \
++ 		quotaio_tree.h quotaio_v2.h xattr.h compress.h
++diff --git a/include/android_config.h b/include/android_config.h
++index 141fe06..da8abcb 100644
++--- a/include/android_config.h
+++++ b/include/android_config.h
++@@ -30,8 +30,6 @@
++ #define HAVE_FSTAT 1
++ #define HAVE_FSTAT64 1
++ #define HAVE_GETMNTENT 1
++-#define HAVE_LLSEEK 1
++-#define HAVE_LSEEK64 1
++ #define HAVE_MEMSET 1
++ #define HAVE_SELINUX_ANDROID_H 1
++ #define HAVE_SETMNTENT 1
++@@ -67,7 +65,6 @@
++ #define HAVE_FSTAT 1
++ #define HAVE_FSTAT64 1
++ #define HAVE_GETMNTENT 1
++-#define HAVE_LLSEEK 1
++ #define HAVE_MEMSET 1
++ #define HAVE_SPARSE_SPARSE_H 1
++ #define HAVE_LIBLZ4 1
++@@ -78,6 +75,5 @@
++ #endif
++ 
++ #if defined(_WIN32)
++-#define HAVE_LSEEK64
++ #define HAVE_SPARSE_SPARSE_H 1
++ #endif
++diff --git a/lib/Makefile.am b/lib/Makefile.am
++index 871d773..69d46f8 100644
++--- a/lib/Makefile.am
+++++ b/lib/Makefile.am
++@@ -3,7 +3,7 @@
++ lib_LTLIBRARIES = libf2fs.la
++ 
++ libf2fs_la_SOURCES = libf2fs.c libf2fs_io.c libf2fs_zoned.c nls_utf8.c
++-libf2fs_la_CFLAGS = -Wall
+++libf2fs_la_CFLAGS = -Wall -D_FILE_OFFSET_BITS=64
++ libf2fs_la_CPPFLAGS = -I$(top_srcdir)/include
++ libf2fs_la_LDFLAGS = -version-info $(LIBF2FS_CURRENT):$(LIBF2FS_REVISION):$(LIBF2FS_AGE)
++ 
++diff --git a/lib/libf2fs.c b/lib/libf2fs.c
++index 577a7e8..c3d5744 100644
++--- a/lib/libf2fs.c
+++++ b/lib/libf2fs.c
++@@ -6,9 +6,6 @@
++  *
++  * Dual licensed under the GPL or LGPL version 2 licenses.
++  */
++-#define _LARGEFILE64_SOURCE
++-#define _FILE_OFFSET_BITS 64
++-
++ #include <f2fs_fs.h>
++ #include <stdio.h>
++ #include <stdlib.h>
++diff --git a/lib/libf2fs_io.c b/lib/libf2fs_io.c
++index 1a8167d..74e5f3a 100644
++--- a/lib/libf2fs_io.c
+++++ b/lib/libf2fs_io.c
++@@ -11,8 +11,6 @@
++  *
++  * Dual licensed under the GPL or LGPL version 2 licenses.
++  */
++-#define _LARGEFILE64_SOURCE
++-
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <string.h>
++@@ -67,22 +65,13 @@ static int __get_device_fd(__u64 *offset)
++ 	return -1;
++ }
++ 
++-#ifndef HAVE_LSEEK64
++-typedef off_t	off64_t;
++-
++-static inline off64_t lseek64(int fd, __u64 offset, int set)
++-{
++-	return lseek(fd, offset, set);
++-}
++-#endif
++-
++ /* ---------- dev_cache, Least Used First (LUF) policy  ------------------- */
++ /*
++  * Least used block will be the first victim to be replaced when max hash
++  * collision exceeds
++  */
++ static bool *dcache_valid; /* is the cached block valid? */
++-static off64_t  *dcache_blk; /* which block it cached */
+++static off_t  *dcache_blk; /* which block it cached */
++ static uint64_t *dcache_lastused; /* last used ticks for cache entries */
++ static char *dcache_buf; /* cached block data */
++ static uint64_t dcache_usetick; /* current use tick */
++@@ -172,7 +161,7 @@ static int dcache_alloc_all(long n)
++ {
++ 	if (n <= 0)
++ 		return -1;
++-	if ((dcache_blk = (off64_t *) malloc(sizeof(off64_t) * n)) == NULL
+++	if ((dcache_blk = (off_t *) malloc(sizeof(off_t) * n)) == NULL
++ 		|| (dcache_lastused = (uint64_t *)
++ 				malloc(sizeof(uint64_t) * n)) == NULL
++ 		|| (dcache_buf = (char *) malloc (F2FS_BLKSIZE * n)) == NULL
++@@ -257,7 +246,7 @@ static inline long dcache_relocate(long entry, int n)
++ 			dcache_config.num_cache_entry;
++ }
++ 
++-static long dcache_find(off64_t blk)
+++static long dcache_find(off_t blk)
++ {
++ 	register long n = dcache_config.num_cache_entry;
++ 	register unsigned m = dcache_config.max_hash_collision;
++@@ -278,10 +267,10 @@ static long dcache_find(off64_t blk)
++ }
++ 
++ /* Physical read into cache */
++-static int dcache_io_read(int fd, long entry, off64_t offset, off64_t blk)
+++static int dcache_io_read(int fd, long entry, off_t offset, off_t blk)
++ {
++-	if (lseek64(fd, offset, SEEK_SET) < 0) {
++-		MSG(0, "\n lseek64 fail.\n");
+++	if (lseek(fd, offset, SEEK_SET) < 0) {
+++		MSG(0, "\n lseek fail.\n");
++ 		return -1;
++ 	}
++ 	if (read(fd, dcache_buf + entry * F2FS_BLKSIZE, F2FS_BLKSIZE) < 0) {
++@@ -308,12 +297,12 @@ static int dcache_io_read(int fd, long entry, off64_t offset, off64_t blk)
++  *       1: cache not available (uninitialized)
++  *      -1: error
++  */
++-static int dcache_update_rw(int fd, void *buf, off64_t offset,
+++static int dcache_update_rw(int fd, void *buf, off_t offset,
++ 		size_t byte_count, bool is_write)
++ {
++-	off64_t blk;
+++	off_t blk;
++ 	int addr_in_blk;
++-	off64_t start;
+++	off_t start;
++ 
++ 	if (!dcache_initialized)
++ 		dcache_init(); /* auto initialize */
++@@ -377,13 +366,13 @@ static int dcache_update_rw(int fd, void *buf, off64_t offset,
++  * return value: 1: cache not available
++  *               0: success, -1: I/O error
++  */
++-int dcache_update_cache(int fd, void *buf, off64_t offset, size_t count)
+++int dcache_update_cache(int fd, void *buf, off_t offset, size_t count)
++ {
++ 	return dcache_update_rw(fd, buf, offset, count, true);
++ }
++ 
++ /* handles read into cache + read into buffer  */
++-int dcache_read(int fd, void *buf, off64_t offset, size_t count)
+++int dcache_read(int fd, void *buf, off_t offset, size_t count)
++ {
++ 	return dcache_update_rw(fd, buf, offset, count, false);
++ }
++@@ -395,7 +384,7 @@ int dev_read_version(void *buf, __u64 offset, size_t len)
++ {
++ 	if (c.sparse_mode)
++ 		return 0;
++-	if (lseek64(c.kd, (off64_t)offset, SEEK_SET) < 0)
+++	if (lseek(c.kd, (off_t)offset, SEEK_SET) < 0)
++ 		return -1;
++ 	if (read(c.kd, buf, len) < 0)
++ 		return -1;
++@@ -534,10 +523,10 @@ int dev_read(void *buf, __u64 offset, size_t len)
++ 
++ 	/* err = 1: cache not available, fall back to non-cache R/W */
++ 	/* err = 0: success, err=-1: I/O error */
++-	err = dcache_read(fd, buf, (off64_t)offset, len);
+++	err = dcache_read(fd, buf, (off_t)offset, len);
++ 	if (err <= 0)
++ 		return err;
++-	if (lseek64(fd, (off64_t)offset, SEEK_SET) < 0)
+++	if (lseek(fd, (off_t)offset, SEEK_SET) < 0)
++ 		return -1;
++ 	if (read(fd, buf, len) < 0)
++ 		return -1;
++@@ -580,9 +569,9 @@ int dev_write(void *buf, __u64 offset, size_t len)
++ 	 * dcache_update_cache() just update cache, won't do I/O.
++ 	 * Thus even no error, we need normal non-cache I/O for actual write
++ 	 */
++-	if (dcache_update_cache(fd, buf, (off64_t)offset, len) < 0)
+++	if (dcache_update_cache(fd, buf, (off_t)offset, len) < 0)
++ 		return -1;
++-	if (lseek64(fd, (off64_t)offset, SEEK_SET) < 0)
+++	if (lseek(fd, (off_t)offset, SEEK_SET) < 0)
++ 		return -1;
++ 	if (write(fd, buf, len) < 0)
++ 		return -1;
++@@ -596,7 +585,7 @@ int dev_write_block(void *buf, __u64 blk_addr)
++ 
++ int dev_write_dump(void *buf, __u64 offset, size_t len)
++ {
++-	if (lseek64(c.dump_fd, (off64_t)offset, SEEK_SET) < 0)
+++	if (lseek(c.dump_fd, (off_t)offset, SEEK_SET) < 0)
++ 		return -1;
++ 	if (write(c.dump_fd, buf, len) < 0)
++ 		return -1;
++@@ -618,7 +607,7 @@ int dev_fill(void *buf, __u64 offset, size_t len)
++ 	/* Only allow fill to zero */
++ 	if (*((__u8*)buf))
++ 		return -1;
++-	if (lseek64(fd, (off64_t)offset, SEEK_SET) < 0)
+++	if (lseek(fd, (off_t)offset, SEEK_SET) < 0)
++ 		return -1;
++ 	if (write(fd, buf, len) < 0)
++ 		return -1;
++diff --git a/lib/libf2fs_zoned.c b/lib/libf2fs_zoned.c
++index a0dd8bd..2ab2497 100644
++--- a/lib/libf2fs_zoned.c
+++++ b/lib/libf2fs_zoned.c
++@@ -6,7 +6,6 @@
++  *
++  * Dual licensed under the GPL or LGPL version 2 licenses.
++  */
++-#define _LARGEFILE64_SOURCE
++ 
++ #include <f2fs_fs.h>
++ #include <stdio.h>
++diff --git a/mkfs/Makefile.am b/mkfs/Makefile.am
++index af5b1c7..bfffd88 100644
++--- a/mkfs/Makefile.am
+++++ b/mkfs/Makefile.am
++@@ -1,7 +1,7 @@
++ ## Makefile.am
++ 
++ AM_CPPFLAGS = ${libuuid_CFLAGS} ${libblkid_CFLAGS} -I$(top_srcdir)/include
++-AM_CFLAGS = -Wall -DWITH_BLKDISCARD
+++AM_CFLAGS = -Wall -DWITH_BLKDISCARD -D_FILE_OFFSET_BITS=64
++ sbin_PROGRAMS = mkfs.f2fs
++ noinst_HEADERS = f2fs_format_utils.h
++ include_HEADERS = $(top_srcdir)/include/f2fs_fs.h
++@@ -10,7 +10,7 @@ mkfs_f2fs_LDADD = ${libuuid_LIBS} ${libblkid_LIBS} $(top_builddir)/lib/libf2fs.l
++ 
++ lib_LTLIBRARIES = libf2fs_format.la
++ libf2fs_format_la_SOURCES = f2fs_format_main.c f2fs_format.c f2fs_format_utils.c
++-libf2fs_format_la_CFLAGS = -DWITH_BLKDISCARD
+++libf2fs_format_la_CFLAGS = -DWITH_BLKDISCARD -D_FILE_OFFSET_BITS=64
++ libf2fs_format_la_LDFLAGS = ${libblkid_LIBS} ${libuuid_LIBS} -L$(top_builddir)/lib -lf2fs \
++ 	-version-info $(FMT_CURRENT):$(FMT_REVISION):$(FMT_AGE)
++ 
++diff --git a/mkfs/f2fs_format.c b/mkfs/f2fs_format.c
++index 019fb3a..d937eda 100644
++--- a/mkfs/f2fs_format.c
+++++ b/mkfs/f2fs_format.c
++@@ -6,8 +6,6 @@
++  *
++  * Dual licensed under the GPL or LGPL version 2 licenses.
++  */
++-#define _LARGEFILE64_SOURCE
++-
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <fcntl.h>
++diff --git a/mkfs/f2fs_format_main.c b/mkfs/f2fs_format_main.c
++index d8c9cea..08c1b25 100644
++--- a/mkfs/f2fs_format_main.c
+++++ b/mkfs/f2fs_format_main.c
++@@ -6,8 +6,6 @@
++  *
++  * Dual licensed under the GPL or LGPL version 2 licenses.
++  */
++-#define _LARGEFILE64_SOURCE
++-
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <fcntl.h>
++diff --git a/mkfs/f2fs_format_utils.c b/mkfs/f2fs_format_utils.c
++index 448fbaa..437f113 100644
++--- a/mkfs/f2fs_format_utils.c
+++++ b/mkfs/f2fs_format_utils.c
++@@ -6,20 +6,10 @@
++  *
++  * Dual licensed under the GPL or LGPL version 2 licenses.
++  */
++-#ifndef _LARGEFILE_SOURCE
++-#define _LARGEFILE_SOURCE
++-#endif
++-#ifndef _LARGEFILE64_SOURCE
++-#define _LARGEFILE64_SOURCE
++-#endif
++ #ifndef _GNU_SOURCE
++ #define _GNU_SOURCE
++ #endif
++ 
++-#ifndef _FILE_OFFSET_BITS
++-#define _FILE_OFFSET_BITS 64
++-#endif
++-
++ #include <f2fs_fs.h>
++ 
++ #include <stdio.h>
++diff --git a/mkfs/f2fs_format_utils.h b/mkfs/f2fs_format_utils.h
++index 807e7c3..6a7f687 100644
++--- a/mkfs/f2fs_format_utils.h
+++++ b/mkfs/f2fs_format_utils.h
++@@ -6,8 +6,6 @@
++  *
++  * Dual licensed under the GPL or LGPL version 2 licenses.
++  */
++-#define _LARGEFILE64_SOURCE
++-
++ #include "f2fs_fs.h"
++ 
++ extern struct f2fs_configuration c;
++diff --git a/tools/Makefile.am b/tools/Makefile.am
++index 6b03814..7dfffb1 100644
++--- a/tools/Makefile.am
+++++ b/tools/Makefile.am
++@@ -1,7 +1,7 @@
++ ## Makefile.am
++ 
++ AM_CPPFLAGS = ${libuuid_CFLAGS} -I$(top_srcdir)/include
++-AM_CFLAGS = -Wall
+++AM_CFLAGS = -Wall -D_FILE_OFFSET_BITS=64
++ sbin_PROGRAMS =
++ if !WINDOWS
++ sbin_PROGRAMS += fibmap.f2fs parse.f2fs
++diff --git a/tools/f2fs_io/Makefile.am b/tools/f2fs_io/Makefile.am
++index bc4f9d0..f5227ce 100644
++--- a/tools/f2fs_io/Makefile.am
+++++ b/tools/f2fs_io/Makefile.am
++@@ -2,7 +2,7 @@
++ 
++ if LINUX
++ AM_CPPFLAGS = -I$(top_srcdir)/include
++-AM_CFLAGS = -Wall
+++AM_CFLAGS = -Wall -D_FILE_OFFSET_BITS=64
++ sbin_PROGRAMS = f2fs_io
++ f2fs_io_SOURCES = f2fs_io.c
++ endif
++diff --git a/tools/f2fs_io/f2fs_io.c b/tools/f2fs_io/f2fs_io.c
++index 771fd16..1f6549b 100644
++--- a/tools/f2fs_io/f2fs_io.c
+++++ b/tools/f2fs_io/f2fs_io.c
++@@ -9,12 +9,6 @@
++ #ifndef _GNU_SOURCE
++ #define _GNU_SOURCE
++ #endif
++-#ifndef _LARGEFILE_SOURCE
++-#define _LARGEFILE_SOURCE
++-#endif
++-#ifndef _LARGEFILE64_SOURCE
++-#define _LARGEFILE64_SOURCE
++-#endif
++ #ifndef O_LARGEFILE
++ #define O_LARGEFILE 0
++ #endif
++diff --git a/tools/f2fs_io_parse.c b/tools/f2fs_io_parse.c
++index 47f1194..c3c1005 100644
++--- a/tools/f2fs_io_parse.c
+++++ b/tools/f2fs_io_parse.c
++@@ -8,7 +8,6 @@
++  * it under the terms of the GNU General Public License version 2 as
++  * published by the Free Software Foundation.
++  */
++-#define _LARGEFILE64_SOURCE
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <unistd.h>
++diff --git a/tools/f2fscrypt.c b/tools/f2fscrypt.c
++index 8640ffa..d5222fb 100644
++--- a/tools/f2fscrypt.c
+++++ b/tools/f2fscrypt.c
++@@ -7,15 +7,6 @@
++  * Authors: Michael Halcrow <mhalcrow@google.com>,
++  *	    Ildar Muslukhov <ildarm@google.com>
++  */
++-
++-#ifndef _LARGEFILE_SOURCE
++-#define _LARGEFILE_SOURCE
++-#endif
++-
++-#ifndef _LARGEFILE64_SOURCE
++-#define _LARGEFILE64_SOURCE
++-#endif
++-
++ #ifndef _GNU_SOURCE
++ #define _GNU_SOURCE
++ #endif
++diff --git a/tools/fibmap.c b/tools/fibmap.c
++index bda8238..3acc77b 100644
++--- a/tools/fibmap.c
+++++ b/tools/fibmap.c
++@@ -1,13 +1,6 @@
++ #if !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__)
++ #define _XOPEN_SOURCE 600
++ #define _DARWIN_C_SOURCE
++-#define _FILE_OFFSET_BITS 64
++-#ifndef _LARGEFILE_SOURCE
++-#define _LARGEFILE_SOURCE
++-#endif
++-#ifndef _LARGEFILE64_SOURCE
++-#define _LARGEFILE64_SOURCE
++-#endif
++ #ifndef _GNU_SOURCE
++ #define _GNU_SOURCE
++ #endif
++-- 
++2.39.2
++
 -- 
 2.39.2
 
