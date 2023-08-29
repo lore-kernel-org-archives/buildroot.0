@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D51CC6FA8F
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 17:02:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 394DEC83F12
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 17:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 43F88414C8;
-	Tue, 29 Aug 2023 17:02:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43F88414C8
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2FB141559;
+	Tue, 29 Aug 2023 17:03:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2FB141559
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 30nYIga9nr8p; Tue, 29 Aug 2023 17:02:57 +0000 (UTC)
+	with ESMTP id 6uCvY_vW86h4; Tue, 29 Aug 2023 17:03:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 626D5414FE;
-	Tue, 29 Aug 2023 17:02:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 626D5414FE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8F5571BF97E
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 17:02:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F173C41558;
+	Tue, 29 Aug 2023 17:03:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F173C41558
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E3D21BF3EA
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 17:03:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 684BE610A6
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 17:02:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 684BE610A6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57F7D4152A
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 17:03:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57F7D4152A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DbbP6ouaNj4c for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 17:02:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lXTH774N8g7K for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 17:03:09 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B321E610EF
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 17:02:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B321E610EF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 89A764154D
+ for <buildroot@buildroot.org>; Tue, 29 Aug 2023 17:03:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89A764154D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A02A286467; Tue, 29 Aug 2023 17:02:04 +0000 (UTC)
+ id 779808649C; Tue, 29 Aug 2023 17:03:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 18:44:51 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 38de1018253a2de85653659430d3dee509d68fa2
-X-Git-Newrev: 73adf9831be13a94d0fb14d9d9e9a9de86a17fde
+Date: Tue, 29 Aug 2023 18:46:40 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: c2019a9f186837e5613696a34f65bd8db7757acf
+X-Git-Newrev: 867a993aeaebfa54c7154c872dcfcda1e2cf0737
 X-Patchwork-Hint: ignore
-Message-Id: <20230829170204.A02A286467@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/yaml-cpp: fix
- library name
+Message-Id: <20230829170309.779808649C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/kodi: disable
+ clang support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73adf9831be13a94d0fb14d9d9e9a9de86a17fde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=867a993aeaebfa54c7154c872dcfcda1e2cf0737
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-In the current state this package install libyaml-cppd.so due to "d"
-being added because the variable CMAKE_DEBUG_POSTFIX is not set:
-https://github.com/jbeder/yaml-cpp/blob/master/CMakeLists.txt#L137
+When present kodi tries to use the target binary of clang-format
+https://github.com/xbmc/xbmc/blob/master/cmake/modules/buildtools/FindClangFormat.cmake
+causing a build error.
 
-This breaks the build of mongodb which expects the library name
-libyaml-cpp.so:
-https://github.com/mongodb/mongo/blob/master/SConstruct#L5090
-
-Fixes:
-http://autobuild.buildroot.net/results/304/3044d040dec090a2f528a96f201d4e554f6779b4/
+To fix the problem disable clang-format support.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9613092610729177f060bea62708fe3d81c0536b)
+(cherry picked from commit 771fa83920c593fd89593fda1a8a276d2ed8b3a2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/yaml-cpp/yaml-cpp.mk | 1 +
+ package/kodi/kodi.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
-index d65298ffb9..367df27ff1 100644
---- a/package/yaml-cpp/yaml-cpp.mk
-+++ b/package/yaml-cpp/yaml-cpp.mk
-@@ -13,6 +13,7 @@ YAML_CPP_CPE_ID_VENDOR = yaml-cpp_project
- 
- # Disable testing and parse tools
- YAML_CPP_CONF_OPTS += \
-+	-DCMAKE_DEBUG_POSTFIX="" \
- 	-DYAML_CPP_BUILD_TESTS=OFF \
- 	-DYAML_CPP_BUILD_TOOLS=OFF
- 
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 70ed270555..0a76f8a4db 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -78,6 +78,7 @@ KODI_CONF_OPTS += \
+ 	-DENABLE_INTERNAL_SPDLOG=OFF \
+ 	-DKODI_DEPENDSBUILD=OFF \
+ 	-DENABLE_GOLD=OFF \
++	-DCLANG_FORMAT_EXECUTABLE=OFF \
+ 	-DHOST_CAN_EXECUTE_TARGET=FALSE \
+ 	-DNATIVEPREFIX=$(HOST_DIR) \
+ 	-DDEPENDS_PATH=$(STAGING_DIR)/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
