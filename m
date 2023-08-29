@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC05BEC8737
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01410EC8738
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:17:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95DC382321;
-	Thu,  7 Sep 2023 15:17:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95DC382321
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD6BD83B72;
+	Thu,  7 Sep 2023 15:17:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD6BD83B72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id roiwUysGehnK; Thu,  7 Sep 2023 15:17:25 +0000 (UTC)
+	with ESMTP id 7PvnaG-0CnVn; Thu,  7 Sep 2023 15:17:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88241832A9;
-	Thu,  7 Sep 2023 15:17:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88241832A9
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 129881BF313
+	by smtp1.osuosl.org (Postfix) with ESMTP id D455C83B69;
+	Thu,  7 Sep 2023 15:17:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D455C83B69
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C75EE1BF313
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C74D41E1F
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C74D41E1F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3128361266
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3128361266
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9wAiMWzThvOj for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3OwqdyqgX2Yl for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE03641DA9
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE03641DA9
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFBF56128D
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFBF56128D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4A14869E0; Thu,  7 Sep 2023 14:51:27 +0000 (UTC)
+ id A06F486A22; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 8 Aug 2023 00:06:56 +0200
+Date: Tue, 29 Aug 2023 14:55:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df8b0643b538f33cd605a002cdee65a5a4a8b3e9
-X-Git-Newrev: b831bac16a2a61caf1d738e9dbfa9f89797f2296
+X-Git-Oldrev: a2ef47a4b56c5333bbc05ebc6f07e491646eb9ce
+X-Git-Newrev: e8332e66b4f063eb842bb934e4806a26f3cacfd2
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145127.C4A14869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/versal: clean shellcheck issues
+Message-Id: <20230907145133.A06F486A22@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/daemon: bump to version 0.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,86 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b831bac16a2a61caf1d738e9dbfa9f89797f2296
+commit: https://git.buildroot.net/buildroot/commit/?id=e8332e66b4f063eb842bb934e4806a26f3cacfd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch cleans up the shellcheck issues in the versal post scripts.
+Update license info. COPYING hash updated because of added reference to
+additional licenses. Licenses for local snprintf and getopt
+implementations do not apply, since this code is not used for Linux
+targets.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Add Tatu Ylonen Permissive license of the code in pseudo.c.
+
+Add LGPL-2.0+ license text file.
+
+Rename BSD-3-Clause text file and update hash because of text formatting
+change.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore        |  2 --
- board/versal/post-build.sh |  5 ++---
- board/versal/post-image.sh | 14 +++++++-------
- 3 files changed, 9 insertions(+), 12 deletions(-)
+ package/daemon/daemon.hash |  8 +++++---
+ package/daemon/daemon.mk   | 10 +++++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index b229a4e015..3b3be0b18f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -99,8 +99,6 @@ board/technologic/ts4900/post-image.sh Shellcheck
- board/toradex/apalis-imx6/post-image.sh Shellcheck
- board/udoo/common/post-build.sh Shellcheck
- board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch Upstream
--board/versal/post-build.sh Shellcheck
--board/versal/post-image.sh Shellcheck TrailingSpace
- boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch Upstream
- boot/at91bootstrap/0001-eabi-fix.patch Upstream
- boot/at91bootstrap/0002-gcc-4.6.x-ldscript-fix.patch Upstream
-diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
-index ff8f8a6071..ed08ea2d49 100755
---- a/board/versal/post-build.sh
-+++ b/board/versal/post-build.sh
-@@ -3,9 +3,8 @@
- # genimage will need to find the extlinux.conf
- # in the binaries directory
+diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
+index 5ad7bf6ce2..f1346d269b 100644
+--- a/package/daemon/daemon.hash
++++ b/package/daemon/daemon.hash
+@@ -1,7 +1,9 @@
+ # From http://www.libslack.org/daemon/
+-sha256  b34b37543bba43bd086e59f4b754c8102380ae5c1728b987c890d5da4b4cf3ca  daemon-0.8.2.tar.gz
++sha256  fa28859ad341cb0a0b012c11c271814f870482013b49f710600321d379887cd1  daemon-0.8.4.tar.gz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+-sha256  35e31504fc0aec878e86900dde1d90a04404833c182f50d5678d873910bb11eb  COPYING
+-sha256  5a93d5831e1297ab10fe643e1a631e83be392896da14ee2951285a79012df69d  LICENSES/BSD-3-Clause.txt
++sha256  34c8c7085e4d3920bfb8143b910d4f99194b9fc3e1cc3442c9b1b46db4382891  COPYING
++sha256  8587dc1ea896f33b657d9e57bd3bf03f0c11ce07d041f09e687f87e7a0087b38  LICENSES/LicenseRef-BSD-3-Clause-Almost.txt
+ sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
++sha256  61778e80a2fd85955b626b29aa2bcf06144c714277bded65633e4a81479d9fb3  LICENSES/LGPL-2.0-or-later.txt
++sha256  1aa57d2704f6783460f2750a9f3217d083ed5161eb95438ca43a5674213a7128  LICENSES/LicenseRef-Tatu-Ylonen-Permissive.txt
+diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
+index 5e7e497ff1..d7709e03ef 100644
+--- a/package/daemon/daemon.mk
++++ b/package/daemon/daemon.mk
+@@ -4,10 +4,14 @@
+ #
+ ################################################################################
  
--BOARD_DIR="$(dirname $0)"
--CONSOLE=$2
--ROOT=$3
-+CONSOLE="$2"
-+ROOT="$3"
+-DAEMON_VERSION = 0.8.2
++DAEMON_VERSION = 0.8.4
+ DAEMON_SITE = http://libslack.org/daemon/download
+-DAEMON_LICENSE = GPL-2.0+, LGPL-2.0+, BSD-3-Clause
+-DAEMON_LICENSE_FILES = LICENSE COPYING LICENSES/BSD-3-Clause.txt LICENSES/GPL-2.0-or-later.txt
++DAEMON_LICENSE = GPL-2.0+, LGPL-2.0+, BSD-3-Clause, Tatu Ylonen permissive license
++DAEMON_LICENSE_FILES = LICENSE COPYING \
++	LICENSES/LicenseRef-BSD-3-Clause-Almost.txt \
++	LICENSES/GPL-2.0-or-later.txt \
++	LICENSES/LGPL-2.0-or-later.txt \
++	LICENSES/LicenseRef-Tatu-Ylonen-Permissive.txt
  
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
-diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
-index 92e65ed3b7..1d9802c34d 100755
---- a/board/versal/post-image.sh
-+++ b/board/versal/post-image.sh
-@@ -6,12 +6,12 @@
- 
- FIRST_DT=$(sed -nr \
-                -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
--               ${BR2_CONFIG})
-+               "${BR2_CONFIG}")
- 
--[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
-+[ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
- 
--BOARD_DIR="$(dirname $0)"
--BOARD_NAME=$4
-+BOARD_DIR="$(dirname "$0")"
-+BOARD_NAME="$4"
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
-@@ -23,7 +23,7 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	    { core=psm, file=${BINARIES_DIR}/${BOARD_NAME}_psmfw.elf }
- 	  }
- 	  image {
--	    id = 0x1c000000, name=apu_subsystem 
-+	    id = 0x1c000000, name=apu_subsystem
- 	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/u-boot.dtb }
- 	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
- 	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
-@@ -31,5 +31,5 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	}
- 	__HEADER_EOF
- 
--${HOST_DIR}/bin/bootgen -arch versal -image ${BINARIES_DIR}/bootgen.bif -o ${BINARIES_DIR}/boot.bin -w on
--support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
-+"${HOST_DIR}/bin/bootgen" -arch versal -image "${BINARIES_DIR}/bootgen.bif" -o "${BINARIES_DIR}/boot.bin" -w on
-+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+ define DAEMON_CONFIGURE_CMDS
+ 	(cd $(@D); ./configure)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
