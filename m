@@ -4,66 +4,120 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7A41C6FA8F
-	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 12:34:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9E5C83F14
+	for <buildroot@archiver.kernel.org>; Tue, 29 Aug 2023 12:44:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1284481420;
-	Tue, 29 Aug 2023 12:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1284481420
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6E3781423;
+	Tue, 29 Aug 2023 12:44:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6E3781423
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nIy4TZNfCLsh; Tue, 29 Aug 2023 12:34:08 +0000 (UTC)
+	with ESMTP id 0osyhsy9Pvs9; Tue, 29 Aug 2023 12:44:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED69B81423;
-	Tue, 29 Aug 2023 12:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED69B81423
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 50DEF1BF4E7
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 12:34:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03DB681495;
+	Tue, 29 Aug 2023 12:44:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03DB681495
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D2A1D1BF4E7
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 12:44:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2727141030
- for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 12:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2727141030
+ by smtp4.osuosl.org (Postfix) with ESMTP id A64844081F
+ for <buildroot@lists.busybox.net>; Tue, 29 Aug 2023 12:44:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A64844081F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id azhs9jeMNXCR for <buildroot@lists.busybox.net>;
- Tue, 29 Aug 2023 12:34:05 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 361534101F
- for <buildroot@buildroot.org>; Tue, 29 Aug 2023 12:34:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 361534101F
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 617C61BF20D;
- Tue, 29 Aug 2023 12:34:00 +0000 (UTC)
-Date: Tue, 29 Aug 2023 14:33:59 +0200
-To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20230829143359.3093b17f@windsurf>
-In-Reply-To: <20230828185628.946326-1-aduskett@gmail.com>
-References: <20230828185628.946326-1-aduskett@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oVE5pv8xj4sc for <buildroot@lists.busybox.net>;
+ Tue, 29 Aug 2023 12:44:28 +0000 (UTC)
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com
+ (mail-mr2fra01on20717.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e19::717])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 51459404D1
+ for <buildroot@buildroot.org>; Tue, 29 Aug 2023 12:44:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51459404D1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aVIvxkpN5FqmLUKRI5L0+1zmpwxv1C5jowPmSyqfG+PvE+BbzFB9xFNjC4WkOX2ZR166T9e3GKu8GdC3rjzaJ6ZAgpX2AjT8SBhTpA/dMRH7oVB7RBLAORf5ktMv/EPQN628gKJXm+VxyiDIlL0uyUn3kJAKBwvANEOko44wwATWrqgfJFhyUWlIUlb+fTg2g+Zp5grIPWBwNzh+d1J6n+ZNxYzFdhJjw7EX6CmGRKsPZZJJBWKhvd+4Ze7rcQwRKb/kMOkP2jbjRIBFf04ZbeYvDAcEGp294Kfx+pbCI3jl7dQ0X/Ck1B+xlQ4eSiOOwXI2bVxEiei8h9qoWjH8IA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uDv2PENtEwTltefdrWeXIk4RhlIHeKOZCKf6D8qN6fo=;
+ b=D5wBJVi9LEDX3eh2XePVrkYtiTsj5sTonEMzS8R04Nfz4dhzgzh3170JD0dzfeMIbZl+cHXfOSQpgI8vCQKMk9C7ZxxH7S3b1Q+8NV7GfK4lzzRMa2qro4180edMnDuiM0c4E6Xc8y34WcgARnJPKlsrSUaGUJIW2zW8KZert/NUpQsQ8pivzgsKHwGx/tf8qMkAf5Wb2yKf6Kunk/mMjRY6Kv8Nq4rhJtSOcOcPPK0//BnLgTAErC/NV/wr1udYaDHZREYA4BIcGwVBmIL2BXROu9Xnk0fDCpkJRaZPk083Cd/nfHXFA6IIN8vCPYoYro00UQtgsaEbC/vlKPo1wg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=borea-dental.com; dmarc=pass action=none
+ header.from=borea-dental.com; dkim=pass header.d=borea-dental.com; arc=none
+Received: from PAYP264MB4285.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:11b::5)
+ by PR0P264MB3174.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d5::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.35; Tue, 29 Aug
+ 2023 12:44:22 +0000
+Received: from PAYP264MB4285.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::bd35:885a:504:e0f0]) by PAYP264MB4285.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::bd35:885a:504:e0f0%5]) with mapi id 15.20.6699.035; Tue, 29 Aug 2023
+ 12:44:22 +0000
+From: Charlie LEGER <c.leger@borea-dental.com>
+To: buildroot@buildroot.org
+Date: Tue, 29 Aug 2023 14:43:51 +0200
+Message-Id: <20230829124351.1405520-1-c.leger@borea-dental.com>
+X-Mailer: git-send-email 2.34.1
+X-ClientProxiedBy: PR3P191CA0036.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:102:55::11) To PAYP264MB4285.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:11b::5)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693312441;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zm5kVjScLnMrXGF4DT6Ug+iOwHBlF9NIOf7soI6TOa4=;
- b=G1rraXtzqMoUDTx6lcK9S8Jh+D9autzd7BgyP60Zx6gonjEVWWqROT1G2X8oap2zhEgS00
- godHNGsPTc65BLOWnqvTngXF7G8PvhRTq6p6EZ1PSXhjE8ZbJkEKxeMrFcUm72DpUKGQIn
- t/BcCjS09fumdElfdncvyGZblAN3hS7cqkc+jQ3vITvYMeM00EhUTgaHxlpCXNYF3nO0T1
- 9JcAOf0aaK4QXzoO4hjw9F3wl9bM+SkkJKQzIP/mMPJRy9/OlBKqgTrh6GLKkwt+WTJ7On
- h1j/WIP72WXgRFx3ME1rcwt9FJK58+0Oos6m1Sm9OX7m5cUmkh0c2Rl7b1SPAQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=G1rraXtz
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/openjdk{-bin}: security bump
- versions to 11.0.19+7 and 17.0.7+7
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAYP264MB4285:EE_|PR0P264MB3174:EE_
+X-MS-Office365-Filtering-Correlation-Id: 263d8081-917e-4e54-f908-08dba88dab90
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qQs/mCtqY2ieEUrE9W9AfVMPLDMHV4QJpKPdRB7howoo33Tl8izDnLYbpgZUBcCsKJtev+k81+zH+G/TA9OmmtymAGeRoz8wK8MnCX4H/J3P76glVLV8nq8XB0vyxOvRx2LqL+ct+qADkN1Ku4Smw79Qvsi1OObn5ChZ1c+3CXO755/M8OmFFuJSFslfdVOjkOluBkIu/xuKkuBPj0Fl/3WwF52RHT8S5jhzbO3Vjme5xF4Fiu4744nXo7iHVkauy/mcNsjkr5wKGJBZVnarjGul6gE6RxNIsOr47riL5L4WxY8mkUg2vsrhwKNKoxp4u8aUGCUTvTC1AIsyhaCT7KNI82SIpxF/ZvXSASQ87xWvCiUEzagq8ZY4sQilzxarefXkfbr0qdxfqhdob2T7MURSyPTRi+x1EdgQq/AnC4s+c6UMUjdT+ua3HzMr78VWBkQxqViKu5d926hrZGwhHSYlDz9N8mggEbQn6ij8f5J2dPjKCXOcx50qgbkJN/T6AGOdHfIRSaAi5oMjBfPoE/VZG50RF+I4qU0Ws7GHjIE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:PAYP264MB4285.FRAP264.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230031)(396003)(366004)(39830400003)(376002)(346002)(136003)(451199024)(186009)(1800799009)(6506007)(6666004)(6486002)(6512007)(86362001)(36756003)(38100700002)(2616005)(478600001)(107886003)(1076003)(2906002)(52116002)(83380400001)(966005)(66556008)(8936002)(66946007)(66476007)(4326008)(8676002)(5660300002)(41300700001)(6916009)(316002);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a9kmGwzaS/E+fBUAf4Gc1D6qypYNb/0Cte1HsVjhNvuunsvq4i6uJx/4iPzi?=
+ =?us-ascii?Q?qrt0lS010nQMmyVwN0CAg0IgPkWVK7m2mgeMU1tsPpBciJtLRDpkJ3ZFN12V?=
+ =?us-ascii?Q?R07pikfpDw3J2nOq50EzM/qnRgsrifgduJeNKxTurS+SZpziFa58Mbz55B4q?=
+ =?us-ascii?Q?EwZaDpvAqwCZMAU9EwsLeRwhauFM+aTtfUJ/oaLL8Zp+E9LF++r7HJecgkUC?=
+ =?us-ascii?Q?RfreeaGFoR7vmd2XSvCh3kpyVU5+DMm5KeZ0GxW4zqta+hAPUpQEwQmcv8Hq?=
+ =?us-ascii?Q?b17Fclat90SNaJSlYT9Lqys1v1Rq0xPUuevLl53rHOvWgxlgtOU0xl1A+kpR?=
+ =?us-ascii?Q?YOxkscoRgglpMksh71kBP/K9MSmQQ8/+i5DmUu0gd7QB9a4vML3GTyvm6rk8?=
+ =?us-ascii?Q?XNPIc65Hc8w87Lr1PN8azpQQFilpsRhT0hzFgQIQ50YePJL6sldchFPVK0XL?=
+ =?us-ascii?Q?KDGwFA3i01FceAI+R1i756OrzMbfh2HwX7/bPsE2JlMn7wa7aQFhTg3QpjAm?=
+ =?us-ascii?Q?Sad0tClkUJ4xv/yDccpRzIgJDC70729R9tsOEOURhinGTOL5LTPY+0+3F2DO?=
+ =?us-ascii?Q?5VsvHz0SCmg/8B4m0Hvz/EN+6xvs4ZB5G3b1CYl3QiDmTUFqpteVOMBMvTQ6?=
+ =?us-ascii?Q?QGXRBbhT5BmgbfHk0hMwmh1YNYS8WysTuwsQl8Je99x+BLgsXwcrMHDrt7uq?=
+ =?us-ascii?Q?g4TL50v9HLSK0ntii2/baVeguh9tA7jjp9AsU3e7bkNXY9mI5nSPd6pVVAwI?=
+ =?us-ascii?Q?eI6fXsP4+aU/l7+5Ezs1G0mB2pxXZaibv7ND95CG1+DCN+GMd4poRc2UqNGr?=
+ =?us-ascii?Q?sS6M8wh9+7JU9ZuszUlx68OfFrHRTLP+BcLB7foMP1EqFRMYOSYfupVhtWoa?=
+ =?us-ascii?Q?ogLHWvv0dpKqlPqMP/AChdoXveh+cow3DK0yMiNQr7g9EOB8IPPv9H6t2/Hg?=
+ =?us-ascii?Q?eRXFDUthMr5/E/xyxWny5ZyFWi7f5UGozlCV7WfqT/nemRI8+bN39QviuBSC?=
+ =?us-ascii?Q?daMoaVSR9BIwLFSBObpOSkyYHJKVUZaMDogPYr4tQE+eWTvio3KcWdq/tH58?=
+ =?us-ascii?Q?83s0eWPDVz/US2J+DU6H3I1f0QQIVWGlqZIUOTrqONJANRkzjAXdOpjSN/1g?=
+ =?us-ascii?Q?TqdWw9w7NUc8/wxWxHGL8mtibQqteYFEXVq8Qw8shBTsx3FTpVaLebJ//g0/?=
+ =?us-ascii?Q?wE2lb/Rm74Eht4yvTAaq0TELMLHV44Hdo+nvlj3mv3PXgsmWW4L4zhxpUtRV?=
+ =?us-ascii?Q?3kcJtUF4VEBkfkWuNP2JCQ0MD/UjpQGllBZHL4bf3EYP7Ui84cZdINrYngzT?=
+ =?us-ascii?Q?au8y55ooG2pItvgaW3wbN8doq7Ge5vkphFvwb3A+m8ey57WxBFz3hD0pOURh?=
+ =?us-ascii?Q?Hx1/Ys3ylgNieVUmoC6ANyGvsYLHv81UCDVMGrcxQYK55jncZOWkAoU3wwEA?=
+ =?us-ascii?Q?5N9teYh/cpoOM4Fp0S8mY4gCXLeoQOtblOmshvJ1WPlR5y+CEO7o7lvRJnac?=
+ =?us-ascii?Q?vwR2roE2iq7yOua0WsVJPhZLafYDMBDPGfRtJcOMifM4oFNW9x+yQKyJp5Y8?=
+ =?us-ascii?Q?sdpA1YRkSsG7ag8qvp8Y013WAph2Z9y5+5fxyhZc71yh3K3O5ZtcQzz/ibWq?=
+ =?us-ascii?Q?E18I9U4TukbS34ImbHkmad+0hU+AdHIlvrDP9sOKc3Y2ZuwBjo9E+uExQapu?=
+ =?us-ascii?Q?huwMdw=3D=3D?=
+X-OriginatorOrg: borea-dental.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 263d8081-917e-4e54-f908-08dba88dab90
+X-MS-Exchange-CrossTenant-AuthSource: PAYP264MB4285.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2023 12:44:22.6992 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43aede4d-89da-4f78-a51f-69f6b16d8910
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZZCNiZx/LZS0gFTC9x0ees5nm/Gvt70fzo3uIZSEuAMaRzTTXPpz7eMkNAd1zSda5QbQmY79IngD/yQMGNPVacktOLAhzhIwX+BRyAHtkd8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3174
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=borea-dental.com;
+Subject: [Buildroot] [PATCH 1/1] package/libzip: bump to version 1.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,52 +129,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Tudor Holton <buildroot@tudorholton.com>, buildroot@buildroot.org
+Cc: Charlie LEGER <c.leger@borea-dental.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+- Release note libzip 1.10.1:
+https://libzip.org/news/release-1.10.1.html
+- Release note libzip 1.10.0:
+https://libzip.org/news/release-1.10.0.html
+- API changes between 1.9.x to 1.10.x:
+https://github.com/nih-at/libzip/blob/v1.10.1/API-CHANGES.md
 
-On Mon, 28 Aug 2023 12:56:28 -0600
-Adam Duskett <aduskett@gmail.com> wrote:
+Signed-off-by: Charlie LEGER <c.leger@borea-dental.com>
+---
+ package/libzip/libzip.hash | 2 +-
+ package/libzip/libzip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> For details, see the announcements:
-> https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-April/021900.html
-> https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-April/021899.html
-
->  ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
->  OPENJDK_VERSION_MAJOR = 17
-> -OPENJDK_VERSION_MINOR = 0.7+7
-> +OPENJDK_VERSION_MINOR = 0.8+7
->  else
->  OPENJDK_VERSION_MAJOR = 11
-> -OPENJDK_VERSION_MINOR = 0.19+7
-> +OPENJDK_VERSION_MINOR = 0.20+8
->  endif
->  OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
->  OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
-
-Something is wrong between your commit log/description and what the
-commit is doing. The commit log is pointing to a bump to 11.0.19+7, but
-we're already at 11.0.19+7 in Buildroot (your patch is updating to
-11.0.20+8), and the commit log points to a bump to 17.0.7+7, but we're
-already at 17.0.7+7 in Buildroot (your patch is updating to 17.0.8+7).
-
-And therefore, the changelogs that you point to in your commit log,
-that describe several CVEs as being fixed are not relevant to your
-commit: they are related to the versions already in Buildroot.
-
-Could you double check this?
-
-Thomas
+diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
+index 26c038e4b6..93dcb49042 100644
+--- a/package/libzip/libzip.hash
++++ b/package/libzip/libzip.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c93e9852b7b2dc931197831438fee5295976ee0ba24f8524a8907be5c2ba5937  libzip-1.9.2.tar.xz
++sha256  dc3c8d5b4c8bbd09626864f6bcf93de701540f761d76b85d7c7d710f4bd90318  libzip-1.10.1.tar.xz
+ sha256  01c022eca6d566e2e8792fd0f091a28653b2a608319922bcd4de91c49d1438e1  LICENSE
+diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
+index 0c9d66d877..cf85bfa8ce 100644
+--- a/package/libzip/libzip.mk
++++ b/package/libzip/libzip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBZIP_VERSION = 1.9.2
++LIBZIP_VERSION = 1.10.1
+ LIBZIP_SITE = https://libzip.org/download
+ LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
+ LIBZIP_LICENSE = BSD-3-Clause
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
