@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F7A1C6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 21:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDA73C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 21:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 366F741815;
-	Wed, 30 Aug 2023 21:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 366F741815
+	by smtp2.osuosl.org (Postfix) with ESMTP id 774CB40296;
+	Wed, 30 Aug 2023 21:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 774CB40296
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rUmB2YMQKlYO; Wed, 30 Aug 2023 21:55:08 +0000 (UTC)
+	with ESMTP id K3sTdw3UYnij; Wed, 30 Aug 2023 21:55:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7EEBC4181E;
-	Wed, 30 Aug 2023 21:55:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EEBC4181E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 927441BF98D
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 21:54:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A346D4181F;
+	Wed, 30 Aug 2023 21:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A346D4181F
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B09D1BF405
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 21:54:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 758B081E5A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8979441C14
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 21:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 758B081E5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8979441C14
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aVYeoJHgJxRC for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QLPXx_FH0sYK for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 21:54:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8DAEA81B69
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B34741C1F
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 21:54:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DAEA81B69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B34741C1F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D6FC8669B; Wed, 30 Aug 2023 21:54:41 +0000 (UTC)
+ id 473478669B; Wed, 30 Aug 2023 21:54:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 23:49:09 +0200
+Date: Wed, 30 Aug 2023 23:48:51 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 04811ff1489ac3b72cb3aca3ad806998c9863ca2
-X-Git-Newrev: d87d54d23d258945ecc8fd3fc753910c1dd409e6
+X-Git-Oldrev: 93556f95a3a8ce402eb29e8f5c73f0c02a708f54
+X-Git-Newrev: 06b2e496a0c47b1fef55b0daccac1e62b41d7aac
 X-Patchwork-Hint: ignore
-Message-Id: <20230830215441.7D6FC8669B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/tor: bump version to
- 0.4.8.5
+Message-Id: <20230830215441.473478669B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/go: bump to version
+ 1.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d87d54d23d258945ecc8fd3fc753910c1dd409e6
+commit: https://git.buildroot.net/buildroot/commit/?id=06b2e496a0c47b1fef55b0daccac1e62b41d7aac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://forum.torproject.org/t/stable-release-0-4-8-5/8996
+Go 1.21.0 is a major release of Go.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://go.dev/doc/devel/release#go1.21.0
+
+Set GOTOOLCHAIN=local to disable the new toolchain download feature. This
+feature, introduced in Go 1.21.x, will automatically download pre-built compiler
+binaries from Google for the toolchain version specified in go.mod. We do not
+want this in Buildroot as we build from source instead: set GOTOOLCHAIN=local to
+disable the feature and use the locally built toolchain.
+
+https://go.dev/doc/toolchain
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index d87e2742d3..b6b183c2d1 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.4.tar.gz.sha256sum
--sha256  09c1ce74a25fc3b48c81ff146cbd0dd538cbbb8fe4e2964fc2fb2b192f6a1d2b  tor-0.4.8.4.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.5.tar.gz.sha256sum
-+sha256  6957cfd14a29eee7555c52f8387a46f2ce2f5fe7dadf93547f1bc74b1657e119  tor-0.4.8.5.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index b3360d3c3b..e86fec29f4 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 2298534d91..2289442a72 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  2c5ee9c9ec1e733b0dbbc2bdfed3f62306e51d8172bf38f4f4e542b27520f597  go1.20.7.src.tar.gz
++sha256  818d46ede85682dd551ad378ef37a4d247006f12ec59b5b755601d2ce114369a  go1.21.0.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index fc1d9ed681..04aa612256 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.8.4
-+TOR_VERSION = 0.4.8.5
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-GO_VERSION = 1.20.7
++GO_VERSION = 1.21.0
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+@@ -28,6 +28,7 @@ HOST_GO_COMMON_ENV = \
+ 	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
+ 	GOMODCACHE="$(HOST_GO_GOPATH)/pkg/mod" \
+ 	GOPROXY=off \
++	GOTOOLCHAIN=local \
+ 	PATH=$(BR_PATH) \
+ 	GOBIN= \
+ 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
