@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 814FAC83F14
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:39:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E37E6C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CF21612C3;
-	Wed, 30 Aug 2023 22:39:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CF21612C3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89A0A612B8;
+	Wed, 30 Aug 2023 22:40:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89A0A612B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d5_34qdOUoSe; Wed, 30 Aug 2023 22:39:31 +0000 (UTC)
+	with ESMTP id 08ILCfAhH9UL; Wed, 30 Aug 2023 22:40:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 580AC61240;
-	Wed, 30 Aug 2023 22:39:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 580AC61240
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C3AD1BF424
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:39:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB8D8612D8;
+	Wed, 30 Aug 2023 22:40:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB8D8612D8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EE8D1BF424
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:40:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD9D581E53
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:39:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD9D581E53
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12ED9612B8
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:40:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12ED9612B8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1Qb681dFaRmD for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 22:39:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LMVbxgcqSnjK for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 22:40:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6BBA81D5A
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:39:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6BBA81D5A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 33F8260BC3
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:40:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33F8260BC3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3B46866DD; Wed, 30 Aug 2023 22:39:27 +0000 (UTC)
+ id 242D9866E1; Wed, 30 Aug 2023 22:40:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 00:36:37 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d97346f1ceb2f86d0b26fb72cf18647a074bb639
-X-Git-Newrev: 9e6b20bae9ba6cb547d3d7ca8def4a30d23f51f4
+Date: Thu, 31 Aug 2023 00:36:24 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 71278999515fa80b61192c3a156f119676e42424
+X-Git-Newrev: e9584abeb03cd1a4d52ea185485cae9246ded39b
 X-Patchwork-Hint: ignore
-Message-Id: <20230830223927.D3B46866DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/sysdig: remove
+Message-Id: <20230830224033.242D9866E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/sysdig: remove
  patch that doesn't apply
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e6b20bae9ba6cb547d3d7ca8def4a30d23f51f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e9584abeb03cd1a4d52ea185485cae9246ded39b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 Patch 0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
 should have been deleted as part of Buildroot commit
