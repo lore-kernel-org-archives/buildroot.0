@@ -4,88 +4,122 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0C37C83F17
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 07:29:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A24B3C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 07:29:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3785812A9;
-	Wed, 30 Aug 2023 07:29:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3785812A9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 382C781F96;
+	Wed, 30 Aug 2023 07:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 382C781F96
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cMtj0kW5Zy2Q; Wed, 30 Aug 2023 07:29:42 +0000 (UTC)
+	with ESMTP id ePEa0m-Yoyao; Wed, 30 Aug 2023 07:29:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 387FF8129F;
-	Wed, 30 Aug 2023 07:29:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 387FF8129F
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58FBD1BF83A
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 07:29:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60C18818DC;
+	Wed, 30 Aug 2023 07:29:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60C18818DC
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 379661BF83A
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 07:29:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E3FB417B9
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 07:29:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E3FB417B9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11F76812BB
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 07:29:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11F76812BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1qN3wkGHYprz for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 07:29:37 +0000 (UTC)
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D55BE417A8
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 07:29:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D55BE417A8
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-52a39a1c4d5so6770404a12.3
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 00:29:36 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YliFnw98s_dw for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 07:29:48 +0000 (UTC)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 692A6812B5
+ for <buildroot@busybox.net>; Wed, 30 Aug 2023 07:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 692A6812B5
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-99bfcf4c814so685733366b.0
+ for <buildroot@busybox.net>; Wed, 30 Aug 2023 00:29:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693380574; x=1693985374;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Zk2PDaom4GmilODh7ygKGFmSQ1OJmJKnSQJcdYfpwj4=;
- b=DU4A0WER6qkRgQ5Kc/sdHjGF8tyz0eRZPZ1pbzdazuJtGs0OTsNV3RFP47hYIEYojV
- Sw2lq2JNd2+T45Zjv4rJ/isdytGdflyv0o3IdyOcTxgXJnuuSFIRSH/YUsTpwEBUSnD/
- lIq2/7gJmJe143i8F57cyRUzX7BLcuUlYvKF/9FdDNe157sONK5cFAxHPpjnlUo3Z1yr
- 8lhIZH4918L6pVHAUgJej7ojmAt+ejcmrNG6RnNkB0pecOhnKiu9uD0ibVMrcMpTue3+
- LwS0ZP4RDZVsEY1iO7ydXF2B7W0rBltdvAihfp7KqJxbnuto1ovZw2Fiu6w1Ai1exK/A
- 2O4Q==
-X-Gm-Message-State: AOJu0YwUU4obKPjppLDFZDH2ytJMiTmGXA/k1rSbPeAE66on7/q3SfM8
- +GBRcDaIkkxkkFc/zDQe8cqJr6mvfCqK7Opv5xL/Og==
-X-Google-Smtp-Source: AGHT+IHjxX6sZICKiyLY+h8OjMYCNTcyupbUkS9T1/4VDUp3lkU6V636mcJDbIhs5lWm8MeRbEPIqQ==
-X-Received: by 2002:a05:6402:325:b0:523:3e90:68b0 with SMTP id
- q5-20020a056402032500b005233e9068b0mr1074919edw.21.1693380574417; 
- Wed, 30 Aug 2023 00:29:34 -0700 (PDT)
-Received: from wintermute.localnet (94.105.107.31.dyn.edpnet.net.
- [94.105.107.31]) by smtp.gmail.com with ESMTPSA id
- j4-20020aa7ca44000000b0052574ef0da1sm6456068edt.28.2023.08.30.00.29.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Aug 2023 00:29:33 -0700 (PDT)
-To: Frank Vanbever via buildroot <buildroot@buildroot.org>,
- Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Aug 2023 09:29:33 +0200
-Message-ID: <5966703.lOV4Wx5bFT@wintermute>
-In-Reply-To: <87il917em8.fsf@48ers.dk>
-References: <20230713161139.182388-1-frank.vanbever@mind.be>
- <87il917em8.fsf@48ers.dk>
+ d=1e100.net; s=20221208; t=1693380585; x=1693985385;
+ h=subject:autocrypt:from:to:content-language:user-agent:mime-version
+ :date:message-id:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Ioyusg4dyVKIOL4RYe+wSidN65awlhoSRDTgc1PSRko=;
+ b=G6k4YsLkN9b3TEHVlW4suf2awx2sYRIcidSD30xyYgWmW+sH22C7D0lo+0AI7y5aLV
+ zJrfpxg0U4C3PiV9IPE9+z4m+F+kRdGMu2Eqj73cBHDzG9MwaWkf3G2WuuNymDbOxRuC
+ Pnv1Rx9085grjp7M7yTlCUQaNkCaiE30bRj3Xkl6qtHaef93UryI/Fd+WJLRQTOUpUqo
+ aE+gKhLHRMLpgQbq9n3BBycpbQE44VzOOwpaAWjP0Ycp+F1Bx+HlQznwZofwiYc4SLHR
+ JYa54sASc3t2IS86YuYb7IBQqE62rwocYeweF/MQots3UL/gSMqfMj4InIgGvPX2QpPt
+ KF6w==
+X-Gm-Message-State: AOJu0YwIhtdGd9X+K8jH/qU31V2NR+1y4qYYWGMcGuQ3Og2IAkGFvH7J
+ vVdyhREjGcSCRBAVQIp+GWFlsg==
+X-Google-Smtp-Source: AGHT+IFylkZX57Jal/Qk9HBlJBnY2n+xD5edruG8rTO5zS34dV7LbLzEDRmOvmgjZddFY5TkWgXQ0g==
+X-Received: by 2002:a17:906:311a:b0:9a5:821e:1655 with SMTP id
+ 26-20020a170906311a00b009a5821e1655mr947520ejx.71.1693380584709; 
+ Wed, 30 Aug 2023 00:29:44 -0700 (PDT)
+Received: from [192.168.178.86] (clnet-p04-043.ikbnet.co.at. [83.175.81.43])
+ by smtp.gmail.com with ESMTPSA id
+ bn24-20020a170906c0d800b00997d7aa59fasm7004694ejb.14.2023.08.30.00.29.43
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 30 Aug 2023 00:29:44 -0700 (PDT)
+Message-ID: <ad5cc151-04ba-7877-a24e-b6a832371302@sigma-star.at>
+Date: Wed, 30 Aug 2023 09:29:43 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To: MTD Mailing List <linux-mtd@lists.infradead.org>,
+ Buildroot Mailing List <buildroot@busybox.net>,
+ "Josh Boyer (Fedora)" <jwboyer@gmail.com>,
+ "Riku Voipio (Debian)" <riku.voipio@linaro.org>,
+ "Pascal Bleser (SUSE)" <pascal.bleser@opensuse.org>,
+ "Levente Polyak (Arch)" <anthraxx@archlinux.org>,
+ "Robbat (Gentoo)" <robbat2@gentoo.org>, embedded@gentoo.org,
+ "Oliver Schinagl (Alpine)" <oliver@schinagl.nl>,
+ "Pascal Bellard (SliTaz)" <pascal.bellard@slitaz.org>,
+ =?UTF-8?Q?Llu=c3=ads_Batlle_i_Rossell_=28NixOS=29?= <shaba@altlinux.org>,
+ "Sergey Bolshakov (ALT Linux)" <sbolshakov@altlinux.org>,
+ "Orphaned (Void Linux)" <orphan@voidlinux.org>,
+ Richard Weinberger <richard@nod.at>
+From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Autocrypt: addr=david.oberhollenzer@sigma-star.at; keydata=
+ xsBNBFZyf0YBCADHyKhABhxthCC9n48pvsuk5p3IEdYXMs8Apenh1N/Z4cViAz/d/nSCZ+FG
+ FX/PSubEzq8AilZLejchAltaORCvA1Y6FgTlpcdJ6gHDfStDbJL/vk5N8aL7YNF7VfjTRntB
+ tKbhKcrG05nbdNjIioAm04pt9rx5mV5KMbf22/FdZpOSSsC6/N7b/cFH9+fx8kwi4pNFuJwr
+ BkWRuQ7rEtCoSpd22t+Vh9qA7kymW9gWY405258jnN65jBO7ElqU2CCuGRPg6uryAHV3RVCB
+ 9j9AE3HLacQReFtt5ylyydSQbaK4K9asnd7U2/C11vIuuciXCppX4bPap/pMnGpzw0UNABEB
+ AAHNN0RhdmlkIE9iZXJob2xsZW56ZXIgPGRhdmlkLm9iZXJob2xsZW56ZXJAc2lnbWEtc3Rh
+ ci5hdD7CwHcEEwEIACEFAlZyf0YCGwMFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQvOXc
+ PHQaAtFuEAgArXOhaoaVvCMVCa5N25Q/+Q6K1wrVpPmkH89yhQqCmfM6f+2VM5MGFDPfaSJ3
+ 5fBDH0iwBQwlXIb7NSXWtzdXX9rMvJkJqv45TgeKtJApf/sRhmcN+clrwzP8oZQbxkP1YWzo
+ Vwo4lOb3Kv7aY9yeCjqNbdJJ57NpvYOUrzrCpGkrDPBBQOvKF3wbq3oU/o3dT23NDeQ20jXg
+ quJf/PCw6WCzRxqg58wH02MdMDQe8vByzVig2bM2e7DErtt+hPK/Dmdsqgns+Z+SrQcOvRa3
+ GMAHAuHB0u2LhYO6NyaNCgzdgutorilYcq7FEKr8XqwOnfVmZdCW3qGKmLbn6qMEdM7ATQRW
+ cn9GAQgAvugF8cFjv2Zs4BBb44SnxGawBySC1bMRas/MjA9EMHUAx/StcecQmxnl6BzEyGpr
+ +TRnXIzcb5xI8SxitBDU5MLvwsHgNvpYp9fscd4kWP7oMir9ta3Q8SvT4OLbO4FZBGaURzGP
+ ak8JmjMMtOoOBh4meOjz6GrJe9UIGxT94aB01w7YohfBANzK8xyk4ykKC5Op4XgaaMKOEQUa
+ h7wajcojYSlvgOiXqEisMHlRDAW6sXL2sEM7TIpvYhy9txMLllpkYb0Pu1BvUpY/unsybWKA
+ FyiTmeiY+nEveUvqX6Ef7BWdClBeCk2UaRvtcoLd22VxMlKTniHQcNMOXlRRawARAQABwsBf
+ BBgBCAAJBQJWcn9GAhsMAAoJELzl3Dx0GgLRPtcH/jD6rn2+VIKgrHdt3ao3Abpu2fqYfwbI
+ yPAtpXOddDptVq+0A/2arXT1Y8+jNSZpbAg8K+bLaEAcSUEjviKMpfI7ppTUBuGKrpgc5xsi
+ UpKkJCb7oB1ZraIBNBPtPPVUhbwLie4uW/LVt+8rBKz3W9KEDOsT0ZCG/pW8Ld+EpDR9l0fm
+ qoVHaw8PhLAtez+B7HS7Hv7iJPDtX85kFYpud8kIPENXVn9EjZudyMWgZb2LhYlcavNcszgR
+ 7In6ift5SNySojCOfAV0iKZb8QUXWktLleY8kQ8jltOsSRTuO4PDfzvtCQDixUw4tQ7WLwDT
+ qyUpot0oG03vtSG4LIRCdxI=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1693380574; x=1693985374; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Zk2PDaom4GmilODh7ygKGFmSQ1OJmJKnSQJcdYfpwj4=;
- b=fmJaqrNdzlckJRT5zw38j4eEQu18ILwHnUht4olVqTqJNOQGZh/jQ6ItH4Aa0vXc8s
- UpiE7bAGwAblFiuCIzWqbJFQLfuXavIz1Ruk2OoQ5uXG5Gt0zpF0UGFNLGB8jFYdRPbM
- S6K/NmfDdPmlAtee8RyVLV/tde/+op1/Ok2NwLdiKN5oPTJqCFgVzdoF70vgbzmLeAMa
- 5oiSLRwFG0USae/G5psdRZ6vv1j9swDs99W3qwtmfbjfIYr5v6JEbvfoOTysg/Fnp0ft
- UxsyXVdJv3SneBbcUxztc+TbxL265Mhgb7ZC6j0EcQuTjbWaIR8pQhCxE4mHukYbxUSy
- XPUg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fmJaqrNd
-Subject: Re: [Buildroot] [PATCH 2023.02.x] package/libmodsecurity: backport
- security fix for CVE-2023-28882
+ d=sigma-star.at; s=google; t=1693380585; x=1693985385; darn=busybox.net;
+ h=subject:autocrypt:from:to:content-language:user-agent:mime-version
+ :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=Ioyusg4dyVKIOL4RYe+wSidN65awlhoSRDTgc1PSRko=;
+ b=nCJt0ItCKCh8AU1t47Zr/tdBNtekNv+gdYGbjR55dlgCbUl9cRRGn0a9jlqa4zheTA
+ Q3W5vJ7GXwgPwLNFF7/Ud33CYUxWiMNGMeFwgOGtzl7Nsge1Wadvw3jLsRMmQ4mpO7ov
+ aXMOHfZOuKNo9wlzUge4D7ud0nc0BofVASG8+H91z05NlqN+X5zYJSYVdQaBIZw5L5sz
+ 3lvdti8JYurfSIIr8muVzCztz06C0mqbU/xNw+Ob3P8JnD76xaDkPb85muX9/OvoJ+By
+ 5O50u01Qd9IqzDPRSMyY7XtKgjEaPeHksip/QdCexlAzJ7FT1wFAzvsZTSsLgErT8y6b
+ Z6EQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=sigma-star.at header.i=@sigma-star.at
+ header.a=rsa-sha256 header.s=google header.b=nCJt0ItC
+Subject: [Buildroot] [ANNOUNCE] mtd-utils-2.1.6 is released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,52 +131,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Frank Vanbever via buildroot <buildroot@buildroot.org>
-Reply-To: Frank Vanbever <frank.vanbever@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8035918634169629358=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============8035918634169629358==
+Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------w7qnuR56pJEBmSjicyoAqoOv"
 
-I believe your assessment is right, at this point it would be best to backport 
-the bump to 3.0.10 on master to the stable branches and get rid of multiple 
-CVEs at the same time. Do I resubmit that patch or do you take it directly 
-from master?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------w7qnuR56pJEBmSjicyoAqoOv
+Content-Type: multipart/mixed; boundary="------------mohYc7hW4Fnhf4nfv320FfUV";
+ protected-headers="v1"
+From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+To: MTD Mailing List <linux-mtd@lists.infradead.org>,
+ Buildroot Mailing List <buildroot@busybox.net>,
+ "Josh Boyer (Fedora)" <jwboyer@gmail.com>,
+ "Riku Voipio (Debian)" <riku.voipio@linaro.org>,
+ "Pascal Bleser (SUSE)" <pascal.bleser@opensuse.org>,
+ "Levente Polyak (Arch)" <anthraxx@archlinux.org>,
+ "Robbat (Gentoo)" <robbat2@gentoo.org>, embedded@gentoo.org,
+ "Oliver Schinagl (Alpine)" <oliver@schinagl.nl>,
+ "Pascal Bellard (SliTaz)" <pascal.bellard@slitaz.org>,
+ =?UTF-8?Q?Llu=c3=ads_Batlle_i_Rossell_=28NixOS=29?= <shaba@altlinux.org>,
+ "Sergey Bolshakov (ALT Linux)" <sbolshakov@altlinux.org>,
+ "Orphaned (Void Linux)" <orphan@voidlinux.org>,
+ Richard Weinberger <richard@nod.at>
+Message-ID: <ad5cc151-04ba-7877-a24e-b6a832371302@sigma-star.at>
+Subject: [ANNOUNCE] mtd-utils-2.1.6 is released
 
-Best regards,
-Frank
+--------------mohYc7hW4Fnhf4nfv320FfUV
+Content-Type: multipart/mixed; boundary="------------NOAJ9cR1fR11DQ98ZSkqNoTu"
 
-On zaterdag 26 augustus 2023 22:06:23 CEST Peter Korsgaard wrote:
-> >>>>> "Frank" == Frank Vanbever via buildroot <buildroot@buildroot.org> 
-writes:
->  > Fixes the following issue:
->  > - CVE-2023-28882: Trustwave ModSecurity 3.0.5 through 3.0.8 before 3.0.9
->  > allows > 
->  >   a denial of service (worker crash and unresponsiveness) because some
->  >   inputs
->  >   cause a segfault in the Transaction class for some configurations.
->  >   
->  >   https://security-tracker.debian.org/tracker/CVE-2023-28882
->  > 
->  > Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
-> 
-> Sorry for the slow response.
-> 
-> We are using 3.0.8 on 2023.02.x. Is the delta between 3.0.8 and 3.0.9 so
-> big that it makes sense to add this patch rather than just bumping to
-> 3.0.9 - Especially given that 3.0.10 contained another security fix?
-> 
-> Looking at the 3.0.9 release notes, it seems to be almost entirely
-> fixes:
-> 
-> https://github.com/SpiderLabs/ModSecurity/releases/tag/v3.0.9
+--------------NOAJ9cR1fR11DQ98ZSkqNoTu
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+SGksDQoNCm10ZC11dGlscy0yLjEuNiBpcyByZWxlYXNlZC4NCg0KVGFyYmFsbDogICAgICAg
+ICAgICAgICBmdHA6Ly9mdHAuaW5mcmFkZWFkLm9yZy9wdWIvbXRkLXV0aWxzL210ZC11dGls
+cy0yLjEuNi50YXIuYnoyDQpUYXJiYWxsIGdwZyBzaWduYXR1cmU6IGZ0cDovL2Z0cC5pbmZy
+YWRlYWQub3JnL3B1Yi9tdGQtdXRpbHMvbXRkLXV0aWxzLTIuMS42LnRhci5iejIuYXNjDQpT
+aWduZWQgZ2l0IHRhZzogICAgICAgIGdpdDovL2dpdC5pbmZyYWRlYWQub3JnL210ZC11dGls
+cy5naXQgdjIuMS42DQoNCkFsdGVybmF0aXZlbHkgYWxzbyBtaXJyb3JlZCBoZXJlOg0KDQpU
+YXJiYWxsOiAgICAgICAgICAgICAgIGh0dHBzOi8vaW5mcmFyb290LmF0L3B1Yi9tdGQvbXRk
+LXV0aWxzLTIuMS42LnRhci5iejINClRhcmJhbGwgZ3BnIHNpZ25hdHVyZTogaHR0cHM6Ly9p
+bmZyYXJvb3QuYXQvcHViL210ZC9tdGQtdXRpbHMtMi4xLjYudGFyLmJ6Mi5hc2MNClNpZ25l
+ZCBnaXQgdGFnOiAgICAgICAgaHR0cHM6Ly9naXQuaW5mcmFyb290LmF0L210ZC11dGlscy5n
+aXQgdjIuMS42DQoNCg0KVGhpcyBpcyBhIHNtYWxsZXIsIHBhdGNoIGxldmVsIHJlbGVhc2Ug
+bWFpbmx5IGNvbnNpc3Rpbmcgb2YgZml4ZXMNCnRoYXQgaGF2ZSBhY2N1bXVsYXRlZCBpbiBt
+dGQtdXRpbHMuZ2l0IG1hc3RlciBzaW5jZSB0aGUgbGFzdCByZWxlYXNlLA0KYWxtb3N0IGEg
+eWVhciBhZ28uDQoNCg0KQ2hhbmdlcyBmcm9tIDIuMS41IHRvIDIuMS42Og0KDQpGZWF0dXJl
+czoNCiAgICAgICBmbGFzaF9zcGVlZDogTWVhc3VyZSByZWFkIHdoaWxlIHdyaXRlIGxhdGVu
+Y3kNCiAgICAgICBTdXBwb3J0IG10ZDo8bnVtPiBzeW50YXggZm9yIHNldmVyYWwgdG9vbHMN
+Cg0KRml4ZXM6DQogICAgICAgZmxhc2hjcDogY2hlY2sgZm9yIGxzZWVrIGVycm9ycw0KICAg
+ICAgIGZsYXNoY3A6IGZpeCBidWZmZXIgb3ZlcmZsb3cNCiAgICAgICBmbGFzaGNwOiB2ZXJp
+ZnkgZGF0YSBpbiAtLXBhcnRpdGlvbg0KICAgICAgIGZsYXNoY3A6IGFib3J0IG9uIC0tcGFy
+dGl0aW9uIGFuZCAtLWVyYXNlLWFsbA0KICAgICAgIGZsYXNoY3A6IGNvcnJlY3QgY2FzdGlu
+ZyBmb3IgcGVyY2VudCBkaXNwbGF5DQogICAgICAgbXRkcGFydDogZG9jdW1lbnQgcGFydGl0
+aW9uIG9mIHNpemUgMA0KICAgICAgIG1rZnMudWJpZnM6IE5vbi10ZXJtaW5hdGVkIHN0cmlu
+ZyByZWxhdGVkIGZhaWx1cmUgd2l0aCBvcHRpb24gc2VsaW51eA0KICAgICAgIG5hbmR0ZXN0
+OiBoYW5kbGUgbmFuZCBkZXZpY2VzIGxhcmdlciB0aGFuIDRHDQogICAgICAgRml4IHByaW50
+ZiBmb3JtYXQgc3BlY2lmaWVycyBmb3IgNjQgYml0IGludGVnZXIgdHlwZXMNCg0KQ2hhbmdl
+czoNCiAgICAgICBmbGFzaGNwOiBtZXJnZSBkdXBsaWNhdGUgd3JpdGUgY29kZSBwYXRocw0K
+ICAgICAgIGZsYXNoY3A6IG1lcmdlIGR1cGxpY2F0ZSBNRU1FUkFTRSBjb2RlIHBhdGhzDQog
+ICAgICAgZmxhc2hjcDogc2ltcGxpZnkgbG9nZ2luZw0KDQoNClJhdyBzaG9ydCBsb2cgc2lu
+Y2UgdGhlIDIuMS41IHJlbGVhc2U6DQoNCkJyYW5kb24gTWFpZXIgKDEwKToNCiAgICAgICBt
+aXNjLXV0aWxzOiBmbGFzaGNwOiBhZGQgc2FmZV93cml0ZQ0KICAgICAgIG1pc2MtdXRpbHM6
+IGZsYXNoY3A6IGNoZWNrIGZvciBsc2VlayBlcnJvcnMNCiAgICAgICBtaXNjLXV0aWxzOiBm
+bGFzaGNwOiBhZGQgc2FmZV9tZW1lcmFzZQ0KICAgICAgIG1pc2MtdXRpbHM6IGZsYXNoY3A6
+IHNpbXBsaWZ5IGxvZ2dpbmcNCiAgICAgICBtaXNjLXV0aWxzOiBmbGFzaGNwOiBmaXggYnVm
+ZmVyIG92ZXJmbG93DQogICAgICAgbWlzYy11dGlsczogZmxhc2hjcDogdmVyaWZ5IGRhdGEg
+aW4gLS1wYXJ0aXRpb24NCiAgICAgICBtaXNjLXV0aWxzOiBmbGFzaGNwOiBhYm9ydCBvbiAt
+LXBhcnRpdGlvbiBhbmQgLS1lcmFzZS1hbGwNCiAgICAgICBtaXNjLXV0aWxzOiBtdGRwYXJ0
+OiBkb2N1bWVudCBwYXJ0aXRpb24gb2Ygc2l6ZSAwDQogICAgICAgbGlibXRkOiBBZGQgZnVu
+Y3Rpb24gdG8gZ2V0IE1URCBpbmZvIGJ5IGRldmljZSBuYW1lDQogICAgICAgbXRkLXV0aWxz
+OiBBZGQgbmV3IHN5bnRheCB0byBnZXQgZGV2aWNlcyBieSBuYW1lDQoNCkNocmlzdGlhbiBX
+ZW5kdCBoZS9oaW0gKDEpOg0KICAgICAgIG10ZC11dGlsczogbmFuZHRlc3Q6IGhhbmRsZSBs
+YXJnZSBuYW5kIGRldmljZXMNCg0KRGF2aWQgT2JlcmhvbGxlbnplciAoNik6DQogICAgICAg
+UmVtb3ZlIGxpYnRvb2wgdXNhZ2UgZnJvbSBjb25maWd1cmUuYWMNCiAgICAgICBVcGRhdGUg
+YXhfcHRocmVhZA0KICAgICAgIFJlbW92ZSB1bnVzZWQgc3ltYm9scw0KICAgICAgIE1ha2Ug
+c3VyZSB1YmktbWVkaWEgc3RydWN0dXJlcyBhcmUgdmlzaWJsZSBmb3IgbGlidWJpZ2VuDQog
+ICAgICAgRml4IHByaW50ZiBmb3JtYXQgc3BlY2lmaWVycyBmb3IgNjQgYml0IGludGVnZXIg
+dHlwZXMNCiAgICAgICBSZWxlYXNlIG10ZC11dGlscy0yLjEuNg0KDQpNaXF1ZWwgUmF5bmFs
+ICgyKToNCiAgICAgICBtdGQtdXRpbHM6IGZsYXNoX3NwZWVkOiBSZXdvcmsgdGhlIHRpbWUg
+Y291bnRpbmcgaGVscGVycw0KICAgICAgIG10ZC11dGlsczogZmxhc2hfc3BlZWQ6IE1lYXN1
+cmUgcmVhZCB3aGlsZSB3cml0ZSBsYXRlbmN5DQoNClppanVuIEh1ICgxKToNCiAgICAgICBt
+a2ZzLnViaWZzOiBGaXggbWtmcy51YmlmcyBmYWlsdXJlIHdpdGggb3B0aW9uIHNlbGludXgN
+Cg0KY2Nob3V4ICgxKToNCiAgICAgICBtaXNjLXV0aWxzOiBmbGFzaGNwOiBjb3JyZWN0IGNh
+c3RpbmcgZm9yIHBlcmNlbnQgZGlzcGxheQ0KDQoNClJlZ2FyZHMsDQoNCkRhdmlkDQo=
+--------------NOAJ9cR1fR11DQ98ZSkqNoTu
+Content-Type: application/pgp-keys; name="OpenPGP_0xBCE5DC3C741A02D1.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xBCE5DC3C741A02D1.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+xsBNBFZyf0YBCADHyKhABhxthCC9n48pvsuk5p3IEdYXMs8Apenh1N/Z4cViAz/d
+/nSCZ+FGFX/PSubEzq8AilZLejchAltaORCvA1Y6FgTlpcdJ6gHDfStDbJL/vk5N
+8aL7YNF7VfjTRntBtKbhKcrG05nbdNjIioAm04pt9rx5mV5KMbf22/FdZpOSSsC6
+/N7b/cFH9+fx8kwi4pNFuJwrBkWRuQ7rEtCoSpd22t+Vh9qA7kymW9gWY405258j
+nN65jBO7ElqU2CCuGRPg6uryAHV3RVCB9j9AE3HLacQReFtt5ylyydSQbaK4K9as
+nd7U2/C11vIuuciXCppX4bPap/pMnGpzw0UNABEBAAHNN0RhdmlkIE9iZXJob2xs
+ZW56ZXIgPGRhdmlkLm9iZXJob2xsZW56ZXJAc2lnbWEtc3Rhci5hdD7CwHcEEwEI
+ACEFAlZyf0YCGwMFCwkIBwIGFQgJCgsCBBYCAwECHgECF4AACgkQvOXcPHQaAtFu
+EAgArXOhaoaVvCMVCa5N25Q/+Q6K1wrVpPmkH89yhQqCmfM6f+2VM5MGFDPfaSJ3
+5fBDH0iwBQwlXIb7NSXWtzdXX9rMvJkJqv45TgeKtJApf/sRhmcN+clrwzP8oZQb
+xkP1YWzoVwo4lOb3Kv7aY9yeCjqNbdJJ57NpvYOUrzrCpGkrDPBBQOvKF3wbq3oU
+/o3dT23NDeQ20jXgquJf/PCw6WCzRxqg58wH02MdMDQe8vByzVig2bM2e7DErtt+
+hPK/Dmdsqgns+Z+SrQcOvRa3GMAHAuHB0u2LhYO6NyaNCgzdgutorilYcq7FEKr8
+XqwOnfVmZdCW3qGKmLbn6qMEdM7ATQRWcn9GAQgAvugF8cFjv2Zs4BBb44SnxGaw
+BySC1bMRas/MjA9EMHUAx/StcecQmxnl6BzEyGpr+TRnXIzcb5xI8SxitBDU5MLv
+wsHgNvpYp9fscd4kWP7oMir9ta3Q8SvT4OLbO4FZBGaURzGPak8JmjMMtOoOBh4m
+eOjz6GrJe9UIGxT94aB01w7YohfBANzK8xyk4ykKC5Op4XgaaMKOEQUah7wajcoj
+YSlvgOiXqEisMHlRDAW6sXL2sEM7TIpvYhy9txMLllpkYb0Pu1BvUpY/unsybWKA
+FyiTmeiY+nEveUvqX6Ef7BWdClBeCk2UaRvtcoLd22VxMlKTniHQcNMOXlRRawAR
+AQABwsBfBBgBCAAJBQJWcn9GAhsMAAoJELzl3Dx0GgLRPtcH/jD6rn2+VIKgrHdt
+3ao3Abpu2fqYfwbIyPAtpXOddDptVq+0A/2arXT1Y8+jNSZpbAg8K+bLaEAcSUEj
+viKMpfI7ppTUBuGKrpgc5xsiUpKkJCb7oB1ZraIBNBPtPPVUhbwLie4uW/LVt+8r
+BKz3W9KEDOsT0ZCG/pW8Ld+EpDR9l0fmqoVHaw8PhLAtez+B7HS7Hv7iJPDtX85k
+FYpud8kIPENXVn9EjZudyMWgZb2LhYlcavNcszgR7In6ift5SNySojCOfAV0iKZb
+8QUXWktLleY8kQ8jltOsSRTuO4PDfzvtCQDixUw4tQ7WLwDTqyUpot0oG03vtSG4
+LIRCdxI=3D
+=3DjujX
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------NOAJ9cR1fR11DQ98ZSkqNoTu--
+
+--------------mohYc7hW4Fnhf4nfv320FfUV--
+
+--------------w7qnuR56pJEBmSjicyoAqoOv
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEEwY/cjyeWErqzVubvOXcPHQaAtEFAmTu7+cFAwAAAAAACgkQvOXcPHQaAtGZ
+lwf+OD7Fit38rjswkg8/rMulbHbEYppl3RP3BI7YtdXP/zMXW+CiARW5GZht2pvPfmPpk9KCJnEK
+VPUNiQKWZ7lcrtp9hy5m2GfZvx2b3YeeOTit3u1w9nVnD9yvT8wu8g4dv+ZI6GKCv1GaOBoQQ1iJ
+hJ8JNRcqtXC5anXyrMOqGMl/CW3Ht7uXZ0HlzOeKavLNo0EpBF5gbbx0s7s63FUmJfXg5+0bhEgT
+Hv2vx7P1h1ikkyTu8w23uQI20IkZJkV74grVT/9X/Nw9LFtswKR4BRd2/zW3BJw3I99bB/IHNv2E
+R3ShJ2oHMLBcu9Y1yuvlRv/YlAWrHdeoypBrCuT5mQ==
+=cRI0
+-----END PGP SIGNATURE-----
+
+--------------w7qnuR56pJEBmSjicyoAqoOv--
+
+--===============8035918634169629358==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8035918634169629358==--
