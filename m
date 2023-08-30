@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4422C6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5E34C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 908018232C;
-	Wed, 30 Aug 2023 11:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 908018232C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9AE8881F9A;
+	Wed, 30 Aug 2023 11:22:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AE8881F9A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IBhGOVUsD0qE; Wed, 30 Aug 2023 11:22:13 +0000 (UTC)
+	with ESMTP id UpQ_7IhrR-IV; Wed, 30 Aug 2023 11:22:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E428081F9A;
-	Wed, 30 Aug 2023 11:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E428081F9A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5E5361BF42D
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC4B382675;
+	Wed, 30 Aug 2023 11:22:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC4B382675
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 69C0A1BF980
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 37B8561019
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5033B416BB
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:22:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37B8561019
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5033B416BB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id prWaiiSoijXr for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Cy7tmP4fpC4v for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 11:22:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 688EF60FC0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79A79416B8
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 11:22:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 688EF60FC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79A79416B8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5463B86592; Wed, 30 Aug 2023 11:22:10 +0000 (UTC)
+ id 684B486594; Wed, 30 Aug 2023 11:22:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 13:03:52 +0200
+Date: Wed, 30 Aug 2023 13:17:39 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: a8ce33440d9bf17c6fba50432a3b3c324809fcb4
-X-Git-Newrev: 836cb23310cbbb003225a3ea4f1d2b4686fa81f0
+X-Git-Oldrev: b8088fce0a83f3f0c07a7ba5dc00fcac1192fdc1
+X-Git-Newrev: 69e694d0dd568318f9c8e0e548fe7440375c14bd
 X-Patchwork-Hint: ignore
-Message-Id: <20230830112210.5463B86592@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/containerd: bump
- version to v1.6.22
+Message-Id: <20230830112210.684B486594@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/php: force arm
+ mode instead of Thumb mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=836cb23310cbbb003225a3ea4f1d2b4686fa81f0
+commit: https://git.buildroot.net/buildroot/commit/?id=69e694d0dd568318f9c8e0e548fe7440375c14bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Bugfixes and updates.
+Fix the following build failure:
+/tmp/ccqcLrVb.s:4053: Error: selected processor does not support `umlal r2,r1,r0,r3' in Thumb mode
+/tmp/ccqcLrVb.s:4076: Error: selected processor does not support `umlal r0,r3,r1,r2' in Thumb mode
+/tmp/ccqcLrVb.s:8644: Error: selected processor does not support `umlal r0,r3,r2,r4' in Thumb mode
 
-https://github.com/containerd/containerd/releases/tag/v1.6.22
+Fixes:
+http://autobuild.buildroot.net/results/1d09a0a58cbc1712416de746d57d4532df580673/
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 718c4972c6f58fd8ac401fa4a982a9d8514f9dcd)
+(cherry picked from commit 73ddf7bf509813a1a9008fa61c8706e200340fe9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/php.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index 345a7b16ff..8404675e30 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  9452e95455d03a00d78ae0587595d0c18555bae7912068269efa25a724efe713  containerd-1.6.21.tar.gz
-+sha256  b109aceacc814d7a637ed94ba5ade829cd2642841d03e06971ef124fa3b86899  containerd-1.6.22.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 83489a3abf..c4a6d854c3 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 6a2a6ae71b..68aeceb33e 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -84,6 +84,13 @@ else
+ PHP_CONF_ENV += ac_cv_func_dlopen=no ac_cv_lib_dl_dlopen=no
+ endif
  
--CONTAINERD_VERSION = 1.6.21
-+CONTAINERD_VERSION = 1.6.22
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
++# php has some assembly function that is not present in Thumb mode:
++# Error: selected processor does not support `umlal r2,r1,r0,r3' in Thumb mode
++# so, we desactivate Thumb mode
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++PHP_CFLAGS += -marm
++endif
++
+ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CLI),--enable-cli,--disable-cli)
+ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_CGI),--enable-cgi,--disable-cgi)
+ PHP_CONF_OPTS += $(if $(BR2_PACKAGE_PHP_SAPI_FPM),--enable-fpm,--disable-fpm)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
