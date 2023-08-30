@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0EB6C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08C42C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 91D25418B0;
-	Wed, 30 Aug 2023 22:33:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91D25418B0
+	by smtp2.osuosl.org (Postfix) with ESMTP id B623C41872;
+	Wed, 30 Aug 2023 22:33:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B623C41872
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PGt7zMH1-17C; Wed, 30 Aug 2023 22:33:13 +0000 (UTC)
+	with ESMTP id IKgX8cf1wWGK; Wed, 30 Aug 2023 22:33:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBD1A418AD;
-	Wed, 30 Aug 2023 22:33:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBD1A418AD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7BA141BF424
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0008F418B3;
+	Wed, 30 Aug 2023 22:33:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0008F418B3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9FC551BF424
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:32:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 632824189A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 79C5D60FB2
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:32:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 632824189A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79C5D60FB2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OTFFICh6RNlm for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G3VUcgPr_D59 for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 22:32:33 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8EF7F41892
+ by smtp3.osuosl.org (Postfix) with ESMTP id 948B060DA5
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:32:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EF7F41892
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 948B060DA5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C499866DB; Wed, 30 Aug 2023 22:32:33 +0000 (UTC)
+ id 84D8D866DC; Wed, 30 Aug 2023 22:32:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 00:10:02 +0200
+Date: Thu, 31 Aug 2023 00:14:42 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 93fb7cccca622cc15d2f33f3c567a6a26b25f4b0
-X-Git-Newrev: e3290059712ea592ce2c609c737aeef699dca237
+X-Git-Oldrev: e3290059712ea592ce2c609c737aeef699dca237
+X-Git-Newrev: 75f235013e047527668520320cc5b1923fb6061b
 X-Patchwork-Hint: ignore
-Message-Id: <20230830223233.7C499866DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/bind: fix build
- failure due to gcc bug 101737
+Message-Id: <20230830223233.84D8D866DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ board/bsh/imx8mn-bsh-smm-s2/readme.txt: fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3290059712ea592ce2c609c737aeef699dca237
+commit: https://git.buildroot.net/buildroot/commit/?id=75f235013e047527668520320cc5b1923fb6061b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The bind package exhibits gcc bug 101737 when built for the SH4
-architecture with optimization enabled, which causes a build failure.
+It was a leftover from the copy-and-paste of the readme.txt file of its
+almost twin sister BSH SMM S2 PRO.
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_101737=y.
-To achieve this we need to correct the override of CFLAGS by using:
-BIND_CONF_OPTS += CFLAGS="$(BIND_CFLAGS)"
-instead of:
-BIND_CONF_ENV = BUILD_CFLAGS"$(BIND_CFLAGS)"
-since the latter doesn't work as expected and doesn't override CFLAGS.
-
-Fixes:
-http://autobuild.buildroot.net/results/e7b/e7b9a4cbee8bb16431609182b96d1ac1ccec10e7/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Reviewed-by: Michael Trimarchi <michael@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 105e3b34be2e51e03721710fb3e91aa93083b1ce)
+(cherry picked from commit d4f23da67eedc56f285e093b7432b33ba303a71c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ board/bsh/imx8mn-bsh-smm-s2/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index f46d1a8a54..b934ab3190 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -28,7 +28,6 @@ BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone tsig-keygen
- BIND_TARGET_TOOLS_BIN = dig host nslookup nsupdate
- BIND_CONF_ENV = \
- 	BUILD_CC="$(TARGET_CC)" \
--	BUILD_CFLAGS="$(TARGET_CFLAGS)" \
- 	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- BIND_CONF_OPTS = \
- 	--without-cmocka \
-@@ -39,6 +38,14 @@ BIND_CONF_OPTS = \
+diff --git a/board/bsh/imx8mn-bsh-smm-s2/readme.txt b/board/bsh/imx8mn-bsh-smm-s2/readme.txt
+index 37081091e8..6b8cd03199 100644
+--- a/board/bsh/imx8mn-bsh-smm-s2/readme.txt
++++ b/board/bsh/imx8mn-bsh-smm-s2/readme.txt
+@@ -2,7 +2,7 @@ i.MX8MN BSH SMM S2
+ ==================
  
- BIND_DEPENDENCIES = host-pkgconf libuv openssl
+ This tutorial describes how to use the predefined Buildroot
+-configuration for the i.MX8MN BSH SMM S2 PRO board.
++configuration for the i.MX8MN BSH SMM S2 board.
  
-+BIND_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101737),y)
-+BIND_CFLAGS += -O0
-+endif
-+
-+BIND_CONF_OPTS += CFLAGS="$(BIND_CFLAGS)"
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- BIND_CONF_OPTS += --with-zlib
- BIND_DEPENDENCIES += zlib
+ Building
+ --------
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
