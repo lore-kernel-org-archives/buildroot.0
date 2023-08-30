@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C62D2C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 12:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3768EC6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 12:07:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B31A82258;
-	Wed, 30 Aug 2023 12:06:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B31A82258
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96BD8821CE;
+	Wed, 30 Aug 2023 12:07:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96BD8821CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ko7t1EOdm0BM; Wed, 30 Aug 2023 12:06:52 +0000 (UTC)
+	with ESMTP id rBRHywUJiUe5; Wed, 30 Aug 2023 12:07:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9E85821CE;
-	Wed, 30 Aug 2023 12:06:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9E85821CE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9D6011BF487
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 12:06:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E542082276;
+	Wed, 30 Aug 2023 12:07:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E542082276
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 17F431BF487
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 12:06:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7665060FE9
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 12:06:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7665060FE9
+ by smtp2.osuosl.org (Postfix) with ESMTP id F277241749
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 12:06:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F277241749
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BueL1F_Ilmv1 for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 12:06:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9222360F79
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:06:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9222360F79
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F05C865B3; Wed, 30 Aug 2023 12:06:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9AYnLcDwen2w for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 12:06:55 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DCAA4405F5
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:06:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCAA4405F5
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C755960006;
+ Wed, 30 Aug 2023 12:06:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qbJyF-0004GO-1P; Wed, 30 Aug 2023 14:06:51 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 14:06:38 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 924c0ae6239fd37ad3a1b0e91e4365cec61859f0
-X-Git-Newrev: 324e16e8b68acccf3ff88cfc5c44f8635036eeed
-X-Patchwork-Hint: ignore
-Message-Id: <20230830120649.7F05C865B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/tor: bump version
- to 0.4.7.14
+To: Baruch Siach <baruch@tkos.co.il>
+References: <20230727162340.3303969-1-bernd@kuhls.net>
+ <87edjkre3b.fsf@48ers.dk> <878r9svjvn.fsf@tarshish>
+Date: Wed, 30 Aug 2023 14:06:51 +0200
+In-Reply-To: <878r9svjvn.fsf@tarshish> (Baruch Siach's message of "Wed, 30 Aug
+ 2023 14:39:06 +0300")
+Message-ID: <87fs40pwdg.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.7.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,51 +63,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=324e16e8b68acccf3ff88cfc5c44f8635036eeed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Changelog:
-https://gitlab.torproject.org/tpo/core/tor/-/blob/release-0.4.7/ChangeLog
+ > Hi Peter,
+ > On Wed, Aug 30 2023, Peter Korsgaard wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 361ff14457d6438e8b32a3566d60edb27a422ce5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ >>>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+ >> 
+ >> > Changelog:
+ >> > https://gitlab.torproject.org/tpo/core/tor/-/blob/release-0.4.7/ChangeLog
+ >> 
+ >> > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ >> 
+ >> Committed to 2023.02.x and 2023.05.x, thanks.
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 51892f15c3..a6b5f27c40 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.7.13.tar.gz.sha256sum
--sha256  2079172cce034556f110048e26083ce9bea751f3154b0ad2809751815b11ea9d  tor-0.4.7.13.tar.gz
-+# From https://dist.torproject.org/tor-0.4.7.14.tar.gz.sha256sum
-+sha256  a5ac67f6466380fc05e8043d01c581e4e8a2b22fe09430013473e71065e65df8  tor-0.4.7.14.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 03bd998708..b794296c6a 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.4.7.13
-+TOR_VERSION = 0.4.7.14
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+ > This patch is not in the 2023.05.x branch as of commit 69e694d0dd.
+
+Ups, fixed now - Thanks!
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
