@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 203F1C83F17
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A22BC83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:43:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACEB660E83;
-	Wed, 30 Aug 2023 19:41:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACEB660E83
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28121605EC;
+	Wed, 30 Aug 2023 19:43:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28121605EC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MT_3IBl3gRqo; Wed, 30 Aug 2023 19:41:16 +0000 (UTC)
+	with ESMTP id Dhm2YW6aUtyJ; Wed, 30 Aug 2023 19:43:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6BD160BF4;
-	Wed, 30 Aug 2023 19:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6BD160BF4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 18A511BF423
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:41:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58ACA605A7;
+	Wed, 30 Aug 2023 19:43:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58ACA605A7
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F9B31BF423
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2DF860BF4
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:41:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2DF860BF4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6581081A6A
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:43:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6581081A6A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p4bNEgyxJWIq for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 19:41:14 +0000 (UTC)
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9725360A7E
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9725360A7E
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-9936b3d0286so1400166b.0
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:41:13 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7pD5uKYtAzLO for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 19:43:27 +0000 (UTC)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF89181E98
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:43:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF89181E98
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-5256d74dab9so4102a12.1
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:43:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693424471; x=1694029271;
+ d=1e100.net; s=20221208; t=1693424605; x=1694029405;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=r8pG/qEmsrGYnbOWXxvf+D2TcWEidp5zlYfVkN+QqlQ=;
- b=cvs/L5BNh4s/fUBrXq1UuE3Bho3iDdUIfRHAd1loJGY4q2xMAjYMOHRYsvIBYgYFPg
- Cn5kixfGAfi2aGL3HlM22cOYim7oIjOJa+8wxSdwfW7rnvHnZngjdOWTcvQaGE4NqXNv
- ElMb3uX8iz6w98SfA6lkwKrkhjokZRBcaArmdXDj+QDtFLjBCLL1YUacQZhOfXTRkf8O
- A91e8+N67RZEJQahYr5EZyIZKvjsoDjXFd3vP8+f6Ad+zHhxibns5CYrm4kPj7ty6TMh
- eOoy6yv2Sk4R9bC0cOX0BqjMlfGcYs2QFkbcYWCcH2h6pIn78ZTL09wfeUEspG6oMnQe
- 5a/w==
-X-Gm-Message-State: AOJu0Yw0IW6O2bczOtaIVeZZzLHlUUvtO+iE8crBRMEOm/rE0HznIU0i
- SqLlkNbZYzXodeaK/hq5+PsA8g==
-X-Google-Smtp-Source: AGHT+IGH3GJ8ptlGmXIqsZfZoqtfCn4Q4HEljobbuCpcc+luB1f7sjjYQ9YMR8nS1ZpRMOhOVz4Ylg==
-X-Received: by 2002:a17:906:31d2:b0:9a5:d48f:c906 with SMTP id
- f18-20020a17090631d200b009a5d48fc906mr2290089ejf.15.1693424471387; 
- Wed, 30 Aug 2023 12:41:11 -0700 (PDT)
+ bh=Mbs+0c1WrUukPWCZ/GkZimS589FhYXU8SDHOr6t0yhs=;
+ b=MJycBFC1NRRF3NoK7bXfh+67Xytrr5rkTkwqSEse0JLnrW7yp3POTxOhHOIGrXD2La
+ jMD6jIOMk20eNokXl1WIMvsEjQ/Hhw5XMTCf44qNqvC0ksi/41o5RYrzu8XZCjcQgp69
+ K81WYOEhq5Jb0ofRdqqHBRcSUticOXkz2gpYmO6/pRd7DCyDZwFjXV2HjrBXr538tlH6
+ 2osxjY8oxySZCDDuyEI0M45foTbEiupbPgIZLXkknaqCiM+T8W9dExgSDqYpDdmagpLU
+ eFEzoNZ1LU4+Wd2s50yDGe51d4neIr+GibDkfDaIViJmqrN+QCQ8kEKWNywPTRIQIvFx
+ 450w==
+X-Gm-Message-State: AOJu0YxlA4Uzl06QznAjNnr0evf6cLmUnWAAMe2a10B0xviA8QysjHQv
+ S94/Xt1tMq2U+XQA4fprLAYzFUOQQJZCdLgxztM=
+X-Google-Smtp-Source: AGHT+IGpEV5g5rwjfo954bNGiR6KrzZB8b7Du4GFsRDQ5NfMChqfVAfOMEG3svS0kee7wkNVz9ovKw==
+X-Received: by 2002:a05:6402:1482:b0:523:38eb:395f with SMTP id
+ e2-20020a056402148200b0052338eb395fmr2544189edv.2.1693424604813; 
+ Wed, 30 Aug 2023 12:43:24 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- u5-20020a17090626c500b009929d998abcsm7492775ejc.209.2023.08.30.12.41.10
+ cq26-20020a056402221a00b0052bdfc9b8dbsm1374050edb.92.2023.08.30.12.43.23
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 30 Aug 2023 12:41:10 -0700 (PDT)
-Message-ID: <4453d5d9-5194-19ac-dbc8-90eae39f6551@mind.be>
-Date: Wed, 30 Aug 2023 21:41:08 +0200
+ Wed, 30 Aug 2023 12:43:24 -0700 (PDT)
+Message-ID: <c9c04ca0-fe70-1e90-cbbb-989354b27bd3@mind.be>
+Date: Wed, 30 Aug 2023 21:43:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 Content-Language: en-GB
-To: Adam Duskett <aduskett@gmail.com>, buildroot@buildroot.org
-References: <20230830155926.2831345-1-aduskett@gmail.com>
-In-Reply-To: <20230830155926.2831345-1-aduskett@gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <20230829120933.335227-1-yann.morin.1998@free.fr>
+In-Reply-To: <20230829120933.335227-1-yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1693424471; x=1694029271; darn=buildroot.org;
+ d=mind.be; s=google; t=1693424605; x=1694029405; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:cc:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=r8pG/qEmsrGYnbOWXxvf+D2TcWEidp5zlYfVkN+QqlQ=;
- b=HRkRZExG7BChXjWGKi5mAhVdsiqGHSawEb7BX7ma5o6Y5dX35SkNdb5H0/kJ24haDb
- W8bvi07lSu6LJPNdBKyQLzExd3/8pMKbXmoRvpHmbD5mHhTFDCKBkSPt1QNX0oy00/U2
- zda1DB7RIIH9MK9lHS5LbZN4dqKnVqDXNPsEbG1d872Li/fxC/Qo7v8Z5Z/m+dUVL8fU
- HYXkvH39khqW0nn1Hu8dxMHBIYC5SI1aTSgQji4lVEO8A/dwF8YtemXNaSv77vo3xppE
- fE2sygfm8lVX1CgsbpYFBwsH9vKoVRBsd/Aj/PHDLOmSFrZ7+9YbBwhUKES3thJjkw2x
- cFQw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Mbs+0c1WrUukPWCZ/GkZimS589FhYXU8SDHOr6t0yhs=;
+ b=bdC211xkNGntAUV+XP4i4i82TsZ7lKa7yii3MhnaycnXcNhAlbucT9l+z4GpF3NjOB
+ g/6CuJw0nDAqBzheRgar5uQN4il+hFQUiY5IMoMQcrHVYAmeP6nBJKmxEDjh8tuvBmxP
+ ciE4nsHkyP7b93U2Nb2tbcNOLNwbS/232Z8ekWPC3XG1vJMvxjioyI3ryMkKgRiv5xEc
+ krpK7cPWlskjlYGYFmkTaoSMjhY9flZC7vwsauBzCD7D+2nKTUjP8CNo4L+fJkWSj6NM
+ e6FV7GzdBR5HxEKYpedNcP9lmDTVYAEsOLjYHZD7uIuWQcM94U/vOl+5fuBKxPM83H1d
+ mXkA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HRkRZExG
-Subject: Re: [Buildroot] [PATCH 1/1] package/openjdk{-bin}: security bump
- versions to 11.0.20+8 and 17.0.8+7
+ header.a=rsa-sha256 header.s=google header.b=bdC211xk
+Subject: Re: [Buildroot] [PATCH] package/pcm-tools: fix github-download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,7 +101,8 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Tudor Holton <buildroot@tudorholton.com>
+Cc: Woody Douglass <wdouglass@carnegierobotics.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
@@ -110,117 +110,116 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 30/08/2023 17:59, Adam Duskett wrote:
-> Fixed the following security issues:
+On 29/08/2023 14:09, Yann E. MORIN wrote:
+> The pcm-tools package contains a version.h with git attributes:
 > 
-> * CVEs
->    - CVE-2023-22006
->    - CVE-2023-22036
->    - CVE-2023-22041
->    - CVE-2023-22044
->    - CVE-2023-22045
->    - CVE-2023-22049
->    - CVE-2023-25193
-> * Security fixes
->    - JDK-8298676: Enhanced Look and Feel
->    - JDK-8300285: Enhance TLS data handling
->    - JDK-8300596: Enhance Jar Signature validation
->    - JDK-8301998, JDK-8302084: Update HarfBuzz to 7.0.1
->    - JDK-8302475: Enhance HTTP client file downloading
->    - JDK-8302483: Enhance ZIP performance
->    - JDK-8303376: Better launching of JDI
->    - JDK-8304468: Better array usages
->    - JDK-8305312: Enhanced path handling
->    - JDK-8308682: Enhance AES performance
+>      $ cat version.h
+>      #define PCM_VERSION " ($Format:%ci ID=%h$)"
 > 
-> For details, see the announcements:
-> https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024064.html
-> https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024063.html
+>      $ man 5 gitattributes
+>         Creating an archive
+>           export-subst
+>             If the attribute export-subst is set for a file then Git
+>             will expand several placeholders when adding this file to
+>             an archive. The expansion depends on the availability of
+>             a commit ID, i.e., if git-archive(1) has been given a tree
+>             instead of a commit or a tag then no replacement will be
+>             done. The placeholders are the same as those for the option
+>             --pretty=format: of git-log(1), except that they need to be
+>             wrapped like this: $Format:PLACEHOLDERS$ in the file. E.g.
+>             the string $Format:%H$ will be replaced by the commit hash.
 > 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> So, the archive generated by github has changed since we updated
+> pcm-tools in 2021-12-08 with commit d1d93d488c76 (package/pcm-tools:
+> bump to version 202110). The downlad was still OK in 2022-01-04 [0]
+> but has been failing at least since 202-08-25 [1].
+> 
+> Since the archive is generated on the github side, there is not much we
+> can do to fix this up.
+> 
+> We switch over to using git to do the download, and we generate the
+> archive localy, which we know is reproducible.
+> 
+> We fix the version.h so that it contains the same string as the backup
+> tarball we host on s.b.o.
+> 
+> There are three other files in pcm-tools that have git attributes, to
+> exclude them from the generated archive, all pertaining to CI/CD stuff:
+>      .cirrus.yml export-ignore
+>      .gitlab-ci.yml export-ignore
+>      .travis.yml export-ignore
+> 
+> We don't remove them, because they have no impact on the build, and they
+> are anyway already present in the archive by the time we could act on it
+> anyway...
+> 
+> [0] http://autobuild.buildroot.org/results/127/1276a3d49c8848039f034e7f03632df365097e94/
+> [1] http://autobuild.buildroot.org/results/8bb/8bbf9c36af332bbf5e7c1abcbb594a0b231ef97e/
+> 
+> Reported-by: Woody Douglass <wdouglass@carnegierobotics.com>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>   package/pcm-tools/pcm-tools.hash |  2 +-
+>   package/pcm-tools/pcm-tools.mk   | 16 ++++++++++++++--
+>   2 files changed, 15 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pcm-tools/pcm-tools.hash b/package/pcm-tools/pcm-tools.hash
+> index 1853dcebb5..cfa3faeff7 100644
+> --- a/package/pcm-tools/pcm-tools.hash
+> +++ b/package/pcm-tools/pcm-tools.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  aa48ab1473720aeb7837b67bfc612100f484748720a8b8034daff00419709057  pcm-tools-202110.tar.gz
+> +sha256  29416f83d1de95594d225f63af34f8f074ee4822010ce2e05b1fabc66933472a  pcm-tools-93fc9193a70e2f1f054be554c48f4a4791be5032-br1.tar.gz
+>   sha256  0f476c77009f982dcc4bdff41e692ddd456a9862908e99f2ae3d57296decc649  LICENSE
+> diff --git a/package/pcm-tools/pcm-tools.mk b/package/pcm-tools/pcm-tools.mk
+> index d676df57f9..c530492696 100644
+> --- a/package/pcm-tools/pcm-tools.mk
+> +++ b/package/pcm-tools/pcm-tools.mk
+> @@ -4,8 +4,12 @@
+>   #
+>   ################################################################################
+>   
+> -PCM_TOOLS_VERSION = 202110
+> -PCM_TOOLS_SITE = $(call github,opcm,pcm,$(PCM_TOOLS_VERSION))
+> +# Don't use the github helper, as pcm-tools uses git attributes that are
+> +# replaced when gnerating the archive.
+> +# 93fc9193a70e2f1f054be554c48f4a4791be5032 is the hash of the 202110 tag.
+> +PCM_TOOLS_VERSION = 93fc9193a70e2f1f054be554c48f4a4791be5032
 
-  Applied to master, thanks.
+  We did not, in fact, need to change to a hash, because the filename anyway 
+changes due to the -br1 suffix. Keeping an actual version has the advantage that 
+it's still possible to do version comparisons for CVE and release-monitoring.
+
+  On the other hand, you never know if upstream changes the tag. And this 
+package anyway doesn't have a valid CPE.
+
+  Therefore, applied to master as is, thanks.
 
   Regards,
   Arnout
 
-> ---
->   package/openjdk-bin/openjdk-bin.hash                      | 8 ++++----
->   package/openjdk-bin/openjdk-bin.mk                        | 4 ++--
->   .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch   | 0
->   package/openjdk/openjdk.hash                              | 4 ++--
->   package/openjdk/openjdk.mk                                | 4 ++--
->   5 files changed, 10 insertions(+), 10 deletions(-)
->   rename package/openjdk/{17.0.7+7 => 17.0.8+7}/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch (100%)
-> 
-> diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-> index eb9d7396e3..401e83e75e 100644
-> --- a/package/openjdk-bin/openjdk-bin.hash
-> +++ b/package/openjdk-bin/openjdk-bin.hash
-> @@ -1,10 +1,10 @@
->   # https://github.com/adoptium/temurin17-binaries/releases
-> -sha256  e9458b38e97358850902c2936a1bb5f35f6cffc59da9fcd28c63eab8dbbfbc3b  OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz
-> -sha256  0084272404b89442871e0a1f112779844090532978ad4d4191b8d03fc6adfade  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz
-> +sha256  aa5fc7d388fe544e5d85902e68399d5299e931f9b280d358a3cbee218d6017b0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz
-> +sha256  c43688163cfdcb1a6e6fe202cc06a51891df746b954c55dbd01430e7d7326d00  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz
+> +PCM_TOOLS_SITE = https://github.com/opcm/pcm
+> +PCM_TOOLS_SITE_METHOD = git
+>   PCM_TOOLS_LICENSE = BSD-3-Clause
+>   PCM_TOOLS_LICENSE_FILES = LICENSE
 >   
->   # From https://github.com/adoptium/temurin11-binaries/releases
-> -sha256  5f19fb28aea3e28fcc402b73ce72f62b602992d48769502effe81c52ca39a581  OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
-> -sha256  0c7763a19b4af4ef5fbae831781b5184e988d6f131d264482399eeaf51b6e254  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.19_7.tar.gz
-> +sha256  7a99258af2e3ee9047e90f1c0c1775fd6285085759501295358d934d662e01f9  OpenJDK11U-jdk_x64_linux_hotspot_11.0.20_8.tar.gz
-> +sha256  eb821c049c2d2f7c3fbf8ddcce2d608d3aa7d488700e76bfbbebabba93021748  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.20_8.tar.gz
+> @@ -13,6 +17,14 @@ PCM_TOOLS_EXE_FILES = \
+>   	pcm-core pcm-iio pcm-lspci pcm-memory pcm-msr pcm-numa \
+>   	pcm-pcicfg pcm-pcie pcm-power pcm-sensor pcm-tsx pcm
 >   
->   # Locally calculated
->   sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-> diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-> index dad846534b..616c8d917d 100644
-> --- a/package/openjdk-bin/openjdk-bin.mk
-> +++ b/package/openjdk-bin/openjdk-bin.mk
-> @@ -6,10 +6,10 @@
->   
->   ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
->   HOST_OPENJDK_BIN_VERSION_MAJOR = 17
-> -HOST_OPENJDK_BIN_VERSION_MINOR = 0.7_7
-> +HOST_OPENJDK_BIN_VERSION_MINOR = 0.8_7
->   else
->   HOST_OPENJDK_BIN_VERSION_MAJOR = 11
-> -HOST_OPENJDK_BIN_VERSION_MINOR = 0.19_7
-> +HOST_OPENJDK_BIN_VERSION_MINOR = 0.20_8
->   endif
->   
->   ifeq ($(HOSTARCH),x86_64)
-> diff --git a/package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-> similarity index 100%
-> rename from package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-> rename to package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-> diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-> index 3b36289628..ba398b84be 100644
-> --- a/package/openjdk/openjdk.hash
-> +++ b/package/openjdk/openjdk.hash
-> @@ -1,4 +1,4 @@
->   # Locally computed
-> -sha256  43b80a5aec5fce908e80858e9b34efdf1b49255a12ce303650325af65141d3e8  openjdk-17.0.7+7.tar.gz
-> -sha256  25fd9ab3042a284aa4e6348969403016404bc2706a4a02c149a0054fbe477337  openjdk-11.0.19+7.tar.gz
-> +sha256  643ff42dcdf8751e0fee716c1a1914ddc7348b174e871a5eb2636578a181f20d  openjdk-17.0.8+7.tar.gz
-> +sha256  b2a37ef209ae7eaf8f34182b7c9aa3252af20a214d02970f96ce62242c805479  openjdk-11.0.20+8.tar.gz
->   sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index 39d461a87c..d1a2fa23ee 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -6,10 +6,10 @@
->   
->   ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
->   OPENJDK_VERSION_MAJOR = 17
-> -OPENJDK_VERSION_MINOR = 0.7+7
-> +OPENJDK_VERSION_MINOR = 0.8+7
->   else
->   OPENJDK_VERSION_MAJOR = 11
-> -OPENJDK_VERSION_MINOR = 0.19+7
-> +OPENJDK_VERSION_MINOR = 0.20+8
->   endif
->   OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
->   OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+> +# version.h contains git attributes; replace them with the previously-known
+> +# value.
+> +define PCM_TOOLS_FIXUP_VERSION_H
+> +	$(SED) 's/\$$Format:%ci ID=%h\$$/2021-10-25 16:07:54 +0200 ID=93fc9193/' \
+> +		$(@D)/version.h
+> +endef
+> +PCM_TOOLS_POST_EXTRACT_HOOKS += PCM_TOOLS_FIXUP_VERSION_H
+> +
+>   define PCM_TOOLS_BUILD_CMDS
+>   	touch $(@D)/daemon-binaries
+>   	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
