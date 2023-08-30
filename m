@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F6DEC873A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F273EC873C
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B87D380B6A;
-	Thu,  7 Sep 2023 15:39:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B87D380B6A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D3B883B48;
+	Thu,  7 Sep 2023 15:39:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D3B883B48
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r0JFvNPb5wfd; Thu,  7 Sep 2023 15:39:36 +0000 (UTC)
+	with ESMTP id V41Sj3RaQFNt; Thu,  7 Sep 2023 15:39:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB2DD83A8E;
-	Thu,  7 Sep 2023 15:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB2DD83A8E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CF1F83A45;
+	Thu,  7 Sep 2023 15:39:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CF1F83A45
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 15DA61BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5C6381BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DCB941E42
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9759C41E37
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DCB941E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9759C41E37
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X8-uOSnkVrhw for <buildroot@lists.busybox.net>;
+ with ESMTP id 2kbMYLfwInuu for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C774641D80
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAD1241E4B
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C774641D80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAD1241E4B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBFF486A1F; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+ id D613486A1E; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 23:33:21 +0200
+Date: Wed, 30 Aug 2023 23:48:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ae3f1748b93990436723a4c4f8434ba61fdc099
-X-Git-Newrev: f8047ff5987efc80f6ead51edae126911c02a8ad
+X-Git-Oldrev: 060b88ace6772ceb016a1ebe45d415f10c194c6c
+X-Git-Newrev: 93556f95a3a8ce402eb29e8f5c73f0c02a708f54
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145133.BBFF486A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nushell: new package
+Message-Id: <20230907145133.D613486A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdbus-cpp: bump to version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,118 +58,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2336111040299072535=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2336111040299072535==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f8047ff5987efc80f6ead51edae126911c02a8ad
+commit: https://git.buildroot.net/buildroot/commit/?id=93556f95a3a8ce402eb29e8f5c73f0c02a708f54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Nushell is a shell - written in Rust - that makes use of the nushell
-language to interact with the operating system
+Changelog:
+https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v1.3.0
 
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+A trailing whitespace was removed in the COPYING-LGPL-Exception file,
+so the hash differs.
+https://github.com/Kistler-Group/sdbus-cpp/commit/dcd9d46b9c5e5011dc7170e9d081bcf80096fd15
+
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/nushell/Config.in    | 12 ++++++++++++
- package/nushell/nushell.hash |  3 +++
- package/nushell/nushell.mk   | 20 ++++++++++++++++++++
- 5 files changed, 39 insertions(+)
+ package/sdbus-cpp/sdbus-cpp.hash | 4 ++--
+ package/sdbus-cpp/sdbus-cpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 241de082eb..24ec17a7c2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2683,6 +2683,9 @@ F:	support/misc/toolchainfile.cmake.in
- N:	Sam Voss <sam.voss@gmail.com>
- F:	package/ripgrep/
+diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
+index 169fad2807..f5fc8d6868 100644
+--- a/package/sdbus-cpp/sdbus-cpp.hash
++++ b/package/sdbus-cpp/sdbus-cpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  7f7231904abb6a996b8c18ddc5fb50078ef5dff5191649abf9f127aff41d24e9  v1.2.0.tar.gz
++sha256  d44f59abdd64d8f1ca3af7db58bc6518cb081fc9ff16285c3d75a68f5c073d10  v1.3.0.tar.gz
+ sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
+-sha256  be43debbf06a38325616054a39e44ed5afde4ed21b99de197488a4a306d47e39  COPYING-LGPL-Exception
++sha256  a1c9e75e25d8f2ce18017c88978edab2f0dbc7814ad0697d4ff2e5e59959f657  COPYING-LGPL-Exception
+diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
+index 0e8d74cfcd..52e5c50cd2 100644
+--- a/package/sdbus-cpp/sdbus-cpp.mk
++++ b/package/sdbus-cpp/sdbus-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Sebastian Weyer <sebastian.weyer@smile.fr>
-+F:	package/nushell/
-+
- N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
- F:	package/mmc-utils/
- F:	package/python-flask-jsonrpc/
-diff --git a/package/Config.in b/package/Config.in
-index 3d16ea37d1..5449884809 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2607,6 +2607,7 @@ comment "Shells"
- 	source "package/bash/Config.in"
- 	source "package/dash/Config.in"
- 	source "package/mksh/Config.in"
-+	source "package/nushell/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
- 	source "package/apg/Config.in"
-diff --git a/package/nushell/Config.in b/package/nushell/Config.in
-new file mode 100644
-index 0000000000..edb01d2f72
---- /dev/null
-+++ b/package/nushell/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_NUSHELL
-+	bool "nushell"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_HOST_PKGCONF
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PROGS
-+	help
-+	  A new type of shell.
-+
-+	  https://github.com/nushell/nushell
-diff --git a/package/nushell/nushell.hash b/package/nushell/nushell.hash
-new file mode 100644
-index 0000000000..b553a6c2bc
---- /dev/null
-+++ b/package/nushell/nushell.hash
-@@ -0,0 +1,3 @@
-+# Locally generated
-+sha256  352e807698d5f95e9bfdd9dd5512acab3cbef315379299a32e5f322a76eb718a  nushell-0.76.0.tar.gz
-+sha256  e189616e535e9f7bf410a72e6fc51ad1e0ae461c58d592e186c2669daa5d1e5d  LICENSE
-diff --git a/package/nushell/nushell.mk b/package/nushell/nushell.mk
-new file mode 100644
-index 0000000000..b9c1ee6434
---- /dev/null
-+++ b/package/nushell/nushell.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# nushell
-+#
-+################################################################################
-+
-+NUSHELL_VERSION = 0.76.0
-+NUSHELL_SITE = $(call github,nushell,nushell,$(NUSHELL_VERSION))
-+NUSHELL_LICENSE = MIT
-+NUSHELL_LICENSE_FILES = LICENSE
-+NUSHELL_DEPENDENCIES = host-pkgconf openssl ncurses
-+
-+# Add /usr/bin/nu to /etc/shells as in package/bash/bash.mk
-+define NUSHELL_ADD_NU_TO_SHELLS
-+	grep -qsE '^/usr/bin/nu$$' $(TARGET_DIR)/etc/shells \
-+		|| echo "/usr/bin/nu" >> $(TARGET_DIR)/etc/shells
-+endef
-+NUSHELL_TARGET_FINALIZE_HOOKS += NUSHELL_ADD_NU_TO_SHELLS
-+
-+$(eval $(cargo-package))
-
---===============2336111040299072535==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-SDBUS_CPP_VERSION = 1.2.0
++SDBUS_CPP_VERSION = 1.3.0
+ SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
+ SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
+ SDBUS_CPP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2336111040299072535==--
