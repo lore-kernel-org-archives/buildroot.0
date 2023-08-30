@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0203C83F14
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CC09C83F14
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3A2541889;
-	Wed, 30 Aug 2023 22:32:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3A2541889
+	by smtp2.osuosl.org (Postfix) with ESMTP id 16BC94185B;
+	Wed, 30 Aug 2023 22:32:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16BC94185B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Jjcqi6o3EiCy; Wed, 30 Aug 2023 22:31:59 +0000 (UTC)
+	with ESMTP id nG90B-ylYZlH; Wed, 30 Aug 2023 22:32:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCAA54188B;
-	Wed, 30 Aug 2023 22:31:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCAA54188B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 546C94187E;
+	Wed, 30 Aug 2023 22:32:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 546C94187E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 323E41BF98E
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B3C51BF424
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07FD741E56
+ by smtp4.osuosl.org (Postfix) with ESMTP id 215EF41E5E
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07FD741E56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 215EF41E5E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qFo4oxwN3WTc for <buildroot@lists.busybox.net>;
+ with ESMTP id rh52csmm8P7W for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 080C541E0D
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 080C541E0D
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3C1341E03
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:31:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3C1341E03
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9B6D866BF; Wed, 30 Aug 2023 22:31:18 +0000 (UTC)
+ id DFC2E866BC; Wed, 30 Aug 2023 22:31:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 00:09:33 +0200
+Date: Thu, 31 Aug 2023 00:08:22 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: a4df6181072f40417d6b5a7f9bf10daf91b0f861
-X-Git-Newrev: f8e97d8cd6358cdb4239c6196c48248816821d86
+X-Git-Oldrev: 90bee8d4484b2a773a020b5404ddb0e7e52f8bba
+X-Git-Newrev: a4df6181072f40417d6b5a7f9bf10daf91b0f861
 X-Patchwork-Hint: ignore
-Message-Id: <20230830223118.E9B6D866BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/bind: fix build
- failure due to gcc bug 101737
+Message-Id: <20230830223118.DFC2E866BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/shadow: fix
+ yescrypt-only build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8e97d8cd6358cdb4239c6196c48248816821d86
+commit: https://git.buildroot.net/buildroot/commit/?id=a4df6181072f40417d6b5a7f9bf10daf91b0f861
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-The bind package exhibits gcc bug 101737 when built for the SH4
-architecture with optimization enabled, which causes a build failure.
-
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_101737=y.
-To achieve this we need to correct the override of CFLAGS by using:
-BIND_CONF_OPTS += CFLAGS="$(BIND_CFLAGS)"
-instead of:
-BIND_CONF_ENV = BUILD_CFLAGS"$(BIND_CFLAGS)"
-since the latter doesn't work as expected and doesn't override CFLAGS.
-
 Fixes:
-http://autobuild.buildroot.net/results/e7b/e7b9a4cbee8bb16431609182b96d1ac1ccec10e7/
+http://autobuild.buildroot.net/results/afd/afd5d59f94986593cd697148f4cce2bf70e4d81b/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 105e3b34be2e51e03721710fb3e91aa93083b1ce)
+(cherry picked from commit 35835f284932e1732317d21f01254beec2d93b4c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/shadow/0001-Fix-yescrypt-support.patch | 38 ++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index f46d1a8a54..b934ab3190 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -28,7 +28,6 @@ BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone tsig-keygen
- BIND_TARGET_TOOLS_BIN = dig host nslookup nsupdate
- BIND_CONF_ENV = \
- 	BUILD_CC="$(TARGET_CC)" \
--	BUILD_CFLAGS="$(TARGET_CFLAGS)" \
- 	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- BIND_CONF_OPTS = \
- 	--without-cmocka \
-@@ -39,6 +38,14 @@ BIND_CONF_OPTS = \
- 
- BIND_DEPENDENCIES = host-pkgconf libuv openssl
- 
-+BIND_CFLAGS = $(TARGET_CFLAGS)
+diff --git a/package/shadow/0001-Fix-yescrypt-support.patch b/package/shadow/0001-Fix-yescrypt-support.patch
+new file mode 100644
+index 0000000000..19427676ca
+--- /dev/null
++++ b/package/shadow/0001-Fix-yescrypt-support.patch
+@@ -0,0 +1,38 @@
++From 7a63017b3c873a59e3482322b7824160a8c8ca67 Mon Sep 17 00:00:00 2001
++11;rgb:f6f6/f5f5/f4f4From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sun, 9 Jul 2023 10:55:03 +0200
++Subject: [PATCH] Fix yescrypt support
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_101737),y)
-+BIND_CFLAGS += -O0
-+endif
++Fixes build error:
++newusers.c: In function 'update_passwd':
++newusers.c:433:21: error: 'sflg' undeclared (first use in this function); did you mean 'rflg'?
 +
-+BIND_CONF_OPTS += CFLAGS="$(BIND_CFLAGS)"
++introduced by
++https://github.com/shadow-maint/shadow/commit/5cd04d03f94622c12220d4a6352824af081b8531
++which forgot to define sflg for these configure options:
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- BIND_CONF_OPTS += --with-zlib
- BIND_DEPENDENCIES += zlib
++--without-sha-crypt --without-bcrypt --with-yescrypt
++
++Upstream: https://github.com/shadow-maint/shadow/commit/29da702491eea314b915ea9c7a83c9af80cf5797
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/newusers.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/newusers.c b/src/newusers.c
++index 7cb8434b..08f79798 100644
++--- a/src/newusers.c
+++++ b/src/newusers.c
++@@ -60,7 +60,7 @@ static bool rflg = false;	/* create a system account */
++ #ifndef USE_PAM
++ static /*@null@*//*@observer@*/char *crypt_method = NULL;
++ #define cflg (NULL != crypt_method)
++-#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT)
+++#if defined(USE_SHA_CRYPT) || defined(USE_BCRYPT) || defined(USE_YESCRYPT)
++ static bool sflg = false;
++ #endif
++ #ifdef USE_SHA_CRYPT
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
