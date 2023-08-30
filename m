@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ECA8C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C436C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C7334183E;
-	Wed, 30 Aug 2023 22:30:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C7334183E
+	by smtp2.osuosl.org (Postfix) with ESMTP id CB221402EB;
+	Wed, 30 Aug 2023 22:31:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB221402EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bxQXUB95KTFC; Wed, 30 Aug 2023 22:30:56 +0000 (UTC)
+	with ESMTP id hZZmFFl8Vp6G; Wed, 30 Aug 2023 22:31:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5BDB41813;
-	Wed, 30 Aug 2023 22:30:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5BDB41813
+	by smtp2.osuosl.org (Postfix) with ESMTP id 02B4141839;
+	Wed, 30 Aug 2023 22:31:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02B4141839
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 42FA91BF424
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:30:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EC3851BF424
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C4C260FB2
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:30:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C4C260FB2
+ by smtp3.osuosl.org (Postfix) with ESMTP id D299C612D5
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D299C612D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9-57RG3GZfX9 for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 22:30:53 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0599460DA5
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:30:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0599460DA5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 56E84E0004;
- Wed, 30 Aug 2023 22:30:51 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qbTi6-000JbH-Hi; Thu, 31 Aug 2023 00:30:50 +0200
+ with ESMTP id MNn2Kz4iLAYQ for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1227060FB2
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1227060FB2
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F37BF866C0; Wed, 30 Aug 2023 22:31:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20230731190137.F10EE83DE7@busybox.osuosl.org>
-Date: Thu, 31 Aug 2023 00:30:50 +0200
-In-Reply-To: <20230731190137.F10EE83DE7@busybox.osuosl.org> (Yann E. MORIN's
- message of "Mon, 31 Jul 2023 20:56:57 +0200")
-Message-ID: <87zg28macl.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [git commit] utils/docker-run: fix running when CWD
- is not MAIN_DIR
+To: buildroot@buildroot.org
+Date: Thu, 31 Aug 2023 00:14:32 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: f8e97d8cd6358cdb4239c6196c48248816821d86
+X-Git-Newrev: edab7e0f75f566d7c0ae4274183c25f0b94e6149
+X-Patchwork-Hint: ignore
+Message-Id: <20230830223118.F37BF866C0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x]
+ board/bsh/imx8mn-bsh-smm-s2/readme.txt: fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=edab7e0f75f566d7c0ae4274183c25f0b94e6149
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=5b559109eeeec19e6e33c82712690aec89dcb562
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+It was a leftover from the copy-and-paste of the readme.txt file of its
+almost twin sister BSH SMM S2 PRO.
 
- > Commit 90790790925c (utils/docker-run: fix support for git-worktrees)
- > got last-minute changes when it was applied, and the case when the
- > current working directory is not the top of the current working copy
- > got broken.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Reviewed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d4f23da67eedc56f285e093b7432b33ba303a71c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/bsh/imx8mn-bsh-smm-s2/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fix that by duplicating (and thus reinstating) the 'cd MAIN_DIR' to
- > match what is done when retrieving the git-common-dir.
-
- > Fixes: 90790790925c
-
- > Reported-by: Brandon Maier <Brandon.Maier@collins.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/bsh/imx8mn-bsh-smm-s2/readme.txt b/board/bsh/imx8mn-bsh-smm-s2/readme.txt
+index 37081091e8..6b8cd03199 100644
+--- a/board/bsh/imx8mn-bsh-smm-s2/readme.txt
++++ b/board/bsh/imx8mn-bsh-smm-s2/readme.txt
+@@ -2,7 +2,7 @@ i.MX8MN BSH SMM S2
+ ==================
+ 
+ This tutorial describes how to use the predefined Buildroot
+-configuration for the i.MX8MN BSH SMM S2 PRO board.
++configuration for the i.MX8MN BSH SMM S2 board.
+ 
+ Building
+ --------
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
