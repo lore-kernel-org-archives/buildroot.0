@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF2AEC83F14
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 20:13:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C01DBC6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 20:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4395A600B8;
-	Wed, 30 Aug 2023 20:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4395A600B8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E3F9612B8;
+	Wed, 30 Aug 2023 20:13:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E3F9612B8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f-AKw4tEAht8; Wed, 30 Aug 2023 20:13:26 +0000 (UTC)
+	with ESMTP id GoVic74QVFbu; Wed, 30 Aug 2023 20:13:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8673561284;
-	Wed, 30 Aug 2023 20:13:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8673561284
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5AE631BF40B
+	by smtp3.osuosl.org (Postfix) with ESMTP id AED7E612CD;
+	Wed, 30 Aug 2023 20:13:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AED7E612CD
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7FA541BF980
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 20:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 344BD82DDE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5636A61283
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 20:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 344BD82DDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5636A61283
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id X2bNmtYfAhBu for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id paOu22rFMfHH for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 20:13:12 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7040882CC7
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A412612A7
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 20:13:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7040882CC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A412612A7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5EEB88660B; Wed, 30 Aug 2023 20:13:12 +0000 (UTC)
+ id 5632A8660A; Wed, 30 Aug 2023 20:13:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 22:12:02 +0200
+Date: Wed, 30 Aug 2023 22:05:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 94716fdb481247e962aa646ee1a95852d03db700
-X-Git-Newrev: 829610c701ba322514facd8e24ef4b9518a00601
+X-Git-Oldrev: cf686670b99ae0388b27867db64516c09b2de91f
+X-Git-Newrev: 94716fdb481247e962aa646ee1a95852d03db700
 X-Patchwork-Hint: ignore
-Message-Id: <20230830201312.5EEB88660B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/heirloom-mailx: ignore
- CVE-2004-2771
+Message-Id: <20230830201312.5632A8660A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/heirloom-mailx: fix comment about
+ ignore CVE-2014-7844
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,37 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=829610c701ba322514facd8e24ef4b9518a00601
+commit: https://git.buildroot.net/buildroot/commit/?id=94716fdb481247e962aa646ee1a95852d03db700
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The CVE-2004-2771 is already fixed by the Debian patch
-0014-globname-Invoke-wordexp-with-WRDE_NOCMD.patch. The Debian patch
-description is:
+In commit
+15972770cf34ed0b0ba330e3cc42c04f1c80c3c8 ("package/heirloom-mailx:
+security bump to version 12.5-5 from Debian"), we added CVE-2014-7844
+in HEIRLOOM_MAILX_IGNORE_CVES, but with the wrong comment about it: it
+is a different patch in the Debian stack of patches that fixes
+it. Indeed the description of patch
+0011-outof-Introduce-expandaddr-flag.patch is:
 
-Subject: [PATCH 4/4] globname: Invoke wordexp with WRDE_NOCMD (CVE-2004-2771)
+=====================================================================
+Subject: [PATCH 1/4] outof: Introduce expandaddr flag
+
+Document that address expansion is disabled unless the expandaddr
+binary option is set.
+
+This has been assigned CVE-2014-7844 for BSD mailx, but it is not
+a vulnerability in Heirloom mailx because this feature was documented.
+=====================================================================
 
 See also https://marc.info/?l=oss-security&m=141875285203183&w=2 for
-more details.
+details.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/heirloom-mailx/heirloom-mailx.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/heirloom-mailx/heirloom-mailx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
-index bb2e1f48de..063fccf5eb 100644
+index d3b8ad437a..bb2e1f48de 100644
 --- a/package/heirloom-mailx/heirloom-mailx.mk
 +++ b/package/heirloom-mailx/heirloom-mailx.mk
-@@ -14,6 +14,8 @@ HEIRLOOM_MAILX_CPE_ID_VENDOR = heirloom
+@@ -12,7 +12,7 @@ HEIRLOOM_MAILX_LICENSE = BSD-4-Clause, Bellcore (base64), OpenVision (imap_gssap
+ HEIRLOOM_MAILX_LICENSE_FILES = COPYING
+ HEIRLOOM_MAILX_CPE_ID_VENDOR = heirloom
  HEIRLOOM_MAILX_CPE_ID_PRODUCT = mailx
- # 0011-outof-Introduce-expandaddr-flag.patch in the Debian patches
+-# 0014-globname-Invoke-wordexp-with-WRDE_NOCMD.patch in the Debian patches
++# 0011-outof-Introduce-expandaddr-flag.patch in the Debian patches
  HEIRLOOM_MAILX_IGNORE_CVES += CVE-2014-7844
-+# 0014-globname-Invoke-wordexp-with-WRDE_NOCMD.patch in the Debian patches
-+HEIRLOOM_MAILX_IGNORE_CVES += CVE-2004-2771
  
  ifeq ($(BR2_PACKAGE_OPENSSL),y)
- HEIRLOOM_MAILX_DEPENDENCIES += openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
