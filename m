@@ -4,87 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFEEC83F15
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:55:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B2C8C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EA3861257;
-	Wed, 30 Aug 2023 19:55:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA3861257
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A2B761259;
+	Wed, 30 Aug 2023 19:55:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A2B761259
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 54HpwPpbs2Pf; Wed, 30 Aug 2023 19:55:21 +0000 (UTC)
+	with ESMTP id 9mVuABL9vLf6; Wed, 30 Aug 2023 19:55:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44BB3612A5;
-	Wed, 30 Aug 2023 19:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44BB3612A5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E4491BF423
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73B4A6124D;
+	Wed, 30 Aug 2023 19:55:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73B4A6124D
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8928E1BF423
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 05092402A8
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05092402A8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61B34822BE
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61B34822BE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id XLFRYjdDrJUl for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 19:54:55 +0000 (UTC)
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
- [IPv6:2607:f8b0:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD7F540017
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:54:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD7F540017
-Received: by mail-pl1-x62d.google.com with SMTP id
- d9443c01a7336-1c1e128135aso263685ad.3
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:54:55 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NFMEAZORswhC for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 19:54:57 +0000 (UTC)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 66D7B822A4
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:54:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66D7B822A4
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-1c06f6f98c0so227145ad.3
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:54:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693425295; x=1694030095;
+ d=1e100.net; s=20221208; t=1693425296; x=1694030096;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=nu3I5RHzzFgYmmza8kMP4ScsmnAiphK8AOZ40iHUDf8=;
- b=bRl1bwlPMlVFdpcYZZUSAvYjSwx+Dw7nn6TXe7zHR6A0IsiEN+CkrNJ3Ozc0lqeo2Z
- rx+C1a0koe/4txxpiJOOQNG3YdgfhQCtGMcqui+ICEn/4TjHhYu2PWaTutDRRWik/A0G
- UAadvtERNgGNP91Gt84shVHUYLPTNpFDrDABE572bNqmBn6WHPk6wequ/pxHT3530Cre
- 7AcMD1+uW2VfuTYz+Q5CjtqzKbZx0SWBou9A1GRLguvd1EuMsNw2hs7hvGQqHz9DRQT3
- c18npGuZ1M8zrk9ngDi6N9WMiFGL0NKhHD7ZdFbbaKc3OJFB6o/AYNbJhK6a1Uiz00XZ
- 6MRg==
-X-Gm-Message-State: AOJu0YxE3I75qTuvBMhjHuHgQs6ga0RaLKGDgZWcdVtq9tFv57O05XaM
- XDp/1KJaXLQ5cWDQT7hKwSJXeeZ1+bc=
-X-Google-Smtp-Source: AGHT+IEw79RggDzv+KWO/PdH/dwfmOKcnE8RdPTkxNib33J6fV2ZLMNzA9IZy5jaaiJffXs3KMfONA==
-X-Received: by 2002:a17:903:11c5:b0:1c1:f1db:e86d with SMTP id
- q5-20020a17090311c500b001c1f1dbe86dmr3430442plh.7.1693425294690; 
- Wed, 30 Aug 2023 12:54:54 -0700 (PDT)
+ bh=HdfEPiMwaCZ4viatq5oPJ5OkSumdGYqSRrmT2sToj0M=;
+ b=PY2yJlzL3nEPH+BXicSugtwK7JrH+iMaxBBKV+TD0DC6iavgWE5uAHA4STQZR0omwr
+ flYaqxD92NbSfpzzmO+gLELtQRkIYzAfvYZTc/yvh14B6N41e1ky6pY7tDlxuxNw892o
+ xZyAG3r4eUlyh1ps8ck2bgeKeBb6jaYszQdajf5BdMjOPC8ZA7WaHoewk3PxV1oklV8e
+ T2yujhVkXA/FJR6EF1Or5ecXQFXkqK84BCpPfpNTYGCetf3UOkELQ/2n5lpE6/5X0DFd
+ ozvMt49WOxYSX+jjJk3SGMNJjBKoC3eFOavswYyYeuuhsbD+c337boMIYzwAVYkLYrX6
+ dXBw==
+X-Gm-Message-State: AOJu0YzgC2ZUlzBdx37Vtr2S3IR9Otm45SlUPk6lzdxkreA6l+drD+yC
+ rSsj0/yX7wxq2wkdtaeQHQEZjEsCQ9c=
+X-Google-Smtp-Source: AGHT+IHqr8GtqaJSxCF0Pk7F+Dp7Bw7C+xBbnSBJCrA5cNYkUT8u0XzfnpS+QZGIFo2yqUc0wQeR8A==
+X-Received: by 2002:a17:902:e741:b0:1bd:c931:8c47 with SMTP id
+ p1-20020a170902e74100b001bdc9318c47mr3445246plf.68.1693425296316; 
+ Wed, 30 Aug 2023 12:54:56 -0700 (PDT)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.200.156])
  by smtp.gmail.com with ESMTPSA id
- m12-20020a1709026bcc00b001b8a85489a3sm11345492plt.262.2023.08.30.12.54.53
+ m12-20020a1709026bcc00b001b8a85489a3sm11345492plt.262.2023.08.30.12.54.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Aug 2023 12:54:54 -0700 (PDT)
+ Wed, 30 Aug 2023 12:54:55 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 13:54:42 -0600
-Message-ID: <20230830195446.3958486-3-aduskett@gmail.com>
+Date: Wed, 30 Aug 2023 13:54:43 -0600
+Message-ID: <20230830195446.3958486-4-aduskett@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230830195446.3958486-1-aduskett@gmail.com>
 References: <20230830195446.3958486-1-aduskett@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693425295; x=1694030095; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1693425296; x=1694030096; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=nu3I5RHzzFgYmmza8kMP4ScsmnAiphK8AOZ40iHUDf8=;
- b=V2TXt29rsmBTYQJcwGCefbGZzwb3tAn7hzZHomNdMP2WJx+/hFYQNOQELszdWTzmWG
- 10Q/N4D84lxjPpzwd0uZ6HK9rDCK7rWbla1mUyI/KSHpe5mAk8hl7xuQAPuZ+C2x0QGr
- VfTp215XopTM/QDLNbeLMrwUq1ybXArROoMb/BtLLuYkXC7VcGMSqgAl/0TS4MprZJja
- keLR6ZFKeLVjGBrz0+v+y6cfC+efNZwHfq5Jnvr8Ya7AiFabtVtTbnLtPrGVKuNWN0DV
- CT6dc+S4/ZqhaA4vsUiAvi0QhJkpb7tXUYJwH+jue4MdenFWfzgGmcEtjaPR7zCA+YF9
- QD6g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=HdfEPiMwaCZ4viatq5oPJ5OkSumdGYqSRrmT2sToj0M=;
+ b=Y27JHapb7doUrJhfvzwTWzCILuYsr8j4yQhHU6PC0uMj8Ri67eVrO1Is9d8dJm+IEB
+ 5D5CXW3gW/vAAcTz/2HEqukVQTqyTLi6ydqILAXH00PBa2/wy0yseaF13QhscGChb6Lx
+ ogz2J0hId/MMlGUfbOnYro3XZKE1WRNtWYNI/3DUqJJgHCSU/IoLEImo4xE3Vr5kbYcB
+ cBE+NsRsyTO2lPSZW7k8ixk/o6UVQNfwWOIz7gZGiGFCkIORWll7HO9m131w4x0LP78a
+ hehx61Q3YqDrSvbJTnKvnCEAd7bUFTGzMA/U+Mi/Kys9mz0xBW2K4RtlLx52W4mdcoBK
+ LLNw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=V2TXt29r
-Subject: [Buildroot] [PATCH/next 3/7] package/vulkan-tools: new package
+ header.a=rsa-sha256 header.s=20221208 header.b=Y27JHapb
+Subject: [Buildroot] [PATCH/next 4/7] package/mesa3d: add vulkan broadcom
+ driver support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,130 +108,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use $(VULKAN_HEADERS_VERSION) for VULKAN_TOOLS_VERSION as the vulkan packages
-need to all be the same version.
-
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/vulkan-tools/Config.in         | 17 ++++++++++
- package/vulkan-tools/vulkan-tools.hash |  3 ++
- package/vulkan-tools/vulkan-tools.mk   | 47 ++++++++++++++++++++++++++
- 5 files changed, 69 insertions(+)
- create mode 100644 package/vulkan-tools/Config.in
- create mode 100644 package/vulkan-tools/vulkan-tools.hash
- create mode 100644 package/vulkan-tools/vulkan-tools.mk
+ package/mesa3d/Config.in | 10 ++++++++++
+ package/mesa3d/mesa3d.mk |  1 +
+ 2 files changed, 11 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e83b7c1b2b..3c2187afac 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -29,6 +29,7 @@
- N:	Adam Duskett <aduskett@gmail.com>
- F:	package/firewalld/
- F:	package/vulkan-loader/
-+F:	package/vulkan-tools/
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index c7ee2a8db0..a32fce755f 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -299,6 +299,16 @@ comment "Gallium VDPAU state tracker needs X.org and gallium drivers r600, radeo
  
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
-diff --git a/package/Config.in b/package/Config.in
-index 51c2ee2b3e..5fa34b1f0d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -370,6 +370,7 @@ comment "Graphic libraries"
- 	source "package/tk/Config.in"
- 	source "package/vulkan-headers/Config.in"
- 	source "package/vulkan-loader/Config.in"
-+	source "package/vulkan-tools/Config.in"
+ comment "Vulkan drivers"
  
- comment "Other GUIs"
- 	source "package/qt5/Config.in"
-diff --git a/package/vulkan-tools/Config.in b/package/vulkan-tools/Config.in
-new file mode 100644
-index 0000000000..54fa539dab
---- /dev/null
-+++ b/package/vulkan-tools/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_VULKAN_TOOLS
-+	bool "vulkan-tools"
-+	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
-+	depends on !BR2_STATIC_LIBS # vullan-loader
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
-+	select BR2_PACKAGE_VULKAN_HEADERS
-+	select BR2_PACKAGE_VULKAN_LOADER
-+
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
++	bool "Vulkan broadcom driver"
++	depends on BR2_arm || BR2_aarch64
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # dri3/libxshmfence
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_MESA3D_OPENGL_GLX
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
 +	help
-+	  The Khronos official Vulkan Tools and Utilities.
++	  Vulkan broadcom driver.
 +
-+	  https://github.com/KhronosGroup/Vulkan-Tools
-+
-+comment "vulkan-tools needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/vulkan-tools/vulkan-tools.hash b/package/vulkan-tools/vulkan-tools.hash
-new file mode 100644
-index 0000000000..24c0697784
---- /dev/null
-+++ b/package/vulkan-tools/vulkan-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  8c77d02694d0516ae2ba3f3718745647e87e788ef93faabb2e3674ff32608010  vulkan-tools-1.3.262.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
-new file mode 100644
-index 0000000000..68f7c1c04d
---- /dev/null
-+++ b/package/vulkan-tools/vulkan-tools.mk
-@@ -0,0 +1,47 @@
-+################################################################################
-+#
-+# vulkan-tools
-+#
-+################################################################################
-+
-+VULKAN_TOOLS_VERSION = $(VULKAN_HEADERS_VERSION)
-+VULKAN_TOOLS_SITE = $(call github,KhronosGroup,Vulkan-Tools,v$(VULKAN_TOOLS_VERSION))
-+VULKAN_TOOLS_LICENSE = Apache-2.0
-+VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
-+
-+VULKAN_TOOLS_DEPENDENCIES = \
-+	vulkan-headers \
-+	vulkan-loader
-+
-+VULKAN_TOOLS_CONF_OPTS += \
-+	-DBUILD_CUBE=OFF \
-+	-DBUILD_ICD=OFF \
-+	-DBUILD_VULKANINFO=ON \
-+	-DINSTALL_ICD=OFF
-+
-+ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-+VULKAN_TOOLS_DEPENDENCIES += directfb
-+VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=ON
-+else
-+VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBXCB),y)
-+VULKAN_TOOLS_DEPENDENCIES += libxcb
-+VULKAN_TOOLS_CONF_OPTS += \
-+	-DBUILD_WSI_XCB_SUPPORT=ON \
-+	-DBUILD_WSI_XLIB_SUPPORT=ON
-+else
-+VULKAN_TOOLS_CONF_OPTS += \
-+	-DBUILD_WSI_XCB_SUPPORT=OFF \
-+	-DBUILD_WSI_XLIB_SUPPORT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+VULKAN_TOOLS_DEPENDENCIES += wayland
-+VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=ON
-+else
-+VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=OFF
-+endif
-+
-+$(eval $(cmake-package))
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	bool "Vulkan Intel driver"
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 8f3d224417..67573909a3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -119,6 +119,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ # Vulkan Drivers
++MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
 -- 
 2.41.0
 
