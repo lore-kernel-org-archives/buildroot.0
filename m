@@ -4,55 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1531C6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 10:32:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16539C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 10:38:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7616941B60;
-	Wed, 30 Aug 2023 10:32:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7616941B60
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85F95402A6;
+	Wed, 30 Aug 2023 10:38:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85F95402A6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id utcEpXcf55g8; Wed, 30 Aug 2023 10:32:01 +0000 (UTC)
+	with ESMTP id ejDxcvQoTukd; Wed, 30 Aug 2023 10:38:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8892D41602;
-	Wed, 30 Aug 2023 10:32:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8892D41602
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB1941BF2B1
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 10:31:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9986C40222;
+	Wed, 30 Aug 2023 10:38:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9986C40222
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 59A421BF2B1
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 10:38:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E95D41762
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 10:31:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E95D41762
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32CDB82284
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 10:38:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32CDB82284
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id p7URS8O1dJiD for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 10:31:48 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 902F6418A1
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 10:31:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 902F6418A1
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7BB1BFF80D;
- Wed, 30 Aug 2023 10:31:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id K3-3NEMk6s1x for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 10:38:24 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 522748227D
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 10:38:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 522748227D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F9F740008;
+ Wed, 30 Aug 2023 10:38:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qbIUB-0002AE-K5; Wed, 30 Aug 2023 12:31:43 +0200
+ id 1qbIab-0002HB-Il; Wed, 30 Aug 2023 12:38:21 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Sergey Bobrenok via buildroot <buildroot@buildroot.org>
-References: <20230618111434.62274-1-SIBobrenok@sberdevices.ru>
- <20230618111434.62274-2-SIBobrenok@sberdevices.ru>
-Date: Wed, 30 Aug 2023 12:31:43 +0200
-In-Reply-To: <20230618111434.62274-2-SIBobrenok@sberdevices.ru> (Sergey
- Bobrenok via buildroot's message of "Sun, 18 Jun 2023 14:14:34 +0300")
-Message-ID: <874jkgstww.fsf@48ers.dk>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20230612165344.3829304-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 30 Aug 2023 12:38:21 +0200
+In-Reply-To: <20230612165344.3829304-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Mon, 12 Jun 2023 18:53:44 +0200")
+Message-ID: <87zg28rf1e.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/crudini: add host variant
- dependency from python-iniparse
+Subject: Re: [Buildroot] [PATCH] package/rtl8189fs: en/disable runtime debug
+ according to BR2_ENABLE_RUNTIME_DEBUG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,17 +63,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
- Sergey Bobrenok <SIBobrenok@sberdevices.ru>, Asaf Kahlon <asafka7@gmail.com>,
- sdfw_system_team@sberdevices.ru
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ Indrek Kruusa <indrek.kruusa@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Sergey" == Sergey Bobrenok via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
- > Signed-off-by: Sergey Bobrenok <SIBobrenok@sberdevices.ru>
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > ---
+ >  package/rtl8189fs/rtl8189fs.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
+ > index dd35a166e5..6b0585073b 100644
+ > --- a/package/rtl8189fs/rtl8189fs.mk
+ > +++ b/package/rtl8189fs/rtl8189fs.mk
+ > @@ -13,6 +13,10 @@ RTL8189FS_MODULE_MAKE_OPTS = \
+ >  	KVER=$(LINUX_VERSION_PROBED) \
+ >  	KSRC=$(LINUX_DIR)
+ 
+ > +ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
+ > +RTL8189FS_MODULE_MAKE_OPTS += CONFIG_RTW_DEBUG=n
+ > +endif
+ > +
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
