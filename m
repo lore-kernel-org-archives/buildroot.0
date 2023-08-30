@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ED48C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:31:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B25C8C83F15
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:31:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DBA2141839;
-	Wed, 30 Aug 2023 22:31:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBA2141839
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63F8341813;
+	Wed, 30 Aug 2023 22:31:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63F8341813
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HpKViiieFoA4; Wed, 30 Aug 2023 22:31:35 +0000 (UTC)
+	with ESMTP id k4Z8RCu0rwJX; Wed, 30 Aug 2023 22:31:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1113B4184B;
-	Wed, 30 Aug 2023 22:31:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1113B4184B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0686C1BF980
+	by smtp2.osuosl.org (Postfix) with ESMTP id 79AFA41883;
+	Wed, 30 Aug 2023 22:31:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 79AFA41883
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 236F51BF98D
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1865612D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id F14FD41839
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1865612D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F14FD41839
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sCdUQu7MXW25 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wxvSdRXrxY1L for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EAD1360DA5
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:31:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAD1360DA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F709402EB
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F709402EB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D69CB866BA; Wed, 30 Aug 2023 22:31:18 +0000 (UTC)
+ id 1F5B0866BC; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 22:58:46 +0200
+Date: Thu, 31 Aug 2023 00:25:26 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 5e2d890b5d0dd901ad99f1ea3eb49f1dd6a51662
-X-Git-Newrev: 90bee8d4484b2a773a020b5404ddb0e7e52f8bba
+X-Git-Oldrev: 320dbd06ddfc8bd1257a4904a50139edc610f67f
+X-Git-Newrev: 67564d1da2fa738c7d683e0f7cee725b75518aed
 X-Patchwork-Hint: ignore
-Message-Id: <20230830223118.D69CB866BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] utils/docker-run: fix
- support for git-worktrees
+Message-Id: <20230830223119.1F5B0866BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/sam-ba: drop
+ 32bit host lib requirement
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,86 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90bee8d4484b2a773a020b5404ddb0e7e52f8bba
+commit: https://git.buildroot.net/buildroot/commit/?id=67564d1da2fa738c7d683e0f7cee725b75518aed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-The docker-run script attempts to support git-new-workdirs and
-git-worktrees by resolving the symlink at '$GIT_DIR/config' to get the
-true $GIT_DIR. However this does not work for git-worktrees as they do
-not use symlinks, instead they change the $GIT_DIR into a regular file
-that contains the path to the real $GIT_DIR. To complicate things
-further, we actually want the $GIT_COMMON_DIR which is the superset of a
-worktree's $GIT_DIR.
+Current versions of sam-ba are 64bit only.
 
-git-rev-parse supports the '--git-common-dir' which will resolve the
-$GIT_COMMON_DIR for us. However it does not work for git-new-workdirs,
-so we still need to detect and handle them.
+objdump -p $(HOST_DIR)/bin/sam-ba
+$(HOST_DIR)/bin/sam-ba: file format elf64-x86-64
 
-'--git-common-dir' also appeared only with git 2.10.0, released in 2016,
-so it will not be available in older "enterprise-grade" distributions.
-In that case, 'git rev-parse --git-common-dir' would return the option
-flag '--git-common-dir' as-is, which is incorrect. So, we instruct it to
-never return flags.
-
-'--git-common-dir' also returns just '.git' for the main working copy,
-but 'docker run' want an absolute path, so we canonicalise it.
-
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-[yann.morin.1998@free.fr:
-  - support git versions before --git-common-dir was introduced
-  - don't mount GIT_DIR if unknown (i.e. not needed)
-  - fix expanding MAIN_DIR
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 90790790925c5d456ce7585afdf6e42aa25fd9ea)
+Signed-off-by: Daniel Lang <d.lang@abatec.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 71b5ea4030a25f84375a5e23d0eae6cf49ffe5a8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/docker-run | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ Config.in                     | 2 +-
+ package/sam-ba/Config.in.host | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/utils/docker-run b/utils/docker-run
-index 17c587a484..b201d28289 100755
---- a/utils/docker-run
-+++ b/utils/docker-run
-@@ -2,8 +2,13 @@
- set -o errexit -o pipefail
- DIR=$(dirname "${0}")
- MAIN_DIR=$(readlink -f "${DIR}/..")
--# GIT_DIR to support workdirs/worktrees
--GIT_DIR="$(dirname "$(realpath "${MAIN_DIR}/.git/config")")"
-+if [ -L "${MAIN_DIR}/.git/config" ]; then
-+    # Support git-new-workdir
-+    GIT_DIR="$(dirname "$(realpath "${MAIN_DIR}/.git/config")")"
-+else
-+    # Support git-worktree
-+    GIT_DIR="$(cd "${MAIN_DIR}" && git rev-parse --no-flags --git-common-dir)"
-+fi
- # shellcheck disable=SC2016
- IMAGE=$(grep ^image: "${MAIN_DIR}/.gitlab-ci.yml" | \
-         sed -e 's,^image: ,,g' | sed -e 's,\$CI_REGISTRY,registry.gitlab.com,g')
-@@ -13,9 +18,21 @@ declare -a docker_opts=(
-     --rm
-     --user "$(id -u):$(id -g)"
-     --mount "type=bind,src=${MAIN_DIR},dst=${MAIN_DIR}"
--    --mount "type=bind,src=${GIT_DIR},dst=${GIT_DIR}"
-     --workdir "${MAIN_DIR}"
- )
-+
-+# Empty GIT_DIR means that we are not in a workdir, *and* git is too old
-+# to know about worktrees, so we're not in a worktree either. So it means
-+# we're in the main git working copy, and thus we don't need to mount the
-+# .git directory.
-+if [ "${GIT_DIR}" ]; then
-+    # GIT_DIR in the main working copy (when git supports worktrees) will
-+    # be just '.git', but 'docker run' needs an absolute path. If it's an
-+    # absolute path already (in a wordir), then that's a noop.
-+    GIT_DIR="$(readlink -e "${GIT_DIR}")"
-+    docker_opts+=( --mount "type=bind,src=${GIT_DIR},dst=${GIT_DIR}" )
-+fi
-+
- if tty -s; then
-     docker_opts+=( -t )
- fi
+diff --git a/Config.in b/Config.in
+index 0d7641633c..670e199c0b 100644
+--- a/Config.in
++++ b/Config.in
+@@ -65,7 +65,7 @@ config BR2_NEEDS_HOST_JAVA
+ 
+ # Hidden boolean selected by pre-built packages for x86, when they
+ # need to run on x86-64 machines (example: pre-built external
+-# toolchains, binary tools like SAM-BA, etc.).
++# toolchains, binary tools, etc.).
+ config BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	bool
+ 
+diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
+index 1967f33ab3..cd11e8633e 100644
+--- a/package/sam-ba/Config.in.host
++++ b/package/sam-ba/Config.in.host
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_HOST_SAM_BA
+ 	bool "host sam-ba"
+ 	depends on BR2_HOSTARCH = "x86_64"
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Atmel SAM-BA software provides an open set of tools for
+ 	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
