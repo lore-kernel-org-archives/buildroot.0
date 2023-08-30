@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37128C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:56:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CBEFC83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:56:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E30B961286;
-	Wed, 30 Aug 2023 19:55:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E30B961286
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A139612B1;
+	Wed, 30 Aug 2023 19:56:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A139612B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SguwcxlixilX; Wed, 30 Aug 2023 19:55:59 +0000 (UTC)
+	with ESMTP id qbn7e8ykq8Ku; Wed, 30 Aug 2023 19:56:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3598B6128C;
-	Wed, 30 Aug 2023 19:55:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3598B6128C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8D3A71BF423
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:55:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F0B3612BB;
+	Wed, 30 Aug 2023 19:56:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F0B3612BB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 417741BF423
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70D8B418A1
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:55:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70D8B418A1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 283CF402A8
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:55:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 283CF402A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CyjNqkm2IW6S for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 19:55:00 +0000 (UTC)
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7B5514188A
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:55:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B5514188A
-Received: by mail-pl1-x62b.google.com with SMTP id
- d9443c01a7336-1bf092a16c9so385635ad.0
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:55:00 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZF4TAnTtnka4 for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 19:55:02 +0000 (UTC)
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
+ [IPv6:2607:f8b0:4864:20::630])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 35A1440017
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:55:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35A1440017
+Received: by mail-pl1-x630.google.com with SMTP id
+ d9443c01a7336-1c0db66af1bso222445ad.2
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:55:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693425299; x=1694030099;
+ d=1e100.net; s=20221208; t=1693425301; x=1694030101;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=NmnH7x0dI9Y1ZZFangFHAdpzAA95D+1WT/rn/Fz68GM=;
- b=ZAdQIE9nAYFggoOLkV2am62oFNRTogSZTDgHQKZW4DXrlQsVfGC08leFvbsVojVX+S
- 94IE/9PtHEVbZYW/08jwk7PuDetb4XV0KwAmjprN26wXPwOyECScCe8hSTqp0VhMmN5X
- bIr8/3ruv+9puLbvpGHijnzN3S5qmsFY6Y/DjfpyzPi+gzQwa0oPhrTP6cDuHUkRM2sx
- vA0taTQz3OymqXmdlOuQTLZSRIPvI2B7W4zaw9lZbyBEk0OguQ8RKAqrEfS/gKoI/EI1
- vc7QMmzUh9qpjjI0j6nXTSaPEMqyGGMO5ZSgwnqcU15Ul/o1DQMj0T9DEveG11GapLKw
- hhcw==
-X-Gm-Message-State: AOJu0YwpAySYND014eTeH9MTITCrlXNBiLazpAMou519mepEOzoYuhUt
- WilF3XAvZa9jTmO7lFYIA5FIMGcPCgM=
-X-Google-Smtp-Source: AGHT+IGwCyf7A91FrMwn7c5heH6Pa3VIMzzkklve8VQKxBVlbwmB/CkGom6QCYcDefn8gDV3Xqnavw==
-X-Received: by 2002:a17:903:18a:b0:1bf:826:9e30 with SMTP id
- z10-20020a170903018a00b001bf08269e30mr3278722plg.16.1693425299443; 
- Wed, 30 Aug 2023 12:54:59 -0700 (PDT)
+ bh=8YUP8QUXvQEKfX+4T8j14H7eUoT7jN6rC3pkWTSPQyI=;
+ b=NcdORJb7cbnjSeIoB4XtKpdIwfmRGC+bzwKcz7XkEYRTuEHOUmGdDMlyD72S09N0zD
+ KFe+fLQCZo9kpZxqAhJDVMM/0n2/OyPV+c8SXBF6jvLSQttBPMlBL0Dx/3Y2XP5b1Bxf
+ apGDAgaUK2XbNtUwxH9SNny+shi+zh1Pc6nX+yhpSs0OZoYSZiWTS6CA+lS+mznMgW0O
+ ih8bu7+eKco1Lnmx6ez91S1A/CYwElff121lwObEw0fedvVh5itViC1Mg+54tjm5vX26
+ IlXMje6JHfIHCZj8OZxh3+ejn9uVTanWsFJdn5MIzYX8tX9o+nQvELm/XXHq5vrEY/6C
+ Vxlg==
+X-Gm-Message-State: AOJu0Yzfek40XGB0ksU7Hl7JLuGvqAj2ZWgXscvauSOcbSgRYfmRXhDr
+ uNGf3Z8dxT/K6+7PWQfaYe64hhyPHyk=
+X-Google-Smtp-Source: AGHT+IGSTqohibFAjO+lqeh2NwuEUrgN4+4S9KVOIOCS1uEN6oPVIIJYJ6TqG6Wfi2nuw92C8VOWjA==
+X-Received: by 2002:a17:902:da85:b0:1b9:e8e4:620e with SMTP id
+ j5-20020a170902da8500b001b9e8e4620emr3541263plx.47.1693425301113; 
+ Wed, 30 Aug 2023 12:55:01 -0700 (PDT)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.200.156])
  by smtp.gmail.com with ESMTPSA id
- m12-20020a1709026bcc00b001b8a85489a3sm11345492plt.262.2023.08.30.12.54.58
+ m12-20020a1709026bcc00b001b8a85489a3sm11345492plt.262.2023.08.30.12.54.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Aug 2023 12:54:59 -0700 (PDT)
+ Wed, 30 Aug 2023 12:55:00 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 13:54:45 -0600
-Message-ID: <20230830195446.3958486-6-aduskett@gmail.com>
+Date: Wed, 30 Aug 2023 13:54:46 -0600
+Message-ID: <20230830195446.3958486-7-aduskett@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230830195446.3958486-1-aduskett@gmail.com>
 References: <20230830195446.3958486-1-aduskett@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693425299; x=1694030099; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1693425301; x=1694030101; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=NmnH7x0dI9Y1ZZFangFHAdpzAA95D+1WT/rn/Fz68GM=;
- b=h5ksla6bpiTQLxeXqTwUKeQxaapA1Q1uLbetZtu7cEAwP+wabKWRQY0BAVrsLYGUcU
- Nb+juZciMMrbncRuFyZTW6YZGr6rSJpHxantXOCb3yfgPRi0vUBIt2uV68FAwU2028pB
- xCaCFVrtLda7Rz8x0QniqEvZWzoKA/4K7muDud/P5uwP4qZ8iXPZfThWQ7ZkyRV9mmD8
- Qyb1jtSTVLukNzhEVmMvPEzAqy07SxdrFJ2Ri0OAN9+we6bwXmquFpAy3jnjysn8hska
- /zBmZQ4AG+3Wm6zcWMUq35d18IYR7EyVWoXmlXgZoLM973/hC1vLIhXxp9ax+OsV8fAN
- 3xdA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=8YUP8QUXvQEKfX+4T8j14H7eUoT7jN6rC3pkWTSPQyI=;
+ b=GvRMhc2MP/BzGUjQTqyBb/FUf+r/4Ss9RobeCqic/pjuu9RiEryM2XY3OTHzHLkSt8
+ /K35jQcx0woEx/IZ2PeWHHwdlHPPfJsYj3xIhLsz3P/UdAt3WdiGw5rmc1UDADCI6N1Y
+ VfwpvkJJlKQKm1Ck5oo3grZ6rUaJdiRT2r+as4s51/jS8sMSSoNrJp2zFZjXpVZbJxoH
+ a13MeG/9omWRKYxPEP/I7d09QIlQ2w/QfGewQD5xBre160e5xrkC1xWMgjgu+bxVCsz3
+ gHWZauzL/dAvJplQFaWYSXhm5ZgKa3b9bk/5CDTpEhcPP9t4WHFWJE9dYob9J3QJDn0o
+ vyFg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=h5ksla6b
-Subject: [Buildroot] [PATCH/next 6/7] package/qt5base: add vulkan option
+ header.a=rsa-sha256 header.s=20221208 header.b=GvRMhc2M
+Subject: [Buildroot] [PATCH vnext 7/7] package/qt6base: add vulkan option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,29 +107,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Notes:
-  - eglfs/vulkan is only implemented for eglfs_viv
-    (see stub implementation for QEglFSDeviceIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/eglfs/api/qeglfsdeviceintegration.cpp and
-    real implementation for QEglFSVivIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/eglfs/deviceintegration/eglfs_viv/qeglfsvivintegration.cpp)
-  - or for xcb (see QXcbIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/xcb/qxcbintegration.cpp)
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/qt5/qt5base/Config.in  | 10 ++++++++++
- package/qt5/qt5base/qt5base.mk |  7 +++++++
+ package/qt6/qt6base/Config.in  | 10 ++++++++++
+ package/qt6/qt6base/qt6base.mk |  7 +++++++
  2 files changed, 17 insertions(+)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index b876f1948e..0c7ed41c46 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -180,6 +180,16 @@ config BR2_PACKAGE_QT5BASE_OPENGL_LIB
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index f9fb2a2ad0..98a7520486 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -43,6 +43,16 @@ config BR2_PACKAGE_QT6BASE_GUI
  
- endif
+ if BR2_PACKAGE_QT6BASE_GUI
  
-+config BR2_PACKAGE_QT5BASE_VULKAN
++config BR2_PACKAGE_QT6BASE_VULKAN
 +	bool "Vulkan support"
 +	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
 +	depends on !BR2_STATIC_LIBS # vulkan-loader
@@ -139,27 +131,27 @@ index b876f1948e..0c7ed41c46 100644
 +	help
 +	  This option enables Vulkan support.
 +
- config BR2_PACKAGE_QT5BASE_LINUXFB
+ config BR2_PACKAGE_QT6BASE_LINUXFB
  	bool "linuxfb support"
  
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 028236d2ed..cc29f5523f 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -206,6 +206,13 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-opengl
- endif
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index 4a01bb17b2..c32089f551 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -127,6 +127,13 @@ QT6BASE_CONF_OPTS += \
+ 	-DFEATURE_vulkan=OFF
+ QT6BASE_DEPENDENCIES += freetype
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_VULKAN),y)
-+QT5BASE_CONFIGURE_OPTS += -feature-vulkan
-+QT5BASE_DEPENDENCIES   += vulkan-headers vulkan-loader
++ifeq ($(BR2_PACKAGE_QT6BASE_VULKAN),y)
++QT6BASE_DEPENDENCIES   += vulkan-headers vulkan-loader
++QT6BASE_CONFIGURE_OPTS += -DFEATURE_vulkan=ON
 +else
-+QT5BASE_CONFIGURE_OPTS += -no-feature-vulkan
++QT6BASE_CONFIGURE_OPTS += -DFEATURE_vulkan=OFF
 +endif
 +
- QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
- QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
- 
+ ifeq ($(BR2_PACKAGE_QT6BASE_LINUXFB),y)
+ QT6BASE_CONF_OPTS += -DFEATURE_linuxfb=ON
+ else
 -- 
 2.41.0
 
