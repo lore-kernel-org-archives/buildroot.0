@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 582B8C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:10:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5EB4C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:15:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 148804181E;
-	Wed, 30 Aug 2023 22:10:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 148804181E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 957994182B;
+	Wed, 30 Aug 2023 22:15:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 957994182B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MS2CJ7mAwT4o; Wed, 30 Aug 2023 22:10:29 +0000 (UTC)
+	with ESMTP id AAQCQrsYpkpJ; Wed, 30 Aug 2023 22:15:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67E8B4180A;
-	Wed, 30 Aug 2023 22:10:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67E8B4180A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E9A791BF424
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:10:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8BCD41830;
+	Wed, 30 Aug 2023 22:15:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8BCD41830
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BF0361BF424
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:15:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D04D660B68
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:10:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D04D660B68
+ by smtp1.osuosl.org (Postfix) with ESMTP id 990A281F86
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:15:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 990A281F86
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nUttia_SBVWm for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 22:10:26 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C959460B42
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:10:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C959460B42
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 32A0560006;
- Wed, 30 Aug 2023 22:10:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KBKozv_0cpyH for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 22:15:11 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A51A881E51
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:15:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A51A881E51
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D01020003;
+ Wed, 30 Aug 2023 22:15:08 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qbTOH-000IqK-A9; Thu, 31 Aug 2023 00:10:21 +0200
+ id 1qbTSt-000J1h-Fs; Thu, 31 Aug 2023 00:15:07 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20230325203808.1272652-1-giulio.benetti@benettiengineering.com>
-Date: Thu, 31 Aug 2023 00:10:21 +0200
-In-Reply-To: <20230325203808.1272652-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sat, 25 Mar 2023 21:38:08 +0100")
-Message-ID: <87pm34npv6.fsf@48ers.dk>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+References: <20230706105347.229550-1-dario.binacchi@amarulasolutions.com>
+Date: Thu, 31 Aug 2023 00:15:07 +0200
+In-Reply-To: <20230706105347.229550-1-dario.binacchi@amarulasolutions.com>
+ (Dario Binacchi's message of "Thu, 6 Jul 2023 12:53:47 +0200")
+Message-ID: <87ledsnpn8.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/bind: fix build failure due to gcc
- bug 101737
+Subject: Re: [Buildroot] [PATCH 1/1] board/bsh/imx8mn-bsh-smm-s2/readme.txt:
+ fix typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,29 +63,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Michael Trimarchi <michael@amarulasolutions.com>,
+ Ariel D'Alessandro <ariel@vanguardiasur.com.ar>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
- > The bind package exhibits gcc bug 101737 when built for the SH4
- > architecture with optimization enabled, which causes a build failure.
+ > It was a leftover from the copy-and-paste of the readme.txt file of its
+ > almost twin sister BSH SMM S2 PRO.
 
- > As done for other packages in Buildroot work around this gcc bug by
- > setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_101737=y.
- > To achieve this we need to correct the override of CFLAGS by using:
- > BIND_CONF_OPTS += CFLAGS="$(BIND_CFLAGS)"
- > instead of:
- > BIND_CONF_ENV = BUILD_CFLAGS"$(BIND_CFLAGS)"
- > since the latter doesn't work as expected and doesn't override CFLAGS.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/e7b/e7b9a4cbee8bb16431609182b96d1ac1ccec10e7/
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
