@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C6E4C6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 21:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48562C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 21:59:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB01941850;
-	Wed, 30 Aug 2023 21:58:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB01941850
+	by smtp2.osuosl.org (Postfix) with ESMTP id EFB9541815;
+	Wed, 30 Aug 2023 21:59:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFB9541815
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OJPnhQDtm55z; Wed, 30 Aug 2023 21:58:51 +0000 (UTC)
+	with ESMTP id 8j0gsAZpX_g5; Wed, 30 Aug 2023 21:59:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DC1141815;
-	Wed, 30 Aug 2023 21:58:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DC1141815
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2BA211BF405
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 21:58:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5824441883;
+	Wed, 30 Aug 2023 21:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5824441883
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 315CB1BF405
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 21:58:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0521881377
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 21:58:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0521881377
+ by smtp2.osuosl.org (Postfix) with ESMTP id F22E24181D
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 21:58:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F22E24181D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9wDJnJPs2lR5 for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 21:58:42 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 744068136C
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 21:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 744068136C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 92C53E0002;
- Wed, 30 Aug 2023 21:58:40 +0000 (UTC)
-Date: Wed, 30 Aug 2023 23:58:39 +0200
-To: Sergey Bobrenok <bobrofon@gmail.com>
-Message-ID: <20230830235839.67c0bdd0@windsurf>
-In-Reply-To: <20230829220734.414550-1-bobrofon@gmail.com>
-References: <20230829233133.29a69227@windsurf>
- <20230829220734.414550-1-bobrofon@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BBJXSYH5SxN8 for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 21:58:57 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 15D4041815
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 21:58:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15D4041815
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 41A53FF805;
+ Wed, 30 Aug 2023 21:58:55 +0000 (UTC)
+Date: Wed, 30 Aug 2023 23:58:54 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20230830235854.4dbb1636@windsurf>
+In-Reply-To: <20230830204213.1158602-1-bernd@kuhls.net>
+References: <20230830204213.1158602-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693432720;
+ d=bootlin.com; s=gm1; t=1693432735;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=1EdsxJIGgdclovLDK7wRmBZ/0Qv6VJzsOBZ1dfAhb8g=;
- b=fkc3W/VG8QN2h4BJCme7Px8bxrQfT+ohOoBpde4ebG7MLdbYcMUbHfM54a/cUbi+C7Ro52
- W2gfx4yMiQ2d0vsMLQtc5S7yzPqEBLvEfbGl1dCVWYFFCKRRLCrR9nqB5ON+dAYfahEO7n
- ZYGJdlZ7p/7UiXI9cCYH/mtannjG6MFXipLYKGG2yhKJli68j6MJ5XAy0U/4xD3M+xLMrQ
- IxBK+EOSFyIH1zh2RLaF4NzCOcuPYIEf0kwJbhRSWh8AzTxZXMw8u+UfwQ7eSUs607mIX6
- 4iL30o8d3sijWtZ73ArlVqnWYWCztS95iKdOxz6w3G8rV2aYqtW3QzwAdEVJrg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=j3tbKelFQIZSC4Q89ra9PuriQc9yBSe+sFwYbnT/r+k=;
+ b=BjjigCPTf+Cx/vWwcBg+eUUuBVRgAO95B18UkpuPRaS8KySjycxCld5/ojuNzLSlq2EDZz
+ FAKd0X9jQyG6vIFD4OeyG3Uzuz6p3M0zl8+tjP3C1sDLK7nRvYRLVdhICSZE8y/yJHP5tG
+ XucG0CBdp69AB9frgc6wOJID47QxZ8zfOmcg7hPKTTxhB0d4Bg9CO0jAHRAh8ztxfhpwJE
+ OjKS9eo3PjVKTxbdmDDI0e1TcHGyJsyrcO69Ae10wSUj3ncV3W0OYzP6yJwwllwk8gvcMK
+ u1EiDQ9yIWVLzNpOEaK2TxF1tZPyeGpNLViKtrEFoVUBIFwjb9pLGIhkbCd+2Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fkc3W/VG
-Subject: Re: [Buildroot] [PATCH v2] package/sdbus-cpp: bump to version 1.3.0
+ header.s=gm1 header.b=BjjigCPT
+Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.{14,
+ 19}.x / 5.{4, 10, 15}.x / 6.{1, 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,23 +83,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 30 Aug 2023 01:07:34 +0300
-Sergey Bobrenok <bobrofon@gmail.com> wrote:
+On Wed, 30 Aug 2023 22:42:13 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Changelog:
-> https://github.com/Kistler-Group/sdbus-cpp/releases/tag/v1.3.0
-> 
-> A trailing whitespace was removed in the COPYING-LGPL-Exception file,
-> so the hash differs.
-> https://github.com/Kistler-Group/sdbus-cpp/commit/dcd9d46b9c5e5011dc7170e9d081bcf80096fd15
-> 
-> Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
-> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
-> Changes v1 -> v2:
->   - updated COPYING-LGPL-Exception hash
+>  linux/Config.in                      |  2 +-
+>  linux/linux.hash                     | 14 +++++++-------
+>  package/linux-headers/Config.in.host | 14 +++++++-------
+>  3 files changed, 15 insertions(+), 15 deletions(-)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
