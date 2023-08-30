@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63414C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 814FAC83F14
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C083612B8;
-	Wed, 30 Aug 2023 22:34:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C083612B8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CF21612C3;
+	Wed, 30 Aug 2023 22:39:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CF21612C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VN44Tv9zKk9D; Wed, 30 Aug 2023 22:34:43 +0000 (UTC)
+	with ESMTP id d5_34qdOUoSe; Wed, 30 Aug 2023 22:39:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59643612C3;
-	Wed, 30 Aug 2023 22:34:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59643612C3
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 298F61BF980
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:32:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 580AC61240;
+	Wed, 30 Aug 2023 22:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 580AC61240
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C3AD1BF424
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F3CF41917
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:32:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F3CF41917
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD9D581E53
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:39:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD9D581E53
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Put7iljHNiM5 for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 22:32:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1Qb681dFaRmD for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 22:39:28 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A29AF41E0D
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:32:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A29AF41E0D
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6BBA81D5A
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:39:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6BBA81D5A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F96B866DD; Wed, 30 Aug 2023 22:32:33 +0000 (UTC)
+ id D3B46866DD; Wed, 30 Aug 2023 22:39:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 00:18:18 +0200
+Date: Thu, 31 Aug 2023 00:36:37 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 75f235013e047527668520320cc5b1923fb6061b
-X-Git-Newrev: 99c68c06b8a4067c65a8d72a6a11929dabbdcad7
+X-Git-Oldrev: d97346f1ceb2f86d0b26fb72cf18647a074bb639
+X-Git-Newrev: 9e6b20bae9ba6cb547d3d7ca8def4a30d23f51f4
 X-Patchwork-Hint: ignore
-Message-Id: <20230830223233.8F96B866DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] DEVELOPERS: sort entries
- of Bernd Kuhls
+Message-Id: <20230830223927.D3B46866DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/sysdig: remove
+ patch that doesn't apply
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99c68c06b8a4067c65a8d72a6a11929dabbdcad7
+commit: https://git.buildroot.net/buildroot/commit/?id=9e6b20bae9ba6cb547d3d7ca8def4a30d23f51f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Patch 0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+should have been deleted as part of Buildroot commit
+08792a60df80a1147ee78bb108f8186996bf0c77 ("package/sysdig: bump to
+version 0.29.3"). Indeed, this patch was merged upstream as commit
+114436c1a45142ef73acfc2607fbc6572782160f between 0.29.2 and 0.29.3.
+
+This fixes the following build failure:
+
+Applying 0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch using patch:
+patching file cmake/modules/nlohmann-json.cmake
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file cmake/modules/nlohmann-json.cmake.rej
+
+There are no autobuilder failures, probably because getting to build
+sysdig requires so many special conditions that it never triggered.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 210306b4fa1f1a018393c69334eb48bf247a91c7)
+(cherry picked from commit e434d8a29fd566c43c1051eb84694b6ac032597d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ ...-USE_BUNDLED_DEPS-before-getting-nlohmann.patch | 52 ----------------------
+ 1 file changed, 52 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1f30279d98..b407537c71 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -343,8 +343,8 @@ F:	package/giflib/
- F:	package/gkrellm/
- F:	package/gpsd/
- F:	package/gptfdisk/
--F:	package/hdparm/
- F:	package/hddtemp/
-+F:	package/hdparm/
- F:	package/intel-gmmlib/
- F:	package/intel-mediadriver/
- F:	package/intel-mediasdk/
-@@ -372,8 +372,8 @@ F:	package/libdvdcss/
- F:	package/libdvdnav/
- F:	package/libdvdread/
- F:	package/libebur128/
--F:	package/libfribidi/
- F:	package/libfreeglut/
-+F:	package/libfribidi/
- F:	package/libg7221/
- F:	package/libglew/
- F:	package/libglfw/
-@@ -435,9 +435,9 @@ F:	package/perl-io-html/
- F:	package/perl-lwp-mediatypes/
- F:	package/perl-mail-dkim/
- F:	package/perl-mailtools/
-+F:	package/perl-netaddr-ip/
- F:	package/perl-net-dns/
- F:	package/perl-net-http/
--F:	package/perl-netaddr-ip/
- F:	package/perl-timedate/
- F:	package/perl-uri/
- F:	package/perl-www-robotrules/
-@@ -449,17 +449,17 @@ F:	package/pure-ftpd/
- F:	package/python-couchdb/
- F:	package/python-cssutils/
- F:	package/python-glslang/
-+F:	package/python-mako/
- F:	package/python-mwclient/
- F:	package/python-mwscrape/
- F:	package/python-mwscrape2slob/
--F:	package/python-mako/
- F:	package/python-oauthlib/
- F:	package/python-pyicu/
- F:	package/python-pylru/
- F:	package/python-requests-oauthlib/
- F:	package/python-slob/
--F:	package/rsync/
- F:	package/rrdtool/
-+F:	package/rsync/
- F:	package/rtmpdump/
- F:	package/samba4/
- F:	package/sofia-sip/
+diff --git a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch b/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
+deleted file mode 100644
+index 3521bd3f8d..0000000000
+--- a/package/sysdig/0001-cmake-Check-USE_BUNDLED_DEPS-before-getting-nlohmann.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 0dbebd008c04d266dc41c4bec8280a0744fd5130 Mon Sep 17 00:00:00 2001
+-From: Francis Laniel <flaniel@linux.microsoft.com>
+-Date: Wed, 13 Apr 2022 18:01:11 +0100
+-Subject: [PATCH] cmake: Check USE_BUNDLED_DEPS before getting
+- nlohmann-json.
+-
+-Upstream: https://github.com/draios/sysdig/pull/1869
+-Signed-off-by: Francis Laniel <flaniel@linux.microsoft.com>
+----
+- cmake/modules/nlohmann-json.cmake | 29 +++++++++++++++++++----------
+- 1 file changed, 19 insertions(+), 10 deletions(-)
+-
+-diff --git a/cmake/modules/nlohmann-json.cmake b/cmake/modules/nlohmann-json.cmake
+-index bb1279d7..feb0f071 100644
+---- a/cmake/modules/nlohmann-json.cmake
+-+++ b/cmake/modules/nlohmann-json.cmake
+-@@ -16,13 +16,22 @@
+- # limitations under the License.
+- #
+- 
+--set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
+--message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
+--set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
+--ExternalProject_Add(
+--  njson
+--  URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
+--  URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
+--  CONFIGURE_COMMAND ""
+--  BUILD_COMMAND ""
+--  INSTALL_COMMAND "")
+-+if(NOT USE_BUNDLED_DEPS)
+-+  find_path(NJSON_INCLUDE_DIR NAMES nlohmann/json.hpp)
+-+  if(NJSON_INCLUDE_DIR)
+-+    message(STATUS "Found njson: include: ${NJSON_INCLUDE_DIR}")
+-+  else()
+-+    message(FATAL_ERROR "Couldn't find system njson")
+-+  endif()
+-+else()
+-+  set(NJSON_SRC "${PROJECT_BINARY_DIR}/njson-prefix/src/njson")
+-+  message(STATUS "Using bundled nlohmann-json in '${NJSON_SRC}'")
+-+  set(NJSON_INCLUDE_DIR "${NJSON_SRC}/single_include")
+-+  ExternalProject_Add(
+-+    njson
+-+    URL "https://github.com/nlohmann/json/archive/v3.3.0.tar.gz"
+-+    URL_HASH "SHA256=2fd1d207b4669a7843296c41d3b6ac5b23d00dec48dba507ba051d14564aa801"
+-+    CONFIGURE_COMMAND ""
+-+    BUILD_COMMAND ""
+-+    INSTALL_COMMAND "")
+-+endif()
+--- 
+-2.25.1
+-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
