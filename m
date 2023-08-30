@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AE51C6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65DB7C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:06:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF1A241BBF;
-	Wed, 30 Aug 2023 11:06:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF1A241BBF
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D55441D9E;
+	Wed, 30 Aug 2023 11:06:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D55441D9E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eyLVsVf9Fodv; Wed, 30 Aug 2023 11:06:14 +0000 (UTC)
+	with ESMTP id 5E0yRu_bWDdC; Wed, 30 Aug 2023 11:06:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1F84407D7;
-	Wed, 30 Aug 2023 11:06:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1F84407D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B1231BF98D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0530041E56;
+	Wed, 30 Aug 2023 11:06:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0530041E56
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3660E1BF98E
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43CD941C48
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:03:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43CD941C48
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0AA16611A5
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AA16611A5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id arIgQRNMUyaz for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QTO1U_KBN4pK for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 11:03:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F90E41C49
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D623611B4
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 11:03:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F90E41C49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D623611B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E20786587; Wed, 30 Aug 2023 11:03:47 +0000 (UTC)
+ id 5E11186585; Wed, 30 Aug 2023 11:03:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 12:37:49 +0200
+Date: Wed, 30 Aug 2023 12:59:15 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: bb17fd587c5f73f16a3b5c56b03a767c0f73580d
-X-Git-Newrev: f264dc796ca166d23662cdb0e3741dde722a0b38
+X-Git-Oldrev: f8b5d6a0008ab785ac2e9892f5cd06c411602790
+X-Git-Newrev: b703a2b860acca4c3cc61089754963886bf7f78f
 X-Patchwork-Hint: ignore
-Message-Id: <20230830110347.2E20786587@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/rtl8189fs:
- en/disable runtime debug according to BR2_ENABLE_RUNTIME_DEBUG
+Message-Id: <20230830110347.5E11186585@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libcurl: bump
+ version to 8.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f264dc796ca166d23662cdb0e3741dde722a0b38
+commit: https://git.buildroot.net/buildroot/commit/?id=b703a2b860acca4c3cc61089754963886bf7f78f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Indrek Kruusa <indrek.kruusa@gmail.com>
+Changelog: https://curl.se/changes.html#8_2_1
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e798bfb8ff48acd54540e1347ad09c6ebf4ac29e)
+(cherry picked from commit 653076ab71a418eaa5a0af3528cbec31bfee3aa6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8189fs/rtl8189fs.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index ca8ea15c03..c3eef6e071 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -13,6 +13,10 @@ RTL8189FS_MODULE_MAKE_OPTS = \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	KSRC=$(LINUX_DIR)
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index f606735c0f..42bf5967e1 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.2.0.tar.xz.asc
++# https://curl.se/download/curl-8.2.1.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  2859ec79e2cd96e976a99493547359b8001af1d1e21f3a3a3b846544ef54500f  curl-8.2.0.tar.xz
++sha256  dd322f6bd0a20e6cebdfd388f69e98c3d183bed792cf4713c8a7ef498cba4894  curl-8.2.1.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index d0bf6ccead..7a3d6460e9 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
-+RTL8189FS_MODULE_MAKE_OPTS += CONFIG_RTW_DEBUG=n
-+endif
-+
- define RTL8189FS_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
+-LIBCURL_VERSION = 8.2.0
++LIBCURL_VERSION = 8.2.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
