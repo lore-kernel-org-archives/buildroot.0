@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72262C6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 07:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38255C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 08:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F5ED817BD;
-	Wed, 30 Aug 2023 07:58:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F5ED817BD
+	by smtp1.osuosl.org (Postfix) with ESMTP id D051C81DE3;
+	Wed, 30 Aug 2023 08:00:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D051C81DE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rdRYOsXc0Ydu; Wed, 30 Aug 2023 07:58:00 +0000 (UTC)
+	with ESMTP id F8NMfte6kuU2; Wed, 30 Aug 2023 08:00:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3549B8210D;
-	Wed, 30 Aug 2023 07:57:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3549B8210D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B2B381BF83A
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 07:57:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0896681EB7;
+	Wed, 30 Aug 2023 08:00:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0896681EB7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D08211BF83A
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 08:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9920560C08
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 07:57:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9920560C08
+ by smtp2.osuosl.org (Postfix) with ESMTP id A744941579
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 08:00:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A744941579
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QmLQ86Dk61FR for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 07:57:56 +0000 (UTC)
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4478760BE0
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 07:57:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4478760BE0
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-31c63cd4ec2so4398448f8f.0
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 00:57:56 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id c_Q5L2YL4GHx for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 08:00:20 +0000 (UTC)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 57A6141592
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 08:00:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57A6141592
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-401da71b85eso11124565e9.1
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 01:00:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693382274; x=1693987074;
+ d=1e100.net; s=20221208; t=1693382418; x=1693987218;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=HodAwSkexeHKb+dEOCQ6jlUN7NJYEGPUnPuShHyx2xA=;
- b=KOpNU8GdkM9iZI+JMzYiJw1LKIPK0GNTJ+kU/W/1LfpBbAbWg9cRK45s8EZ1q6ig6k
- D02sC6XZItHtlCqXBCQO7r1FldjUg9KjwaYP5EsAmiYR2t/2tKGX9kEUbjlJkBfX3Ofj
- bRpf938FE7NBitvZolMlBm6YDxQ+AtX0/obRbV1XzTJryErbXv7HCeoflqKoYiJuaOUe
- 0RAUgcPqEijNezHot0+gtqejafjMvC7CEFgSIqiiZG9srrX5JleArTAhR9/moCAKc+15
- 2ZORqkoFH73Bdt/r9qlhcoWm9/JefzmpeQ3TzYwaBIY/OlXVjWMkxFyqCG4//z7FcXN0
- oR5w==
-X-Gm-Message-State: AOJu0Yy5uauOYHTNqfOza92T3m4yPXkgWiarQ8jzJdwn6AN4FJYrVxBP
- 2T+wxSGVr/josMUy3rTLLour+Ldmj4VBEw==
-X-Google-Smtp-Source: AGHT+IFU4uu3BEYCGA+mQe/zE0fZfR9XGUin+5Dor8ZkQ/3M+/2tfdWC+c8st/I4MnCxh5X53Nj/Ig==
-X-Received: by 2002:a5d:49c7:0:b0:317:70da:abdd with SMTP id
- t7-20020a5d49c7000000b0031770daabddmr1054453wrs.59.1693382273651; 
- Wed, 30 Aug 2023 00:57:53 -0700 (PDT)
+ bh=1Ewp2IXLPZvFMP7e5RjBuUh9NcWaNSWucm5SlEWC66c=;
+ b=Cd5/zoeu/rHdF0hCfuiHOTXdr5vh4OV3chPtkyAM8HHb2qwU2GiEykvOH/uvXhyxl1
+ pRbh9HwSnBb+yAV4TBKnghKmV1de0sZfbJiLUeQwu7/0f7cCTeekErojFwsBdDAs4CEp
+ X71Ah+E3fq1yoUXeSXbrfeUp5w3wNxhmAyWqKqY4RlUoke9mK3xgJLV37R8z1LRFc83h
+ S/fPHx0jNyZ//HQiWKhNXBwwQKXlkl77ZFVqjVH3pai/P4v7kVnq4xB4M3s5gG+lHbOj
+ zloUYAjr0Y5WImqX0/LkSbavKVUbkY6wFKeUAznc9mM37iTKpk/7KWaX76BuP9pPufgC
+ tMIQ==
+X-Gm-Message-State: AOJu0Ywnhm/yrOJWEX7KsNENZoy3GWKx976yD090iFez4a+yOgeXPrI2
+ UZnMUEoOezlMnnjOh1Ps2EY1AHUOcYoGiw==
+X-Google-Smtp-Source: AGHT+IF0AyPE3a4mEw5Ntq0HhkCFmuwOuFKWNNevGUDx/EUjWDNjUuBFNof4T8zxeCshh1887BhyQA==
+X-Received: by 2002:a05:600c:24d:b0:3f9:c82e:9d87 with SMTP id
+ 13-20020a05600c024d00b003f9c82e9d87mr1296176wmj.13.1693382417597; 
+ Wed, 30 Aug 2023 01:00:17 -0700 (PDT)
 Received: from thomas-OptiPlex-7090.nmg.localnet (d528f5fc4.static.telenet.be.
  [82.143.95.196]) by smtp.gmail.com with ESMTPSA id
- j14-20020adfea4e000000b003142ea7a661sm15925680wrn.21.2023.08.30.00.57.53
+ 19-20020a05600c235300b003feea62440bsm1391698wmq.43.2023.08.30.01.00.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Aug 2023 00:57:53 -0700 (PDT)
+ Wed, 30 Aug 2023 01:00:17 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 X-Google-Original-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 09:57:45 +0200
-Message-ID: <20230830075745.1861095-1-thomas.devoogdt@barco.com>
+Date: Wed, 30 Aug 2023 10:00:13 +0200
+Message-ID: <20230830080013.1862029-1-thomas.devoogdt@barco.com>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693382274; x=1693987074; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1693382418; x=1693987218; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=HodAwSkexeHKb+dEOCQ6jlUN7NJYEGPUnPuShHyx2xA=;
- b=qxw85K4BZfo+OTPmm2S3SdGmsrXuO4pZLCqUHHDuKkhozUaI/q8Ywk6KCowYgCmncx
- XPG761cNvzzjsp5paECmE0AZUQFyM8Lx5OXDW7lxvGyBSeAAiVdA+RZaWsUjKWu0EpmB
- jDxUTRVoe/Ew8r7c9QM1BvM+LYA4wLNC44ba8OE2fxG75U9TQauwxBJadFLptQJfier1
- 6ly7W0aOfpF4QAzdAv5jglZJKxtZtW69lXVm7AA5Jh3oZKLfiabhkR+n4K1fT//KmNiJ
- ehnDn/pcOMpCMPkLbT2mupsGK6lf057xZSeznUCbVBEcmKSKsMKcMv8iEuGjVCv3ViIB
- ySOQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=1Ewp2IXLPZvFMP7e5RjBuUh9NcWaNSWucm5SlEWC66c=;
+ b=LTFrLf7pbdIVrfxBXbGhLG/R+1fl5+8ZFmYCuSX4tllDiIiL7VAFwLNAATWcMPY6Yk
+ rUewKXQua+GChSOjkm5GVQAWwf8e36kT7IShHmhSmPiPdpnGyCCt/SUq2tcUHY33mN9K
+ J4RTzNSnjKqp3reEYV5oTSLgmrSfgMmlB3jV29pYUlTfEElfVx4YXlfdVIGGgpjVe1Ie
+ bkHF8mvjLh7Tw0QZwDENkOxEcYi2xPYbfDN6XGlvYQ3mcmEgF8lmxoZfFd02s7w6dM6n
+ i5L3sZ0x+Pdq4XAvUP/WBkg3OIK0B7mOMQdjurb1IzQcqcvwvYdhiIlbGr0rqlhPBT77
+ xZZg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=qxw85K4B
-Subject: [Buildroot] [PATCH] package/libsrtp: bump to version 2.5.0
+ header.a=rsa-sha256 header.s=20221208 header.b=LTFrLf7p
+Subject: [Buildroot] [PATCH v2] package/libsrtp: bump to version 2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,12 +110,27 @@ Dropped patch wich was already upstream.
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
+v2: update .checkpackageignore
+---
+ .checkpackageignore                           |  1 -
  ...legacy-OpenSSL-to-fix-LibreSSL-build.patch | 86 -------------------
  package/libsrtp/libsrtp.hash                  |  2 +-
  package/libsrtp/libsrtp.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 88 deletions(-)
+ 4 files changed, 2 insertions(+), 89 deletions(-)
  delete mode 100644 package/libsrtp/0001-Remove-compatibility-code-for-legacy-OpenSSL-to-fix-LibreSSL-build.patch
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f943153de9..3e0aaaf253 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -788,7 +788,6 @@ package/libsoxr/0001-Add-Libs.private-for-static-linking.patch Upstream
+ package/libspatialindex/0001-allow-building-static-libs.patch Upstream
+ package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch Upstream
+ package/libsquish/0001-Makefile-add-f-option-for-ln-to-remove-existing-dest.patch Upstream
+-package/libsrtp/0001-Remove-compatibility-code-for-legacy-OpenSSL-to-fix-LibreSSL-build.patch Upstream
+ package/libsvg/0001-fix-expat-static-declaration.patch Upstream
+ package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch Upstream
+ package/libsvgtiny/0001-disable-debug-printfs.patch Upstream
 diff --git a/package/libsrtp/0001-Remove-compatibility-code-for-legacy-OpenSSL-to-fix-LibreSSL-build.patch b/package/libsrtp/0001-Remove-compatibility-code-for-legacy-OpenSSL-to-fix-LibreSSL-build.patch
 deleted file mode 100644
 index 68bfb085f7..0000000000
