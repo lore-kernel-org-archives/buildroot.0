@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C5AC6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:03:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4C60C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:03:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E88141BE6;
-	Wed, 30 Aug 2023 11:03:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E88141BE6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81E7E40241;
+	Wed, 30 Aug 2023 11:03:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81E7E40241
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sDiuRc79-H9e; Wed, 30 Aug 2023 11:03:14 +0000 (UTC)
+	with ESMTP id 5rWI3-KwyVdc; Wed, 30 Aug 2023 11:03:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7DD5408A4;
-	Wed, 30 Aug 2023 11:03:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7DD5408A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D0E241C10;
+	Wed, 30 Aug 2023 11:03:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D0E241C10
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2406E1BF282
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:02:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2DE271BF282
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1581822F8
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1581822F8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13B5D82300
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:02:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13B5D82300
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cqr55duTgmuT for <buildroot@lists.busybox.net>;
+ with ESMTP id XIUgI5dmjnkL for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2E981822F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36B61822FA
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E981822F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36B61822FA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DB9C8655A; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
+ id 259978655D; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 12:49:04 +0200
+Date: Wed, 30 Aug 2023 12:54:00 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 43e1e51997a152e9c1c084c89b5f01886a701f8e
-X-Git-Newrev: 16c683a27df3634941637b76426c0793b5d019e8
+X-Git-Oldrev: 16c683a27df3634941637b76426c0793b5d019e8
+X-Git-Newrev: f2cfe1d28c093d2abeef0d86d73022d6c6deea24
 X-Patchwork-Hint: ignore
-Message-Id: <20230830110242.1DB9C8655A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/wolfssl: disable
- asm on armv4
+Message-Id: <20230830110242.259978655D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] arch/Config.in.x86: drop
+ AVX512 from alderlake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16c683a27df3634941637b76426c0793b5d019e8
+commit: https://git.buildroot.net/buildroot/commit/?id=f2cfe1d28c093d2abeef0d86d73022d6c6deea24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Quoting
-https://developer.arm.com/documentation/dui0489/i/arm-and-thumb-instructions/clz
-"This ARM instruction is available in ARMv5T and above."
+Alder Lake CPUs have AVX512 support disabled [0].
 
-Fixes:
-- armeb
-  http://autobuild.buildroot.net/results/ea9/ea9b19e872b4b20b97fceec3f7e0a6a1109c4f12/
-  /tmp/ccdRCOaB.s:27: Error: selected processor does not support `clz r5,r2' in ARM mode
-- arm
-  http://autobuild.buildroot.net/results/cb1/cb1c7ac68b3379d3f4b5efc897198bea0a904217/
-  /tmp/cc72ECAj.s:6764: Error: selected processor does not support `clz r5,r0' in ARM mode
-  /tmp/cc72ECAj.s:7110: Error: selected processor does not support `clz r5,lr' in ARM mode
-  /tmp/cc72ECAj.s:8934: Error: selected processor does not support `clz r5,fp' in ARM mode
+To prevent potential issues, remove the AVX512 support advertisement.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This puts Buildroot inline with the GCC options [1].
+
+[0]: https://www.intel.com/content/www/us/en/support/articles/000089918/processors.html
+[1]: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
+
+Fixes: e7b94130 ("arch/Config.in.x86: add sapphirerapids, alderlake, rocketlake")
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4c663675646264e9bb1e72f014195081a1582d19)
+(cherry picked from commit f82a65b15b1805b9cbde0220e68e0267d0dbdb2b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wolfssl/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in.x86 | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
-index c41bdb6888..9d173412fe 100644
---- a/package/wolfssl/Config.in
-+++ b/package/wolfssl/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS
- 	bool
- 	default y if BR2_aarch64
--	default y if BR2_arm || BR2_armeb
-+	default y if (BR2_arm || BR2_armeb) && !BR2_ARM_CPU_ARMV4 # clz
- 	default y if BR2_powerpc
- 	default y if BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_mips64 && !BR2_MIPS_CPU_MIPS32R6
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index c770ae3ffe..56ce1eb0cc 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -450,7 +450,6 @@ config BR2_x86_alderlake
+ 	select BR2_X86_CPU_HAS_SSE42
+ 	select BR2_X86_CPU_HAS_AVX
+ 	select BR2_X86_CPU_HAS_AVX2
+-	select BR2_X86_CPU_HAS_AVX512
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
+ config BR2_x86_rocketlake
+ 	bool "rocketlake"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
