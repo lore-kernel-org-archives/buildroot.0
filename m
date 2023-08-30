@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2B21C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:03:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C5AC6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 11:03:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5454941BBE;
-	Wed, 30 Aug 2023 11:03:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5454941BBE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E88141BE6;
+	Wed, 30 Aug 2023 11:03:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E88141BE6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hKW1Zom2RU3o; Wed, 30 Aug 2023 11:03:00 +0000 (UTC)
+	with ESMTP id sDiuRc79-H9e; Wed, 30 Aug 2023 11:03:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8746141BD1;
-	Wed, 30 Aug 2023 11:02:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8746141BD1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 015D21BF980
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7DD5408A4;
+	Wed, 30 Aug 2023 11:03:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7DD5408A4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2406E1BF282
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC3DF416A2
+ by smtp1.osuosl.org (Postfix) with ESMTP id F1581822F8
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC3DF416A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1581822F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 48PFPcr_QW5S for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id cqr55duTgmuT for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 245634168D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E981822F9
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 245634168D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E981822F9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11C7B8655C; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
+ id 1DB9C8655A; Wed, 30 Aug 2023 11:02:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 12:38:04 +0200
+Date: Wed, 30 Aug 2023 12:49:04 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 4d654340b69c165949472afe3819f8c972215709
-X-Git-Newrev: 43e1e51997a152e9c1c084c89b5f01886a701f8e
+X-Git-Oldrev: 43e1e51997a152e9c1c084c89b5f01886a701f8e
+X-Git-Newrev: 16c683a27df3634941637b76426c0793b5d019e8
 X-Patchwork-Hint: ignore
-Message-Id: <20230830110242.11C7B8655C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/rtl8189fs:
- en/disable runtime debug according to BR2_ENABLE_RUNTIME_DEBUG
+Message-Id: <20230830110242.1DB9C8655A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/wolfssl: disable
+ asm on armv4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43e1e51997a152e9c1c084c89b5f01886a701f8e
+commit: https://git.buildroot.net/buildroot/commit/?id=16c683a27df3634941637b76426c0793b5d019e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Tested-by: Indrek Kruusa <indrek.kruusa@gmail.com>
+Quoting
+https://developer.arm.com/documentation/dui0489/i/arm-and-thumb-instructions/clz
+"This ARM instruction is available in ARMv5T and above."
+
+Fixes:
+- armeb
+  http://autobuild.buildroot.net/results/ea9/ea9b19e872b4b20b97fceec3f7e0a6a1109c4f12/
+  /tmp/ccdRCOaB.s:27: Error: selected processor does not support `clz r5,r2' in ARM mode
+- arm
+  http://autobuild.buildroot.net/results/cb1/cb1c7ac68b3379d3f4b5efc897198bea0a904217/
+  /tmp/cc72ECAj.s:6764: Error: selected processor does not support `clz r5,r0' in ARM mode
+  /tmp/cc72ECAj.s:7110: Error: selected processor does not support `clz r5,lr' in ARM mode
+  /tmp/cc72ECAj.s:8934: Error: selected processor does not support `clz r5,fp' in ARM mode
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e798bfb8ff48acd54540e1347ad09c6ebf4ac29e)
+(cherry picked from commit 4c663675646264e9bb1e72f014195081a1582d19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8189fs/rtl8189fs.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/wolfssl/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index ca8ea15c03..c3eef6e071 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -13,6 +13,10 @@ RTL8189FS_MODULE_MAKE_OPTS = \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	KSRC=$(LINUX_DIR)
- 
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
-+RTL8189FS_MODULE_MAKE_OPTS += CONFIG_RTW_DEBUG=n
-+endif
-+
- define RTL8189FS_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_WIRELESS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CFG80211)
+diff --git a/package/wolfssl/Config.in b/package/wolfssl/Config.in
+index c41bdb6888..9d173412fe 100644
+--- a/package/wolfssl/Config.in
++++ b/package/wolfssl/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+-	default y if BR2_arm || BR2_armeb
++	default y if (BR2_arm || BR2_armeb) && !BR2_ARM_CPU_ARMV4 # clz
+ 	default y if BR2_powerpc
+ 	default y if BR2_powerpc64 || BR2_powerpc64le
+ 	default y if BR2_mips64 && !BR2_MIPS_CPU_MIPS32R6
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
