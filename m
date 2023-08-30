@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739E8EC873C
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B438EC8745
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:41:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B2C883EC3;
-	Thu,  7 Sep 2023 15:41:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B2C883EC3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 260F382C3B;
+	Thu,  7 Sep 2023 15:41:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 260F382C3B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kN3imA7Qpp13; Thu,  7 Sep 2023 15:41:27 +0000 (UTC)
+	with ESMTP id YIO_xWOgxrVn; Thu,  7 Sep 2023 15:41:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B25C83ED8;
-	Thu,  7 Sep 2023 15:41:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B25C83ED8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47CE183EE1;
+	Thu,  7 Sep 2023 15:41:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47CE183EE1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0A0CB1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1389B1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B797941D7F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D3E841D6C
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B797941D7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D3E841D6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BF2QetaTYzGP for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
+ with ESMTP id kewvO3CBrjBu for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42A6341DC4
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A6341DC4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05DAD41DBB
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05DAD41DBB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EDBB86A1E; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id E99EF86A21; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:36:36 +0200
+Date: Wed, 30 Aug 2023 23:48:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0e30b87f9a278218950000882c607cf39a79e45
-X-Git-Newrev: e8e66020f3fcac943595034ce7ec6fc6f1bc154b
+X-Git-Oldrev: 06b2e496a0c47b1fef55b0daccac1e62b41d7aac
+X-Git-Newrev: 16da1e0b047688831e6653b01194807af0a9df41
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.3EDBB86A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libgpiod: bump to version 1.6.4
+Message-Id: <20230907145133.E99EF86A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.116
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,64 +63,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8e66020f3fcac943595034ce7ec6fc6f1bc154b
+commit: https://git.buildroot.net/buildroot/commit/?id=16da1e0b047688831e6653b01194807af0a9df41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Release notes:
+https://lists.x.org/archives/xorg-announce/2023-August/003416.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-build-add-a-configure-switch-for-building-examples.patch   | 6 +++---
- package/libgpiod/libgpiod.hash                                      | 2 +-
- package/libgpiod/libgpiod.mk                                        | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libdrm/libdrm.hash | 6 +++---
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
-index a21c767006..f1a853a6f8 100644
---- a/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
-+++ b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
-@@ -73,7 +73,7 @@ diff --git a/configure.ac b/configure.ac
- index 57c99a8..90a6324 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -155,6 +155,12 @@ then
-+@@ -164,6 +164,12 @@ then
-  	fi
-  fi
-  
-@@ -84,8 +84,8 @@ index 57c99a8..90a6324 100644
- +AM_CONDITIONAL([WITH_EXAMPLES], [test "x$with_examples" = xtrue])
- +
-  AC_ARG_ENABLE([bindings-cxx],
-- 	[AS_HELP_STRING([--enable-bindings-cxx],[enable C++ bindings [default=no]])],
-- 	[if test "x$enableval" = xyes; then with_bindings_cxx=true; fi],
-+ 	[AC_HELP_STRING([--enable-bindings-cxx],
-+ 		[enable C++ bindings [default=no]])],
- -- 
- cgit 1.2.3-1.el7
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 87cc170617..32b39d6a1b 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2023-February/003323.html
+-sha256  554cfbfe0542bddb391b4e3e05bfbbfc3e282b955bd56218d21c0616481f65eb  libdrm-2.4.115.tar.xz
+-sha512  0c38d3cfd76f627b899f052527c2939d5fc87a417422dceb0761839ba21e69736703a87ba170b5ba7a4aca2506a240760c8c97ca1781a7fb78468225295293bd  libdrm-2.4.115.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2023-August/003416.html
++sha256  46c53f40735ea3d26d614297f155f6131a510624a24274f654f6469ca905339a  libdrm-2.4.116.tar.xz
++sha512  1287d1896deeb8cfb4532c6750eb43493dcefbfaaa598a73bbb682aa749594eaad3ed1fa2fe73d06280350f365a92a0c20cad8be76f3da2ed59b04aa008de911  libdrm-2.4.116.tar.xz
  
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index f0803cab36..6647b77c5a 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256  841be9d788f00bab08ef22c4be5c39866f0e46cb100a3ae49ed816ac9c5dddc7  libgpiod-1.6.3.tar.xz
-+sha256  7b146e12f28fbca3df7557f176eb778c5ccf952ca464698dba8a61b2e1e3f9b5  libgpiod-1.6.4.tar.xz
  # Hash for license file
- sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 35d003fa33..e7ff155618 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -6,7 +6,7 @@
+ sha256  d0a616a9020dc0271e36e6dd4bad174b4e2c2a42636f13785f8e18dd5f85fd83  data/meson.build
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 52ac13b7d0..70f449037d 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Be careful when bumping versions.
- # Dependency on kernel header versions may change.
--LIBGPIOD_VERSION = 1.6.3
-+LIBGPIOD_VERSION = 1.6.4
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+-LIBDRM_VERSION = 2.4.115
++LIBDRM_VERSION = 2.4.116
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
