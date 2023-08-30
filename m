@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9462BEC873B
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5851EC873C
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47C4283C94;
-	Thu,  7 Sep 2023 15:40:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47C4283C94
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BCD383AA4;
+	Thu,  7 Sep 2023 15:40:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BCD383AA4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sycEQhKuQtVu; Thu,  7 Sep 2023 15:40:00 +0000 (UTC)
+	with ESMTP id bPTs-cW6uVr0; Thu,  7 Sep 2023 15:40:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BA9B83AA4;
-	Thu,  7 Sep 2023 15:39:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BA9B83AA4
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBCCB83CB4;
+	Thu,  7 Sep 2023 15:40:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBCCB83CB4
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2FDE71BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 052B01BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:53:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF47B41D80
+ by smtp4.osuosl.org (Postfix) with ESMTP id E487041E3F
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF47B41D80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E487041E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9SWfPmji0Fsq for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
+ with ESMTP id nehg-vf9h5vg for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D89E41E57
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D89E41E57
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1ADA41E4E
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1ADA41E4E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0949986A1E; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id CD860869E0; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 23:49:03 +0200
+Date: Wed, 30 Aug 2023 22:38:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd8aa311be7360cbe8afbd974cda8bdc018e4448
-X-Git-Newrev: 91aac180e0d973585ab6b85bc103457ea69558c6
+X-Git-Oldrev: bea949996e193e3d40ea7dd45122f8fce75f8cd0
+X-Git-Newrev: 060b88ace6772ceb016a1ebe45d415f10c194c6c
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.0949986A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 23.3.2
+Message-Id: <20230907145133.CD860869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gr-osmosdr: add support for HACKRF
+ receivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +59,71 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6096638887131631505=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91aac180e0d973585ab6b85bc103457ea69558c6
+--===============6096638887131631505==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=060b88ace6772ceb016a1ebe45d415f10c194c6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Martin Böh <contact@martb.dev>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gr-osmosdr/Config.in     | 13 +++++++++++++
+ package/gr-osmosdr/gr-osmosdr.mk |  7 +++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 39aa23a973..012317db3d 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ce929da08ea917e4bb133ae67b5de42dce9c459b06a2670358a6ada00c48db58  intel-media-23.3.1.tar.gz
-+sha256  6a0fc8513fb60e2e2fc2178a8fb0b25cb5dbacf52a645af9a9297fc5f43822ab  intel-media-23.3.2.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 353f06156e..44edba6007 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
+index d83de75282..72d3c3f481 100644
+--- a/package/gr-osmosdr/Config.in
++++ b/package/gr-osmosdr/Config.in
+@@ -36,4 +36,17 @@ config BR2_PACKAGE_GR_OSMOSDR_RFSPACE
+ 	help
+ 	  Enable RFSPACE Receivers support
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
++config BR2_PACKAGE_GR_OSMOSDR_HACKRF
++	bool "Osmocom HACKRF support"
++	depends on !BR2_STATIC_LIBS # hackrf
++	depends on BR2_TOOLCHAIN_HAS_THREADS # hackrf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # hackrf
++	select BR2_PACKAGE_HACKRF
++	help
++	  Enable Osmocom HACKRF support
++
++comment "hackrf support needs a toolchain w/ threads, dynamic library, gcc >= 4.9"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
+ endif
+diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
+index 6011a67539..8491c005d8 100644
+--- a/package/gr-osmosdr/gr-osmosdr.mk
++++ b/package/gr-osmosdr/gr-osmosdr.mk
+@@ -54,4 +54,11 @@ else
+ GR_OSMOSDR_CONF_OPTS += -DENABLE_RFSPACE=OFF
+ endif
  
--INTEL_MEDIADRIVER_VERSION = 23.3.1
-+INTEL_MEDIADRIVER_VERSION = 23.3.2
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
++ifeq ($(BR2_PACKAGE_GR_OSMOSDR_HACKRF),y)
++GR_OSMOSDR_CONF_OPTS += -DENABLE_HACKRF=ON
++GR_OSMOSDR_DEPENDENCIES += hackrf
++else
++GR_OSMOSDR_CONF_OPTS += -DENABLE_HACKRF=OFF
++endif
++
+ $(eval $(cmake-package))
+
+--===============6096638887131631505==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6096638887131631505==--
