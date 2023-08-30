@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F61C6FA8F
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 12:00:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F2D5C6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 12:00:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFEFE82BBA;
-	Wed, 30 Aug 2023 12:00:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFEFE82BBA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15D598227E;
+	Wed, 30 Aug 2023 12:00:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15D598227E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0cWXw79Y3BZE; Wed, 30 Aug 2023 12:00:30 +0000 (UTC)
+	with ESMTP id VtTFJtOu8Ggn; Wed, 30 Aug 2023 12:00:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F38AE8226F;
-	Wed, 30 Aug 2023 12:00:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F38AE8226F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 33D3B1BF42D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06C9B82BF5;
+	Wed, 30 Aug 2023 12:00:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06C9B82BF5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A609F1BF42D
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 12:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DE1141749
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B5EC41B26
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 12:00:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DE1141749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B5EC41B26
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xG7w-G1EFQBD for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VYqum3lqaVpZ for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 12:00:27 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1CB3241732
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14AEA41B47
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:00:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CB3241732
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14AEA41B47
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C8FF865B1; Wed, 30 Aug 2023 12:00:27 +0000 (UTC)
+ id 03769865B0; Wed, 30 Aug 2023 12:00:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 13:57:52 +0200
+Date: Wed, 30 Aug 2023 13:44:35 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: fa03b8cd7c9cb1106e403b3864625d6cb271c940
-X-Git-Newrev: 924c0ae6239fd37ad3a1b0e91e4365cec61859f0
+X-Git-Oldrev: 69e694d0dd568318f9c8e0e548fe7440375c14bd
+X-Git-Newrev: fa03b8cd7c9cb1106e403b3864625d6cb271c940
 X-Patchwork-Hint: ignore
-Message-Id: <20230830120027.0C8FF865B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/iperf3: security
- bump to version 3.14
+Message-Id: <20230830120027.03769865B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/gcc: or1k: Only
+ define TARGET_HAVE_TLS when HAVE_AS_TLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,191 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=924c0ae6239fd37ad3a1b0e91e4365cec61859f0
+commit: https://git.buildroot.net/buildroot/commit/?id=fa03b8cd7c9cb1106e403b3864625d6cb271c940
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-For change log, see:
-https://github.com/esnet/iperf/blob/3.14/RELNOTES.md#iperf-314-2023-07-07
+Backport upstream patch to fix build error seens with alsa-lib:
+error.c:(.text+0x12c): undefined reference to `__tls_get_addr'
 
-Fixes CVE-2023-38403:
-https://www.cve.org/CVERecord?id=CVE-2023-38403
+Fixes:
+http://autobuild.buildroot.net/results/525ca7fe78015168c186ffda5fa52c0edb2071c9/
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+The fix is included in gcc 13.x.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3c4f02e76ea6df25456e4cccedd04d47c44add18)
+(cherry picked from commit 4ce0dacb60b7fdccf3daabe58e09358da3f09fa2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iperf3/iperf3.hash | 4 ++--
- package/iperf3/iperf3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...y-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 49 ++++++++++++++++++++++
+ ...y-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 49 ++++++++++++++++++++++
+ ...y-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch | 48 +++++++++++++++++++++
+ 3 files changed, 146 insertions(+)
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index b2c89df98a..02ada0dcc6 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.13.tar.gz.sha256
--sha256  bee427aeb13d6a2ee22073f23261f63712d82befaa83ac8cb4db5da4c2bdc865  iperf-3.13.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.14.tar.gz.sha256
-+sha256  723fcc430a027bc6952628fa2a3ac77584a1d0bd328275e573fc9b206c155004  iperf-3.14.tar.gz
- # Locally computed
- sha256  35aa7c4618b9884d6faa9b43a4e70291b35ea9f89329d5d33becd852e85221b0  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 129319d78a..c00b16ce61 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPERF3_VERSION = 3.13
-+IPERF3_VERSION = 3.14
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+diff --git a/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+new file mode 100644
+index 0000000000..7e9714e9cb
+--- /dev/null
++++ b/package/gcc/10.4.0/0007-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+@@ -0,0 +1,49 @@
++From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
++From: Stafford Horne <shorne@gmail.com>
++Date: Thu, 29 Sep 2022 15:32:39 +0100
++Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
++
++This was found when testing buildroot with linuxthreads enabled.  In
++this case, the build passes --disable-tls to the toolchain during
++configuration.  After building the OpenRISC toolchain it was still
++generating TLS code sequences and causing linker failures such as:
++
++ ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
++ ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
++
++This patch fixes this by disabling tls for the OpenRISC target when requested
++via --disable-tls.
++
++gcc/ChangeLog:
++
++	* config/or1k/or1k.c (TARGET_HAVE_TLS): Only define if
++	HAVE_AS_TLS is defined.
++
++Tested-by: Yann E. MORIN <yann.morin@orange.com>
++
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
++
++[Bernd: backported to 10.4.0]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ gcc/config/or1k/or1k.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/gcc/config/or1k/or1k.c b/gcc/config/or1k/or1k.c
++index da2f59062ba..0ce7b234417 100644
++--- a/gcc/config/or1k/or1k.c
+++++ b/gcc/config/or1k/or1k.c
++@@ -2175,8 +2175,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
++ #undef  TARGET_LEGITIMATE_ADDRESS_P
++ #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
++ 
+++#ifdef HAVE_AS_TLS
++ #undef  TARGET_HAVE_TLS
++ #define TARGET_HAVE_TLS true
+++#endif
++ 
++ #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
++ #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
++-- 
++2.39.3
++
+diff --git a/package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+new file mode 100644
+index 0000000000..025e6cfe32
+--- /dev/null
++++ b/package/gcc/11.4.0/0006-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+@@ -0,0 +1,49 @@
++From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
++From: Stafford Horne <shorne@gmail.com>
++Date: Thu, 29 Sep 2022 15:32:39 +0100
++Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
++
++This was found when testing buildroot with linuxthreads enabled.  In
++this case, the build passes --disable-tls to the toolchain during
++configuration.  After building the OpenRISC toolchain it was still
++generating TLS code sequences and causing linker failures such as:
++
++ ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
++ ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
++
++This patch fixes this by disabling tls for the OpenRISC target when requested
++via --disable-tls.
++
++gcc/ChangeLog:
++
++	* config/or1k/or1k.c (TARGET_HAVE_TLS): Only define if
++	HAVE_AS_TLS is defined.
++
++Tested-by: Yann E. MORIN <yann.morin@orange.com>
++
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
++
++[Bernd: backported to 11.4.0]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ gcc/config/or1k/or1k.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/gcc/config/or1k/or1k.c b/gcc/config/or1k/or1k.c
++index da2f59062ba..0ce7b234417 100644
++--- a/gcc/config/or1k/or1k.c
+++++ b/gcc/config/or1k/or1k.c
++@@ -2175,8 +2175,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
++ #undef  TARGET_LEGITIMATE_ADDRESS_P
++ #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
++ 
+++#ifdef HAVE_AS_TLS
++ #undef  TARGET_HAVE_TLS
++ #define TARGET_HAVE_TLS true
+++#endif
++ 
++ #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
++ #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
++-- 
++2.39.3
++
+diff --git a/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch b/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+new file mode 100644
+index 0000000000..4bac597233
+--- /dev/null
++++ b/package/gcc/12.3.0/0002-or1k-Only-define-TARGET_HAVE_TLS-when-HAVE_AS_TLS.patch
+@@ -0,0 +1,48 @@
++From ca01d2526917ec6e54b30472d3aedfd46d4ca585 Mon Sep 17 00:00:00 2001
++From: Stafford Horne <shorne@gmail.com>
++Date: Thu, 29 Sep 2022 15:32:39 +0100
++Subject: [PATCH] or1k: Only define TARGET_HAVE_TLS when HAVE_AS_TLS
++
++This was found when testing buildroot with linuxthreads enabled.  In
++this case, the build passes --disable-tls to the toolchain during
++configuration.  After building the OpenRISC toolchain it was still
++generating TLS code sequences and causing linker failures such as:
++
++ ..../or1k-buildroot-linux-uclibc-gcc -o gpsd-3.24/gpsctl .... -lusb-1.0 -lm -lrt -lnsl
++ ..../ld: ..../sysroot/usr/lib/libusb-1.0.so: undefined reference to `__tls_get_addr'
++
++This patch fixes this by disabling tls for the OpenRISC target when requested
++via --disable-tls.
++
++gcc/ChangeLog:
++
++	* config/or1k/or1k.cc (TARGET_HAVE_TLS): Only define if
++	HAVE_AS_TLS is defined.
++
++Tested-by: Yann E. MORIN <yann.morin@orange.com>
++
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ca01d2526917ec6e54b30472d3aedfd46d4ca585
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ gcc/config/or1k/or1k.cc | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/gcc/config/or1k/or1k.cc b/gcc/config/or1k/or1k.cc
++index da2f59062ba..0ce7b234417 100644
++--- a/gcc/config/or1k/or1k.cc
+++++ b/gcc/config/or1k/or1k.cc
++@@ -2206,8 +2206,10 @@ or1k_output_mi_thunk (FILE *file, tree thunk_fndecl,
++ #undef  TARGET_LEGITIMATE_ADDRESS_P
++ #define TARGET_LEGITIMATE_ADDRESS_P or1k_legitimate_address_p
++ 
+++#ifdef HAVE_AS_TLS
++ #undef  TARGET_HAVE_TLS
++ #define TARGET_HAVE_TLS true
+++#endif
++ 
++ #undef  TARGET_HAVE_SPECULATION_SAFE_VALUE
++ #define TARGET_HAVE_SPECULATION_SAFE_VALUE speculation_safe_value_not_needed
++-- 
++2.39.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
