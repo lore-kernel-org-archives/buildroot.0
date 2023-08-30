@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA9D9C83F15
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:32:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FE47C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 22:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F88C4181F;
-	Wed, 30 Aug 2023 22:32:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F88C4181F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2C1DA4188C;
+	Wed, 30 Aug 2023 22:32:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C1DA4188C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hI9ouJkMJSjt; Wed, 30 Aug 2023 22:32:24 +0000 (UTC)
+	with ESMTP id h4O-AqLYNDNV; Wed, 30 Aug 2023 22:32:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9C0841895;
-	Wed, 30 Aug 2023 22:32:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9C0841895
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB36D1BF424
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59C024187E;
+	Wed, 30 Aug 2023 22:32:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59C024187E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04DEB1BF980
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C2AFA60DA5
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA0AD402EB
  for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 22:31:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2AFA60DA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA0AD402EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HdupZ2xqCkt4 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U6nb5UGszVv3 for <buildroot@lists.busybox.net>;
  Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D3AC612CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 384DD41813
  for <buildroot@buildroot.org>; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D3AC612CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 384DD41813
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 09FD8866C1; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
+ id 283EE866BF; Wed, 30 Aug 2023 22:31:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 00:18:57 +0200
+Date: Thu, 31 Aug 2023 00:28:05 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: edab7e0f75f566d7c0ae4274183c25f0b94e6149
-X-Git-Newrev: a220cfad564160ea718c4c4bb33a7dcf090d47c3
+X-Git-Oldrev: 67564d1da2fa738c7d683e0f7cee725b75518aed
+X-Git-Newrev: fbc2e83d41c3f1aa723f68c9926311db0a4ed22f
 X-Patchwork-Hint: ignore
-Message-Id: <20230830223119.09FD8866C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] DEVELOPERS: sort entries
- of Bernd Kuhls
+Message-Id: <20230830223119.283EE866BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/cmocka: fix build
+ on Thumb classic configurations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,72 +63,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a220cfad564160ea718c4c4bb33a7dcf090d47c3
+commit: https://git.buildroot.net/buildroot/commit/?id=fbc2e83d41c3f1aa723f68c9926311db0a4ed22f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The cmocka package checks if a toolchain supports the
+-fstack-clash-protection compiler flag, and if it does automatically
+uses it. That flag is not supported by GCC for Thumb1 builds (at least
+as of both GCC 11 and GCC 12). Let's tell cmocka about this by passing
+-DWITH_STACK_CLASH_PROTECTION=OFF in this configuration, as suggested
+by Arnout Vandecappelle.
+
+Fixes:
+http://autobuild.buildroot.net/results/4044b3a71d3130d934c7a7c0c5badfabb2a97030/
+
+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+[Thomas: change the initial patch from Joel to use the suggestion from
+Arnout]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 210306b4fa1f1a018393c69334eb48bf247a91c7)
+(cherry picked from commit 5622c76bf42fd29f8dfc231d0fccb623960b3542)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/cmocka/cmocka.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ed31497f89..31f108fed0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -343,8 +343,8 @@ F:	package/giflib/
- F:	package/gkrellm/
- F:	package/gpsd/
- F:	package/gptfdisk/
--F:	package/hdparm/
- F:	package/hddtemp/
-+F:	package/hdparm/
- F:	package/intel-gmmlib/
- F:	package/intel-mediadriver/
- F:	package/intel-mediasdk/
-@@ -372,8 +372,8 @@ F:	package/libdvdcss/
- F:	package/libdvdnav/
- F:	package/libdvdread/
- F:	package/libebur128/
--F:	package/libfribidi/
- F:	package/libfreeglut/
-+F:	package/libfribidi/
- F:	package/libg7221/
- F:	package/libglew/
- F:	package/libglfw/
-@@ -435,9 +435,9 @@ F:	package/perl-io-html/
- F:	package/perl-lwp-mediatypes/
- F:	package/perl-mail-dkim/
- F:	package/perl-mailtools/
-+F:	package/perl-netaddr-ip/
- F:	package/perl-net-dns/
- F:	package/perl-net-http/
--F:	package/perl-netaddr-ip/
- F:	package/perl-timedate/
- F:	package/perl-uri/
- F:	package/perl-www-robotrules/
-@@ -449,17 +449,17 @@ F:	package/pure-ftpd/
- F:	package/python-couchdb/
- F:	package/python-cssutils/
- F:	package/python-glslang/
-+F:	package/python-mako/
- F:	package/python-mwclient/
- F:	package/python-mwscrape/
- F:	package/python-mwscrape2slob/
--F:	package/python-mako/
- F:	package/python-oauthlib/
- F:	package/python-pyicu/
- F:	package/python-pylru/
- F:	package/python-requests-oauthlib/
- F:	package/python-slob/
--F:	package/rsync/
- F:	package/rrdtool/
-+F:	package/rsync/
- F:	package/rtmpdump/
- F:	package/samba4/
- F:	package/sofia-sip/
+diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
+index eafb4898e1..297f95f465 100644
+--- a/package/cmocka/cmocka.mk
++++ b/package/cmocka/cmocka.mk
+@@ -21,4 +21,9 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ CMOCKA_CONF_OPTS += -DWITH_STATIC_LIB=ON
+ endif
+ 
++# gcc for ARM Thumb1 doesn't implement -fstack-clash-protection
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++CMOCKA_CONF_OPTS += -DWITH_STACK_CLASH_PROTECTION=OFF
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
