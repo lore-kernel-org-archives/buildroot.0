@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2510EC83F15
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFEEC83F15
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 19:55:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B01AC61284;
-	Wed, 30 Aug 2023 19:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B01AC61284
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EA3861257;
+	Wed, 30 Aug 2023 19:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EA3861257
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R_wT_VnrS6a4; Wed, 30 Aug 2023 19:55:08 +0000 (UTC)
+	with ESMTP id 54HpwPpbs2Pf; Wed, 30 Aug 2023 19:55:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D826C6126D;
-	Wed, 30 Aug 2023 19:55:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D826C6126D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 70B551BF423
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44BB3612A5;
+	Wed, 30 Aug 2023 19:55:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44BB3612A5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E4491BF423
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A1E361257
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A1E361257
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05092402A8
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 19:54:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05092402A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oEDRLgnFvhmU for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 19:54:54 +0000 (UTC)
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
- [IPv6:2607:f8b0:4864:20::636])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5D34C6124D
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:54:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D34C6124D
-Received: by mail-pl1-x636.google.com with SMTP id
- d9443c01a7336-1c1e3a4a06fso204245ad.3
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:54:54 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XLFRYjdDrJUl for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 19:54:55 +0000 (UTC)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
+ [IPv6:2607:f8b0:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD7F540017
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 19:54:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD7F540017
+Received: by mail-pl1-x62d.google.com with SMTP id
+ d9443c01a7336-1c1e128135aso263685ad.3
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 12:54:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693425293; x=1694030093;
+ d=1e100.net; s=20221208; t=1693425295; x=1694030095;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=tkynIWJ2ghZw2FZgS45/JG82lc2aZs+Zy45V88OrTh8=;
- b=hCEY4YgXI50GG2Ud3YUaPkhvMByLzKIryElhqjYB3rExpHBXLzvJHhTz9RJHjI+udj
- 0sevmP0O0+i3IoVaQvhDQMfrb6sY+wPnQ+zbMEbSixaCTD5QRGuHaQMVWPfzpwycCLE5
- bvnEUFdT9EhJ+AEq/iG5sEucppcWZnnnH4mGmnszf4ODqJ3wpFfd5fT5ivB7ZtOIPbuh
- mxYcNe5+PwSToz3qwcXg+NDwpyzOzLYB3wiyyYDnY1lX49xzEzrERcPe7J2NMsigXCwn
- 4Y6DWzxEu9bX85h4zMmsbSnzOXbaIIWxc+S/M5fPbh1t/25l9I8NLdrYKEekAwML4q33
- be2A==
-X-Gm-Message-State: AOJu0YzwCBJs45SbGI2Zodj5z3TrmS6zWwcbua5jKrNmiiDP6wymtSPA
- PI8mApKpb7ptOZxQuHVG20XVHqTCDvc=
-X-Google-Smtp-Source: AGHT+IEGs0+Vh8fZqwDd5DcKKMy8HbLAnJ3Ov1PsIn29cV05iDfuzb0MS6mMOZ6vjuRIPWIiGAWKZQ==
-X-Received: by 2002:a17:902:e811:b0:1c1:db28:f253 with SMTP id
- u17-20020a170902e81100b001c1db28f253mr2829730plg.26.1693425293279; 
- Wed, 30 Aug 2023 12:54:53 -0700 (PDT)
+ bh=nu3I5RHzzFgYmmza8kMP4ScsmnAiphK8AOZ40iHUDf8=;
+ b=bRl1bwlPMlVFdpcYZZUSAvYjSwx+Dw7nn6TXe7zHR6A0IsiEN+CkrNJ3Ozc0lqeo2Z
+ rx+C1a0koe/4txxpiJOOQNG3YdgfhQCtGMcqui+ICEn/4TjHhYu2PWaTutDRRWik/A0G
+ UAadvtERNgGNP91Gt84shVHUYLPTNpFDrDABE572bNqmBn6WHPk6wequ/pxHT3530Cre
+ 7AcMD1+uW2VfuTYz+Q5CjtqzKbZx0SWBou9A1GRLguvd1EuMsNw2hs7hvGQqHz9DRQT3
+ c18npGuZ1M8zrk9ngDi6N9WMiFGL0NKhHD7ZdFbbaKc3OJFB6o/AYNbJhK6a1Uiz00XZ
+ 6MRg==
+X-Gm-Message-State: AOJu0YxE3I75qTuvBMhjHuHgQs6ga0RaLKGDgZWcdVtq9tFv57O05XaM
+ XDp/1KJaXLQ5cWDQT7hKwSJXeeZ1+bc=
+X-Google-Smtp-Source: AGHT+IEw79RggDzv+KWO/PdH/dwfmOKcnE8RdPTkxNib33J6fV2ZLMNzA9IZy5jaaiJffXs3KMfONA==
+X-Received: by 2002:a17:903:11c5:b0:1c1:f1db:e86d with SMTP id
+ q5-20020a17090311c500b001c1f1dbe86dmr3430442plh.7.1693425294690; 
+ Wed, 30 Aug 2023 12:54:54 -0700 (PDT)
 Received: from DESKTOP-OI0KN2B.lan ([172.56.200.156])
  by smtp.gmail.com with ESMTPSA id
- m12-20020a1709026bcc00b001b8a85489a3sm11345492plt.262.2023.08.30.12.54.51
+ m12-20020a1709026bcc00b001b8a85489a3sm11345492plt.262.2023.08.30.12.54.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Aug 2023 12:54:52 -0700 (PDT)
+ Wed, 30 Aug 2023 12:54:54 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 13:54:41 -0600
-Message-ID: <20230830195446.3958486-2-aduskett@gmail.com>
+Date: Wed, 30 Aug 2023 13:54:42 -0600
+Message-ID: <20230830195446.3958486-3-aduskett@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230830195446.3958486-1-aduskett@gmail.com>
 References: <20230830195446.3958486-1-aduskett@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693425293; x=1694030093; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1693425295; x=1694030095; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=tkynIWJ2ghZw2FZgS45/JG82lc2aZs+Zy45V88OrTh8=;
- b=XeP4ds3QFFnzKU9fKwSpM8GxXwQGGGZvcFjClb3TnRVnDvNJypgHBAMGa5DQgJ5YHN
- cd6daLkoWH265oQS5QqX+Zp/5Aqjl5SaIxQws1PxWu8HrhUUVftChITdj9JgE+EX9b8Z
- 0fIS/6HsR9po8ULI9crJQX7U5tfrCUuSIABJ4xQoef4ptWtjiq/4QDQUQrlXJUM5BoPe
- jXj2SNsPIwaagjJ1kux82n0X+AXzIWOkE1Y4M9EU8fqtpS/JjwwX74YFIkElXtaiUcAa
- 4YrBs2PEd+vQYLBehK1ZITNCOpXNpnkRMssJbkaf9MDcnK9jm3Hl/5a+gpUK2wQLwo/d
- XOBg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nu3I5RHzzFgYmmza8kMP4ScsmnAiphK8AOZ40iHUDf8=;
+ b=V2TXt29rsmBTYQJcwGCefbGZzwb3tAn7hzZHomNdMP2WJx+/hFYQNOQELszdWTzmWG
+ 10Q/N4D84lxjPpzwd0uZ6HK9rDCK7rWbla1mUyI/KSHpe5mAk8hl7xuQAPuZ+C2x0QGr
+ VfTp215XopTM/QDLNbeLMrwUq1ybXArROoMb/BtLLuYkXC7VcGMSqgAl/0TS4MprZJja
+ keLR6ZFKeLVjGBrz0+v+y6cfC+efNZwHfq5Jnvr8Ya7AiFabtVtTbnLtPrGVKuNWN0DV
+ CT6dc+S4/ZqhaA4vsUiAvi0QhJkpb7tXUYJwH+jue4MdenFWfzgGmcEtjaPR7zCA+YF9
+ QD6g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=XeP4ds3Q
-Subject: [Buildroot] [PATCH/next 2/7] package/vulkan-loader: new package
+ header.a=rsa-sha256 header.s=20221208 header.b=V2TXt29r
+Subject: [Buildroot] [PATCH/next 3/7] package/vulkan-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,122 +107,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use $(VULKAN_HEADERS_VERSION) for VULKAN_LOADER_VERSION as the vulkan packages
+Use $(VULKAN_HEADERS_VERSION) for VULKAN_TOOLS_VERSION as the vulkan packages
 need to all be the same version.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/vulkan-loader/Config.in          | 14 ++++++++
- package/vulkan-loader/vulkan-loader.hash |  3 ++
- package/vulkan-loader/vulkan-loader.mk   | 45 ++++++++++++++++++++++++
- 5 files changed, 64 insertions(+)
- create mode 100644 package/vulkan-loader/Config.in
- create mode 100644 package/vulkan-loader/vulkan-loader.hash
- create mode 100644 package/vulkan-loader/vulkan-loader.mk
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/vulkan-tools/Config.in         | 17 ++++++++++
+ package/vulkan-tools/vulkan-tools.hash |  3 ++
+ package/vulkan-tools/vulkan-tools.mk   | 47 ++++++++++++++++++++++++++
+ 5 files changed, 69 insertions(+)
+ create mode 100644 package/vulkan-tools/Config.in
+ create mode 100644 package/vulkan-tools/vulkan-tools.hash
+ create mode 100644 package/vulkan-tools/vulkan-tools.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 241de082eb..e83b7c1b2b 100644
+index e83b7c1b2b..3c2187afac 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -28,6 +28,7 @@
- 
+@@ -29,6 +29,7 @@
  N:	Adam Duskett <aduskett@gmail.com>
  F:	package/firewalld/
-+F:	package/vulkan-loader/
+ F:	package/vulkan-loader/
++F:	package/vulkan-tools/
  
  N:	Adam Heinrich <adam@adamh.cz>
  F:	package/jack1/
 diff --git a/package/Config.in b/package/Config.in
-index 3d16ea37d1..51c2ee2b3e 100644
+index 51c2ee2b3e..5fa34b1f0d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -369,6 +369,7 @@ comment "Graphic libraries"
- 	source "package/sdl2_ttf/Config.in"
+@@ -370,6 +370,7 @@ comment "Graphic libraries"
  	source "package/tk/Config.in"
  	source "package/vulkan-headers/Config.in"
-+	source "package/vulkan-loader/Config.in"
+ 	source "package/vulkan-loader/Config.in"
++	source "package/vulkan-tools/Config.in"
  
  comment "Other GUIs"
  	source "package/qt5/Config.in"
-diff --git a/package/vulkan-loader/Config.in b/package/vulkan-loader/Config.in
+diff --git a/package/vulkan-tools/Config.in b/package/vulkan-tools/Config.in
 new file mode 100644
-index 0000000000..9c215dc9ce
+index 0000000000..54fa539dab
 --- /dev/null
-+++ b/package/vulkan-loader/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_VULKAN_LOADER
-+	bool "vulkan-loader"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++++ b/package/vulkan-tools/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_VULKAN_TOOLS
++	bool "vulkan-tools"
++	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
++	depends on !BR2_STATIC_LIBS # vullan-loader
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
 +	select BR2_PACKAGE_VULKAN_HEADERS
++	select BR2_PACKAGE_VULKAN_LOADER
++
 +	help
-+	  The Khronos official Vulkan ICD desktop loader.
++	  The Khronos official Vulkan Tools and Utilities.
 +
-+	  https://github.com/KhronosGroup/Vulkan-Loader
++	  https://github.com/KhronosGroup/Vulkan-Tools
 +
-+comment "vulkan-loader needs a toolchain w/ C++, dynamic library, threads"
++comment "vulkan-tools needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.9"
 +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/vulkan-loader/vulkan-loader.hash b/package/vulkan-loader/vulkan-loader.hash
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/vulkan-tools/vulkan-tools.hash b/package/vulkan-tools/vulkan-tools.hash
 new file mode 100644
-index 0000000000..e09ecda8a9
+index 0000000000..24c0697784
 --- /dev/null
-+++ b/package/vulkan-loader/vulkan-loader.hash
++++ b/package/vulkan-tools/vulkan-tools.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  3bbaa5ee64058a89949eb777de66ce94bfe3141892514172cfc9451c756802d5  vulkan-loader-1.3.262.tar.gz
-+sha256  43c0a37e6a0fa7ff3c843b3ec5a4fac84b712558ddac103fbd4c1649662a9ece  LICENSE.txt
-diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
++sha256  8c77d02694d0516ae2ba3f3718745647e87e788ef93faabb2e3674ff32608010  vulkan-tools-1.3.262.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
 new file mode 100644
-index 0000000000..d87e57ebd4
+index 0000000000..68f7c1c04d
 --- /dev/null
-+++ b/package/vulkan-loader/vulkan-loader.mk
-@@ -0,0 +1,45 @@
++++ b/package/vulkan-tools/vulkan-tools.mk
+@@ -0,0 +1,47 @@
 +################################################################################
 +#
-+# vulkan-loader
++# vulkan-tools
 +#
 +################################################################################
 +
-+VULKAN_LOADER_VERSION = $(VULKAN_HEADERS_VERSION)
-+VULKAN_LOADER_SITE = $(call github,KhronosGroup,Vulkan-Loader,v$(VULKAN_LOADER_VERSION))
-+VULKAN_LOADER_LICENSE = Apache-2.0
-+VULKAN_LOADER_LICENSE_FILES = LICENSE.txt
-++VULKAN_LOADER_INSTALL_STAGING = YES
++VULKAN_TOOLS_VERSION = $(VULKAN_HEADERS_VERSION)
++VULKAN_TOOLS_SITE = $(call github,KhronosGroup,Vulkan-Tools,v$(VULKAN_TOOLS_VERSION))
++VULKAN_TOOLS_LICENSE = Apache-2.0
++VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
 +
-+VULKAN_LOADER_DEPENDENCIES = host-pkgconf vulkan-headers
++VULKAN_TOOLS_DEPENDENCIES = \
++	vulkan-headers \
++	vulkan-loader
 +
-+VULKAN_LOADER_CONF_OPTS += \
-+	-DASSEMBLER_WORKS=FALSE \
-+	-DBUILD_WSI_SCREEN_QNX_SUPPORT=OFF \
-+	-DLOADER_CODEGEN=OFF
++VULKAN_TOOLS_CONF_OPTS += \
++	-DBUILD_CUBE=OFF \
++	-DBUILD_ICD=OFF \
++	-DBUILD_VULKANINFO=ON \
++	-DINSTALL_ICD=OFF
 +
 +ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-+VULKAN_LOADER_DEPENDENCIES += directfb
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=ON
++VULKAN_TOOLS_DEPENDENCIES += directfb
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=ON
 +else
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=OFF
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=OFF
 +endif
 +
 +ifeq ($(BR2_PACKAGE_LIBXCB),y)
-+VULKAN_LOADER_DEPENDENCIES += libxcb
-+VULKAN_LOADER_CONF_OPTS += \
++VULKAN_TOOLS_DEPENDENCIES += libxcb
++VULKAN_TOOLS_CONF_OPTS += \
 +	-DBUILD_WSI_XCB_SUPPORT=ON \
 +	-DBUILD_WSI_XLIB_SUPPORT=ON
 +else
-+VULKAN_LOADER_CONF_OPTS += \
++VULKAN_TOOLS_CONF_OPTS += \
 +	-DBUILD_WSI_XCB_SUPPORT=OFF \
 +	-DBUILD_WSI_XLIB_SUPPORT=OFF
 +endif
 +
 +ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+VULKAN_LOADER_DEPENDENCIES += wayland
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=ON
++VULKAN_TOOLS_DEPENDENCIES += wayland
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=ON
 +else
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=OFF
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=OFF
 +endif
 +
 +$(eval $(cmake-package))
