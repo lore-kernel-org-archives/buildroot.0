@@ -4,48 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93156C83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 06:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57D11C83F01
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 06:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4BA0841579;
-	Wed, 30 Aug 2023 06:11:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BA0841579
+	by smtp2.osuosl.org (Postfix) with ESMTP id E33644156F;
+	Wed, 30 Aug 2023 06:13:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E33644156F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ecjSDKVvLhlW; Wed, 30 Aug 2023 06:11:27 +0000 (UTC)
+	with ESMTP id 5Bhg6N9C47jC; Wed, 30 Aug 2023 06:13:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B4A341578;
-	Wed, 30 Aug 2023 06:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B4A341578
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 98AC41BF41D
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 06:11:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3305C409E7;
+	Wed, 30 Aug 2023 06:13:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3305C409E7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D1AF1BF41D
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 06:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E772417BE
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 06:11:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E772417BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 338DA409E7
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 06:13:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 338DA409E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iRTQhLhOI6eh for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 06:11:11 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 561824174D
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 06:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 561824174D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 433BA86501; Wed, 30 Aug 2023 06:11:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dq_GPdZYJG4p for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 06:13:34 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2AA9040328
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 06:13:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AA9040328
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BC4431BF204;
+ Wed, 30 Aug 2023 06:13:30 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qbESH-008pNz-OO; Wed, 30 Aug 2023 08:13:29 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 08:08:07 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a3cfb1f114806dc3d290996e1223a47ca0958363
-X-Git-Newrev: 914e8ed0afaf47c061572810f2fa16cf46107222
-X-Patchwork-Hint: ignore
-Message-Id: <20230830061111.433BA86501@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
- linux-headers}: bump 5.15.x / 6.{1, 4}.x series
+To: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>
+References: <20230719125309.723762-1-vincent.stehle@arm.com>
+ <20230721130959.899919-1-vincent.stehle@arm.com>
+Date: Wed, 30 Aug 2023 08:13:29 +0200
+In-Reply-To: <20230721130959.899919-1-vincent.stehle@arm.com> ("Vincent
+ =?utf-8?Q?Stehl=C3=A9=22's?= message of "Fri, 21 Jul 2023 15:09:59 +0200")
+Message-ID: <877cpd2h2u.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] boot/arm-trusted-firmware: add patch to
+ fix fiptool link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,69 +64,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Sergey Matyukevich <geomatsi@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=914e8ed0afaf47c061572810f2fa16cf46107222
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 15aae1902a3d47caa29bfb997a82a72194c79396)
-[Peter: drop 6.4.x bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index 2cad920d6f..cef9c9eebe 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1.39" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.1.40" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e561cb9a93..321629704b 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  4cddee22fdf657138a06af653492f67cd3a4762c04a34725534bd200d99085b8  linux-6.1.39.tar.xz
-+sha256  43eafc2197a07dcdcff7a7ef79ac7502061f7c564744e51626bf5fa2e22587f0  linux-6.1.40.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  6499089eae6b271063cb3e873ab7f4ba0543cfb21dcc9c54d9bcf5357db683f6  linux-5.15.120.tar.xz
-+sha256  07e0cebdb00d25459683e9c330a0576349b8c5e5f2abf053b864f9909151c31d  linux-5.15.121.tar.xz
- sha256  1e60296a135d272bb7ce645f6ae68fbd4ffd1972cb4b82c38c6faa1172481be3  linux-5.10.186.tar.xz
- sha256  dc5458462c6edbe3473fc6dee80fbe0841df7c177fe0546c2f131e5918f5351d  linux-5.4.249.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6a4c9594e4..83b8625c4c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -388,8 +388,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.288"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.249"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.186"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.120"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.39"	if BR2_KERNEL_HEADERS_6_1
-+	default "5.15.121"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.40"	if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlZpbmNlbnQiID09IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNv
+bT4gd3JpdGVzOgoKID4gV2hlbiBidWlsZGluZyBhIGZpcCBmaXJtd2FyZSAoQlIyX1RBUkdFVF9B
+Uk1fVFJVU1RFRF9GSVJNV0FSRV9GSVA9eSksIHRoZQogPiBURi1BIGJ1aWxkIHJlY2lwZSBzdGFy
+dHMgYnkgYnVpbGRpbmcgdGhlIGhvc3QgcHJvZ3JhbSBmaXB0b29sIHdpdGggdGhlCiA+IHByb3Bl
+ciBidWlsZCBlbnZpcm9ubWVudCB2YXJpYWJsZXMuIFRoZW4gdGhlIG1haW4gVEYtQSB0YXJnZXQg
+ZmlybXdhcmUKID4gYnVpbGQgc3RlcCB0YWtlcyBwbGFjZSwgd2l0aCB0aGUgZXhwZWN0YXRpb24g
+dGhhdCB0aGUgZmlwdG9vbCBwcm9ncmFtIHdpbGwKID4gYmUgdXNlZCB1bmRlciB0aGUgaG9vZCBp
+ZiBuZWNlc3NhcnkuCgogPiBJbiBURi1BLCB0aGUgYnVpbGQgcmVjaXBlIGZvciB0aGUgaG9zdCBw
+cm9ncmFtIGZpcHRvb2wgaGFzIHN1YnRseSBjaGFuZ2VkCiA+IGFmdGVyIHYyLjcsIGluIGNvbW1p
+dCBjZjJkZDE3ZGRkYTIgKCJyZWZhY3RvcihzZWN1cml0eSk6IGFkZCBPcGVuU1NMIDEueAogPiBj
+b21wYXRpYmlsaXR5IikuIFRoaXMgY2hhbmdlIGhhcyB0aGUgZWZmZWN0IHRvIGZvcmNlIHJlLWxp
+bmtpbmcgZmlwdG9vbAogPiBlYWNoIHRpbWUuCgogPiBJZiB3ZSB0cnkgdG8gYnVpbGQgd2l0aCBC
+dWlsZHJvb3QgYSBmaXAgZmlybXdhcmUgd2l0aCBhIFRGLUEgdmVyc2lvbiBhZnRlcgogPiB2Mi43
+IGNvbXByaXNpbmcgdGhlIGFmb3JlbWVudGlvbmVkIGNoYW5nZSwgdGhlIGZpcHRvb2wgcHJvZ3Jh
+bSBpcyBmb3JjaWJseQogPiByZS1saW5rZWQgZHVyaW5nIHRoZSBtYWluIGZpcm13YXJlIGJ1aWxk
+IHN0ZXAuIFRoaXMgaGFwcGVucyB3aXRob3V0IHRoZQogPiBwcm9wZXIgYnVpbGQgZW52aXJvbm1l
+bnQgdmFyaWFibGVzIGFuZCBjb25zZXF1ZW50bHksIGlmIG9wZW5zc2wgaXMgbm90CiA+IGluc3Rh
+bGxlZCBvbiB0aGUgaG9zdCwgdGhlIGxpYmNyeXB0byBzaGFyZWQgbGlicmFyeSB3aWxsIG5vdCBi
+ZSBmb3VuZCBieQogPiB0aGUgbGlua2VyIGFuZCB0aGUgbGluayB3aWxsIGZhaWwgd2l0aCB0aGUg
+Zm9sbG93aW5nIGVycm9yOgoKID4gICAvdXNyL2Jpbi9sZDogY2Fubm90IGZpbmQgLWxjcnlwdG86
+IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKCiA+IEEgcGF0Y2ggaGFzIGJlZW4gaW50ZWdyYXRl
+ZCBpbnRvIFRGLUEgdG8gYXZvaWQgcmUtbGlua2luZyBmaXB0b29sIHdoZW4gbm90CiA+IG5lY2Vz
+c2FyeSwgd2hpY2ggc2hvdWxkIHNvbHZlIHRoZSBwcm9ibGVtIHN0YXJ0aW5nIHdpdGggdmVyc2lv
+biB2Mi4xMC4gQWRkCiA+IHRoYXQgcGF0Y2ggaW4gQnVpbGRyb290IGZvciB2ZXJzaW9ucyB2Mi44
+IGFuZCB2Mi45LCB0byByZXBhaXIgdGhlIGJ1aWxkIGluCiA+IHRoZSBjYXNlcyBkZXNjcmliZWQg
+YWJvdmUuCgogPiBGaXhlczoKCiA+ICAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcv
+YnVpbGRyb290Ly0vam9icy80NjY0ODQ1NzY3CgogPiBTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0
+ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+CiA+IENjOiBEaWNrIE9sc3NvbiA8aGlAc2Vu
+emlsbGEuaW8+CiA+IENjOiBTZXJnZXkgTWF0eXVrZXZpY2ggPGdlb21hdHNpQGdtYWlsLmNvbT4K
+ID4gLS0tCiA+IENoYW5nZXMgdjEgLT4gdjI6CiA+ICAgLSBBZGQgRml4ZXM6IG1lbnRpb24gICAo
+c3VnZ2VzdGVkIGJ5IFRob21hcykKCkNvbW1pdHRlZCB0byAyMDIzLjAyLnggYW5kIDIwMjMuMDUu
+eCwgdGhhbmtzLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
