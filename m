@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89A2AC83F01
-	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 20:34:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8ACEC6FA8F
+	for <buildroot@archiver.kernel.org>; Wed, 30 Aug 2023 20:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EED5417DC;
-	Wed, 30 Aug 2023 20:34:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EED5417DC
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EF07417DB;
+	Wed, 30 Aug 2023 20:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EF07417DB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 56nnCuE2eCRb; Wed, 30 Aug 2023 20:34:40 +0000 (UTC)
+	with ESMTP id iH7slbSIqWyf; Wed, 30 Aug 2023 20:35:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42886417DB;
-	Wed, 30 Aug 2023 20:34:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42886417DB
+	by smtp2.osuosl.org (Postfix) with ESMTP id C4074417D3;
+	Wed, 30 Aug 2023 20:35:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C4074417D3
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 421551BF980
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 20:34:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 315871BF40B
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 20:35:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A96C417CB
- for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 20:34:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A96C417CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 00828417D3
+ for <buildroot@lists.busybox.net>; Wed, 30 Aug 2023 20:35:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00828417D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RH_ge3ElntGK for <buildroot@lists.busybox.net>;
- Wed, 30 Aug 2023 20:34:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34787402A8
- for <buildroot@buildroot.org>; Wed, 30 Aug 2023 20:34:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34787402A8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2015D86621; Wed, 30 Aug 2023 20:34:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 23:33:21 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1ae3f1748b93990436723a4c4f8434ba61fdc099
-X-Git-Newrev: f8047ff5987efc80f6ead51edae126911c02a8ad
-X-Patchwork-Hint: ignore
-Message-Id: <20230830203425.2015D86621@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nushell: new package
+ with ESMTP id H9fQp1wLHTpL for <buildroot@lists.busybox.net>;
+ Wed, 30 Aug 2023 20:35:55 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8666417CB
+ for <buildroot@buildroot.org>; Wed, 30 Aug 2023 20:35:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8666417CB
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C7AFBE0005;
+ Wed, 30 Aug 2023 20:35:52 +0000 (UTC)
+Date: Wed, 30 Aug 2023 22:35:51 +0200
+To: Sebastian Weyer <sebastian.weyer@smile.fr>
+Message-ID: <20230830223551.48ebb70d@windsurf>
+In-Reply-To: <20230308131554.642965-1-sebastian.weyer@smile.fr>
+References: <20230308131554.642965-1-sebastian.weyer@smile.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693427753;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=VB9+QE4THyUWmoAgctrD4+DKHBCN6XkdWn7mjhCjqUQ=;
+ b=RasDW6yJJjDmPMy0D7bwis3iCFZG/pCydHw65DYyu/sQnAFcZtZxymycQAtx3QdWqhNGv1
+ lpdp7RMyuQnGMQ5paszvqk+40/mII7JtzFuqLeVNuGLrvliRL2DhhKlrqnT+r2FQlkLkH5
+ Mc8tPOrpAddvAClmP5N4N/7JU88/dgjj0qgr+NJ02jWRU6beGdVue1jKJ56iazqGiqXrKr
+ sSSVDHJRF1++Bvm4nKVKXqT+chebLTifoXnWCEKZil5VxTh196RkgnBSeJ30pvoKE7pYpB
+ YB8L3EQmRjYF4SQ38k0CrrYkOFZMKKD7S1h+fba/zAAb0ASKtYgWiH4HKSJqDg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RasDW6yJ
+Subject: Re: [Buildroot] [PATCH v6 1/3] package/nushell: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,119 +76,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7370389079941412675=="
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7370389079941412675==
-Content-Type: text/plain
+On Wed,  8 Mar 2023 14:15:51 +0100
+Sebastian Weyer <sebastian.weyer@smile.fr> wrote:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8047ff5987efc80f6ead51edae126911c02a8ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+> Nushell is a shell - written in Rust - that makes use of the nushell
+> language to interact with the operating system
+> 
+> Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+> ---
+> This new version adds ncurses-target-progs as a dependency which is a
+> hidden dependency of nushell. With this option enabled, nushell is also
+> usable without specifically replacing getty by agetty.
 
-Nushell is a shell - written in Rust - that makes use of the nushell
-language to interact with the operating system
+Applied to next, thanks.
 
-Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/nushell/Config.in    | 12 ++++++++++++
- package/nushell/nushell.hash |  3 +++
- package/nushell/nushell.mk   | 20 ++++++++++++++++++++
- 5 files changed, 39 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 241de082eb..24ec17a7c2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2683,6 +2683,9 @@ F:	support/misc/toolchainfile.cmake.in
- N:	Sam Voss <sam.voss@gmail.com>
- F:	package/ripgrep/
- 
-+N:	Sebastian Weyer <sebastian.weyer@smile.fr>
-+F:	package/nushell/
-+
- N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
- F:	package/mmc-utils/
- F:	package/python-flask-jsonrpc/
-diff --git a/package/Config.in b/package/Config.in
-index 3d16ea37d1..5449884809 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2607,6 +2607,7 @@ comment "Shells"
- 	source "package/bash/Config.in"
- 	source "package/dash/Config.in"
- 	source "package/mksh/Config.in"
-+	source "package/nushell/Config.in"
- 	source "package/zsh/Config.in"
- comment "Utilities"
- 	source "package/apg/Config.in"
-diff --git a/package/nushell/Config.in b/package/nushell/Config.in
-new file mode 100644
-index 0000000000..edb01d2f72
---- /dev/null
-+++ b/package/nushell/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_NUSHELL
-+	bool "nushell"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_HOST_PKGCONF
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PROGS
-+	help
-+	  A new type of shell.
-+
-+	  https://github.com/nushell/nushell
-diff --git a/package/nushell/nushell.hash b/package/nushell/nushell.hash
-new file mode 100644
-index 0000000000..b553a6c2bc
---- /dev/null
-+++ b/package/nushell/nushell.hash
-@@ -0,0 +1,3 @@
-+# Locally generated
-+sha256  352e807698d5f95e9bfdd9dd5512acab3cbef315379299a32e5f322a76eb718a  nushell-0.76.0.tar.gz
-+sha256  e189616e535e9f7bf410a72e6fc51ad1e0ae461c58d592e186c2669daa5d1e5d  LICENSE
-diff --git a/package/nushell/nushell.mk b/package/nushell/nushell.mk
-new file mode 100644
-index 0000000000..b9c1ee6434
---- /dev/null
-+++ b/package/nushell/nushell.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# nushell
-+#
-+################################################################################
-+
-+NUSHELL_VERSION = 0.76.0
-+NUSHELL_SITE = $(call github,nushell,nushell,$(NUSHELL_VERSION))
-+NUSHELL_LICENSE = MIT
-+NUSHELL_LICENSE_FILES = LICENSE
-+NUSHELL_DEPENDENCIES = host-pkgconf openssl ncurses
-+
-+# Add /usr/bin/nu to /etc/shells as in package/bash/bash.mk
-+define NUSHELL_ADD_NU_TO_SHELLS
-+	grep -qsE '^/usr/bin/nu$$' $(TARGET_DIR)/etc/shells \
-+		|| echo "/usr/bin/nu" >> $(TARGET_DIR)/etc/shells
-+endef
-+NUSHELL_TARGET_FINALIZE_HOOKS += NUSHELL_ADD_NU_TO_SHELLS
-+
-+$(eval $(cargo-package))
-
---===============7370389079941412675==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7370389079941412675==--
