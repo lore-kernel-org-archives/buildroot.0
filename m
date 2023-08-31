@@ -1,80 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53B71C83F2E
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 16:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CECDC83F35
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 17:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95D88418CC;
-	Thu, 31 Aug 2023 16:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95D88418CC
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE53C835C9;
+	Thu, 31 Aug 2023 17:37:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE53C835C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1NCbOo0zyt1i; Thu, 31 Aug 2023 16:48:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id WBNmFrT0lAun; Thu, 31 Aug 2023 17:37:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D45EE40153;
-	Thu, 31 Aug 2023 16:48:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D45EE40153
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7F0AE1BF3BA
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 16:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E1A5835D9;
+	Thu, 31 Aug 2023 17:37:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E1A5835D9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 879CD1BF2FE
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 17:37:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 588A060D68
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 16:48:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 588A060D68
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55EFD418F8
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 17:37:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55EFD418F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KAoL0PEWEOJg for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 16:48:17 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 37FDE60B26
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 16:48:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37FDE60B26
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-5009d4a4897so2040317e87.0
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 09:48:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693500495; x=1694105295;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=iOMB+sKLsZXeFvS5tH66CPlqP6VQifPfhCybLlOlKkc=;
- b=EK3ziPMqKUkjOfMfWPZM+aLAmjJPFl4KJMubXcEmMvZI7nEH3w5FYpKOdpxtJQjNMJ
- AdxP5KcoqLb+2bMiWSw604lDp1T37zdKI3lx5r0Y9AB006OL4qASeg2q1JJ3pZtlKBZM
- eNDqgOXDEbV/s0H1G5ZY/L6XcxXp2XprcG0Z2VpDUGpGkYCniUw0zIkKaER0y1CkExcI
- ff5OoqqxqIlhTmMaQGX2CJTmPgrmvSdwjpci05WYVsTAUyftrPs4GNUIobdh+zcOkKsU
- 1khLhWLY4yDXneWNp13Ao102VcUZpxAjFsCZ8vG7uw1pBhU6J4vn6oBuz/lJtv+BVymq
- /A2w==
-X-Gm-Message-State: AOJu0YwiivZz21SkOtPBKQFPrib+AjJzong6Bc9PK0dFNvA6Urtrzswt
- SnOhef0y03hK7+kkmcOZ6CjlT4H0BShC9EUyZZokatWhUFKYjg==
-X-Google-Smtp-Source: AGHT+IF3N1wzLWStxBSkw+72vyRfMgdrDRuGtLz7DP804efKftOd0WmamWr/idOpAHaMdDqFR9OJpQ1sO7U00d51UE0=
-X-Received: by 2002:a05:6512:234c:b0:500:d960:8ae5 with SMTP id
- p12-20020a056512234c00b00500d9608ae5mr200124lfu.25.1693500494633; Thu, 31 Aug
- 2023 09:48:14 -0700 (PDT)
-MIME-Version: 1.0
-From: Andrea Simeoni <andreasimeoni73@gmail.com>
-Date: Thu, 31 Aug 2023 18:48:03 +0200
-Message-ID: <CAPmASevbUcWtFd-6ke-fXkXor6iPRmjnk+UvB3_fVQk+Jwf33Q@mail.gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Lo47OLRg90-Y for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 17:37:48 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9B2A4418D1
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 17:37:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B2A4418D1
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 3085E13F8D9;
+ Thu, 31 Aug 2023 19:37:42 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693500495; x=1694105295; darn=buildroot.org;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=iOMB+sKLsZXeFvS5tH66CPlqP6VQifPfhCybLlOlKkc=;
- b=bay4yVD6+NK5+9Kcfa1+wjEozNql4pxmc1FNQyx5Z99Wy2r4WHlzXZDq0jR6uRz1bU
- udH+Zcld3IyguMe1yKYALOpExGCp/3I0/YDDaGq32U6YwYGTUqk1sJ3Q4vmzEasRPFXA
- eUJzR0SRj+tT1bg2N32m0d1cITQ/1Iy+9z4gPnsvTsn5KqqSHwWvDOCzS2zLHRvGYHXf
- 5xMaRIwuzcCxdq8BHgD2wqZ9vxLU65AuGNx4mbla+BpiZL4BvwJgYG/xZ2ECTfqkbp1U
- iS4Aoj+MsQD9kceoWuy2EuqRDo9iykZyPP3NrXjc0xu/dsWVqesabi/qV4YQ7fkyxCjn
- 3IRQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=bay4yVD6
-Subject: [Buildroot] Network Manager says the interfaces are unavailable
+Date: Thu, 31 Aug 2023 19:37:36 +0200
+Message-ID: <20230831173736.84288-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1693503464;
+ bh=sX+VsyqsNv1fEMv/1vC3ZoA0VM1/QpCO5bmzuZSx4Fo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Tr4+RUrnFCk2aPdMJKKM8YTmtQsPwSJDiq4eBodquepWQLCNrj+rtRNx/RNKHrZbi
+ aDXcW/iQ8N/LyV+jrlQ7yRW+a9xcrAntvG5bbkzDbKas57Vekr/YkIXu4u3iwlekGJ
+ IA4YkfVrf2jmNc0omQghDGgF2SGFhUiZshvotVvJIv3vC470jh8Y6iJsdceK/j8Y6b
+ D+qERBdoCKNmgt3PK1fy07fTKQ9aA3gkSu4Tjj0cbjxAJdgiZh2PctL5Up/4X8nFVM
+ +tc5ko7lZlUc7WM7CazGePhtEPG4ZpYAN42HrSDcgIKhioYLIEKJRztDqRLeCXiQlp
+ hztiMY62dxDNQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Tr4+RUrn
+Subject: [Buildroot] [PATCH 1/1] support/testing: python-magic-wormhole: fix
+ random failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,132 +71,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7456900825303264107=="
+Cc: Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7456900825303264107==
-Content-Type: multipart/alternative; boundary="00000000000068dfe006043acff8"
+The magic-wormhole "receive" command can output "waiting" messages
+when key receival or verification are longer than a predefined
+timeout:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L135
 
---00000000000068dfe006043acff8
-Content-Type: text/plain; charset="UTF-8"
+The intent is to have an interactive user experience.
 
-I customized the default Raspberry Pi 3 64-bit config, and I enabled
-BR2_PACKAGE_NETWORK_MANAGER
-and also BR2_PACKAGE_WPA_SUPPLICANT in order to connect to WPA networks.
+This behavior makes the runtime test unreliable as the test always
+expect the sent message as the exact output. When the test execution
+is slower, it sometimes get the "waiting" message instead of the
+expected message.
 
+Some test jobs are succeeding:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4968059737
+while some other are failing.
 
-I didn't enable BR2_PACKAGE_DHCPCD because I read it would prevent Network
-Manager to work. Running the image, Network Manager find the interfaces
-(eth0 and wlan0) but cannot use them:
+magic-wormhole can override those timers with environment variables.
+See:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L26
 
-# nmcli dev status
-> DEVICE  TYPE       STATE                    CONNECTION
-> lo      loopback   connected (externally)   lo
-> eth0    ethernet   unavailable              --
-> wlan0   wifi       unavailable              --
->
+This commit sets those environment variable to larger values
+(100 seconds instread of 1 by default), to make sure the test will
+always pass.
 
-I'm aware it's the expected behavior if the interface is present in
-/etc/network/interfaces and I'm ok with eth0, but wlan0 should be available:
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4962923235
 
-auto lo
-> iface lo inet loopback
->
-> auto eth0
-> iface eth0 inet dhcp
->   pre-up /etc/network/nfs_check
->   wait-delay 15
->   hostname $(hostname)
->
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ support/testing/tests/package/test_python_magic_wormhole.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-
-The driver seems ok:
-
-# lsmod | grep brcmfmac
-> brcmfmac         270336  0
-> brcmutil          24576  1 brcmfmac
-> cfg80211         872448  1 brcmfmac
->
-
-and iwconfig confirms the wlan0 is running:
-
-# iwconfig
-> lo      no wireless extension
->
-> eth0    no wireless extension
->
-> wlan0   IEEE 802.11  ESSID:off/any
->         Mode:Managed Access Point: Not-Associated  Tx-Power=31 bDm
->         Retry short limit:7  RTS thr:off  Fragment thr:off
->         Encryption key:off
->         Power Management:on
->
-
-I also tried ip link set wlan0 up but it does nothing, since the interface
-is already up.
-What else should I do in order to let Network Manager to use my wlan0?
-
-I'm not sure what other info I may add to my question.
-
---00000000000068dfe006043acff8
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">I customized the default Raspberry Pi 3 64-bit config, and=
- I enabled <span style=3D"white-space:pre-wrap">BR2_PACKAGE_NETWORK_MANAGER=
- and also BR2_PACKAGE_WPA_SUPPLICANT in order to connect to WPA networks.</=
-span><p style=3D"margin:0px;text-indent:0px;white-space:pre-wrap"><br></p><=
-p style=3D"margin:0px;text-indent:0px;white-space:pre-wrap">I didn&#39;t en=
-able BR2_PACKAGE_DHCPCD because I read it would prevent Network Manager to =
-work. Running the image, Network Manager find the interfaces (eth0 and wlan=
-0) but cannot use them:</p><div><br></div><blockquote class=3D"gmail_quote"=
- style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
-adding-left:1ex"><div># nmcli dev status<br>DEVICE =C2=A0TYPE =C2=A0 =C2=A0=
- =C2=A0 STATE =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0CONNECTION <br>lo =C2=A0 =C2=A0 =C2=A0loopback =C2=A0 connected (=
-externally) =C2=A0 lo<br>eth0 =C2=A0 =C2=A0ethernet =C2=A0 unavailable =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--<br>wlan0 =C2=A0 wifi =C2=A0=
- =C2=A0 =C2=A0 unavailable =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
---</div></blockquote><div><br></div><div>I&#39;m aware it&#39;s the expecte=
-d behavior if the interface is present in /etc/network/interfaces and I&#39=
-;m ok with eth0, but wlan0 should be available:</div><div><br></div><blockq=
-uote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1p=
-x solid rgb(204,204,204);padding-left:1ex"><div>auto lo<br>iface lo inet lo=
-opback<br><br>auto eth0<br>iface eth0 inet dhcp<br>=C2=A0 pre-up /etc/netwo=
-rk/nfs_check<br>=C2=A0 wait-delay 15<br>=C2=A0 hostname $(hostname)</div></=
-blockquote><div><br></div><div><br></div><div>The driver seems ok:</div><di=
-v><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
-.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div># lsmod =
-| grep brcmfmac<br>brcmfmac =C2=A0 =C2=A0 =C2=A0 =C2=A0 270336 =C2=A00<br>b=
-rcmutil =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A024576 =C2=A01 brcmfmac<br>cfg8021=
-1 =C2=A0 =C2=A0 =C2=A0 =C2=A0 872448 =C2=A01 brcmfmac</div></blockquote><di=
-v><br></div><div>and iwconfig confirms the wlan0 is running:</div><div><br>=
-</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
-order-left:1px solid rgb(204,204,204);padding-left:1ex"><div># iwconfig<br>=
-lo =C2=A0 =C2=A0 =C2=A0no wireless extension<br><br>eth0 =C2=A0 =C2=A0no wi=
-reless extension<br><br>wlan0 =C2=A0 IEEE 802.11 =C2=A0ESSID:off/any<br>=C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 Mode:Managed Access Point: Not-Associated =C2=A0Tx=
--Power=3D31 bDm<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 Retry short limit:7 =C2=A0RT=
-S thr:off =C2=A0Fragment thr:off<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 Encryption =
-key:off<br>=C2=A0 =C2=A0 =C2=A0 =C2=A0 Power Management:on</div></blockquot=
-e><div><br></div><div>I also tried ip link set wlan0 up but it does nothing=
-, since the interface is already up.</div><div></div><div>What else should =
-I do in order to let Network Manager to use my wlan0?</div><div><br></div><=
-div>I&#39;m not sure what other info I may add to my question.<br></div><p =
-style=3D"margin:0px;text-indent:0px;white-space:pre-wrap"></p></div>
-
---00000000000068dfe006043acff8--
-
---===============7456900825303264107==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/support/testing/tests/package/test_python_magic_wormhole.py b/support/testing/tests/package/test_python_magic_wormhole.py
+index abd34bca50..5a0f0277b0 100644
+--- a/support/testing/tests/package/test_python_magic_wormhole.py
++++ b/support/testing/tests/package/test_python_magic_wormhole.py
+@@ -50,7 +50,9 @@ class TestPythonPy3MagicWormhole(TestPythonPackageBase):
+         cmd += "sleep 25"
+         self.assertRunOk(cmd, timeout=30)
+ 
+-        cmd = wormhole_cmd + " receive {}".format(code)
++        wormhole_env = "_MAGIC_WORMHOLE_TEST_KEY_TIMER=100 "
++        wormhole_env += "_MAGIC_WORMHOLE_TEST_VERIFY_TIMER=100 "
++        cmd = wormhole_env + wormhole_cmd + " receive {}".format(code)
+         output, exit_code = self.emulator.run(cmd, timeout=35)
+         self.assertEqual(exit_code, 0)
+         self.assertEqual(output[0], text)
+-- 
+2.41.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7456900825303264107==--
