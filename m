@@ -4,80 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF4DC83F2F
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 19:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB86CC83F37
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 19:52:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C670461341;
-	Thu, 31 Aug 2023 19:46:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C670461341
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DA0D61366;
+	Thu, 31 Aug 2023 19:52:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DA0D61366
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QkNjlPWZ8p_x; Thu, 31 Aug 2023 19:46:13 +0000 (UTC)
+	with ESMTP id zLxaJ5BXstQH; Thu, 31 Aug 2023 19:52:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1066C61331;
-	Thu, 31 Aug 2023 19:46:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1066C61331
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DD6401BF3D4
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:46:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9609561321;
+	Thu, 31 Aug 2023 19:52:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9609561321
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 73D5F1BF295
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C37C961331
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:46:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C37C961331
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D8C0408D1
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:52:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D8C0408D1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NUHZhSId1w03 for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 19:46:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VuszVVB9FaV1 for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 19:52:31 +0000 (UTC)
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5FAC761321
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 19:46:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FAC761321
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DE68240278
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 19:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE68240278
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([89.144.220.251]) by mail.gmx.net
- (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1N7QxL-1pb8jO0F7F-017m9g; Thu, 31 Aug 2023 21:46:03 +0200
-From: Daniel Lang <dalang@gmx.at>
-To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 21:45:13 +0200
-Message-ID: <20230831194514.37493-2-dalang@gmx.at>
-X-Mailer: git-send-email 2.42.0
+Received: from [192.168.8.36] ([89.144.220.251]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mwfai-1pj9ec0PIQ-00y6tz; Thu, 31
+ Aug 2023 21:52:24 +0200
+Message-ID: <00d15b88-0d94-491e-800c-c36f4a3ddbe7@gmx.at>
+Date: Thu, 31 Aug 2023 21:52:23 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:5Lw4ZYtD7iO7MMF7SQn2hoK6Sp5wEuZlUuNhJg+AKZujCHGsCgd
- QRw2ufnCXBad2gDFTb13+jCSRzCCmlBPYgWajBm3rXCQddyig0amv5LnSy+jGLFAmQUlpgZ
- uQxJLvwB5mBNQSOphiBA5veKhPaEmfnoph2e01dO4qJAbkQk1ZYFZiy0gmuioos9VkCrYyq
- XBePkdYFA8w0G5phdnxeQ==
-UI-OutboundReport: notjunk:1;M01:P0:U/N9yXLexS0=;dt02mW77U8qLz0DM08DUMBVOIDW
- j5KdbDgBkvDALwz49oS2zhtJ6E8v9MlsSg1XZCNYWe2fI8IaaVhkPVLPDDhX+W3FKAxykfq1w
- 67HCU4Y/h+G/H1B6FcBrDJpJeVj9MLhx5IuA0F3VVbNF9GO3PUB2Y6vc2xGmyU0sSs6XB5fT5
- R8ZLABvn13CWJ6ylzMgl79zpYU0aGveuYAsnUiKzA2KnBeTKAtjtaihw0ynrvkMXveqJDZx7w
- 1r2srApBsYVaRfCJyrspGGjKFMvNYMT11M32bG2Sg/RreLyO+PHI0jGvDLhgW0grHpQ0AJDi3
- c8nEzTev3rpJDs4dswycduExo1lnEeLEa5CuKJobRW6GIFpV1zHGXGVYBFWx4AsVUW8+pfXVS
- 0ta5dthTRh9WqJvj7YKh3I07gJWrcLXWojr8+y7NwDQwWa7zCb0NOcMGGyBMurZ13tekEEEZ6
- hyYHFhg2s/5G5NcqfBCbewehBBOxoabiSjaoyWfHCyCu92ukvUDrNLP6khzh0IMefInaAK00h
- OB0paeiHK0L3sZ31itftMzYnuNQ4P0bFif3YxU+FjIKra42gI30IiqlD+1BU9djhKohdwUwbD
- aVMkffqWMy8t6X2PIEZhM5OMTms1P717eZpaS00IJSYR9eUFJe5/9XzyQ2g6JWPtMGnFJMutn
- zQbWswwuF3k6WYQ42rdRz3+k874YlpF/V0Sv00uFM1KbpHmWJcsrZuirCz1rkLtFlxOhNzWla
- RYgjuEvrOlmRBRw9bnVM2F3z8XCSNU5LfJ+HDvbM8UReE9cHVLMH6OpLOBtxveXKE4Jt1sVsf
- GpcvrCcC9JXCPOhXqnjJep/CQmSZKhLSSfGcc+4I/J3xgNenmF1q+xgetN2cJkYDHyFIIfo5D
- epTqbJCGH1Idjub74etE/L3NvD3HEXkRijgwFf/f1mCiiu0qPd7ZTLHuukCrMb9UVvDdokEVj
- VEVUTors994h/m9tzPOgD0yPMcY=
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
+References: <20230812192842.135682-1-dalang@gmx.at>
+ <20230812192842.135682-3-dalang@gmx.at>
+ <4c576534-7bd0-d1c4-61f3-a84821da3825@mind.be>
+From: Daniel Lang <dalang@gmx.at>
+In-Reply-To: <4c576534-7bd0-d1c4-61f3-a84821da3825@mind.be>
+X-Provags-ID: V03:K1:lYV0d4ZptKkJ+S3mk8GyfrJylCi4GvIgC9CQIolSo26yBNB0KwD
+ cN75RSzLV6NuTjH5I/mtQsxhLpC6dlTmvJDr6666ZIS5t/LYPEt0ooLEJsDh6QVMOAK3+w1
+ d4wRxVqMkUA9Y6Y+2qwZBy1qIpk72q6nqiW/je0WYpEogJWJiky8NBc9gYhG/5cFSgib/Yi
+ 5JON3Se2SwOs006zeeXgQ==
+UI-OutboundReport: notjunk:1;M01:P0:EaB0+LN6+jQ=;rCq16lW0MZRQSZcyli8im8ibOJc
+ H6Eqy59f/DIsMv4kIBS4wsokzRu++O/HBi412E7iq4l7I3sMPjIm7qwCcO7iiHzgkfn4yKP83
+ Edt8w06MHREU9/GWRFl/RAIDLbuyYXgrnu8ARVJMnt6cAKhAn1v+IKoFjK7TO3meDaR/RGEyF
+ bQHstudhpP791smPVO7Q+Jba8E2gB2L5V6swy21xhhHgITvNoOZMYxYbb+Pr802ukeQBtu1Kb
+ y/z4uf+Xj/NPatID83fpuNT7p4VHfTb/cymsHIp73iZgQVzyL5nZhVKT9DCfViRQVR8lm+Bb+
+ ZiJTKkBWoQS7MJn6jbmR6HaLWWwnUtZH7ctBgMubuJpeJ3v+yJML/g24ljATvJ4HaV/fRB+AG
+ q9CL4qbgjoFdZOB/AXGo9Y18NOJzBAI+5gDsqhAgSF+w1dvvnuZ49kkqGtWWxTtCkA1Uo/UEa
+ KQPH8lm/DIY9TBvPkVEUzyBFXyLyZkcLJ7LOKkRM4GPUMroy31q9yJ/ehomnd5n2AyoVuBb/a
+ i7/7dyfTNE443xqMBsG8IYPZrsv4Dw0NVcC6nlfSGWAYUwLC+sN8vTgvY1H8n0xlIJE3khwrx
+ XfbGvWg/n1hhDoXI3pcHi6oyVrfsFIl28x0o5pTQ7dQk/t1U7wr6OZ3txU/zGqZ+ySUdwv+Xi
+ gObMYpRpVhoR+csi2/0z71GMG34kxI9WEIuLMA1+OMiRAJ9s6MibQwkiuBo0dznL1C5qPbo0v
+ v6L4zHOTx+b3zzeWnBEFUTodmODh2D/2Ku1pkagS5BU2IvnnQpF4JimW9PtipL9ssI2Dl7vJ8
+ ww8Ua7bwmrNp1Z3KqyWuVT4FssO/gNtMThvUpCg0Icja9yXkNK8+br4NRzkEmJuoN1N/r91Bj
+ bC+w3A6O1tibCs+QI3OxVx3Ixvft5EfnHeAGH4+VM8CONhVf5M47INOCaqbW9ph+fRGunYmVl
+ eh6yFs3ptI3EUJFGctyxY1BcQZ4=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.at; 
- s=s31663417; t=1693511163; x=1694115963; i=dalang@gmx.at;
- bh=wKxABYLKxoxeaLBazu+IV0nxjA0pFPiQptD5Oiwvg2E=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
- b=dsGtc7S30zZcOcdTXPckia1FHPMl09hZkgdI6n6ZDRd1nNftYvGLti7qawxph/QbKQt4/Rq
- OQp6x+lJ3NVINd8DccvZXbraGtv0/6RP/5d7F7HxCZ1YsdEvHwaRutmPuE2eqAh1wQ+XKJspt
- hpu45YfEeH0SqqUTN/cS0SA11rVvq1wj1DtgX/k8YJ/vHgMThK/MWYglMkvynC7RrwM8LqBKw
- hlA+hYalPprWRLxSKA2nHySFB9jMDtNfbcWhwm6IDpBNQ0yVE1qpgcIxDBYEFI2gqsxpLLwqD
- l0Rncy+acJwe1dQ95fmE/bcyfd3Z0V0iiVH++GHO97jLgsucvW2A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=s31663417; t=1693511544; x=1694116344; i=dalang@gmx.at;
+ bh=wXf4vZMj5wJeoFfNgc8NAhEK+weePTW9zriO5qST2eI=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=VF04UQ95/8b7Vtw3rtAQuMehYapVFwD7C3LXBDxLNt/NL2uf59T7rGv6nShCCK558OmbF3N
+ OkVcqWsfGKPrcsZh4oxOdxjtCU7P3rhU4sTgcWxe5/CJ2iLg+MUwSSZiJ4MeMUuLjydpT4+g6
+ zYUd8Hvx9PVA7tuioThZC2sL68Ei7B9Qp/qs37hgLeQn/0cJ5t7ntrrbne5WnSCVh2+kr4zcv
+ 6f059BTxEzd0ii2CsoFsB2mpPMJyBEqmD2MPXpgIN8odlHyv6NVXcHqWYiSExC4Ysq7gsri3A
+ QVzmDUsCxNuZFWzf9EdIKdHD6EulgI81NdggLr50jhSHHh8Iqktg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=dsGtc7S3
-Subject: [Buildroot] [PATCH] package/libxcrypt: fix another build issue with
- perl >= 5.38
+ header.a=rsa-sha256 header.s=s31663417 header.b=VF04UQ95
+Subject: Re: [Buildroot] [PATCH v3 3/8] support/scripts/pkg-stats: check all
+ files for warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,95 +94,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Romain Naour <romain.naour@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-perl 5.38 deprecated smartmatch (~~ and the given/when syntax).
-Backport another upstream patch to drop uses of given.
-
-Fixes:
-- http://autobuild.buildroot.net/results/727/727aa831881af36394bafef9e13a0dcbd9d0db3a
-
-Signed-off-by: Daniel Lang <dalang@gmx.at>
----
- ...ve-smartmatch-usage-from-gen-crypt-h.patch | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch
-
-diff --git a/package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch b/package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch
-new file mode 100644
-index 0000000000..444896b53f
---- /dev/null
-+++ b/package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch
-@@ -0,0 +1,61 @@
-+From 95d6e03ae37f4ec948474d111105bbdd2938aba2 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Andreas=20K=2E=20H=C3=BCttel?= <dilfridge@gentoo.org>
-+Date: Sun, 25 Jun 2023 01:35:08 +0200
-+Subject: [PATCH] Remove smartmatch usage from gen-crypt-h
-+
-+Needed for Perl 5.38
-+
-+Upstream: https://github.com/besser82/libxcrypt/commit/95d6e03ae37f4ec948474d111105bbdd2938aba2
-+Signed-off-by: Daniel Lang <dalang@gmx.at>
-+---
-+ build-aux/scripts/gen-crypt-h | 31 ++++++++++++++-----------------
-+ 1 file changed, 14 insertions(+), 17 deletions(-)
-+
-+diff --git a/build-aux/scripts/gen-crypt-h b/build-aux/scripts/gen-crypt-h
-+index 12aecf6d..b113b791 100644
-+--- a/build-aux/scripts/gen-crypt-h
-++++ b/build-aux/scripts/gen-crypt-h
-+@@ -12,7 +12,6 @@ use v5.14;    # implicit use strict, use feature ':5.14'
-+ use warnings FATAL => 'all';
-+ use utf8;
-+ use open qw(:std :utf8);
-+-no  if $] >= 5.018, warnings => 'experimental::smartmatch';
-+ no  if $] >= 5.022, warnings => 'experimental::re_strict';
-+ use if $] >= 5.022, re       => 'strict';
-+
-+@@ -37,22 +36,20 @@ sub process_config_h {
-+     local $_;
-+     while (<$fh>) {
-+         chomp;
-+-        # Yes, 'given $_' is really required here.
-+-        given ($_) {
-+-            when ('#define HAVE_SYS_CDEFS_H 1') {
-+-                $have_sys_cdefs_h = 1;
-+-            }
-+-            when ('#define HAVE_SYS_CDEFS_BEGIN_END_DECLS 1') {
-+-                $have_sys_cdefs_begin_end_decls = 1;
-+-            }
-+-            when ('#define HAVE_SYS_CDEFS_THROW 1') {
-+-                $have_sys_cdefs_throw = 1;
-+-            }
-+-            when (/^#define PACKAGE_VERSION "((\d+)\.(\d+)\.\d+)"$/) {
-+-                $substs{XCRYPT_VERSION_STR}   = $1;
-+-                $substs{XCRYPT_VERSION_MAJOR} = $2;
-+-                $substs{XCRYPT_VERSION_MINOR} = $3;
-+-            }
-++
-++        if ($_ eq '#define HAVE_SYS_CDEFS_H 1') {
-++            $have_sys_cdefs_h = 1;
-++        }
-++        elsif ($_ eq '#define HAVE_SYS_CDEFS_BEGIN_END_DECLS 1') {
-++            $have_sys_cdefs_begin_end_decls = 1;
-++        }
-++        elsif ($_ eq '#define HAVE_SYS_CDEFS_THROW 1') {
-++            $have_sys_cdefs_throw = 1;
-++        }
-++        elsif (/^#define PACKAGE_VERSION "((\d+)\.(\d+)\.\d+)"$/) {
-++            $substs{XCRYPT_VERSION_STR}   = $1;
-++            $substs{XCRYPT_VERSION_MAJOR} = $2;
-++            $substs{XCRYPT_VERSION_MINOR} = $3;
-+         }
-+     }
--- 
-2.42.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQXJub3V0LAoKT24gMzAuMDguMjMgMjI6MzYsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdy
+b3RlOgo+Cj4KPiBPbiAxMi8wOC8yMDIzIDIxOjI4LCBEYW5pZWwgTGFuZyB3cm90ZToKPj4gSW5z
+dGVhZCBvZiBvbmx5IGNoZWNraW5nIC5tayBhbmQgQ29uZmlnLmlueywuaG9zdH0sIGNoZWNrCj4+
+IGFsbCBmaWxlcyBpbiBhIHBhY2thZ2UgZGlyZWN0b3J5Lgo+Cj4gwqAoImNoZWNraW5nIiBoZXJl
+IG1lYW5zICJydW4gY2hlY2stcGFja2FnZSIpLgoKQ29ycmVjdC4KCj4KPiDCoEkgdGhpbmsgd2Ug
+c2hvdWxkIGluc3RlYWQgcmVtb3ZlIHRoZSAud2FybmluZ3MgYW5kIC5zdGF0dXNbJ3BrZy1jaGVj
+ayddIGZpZWxkcyBlbnRpcmVseS4gSXQgbWFkZSBzZW5zZSBiYWNrIGluIHRoZSBkYXlzLCBiZWNh
+dXNlIHdlIHdlcmVuJ3QgcnVubmluZyBjaGVjay1wYWNrYWdlIGluIENJLiBOb3csIGhvd2V2ZXIs
+IHdlIGRvLCBzbyB0aGVyZSdzIGxpdHRsZSBwb2ludCB0byBydW4gY2hlY2stcGFja2FnZSBhcyBw
+YXJ0IG9mIHBrZy1zdGF0cyBhcyB3ZWxsLiBPbiBhLmIubyB0aGUgd2FybmluZ3MgY29sdW1uIHdp
+bGwgKGFsbW9zdCkgYWx3YXlzIGJlIGFsbCAwLgoKSXQgd2lsbCBhbHdheXMgYmUgMCBpZiAuY2hl
+Y2twYWNrYWdlaWdub3JlIGlzIGNvbnNpZGVyZWQgd2hpY2ggaXNuJ3QgdGhlIGNhc2UKaGVyZS4g
+VGhlcmVmb3JlIHRoZSB3YXJuaW5nIGNvbHVtbiB3b3VsZCBzaG93IHRoZSBudW1iZXIgb2Ygd2Fy
+bmluZ3MgaW5jbHVkaW5nCnRob3NlIGlnbm9yZWQuClRoZSBxdWVzdGlvbiBvZiB3aGV0aGVyIG9y
+IG5vdCB0aGlzIGluZm9ybWF0aW9uIGlzIG5lZWRlZCBpcyBzdGlsbCByZWxldmFudC4KSSBqdXN0
+IHdhbnRlZCB0byBwb2ludCBvdXQgdGhhdCBpbiBteSB0ZXN0aW5nIHRoZSB2YWx1ZSB3YXNuJ3Qg
+MCBmb3IgYWxsIHBhY2thZ2VzLgoKPgo+IMKgVGhlcmUgaXMgdGhlIHBvaW50IG9mIHBlb3BsZSB1
+c2luZyBwa2ctc3RhdHMgZm9yIHRoZWlyIGJyMi1leHRlcm5hbCwgYnV0Ogo+Cj4gMS4gcGtnLXN0
+YXRzIGlzIHByZXR0eSBmcmFnaWxlIHNvIHVzZXJzIHNob3VsZG4ndCBiZSB0b28gc3VycHJpc2Vk
+IGIgc29tZSBicmVha2FnZTsKPiAyLiBpdCdzIHZlcnkgZWFzeSBmb3IgdGhvc2UgdXNlcnMgdG8g
+cnVuICdtYWtlIGNoZWNrLXBhY2thZ2UnIGluc3RlYWQuCj4KPgo+IMKgRG8gb3RoZXIgbWFpbnRh
+aW5lcnMgaGF2ZSB0aGUgc2FtZSBvcGluaW9uPwoKU2VlaW5nIGFzIFRob21hcyBhbHJlYWR5IGFn
+cmVlZCwgSSB3aWxsIHByZXBhcmUgdGhlIHJlbW92YWwsIHVubGVzcyBvdGhlciBvcGluaW9ucwph
+cmUgcmFpc2VkLgoKPgo+Cj4gwqBSZWdhcmRzLAo+IMKgQXJub3V0CgpSZWdhcmRzLApEYW5pZWwK
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
+ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
