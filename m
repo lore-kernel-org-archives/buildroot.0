@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E140DC83F2F
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 18:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BAC5C83F37
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 18:29:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C3758366E;
-	Thu, 31 Aug 2023 18:29:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C3758366E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EE0E83935;
+	Thu, 31 Aug 2023 18:29:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EE0E83935
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4xcdoP2NODhk; Thu, 31 Aug 2023 18:29:10 +0000 (UTC)
+	with ESMTP id JKzJiiP6LMky; Thu, 31 Aug 2023 18:29:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47E30830E3;
-	Thu, 31 Aug 2023 18:29:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47E30830E3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A475E1BF23B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 818F183381;
+	Thu, 31 Aug 2023 18:29:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 818F183381
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B5AF61BF990
  for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8AC4260E3F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E1B841EF9
  for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AC4260E3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E1B841EF9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NO8ebxqWES14 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ca6dy53IEV0j for <buildroot@lists.busybox.net>;
  Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9524D600B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AAF441EF4
  for <buildroot@buildroot.org>; Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9524D600B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AAF441EF4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 821218665A; Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
+ id 71F6A8677E; Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 20:28:40 +0200
+Date: Thu, 31 Aug 2023 20:12:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 386b72ca224fba927a0bd768c2f772ee1b892ed1
-X-Git-Newrev: 1f137a03ea7698bc7cfc463494d96319fe2ff52d
+X-Git-Oldrev: 16c3b4b92bb7b2fef6ad314a5fb9b7203b3d80b3
+X-Git-Newrev: 386b72ca224fba927a0bd768c2f772ee1b892ed1
 X-Patchwork-Hint: ignore
-Message-Id: <20230831182906.821218665A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2023.05.2
+Message-Id: <20230831182906.71F6A8677E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2023.05.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,96 +62,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f137a03ea7698bc7cfc463494d96319fe2ff52d
+commit: https://git.buildroot.net/buildroot/commit/?id=386b72ca224fba927a0bd768c2f772ee1b892ed1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3923a4fac8c9e501b5fd94eea98bd7e842b31876)
+[Peter: drop Makefile change]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES                  | 32 ++++++++++++++++++++++++++++++++
+ support/misc/Vagrantfile |  2 +-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index a4cce974de..eeb5a142f9 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/CHANGES b/CHANGES
+index 3ee83f64c6..e623d8b439 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -80,6 +80,38 @@
  
--      <h3 style="text-align: center;">Latest stable release: <b>2023.05.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2023.05.2</b></h3>
+ 	Removed packages: libasplib, ocf-linux, tovid
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2023.05.1.tar.gz">buildroot-2023.05.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.05.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.05.2.tar.gz">buildroot-2023.05.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.05.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.05.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.05.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.05.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.05.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.05.1.tar.xz">buildroot-2023.05.1.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.05.1.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.05.2.tar.xz">buildroot-2023.05.2.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.05.2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index aea6779579..8465d932c3 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.05.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 August 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2023.05.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2023.05.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.05.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87ledrkrpp.fsf@48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2023.05.2.tar.xz">2023.05.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2023.05.2, released August 31th, 2023
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Toolchains: Correctly mark Bootlin external toolchains as
++	having OpenMP support.
++
++	Arch: Mark Alderlake x86 variants as no AVX512 support.
++
++	Utils: Ensure utils/docker-run correctly supports git
++	worktrees.
++
++	Defconfigs: Beaglebone: U-Boot needs OpenSSL. Beaglebone qt5:
++	Enable support for green wireless variant.
++
++	Updated/fixed packages: arm-trusted-firmware, bind, cairo,
++	cmocka, containerd, crudini, cryptodev-linux, dmidecode,
++	ffmpeg, firmware-imx, gcc, gdb, ghostscript, gkrellm,
++	gnuradio, go, igh-ethercat, iperf3, kodi, libcurl, libopenssl,
++	libssh, libubootenv, libuhttpd, linux-tools, mali-driver,
++	nfs-utils, ntp, openssh, php, pipewire, python-pysmb,
++	python-iniparse, python-iptables, rtl8189es, rtl8189fs,
++	sam-ba, samba4, seatd, shadow, speex,
++	sunxi-mali-utgard-driver, supertuxkart, sysdig, systemd, tor,
++	tpm2-tss, transmission, uboot, unzip, webkitgtk,
++	wireless-regdb, wolfssl, wpebackend-fdo, wpewebkit, xenomai,
++	yaml-cpp, yavta
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#15634: fluidsynths refers to missing libgomp.so.1
++
+ 2023.05.1, released July 17th, 2023
+ 
+ 	Important / security related fixes.
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 12da353f2e..75aae858b7 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2023.05.1'
++RELEASE='2023.05.2'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
