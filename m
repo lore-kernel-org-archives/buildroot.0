@@ -4,62 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5FB8C83F2F
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 18:12:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E140DC83F2F
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 18:29:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A56983267;
-	Thu, 31 Aug 2023 18:12:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A56983267
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C3758366E;
+	Thu, 31 Aug 2023 18:29:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C3758366E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DYBKBEVZhCt7; Thu, 31 Aug 2023 18:12:23 +0000 (UTC)
+	with ESMTP id 4xcdoP2NODhk; Thu, 31 Aug 2023 18:29:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BAA7C81F6D;
-	Thu, 31 Aug 2023 18:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAA7C81F6D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AEA9B1BF23B
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:12:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47E30830E3;
+	Thu, 31 Aug 2023 18:29:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47E30830E3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A475E1BF23B
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 957E940452
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 957E940452
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AC4260E3F
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:29:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AC4260E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0jvasTwMPRJb for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 18:12:18 +0000 (UTC)
-Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F09B640443
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 18:12:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F09B640443
-Received: from localhost.localdomain ([146.241.105.17])
- by Aruba Outgoing Smtp  with ESMTPSA
- id bm9PqhstR7c04bm9PquAEq; Thu, 31 Aug 2023 20:12:15 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NO8ebxqWES14 for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9524D600B3
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9524D600B3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 821218665A; Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 20:12:14 +0200
-Message-Id: <20230831181214.2547009-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfLentqCa13CMTcoRFF12dDcg/EQQhJe7e3UEegR2TGNADWC2BqUoZkouf4l39uaRvvZUr35Btnu5Fwk3pi4lQNOtqT/2XhHUEDu1cFlp7nsZEYGTVuUX
- zdTx3iCtYzmaWZI/gYbzth1c36h4D3Yg9u6FhyYhgNB770BY6WA5l1YfV43Fg8bCsQ+0ZKJRbvk4wrvRpDkaXHy7HSC+Hlq+3SRCpAFX/5uam/i+GTN2mOb5
- CxCvzWkubRGGViH584ncl0jpRGWQRWt6mHo3dVwYuqytG7xXUjE2JtL5ejSDdnj3+cdhHw2+nyR5OdLte42WGA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1693505535; bh=mI66cVyNsqD3DltIsEPwoM+23weZ0O52cUkVaTyCuXc=;
- h=From:To:Subject:Date:MIME-Version;
- b=aMtyHdP9rzOyAhfzhV4cyzERrjM6qeFT/+u+dRWRTEPrG0hgStUFpakzDHbHUOnGj
- gnZc2Xyrh4bNlvFLhS8HzinRwcDw4H/iOC5sx7eDsCDBZh6C2tZAZVL/qt9junRY9n
- qo5Hm2UGrb2UV8M1tZ1kccdYkjUcl1PzVttcgVpvDQ+LSuhXKTrwkZpCmDEEI4WhHE
- asCBe9sVdShUpOGfoZuqnM4p+Xn32I52hJ9bU9oUwopz3tSERiCwiyzyNe8QgA6/bj
- Xi+dQzEsI9qhSM8hy9VISTJkHIW3kDJP3lKlJ4AN71Ff/5yHP7RxKh7jPzu+yk7kBa
- Mzfyv8KiCnbqg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=aMtyHdP9
-Subject: [Buildroot] [for-next] package/libnss: bump version to 3.93
+Date: Thu, 31 Aug 2023 20:28:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 386b72ca224fba927a0bd768c2f772ee1b892ed1
+X-Git-Newrev: 1f137a03ea7698bc7cfc463494d96319fe2ff52d
+X-Patchwork-Hint: ignore
+Message-Id: <20230831182906.821218665A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website: Update for 2023.05.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,46 +56,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=1f137a03ea7698bc7cfc463494d96319fe2ff52d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index b95c0448b0..a3b98b0f8c 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_92_RTM/src/SHA256SUMS
--sha256  3db192d6e882039af02ae7eaf3217ed114bb7ad83414c646772ab8021e24a254  nss-3.92.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_93_RTM/src/SHA256SUMS
-+sha256  15f54bb72048eb105f8c0e936a04b899e74c3db9a19bbc1e00acee2af9476a8a  nss-3.93.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 64463d1f10..abdce32efb 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/website/download.html b/docs/website/download.html
+index a4cce974de..eeb5a142f9 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
--LIBNSS_VERSION = 3.92
-+LIBNSS_VERSION = 3.93
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
--- 
-2.34.1
-
+-      <h3 style="text-align: center;">Latest stable release: <b>2023.05.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2023.05.2</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2023.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2023.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2023.05.1.tar.gz">buildroot-2023.05.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2023.05.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2023.05.2.tar.gz">buildroot-2023.05.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2023.05.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2023.05.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2023.05.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2023.05.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2023.05.1.tar.xz">buildroot-2023.05.1.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2023.05.1.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2023.05.2.tar.xz">buildroot-2023.05.2.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2023.05.2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index aea6779579..8465d932c3 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2023.05.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 August 2023</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2023.05.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2023.05.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.05.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/87ledrkrpp.fsf@48ers.dk/T/#u">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2023.05.2.tar.xz">2023.05.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
