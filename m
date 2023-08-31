@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14098C83F37
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 17:48:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F97C83F35
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 17:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F263812F5;
-	Thu, 31 Aug 2023 17:48:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F263812F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id B207081DE7;
+	Thu, 31 Aug 2023 17:49:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B207081DE7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Cg2wbnVfgb23; Thu, 31 Aug 2023 17:48:41 +0000 (UTC)
+	with ESMTP id m2nBwxHARiME; Thu, 31 Aug 2023 17:49:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF7FA812E1;
-	Thu, 31 Aug 2023 17:48:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF7FA812E1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3BA191BF2FE
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 17:48:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05EEB81980;
+	Thu, 31 Aug 2023 17:49:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05EEB81980
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 480C11BF2FE
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 17:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12F9E41BB7
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 17:48:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12F9E41BB7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 21E5440492
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 17:49:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 21E5440492
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7BruDNFR0Vou for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 17:48:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LS8tjHAjQPR1 for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 17:49:24 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D4B841937
- for <buildroot@uclibc.org>; Thu, 31 Aug 2023 17:48:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D4B841937
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60B3340452
+ for <buildroot@uclibc.org>; Thu, 31 Aug 2023 17:49:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60B3340452
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 084B88675D; Thu, 31 Aug 2023 17:48:38 +0000 (UTC)
+ id 4B5B08675D; Thu, 31 Aug 2023 17:49:24 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Thu, 31 Aug 2023 17:48:37 +0000
+Date: Thu, 31 Aug 2023 17:49:24 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -48,14 +48,14 @@ X-Bugzilla-Version: 2023.02.2
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
 X-Bugzilla-Who: yanghao.cheng@aioi-atg.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
 X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-15745-163-vzPtiz0a34@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: resolution bug_status
+Message-ID: <bug-15745-163-oHJwgpY3oQ@https.bugs.busybox.net/>
 In-Reply-To: <bug-15745-163@https.bugs.busybox.net/>
 References: <bug-15745-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
@@ -81,13 +81,12 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 https://bugs.busybox.net/show_bug.cgi?id=15745
 
---- Comment #2 from yanghao.cheng@aioi-atg.com ---
-Okay... I meant only one LF is needed.
+yanghao.cheng@aioi-atg.com changed:
 
-I've to admit that I don't know the definition exactly although I have seen
-software that marks non-LF terminated files as questionable.
-
-Thank you for letting me know and I will close this ticket.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
 -- 
 You are receiving this mail because:
