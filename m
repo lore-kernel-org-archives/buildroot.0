@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABAFAC83F12
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38F03C83F01
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:23:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DBD8813FE;
-	Thu, 31 Aug 2023 12:23:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DBD8813FE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EE87830FB;
+	Thu, 31 Aug 2023 12:23:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EE87830FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id o03LKCCk1Kbu; Thu, 31 Aug 2023 12:23:37 +0000 (UTC)
+	with ESMTP id Pc2WvESCARxm; Thu, 31 Aug 2023 12:23:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A358B80FF9;
-	Thu, 31 Aug 2023 12:23:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A358B80FF9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1E8C51BF990
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC3C383148;
+	Thu, 31 Aug 2023 12:23:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC3C383148
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 42C5A1BF995
  for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EBF3A830FB
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBF3A830FB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29E9360B3B
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29E9360B3B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LDqheqkWGCxH for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0lsdMfaNB11L for <buildroot@lists.busybox.net>;
  Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B5168308A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B5EF6002E
  for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B5168308A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B5EF6002E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A840866F4; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
+ id 0977586730; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 13:10:38 +0200
+Date: Thu, 31 Aug 2023 13:08:49 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 5ad971ee08e738174a802e519a964e5eee20bf04
-X-Git-Newrev: 560c4a0d03bc47995d8be88273abf28b3ed0ac9d
+X-Git-Oldrev: 57e5d85185d64623403e6fd3e4609273ba8cf0a0
+X-Git-Newrev: 762fe411f20a4901567e967ed8e97c9bf59108cd
 X-Patchwork-Hint: ignore
-Message-Id: <20230831122322.2A840866F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] DEVELOPERS: sort entries
- of Neal Frager
+Message-Id: <20230831122322.0977586730@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/gdb: fix build
+ error for version arc-2020.09
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,36 +63,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=560c4a0d03bc47995d8be88273abf28b3ed0ac9d
+commit: https://git.buildroot.net/buildroot/commit/?id=762fe411f20a4901567e967ed8e97c9bf59108cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-[yann.morin.1998@free.fr: sort with LC_ALL=C]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2672fb08730dc378079672b02aa4c1f713b186ab)
+Fixes:
+http://autobuild.buildroot.net/results/e60/e60c9bba5395970f99e9f889bba4675ac6f004c4/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ea1816008818acc7a339cf1b009b9453bc59e95a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ ...Do-not-define-basic_string_view-to_string.patch | 114 +++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 31f108fed0..4e25d04952 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2136,12 +2136,11 @@ N:	Neal Frager <neal.frager@amd.com>
- F:	board/versal/
- F:	board/zynq/
- F:	board/zynqmp/
--F:	board/zynqmp/kria/
- F:	configs/versal_vck190_defconfig
- F:	configs/zynq_zc706_defconfig
-+F:	configs/zynqmp_kria_kv260_defconfig
- F:	configs/zynqmp_zcu102_defconfig
- F:	configs/zynqmp_zcu106_defconfig
--F:	configs/zynqmp_kria_kv260_defconfig
- F:	package/bootgen/
- F:	package/versal-firmware/
- 
+diff --git a/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+new file mode 100644
+index 0000000000..210ba6d609
+--- /dev/null
++++ b/package/gdb/arc-2020.09-release-gdb/0001-Do-not-define-basic_string_view-to_string.patch
+@@ -0,0 +1,114 @@
++From 5ac588997c3c2d032d5d5145d9245eb37354c23b Mon Sep 17 00:00:00 2001
++From: Tom Tromey <tromey@adacore.com>
++Date: Tue, 30 Jun 2020 07:53:03 -0600
++Subject: [PATCH] Do not define basic_string_view::to_string
++
++gdb's copy of basic_string_view includes a to_string method.  However,
++according to cppreference, this is not a method on the real
++std::basic_string_view:
++
++https://en.cppreference.com/w/cpp/string/basic_string_view
++
++This difference matters because gdb_string_view.h will use the
++standard implementation when built with a C++17 or later.  This caused
++PR build/26183.
++
++This patch fixes the problem by changing the method to be a standalone
++helper function, and then rewriting the uses.  Tested by rebuilding
++with a version of GCC that defaults to C++17.
++
++(Note that the build still is not clean; and also I noticed that the
++libstdc++ string_view forbids the use of nullptr ... I wonder if gdb
++violates that.)
++
++gdb/ChangeLog
++2020-06-30  Tom Tromey  <tromey@adacore.com>
++
++	PR build/26183:
++	* ada-lang.c (ada_lookup_name_info::ada_lookup_name_info): Use
++	gdb::to_string.
++
++gdbsupport/ChangeLog
++2020-06-30  Tom Tromey  <tromey@adacore.com>
++
++	PR build/26183:
++	* gdb_string_view.h (basic_string_view::to_string): Remove.
++	(gdb::to_string): New function.
++
++Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=5ac588997c3c2d032d5d5145d9245eb37354c23b
++Bug report: https://sourceware.org/bugzilla/show_bug.cgi?id=26183
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ gdb/ChangeLog                |  6 ++++++
++ gdb/ada-lang.c               |  8 ++++----
++ gdbsupport/ChangeLog         |  6 ++++++
++ gdbsupport/gdb_string_view.h | 17 ++++++++++-------
++ 4 files changed, 26 insertions(+), 11 deletions(-)
++
++diff --git a/gdb/ada-lang.c b/gdb/ada-lang.c
++index 9b0c2efbfe2..98508c168bc 100644
++--- a/gdb/ada-lang.c
+++++ b/gdb/ada-lang.c
++@@ -13553,10 +13553,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
++     {
++       if (user_name.back () == '>')
++ 	m_encoded_name
++-	  = user_name.substr (1, user_name.size () - 2).to_string ();
+++	  = gdb::to_string (user_name.substr (1, user_name.size () - 2));
++       else
++ 	m_encoded_name
++-	  = user_name.substr (1, user_name.size () - 1).to_string ();
+++	  = gdb::to_string (user_name.substr (1, user_name.size () - 1));
++       m_encoded_p = true;
++       m_verbatim_p = true;
++       m_wild_match_p = false;
++@@ -13575,10 +13575,10 @@ ada_lookup_name_info::ada_lookup_name_info (const lookup_name_info &lookup_name)
++ 	  if (encoded != NULL)
++ 	    m_encoded_name = encoded;
++ 	  else
++-	    m_encoded_name = user_name.to_string ();
+++	    m_encoded_name = gdb::to_string (user_name);
++ 	}
++       else
++-	m_encoded_name = user_name.to_string ();
+++	m_encoded_name = gdb::to_string (user_name);
++ 
++       /* Handle the 'package Standard' special case.  See description
++ 	 of m_standard_p.  */
++diff --git a/gdbsupport/gdb_string_view.h b/gdbsupport/gdb_string_view.h
++index c0ae7a8a2d9..65124e67e54 100644
++--- a/gdbsupport/gdb_string_view.h
+++++ b/gdbsupport/gdb_string_view.h
++@@ -245,13 +245,6 @@ namespace gdb {
++ 	  return { this->_M_str, this->_M_len };
++ 	}
++ 
++-      template<typename _Allocator = std::allocator<_CharT>>
++-	std::basic_string<_CharT, _Traits, _Allocator>
++-	to_string(const _Allocator& __alloc = _Allocator()) const
++-	{
++-	  return { this->_M_str, this->_M_len, __alloc };
++-	}
++-
++       size_type
++       copy(_CharT* __str, size_type __n, size_type __pos = 0) const
++       {
++@@ -560,4 +553,14 @@ namespace gdb {
++ 
++ #endif // __cplusplus < 201703L
++ 
+++namespace gdb {
+++
+++static inline std::string
+++to_string(const gdb::string_view &view)
+++{
+++  return { view.data (), view.size () };
+++}
+++
+++}
+++
++ #endif /* COMMON_GDB_STRING_VIEW_H */
++-- 
++2.39.3
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
