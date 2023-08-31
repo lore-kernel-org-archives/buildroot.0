@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD22C83F33
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1FCBC83F12
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D19481099;
-	Thu, 31 Aug 2023 12:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D19481099
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AF1283163;
+	Thu, 31 Aug 2023 12:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AF1283163
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AhLSgUTlk163; Thu, 31 Aug 2023 12:24:26 +0000 (UTC)
+	with ESMTP id 11S7zVEPffvR; Thu, 31 Aug 2023 12:26:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80A4080C28;
-	Thu, 31 Aug 2023 12:24:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80A4080C28
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 730771BF3D1
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E90F283126;
+	Thu, 31 Aug 2023 12:26:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E90F283126
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E8D81BF3D1
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:26:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5752E41E3F
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5752E41E3F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 47D4741794
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:26:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47D4741794
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gK0cR_bT0bjs for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B3C141E6F
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B3C141E6F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 343B586730; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id quVHWT8t-I9o for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 12:26:06 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 51BDA40280
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:26:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51BDA40280
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BD44C1C0006;
+ Thu, 31 Aug 2023 12:26:02 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qbgkL-000qR8-SU; Thu, 31 Aug 2023 14:26:01 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 14:21:43 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 560c4a0d03bc47995d8be88273abf28b3ed0ac9d
-X-Git-Newrev: bd1991e228cfd7478b3bac29fccb3c7fd71b10ab
-X-Patchwork-Hint: ignore
-Message-Id: <20230831122322.343B586730@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libopenssl:
- security bump version to 1.1.1v
+To: Peter Seiderer <ps.report@gmx.net>
+References: <20230806182543.1751-1-ps.report@gmx.net>
+Date: Thu, 31 Aug 2023 14:26:01 +0200
+In-Reply-To: <20230806182543.1751-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 6 Aug 2023 20:25:43 +0200")
+Message-ID: <875y4vmm92.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH for-2023.5.x v1] package/libopenssl: bump
+ version to 1.1.1v (fixes CVE-2023-3817 and CVE-2023-3446)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,50 +63,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd1991e228cfd7478b3bac29fccb3c7fd71b10ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Fixes:
-CVE-2023-3446: https://www.openssl.org/news/secadv/20230719.txt
-CVE-2023-3817: https://www.openssl.org/news/secadv/20230731.txt
+ > Fixes CVE-2023-3817 and CVE-2023-3446 (see [1] and [2]).
+ > [1] https://www.openssl.org/news/cl111.txt
+ > [2] https://www.openssl.org/news/vulnerabilities.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 708926de80..4541087c07 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1u.tar.gz.sha256
--sha256  e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6  openssl-1.1.1u.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1v.tar.gz.sha256
-+sha256  d6697e2871e77238460402e9362d47d18382b15ef9f246aba6c7bd780d38a6b0  openssl-1.1.1v.tar.gz
- 
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 178979f43b..fe68a20ed1 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 1.1.1u
-+LIBOPENSSL_VERSION = 1.1.1v
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+Sorry, I missed your patch before doing the bump myself when I got to
+the 3.0.10 bump.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
