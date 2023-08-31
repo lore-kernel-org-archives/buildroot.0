@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F2EDC83F17
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 10:18:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A18C83F10
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 10:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9AE69417C4;
-	Thu, 31 Aug 2023 10:18:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AE69417C4
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC923400BA;
+	Thu, 31 Aug 2023 10:19:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC923400BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1L22vWovdIVY; Thu, 31 Aug 2023 10:18:20 +0000 (UTC)
+	with ESMTP id o5YItDoJ0p9O; Thu, 31 Aug 2023 10:19:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8AC4B40542;
-	Thu, 31 Aug 2023 10:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC4B40542
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 991D51BF3D4
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 10:18:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3FCB417D5;
+	Thu, 31 Aug 2023 10:19:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3FCB417D5
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 94BF01BF3D4
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 10:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F0AA41802
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 10:18:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F0AA41802
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E15D612AC
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 10:19:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E15D612AC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iIdnfYAdFCY3 for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 10:18:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id atrEpSSJnqCj for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 10:19:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AFEF2402F4
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 10:18:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFEF2402F4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99D2E612A8
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 10:19:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99D2E612A8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D238866F5; Thu, 31 Aug 2023 10:18:16 +0000 (UTC)
+ id 89C6686708; Thu, 31 Aug 2023 10:19:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 12:06:16 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: e9584abeb03cd1a4d52ea185485cae9246ded39b
-X-Git-Newrev: 352a2abad5d0bd7965024232f79cee778cfa9424
+Date: Thu, 31 Aug 2023 12:06:29 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 9e6b20bae9ba6cb547d3d7ca8def4a30d23f51f4
+X-Git-Newrev: 7ed51e5c2f30102bde6cdef8a6bd3d60e152da28
 X-Patchwork-Hint: ignore
-Message-Id: <20230831101816.9D238866F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/xenomai: fix
+Message-Id: <20230831101922.89C6686708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/xenomai: fix
  testsuite install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=352a2abad5d0bd7965024232f79cee778cfa9424
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7ed51e5c2f30102bde6cdef8a6bd3d60e152da28
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Since commit [1], the testsuite build is unconditionally disabled
 although we have the option BR2_PACKAGE_XENOMAI_TESTSUITE to
