@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C12DC83F12
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9A24C83F32
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:23:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD04883126;
-	Thu, 31 Aug 2023 12:22:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD04883126
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4747D83126;
+	Thu, 31 Aug 2023 12:23:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4747D83126
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LZOqKp9baQOC; Thu, 31 Aug 2023 12:22:22 +0000 (UTC)
+	with ESMTP id Sp4C57TY0UNF; Thu, 31 Aug 2023 12:23:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0DF9A8308A;
-	Thu, 31 Aug 2023 12:22:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0DF9A8308A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B16B1BF3D1
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:22:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86E7A830FB;
+	Thu, 31 Aug 2023 12:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86E7A830FB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 14FB51BF3D1
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E1448308A
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:22:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E1448308A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E232C4052B
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E232C4052B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RTcz-kDXGbki for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 12:22:18 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E7AF68305A
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:22:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7AF68305A
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E3C9DC000C;
- Thu, 31 Aug 2023 12:22:14 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qbggf-000qJd-VL; Thu, 31 Aug 2023 14:22:13 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fS9ZofKP0hST for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 144C440280
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 144C440280
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F2AC28672F; Thu, 31 Aug 2023 12:23:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230803040935.23465-1-bernd@kuhls.net>
-Date: Thu, 31 Aug 2023 14:22:13 +0200
-In-Reply-To: <20230803040935.23465-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Thu, 3 Aug 2023 06:09:35 +0200")
-Message-ID: <87a5u7mmfe.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libopenssl: security bump
- version to 3.0.10
+To: buildroot@buildroot.org
+Date: Thu, 31 Aug 2023 13:04:40 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 352a2abad5d0bd7965024232f79cee778cfa9424
+X-Git-Newrev: 57e5d85185d64623403e6fd3e4609273ba8cf0a0
+X-Patchwork-Hint: ignore
+Message-Id: <20230831122321.F2AC28672F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/go: security bump
+ to v1.19.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,28 +57,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=57e5d85185d64623403e6fd3e4609273ba8cf0a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > Fixes
- > CVE-2023-2975: https://www.openssl.org/news/secadv/20230714.txt
- > CVE-2023-3446: https://www.openssl.org/news/secadv/20230719.txt
- > CVE-2023-3817: https://www.openssl.org/news/secadv/20230731.txt
+go1.19.12 (released 2023-08-01) includes a security fix to the crypto/tls
+package, as well as bug fixes to the assembler and the compiler.
 
- > Changelog: https://www.openssl.org/news/cl30.txt
+Fixes CVE-2023-29409: restrict RSA keys in certificates to <= 8192 bits
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Extremely large RSA keys in certificate chains can cause a client/server to
+expend significant CPU time verifying signatures. Limit this by restricting the
+size of RSA keys transmitted during handshakes to <= 8192 bits.
 
-For 2023.02.x and 2023.05.x I have instead bumped to 1.1.1v, which
-contains the same fixes.
+Based on a survey of publicly trusted RSA keys, there are currently only three
+certificates in circulation with keys larger than this, and all three appear to
+be test certificates that are not actively deployed. It is possible there are
+larger keys in use in private PKIs, but we target the web PKI, so causing
+breakage here in the interests of increasing the default safety of users of
+crypto/tls seems reasonable.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 6d4c718a40..ac8499e7dc 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  e25c9ab72d811142b7f41ff6da5165fec2d1be5feec3ef2c66bc0bdecb431489  go1.19.11.src.tar.gz
++sha256  ee5d50e0a7fd74ba1b137cb879609aaaef9880bf72b5d1742100e38ae72bb557  go1.19.12.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 22b8161e05..9189032ba8 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.19.11
++GO_VERSION = 1.19.12
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
