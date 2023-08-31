@@ -4,47 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C46FAC83F2F
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 19:31:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01D78C83F37
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 19:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D7A46134C;
-	Thu, 31 Aug 2023 19:31:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D7A46134C
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB3D06133C;
+	Thu, 31 Aug 2023 19:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB3D06133C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id khAPKGI_t6Nb; Thu, 31 Aug 2023 19:31:40 +0000 (UTC)
+	with ESMTP id 49gRVTp4UoNF; Thu, 31 Aug 2023 19:45:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9799461334;
-	Thu, 31 Aug 2023 19:31:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9799461334
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 26B601BF3AF
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:31:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE90B61331;
+	Thu, 31 Aug 2023 19:45:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE90B61331
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F27C71BF3D4
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 001AC61324
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:31:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 001AC61324
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8B2182023
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8B2182023
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eAKBnhjSSc3q for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 19:31:25 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1636C61321
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 19:31:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1636C61321
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBB7B867A1; Thu, 31 Aug 2023 19:31:24 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 21:30:47 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d283473ae40498432c42c1bcf1ad815749aa4c8c
-X-Git-Newrev: fbcc1bf533e721c7393315ca68e8faa3af9d3194
-X-Patchwork-Hint: ignore
-Message-Id: <20230831193124.EBB7B867A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2023.02.4
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oYDtPUU5zdMB for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 19:45:25 +0000 (UTC)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D681F81F27
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 19:45:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D681F81F27
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-3ff7d73a6feso11727205e9.1
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:45:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693511123; x=1694115923;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=oKc9j+Gvr9BkaA2NBBvcetNnOCY9PYjzXg2KTeH24K8=;
+ b=DPwrlO67/O+Nj2a9clm26pb++qWBKr2MkqsWuKEVjhfiljF6qjeCfWQf0iqRDYf49i
+ N1q4q1U42kvOe78UHa11OTr+P6ZSVRKXHKXwPrCJFfxMMgYbhlqiKgghJ4hQNH5WJw95
+ +ZZfwCBhQrf2tXD5GEcp+E9p2eX2eo/e6xpqRSdqIlML3ycHabrbdK3tq2pnY3oQtGAL
+ 0omNQg9W/gZQWGPNy+bmzywwjS5N3fG9VlrSCzOgeN/rZUEGkaJubv+T5zQiqdJ1vLWA
+ a1DoxJVP8qKV8B1gbdD1Ei9TyAKWtSzZBSKaZ25FXPUjjuWSZHy8CrjFcSGuRzg/C5yz
+ uQoA==
+X-Gm-Message-State: AOJu0Yz4SzyRZY5lDIOsd2zMP5fGru/AFActD8aqJF1HUh9jgOAq0KGl
+ 6L9turdnGu8vlFtaP5+RkBw=
+X-Google-Smtp-Source: AGHT+IEeLTCsepg1S8tpiy9HN+LF7WX76xk3lgtFAFNHsAP/QtUHo9gzQkNRPoRVsVRhNUKVFT6UfA==
+X-Received: by 2002:a7b:c8ca:0:b0:401:519:c9 with SMTP id
+ f10-20020a7bc8ca000000b00401051900c9mr258219wml.13.1693511122635; 
+ Thu, 31 Aug 2023 12:45:22 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:945b:7e00:87f8:ae36:66c2:3a18?
+ (2a01cb05945b7e0087f8ae3666c23a18.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:87f8:ae36:66c2:3a18])
+ by smtp.gmail.com with ESMTPSA id
+ p9-20020a1c7409000000b003fee53feab5sm2837490wmc.10.2023.08.31.12.45.21
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 31 Aug 2023 12:45:22 -0700 (PDT)
+Message-ID: <8fd73e29-f78f-8039-37e8-856df4ae6d9a@gmail.com>
+Date: Thu, 31 Aug 2023 21:45:21 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20230831173736.84288-1-ju.o@free.fr>
+Content-Language: en-US
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20230831173736.84288-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1693511123; x=1694115923; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=oKc9j+Gvr9BkaA2NBBvcetNnOCY9PYjzXg2KTeH24K8=;
+ b=TCQ2Z5aDDUKJpo2eKxifiUw9DMcGCuREdmRefqY1cbiCnHbmRufMvnWcqi4tiYl6he
+ 8qJMwL26HoPDaDN+tSPOIeqQloj848EHV4gJcqkmiyID95KaWoGT5CyVlx3QFWauy/hh
+ +A6/JkwxXZlJcC4YMSa74cSLzlnc1DbfpfdwLF3a5siqll50fqWpGkk//3qvwPJdmbUd
+ Nrz9Sns8mOzcxJdfIsOnT1W4++xvJ8dhKUdB6KPIKfSR+e/EmMa+5lr/WCjZjdG4yA0p
+ 5CGxqUyk/sU8sLhTHwWJhGjox0JWCx9YwNlo1Nt5yg8tHzXRjJeyAnDQ4bCF45G4cL1h
+ nHZg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=TCQ2Z5aD
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: python-magic-wormhole:
+ fix random failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,103 +101,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbcc1bf533e721c7393315ca68e8faa3af9d3194
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
-
-diff --git a/docs/website/download.html b/docs/website/download.html
-index eeb5a142f9..725cf62b2c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2023.02.3</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2023.02.4</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2023.02.3.tar.gz">buildroot-2023.02.3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.02.3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.02.4.tar.gz">buildroot-2023.02.4.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.02.4.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2023.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.02.4.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2023.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2023.02.4.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2023.02.3.tar.xz">buildroot-2023.02.3.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2023.02.3.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2023.02.4.tar.xz">buildroot-2023.02.4.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2023.02.4.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 8465d932c3..aeca36bc68 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2023.02.4 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 August 2023</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2023.02.4 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2023.02.3 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2023.02.4">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87h6ofko6r.fsf@48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2023.02.4.tar.xz">2023.02.4 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSnVsaWVuLAoKTGUgMzEvMDgvMjAyMyDDoCAxOTozNywgSnVsaWVuIE9saXZhaW4gYSDD
+qWNyaXTCoDoKPiBUaGUgbWFnaWMtd29ybWhvbGUgInJlY2VpdmUiIGNvbW1hbmQgY2FuIG91dHB1
+dCAid2FpdGluZyIgbWVzc2FnZXMKPiB3aGVuIGtleSByZWNlaXZhbCBvciB2ZXJpZmljYXRpb24g
+YXJlIGxvbmdlciB0aGFuIGEgcHJlZGVmaW5lZAo+IHRpbWVvdXQ6Cj4gaHR0cHM6Ly9naXRodWIu
+Y29tL21hZ2ljLXdvcm1ob2xlL21hZ2ljLXdvcm1ob2xlL2Jsb2IvMC4xMy4wL3NyYy93b3JtaG9s
+ZS9jbGkvY21kX3JlY2VpdmUucHkjTDEzNQo+IAo+IFRoZSBpbnRlbnQgaXMgdG8gaGF2ZSBhbiBp
+bnRlcmFjdGl2ZSB1c2VyIGV4cGVyaWVuY2UuCj4gCj4gVGhpcyBiZWhhdmlvciBtYWtlcyB0aGUg
+cnVudGltZSB0ZXN0IHVucmVsaWFibGUgYXMgdGhlIHRlc3QgYWx3YXlzCj4gZXhwZWN0IHRoZSBz
+ZW50IG1lc3NhZ2UgYXMgdGhlIGV4YWN0IG91dHB1dC4gV2hlbiB0aGUgdGVzdCBleGVjdXRpb24K
+PiBpcyBzbG93ZXIsIGl0IHNvbWV0aW1lcyBnZXQgdGhlICJ3YWl0aW5nIiBtZXNzYWdlIGluc3Rl
+YWQgb2YgdGhlCj4gZXhwZWN0ZWQgbWVzc2FnZS4KPiAKPiBTb21lIHRlc3Qgam9icyBhcmUgc3Vj
+Y2VlZGluZzoKPiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9q
+b2JzLzQ5NjgwNTk3MzcKPiB3aGlsZSBzb21lIG90aGVyIGFyZSBmYWlsaW5nLgo+IAo+IG1hZ2lj
+LXdvcm1ob2xlIGNhbiBvdmVycmlkZSB0aG9zZSB0aW1lcnMgd2l0aCBlbnZpcm9ubWVudCB2YXJp
+YWJsZXMuCj4gU2VlOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9tYWdpYy13b3JtaG9sZS9tYWdpYy13
+b3JtaG9sZS9ibG9iLzAuMTMuMC9zcmMvd29ybWhvbGUvY2xpL2NtZF9yZWNlaXZlLnB5I0wyNgo+
+IAo+IFRoaXMgY29tbWl0IHNldHMgdGhvc2UgZW52aXJvbm1lbnQgdmFyaWFibGUgdG8gbGFyZ2Vy
+IHZhbHVlcwo+ICgxMDAgc2Vjb25kcyBpbnN0cmVhZCBvZiAxIGJ5IGRlZmF1bHQpLCB0byBtYWtl
+IHN1cmUgdGhlIHRlc3Qgd2lsbAo+IGFsd2F5cyBwYXNzLgo+IAo+IEZpeGVzOgo+IGh0dHBzOi8v
+Z2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNDk2MjkyMzIzNQo+IAo+
+IFJlcG9ydGVkLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+Cj4gU2ln
+bmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KClJldmlld2VkLWJ5OiBS
+b21haW4gTmFvdXIgPHJvbWFpbi5uYW91ckBnbWFpbC5jb20+ClRlc3RlZC1ieTogUm9tYWluIE5h
+b3VyIDxyb21haW4ubmFvdXJAZ21haWwuY29tPgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IC0t
+LQo+ICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl9tYWdpY193b3Jt
+aG9sZS5weSB8IDQgKysrLQo+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRl
+bGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
+L3Rlc3RfcHl0aG9uX21hZ2ljX3dvcm1ob2xlLnB5IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3Bh
+Y2thZ2UvdGVzdF9weXRob25fbWFnaWNfd29ybWhvbGUucHkKPiBpbmRleCBhYmQzNGJjYTUwLi41
+YTBmMDI3N2IwIDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rl
+c3RfcHl0aG9uX21hZ2ljX3dvcm1ob2xlLnB5Cj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3Rz
+L3BhY2thZ2UvdGVzdF9weXRob25fbWFnaWNfd29ybWhvbGUucHkKPiBAQCAtNTAsNyArNTAsOSBA
+QCBjbGFzcyBUZXN0UHl0aG9uUHkzTWFnaWNXb3JtaG9sZShUZXN0UHl0aG9uUGFja2FnZUJhc2Up
+Ogo+ICAgICAgICAgIGNtZCArPSAic2xlZXAgMjUiCj4gICAgICAgICAgc2VsZi5hc3NlcnRSdW5P
+ayhjbWQsIHRpbWVvdXQ9MzApCj4gIAo+IC0gICAgICAgIGNtZCA9IHdvcm1ob2xlX2NtZCArICIg
+cmVjZWl2ZSB7fSIuZm9ybWF0KGNvZGUpCj4gKyAgICAgICAgd29ybWhvbGVfZW52ID0gIl9NQUdJ
+Q19XT1JNSE9MRV9URVNUX0tFWV9USU1FUj0xMDAgIgo+ICsgICAgICAgIHdvcm1ob2xlX2VudiAr
+PSAiX01BR0lDX1dPUk1IT0xFX1RFU1RfVkVSSUZZX1RJTUVSPTEwMCAiCj4gKyAgICAgICAgY21k
+ID0gd29ybWhvbGVfZW52ICsgd29ybWhvbGVfY21kICsgIiByZWNlaXZlIHt9Ii5mb3JtYXQoY29k
+ZSkKPiAgICAgICAgICBvdXRwdXQsIGV4aXRfY29kZSA9IHNlbGYuZW11bGF0b3IucnVuKGNtZCwg
+dGltZW91dD0zNSkKPiAgICAgICAgICBzZWxmLmFzc2VydEVxdWFsKGV4aXRfY29kZSwgMCkKPiAg
+ICAgICAgICBzZWxmLmFzc2VydEVxdWFsKG91dHB1dFswXSwgdGV4dCkKCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
