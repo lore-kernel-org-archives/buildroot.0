@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71689C83F32
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD22C83F33
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 12:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DA508143A;
-	Thu, 31 Aug 2023 12:24:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DA508143A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D19481099;
+	Thu, 31 Aug 2023 12:24:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D19481099
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0qxp5CXYh6oE; Thu, 31 Aug 2023 12:24:14 +0000 (UTC)
+	with ESMTP id AhLSgUTlk163; Thu, 31 Aug 2023 12:24:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6600C8336F;
-	Thu, 31 Aug 2023 12:24:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6600C8336F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80A4080C28;
+	Thu, 31 Aug 2023 12:24:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80A4080C28
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 656A91BF3D1
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 730771BF3D1
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B1FC41E77
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B1FC41E77
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5752E41E3F
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 12:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5752E41E3F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wg4VlM-6SoeE for <buildroot@lists.busybox.net>;
+ with ESMTP id gK0cR_bT0bjs for <buildroot@lists.busybox.net>;
  Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 380D441E4C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B3C141E6F
  for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 380D441E4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B3C141E6F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 20D5986732; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
+ id 343B586730; Thu, 31 Aug 2023 12:23:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 13:10:04 +0200
+Date: Thu, 31 Aug 2023 14:21:43 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 307abe2029d3681408f2c33a37ef688b139151bf
-X-Git-Newrev: 5ad971ee08e738174a802e519a964e5eee20bf04
+X-Git-Oldrev: 560c4a0d03bc47995d8be88273abf28b3ed0ac9d
+X-Git-Newrev: bd1991e228cfd7478b3bac29fccb3c7fd71b10ab
 X-Patchwork-Hint: ignore
-Message-Id: <20230831122322.20D5986732@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/systemd: fix
- wrong variable name in comment
+Message-Id: <20230831122322.343B586730@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libopenssl:
+ security bump version to 1.1.1v
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ad971ee08e738174a802e519a964e5eee20bf04
+commit: https://git.buildroot.net/buildroot/commit/?id=bd1991e228cfd7478b3bac29fccb3c7fd71b10ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-There is no such thing as a BR2_TARGET_GENERIC_TTY_PATH variable. The
-comment here should mention BR2_TARGET_GENERIC_GETTY_PORT instead.
+Fixes:
+CVE-2023-3446: https://www.openssl.org/news/secadv/20230719.txt
+CVE-2023-3817: https://www.openssl.org/news/secadv/20230731.txt
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e0ff6ad7ff6fb5c4643314b9e029f81cc3b07762)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 7f89c7cd1e..d235256867 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -683,15 +683,15 @@ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
- # Systemd defaults to enabling getty@tty1.service
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 708926de80..4541087c07 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1u.tar.gz.sha256
+-sha256  e2f8d84b523eecd06c7be7626830370300fbcc15386bf5142d72758f6963ebc6  openssl-1.1.1u.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1v.tar.gz.sha256
++sha256  d6697e2871e77238460402e9362d47d18382b15ef9f246aba6c7bd780d38a6b0  openssl-1.1.1v.tar.gz
+ 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 178979f43b..fe68a20ed1 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
  #
- # What we want to do
--# * Enable a getty on $BR2_TARGET_GENERIC_TTY_PATH
-+# * Enable a getty on $BR2_TARGET_GENERIC_GETTY_PORT
- # * Set the baudrate for all units according to BR2_TARGET_GENERIC_GETTY_BAUDRATE
- # * Always enable a getty on the console using systemd-getty-generator
- #   (backward compatibility with previous releases of buildroot)
- #
- # What we do
- # * disable getty@tty1 (enabled by upstream systemd)
--# * enable getty@xxx if  $BR2_TARGET_GENERIC_TTY_PATH is a tty
--# * enable serial-getty@xxx for other $BR2_TARGET_GENERIC_TTY_PATH
-+# * enable getty@xxx if  $BR2_TARGET_GENERIC_GETTY_PORT is a tty
-+# * enable serial-getty@xxx for other $BR2_TARGET_GENERIC_GETTY_PORT
- # * rewrite baudrates if a baudrate is provided
- define SYSTEMD_INSTALL_SERVICE_TTY
- 	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/getty@.service.d; \
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1u
++LIBOPENSSL_VERSION = 1.1.1v
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
