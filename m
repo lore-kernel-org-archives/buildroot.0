@@ -4,50 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C33F5C83F38
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 18:11:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5FB8C83F2F
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 18:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2966D831C1;
-	Thu, 31 Aug 2023 18:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2966D831C1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A56983267;
+	Thu, 31 Aug 2023 18:12:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A56983267
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Ec9J65ipnqAs; Thu, 31 Aug 2023 18:11:08 +0000 (UTC)
+	with ESMTP id DYBKBEVZhCt7; Thu, 31 Aug 2023 18:12:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F61381F61;
-	Thu, 31 Aug 2023 18:11:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F61381F61
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5CAAD1BF23B
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:11:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAA7C81F6D;
+	Thu, 31 Aug 2023 18:12:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAA7C81F6D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AEA9B1BF23B
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4157541EF4
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:11:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4157541EF4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 957E940452
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 957E940452
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hANIwm51bmHT for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 18:11:03 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DAE0B41EF2
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 18:11:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAE0B41EF2
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EE9BA6000A
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 18:10:59 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>) id 1qbm8B-000z6J-3c
- for buildroot@buildroot.org; Thu, 31 Aug 2023 20:10:59 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0jvasTwMPRJb for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 18:12:18 +0000 (UTC)
+Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F09B640443
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 18:12:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F09B640443
+Received: from localhost.localdomain ([146.241.105.17])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id bm9PqhstR7c04bm9PquAEq; Thu, 31 Aug 2023 20:12:15 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 20:10:58 +0200
-Message-ID: <87ledrkrpp.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date: Thu, 31 Aug 2023 20:12:14 +0200
+Message-Id: <20230831181214.2547009-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] Buildroot 2023.05.2 released
+X-CMAE-Envelope: MS4xfLentqCa13CMTcoRFF12dDcg/EQQhJe7e3UEegR2TGNADWC2BqUoZkouf4l39uaRvvZUr35Btnu5Fwk3pi4lQNOtqT/2XhHUEDu1cFlp7nsZEYGTVuUX
+ zdTx3iCtYzmaWZI/gYbzth1c36h4D3Yg9u6FhyYhgNB770BY6WA5l1YfV43Fg8bCsQ+0ZKJRbvk4wrvRpDkaXHy7HSC+Hlq+3SRCpAFX/5uam/i+GTN2mOb5
+ CxCvzWkubRGGViH584ncl0jpRGWQRWt6mHo3dVwYuqytG7xXUjE2JtL5ejSDdnj3+cdhHw2+nyR5OdLte42WGA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1693505535; bh=mI66cVyNsqD3DltIsEPwoM+23weZ0O52cUkVaTyCuXc=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=aMtyHdP9rzOyAhfzhV4cyzERrjM6qeFT/+u+dRWRTEPrG0hgStUFpakzDHbHUOnGj
+ gnZc2Xyrh4bNlvFLhS8HzinRwcDw4H/iOC5sx7eDsCDBZh6C2tZAZVL/qt9junRY9n
+ qo5Hm2UGrb2UV8M1tZ1kccdYkjUcl1PzVttcgVpvDQ+LSuhXKTrwkZpCmDEEI4WhHE
+ asCBe9sVdShUpOGfoZuqnM4p+Xn32I52hJ9bU9oUwopz3tSERiCwiyzyNe8QgA6/bj
+ Xi+dQzEsI9qhSM8hy9VISTJkHIW3kDJP3lKlJ4AN71Ff/5yHP7RxKh7jPzu+yk7kBa
+ Mzfyv8KiCnbqg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=aMtyHdP9
+Subject: [Buildroot] [for-next] package/libnss: bump version to 3.93
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,49 +71,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
-ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cDovL2J1aWxkcm9vdC5vcmcpLgoKQnVpbGRyb290IDIw
-MjMuMDUuMiBpcyByZWxlYXNlZCAtIEdvIGRvd25sb2FkIGl0IGF0OgoKaHR0cDovL2J1aWxkcm9v
-dC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIzLjA1LjIudGFyLmd6CgpvcgoKaHR0cDovL2J1
-aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDIzLjA1LjIudGFyLnh6CgpPciBnZXQg
-aXQgZnJvbSBHaXQ6CgpnaXQ6Ly9naXQuYnVpbGRyb290Lm9yZy9idWlsZHJvb3QKCkJ1aWxkcm9v
-dCAyMDIzLjA1LjIgaXMgYSBidWdmaXggcmVsZWFzZSwgZml4aW5nIGEgbnVtYmVyIG9mIGltcG9y
-dGFudCAvCnNlY3VyaXR5IHJlbGF0ZWQgaXNzdWVzIGRpc2NvdmVyZWQgc2luY2UgdGhlIDIwMjMu
-MDUuMSByZWxlYXNlLgoKLSBDb3JyZWN0bHkgbWFyayBCb290bGluIGV4dGVybmFsIHRvb2xjaGFp
-bnMgYXMgaGF2aW5nIE9wZW5NUCBzdXBwb3J0CgotIEVuc3VyZSB1dGlscy9kb2NrZXItcnVuIGNv
-cnJlY3RseSBzdXBwb3J0cyBnaXQgd29ya3RyZWVzLgoKLSBTZWN1cml0eSBmaXhlcyBmb3IgZG1p
-ZGVjb2RlLCBpcGVyZjMsIGxpYmN1cmwsIGxpYm9wZW5zc2wsCiAgZ2hvc3RzY3JpcHQsIGdvLCBv
-cGVuc3NoLCBzYW1iYTQsIHRwbTItdHNzLCB3ZWJraXRndGssIHdwZXdlYmtpdAoKLSBGaXhlcyBm
-b3IgZG93bmxvYWQvY29tcGlsYXRpb24vcnVudGltZS9saWNlbnNlIGlzc3VlcyBpbgogIGFybS10
-cnVzdGVkLWZpcm13YXJlLCBiaW5kLCBjYWlybywgY21vY2thLCBjb250YWluZXJkLCBjcnVkaW5p
-LAogIGNyeXB0b2Rldi1saW51eCwgZmZtcGVnLCBmaXJtd2FyZS1pbXgsIGdjYywgZ2RiLCBna3Jl
-bGxtLCBnbnVyYWRpbywKICBpZ2gtZXRoZXJjYXQsIGtvZGksIGxpYnNzaCwgbGlidWJvb3RlbnYs
-IGxpbnV4LXRvb2xzLCBtYWxpLWRyaXZlciwKICBuZnMtdXRpbHMsIG50cCwgcGhwLCBwaXBld2ly
-ZSwgcHl0aG9uLWluaXBhcnNlLCBweXRob24taXB0YWJsZXMsCiAgcHl0aG9uLXB5c21iLCBydGw4
-MTg5ZXMsIHJ0bDgxODlmcywgc2FtLWJhLCBzZWF0ZCwgc2hhZG93LCBzcGVleCwKICBzdW54aS1t
-YWxpLXV0Z2FyZC1kcml2ZXIsIHN1cGVydHV4a2FydCwgc3lzZGlnLCB0b3IsIHRyYW5zbWlzc2lv
-biwKICB1Ym9vdCwgdW56aXAsIHdpcmVsZXNzLXJlZ2RiLCB3b2xmc3NsLCB3cGV3ZWJhY2tlbmQt
-ZmRvLCB4ZW5vbWFpLAogIHlhbWwtY3BwCgpGb3IgbW9yZSBkZXRhaWxzLCBzZWUgdGhlIENIQU5H
-RVMgZmlsZToKCmh0dHBzOi8vZ2l0LmJ1aWxkcm9vdC5uZXQvYnVpbGRyb290L3BsYWluL0NIQU5H
-RVM/aWQ9MjAyMy4wNS4yCgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMgYXJlIHN0cm9u
-Z2x5IGVuY291cmFnZWQgdG8gdXBncmFkZS4KCk1hbnkgdGhhbmtzIHRvIGFsbCB0aGUgcGVvcGxl
-IGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXNuIDIwMjMuMDUu
-MS4uCgogICAgNDMgIEJlcm5kIEt1aGxzCiAgICAgNiAgR2l1bGlvIEJlbmV0dGkKICAgICAzICBK
-YW1lcyBIaWxsaWFyZAogICAgIDMgIFBldGVyIEtvcnNnYWFyZAogICAgIDIgIEJyYW5kb24gTWFp
-ZXIKICAgICAyICBDaGFybGVzIEhhcmRpbgogICAgIDIgIENocmlzdGlhbiBTdGV3YXJ0CiAgICAg
-MiAgSnVsaWVuIE9saXZhaW4KICAgICAyICBMYW5nIERhbmllbAogICAgIDIgIExvdGhhciBGZWx0
-ZW4KICAgICAyICBMdWNhIENlcmVzb2xpCiAgICAgMiAgU2VyZ2V5IEJvYnJlbm9rCiAgICAgMiAg
-VGhvbWFzIFBldGF6em9uaQogICAgIDIgIFZpbmNlbnQgRmF6aW8KICAgICAxICBEYXJpbyBCaW5h
-Y2NoaQogICAgIDEgIEZsb3JpYW4gRmFpbmVsbGkKICAgICAxICBHd2VuaGFlbCBHb2F2ZWMtTWVy
-b3UKICAgICAxICBKb2VsIENhcmxzb24KICAgICAxICBOZWFsIEZyYWdlcgogICAgIDEgIFBpZXJy
-ZSBGaWNoZXV4CiAgICAgMSAgUGlldGVyamFuIENhbWVybHluY2sKICAgICAxICBSb21haW4gTmFv
-dXIKICAgICAxICBTw6liYXN0aWVuIFN6eW1hbnNraQogICAgIDEgIFZpbmNlbnQgU3RlaGzDqQog
-ICAgIDEgIFlhbm4gRS4gTU9SSU4KICAgICAxICBZZWdvciBZZWZyZW1vdgoKLS0gCkJ5ZSwgUGV0
-ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index b95c0448b0..a3b98b0f8c 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_92_RTM/src/SHA256SUMS
+-sha256  3db192d6e882039af02ae7eaf3217ed114bb7ad83414c646772ab8021e24a254  nss-3.92.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_93_RTM/src/SHA256SUMS
++sha256  15f54bb72048eb105f8c0e936a04b899e74c3db9a19bbc1e00acee2af9476a8a  nss-3.93.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 64463d1f10..abdce32efb 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.92
++LIBNSS_VERSION = 3.93
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
