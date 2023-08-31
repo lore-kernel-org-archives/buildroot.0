@@ -4,85 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB86CC83F37
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 19:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2820C83F2F
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 19:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DA0D61366;
-	Thu, 31 Aug 2023 19:52:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DA0D61366
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AE2D60BC9;
+	Thu, 31 Aug 2023 19:53:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AE2D60BC9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zLxaJ5BXstQH; Thu, 31 Aug 2023 19:52:34 +0000 (UTC)
+	with ESMTP id wjYkEGJ5N_Wa; Thu, 31 Aug 2023 19:53:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9609561321;
-	Thu, 31 Aug 2023 19:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9609561321
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 73D5F1BF295
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:52:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B559260AFE;
+	Thu, 31 Aug 2023 19:53:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B559260AFE
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D70881BF295
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D8C0408D1
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D8C0408D1
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFBAF60AFE
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:53:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFBAF60AFE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VuszVVB9FaV1 for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 19:52:31 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DE68240278
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 19:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE68240278
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.8.36] ([89.144.220.251]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mwfai-1pj9ec0PIQ-00y6tz; Thu, 31
- Aug 2023 21:52:24 +0200
-Message-ID: <00d15b88-0d94-491e-800c-c36f4a3ddbe7@gmx.at>
-Date: Thu, 31 Aug 2023 21:52:23 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id tgM30ZV0_MZV for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 19:53:45 +0000 (UTC)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B127460AC3
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 19:53:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B127460AC3
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-401ceda85cdso12612975e9.1
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 12:53:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693511623; x=1694116423;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9ctxm1cQD1Pab8jKqR7i0FH2yTomzBTJrrt1Vd8LdQ0=;
+ b=kgyEYAF0pTRWBA/yuToq43YjEoBMcYgJ/6KSURGkZyUk51QBRqErLxFEK1iqGvt165
+ nl79MFifCe4isD7Dq/z/t2Nym5GMddyPbje1enBnPOSmhHtGQIR9g5/3bMCu7Bfk9v/M
+ N1tWKyjET8ZNXpnb4SBmIo0Lw9xLb7grlrlZwOe56BWLnDilqvE6Rpc6sWCTM4aDn9XO
+ sXHJMttLlPphiQxxkwPY6iN5PpiEvQUyyYM7giEQSPpeP/9gMDcQH7yiqUOfNDidtcjM
+ mO4Az2D1lzKW901z5G5n2oFLNdhpFuHm2WY+koTLkU4bZDZDqPKQuJC3qe9xG7bz2926
+ AENA==
+X-Gm-Message-State: AOJu0YwRN/ewB1sIK7ON9ht5xphl3Gi1Tz0Y62hpB3t7SqlgJoFtHlzm
+ Ts90RB7ZioIEJUS07pyGSeA6s2cntEo=
+X-Google-Smtp-Source: AGHT+IEEhkjvqPGb1Kasi3BQV84jCI7pzmparsYoygrKjrlF0ueyXFHAGvrHlnjnrqIySowXjRdnDg==
+X-Received: by 2002:a05:600c:364c:b0:401:b0f2:88b4 with SMTP id
+ y12-20020a05600c364c00b00401b0f288b4mr241577wmq.26.1693511622533; 
+ Thu, 31 Aug 2023 12:53:42 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05945b7e009bdc688723a24f31.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:945b:7e00:9bdc:6887:23a2:4f31])
+ by smtp.gmail.com with ESMTPSA id
+ p22-20020a1c7416000000b003fe23b10fdfsm6044620wmc.36.2023.08.31.12.53.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 31 Aug 2023 12:53:41 -0700 (PDT)
+From: Romain Naour <romain.naour@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 31 Aug 2023 21:53:38 +0200
+Message-ID: <20230831195338.469375-1-romain.naour@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Arnout Vandecappelle <arnout@mind.be>, buildroot@buildroot.org
-References: <20230812192842.135682-1-dalang@gmx.at>
- <20230812192842.135682-3-dalang@gmx.at>
- <4c576534-7bd0-d1c4-61f3-a84821da3825@mind.be>
-From: Daniel Lang <dalang@gmx.at>
-In-Reply-To: <4c576534-7bd0-d1c4-61f3-a84821da3825@mind.be>
-X-Provags-ID: V03:K1:lYV0d4ZptKkJ+S3mk8GyfrJylCi4GvIgC9CQIolSo26yBNB0KwD
- cN75RSzLV6NuTjH5I/mtQsxhLpC6dlTmvJDr6666ZIS5t/LYPEt0ooLEJsDh6QVMOAK3+w1
- d4wRxVqMkUA9Y6Y+2qwZBy1qIpk72q6nqiW/je0WYpEogJWJiky8NBc9gYhG/5cFSgib/Yi
- 5JON3Se2SwOs006zeeXgQ==
-UI-OutboundReport: notjunk:1;M01:P0:EaB0+LN6+jQ=;rCq16lW0MZRQSZcyli8im8ibOJc
- H6Eqy59f/DIsMv4kIBS4wsokzRu++O/HBi412E7iq4l7I3sMPjIm7qwCcO7iiHzgkfn4yKP83
- Edt8w06MHREU9/GWRFl/RAIDLbuyYXgrnu8ARVJMnt6cAKhAn1v+IKoFjK7TO3meDaR/RGEyF
- bQHstudhpP791smPVO7Q+Jba8E2gB2L5V6swy21xhhHgITvNoOZMYxYbb+Pr802ukeQBtu1Kb
- y/z4uf+Xj/NPatID83fpuNT7p4VHfTb/cymsHIp73iZgQVzyL5nZhVKT9DCfViRQVR8lm+Bb+
- ZiJTKkBWoQS7MJn6jbmR6HaLWWwnUtZH7ctBgMubuJpeJ3v+yJML/g24ljATvJ4HaV/fRB+AG
- q9CL4qbgjoFdZOB/AXGo9Y18NOJzBAI+5gDsqhAgSF+w1dvvnuZ49kkqGtWWxTtCkA1Uo/UEa
- KQPH8lm/DIY9TBvPkVEUzyBFXyLyZkcLJ7LOKkRM4GPUMroy31q9yJ/ehomnd5n2AyoVuBb/a
- i7/7dyfTNE443xqMBsG8IYPZrsv4Dw0NVcC6nlfSGWAYUwLC+sN8vTgvY1H8n0xlIJE3khwrx
- XfbGvWg/n1hhDoXI3pcHi6oyVrfsFIl28x0o5pTQ7dQk/t1U7wr6OZ3txU/zGqZ+ySUdwv+Xi
- gObMYpRpVhoR+csi2/0z71GMG34kxI9WEIuLMA1+OMiRAJ9s6MibQwkiuBo0dznL1C5qPbo0v
- v6L4zHOTx+b3zzeWnBEFUTodmODh2D/2Ku1pkagS5BU2IvnnQpF4JimW9PtipL9ssI2Dl7vJ8
- ww8Ua7bwmrNp1Z3KqyWuVT4FssO/gNtMThvUpCg0Icja9yXkNK8+br4NRzkEmJuoN1N/r91Bj
- bC+w3A6O1tibCs+QI3OxVx3Ixvft5EfnHeAGH4+VM8CONhVf5M47INOCaqbW9ph+fRGunYmVl
- eh6yFs3ptI3EUJFGctyxY1BcQZ4=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; 
- s=s31663417; t=1693511544; x=1694116344; i=dalang@gmx.at;
- bh=wXf4vZMj5wJeoFfNgc8NAhEK+weePTW9zriO5qST2eI=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=VF04UQ95/8b7Vtw3rtAQuMehYapVFwD7C3LXBDxLNt/NL2uf59T7rGv6nShCCK558OmbF3N
- OkVcqWsfGKPrcsZh4oxOdxjtCU7P3rhU4sTgcWxe5/CJ2iLg+MUwSSZiJ4MeMUuLjydpT4+g6
- zYUd8Hvx9PVA7tuioThZC2sL68Ei7B9Qp/qs37hgLeQn/0cJ5t7ntrrbne5WnSCVh2+kr4zcv
- 6f059BTxEzd0ii2CsoFsB2mpPMJyBEqmD2MPXpgIN8odlHyv6NVXcHqWYiSExC4Ysq7gsri3A
- QVzmDUsCxNuZFWzf9EdIKdHD6EulgI81NdggLr50jhSHHh8Iqktg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=VF04UQ95
-Subject: Re: [Buildroot] [PATCH v3 3/8] support/scripts/pkg-stats: check all
- files for warnings
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1693511623; x=1694116423; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9ctxm1cQD1Pab8jKqR7i0FH2yTomzBTJrrt1Vd8LdQ0=;
+ b=bYFzGEWk9KJ0+7uukWSQ42oLpVz9LZ7JJKhdD0+ACdKOsXBnYXuSl+dbMgiiQ9omT2
+ VuC8k5hEPAXMswwXibkIlLAFREU2NOPg+ANfA6T6T1W8EQ3/EGohAGkh/qGGMZsllM3W
+ 6FHNCLQptabChRl7SiIuJNu0mX2puBxMY1jTsce4CWha6XpPkSZ0kAtFVB3DLTwLhg6V
+ Ce+padX1ZTkHWxsNi+gyJabuszLi6gZXbyD4GIDi72CaqEwicI3D7POBg0eKV8wceLEI
+ k2Ag/dsa8rSwmFQmpXNKNkmMfbCdtUzXTa0Jj5IF3+LBgZF1df2HEg7AW2boPwAOGhMZ
+ dUWA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=bYFzGEWk
+Subject: [Buildroot] [PATCH] configs/hifive_unleashed_defconfig: uboot needs
+ OpenSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,38 +96,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, Sen Hastings <sen@phobosdpl.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQXJub3V0LAoKT24gMzAuMDguMjMgMjI6MzYsIEFybm91dCBWYW5kZWNhcHBlbGxlIHdy
-b3RlOgo+Cj4KPiBPbiAxMi8wOC8yMDIzIDIxOjI4LCBEYW5pZWwgTGFuZyB3cm90ZToKPj4gSW5z
-dGVhZCBvZiBvbmx5IGNoZWNraW5nIC5tayBhbmQgQ29uZmlnLmlueywuaG9zdH0sIGNoZWNrCj4+
-IGFsbCBmaWxlcyBpbiBhIHBhY2thZ2UgZGlyZWN0b3J5Lgo+Cj4gwqAoImNoZWNraW5nIiBoZXJl
-IG1lYW5zICJydW4gY2hlY2stcGFja2FnZSIpLgoKQ29ycmVjdC4KCj4KPiDCoEkgdGhpbmsgd2Ug
-c2hvdWxkIGluc3RlYWQgcmVtb3ZlIHRoZSAud2FybmluZ3MgYW5kIC5zdGF0dXNbJ3BrZy1jaGVj
-ayddIGZpZWxkcyBlbnRpcmVseS4gSXQgbWFkZSBzZW5zZSBiYWNrIGluIHRoZSBkYXlzLCBiZWNh
-dXNlIHdlIHdlcmVuJ3QgcnVubmluZyBjaGVjay1wYWNrYWdlIGluIENJLiBOb3csIGhvd2V2ZXIs
-IHdlIGRvLCBzbyB0aGVyZSdzIGxpdHRsZSBwb2ludCB0byBydW4gY2hlY2stcGFja2FnZSBhcyBw
-YXJ0IG9mIHBrZy1zdGF0cyBhcyB3ZWxsLiBPbiBhLmIubyB0aGUgd2FybmluZ3MgY29sdW1uIHdp
-bGwgKGFsbW9zdCkgYWx3YXlzIGJlIGFsbCAwLgoKSXQgd2lsbCBhbHdheXMgYmUgMCBpZiAuY2hl
-Y2twYWNrYWdlaWdub3JlIGlzIGNvbnNpZGVyZWQgd2hpY2ggaXNuJ3QgdGhlIGNhc2UKaGVyZS4g
-VGhlcmVmb3JlIHRoZSB3YXJuaW5nIGNvbHVtbiB3b3VsZCBzaG93IHRoZSBudW1iZXIgb2Ygd2Fy
-bmluZ3MgaW5jbHVkaW5nCnRob3NlIGlnbm9yZWQuClRoZSBxdWVzdGlvbiBvZiB3aGV0aGVyIG9y
-IG5vdCB0aGlzIGluZm9ybWF0aW9uIGlzIG5lZWRlZCBpcyBzdGlsbCByZWxldmFudC4KSSBqdXN0
-IHdhbnRlZCB0byBwb2ludCBvdXQgdGhhdCBpbiBteSB0ZXN0aW5nIHRoZSB2YWx1ZSB3YXNuJ3Qg
-MCBmb3IgYWxsIHBhY2thZ2VzLgoKPgo+IMKgVGhlcmUgaXMgdGhlIHBvaW50IG9mIHBlb3BsZSB1
-c2luZyBwa2ctc3RhdHMgZm9yIHRoZWlyIGJyMi1leHRlcm5hbCwgYnV0Ogo+Cj4gMS4gcGtnLXN0
-YXRzIGlzIHByZXR0eSBmcmFnaWxlIHNvIHVzZXJzIHNob3VsZG4ndCBiZSB0b28gc3VycHJpc2Vk
-IGIgc29tZSBicmVha2FnZTsKPiAyLiBpdCdzIHZlcnkgZWFzeSBmb3IgdGhvc2UgdXNlcnMgdG8g
-cnVuICdtYWtlIGNoZWNrLXBhY2thZ2UnIGluc3RlYWQuCj4KPgo+IMKgRG8gb3RoZXIgbWFpbnRh
-aW5lcnMgaGF2ZSB0aGUgc2FtZSBvcGluaW9uPwoKU2VlaW5nIGFzIFRob21hcyBhbHJlYWR5IGFn
-cmVlZCwgSSB3aWxsIHByZXBhcmUgdGhlIHJlbW92YWwsIHVubGVzcyBvdGhlciBvcGluaW9ucwph
-cmUgcmFpc2VkLgoKPgo+Cj4gwqBSZWdhcmRzLAo+IMKgQXJub3V0CgpSZWdhcmRzLApEYW5pZWwK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4987456270
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ configs/hifive_unleashed_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
+index c9d4a31ede..fbc273fffc 100644
+--- a/configs/hifive_unleashed_defconfig
++++ b/configs/hifive_unleashed_defconfig
+@@ -48,6 +48,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_unleashed"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+-- 
+2.41.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
