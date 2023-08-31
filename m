@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BAC5C83F37
-	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 18:29:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 215D1C83F3D
+	for <buildroot@archiver.kernel.org>; Thu, 31 Aug 2023 19:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4EE0E83935;
-	Thu, 31 Aug 2023 18:29:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EE0E83935
+	by smtp3.osuosl.org (Postfix) with ESMTP id 616AF60DF4;
+	Thu, 31 Aug 2023 19:11:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 616AF60DF4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JKzJiiP6LMky; Thu, 31 Aug 2023 18:29:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hSE4AdnBg1E9; Thu, 31 Aug 2023 19:11:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 818F183381;
-	Thu, 31 Aug 2023 18:29:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 818F183381
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B5AF61BF990
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:29:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A627160B3C;
+	Thu, 31 Aug 2023 19:11:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A627160B3C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DF4AB1BF396
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E1B841EF9
- for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 18:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E1B841EF9
+ by smtp2.osuosl.org (Postfix) with ESMTP id C01EF417F6
+ for <buildroot@lists.busybox.net>; Thu, 31 Aug 2023 19:11:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C01EF417F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ca6dy53IEV0j for <buildroot@lists.busybox.net>;
- Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HCUBfcQdiF-5 for <buildroot@lists.busybox.net>;
+ Thu, 31 Aug 2023 19:11:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8AAF441EF4
- for <buildroot@buildroot.org>; Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AAF441EF4
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF7CE408BF
+ for <buildroot@buildroot.org>; Thu, 31 Aug 2023 19:11:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF7CE408BF
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71F6A8677E; Thu, 31 Aug 2023 18:29:06 +0000 (UTC)
+ id BAE1B8678D; Thu, 31 Aug 2023 19:11:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 31 Aug 2023 20:12:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 16c3b4b92bb7b2fef6ad314a5fb9b7203b3d80b3
-X-Git-Newrev: 386b72ca224fba927a0bd768c2f772ee1b892ed1
+Date: Thu, 31 Aug 2023 20:49:28 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: f6f9b0938b41371d49207f99f86e50d9984dc05a
+X-Git-Newrev: 3b8e5b19ad9117c0ebcace9cde2e075108462c98
 X-Patchwork-Hint: ignore
-Message-Id: <20230831182906.71F6A8677E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Update for 2023.05.2
+Message-Id: <20230831191123.BAE1B8678D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] Update for 2023.02.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,71 +62,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=386b72ca224fba927a0bd768c2f772ee1b892ed1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=3b8e5b19ad9117c0ebcace9cde2e075108462c98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3923a4fac8c9e501b5fd94eea98bd7e842b31876)
-[Peter: drop Makefile change]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES                  | 32 ++++++++++++++++++++++++++++++++
+ CHANGES                  | 29 +++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
  support/misc/Vagrantfile |  2 +-
- 2 files changed, 33 insertions(+), 1 deletion(-)
+ 3 files changed, 32 insertions(+), 3 deletions(-)
 
 diff --git a/CHANGES b/CHANGES
-index 3ee83f64c6..e623d8b439 100644
+index b5cb5e7665..abf5b4bd7c 100644
 --- a/CHANGES
 +++ b/CHANGES
-@@ -80,6 +80,38 @@
- 
- 	Removed packages: libasplib, ocf-linux, tovid
- 
-+2023.05.2, released August 31th, 2023
+@@ -1,3 +1,32 @@
++2023.02.4, released August 31th, 2023
 +
 +	Important / security related fixes.
 +
 +	Toolchains: Correctly mark Bootlin external toolchains as
 +	having OpenMP support.
 +
-+	Arch: Mark Alderlake x86 variants as no AVX512 support.
++	Arch: Mark Alderlake x86 variants as having no AVX512 support.
 +
 +	Utils: Ensure utils/docker-run correctly supports git
 +	worktrees.
 +
-+	Defconfigs: Beaglebone: U-Boot needs OpenSSL. Beaglebone qt5:
-+	Enable support for green wireless variant.
++	Defconfigs: Beaglebone qt5: Enable support for green wireless
++	variant.
 +
 +	Updated/fixed packages: arm-trusted-firmware, bind, cairo,
-+	cmocka, containerd, crudini, cryptodev-linux, dmidecode,
-+	ffmpeg, firmware-imx, gcc, gdb, ghostscript, gkrellm,
-+	gnuradio, go, igh-ethercat, iperf3, kodi, libcurl, libopenssl,
-+	libssh, libubootenv, libuhttpd, linux-tools, mali-driver,
-+	nfs-utils, ntp, openssh, php, pipewire, python-pysmb,
-+	python-iniparse, python-iptables, rtl8189es, rtl8189fs,
-+	sam-ba, samba4, seatd, shadow, speex,
-+	sunxi-mali-utgard-driver, supertuxkart, sysdig, systemd, tor,
-+	tpm2-tss, transmission, uboot, unzip, webkitgtk,
-+	wireless-regdb, wolfssl, wpebackend-fdo, wpewebkit, xenomai,
-+	yaml-cpp, yavta
++	cmocka, containerd, crudini, dmidecode, ffmpeg, freescale-imx,
++	gcc, gdb, ghostscript, gkrellm, gnuradio, go, heimdall,
++	iperf3, libcurl, libmodsecurity, libopenssl, libssh,
++	libubootenv, libuhttpd, linux-tools, ntp, openssh, php,
++	pipewire, python-iniparse, python-iptables, python-pysmb,
++	rtl8189fs, sam-ba, samba4, seatd, speex, supertuxkart, sysdig,
++	tor, tpm2-tss, uboot, unzip, webkitgtk, wireless-regdb,
++	wolfssl, wpebackend-fdo wpewebkit, xenomai, yaml-cpp, yavta
 +
 +	Issues resolved (http://bugs.uclibc.org):
 +
 +	#15634: fluidsynths refers to missing libgomp.so.1
 +
- 2023.05.1, released July 17th, 2023
+ 2023.02.3, released July 17th, 2023
  
  	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 7309fd9976..42bb7a7b1f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -90,9 +90,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2023.02.3
++export BR2_VERSION := 2023.02.4
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1689628000
++BR2_VERSION_EPOCH = 1693507700
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
 diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 12da353f2e..75aae858b7 100644
+index 250766fb1d..29f1e8223d 100644
 --- a/support/misc/Vagrantfile
 +++ b/support/misc/Vagrantfile
 @@ -5,7 +5,7 @@
  ################################################################################
  
  # Buildroot version to use
--RELEASE='2023.05.1'
-+RELEASE='2023.05.2'
+-RELEASE='2023.02.3'
++RELEASE='2023.02.4'
  
  ### Change here for more memory/cores ###
  VM_MEMORY=2048
