@@ -4,82 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C50D2CA0FEC
-	for <buildroot@archiver.kernel.org>; Fri,  1 Sep 2023 19:28:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BC4FCA0FEC
+	for <buildroot@archiver.kernel.org>; Fri,  1 Sep 2023 19:28:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 813C060758;
-	Fri,  1 Sep 2023 19:28:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 813C060758
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB879613DA;
+	Fri,  1 Sep 2023 19:28:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB879613DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DZ4dn8nyRhv5; Fri,  1 Sep 2023 19:28:24 +0000 (UTC)
+	with ESMTP id lkTNYW5mep4Y; Fri,  1 Sep 2023 19:28:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8C9360644;
-	Fri,  1 Sep 2023 19:28:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8C9360644
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E7551BF576
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01FAF61084;
+	Fri,  1 Sep 2023 19:28:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01FAF61084
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C30081BF576
  for <buildroot@lists.busybox.net>; Fri,  1 Sep 2023 19:28:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC558404B9
- for <buildroot@lists.busybox.net>; Fri,  1 Sep 2023 19:28:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC558404B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B7E140246
+ for <buildroot@lists.busybox.net>; Fri,  1 Sep 2023 19:28:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B7E140246
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id E23JMTvwebIy for <buildroot@lists.busybox.net>;
- Fri,  1 Sep 2023 19:28:13 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6702A40960
- for <buildroot@buildroot.org>; Fri,  1 Sep 2023 19:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6702A40960
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RR2zLKHjeIwi for <buildroot@lists.busybox.net>;
+ Fri,  1 Sep 2023 19:28:14 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A2E3140227
+ for <buildroot@buildroot.org>; Fri,  1 Sep 2023 19:28:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2E3140227
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.localdomain ([213.147.166.144]) by mail.gmx.net
  (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MxlzC-1pjtTE0bYE-00zItx; Fri, 01 Sep 2023 21:28:06 +0200
+ 1MIwz4-1qMGYK1Cbi-00KSJF; Fri, 01 Sep 2023 21:28:10 +0200
 From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Fri,  1 Sep 2023 21:27:10 +0200
-Message-ID: <20230901192719.102415-2-dalang@gmx.at>
+Date: Fri,  1 Sep 2023 21:27:11 +0200
+Message-ID: <20230901192719.102415-3-dalang@gmx.at>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20230901192719.102415-1-dalang@gmx.at>
 References: <20230901192719.102415-1-dalang@gmx.at>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:2F8G5eq8AQAe2/wf3K/A+G/WwNweqjb2WqSTjWN43VbnGC2tQe1
- kdsyRW4lhQH3ido30BDQsNH3dsf4d4L7i7p5E6ZcZpvNuWt6N7wYsSWIjFk1dQshsE2GCwC
- b7TMeOhrxyyPIqeIxaINMzrYq/S26YURppMs1i0gYe8fmxPLHuU/bwN17Mcq58tKUN8v18s
- HO3FfIa4S458Jt8TQORQQ==
-UI-OutboundReport: notjunk:1;M01:P0:6kW/mSRb3es=;1tzOMnrs3vTuIIkz5n9HFy243Ha
- 6PdN2cKx1Dk1v6BxDk7To3JX/ZPk2lrbC/CQua29rsVASglO6cUs+1iiCrR5b8+ssrHqX8p3Y
- jEuQKUsprCc17o2EgGA1rmjmw4GnChQo+lvN1gGD+J87FhyRtuJDuxrXnR/4dipveLklTSd/p
- mU7NK4/LKw18gmIbyFAqLeS9Vu+SAV7ocdFLuYhGC+Jk4PhFVNgvAhHDPgeeb9cphtfjTIXu0
- hRTy3PJjMNisgCbsAHLWWKhUp5i38phlO+PEB/feueimc69Ivk9Jb2ab2FnDh8oWiEI26naLh
- HU2OLD5xzoOatF1wIlLKlaihax2fxUatorDp70iuq6h/9Mgh8KyJ3u7GQUdKqCh+c3SvSs0Dt
- 52f0B0LKSBjCDrGKeX2owhkRc2jLOxnsYirnLG28T66cuVH2n+V75GDC2iFipqa32V6jmF6BZ
- FxUtwdhVj07LRTzhr26OFiqWCAb+7MSHLOZ14RhewIX6RDpvcVszauYmK0W0b5Q1l+J8u6zYO
- qYcY2+7Dro1HKweBFyPVyT1Qk1katHSQ7/OxWtBlHCu6tzUDWzMQVi0kNKcmHSQ1KpTYZuzu+
- G0aIPwEO/VWOpp0Fmh0lBvwoJ8rfncN4H7+QAgJIYVls88ataAR3Ou0ud52WnANSleVH0tiLe
- m8wWbKNwB10myV3XSer4iERlR6RkpdAMrSJQi69PxPTKsdViteZ4d58lfueC1LG98kZKOCzmC
- lIs3f3f/JfsstHL5KAGwNTQ6Sj7PMipJB2DhJwtnahFQBI9b+KXw+PVv6WjXpIvRBOFrGTBYI
- 7g+np/4dedSrQbU/h9XDyBJW9qsFXYJz+qO/J2pnySC1yskHzS535MqfhywawBCaWisn86QEN
- gHVd6T5joI6sAYEOtGSwO8D1nu03fSo/HklD0myXupxS32D9Chug4OC4oWGDnP2kBMqu+k7AP
- 17BdKMfAf6ZLFVD4zmSZZiXaf9A=
+X-Provags-ID: V03:K1:5wPpoed44C7850MoeW69Y0WIFXlqlzAWACVZxVs5ZWyDmmg1gel
+ Pb6UvEAud070jwW7sLIkkFkY+HUYDgmXd6F0vbfouR+ID8ZqP2zjE0Gf/q7GrNwVJYaud7j
+ jN/K+Xeusdt6+sxjHq8+1J4WwRQY0kqRrPTd0Adj2KKLwa4qVWcTmWFXC4iGxUzEMCLY7dL
+ BhGF2ubStsM2PSUAc4HBw==
+UI-OutboundReport: notjunk:1;M01:P0:EmtVi75H1rc=;o1cAQpUq1Y8cj/lyuUn/WkWGd0V
+ Svx8uXAFW8XnNmq1FjqUhOD8Ne6WYUnSEuVwK1tKShxXnxLodtEvoS9rWu3eVRpVDxUEmXO+T
+ j/q6GLod/LyvZujVmyO5ahUVtRo4rqAHbUgJWqTj7s+5wPDpuonCsGhIiYRIJZmO/DIi1d7ZY
+ pSzrcLH/ofxdF1102XKhKOtX8oI4a7RiDP5EfL7m7n4LVfaS2IzNAa/nsqIbSftE4dBFh5xrm
+ v3aAiHUTFJ1zO3uWB0U9Ty7VRKMSLsYPNLreXGmdiTBN0p4cm1v9pGqHj433F9rVOpzGN6P6g
+ OjcQf7cTxOk0Y+LvQHmqvAhRIleO5agFbiTRF+ulYspOlQsCfTJz0C+vHB1uUQCHS66mm7CZn
+ aiTxURnA57E2YZiRrTcckE81OdR8AoQdnEC8s7e5vYgYZAxas3+pxuyz9zvvsR0zTRFuAyYyf
+ x3jAsISMEk6leVDaVES9CB34Hk8+rytlNESksEAgmvfnJStqW1DL1J7dD258riE+7FaIvVHB3
+ FhwEJeCl4VH58n1Qer1J+wun09aWVO+Q582Ues1t8Zt3TWlvaLM396X0I8wJEQKrjZJLO1TJB
+ MgLeMjGfKAb6p73z3YqZaZnaQiPlL1qZwNXiVkSJTtqWfcmMBgl5v9RrTc5nFmJ0ks2JF/n4t
+ 1uuMjnewk0UnHZXvTqjf90AsxoBTgBWGOVetmMeKNZPTWx4NCo8g+LeZd+v6ZrL7HSU/R5K+r
+ p4b45C6xuTzsEvpX/vqMUS6M4mk1bI9lyduoxSaGQ4OSGL8O+vfIVXoEGo2a5sziikCy/ezD3
+ p0Ej9hWpYcyqCy4VRwmX+6bvoYpZaZUxGW0Ms7E5dabkqcnbCV8pOJCJvraYvDi34USh6HnfQ
+ ulb4JP+Ye3wZzDQZRXI/k2Dg24uy1UrVcpniSi5I/QdNJoIR7j54kiaybGHrIs4ad8OIAcPTk
+ BjlCxezX8E6j99NZp5cdn+T3j4U=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.at; 
- s=s31663417; t=1693596486; x=1694201286; i=dalang@gmx.at;
- bh=9yvzTWDx8zLDekr/PaiHKrNMcISrAb0xoMMAfxhS7/I=;
+ s=s31663417; t=1693596490; x=1694201290; i=dalang@gmx.at;
+ bh=Rq6dlOycYFQetFtCazHf6aLDnftmF1bLpgLgaitHfSM=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=ZJ6LRSNS2FdJ6oq2wumkhtkV4FV7TZ8SekYIXX2pBTXn0R6rpuTULQZwuTNuJx84SoxAqAY
- PE0tQu/roX1iQNhTt8vjVjJengPf61wwEp/ePe7MzvtxaydvQeMFtuo7hZGIM0V6FhZXZSKBX
- pBB9OBQfHKC3L5Ct+sLapQYBb3Y1yO/xv5laLOAn6qomlEqxUTXQy3t8zqLmoTeR+QBblKkGg
- 2o9eM8YoDP4c/adwBDEbbyF4C+acN4odkY9Rh5pt4bK+KrG7gWIKSSKieEJzZMYBz4QkyvMrU
- CxFvlT12pwfBXvURAJ+dd9RLFsCPfhg4yZLAraFcqJRSse+GFq/w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=C8Doi/5fLvMd+DwczcEzSssr+CIXh9Zw2epvSG83KVp43ziuGlyAYjTD/mma5exBLm8fE+9
+ LYZ5ZXyP+uUv336awWljIYKohIuKpqInqGUucafYTjJzpgvHzBa7qouA8aWZJKpDcqAYr9g5W
+ x1jKTltJqrESCy/5vO/IX4lpxLyhCOqaZy6Pdex7RihaRnvQk48uFAY1OLSjfpXHdn8izyJHt
+ pPNtrVfkbRt1kKUWgbVl1aMLXxJGV7cY3Vdb5bzEbr96e3Z2/98Y5qjVvVpXd71cJeAAIRupP
+ ceXe8yqgvcJVBPGv53b8az2SBII6cNJi3Ce2x6aggG1Dy2qh8hFA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=ZJ6LRSNS
-Subject: [Buildroot] [PATCH v4 2/6] support/scripts/pkg-stats: check all
- files for warnings
+ header.a=rsa-sha256 header.s=s31663417 header.b=C8Doi/5f
+Subject: [Buildroot] [PATCH v4 3/6] support/scripts/nvd_api_v2.py: new
+ helper class
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,64 +91,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sen Hastings <sen@phobosdpl.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Instead of only checking .mk and Config.in{,.host}, check
-all files in a package directory.
-.checkpackageignore isn't considered here, therefore the shown number
-includes ignored warnings as well.
-Add another css class to signal some warning, compared to a lot (>5),
-similar to patches.
+The current NVD data feeds used for CVE and CPE checking will be retired
+by 2023-12-05 [0]. Both have to be switched to the new v2 API. Since
+fetching data from both sources workes the same, a common base class is
+used to handle the API interaction.
+With the new API JSON pages are downloaded, meaning that we have to come
+up with a storage solution ourselves. Therefore nvd_api_v2.py manages a
+generic set of methods to initialize and update a sqlite database.
+
+[0]: https://nvd.nist.gov/General/News/change-timeline
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
 v3 -> v4:
-- use yellowish bachground for "some" warnings
-v2 -> v3:
-- new patch
+- use f-strings
+- add meta table instead of tmp file
+- drop error handling
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 ---
- support/scripts/pkg-stats | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ DEVELOPERS                    |   1 +
+ support/scripts/nvd_api_v2.py | 137 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 138 insertions(+)
+ create mode 100755 support/scripts/nvd_api_v2.py
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index eca638f396..9349a0df57 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -272,8 +272,7 @@ class Package:
-         self.status['pkg-check'] = ("error", "Missing")
-         for root, dirs, files in os.walk(pkgdir):
-             for f in files:
--                if f.endswith(".mk") or f.endswith(".hash") or f == "Config.in" or f == "Config.in.host":
--                    cmd.append(os.path.join(root, f))
-+                cmd.append(os.path.join(root, f))
-         o = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
-         lines = o.splitlines()
-         for line in lines:
-@@ -876,7 +875,7 @@ function expandField(fieldId){
-  .wrong, .lotsofpatches, .invalid_url, .version-needs-update, .cpe-nok, .cve-nok {
-    background: #ff9a69;
-  }
-- .somepatches, .missing_url, .version-unknown, .cpe-unknown, .cve-unknown {
-+ .somepatches, .somewarnings, .missing_url, .version-unknown, .cpe-unknown, .cve-unknown {
-    background: #ffd870;
-  }
-  .cve_ignored, .version-error {
-@@ -1033,6 +1032,8 @@ def dump_html_pkg(f, pkg):
-     div_class.append(f'_{pkg_css_class}')
-     if pkg.warnings == 0:
-         div_class.append("correct")
-+    elif pkg.warnings < 5:
-+        div_class.append("somewarnings")
-     else:
-         div_class.append("wrong")
-     f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">{pkg.warnings}</div>\n')
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9b500f3701..046a022fc9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -668,6 +668,7 @@ F:	package/paho-mqtt-cpp/
+ F:	package/pangomm/
+ F:	package/pangomm2_46/
+ F:	package/sam-ba/
++F:	support/scripts/nvd_api_v2.py
+ 
+ N:	Damien Lanson <damien@kal-host.com>
+ F:	package/libvdpau/
+diff --git a/support/scripts/nvd_api_v2.py b/support/scripts/nvd_api_v2.py
+new file mode 100755
+index 0000000000..f50a362f88
+--- /dev/null
++++ b/support/scripts/nvd_api_v2.py
+@@ -0,0 +1,137 @@
++#!/usr/bin/env python3
++
++from datetime import datetime, timedelta, timezone
++from pathlib import Path
++import requests
++import sqlite3
++import time
++
++NVD_API_VERSION = '2.0'
++NVD_API_BASE_URL = 'https://services.nvd.nist.gov/rest/json'
++# NVD rate limiting allows 5 requests per 30 seconds -> one every 6 seconds.
++NVD_SLEEP_TIME_SEC = 30 / 5
++# Number of minutes that are subtracted from the update timestap given by NVD.
++NVD_TIMESTAMP_SUBTRACT_MINUTES = 1
++# Only update the database if the given number of seconds elapsed.
++NVD_CHECK_TIMEOUT_SECONDS = 120 * 60
++
++
++class NVD_API:
++    """A helper class that fetches data from a NVD API and helps manage a sqlite database.
++
++    This class defines two functions that need to be implemented in a derived class.
++    init_db: Called to create database tables.
++    save_to_db: Called to actually analyse and save the downloaded data."""
++
++    def __init__(self, nvd_path, service, database_file_prefix):
++        """Initialize a new NVD API endpoint.
++
++        nvd_path             - The local path of the database, typically DL_DIR/buildroot-nvd.
++        service              - The service that gets appended to the API URL, should be 'CVEs' or 'CPEs'.
++        database_file_prefix - The prefix of the sqlite database, typically 'nvdcve' or 'nvdcpe'.
++        """
++        self.nvd_path = nvd_path
++        self.service = service
++        self.url = f'{NVD_API_BASE_URL}/{service.lower()}/{NVD_API_VERSION}'
++        self.db_file = Path(nvd_path, f'{database_file_prefix}-{NVD_API_VERSION}.sqlite')
++        self.db_connection = None
++
++    def init_db_meta(self) -> None:
++        """Create the internal meta table that stores the last update date."""
++        self.db_connection.execute('CREATE TABLE IF NOT EXISTS meta ( \
++            id INTEGER UNIQUE, \
++            last_update TIMESTAMP)').close()
++
++    def init_db(self) -> None:
++        """Used to make sure that database tables exist.
++
++        Database connection is active at this point (self.db_connection).
++        Needs to be implemented by derived classes.
++        """
++        pass
++
++    def save_to_db(self, content) -> bool:
++        """Used to save the data given by a single API request to the database.
++
++        content is the json downloaded from NVD.
++        Needs to be implemented by derived classes.
++        """
++        pass
++
++    def download(self, last_update) -> None:
++        """Download all entries from NVD since last_update (if not None).
++
++        For each downloaded page save_to_db is called.
++        """
++        args = {}
++        start_index = 0
++        total_results = 0
++        results_per_page = 0
++
++        print(f'Downloading new {self.service}')
++
++        if (last_update is not None):
++            args['lastModStartDate'] = last_update.isoformat()
++            args['lastModEndDate'] = datetime.now(tz=timezone.utc).isoformat()
++
++        while True:
++            args['startIndex'] = start_index
++
++            page = requests.get(self.url, params=args)
++            page.raise_for_status()
++            content = page.json()
++
++            if content is None:
++                # Nothing was downloaded
++                return False
++
++            results_per_page = content['resultsPerPage']
++            total_results = content['totalResults']
++            start_index = content['startIndex']
++            timestamp = content['timestamp']
++
++            start_index += results_per_page
++
++            # Call the save method of the derived class
++            if not self.save_to_db(content):
++                return False
++
++            print(f'[{start_index:0{len(str(total_results))}}/{total_results}]')
++
++            if start_index >= total_results:
++                # Update the meta table with the timestamp given by NVD but
++                # subtract a minute to make sure nothing is missed the next time.
++                timestamp = datetime.fromisoformat(timestamp) - timedelta(minutes=NVD_TIMESTAMP_SUBTRACT_MINUTES)
++                self.db_connection.execute('INSERT OR REPLACE INTO meta VALUES (0, ?)', (timestamp,)).close()
++                self.db_connection.commit()
++                return True
++
++            self.db_connection.commit()
++
++            # Otherwise rate limiting will be hit.
++            time.sleep(NVD_SLEEP_TIME_SEC)
++
++    def check_for_updates(self) -> None:
++        """Check if new data needs to be fetched from NVD.
++
++        If the last update happened more than 24 hours ago,
++        a new download is triggered.
++        """
++        self.db_connection = sqlite3.connect(self.db_file)
++        self.init_db_meta()
++        self.init_db()
++
++        last_update = None
++        result = self.db_connection.execute('SELECT last_update FROM meta WHERE id = 0').fetchone()
++        if result:
++            # NVD uses UTC without specifying the timezone on their timestamp
++            now = datetime.now(tz=timezone.utc)
++            last_update = datetime.fromisoformat(result[0])
++            delta = now - last_update.replace(tzinfo=timezone.utc)
++            if delta.total_seconds() < NVD_CHECK_TIMEOUT_SECONDS:
++                # Don't run the download if the last update
++                # is less than two hours ago.
++                return
++
++        if not self.download(last_update):
++            print('Update failed!')
 -- 
 2.42.0
 
