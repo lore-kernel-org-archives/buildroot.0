@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AB13CA0FEF
-	for <buildroot@archiver.kernel.org>; Fri,  1 Sep 2023 18:55:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC39CA0FF5
+	for <buildroot@archiver.kernel.org>; Fri,  1 Sep 2023 19:16:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80DF860AF1;
-	Fri,  1 Sep 2023 18:55:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80DF860AF1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92DFE613CA;
+	Fri,  1 Sep 2023 19:16:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92DFE613CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OxzEGlRA9K9z; Fri,  1 Sep 2023 18:55:19 +0000 (UTC)
+	with ESMTP id Ugg0evTTEGpO; Fri,  1 Sep 2023 19:16:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B3E560BCA;
-	Fri,  1 Sep 2023 18:55:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B3E560BCA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6A1181BF3FF
- for <buildroot@lists.busybox.net>; Fri,  1 Sep 2023 18:55:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA21F613CB;
+	Fri,  1 Sep 2023 19:16:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA21F613CB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 225E61BF576
+ for <buildroot@lists.busybox.net>; Fri,  1 Sep 2023 19:16:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F2544209F
- for <buildroot@lists.busybox.net>; Fri,  1 Sep 2023 18:55:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F2544209F
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFCF183BAC
+ for <buildroot@lists.busybox.net>; Fri,  1 Sep 2023 19:16:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFCF183BAC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rflb9MlOvd74 for <buildroot@lists.busybox.net>;
- Fri,  1 Sep 2023 18:55:15 +0000 (UTC)
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
- [IPv6:2607:f8b0:4864:20::62d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EDB064209D
- for <buildroot@buildroot.org>; Fri,  1 Sep 2023 18:55:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDB064209D
-Received: by mail-pl1-x62d.google.com with SMTP id
- d9443c01a7336-1c0bae4da38so2107145ad.0
- for <buildroot@buildroot.org>; Fri, 01 Sep 2023 11:55:14 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U6HDzo3oqx8j for <buildroot@lists.busybox.net>;
+ Fri,  1 Sep 2023 19:16:16 +0000 (UTC)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 81A9A83BA3
+ for <buildroot@busybox.net>; Fri,  1 Sep 2023 19:16:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81A9A83BA3
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-3fee8af9cb9so23290085e9.1
+ for <buildroot@busybox.net>; Fri, 01 Sep 2023 12:16:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693594514; x=1694199314;
+ d=1e100.net; s=20221208; t=1693595774; x=1694200574;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=p1i1wzXPUN6I4tIN3bH7k3IvXkIhOHbMRqwgCKLj14k=;
- b=OHCEA3Xe+L+l7mrfOE2G/AkfWTKnAEsA3v4FoyZrW6EJJ9cptNTSH5MSt/Bp9b8aeh
- DQf2fvto5BCueMNmIJBgzdZKfLVQXYsYNcX0/Z+N7lJ0YVtVaNVmiss10+rhg+KsnvyA
- f5TPbGkAfpC2AA9chBlHSoY8AWGD/xFdL78y2e5SJffEyYETxFKg0+JaEo65Oi3TraK9
- 9nebFhn2zrIckieetr9m1KKw+0OFKe0Mr2XOuoAJEUPXRb5gfv1XbWjfm93VO0t4Xl3e
- gkLnJyjis5aywMWSpF/wv7hMbsqJ/lbuIPVoeVyfi4YZQiFeVli3Z22mvtjlVti/SaVq
- fdWQ==
-X-Gm-Message-State: AOJu0YzexJII/nl9i3B9D7jx2xmFWsvWs2g+h4lGno6sdmE4mmS3YknQ
- u1bTtbFZnqP+7lBd9gqw6UDeubY8tWA=
-X-Google-Smtp-Source: AGHT+IHU489lyqNsw/ffb4dHdmZYuR58E1bNg2Do74svOOCXt68bu+4tZR3V3lY6/n2Q7vrMcPthjQ==
-X-Received: by 2002:a17:902:e54e:b0:1c1:eb8b:799d with SMTP id
- n14-20020a170902e54e00b001c1eb8b799dmr4691225plf.21.1693594513747; 
- Fri, 01 Sep 2023 11:55:13 -0700 (PDT)
-Received: from Adam-laptop.amarulasolutions.com ([172.56.200.156])
- by smtp.gmail.com with ESMTPSA id
- jb4-20020a170903258400b001bb97e51ab4sm3298266plb.98.2023.09.01.11.55.12
+ bh=SYDL7nGpMeiWHbKOSEWJ+94LuKDMpSUk1KElEC2tx/o=;
+ b=Bk6WzsLoWKyH6deRdiuKliIE8wqdoVlaRGIVXf0lzLqqosC470RlfK//WnExmVd47t
+ OAQXuP5yY6BFcNYIhJBHpIgjE1f1etrtyqVW+HXXX5TXwVai9qEEDqngPiIv/+gaoQyr
+ 1mP5itDmbySpyP0SYS7uG8D4nDgBUAsvSk6UPb5obJ7NxAd/mwMRjgK5hzB3gJZ6dtY2
+ xViCz4gvSHBmDeg+9EFEkUT896E0Uk2TCLQtWkXu6X8RXehIi5j5Ko7ZDfJiyjoDeRHj
+ YzLbGHr83rEz0PO2EfAcF3SHQm3DDN21eEqgP2aMPjDjs/kNhH7d6nMK/B3Mk1uPIJzk
+ tVOw==
+X-Gm-Message-State: AOJu0YzConSdf2GW4lrUFplOnmrX75f7RlyuaVagVft3td6b+DnRHSYn
+ dNFjQjj35s0LFJdURStZ0Iaruq1JbBU=
+X-Google-Smtp-Source: AGHT+IHlty4TAszlnxwmXBh8hRUycgmtRdIh/0XZRsHj4ZOdUzJ1YEvp+X1d6gzMA45wMJMUM3lOnw==
+X-Received: by 2002:a7b:cb9a:0:b0:401:b53e:6c58 with SMTP id
+ m26-20020a7bcb9a000000b00401b53e6c58mr2387075wmi.26.1693595774336; 
+ Fri, 01 Sep 2023 12:16:14 -0700 (PDT)
+Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ p22-20020a1c7416000000b003fe23b10fdfsm8892090wmc.36.2023.09.01.12.16.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Sep 2023 11:55:13 -0700 (PDT)
-From: Adam Duskett <aduskett@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  1 Sep 2023 12:55:09 -0600
-Message-Id: <20230901185509.1031327-1-aduskett@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ Fri, 01 Sep 2023 12:16:13 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Fri,  1 Sep 2023 21:14:47 +0200
+Message-Id: <20230901191447.717460-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693594514; x=1694199314; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1693595774; x=1694200574; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=p1i1wzXPUN6I4tIN3bH7k3IvXkIhOHbMRqwgCKLj14k=;
- b=Qbzquco1ArOIsWDuPra8nJ4pbNj6ZM0/ENWLAJNT1bQTt4CkdH6T8CRKL4xH6x+SZE
- BbTRMX9U73eo2Szgpqy5qWpDXMHNyAQp3DuJvUFRbenHDQwaIWds8XJ405hlUaDogy3W
- AxX1pwzq3VUMiVY6FZUlVSe40A1PB3ulgnlB9Q92/hvYhPA+lFXLkXHOITaPlWslf1LW
- XAStS/g0/vwHrmIEPeV/XJmPxpeSCPqh3aUjLasjbelHqwPB7s3aSXW9epG9Ay5kWVBS
- FuSXiI9BT28nan931z5iquqZ7kKBl4hGVljE3eHhvUdZuRPkYJfi6oxenwfgpODGIfFz
- 3JjA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=SYDL7nGpMeiWHbKOSEWJ+94LuKDMpSUk1KElEC2tx/o=;
+ b=WhsEdZvvShMvPPDt9eC9KXKfSk9+E3nG7+z08AHC5Z+RyMJTilLUIc1hogonUgfauY
+ 4irpA6Koih0bpvnmqHuD1f61c9c3ln59hfXEcI5pALN8y86JAtFXh/7DRhfznbPkBOcm
+ MmxQt9DZwml5HWDCQAUPGmeifwhbzdIw1rOwO/pbTJKRF+X4O6lL5cm9RA42UTINvXA4
+ /J0+4PfRPq65vEnKdhnob24qCJPupoVGUWgmQsvar9bQBaAlwy95SFaVz0oYrMgQQb3L
+ uc7696+rlhUxH219AAYixQMVHJFSPFis+7gy8kRO4HaaoPNw5hWuyaw3gQ0ikEjd7Dm7
+ lzgg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Qbzquco1
-Subject: [Buildroot] [PATCH] package/libopenssl: bump version to 3.1.2
+ header.a=rsa-sha256 header.s=20221208 header.b=WhsEdZvv
+Subject: [Buildroot] [PATCH] package/mc: bump to version 4.8.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,123 +93,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- ...002-Reproducible-build-do-not-leak-compiler-path.patch | 2 +-
- ...igure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 8 ++++----
- package/libopenssl/0005-Revert-Fix-static-builds.patch    | 4 ++--
- .../libopenssl/0006-Add-linux-x86-latomic-target.patch    | 2 +-
- package/libopenssl/libopenssl.hash                        | 4 ++--
- package/libopenssl/libopenssl.mk                          | 2 +-
- 6 files changed, 11 insertions(+), 11 deletions(-)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch b/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch
-index ea26a31075..9353c1ae90 100644
---- a/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch
-+++ b/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch
-@@ -15,7 +15,7 @@ diff --git a/crypto/build.info b/crypto/build.info
- index 2c619c6..49ca6ab 100644
- --- a/crypto/build.info
- +++ b/crypto/build.info
--@@ -111,7 +111,7 @@ EXTRA=  ../ms/uplink-x86.pl ../ms/uplink.c ../ms/applink.c \
-+@@ -115,7 +115,7 @@ EXTRA=  ../ms/uplink-x86.pl ../ms/uplink.c ../ms/applink.c \
-  
-  DEPEND[info.o]=buildinf.h
-  DEPEND[cversion.o]=buildinf.h
-diff --git a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-index 9f34e1f5fb..629d9c26ce 100644
---- a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-+++ b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-@@ -21,9 +21,9 @@ diff --git a/Configure b/Configure
- index 5a699836f3..f9152b1702 100755
- --- a/Configure
- +++ b/Configure
--@@ -1424,6 +1424,10 @@ my %predefined_CXX = $config{CXX}
--     ? compiler_predefined($config{CROSS_COMPILE}.$config{CXX})
--     : ();
-+@@ -1549,6 +1549,10 @@ unless ($disabled{asm}) {
-+     }
-+ }
-  
- +if ($target eq "linux-ppc64" && !$disabled{asm}) {
- +       $target{perlasm_scheme} = "linux64v2" if ($predefined_C{_CALL_ELF} == 2);
-@@ -31,7 +31,7 @@ index 5a699836f3..f9152b1702 100755
- +
-  # Check for makedepend capabilities.
-  if (!$disabled{makedepend}) {
--     if ($config{target} =~ /^(VC|vms)-/) {
-+     # If the attribute makedep_scheme is defined, then we assume that the
- -- 
- 2.25.0
- 
-diff --git a/package/libopenssl/0005-Revert-Fix-static-builds.patch b/package/libopenssl/0005-Revert-Fix-static-builds.patch
-index 2bc0b961eb..149ad54fc5 100644
---- a/package/libopenssl/0005-Revert-Fix-static-builds.patch
-+++ b/package/libopenssl/0005-Revert-Fix-static-builds.patch
-@@ -16,7 +16,7 @@ diff --git a/Configure b/Configure
- index 2c17f4186b..94cab4c3c4 100755
- --- a/Configure
- +++ b/Configure
--@@ -1438,10 +1438,6 @@ foreach (keys %useradd) {
-+@@ -1377,10 +1377,6 @@ foreach (keys %useradd) {
-  # At this point, we can forget everything about %user and %useradd,
-  # because it's now all been merged into the corresponding $config entry
-  
-@@ -27,7 +27,7 @@ index 2c17f4186b..94cab4c3c4 100755
-  # Allow overriding the build file name
-  $config{build_file} = env('BUILDFILE') || $target{build_file} || "Makefile";
-  
--@@ -1728,6 +1724,10 @@ if ($strict_warnings)
-+@@ -1671,6 +1667,10 @@ if ($strict_warnings)
-                  }
-          }
-  
-diff --git a/package/libopenssl/0006-Add-linux-x86-latomic-target.patch b/package/libopenssl/0006-Add-linux-x86-latomic-target.patch
-index a59db73314..9ecc50b1ae 100644
---- a/package/libopenssl/0006-Add-linux-x86-latomic-target.patch
-+++ b/package/libopenssl/0006-Add-linux-x86-latomic-target.patch
-@@ -14,7 +14,7 @@ diff --git a/Configurations/10-main.conf b/Configurations/10-main.conf
- index 2200a85b16..bcf54a2a53 100644
- --- a/Configurations/10-main.conf
- +++ b/Configurations/10-main.conf
--@@ -861,6 +861,10 @@ my %targets = (
-+@@ -868,6 +868,10 @@ my %targets = (
-          asm_arch         => 'x86',
-          perlasm_scheme   => "elf",
-      },
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index b43281c7eb..1c82cd7cf8 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-3.0.10.tar.gz.sha256
--sha256  1761d4f5b13a1028b9b6f3d4b8e17feb0cedc9370f6afe61d7193d2cdce83323  openssl-3.0.10.tar.gz
-+# From https://www.openssl.org/source/openssl-3.1.2.tar.gz.sha256
-+sha256  a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6767d6539  openssl-3.1.2.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 8bc3687921..9c1dbe8694 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 5edfc7911..93462afa6 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,4 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.29.sha256
+-sha256  01d8a3b94f58180cca5bf17257b5078d1fd6fd27a9b5c0e970ec767549540ad4  mc-4.8.29.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.30.sha256
++sha256  5ebc3cb2144b970c5149fda556c4ad50b78780494696cdf2d14a53204c95c7df  mc-4.8.30.tar.xz
+ # sha256 locally computed:
+ sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index 894b23144..2b4279c30 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 3.0.10
-+LIBOPENSSL_VERSION = 3.1.2
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+-MC_VERSION = 4.8.29
++MC_VERSION = 4.8.30
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
