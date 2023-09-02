@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DE3FEC873D
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2F5EC873D
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:45:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48D7683B0D;
-	Thu,  7 Sep 2023 15:45:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48D7683B0D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 056AF83F39;
+	Thu,  7 Sep 2023 15:45:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 056AF83F39
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4CQ31jo7Q8bL; Thu,  7 Sep 2023 15:45:30 +0000 (UTC)
+	with ESMTP id k9K7LgqCscCw; Thu,  7 Sep 2023 15:45:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7212483F26;
-	Thu,  7 Sep 2023 15:45:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7212483F26
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3779C83AD1;
+	Thu,  7 Sep 2023 15:45:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3779C83AD1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1ED881BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7FB991BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2177D41E5A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CC4641DB8
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2177D41E5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CC4641DB8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id widbfXDPrEeY for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
+ with ESMTP id fWP6weKrwFhr for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1447841C01
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2758041DA8
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1447841C01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2758041DA8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E63B869E0; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
+ id 2050686A1F; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 17:49:19 +0200
+Date: Sat, 2 Sep 2023 17:58:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2001d3758879bc25496e726edf3da99e9dbee38f
-X-Git-Newrev: a51213b2702853e7897aa1f8be3a679280ab5e24
+X-Git-Oldrev: 925b09f7edf97b2f57b9269c1fd73e2e6f5a9f13
+X-Git-Newrev: d8e9505922cf76ff498e6cd31dd7e543f9b0dc4b
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145135.0E63B869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/edk2-non-osi: bump in sync with
- edk2-stable202308
+Message-Id: <20230907145135.2050686A1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: add recommended
+ host-python-distlib dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,60 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3305781226033200907=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3305781226033200907==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a51213b2702853e7897aa1f8be3a679280ab5e24
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e9505922cf76ff498e6cd31dd7e543f9b0dc4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the edk2-non-osi commit to the one corresponding to version
-edk2-stable202308 of edk2, based on the timestamps.
+The docs here:
+https://wiki.qemu.org/ChangeLog/8.1#Build_Dependencies
 
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Vincent Stehlé <vincent.stehle@arm.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Indicates:
+It is recommended to install distlib as well, but the build process
+tries to cope with its absence and it shouldn't be necessary.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/edk2-non-osi/edk2-non-osi.hash | 2 +-
- package/edk2-non-osi/edk2-non-osi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qemu/qemu.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/edk2-non-osi/edk2-non-osi.hash b/package/edk2-non-osi/edk2-non-osi.hash
-index 2593324bc1..e4e84f1cef 100644
---- a/package/edk2-non-osi/edk2-non-osi.hash
-+++ b/package/edk2-non-osi/edk2-non-osi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c048101d6532d9bb4f6450095e0b50812d9a831f7e3c119db48e5caf2bf020a6  edk2-non-osi-41876073afb7c7309018223baa1a6f8108bf23f0.tar.gz
-+sha256  6fe059c4ee5d4fad6245a6eb53ed6b62b8890e9481cfb52c9fbdb83a5b2e0edb  edk2-non-osi-8c09bd0955338db38813e0d8ae1faa634f545f73.tar.gz
- sha256  38d73db2f9dfb32e1666d898cb9d7c1ccd78302dd9922d5fac4a9cf61fa872d9  Silicon/Marvell/Armada7k8k/DeviceTree/Armada80x0McBin.inf
-diff --git a/package/edk2-non-osi/edk2-non-osi.mk b/package/edk2-non-osi/edk2-non-osi.mk
-index 1103772768..d787c882b3 100644
---- a/package/edk2-non-osi/edk2-non-osi.mk
-+++ b/package/edk2-non-osi/edk2-non-osi.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 84166958bb..4d2135a3c6 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -26,6 +26,7 @@ QEMU_DEPENDENCIES = \
+ 	host-meson \
+ 	host-pkgconf \
+ 	host-python3 \
++	host-python-distlib \
+ 	libglib2 \
+ 	zlib
  
- # Keep in sync with latest commit as of the release date for boot/edk2
--EDK2_NON_OSI_VERSION = 41876073afb7c7309018223baa1a6f8108bf23f0
-+EDK2_NON_OSI_VERSION = 8c09bd0955338db38813e0d8ae1faa634f545f73
- EDK2_NON_OSI_SITE = $(call github,tianocore,edk2-non-osi,$(EDK2_NON_OSI_VERSION))
- EDK2_NON_OSI_INSTALL_TARGET = NO
- EDK2_NON_OSI_INSTALL_STAGING = YES
-
---===============3305781226033200907==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+@@ -339,6 +340,7 @@ HOST_QEMU_DEPENDENCIES = \
+ 	host-pixman \
+ 	host-pkgconf \
+ 	host-python3 \
++	host-python-distlib \
+ 	host-slirp \
+ 	host-zlib
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3305781226033200907==--
