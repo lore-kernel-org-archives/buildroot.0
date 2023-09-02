@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB653CA0FF8
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 062BCCA0FF8
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:39:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C34940204;
-	Sat,  2 Sep 2023 07:39:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C34940204
+	by smtp2.osuosl.org (Postfix) with ESMTP id AFD4F4055D;
+	Sat,  2 Sep 2023 07:39:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFD4F4055D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tF9dDp9FQjN3; Sat,  2 Sep 2023 07:39:36 +0000 (UTC)
+	with ESMTP id U6He09Im-vTS; Sat,  2 Sep 2023 07:39:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB9634051D;
-	Sat,  2 Sep 2023 07:39:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB9634051D
+	by smtp2.osuosl.org (Postfix) with ESMTP id E0C4C40535;
+	Sat,  2 Sep 2023 07:39:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0C4C40535
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7FCEB1BF861
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 197861BF3CB
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6271E401CA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AA3C4018A
  for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6271E401CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7AA3C4018A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZSp6QASvudFu for <buildroot@lists.busybox.net>;
+ with ESMTP id VU5QZOnPeXYj for <buildroot@lists.busybox.net>;
  Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 672CF4018A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CC8A4026F
  for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 672CF4018A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CC8A4026F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F38C86501; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
+ id 8832886559; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:36:21 +0200
+Date: Sat, 2 Sep 2023 09:36:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d87d54d23d258945ecc8fd3fc753910c1dd409e6
-X-Git-Newrev: 3ef29343aeebefa019d2fabc6e0f83d7639b9b01
+X-Git-Oldrev: 94d48acba3a787dd20fb53bcd759a2cf96e779fc
+X-Git-Newrev: ff6fae8bc1e995681cc906c4595205b5dc3f5586
 X-Patchwork-Hint: ignore
-Message-Id: <20230902073856.4F38C86501@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/less: bump to version
- 643
+Message-Id: <20230902073856.8832886559@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lighttpd: bump to
+ version 1.4.71
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ef29343aeebefa019d2fabc6e0f83d7639b9b01
+commit: https://git.buildroot.net/buildroot/commit/?id=ff6fae8bc1e995681cc906c4595205b5dc3f5586
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log, see:
-https://www.greenwoodsoftware.com/less/news.643.html
+Changelog:
+ - https://www.lighttpd.net/2023/5/10/1.4.70/
+ - https://www.lighttpd.net/2023/5/27/1.4.71/
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/less/less.hash | 4 ++--
- package/less/less.mk   | 2 +-
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/less/less.hash b/package/less/less.hash
-index 8018c9fab1..c44e246773 100644
---- a/package/less/less.hash
-+++ b/package/less/less.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
- # using DSA key F153A7C833235259
--# https://www.greenwoodsoftware.com/less/less-633.sig
--sha256  2f201d64b828b88af36dfe6cfdba3e0819ece2e446ebe6224813209aaefed04f  less-633.tar.gz
-+# https://www.greenwoodsoftware.com/less/less-643.sig
-+sha256  2911b5432c836fa084c8a2e68f6cd6312372c026a58faaa98862731c8b6052e8  less-643.tar.gz
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 29bf5124b6..a86ebf2f68 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.69.sha512sum
+-sha512  9d174c8e0a192b4eb8218a9f76b0bd42f90030228600bb7bbe35ebb9e7bbaea36ee2732535c5cc6dab171294817837bfa26074ff84a37832dd89f57488b4071f  lighttpd-1.4.69.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.71.sha512sum
++sha512  c1388b563b9cf9dcab0a57bec42b09b2cb5e1932bc137ae5f957d1bf3932ddd8f5f188002a7b9a00f0a92ba3779b21ecbea2ccffa91e686b6660c9cc455d6598  lighttpd-1.4.71.tar.xz
  # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/less/less.mk b/package/less/less.mk
-index f7211ef112..7431d80cc4 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -4,7 +4,7 @@
- #
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index ca2035b6b3..bc0dbcbf45 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LESS_VERSION = 633
-+LESS_VERSION = 643
- LESS_SITE = http://www.greenwoodsoftware.com/less
- LESS_LICENSE = GPL-3.0+
- LESS_LICENSE_FILES = COPYING
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).69
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).71
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
