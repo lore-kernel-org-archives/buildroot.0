@@ -4,61 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF3BDC83F2C
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 13:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 171F8C71153
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:29:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 334D74051D;
-	Sat,  2 Sep 2023 13:33:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 334D74051D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4F97B40500;
+	Sat,  2 Sep 2023 15:29:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F97B40500
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id baLYqi-eOIsf; Sat,  2 Sep 2023 13:33:57 +0000 (UTC)
+	with ESMTP id jI-vYSfnF-mg; Sat,  2 Sep 2023 15:29:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 88C70404F9;
-	Sat,  2 Sep 2023 13:33:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88C70404F9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DE8031BF861
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 13:33:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3F2A40471;
+	Sat,  2 Sep 2023 15:29:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3F2A40471
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 086171BF401
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:29:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B772C81778
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 13:33:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B772C81778
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF17860758
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:29:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF17860758
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jn46IBXE2hra for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 13:33:53 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 42F2181389
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 13:33:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42F2181389
-Received: by mail.gandi.net (Postfix) with ESMTPA id E893FC0008;
- Sat,  2 Sep 2023 13:33:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat,  2 Sep 2023 15:33:46 +0200
-Message-ID: <20230902133347.3261113-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.41.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qJ9wLFmX8f_L for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 15:29:47 +0000 (UTC)
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3FC4A6074C
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:29:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FC4A6074C
+Received: from [192.168.50.162] ([146.241.105.17])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id cSZAqwxiWT5N3cSZAqusyh; Sat, 02 Sep 2023 17:29:40 +0200
+Message-ID: <b8d73440-18af-a0c6-d3ca-928104b22844@benettiengineering.com>
+Date: Sat, 2 Sep 2023 17:29:41 +0200
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693661631;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=XyPZxxnFO3qYRxS8Ni+nBMzKvmaZg8qJxUY9a3HOMfk=;
- b=CwKnELEKpI0IqzCYsdOFXlbrXOebVzqhUaDwL4ou/Q9yuVgFpYuu6/WernfiNUGwKnxpzK
- 6jJqGOYtOu5lcp4oQhq32G7Uf3mwvAB4s7hSI2ycpeNqlsnaVXAHYeXJdUPSvXamaruq3t
- /oh/LHPikwDNW1QOzTa4lOM/s66fTPrDFk8br0O5b58NMmsZSE1DrUC1uuucIyyaBkPkqk
- xh1GMWQcFLkmvvq5iCzbFGftGbrSZ3+YKKF7rbn3L5jXk9WKM/Seklp7tfaQWRspT4z6xH
- hn0t+1w5oZUpthc2WpUCZGVPbtHxLTFPiZpwTOXUg0FAZJEfKHBSqhmhM+Q6jQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CwKnELEK
-Subject: [Buildroot] [PATCH] package/pkg-qmake.mk: drop host-perl dependency
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+To: Andrea Simeoni <andreasimeoni73@gmail.com>, buildroot@buildroot.org
+References: <CAPmASevJ9KynWxPBga3chKQCBVUCeZ-gt88LMfAzt6+-F6bZHw@mail.gmail.com>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <CAPmASevJ9KynWxPBga3chKQCBVUCeZ-gt88LMfAzt6+-F6bZHw@mail.gmail.com>
+X-CMAE-Envelope: MS4xfGbGLnE1PKwc3sxnG7j2iY6iIrudt9JdPoa0a/jYf/565R+yRQBhU/4M30tDbrO4FrbZeNvoLUU9NWckkhNats2SberCOfIQMCIiIrkNdLTr4d16I22b
+ u232gFxdRbGWXlr0DqAtjccOsqVGXE8TZzeA/XYXHe0ZA8DaA2D0Cmnxj4vFHp0veWntQTjnTqDuf91zpIJSwpBM7pGVyA4xQQFbYOb5U9P/DEzkvNXIM4Om
+ vgayYBpunC5EjT6H/goTYvaMwGnNb4qGHAn2RYiX72o=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1693668581; bh=fmojJbsfwxaQYrjln/2+6Uxcx1l9dCSa7oAN3JeK8Jo=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=gN60Q9gr/w77SmOk7xMEVvKdl3xQ0JJAOkn30lETkRFEW8lOmBe4WE09yfSx+934T
+ Sj6L9/ePGBtLxhSiaMRNMxDgeOvCU4J2W+Akljs4MQ6AU61bvUfxDvcLyKZbF2BhMY
+ FRC381n8wuTnlWSdT82hDqiZq35bUpBWQ8bwkPQM6MuOaQ3VlpL+vK+5aZ3jA/PRF0
+ qkJnUl8COZZF48W7gz65SQjErtGOhYIMum0byjt+mzXIT8zY+XPg/a8afJ0aOX1TNz
+ Mljy3P1XPqviTjuqwPubqE1wsiL7v4w4yk8ah7Nb1pTCSM68+MMzPIMogeK9dFxueR
+ l2Ay8KceYWR4A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
+ header.a=rsa-sha256 header.s=a1 header.b=gN60Q9gr
+Subject: Re: [Buildroot] stat command missing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,41 +75,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Naumann Andreas <ANaumann@ultratronik.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since commit 5770a645a3a49a3f0f02972131a4ff5283b4c11e ("package/qt5:
-bump packages to latest kde submodule versions"), the
-QT_HEADERS_SYNC_HOOK hook no longer calls the syncqt.pl script, so
-host-perl is no longer needed as a dependency of running this
-hook (and as a dependency of building Qt).
+Hi Andrea,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-qmake.mk | 1 -
- 1 file changed, 1 deletion(-)
+On 02/09/23 12:19, Andrea Simeoni wrote:
+> Hello! How to add the stat command to the image?
+> Is needed by QtCreator to deploy files to the remote target.
+> 
+> I tried to add CONFIG_STAT=y to the busybox config file but it's not 
+> recognized.
+> Even a search in xconfig did not find anything related to stat.
+> Thanks
 
-diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
-index fdaddf08df..ccf78692e8 100644
---- a/package/pkg-qmake.mk
-+++ b/package/pkg-qmake.mk
-@@ -50,7 +50,6 @@ $(2)_DEPENDENCIES 		+= qt5base
- endif
- 
- ifeq ($$($(2)_SYNC_QT_HEADERS),YES)
--$(2)_DEPENDENCIES 		+= host-perl
- $(2)_PRE_CONFIGURE_HOOKS        += QT_HEADERS_SYNC_HOOK
- endif
- 
+Enabling Busybox CONFIG_STAT option works good for me. How do you enable
+it?
+
+I mean, you have to add a busybox config file or a fragment.
+To do the first test you can issue:
+$ make busybox-menuconfig
+and enable it under Coreutils
+then you have to rebuild it with:
+$ make busybox-rebuild
+
+but the best way is to supply a busybox config fragment.
+
+Best regards
 -- 
-2.41.0
-
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
