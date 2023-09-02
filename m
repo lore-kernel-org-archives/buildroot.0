@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB6AEC873C
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739E8EC873C
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 648BD83EA7;
-	Thu,  7 Sep 2023 15:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 648BD83EA7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B2C883EC3;
+	Thu,  7 Sep 2023 15:41:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B2C883EC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nCl4N_iXg7T1; Thu,  7 Sep 2023 15:41:14 +0000 (UTC)
+	with ESMTP id kN3imA7Qpp13; Thu,  7 Sep 2023 15:41:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C89583C6B;
-	Thu,  7 Sep 2023 15:41:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C89583C6B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B25C83ED8;
+	Thu,  7 Sep 2023 15:41:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B25C83ED8
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0977B1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A0CB1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE5A241D83
+ by smtp4.osuosl.org (Postfix) with ESMTP id B797941D7F
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE5A241D83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B797941D7F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 08755JbEzHnp for <buildroot@lists.busybox.net>;
+ with ESMTP id BF2QetaTYzGP for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C02A41DC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 42A6341DC4
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C02A41DC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A6341DC4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A05E86A1F; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id 3EDBB86A1E; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:36:55 +0200
+Date: Sat, 2 Sep 2023 09:36:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 94d48acba3a787dd20fb53bcd759a2cf96e779fc
-X-Git-Newrev: ff6fae8bc1e995681cc906c4595205b5dc3f5586
+X-Git-Oldrev: d0e30b87f9a278218950000882c607cf39a79e45
+X-Git-Newrev: e8e66020f3fcac943595034ce7ec6fc6f1bc154b
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.5A05E86A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lighttpd: bump to version 1.4.71
+Message-Id: <20230907145134.3EDBB86A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgpiod: bump to version 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,44 +63,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff6fae8bc1e995681cc906c4595205b5dc3f5586
+commit: https://git.buildroot.net/buildroot/commit/?id=e8e66020f3fcac943595034ce7ec6fc6f1bc154b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
- - https://www.lighttpd.net/2023/5/10/1.4.70/
- - https://www.lighttpd.net/2023/5/27/1.4.71/
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lighttpd/lighttpd.hash | 4 ++--
- package/lighttpd/lighttpd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-build-add-a-configure-switch-for-building-examples.patch   | 6 +++---
+ package/libgpiod/libgpiod.hash                                      | 2 +-
+ package/libgpiod/libgpiod.mk                                        | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index 29bf5124b6..a86ebf2f68 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,4 +1,4 @@
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.69.sha512sum
--sha512  9d174c8e0a192b4eb8218a9f76b0bd42f90030228600bb7bbe35ebb9e7bbaea36ee2732535c5cc6dab171294817837bfa26074ff84a37832dd89f57488b4071f  lighttpd-1.4.69.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.71.sha512sum
-+sha512  c1388b563b9cf9dcab0a57bec42b09b2cb5e1932bc137ae5f957d1bf3932ddd8f5f188002a7b9a00f0a92ba3779b21ecbea2ccffa91e686b6660c9cc455d6598  lighttpd-1.4.71.tar.xz
- # Locally calculated
- sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index ca2035b6b3..bc0dbcbf45 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
+index a21c767006..f1a853a6f8 100644
+--- a/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
++++ b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
+@@ -73,7 +73,7 @@ diff --git a/configure.ac b/configure.ac
+ index 57c99a8..90a6324 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -155,6 +155,12 @@ then
++@@ -164,6 +164,12 @@ then
+  	fi
+  fi
+  
+@@ -84,8 +84,8 @@ index 57c99a8..90a6324 100644
+ +AM_CONDITIONAL([WITH_EXAMPLES], [test "x$with_examples" = xtrue])
+ +
+  AC_ARG_ENABLE([bindings-cxx],
+- 	[AS_HELP_STRING([--enable-bindings-cxx],[enable C++ bindings [default=no]])],
+- 	[if test "x$enableval" = xyes; then with_bindings_cxx=true; fi],
++ 	[AC_HELP_STRING([--enable-bindings-cxx],
++ 		[enable C++ bindings [default=no]])],
+ -- 
+ cgit 1.2.3-1.el7
  
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).69
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).71
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index f0803cab36..6647b77c5a 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256  841be9d788f00bab08ef22c4be5c39866f0e46cb100a3ae49ed816ac9c5dddc7  libgpiod-1.6.3.tar.xz
++sha256  7b146e12f28fbca3df7557f176eb778c5ccf952ca464698dba8a61b2e1e3f9b5  libgpiod-1.6.4.tar.xz
+ # Hash for license file
+ sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 35d003fa33..e7ff155618 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -6,7 +6,7 @@
+ 
+ # Be careful when bumping versions.
+ # Dependency on kernel header versions may change.
+-LIBGPIOD_VERSION = 1.6.3
++LIBGPIOD_VERSION = 1.6.4
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
