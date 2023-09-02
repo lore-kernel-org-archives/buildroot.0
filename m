@@ -4,62 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B4C4C001DB
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 21:40:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B5B5C71153
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 21:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C3B581F80;
-	Sat,  2 Sep 2023 21:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C3B581F80
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD3FA81F78;
+	Sat,  2 Sep 2023 21:40:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD3FA81F78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nl0HsJwPigmP; Sat,  2 Sep 2023 21:40:42 +0000 (UTC)
+	with ESMTP id XaUocGcNNrAt; Sat,  2 Sep 2023 21:40:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0C4081F78;
-	Sat,  2 Sep 2023 21:40:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0C4081F78
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C110E1BF3A4
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 21:40:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC82881F8C;
+	Sat,  2 Sep 2023 21:40:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC82881F8C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 041721BF863
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 21:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A3C24017A
+ by smtp3.osuosl.org (Postfix) with ESMTP id BBA0E60E5D
  for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 21:40:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A3C24017A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBA0E60E5D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LPAtLAvXd3Rt for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gBgS1i55DH3T for <buildroot@lists.busybox.net>;
  Sat,  2 Sep 2023 21:40:38 +0000 (UTC)
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8A84440144
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 959EB60BED
  for <buildroot@buildroot.org>; Sat,  2 Sep 2023 21:40:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A84440144
-Received: by mail.gandi.net (Postfix) with ESMTPA id 211111BF204;
- Sat,  2 Sep 2023 21:40:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 959EB60BED
+Received: by mail.gandi.net (Postfix) with ESMTPA id EEFAE1BF207;
+ Sat,  2 Sep 2023 21:40:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat,  2 Sep 2023 23:40:31 +0200
-Message-ID: <20230902214032.3570167-1-thomas.petazzoni@bootlin.com>
+Date: Sat,  2 Sep 2023 23:40:32 +0200
+Message-ID: <20230902214032.3570167-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230902214032.3570167-1-thomas.petazzoni@bootlin.com>
+References: <20230902214032.3570167-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693690834;
+ d=bootlin.com; s=gm1; t=1693690835;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=0pbzIyULKzg5Wa8qC+DjGMf5Z5s/z22UC2KHG+4kYHc=;
- b=kqxe6Cxs7DpwFQ5ct9ZJpYLt3Ky7DFBeyepu2tvPCcRuOjsD93HnlfRuFAQWqTHfH49Hil
- 2Y8wqPv6IgOrTCcqSTQon62w/7ewU3ZwZEKLSbLXSGb+bTtonL6EM/GrdhwDIxy5KE5DtO
- J582s7WbzGkrua+Rz9eYLspdv55HREZAomlSfkH1sR5ZNfe0l1yInia9oqk9HEKdsk7dQ3
- cPijoL9Jgfr1uapL+xPdWo/4iOaT4VbJ1kX/2b3dsWCnbtlOTvddrFqFjPznIeB+hOb8zP
- YBpPSySwohf7HPb7TLX66N8x119Zmqg54Fz4+oEYngeIiIiwyzmM72z8Dpgwgg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=YURailhfljjpFrtEXEf3XkdPFEj8SCwdh4I0iDOjV+o=;
+ b=J4Y/CfQn7NrkFulB4FHb9/uGwIQb3keTh+GLquBlzhoxS3B/Ewq9ORZVgKvfLT7xR8Tc3H
+ GjWbXxk7CddkvJupW38r8N9qtkwX29FQK+YRQ1Puqv46zPEafcOWloVZ52E+EjS9c6g9DL
+ Fxzn0jrW5IpkUYckHtNGBF+vT63svSj6015IEVznyV1dunhQPVyux2AvjYtRU+F2JR5cf3
+ mWdfraXsy6XMEJ6W4EDn0l+hnY4Sw2Fv1T1yMWkB8yHhWHmZ+BNaEWhe4SMiMrb3VPpViE
+ 3HNWYpfqRg4jJCq8Xq3NgMb30qTiB5NFGfkIZYh5jLuz5suMUS/Q0/bGSwAVzw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kqxe6Cxs
-Subject: [Buildroot] [PATCH 1/2] package/poppler: backport patch to fix
- CVE-2023-34872
+ header.s=gm1 header.b=J4Y/CfQn
+Subject: [Buildroot] [PATCH 2/2] package/poppler: bump version to matest in
+ 22.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,77 +83,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+This commit updates poppler to the latest version in the 22.x series,
+with only has bug fixes. Here is the list of commits between 22.10.0
+and 22.12.0:
+
+df568263c51950ceed6f1fb42f80e99a2614c275 (tag: poppler-22.12.0) poppler 22.12.0
+198dc1d0674c0a462668e6868c35b1ee0e731005 Form::addFontToDefaultResources: Be stubborn in finding a font we can use
+a5952ab70716a2d4f792a943c2dcf3068f1d6885 Revert "CI: Fix Debian brokenness"
+8fcaa7c622d24761a9ecb3922f95d072077d6f34 CI: Fix Debian brokenness
+cc665f757af6b87dd245d36e079dd44d8d2d2182 (tag: poppler-22.11.0) poppler 22.11.0
+a296982e1d5b4968b2bd044d80647ae6f9267526 Do not include a poppler/ file from a splash/ header
+bc4a0d9a2abfcd75d9b0ee4be3f7600905fe6001 Form: Provide Unicode marker when ensuring fonts
+111f38a722eedddd94faa52dda8c5e0da561fb41 Cairo: Update font after restore
+907d05a6a141284aee22fbd16ab0a2fb4e0f2724 Fix crash in file that wants to do huge transparency group
+e53f5aae3bce7d09788f2ad62be998895fb9807b PSOutputDev::setupResources: Fix stack overflow in malformed doc
+a4ca3a96a6b1f65b335a1ea362e6c202e46ae055 topIdx can't be negative
+e471f8e09bf2e38df0cf5df1acecbcca70685573 Init all the fields of JPXStreamPrivate
+5190c0d4369bd9f501922585140be4ec736e24f2 No need to store smaskInData in priv
+6263bb90b09326103b10e4c4edfbc5b84c884921 Page label ranges can't start in < 0
+
+Note: this version bump does not include the fix for CVE-2023-34872,
+so we still need the backported patch.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...em-open-Fix-crash-on-malformed-files.patch | 45 +++++++++++++++++++
- package/poppler/poppler.mk                    |  2 +
- 2 files changed, 47 insertions(+)
- create mode 100644 package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
+ package/poppler/poppler.hash | 2 +-
+ package/poppler/poppler.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
-new file mode 100644
-index 0000000000..478759e0cc
---- /dev/null
-+++ b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
-@@ -0,0 +1,45 @@
-+From e5cc11e0b5b867f4705fd28ff1b981c1224be1cd Mon Sep 17 00:00:00 2001
-+From: Albert Astals Cid <aacid@kde.org>
-+Date: Wed, 17 May 2023 22:42:05 +0200
-+Subject: [PATCH] OutlineItem::open: Fix crash on malformed files
-+
-+Fixes #1399
-+
-+Upstream: https://gitlab.freedesktop.org/poppler/poppler/-/commit/591235c8b6c65a2eee88991b9ae73490fd9afdfe
-+[Thomas: backported to fix CVE-2023-34872]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ poppler/Outline.cc | 10 +++++++---
-+ 1 file changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/poppler/Outline.cc b/poppler/Outline.cc
-+index cbb6cb49..4c68be99 100644
-+--- a/poppler/Outline.cc
-++++ b/poppler/Outline.cc
-+@@ -14,7 +14,7 @@
-+ // under GPL version 2 or later
-+ //
-+ // Copyright (C) 2005 Marco Pesenti Gritti <mpg@redhat.com>
-+-// Copyright (C) 2008, 2016-2019, 2021 Albert Astals Cid <aacid@kde.org>
-++// Copyright (C) 2008, 2016-2019, 2021, 2023 Albert Astals Cid <aacid@kde.org>
-+ // Copyright (C) 2009 Nick Jones <nick.jones@network-box.com>
-+ // Copyright (C) 2016 Jason Crain <jason@aquaticape.us>
-+ // Copyright (C) 2017 Adrian Johnson <ajohnson@redneon.com>
-+@@ -483,8 +483,12 @@ void OutlineItem::open()
-+ {
-+     if (!kids) {
-+         Object itemDict = xref->fetch(ref);
-+-        const Object &firstRef = itemDict.dictLookupNF("First");
-+-        kids = readItemList(this, &firstRef, xref, doc);
-++        if (itemDict.isDict()) {
-++            const Object &firstRef = itemDict.dictLookupNF("First");
-++            kids = readItemList(this, &firstRef, xref, doc);
-++        } else {
-++            kids = new std::vector<OutlineItem *>();
-++        }
-+     }
-+ }
-+ 
-+-- 
-+2.41.0
-+
+diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
+index 93681e04af..bb07b2ee6a 100644
+--- a/package/poppler/poppler.hash
++++ b/package/poppler/poppler.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  04e40fad924a6de62e63017a6fd4c04696c1f526dedc2ba5ef275cedf646292a  poppler-22.10.0.tar.xz
++sha256  d9aa9cacdfbd0f8e98fc2b3bb008e645597ed480685757c3e7bc74b4278d15c0  poppler-22.12.0.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
 diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 5524bfc420..4c6017a5f5 100644
+index 4c6017a5f5..776fb4d566 100644
 --- a/package/poppler/poppler.mk
 +++ b/package/poppler/poppler.mk
-@@ -11,6 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
- POPPLER_LICENSE = GPL-2.0+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_CPE_ID_VENDOR = freedesktop
-+# 0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
-+POPPLER_IGNORE_CVES += CVE-2023-34872
- POPPLER_INSTALL_STAGING = YES
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- POPPLER_CONF_OPTS = \
+-POPPLER_VERSION = 22.10.0
++POPPLER_VERSION = 22.12.0
+ POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
+ POPPLER_SITE = https://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
 -- 
 2.41.0
 
