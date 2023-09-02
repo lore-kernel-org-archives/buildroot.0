@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D97C001DB
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:59:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B466C001DB
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 16:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D038405F9;
-	Sat,  2 Sep 2023 15:59:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D038405F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E61E40579;
+	Sat,  2 Sep 2023 16:01:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E61E40579
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id dBHaKgPazTbp; Sat,  2 Sep 2023 15:59:20 +0000 (UTC)
+	with ESMTP id W6EmeRlR_HSS; Sat,  2 Sep 2023 16:01:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E466E40614;
-	Sat,  2 Sep 2023 15:59:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E466E40614
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4368E4059E;
+	Sat,  2 Sep 2023 16:01:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4368E4059E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B5D351BF401
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:59:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D3831BF401
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 16:01:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E5364167A
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:59:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E5364167A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5300C416C4
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 16:01:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5300C416C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BEuF7QOcpHkz for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 15:59:09 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B4A641621
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:59:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B4A641621
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5615A1BF207;
- Sat,  2 Sep 2023 15:59:07 +0000 (UTC)
-Date: Sat, 2 Sep 2023 17:59:06 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230902175906.42a66542@windsurf>
-In-Reply-To: <20230827194003.3387773-2-james.hilliard1@gmail.com>
-References: <20230827194003.3387773-1-james.hilliard1@gmail.com>
- <20230827194003.3387773-2-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693670347;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ldyaVYbLpwXdsyi4prLbWLSJxZcMxPcRKSb0u2RtGfI=;
- b=grwOBXgnMBM164GnPrNpmGs9lEYjzgYP0sWcxASDVcacnKRXjzGO8rPzxKcJAKQVDi0jnV
- 6RFaKBLl+zm3X9ruFAtiQeiMMJqSScU1jXVm9gPj4gyj9UdIcO00CopxyHMS7AZKlOET2v
- ddNEk05TjQH8h4NdL8Qc92xzE2rwd9yH3AMtXwgFzVvXPg5TxGChClqNZE7D6wp35gXN4B
- Ce4p87hZrTbM/IWHC5GWUxAzQFuWBLbOZDMo4XPi/T3r+FMs9Vh666PRrZRhUxTP8l7DgX
- 8vtbqFftVAFwtYnBm69zoKDnWho8+AevO9W373IQLMvSp5adSE7BFxBH8XWRig==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=grwOBXgn
-Subject: Re: [Buildroot] [PATCH 2/2] package/qemu: add host-python-distlib
- dependency
+ with ESMTP id 5RpievhFmeJR for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 16:01:20 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29206416AE
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 16:01:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29206416AE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 14FAD868E7; Sat,  2 Sep 2023 16:01:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 2 Sep 2023 18:00:57 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d8e9505922cf76ff498e6cd31dd7e543f9b0dc4b
+X-Git-Newrev: 3fa1ae00681ca17fb709dcf1e281b8ee0ede0d5f
+X-Patchwork-Hint: ignore
+Message-Id: <20230902160120.14FAD868E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qemu: add option to
+ enable tracing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,30 +58,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 27 Aug 2023 13:40:03 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3fa1ae00681ca17fb709dcf1e281b8ee0ede0d5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> The qemu documentation recommends depending on this package.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/qemu/qemu.mk | 2 ++
->  1 file changed, 2 insertions(+)
+Tracing is a development feature for debugging, profiling, and observing
+QEMU execution. It does not make sense to enable it by default, so add a
+config to enable the "log" tracing backend (the default one). Options to
+select other backends may be added in the future.
 
-Applied to next with a slightly extended commit message. Thanks!
+Also pull a patch already reviewed upstream to install the trace events
+file only if necessary:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    https://patchwork.kernel.org/project/qemu-devel/patch/20230408010410.281263-1-casantos@redhat.com/
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...stall-trace-events-file-only-if-necessary.patch | 30 ++++++++++++++++++++++
+ package/qemu/Config.in                             |  9 +++++++
+ package/qemu/qemu.mk                               |  6 +++++
+ 3 files changed, 45 insertions(+)
+
+diff --git a/package/qemu/0004-tracing-install-trace-events-file-only-if-necessary.patch b/package/qemu/0004-tracing-install-trace-events-file-only-if-necessary.patch
+new file mode 100644
+index 0000000000..36bdaa4978
+--- /dev/null
++++ b/package/qemu/0004-tracing-install-trace-events-file-only-if-necessary.patch
+@@ -0,0 +1,30 @@
++From 5c43da1e4983cc3c209b325a5228b6149e0a0ccf Mon Sep 17 00:00:00 2001
++From: Carlos Santos <casantos@redhat.com>
++Date: Fri, 24 Mar 2023 21:40:22 -0300
++Subject: [PATCH] tracing: install trace events file only if necessary
++
++It is not useful when configuring with --enable-trace-backends=nop.
++
++Upstream: https://patchwork.kernel.org/project/qemu-devel/patch/20230408010410.281263-1-casantos@redhat.com/
++Signed-off-by: Carlos Santos <casantos@redhat.com>
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
++---
++ trace/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/trace/meson.build b/trace/meson.build
++index 8e80be895c..30b1d942eb 100644
++--- a/trace/meson.build
+++++ b/trace/meson.build
++@@ -64,7 +64,7 @@ trace_events_all = custom_target('trace-events-all',
++                                  input: trace_events_files,
++                                  command: [ 'cat', '@INPUT@' ],
++                                  capture: true,
++-                                 install: true,
+++                                 install: get_option('trace_backends') != [ 'nop' ],
++                                  install_dir: qemu_datadir)
++ 
++ if 'ust' in get_option('trace_backends')
++-- 
++2.31.1
++
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 6fb34a0dae..8d53ced300 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -106,6 +106,15 @@ config BR2_PACKAGE_QEMU_FDT
+ 	  Say 'y' here to have QEMU capable of constructing Device
+ 	  Trees, and passing them to the VMs.
+ 
++config BR2_PACKAGE_QEMU_TRACING
++	bool "Enable tracing"
++	help
++	  Say 'y' to enable the "log" tracing infrastructure in QEMU,
++	  used for debugging, profiling, and observing execution. For
++	  detailed documentation, see
++
++	  https://www.qemu.org/docs/master/devel/tracing.html
++
+ endif # BR2_PACKAGE_QEMU_SYSTEM
+ 
+ comment "systems emulation needs a toolchain w/ dynamic library"
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 4d2135a3c6..87ecad5b52 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -160,6 +160,12 @@ else
+ QEMU_OPTS += --disable-fdt
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_TRACING),y)
++QEMU_OPTS += --enable-trace-backends=log
++else
++QEMU_OPTS += --enable-trace-backends=nop
++endif
++
+ ifeq ($(BR2_PACKAGE_QEMU_TOOLS),y)
+ QEMU_OPTS += --enable-tools
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
