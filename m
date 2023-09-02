@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB1BEC873D
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:44:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05663EC873D
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:44:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD94083A84;
-	Thu,  7 Sep 2023 15:44:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD94083A84
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6B03831E3;
+	Thu,  7 Sep 2023 15:44:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6B03831E3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qVte0z2UsVVe; Thu,  7 Sep 2023 15:44:01 +0000 (UTC)
+	with ESMTP id s1X9l2mWIvrE; Thu,  7 Sep 2023 15:44:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F38F783A5F;
-	Thu,  7 Sep 2023 15:43:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F38F783A5F
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE85783EE1;
+	Thu,  7 Sep 2023 15:44:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE85783EE1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 12F891BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0E8FF1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40D3941DCB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B4E541E57
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40D3941DCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B4E541E57
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5D4S89gq347D for <buildroot@lists.busybox.net>;
+ with ESMTP id A78OqizAs5aB for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0C2541E5A
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADB5141E5E
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0C2541E5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADB5141E5E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BDE4786A1F; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id 9958986A1E; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 11:49:38 +0200
+Date: Sat, 2 Sep 2023 11:49:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 028403c47ce297776558173f9833fe64ad2f058f
-X-Git-Newrev: c6b2a5049ecd9b4c6ba500d9c4793e68e86c36f8
+X-Git-Oldrev: a95d65e495ccfbf8bd91c8f9a41bd12574a937cb
+X-Git-Newrev: 6aa1bc31678ff9f8013084fda34b9f941cc63fc3
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.BDE4786A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5base: add vulkan option
+Message-Id: <20230907145134.9958986A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vulkan-loader: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,126 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6b2a5049ecd9b4c6ba500d9c4793e68e86c36f8
+commit: https://git.buildroot.net/buildroot/commit/?id=6aa1bc31678ff9f8013084fda34b9f941cc63fc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Notes:
-  - eglfs/vulkan is only implemented for eglfs_viv
-    (see stub implementation for QEglFSDeviceIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/eglfs/api/qeglfsdeviceintegration.cpp and
-    real implementation for QEglFSVivIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/eglfs/deviceintegration/eglfs_viv/qeglfsvivintegration.cpp)
-  - or for xcb (see QXcbIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/xcb/qxcbintegration.cpp)
+Use $(VULKAN_HEADERS_VERSION) for VULKAN_LOADER_VERSION as the vulkan packages
+need to all be the same version.
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/Config.in  | 10 ++++++++++
- package/qt5/qt5base/qt5base.mk |  7 +++++++
- 2 files changed, 17 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/vulkan-loader/Config.in          | 14 ++++++++++
+ package/vulkan-loader/vulkan-loader.hash |  3 +++
+ package/vulkan-loader/vulkan-loader.mk   | 45 ++++++++++++++++++++++++++++++++
+ 5 files changed, 64 insertions(+)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index b876f1948e..0c7ed41c46 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -180,6 +180,16 @@ config BR2_PACKAGE_QT5BASE_OPENGL_LIB
+diff --git a/DEVELOPERS b/DEVELOPERS
+index db0ea49f90..413054ab84 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -28,6 +28,7 @@
  
- endif
+ N:	Adam Duskett <aduskett@gmail.com>
+ F:	package/firewalld/
++F:	package/vulkan-loader/
  
-+config BR2_PACKAGE_QT5BASE_VULKAN
-+	bool "Vulkan support"
-+	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
-+	depends on !BR2_STATIC_LIBS # vulkan-loader
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
+ N:	Adam Heinrich <adam@adamh.cz>
+ F:	package/jack1/
+diff --git a/package/Config.in b/package/Config.in
+index 5449884809..41ff89726c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -369,6 +369,7 @@ comment "Graphic libraries"
+ 	source "package/sdl2_ttf/Config.in"
+ 	source "package/tk/Config.in"
+ 	source "package/vulkan-headers/Config.in"
++	source "package/vulkan-loader/Config.in"
+ 
+ comment "Other GUIs"
+ 	source "package/qt5/Config.in"
+diff --git a/package/vulkan-loader/Config.in b/package/vulkan-loader/Config.in
+new file mode 100644
+index 0000000000..9c215dc9ce
+--- /dev/null
++++ b/package/vulkan-loader/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_VULKAN_LOADER
++	bool "vulkan-loader"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	select BR2_PACKAGE_VULKAN_HEADERS
-+	select BR2_PACKAGE_VULKAN_LOADER
 +	help
-+	  This option enables Vulkan support.
++	  The Khronos official Vulkan ICD desktop loader.
 +
- config BR2_PACKAGE_QT5BASE_LINUXFB
- 	bool "linuxfb support"
- 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 028236d2ed..cc29f5523f 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -206,6 +206,13 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-opengl
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5BASE_VULKAN),y)
-+QT5BASE_CONFIGURE_OPTS += -feature-vulkan
-+QT5BASE_DEPENDENCIES   += vulkan-headers vulkan-loader
++	  https://github.com/KhronosGroup/Vulkan-Loader
++
++comment "vulkan-loader needs a toolchain w/ C++, dynamic library, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/vulkan-loader/vulkan-loader.hash b/package/vulkan-loader/vulkan-loader.hash
+new file mode 100644
+index 0000000000..e09ecda8a9
+--- /dev/null
++++ b/package/vulkan-loader/vulkan-loader.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  3bbaa5ee64058a89949eb777de66ce94bfe3141892514172cfc9451c756802d5  vulkan-loader-1.3.262.tar.gz
++sha256  43c0a37e6a0fa7ff3c843b3ec5a4fac84b712558ddac103fbd4c1649662a9ece  LICENSE.txt
+diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
+new file mode 100644
+index 0000000000..f6dd9d0ac3
+--- /dev/null
++++ b/package/vulkan-loader/vulkan-loader.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# vulkan-loader
++#
++################################################################################
++
++VULKAN_LOADER_VERSION = $(VULKAN_HEADERS_VERSION)
++VULKAN_LOADER_SITE = $(call github,KhronosGroup,Vulkan-Loader,v$(VULKAN_LOADER_VERSION))
++VULKAN_LOADER_LICENSE = Apache-2.0
++VULKAN_LOADER_LICENSE_FILES = LICENSE.txt
++VULKAN_LOADER_INSTALL_STAGING = YES
++
++VULKAN_LOADER_DEPENDENCIES = host-pkgconf vulkan-headers
++
++VULKAN_LOADER_CONF_OPTS += \
++	-DASSEMBLER_WORKS=FALSE \
++	-DBUILD_WSI_SCREEN_QNX_SUPPORT=OFF \
++	-DLOADER_CODEGEN=OFF
++
++ifeq ($(BR2_PACKAGE_DIRECTFB),y)
++VULKAN_LOADER_DEPENDENCIES += directfb
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=ON
 +else
-+QT5BASE_CONFIGURE_OPTS += -no-feature-vulkan
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=OFF
 +endif
 +
- QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
- QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
- 
++ifeq ($(BR2_PACKAGE_LIBXCB),y)
++VULKAN_LOADER_DEPENDENCIES += libxcb
++VULKAN_LOADER_CONF_OPTS += \
++	-DBUILD_WSI_XCB_SUPPORT=ON \
++	-DBUILD_WSI_XLIB_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += \
++	-DBUILD_WSI_XCB_SUPPORT=OFF \
++	-DBUILD_WSI_XLIB_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++VULKAN_LOADER_DEPENDENCIES += wayland
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
