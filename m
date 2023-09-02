@@ -4,66 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 908A0C83F2C
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 20:18:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7322FC001DB
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 20:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C202560784;
-	Sat,  2 Sep 2023 20:18:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C202560784
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB11760EE2;
+	Sat,  2 Sep 2023 20:27:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB11760EE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UTQXvczK_Nd2; Sat,  2 Sep 2023 20:18:26 +0000 (UTC)
+	with ESMTP id udbBZFrj9DTE; Sat,  2 Sep 2023 20:27:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24A16606BF;
-	Sat,  2 Sep 2023 20:18:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24A16606BF
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BE2E60D71;
+	Sat,  2 Sep 2023 20:27:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BE2E60D71
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C4D01BF3F7
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 20:18:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F2A5C1BF3F7
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 20:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C15B181F24
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 20:18:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C15B181F24
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8AA781F69
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 20:27:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8AA781F69
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 42DxHGkgh1Hi for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 20:18:20 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 425E581F34
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 20:18:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 425E581F34
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A59160002;
- Sat,  2 Sep 2023 20:18:17 +0000 (UTC)
-Date: Sat, 2 Sep 2023 22:18:15 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230902221815.62c472d1@windsurf>
-In-Reply-To: <20230902193000.1457685-1-ju.o@free.fr>
-References: <20230902193000.1457685-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id DkaJuPCm0XEK for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 20:27:31 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7BDA881F63
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 20:27:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BDA881F63
+Received: by mail.gandi.net (Postfix) with ESMTPA id 4588EC0003;
+ Sat,  2 Sep 2023 20:27:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat,  2 Sep 2023 22:27:23 +0200
+Message-ID: <20230902202724.3498579-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693685897;
+ d=bootlin.com; s=gm1; t=1693686448;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4OodiqlAdbKV/f/hwvB3jiuA0IJV4pgH0hzjNonAfCg=;
- b=lHOUO2plS+RVyerRSaTOWdrQhpWZYPtVLIhRqPtZLR9Wzg53c8FTCjH2Ak5ZkPatINw0ju
- nvApNFVYL00jX+AKgQ7kroctqQ8UCVm28PsYzQoNo2U7FGN7atdMo5UWHLiv1xt+KMiCF+
- CiMMBmsNhVn8w06wRWg7jeI0dtVH4E/XQgB0OQt35QkFv72hdYzMmuia1BYyRuOuPE8w1c
- hFHbviVejnoPFSofOXaTpEeryLLHSXzMdifm/p1kqv8ocHE+RKtsUkyJS28RaqlZcSxg1v
- WmvF/svHXywG4TlUuOQcTelnV4RsZ3VBTytvkFvg6YhdQi9EaUAruG2fOxD67g==
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=arkn3s/I/lct/gHaqFtZ7AfLZRBOlZrEuH8l//yzEoA=;
+ b=Hbpgcu+1/McHYR1VTljMa10ASckHI08v+/b/EPAQMLqs7vAVjZWZ26OenZFl74R64ALPEX
+ 2IInp30yZeLjlbYCx3buyFajRn2Jj4DsyZAXF16k8KAQ3CrL7IlBCzvUbXZtU1+Gn/EJXA
+ 5Puu+oEHZAvEYavTTZbEojFODsSPEEIg+GRve/xNrt2QnwOyAQQx0ERD97K91XXbtQgA6/
+ 73HRvIYsR3CnIDJP5H0dFG1I16dp4Fjda+w882weXaMW6TY86CztDTqy5yTu4XabRdaCGA
+ fBWW+gr30WMnNNERILZ+alfr3eaoKclwF+G96Yn6/rc21QlQLDsfVMpyCb13/A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lHOUO2pl
-Subject: Re: [Buildroot] [PATCH next 1/1] boot/edk2: add support for RISC-V
- 64bit architecture
+ header.s=gm1 header.b=Hbpgcu+1
+Subject: [Buildroot] [PATCH next] package/polkit: bump to version 123
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,61 +72,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Marek Belisko <marek.belisko@open-nandra.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  2 Sep 2023 21:30:00 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+polkit runtime tests are passing successfully with this version bump:
 
-> RISC-V 64bit qemu virt machine support has been added in edk2
-> version "stable202302". See [1].
-> 
-> Since edk2-stable202308, introduced in buildroot in commit 5c9f310
-> "boot/edk2: bump to version edk2-stable202308", it is now possible
-> to boot the edk2 UEFI shell in qemu.
-> 
-> This commit adds this early RISC-V support to edk2.
-> 
-> The RISC-V edk2 UEFI shell can be booted in Buildroot with the
-> following commands:
-> 
->     # Build EDK2 images
->     cat > .config <<EOF
->     BR2_riscv=y
->     BR2_RISCV_64=y
->     BR2_PACKAGE_HOST_QEMU=y
->     BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
->     BR2_TARGET_EDK2=y
->     EOF
->     make olddefconfig
->     make
-> 
->     # edk2 image size should fit the 32MB of qemu pflash memories
->     truncate -s 32M output/images/RISCV_VIRT_CODE.fd
->     truncate -s 32M output/images/RISCV_VIRT_VARS.fd
-> 
->     # Start qemu:
->     output/host/usr/bin/qemu-system-riscv64 \
->         -M virt,pflash0=pflash0,pflash1=pflash1,acpi=off \
->         -nographic \
->         -blockdev node-name=pflash0,driver=file,read-only=on,filename=output/images/RISCV_VIRT_CODE.fd \
->         -blockdev node-name=pflash1,driver=file,filename=output/images/RISCV_VIRT_VARS.fd
-> 
-> Note: a Qemu version >= 8.0.0 is needed to properly start edk2. A qemu
-> version on the host system might now be suffucient. This is why the
+  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/989945901
 
-                                   ^^^ not   ^^^^^ sufficient
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/polkit/polkit.hash | 2 +-
+ package/polkit/polkit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-(Minor nits, no need to send a v2 for this)
-
-Thomas
+diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
+index ffdc2a7568..5eadc89753 100644
+--- a/package/polkit/polkit.hash
++++ b/package/polkit/polkit.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0d69656d60800835c3d7d1f0a8362b32e1ae3ace2875a35bb624296fc52d5dc4  polkit-122.tar.gz
++sha256  b69278f6ea0eac406350c45f5720e2fe5e4beaf9f53c16d9902e025965418864  polkit-123.tar.gz
+ sha256  d2e2aa973e29c75e1b492e67ea7b7da9de2d501d49a934657971fd74f9a0b0a8  COPYING
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index dab5d542eb..f58dbe43de 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POLKIT_VERSION = 122
++POLKIT_VERSION = 123
+ POLKIT_SITE = https://gitlab.freedesktop.org/polkit/polkit/-/archive/$(POLKIT_VERSION)
+ POLKIT_LICENSE = GPL-2.0
+ POLKIT_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
