@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D466BCA0FF8
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:40:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00B1CCA0FF8
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C35340323;
-	Sat,  2 Sep 2023 07:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C35340323
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD79C40579;
+	Sat,  2 Sep 2023 07:40:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD79C40579
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZFQ1IZKUw1if; Sat,  2 Sep 2023 07:40:13 +0000 (UTC)
+	with ESMTP id bt8ybqKtWGcT; Sat,  2 Sep 2023 07:40:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 981194059E;
-	Sat,  2 Sep 2023 07:40:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 981194059E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 102851BF3CB
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:39:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E031C405BE;
+	Sat,  2 Sep 2023 07:40:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E031C405BE
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1218F1BF3CB
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:39:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59DE04025D
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59DE04025D
+ by smtp1.osuosl.org (Postfix) with ESMTP id E00C181272
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:39:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E00C181272
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y_toMvti6QdY for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GQKgN55d27Uk for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 07:39:01 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ABB4D8124F
+ for <buildroot@busybox.net>; Sat,  2 Sep 2023 07:39:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ABB4D8124F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2C94BE0002;
  Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A08C40204
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A08C40204
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74242865A7; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:36:41 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e8e66020f3fcac943595034ce7ec6fc6f1bc154b
-X-Git-Newrev: a0617d73c39a42a6644e99f7e0a2f766ade1a3ce
-X-Patchwork-Hint: ignore
-Message-Id: <20230902073856.74242865A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mc: bump to version
- 4.8.30
+Date: Sat, 2 Sep 2023 09:38:56 +0200
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230902093856.00883ba3@windsurf>
+In-Reply-To: <20230902072610.737589-1-francois.perrad@gadz.org>
+References: <20230902072610.737589-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693640337;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=exBRwliAgrSc69a2DKeq3e5DIH64xgx3e9ICPIwznXo=;
+ b=CtN7j7RijTy55dg04udBPsyadtJl2yAhuD+HDxJOt3GOVEgZAG3p0SThAhtoZLs9hUZ699
+ Jqd2kso+gkCWNhTKN9oOdRZHVFRUCdG6KAZq8MeLkhfjBOO3xSe59zFGFCazBbPaVdn8Db
+ eh28iziXo5Va7nwi+1aUbXAo8jgBoH08hcz9F6RisTMFT9qvOVx5RoDfkFaT65cCPM+wpc
+ QP4S0p1b+g+7fLeukOloKben0HPfLRa2B8Sj7hoPeHTQFtOL1rGPqdC71jLDwXwpWptz+C
+ vFzXjzVRJ/iAp5eEQLr5qTZSRkVqv60E/KteyZsgCUzNLkpy9VGLARviVyzynQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CtN7j7Ri
+Subject: Re: [Buildroot] [PATCH] package/libgpiod: bump to version 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,46 +76,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0617d73c39a42a6644e99f7e0a2f766ade1a3ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sat,  2 Sep 2023 09:26:09 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  ...build-add-a-configure-switch-for-building-examples.patch | 6 +++---
+>  package/libgpiod/libgpiod.hash                              | 2 +-
+>  package/libgpiod/libgpiod.mk                                | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 5edfc79113..93462afa60 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.29.sha256
--sha256  01d8a3b94f58180cca5bf17257b5078d1fd6fd27a9b5c0e970ec767549540ad4  mc-4.8.29.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.30.sha256
-+sha256  5ebc3cb2144b970c5149fda556c4ad50b78780494696cdf2d14a53204c95c7df  mc-4.8.30.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 894b231445..2b4279c308 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.29
-+MC_VERSION = 4.8.30
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
