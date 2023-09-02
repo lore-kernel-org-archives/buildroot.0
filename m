@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B86CA0FF6
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BD44CA0FF8
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB28C404F9;
-	Sat,  2 Sep 2023 07:43:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB28C404F9
+	by smtp2.osuosl.org (Postfix) with ESMTP id 34FAF41686;
+	Sat,  2 Sep 2023 07:44:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34FAF41686
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id wmXRTcKLeYvW; Sat,  2 Sep 2023 07:43:17 +0000 (UTC)
+	with ESMTP id dLbtIgrzJxYg; Sat,  2 Sep 2023 07:44:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3809D416F9;
-	Sat,  2 Sep 2023 07:43:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3809D416F9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 09C3D1BF861
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:42:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8167C405D1;
+	Sat,  2 Sep 2023 07:44:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8167C405D1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6ADCE1BF3CB
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:44:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D4FCD416DD
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:42:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4FCD416DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44376410D5
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:44:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44376410D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KG5tpTAY_2TX for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 07:42:49 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1C6DF404F9
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:42:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C6DF404F9
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EA3621BF205;
- Sat,  2 Sep 2023 07:42:45 +0000 (UTC)
-Date: Sat, 2 Sep 2023 09:42:44 +0200
-To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Message-ID: <20230902094244.0251e004@windsurf>
-In-Reply-To: <7af21f66-d3c5-e42f-03e5-8a1f6b370520@mind.be>
-References: <5969347.lOV4Wx5bFT@kilian-aisec>
- <7af21f66-d3c5-e42f-03e5-8a1f6b370520@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693640566;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=KqFoWs5DBAt2HsPb4n/Em9TFUeaisV2qy+lt2I2XWEM=;
- b=UmQkSpvvCQ2uZpThQY15xZmplvYTeOhXxnuUUIx+0tgZddxA+bQX4LPS/sEMAMkxNVxGb1
- P1c5PggTTpaB/b/7+iew/w/yyVY7Vpmvk/nYF/FTIQuildGTACuW2+HDIppG427LGiB/J2
- bazif2FhZ5BG8TxhlsodX34QQMO+Jbsb7PFlU4m323H7Yp1msh9IDLQ+Va50mAsBiev8GQ
- sZGKN0Qmd9zikqroszuM964Z+by2QOwIUMWQf2DG4ejIn0FEKLRepZt5Y8dhHjfoDuhGNO
- k9ARj/Lhybemx3DfSYXj3l2tL7c5UuQZ7GnJW6dsCytZ8SQICO4r/qcnVO4M9A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UmQkSpvv
-Subject: Re: [Buildroot] Buildroot docker image
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id h7s7U0OiC3jc for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 07:44:08 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DCC2410CB
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:44:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DCC2410CB
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1A6EE867AD; Sat,  2 Sep 2023 07:44:08 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 2 Sep 2023 09:43:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: aab82a29bc66ec1ab03c98cfe72112a9d21a1fc6
+X-Git-Newrev: d44a888c320bd5fc850bccf5a1e09facb9fdad0d
+X-Patchwork-Hint: ignore
+Message-Id: <20230902074408.1A6EE867AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: python-magic-wormhole:
+ fix random failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,40 +58,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>, yann.morin.1998@free.fr
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 1 Sep 2023 09:19:02 +0200
-Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d44a888c320bd5fc850bccf5a1e09facb9fdad0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->   First of all, the one on dockerhub is no longer updated. The images we 
-> actually use are on registry.gitlab.com/buildroot.org/buildroot/base
-> 
->   But even those images are not really "for user consumption". They are the 
-> images we use for CI, and they therefore have a bit more stuff in them than 
-> really needed, e.g. qemu. They are also not updated (on the OS level) - no 
-> security updates or anything are applied on it.
-> 
->   It would probably be better if we would also create a small image that people 
-> can use for just building in their CI. A small image based on e.g. Alpine or 
-> Arch, and that is updated e.g. daily on dockerhub. However, nobody ever 
-> contributed such an image so we don't have it.
+The magic-wormhole "receive" command can output "waiting" messages
+when key receival or verification are longer than a predefined
+timeout:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L135
 
-Yann has been working on and off on a set of Docker images for
-Buildroot. See his branch at
-https://gitlab.com/ymorin/buildroot/-/commits/yem/dockers/. I indeed
-shared with him recently on IRC that it would be nice to have a really
-minimal image, separate from the image used in CI (which has more stuff
-enabled, most notably python3).
+The intent is to have an interactive user experience.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+This behavior makes the runtime test unreliable as the test always
+expect the sent message as the exact output. When the test execution
+is slower, it sometimes get the "waiting" message instead of the
+expected message.
+
+Some test jobs are succeeding:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4968059737
+while some other are failing.
+
+magic-wormhole can override those timers with environment variables.
+See:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L26
+
+This commit sets those environment variable to larger values
+(100 seconds instread of 1 by default), to make sure the test will
+always pass.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4962923235
+
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_python_magic_wormhole.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/package/test_python_magic_wormhole.py b/support/testing/tests/package/test_python_magic_wormhole.py
+index abd34bca50..5a0f0277b0 100644
+--- a/support/testing/tests/package/test_python_magic_wormhole.py
++++ b/support/testing/tests/package/test_python_magic_wormhole.py
+@@ -50,7 +50,9 @@ class TestPythonPy3MagicWormhole(TestPythonPackageBase):
+         cmd += "sleep 25"
+         self.assertRunOk(cmd, timeout=30)
+ 
+-        cmd = wormhole_cmd + " receive {}".format(code)
++        wormhole_env = "_MAGIC_WORMHOLE_TEST_KEY_TIMER=100 "
++        wormhole_env += "_MAGIC_WORMHOLE_TEST_VERIFY_TIMER=100 "
++        cmd = wormhole_env + wormhole_cmd + " receive {}".format(code)
+         output, exit_code = self.emulator.run(cmd, timeout=35)
+         self.assertEqual(exit_code, 0)
+         self.assertEqual(output[0], text)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
