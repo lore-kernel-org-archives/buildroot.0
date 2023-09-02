@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4AEACA0FF8
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF6D2CA0FF8
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E900C40154;
-	Sat,  2 Sep 2023 07:09:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E900C40154
+	by smtp2.osuosl.org (Postfix) with ESMTP id 478D7401CA;
+	Sat,  2 Sep 2023 07:26:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 478D7401CA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L1Ek4QOZwBpf; Sat,  2 Sep 2023 07:09:11 +0000 (UTC)
+	with ESMTP id KXCLVeCcylHm; Sat,  2 Sep 2023 07:26:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B1AA40297;
-	Sat,  2 Sep 2023 07:09:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B1AA40297
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8524C40192;
+	Sat,  2 Sep 2023 07:26:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8524C40192
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 697BC1BF3CB
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:09:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B7DC41BF3CB
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5049983B0B
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:09:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5049983B0B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9114D83BCC
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:26:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9114D83BCC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wHyVTYL32MJz for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 07:09:08 +0000 (UTC)
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2564083B05
- for <buildroot@busybox.net>; Sat,  2 Sep 2023 07:09:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2564083B05
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-31c5c06e8bbso2327789f8f.1
- for <buildroot@busybox.net>; Sat, 02 Sep 2023 00:09:08 -0700 (PDT)
+ with ESMTP id KNdgo0FxfIRa for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 07:26:19 +0000 (UTC)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 22C4183BCB
+ for <buildroot@busybox.net>; Sat,  2 Sep 2023 07:26:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22C4183BCB
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-31c615eb6feso2319642f8f.3
+ for <buildroot@busybox.net>; Sat, 02 Sep 2023 00:26:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693638546; x=1694243346;
+ d=1e100.net; s=20221208; t=1693639577; x=1694244377;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=g3MVe3yEOy5aCHN7KhziVhNzwELugYAgpvapPxsArjc=;
- b=UqZZkoI54s9t/0okNoWON8gT2gCzJPn9u7hH63pdscCLb/p/7N4iEcVbeykI3hjAzS
- m64/kZ1CGYiTGgUyKlGJVBFwEMVs6dSGovm2N1H7VGK25MLBEtL30td17x50i8ztoU3V
- JqjDF1AJRzf9+YBsLdAsuAKYnGBR8uN0YESSVpiE9N+JUYJZgikSoTpv8MDHrlMK/dIp
- ptOpbgpZRR/wSLvU8bkMtBnGx7HhbKB9IhTnqV8gcnjmtyYfjIjCgbSJivRx27q7YWvN
- 98J2KW9SkVyHk+s5hawZZlikArWbI6Qbjh5vaQj9XpZcEsvzimy9Vaut44jt81KxDJ2L
- 67hA==
-X-Gm-Message-State: AOJu0Yw8m1JfmN7EgdQhGiZzsYMv2GcdWlL5bAEi+YN47UNDyxXYOsCd
- HWNzArnl6h2b+kkdeTs7q8zdqS/TcgI=
-X-Google-Smtp-Source: AGHT+IEA2mFLThpklwvblx8XuLrHDUzY0+S5Pwb2wH5t8vnOBaaiLb7uvNS0IMdmLYoD8XfsA6ih3w==
-X-Received: by 2002:adf:e5c7:0:b0:315:adf3:67db with SMTP id
- a7-20020adfe5c7000000b00315adf367dbmr3914085wrn.59.1693638545592; 
- Sat, 02 Sep 2023 00:09:05 -0700 (PDT)
+ bh=Ei3sF52ruKLXrJJr+OFgyIKaA07SyvKkHMBK2a+YBVA=;
+ b=ESk5C/SRpJaIQUjJDoGHc6npdendFwupC5bT7BAaadww2YLauQxsHTLEVaF0Q42Pg3
+ +zUECF09kErt8Zbd3YqAyj3KldEZJ/6lxsArxMws0BL5wNxF6d0sWDE/ADN+cczyDtk0
+ GQoxUD8gF8F9pmoh+DMPqMkmZdqY2Ca6h2E+sh9cpvc2A7wQOuSXtHEIgSWCsr+iMEj9
+ uxbyhTENj5BaHAEAg8Qlyc18RY2pYTfIzTA4iiVV9CvPO/0Uqsl/XTHdzXYzFdfFm6yS
+ Fz9tefeEGqcC39p30xDhcMXqcxhOTOJm3+FP/22CIRraCROYwZAHN8Cl4mbBaNKPPwqH
+ errQ==
+X-Gm-Message-State: AOJu0YzihmLhJLdExRyV1/IvELiJdAhAQ4WqbBKry/Z0eZBdVLd+MF7I
+ pd4JWbLa1t4mL7cJTSJP4sV3bl0IOGI=
+X-Google-Smtp-Source: AGHT+IGXIH3GXbAIsbyZPvsZkT/b1NEixUWA4ykgJ57AB0F6oDJxm5LdRP588EI4GcydiPH3SRvV3A==
+X-Received: by 2002:a5d:68c8:0:b0:317:f702:70d8 with SMTP id
+ p8-20020a5d68c8000000b00317f70270d8mr3370385wrw.67.1693639576954; 
+ Sat, 02 Sep 2023 00:26:16 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- w2-20020adff9c2000000b00317ddccb0d1sm7462962wrr.24.2023.09.02.00.09.04
+ f4-20020adfdb44000000b0031984b370f2sm7579929wrj.47.2023.09.02.00.26.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 02 Sep 2023 00:09:05 -0700 (PDT)
+ Sat, 02 Sep 2023 00:26:16 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sat,  2 Sep 2023 09:09:01 +0200
-Message-Id: <20230902070901.724634-1-francois.perrad@gadz.org>
+Date: Sat,  2 Sep 2023 09:26:09 +0200
+Message-Id: <20230902072610.737589-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693638546; x=1694243346; darn=busybox.net;
+ d=gmail.com; s=20221208; t=1693639577; x=1694244377; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=g3MVe3yEOy5aCHN7KhziVhNzwELugYAgpvapPxsArjc=;
- b=JWZXEIjk46jypOnbrkuO4jZwVsh5qNH/ZfJlPxxpLwJTmR+JThD6iYkO7oMum4DcV4
- h2cblwYAaHR2KsctE36ZozyfHSNLD3cTeKJScytf5KL/boyVCwmbmCfoKI+l4y+l81cM
- STVx76JKFoTms7g9F1nY8PlqDZQElZEaoV2n7f+GzLknw7aLe7CXiVIbwVcCNk4uatxg
- qDRCQP4XvSiOxwclLV3dwAMpOeFsC0moo095okGmkKpwLcoxhMg9G7ijw0WRetb2qeCH
- jreCgWs7NAINjb5gAlJIFmL0FFJCktW0o3M+iGgq9H4I+nnu5A2dEQY5wTM5Uda7yCLw
- Zf0w==
+ bh=Ei3sF52ruKLXrJJr+OFgyIKaA07SyvKkHMBK2a+YBVA=;
+ b=eFv3+VycL7cbKkakYOwTvpt36iv1sC/LQECI3C0gYRopMoQ4ppS2yxQmMaJkDDrck8
+ otzoYegbbG2rRHjugw5Mmbmd/kXd5BSKiOhwTU5hdePOBTPghWCjCSZakWwMljGzWC0v
+ R4DT/lFDawI4Gs2C8ftXqS9APUwUE3cJPGJf9Al0bHI2Ztj1P83GPV2mM40tgmeSSvU1
+ s33ukrf7lf+Iuaeb2aBI9UpOJ1G3V+HoBvUF0sY2M0rOL0qpr1VzUVL1MEpCOE2fNdcu
+ eCnMkPLQ/8u/ODhjG+oe+Wp5msZFz8Tp5nZsiox5o8xKYLaWwXScTgr0Bw9X6LV7J+cY
+ wgHQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=JWZXEIjk
-Subject: [Buildroot] [PATCH] package/freetype: bump to version 2.13.2
+ header.a=rsa-sha256 header.s=20221208 header.b=eFv3+Vyc
+Subject: [Buildroot] [PATCH] package/libgpiod: bump to version 1.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,37 +100,58 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...build-add-a-configure-switch-for-building-examples.patch | 6 +++---
+ package/libgpiod/libgpiod.hash                              | 2 +-
+ package/libgpiod/libgpiod.mk                                | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index ea03526c9..e7331d5ba 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.1/
--sha1  af9b6b754320a0526179f166e3f8cffce78526ca  freetype-2.13.1.tar.xz
--sha256  ea67e3b019b1104d1667aa274f5dc307d8cbd606b399bc32df308a77f1a564bf  freetype-2.13.1.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.2/
-+sha1  2d8d5917a1983ebd04921f2993a88858d6f72dec  freetype-2.13.2.tar.xz
-+sha256  12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d  freetype-2.13.2.tar.xz
+diff --git a/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
+index a21c76700..f1a853a6f 100644
+--- a/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
++++ b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
+@@ -73,7 +73,7 @@ diff --git a/configure.ac b/configure.ac
+ index 57c99a8..90a6324 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -155,6 +155,12 @@ then
++@@ -164,6 +164,12 @@ then
+  	fi
+  fi
+  
+@@ -84,8 +84,8 @@ index 57c99a8..90a6324 100644
+ +AM_CONDITIONAL([WITH_EXAMPLES], [test "x$with_examples" = xtrue])
+ +
+  AC_ARG_ENABLE([bindings-cxx],
+- 	[AS_HELP_STRING([--enable-bindings-cxx],[enable C++ bindings [default=no]])],
+- 	[if test "x$enableval" = xyes; then with_bindings_cxx=true; fi],
++ 	[AC_HELP_STRING([--enable-bindings-cxx],
++ 		[enable C++ bindings [default=no]])],
+ -- 
+ cgit 1.2.3-1.el7
  
- # Locally calculated
- sha256  2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index c6bc0673f..1f4bcaf34 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index f0803cab3..6647b77c5 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256  841be9d788f00bab08ef22c4be5c39866f0e46cb100a3ae49ed816ac9c5dddc7  libgpiod-1.6.3.tar.xz
++sha256  7b146e12f28fbca3df7557f176eb778c5ccf952ca464698dba8a61b2e1e3f9b5  libgpiod-1.6.4.tar.xz
+ # Hash for license file
+ sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 35d003fa3..e7ff15561 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -6,7 +6,7 @@
  
--FREETYPE_VERSION = 2.13.1
-+FREETYPE_VERSION = 2.13.2
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+ # Be careful when bumping versions.
+ # Dependency on kernel header versions may change.
+-LIBGPIOD_VERSION = 1.6.3
++LIBGPIOD_VERSION = 1.6.4
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 -- 
 2.39.2
 
