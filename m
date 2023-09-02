@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F540CA0FF8
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 09:59:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1112CA0FF7
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 09:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57C9560EF9;
-	Sat,  2 Sep 2023 09:59:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57C9560EF9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6221F60E2E;
+	Sat,  2 Sep 2023 09:59:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6221F60E2E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EEIl7WbyWe2K; Sat,  2 Sep 2023 09:59:41 +0000 (UTC)
+	with ESMTP id KxFp_CnvKzpp; Sat,  2 Sep 2023 09:59:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E0FC60E2E;
-	Sat,  2 Sep 2023 09:59:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E0FC60E2E
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 73E4A1BF419
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACD6C60BB0;
+	Sat,  2 Sep 2023 09:59:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACD6C60BB0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 14BD51BF21A
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CD3641E3E
+ by smtp2.osuosl.org (Postfix) with ESMTP id F01784010C
  for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CD3641E3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F01784010C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jtyV7g_KqN5s for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 99i2lSvgi2Sp for <buildroot@lists.busybox.net>;
  Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39CF441918
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E2934025D
  for <buildroot@buildroot.org>; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39CF441918
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E2934025D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 28247867EE; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
+ id EFF3286884; Sat,  2 Sep 2023 09:59:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 11:56:58 +0200
+Date: Sat, 2 Sep 2023 11:49:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c6b2a5049ecd9b4c6ba500d9c4793e68e86c36f8
-X-Git-Newrev: 1c27f3a12d77bc3cef97123148ff13929d13d73e
+X-Git-Oldrev: d5a7f213ab94d986133760122105adda76676823
+X-Git-Newrev: 0bc44d52c643711e39bc2ee44ca10a16ed300460
 X-Patchwork-Hint: ignore
-Message-Id: <20230902095901.28247867EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt6base: add vulkan
- option
+Message-Id: <20230902095900.EFF3286884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mesa3d: add vulkan
+ broadcom driver support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,55 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c27f3a12d77bc3cef97123148ff13929d13d73e
+commit: https://git.buildroot.net/buildroot/commit/?id=0bc44d52c643711e39bc2ee44ca10a16ed300460
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt6/qt6base/Config.in  | 10 ++++++++++
- package/qt6/qt6base/qt6base.mk |  7 +++++++
- 2 files changed, 17 insertions(+)
+ package/mesa3d/Config.in | 9 +++++++++
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index f9fb2a2ad0..98a7520486 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -43,6 +43,16 @@ config BR2_PACKAGE_QT6BASE_GUI
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index c7ee2a8db0..c3abd662f3 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -299,6 +299,15 @@ comment "Gallium VDPAU state tracker needs X.org and gallium drivers r600, radeo
  
- if BR2_PACKAGE_QT6BASE_GUI
+ comment "Vulkan drivers"
  
-+config BR2_PACKAGE_QT6BASE_VULKAN
-+	bool "Vulkan support"
-+	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
-+	depends on !BR2_STATIC_LIBS # vulkan-loader
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
-+	select BR2_PACKAGE_VULKAN_HEADERS
-+	select BR2_PACKAGE_VULKAN_LOADER
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
++	bool "Vulkan broadcom driver"
++	depends on BR2_arm || BR2_aarch64
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # dri3/libxshmfence
++	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
 +	help
-+	  This option enables Vulkan support.
++	  Vulkan broadcom driver.
 +
- config BR2_PACKAGE_QT6BASE_LINUXFB
- 	bool "linuxfb support"
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	bool "Vulkan Intel driver"
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 8f3d224417..67573909a3 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -119,6 +119,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ # Vulkan Drivers
++MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
  
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 4a01bb17b2..c32089f551 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -127,6 +127,13 @@ QT6BASE_CONF_OPTS += \
- 	-DFEATURE_vulkan=OFF
- QT6BASE_DEPENDENCIES += freetype
- 
-+ifeq ($(BR2_PACKAGE_QT6BASE_VULKAN),y)
-+QT6BASE_DEPENDENCIES   += vulkan-headers vulkan-loader
-+QT6BASE_CONFIGURE_OPTS += -DFEATURE_vulkan=ON
-+else
-+QT6BASE_CONFIGURE_OPTS += -DFEATURE_vulkan=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT6BASE_LINUXFB),y)
- QT6BASE_CONF_OPTS += -DFEATURE_linuxfb=ON
- else
+ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
