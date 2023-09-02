@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A375CA0FF7
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 10:01:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF345CA0FF7
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 10:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 35EB8607C1;
-	Sat,  2 Sep 2023 10:01:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35EB8607C1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6901A60E73;
+	Sat,  2 Sep 2023 10:02:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6901A60E73
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D3mugv9izXD3; Sat,  2 Sep 2023 10:01:43 +0000 (UTC)
+	with ESMTP id GTTdmJPg58d3; Sat,  2 Sep 2023 10:02:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 889C5608D8;
-	Sat,  2 Sep 2023 10:01:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 889C5608D8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D0631BF419
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:01:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C10F960C16;
+	Sat,  2 Sep 2023 10:02:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C10F960C16
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A2AA81BF419
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:02:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3628381E6C
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:01:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3628381E6C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88D244011D
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:02:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88D244011D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QWREPU_w596Q for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 10:01:40 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0EE7281E69
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 10:01:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EE7281E69
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E732E60005;
- Sat,  2 Sep 2023 10:01:34 +0000 (UTC)
-Date: Sat, 2 Sep 2023 12:01:33 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xgNVl6CZGJdm for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 10:02:06 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81A404010C
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 10:02:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81A404010C
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E168CE0008;
+ Sat,  2 Sep 2023 10:02:03 +0000 (UTC)
+Date: Sat, 2 Sep 2023 12:02:02 +0200
 To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20230902120133.71a0809c@windsurf>
-In-Reply-To: <20230830195446.3958486-2-aduskett@gmail.com>
+Message-ID: <20230902120202.53573737@windsurf>
+In-Reply-To: <20230830195446.3958486-3-aduskett@gmail.com>
 References: <20230830195446.3958486-1-aduskett@gmail.com>
- <20230830195446.3958486-2-aduskett@gmail.com>
+ <20230830195446.3958486-3-aduskett@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693648897;
+ d=bootlin.com; s=gm1; t=1693648925;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ZYcGaamkgH4pdMNzkOsd4tx/YZTPDiHzfdD3onJ60fk=;
- b=bk8Q8Kh8bQUqrVTrSKhoO5Om1GtAKUnGGH60zUfVT+mEKfILn20SYkKk78eWYzZRKTcXtV
- 3lJu/5RsHyBqpx9B9XPjUoDZktUhzdxhNGtMz2+/YetsPN+DGpbhRCNGTYSkSbGQBuF2NY
- krwdM7y3gWXNbqZ5hVeT4zc247jhKqz27fD5QvW46YzvtBUsqjMWegTq1ORVIfDJpp6Db9
- jXh/lMMvlHeJ3mNY3V3smIv+3++6lpfJGKaelv5Pv8I0GUKYntlhNIIm+JXgtU2dVf8kKM
- u9ej0FIseSKLk2kFhNynb2jaKQZWbfJ8WMu9fYc2oBRB2+hO+D8UmBQV8G0+Jg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=vEglCtBKFAl84I15Gdijs8UqVC5rYiNJqxWKONeQYvM=;
+ b=HquolwLTyNiVVCFGilWb+gSvwrua/7p8h4jE3svWnAvnpqXJRn85VoDa2ugIpkeF4JUuVX
+ 7h2W/W5gd3swG87PcPG6OSlZPAWdXXUEQkgnLRvVAsY9ZEmBKCe7Vh1gfATkn80rw5Vs9d
+ svU67yzdCfs3ugk6XrD8GsORzEcRSbUBtbR+Q7cTJsYGhRV24q9/DvfkaArXAp3YIcrM7Q
+ Is1ql5nxR8kV9LZkzPLp6z+Kk5Ab6CLNjy0yZykGpjdfoQOG2gTwJhhAWdXMPbwgIeXXiF
+ Y1CtYL/8uJ+SbiLrhWp0xcMoMPu+X11lRwxsoJBUbv2CfIc8AkvR/SvE4X/uqw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bk8Q8Kh8
-Subject: Re: [Buildroot] [PATCH/next 2/7] package/vulkan-loader: new package
+ header.s=gm1 header.b=HquolwLT
+Subject: Re: [Buildroot] [PATCH/next 3/7] package/vulkan-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,55 +86,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
-
-On Wed, 30 Aug 2023 13:54:41 -0600
+On Wed, 30 Aug 2023 13:54:42 -0600
 Adam Duskett <aduskett@gmail.com> wrote:
 
-> diff --git a/package/vulkan-loader/vulkan-loader.hash b/package/vulkan-loader/vulkan-loader.hash
-> new file mode 100644
-> index 0000000000..e09ecda8a9
-> --- /dev/null
-> +++ b/package/vulkan-loader/vulkan-loader.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  3bbaa5ee64058a89949eb777de66ce94bfe3141892514172cfc9451c756802d5  vulkan-loader-1.3.262.tar.gz
-> +sha256  43c0a37e6a0fa7ff3c843b3ec5a4fac84b712558ddac103fbd4c1649662a9ece  LICENSE.txt
-> diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
-> new file mode 100644
-> index 0000000000..d87e57ebd4
-> --- /dev/null
-> +++ b/package/vulkan-loader/vulkan-loader.mk
-> @@ -0,0 +1,45 @@
-> +################################################################################
-> +#
-> +# vulkan-loader
-> +#
-> +################################################################################
-> +
-> +VULKAN_LOADER_VERSION = $(VULKAN_HEADERS_VERSION)
-> +VULKAN_LOADER_SITE = $(call github,KhronosGroup,Vulkan-Loader,v$(VULKAN_LOADER_VERSION))
-> +VULKAN_LOADER_LICENSE = Apache-2.0
-> +VULKAN_LOADER_LICENSE_FILES = LICENSE.txt
-> ++VULKAN_LOADER_INSTALL_STAGING = YES
+> Use $(VULKAN_HEADERS_VERSION) for VULKAN_TOOLS_VERSION as the vulkan packages
+> need to all be the same version.
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  DEVELOPERS                             |  1 +
+>  package/Config.in                      |  1 +
+>  package/vulkan-tools/Config.in         | 17 ++++++++++
+>  package/vulkan-tools/vulkan-tools.hash |  3 ++
+>  package/vulkan-tools/vulkan-tools.mk   | 47 ++++++++++++++++++++++++++
+>  5 files changed, 69 insertions(+)
+>  create mode 100644 package/vulkan-tools/Config.in
+>  create mode 100644 package/vulkan-tools/vulkan-tools.hash
+>  create mode 100644 package/vulkan-tools/vulkan-tools.mk
 
-  ^^^ typo here, there was a "+" at the beginning of the line. Funnily,
-  make did not complain about this, and just ignored this line, so
-  vulkan-loader was not installed into staging.
-
-I fixed that and applied to next. However, could you have a look at
-whether we need to keep /usr/share/vulkan/registry/? It contains
-JSON/Python stuff, I don't think it's useful at runtime?
-
-Also, what is /usr/share/vulkan/icd.d/ ? I see there's an ICD tool in
-vulkan-tools. Is that related? Needed on the target?
-
-Thanks!
+Applied to next, thanks. I was initially surprised that only vulkaninfo
+gets installed but indeed you disable everything else (cube, icd, etc.).
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
