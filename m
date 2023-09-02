@@ -4,65 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B5B5C71153
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 21:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE54FC001DB
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 22:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD3FA81F78;
-	Sat,  2 Sep 2023 21:40:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD3FA81F78
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C10B81F82;
+	Sat,  2 Sep 2023 22:01:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C10B81F82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XaUocGcNNrAt; Sat,  2 Sep 2023 21:40:54 +0000 (UTC)
+	with ESMTP id 2WPkSvAwiSlJ; Sat,  2 Sep 2023 22:01:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC82881F8C;
-	Sat,  2 Sep 2023 21:40:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC82881F8C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 041721BF863
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 21:40:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05F9181F84;
+	Sat,  2 Sep 2023 22:01:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05F9181F84
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 225941BF3A4
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 22:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BBA0E60E5D
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 21:40:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBA0E60E5D
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA0FF4017A
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 22:01:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA0FF4017A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gBgS1i55DH3T for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 21:40:38 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 959EB60BED
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 21:40:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 959EB60BED
-Received: by mail.gandi.net (Postfix) with ESMTPA id EEFAE1BF207;
- Sat,  2 Sep 2023 21:40:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat,  2 Sep 2023 23:40:32 +0200
-Message-ID: <20230902214032.3570167-2-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230902214032.3570167-1-thomas.petazzoni@bootlin.com>
-References: <20230902214032.3570167-1-thomas.petazzoni@bootlin.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rH-1DLy3vWeT for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 22:01:07 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 24A8640144
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 22:01:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24A8640144
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A8CB840008;
+ Sat,  2 Sep 2023 22:01:02 +0000 (UTC)
+Date: Sun, 3 Sep 2023 00:01:00 +0200
+To: nvd@nist.gov
+Message-ID: <20230903000100.0c1b187b@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="MP_/bLosz/70q3yHrFBGQZSM.wS"
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693690835;
+ d=bootlin.com; s=gm1; t=1693692063;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YURailhfljjpFrtEXEf3XkdPFEj8SCwdh4I0iDOjV+o=;
- b=J4Y/CfQn7NrkFulB4FHb9/uGwIQb3keTh+GLquBlzhoxS3B/Ewq9ORZVgKvfLT7xR8Tc3H
- GjWbXxk7CddkvJupW38r8N9qtkwX29FQK+YRQ1Puqv46zPEafcOWloVZ52E+EjS9c6g9DL
- Fxzn0jrW5IpkUYckHtNGBF+vT63svSj6015IEVznyV1dunhQPVyux2AvjYtRU+F2JR5cf3
- mWdfraXsy6XMEJ6W4EDn0l+hnY4Sw2Fv1T1yMWkB8yHhWHmZ+BNaEWhe4SMiMrb3VPpViE
- 3HNWYpfqRg4jJCq8Xq3NgMb30qTiB5NFGfkIZYh5jLuz5suMUS/Q0/bGSwAVzw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+ bh=Pn/rPzG2bq4BoSKM0gB0NS3Z71yj6p5K+OOCl90JV+g=;
+ b=j7vHfvBV5F0/mrIGk5b/fVHS265swkdwKn04eFYYTdSmW8DFeG5HhEw15hXrtFJOFMk1fo
+ HTNM6gFwuwAnoMOSYE06huWxg0jR8gI2/rsVSgpEZuHlzEFCHyeNhlEnaLiz2HB56tyzbs
+ KUlBayHq5Z8swTIEADFeFr6DUT8VI5s5vHBoGsKOeO/aW9qiYn/CkBlD+gwuKiLLPykune
+ whLkuu/PE8q5StIWYQPwFe7nViudffX1MaLZi+8R9hhMgYpBLvn9MUCqMSbpcljK9bJhGd
+ hmnQ5Ft9oEqUjZmGZTYxYZYT///yel0ye72NjJ6/B27P9uDjAgmz32+DJETwrQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=J4Y/CfQn
-Subject: [Buildroot] [PATCH 2/2] package/poppler: bump version to matest in
- 22.x series
+ header.s=gm1 header.b=j7vHfvBV
+Subject: [Buildroot] CVE-2018-11574 version range fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,67 +73,313 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Olivier Schonken <olivier.schonken@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit updates poppler to the latest version in the 22.x series,
-with only has bug fixes. Here is the list of commits between 22.10.0
-and 22.12.0:
+--MP_/bLosz/70q3yHrFBGQZSM.wS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-df568263c51950ceed6f1fb42f80e99a2614c275 (tag: poppler-22.12.0) poppler 22.12.0
-198dc1d0674c0a462668e6868c35b1ee0e731005 Form::addFontToDefaultResources: Be stubborn in finding a font we can use
-a5952ab70716a2d4f792a943c2dcf3068f1d6885 Revert "CI: Fix Debian brokenness"
-8fcaa7c622d24761a9ecb3922f95d072077d6f34 CI: Fix Debian brokenness
-cc665f757af6b87dd245d36e079dd44d8d2d2182 (tag: poppler-22.11.0) poppler 22.11.0
-a296982e1d5b4968b2bd044d80647ae6f9267526 Do not include a poppler/ file from a splash/ header
-bc4a0d9a2abfcd75d9b0ee4be3f7600905fe6001 Form: Provide Unicode marker when ensuring fonts
-111f38a722eedddd94faa52dda8c5e0da561fb41 Cairo: Update font after restore
-907d05a6a141284aee22fbd16ab0a2fb4e0f2724 Fix crash in file that wants to do huge transparency group
-e53f5aae3bce7d09788f2ad62be998895fb9807b PSOutputDev::setupResources: Fix stack overflow in malformed doc
-a4ca3a96a6b1f65b335a1ea362e6c202e46ae055 topIdx can't be negative
-e471f8e09bf2e38df0cf5df1acecbcca70685573 Init all the fields of JPXStreamPrivate
-5190c0d4369bd9f501922585140be4ec736e24f2 No need to store smaskInData in priv
-6263bb90b09326103b10e4c4edfbc5b84c884921 Page label ranges can't start in < 0
+Hello,
 
-Note: this version bump does not include the fix for CVE-2023-34872,
-so we still need the backported patch.
+CVE-2018-11574 is marked in the NVD database as affecting all pppd
+versions, as it has as its only "Configuration" the following CPE
+identifier match:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/poppler/poppler.hash | 2 +-
- package/poppler/poppler.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+  cpe:2.3:a:point-to-point_protocol_project:point-to-point_protocol:-:*:*:*:*:*:*:*
 
-diff --git a/package/poppler/poppler.hash b/package/poppler/poppler.hash
-index 93681e04af..bb07b2ee6a 100644
---- a/package/poppler/poppler.hash
-+++ b/package/poppler/poppler.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  04e40fad924a6de62e63017a6fd4c04696c1f526dedc2ba5ef275cedf646292a  poppler-22.10.0.tar.xz
-+sha256  d9aa9cacdfbd0f8e98fc2b3bb008e645597ed480685757c3e7bc74b4278d15c0  poppler-22.12.0.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 4c6017a5f5..776fb4d566 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POPPLER_VERSION = 22.10.0
-+POPPLER_VERSION = 22.12.0
- POPPLER_SOURCE = poppler-$(POPPLER_VERSION).tar.xz
- POPPLER_SITE = https://poppler.freedesktop.org
- POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+However, it turns out that the upstream pppd was *never* affected by
+CVE-2018-11574. Let me walk through the story.
+
+CVE-2018-11574 affects the EAP-TLS implementation in pppd. However,
+EAP-TLS was not supported in upstream pppd before its 2.4.9 release,
+thanks to commit
+https://github.com/ppp-project/ppp/commit/e87fe1bbd37a1486c5223f110e9ce3ef75971f93.
+
+Before that EAP-TLS support for pppd was provided as an out-of-tree
+patch, provided by a third party developer at
+https://jjkeijser.github.io/ppp/download.html. It is this patch that
+was affected by CVE-2018-11574. As can be seen at
+https://jjkeijser.github.io/ppp/download.html, all versions of the
+patch prior to version 1.101 are affected, as 1.101 was precisely
+released to fix CVE-2018-11574.
+
+So: before pppd 2.4.9, the only way to be affected by CVE-2018-11574
+was by having applied a third-party patch. I am not sure how to reflect
+this correctly in the CVE-2018-11574 information in the NVD database.
+To me, if one applies random patches to a code base, for sure those
+patches can introduce additional security vulnerabilities, so it
+doesn't make sense that CVE-2018-11574 is reported against pppd
+upstream.
+
+In addition, in the EAP-TLS code that was added in pppd 2.4.9, the
+issue of CVE-2018-11574 is already fixed. Indeed, we did a diff between
+the out-of-tree EAP-TLS patch in version 0.999 (affected) and 1.101
+(not affected), which gives the attached file. And those fixes are
+indeed present in commit
+https://github.com/ppp-project/ppp/commit/e87fe1bbd37a1486c5223f110e9ce3ef75971f93,
+which introduced EAP-TLS support in upstream pppd.
+
+Therefore: upstream pppd was never affected by this issue. Prior to
+pppd 2.4.9, there was no EAP-TLS support, and starting from 2.4.9, the
+EAP-TLS is correct with regard to CVE-2018-11574.
+
+At the very least, I would suggest to change the CVE-2018-11574
+information to indicate that only versions up to (and excluding) 2.4.9
+are affected. Do you think this would be possible ?
+
+Best regards,
+
+Thomas
 -- 
-2.41.0
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+
+--MP_/bLosz/70q3yHrFBGQZSM.wS
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=pppd-eap-tls-CVE-2018-11574-fix.patch
+
+diff --git a/README.eap-tls b/README.eap-tls
+index 037be0a..084b046 100644
+--- a/README.eap-tls
++++ b/README.eap-tls
+@@ -273,8 +273,14 @@ v0.995   (27-May-2014)
+ v0.996   (28-May-2014)
+  - Fix minor bug where SessionTicket message was printed as 'Unknown SSL3 code 4'
+  - Add EAP-TLS-specific options to pppd.8 manual page.
+- - Updated README.eap-tls file with new option and provide an example.
++ - Updated README.eap-tls file with new options and provide an example.
+ v0.997   (19-Jun-2014)
+- - change SSL_OP_NO_TICKETS to SSL_OP_NO_TICKET
+- - fix bug in initialisation code with fragmented packets.
++ - Change SSL_OP_NO_TICKETS to SSL_OP_NO_TICKET
++ - Fix bug in initialisation code with fragmented packets.
++v0.998   (13-Mar-2015)
++ - Added fix for https://bugzilla.redhat.com/show_bug.cgi?id=1023620
++v0.999   (11-May-2017)
++ - Added support for OpenSSL 1.1: the code will now compile against OpenSSL 1.0.x or 1.1.x.
++v1.101 (1-Jun-2018)
++ - Fix vulnerabilities CVE-2018-11574.
+ 
+diff --git a/pppd/eap-tls.c b/pppd/eap-tls.c
+index 2c0766e..1b79abf 100644
+--- a/pppd/eap-tls.c
++++ b/pppd/eap-tls.c
+@@ -62,6 +62,7 @@ static ENGINE *pkey_engine = NULL;
+  * tries to provide some guidance but ultimately falls short.
+  */
+ 
++
+ static void HMAC_CTX_free(HMAC_CTX *ctx)
+ {
+ 	if (ctx != NULL) {
+@@ -865,46 +866,47 @@ void eaptls_free_session(struct eaptls_session *ets)
+ int eaptls_receive(struct eaptls_session *ets, u_char * inp, int len)
+ {
+ 	u_char flags;
+-	u_int tlslen;
++	u_int tlslen = 0;
+ 	u_char dummy[65536];
+ 
++	if (len < 1) {
++		warn("EAP-TLS: received no or invalid data");
++		return 1;
++	}
++		
+ 	GETCHAR(flags, inp);
+ 	len--;
+ 
+-    if (flags & EAP_TLS_FLAGS_LI && !ets->data) {
+- 
++    if (flags & EAP_TLS_FLAGS_LI && len >= 4) {
+ 		/*
+-		 * This is the first packet of a message
++		 * LenghtIncluded flag set -> this is the first packet of a message
+ 		*/
+- 
++
++		/*
++		 * the first 4 octets are the length of the EAP-TLS message
++		 */
+ 		GETLONG(tlslen, inp);
+ 		len -= 4;
+ 
+-		if (tlslen > EAP_TLS_MAX_LEN) {
+-			error("Error: tls message length > %d, truncated",
+-				EAP_TLS_MAX_LEN);
+-			tlslen = EAP_TLS_MAX_LEN;
+-		}
++		if (!ets->data) {
+ 
+-		/*
+-		 * Allocate memory for the whole message
+-		*/
+-		ets->data = malloc(tlslen);
+-		if (!ets->data)
+-			fatal("EAP TLS: allocation error\n");
++			if (tlslen > EAP_TLS_MAX_LEN) {
++				error("EAP-TLS: TLS message length > %d, truncated", EAP_TLS_MAX_LEN);
++				tlslen = EAP_TLS_MAX_LEN;
++			}
+ 
+-		ets->datalen = 0;
+-		ets->tlslen = tlslen;
++			/*
++			 * Allocate memory for the whole message
++			*/
++			ets->data = malloc(tlslen);
++			if (!ets->data)
++				fatal("EAP-TLS: allocation error\n");
+ 
+-	}
+-	else if (flags & EAP_TLS_FLAGS_LI && ets->data) {
+-		/*
+-		 * Non first with LI (strange...)
+-		*/
+- 
+-		GETLONG(tlslen, inp);
+-		len -= 4;
+- 
++			ets->datalen = 0;
++			ets->tlslen = tlslen;
++		}
++		else
++			warn("EAP-TLS: non-first LI packet? that's odd...");
+ 	}
+ 	else if (!ets->data) {
+ 		/*
+@@ -913,7 +915,7 @@ int eaptls_receive(struct eaptls_session *ets, u_char * inp, int len)
+  
+ 		ets->data = malloc(len);
+ 		if (!ets->data)
+-			fatal("EAP TLS: allocation error\n");
++			fatal("EAP-TLS: allocation error\n");
+  
+ 		ets->datalen = 0;
+ 		ets->tlslen = len;
+@@ -924,8 +926,13 @@ int eaptls_receive(struct eaptls_session *ets, u_char * inp, int len)
+ 	else
+ 		ets->frag = 0;
+ 
++	if (len < 0) {
++		warn("EAP-TLS: received malformed data");
++		return 1;
++	}
++
+ 	if (len + ets->datalen > ets->tlslen) {
+-		warn("EAP TLS: received data > TLS message length");
++		warn("EAP-TLS: received data > TLS message length");
+ 		return 1;
+ 	}
+ 
+@@ -939,7 +946,7 @@ int eaptls_receive(struct eaptls_session *ets, u_char * inp, int len)
+ 		 */
+ 
+ 		if (ets->datalen != ets->tlslen) {
+-			warn("EAP TLS: received data != TLS message length");
++			warn("EAP-TLS: received data != TLS message length");
+ 			return 1;
+ 		}
+ 
+@@ -1200,7 +1207,6 @@ ssl_msg_callback(int write_p, int version, int content_type,
+ 
+ 	switch(content_type) {
+ 
+-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+ 	case SSL3_RT_HEADER:
+ 		strcat(string, "SSL/TLS Header: ");
+ 		switch(hvers) {
+@@ -1226,7 +1232,6 @@ ssl_msg_callback(int write_p, int version, int content_type,
+ 			strcat(string, "Unknown version");
+ 		}
+ 		break;
+-#endif /* OPENSSL_VERSION_NUMBER >= 0x10100000L */
+ 
+ 	case SSL3_RT_ALERT:	
+ 		strcat(string, "Alert: ");	
+diff --git a/pppd/eap.c b/pppd/eap.c
+index 008801b..3ce8bde 100644
+--- a/pppd/eap.c
++++ b/pppd/eap.c
+@@ -1703,6 +1703,11 @@ int len;
+ 
+ 		case eapListen:
+ 
++			if (len < 1) {
++				error("EAP: received EAP-TLS Listen packet with no data");
++				/* Bogus request; wait for something real. */
++				return;
++			}
+ 			GETCHAR(flags, inp);
+ 			if(flags & EAP_TLS_FLAGS_START){
+ 
+@@ -1740,6 +1745,11 @@ int len;
+ 			break;
+ 
+ 		case eapTlsRecv:
++			if (len < 1) {
++				error("EAP: discarding EAP-TLS Receive packet with no data");
++				/* Bogus request; wait for something real. */
++				return;
++			}
+ 			eaptls_receive(ets, inp, len);
+ 
+ 			if(ets->frag) {
+@@ -2110,6 +2120,7 @@ int len;
+ 		switch(esp->es_server.ea_state) {
+ 
+ 		case eapTlsRecv:
++	
+ 			ets = (struct eaptls_session *) esp->es_server.ea_session;
+ 			eap_figure_next_state(esp, 
+ 				eaptls_receive(esp->es_server.ea_session, inp, len));
+@@ -2130,19 +2141,22 @@ int len;
+ 		case eapTlsRecvClient:
+ 			/* Receive authentication response from client */
+ 
+-			GETCHAR(flags, inp);
++			if (len > 0) {
++				GETCHAR(flags, inp);
+ 
+-			if(len == 1 && !flags) {	/* Ack = ok */
++				if(len == 1 && !flags) {	/* Ack = ok */
+ #ifdef MPPE
+- 				eaptls_gen_mppe_keys( esp->es_server.ea_session, "client EAP encryption", 0 );
++ 					eaptls_gen_mppe_keys( esp->es_server.ea_session, "client EAP encryption", 0 );
+ #endif
+-				eap_send_success(esp);
+-			}
+-			else {			/* failure */
+-				eaptls_receive(esp->es_server.ea_session, inp, len);
+-				warn("Server authentication failed");
+-				eap_send_failure(esp);
++					eap_send_success(esp);
++				}
++				else {			/* failure */
++					warn("Server authentication failed");
++					eap_send_failure(esp);
++				}
+ 			}
++			else
++				warn("Bogus EAP-TLS packet received from client");
+ 
+ 			eaptls_free_session(esp->es_server.ea_session);
+ 
+
+--MP_/bLosz/70q3yHrFBGQZSM.wS
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--MP_/bLosz/70q3yHrFBGQZSM.wS--
