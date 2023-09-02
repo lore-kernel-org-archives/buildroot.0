@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 282AFC71153
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C8FFC71153
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:50:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D31E44053F;
-	Sat,  2 Sep 2023 15:49:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D31E44053F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24FEA4052D;
+	Sat,  2 Sep 2023 15:50:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24FEA4052D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NfOWQLrMAqHh; Sat,  2 Sep 2023 15:49:09 +0000 (UTC)
+	with ESMTP id JPdhjO9aGT0U; Sat,  2 Sep 2023 15:50:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1B1C84053C;
-	Sat,  2 Sep 2023 15:49:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B1C84053C
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 610E01BF401
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:49:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 73304404AF;
+	Sat,  2 Sep 2023 15:50:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73304404AF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A8F001BF401
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 087BD60AC4
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:49:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 087BD60AC4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80437416C4
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:50:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80437416C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aEelBrddundu for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 15:49:05 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E068E60593
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:49:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E068E60593
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5A72B20004;
- Sat,  2 Sep 2023 15:49:00 +0000 (UTC)
-Date: Sat, 2 Sep 2023 17:48:59 +0200
-To: James Knight <james.d.knight@live.com>
-Message-ID: <20230902174859.4e92c381@windsurf>
-In-Reply-To: <CYYP221MB114006AE3D1C77F421E44B43A0EBA@CYYP221MB1140.NAMP221.PROD.OUTLOOK.COM>
-References: <CYYP221MB114006AE3D1C77F421E44B43A0EBA@CYYP221MB1140.NAMP221.PROD.OUTLOOK.COM>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bye4kzAsyAKs for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 15:50:23 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3F25841621
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:50:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F25841621
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 21FE91BF203;
+ Sat,  2 Sep 2023 15:50:19 +0000 (UTC)
+Date: Sat, 2 Sep 2023 17:50:18 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230902175018.249805c8@windsurf>
+In-Reply-To: <20230827145956.3204254-1-ju.o@free.fr>
+References: <20230827145956.3204254-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693669742;
+ d=bootlin.com; s=gm1; t=1693669820;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=yGQlR3xgASDmzUbsMHdT/PQT2PsTnuZLv/6l2JkuIb0=;
- b=QGP6Llku4j1UI9uPwHNTSczJGqLayRJPiwbK2e9MzeHyF54vZkZz8rYRF6tfdXAnHKand7
- p+T0KtWktQftHtvVBfnrip29zIh/dX7z40RkhiHCSz4aheWMN0rhV7VtMD5tNnGLseFVFv
- 9GRVcrVPiiT5z0sYWQ5Wla/FWIWnzr2BKQAxfMlh0GP0rNm9/5q9Oomj4lRiyjSICvtk9y
- PyVRZlyqUovBKFhFQ9385CnEql/aXKQtUobg5qRKmxChuDSk2r0uGIW+GP79Myx5NDj+O3
- msCU7VBsPhrI92KrLTz6TW+hDUmYMUlbbetco7xpvvhkiK6Q8fqNEyh1JEgZ9A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=8wvAQhOaeMlSrM1iVo/klzVru6V03WESZ50rslR734Q=;
+ b=ajRKcBFQk02xeaavdBa+8vtTWWnblY2ioOF5XZaKjXt5iBHM54PXkjfdlvSwC8J/aV4vua
+ FDzgg1+mWdxG/UINOVru1+ZXEn8th6d+eLcrv3WtApQowVNLIRTb42gMRLBzy2RmwTkzKw
+ GjO39kcyYvvi3gFuo8dsTEIaBsCcDLbeN8DvCFfMYlpJwGAGfWzC+yK3c5e7WNeZMtkt1C
+ y8nV/8+m1nA4C5L8Bdtob5uM0K5sLH+U+LMhlOBD4dek+HmvqmOustpzvUvfWjEEKGGvZ3
+ EvvVk8F11vATrd/SURflclo0yTJsbBjVyubN9zX/xns6e8nDB1kTTiA8y+emQw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QGP6Llku
-Subject: Re: [Buildroot] [PATCH v2 1/1] utils/check-package: cleanup line
- reading
+ header.s=gm1 header.b=ajRKcBFQ
+Subject: Re: [Buildroot] [PATCH next 1/3] boot/edk2: bump to version
+ edk2-stable202308
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,40 +77,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+Cc: Vincent =?UTF-8?B?U3RlaGzDqQ==?= <vincent.stehle@arm.com>,
  buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  2 Sep 2023 08:47:49 -0400
-James Knight <james.d.knight@live.com> wrote:
-
-> Cleanup the implementation for reading lines by having files processed
-> in context managers and utilizing the iterable file object for line
-> reading (instead of needing to call `readlines()`).
-> 
-> Signed-off-by: James Knight <james.d.knight@live.com>
-> ---
-> Changes v1 -> v2:
->   - This change drops the use of an `fstate` instance which should not
->     have been added in this initial/first patch (of a four-patch
->     series).  (mentioned by Thomas Petazzoni)
->   - Only this first patch is being resubmitted as this first patch can
->     be applied by itself and the remaining patches are in discussion.
-> ---
->  utils/check-package | 22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
-
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU3VuLCAyNyBBdWcgMjAyMyAxNjo1OTo1NCArMDIwMApKdWxpZW4gT2xpdmFpbiA8anUub0Bm
+cmVlLmZyPiB3cm90ZToKCj4gRm9yIGNoYW5nZSBsb2cgc2luY2UgdmVyc2lvbiBlZGsyLXN0YWJs
+ZTIwMjMwNSwgc2VlOgo+IC0gaHR0cHM6Ly9naXRodWIuY29tL3RpYW5vY29yZS9lZGsyL3JlbGVh
+c2VzL3RhZy9lZGsyLXN0YWJsZTIwMjMwOAo+IAo+IFRoZSBtYWluIG1vdGl2YXRpb25zIG9mIHRo
+aXMgYnVtcCBhcmUgdGhlIFJJU0MtViBRRU1VIFZpcnQgc3VwcG9ydAo+IGltcHJvdmVtZW50cyAo
+bm90IHlldCBzdXBwb3J0ZWQgaW4gQnVpbGRyb290KS4KPiAKPiBDYzogRGljayBPbHNzb24gPGhp
+QHNlbnppbGxhLmlvPgo+IENjOiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5j
+b20+Cj4gU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiAtLS0K
+PiBQYXRjaCBzZXJpZXMgdGVzdGVkIG9uIGJyYW5jaCBuZXh0IGF0IGNvbW1pdCA3YjAyY2E4IHdp
+dGggY29tbWFuZHM6CgpTZXJpZXMgYXBwbGllZCB0byBuZXh0LCB0aGFua3MhCgpUaG9tYXMKLS0g
+ClRob21hcyBQZXRhenpvbmksIENUTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVs
+IGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
+by9idWlsZHJvb3QK
