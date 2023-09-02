@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23D5DCA0FF8
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:42:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58336CA0FF6
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CF8BC40347;
-	Sat,  2 Sep 2023 07:42:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF8BC40347
+	by smtp2.osuosl.org (Postfix) with ESMTP id 118BF40470;
+	Sat,  2 Sep 2023 07:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 118BF40470
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3LAQSHoc7jTg; Sat,  2 Sep 2023 07:42:15 +0000 (UTC)
+	with ESMTP id idFnYGlgR3Ef; Sat,  2 Sep 2023 07:42:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA1C8415A7;
-	Sat,  2 Sep 2023 07:42:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA1C8415A7
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3885B1BF3CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3074E405DC;
+	Sat,  2 Sep 2023 07:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3074E405DC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3A0581BF861
  for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1228360ADD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 118B940347
  for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:40:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1228360ADD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 118B940347
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Bs07dvf_iB2P for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AzIDyOhaOJQq for <buildroot@lists.busybox.net>;
  Sat,  2 Sep 2023 07:40:43 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3077D60D9D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DFBD4018A
  for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:40:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3077D60D9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DFBD4018A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A44286762; Sat,  2 Sep 2023 07:40:43 +0000 (UTC)
+ id 0AAA9866FD; Sat,  2 Sep 2023 07:40:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:40:27 +0200
+Date: Sat, 2 Sep 2023 09:40:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 698562e7f59249b49e94d3243e3a592d1919fcf5
-X-Git-Newrev: aab82a29bc66ec1ab03c98cfe72112a9d21a1fc6
+X-Git-Oldrev: bf7926230c7d47dd809e59646a6ff4f7fe35b833
+X-Git-Newrev: 7dd5233b5540a950bb25024d2d48de04f07995bc
 X-Patchwork-Hint: ignore
-Message-Id: <20230902074043.1A44286762@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/beaglev_defconfig: fix build with
- binutils >= 2.38
+Message-Id: <20230902074043.0AAA9866FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxcrypt: fix another build issue
+ with perl >= 5.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,95 +64,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aab82a29bc66ec1ab03c98cfe72112a9d21a1fc6
+commit: https://git.buildroot.net/buildroot/commit/?id=7dd5233b5540a950bb25024d2d48de04f07995bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport an upstream patch fixing the build with binutils >= 2.38
-for riscv's for Zicsr and Zifencei.
+perl 5.38 deprecated smartmatch (~~ and the given/when syntax).
+Backport another upstream patch to drop uses of given.
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4987456149
+- http://autobuild.buildroot.net/results/727/727aa831881af36394bafef9e13a0dcbd9d0db3a
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...001-riscv-Fix-build-against-binutils-2.38.patch | 58 ++++++++++++++++++++++
- configs/beaglev_defconfig                          |  1 +
- 2 files changed, 59 insertions(+)
+ ...-Remove-smartmatch-usage-from-gen-crypt-h.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/board/beaglev/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch b/board/beaglev/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
+diff --git a/package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch b/package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch
 new file mode 100644
-index 0000000000..52b496f054
+index 0000000000..444896b53f
 --- /dev/null
-+++ b/board/beaglev/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
-@@ -0,0 +1,58 @@
-+From 0cf11f3c0478f4286adcfb09bf9137f8b00212e3 Mon Sep 17 00:00:00 2001
-+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-+Date: Mon, 3 Oct 2022 18:07:54 +0200
-+Subject: [PATCH] riscv: Fix build against binutils 2.38
++++ b/package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch
+@@ -0,0 +1,61 @@
++From 95d6e03ae37f4ec948474d111105bbdd2938aba2 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Andreas=20K=2E=20H=C3=BCttel?= <dilfridge@gentoo.org>
++Date: Sun, 25 Jun 2023 01:35:08 +0200
++Subject: [PATCH] Remove smartmatch usage from gen-crypt-h
 +
-+The following description is copied from the equivalent patch for the
-+Linux Kernel proposed by Aurelien Jarno:
++Needed for Perl 5.38
 +
-+>From version 2.38, binutils default to ISA spec version 20191213. This
-+means that the csr read/write (csrr*/csrw*) instructions and fence.i
-+instruction has separated from the `I` extension, become two standalone
-+extensions: Zicsr and Zifencei. As the kernel uses those instruction,
-+this causes the following build failure:
-+
-+arch/riscv/cpu/mtrap.S: Assembler messages:
-+arch/riscv/cpu/mtrap.S:65: Error: unrecognized opcode `csrr a0,scause'
-+arch/riscv/cpu/mtrap.S:66: Error: unrecognized opcode `csrr a1,sepc'
-+arch/riscv/cpu/mtrap.S:67: Error: unrecognized opcode `csrr a2,stval'
-+arch/riscv/cpu/mtrap.S:70: Error: unrecognized opcode `csrw sepc,a0'
-+
-+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-+Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-+Tested-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-+Tested-by: Heiko Stuebner <heiko@sntech.de>
-+Tested-by: Christian Stewart <christian@paral.in>
-+Reviewed-by: Rick Chen <rick@andestech.com>
-+(cherry picked from commit 1dde977518f13824b847e23275001191139bc384)
-+Upstream: https://gitlab.com/u-boot/u-boot/-/commit/1dde977518f13824b847e23275001191139bc384
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Upstream: https://github.com/besser82/libxcrypt/commit/95d6e03ae37f4ec948474d111105bbdd2938aba2
++Signed-off-by: Daniel Lang <dalang@gmx.at>
 +---
-+ arch/riscv/Makefile | 11 ++++++++++-
-+ 1 file changed, 10 insertions(+), 1 deletion(-)
++ build-aux/scripts/gen-crypt-h | 31 ++++++++++++++-----------------
++ 1 file changed, 14 insertions(+), 17 deletions(-)
 +
-+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-+index 0b80eb8d864..53d1194ffb6 100644
-+--- a/arch/riscv/Makefile
-++++ b/arch/riscv/Makefile
-+@@ -24,7 +24,16 @@ ifeq ($(CONFIG_CMODEL_MEDANY),y)
-+ 	CMODEL = medany
-+ endif
-+ 
-+-ARCH_FLAGS = -march=$(ARCH_BASE)$(ARCH_A)$(ARCH_C) -mabi=$(ABI) \
-++RISCV_MARCH = $(ARCH_BASE)$(ARCH_A)$(ARCH_C)
-++
-++# Newer binutils versions default to ISA spec version 20191213 which moves some
-++# instructions from the I extension to the Zicsr and Zifencei extensions.
-++toolchain-need-zicsr-zifencei := $(call cc-option-yn, -mabi=$(ABI) -march=$(RISCV_MARCH)_zicsr_zifencei)
-++ifeq ($(toolchain-need-zicsr-zifencei),y)
-++	RISCV_MARCH := $(RISCV_MARCH)_zicsr_zifencei
-++endif
-++
-++ARCH_FLAGS = -march=$(RISCV_MARCH) -mabi=$(ABI) \
-+ 	     -mcmodel=$(CMODEL)
-+ 
-+ PLATFORM_CPPFLAGS	+= $(ARCH_FLAGS)
-+-- 
-+2.41.0
++diff --git a/build-aux/scripts/gen-crypt-h b/build-aux/scripts/gen-crypt-h
++index 12aecf6d..b113b791 100644
++--- a/build-aux/scripts/gen-crypt-h
+++++ b/build-aux/scripts/gen-crypt-h
++@@ -12,7 +12,6 @@ use v5.14;    # implicit use strict, use feature ':5.14'
++ use warnings FATAL => 'all';
++ use utf8;
++ use open qw(:std :utf8);
++-no  if $] >= 5.018, warnings => 'experimental::smartmatch';
++ no  if $] >= 5.022, warnings => 'experimental::re_strict';
++ use if $] >= 5.022, re       => 'strict';
 +
-diff --git a/configs/beaglev_defconfig b/configs/beaglev_defconfig
-index 42c732b973..a76c1ffb5f 100644
---- a/configs/beaglev_defconfig
-+++ b/configs/beaglev_defconfig
-@@ -40,3 +40,4 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,starfive-tech,u-boot,64e
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_vic7100_beagle_v_smode"
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_JH71XX_TOOLS=y
-+BR2_GLOBAL_PATCH_DIR="board/beaglev/patches"
++@@ -37,22 +36,20 @@ sub process_config_h {
++     local $_;
++     while (<$fh>) {
++         chomp;
++-        # Yes, 'given $_' is really required here.
++-        given ($_) {
++-            when ('#define HAVE_SYS_CDEFS_H 1') {
++-                $have_sys_cdefs_h = 1;
++-            }
++-            when ('#define HAVE_SYS_CDEFS_BEGIN_END_DECLS 1') {
++-                $have_sys_cdefs_begin_end_decls = 1;
++-            }
++-            when ('#define HAVE_SYS_CDEFS_THROW 1') {
++-                $have_sys_cdefs_throw = 1;
++-            }
++-            when (/^#define PACKAGE_VERSION "((\d+)\.(\d+)\.\d+)"$/) {
++-                $substs{XCRYPT_VERSION_STR}   = $1;
++-                $substs{XCRYPT_VERSION_MAJOR} = $2;
++-                $substs{XCRYPT_VERSION_MINOR} = $3;
++-            }
+++
+++        if ($_ eq '#define HAVE_SYS_CDEFS_H 1') {
+++            $have_sys_cdefs_h = 1;
+++        }
+++        elsif ($_ eq '#define HAVE_SYS_CDEFS_BEGIN_END_DECLS 1') {
+++            $have_sys_cdefs_begin_end_decls = 1;
+++        }
+++        elsif ($_ eq '#define HAVE_SYS_CDEFS_THROW 1') {
+++            $have_sys_cdefs_throw = 1;
+++        }
+++        elsif (/^#define PACKAGE_VERSION "((\d+)\.(\d+)\.\d+)"$/) {
+++            $substs{XCRYPT_VERSION_STR}   = $1;
+++            $substs{XCRYPT_VERSION_MAJOR} = $2;
+++            $substs{XCRYPT_VERSION_MINOR} = $3;
++         }
++     }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
