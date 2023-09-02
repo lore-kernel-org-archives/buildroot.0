@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F28DCA0FF7
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 10:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB21BCA0FF7
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 10:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 508D960E32;
-	Sat,  2 Sep 2023 10:03:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 508D960E32
+	by smtp3.osuosl.org (Postfix) with ESMTP id 682FE60FEE;
+	Sat,  2 Sep 2023 10:03:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 682FE60FEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IgHVVArxQc-u; Sat,  2 Sep 2023 10:03:37 +0000 (UTC)
+	with ESMTP id 5iokec6xfH6J; Sat,  2 Sep 2023 10:03:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9854260BA6;
-	Sat,  2 Sep 2023 10:03:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9854260BA6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4E8361BF419
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:03:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB3CA60EC4;
+	Sat,  2 Sep 2023 10:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB3CA60EC4
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 52A961BF419
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B1A24011D
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:03:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B1A24011D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39B0D60EC4
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:03:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39B0D60EC4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Et4JRyXxNagp for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 10:03:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zHx1KudmVNKl for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 10:03:50 +0000 (UTC)
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 152DA4010C
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 10:03:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 152DA4010C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D93FA20005;
- Sat,  2 Sep 2023 10:03:28 +0000 (UTC)
-Date: Sat, 2 Sep 2023 12:03:27 +0200
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 15B7760BA6
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 10:03:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15B7760BA6
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 599FB20003;
+ Sat,  2 Sep 2023 10:03:47 +0000 (UTC)
+Date: Sat, 2 Sep 2023 12:03:46 +0200
 To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20230902120327.2cf071e3@windsurf>
-In-Reply-To: <20230830195446.3958486-5-aduskett@gmail.com>
+Message-ID: <20230902120346.05fc9bce@windsurf>
+In-Reply-To: <20230830195446.3958486-6-aduskett@gmail.com>
 References: <20230830195446.3958486-1-aduskett@gmail.com>
- <20230830195446.3958486-5-aduskett@gmail.com>
+ <20230830195446.3958486-6-aduskett@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693649010;
+ d=bootlin.com; s=gm1; t=1693649028;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=yLCjSOBf5D6XWFL9XjwFeObti7WWeJAYjgzGyyT2rAA=;
- b=OLROwhD1rOEOO5v4vf5a7L8x4RaAk5wz1X3ay7MBtoXnaI+M4zDXRUn8J+ZBtC6tuy26V3
- 3ZFFhSOL+ujsBqMTZ2YfxI6f1tLcI3q9zZULo2pw6r6WrYKKY1l8JfVUXQqGGKqu5+ecGQ
- 2WsDLSqLlSC8JXRayt+ydSgKLb+m6P1xoorUbx/rseYhwxEMkLXRueQ0oWuJowL8SHM2AB
- f5PZs7LvD4IS02H/zqARSQ5wzOBUvK4cJQy2CpusJ8i50ZNICF8wysOTPftvE0Uc+hRg5Z
- 8lqHQt6yAMb8P4s1qefsyaR3d0Ac/S0x2s01VvKaPVBoTaTodlKLe71a+7YAfQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Ie1LO7yqi+960siBNzHKOmCMJHnGcw0qjM5KkBpnrPI=;
+ b=FEKIs0eCQF+9VnMHLLWLCyAFqSHoa/xc+txURumfkUVygOCk35FfKqtZ7L8ZkVkTEG4myN
+ H1inZhfOaox7Kl6zYoz5BkM04gQZmK87U7FVSPfZTq7eCNQkmVftmpsaxF7h03wPPKF40G
+ BjmoR/qIIJVbhFFXlWGQcZmvoJ/coG0vOTdyJj2e7IcdZQARNqRMVwQrwF6vaOScJQpQ2n
+ bAcHE3KHnCBOBpslaxpTI/Ybzt/QrkzyBrPW95FtgvDdNlYWkpgMw68lZ5p7C4zwqvJHC8
+ TIG9pi5wp7LTywagFrhCAXtMG2UvmBEvcUCdrc0jYi3SOF0vu8WazM+DDweCmA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OLROwhD1
-Subject: Re: [Buildroot] [PATCH/next 5/7] package/mesa3d: add vulkan swrast
- driver support
+ header.s=gm1 header.b=FEKIs0eC
+Subject: Re: [Buildroot] [PATCH/next 6/7] package/qt5base: add vulkan option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,36 +86,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-On Wed, 30 Aug 2023 13:54:44 -0600
+On Wed, 30 Aug 2023 13:54:45 -0600
 Adam Duskett <aduskett@gmail.com> wrote:
 
-> +config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
-> +	bool "Vulkan swrast driver"
-> +	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	select BR2_PACKAGE_EXPAT
+> Notes:
+>   - eglfs/vulkan is only implemented for eglfs_viv
+>     (see stub implementation for QEglFSDeviceIntegration::createPlatformVulkanInstance()
+>     in src/plugins/platforms/eglfs/api/qeglfsdeviceintegration.cpp and
+>     real implementation for QEglFSVivIntegration::createPlatformVulkanInstance()
+>     in src/plugins/platforms/eglfs/deviceintegration/eglfs_viv/qeglfsvivintegration.cpp)
+>   - or for xcb (see QXcbIntegration::createPlatformVulkanInstance()
+>     in src/plugins/platforms/xcb/qxcbintegration.cpp)
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+>  package/qt5/qt5base/Config.in  | 10 ++++++++++
+>  package/qt5/qt5base/qt5base.mk |  7 +++++++
+>  2 files changed, 17 insertions(+)
 
-Not needed, this is selected globally by mesa3d.
-
-> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-
-Not needed, this is selected by
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST, and it makes more sense to
-have it selected by BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST.
-
-> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-> +	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
-> +	help
-> +	  Vulkan swrast driver.
-> +
-
-Applied to next with those changes. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
