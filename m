@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01410EC8738
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23D69EC8737
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD6BD83B72;
-	Thu,  7 Sep 2023 15:17:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD6BD83B72
+	by smtp1.osuosl.org (Postfix) with ESMTP id D161B822FA;
+	Thu,  7 Sep 2023 15:17:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D161B822FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7PvnaG-0CnVn; Thu,  7 Sep 2023 15:17:37 +0000 (UTC)
+	with ESMTP id eOiJNGDJ3ssp; Thu,  7 Sep 2023 15:17:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D455C83B69;
-	Thu,  7 Sep 2023 15:17:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D455C83B69
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11D6B83A38;
+	Thu,  7 Sep 2023 15:17:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11D6B83A38
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C75EE1BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 08BAF1BF3BB
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3128361266
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59E4B6128D
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3128361266
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59E4B6128D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3OwqdyqgX2Yl for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+ with ESMTP id COVkcSDQlJRd for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFBF56128D
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFBF56128D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9601C612B4
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9601C612B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A06F486A22; Thu,  7 Sep 2023 14:51:33 +0000 (UTC)
+ id 856EA86A25; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 29 Aug 2023 14:55:04 +0200
+Date: Sat, 2 Sep 2023 10:15:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a2ef47a4b56c5333bbc05ebc6f07e491646eb9ce
-X-Git-Newrev: e8332e66b4f063eb842bb934e4806a26f3cacfd2
+X-Git-Oldrev: 86fac42015cb10c8d2926a30882d8e3645e585c8
+X-Git-Newrev: c82de32369d9c5c298058896c87b3e6fa9b465de
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145133.A06F486A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/daemon: bump to version 0.8.4
+Message-Id: <20230907145134.856EA86A25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: add new option for
+ Marvell prestera firmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,67 +64,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8332e66b4f063eb842bb934e4806a26f3cacfd2
+commit: https://git.buildroot.net/buildroot/commit/?id=c82de32369d9c5c298058896c87b3e6fa9b465de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update license info. COPYING hash updated because of added reference to
-additional licenses. Licenses for local snprintf and getopt
-implementations do not apply, since this code is not used for Linux
-targets.
+Add the Marvell prestera ethernet cards firmwares.
 
-Add Tatu Ylonen Permissive license of the code in pseudo.c.
-
-Add LGPL-2.0+ license text file.
-
-Rename BSD-3-Clause text file and update hash because of text formatting
-change.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/daemon/daemon.hash |  8 +++++---
- package/daemon/daemon.mk   | 10 +++++++---
- 2 files changed, 12 insertions(+), 6 deletions(-)
+ package/linux-firmware/Config.in           | 5 +++++
+ package/linux-firmware/linux-firmware.hash | 1 +
+ package/linux-firmware/linux-firmware.mk   | 6 ++++++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-index 5ad7bf6ce2..f1346d269b 100644
---- a/package/daemon/daemon.hash
-+++ b/package/daemon/daemon.hash
-@@ -1,7 +1,9 @@
- # From http://www.libslack.org/daemon/
--sha256  b34b37543bba43bd086e59f4b754c8102380ae5c1728b987c890d5da4b4cf3ca  daemon-0.8.2.tar.gz
-+sha256  fa28859ad341cb0a0b012c11c271814f870482013b49f710600321d379887cd1  daemon-0.8.4.tar.gz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
--sha256  35e31504fc0aec878e86900dde1d90a04404833c182f50d5678d873910bb11eb  COPYING
--sha256  5a93d5831e1297ab10fe643e1a631e83be392896da14ee2951285a79012df69d  LICENSES/BSD-3-Clause.txt
-+sha256  34c8c7085e4d3920bfb8143b910d4f99194b9fc3e1cc3442c9b1b46db4382891  COPYING
-+sha256  8587dc1ea896f33b657d9e57bd3bf03f0c11ce07d041f09e687f87e7a0087b38  LICENSES/LicenseRef-BSD-3-Clause-Almost.txt
- sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
-+sha256  61778e80a2fd85955b626b29aa2bcf06144c714277bded65633e4a81479d9fb3  LICENSES/LGPL-2.0-or-later.txt
-+sha256  1aa57d2704f6783460f2750a9f3217d083ed5161eb95438ca43a5674213a7128  LICENSES/LicenseRef-Tatu-Ylonen-Permissive.txt
-diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-index 5e7e497ff1..d7709e03ef 100644
---- a/package/daemon/daemon.mk
-+++ b/package/daemon/daemon.mk
-@@ -4,10 +4,14 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 3ae72564cc..46e538776d 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -489,6 +489,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_ICE
+ 	  Firmware files for Intel Ethernet 800 Series Network Adapters
+ 	  (ice)
  
--DAEMON_VERSION = 0.8.2
-+DAEMON_VERSION = 0.8.4
- DAEMON_SITE = http://libslack.org/daemon/download
--DAEMON_LICENSE = GPL-2.0+, LGPL-2.0+, BSD-3-Clause
--DAEMON_LICENSE_FILES = LICENSE COPYING LICENSES/BSD-3-Clause.txt LICENSES/GPL-2.0-or-later.txt
-+DAEMON_LICENSE = GPL-2.0+, LGPL-2.0+, BSD-3-Clause, Tatu Ylonen permissive license
-+DAEMON_LICENSE_FILES = LICENSE COPYING \
-+	LICENSES/LicenseRef-BSD-3-Clause-Almost.txt \
-+	LICENSES/GPL-2.0-or-later.txt \
-+	LICENSES/LGPL-2.0-or-later.txt \
-+	LICENSES/LicenseRef-Tatu-Ylonen-Permissive.txt
++config BR2_PACKAGE_LINUX_FIRMWARE_MARVELL_PRESTERA
++	bool "Marvell Prestera"
++	help
++	  Firmware files for Marvell Prestera ethernet cards
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
+ 	bool "Microchip VSC85xx PHYs"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 7ba9537dd8..31bbfddfaa 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -17,6 +17,7 @@ sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENC
+ sha256  8c45a83562a69f7ac4207e4cb5c0063af2e545791b3947bc81dc82305481c15c  LICENSE.ice_enhanced
+ sha256  0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d  LICENCE.it913x
+ sha256  16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5  LICENCE.iwlwifi_firmware
++sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
+ sha256  0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3  LICENCE.microchip
+ sha256  59ae206c89108905ebdc9ad4c9336526bd2c0d50fbf988c21e8c2a82719d42a4  LICENCE.moxa
+ sha256  0bd9f7cae3cf72b12a63359a725ccbb76ddbd6831372695a9162144329800dd0  LICENCE.qat_firmware
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index a1cec90de2..f8c239d816 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -616,6 +616,12 @@ LINUX_FIRMWARE_FILES += \
+ 	rtl_nic/rtl8411-2.fw
+ endif
  
- define DAEMON_CONFIGURE_CMDS
- 	(cd $(@D); ./configure)
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MARVELL_PRESTERA),y)
++LINUX_FIRMWARE_FILES += \
++	mrvl/prestera/mvsw_prestera_fw*.img
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XCx000),y)
+ LINUX_FIRMWARE_FILES += \
+ 	dvb-fe-xc4000-1.4.1.fw \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
