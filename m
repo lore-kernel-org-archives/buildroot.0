@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC85CEC873A
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76B71EC873A
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:43:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69C8883268;
-	Thu,  7 Sep 2023 15:43:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 69C8883268
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31C4280BFF;
+	Thu,  7 Sep 2023 15:43:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31C4280BFF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id MlGm57umm6_s; Thu,  7 Sep 2023 15:43:22 +0000 (UTC)
+	with ESMTP id eeiQtQwu9WVV; Thu,  7 Sep 2023 15:43:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FE0882312;
-	Thu,  7 Sep 2023 15:43:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FE0882312
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EC9680B9F;
+	Thu,  7 Sep 2023 15:43:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EC9680B9F
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 52A171BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1FEDA1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3326441DC6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C17D41DC2
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3326441DC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C17D41DC2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dB-NJpkNeA3e for <buildroot@lists.busybox.net>;
+ with ESMTP id KUC0lcfWzOLp for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B377041DC9
+ by smtp4.osuosl.org (Postfix) with ESMTP id E48A641E68
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B377041DC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E48A641E68
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC9A686A22; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id CF506869E0; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 11:49:37 +0200
+Date: Sat, 2 Sep 2023 11:58:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d5a7f213ab94d986133760122105adda76676823
-X-Git-Newrev: 0bc44d52c643711e39bc2ee44ca10a16ed300460
+X-Git-Oldrev: 1c27f3a12d77bc3cef97123148ff13929d13d73e
+X-Git-Newrev: 9e057e7897008a6aabcd91109cf004e5ffd957ff
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.AC9A686A22@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mesa3d: add vulkan broadcom driver
- support
+Message-Id: <20230907145134.CF506869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vulkan-headers: add comment on
+ version being shared with other packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,48 +64,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bc44d52c643711e39bc2ee44ca10a16ed300460
+commit: https://git.buildroot.net/buildroot/commit/?id=9e057e7897008a6aabcd91109cf004e5ffd957ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/Config.in | 9 +++++++++
- package/mesa3d/mesa3d.mk | 1 +
- 2 files changed, 10 insertions(+)
+ package/vulkan-headers/vulkan-headers.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index c7ee2a8db0..c3abd662f3 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -299,6 +299,15 @@ comment "Gallium VDPAU state tracker needs X.org and gallium drivers r600, radeo
+diff --git a/package/vulkan-headers/vulkan-headers.mk b/package/vulkan-headers/vulkan-headers.mk
+index 5434f69a40..20b248364d 100644
+--- a/package/vulkan-headers/vulkan-headers.mk
++++ b/package/vulkan-headers/vulkan-headers.mk
+@@ -4,6 +4,8 @@
+ #
+ ################################################################################
  
- comment "Vulkan drivers"
- 
-+config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
-+	bool "Vulkan broadcom driver"
-+	depends on BR2_arm || BR2_aarch64
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # dri3/libxshmfence
-+	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
-+	help
-+	  Vulkan broadcom driver.
-+
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	bool "Vulkan Intel driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 8f3d224417..67573909a3 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -119,6 +119,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
- # Vulkan Drivers
-+MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
- 
- ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
++# Note: changing this version will also affect vulkan-loader and
++# vulkan-tools, so please update those packages as well.
+ VULKAN_HEADERS_VERSION = 1.3.262
+ VULKAN_HEADERS_SITE = $(call github,KhronosGroup,Vulkan-Headers,v$(VULKAN_HEADERS_VERSION))
+ VULKAN_HEADERS_LICENSE = Apache-2.0, MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
