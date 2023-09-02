@@ -4,66 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E13DCA0FF7
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 10:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D7C1CA0FF7
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 10:19:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1772A6142B;
-	Sat,  2 Sep 2023 10:04:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1772A6142B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CB6F60A79;
+	Sat,  2 Sep 2023 10:19:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CB6F60A79
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id flTk9nJsnn1b; Sat,  2 Sep 2023 10:04:06 +0000 (UTC)
+	with ESMTP id MgAT_I6-ahOl; Sat,  2 Sep 2023 10:19:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 080EC60EAA;
-	Sat,  2 Sep 2023 10:04:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 080EC60EAA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7AB791BF419
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:04:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5E02260A74;
+	Sat,  2 Sep 2023 10:19:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E02260A74
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BF3841BF40A
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5363F60EAA
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:04:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5363F60EAA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97AD14011D
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 10:19:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97AD14011D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wPmyHDuFbtaY for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 10:03:59 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 497C360C16
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 10:03:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 497C360C16
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BADF51C0005;
- Sat,  2 Sep 2023 10:03:54 +0000 (UTC)
-Date: Sat, 2 Sep 2023 12:03:53 +0200
-To: Adam Duskett <aduskett@gmail.com>
-Message-ID: <20230902120353.4d363616@windsurf>
-In-Reply-To: <20230830195446.3958486-7-aduskett@gmail.com>
-References: <20230830195446.3958486-1-aduskett@gmail.com>
- <20230830195446.3958486-7-aduskett@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id e3H7XitEaDGZ for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 10:19:47 +0000 (UTC)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B6CEB4010C
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 10:19:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6CEB4010C
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-5298e43bb67so1645813a12.1
+ for <buildroot@buildroot.org>; Sat, 02 Sep 2023 03:19:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693649984; x=1694254784;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=LSaQhxDQpM4czqZLtSNZuHWJXpPU4C48Z/RXZRpvvEU=;
+ b=WjBExPCVfbNcH9DWhbLU7/j23HwTv/blSkNGGZinoenb7y/6pxRyS8iYmjrgFalA4c
+ n9IaXZrUxVHL0LC0tx7Dtymdugz27vrB9swl1orhqLLHDD5wWC9xBq9KTDLevFziW86x
+ u0bXCc7MEvMay3pUXE/eGawIc5lnDjSOmcL87c3dHpbdtXbY0Ff6DrcEpwVs20AAWsNw
+ uDh00WQK/vn6dKl9aB951Ihd4qlEG/1/xDuoZ7XfOFuqI1CYoDJWqo33Vah0CQFzaOYU
+ gs41UUQqxX+05WBPGLVM+vKzx0fOGkYE33s/MeMGQgyei+avHLwOcf/hVbu+HOzyVUFa
+ 90hA==
+X-Gm-Message-State: AOJu0YyGh1z/tZp6GvFYwSA7BW0p4s5rMQj0bMl40p+pOnN2pVAWf/uh
+ ufe9k86p/U6/tymJGOwlhjOKPgo8lR9ve81yBsD7jQkDCYPnog==
+X-Google-Smtp-Source: AGHT+IF/bcSQwExQ2+sL2r4ZE97q4700sIlwKuzxy2utkhFRxHyCRXhbpuz6svST8FdFdoUWaPRsx9VDQ4PS4w+15DE=
+X-Received: by 2002:a05:6402:40d5:b0:522:582f:91af with SMTP id
+ z21-20020a05640240d500b00522582f91afmr8858994edb.9.1693649984544; Sat, 02 Sep
+ 2023 03:19:44 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+From: Andrea Simeoni <andreasimeoni73@gmail.com>
+Date: Sat, 2 Sep 2023 12:19:33 +0200
+Message-ID: <CAPmASevJ9KynWxPBga3chKQCBVUCeZ-gt88LMfAzt6+-F6bZHw@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693649036;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LxX1Cdw/TPMefV86OE/axFkKG40E+U6nJ8eMFJVc3Ww=;
- b=TVQowXUyBu+l3MOy2E03TGpB5tNR0ux+OyxCOk4lLJUa/6MLZCCHTQAfi2wqShbYKb8k90
- 1O8oYh6hbHEMbEkMVeHzXrTb12Qmx/9/xwja5mt0YFT8cregO2qDprlShRKMHeRKs2HF3i
- HlrMitS546RuyTlV2l7Oqmfno4+vX0sXuSYSE/VKzhe8FbJcb6Z/32FTOCNKLegILRMr+W
- xpcACLxFxNKP3BlNCExRUUWiiMmnd4/flgP5UxCXl0nooCJSSYUmcfhGWztm0ivOgdN9OP
- h6kl8t08FLDPYEBYWTCTTnAYt+Q6t/pHJNh8mV3EbWvaqvLytQIlgQ+TPQXtWA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TVQowXUy
-Subject: Re: [Buildroot] [PATCH vnext 7/7] package/qt6base: add vulkan option
+ d=gmail.com; s=20221208; t=1693649984; x=1694254784; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=LSaQhxDQpM4czqZLtSNZuHWJXpPU4C48Z/RXZRpvvEU=;
+ b=O+pgKhP0hr/E0qQPOfX8b4VsbSGxZN6aL9DAuW3CIi2O8WHsP4UMTMtyjQchPOs378
+ fAT77BanDkRVRcwfm/Dg929Z6SXl9ZRRih3l9XHswZJ76XCb7xhEzpsNstA5Jji7+2Ve
+ 2iAc2gg1nr8y0QxXIK0PFd5vwLqCgIPm26I6Fgt7bn46esZn686t39y1zNLRE1bNuAXD
+ ceV0IUbsiv/maKXsIRhXhS2BSG9rMjJVfBHp32Lg0VH9/9fAd80kXoKoMcgpNQ59UWEL
+ jlimc4gETutfnOZBv8rbradOVzSTadOvbewKYtJ+T0fiCUdEnx5xPKYkNx40gfw3bs/W
+ EYVQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=O+pgKhP0
+Subject: [Buildroot] stat command missing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,34 +86,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Samuel Martin <s.martin49@gmail.com>,
- Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jesse Van Gavere <jesseevg@gmail.com>, Romain Naour <romain.naour@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0141153262654336706=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 30 Aug 2023 13:54:46 -0600
-Adam Duskett <aduskett@gmail.com> wrote:
+--===============0141153262654336706==
+Content-Type: multipart/alternative; boundary="000000000000b3e30306045d9d7a"
 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/qt6/qt6base/Config.in  | 10 ++++++++++
->  package/qt6/qt6base/qt6base.mk |  7 +++++++
->  2 files changed, 17 insertions(+)
+--000000000000b3e30306045d9d7a
+Content-Type: text/plain; charset="UTF-8"
 
-Applied to next, thanks.
+Hello! How to add the stat command to the image?
+Is needed by QtCreator to deploy files to the remote target.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I tried to add CONFIG_STAT=y to the busybox config file but it's not
+recognized.
+Even a search in xconfig did not find anything related to stat.
+Thanks
+
+--000000000000b3e30306045d9d7a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hello! How to add the stat command to the image? <br>=
+</div>Is needed by QtCreator to deploy files to the remote target.<div><br>=
+</div><div><div>I tried to add CONFIG_STAT=3Dy to the busybox config file b=
+ut it&#39;s not recognized.</div><div></div><div>Even a search in xconfig d=
+id not find anything related to stat.</div><div>Thanks</div><div><br></div>=
+</div></div>
+
+--000000000000b3e30306045d9d7a--
+
+--===============0141153262654336706==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0141153262654336706==--
