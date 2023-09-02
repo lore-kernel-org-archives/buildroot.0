@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2203AEC873F
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB6AEC873C
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:41:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCE8B83C60;
-	Thu,  7 Sep 2023 15:41:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCE8B83C60
+	by smtp1.osuosl.org (Postfix) with ESMTP id 648BD83EA7;
+	Thu,  7 Sep 2023 15:41:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 648BD83EA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id OpTlAj1eavjU; Thu,  7 Sep 2023 15:41:02 +0000 (UTC)
+	with ESMTP id nCl4N_iXg7T1; Thu,  7 Sep 2023 15:41:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07A5F83C65;
-	Thu,  7 Sep 2023 15:41:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07A5F83C65
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C89583C6B;
+	Thu,  7 Sep 2023 15:41:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C89583C6B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18AC51BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0977B1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C94F41DB2
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE5A241D83
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C94F41DB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE5A241D83
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mBo8URvESjer for <buildroot@lists.busybox.net>;
+ with ESMTP id 08755JbEzHnp for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23AB841E59
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C02A41DC6
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23AB841E59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C02A41DC6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C16B869E0; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id 5A05E86A1F; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 30 Aug 2023 23:49:09 +0200
+Date: Sat, 2 Sep 2023 09:36:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 04811ff1489ac3b72cb3aca3ad806998c9863ca2
-X-Git-Newrev: d87d54d23d258945ecc8fd3fc753910c1dd409e6
+X-Git-Oldrev: 94d48acba3a787dd20fb53bcd759a2cf96e779fc
+X-Git-Newrev: ff6fae8bc1e995681cc906c4595205b5dc3f5586
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.1C16B869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.8.5
+Message-Id: <20230907145134.5A05E86A1F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lighttpd: bump to version 1.4.71
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,43 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d87d54d23d258945ecc8fd3fc753910c1dd409e6
+commit: https://git.buildroot.net/buildroot/commit/?id=ff6fae8bc1e995681cc906c4595205b5dc3f5586
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://forum.torproject.org/t/stable-release-0-4-8-5/8996
+Changelog:
+ - https://www.lighttpd.net/2023/5/10/1.4.70/
+ - https://www.lighttpd.net/2023/5/27/1.4.71/
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index d87e2742d3..b6b183c2d1 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 29bf5124b6..a86ebf2f68 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
 @@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.4.tar.gz.sha256sum
--sha256  09c1ce74a25fc3b48c81ff146cbd0dd538cbbb8fe4e2964fc2fb2b192f6a1d2b  tor-0.4.8.4.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.5.tar.gz.sha256sum
-+sha256  6957cfd14a29eee7555c52f8387a46f2ce2f5fe7dadf93547f1bc74b1657e119  tor-0.4.8.5.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index b3360d3c3b..e86fec29f4 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.69.sha512sum
+-sha512  9d174c8e0a192b4eb8218a9f76b0bd42f90030228600bb7bbe35ebb9e7bbaea36ee2732535c5cc6dab171294817837bfa26074ff84a37832dd89f57488b4071f  lighttpd-1.4.69.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.71.sha512sum
++sha512  c1388b563b9cf9dcab0a57bec42b09b2cb5e1932bc137ae5f957d1bf3932ddd8f5f188002a7b9a00f0a92ba3779b21ecbea2ccffa91e686b6660c9cc455d6598  lighttpd-1.4.71.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index ca2035b6b3..bc0dbcbf45 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--TOR_VERSION = 0.4.8.4
-+TOR_VERSION = 0.4.8.5
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).69
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).71
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
