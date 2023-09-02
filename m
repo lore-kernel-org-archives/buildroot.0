@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55115EC873D
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:42:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45BF0EC873D
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D1F4813F4;
-	Thu,  7 Sep 2023 15:42:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D1F4813F4
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC32A83B98;
+	Thu,  7 Sep 2023 15:42:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC32A83B98
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WL4dLIQtGK1a; Thu,  7 Sep 2023 15:42:44 +0000 (UTC)
+	with ESMTP id K3B8MbKGiDOb; Thu,  7 Sep 2023 15:42:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C43B83268;
-	Thu,  7 Sep 2023 15:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C43B83268
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2422C827DD;
+	Thu,  7 Sep 2023 15:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2422C827DD
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 231101BF313
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EA1FD1BF313
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:54:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F002D41E59
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F002D41E59
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2142441DBC
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2142441DBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0S7naZ9zMe1R for <buildroot@lists.busybox.net>;
+ with ESMTP id Audsz_UFccQj for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 14:51:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8043141DC2
+ by smtp4.osuosl.org (Postfix) with ESMTP id AB35B41E5D
  for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8043141DC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB35B41E5D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C1B086A21; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+ id A418686A21; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:44:48 +0200
+Date: Sat, 2 Sep 2023 11:49:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: de9187eca28adc3733b1842d97666c7eb1c6b380
-X-Git-Newrev: f38a2a95ac9cefaf7483d49ba0f2ded6fa97019c
+X-Git-Oldrev: 6aa1bc31678ff9f8013084fda34b9f941cc63fc3
+X-Git-Newrev: d5a7f213ab94d986133760122105adda76676823
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145134.6C1B086A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmt: bump to version 10.1.1
+Message-Id: <20230907145134.A418686A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vulkan-tools: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,131 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f38a2a95ac9cefaf7483d49ba0f2ded6fa97019c
+commit: https://git.buildroot.net/buildroot/commit/?id=d5a7f213ab94d986133760122105adda76676823
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Use $(VULKAN_HEADERS_VERSION) for VULKAN_TOOLS_VERSION as the vulkan packages
+need to all be the same version.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/vulkan-tools/Config.in         | 17 ++++++++++++
+ package/vulkan-tools/vulkan-tools.hash |  3 +++
+ package/vulkan-tools/vulkan-tools.mk   | 47 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 69 insertions(+)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 688c86243a..5f0e06ef30 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d725fa83a8b57a3cedf238828fa6b167f963041e8f9f7327649bddc68ae316f4  fmt-10.1.0.zip
-+sha256  b84e58a310c9b50196cda48d5678d5fa0849bca19e5fdba6b684f0ee93ed9d1b  fmt-10.1.1.zip
- sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 8332b89605..8f8ba4837f 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 413054ab84..eba7c4aa34 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -29,6 +29,7 @@
+ N:	Adam Duskett <aduskett@gmail.com>
+ F:	package/firewalld/
+ F:	package/vulkan-loader/
++F:	package/vulkan-tools/
  
--FMT_VERSION = 10.1.0
-+FMT_VERSION = 10.1.1
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+ N:	Adam Heinrich <adam@adamh.cz>
+ F:	package/jack1/
+diff --git a/package/Config.in b/package/Config.in
+index 41ff89726c..b21a2f8c65 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -370,6 +370,7 @@ comment "Graphic libraries"
+ 	source "package/tk/Config.in"
+ 	source "package/vulkan-headers/Config.in"
+ 	source "package/vulkan-loader/Config.in"
++	source "package/vulkan-tools/Config.in"
+ 
+ comment "Other GUIs"
+ 	source "package/qt5/Config.in"
+diff --git a/package/vulkan-tools/Config.in b/package/vulkan-tools/Config.in
+new file mode 100644
+index 0000000000..54fa539dab
+--- /dev/null
++++ b/package/vulkan-tools/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_VULKAN_TOOLS
++	bool "vulkan-tools"
++	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
++	depends on !BR2_STATIC_LIBS # vullan-loader
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
++	select BR2_PACKAGE_VULKAN_HEADERS
++	select BR2_PACKAGE_VULKAN_LOADER
++
++	help
++	  The Khronos official Vulkan Tools and Utilities.
++
++	  https://github.com/KhronosGroup/Vulkan-Tools
++
++comment "vulkan-tools needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/vulkan-tools/vulkan-tools.hash b/package/vulkan-tools/vulkan-tools.hash
+new file mode 100644
+index 0000000000..24c0697784
+--- /dev/null
++++ b/package/vulkan-tools/vulkan-tools.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  8c77d02694d0516ae2ba3f3718745647e87e788ef93faabb2e3674ff32608010  vulkan-tools-1.3.262.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
+new file mode 100644
+index 0000000000..68f7c1c04d
+--- /dev/null
++++ b/package/vulkan-tools/vulkan-tools.mk
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# vulkan-tools
++#
++################################################################################
++
++VULKAN_TOOLS_VERSION = $(VULKAN_HEADERS_VERSION)
++VULKAN_TOOLS_SITE = $(call github,KhronosGroup,Vulkan-Tools,v$(VULKAN_TOOLS_VERSION))
++VULKAN_TOOLS_LICENSE = Apache-2.0
++VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
++
++VULKAN_TOOLS_DEPENDENCIES = \
++	vulkan-headers \
++	vulkan-loader
++
++VULKAN_TOOLS_CONF_OPTS += \
++	-DBUILD_CUBE=OFF \
++	-DBUILD_ICD=OFF \
++	-DBUILD_VULKANINFO=ON \
++	-DINSTALL_ICD=OFF
++
++ifeq ($(BR2_PACKAGE_DIRECTFB),y)
++VULKAN_TOOLS_DEPENDENCIES += directfb
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=ON
++else
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBXCB),y)
++VULKAN_TOOLS_DEPENDENCIES += libxcb
++VULKAN_TOOLS_CONF_OPTS += \
++	-DBUILD_WSI_XCB_SUPPORT=ON \
++	-DBUILD_WSI_XLIB_SUPPORT=ON
++else
++VULKAN_TOOLS_CONF_OPTS += \
++	-DBUILD_WSI_XCB_SUPPORT=OFF \
++	-DBUILD_WSI_XLIB_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++VULKAN_TOOLS_DEPENDENCIES += wayland
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=ON
++else
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
