@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C004CA0FF6
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8150FCA0FF8
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B8A514026F;
-	Sat,  2 Sep 2023 07:39:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8A514026F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 12A4D40297;
+	Sat,  2 Sep 2023 07:39:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12A4D40297
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EEQ6-i6FyMlk; Sat,  2 Sep 2023 07:39:00 +0000 (UTC)
+	with ESMTP id 2x_ayV2YhLsG; Sat,  2 Sep 2023 07:39:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AE3740204;
-	Sat,  2 Sep 2023 07:38:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AE3740204
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5523D1BF3CB
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4856340204;
+	Sat,  2 Sep 2023 07:39:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4856340204
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 604311BF861
  for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BC1C8123F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46A3840297
  for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC1C8123F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46A3840297
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MKzLWWGweyzN for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5cH_c-_odobJ for <buildroot@lists.busybox.net>;
  Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 742B181232
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B106401CA
  for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 742B181232
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B106401CA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61B5E8659D; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
+ id 58B33864F2; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:36:29 +0200
+Date: Sat, 2 Sep 2023 09:36:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5b3388f1e2a23f9cfa922128304e6db803e1093c
-X-Git-Newrev: d0e30b87f9a278218950000882c607cf39a79e45
+X-Git-Oldrev: 3ef29343aeebefa019d2fabc6e0f83d7639b9b01
+X-Git-Newrev: 5b3388f1e2a23f9cfa922128304e6db803e1093c
 X-Patchwork-Hint: ignore
-Message-Id: <20230902073856.61B5E8659D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/freetype: bump to
- version 2.13.2
+Message-Id: <20230902073856.58B33864F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ed: bump to version
+ 1.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0e30b87f9a278218950000882c607cf39a79e45
+commit: https://git.buildroot.net/buildroot/commit/?id=5b3388f1e2a23f9cfa922128304e6db803e1093c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+See release announce:
+https://lists.gnu.org/archive/html/bug-ed/2023-01/msg00000.html
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ed/ed.hash | 4 ++--
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index ea03526c99..e7331d5ba0 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.1/
--sha1  af9b6b754320a0526179f166e3f8cffce78526ca  freetype-2.13.1.tar.xz
--sha256  ea67e3b019b1104d1667aa274f5dc307d8cbd606b399bc32df308a77f1a564bf  freetype-2.13.1.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.2/
-+sha1  2d8d5917a1983ebd04921f2993a88858d6f72dec  freetype-2.13.2.tar.xz
-+sha256  12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d  freetype-2.13.2.tar.xz
- 
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index 36f9b9c1e4..007f645f51 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnu.org/archive/html/bug-ed/2022-02/msg00000.html
+-sha256  aca8efad9800c587724a20b97aa8fc47e6b5a47df81606feaba831b074462b4f  ed-1.18.tar.lz
++# From https://lists.gnu.org/archive/html/bug-ed/2023-01/msg00000.html
++sha256  ce2f2e5c424790aa96d09dacb93d9bbfdc0b7eb6249c9cb7538452e8ec77cd48  ed-1.19.tar.lz
  # Locally calculated
- sha256  2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index c6bc0673f6..1f4bcaf341 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
+ sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 645cfb7696..a90d1f005e 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.13.1
-+FREETYPE_VERSION = 2.13.2
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+-ED_VERSION = 1.18
++ED_VERSION = 1.19
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
