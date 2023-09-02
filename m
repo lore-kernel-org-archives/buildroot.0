@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76B98EC8738
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:18:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD030EC8738
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 15:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F49C81767;
-	Thu,  7 Sep 2023 15:18:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F49C81767
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8503B8122D;
+	Thu,  7 Sep 2023 15:18:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8503B8122D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bqbkoybodZX0; Thu,  7 Sep 2023 15:18:39 +0000 (UTC)
+	with ESMTP id PZJ4IJsJobyA; Thu,  7 Sep 2023 15:18:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 508518146B;
-	Thu,  7 Sep 2023 15:18:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 508518146B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 185DC1BF313
+	by smtp1.osuosl.org (Postfix) with ESMTP id A137881E6A;
+	Thu,  7 Sep 2023 15:18:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A137881E6A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 49EDC1BF3BB
  for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:52:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B8D5F41D7D
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8D5F41D7D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 79463612B2
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 14:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79463612B2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MMJUN1XAgBCJ for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 14:51:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RCaelovjrKEK for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 149E741D74
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 149E741D74
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6884612B6
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6884612B6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 094DF869E0; Thu,  7 Sep 2023 14:51:28 +0000 (UTC)
+ id B4E00869E0; Thu,  7 Sep 2023 14:51:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 8 Aug 2023 19:15:05 +0200
+Date: Sat, 2 Sep 2023 11:49:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f32fab3d85c4e8e45f170d7b720bf9f6404962f
-X-Git-Newrev: c50e9c21f0444b064bc257fcc0d3073fee945623
+X-Git-Oldrev: 0bc44d52c643711e39bc2ee44ca10a16ed300460
+X-Git-Newrev: 028403c47ce297776558173f9833fe64ad2f058f
 X-Patchwork-Hint: ignore
-Message-Id: <20230907145128.094DF869E0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/onevpl: new package
+Message-Id: <20230907145134.B4E00869E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: add vulkan swrast driver
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,173 +64,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c50e9c21f0444b064bc257fcc0d3073fee945623
+commit: https://git.buildroot.net/buildroot/commit/?id=028403c47ce297776558173f9833fe64ad2f058f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../onevpl/0001-Don-t-force-fstack-protector.patch | 32 ++++++++++++++++
- package/onevpl/Config.in                           | 27 ++++++++++++++
- package/onevpl/onevpl.hash                         |  3 ++
- package/onevpl/onevpl.mk                           | 43 ++++++++++++++++++++++
- 6 files changed, 107 insertions(+)
+ package/mesa3d/Config.in | 8 ++++++++
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9915143a04..eb703d52c7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -417,6 +417,7 @@ F:	package/mjpg-streamer/
- F:	package/mpg123/
- F:	package/ntp/
- F:	package/nut/
-+F:	package/onevpl/
- F:	package/opus/
- F:	package/pciutils/
- F:	package/perl-crypt-openssl-guess/
-diff --git a/package/Config.in b/package/Config.in
-index e12ee34e9f..58e653dcd9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1642,6 +1642,7 @@ menu "Graphics"
- 	source "package/libvips/Config.in"
- 	source "package/libwpe/Config.in"
- 	source "package/menu-cache/Config.in"
-+	source "package/onevpl/Config.in"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
-diff --git a/package/onevpl/0001-Don-t-force-fstack-protector.patch b/package/onevpl/0001-Don-t-force-fstack-protector.patch
-new file mode 100644
-index 0000000000..14948e28cc
---- /dev/null
-+++ b/package/onevpl/0001-Don-t-force-fstack-protector.patch
-@@ -0,0 +1,32 @@
-+From 682a9eabc71c2e33ebbbba2e75d0ba7caa08c7c8 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 8 May 2023 20:03:22 +0200
-+Subject: [PATCH] Don't force -fstack-protector
-+
-+This allows the environment to decide whether SSP should be used or
-+not, for example to support toolchains that don't have SSP support.
-+
-+Upstream: Not applicable
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ cmake/CompileOptions.cmake | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/cmake/CompileOptions.cmake b/cmake/CompileOptions.cmake
-+index 9923f1c..5b24622 100644
-+--- a/cmake/CompileOptions.cmake
-++++ b/cmake/CompileOptions.cmake
-+@@ -54,9 +54,6 @@ else()
-+       add_definitions("-D_FORTIFY_SOURCE=2")
-+     endif()
-+   endif()
-+-  if(NOT MINGW)
-+-    add_compile_options("-fstack-protector-strong")
-+-  endif()
-+   if(NOT MINGW)
-+     add_link_options("-Wl,-z,relro,-z,now,-z,noexecstack")
-+   endif()
-+-- 
-+2.39.2
-+
-diff --git a/package/onevpl/Config.in b/package/onevpl/Config.in
-new file mode 100644
-index 0000000000..a750e54d52
---- /dev/null
-+++ b/package/onevpl/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_ARCH_IS_64
-+	default y if BR2_arm
-+
-+config BR2_PACKAGE_ONEVPL
-+	bool "onevpl"
-+	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
-+	# libva support needs a libdrm with intel driver
-+	select BR2_PACKAGE_LIBDRM_INTEL if BR2_PACKAGE_LIBVA
-+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index c3abd662f3..6be05ef4b5 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -325,6 +325,14 @@ comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC
+ 
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
++	bool "Vulkan swrast driver"
++	depends on BR2_PACKAGE_MESA3D_LLVM
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
 +	help
-+	  oneAPI Video Processing Library (oneVPL) dispatcher,
-+	  tools, and examples
++	  Vulkan swrast driver.
 +
-+	  https://github.com/oneapi-src/oneVPL
-+
-+comment "onevpl needs a toolchain w/ dynamic library, gcc >= 7, C++, threads"
-+	depends on BR2_PACKAGE_ONEVPL_ARCH_SUPPORTS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/onevpl/onevpl.hash b/package/onevpl/onevpl.hash
-new file mode 100644
-index 0000000000..c9ca1e6c04
---- /dev/null
-+++ b/package/onevpl/onevpl.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  4411543519486a2450f6f5af06a077596e7888a551768594e9dfa2a46b23b6f5  onevpl-2023.3.1.tar.gz
-+sha256  bf1cfac2e2792b6e1e995ce103d70796aecaf2ec7e4c5fe5474f7acec7b4a677  LICENSE
-diff --git a/package/onevpl/onevpl.mk b/package/onevpl/onevpl.mk
-new file mode 100644
-index 0000000000..2033f755c0
---- /dev/null
-+++ b/package/onevpl/onevpl.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# onevpl
-+#
-+################################################################################
-+
-+ONEVPL_VERSION = 2023.3.1
-+ONEVPL_SITE = $(call github,oneapi-src,oneVPL,v$(ONEVPL_VERSION))
-+ONEVPL_LICENSE = MIT
-+ONEVPL_LICENSE_FILES = LICENSE
-+ONEVPL_INSTALL_STAGING = YES
-+ONEVPL_DEPENDENCIES = host-pkgconf
-+
-+ONEVPL_CONF_OPTS = \
-+	-DINSTALL_EXAMPLE_CODE=OFF
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+ONEVPL_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="-latomic"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBVA),y)
-+ONEVPL_CONF_OPTS += -DENABLE_VA=ON
-+ONEVPL_DEPENDENCIES += libva
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_VA=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=ON
-+ONEVPL_DEPENDENCIES += wayland wayland-protocols
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_WAYLAND=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+ONEVPL_CONF_OPTS += -DENABLE_X11=ON
-+ONEVPL_DEPENDENCIES += libxcb xlib_libX11
-+else
-+ONEVPL_CONF_OPTS += -DENABLE_X11=OFF
-+endif
-+
-+$(eval $(cmake-package))
+ comment "Off-screen Rendering"
+ 
+ config BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 67573909a3..f86140f17e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -121,6 +121,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ # Vulkan Drivers
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
++MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST) += swrast
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
+ MESA3D_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
