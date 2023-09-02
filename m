@@ -4,47 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2830CC71153
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54CBEC83F3F
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D23084052E;
-	Sat,  2 Sep 2023 15:51:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D23084052E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D18240543;
+	Sat,  2 Sep 2023 15:51:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D18240543
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eceK-JSwK_NP; Sat,  2 Sep 2023 15:51:03 +0000 (UTC)
+	with ESMTP id MQ1pu7B_CWhd; Sat,  2 Sep 2023 15:51:15 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 292EA4056D;
-	Sat,  2 Sep 2023 15:51:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 292EA4056D
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C9B051BF401
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:50:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 62F87405BD;
+	Sat,  2 Sep 2023 15:51:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62F87405BD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BF7D1BF401
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:51:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3DF64055D
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:50:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3DF64055D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25AA18200A
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:51:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25AA18200A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pjLnUAyyTWWy for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 15:50:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9453F4051D
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:50:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9453F4051D
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7543F868C7; Sat,  2 Sep 2023 15:50:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 17:49:15 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5c9f31041a2c36e3b97cd2f9577f68d88ee91174
-X-Git-Newrev: 2001d3758879bc25496e726edf3da99e9dbee38f
-X-Patchwork-Hint: ignore
-Message-Id: <20230902155034.7543F868C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/edk2-platforms: bump
- in sync with edk2-stable202308
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lMV2V60cDf6w for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 15:51:05 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 31BF581E25
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:51:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31BF581E25
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 44EB620005;
+ Sat,  2 Sep 2023 15:51:03 +0000 (UTC)
+Date: Sat, 2 Sep 2023 17:51:02 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20230902175102.3bbb46e2@windsurf>
+In-Reply-To: <ZOsxD6Z372MejW1M@waldemar-brodkorb.de>
+References: <ZOsxD6Z372MejW1M@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693669863;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=G+pu9L8xi+VgghRXigY7FQZGYJsCm48r35sIXKiaaMM=;
+ b=JGBqa/psAPD++7aMNlq0piARsdxYfT1nFoHauc49G96HVUhkhVm/1ucjgFdLM179x9JkUQ
+ 6098YEd17CSFZyzogYaDOZHiEiGhGlhR4QE28dTpiiqMEUVgbD7crJPtEkRi4v3g6JXQEF
+ Rm0Swfy2L5hUYQMe/xXhGzeX1E+YWbqhGwXmAe/LC6zG53Dqf4W1iEp/k/hevR7M6/Jvru
+ +AygCFCEkTFvlMcKiI75P/CZ1tTURwhAzFPthsenIVPdwABmXM606k3ghphekywUqYoA7S
+ xmiCsENgsIruTVtb5AOaonUsauVO2PvJdLKVJgQOv3PDKOU5TCNSx/Kn6nRHsA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JGBqa/ps
+Subject: Re: [Buildroot] [PATCH] package/pam: fix uclibc compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,61 +76,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5595199037462932831=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5595199037462932831==
-Content-Type: text/plain
+On Sun, 27 Aug 2023 13:18:39 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2001d3758879bc25496e726edf3da99e9dbee38f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+> Following build failure occurs:
+> opasswd.c: In function 'compare_password':
+> opasswd.c:142:3: error: 'retval' undeclared (first use in this function); did you mean 'outval'?
+>   142 |   retval = outval != NULL && strcmp(outval, oldpass) == 0;
+>       |   ^~~~~~
+>       |   outval
+> 
+> Add a patch from upstream to fix it.
+> Happens since the update to 1.5.3 in Buildroot commit:
+> f8147e27cdac8f998ec6644a09ce4e8d62b6433c
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/576/576fc4b9ccbc6cff82569692bdec82192e89f036
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  ...Fix-build-if-crypt_r-isn-t-available.patch | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 package/linux-pam/0002-Fix-build-if-crypt_r-isn-t-available.patch
 
-Bump the edk2-platforms commit to the one corresponding to version
-edk2-stable202308 of edk2, based on the timestamps.
+Applied to master, thanks.
 
-Cc: Dick Olsson <hi@senzilla.io>
-Cc: Vincent Stehlé <vincent.stehle@arm.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/edk2-platforms/edk2-platforms.hash | 2 +-
- package/edk2-platforms/edk2-platforms.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
-index ae88b672a6..4c74c7dfb6 100644
---- a/package/edk2-platforms/edk2-platforms.hash
-+++ b/package/edk2-platforms/edk2-platforms.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  31257160ac51a4a5f63db92d26482d6a005286ed040dafe89d01f0ee906b111e  edk2-platforms-b71f2bda9e4fc183068eef5d1d90a631181a2506.tar.gz
-+sha256  c240a8ec7816bc5963d881c84eb18d880e9269c117cfc46a3106b0c5e6e80c66  edk2-platforms-e509ac5a729ebe2a3bc905aed1df23226aca4dc9.tar.gz
- sha256  50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
-diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
-index 9e8ff94156..7bd86ff159 100644
---- a/package/edk2-platforms/edk2-platforms.mk
-+++ b/package/edk2-platforms/edk2-platforms.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Keep in sync with latest commit as of the release date for boot/edk2
--EDK2_PLATFORMS_VERSION = b71f2bda9e4fc183068eef5d1d90a631181a2506
-+EDK2_PLATFORMS_VERSION = e509ac5a729ebe2a3bc905aed1df23226aca4dc9
- EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
- EDK2_PLATFORMS_LICENSE = BSD-2-Clause-Patent
- EDK2_PLATFORMS_LICENSE_FILES = License.txt
-
---===============5595199037462932831==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5595199037462932831==--
