@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE0CACA0FF6
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B86CA0FF6
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:43:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BADC416E7;
-	Sat,  2 Sep 2023 07:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BADC416E7
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB28C404F9;
+	Sat,  2 Sep 2023 07:43:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB28C404F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7b4CEWtJ-I-N; Sat,  2 Sep 2023 07:43:04 +0000 (UTC)
+	with ESMTP id wmXRTcKLeYvW; Sat,  2 Sep 2023 07:43:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8A814057F;
-	Sat,  2 Sep 2023 07:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8A814057F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2D8C11BF3CB
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:41:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3809D416F9;
+	Sat,  2 Sep 2023 07:43:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3809D416F9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 09C3D1BF861
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 144EE81EAE
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:41:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 144EE81EAE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D4FCD416DD
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:42:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D4FCD416DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3PumPhPDSaQV for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 07:41:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KG5tpTAY_2TX for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 07:42:49 +0000 (UTC)
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0ADE881E83
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:41:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ADE881E83
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E4C271BF206;
- Sat,  2 Sep 2023 07:41:39 +0000 (UTC)
-Date: Sat, 2 Sep 2023 09:41:39 +0200
-To: Romain Naour <romain.naour@gmail.com>
-Message-ID: <20230902094139.116f5fe9@windsurf>
-In-Reply-To: <20230831201737.509574-1-romain.naour@gmail.com>
-References: <20230831201737.509574-1-romain.naour@gmail.com>
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C6DF404F9
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:42:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C6DF404F9
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EA3621BF205;
+ Sat,  2 Sep 2023 07:42:45 +0000 (UTC)
+Date: Sat, 2 Sep 2023 09:42:44 +0200
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Message-ID: <20230902094244.0251e004@windsurf>
+In-Reply-To: <7af21f66-d3c5-e42f-03e5-8a1f6b370520@mind.be>
+References: <5969347.lOV4Wx5bFT@kilian-aisec>
+ <7af21f66-d3c5-e42f-03e5-8a1f6b370520@mind.be>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693640500;
+ d=bootlin.com; s=gm1; t=1693640566;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=VaxE9buhNCJw2xLOOfnMO1n/TP069t/+kDnhlPDn4q4=;
- b=eknAnx5t57SksdwStn7nEL6BNqito2POydK10TT1CzFlWWZOoBFWdA4CgPC2k5NUfEPbDk
- OkTXChgC7RQ3XBdgfYOYOyntXnfNrXYfWU0m+tBdoApWvUsIWxqIDioDMHT7tO6vMw3Fww
- PEOeULzCG/GNUSa4z4vSiTqjqV3ULlrmcUK8r986YGn0KxCZM9IzovT2NSZlgFgwVPRExl
- QtFPDj3SJtj/0JGY8gHibhjr1V3knKd0FmkxCSCrERKu3bwMlGyW8u5wtiyQ4W1NAoTDl7
- aA6knj1TM5tHehFxFc2GfZTBW+pcEL/Q1lbukxhnpcjUguWH7My8nmWIJLuLxw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=KqFoWs5DBAt2HsPb4n/Em9TFUeaisV2qy+lt2I2XWEM=;
+ b=UmQkSpvvCQ2uZpThQY15xZmplvYTeOhXxnuUUIx+0tgZddxA+bQX4LPS/sEMAMkxNVxGb1
+ P1c5PggTTpaB/b/7+iew/w/yyVY7Vpmvk/nYF/FTIQuildGTACuW2+HDIppG427LGiB/J2
+ bazif2FhZ5BG8TxhlsodX34QQMO+Jbsb7PFlU4m323H7Yp1msh9IDLQ+Va50mAsBiev8GQ
+ sZGKN0Qmd9zikqroszuM964Z+by2QOwIUMWQf2DG4ejIn0FEKLRepZt5Y8dhHjfoDuhGNO
+ k9ARj/Lhybemx3DfSYXj3l2tL7c5UuQZ7GnJW6dsCytZ8SQICO4r/qcnVO4M9A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eknAnx5t
-Subject: Re: [Buildroot] [PATCH] configs/beaglev_defconfig: fix build with
- binutils >= 2.38
+ header.s=gm1 header.b=UmQkSpvv
+Subject: Re: [Buildroot] Buildroot docker image
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,34 +77,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>, yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 31 Aug 2023 22:17:37 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+On Fri, 1 Sep 2023 09:19:02 +0200
+Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
 
-> Backport an upstream patch fixing the build with binutils >= 2.38
-> for riscv's for Zicsr and Zifencei.
+>   First of all, the one on dockerhub is no longer updated. The images we 
+> actually use are on registry.gitlab.com/buildroot.org/buildroot/base
 > 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/4987456149
+>   But even those images are not really "for user consumption". They are the 
+> images we use for CI, and they therefore have a bit more stuff in them than 
+> really needed, e.g. qemu. They are also not updated (on the OS level) - no 
+> security updates or anything are applied on it.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...iscv-Fix-build-against-binutils-2.38.patch | 58 +++++++++++++++++++
->  configs/beaglev_defconfig                     |  1 +
->  2 files changed, 59 insertions(+)
->  create mode 100644 board/beaglev/patches/uboot/0001-riscv-Fix-build-against-binutils-2.38.patch
+>   It would probably be better if we would also create a small image that people 
+> can use for just building in their CI. A small image based on e.g. Alpine or 
+> Arch, and that is updated e.g. daily on dockerhub. However, nobody ever 
+> contributed such an image so we don't have it.
 
-Applied to master, thanks.
+Yann has been working on and off on a set of Docker images for
+Buildroot. See his branch at
+https://gitlab.com/ymorin/buildroot/-/commits/yem/dockers/. I indeed
+shared with him recently on IRC that it would be nice to have a really
+minimal image, separate from the image used in CI (which has more stuff
+enabled, most notably python3).
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
