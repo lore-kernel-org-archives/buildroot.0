@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68DB3CA0FFC
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 08:25:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B807CCA0FF7
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 09:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2DDC6109C;
-	Sat,  2 Sep 2023 08:25:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2DDC6109C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE73608D8;
+	Sat,  2 Sep 2023 09:59:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE73608D8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BPvVCZ3AxJ4f; Sat,  2 Sep 2023 08:25:04 +0000 (UTC)
+	with ESMTP id hsR0yCeFK4fM; Sat,  2 Sep 2023 09:59:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F60360E85;
-	Sat,  2 Sep 2023 08:25:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F60360E85
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7D8EC1BF41B
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 08:25:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A89C860BA6;
+	Sat,  2 Sep 2023 09:59:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A89C860BA6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E94DC1BF21A
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6501983935
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 08:25:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6501983935
+ by smtp2.osuosl.org (Postfix) with ESMTP id D011740297
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D011740297
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rCF6lNlAPbUv for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 08:24:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mSVdtnttMf-t for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B1AE8391F
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 08:24:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B1AE8391F
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7A524010C
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 09:59:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A524010C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88002867EF; Sat,  2 Sep 2023 08:24:59 +0000 (UTC)
+ id D5D9E86882; Sat,  2 Sep 2023 09:59:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 10:15:16 +0200
+Date: Sat, 2 Sep 2023 11:49:36 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 86fac42015cb10c8d2926a30882d8e3645e585c8
-X-Git-Newrev: c82de32369d9c5c298058896c87b3e6fa9b465de
+X-Git-Oldrev: a95d65e495ccfbf8bd91c8f9a41bd12574a937cb
+X-Git-Newrev: 6aa1bc31678ff9f8013084fda34b9f941cc63fc3
 X-Patchwork-Hint: ignore
-Message-Id: <20230902082459.88002867EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/linux-firmware: add
- new option for Marvell prestera firmware
+Message-Id: <20230902095900.D5D9E86882@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vulkan-loader: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,64 +64,126 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c82de32369d9c5c298058896c87b3e6fa9b465de
+commit: https://git.buildroot.net/buildroot/commit/?id=6aa1bc31678ff9f8013084fda34b9f941cc63fc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add the Marvell prestera ethernet cards firmwares.
+Use $(VULKAN_HEADERS_VERSION) for VULKAN_LOADER_VERSION as the vulkan packages
+need to all be the same version.
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-firmware/Config.in           | 5 +++++
- package/linux-firmware/linux-firmware.hash | 1 +
- package/linux-firmware/linux-firmware.mk   | 6 ++++++
- 3 files changed, 12 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/vulkan-loader/Config.in          | 14 ++++++++++
+ package/vulkan-loader/vulkan-loader.hash |  3 +++
+ package/vulkan-loader/vulkan-loader.mk   | 45 ++++++++++++++++++++++++++++++++
+ 5 files changed, 64 insertions(+)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 3ae72564cc..46e538776d 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -489,6 +489,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_ICE
- 	  Firmware files for Intel Ethernet 800 Series Network Adapters
- 	  (ice)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index db0ea49f90..413054ab84 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -28,6 +28,7 @@
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MARVELL_PRESTERA
-+	bool "Marvell Prestera"
+ N:	Adam Duskett <aduskett@gmail.com>
+ F:	package/firewalld/
++F:	package/vulkan-loader/
+ 
+ N:	Adam Heinrich <adam@adamh.cz>
+ F:	package/jack1/
+diff --git a/package/Config.in b/package/Config.in
+index 5449884809..41ff89726c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -369,6 +369,7 @@ comment "Graphic libraries"
+ 	source "package/sdl2_ttf/Config.in"
+ 	source "package/tk/Config.in"
+ 	source "package/vulkan-headers/Config.in"
++	source "package/vulkan-loader/Config.in"
+ 
+ comment "Other GUIs"
+ 	source "package/qt5/Config.in"
+diff --git a/package/vulkan-loader/Config.in b/package/vulkan-loader/Config.in
+new file mode 100644
+index 0000000000..9c215dc9ce
+--- /dev/null
++++ b/package/vulkan-loader/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_VULKAN_LOADER
++	bool "vulkan-loader"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_VULKAN_HEADERS
 +	help
-+	  Firmware files for Marvell Prestera ethernet cards
++	  The Khronos official Vulkan ICD desktop loader.
 +
- config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
- 	bool "Microchip VSC85xx PHYs"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 7ba9537dd8..31bbfddfaa 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -17,6 +17,7 @@ sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENC
- sha256  8c45a83562a69f7ac4207e4cb5c0063af2e545791b3947bc81dc82305481c15c  LICENSE.ice_enhanced
- sha256  0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d  LICENCE.it913x
- sha256  16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5  LICENCE.iwlwifi_firmware
-+sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
- sha256  0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3  LICENCE.microchip
- sha256  59ae206c89108905ebdc9ad4c9336526bd2c0d50fbf988c21e8c2a82719d42a4  LICENCE.moxa
- sha256  0bd9f7cae3cf72b12a63359a725ccbb76ddbd6831372695a9162144329800dd0  LICENCE.qat_firmware
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index a1cec90de2..f8c239d816 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -616,6 +616,12 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8411-2.fw
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MARVELL_PRESTERA),y)
-+LINUX_FIRMWARE_FILES += \
-+	mrvl/prestera/mvsw_prestera_fw*.img
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++	  https://github.com/KhronosGroup/Vulkan-Loader
++
++comment "vulkan-loader needs a toolchain w/ C++, dynamic library, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/vulkan-loader/vulkan-loader.hash b/package/vulkan-loader/vulkan-loader.hash
+new file mode 100644
+index 0000000000..e09ecda8a9
+--- /dev/null
++++ b/package/vulkan-loader/vulkan-loader.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  3bbaa5ee64058a89949eb777de66ce94bfe3141892514172cfc9451c756802d5  vulkan-loader-1.3.262.tar.gz
++sha256  43c0a37e6a0fa7ff3c843b3ec5a4fac84b712558ddac103fbd4c1649662a9ece  LICENSE.txt
+diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
+new file mode 100644
+index 0000000000..f6dd9d0ac3
+--- /dev/null
++++ b/package/vulkan-loader/vulkan-loader.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# vulkan-loader
++#
++################################################################################
++
++VULKAN_LOADER_VERSION = $(VULKAN_HEADERS_VERSION)
++VULKAN_LOADER_SITE = $(call github,KhronosGroup,Vulkan-Loader,v$(VULKAN_LOADER_VERSION))
++VULKAN_LOADER_LICENSE = Apache-2.0
++VULKAN_LOADER_LICENSE_FILES = LICENSE.txt
++VULKAN_LOADER_INSTALL_STAGING = YES
++
++VULKAN_LOADER_DEPENDENCIES = host-pkgconf vulkan-headers
++
++VULKAN_LOADER_CONF_OPTS += \
++	-DASSEMBLER_WORKS=FALSE \
++	-DBUILD_WSI_SCREEN_QNX_SUPPORT=OFF \
++	-DLOADER_CODEGEN=OFF
++
++ifeq ($(BR2_PACKAGE_DIRECTFB),y)
++VULKAN_LOADER_DEPENDENCIES += directfb
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_XCx000),y)
- LINUX_FIRMWARE_FILES += \
- 	dvb-fe-xc4000-1.4.1.fw \
++ifeq ($(BR2_PACKAGE_LIBXCB),y)
++VULKAN_LOADER_DEPENDENCIES += libxcb
++VULKAN_LOADER_CONF_OPTS += \
++	-DBUILD_WSI_XCB_SUPPORT=ON \
++	-DBUILD_WSI_XLIB_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += \
++	-DBUILD_WSI_XCB_SUPPORT=OFF \
++	-DBUILD_WSI_XLIB_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++VULKAN_LOADER_DEPENDENCIES += wayland
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
