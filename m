@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B6BCA0FF6
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D466BCA0FF8
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 07:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1AD7A4012B;
-	Sat,  2 Sep 2023 07:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AD7A4012B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8C35340323;
+	Sat,  2 Sep 2023 07:40:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C35340323
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JQ0Cz-11K9XG; Sat,  2 Sep 2023 07:40:01 +0000 (UTC)
+	with ESMTP id ZFQ1IZKUw1if; Sat,  2 Sep 2023 07:40:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 26E604052D;
-	Sat,  2 Sep 2023 07:40:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26E604052D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 981194059E;
+	Sat,  2 Sep 2023 07:40:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 981194059E
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 175301BF3CB
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:39:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 102851BF3CB
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B10114026F
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B10114026F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59DE04025D
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 07:38:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59DE04025D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ipYEFDRb1tmc for <buildroot@lists.busybox.net>;
+ with ESMTP id Y_toMvti6QdY for <buildroot@lists.busybox.net>;
  Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FA6F4025D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8A08C40204
  for <buildroot@buildroot.org>; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FA6F4025D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A08C40204
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E89386501; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
+ id 74242865A7; Sat,  2 Sep 2023 07:38:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 09:36:52 +0200
+Date: Sat, 2 Sep 2023 09:36:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a0617d73c39a42a6644e99f7e0a2f766ade1a3ce
-X-Git-Newrev: 94d48acba3a787dd20fb53bcd759a2cf96e779fc
+X-Git-Oldrev: e8e66020f3fcac943595034ce7ec6fc6f1bc154b
+X-Git-Newrev: a0617d73c39a42a6644e99f7e0a2f766ade1a3ce
 X-Patchwork-Hint: ignore
-Message-Id: <20230902073856.7E89386501@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libopenssl: bump
- version to 3.1.2
+Message-Id: <20230902073856.74242865A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mc: bump to version
+ 4.8.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,119 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94d48acba3a787dd20fb53bcd759a2cf96e779fc
+commit: https://git.buildroot.net/buildroot/commit/?id=a0617d73c39a42a6644e99f7e0a2f766ade1a3ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-Reproducible-build-do-not-leak-compiler-path.patch       | 2 +-
- ...004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 8 ++++----
- package/libopenssl/0005-Revert-Fix-static-builds.patch            | 4 ++--
- package/libopenssl/0006-Add-linux-x86-latomic-target.patch        | 2 +-
- package/libopenssl/libopenssl.hash                                | 4 ++--
- package/libopenssl/libopenssl.mk                                  | 2 +-
- 6 files changed, 11 insertions(+), 11 deletions(-)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch b/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch
-index ea26a31075..9353c1ae90 100644
---- a/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch
-+++ b/package/libopenssl/0002-Reproducible-build-do-not-leak-compiler-path.patch
-@@ -15,7 +15,7 @@ diff --git a/crypto/build.info b/crypto/build.info
- index 2c619c6..49ca6ab 100644
- --- a/crypto/build.info
- +++ b/crypto/build.info
--@@ -111,7 +111,7 @@ EXTRA=  ../ms/uplink-x86.pl ../ms/uplink.c ../ms/applink.c \
-+@@ -115,7 +115,7 @@ EXTRA=  ../ms/uplink-x86.pl ../ms/uplink.c ../ms/applink.c \
-  
-  DEPEND[info.o]=buildinf.h
-  DEPEND[cversion.o]=buildinf.h
-diff --git a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-index 9f34e1f5fb..629d9c26ce 100644
---- a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-+++ b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-@@ -21,9 +21,9 @@ diff --git a/Configure b/Configure
- index 5a699836f3..f9152b1702 100755
- --- a/Configure
- +++ b/Configure
--@@ -1424,6 +1424,10 @@ my %predefined_CXX = $config{CXX}
--     ? compiler_predefined($config{CROSS_COMPILE}.$config{CXX})
--     : ();
-+@@ -1549,6 +1549,10 @@ unless ($disabled{asm}) {
-+     }
-+ }
-  
- +if ($target eq "linux-ppc64" && !$disabled{asm}) {
- +       $target{perlasm_scheme} = "linux64v2" if ($predefined_C{_CALL_ELF} == 2);
-@@ -31,7 +31,7 @@ index 5a699836f3..f9152b1702 100755
- +
-  # Check for makedepend capabilities.
-  if (!$disabled{makedepend}) {
--     if ($config{target} =~ /^(VC|vms)-/) {
-+     # If the attribute makedep_scheme is defined, then we assume that the
- -- 
- 2.25.0
- 
-diff --git a/package/libopenssl/0005-Revert-Fix-static-builds.patch b/package/libopenssl/0005-Revert-Fix-static-builds.patch
-index 2bc0b961eb..149ad54fc5 100644
---- a/package/libopenssl/0005-Revert-Fix-static-builds.patch
-+++ b/package/libopenssl/0005-Revert-Fix-static-builds.patch
-@@ -16,7 +16,7 @@ diff --git a/Configure b/Configure
- index 2c17f4186b..94cab4c3c4 100755
- --- a/Configure
- +++ b/Configure
--@@ -1438,10 +1438,6 @@ foreach (keys %useradd) {
-+@@ -1377,10 +1377,6 @@ foreach (keys %useradd) {
-  # At this point, we can forget everything about %user and %useradd,
-  # because it's now all been merged into the corresponding $config entry
-  
-@@ -27,7 +27,7 @@ index 2c17f4186b..94cab4c3c4 100755
-  # Allow overriding the build file name
-  $config{build_file} = env('BUILDFILE') || $target{build_file} || "Makefile";
-  
--@@ -1728,6 +1724,10 @@ if ($strict_warnings)
-+@@ -1671,6 +1667,10 @@ if ($strict_warnings)
-                  }
-          }
-  
-diff --git a/package/libopenssl/0006-Add-linux-x86-latomic-target.patch b/package/libopenssl/0006-Add-linux-x86-latomic-target.patch
-index a59db73314..9ecc50b1ae 100644
---- a/package/libopenssl/0006-Add-linux-x86-latomic-target.patch
-+++ b/package/libopenssl/0006-Add-linux-x86-latomic-target.patch
-@@ -14,7 +14,7 @@ diff --git a/Configurations/10-main.conf b/Configurations/10-main.conf
- index 2200a85b16..bcf54a2a53 100644
- --- a/Configurations/10-main.conf
- +++ b/Configurations/10-main.conf
--@@ -861,6 +861,10 @@ my %targets = (
-+@@ -868,6 +868,10 @@ my %targets = (
-          asm_arch         => 'x86',
-          perlasm_scheme   => "elf",
-      },
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index b43281c7eb..1c82cd7cf8 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-3.0.10.tar.gz.sha256
--sha256  1761d4f5b13a1028b9b6f3d4b8e17feb0cedc9370f6afe61d7193d2cdce83323  openssl-3.0.10.tar.gz
-+# From https://www.openssl.org/source/openssl-3.1.2.tar.gz.sha256
-+sha256  a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6767d6539  openssl-3.1.2.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 8bc3687921..9c1dbe8694 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 5edfc79113..93462afa60 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,4 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.29.sha256
+-sha256  01d8a3b94f58180cca5bf17257b5078d1fd6fd27a9b5c0e970ec767549540ad4  mc-4.8.29.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.30.sha256
++sha256  5ebc3cb2144b970c5149fda556c4ad50b78780494696cdf2d14a53204c95c7df  mc-4.8.30.tar.xz
+ # sha256 locally computed:
+ sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index 894b231445..2b4279c308 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 3.0.10
-+LIBOPENSSL_VERSION = 3.1.2
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+-MC_VERSION = 4.8.29
++MC_VERSION = 4.8.30
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
