@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A8D1C83F2C
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:48:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 282AFC71153
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 15:49:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9EBD440471;
-	Sat,  2 Sep 2023 15:48:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9EBD440471
+	by smtp2.osuosl.org (Postfix) with ESMTP id D31E44053F;
+	Sat,  2 Sep 2023 15:49:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D31E44053F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kvBwLcTZJgvh; Sat,  2 Sep 2023 15:48:53 +0000 (UTC)
+	with ESMTP id NfOWQLrMAqHh; Sat,  2 Sep 2023 15:49:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DCB5A40490;
-	Sat,  2 Sep 2023 15:48:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCB5A40490
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18C691BF401
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:48:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B1C84053C;
+	Sat,  2 Sep 2023 15:49:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B1C84053C
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 610E01BF401
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4C0841621
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:48:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4C0841621
+ by smtp3.osuosl.org (Postfix) with ESMTP id 087BD60AC4
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 15:49:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 087BD60AC4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C0M7PICz4gkm for <buildroot@lists.busybox.net>;
- Sat,  2 Sep 2023 15:48:49 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB07941608
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:48:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB07941608
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A612B868AE; Sat,  2 Sep 2023 15:48:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 17:47:48 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 464ff28b7a7afc73b51aa9324b24a5aca5bf2ade
-X-Git-Newrev: 2be2ccb4873f3e63626c40519ed69ac2e5d456b3
-X-Patchwork-Hint: ignore
-Message-Id: <20230902154849.A612B868AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/check-package: cleanup
- line reading
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id aEelBrddundu for <buildroot@lists.busybox.net>;
+ Sat,  2 Sep 2023 15:49:05 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E068E60593
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 15:49:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E068E60593
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5A72B20004;
+ Sat,  2 Sep 2023 15:49:00 +0000 (UTC)
+Date: Sat, 2 Sep 2023 17:48:59 +0200
+To: James Knight <james.d.knight@live.com>
+Message-ID: <20230902174859.4e92c381@windsurf>
+In-Reply-To: <CYYP221MB114006AE3D1C77F421E44B43A0EBA@CYYP221MB1140.NAMP221.PROD.OUTLOOK.COM>
+References: <CYYP221MB114006AE3D1C77F421E44B43A0EBA@CYYP221MB1140.NAMP221.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1693669742;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=yGQlR3xgASDmzUbsMHdT/PQT2PsTnuZLv/6l2JkuIb0=;
+ b=QGP6Llku4j1UI9uPwHNTSczJGqLayRJPiwbK2e9MzeHyF54vZkZz8rYRF6tfdXAnHKand7
+ p+T0KtWktQftHtvVBfnrip29zIh/dX7z40RkhiHCSz4aheWMN0rhV7VtMD5tNnGLseFVFv
+ 9GRVcrVPiiT5z0sYWQ5Wla/FWIWnzr2BKQAxfMlh0GP0rNm9/5q9Oomj4lRiyjSICvtk9y
+ PyVRZlyqUovBKFhFQ9385CnEql/aXKQtUobg5qRKmxChuDSk2r0uGIW+GP79Myx5NDj+O3
+ msCU7VBsPhrI92KrLTz6TW+hDUmYMUlbbetco7xpvvhkiK6Q8fqNEyh1JEgZ9A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QGP6Llku
+Subject: Re: [Buildroot] [PATCH v2 1/1] utils/check-package: cleanup line
+ reading
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,58 +77,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2be2ccb4873f3e63626c40519ed69ac2e5d456b3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sat,  2 Sep 2023 08:47:49 -0400
+James Knight <james.d.knight@live.com> wrote:
 
-Cleanup the implementation for reading lines by having files processed
-in context managers and utilizing the iterable file object for line
-reading (instead of needing to call `readlines()`).
+> Cleanup the implementation for reading lines by having files processed
+> in context managers and utilizing the iterable file object for line
+> reading (instead of needing to call `readlines()`).
+> 
+> Signed-off-by: James Knight <james.d.knight@live.com>
+> ---
+> Changes v1 -> v2:
+>   - This change drops the use of an `fstate` instance which should not
+>     have been added in this initial/first patch (of a four-patch
+>     series).  (mentioned by Thomas Petazzoni)
+>   - Only this first patch is being resubmitted as this first patch can
+>     be applied by itself and the remaining patches are in discussion.
+> ---
+>  utils/check-package | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
 
-Signed-off-by: James Knight <james.d.knight@live.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/check-package | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+Applied to next, thanks.
 
-diff --git a/utils/check-package b/utils/check-package
-index 3de3a72e0c..105902303e 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -233,16 +233,18 @@ def check_file_using_lib(fname):
-         nwarnings += warn
- 
-     lastline = ""
--    for lineno, text in enumerate(open(fname, "r", errors="surrogateescape").readlines()):
--        nlines += 1
--        for name, cf in objects:
--            if cf.disable.search(lastline):
--                continue
--            warn, fail = print_warnings(cf.check_line(lineno + 1, text), name in xfail)
--            if fail > 0:
--                failed.add(name)
--            nwarnings += warn
--        lastline = text
-+    with open(fname, "r", errors="surrogateescape") as f:
-+        for lineno, text in enumerate(f):
-+            nlines += 1
-+            for name, cf in objects:
-+                if cf.disable.search(lastline):
-+                    continue
-+                line_sts = cf.check_line(lineno + 1, text)
-+                warn, fail = print_warnings(line_sts, name in xfail)
-+                if fail > 0:
-+                    failed.add(name)
-+                nwarnings += warn
-+            lastline = text
- 
-     for name, cf in objects:
-         warn, fail = print_warnings(cf.after(), name in xfail)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
