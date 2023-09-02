@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B807CCA0FF7
-	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 09:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EC56CA0FF8
+	for <buildroot@archiver.kernel.org>; Sat,  2 Sep 2023 09:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE73608D8;
-	Sat,  2 Sep 2023 09:59:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE73608D8
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0CD660BA6;
+	Sat,  2 Sep 2023 09:59:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0CD660BA6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hsR0yCeFK4fM; Sat,  2 Sep 2023 09:59:04 +0000 (UTC)
+	with ESMTP id l47Gy0cQ4ew8; Sat,  2 Sep 2023 09:59:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A89C860BA6;
-	Sat,  2 Sep 2023 09:59:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A89C860BA6
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E94DC1BF21A
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC29960D9D;
+	Sat,  2 Sep 2023 09:59:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC29960D9D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 26C541BF419
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D011740297
- for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D011740297
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0070D60BAA
+ for <buildroot@lists.busybox.net>; Sat,  2 Sep 2023 09:59:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0070D60BAA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mSVdtnttMf-t for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RgsXwvkB-hYT for <buildroot@lists.busybox.net>;
  Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7A524010C
- for <buildroot@buildroot.org>; Sat,  2 Sep 2023 09:59:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7A524010C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E939608D8
+ for <buildroot@buildroot.org>; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E939608D8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5D9E86882; Sat,  2 Sep 2023 09:59:00 +0000 (UTC)
+ id 0927386881; Sat,  2 Sep 2023 09:59:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 2 Sep 2023 11:49:36 +0200
+Date: Sat, 2 Sep 2023 11:49:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a95d65e495ccfbf8bd91c8f9a41bd12574a937cb
-X-Git-Newrev: 6aa1bc31678ff9f8013084fda34b9f941cc63fc3
+X-Git-Oldrev: 0bc44d52c643711e39bc2ee44ca10a16ed300460
+X-Git-Newrev: 028403c47ce297776558173f9833fe64ad2f058f
 X-Patchwork-Hint: ignore
-Message-Id: <20230902095900.D5D9E86882@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/vulkan-loader: new
- package
+Message-Id: <20230902095901.0927386881@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mesa3d: add vulkan
+ swrast driver support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,126 +64,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6aa1bc31678ff9f8013084fda34b9f941cc63fc3
+commit: https://git.buildroot.net/buildroot/commit/?id=028403c47ce297776558173f9833fe64ad2f058f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Use $(VULKAN_HEADERS_VERSION) for VULKAN_LOADER_VERSION as the vulkan packages
-need to all be the same version.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/vulkan-loader/Config.in          | 14 ++++++++++
- package/vulkan-loader/vulkan-loader.hash |  3 +++
- package/vulkan-loader/vulkan-loader.mk   | 45 ++++++++++++++++++++++++++++++++
- 5 files changed, 64 insertions(+)
+ package/mesa3d/Config.in | 8 ++++++++
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index db0ea49f90..413054ab84 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -28,6 +28,7 @@
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index c3abd662f3..6be05ef4b5 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -325,6 +325,14 @@ comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC
  
- N:	Adam Duskett <aduskett@gmail.com>
- F:	package/firewalld/
-+F:	package/vulkan-loader/
- 
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
-diff --git a/package/Config.in b/package/Config.in
-index 5449884809..41ff89726c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -369,6 +369,7 @@ comment "Graphic libraries"
- 	source "package/sdl2_ttf/Config.in"
- 	source "package/tk/Config.in"
- 	source "package/vulkan-headers/Config.in"
-+	source "package/vulkan-loader/Config.in"
- 
- comment "Other GUIs"
- 	source "package/qt5/Config.in"
-diff --git a/package/vulkan-loader/Config.in b/package/vulkan-loader/Config.in
-new file mode 100644
-index 0000000000..9c215dc9ce
---- /dev/null
-+++ b/package/vulkan-loader/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_VULKAN_LOADER
-+	bool "vulkan-loader"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_VULKAN_HEADERS
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
++	bool "Vulkan swrast driver"
++	depends on BR2_PACKAGE_MESA3D_LLVM
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
 +	help
-+	  The Khronos official Vulkan ICD desktop loader.
++	  Vulkan swrast driver.
 +
-+	  https://github.com/KhronosGroup/Vulkan-Loader
-+
-+comment "vulkan-loader needs a toolchain w/ C++, dynamic library, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/vulkan-loader/vulkan-loader.hash b/package/vulkan-loader/vulkan-loader.hash
-new file mode 100644
-index 0000000000..e09ecda8a9
---- /dev/null
-+++ b/package/vulkan-loader/vulkan-loader.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  3bbaa5ee64058a89949eb777de66ce94bfe3141892514172cfc9451c756802d5  vulkan-loader-1.3.262.tar.gz
-+sha256  43c0a37e6a0fa7ff3c843b3ec5a4fac84b712558ddac103fbd4c1649662a9ece  LICENSE.txt
-diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
-new file mode 100644
-index 0000000000..f6dd9d0ac3
---- /dev/null
-+++ b/package/vulkan-loader/vulkan-loader.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# vulkan-loader
-+#
-+################################################################################
-+
-+VULKAN_LOADER_VERSION = $(VULKAN_HEADERS_VERSION)
-+VULKAN_LOADER_SITE = $(call github,KhronosGroup,Vulkan-Loader,v$(VULKAN_LOADER_VERSION))
-+VULKAN_LOADER_LICENSE = Apache-2.0
-+VULKAN_LOADER_LICENSE_FILES = LICENSE.txt
-+VULKAN_LOADER_INSTALL_STAGING = YES
-+
-+VULKAN_LOADER_DEPENDENCIES = host-pkgconf vulkan-headers
-+
-+VULKAN_LOADER_CONF_OPTS += \
-+	-DASSEMBLER_WORKS=FALSE \
-+	-DBUILD_WSI_SCREEN_QNX_SUPPORT=OFF \
-+	-DLOADER_CODEGEN=OFF
-+
-+ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-+VULKAN_LOADER_DEPENDENCIES += directfb
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=ON
-+else
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_DIRECTFB_SUPPORT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBXCB),y)
-+VULKAN_LOADER_DEPENDENCIES += libxcb
-+VULKAN_LOADER_CONF_OPTS += \
-+	-DBUILD_WSI_XCB_SUPPORT=ON \
-+	-DBUILD_WSI_XLIB_SUPPORT=ON
-+else
-+VULKAN_LOADER_CONF_OPTS += \
-+	-DBUILD_WSI_XCB_SUPPORT=OFF \
-+	-DBUILD_WSI_XLIB_SUPPORT=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+VULKAN_LOADER_DEPENDENCIES += wayland
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=ON
-+else
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_WAYLAND_SUPPORT=OFF
-+endif
-+
-+$(eval $(cmake-package))
+ comment "Off-screen Rendering"
+ 
+ config BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 67573909a3..f86140f17e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -121,6 +121,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ # Vulkan Drivers
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
++MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST) += swrast
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
+ MESA3D_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
