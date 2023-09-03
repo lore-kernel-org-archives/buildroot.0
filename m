@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE8C5C83F2C
-	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F00D0C83F2C
+	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F47A41503;
-	Sun,  3 Sep 2023 19:35:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F47A41503
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B85B4094C;
+	Sun,  3 Sep 2023 19:35:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B85B4094C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id L29VF9B-eTfq; Sun,  3 Sep 2023 19:35:18 +0000 (UTC)
+	with ESMTP id mFgRw5Krto95; Sun,  3 Sep 2023 19:35:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC80F414A1;
-	Sun,  3 Sep 2023 19:35:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC80F414A1
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 222851BF865
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0B4415BA;
+	Sun,  3 Sep 2023 19:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0B4415BA
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 176131BF3C8
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDF7F410D5
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDF7F410D5
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5DBB81BE3
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5DBB81BE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NHGEG3yXmJMl for <buildroot@lists.busybox.net>;
- Sun,  3 Sep 2023 19:34:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id CUEbPQoLGLVg for <buildroot@lists.busybox.net>;
+ Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DE299402C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 917E881BB0
  for <buildroot@buildroot.org>; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE299402C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 917E881BB0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4FDD86931; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
+ id 7DD158692C; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Sep 2023 21:33:37 +0200
+Date: Sun, 3 Sep 2023 21:29:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 57229c22f17fa892c18dff1e424dedc7e3d05358
-X-Git-Newrev: 317c4b8f60d1c81a87cb16d01a4f15ac733d858e
+X-Git-Oldrev: 7ec2df1e9a65c41a542a796d5b65b13f0db45742
+X-Git-Newrev: fea8852c681c26a785557353caea4a669dcc35be
 X-Patchwork-Hint: ignore
-Message-Id: <20230903193434.A4FDD86931@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tornado: backport fix for
- CVE-2023-28370
+Message-Id: <20230903193434.7DD158692C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/poppler: backport patch to fix
+ CVE-2023-34872
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +63,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=317c4b8f60d1c81a87cb16d01a4f15ac733d858e
+commit: https://git.buildroot.net/buildroot/commit/?id=fea8852c681c26a785557353caea4a669dcc35be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Fix-an-open-redirect-in-StaticFileHandler.patch | 42 ++++++++++++++++++++++
- package/python-tornado/python-tornado.mk           |  2 ++
- 2 files changed, 44 insertions(+)
+ ...ineItem-open-Fix-crash-on-malformed-files.patch | 45 ++++++++++++++++++++++
+ package/poppler/poppler.mk                         |  2 +
+ 2 files changed, 47 insertions(+)
 
-diff --git a/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch b/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
+diff --git a/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
 new file mode 100644
-index 0000000000..357c6f2f12
+index 0000000000..478759e0cc
 --- /dev/null
-+++ b/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
-@@ -0,0 +1,42 @@
-+From ac79778c91bd9a4a92111f7e06d4b12674571113 Mon Sep 17 00:00:00 2001
-+From: Ben Darnell <ben@bendarnell.com>
-+Date: Sat, 13 May 2023 20:58:52 -0400
-+Subject: [PATCH] web: Fix an open redirect in StaticFileHandler
++++ b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
+@@ -0,0 +1,45 @@
++From e5cc11e0b5b867f4705fd28ff1b981c1224be1cd Mon Sep 17 00:00:00 2001
++From: Albert Astals Cid <aacid@kde.org>
++Date: Wed, 17 May 2023 22:42:05 +0200
++Subject: [PATCH] OutlineItem::open: Fix crash on malformed files
 +
-+Under some configurations the default_filename redirect could be exploited
-+to redirect to an attacker-controlled site. This change refuses to redirect
-+to URLs that could be misinterpreted.
++Fixes #1399
 +
-+A test case for the specific vulnerable configuration will follow after the
-+patch has been available.
-+
-+Upstream: https://github.com/tornadoweb/tornado/commit/32ad07c54e607839273b4e1819c347f5c8976b2f
-+[Thomas: backported to fix CVE-2023-28370]
++Upstream: https://gitlab.freedesktop.org/poppler/poppler/-/commit/591235c8b6c65a2eee88991b9ae73490fd9afdfe
++[Thomas: backported to fix CVE-2023-34872]
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ tornado/web.py | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
++ poppler/Outline.cc | 10 +++++++---
++ 1 file changed, 7 insertions(+), 3 deletions(-)
 +
-+diff --git a/tornado/web.py b/tornado/web.py
-+index cd6a81b4..05b571eb 100644
-+--- a/tornado/web.py
-++++ b/tornado/web.py
-+@@ -2806,6 +2806,15 @@ class StaticFileHandler(RequestHandler):
-+             # but there is some prefix to the path that was already
-+             # trimmed by the routing
-+             if not self.request.path.endswith("/"):
-++                if self.request.path.startswith("//"):
-++                    # A redirect with two initial slashes is a "protocol-relative" URL.
-++                    # This means the next path segment is treated as a hostname instead
-++                    # of a part of the path, making this effectively an open redirect.
-++                    # Reject paths starting with two slashes to prevent this.
-++                    # This is only reachable under certain configurations.
-++                    raise HTTPError(
-++                        403, "cannot redirect path with two initial slashes"
-++                    )
-+                 self.redirect(self.request.path + "/", permanent=True)
-+                 return None
-+             absolute_path = os.path.join(absolute_path, self.default_filename)
++diff --git a/poppler/Outline.cc b/poppler/Outline.cc
++index cbb6cb49..4c68be99 100644
++--- a/poppler/Outline.cc
+++++ b/poppler/Outline.cc
++@@ -14,7 +14,7 @@
++ // under GPL version 2 or later
++ //
++ // Copyright (C) 2005 Marco Pesenti Gritti <mpg@redhat.com>
++-// Copyright (C) 2008, 2016-2019, 2021 Albert Astals Cid <aacid@kde.org>
+++// Copyright (C) 2008, 2016-2019, 2021, 2023 Albert Astals Cid <aacid@kde.org>
++ // Copyright (C) 2009 Nick Jones <nick.jones@network-box.com>
++ // Copyright (C) 2016 Jason Crain <jason@aquaticape.us>
++ // Copyright (C) 2017 Adrian Johnson <ajohnson@redneon.com>
++@@ -483,8 +483,12 @@ void OutlineItem::open()
++ {
++     if (!kids) {
++         Object itemDict = xref->fetch(ref);
++-        const Object &firstRef = itemDict.dictLookupNF("First");
++-        kids = readItemList(this, &firstRef, xref, doc);
+++        if (itemDict.isDict()) {
+++            const Object &firstRef = itemDict.dictLookupNF("First");
+++            kids = readItemList(this, &firstRef, xref, doc);
+++        } else {
+++            kids = new std::vector<OutlineItem *>();
+++        }
++     }
++ }
++ 
 +-- 
 +2.41.0
 +
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index 2af86ecb18..f4a4c97d2a 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -12,5 +12,7 @@ PYTHON_TORNADO_LICENSE_FILES = LICENSE
- PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
- PYTHON_TORNADO_CPE_ID_PRODUCT = tornado
- PYTHON_TORNADO_SETUP_TYPE = setuptools
-+# 0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
-+PYTHON_TORNADO_IGNORE_CVES += CVE-2023-28370
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 5524bfc420..4c6017a5f5 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -11,6 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ POPPLER_LICENSE = GPL-2.0+
+ POPPLER_LICENSE_FILES = COPYING
+ POPPLER_CPE_ID_VENDOR = freedesktop
++# 0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
++POPPLER_IGNORE_CVES += CVE-2023-34872
+ POPPLER_INSTALL_STAGING = YES
  
- $(eval $(python-package))
+ POPPLER_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
