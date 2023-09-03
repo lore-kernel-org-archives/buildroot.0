@@ -4,53 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C1F4C71153
-	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:34:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99005C71153
+	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0CEF0414CC;
-	Sun,  3 Sep 2023 19:34:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CEF0414CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 438814151B;
+	Sun,  3 Sep 2023 19:34:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 438814151B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZoHCzZJ8lP2K; Sun,  3 Sep 2023 19:34:17 +0000 (UTC)
+	with ESMTP id SNSFHjsw4tWd; Sun,  3 Sep 2023 19:34:38 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 274324149F;
-	Sun,  3 Sep 2023 19:34:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 274324149F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 84D011BF3C8
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38C7D4150E;
+	Sun,  3 Sep 2023 19:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38C7D4150E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A21021BF3C8
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5EB6540A01
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EB6540A01
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BFD181BF5
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BFD181BF5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bCHxZd5zje0V for <buildroot@lists.busybox.net>;
- Sun,  3 Sep 2023 19:34:13 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 83DA340A08
- for <buildroot@buildroot.org>; Sun,  3 Sep 2023 19:34:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83DA340A08
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D118FF807;
- Sun,  3 Sep 2023 19:34:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qcsrK-0032Ja-CB; Sun, 03 Sep 2023 21:34:10 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X6roJz-Lc7BC for <buildroot@lists.busybox.net>;
+ Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C05A681BE3
+ for <buildroot@buildroot.org>; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C05A681BE3
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B03AC8692C; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20230902220751.3574594-1-thomas.petazzoni@bootlin.com>
-Date: Sun, 03 Sep 2023 21:34:10 +0200
-In-Reply-To: <20230902220751.3574594-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Sun, 3 Sep 2023 00:07:50 +0200")
-Message-ID: <87fs3vjbkd.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/python-ipython: ignore
+To: buildroot@buildroot.org
+Date: Sun, 3 Sep 2023 21:34:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 317c4b8f60d1c81a87cb16d01a4f15ac733d858e
+X-Git-Newrev: a9c74c5b7f4b2fb35ee32c2f1f8fffdd16d4db85
+X-Patchwork-Hint: ignore
+Message-Id: <20230903193434.B03AC8692C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ipython: ignore
  CVE-2023-24816
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,23 +57,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Philippe Proulx <eeppeliteloop@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a9c74c5b7f4b2fb35ee32c2f1f8fffdd16d4db85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > It affects only Windows, so we don't care in the context of Buildroot.
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+It affects only Windows, so we don't care in the context of Buildroot.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-ipython/python-ipython.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index f5a114c2f3..aa274314eb 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
+@@ -11,6 +11,8 @@ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
+ PYTHON_IPYTHON_CPE_ID_PRODUCT = ipython
++# Affects only Windows. Can be dropped once we update to >= 8.10.0
++PYTHON_IPYTHON_IGNORE_CVES += CVE-2023-24816
+ PYTHON_IPYTHON_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
