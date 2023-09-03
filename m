@@ -1,84 +1,59 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8144DC83F2C
-	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 06:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C9D3C71153
+	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 07:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E224B40361;
-	Sun,  3 Sep 2023 06:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E224B40361
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8920F403B3;
+	Sun,  3 Sep 2023 07:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8920F403B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UFEAgoWE4MfG; Sun,  3 Sep 2023 06:43:07 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ppB3W4ORsRRB; Sun,  3 Sep 2023 07:33:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4D9E400DF;
-	Sun,  3 Sep 2023 06:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4D9E400DF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 82C84403FB;
+	Sun,  3 Sep 2023 07:33:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82C84403FB
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 65B5E1BF3EF
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 06:43:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6B6FA1BF338
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 07:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38ACA401AD
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 06:43:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38ACA401AD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22A6B403FB
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 07:33:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22A6B403FB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 069X45e344IV for <buildroot@lists.busybox.net>;
- Sun,  3 Sep 2023 06:43:04 +0000 (UTC)
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 59ECF400EC
- for <buildroot@buildroot.org>; Sun,  3 Sep 2023 06:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59ECF400EC
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-5298e43bb67so884431a12.1
- for <buildroot@buildroot.org>; Sat, 02 Sep 2023 23:43:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693723382; x=1694328182;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Yb2804OQ1ruchU9/G8DWYpDn4bnYm74sFsS6wURqP88=;
- b=ZTgDTcfgC0YeKO1q4HGFOM85a0cZoQgSpwNUE74ZcGFOiEV8aWR6inWLoJSQ6FrUMb
- OyDYEuJ4rDDQXPb3lVd/921OCFoN5IncOwQlzCbMpDCKhKRPowVnmZ/bsPlgsQiET3Wy
- 7n6T6yF7gZ5MhXRduIPFzDwy6MOR/Kma533irGSN62mXBWzSphjr7j1v26SVv0f7Tnkq
- s0r0BgkZQWUiv+l5vTs8bNAvwo+73sMOfWrxFkWnX67rt6SNNAapKNkDvg9skPyZJV79
- tTAx6WxlBEMd+YWlo14Ovxd+fDHMH1r6EVQET46/JRL/DAQI7dFZ3vhPGL6x9ItHVHc0
- GzZg==
-X-Gm-Message-State: AOJu0Yz423hPzE/rEkMT8B/nH2RtsnAGBE3RkLAZHfEOVAlSY+109QAr
- zKpw+blfeiv+ue3xAoWhKqb1PABw/d0BAbcKzOQ=
-X-Google-Smtp-Source: AGHT+IEsf7bQlqrpTaBKhKG/rjOXUSMCz0pm2n7g2LXuBLh8cpyUywmf6ZZWN0td21FZz7l1OjnDQK/UmEHAPgUYIhc=
-X-Received: by 2002:a05:6402:17d0:b0:52c:8e9b:6bcd with SMTP id
- s16-20020a05640217d000b0052c8e9b6bcdmr2276360edy.12.1693723382183; Sat, 02
- Sep 2023 23:43:02 -0700 (PDT)
+ with ESMTP id 22TWSid3Ukgf for <buildroot@lists.busybox.net>;
+ Sun,  3 Sep 2023 07:33:41 +0000 (UTC)
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0AC7F403B3
+ for <buildroot@buildroot.org>; Sun,  3 Sep 2023 07:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AC7F403B3
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 73F93352BD9A; Sun,  3 Sep 2023 09:33:34 +0200 (CEST)
+Date: Sun, 3 Sep 2023 09:33:33 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZPQ2zZ1dgo6K2mdO@waldemar-brodkorb.de>
 MIME-Version: 1.0
-References: <CAPmASevJ9KynWxPBga3chKQCBVUCeZ-gt88LMfAzt6+-F6bZHw@mail.gmail.com>
- <b8d73440-18af-a0c6-d3ca-928104b22844@benettiengineering.com>
-In-Reply-To: <b8d73440-18af-a0c6-d3ca-928104b22844@benettiengineering.com>
-From: Andrea Simeoni <andreasimeoni73@gmail.com>
-Date: Sun, 3 Sep 2023 08:42:51 +0200
-Message-ID: <CAPmASes2TPHpX_uZbatW8icnq1hhheKVrd7nJAuCcosc6AyPsA@mail.gmail.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693723382; x=1694328182; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=Yb2804OQ1ruchU9/G8DWYpDn4bnYm74sFsS6wURqP88=;
- b=n+8dgldL8VH7iJlGUSX0lbL0yH46DTprvqJ5rt7cjWTniguLcx/M2MC5Yy3OlIuDLG
- xlEE/rvyBpLnoXHKeCJtpbrWGagsr7sNrhq7mMPGApeBeEIaHe0wo+wEYN8R7T4HNGus
- WfXzfuUPpNeMKmauDaWiZAc+RpaI9f8ipzGX47HbYADuYzUBa/eikttOKDatxfmCGQqV
- AjqfRm2wpqz5/AGRbip0KGukru2ifD3HtMI2McyX4kIeqwJrc9W3szBLzmSVBvOp/5pi
- 6WXazyr24KjBMI9l3P5R6Dkr9v5bnNGF+AXpAf4szmGOT7Z7tTNXiCOTSXAbqDWy8Y0o
- UB0Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=n+8dgldL
-Subject: Re: [Buildroot] stat command missing
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-21-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1693726415; bh=tiK3RRcqVd4zJHKDAjsCJKf62TdRqaiTSyHzUSluT4o=;
+ h=Date:From:To:Subject:From;
+ b=Oj5JIGZ1sRVV+NCyGh6Q3pGIk+BjtzAQX+awMvlx4GIpIJhIbEX0Mccl7VO+PZ9/s
+ lxVw5aBlqP4NM6x8toUoX9SK4UOt4B82HM2cZNfwdmInBaBIsFvRtviLEODjwMAlSt
+ E8hiVL8eobPMrRti2XSf3wG/euQG/1UU3LmR3FD1t+sOtxM59vDqAwC889Cja0Ktum
+ rc9JmG1oT33SiVJX/Rl4lLRbO01EMnvojhFv8xjxmXii9TAUCgvcm05UNDDp07xtWc
+ 2a34y6ixWyolAqDun1oLe+9Ps/b7aZ61CFFUVhAcAoVTOaa86+pArMnGB+ro2IulYX
+ Ej7kol4EF+rgQ==
+Subject: [Buildroot] [PATCH] package/gcc: fix missing .note.GNU-stack section
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,77 +65,259 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============0215614705913269590=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0215614705913269590==
-Content-Type: multipart/alternative; boundary="0000000000008afc7306046eb4d3"
+Shellinabox configure fails to detect ptsname_r, because of the following warning
+binutils 2.39+ emits:
+ld: warning: crtend.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
 
---0000000000008afc7306046eb4d3
-Content-Type: text/plain; charset="UTF-8"
+Then the build errors out with:
+shellinabox/launcher.c:772:12: error: static declaration of 'ptsname_r' follows non-static declaration
 
-> Enabling Busybox CONFIG_STAT option works good for me. How do you enable
-> it?
->
-> I mean, you have to add a busybox config file or a fragment.
-> To do the first test you can issue:
-> $ make busybox-menuconfig
-> and enable it under Coreutils
-> then you have to rebuild it with:
-> $ make busybox-rebuild
->
-> but the best way is to supply a busybox config fragment.
->
+The same issue exist for cairo 1.16.0 and the detection of pthreads.
 
-Hi Giulio,
-I set BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES to  CONFIG_STAT=y and then
-I issued make busybox-dirclean && make busybox-reconfigure. But as said it
-didn't accept that option.
+Fixes:
+ - http://autobuild.buildroot.net/results/3e4/3e478d22e820703ddfd11d1491e631ef8ed6b29b
+ - http://autobuild.buildroot.net/results/f60/f602ea17d5938a5beb81d07e13de75ba41d5f6a1
 
-I didn't know the <package>-menuconfig target. It's great!
-I followed your steps and now I have a working stat on my image, thanks!
-Andrea
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...add-.note.GNU-stack-section-on-linux.patch | 105 ++++++++++++++++++
+ ...add-.note.GNU-stack-section-on-linux.patch | 105 ++++++++++++++++++
+ 2 files changed, 210 insertions(+)
+ create mode 100644 package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch
+ create mode 100644 package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
 
---0000000000008afc7306046eb4d3
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><br><div class=3D"gmail_quote"><blockquote class=3D"gmail_=
-quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,=
-204);padding-left:1ex">
-Enabling Busybox CONFIG_STAT option works good for me. How do you enable<br=
->
-it?<br>
-<br>
-I mean, you have to add a busybox config file or a fragment.<br>
-To do the first test you can issue:<br>
-$ make busybox-menuconfig<br>
-and enable it under Coreutils<br>
-then you have to rebuild it with:<br>
-$ make busybox-rebuild<br>
-<br>
-but the best way is to supply a busybox config fragment.<br></blockquote><d=
-iv><br></div><div>Hi Giulio,<br></div><div>I set=C2=A0BR2_PACKAGE_BUSYBOX_C=
-ONFIG_FRAGMENT_FILES to=C2=A0 CONFIG_STAT=3Dy and then I issued make busybo=
-x-dirclean &amp;&amp; make busybox-reconfigure. But as said it didn&#39;t a=
-ccept that option.<br></div><div><br></div><div>I didn&#39;t know the &lt;p=
-ackage&gt;-menuconfig target. It&#39;s great!</div><div>I followed your ste=
-ps and now I have a working stat on my image, thanks!</div><div>Andrea</div=
-><div><br></div></div></div>
-
---0000000000008afc7306046eb4d3--
-
---===============0215614705913269590==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch b/package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch
+new file mode 100644
+index 0000000000..967bbaf3fe
+--- /dev/null
++++ b/package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch
+@@ -0,0 +1,105 @@
++From 4958020ecc85a30c52544deaf3c017cea82a0fb0 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 2 Mar 2023 09:45:41 -0800
++Subject: [PATCH] xtensa: add .note.GNU-stack section on linux
++
++gcc/
++	* config/xtensa/linux.h (TARGET_ASM_FILE_END): New macro.
++
++libgcc/
++	* config/xtensa/crti.S: Add .note.GNU-stack section on linux.
++	* config/xtensa/crtn.S: Likewise.
++	* config/xtensa/lib1funcs.S: Likewise.
++	* config/xtensa/lib2funcs.S: Likewise.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=6360bf9a2d08f08c151464c77c0da53cd702ff25
++---
++ gcc/config/xtensa/linux.h        | 1 +
++ libgcc/config/xtensa/crti.S      | 6 ++++++
++ libgcc/config/xtensa/crtn.S      | 6 ++++++
++ libgcc/config/xtensa/lib1funcs.S | 6 ++++++
++ libgcc/config/xtensa/lib2funcs.S | 6 ++++++
++ 5 files changed, 25 insertions(+)
++
++diff --git a/gcc/config/xtensa/linux.h b/gcc/config/xtensa/linux.h
++index 468a48489e7..a69e38c58ee 100644
++--- a/gcc/config/xtensa/linux.h
+++++ b/gcc/config/xtensa/linux.h
++@@ -69,3 +69,4 @@ along with GCC; see the file COPYING3.  If not see
++ 
++ #undef DBX_REGISTER_NUMBER
++ 
+++#define TARGET_ASM_FILE_END file_end_indicate_exec_stack
++diff --git a/libgcc/config/xtensa/crti.S b/libgcc/config/xtensa/crti.S
++index 87a66e32e4a..40dd8c0dbc2 100644
++--- a/libgcc/config/xtensa/crti.S
+++++ b/libgcc/config/xtensa/crti.S
++@@ -26,6 +26,12 @@
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ 	.section .init
++ 	.globl _init
++ 	.type _init,@function
++diff --git a/libgcc/config/xtensa/crtn.S b/libgcc/config/xtensa/crtn.S
++index 8d2c2b1f22b..9d29f8fce1a 100644
++--- a/libgcc/config/xtensa/crtn.S
+++++ b/libgcc/config/xtensa/crtn.S
++@@ -27,6 +27,12 @@
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ 	.section .init
++ #if XCHAL_HAVE_WINDOWED && !__XTENSA_CALL0_ABI__
++ 	retw
++diff --git a/libgcc/config/xtensa/lib1funcs.S b/libgcc/config/xtensa/lib1funcs.S
++index a482a6eefc8..5245d7ad8ad 100644
++--- a/libgcc/config/xtensa/lib1funcs.S
+++++ b/libgcc/config/xtensa/lib1funcs.S
++@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ /* Define macros for the ABS and ADDX* instructions to handle cases
++    where they are not included in the Xtensa processor configuration.  */
++ 
++diff --git a/libgcc/config/xtensa/lib2funcs.S b/libgcc/config/xtensa/lib2funcs.S
++index 36938c84924..a574a45fa68 100644
++--- a/libgcc/config/xtensa/lib2funcs.S
+++++ b/libgcc/config/xtensa/lib2funcs.S
++@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ /* __xtensa_libgcc_window_spill: This function flushes out all but the
++    current register window.  This is used to set up the stack so that
++    arbitrary frames can be accessed.  */
++-- 
++2.39.2
++
+diff --git a/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch b/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
+new file mode 100644
+index 0000000000..4c79c3448f
+--- /dev/null
++++ b/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
+@@ -0,0 +1,105 @@
++From 38cdfcc4b2cca8d251ff8d8d34201dfe9849333e Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 2 Mar 2023 09:45:41 -0800
++Subject: [PATCH] xtensa: add .note.GNU-stack section on linux
++
++gcc/
++	* config/xtensa/linux.h (TARGET_ASM_FILE_END): New macro.
++
++libgcc/
++	* config/xtensa/crti.S: Add .note.GNU-stack section on linux.
++	* config/xtensa/crtn.S: Likewise.
++	* config/xtensa/lib1funcs.S: Likewise.
++	* config/xtensa/lib2funcs.S: Likewise.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=6360bf9a2d08f08c151464c77c0da53cd702ff25
++---
++ gcc/config/xtensa/linux.h        | 1 +
++ libgcc/config/xtensa/crti.S      | 6 ++++++
++ libgcc/config/xtensa/crtn.S      | 6 ++++++
++ libgcc/config/xtensa/lib1funcs.S | 6 ++++++
++ libgcc/config/xtensa/lib2funcs.S | 6 ++++++
++ 5 files changed, 25 insertions(+)
++
++diff --git a/gcc/config/xtensa/linux.h b/gcc/config/xtensa/linux.h
++index edce618fb94..fe0e3a43797 100644
++--- a/gcc/config/xtensa/linux.h
+++++ b/gcc/config/xtensa/linux.h
++@@ -69,3 +69,4 @@ along with GCC; see the file COPYING3.  If not see
++ 
++ #undef DBX_REGISTER_NUMBER
++ 
+++#define TARGET_ASM_FILE_END file_end_indicate_exec_stack
++diff --git a/libgcc/config/xtensa/crti.S b/libgcc/config/xtensa/crti.S
++index 3de7bc101f4..0996e7cb29b 100644
++--- a/libgcc/config/xtensa/crti.S
+++++ b/libgcc/config/xtensa/crti.S
++@@ -26,6 +26,12 @@
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ 	.section .init
++ 	.globl _init
++ 	.type _init,@function
++diff --git a/libgcc/config/xtensa/crtn.S b/libgcc/config/xtensa/crtn.S
++index 06b932edb14..a4cc9830096 100644
++--- a/libgcc/config/xtensa/crtn.S
+++++ b/libgcc/config/xtensa/crtn.S
++@@ -27,6 +27,12 @@
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ 	.section .init
++ #if XCHAL_HAVE_WINDOWED && !__XTENSA_CALL0_ABI__
++ 	retw
++diff --git a/libgcc/config/xtensa/lib1funcs.S b/libgcc/config/xtensa/lib1funcs.S
++index 5a2bd20534f..7177dd4f73a 100644
++--- a/libgcc/config/xtensa/lib1funcs.S
+++++ b/libgcc/config/xtensa/lib1funcs.S
++@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ /* Define macros for the ABS and ADDX* instructions to handle cases
++    where they are not included in the Xtensa processor configuration.  */
++ 
++diff --git a/libgcc/config/xtensa/lib2funcs.S b/libgcc/config/xtensa/lib2funcs.S
++index 681bac1be8c..a40c1a45604 100644
++--- a/libgcc/config/xtensa/lib2funcs.S
+++++ b/libgcc/config/xtensa/lib2funcs.S
++@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
++ 
++ #include "xtensa-config.h"
++ 
+++/* An executable stack is *not* required for these functions.  */
+++#if defined(__ELF__) && defined(__linux__)
+++.section .note.GNU-stack,"",%progbits
+++.previous
+++#endif
+++
++ /* __xtensa_libgcc_window_spill: This function flushes out all but the
++    current register window.  This is used to set up the stack so that
++    arbitrary frames can be accessed.  */
++-- 
++2.39.2
++
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0215614705913269590==--
