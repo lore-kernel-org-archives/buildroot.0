@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10A80C83F2C
-	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08A4CC71153
+	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B694A415D9;
-	Sun,  3 Sep 2023 19:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B694A415D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60C60414A2;
+	Sun,  3 Sep 2023 19:42:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60C60414A2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 66U6n8Wcara5; Sun,  3 Sep 2023 19:35:44 +0000 (UTC)
+	with ESMTP id oiNErqeBlwdv; Sun,  3 Sep 2023 19:42:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90569415BA;
-	Sun,  3 Sep 2023 19:35:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90569415BA
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 218611BF865
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91BC641499;
+	Sun,  3 Sep 2023 19:42:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91BC641499
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 65ED61BF3CA
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 090F240503
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 090F240503
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BE3E81D5F
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BE3E81D5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lRtUeVJgGiol for <buildroot@lists.busybox.net>;
- Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDAFC40012
- for <buildroot@buildroot.org>; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDAFC40012
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 908678692F; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ILH26wihq4HN for <buildroot@lists.busybox.net>;
+ Sun,  3 Sep 2023 19:42:26 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 61FD881D5A
+ for <buildroot@buildroot.org>; Sun,  3 Sep 2023 19:42:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61FD881D5A
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 08DAA40004;
+ Sun,  3 Sep 2023 19:42:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qcszG-0032Zt-1c; Sun, 03 Sep 2023 21:42:22 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 3 Sep 2023 21:32:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3ab33c62fac662b5f0aca9f4342d798a41e2736
-X-Git-Newrev: 2397349fa99787a4ccbf75917e113087fa1a67d3
-X-Patchwork-Hint: ignore
-Message-Id: <20230903193434.908678692F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- 4.1.10
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20230902172104.3476758-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 03 Sep 2023 21:42:21 +0200
+In-Reply-To: <20230902172104.3476758-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Sat, 2 Sep 2023 19:21:03 +0200")
+Message-ID: <87bkejjb6q.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/pixman: ignore CVE-2023-37769
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,62 +62,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2397349fa99787a4ccbf75917e113087fa1a67d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-4.1.9 is affected by CVE-2023-36053, and 4.1.10 was released to fix
-it. The changes between 4.1.9 and 4.1.10 are just:
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-f9a14b8f0668029fb7e0aebcae57b60dcec4a529 (tag: 4.1.10) [4.1.x] Bumped version for 4.1.10 release.
-beb3f3d55940d9aa7198bf9d424ab74e873aec3d [4.1.x] Fixed CVE-2023-36053 -- Prevented potential ReDoS in EmailValidator and URLValidator.
-3b48fe413f91612fb8c43fe9d489860d10c84bf7 [4.1.x] Added stub release notes for 4.1.10 and 3.2.20.
-0e5948b8df5d25deb48a505cbf16f010d9dc603c [4.1.x] Fixed MultipleFileFieldTest.test_file_multiple_validation() test if Pillow isn't installed.
-66e1e9b006618ba00e804d18bd90d3a9e94801b3 [4.1.x] Added CVE-2023-31047 to security archive.
-d1385cc51b142b05b21b721d9d68fc461bc7241f [4.1.x] Post-release version bump.
+Committed, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 922f468a67..ee1776b44f 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  1a6f4e5318e3272deaa9cfd61e252fab  Django-4.1.9.tar.gz
--sha256  e9f074a84930662104871bfcea55c3c180c50a0a47739db82435deae6cbaf032  Django-4.1.9.tar.gz
-+md5  3720c85a8c25cacbce2f95d345d0f5ad  Django-4.1.10.tar.gz
-+sha256  56343019a9fd839e2e5bf203daf45f25af79d5bffa4c71d56eae4f4404d82ade  Django-4.1.10.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index fa58f65797..61dfd54dcd 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 4.1.9
-+PYTHON_DJANGO_VERSION = 4.1.10
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/11/ea/8b514434c57c3bef89a475b75f74d768471d8e1bc61f4e5c79daeae9b5ef
--
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/70/d4/eded564fa5928f68771d082ec0eef4d023f9d19dfa1d2923305bc3e62afe
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
