@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F00D0C83F2C
-	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10A80C83F2C
+	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:35:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B85B4094C;
-	Sun,  3 Sep 2023 19:35:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B85B4094C
+	by smtp4.osuosl.org (Postfix) with ESMTP id B694A415D9;
+	Sun,  3 Sep 2023 19:35:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B694A415D9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mFgRw5Krto95; Sun,  3 Sep 2023 19:35:31 +0000 (UTC)
+	with ESMTP id 66U6n8Wcara5; Sun,  3 Sep 2023 19:35:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E0B4415BA;
-	Sun,  3 Sep 2023 19:35:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0B4415BA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 176131BF3C8
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90569415BA;
+	Sun,  3 Sep 2023 19:35:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90569415BA
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 218611BF865
  for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5DBB81BE3
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5DBB81BE3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 090F240503
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:34:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 090F240503
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CUEbPQoLGLVg for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lRtUeVJgGiol for <buildroot@lists.busybox.net>;
  Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 917E881BB0
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDAFC40012
  for <buildroot@buildroot.org>; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 917E881BB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDAFC40012
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DD158692C; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
+ id 908678692F; Sun,  3 Sep 2023 19:34:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 3 Sep 2023 21:29:48 +0200
+Date: Sun, 3 Sep 2023 21:32:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7ec2df1e9a65c41a542a796d5b65b13f0db45742
-X-Git-Newrev: fea8852c681c26a785557353caea4a669dcc35be
+X-Git-Oldrev: f3ab33c62fac662b5f0aca9f4342d798a41e2736
+X-Git-Newrev: 2397349fa99787a4ccbf75917e113087fa1a67d3
 X-Patchwork-Hint: ignore
-Message-Id: <20230903193434.7DD158692C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/poppler: backport patch to fix
- CVE-2023-34872
+Message-Id: <20230903193434.908678692F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ 4.1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,80 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fea8852c681c26a785557353caea4a669dcc35be
+commit: https://git.buildroot.net/buildroot/commit/?id=2397349fa99787a4ccbf75917e113087fa1a67d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+4.1.9 is affected by CVE-2023-36053, and 4.1.10 was released to fix
+it. The changes between 4.1.9 and 4.1.10 are just:
+
+f9a14b8f0668029fb7e0aebcae57b60dcec4a529 (tag: 4.1.10) [4.1.x] Bumped version for 4.1.10 release.
+beb3f3d55940d9aa7198bf9d424ab74e873aec3d [4.1.x] Fixed CVE-2023-36053 -- Prevented potential ReDoS in EmailValidator and URLValidator.
+3b48fe413f91612fb8c43fe9d489860d10c84bf7 [4.1.x] Added stub release notes for 4.1.10 and 3.2.20.
+0e5948b8df5d25deb48a505cbf16f010d9dc603c [4.1.x] Fixed MultipleFileFieldTest.test_file_multiple_validation() test if Pillow isn't installed.
+66e1e9b006618ba00e804d18bd90d3a9e94801b3 [4.1.x] Added CVE-2023-31047 to security archive.
+d1385cc51b142b05b21b721d9d68fc461bc7241f [4.1.x] Post-release version bump.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ineItem-open-Fix-crash-on-malformed-files.patch | 45 ++++++++++++++++++++++
- package/poppler/poppler.mk                         |  2 +
- 2 files changed, 47 insertions(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
-new file mode 100644
-index 0000000000..478759e0cc
---- /dev/null
-+++ b/package/poppler/0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
-@@ -0,0 +1,45 @@
-+From e5cc11e0b5b867f4705fd28ff1b981c1224be1cd Mon Sep 17 00:00:00 2001
-+From: Albert Astals Cid <aacid@kde.org>
-+Date: Wed, 17 May 2023 22:42:05 +0200
-+Subject: [PATCH] OutlineItem::open: Fix crash on malformed files
-+
-+Fixes #1399
-+
-+Upstream: https://gitlab.freedesktop.org/poppler/poppler/-/commit/591235c8b6c65a2eee88991b9ae73490fd9afdfe
-+[Thomas: backported to fix CVE-2023-34872]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ poppler/Outline.cc | 10 +++++++---
-+ 1 file changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/poppler/Outline.cc b/poppler/Outline.cc
-+index cbb6cb49..4c68be99 100644
-+--- a/poppler/Outline.cc
-++++ b/poppler/Outline.cc
-+@@ -14,7 +14,7 @@
-+ // under GPL version 2 or later
-+ //
-+ // Copyright (C) 2005 Marco Pesenti Gritti <mpg@redhat.com>
-+-// Copyright (C) 2008, 2016-2019, 2021 Albert Astals Cid <aacid@kde.org>
-++// Copyright (C) 2008, 2016-2019, 2021, 2023 Albert Astals Cid <aacid@kde.org>
-+ // Copyright (C) 2009 Nick Jones <nick.jones@network-box.com>
-+ // Copyright (C) 2016 Jason Crain <jason@aquaticape.us>
-+ // Copyright (C) 2017 Adrian Johnson <ajohnson@redneon.com>
-+@@ -483,8 +483,12 @@ void OutlineItem::open()
-+ {
-+     if (!kids) {
-+         Object itemDict = xref->fetch(ref);
-+-        const Object &firstRef = itemDict.dictLookupNF("First");
-+-        kids = readItemList(this, &firstRef, xref, doc);
-++        if (itemDict.isDict()) {
-++            const Object &firstRef = itemDict.dictLookupNF("First");
-++            kids = readItemList(this, &firstRef, xref, doc);
-++        } else {
-++            kids = new std::vector<OutlineItem *>();
-++        }
-+     }
-+ }
-+ 
-+-- 
-+2.41.0
-+
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 5524bfc420..4c6017a5f5 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -11,6 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
- POPPLER_LICENSE = GPL-2.0+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_CPE_ID_VENDOR = freedesktop
-+# 0001-OutlineItem-open-Fix-crash-on-malformed-files.patch
-+POPPLER_IGNORE_CVES += CVE-2023-34872
- POPPLER_INSTALL_STAGING = YES
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 922f468a67..ee1776b44f 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  1a6f4e5318e3272deaa9cfd61e252fab  Django-4.1.9.tar.gz
+-sha256  e9f074a84930662104871bfcea55c3c180c50a0a47739db82435deae6cbaf032  Django-4.1.9.tar.gz
++md5  3720c85a8c25cacbce2f95d345d0f5ad  Django-4.1.10.tar.gz
++sha256  56343019a9fd839e2e5bf203daf45f25af79d5bffa4c71d56eae4f4404d82ade  Django-4.1.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index fa58f65797..61dfd54dcd 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
- POPPLER_CONF_OPTS = \
+-PYTHON_DJANGO_VERSION = 4.1.9
++PYTHON_DJANGO_VERSION = 4.1.10
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/11/ea/8b514434c57c3bef89a475b75f74d768471d8e1bc61f4e5c79daeae9b5ef
+-
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/70/d4/eded564fa5928f68771d082ec0eef4d023f9d19dfa1d2923305bc3e62afe
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
