@@ -4,47 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15CC4C71153
-	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 19:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A360C83F2D
+	for <buildroot@archiver.kernel.org>; Sun,  3 Sep 2023 20:06:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9272F4151C;
-	Sun,  3 Sep 2023 19:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9272F4151C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97D1F41503;
+	Sun,  3 Sep 2023 20:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97D1F41503
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PBvcJ0To5-QC; Sun,  3 Sep 2023 19:42:42 +0000 (UTC)
+	with ESMTP id 5Zw413_zXbST; Sun,  3 Sep 2023 20:06:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 761C44146F;
-	Sun,  3 Sep 2023 19:42:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 761C44146F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 03F3D1BF3CA
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:42:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD0E14151C;
+	Sun,  3 Sep 2023 20:06:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD0E14151C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BAD421BF3BC
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 20:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF50281D5F
- for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 19:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF50281D5F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9402A401F3
+ for <buildroot@lists.busybox.net>; Sun,  3 Sep 2023 20:06:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9402A401F3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SssjC2AmhCU9 for <buildroot@lists.busybox.net>;
- Sun,  3 Sep 2023 19:42:35 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 155A181D5A
- for <buildroot@buildroot.org>; Sun,  3 Sep 2023 19:42:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 155A181D5A
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1FBB86932; Sun,  3 Sep 2023 19:42:34 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sBePoptMDWfq for <buildroot@lists.busybox.net>;
+ Sun,  3 Sep 2023 20:06:15 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D47C140012
+ for <buildroot@buildroot.org>; Sun,  3 Sep 2023 20:06:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D47C140012
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id AB54E13F879;
+ Sun,  3 Sep 2023 22:06:10 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 3 Sep 2023 21:42:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9c74c5b7f4b2fb35ee32c2f1f8fffdd16d4db85
-X-Git-Newrev: 19921699b3aaed330343e65418ddca6833bb3cd1
-X-Patchwork-Hint: ignore
-Message-Id: <20230903194234.F1FBB86932@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pixman: ignore CVE-2023-37769
+Date: Sun,  3 Sep 2023 22:06:05 +0200
+Message-ID: <20230903200605.32530-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1693771571;
+ bh=8sOyamW/YGh4bxc1Y3BHciBfEv9OrOb0fer+n2PTCwI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=tl0H0TbF4DVE31MVBu/xc7pmSjXR2d5CCKgQOEFQu5q8GAUTyzKl2aLhqCi/Q5SYq
+ nAWz41LYSasm5V0c/ggVTAAgcF2o4eC07D5Ub0AMoT9Bp1IdgwQ1yrSHt4ZM1CwyVz
+ /yXNLM2K+qoAEwu2EZRfKMCkOCbhVgAUUvb8K9zMRUIWw2BjqwEm4N100SeAHLHl55
+ VyaF0ii+GFF+K8PabolWvfE+koehv3G6vjm9/Gavh2UYGOMQ1bBo95lGTXQ6D27Xmj
+ MomdZKXB/wKnBicLt6Kw8qAE7PMHkcfJ4zkfiqM+jiMDOYhjFzHtDYwQupbJ099D5o
+ NTwTuteBgidOw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tl0H0TbF
+Subject: [Buildroot] [PATCH 1/1] package/dt: fix Kconfig package URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,39 +70,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19921699b3aaed330343e65418ddca6833bb3cd1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The old package URL is no longer working. This commit updates it to
+the one advertised at [1].
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] https://github.com/RobinTMiller/dt/blob/b30eb7a123cfba900f26ceda413ea8ae49c3817e/html/dt.html#L33
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pixman/pixman.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/dt/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 6e6d787d27..37eb974c46 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -24,6 +24,13 @@ PIXMAN_CONF_OPTS = \
- 	--disable-loongson-mmi \
- 	--disable-arm-iwmmxt
+diff --git a/package/dt/Config.in b/package/dt/Config.in
+index 826a66ebd5..af20cc9bca 100644
+--- a/package/dt/Config.in
++++ b/package/dt/Config.in
+@@ -18,4 +18,4 @@ config BR2_PACKAGE_DT
+ 	  before exiting. Since verification of data is performed,
+ 	  dt can be thought of as a generic diagnostic tool.
  
-+# Affects only tests, and we don't build tests (see
-+# 0001-Disable-tests.patch). See
-+# https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
-+# "not sure why NVD keeps assigning CVEs like this. This is just a
-+# test executable".
-+PIXMAN_IGNORE_CVES += CVE-2023-37769
-+
- # The ARM SIMD code from pixman requires a recent enough ARM core, but
- # there is a runtime CPU check that makes sure it doesn't get used if
- # the HW doesn't support it. The only case where the ARM SIMD code
+-	  http://www.scsifaq.org/RMiller_Tools/dt.html
++	  https://github.com/RobinTMiller/dt
+-- 
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
