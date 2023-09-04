@@ -1,70 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B3B0C71153
-	for <buildroot@archiver.kernel.org>; Mon,  4 Sep 2023 16:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCB71C71153
+	for <buildroot@archiver.kernel.org>; Mon,  4 Sep 2023 16:34:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6F38340C2E;
-	Mon,  4 Sep 2023 16:26:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F38340C2E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 540D081AEA;
+	Mon,  4 Sep 2023 16:34:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 540D081AEA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I_9mAjCowxhJ; Mon,  4 Sep 2023 16:26:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id L4h0S646P0mx; Mon,  4 Sep 2023 16:34:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BDB7740B67;
-	Mon,  4 Sep 2023 16:26:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDB7740B67
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3F0B11BF364
- for <buildroot@lists.busybox.net>; Mon,  4 Sep 2023 16:26:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5522381AAB;
+	Mon,  4 Sep 2023 16:34:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5522381AAB
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 136111BF364
+ for <buildroot@lists.busybox.net>; Mon,  4 Sep 2023 16:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B7D640B67
- for <buildroot@lists.busybox.net>; Mon,  4 Sep 2023 16:26:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B7D640B67
+ by smtp1.osuosl.org (Postfix) with ESMTP id E084981AA7
+ for <buildroot@lists.busybox.net>; Mon,  4 Sep 2023 16:34:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E084981AA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id U9CAG_GPwR_x for <buildroot@lists.busybox.net>;
- Mon,  4 Sep 2023 16:26:54 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B9B2940025
- for <buildroot@buildroot.org>; Mon,  4 Sep 2023 16:26:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9B2940025
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 75C4A1C0009;
- Mon,  4 Sep 2023 16:26:50 +0000 (UTC)
-Date: Mon, 4 Sep 2023 18:26:49 +0200
-To: patrick.oppenlander@gmail.com
-Message-ID: <20230904182649.51e17f8d@windsurf>
-In-Reply-To: <20230903230647.311877-2-patrick.oppenlander@gmail.com>
-References: <20230902191549.44efa583@windsurf>
- <20230903230647.311877-2-patrick.oppenlander@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jvG40FwH5nds for <buildroot@lists.busybox.net>;
+ Mon,  4 Sep 2023 16:34:48 +0000 (UTC)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CD0568145A
+ for <buildroot@busybox.net>; Mon,  4 Sep 2023 16:34:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD0568145A
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-31c6cd238e0so1565723f8f.0
+ for <buildroot@busybox.net>; Mon, 04 Sep 2023 09:34:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693845286; x=1694450086;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=tvMqL7iwkfNee8Aumbb1oHwgbbme593ikoHyeI2/Z+M=;
+ b=JQOfM9Hbq7sBRNkjdv9zX71GAVFvdcqtcv36PIzK1WmcmGBgwRkYbkawnRGWxx3jnN
+ iqe3Gb0VRTJX/h6GOpFZCZ4vhi+vE2xw9Cd6xgseZVt2aJa/rZIIZuE0L+B6KwSvqis7
+ ZzlRyI4PpUPJIRbBOCnyAzA4D3RjCRffc0vpNuo/pthV5jeQ+r2i4WjFC2JosjGO+0fE
+ +oZZ8MCCzSskSAknEa5EkYjIVRgU7IbhVc7PT9+j2WwXn5K5epmifRFuEnxEcVosZK9D
+ LWrurCT+JEfyo5H3cjBHNyeKUMd37ka1VZC1qJiz1xZ3qGEKH8bhIo/n+oBw/LmdqHUH
+ pZzw==
+X-Gm-Message-State: AOJu0YxHUgF5v4jif2r9GlHLE45A6HDph12GiWRoYEEtX7LyABtoq9Xh
+ zPniY6WBZDfbaArA11M/L93hB3taPZk=
+X-Google-Smtp-Source: AGHT+IF8rxGTHwEBps5Ne1rQGC0ZudSYmiEGf/RoTPuVl+tk0QfpJ6Gyr03vnQq7utqavcnTAbj4rQ==
+X-Received: by 2002:adf:f10e:0:b0:31a:cca0:2f3a with SMTP id
+ r14-20020adff10e000000b0031acca02f3amr10873378wro.0.1693845285621; 
+ Mon, 04 Sep 2023 09:34:45 -0700 (PDT)
+Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
+ p3-20020a05600c1d8300b00401e32b25adsm14863991wms.4.2023.09.04.09.34.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 04 Sep 2023 09:34:45 -0700 (PDT)
+From: Francois Perrad <fperrad@gmail.com>
+X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon,  4 Sep 2023 18:34:36 +0200
+Message-Id: <20230904163436.1131078-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1693844810;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vw4a2RZdfu4Y3BS5zWIHb6dJkcaAieuoU0f9F2JjjEI=;
- b=gMHn41KlLx9g6y8be8YcJje8La7HTNCzGKr93ODYJX75ObqePbb891kRZge5WrMVbth/Zq
- K7vAHVQWSPA5TENL6F8YuxE013kEdU4ghthjrqikH+zA/zM0hBgA86he5tDU/lJplaR3UO
- xDAHT4jaQij2yFVsFH9tm/1LkyBu2RTWCSe6LIE4L9w2U23XmYswSS49eFzCHpkQqqwN98
- +DlJOzewdLrsCW8ZQa9fESqKtDnbx52qNSNTGInGsguon2QxzThwd92SRaSgsWT6WiXRdf
- FLIWhrdxk5O7RueX2hMl2Rk9K5+gu/sYJCQj1T9TcJG//t2zZ9T4rJ3PaDhTTQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gMHn41Kl
-Subject: Re: [Buildroot] [PATCH] ti-k3-r5-loader: support devicetree
- customisation
+ d=gmail.com; s=20221208; t=1693845286; x=1694450086; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=tvMqL7iwkfNee8Aumbb1oHwgbbme593ikoHyeI2/Z+M=;
+ b=Uybb5lQvZas4aV+tM6/MzpOxVwVq5AX+zmJ7TFOsyj6EaQ3n5A7pQXpmXeFktzI6Gr
+ 9ijL2qg6VDKr3mjxo240Tnw79XAwsK32SlrFXf3j0xxFe1kC2yeN3JVeyGEkH+F+qYfj
+ FDAULBwwCGMDx6Qdqk43oVv+XlvCDX1+k8lcGIJNqryKnFGeztLoijZwYjqItmrMneg3
+ pUQoXA0npO5uZuE+jRS/a8ZeQZxU5W036pVRHIII0uGgL/ADv8km+ZZzF6wjF/ETlIM7
+ dTzBn71bgCe854/4ICiq0xRy4AqvrL7fqQOKn2oQpAFBrrDWIgN0oF1Ejb9q/38bMVcD
+ v/ZQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=Uybb5lQv
+Subject: [Buildroot] [PATCH] package/libtommath: security bump to version
+ 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,45 +94,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  4 Sep 2023 09:06:09 +1000
-patrick.oppenlander@gmail.com wrote:
+This is a bugfix release only containing the fix to a potential integer underflow
+which got assigned CVE-2023-36328.
 
-> From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
-> 
-> Hi Thomas,
-> 
-> sorry about that. Resend below.
-> 
-> Patrick
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ .../0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch  | 2 +-
+ package/libtommath/libtommath.hash                              | 2 +-
+ package/libtommath/libtommath.mk                                | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-This also doesn't work, because now your commit log would be:
-
-=============================================================
-Hi Thomas,
-
-sorry about that. Resend below.
-
-Patrick
-=============================================================
-
-Your commit log should be a proper commit log, which explains the
-change and its rationale.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch b/package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch
+index c25002ba7..1cf411b39 100644
+--- a/package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch
++++ b/package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch
+@@ -20,7 +20,7 @@ diff --git a/demo/test.c b/demo/test.c
+ index 998f14b3..f719709d 100644
+ --- a/demo/test.c
+ +++ b/demo/test.c
+-@@ -522,7 +522,7 @@ static int test_mp_invmod(void)
++@@ -625,7 +625,7 @@ static int test_mp_invmod(void)
+  
+  }
+  
+diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
+index 9af489ef1..4f5dd4023 100644
+--- a/package/libtommath/libtommath.hash
++++ b/package/libtommath/libtommath.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  b7c75eecf680219484055fcedd686064409254ae44bc31a96c5032843c0e18b1  ltm-1.2.0.tar.xz
++sha256  986025d7b374276fee2e30e99f3649e4ac0db8a02257a37ee10eae72abed0d1f  ltm-1.2.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  LICENSE
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+index bd3957d6c..25d4e836b 100644
+--- a/package/libtommath/libtommath.mk
++++ b/package/libtommath/libtommath.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTOMMATH_VERSION = 1.2.0
++LIBTOMMATH_VERSION = 1.2.1
+ LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
+ LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
+ LIBTOMMATH_LICENSE = Unlicense
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
