@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B573BCA0FFA
-	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 18:06:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F3B8C83F3E
+	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 18:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB5C040876;
-	Tue,  5 Sep 2023 18:06:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB5C040876
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2A71418C0;
+	Tue,  5 Sep 2023 18:06:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2A71418C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9gZXmGV2NBos; Tue,  5 Sep 2023 18:06:35 +0000 (UTC)
+	with ESMTP id OQzAlbWq28_V; Tue,  5 Sep 2023 18:06:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 918E54189A;
-	Tue,  5 Sep 2023 18:06:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 918E54189A
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3E7F418A0;
+	Tue,  5 Sep 2023 18:06:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3E7F418A0
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3EDF91BF318
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7A2BA1BF318
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 182878136D
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 182878136D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60BD08136D
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60BD08136D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nPbvf5hI_lAE for <buildroot@lists.busybox.net>;
- Tue,  5 Sep 2023 18:06:20 +0000 (UTC)
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
- [IPv6:2607:f8b0:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D07698135D
- for <buildroot@buildroot.org>; Tue,  5 Sep 2023 18:06:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D07698135D
-Received: by mail-pl1-x636.google.com with SMTP id
- d9443c01a7336-1bf078d5f33so21992955ad.3
- for <buildroot@buildroot.org>; Tue, 05 Sep 2023 11:06:20 -0700 (PDT)
+ with ESMTP id yHyAv3ZIyhEm for <buildroot@lists.busybox.net>;
+ Tue,  5 Sep 2023 18:06:22 +0000 (UTC)
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
+ [IPv6:2607:f8b0:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7C91C8135D
+ for <buildroot@buildroot.org>; Tue,  5 Sep 2023 18:06:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C91C8135D
+Received: by mail-pl1-x634.google.com with SMTP id
+ d9443c01a7336-1c328b53aeaso21708365ad.2
+ for <buildroot@buildroot.org>; Tue, 05 Sep 2023 11:06:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693937180; x=1694541980;
+ d=1e100.net; s=20221208; t=1693937181; x=1694541981;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=SfoEi7F/bm65MnarYtXP1CbKzCdy+FiacGX2H46MvrE=;
- b=GqyKjr0VxFs2MFS5r+5x2wAys1IiYex+494wbM1NHZ5CbGdOflnvkJnZbJdb1B+Aer
- eMOWlZAulzictL+4/yKRbYboTyLzxo4FNdYgjkO9izqRhHl0VXz5J24YA8igKxr5pSLK
- YI/R2ap/5XldmzYxhdFRPfDiV6CB6WRFKqBCpJi77KY75FXMY2rWZqloEtfBBIHM17J3
- kQ5J2ZPXURSh97OxuTwP7T+j/sNLyEALjhEaYmvaG4Flqf/N5VDhVJJf2uCHoQc/Y+FP
- 5cO6HekztyAem9R2rAUA0UKpRV/iEfSuG9ErzmZHWCbpKKxgpWwioPOH6JD+7TXm0E1f
- v1mw==
-X-Gm-Message-State: AOJu0YzCMD+peEOa31GCC7gdwfeklRCIIg8fh20AbCQ/c6zap8S1OjSa
- 1fZoJPtvQOi1RMIAA8AZ/I7YGqogIUE=
-X-Google-Smtp-Source: AGHT+IExzhDVY1PpgYiE55gbmvli2noiTL7Gbo0Z9a+4QbD43j2nZ/6n1qPQzJB51T3T2H7cHTHp6Q==
-X-Received: by 2002:a17:902:82c8:b0:1c0:e630:5031 with SMTP id
- u8-20020a17090282c800b001c0e6305031mr12902007plz.28.1693937179790; 
- Tue, 05 Sep 2023 11:06:19 -0700 (PDT)
+ bh=RVaVbo418wgK02UOE+IU7pDJALykfJrWc4drr5p8p6Q=;
+ b=ckfvJZNY4NWFn54MPvvDUtds6ANWJMm3hxR+EhhPkCP4weI2RWzmpkbBR2eXtc5ZBO
+ n9BJvu8fZJzDPLujrZ9Zgf3VaHdT5GTlbxpXZyhSUJl/dUSqPSYzOp4SrRLGIUj+6UJg
+ Fs6QE2F5fQrOjbsOp77Xr8FEPiyjf+j9X76+MeN7O08jXU9iWI6cVq75gh9krjUraQgp
+ Igav7xXQPtyzjA5R+8/c9YE2gcg/8quHro9Eju9rT61jaNPJM539GvlzgnqrFKqVYXjU
+ eDNhRpT1QQBFAB+6jd783J8bAamCmM3P8VPryMtxvUJCorT6bKj7rjvxCVbog47mQXLY
+ 8/iw==
+X-Gm-Message-State: AOJu0Yzcd+R2HuyjQnbFaBmVmOdWG2znc0gPGTZdabGxiKPoosaCfIFa
+ IJsO2YHJUfN3VLZkwE3ppkrM3E+2QI4=
+X-Google-Smtp-Source: AGHT+IGrGzeUFZsNuty75t4QeNs1a3Yyz3oIVIkLCqLyvMJ5q2135uuKDcLg4q0yfohFQrT59ZbVzg==
+X-Received: by 2002:a17:902:d505:b0:1c0:ecbb:182f with SMTP id
+ b5-20020a170902d50500b001c0ecbb182fmr14815426plg.5.1693937181484; 
+ Tue, 05 Sep 2023 11:06:21 -0700 (PDT)
 Received: from Adam-laptop.lan ([172.56.200.156])
  by smtp.gmail.com with ESMTPSA id
- ix21-20020a170902f81500b001bba7aab826sm9658143plb.163.2023.09.05.11.06.18
+ ix21-20020a170902f81500b001bba7aab826sm9658143plb.163.2023.09.05.11.06.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Sep 2023 11:06:19 -0700 (PDT)
+ Tue, 05 Sep 2023 11:06:21 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Sep 2023 12:06:03 -0600
-Message-Id: <20230905180610.1610778-3-aduskett@gmail.com>
+Date: Tue,  5 Sep 2023 12:06:04 -0600
+Message-Id: <20230905180610.1610778-4-aduskett@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230905180610.1610778-1-aduskett@gmail.com>
 References: <20230905180610.1610778-1-aduskett@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693937180; x=1694541980; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1693937181; x=1694541981; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=SfoEi7F/bm65MnarYtXP1CbKzCdy+FiacGX2H46MvrE=;
- b=aLJj+Abk4QcH5/K51gAytmyvA4wuZcIlTbG/r5pgDYfhcH8c0ZLZeqzXViYsSg0krs
- sfk817IBL9ra9ckws/B0kXqAfahxMph7R9fPqUCEexLlXdISI8RYQJTjHosh9vzkXZeO
- 1RBkExHNZF6t62qb6AcyBhy2I7BrTLw+tRB4Hplcyx2r14Gn5IZuxc6EPTSEVpSgTLNx
- GZOuLLEK10HD74rQbBOXZ7GdMcBPg576y491hTFT5jIxqRLMgjkSic0V5OOXrJiJfULB
- bKAu2cVJbCF/P1o0p8jLc3ge9TUo1AYzyOXEPOzw8n4Y2jyKuDhEkatsFzFcZ1QqNlMQ
- jJjw==
+ bh=RVaVbo418wgK02UOE+IU7pDJALykfJrWc4drr5p8p6Q=;
+ b=fYp1usoIa2S00rQODCbqtOBU2+ARF9GhV/cZKUI2cJYB4NDzEprC4FQ6lQyO7zyFHi
+ l+OiuHzxwlUEz3cAZHIqXnhIWUN32IBfRVwUDh/E4dQPZncRm+SZAFZHVhGnSUBioqRq
+ rd8fmfV6ogEx3iSa/WqdIyxUtmo2KPHrl16jjeEw5W4krbH063JxN01BVDaNrJUEKeYv
+ NO86IUaoZyK+yZb3UBqSANCj+CLpb4DyW57MRXPzDfyEJlmY+eeSMHRM1mAMC6NWTGbe
+ 9OypeLUZMY7BEmdMTLwcb0cdudinNIYuAo+ov7HQpEzj492t32brGcAWu7xdNAPMLEgH
+ uRoA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=aLJj+Abk
-Subject: [Buildroot] [PATCH 03/10] package/php-apcu: bump version to 5.1.22
+ header.a=rsa-sha256 header.s=20221208 header.b=fYp1usoI
+Subject: [Buildroot] [PATCH 04/10] package/php-gnupg: bump version to 1.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,34 +105,77 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Adam Duskett <aduskett@gmail.comm>
 
+Drop upstream patch
+
 Signed-off-by: Adam Duskett <aduskett@gmail.comm>
 ---
- package/php-apcu/php-apcu.hash | 2 +-
- package/php-apcu/php-apcu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-Remove-inlining-_phpc_res_close.patch | 33 -------------------
+ package/php-gnupg/php-gnupg.hash              |  2 +-
+ package/php-gnupg/php-gnupg.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
+ delete mode 100644 package/php-gnupg/0001-Remove-inlining-_phpc_res_close.patch
 
-diff --git a/package/php-apcu/php-apcu.hash b/package/php-apcu/php-apcu.hash
-index 3aae4120d2..4a5eadf803 100644
---- a/package/php-apcu/php-apcu.hash
-+++ b/package/php-apcu/php-apcu.hash
+diff --git a/package/php-gnupg/0001-Remove-inlining-_phpc_res_close.patch b/package/php-gnupg/0001-Remove-inlining-_phpc_res_close.patch
+deleted file mode 100644
+index 9b94cb7e4f..0000000000
+--- a/package/php-gnupg/0001-Remove-inlining-_phpc_res_close.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 887b0899d7e7423baec691255c2d8b56bb348ecd Mon Sep 17 00:00:00 2001
+-From: Jakub Zelenka <bukka@php.net>
+-Date: Sun, 14 Mar 2021 18:52:21 +0000
+-Subject: [PATCH] Remove inlining _phpc_res_close
+-
+-[Retrieved from:
+-https://github.com/bukka/phpc/commit/887b0899d7e7423baec691255c2d8b56bb348ecd]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- phpc.h | 8 --------
+- 1 file changed, 8 deletions(-)
+-
+-diff --git a/phpc/phpc.h b/phpc/phpc.h
+-index dc5887e..9206105 100644
+---- a/phpc/phpc.h
+-+++ b/phpc/phpc.h
+-@@ -945,16 +945,8 @@ typedef zend_resource * phpc_res_value_t;
+- 	zend_fetch_resource2(Z_RES_P(_pz_res), _res_type_name, _res_type_1, _res_type_2)
+- #define PHPC_RES_DELETE(_pz_res) \
+- 	zend_list_delete(Z_RES_P(_pz_res))
+--#if PHP_MAJOR_VERSION < 8
+- #define PHPC_RES_CLOSE(_pz_res) \
+- 	zend_list_close(Z_RES_P(_pz_res))
+--#else
+--inline int _phpc_res_close(zval *zres) {
+--	zend_list_close(Z_RES_P(zres));
+--	return SUCCESS;
+--}
+--#define PHPC_RES_CLOSE _phpc_res_close
+--#endif
+- 
+- /* resource to zval */
+- #define PHPC_RES_PZVAL(_res, _pzv) \
+diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
+index 99ffe87f46..084de7750a 100644
+--- a/package/php-gnupg/php-gnupg.hash
++++ b/package/php-gnupg/php-gnupg.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b99d40fafec06f4d132fcee53e7526ddbfc1d041ea6e04e17389dfad28f9c390  apcu-5.1.20.tgz
-+sha256  010a0d8fd112e1ed7a52a356191da3696a6b76319423f7b0dfdeaeeafcb41a1e  apcu-5.1.22.tgz
- sha256  ecc8b74820c32fb82ddee80446205408585d75d1632ac959fb3cdf8eaf3877b5  LICENSE
-diff --git a/package/php-apcu/php-apcu.mk b/package/php-apcu/php-apcu.mk
-index d381c9054f..b8eeb9de7c 100644
---- a/package/php-apcu/php-apcu.mk
-+++ b/package/php-apcu/php-apcu.mk
+ # Locally calculated
+-sha256  d4f5f79aa483908f3df08e5b343ea3593c6d725b9ed2103e30242627659e0a64  gnupg-1.5.0.tgz
++sha256  a9906f465ab2343cb2f3127ee209c72760238745c34878d9bbc1576486219252  gnupg-1.5.1.tgz
+ sha256  da1136d4d9326317cbd320dadddf7e9b4b4edffd973eb083cb7b9754fb6a15d9  LICENSE
+diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
+index a89f0978af..89054f5f7c 100644
+--- a/package/php-gnupg/php-gnupg.mk
++++ b/package/php-gnupg/php-gnupg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_APCU_VERSION = 5.1.20
-+PHP_APCU_VERSION = 5.1.22
- PHP_APCU_SITE = http://pecl.php.net/get
- PHP_APCU_SOURCE = apcu-$(PHP_APCU_VERSION).tgz
- PHP_APCU_LICENSE = PHP-3.01
+-PHP_GNUPG_VERSION = 1.5.0
++PHP_GNUPG_VERSION = 1.5.1
+ PHP_GNUPG_SOURCE = gnupg-$(PHP_GNUPG_VERSION).tgz
+ PHP_GNUPG_SITE = https://pecl.php.net/get
+ # phpize does the autoconf magic
 -- 
 2.39.2
 
