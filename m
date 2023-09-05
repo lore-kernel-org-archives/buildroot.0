@@ -4,87 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E250C83F3E
-	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 18:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA05ECA0FFA
+	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 18:08:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 205F040345;
-	Tue,  5 Sep 2023 18:08:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 205F040345
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6779840347;
+	Tue,  5 Sep 2023 18:08:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6779840347
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 16VJUXAAJups; Tue,  5 Sep 2023 18:08:12 +0000 (UTC)
+	with ESMTP id QPjy3hVggHc8; Tue,  5 Sep 2023 18:08:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15FB140347;
-	Tue,  5 Sep 2023 18:08:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15FB140347
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 060AD1BF318
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 688164034D;
+	Tue,  5 Sep 2023 18:08:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 688164034D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 054891BF318
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E07728136D
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E07728136D
+ by smtp3.osuosl.org (Postfix) with ESMTP id D30DD60BEC
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 18:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D30DD60BEC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Lb-0gVfZi6Pd for <buildroot@lists.busybox.net>;
- Tue,  5 Sep 2023 18:06:32 +0000 (UTC)
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
- [IPv6:2607:f8b0:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EE7C48135D
- for <buildroot@buildroot.org>; Tue,  5 Sep 2023 18:06:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE7C48135D
-Received: by mail-pl1-x62b.google.com with SMTP id
- d9443c01a7336-1c0d0bf18d7so15990515ad.0
- for <buildroot@buildroot.org>; Tue, 05 Sep 2023 11:06:31 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qov3g73onpXB for <buildroot@lists.busybox.net>;
+ Tue,  5 Sep 2023 18:06:34 +0000 (UTC)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
+ [IPv6:2607:f8b0:4864:20::534])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1E48D60BDD
+ for <buildroot@buildroot.org>; Tue,  5 Sep 2023 18:06:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E48D60BDD
+Received: by mail-pg1-x534.google.com with SMTP id
+ 41be03b00d2f7-56a3e6bce68so1408317a12.1
+ for <buildroot@buildroot.org>; Tue, 05 Sep 2023 11:06:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693937191; x=1694541991;
+ d=1e100.net; s=20221208; t=1693937193; x=1694541993;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=/pJDpX8D9ZacQJgcrrbpIRi+BoG8RsJRfmfa+upOsQk=;
- b=JZGe7wfSwmM8hP7XWJpPytt1bmGl1zesfPsL5TUoWCiQ8IMYyJWj5cNCCxr3LaUrrB
- lZgsjnKUzgzVLZ/qxkgMvsu08gt2O8/Ie5o0uHyTnHhCNLsY9oRZ29xIPHY8vsM1CEB2
- wIEcD5RkTN320/unaGq0ErTLMQ15KEjgy66ZEBRTTReQ4s3I+kM/3aDHMgomqOrtyBmt
- 3logLlYeVJDCV4I4LkGF54pv7CgM2PEwPKjQ5pXZaXdQYTEFVP8Er0XqXYNj0uSDF6Fq
- V9WkGUArGVH6cvJTkPPKbuKkFNC24LY20jCsYbZjvPTb578bRiPEhq+FbXlUSKU2NBNv
- FyUQ==
-X-Gm-Message-State: AOJu0Yzl4YZ1o4VDT9BDfe5/ktswnmotGDNk3nJ9pQWLtpfNn+O7W10u
- q/X6U3SD5MuMJj6gv7HTjI863oEVCLo=
-X-Google-Smtp-Source: AGHT+IFkYhdgA0fEkf0nUymtcJL4B3S1U1WCby9GgtwL+9Y6G7OKwgV0mcQmESTk3uwk8NM51xWiXg==
-X-Received: by 2002:a17:902:ec92:b0:1b7:e646:4cc4 with SMTP id
- x18-20020a170902ec9200b001b7e6464cc4mr13494203plg.28.1693937190912; 
- Tue, 05 Sep 2023 11:06:30 -0700 (PDT)
+ bh=Nguf83zuwtX4npPn6zoD6xJm68o4uQhxODjioaXI+LE=;
+ b=Xg2WrjUzalCaz2XLHzJUS5n6Ov3JM42VLvV3zkHRsLGsuts95Wff6wbhoGqJHCbFxm
+ K4P0xFrDH4z+CVtedI901BExh0b+LQXCq7USriGiu0ZaL0RJV/nCjLjm3AdhaQ8HVQRw
+ 1fPz70WL24kIYvPn1jbYdL0VzYHFcVV+eAyiUjLglLlQsT8uDa1nYvnPUutDNy2gGu/F
+ CFZga1xTlkJksrTlVdnLCkZohOZ8c+i26AQT8O4dJMFYfsv2Vm9OAYVMZcPqW5jMDck7
+ Dut9jHaVz0xolOZTeqLu+5pdDMU5g+hP2CehgzsgEz2wQhJFhy0eLxmjkEWBLh6bJ5yp
+ JJ/Q==
+X-Gm-Message-State: AOJu0Yxcyqd5p2MwMXsoPoTPqjakk+8XA0RxiVfSP/F0PSyQAZU5fsxF
+ C+RzgkrhzQHbe7PS852vHIVR0Kpeq+c=
+X-Google-Smtp-Source: AGHT+IHCz21Ad6siFOeJObqDt105E9cLeHNEFCxMrouWCNdyzR3fWFBFR68ljNrqHpTU8C6PuVzpmw==
+X-Received: by 2002:a17:90a:f00b:b0:26f:d6f4:9646 with SMTP id
+ bt11-20020a17090af00b00b0026fd6f49646mr9552200pjb.40.1693937192982; 
+ Tue, 05 Sep 2023 11:06:32 -0700 (PDT)
 Received: from Adam-laptop.lan ([172.56.200.156])
  by smtp.gmail.com with ESMTPSA id
- ix21-20020a170902f81500b001bba7aab826sm9658143plb.163.2023.09.05.11.06.29
+ ix21-20020a170902f81500b001bba7aab826sm9658143plb.163.2023.09.05.11.06.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Sep 2023 11:06:30 -0700 (PDT)
+ Tue, 05 Sep 2023 11:06:32 -0700 (PDT)
 From: Adam Duskett <aduskett@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue,  5 Sep 2023 12:06:09 -0600
-Message-Id: <20230905180610.1610778-9-aduskett@gmail.com>
+Date: Tue,  5 Sep 2023 12:06:10 -0600
+Message-Id: <20230905180610.1610778-10-aduskett@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230905180610.1610778-1-aduskett@gmail.com>
 References: <20230905180610.1610778-1-aduskett@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693937191; x=1694541991; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1693937193; x=1694541993; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/pJDpX8D9ZacQJgcrrbpIRi+BoG8RsJRfmfa+upOsQk=;
- b=GLMeiV75+mksih0tNy2PaaJxkax/sPzm/V11WpgmZFhk9DBPKOHj8H46de/APa60Cw
- Lzrlwh2oV83mtSDIALPOvlSlGTy6SKXW8V5cEJNEq+2BhpC3qnRGsjv8mHFOl+6jbyV5
- XPMP+dr20ZGgHhOe5K9jL1JrlQv5pUVHifgkweAt5etUqpF+2OpYrJGxN/upSZdED06Q
- wlm3jKEVOXoG1fHvaGaoJwHtbT9M+v0KEBFtmPOJsDKWLhWA1d9eN6Y2KUSXvydXFVSo
- 2xrefkWQQVrUtLm7c1vr1MT3yoahc9GN+6TG9+M3O64If0mBTZzywjan33fjTpyMcs4K
- PPOw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Nguf83zuwtX4npPn6zoD6xJm68o4uQhxODjioaXI+LE=;
+ b=OdF7+aKkCRpA3MQLob7GPZJCKxkdDSBc2ddOuS6Wng4CtFBkWiyK3TZxYXFOikCDAq
+ KFyKgNiD5Tbfg89b6maYaOnId4ljWZuki2qkxfbWvyhu3yaN9G5nl5YIgzfZMFMRDOVf
+ /PlPLVTu6+WgP3NSrKTCcP39piH8GKD9ZZPDNYmsL8QHqXnziOPjvWsmnvXqGmGZuQIy
+ 6FN47HkDXsap6zFxfeRSAjoqlAHNaS0mamGO3vty3SQvCeCtHKfC1XN8VSMAlkXCTsZH
+ sA5YvvNWI4t34oxqMj2N/0nHrKHOsh+t6yPBJPKxKVGEo0CBxiWAkP7qM748YCvpg5Sr
+ OVLg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=GLMeiV75
-Subject: [Buildroot] [PATCH 09/10] package/php-xdebug: bump version to 3.2.2
+ header.a=rsa-sha256 header.s=20221208 header.b=OdF7+aKk
+Subject: [Buildroot] [PATCH 10/10] package/php-yaml: bump version to 2.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,32 +107,32 @@ From: Adam Duskett <aduskett@gmail.comm>
 
 Signed-off-by: Adam Duskett <aduskett@gmail.comm>
 ---
- package/php-xdebug/php-xdebug.hash | 2 +-
- package/php-xdebug/php-xdebug.mk   | 2 +-
+ package/php-yaml/php-yaml.hash | 2 +-
+ package/php-yaml/php-yaml.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php-xdebug/php-xdebug.hash b/package/php-xdebug/php-xdebug.hash
-index fa92ee82ed..2509e6e2ee 100644
---- a/package/php-xdebug/php-xdebug.hash
-+++ b/package/php-xdebug/php-xdebug.hash
+diff --git a/package/php-yaml/php-yaml.hash b/package/php-yaml/php-yaml.hash
+index b4d14c5a30..4fa5dfbc16 100644
+--- a/package/php-yaml/php-yaml.hash
++++ b/package/php-yaml/php-yaml.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7769b20eecdadf5fbe9f582512c10b394fb575b6f7a8c3a3a82db6883e0032b7  xdebug-3.2.0.tgz
-+sha256  f48777371f90cbb315ea4ea082a1ede6765bcfb35d7d6356ab8f71fd6dfcc157  xdebug-3.2.2.tgz
- sha256  ef479ee1a3da3f933e0d046ca8cd0c14601f29b2c0c41cc60c9388546a4e0272  LICENSE
-diff --git a/package/php-xdebug/php-xdebug.mk b/package/php-xdebug/php-xdebug.mk
-index 9429d4afee..c5a1e10ebc 100644
---- a/package/php-xdebug/php-xdebug.mk
-+++ b/package/php-xdebug/php-xdebug.mk
+ # Locally calculated
+-sha256  119052f0461d57d86f44c252f9c9b2dd743486c701c1a0aba0aebecdd0d8b82a  yaml-2.2.2.tgz
++sha256  5937eb9722ddf6d64626799cfa024598ff2452ea157992e4e67331a253f90236  yaml-2.2.3.tgz
+ sha256  68d9700294396c72089bfc7bf38a5b3654a53ae415f3bd37768848c14e86f338  LICENSE
+diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
+index 39a422e25d..e825e3146f 100644
+--- a/package/php-yaml/php-yaml.mk
++++ b/package/php-yaml/php-yaml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_XDEBUG_VERSION = 3.2.0
-+PHP_XDEBUG_VERSION = 3.2.2
- PHP_XDEBUG_SOURCE = xdebug-$(PHP_XDEBUG_VERSION).tgz
- PHP_XDEBUG_SITE = https://xdebug.org/files
- PHP_XDEBUG_INSTALL_STAGING = YES
+-PHP_YAML_VERSION = 2.2.2
++PHP_YAML_VERSION = 2.2.3
+ PHP_YAML_SOURCE = yaml-$(PHP_YAML_VERSION).tgz
+ PHP_YAML_SITE = https://pecl.php.net/get
+ PHP_YAML_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 -- 
 2.39.2
 
