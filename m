@@ -4,62 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE5F0C71153
-	for <buildroot@archiver.kernel.org>; Mon,  4 Sep 2023 22:16:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 497A7C83F2C
+	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 00:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCDCE610CB;
-	Mon,  4 Sep 2023 22:16:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCDCE610CB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 845E9605B1;
+	Tue,  5 Sep 2023 00:33:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 845E9605B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gT50d7UaoV9X; Mon,  4 Sep 2023 22:16:10 +0000 (UTC)
+	with ESMTP id 9zQW45-f9AhH; Tue,  5 Sep 2023 00:33:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A87F610D7;
-	Mon,  4 Sep 2023 22:16:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A87F610D7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 105DA1BF33F
- for <buildroot@lists.busybox.net>; Mon,  4 Sep 2023 22:16:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEFD6605B3;
+	Tue,  5 Sep 2023 00:33:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEFD6605B3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id AD8991BF964
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 00:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC3FB4088C
- for <buildroot@lists.busybox.net>; Mon,  4 Sep 2023 22:16:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC3FB4088C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92F30605B3
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 00:33:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92F30605B3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u5qdIfnNAHgs for <buildroot@lists.busybox.net>;
- Mon,  4 Sep 2023 22:16:02 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2ACE84086F
- for <buildroot@buildroot.org>; Mon,  4 Sep 2023 22:16:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ACE84086F
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id EFE3A13F88F;
- Tue,  5 Sep 2023 00:15:57 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue,  5 Sep 2023 00:15:49 +0200
-Message-ID: <20230904221549.42938-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Djm0SZqejczE for <buildroot@lists.busybox.net>;
+ Tue,  5 Sep 2023 00:33:37 +0000 (UTC)
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com
+ [IPv6:2607:f8b0:4864:20::f2e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 89552605B1
+ for <buildroot@buildroot.org>; Tue,  5 Sep 2023 00:33:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89552605B1
+Received: by mail-qv1-xf2e.google.com with SMTP id
+ 6a1803df08f44-64f42fcd809so11848796d6.1
+ for <buildroot@buildroot.org>; Mon, 04 Sep 2023 17:33:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1693874016; x=1694478816;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=q4xaN3CsMKuqnp84g3ZpFB8IcvWjNZeWpjYg0z9pEDA=;
+ b=dbA2YHMCBgMGyoxA3n5LBm7Fnig1RUV7oRSue70KVnxX4J59/NDSea4p0At19CwKRB
+ 4OTiJ+PUN/rRZi1B6r87TBy5C3jvxpRmFUtLMpLiva5OhMJxYP1Hf1vsYcteA3xrdWsA
+ c7MXy4ahTxV5RqpljHrHWy0HQUrmJT1KESHA5791sg16Wd0k+UUdY96C50Hl1bfiYYo3
+ Ltib02JZrM4LaR40ETlDUGWbFzmoyfFV+QebNXO58JbY8K1Y+TfwYF9TdkxU23y0Z/z/
+ prGkd1wGlupoTP/cV9Nhg2wTP6kX507OKnOu3LQ849PHJIg6eQFTzHsTyQfd4QMEKIIM
+ HR2w==
+X-Gm-Message-State: AOJu0Ywggb+DXk7OoGk3XmQoBvWxPc+C1UM8fiBGUVekeb3WTo9lK2/L
+ WUEEvDIkMP9WbkVZhCA+ZBL1nH3VhOcp5Ec681idcR7U
+X-Google-Smtp-Source: AGHT+IHX2gDeToYwSxDsIfCpmoEJv7Sedym/PZaSFbR1tjmZAFOfsXRZYkmoQZRtGTYTiACAFYjqYe46K5/2uPDkhpg=
+X-Received: by 2002:a0c:cb8a:0:b0:64f:6079:306b with SMTP id
+ p10-20020a0ccb8a000000b0064f6079306bmr9732689qvk.0.1693874016020; Mon, 04 Sep
+ 2023 17:33:36 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1693865759;
- bh=WHSqNamMK63sgqJixviQNa4bTUCo19/4fYTRouF9ZqA=;
- h=From:To:Cc:Subject:Date:From;
- b=ddCO1GNrC601CLGu3AV+rVOt8K0TITgM/3d8XUIK8bbdvElOrBV5D9a3rAhDI+z/5
- lB0aD0kF/0fIvUftrbS+JCzHoKBeVQWpCtpV5RyZTDpDvfbRHgAJidlrgt0lteJV3X
- ZFJ7KaIeRWl6JtHeFUgM6VShA5nUdZgbvkY1PRa9QEdX3TA8ytngI1Xt1SWd4wAhqh
- JMnTmxKzvUTJ7MSQLdL+Ix8zwVyQXN+JHUfa30vfp9qKssmL1kWPFK/oLzULYmr50R
- IsTvDuyPdgnTKNblUSzqUySp17WFXPZb9W2pM2842+zQpo4Xb3+fS8qYuMoOxFrHGy
- mbFh73NHaJscA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ddCO1GNr
-Subject: [Buildroot] [PATCH next 1/1] package/openblas: bump to version
- v0.3.24
+References: <20230902191549.44efa583@windsurf>
+ <20230903230647.311877-2-patrick.oppenlander@gmail.com>
+ <20230904182649.51e17f8d@windsurf>
+In-Reply-To: <20230904182649.51e17f8d@windsurf>
+From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+Date: Tue, 5 Sep 2023 10:33:25 +1000
+Message-ID: <CAEg67G=DubcweQxneXmqYrQtrKfOhd9_h80UmBM753D_gZSv7g@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1693874016; x=1694478816; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=q4xaN3CsMKuqnp84g3ZpFB8IcvWjNZeWpjYg0z9pEDA=;
+ b=DDEntfHsiRdxz8DTXpLxm/rD4+K7MlmyGTW/op9Am2tWhR1jxXi82P9CC9bbT8gTf2
+ XEdRNYmUI+3UIrRgNQe5hqYoTl71fGWbhumkknZQS8UO5nWmVVnVmNa0ynmPeF2ZCI/U
+ 7MQOf/5cTlXVIQw7g8AWqdUYVn5obY/EnU/rvGmGTN17gjsugFB8zot4hYrm8LbwksXH
+ RxKdbMOuQ+M6itOsirZyKkm25DX9EAwyZJMgEAI9oKA78z57wWJ+Rl8sL3Ogt2UU9/2N
+ eWsruSJb6H2qFkHMCw8vZDh5hxP8PUBgbgW5yrtevwMJJY4HOo52t8N57odXwM2NWKKq
+ hLKQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=DDEntfHs
+Subject: Re: [Buildroot] [PATCH] ti-k3-r5-loader: support devicetree
+ customisation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,67 +93,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v0.3.23, see:
-https://github.com/xianyi/OpenBLAS/releases/tag/v0.3.24
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch next at commit 3fa1ae0 with commands:
-
-    make check-package
-    ...
-    0 warnings generated
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_openblas
-    ...
-    OK
-
-    utils/test-pkg -a -p openblas
-    ...
-    45 builds, 25 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/openblas/openblas.hash | 6 +++---
- package/openblas/openblas.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
-index 2e5fa8865f..8e416f98f6 100644
---- a/package/openblas/openblas.hash
-+++ b/package/openblas/openblas.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/xianyi/OpenBLAS/releases/tag/v0.3.23
--md5  115634b39007de71eb7e75cf7591dfb2  openblas-0.3.23.tar.gz
-+# From https://github.com/xianyi/OpenBLAS/releases/tag/v0.3.24
-+md5  23599a30e4ce887590957d94896789c8  openblas-0.3.24.tar.gz
- # Locally calculated
--sha256  5d9491d07168a5d00116cdc068a40022c3455bf9293c7cb86a65b1054d7e5114  openblas-0.3.23.tar.gz
-+sha256  ceadc5065da97bd92404cac7254da66cc6eb192679cf1002098688978d4d5132  openblas-0.3.24.tar.gz
- sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index d8fcb4a2c6..0d0e8e56dd 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENBLAS_VERSION = 0.3.23
-+OPENBLAS_VERSION = 0.3.24
- OPENBLAS_SITE = https://github.com/xianyi/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
- OPENBLAS_LICENSE = BSD-3-Clause
- OPENBLAS_LICENSE_FILES = LICENSE
--- 
-2.41.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLAoKSSBtZXNzZWQgdGhhdCB1cCwgc29ycnkuIEknbGwgc2VuZCBpdCBhZ2Fpbi4K
+ClBhdHJpY2sKCk9uIFR1ZSwgU2VwIDUsIDIwMjMgYXQgMjoyNuKAr0FNIFRob21hcyBQZXRhenpv
+bmkKPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gT24gTW9uLCAgNCBT
+ZXAgMjAyMyAwOTowNjowOSArMTAwMAo+IHBhdHJpY2sub3BwZW5sYW5kZXJAZ21haWwuY29tIHdy
+b3RlOgo+Cj4gPiBGcm9tOiBQYXRyaWNrIE9wcGVubGFuZGVyIDxwYXRyaWNrLm9wcGVubGFuZGVy
+QGdtYWlsLmNvbT4KPiA+Cj4gPiBIaSBUaG9tYXMsCj4gPgo+ID4gc29ycnkgYWJvdXQgdGhhdC4g
+UmVzZW5kIGJlbG93Lgo+ID4KPiA+IFBhdHJpY2sKPgo+IFRoaXMgYWxzbyBkb2Vzbid0IHdvcmss
+IGJlY2F1c2Ugbm93IHlvdXIgY29tbWl0IGxvZyB3b3VsZCBiZToKPgo+ID09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KPiBIaSBUaG9t
+YXMsCj4KPiBzb3JyeSBhYm91dCB0aGF0LiBSZXNlbmQgYmVsb3cuCj4KPiBQYXRyaWNrCj4gPT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PQo+Cj4gWW91ciBjb21taXQgbG9nIHNob3VsZCBiZSBhIHByb3BlciBjb21taXQgbG9nLCB3aGlj
+aCBleHBsYWlucyB0aGUKPiBjaGFuZ2UgYW5kIGl0cyByYXRpb25hbGUuCj4KPiBUaGFua3MgYSBs
+b3QhCj4KPiBUaG9tYXMKPiAtLQo+IFRob21hcyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8s
+IEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFp
+bmluZwo+IGh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
+b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
+ZHJvb3QK
