@@ -1,80 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1AF3CA1009
-	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 20:02:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7EEACA100D
+	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 20:46:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 103F941781;
-	Tue,  5 Sep 2023 20:02:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 103F941781
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DACF60BE7;
+	Tue,  5 Sep 2023 20:46:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DACF60BE7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qQsbPQjXWF3U; Tue,  5 Sep 2023 20:02:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pTCNS_7Nnvxr; Tue,  5 Sep 2023 20:46:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF88C41798;
-	Tue,  5 Sep 2023 20:02:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF88C41798
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88F2460BBF;
+	Tue,  5 Sep 2023 20:46:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88F2460BBF
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CD3601BF306
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 20:02:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 602E41BF344
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 20:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A427F41779
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 20:02:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A427F41779
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37DB34182F
+ for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 20:46:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37DB34182F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MKKPnUXED8Jn for <buildroot@lists.busybox.net>;
- Tue,  5 Sep 2023 20:02:16 +0000 (UTC)
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com
- [IPv6:2607:f8b0:4864:20::c2c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 82C8D4174C
- for <buildroot@buildroot.org>; Tue,  5 Sep 2023 20:02:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82C8D4174C
-Received: by mail-oo1-xc2c.google.com with SMTP id
- 006d021491bc7-57129417cecso121657eaf.1
- for <buildroot@buildroot.org>; Tue, 05 Sep 2023 13:02:16 -0700 (PDT)
+ with ESMTP id mduQcOoFnfpm for <buildroot@lists.busybox.net>;
+ Tue,  5 Sep 2023 20:46:41 +0000 (UTC)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4196C41835
+ for <buildroot@buildroot.org>; Tue,  5 Sep 2023 20:46:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4196C41835
+Received: by mail-io1-xd2e.google.com with SMTP id
+ ca18e2360f4ac-794d98181f0so123137339f.2
+ for <buildroot@buildroot.org>; Tue, 05 Sep 2023 13:46:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693944135; x=1694548935;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=sF5rHHbIQ2CYdLps3zrjWfJrzH2Q9R83ycSy7yUwsUU=;
- b=mCexsOs4CHlG73qyBbOj4bfamWMqpMy1DQKenhKuw03C8LC45IZmlmoGNRL1okhwM6
- Gj2sXHoWPzZ/A+nVR1qQk+Mb6Enb1vJtDMUbDBINBOUdIe9J+QRmPJ0kBguaHk06nFsS
- BYpxj7Eoz/mLcjMwnpqyN9a2asVieYK6qWMV7XBpx79oCelwp2LsUyyYcDPbDyznJQXt
- WTdibv8SAkuWvx6r4qMzfcPT3QkSzqB1RdqclVNKX+8wIjlprKAww36iGIQyYqsvP8bp
- rgetkDj+RxpCss3E4tWGyyJS2nL9M9WzZac69vcOuyRy051Vw1K2rE87oOWKfcxefWk5
- YN/w==
-X-Gm-Message-State: AOJu0YyDCMUhYKaStQnGAHL9iNG3DRGRkfDCEudNiq+ZGNk8EE8N03RR
- aWV8YGrodc/ndo/yKEdhmFjBj1EphL06RK6iV6/inl9HPqs=
-X-Google-Smtp-Source: AGHT+IH9ou3mCr5+4Ukds/+9FGIkqMe3lhTpprXLD63QmXoJ7gP1zJobmQINqlsl1G4jrHL5E1HnNjD6H+aLMp+8lbY=
-X-Received: by 2002:a4a:2746:0:b0:571:1c44:c9c0 with SMTP id
- w6-20020a4a2746000000b005711c44c9c0mr8704921oow.1.1693944135312; Tue, 05 Sep
- 2023 13:02:15 -0700 (PDT)
-MIME-Version: 1.0
-From: Robert D Kocisko <rkocisko@gmail.com>
-Date: Tue, 5 Sep 2023 16:02:04 -0400
-Message-ID: <CAGF=AeQr3N0UkB9sXqg42D6nUhC3+w3Gw3fHOJPjg-J0f+Lbbg@mail.gmail.com>
+ d=1e100.net; s=20221208; t=1693946800; x=1694551600;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mzt2H51PPmV/5WjhJZuhTGlkYMPjCZgKNyUH6J07HAk=;
+ b=CbN/3ZuV99tL9qaKyBl9WE1K+aV+0K3k8YOZZQNb7chtJrySbyfNWd8GNDyNebuJNa
+ UmNuQur5ua2FiTz7KU7h4o7rO1L2ZCXaqGjxb9cShUMTiyYJMAS30MWgAZqcWSADTkB2
+ O04tkYO1hJojLd/lElq7RkTx2YrKyJWmY4/nN7LALUJLmFBAMby++7hdaq1xWSQdYPLf
+ xR3tvkRVSOe68W1fqjlxR0zZnRoUq0o0I7W08Qw6AFI9pJvIN+dI5azDj1hY7hi1AqPu
+ j0ajWo6yFwWmG8aOFdD0n00kDxyZIfgbeLv7gyTjbF8A3kDYyBNIOhgHATBcgdUNNiJ4
+ 9c+Q==
+X-Gm-Message-State: AOJu0YzJnxgFyoizFaxRQG/I350pTxFXolKApta9D2o8FUPNSK9WRm0P
+ 3kS0wOM7hG5V69aS0dvCKVa7CoMtsGk=
+X-Google-Smtp-Source: AGHT+IE3Fi2+aEP9pVb0+Hi8YgrsPUJxWCiRlipUPvqJpBudx47O6S7reUyvVBEG2aToKlxlTQO+ew==
+X-Received: by 2002:a6b:5c03:0:b0:792:82f8:749d with SMTP id
+ z3-20020a6b5c03000000b0079282f8749dmr16807020ioh.10.1693946799520; 
+ Tue, 05 Sep 2023 13:46:39 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-146-15.hlrn.qwest.net.
+ [97.118.146.15]) by smtp.gmail.com with ESMTPSA id
+ t24-20020a6b0918000000b00777b7fdbbffsm4468784ioi.8.2023.09.05.13.46.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Sep 2023 13:46:38 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
+Date: Tue,  5 Sep 2023 14:46:34 -0600
+Message-Id: <20230905204634.2462368-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693944135; x=1694548935; darn=buildroot.org;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=sF5rHHbIQ2CYdLps3zrjWfJrzH2Q9R83ycSy7yUwsUU=;
- b=Yu+dCmP1agWlfzZyZuNYKz+XZHeWzMDWY55RzO0exEdE4jivyQbRN+oC7BunNc2LxL
- +FveSpNHR390jJI/YABwmnxrWJJAPETeYIUW3IOL4nw61eaNK+F909UjwOGVS/NYcJnU
- TaWZNo8s5/cKq6mGTMvjlaKSi1sWzKUzW+FHusXNYvwEIe9zzfk2BAomv91QbvNPzuFG
- 8+XVL4jPM+gSSkAItalcbIG4jOfa5vIEANActP9LXm2WcFKskKEo4hLn6LEe1Z/bJG5C
- 5La0bg0Kqe2rQvBHYPLoN1wQmdQfyt0XJrimhFRBVxdlOxgjDRqRynEfsLiYq07oc7B1
- aHCA==
+ d=gmail.com; s=20221208; t=1693946800; x=1694551600; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mzt2H51PPmV/5WjhJZuhTGlkYMPjCZgKNyUH6J07HAk=;
+ b=lr8ALipZXwRJPcswUBNZIflj8+Gm+vaUSgbLLZyv3Pcu+HHvPDse9+gueTv+THlYLT
+ FY8N2tAc+zuHvTUH2UnWKEeQmJdcXBk4y8lRng6Tu0D0z7hOgCSZ2gnKiJleuUGQ3n0+
+ bfbfn+EFJznU03EfOLjb3Jw0WW9T8SwejgwPByAOi9BQ4uaowcy5XB8tLNGLT/8hX1/E
+ s4MNiJp6YSPMxPy5qfGiHe4BQCeCcZOeb3MZ5cJue59J2Q1b2nuUM07lvvswplfLK1d+
+ IHRDqN182rz8sqVXI7dvFR3fMyGVmY39vKjfHSeJCrnWjGpPa9g4CuqVXysxmVaiL/G2
+ HgNQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=Yu+dCmP1
-Subject: [Buildroot] Erlang JIT build issues for aarch64
+ header.a=rsa-sha256 header.s=20221208 header.b=lr8ALipZ
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself as developer for all
+ python packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,125 +94,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============4389574743552654144=="
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4389574743552654144==
-Content-Type: multipart/alternative; boundary="00000000000074686c0604a21ad0"
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS | 71 +-----------------------------------------------------
+ 1 file changed, 1 insertion(+), 70 deletions(-)
 
---00000000000074686c0604a21ad0
-Content-Type: text/plain; charset="UTF-8"
-
-Hello!  I'm fairly new to Buildroot and am attempting to build Erlang for
-an aarch64 system.
-
-All was well until I noticed that Erlang said the JIT would be disabled
-since I didn't have c++ support.  To fix that, I enabled c++ support, and
-now I'm getting the following errors.  Am I doing something wrong or is
-this a bug?
-
-asmjit/core/cpuinfo.cpp: In function 'void
-asmjit::_abi_1_10::detectHWCaps(CpuInfo&, long unsigned int, const
-LinuxHWCapMapping*, size_t)':
-asmjit/core/cpuinfo.cpp:840:24: error: 'getauxval' was not declared in this
-scope
-840 | unsigned long mask = getauxval(type);
-| ^~~~~~~~~
-In file included from ../include/internal/gcc/ethread.h:347,
-from ../include/internal/ethread.h:389,
-from beam/erl_threads.h:252,
-from beam/sys.h:539,
-from beam/dist.c:37:
-In function 'ethr_native_atomic64_set_relb',
-inlined from 'ethr_atomic_set_mb' at
-../include/internal/ethr_atomics.h:4019:5,
-inlined from 'erts_dist_command' at beam/dist.c:3866:5:
-../include/internal/gcc/ethr_atomic.h:144:5: warning: '__atomic_store_8'
-writing 8 bytes into a region of size 0 overflows the destination
-[-Wstringop-overflow=]
-144 | __atomic_store_n(&var->value, value, __ATOMIC_RELEASE);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In function 'erts_dist_command':
-cc1: note: destination object is likely at address zero
-asmjit/core/cpuinfo.cpp: In function 'void
-asmjit::_abi_1_10::detectARMCpu(CpuInfo&)':
-asmjit/core/cpuinfo.cpp:972:21: error: 'AT_HWCAP' was not declared in this
-scope
-972 | detectHWCaps(cpu, AT_HWCAP, hwCapMapping,
-ASMJIT_ARRAY_SIZE(hwCapMapping));
-| ^~~~~~~~
-CXX obj/aarch64-buildroot-linux-gnu/opt/jit/asmjit/core/emitterutils.o
-CXX obj/aarch64-buildroot-linux-gnu/opt/jit/asmjit/core/environment.o
-asmjit/core/cpuinfo.cpp:973:21: error: 'AT_HWCAP2' was not declared in this
-scope
-973 | detectHWCaps(cpu, AT_HWCAP2, hwCapMapping2,
-ASMJIT_ARRAY_SIZE(hwCapMapping2));
-|
-
-
-Buildroot version: buildroot-2023.08-rc1
-gcc version: gcc 13.x
-binutils version: 2.41
-enable c++ support: yes
-
-Thanks!
-Bob Kocisko
-
---00000000000074686c0604a21ad0
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><font face=3D"monospace">Hello!=C2=A0 I&#=
-39;m fairly new to Buildroot and am attempting to build Erlang for an aarch=
-64 system. =C2=A0</font><div><font face=3D"monospace"><br></font></div><div=
-><font face=3D"monospace">All was well until I noticed that Erlang said the=
- JIT would be disabled since I didn&#39;t have c++ support.=C2=A0=C2=A0</fo=
-nt><span style=3D"font-family:monospace">To fix that, I enabled c++ support=
-, and now I&#39;m getting the following errors.=C2=A0 Am I doing something =
-wrong or is this a bug?</span><div><font face=3D"monospace"><br>asmjit/core=
-/cpuinfo.cpp: In function &#39;void asmjit::_abi_1_10::detectHWCaps(CpuInfo=
-&amp;, long unsigned int, const LinuxHWCapMapping*, size_t)&#39;:<br>asmjit=
-/core/cpuinfo.cpp:840:24: error: &#39;getauxval&#39; was not declared in th=
-is scope<br>840 | unsigned long mask =3D getauxval(type);<br>| ^~~~~~~~~<br=
->In file included from ../include/internal/gcc/ethread.h:347,<br>from ../in=
-clude/internal/ethread.h:389,<br>from beam/erl_threads.h:252,<br>from beam/=
-sys.h:539,<br>from beam/dist.c:37:<br>In function &#39;ethr_native_atomic64=
-_set_relb&#39;,<br>inlined from &#39;ethr_atomic_set_mb&#39; at ../include/=
-internal/ethr_atomics.h:4019:5,<br>inlined from &#39;erts_dist_command&#39;=
- at beam/dist.c:3866:5:<br>../include/internal/gcc/ethr_atomic.h:144:5: war=
-ning: &#39;__atomic_store_8&#39; writing 8 bytes into a region of size 0 ov=
-erflows the destination [-Wstringop-overflow=3D]<br>144 | __atomic_store_n(=
-&amp;var-&gt;value, value, __ATOMIC_RELEASE);<br>| ^~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br>In function &#39;erts_dist_command&#39;:<=
-br>cc1: note: destination object is likely at address zero<br>asmjit/core/c=
-puinfo.cpp: In function &#39;void asmjit::_abi_1_10::detectARMCpu(CpuInfo&a=
-mp;)&#39;:<br>asmjit/core/cpuinfo.cpp:972:21: error: &#39;AT_HWCAP&#39; was=
- not declared in this scope<br>972 | detectHWCaps(cpu, AT_HWCAP, hwCapMappi=
-ng, ASMJIT_ARRAY_SIZE(hwCapMapping));<br>| ^~~~~~~~<br>CXX obj/aarch64-buil=
-droot-linux-gnu/opt/jit/asmjit/core/emitterutils.o<br>CXX obj/aarch64-build=
-root-linux-gnu/opt/jit/asmjit/core/environment.o<br>asmjit/core/cpuinfo.cpp=
-:973:21: error: &#39;AT_HWCAP2&#39; was not declared in this scope<br>973 |=
- detectHWCaps(cpu, AT_HWCAP2, hwCapMapping2, ASMJIT_ARRAY_SIZE(hwCapMapping=
-2));<br>|</font></div></div><div><font face=3D"monospace"><br></font></div>=
-<div><font face=3D"monospace"><br></font></div><font face=3D"monospace">Bui=
-ldroot version: buildroot-2023.08-rc1<br>gcc version: gcc 13.x</font></div>=
-<div><font face=3D"monospace">binutils version: 2.41</font></div><div><font=
- face=3D"monospace">enable c++ support: yes</font></div><div dir=3D"ltr"><f=
-ont face=3D"monospace"><br></font></div><div>Thanks!</div><div>Bob Kocisko<=
-/div></div>
-
---00000000000074686c0604a21ad0--
-
---===============4389574743552654144==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3af43d2d27..2ff1a8a881 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1402,76 +1402,7 @@ F:	package/lilv/
+ F:	package/lv2/
+ F:	package/neon-2-sse/
+ F:	package/pipewire/
+-F:	package/python-aioconsole/
+-F:	package/python-aiodns/
+-F:	package/python-aiohttp/
+-F:	package/python-aiohttp-cors/
+-F:	package/python-aiohttp-debugtoolbar/
+-F:	package/python-aiohttp-jinja2/
+-F:	package/python-aiohttp-mako/
+-F:	package/python-aiohttp-remotes/
+-F:	package/python-aiohttp-security/
+-F:	package/python-aiohttp-session/
+-F:	package/python-aiohttp-sse/
+-F:	package/python-aiologstash/
+-F:	package/python-aiomonitor/
+-F:	package/python-aiojobs/
+-F:	package/python-aioprocessing/
+-F:	package/python-aiorwlock/
+-F:	package/python-aiosignal/
+-F:	package/python-aiozipkin/
+-F:	package/python-argon2-cffi/
+-F:	package/python-argon2-cffi-bindings/
+-F:	package/python-async-generator/
+-F:	package/python-async-lru/
+-F:	package/python-async-timeout/
+-F:	package/python-bidict/
+-F:	package/python-brotli/
+-F:	package/python-cbor2/
+-F:	package/python-cchardet/
+-F:	package/python-charset-normalizer/
+-F:	package/python-cssselect2/
+-F:	package/python-distlib/
+-F:	package/python-editables/
+-F:	package/python-flatbuffers/
+-F:	package/python-fonttools/
+-F:	package/python-frozenlist/
+-F:	package/python-greenlet/
+-F:	package/python-h11/
+-F:	package/python-hatchling/
+-F:	package/python-hatch-fancy-pypi-readme/
+-F:	package/python-hatch-vcs/
+-F:	package/python-installer/
+-F:	package/python-janus/
+-F:	package/python-logstash/
+-F:	package/python-maturin/
+-F:	package/python-multidict/
+-F:	package/python-mypy-extensions/
+-F:	package/python-outcome/
+-F:	package/python-pathspec/
+-F:	package/python-pycares/
+-F:	package/python-pydyf/
+-F:	package/python-pypa-build/
+-F:	package/python-pyphen/
+-F:	package/python-pyproject-hooks/
+-F:	package/python-rpds-py/
+-F:	package/python-rtoml/
+-F:	package/python-selenium/
+-F:	package/python-snappy/
+-F:	package/python-sniffio/
+-F:	package/python-sockjs/
+-F:	package/python-terminaltables/
+-F:	package/python-tinycss2/
+-F:	package/python-tomli/
+-F:	package/python-trio/
+-F:	package/python-trio-websocket/
+-F:	package/python-typeguard/
+-F:	package/python-typing-inspect/
+-F:	package/python-uhid/
+-F:	package/python-weasyprint/
+-F:	package/python-wsproto/
+-F:	package/python-yarl/
+-F:	package/python-zopfli/
++F:	package/python*
+ F:	package/rtl8192eu/
+ F:	package/serd/
+ F:	package/sord/
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4389574743552654144==--
