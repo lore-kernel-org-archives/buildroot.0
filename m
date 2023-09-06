@@ -4,80 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73064EE14C3
-	for <buildroot@archiver.kernel.org>; Wed,  6 Sep 2023 20:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56147EE14D0
+	for <buildroot@archiver.kernel.org>; Wed,  6 Sep 2023 20:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E42582182;
-	Wed,  6 Sep 2023 20:10:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E42582182
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBBD482183;
+	Wed,  6 Sep 2023 20:13:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBBD482183
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id QqL7CKZ-GYHB; Wed,  6 Sep 2023 20:10:10 +0000 (UTC)
+	with ESMTP id CzAJ-r5b8BQv; Wed,  6 Sep 2023 20:13:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65D2A82183;
-	Wed,  6 Sep 2023 20:10:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65D2A82183
+	by smtp1.osuosl.org (Postfix) with ESMTP id 281DF82158;
+	Wed,  6 Sep 2023 20:13:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 281DF82158
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CFC71BF363
- for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:10:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 437AB1BF363
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0693A82158
- for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:10:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0693A82158
+ by smtp1.osuosl.org (Postfix) with ESMTP id 29C9782158
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:13:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29C9782158
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ef0SVv9jqkZL for <buildroot@lists.busybox.net>;
- Wed,  6 Sep 2023 20:09:57 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A55CD82145
- for <buildroot@buildroot.org>; Wed,  6 Sep 2023 20:09:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A55CD82145
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([213.147.166.144]) by mail.gmx.net
- (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MHG8g-1qQnZK0tUG-00DH0C for <buildroot@buildroot.org>; Wed, 06 Sep 2023
- 22:09:54 +0200
-From: Daniel Lang <dalang@gmx.at>
-To: buildroot@buildroot.org
-Date: Wed,  6 Sep 2023 22:09:27 +0200
-Message-ID: <20230906200929.291410-1-dalang@gmx.at>
-X-Mailer: git-send-email 2.42.0
+ with ESMTP id Ik0TtqMm7vkd for <buildroot@lists.busybox.net>;
+ Wed,  6 Sep 2023 20:13:11 +0000 (UTC)
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com
+ [IPv6:2607:f8b0:4864:20::929])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BCE4482004
+ for <buildroot@buildroot.org>; Wed,  6 Sep 2023 20:13:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCE4482004
+Received: by mail-ua1-x929.google.com with SMTP id
+ a1e0cc1a2514c-7a0254de2fdso51301241.1
+ for <buildroot@buildroot.org>; Wed, 06 Sep 2023 13:13:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1694031190; x=1694635990;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=sER8zUQ5qteq2+8BdY8PUJQI/M2r0oTdwfYiKdEW9Bg=;
+ b=Cd45XLa9/YATrDKnqWxCpB36B5Nelon2QUjdZ+VzDzP0vbQXExemZsvEmQ/iwiguih
+ u3ZGgBgQvU2oq+s1gZZgib7oTPDH9uyVrfzIVpCcwETOF+Rms3AUCC/H0FqbyUwWeZNF
+ kpm4IM22EpE1M3kUYvFMELdgoawJMXYtTk+UENR8RcDGjHSte2fE3S/+8i1AbMhITK5x
+ jG9ZedPv33TbOihQyiQAF1egejkmkmGpqdosDBuCHxPNCq4VCicwlZp2GIIoGq6MVrvl
+ pfq9mdE7useYUbpUwlkjkTjxFc93wNwu4qyunkJ+rqhvO9HhpknGOU/JygX745HKON7T
+ 2+GQ==
+X-Gm-Message-State: AOJu0YzP33+fvRICZjsn36nATmgrZdgNdXBtavLK0YQQdrM0idTpkuxP
+ CvlJN/xBcm75CP3s26Y5Jur91FQyHnbR4mLxKzgv3MiAoCQ=
+X-Google-Smtp-Source: AGHT+IF9pX9uVoKLYY9EqIz69RSBAmCsUHQ3ZAyq9kf/pXGcREGS1/IAz6n2ayhsRiluiWS5NrTn3E0KaHThBPGLsjs=
+X-Received: by 2002:a67:fe97:0:b0:44d:4196:f374 with SMTP id
+ b23-20020a67fe97000000b0044d4196f374mr4098815vsr.14.1694031190430; Wed, 06
+ Sep 2023 13:13:10 -0700 (PDT)
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:jWItwFjr38TlQxLWW9WVMLstsO4glVl+JSQS6LNEOXf8IRqVZmd
- DrAeH3dYysvzHnoqupbe/Y71xWdHIro1URYfRgm6PTHuI9n7s0A1L8vxWE7/NQVmkGLDgjN
- t+0CTrSsWrn84ihKqvzbB5EmFmhC+UU6noHquvq8SM3ImLM4sbMWlgwGIjdjDSeq0zVmHmx
- zgRcuaJ8b45bnXjYtYB9g==
-UI-OutboundReport: notjunk:1;M01:P0:n3hCEi4FFgc=;hp97xqpYmgQN/gzs2nMTteEf7f7
- s2k7iteO22C1DAE29k8cPz/dlMv/hhUyJx3MQUX+SLlTdKaT7lB6dqvZSOmndgfOw6rT8e0Jk
- IKWK+0mOjNq7TTP03OGYerukc3qi0j7BD7C4JcWMykgDn6aiIEOJHExNNTvQP2xSyiI/x3NpN
- CldVaDRzejWc0RxeR1p7tx694T8+lWCg2yhmdjAXPjYiyQTgqhu/aFdcQQ7VU2tg/xohZ429t
- 8nOBTvDX7quY9wnWPYSG2pvl41Kq8XrNcCjixOqet5VV6oeVlSdy3g+5JpRJAcuEn1tkShNim
- 9lo9T4uvpIGVNvnAEjjPiuV5NQ5LlLACzDgcWqNp9uVngWGt5/8oNDA2DfmvN18gTNTXXbId5
- LDumlRO2dW4ZqXvB2uJ1cXy6NNnXGHCSG+6zy+K4tju56AvZF7w5UP9NFlivfBQSr1PYHnqd1
- sifXmZ4aFON7XmmFskMjhMoTH9C5NNbu6MqryiuYPjXQHFKy2ZaH/E0N13jleYI+MB7WtS8sM
- s89merVqxFrwqyNeeoWZHglS308X1i/z0zDKd3DcQ0NZLHaGEVCsY1afTqxeVuqEDZcWtxSx/
- hQ5tQK1djsNiAXvpouxqPd5eYbrUF+v3foAZR/9uiip5cgyajqrUbo0FuaPfj5Tpq90DWSfrZ
- G/f2XiqgVgbsmwGX/LHO2DuSngDkmHwSOaBMF1gvEwBRt5e7YIpAwTYfcwocYPQRZhSM1xL33
- xVtfQUEcPhSF9b7eSzx4FF0JphRoEyT2rC+KvDgswDZyGjclHzFu3lyhtUFdDTgp4ccrbyhwp
- 61DT+oC9BRdSL7v2xHGoEqhUAsgaJJiO4wcV4kMjCk0raUx/jBrsZb/dvvN9PcMy3c1TgWksB
- ldLWDhF3F0o7Mjl5TQztKqLLAxZl2RJz2/5a5du4f3MoG4JIXb0JRiOo3v53Y61bfPxenSLJE
- nwOrUAwiD7+zeAVwYdq+rQMXO2w=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=gmx.at; 
- s=s31663417; t=1694030994; x=1694635794; i=dalang@gmx.at;
- bh=+wIAK8aK74YAMD+TH15SHti0GNpfx2SjJf+ov+H/egc=;
- h=X-UI-Sender-Class:From:To:Subject:Date;
- b=hbqwKyzvFPcWYU1gE8Yu8M0GKvYagLqKGCQY+lrERRbt2NK/G/togzEagl1Pr1A0FSqmXJg
- ysx7tKtm9ORpYRgSuDWfjMuGpuHZv1rfSG8n+FaRESvMvE4jvtLhjw8n998Y32ctyfA8iiB5u
- mQOpIC5sXKnYErjDANcxk0c2418CAoer/KzJ9z5vFSZuKujFt0vq0Klz4vkd7mogbT/9cAhFd
- /zJ4snHtZ5tGVtKtBSDJRraXiZbrcUTCp5Hnpm32B8vqGUPf19y7sOICJbmH5podqSu1yS+x1
- lkTKmaTjUND7I2j5KRJq0piaLOguJpWIK0m6ZM9PJbR7u0/Np11g==
+References: <20230904124551.94741-1-nolange79@gmail.com>
+ <CADYdroOi_QjoOorN6wji5Y4_sUMUe_=YSK42Eik0S8mqHiTosA@mail.gmail.com>
+ <8734zri5aa.fsf@48ers.dk> <87ledjglh6.fsf@48ers.dk>
+In-Reply-To: <87ledjglh6.fsf@48ers.dk>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 6 Sep 2023 22:12:59 +0200
+Message-ID: <CADYdroMetuwfJt3g5OUKyjUBx-535nfPczeHCE_qKRBnyz5QPA@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1694031190; x=1694635990; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=sER8zUQ5qteq2+8BdY8PUJQI/M2r0oTdwfYiKdEW9Bg=;
+ b=WTRyILNXtnCxU9xLyO82aOmKf1x7bZ2WwZed++8ZnDt4G8UayU1NREC4WOwRF58j+/
+ wP2OW4BCiHqzVgf2WuuzNOMKpdrpeq1+Tr1Rua2r1d94+O4A9L97zJBGBXBFbicgD34Q
+ cr60Mim7RrXF5oF7UI9g1smPtJTOYkqCjr+8IJa1j94q4FPH9MtpSenbXRVA+gV0UmWE
+ p5WY7D96Dx5mvsZZ0zGfiUpA/2SNppofQt5y8SvYlCLL3ZiyENBSPh/MaVPNGnXmPHJg
+ 1pmceHcVNhPmILTdJX7FkzICyX1nP/36yU6bB297xnAWFgmoBf2wahch01Y04g5M9qQ1
+ Hopg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=hbqwKyzv
-Subject: [Buildroot] [PATCH] package/libssh: ignore CVE-2023-3603
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=WTRyILNX
+Subject: Re: [Buildroot] [PATCH] package/util-linux: fix build with old glibc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,37 +91,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The affected code isn't present in any release, see [0].
+Am Mi., 6. Sept. 2023 um 21:17 Uhr schrieb Peter Korsgaard
+<peter@korsgaard.com>:
+>
+> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>
+> Hi,
+>
+>  >> I think this, together with the version bugfix bump to 2.39.2 should
+>  >> end up in BR 2023.08.
+>
+>  > Can you give some more details about why? Is this a fix for a new issue
+>  > in 2.39.2 or already in 2.39.1? What is the relation between this and
+>  > commit 898bdbca1f11f (package/util-linux: fix compile issue with older
+>  > kernel headers)?
 
-[0]: https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
+The problem persists in 2.39.1 and 2.39.2 (atleast), has a few attempts to
+solve it. Both BR master/next would not compile if the kernel-headers
+statx struct
+disagrees with the one from glibc (misses some newer members).
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
----
- package/libssh/libssh.mk | 3 +++
- 1 file changed, 3 insertions(+)
+This patch is for 2.39.2 / next and should finally solve it completely,
+I don't see the value in hacking together a solution for 2.39.1 so
+I would highly recommend picking the commits from next into master,
+and this patch on top.
 
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index e770d2b924..f6c590ba0a 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -16,6 +16,9 @@ LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
- LIBSSH_CONF_OPTS = \
- 	-DWITH_STACK_PROTECTOR=OFF \
- 	-DWITH_EXAMPLES=OFF
-+# Not part of this release
-+# https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
-+LIBSSH_IGNORE_CVES += CVE-2023-3603
- 
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- LIBSSH_CONF_OPTS += -DWITH_STACK_CLASH_PROTECTION=OFF
--- 
-2.42.0
+You have a few autobuild failures related to it, like
+b1933b2dabea1fb49e9fce8e19f0532857d3b4c7
 
+
+>
+> Apparently not in 2.39.1?
+>
+> >>> util-linux 2.39.1 Patching
+>
+> Applying 0001-libmount-fix-statx-includes.patch using patch:
+> patching file configure.ac
+> Hunk #1 succeeded at 315 (offset -11 lines).
+> Hunk #2 FAILED at 517.
+> Hunk #3 FAILED at 526.
+> 2 out of 3 hunks FAILED -- saving rejects to file configure.ac.rej
+> patching file include/fileutils.h
+> Hunk #1 FAILED at 94.
+> 1 out of 1 hunk FAILED -- saving rejects to file include/fileutils.h.rej
+> patching file libmount/src/hook_mount.c
+> Hunk #1 FAILED at 294.
+> 1 out of 1 hunk FAILED -- saving rejects to file libmount/src/hook_mount.c.rej
+> patching file libmount/src/utils.c
+> Hunk #1 FAILED at 111.
+> 1 out of 1 hunk FAILED -- saving rejects to file libmount/src/utils.c.rej
+> patching file meson.build
+> Hunk #1 FAILED at 79.
+> Hunk #2 succeeded at 175 with fuzz 2 (offset -2 lines).
+> Hunk #3 FAILED at 639.
+> 2 out of 3 hunks FAILED -- saving rejects to file meson.build.rej
+>
+> --
+> Bye, Peter Korsgaard
+
+Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
