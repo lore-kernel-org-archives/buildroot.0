@@ -4,82 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56147EE14D0
-	for <buildroot@archiver.kernel.org>; Wed,  6 Sep 2023 20:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67141EE14D0
+	for <buildroot@archiver.kernel.org>; Wed,  6 Sep 2023 20:14:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBBD482183;
-	Wed,  6 Sep 2023 20:13:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBBD482183
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E45082017;
+	Wed,  6 Sep 2023 20:14:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E45082017
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CzAJ-r5b8BQv; Wed,  6 Sep 2023 20:13:16 +0000 (UTC)
+	with ESMTP id 5qEL5-QBnuJN; Wed,  6 Sep 2023 20:14:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 281DF82158;
-	Wed,  6 Sep 2023 20:13:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 281DF82158
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 437AB1BF363
- for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:13:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E01B81497;
+	Wed,  6 Sep 2023 20:14:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E01B81497
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E40EB1BF363
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29C9782158
- for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:13:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29C9782158
+ by smtp2.osuosl.org (Postfix) with ESMTP id CAE70404B9
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 20:14:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CAE70404B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Ik0TtqMm7vkd for <buildroot@lists.busybox.net>;
- Wed,  6 Sep 2023 20:13:11 +0000 (UTC)
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com
- [IPv6:2607:f8b0:4864:20::929])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BCE4482004
- for <buildroot@buildroot.org>; Wed,  6 Sep 2023 20:13:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCE4482004
-Received: by mail-ua1-x929.google.com with SMTP id
- a1e0cc1a2514c-7a0254de2fdso51301241.1
- for <buildroot@buildroot.org>; Wed, 06 Sep 2023 13:13:11 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FAEJoejy0jCJ for <buildroot@lists.busybox.net>;
+ Wed,  6 Sep 2023 20:14:02 +0000 (UTC)
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B331400D0
+ for <buildroot@buildroot.org>; Wed,  6 Sep 2023 20:14:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B331400D0
+Received: by mail-pf1-x42e.google.com with SMTP id
+ d2e1a72fcca58-68a440a8a20so221598b3a.3
+ for <buildroot@buildroot.org>; Wed, 06 Sep 2023 13:14:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1694031190; x=1694635990;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20221208; t=1694031241; x=1694636041;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=sER8zUQ5qteq2+8BdY8PUJQI/M2r0oTdwfYiKdEW9Bg=;
- b=Cd45XLa9/YATrDKnqWxCpB36B5Nelon2QUjdZ+VzDzP0vbQXExemZsvEmQ/iwiguih
- u3ZGgBgQvU2oq+s1gZZgib7oTPDH9uyVrfzIVpCcwETOF+Rms3AUCC/H0FqbyUwWeZNF
- kpm4IM22EpE1M3kUYvFMELdgoawJMXYtTk+UENR8RcDGjHSte2fE3S/+8i1AbMhITK5x
- jG9ZedPv33TbOihQyiQAF1egejkmkmGpqdosDBuCHxPNCq4VCicwlZp2GIIoGq6MVrvl
- pfq9mdE7useYUbpUwlkjkTjxFc93wNwu4qyunkJ+rqhvO9HhpknGOU/JygX745HKON7T
- 2+GQ==
-X-Gm-Message-State: AOJu0YzP33+fvRICZjsn36nATmgrZdgNdXBtavLK0YQQdrM0idTpkuxP
- CvlJN/xBcm75CP3s26Y5Jur91FQyHnbR4mLxKzgv3MiAoCQ=
-X-Google-Smtp-Source: AGHT+IF9pX9uVoKLYY9EqIz69RSBAmCsUHQ3ZAyq9kf/pXGcREGS1/IAz6n2ayhsRiluiWS5NrTn3E0KaHThBPGLsjs=
-X-Received: by 2002:a67:fe97:0:b0:44d:4196:f374 with SMTP id
- b23-20020a67fe97000000b0044d4196f374mr4098815vsr.14.1694031190430; Wed, 06
- Sep 2023 13:13:10 -0700 (PDT)
+ bh=G+28gLRYngjAAJSJmm+/RofRAEyMfhdTyoLMhh3UJ9A=;
+ b=LbzkReUW63bU5BKc1Qk2QfHKU7ZFFawrpDPYV85ZLWVWcIYaLjq/IQY58xNZ07sWWT
+ bDruQ2d9DGcgzK0srD1F3EsCMPhxq8DsLYlHlrEL3acuJILZVjpaQTJ+P0q/1Wryjdxk
+ rixz+Nqf8gcwWEHSH5ybF92HJxHl9H6/Ksv4ucCXQohf6yfoMqUj/rZOVfZ4+xlU9t03
+ aiJTK8M0ace1VISckwF7LE2TOIR1t0NsRG9l93PUkVuK/IeLswCwowcLHTGLE0T7NGwo
+ g75LWblW+l9AgecZRl/u+rEHytM+1n6sSbuPZNXXovj1tV/TK57tKVY/mrnAEBC3vFqO
+ b0ig==
+X-Gm-Message-State: AOJu0Ywh+TOh50ZHSm7aBRv9iLVrrHzxkjRYGiqxV4MGEvI4Ai/zHFDP
+ uaA64i3d4pfpWFAbI8ro2SYi1ZZI4EgGie1x0pIoQZ37
+X-Google-Smtp-Source: AGHT+IGTvtxvEScsV4rbvbpyPLbv1dKjX3MaEcuCwI4CyAURUXgsQxeNKnWaXAPgRFQCz+9EiaeGyA==
+X-Received: by 2002:a05:6a21:7747:b0:14d:c05c:6620 with SMTP id
+ bc7-20020a056a21774700b0014dc05c6620mr15775272pzc.31.1694031241275; 
+ Wed, 06 Sep 2023 13:14:01 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ q15-20020a62e10f000000b00687ce7c6540sm11566825pfh.99.2023.09.06.13.14.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 06 Sep 2023 13:14:00 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Wed,  6 Sep 2023 13:13:58 -0700
+Message-ID: <20230906201358.2714756-1-christian@aperture.us>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-References: <20230904124551.94741-1-nolange79@gmail.com>
- <CADYdroOi_QjoOorN6wji5Y4_sUMUe_=YSK42Eik0S8mqHiTosA@mail.gmail.com>
- <8734zri5aa.fsf@48ers.dk> <87ledjglh6.fsf@48ers.dk>
-In-Reply-To: <87ledjglh6.fsf@48ers.dk>
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 6 Sep 2023 22:12:59 +0200
-Message-ID: <CADYdroMetuwfJt3g5OUKyjUBx-535nfPczeHCE_qKRBnyz5QPA@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1694031190; x=1694635990; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=sER8zUQ5qteq2+8BdY8PUJQI/M2r0oTdwfYiKdEW9Bg=;
- b=WTRyILNXtnCxU9xLyO82aOmKf1x7bZ2WwZed++8ZnDt4G8UayU1NREC4WOwRF58j+/
- wP2OW4BCiHqzVgf2WuuzNOMKpdrpeq1+Tr1Rua2r1d94+O4A9L97zJBGBXBFbicgD34Q
- cr60Mim7RrXF5oF7UI9g1smPtJTOYkqCjr+8IJa1j94q4FPH9MtpSenbXRVA+gV0UmWE
- p5WY7D96Dx5mvsZZ0zGfiUpA/2SNppofQt5y8SvYlCLL3ZiyENBSPh/MaVPNGnXmPHJg
- 1pmceHcVNhPmILTdJX7FkzICyX1nP/36yU6bB297xnAWFgmoBf2wahch01Y04g5M9qQ1
- Hopg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=WTRyILNX
-Subject: Re: [Buildroot] [PATCH] package/util-linux: fix build with old glibc
+ d=aperture.us; s=google; t=1694031241; x=1694636041; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=G+28gLRYngjAAJSJmm+/RofRAEyMfhdTyoLMhh3UJ9A=;
+ b=DyBvuJGHijOMjXimUWHyRMkmsoOmv4IlILSFGuCPJDpUxP/LKN0BmpCnrS1jq7Qbsr
+ 5N71b9j6Lg0coiq29aLor0DxomoqVerhLT/cuyMxz7VxR3YVTIZ35T84MoaLPT1Pr7hW
+ 8PbrOkFY6ZIVhnWjv/bUm3SWwx9voQpTH3LWyQpi/kRHGfXYAMw6en4gaoJHhgmb6gvi
+ GmGLBzpiCm7ZnVKaNxqTW3Z7ZhRugPeO+zUsDwB5DbsTTWvllXdX2nokSukp6tDXMwzx
+ A0r04/Az0Ygm2pMTfuIx2BYWm6FgSUgPb8RlpUuzourRAmMOOTOYkgszSU4x/UPc5Gfp
+ fTaw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
+ header.a=rsa-sha256 header.s=google header.b=DyBvuJGH
+Subject: [Buildroot] [PATCH 1/1] package/go: security bump to version 1.20.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,71 +92,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Mi., 6. Sept. 2023 um 21:17 Uhr schrieb Peter Korsgaard
-<peter@korsgaard.com>:
->
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
->
-> Hi,
->
->  >> I think this, together with the version bugfix bump to 2.39.2 should
->  >> end up in BR 2023.08.
->
->  > Can you give some more details about why? Is this a fix for a new issue
->  > in 2.39.2 or already in 2.39.1? What is the relation between this and
->  > commit 898bdbca1f11f (package/util-linux: fix compile issue with older
->  > kernel headers)?
+go1.20.8 (released 2023-09-06) includes two security fixes to the html/template
+package, as well as bug fixes to the compiler, the go command, the runtime, and
+the crypto/tls, go/types, net/http, and path/filepath packages.
 
-The problem persists in 2.39.1 and 2.39.2 (atleast), has a few attempts to
-solve it. Both BR master/next would not compile if the kernel-headers
-statx struct
-disagrees with the one from glibc (misses some newer members).
+CVE-2023-39318: html/template: improper handling of HTML-like comments within script contexts
+CVE-2023-39319: html/template: improper handling of special tags within script contexts
+CVE-2023-39321: crypto/tls: panic when processing post-handshake message on QUIC connections
 
-This patch is for 2.39.2 / next and should finally solve it completely,
-I don't see the value in hacking together a solution for 2.39.1 so
-I would highly recommend picking the commits from next into master,
-and this patch on top.
+https://go.dev/doc/devel/release#go1.20.0
 
-You have a few autobuild failures related to it, like
-b1933b2dabea1fb49e9fce8e19f0532857d3b4c7
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 2298534d91..19405982ba 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  2c5ee9c9ec1e733b0dbbc2bdfed3f62306e51d8172bf38f4f4e542b27520f597  go1.20.7.src.tar.gz
++sha256  38d71714fa5279f97240451956d8e47e3c1b6a5de7cb84137949d62b5dd3182e  go1.20.8.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index fc1d9ed681..c1e9f2f8f6 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.20.7
++GO_VERSION = 1.20.8
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-- 
+2.42.0
 
->
-> Apparently not in 2.39.1?
->
-> >>> util-linux 2.39.1 Patching
->
-> Applying 0001-libmount-fix-statx-includes.patch using patch:
-> patching file configure.ac
-> Hunk #1 succeeded at 315 (offset -11 lines).
-> Hunk #2 FAILED at 517.
-> Hunk #3 FAILED at 526.
-> 2 out of 3 hunks FAILED -- saving rejects to file configure.ac.rej
-> patching file include/fileutils.h
-> Hunk #1 FAILED at 94.
-> 1 out of 1 hunk FAILED -- saving rejects to file include/fileutils.h.rej
-> patching file libmount/src/hook_mount.c
-> Hunk #1 FAILED at 294.
-> 1 out of 1 hunk FAILED -- saving rejects to file libmount/src/hook_mount.c.rej
-> patching file libmount/src/utils.c
-> Hunk #1 FAILED at 111.
-> 1 out of 1 hunk FAILED -- saving rejects to file libmount/src/utils.c.rej
-> patching file meson.build
-> Hunk #1 FAILED at 79.
-> Hunk #2 succeeded at 175 with fuzz 2 (offset -2 lines).
-> Hunk #3 FAILED at 639.
-> 2 out of 3 hunks FAILED -- saving rejects to file meson.build.rej
->
-> --
-> Bye, Peter Korsgaard
-
-Norbert
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
