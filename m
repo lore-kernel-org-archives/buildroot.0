@@ -4,101 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8957DEE14C3
-	for <buildroot@archiver.kernel.org>; Wed,  6 Sep 2023 19:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 407F8EE14C3
+	for <buildroot@archiver.kernel.org>; Wed,  6 Sep 2023 19:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44D32821B8;
-	Wed,  6 Sep 2023 19:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44D32821B8
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD34C82190;
+	Wed,  6 Sep 2023 19:50:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD34C82190
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 979v2RGgqxhQ; Wed,  6 Sep 2023 19:47:20 +0000 (UTC)
+	with ESMTP id s1yup6wDl2lm; Wed,  6 Sep 2023 19:50:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 694C88219C;
-	Wed,  6 Sep 2023 19:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 694C88219C
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B7B31BF983
- for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 19:46:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37BBC8218E;
+	Wed,  6 Sep 2023 19:50:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37BBC8218E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 113C41BF334
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 19:50:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7B1341920
- for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 19:46:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7B1341920
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF6EF400D0
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 19:50:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF6EF400D0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id c1xzq00Ya4bo for <buildroot@lists.busybox.net>;
- Wed,  6 Sep 2023 19:46:15 +0000 (UTC)
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C7A8941936
- for <buildroot@buildroot.org>; Wed,  6 Sep 2023 19:46:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7A8941936
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 386Jga7O001365; Wed, 6 Sep 2023 19:46:13 GMT
-Received: from ppma13.dal12v.mail.ibm.com
- (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sxythr323-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Wed, 06 Sep 2023 19:46:13 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
- by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
- 386IAoTO012275; Wed, 6 Sep 2023 19:46:12 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
- by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3svhkk5ps9-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Wed, 06 Sep 2023 19:46:12 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com
- [10.39.53.229])
- by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 386JkCPw8389328
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Wed, 6 Sep 2023 19:46:12 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id 1D41C5805B;
- Wed,  6 Sep 2023 19:46:12 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id F310F58058;
- Wed,  6 Sep 2023 19:46:11 +0000 (GMT)
-Received: from arbab-laptop.localdomain (unknown [9.53.178.221])
- by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
- Wed,  6 Sep 2023 19:46:11 +0000 (GMT)
-Received: by arbab-laptop.localdomain (Postfix, from userid 152845)
- id 3CC9B19B6A3; Wed,  6 Sep 2023 14:46:11 -0500 (CDT)
-From: Reza Arbab <arbab@linux.ibm.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id HxqfeLTPRJ7Z for <buildroot@lists.busybox.net>;
+ Wed,  6 Sep 2023 19:50:38 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A68C54059D
+ for <buildroot@buildroot.org>; Wed,  6 Sep 2023 19:50:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A68C54059D
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.localdomain ([213.147.166.144]) by mail.gmx.net
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1MDQic-1qWroS0y0s-00AXm5; Wed, 06 Sep 2023 21:50:34 +0200
+From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Wed,  6 Sep 2023 14:46:04 -0500
-Message-Id: <20230906194609.74080-1-arbab@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: j7zEhHxSGVWRgviAIRhHRGor9wvI7RIa
-X-Proofpoint-GUID: j7zEhHxSGVWRgviAIRhHRGor9wvI7RIa
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Date: Wed,  6 Sep 2023 21:49:51 +0200
+Message-ID: <20230906194951.280535-2-dalang@gmx.at>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-06_06,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 clxscore=1015
- phishscore=0 adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- impostorscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=552
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309060169
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=07j7qCW+DrpckZYHQX3EAcuqWR0tvXQEXiLiS04YqM8=;
- b=QViWAf4MlI6z9Xw/6i1wkta6SWlc3offDbh0ioFj+N4lHBlysziVEpzhjmxEt9AyLeMA
- do85IGQkGbyJUgyPoqSUfdu+D4fYU58fE1Acml4RQW09g/0LLqnvm/4S6BeXYSqSkfwB
- r603phYPMMSoCMZQmCeZPgmOBEe3B/K4Vh3j6uDoZ69B1tvxVB3utTXJqln7hFSWJvO9
- A0ZZp5QcEJyFFXTYtlll3af0UwLU5q4ULO41+0Hotmm5ars1WWug5oCwH3D0Xh/rL+fs
- IAOlxbGb/YSSR1j3u/XwlcuVPvWWJ4yoLzmM9vOu1wXp9XPoD2BzrlpsJt7rSKkoJbIG rQ== 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=QViWAf4M
-Subject: [Buildroot] [PATCH 0/5] package/petitboot: misc enhancement
+X-Provags-ID: V03:K1:cMxvkH9mreNArxyY5ZWpkehcO7rm4K9HQKpm1mmHYeZSamQDmvI
+ VCp7bBG7xxtiOEmgeO/pT6+R+0I0w3ZEgC7hQupQHtsp+ZDBPDBqfV9P+TlRsay6SJ4EUoD
+ UB9KjyPTVYhAxQi+1BjV0WajlF+Rx1CO86s5eRzA80zD3uWmIHzZIoPzkLsms3OVpkT29Cw
+ vnur8NmpY/pDyuid5Wutg==
+UI-OutboundReport: notjunk:1;M01:P0:NtAUDlRE5Is=;8P1KR2eoRMYBbnHXm7V95/2C+d7
+ kxAhogTJBqBCmT1QS6DDvrKAajUH4BhttW0ibq1e9QDUpZeRqyNYhGXWePdG0KKkzlQ8/ty2r
+ AJO1CzIUkNTO1iN2ipVB7aCG4uC+LixIL/fWnPnKj0Hg7TiQtJMmX9lNBN0aArg8nV29xzy3c
+ tOTYb0TdHW7aItGDAhbjo2IT1LmaujdgnO4MwJqQu3Z3tfTVmSnYRl89jiSmrLjbrymv/Mi7c
+ gedL0YMUzpEK5WxayB3fQ7GiHBDxKPkFLzBnSUXIwuInINr+lOMtNzcPdN8kn8pdW4zNze2UW
+ QK+LJWvdlvwF00GEt9IPdrHuuPhiw+BRy3HNNlL5tC7KQ8X7kNS3hAp9JI0kID7PG8hGQv0zy
+ Rl/AalJlhxfacio15Ezy5wW/QK0vL7rfHLLx1EHszGH1QqijlYz4DpNncCnlT8SMcQFRDcmll
+ We9578IB+IPTAdRB1ZuQci95wrYvcOfU1Jbp7gqss8MgrDXAEdD9LDZtKRPq7hh9d9kU9nopq
+ USw1YUr2Pb3NxZ2hgUgwwwddDoLvMJ+GDZ/07Zw+uG+BTd7Cmo2dpRDbPei1q97PUjHnOP7ln
+ J3fqwOAWB1kn0jPgKlBRKsNjMwtVJbxce+6eCmj88pndxkOgauyVrAI2C78vdG842tWGMOf0/
+ eJPpGG/3QsVW1+nZ+OKCA2NeR+33/gJoPewVz+b623Bl+IMdycs/h9znHHOAe3FgWz1RMDZ6p
+ KSa4jlO0/+WmQ+4nFkTBN7poVoZMzeogF4XdWnhPwqmkfrmrMiDLcL/kEFFC3Jt3Lit3RC3sj
+ kTAJ4Jk+uSI663t3gnFlc/lgg2Jh7q9Hl1IyE4fNRoaAZi40w5Sxq5GGZp6QIj9STQFdqhDir
+ KR0aBq3Q27qfki6+/sPU9T+5eTjH2tJBWm9Pv3PBXR4qqyuuPoWJCEXEqYxSWRBRHyTet6LgB
+ iyqPz9r0P22JoptCMUOMFJYFB8Q=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.at; 
+ s=s31663417; t=1694029834; x=1694634634; i=dalang@gmx.at;
+ bh=3RwxtnTEXjmb2AUgbuGjxto0zsSrIJEUKB/RjrTueXQ=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+ b=ChM4FcbuTSYQr60PvluHBJrBdqjdiYKI3waxMfbFFG08yTo484/Al/xdaHehFNioEHdJZdZ
+ m4aZZYU/HCqKkkb+z2dk9ywojxmFtZYPpU4a5GV0OkcfDpBt2MAwdlYmmlSjvRCb1f1xH3g0B
+ vXtKZ4TIIdTrh879X+eCnNRYajacWsrzifu+fdRX5drv6I5IDKOnLDV4HEo0L+bF5QxszDvqe
+ pdOYZUCozGGPgIpLnZCZvziYVACydOw/kgIIzQLRZK77MyQ2QbiFaiIM/zHfCS87PGSl1duJr
+ Q++n5oo3uVBLVJfhf3d9d5FeM98fs7Q6X0Sa8uQINaeOhHd1KQLA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=ChM4Fcbu
+Subject: [Buildroot] [PATCH] package/libiec61850: ignore CVE-2023-27772
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,50 +88,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Reza Arbab <arbab@linux.ibm.com>, Laurent Vivier <laurent@vivier.eu>,
- Joel Stanley <joel@jms.id.au>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The br2-external tree used to build OpenPOWER firmware has long carried
-petitboot as a custom package[1]. Now that petitboot has been added to
-buildroot proper, it would be nice to leverage the base package instead.
+Segmentation fault in example code can be exploited.
+BUILD_EXAMPLES is disabled for all cmake projects.
 
-To make that transition easier, here is a set of patches which port over
-some of the enhancements made to that external package.
+See https://github.com/mz-automation/libiec61850/issues/442
 
-Beyond these, there are a couple of more involved things left:
-  * User separation (i.e. the petitboot shell runs as 'petituser')
-  * Support for MTD devices
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+---
+ package/libiec61850/libiec61850.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-[1] https://github.com/open-power/op-build/tree/master/openpower/package/petitboot
-
-Reza Arbab (5):
-  package/petitboot: fix HOST_PROG_SHUTDOWN value
-  package/petitboot: run pb-console at boot
-  package/petitboot: poll removable devices
-  package/petitboot: enable discovery of software RAID devices
-  package/petitboot: enable discovery of SCSI devices
-
- package/petitboot/63-md-raid-arrays.rules    | 41 ++++++++++++
- package/petitboot/65-md-incremental.rules    | 69 ++++++++++++++++++++
- package/petitboot/66-add-sg-module.rules     |  2 +
- package/petitboot/petitboot-console-ui.rules |  4 ++
- package/petitboot/petitboot.mk               | 20 +++++-
- package/petitboot/removable-event-poll.rules |  3 +
- package/petitboot/sysctl.conf                |  1 +
- 7 files changed, 139 insertions(+), 1 deletion(-)
- create mode 100644 package/petitboot/63-md-raid-arrays.rules
- create mode 100644 package/petitboot/65-md-incremental.rules
- create mode 100644 package/petitboot/66-add-sg-module.rules
- create mode 100644 package/petitboot/petitboot-console-ui.rules
- create mode 100644 package/petitboot/removable-event-poll.rules
- create mode 100644 package/petitboot/sysctl.conf
-
+diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
+index 9bd55cb76a..4b61e40c6d 100644
+--- a/package/libiec61850/libiec61850.mk
++++ b/package/libiec61850/libiec61850.mk
+@@ -11,5 +11,8 @@ LIBIEC61850_LICENSE = GPL-3.0+
+ LIBIEC61850_LICENSE_FILES = COPYING
+ LIBIEC61850_CPE_ID_VENDOR = mz-automation
+ LIBIEC61850_CONF_OPTS = -DBUILD_PYTHON_BINDINGS=OFF
++# Examples aren't build
++# https://github.com/mz-automation/libiec61850/issues/442
++LIBIEC61850_IGNORE_CVES += CVE-2023-27772
+ 
+ $(eval $(cmake-package))
 -- 
-2.39.3
+2.42.0
 
 _______________________________________________
 buildroot mailing list
