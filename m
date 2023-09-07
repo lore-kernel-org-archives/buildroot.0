@@ -4,83 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD9FEE14DB
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 10:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D668CA100E
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 10:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 450B760E7C;
-	Thu,  7 Sep 2023 10:45:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 450B760E7C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BFA260C24;
+	Thu,  7 Sep 2023 10:51:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BFA260C24
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7-2TZTb5XCkV; Thu,  7 Sep 2023 10:45:52 +0000 (UTC)
+	with ESMTP id Rvks-7-ZOmTS; Thu,  7 Sep 2023 10:51:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5D1F60E1A;
-	Thu,  7 Sep 2023 10:45:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5D1F60E1A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0072260E7C;
+	Thu,  7 Sep 2023 10:51:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0072260E7C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1173B1BF41A
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:45:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C1DC1BF41A
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC92C400ED
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:45:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC92C400ED
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC43541BB9
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC43541BB9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fbyRIxWT0Qxl for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 10:45:48 +0000 (UTC)
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
- [IPv6:2607:f8b0:4864:20::635])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D15FB400B5
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 10:45:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D15FB400B5
-Received: by mail-pl1-x635.google.com with SMTP id
- d9443c01a7336-1c364fb8a4cso7160205ad.1
- for <buildroot@buildroot.org>; Thu, 07 Sep 2023 03:45:48 -0700 (PDT)
+ with ESMTP id kKFdxHMGCioU for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 10:51:20 +0000 (UTC)
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
+ [IPv6:2a00:1450:4864:20::135])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8595A41BBD
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 10:51:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8595A41BBD
+Received: by mail-lf1-x135.google.com with SMTP id
+ 2adb3069b0e04-500913779f5so1353489e87.2
+ for <buildroot@buildroot.org>; Thu, 07 Sep 2023 03:51:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1694083548; x=1694688348;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=z+QBhPw1xgw6YMLFJLq8N9QlyI6tgJtuMBRSutbtuhs=;
- b=O4AaPRdcGNcgWq9Mt2IPQ0dWdel9cHFnxXPGkQzS/TxAmefNEg29Sta7UIOJCSVloY
- PvS75rsb8lPSXt9Fm3cXNQUCcnbzl1MawULod2M/mSi9iKSPecwMoLnyf3clea7zl1fa
- FlYynd4bvIHnTjcBJsXPEEoroxxMw0iLsU3n7w/fiGEUsWEaau74EotStHX5CwKAxjG+
- IAB1pEcXJ99pPb4as1eQP6BkpnvLtNJ5/b6A8+YanHSVQs9E1/4YMEl85mGNRwvBOSx6
- oi6uJFqdWoJxdzzjWmjMCgxjYDMclnb4QSISodGPPqCgIvRJYlghY6atO/MCl6C0VIaf
- i25w==
-X-Gm-Message-State: AOJu0Yz20MwkV/FDwRvi5H1iPVvJchfdB50GHqfIqaZlDKzSUqPcEdDf
- Ol3UA5NQPIU4xV9NVmBFY/IlAfwAfA9WAqVmOwTrcoeF
-X-Google-Smtp-Source: AGHT+IGQfd1XIjGeQcOA1Uzshc7h7vAG68EAMImJeZ6VBq6v98HwnRu57kwyhMHYXrTEuQLgeS8SNQ==
-X-Received: by 2002:a17:902:d707:b0:1bd:bbc3:c87b with SMTP id
- w7-20020a170902d70700b001bdbbc3c87bmr15631539ply.41.1694083547924; 
- Thu, 07 Sep 2023 03:45:47 -0700 (PDT)
-Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
- [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
- o4-20020a170902bcc400b001b7ffca7dbcsm12447205pls.148.2023.09.07.03.45.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Sep 2023 03:45:47 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Thu,  7 Sep 2023 03:45:45 -0700
-Message-ID: <20230907104545.1385064-1-christian@aperture.us>
-X-Mailer: git-send-email 2.42.0
+ d=1e100.net; s=20221208; t=1694083878; x=1694688678;
+ h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=/P4HNv7Y9ub7WZ+8L9osP9LPAgAhbicuX1TIN2Pc2uA=;
+ b=YEg4KKq85/fXmxhL8JZbOvlxSfsQb8m+nBE8s3/RSoML55upkIDz9r65k+x+pPfZI2
+ wF05bFRO925mK+bXnBjJENWgZ8a1KWK4GcI/NGtlbLOrfIuNVt5bXBg0wAwISgojqdJ2
+ yoIHhhnkSKjXCwAYFyWS+tt68UcrBAf2+BjNL/sdjSdJmv0hhru6zcNKiFtM20YjtpRm
+ T+/aZ14mNe639ZByUrHRsQUFC6giSgwG8JAb3D8auumHtLEfhM13lAz0KNXgXM/IpuSl
+ MCzAfpWp7FUhitsWtlMgfbTXDekvyFXOviu7zzwXnhkJuonbFCxsCXp8xq9XbJllfCfM
+ 5BgA==
+X-Gm-Message-State: AOJu0YzrQvWvoorURCIeTXaoEijLwYmQmEOMg3hFDEDdUYK9wwN5ZGzq
+ GNFTl4rRI8ke7mEG5dnqp95ZoFjpBRTbZpnxHh7Yig==
+X-Google-Smtp-Source: AGHT+IFrejkZwPjGC4Va501Wcfm1+TDG9j+tLeeQgSiWv0cZRQiadRZKiTsxfqrdUO6K9uS/z+pU5Q==
+X-Received: by 2002:ac2:4d92:0:b0:500:b14a:cc63 with SMTP id
+ g18-20020ac24d92000000b00500b14acc63mr4034190lfe.12.1694083878184; 
+ Thu, 07 Sep 2023 03:51:18 -0700 (PDT)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com.
+ [209.85.208.172]) by smtp.gmail.com with ESMTPSA id
+ v9-20020ac25609000000b004fe07f06337sm3103810lfd.53.2023.09.07.03.51.16
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 07 Sep 2023 03:51:16 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id
+ 38308e7fff4ca-2bd6611873aso13771651fa.1
+ for <buildroot@buildroot.org>; Thu, 07 Sep 2023 03:51:16 -0700 (PDT)
+X-Received: by 2002:a2e:7310:0:b0:2bc:fdec:a3f6 with SMTP id
+ o16-20020a2e7310000000b002bcfdeca3f6mr4124617ljc.48.1694083876384; Thu, 07
+ Sep 2023 03:51:16 -0700 (PDT)
 MIME-Version: 1.0
+Date: Thu, 7 Sep 2023 03:51:04 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2oiG-nR_8rGE607Sq2RewGBbSfnJvfp46y5Dw=0q1OryQ@mail.gmail.com>
+Message-ID: <CA+h8R2oiG-nR_8rGE607Sq2RewGBbSfnJvfp46y5Dw=0q1OryQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Waldemar Brodkorb <wbx@openadk.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1694083548; x=1694688348; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=z+QBhPw1xgw6YMLFJLq8N9QlyI6tgJtuMBRSutbtuhs=;
- b=bGBz06vbX5+WNMxT6O+tM6LZo2Hl37kDQ2KfHw0ehcH4rQLQIK2kylAVI3Y1jlpAoz
- H3nlq+KRl+J2p5OVOOFnbsR9gBEuj+mwus0Q0t/Ye0CqE0eaeJ+CKbDxd6X61XV/HBv1
- 91jAuWH7jfxZYPSSlbIo9JnLuKO+ZOTZf324bOhgqJI5MROLT7RZMfuzT+nMqciqb45M
- ladmIEgPsI6S/u3dOt28THrLjnJPjDhyarq4UhE4glOyWVkGT178I7wSObwu4lYMe2rk
- MY/3CX4FN3H/whuQwzzDTbrqtgz/99kpc8jTPa59s6R790E+p7b/x2HKS/HZBQ44KYOr
- FUcw==
+ d=aperture.us; s=google; t=1694083878; x=1694688678; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=/P4HNv7Y9ub7WZ+8L9osP9LPAgAhbicuX1TIN2Pc2uA=;
+ b=qUWsVh9jEtTIdCEwU+GSJ+tpTTON5Q8+ySy0M1gLTts6lkqnJlzlwwqIGbTg6okqDi
+ xgTg7AmHY2pxzdjk2BNjZqpgw3gkFkepHanw2VJaYQdbQrabhcbKTrI1YpHohmQr28YF
+ L3+e31zN5p/oC0jEHYDuq1IXTKFg8B4Rnr8rpy6+0OmgjolvupvcvZu5Xa5+iFHrsOVa
+ EkJeslN0cApe0W75HYbi3x20eMiiaU8yFS5GrIFmhRUdmaK2ILwg0n2pqxViLKZAR6pV
+ yO9SXVD9v7LT+QPRscAIROkWv6WNHfLSAkGKNL2zeq73qbenhB8xjvCyptj1WGnL7msD
+ o/hA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=bGBz06vb
-Subject: [Buildroot] [PATCH v1 1/1] package/conmon: bump version to 2.1.8
+ header.a=rsa-sha256 header.s=google header.b=qUWsVh9j
+Subject: [Buildroot] package/conmon: broken by recent change removing dlfcn.h
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,49 +101,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Christian Stewart via buildroot <buildroot@buildroot.org>
 Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bug fixes.
+Hi Waldemar, Thomas,
 
-https://github.com/containers/conmon/releases/tag/v2.1.8
+A recent commit added a patch removing dlfcn.h:
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
----
- package/conmon/conmon.hash | 2 +-
- package/conmon/conmon.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://lore.kernel.org/buildroot/ZNdpt%2FgB95HIWDAq@waldemar-brodkorb.de/
 
-diff --git a/package/conmon/conmon.hash b/package/conmon/conmon.hash
-index 82d1d14ba3..f2e89b8a92 100644
---- a/package/conmon/conmon.hash
-+++ b/package/conmon/conmon.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7d0f9a2f7cb8a76c51990128ac837aaf0cc89950b6ef9972e94417aa9cf901fe  conmon-2.1.7.tar.gz
-+sha256  e72c090210a03ca3b43a0fad53f15bca90bbee65105c412468009cf3a5988325  conmon-2.1.8.tar.gz
- sha256  9c9d771d4004725237a31ada889fe06c85a24fd0a29e41825181ab4cde54f016  LICENSE
-diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
-index f3567a4305..29deb2af47 100644
---- a/package/conmon/conmon.mk
-+++ b/package/conmon/conmon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONMON_VERSION = 2.1.7
-+CONMON_VERSION = 2.1.8
- CONMON_SITE = $(call github,containers,conmon,v$(CONMON_VERSION))
- CONMON_LICENSE = Apache-2.0
- CONMON_LICENSE_FILES = LICENSE
--- 
-2.42.0
+This header is needed for RTLD_NOW and causes "RTLD_NOW is not
+defined" type build errors when building for a Raspberry Pi 4.
 
+Please revert that commit / remove that patch or otherwise fix the
+undefined symbol.
+
+Thank you,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
