@@ -4,77 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB15EEE14DC
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 10:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD9FEE14DB
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 10:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6528260B5A;
-	Thu,  7 Sep 2023 10:03:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6528260B5A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 450B760E7C;
+	Thu,  7 Sep 2023 10:45:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 450B760E7C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FtK9hANW-JCE; Thu,  7 Sep 2023 10:03:55 +0000 (UTC)
+	with ESMTP id 7-2TZTb5XCkV; Thu,  7 Sep 2023 10:45:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA2B960AC2;
-	Thu,  7 Sep 2023 10:03:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA2B960AC2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E91B21BF403
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5D1F60E1A;
+	Thu,  7 Sep 2023 10:45:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5D1F60E1A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1173B1BF41A
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D000F40489
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D000F40489
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC92C400ED
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:45:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC92C400ED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q0WUEopV7KsQ for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com
- [IPv6:2607:f8b0:4864:20::c2a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 329E940204
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 329E940204
-Received: by mail-oo1-xc2a.google.com with SMTP id
- 006d021491bc7-57129417cecso383421eaf.1
- for <buildroot@buildroot.org>; Thu, 07 Sep 2023 03:03:52 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fbyRIxWT0Qxl for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 10:45:48 +0000 (UTC)
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
+ [IPv6:2607:f8b0:4864:20::635])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D15FB400B5
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 10:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D15FB400B5
+Received: by mail-pl1-x635.google.com with SMTP id
+ d9443c01a7336-1c364fb8a4cso7160205ad.1
+ for <buildroot@buildroot.org>; Thu, 07 Sep 2023 03:45:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20221208; t=1694081031; x=1694685831;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=boA+gRmY7k830IBFIISP1K7kZdOKZdfM6LlO0iVSCxs=;
- b=hjimV0bbltjoYFnkOpZoBNujOoBHSTi8Z9/vMwwU6SfAZkOXNJ2MtwoDPjux9je/Qw
- 6E9I+0/jCxzJYFAoNl5OkW3eGweuYpspI0HHsb6Ta+A4TONGp6RsHq02RfbzdL+Y7V1X
- O4qbEFZFpHf2+WaaRbLyyF+snfuTPCa5B83T1vF25cUea1kBIMRcSgRBO+tjq9eSfKZb
- 7niWQGN4jHPM8HS7jXlyJ1/ZFQPVmAs488ypeXrzS3OA1/JGQYuYL2SZPt08y33FH+pD
- MYS/bf3zSsD4rnVvMPvmtE/ogGkYZDoiI4OjgPQHOCEIvjDN6XIuCm9oDWp7lBRhx/nX
- UrlQ==
-X-Gm-Message-State: AOJu0YzJtY2wroqei9hhUhxp9FTlIMqjEFp+fo5U93Fu207E/cS+/FZ7
- DeYp9GdUqrOAFUNqSKl6V4cgoLSr1wb57LvP0iyzRmzYQnc=
-X-Google-Smtp-Source: AGHT+IF8Ry74iV7gMlqlZScqg+0hdNp8bXIjE2a6gUBygj8iSMFl2P/2zGZCXvCjWCGeWOXEgvhCKyWYhndP3bgYozE=
-X-Received: by 2002:a4a:a5c4:0:b0:56e:9c66:e8a3 with SMTP id
- k4-20020a4aa5c4000000b0056e9c66e8a3mr1469008oom.4.1694081031085; Thu, 07 Sep
- 2023 03:03:51 -0700 (PDT)
-MIME-Version: 1.0
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Thu, 7 Sep 2023 12:03:40 +0200
-Message-ID: <CADYjeSuybuLKr2oHeABvQOwdtcratHm11UrwK76HxA6TBRPnHA@mail.gmail.com>
+ d=1e100.net; s=20221208; t=1694083548; x=1694688348;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=z+QBhPw1xgw6YMLFJLq8N9QlyI6tgJtuMBRSutbtuhs=;
+ b=O4AaPRdcGNcgWq9Mt2IPQ0dWdel9cHFnxXPGkQzS/TxAmefNEg29Sta7UIOJCSVloY
+ PvS75rsb8lPSXt9Fm3cXNQUCcnbzl1MawULod2M/mSi9iKSPecwMoLnyf3clea7zl1fa
+ FlYynd4bvIHnTjcBJsXPEEoroxxMw0iLsU3n7w/fiGEUsWEaau74EotStHX5CwKAxjG+
+ IAB1pEcXJ99pPb4as1eQP6BkpnvLtNJ5/b6A8+YanHSVQs9E1/4YMEl85mGNRwvBOSx6
+ oi6uJFqdWoJxdzzjWmjMCgxjYDMclnb4QSISodGPPqCgIvRJYlghY6atO/MCl6C0VIaf
+ i25w==
+X-Gm-Message-State: AOJu0Yz20MwkV/FDwRvi5H1iPVvJchfdB50GHqfIqaZlDKzSUqPcEdDf
+ Ol3UA5NQPIU4xV9NVmBFY/IlAfwAfA9WAqVmOwTrcoeF
+X-Google-Smtp-Source: AGHT+IGQfd1XIjGeQcOA1Uzshc7h7vAG68EAMImJeZ6VBq6v98HwnRu57kwyhMHYXrTEuQLgeS8SNQ==
+X-Received: by 2002:a17:902:d707:b0:1bd:bbc3:c87b with SMTP id
+ w7-20020a170902d70700b001bdbbc3c87bmr15631539ply.41.1694083547924; 
+ Thu, 07 Sep 2023 03:45:47 -0700 (PDT)
+Received: from localhost.localdomain (ip184-189-231-225.sb.sd.cox.net.
+ [184.189.231.225]) by smtp.gmail.com with ESMTPSA id
+ o4-20020a170902bcc400b001b7ffca7dbcsm12447205pls.148.2023.09.07.03.45.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 07 Sep 2023 03:45:47 -0700 (PDT)
 To: buildroot@buildroot.org
+Date: Thu,  7 Sep 2023 03:45:45 -0700
+Message-ID: <20230907104545.1385064-1-christian@aperture.us>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1694081031; x=1694685831; darn=buildroot.org;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=boA+gRmY7k830IBFIISP1K7kZdOKZdfM6LlO0iVSCxs=;
- b=igDNYUmsluHmtJ1wxONDcSwqMtM1+5Sus5fhtsMEWNtTbwmI4A0JH+aJHeM/1XNQJS
- 3lN1vUi7un3B+t2zQvOz/MvcvAKU3qu5oh6h51zvr6a/bbTiP6xBFa7D97EpQS/6rgW/
- hRLEl7WMcF9IaNo/ULQSurTZhWUHj17HFVtGMNkAbEod+QBID3YU9MpKFDA8jCk+A2dO
- 0AOso7aOO4s6Z3p7tm3kYmBgR5ZfxtreXZEOdbUxkp8Q88NgzyV2XGBHrWYD4iqSwtCB
- f4TuqqZ55d7r3hi/h2zbdG07kerp0OZ2F7RiTb49/rPvEnEwpsHAsF3HLbbwwfcITUag
- 9MkQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=igDNYUms
-Subject: [Buildroot] Unable to configure USB webcam in Buildroot
+ d=aperture.us; s=google; t=1694083548; x=1694688348; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=z+QBhPw1xgw6YMLFJLq8N9QlyI6tgJtuMBRSutbtuhs=;
+ b=bGBz06vbX5+WNMxT6O+tM6LZo2Hl37kDQ2KfHw0ehcH4rQLQIK2kylAVI3Y1jlpAoz
+ H3nlq+KRl+J2p5OVOOFnbsR9gBEuj+mwus0Q0t/Ye0CqE0eaeJ+CKbDxd6X61XV/HBv1
+ 91jAuWH7jfxZYPSSlbIo9JnLuKO+ZOTZf324bOhgqJI5MROLT7RZMfuzT+nMqciqb45M
+ ladmIEgPsI6S/u3dOt28THrLjnJPjDhyarq4UhE4glOyWVkGT178I7wSObwu4lYMe2rk
+ MY/3CX4FN3H/whuQwzzDTbrqtgz/99kpc8jTPa59s6R790E+p7b/x2HKS/HZBQ44KYOr
+ FUcw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
+ header.a=rsa-sha256 header.s=google header.b=bGBz06vb
+Subject: [Buildroot] [PATCH v1 1/1] package/conmon: bump version to 2.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,52 +92,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7262417246490741018=="
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7262417246490741018==
-Content-Type: multipart/alternative; boundary="0000000000001421800604c1fa48"
+Bug fixes.
 
---0000000000001421800604c1fa48
-Content-Type: text/plain; charset="UTF-8"
+https://github.com/containers/conmon/releases/tag/v2.1.8
 
-Hello,
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ package/conmon/conmon.hash | 2 +-
+ package/conmon/conmon.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I am trying to configure a Logitech USB Webcam for my NXP i.MX 8M board. I
-have enabled CONFIG_MEDIA_USB_SUPPORT=y in the linux-menuconfig.
-But when I do "ls -l /dev/video*" I get "No such file or directory" and
-"v4l2-ctl --list-devices" shows "Cannot open device /dev/video0, exiting.".
-
-Can anyone please let me know how to enable USB webcam in Buildroot?
-
-Thank you,
-Sourabh
-
---0000000000001421800604c1fa48
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,<br><div><br></div><div>I am trying to configure a L=
-ogitech USB Webcam for my NXP i.MX 8M board. I have enabled=C2=A0CONFIG_MED=
-IA_USB_SUPPORT=3Dy in the linux-menuconfig.<br>But when I do &quot;ls -l /d=
-ev/video*&quot; I get &quot;No such file or directory&quot; and &quot;v4l2-=
-ctl --list-devices&quot; shows &quot;Cannot open device /dev/video0, exitin=
-g.&quot;.</div><div><br></div><div>Can anyone please let me know how to ena=
-ble USB webcam in Buildroot?</div><div><br></div><div>Thank you,</div><div>=
-Sourabh</div></div>
-
---0000000000001421800604c1fa48--
-
---===============7262417246490741018==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/conmon/conmon.hash b/package/conmon/conmon.hash
+index 82d1d14ba3..f2e89b8a92 100644
+--- a/package/conmon/conmon.hash
++++ b/package/conmon/conmon.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7d0f9a2f7cb8a76c51990128ac837aaf0cc89950b6ef9972e94417aa9cf901fe  conmon-2.1.7.tar.gz
++sha256  e72c090210a03ca3b43a0fad53f15bca90bbee65105c412468009cf3a5988325  conmon-2.1.8.tar.gz
+ sha256  9c9d771d4004725237a31ada889fe06c85a24fd0a29e41825181ab4cde54f016  LICENSE
+diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
+index f3567a4305..29deb2af47 100644
+--- a/package/conmon/conmon.mk
++++ b/package/conmon/conmon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONMON_VERSION = 2.1.7
++CONMON_VERSION = 2.1.8
+ CONMON_SITE = $(call github,containers,conmon,v$(CONMON_VERSION))
+ CONMON_LICENSE = Apache-2.0
+ CONMON_LICENSE_FILES = LICENSE
+-- 
+2.42.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7262417246490741018==--
