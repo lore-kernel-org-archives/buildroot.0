@@ -1,61 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0132DEE14D4
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 09:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB15EEE14DC
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 10:03:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80094812E1;
-	Thu,  7 Sep 2023 09:24:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80094812E1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6528260B5A;
+	Thu,  7 Sep 2023 10:03:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6528260B5A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CpdT7AO2CRE1; Thu,  7 Sep 2023 09:24:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FtK9hANW-JCE; Thu,  7 Sep 2023 10:03:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1FC3820A2;
-	Thu,  7 Sep 2023 09:24:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1FC3820A2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C68291BF403
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 09:23:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA2B960AC2;
+	Thu,  7 Sep 2023 10:03:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA2B960AC2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E91B21BF403
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F189417E5
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 09:23:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F189417E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id D000F40489
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D000F40489
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W5qkQ8_70w7k for <buildroot@lists.busybox.net>;
- Thu,  7 Sep 2023 09:23:48 +0000 (UTC)
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9E665417D0
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 09:23:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E665417D0
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id 48FE55C01A5;
- Thu,  7 Sep 2023 11:23:44 +0200 (CEST)
-From: Stefan Agner <stefan@agner.ch>
-To: buildroot@buildroot.org
-Date: Thu,  7 Sep 2023 11:23:24 +0200
-Message-ID: <0a92454be5519ae93ca3c07770bc9cf8c0b6c19d.1694078576.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.42.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id q0WUEopV7KsQ for <buildroot@lists.busybox.net>;
+ Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com
+ [IPv6:2607:f8b0:4864:20::c2a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 329E940204
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 10:03:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 329E940204
+Received: by mail-oo1-xc2a.google.com with SMTP id
+ 006d021491bc7-57129417cecso383421eaf.1
+ for <buildroot@buildroot.org>; Thu, 07 Sep 2023 03:03:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20221208; t=1694081031; x=1694685831;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=boA+gRmY7k830IBFIISP1K7kZdOKZdfM6LlO0iVSCxs=;
+ b=hjimV0bbltjoYFnkOpZoBNujOoBHSTi8Z9/vMwwU6SfAZkOXNJ2MtwoDPjux9je/Qw
+ 6E9I+0/jCxzJYFAoNl5OkW3eGweuYpspI0HHsb6Ta+A4TONGp6RsHq02RfbzdL+Y7V1X
+ O4qbEFZFpHf2+WaaRbLyyF+snfuTPCa5B83T1vF25cUea1kBIMRcSgRBO+tjq9eSfKZb
+ 7niWQGN4jHPM8HS7jXlyJ1/ZFQPVmAs488ypeXrzS3OA1/JGQYuYL2SZPt08y33FH+pD
+ MYS/bf3zSsD4rnVvMPvmtE/ogGkYZDoiI4OjgPQHOCEIvjDN6XIuCm9oDWp7lBRhx/nX
+ UrlQ==
+X-Gm-Message-State: AOJu0YzJtY2wroqei9hhUhxp9FTlIMqjEFp+fo5U93Fu207E/cS+/FZ7
+ DeYp9GdUqrOAFUNqSKl6V4cgoLSr1wb57LvP0iyzRmzYQnc=
+X-Google-Smtp-Source: AGHT+IF8Ry74iV7gMlqlZScqg+0hdNp8bXIjE2a6gUBygj8iSMFl2P/2zGZCXvCjWCGeWOXEgvhCKyWYhndP3bgYozE=
+X-Received: by 2002:a4a:a5c4:0:b0:56e:9c66:e8a3 with SMTP id
+ k4-20020a4aa5c4000000b0056e9c66e8a3mr1469008oom.4.1694081031085; Thu, 07 Sep
+ 2023 03:03:51 -0700 (PDT)
 MIME-Version: 1.0
+From: Sourabh Hegde <hrsourabh011@gmail.com>
+Date: Thu, 7 Sep 2023 12:03:40 +0200
+Message-ID: <CADYjeSuybuLKr2oHeABvQOwdtcratHm11UrwK76HxA6TBRPnHA@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1694078624;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=16zEnfUOlpdNinQwG7hOs0A7tngiwmdL/k243sGRO3w=;
- b=KxbdulrtlhoMmQUSpP+fcsiI0vQeAW3D8VE9XdrRxL4qqdaVtlXzVjKm6FGsl+yuCzhCuB
- NkAEU7aC3ZFCvkSCmgsAdlz2MpgjtsmM0hojObJNiLtbjpu72HL/iBVsqSFq01sPeYcwdp
- Jlex9y1kS5JIxXhrjCQo9dSn6kO4u10=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=Kxbdulrt
-Subject: [Buildroot] [PATCH] package/docker-engine: bump version to v24.0.6
+ d=gmail.com; s=20221208; t=1694081031; x=1694685831; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=boA+gRmY7k830IBFIISP1K7kZdOKZdfM6LlO0iVSCxs=;
+ b=igDNYUmsluHmtJ1wxONDcSwqMtM1+5Sus5fhtsMEWNtTbwmI4A0JH+aJHeM/1XNQJS
+ 3lN1vUi7un3B+t2zQvOz/MvcvAKU3qu5oh6h51zvr6a/bbTiP6xBFa7D97EpQS/6rgW/
+ hRLEl7WMcF9IaNo/ULQSurTZhWUHj17HFVtGMNkAbEod+QBID3YU9MpKFDA8jCk+A2dO
+ 0AOso7aOO4s6Z3p7tm3kYmBgR5ZfxtreXZEOdbUxkp8Q88NgzyV2XGBHrWYD4iqSwtCB
+ f4TuqqZ55d7r3hi/h2zbdG07kerp0OZ2F7RiTb49/rPvEnEwpsHAsF3HLbbwwfcITUag
+ 9MkQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=igDNYUms
+Subject: [Buildroot] Unable to configure USB webcam in Buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,49 +86,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Agner <stefan@agner.ch>, christian@aperture.us
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7262417246490741018=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bug fixes in containerd storage backend and Docker itself and a single
-new warning about old Docker image format deprecation.
+--===============7262417246490741018==
+Content-Type: multipart/alternative; boundary="0000000000001421800604c1fa48"
 
-https://github.com/moby/moby/releases/tag/v24.0.6
+--0000000000001421800604c1fa48
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 061999464e..7a8b17d3f3 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  837d7d667fb64508bf6e53cb5915b4b5ef356599294ffdd5ca8678168230cb38  docker-engine-24.0.5.tar.gz
-+sha256  29a8ee54e9ea008b40eebca42dec8b67ab257eb8ac175f67e79c110e4187d7d2  docker-engine-24.0.6.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 22cd2c58ed..a8f47254a4 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 24.0.5
-+DOCKER_ENGINE_VERSION = 24.0.6
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
--- 
-2.42.0
+I am trying to configure a Logitech USB Webcam for my NXP i.MX 8M board. I
+have enabled CONFIG_MEDIA_USB_SUPPORT=y in the linux-menuconfig.
+But when I do "ls -l /dev/video*" I get "No such file or directory" and
+"v4l2-ctl --list-devices" shows "Cannot open device /dev/video0, exiting.".
+
+Can anyone please let me know how to enable USB webcam in Buildroot?
+
+Thank you,
+Sourabh
+
+--0000000000001421800604c1fa48
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<br><div><br></div><div>I am trying to configure a L=
+ogitech USB Webcam for my NXP i.MX 8M board. I have enabled=C2=A0CONFIG_MED=
+IA_USB_SUPPORT=3Dy in the linux-menuconfig.<br>But when I do &quot;ls -l /d=
+ev/video*&quot; I get &quot;No such file or directory&quot; and &quot;v4l2-=
+ctl --list-devices&quot; shows &quot;Cannot open device /dev/video0, exitin=
+g.&quot;.</div><div><br></div><div>Can anyone please let me know how to ena=
+ble USB webcam in Buildroot?</div><div><br></div><div>Thank you,</div><div>=
+Sourabh</div></div>
+
+--0000000000001421800604c1fa48--
+
+--===============7262417246490741018==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7262417246490741018==--
