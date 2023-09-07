@@ -4,61 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A640FEE14D4
-	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 09:23:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0132DEE14D4
+	for <buildroot@archiver.kernel.org>; Thu,  7 Sep 2023 09:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40A17812F1;
-	Thu,  7 Sep 2023 09:23:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40A17812F1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80094812E1;
+	Thu,  7 Sep 2023 09:24:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80094812E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RWfMFW7e9PB0; Thu,  7 Sep 2023 09:23:52 +0000 (UTC)
+	with ESMTP id CpdT7AO2CRE1; Thu,  7 Sep 2023 09:24:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C6C4812E1;
-	Thu,  7 Sep 2023 09:23:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C6C4812E1
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1FC3820A2;
+	Thu,  7 Sep 2023 09:24:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1FC3820A2
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A91391BF403
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 09:23:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C68291BF403
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 09:23:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8D7DF417E9
- for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 09:23:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D7DF417E9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F189417E5
+ for <buildroot@lists.busybox.net>; Thu,  7 Sep 2023 09:23:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F189417E5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8N7BFxnDDzN2 for <buildroot@lists.busybox.net>;
+ with ESMTP id W5qkQ8_70w7k for <buildroot@lists.busybox.net>;
  Thu,  7 Sep 2023 09:23:48 +0000 (UTC)
 Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 174DA417E5
- for <buildroot@buildroot.org>; Thu,  7 Sep 2023 09:23:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 174DA417E5
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9E665417D0
+ for <buildroot@buildroot.org>; Thu,  7 Sep 2023 09:23:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E665417D0
 Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id CDCAA5C1882;
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id 48FE55C01A5;
  Thu,  7 Sep 2023 11:23:44 +0200 (CEST)
 From: Stefan Agner <stefan@agner.ch>
 To: buildroot@buildroot.org
-Date: Thu,  7 Sep 2023 11:23:25 +0200
-Message-ID: <d913f7da2bb9720535c0e1826960d01fb1c53e3f.1694078576.git.stefan@agner.ch>
+Date: Thu,  7 Sep 2023 11:23:24 +0200
+Message-ID: <0a92454be5519ae93ca3c07770bc9cf8c0b6c19d.1694078576.git.stefan@agner.ch>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <0a92454be5519ae93ca3c07770bc9cf8c0b6c19d.1694078576.git.stefan@agner.ch>
-References: <0a92454be5519ae93ca3c07770bc9cf8c0b6c19d.1694078576.git.stefan@agner.ch>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=agner.ch; s=dkim; t=1694078624;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zvWHx+p9J58RwX1MO7CB2UHzwTsU7sy223zSMK+ZE9k=;
- b=0DJqm4nAmCcVBiG+ih+Uu7FHT0FmmK1zruw0vXt//QeflvretI0i65rEJenW/hseR2xsZG
- dDxsXs4nw6X4dL+B1MY4bfiLetPvF+Wz2mxQXKRGmroCP2WpSavEOmbJFPdjCHMXkaIriI
- 3v7wI2zw4bsbS9X7mvtBjc1gcULm71U=
+ content-transfer-encoding:content-transfer-encoding:in-reply-to:
+ references; bh=16zEnfUOlpdNinQwG7hOs0A7tngiwmdL/k243sGRO3w=;
+ b=KxbdulrtlhoMmQUSpP+fcsiI0vQeAW3D8VE9XdrRxL4qqdaVtlXzVjKm6FGsl+yuCzhCuB
+ NkAEU7aC3ZFCvkSCmgsAdlz2MpgjtsmM0hojObJNiLtbjpu72HL/iBVsqSFq01sPeYcwdp
+ Jlex9y1kS5JIxXhrjCQo9dSn6kO4u10=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=0DJqm4nA
-Subject: [Buildroot] [PATCH] package/docker-cli: bump version to v24.0.6
+ header.a=rsa-sha256 header.s=dkim header.b=Kxbdulrt
+Subject: [Buildroot] [PATCH] package/docker-engine: bump version to v24.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,32 +80,32 @@ https://github.com/moby/moby/releases/tag/v24.0.6
 
 Signed-off-by: Stefan Agner <stefan@agner.ch>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 95050be88b..5d8c1b0f59 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 061999464e..7a8b17d3f3 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  fa32b5f3c2f85fba9ef6e1b5099a4b608fa20af45ba71b3da2194e8728037eec  docker-cli-24.0.5.tar.gz
-+sha256  c1a4a580ced3633e489c5c9869a20198415da44df7023fdc200d425cdf5fa652  docker-cli-24.0.6.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 4c38e7cba5..53c9ddb6b8 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+-sha256  837d7d667fb64508bf6e53cb5915b4b5ef356599294ffdd5ca8678168230cb38  docker-engine-24.0.5.tar.gz
++sha256  29a8ee54e9ea008b40eebca42dec8b67ab257eb8ac175f67e79c110e4187d7d2  docker-engine-24.0.6.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 22cd2c58ed..a8f47254a4 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 24.0.5
-+DOCKER_CLI_VERSION = 24.0.6
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+-DOCKER_ENGINE_VERSION = 24.0.5
++DOCKER_ENGINE_VERSION = 24.0.6
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
 2.42.0
 
