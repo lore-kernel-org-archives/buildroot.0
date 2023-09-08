@@ -1,88 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85A9AEE57D5
-	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 06:50:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00871EE57E0
+	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 08:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25AE982015;
-	Fri,  8 Sep 2023 06:50:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25AE982015
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4781C405D8;
+	Fri,  8 Sep 2023 08:25:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4781C405D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vp7REfQUevVk; Fri,  8 Sep 2023 06:49:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 4IA-vLPqNVmj; Fri,  8 Sep 2023 08:25:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AC6581FB8;
-	Fri,  8 Sep 2023 06:49:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AC6581FB8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 975DC1BF397
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 06:49:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 801CA4058F;
+	Fri,  8 Sep 2023 08:25:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 801CA4058F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4CB531BF328
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 08:25:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E4EE818D7
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 06:49:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E4EE818D7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24EEB4058F
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 08:25:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24EEB4058F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u6yzyV-jncxL for <buildroot@lists.busybox.net>;
- Fri,  8 Sep 2023 06:49:55 +0000 (UTC)
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DE19D81871
- for <buildroot@busybox.net>; Fri,  8 Sep 2023 06:49:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE19D81871
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-401bbfc05fcso19267615e9.3
- for <buildroot@busybox.net>; Thu, 07 Sep 2023 23:49:54 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id svz4kRx2tAKQ for <buildroot@lists.busybox.net>;
+ Fri,  8 Sep 2023 08:25:27 +0000 (UTC)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
+ [IPv6:2a00:1450:4864:20::231])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8AC2C40338
+ for <buildroot@buildroot.org>; Fri,  8 Sep 2023 08:25:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AC2C40338
+Received: by mail-lj1-x231.google.com with SMTP id
+ 38308e7fff4ca-2ba1e9b1fa9so31573771fa.3
+ for <buildroot@buildroot.org>; Fri, 08 Sep 2023 01:25:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694155793; x=1694760593;
+ d=1e100.net; s=20230601; t=1694161524; x=1694766324;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=GZa3lY6U11RxixUprpjtf5VP9EZo829zrltE7er3cus=;
- b=ln6jDPZBnqrmd7guTMx3GroqYB9R8t6IT9mgB3Ps5kAzh/kmHldtwwNamgViYREV5+
- OceUCjQ9fMXLBoEDjKkzKLsTOP2KCdN0ixc+vvSoOcpKDw9uM3vwk8ybEJFPFVR9203K
- gfZ6uYsOndzECAJb9GwCaI4741ckeqRiDQInebhAvhtsoTDY5GlImPO0pEt344YtWKTs
- tpvetpN//zhrOAilOqj/mpwcc1Qbb1RmTGZf/Eqlm0nijWKywT8qT5teqjfgZUXPrfoU
- q9JSAvDYh5ePJVm32WVTkE3te9dyN9v9BIhYwNssk6jPWdfF24GvCLLa/t0j+4fXMYgt
- rQUA==
-X-Gm-Message-State: AOJu0YyLB6wKAm/HuPaW7060BuKB1n+nIStVIapd6LcI/dCWQbnzHi0f
- jSgQryzeFmBO0YGPswWhqdOWcXuldH0=
-X-Google-Smtp-Source: AGHT+IEBQsL/JMoAnvKgNX3e/RL9PSP/j8VFR5g/y+iHK2Lz6Dl4GpP7kKFhKlqJ9lpihkNTV4vDIQ==
-X-Received: by 2002:a1c:7912:0:b0:401:bf56:8baf with SMTP id
- l18-20020a1c7912000000b00401bf568bafmr1322100wme.8.1694155792625; 
- Thu, 07 Sep 2023 23:49:52 -0700 (PDT)
-Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- g10-20020a5d540a000000b003176c6e87b1sm1221874wrv.81.2023.09.07.23.49.51
+ bh=klbauNNci0+RV/lZH6FLkXedy3AFJIseruzF6mU7DBY=;
+ b=U46nzm57xkuxaUEdKN6a0hv197YSQ759y4LJk2X0dK7m9XcR790NnbST9cFxA1kQTU
+ g+Ypc9SNstHE8UREBQKZ7DM3foPrtLHvGJ171FdJMlfrkjYtcSp0kocJQhdDCP6rE4Bh
+ yEd+s8rZ6hjnK4z9fiHcpGrBVRx2tVkUCDoYkCgkVICbPUJy7Nh9em4iR4hUKWlToE1T
+ 0kVrNopqSbSciGVbpl9O+VYlnZmrMD9zI3kL/NQFA1jRcfz3gUbtybykySdjCotDlxkg
+ kc59wda9mLm4yQFo/XQ6g+hz+1Jm86qyU/jWRaHlNi43AABD6+gFkuvykfCiyrR1iR0y
+ TzeA==
+X-Gm-Message-State: AOJu0YxMBO1PotzLW6k2qeei9EMhgBh/U0rsbg3t+gJOwDiBbDfbMhbK
+ g6+4H41KU6G2iGMrGADocL/KmU/bq7B3Tw==
+X-Google-Smtp-Source: AGHT+IHUOepDOngkaIU4Vj13IH4wwTEBGwSIvFZU+n9uErLM1nabiA5W8Stzh+0eFv6Zm6PTcW6izw==
+X-Received: by 2002:a2e:9153:0:b0:2bc:fd7c:cd6d with SMTP id
+ q19-20020a2e9153000000b002bcfd7ccd6dmr1348161ljg.4.1694161523214; 
+ Fri, 08 Sep 2023 01:25:23 -0700 (PDT)
+Received: from localhost.localdomain (83-233-6-197.cust.bredband2.com.
+ [83.233.6.197]) by smtp.gmail.com with ESMTPSA id
+ z23-20020a2e3517000000b002b9f0b25ff6sm217849ljz.4.2023.09.08.01.25.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Sep 2023 23:49:52 -0700 (PDT)
-From: Francois Perrad <fperrad@gmail.com>
-X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Fri,  8 Sep 2023 08:49:44 +0200
-Message-Id: <20230908064944.2558686-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.39.2
+ Fri, 08 Sep 2023 01:25:22 -0700 (PDT)
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  8 Sep 2023 10:27:40 +0200
+Message-ID: <20230908082741.409005-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1694155793; x=1694760593; darn=busybox.net;
+ d=gmail.com; s=20221208; t=1694161524; x=1694766324; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GZa3lY6U11RxixUprpjtf5VP9EZo829zrltE7er3cus=;
- b=k0jXfpIhfujylfLUGl+ckRyTEBGRoxi5p1T7TtIu84YFexd2jbB1kUfz8HU7WOPqyC
- K3YlC0lHNvpyPh5VY5L2KCpncXAGT6f98WiA5m0Jg5ttGSWi7LYrVxOJK7b2U3oODluN
- CPFnsM/Ud0OnxylD96LNx9vGn2s5BoV7lsrx+aUrY9iEYHE/xwU3oDS2x9xvz4y33SXY
- /v9R0yERoffQ+U9MAbxK7RcKs857aDzWpVZPWm0o3Knh1l5JJxpJ7ux04G8boHtUvxJD
- P2IDNFNcqLS4eBQcwBywvt/0OUDv9CS0T+2mwzhk9aYIlxHqEIe0EBazQ8jWgijC+pkF
- j9sQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=klbauNNci0+RV/lZH6FLkXedy3AFJIseruzF6mU7DBY=;
+ b=Xd2BFrjoWwrAY2NwU8fFMQ8uObSXFpA+S1yBYOHaXEHtIQ5vwH54uTambPf+PWAPW5
+ 0/SrHqJnWNr+y4310wJTXMbUVBkjsahG+MEAReJVqFIDhjUg3t9fiZVaUmuAKUgsGl8J
+ kMrissZkTnD69C9rZ/E+zvOIH8m8iZlhgnkJZl1Lf0jOM9zXIuWGMTbi8VEB3kQDYC8/
+ 8F79jZHywrwJba4kmWrgNjEOSxiHEweLr4AgcdPm/LflfThKZaPDnEIqG9Bm6sVnxyHk
+ roLIIFbE88a1Nv6p4N2RwvGqjW5LHAWhbiaq1S/q2eqj/1mVRerfEId9cBKq3z9tmLK4
+ 41RQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=k0jXfpIh
-Subject: [Buildroot] [PATCH] package/luajit: bump to version
- 41fb94defa8f830ce69a8122b03f6ac3216d392a
+ header.a=rsa-sha256 header.s=20221208 header.b=Xd2BFrjo
+Subject: [Buildroot] [PATCH 1/2] package/criu: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,117 +93,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The LuaJIT project switches to a rolling release scheme.
-Now, the version contains the timestamp of the latest commit.
-So, we need to switch to the SITE_METHOD to git.
+Checkpoint/Restore In Userspace (CRIU), is a software tool for the Linux operating system to make it possible to freeze a running
+application and checkpoint it to persistent storage as a collection of files.
 
-The timestamp can be seen in build log:
-==== Successfully installed LuaJIT 2.1.1693350652 to /usr ====
-
-diff COPYRIGHT:
--Copyright (C) 2005-2022 Mike Pall. All rights reserved.
-+Copyright (C) 2005-2023 Mike Pall. All rights reserved.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- package/luajit/0001-no-bin-symlink.patch |  4 ++--
- package/luajit/0002-install-inc.patch    |  6 +++---
- package/luajit/luajit.hash               |  4 ++--
- package/luajit/luajit.mk                 | 13 +++++++++++--
- 4 files changed, 18 insertions(+), 9 deletions(-)
+ package/Config.in      |  1 +
+ package/criu/Config.in | 28 ++++++++++++++++++++++++++++
+ package/criu/criu.hash |  3 +++
+ package/criu/criu.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 74 insertions(+)
+ create mode 100644 package/criu/Config.in
+ create mode 100644 package/criu/criu.hash
+ create mode 100644 package/criu/criu.mk
 
-diff --git a/package/luajit/0001-no-bin-symlink.patch b/package/luajit/0001-no-bin-symlink.patch
-index dc36fa58d..ea0e5bf8d 100644
---- a/package/luajit/0001-no-bin-symlink.patch
-+++ b/package/luajit/0001-no-bin-symlink.patch
-@@ -6,7 +6,7 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -45,8 +45,7 @@
-+@@ -50,8 +50,7 @@
-  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
-  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
-  
-@@ -16,7 +16,7 @@ Index: b/Makefile
-  INSTALL_ANAME= libluajit-$(ABIVER).a
-  INSTALL_SOSHORT1= libluajit-$(ABIVER).so
-  INSTALL_SOSHORT2= libluajit-$(ABIVER).so.$(MAJVER)
--@@ -61,7 +60,6 @@
-+@@ -66,7 +65,6 @@
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT1)
-  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT2)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-diff --git a/package/luajit/0002-install-inc.patch b/package/luajit/0002-install-inc.patch
-index 8de777dce..163a5d36f 100644
---- a/package/luajit/0002-install-inc.patch
-+++ b/package/luajit/0002-install-inc.patch
-@@ -6,12 +6,12 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -33,7 +33,7 @@
-+@@ -38,7 +38,7 @@
-  INSTALL_BIN=   $(DPREFIX)/bin
-  INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
-  INSTALL_SHARE= $(DPREFIX)/share
---INSTALL_DEFINC= $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
-+-INSTALL_DEFINC= $(DPREFIX)/include/luajit-$(MMVERSION)
- +INSTALL_DEFINC= $(DPREFIX)/include
-  INSTALL_INC=   $(INSTALL_DEFINC)
-  
-- INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(VERSION)
-+ INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(MMVERSION)
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 049f8c2fc..9e5060ea8 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  835035b244c3dc3d3d19bdd5ac623af90b84207e6330fb78f9fa51d6e200d760  luajit-8635cbabf3094c4d8bd00578c7d812bea87bb2d3.tar.gz
-+sha256  1f43430957ea2889ea736d610cf449e9ac6d7140252a697803fccc1aeff241b5  luajit-41fb94defa8f830ce69a8122b03f6ac3216d392a-br1.tar.gz
- 
- # Locally calculated
--sha256  52fc5b15ac968ed81aabb4c1e23ab3bce50f57a5764e9cdca86b463a11072921  COPYRIGHT
-+sha256  1130331ac861a4b4520e9c8ad0814efdc6f1e79ea55ea9c460c73733d13ccb5f  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 2a27aa505..db3bdc913 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--LUAJIT_VERSION = 8635cbabf3094c4d8bd00578c7d812bea87bb2d3
--LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
-+LUAJIT_VERSION = 41fb94defa8f830ce69a8122b03f6ac3216d392a
-+LUAJIT_SITE_METHOD = git
-+LUAJIT_SITE = https://github.com/LuaJIT/LuaJIT.git
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
- LUAJIT_CPE_ID_VENDOR = luajit
-@@ -33,6 +34,14 @@ LUAJIT_HOST_CC = $(HOSTCC) -m32
- LUAJIT_XCFLAGS += -DLUAJIT_DISABLE_GC64
- endif
- 
-+# emulation of git archive with .gitattributes & export-subst
-+define LUAJIT_ROLLING_VERSION
-+	cd $(LUAJIT_DL_DIR)/git && $(GIT) show -s --format=%ct $(LUAJIT_VERSION) > $(@D)/.relver
+diff --git a/package/Config.in b/package/Config.in
+index b21a2f8c65..c6c809f59c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2665,6 +2665,7 @@ menu "System tools"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
++	source "package/criu/Config.in"
+ 	source "package/crun/Config.in"
+ 	source "package/daemon/Config.in"
+ 	source "package/dc3dd/Config.in"
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+new file mode 100644
+index 0000000000..158e7ced57
+--- /dev/null
++++ b/package/criu/Config.in
+@@ -0,0 +1,28 @@
++menuconfig BR2_PACKAGE_CRIU
++	bool "criu"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP # protobuf
++	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_STATIC_LIBS # protobuf, libbsd
++	depends on BR2_USE_WCHAR #libbsd
++	depends on BR2_USE_MMU #libcap
++	select BR2_PACKAGE_HOST_PYTHON3_SSL
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_PROTOBUF_C
++	select BR2_PACKAGE_LIBAIO
++	select BR2_PACKAGE_LIBBSD
++	select BR2_PACKAGE_LIBCAP
++	select BR2_PACKAGE_LIBNET
++	select BR2_PACKAGE_LIBNL
++	select BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_PIP
++	help
++	  Checkpoint/Restore In Userspace (CRIU), is a software tool for the Linux operating system to make it possible to freeze a running 
++	  application and checkpoint it to persistent storage as a collection of files.
++
++comment "criu needs a uClibc or glibc toolchain w/ threads, dynamic library, wchar"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| !BR2_USE_WCHAR || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/criu/criu.hash b/package/criu/criu.hash
+new file mode 100644
+index 0000000000..2c4a07252b
+--- /dev/null
++++ b/package/criu/criu.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  6a9997981c9fe4730c848ce59346b3a22fad69b803607cb67a3f6ec0557fa474  criu-3.18.tar.gz
++sha256  568a1fa9d90e18a1a1a61ea58ec2eece16b56a5042cc72c1b4f8d4455ae6fcb7  COPYING
+diff --git a/package/criu/criu.mk b/package/criu/criu.mk
+new file mode 100644
+index 0000000000..01b07e3f3f
+--- /dev/null
++++ b/package/criu/criu.mk
+@@ -0,0 +1,42 @@
++################################################################################
++#
++# CRIU
++#
++################################################################################
++
++CRIU_VERSION = 3.18
++CRIU_SOURCE = criu-$(CRIU_VERSION).tar.gz
++CRIU_SITE = https://github.com/checkpoint-restore/criu/archive/refs/tags/v$(CRIU_VERSION)
++
++CRIU_LICENSE = GPL-2.0
++CRIU_LICENSE_FILES = COPYING
++CRIU_DEPENDENCIES = host-pkgconf host-protobuf-c host-python3 host-python-pip libaio libbsd libcap libnet libnl protobuf protobuf-c python3
++
++CRIU_CFLAGS = $(TARGET_CFLAGS)
++CRIU_CFLAGS += -D__WORDSIZE -D__USE_GNU -D_GNU_SOURCE
++
++CRIU_MAKE_ENV = $(TARGET_MAKE_ENV)
++CRIU_MAKE_ENV += WERROR=0
++
++#Needed as it adds strange paths to the tool otherwise. E.g.  $CROSS_COMPILE/usr/bin/gcc
++CRIU_MAKE_ENV += HOSTLD=ld
++CRIU_MAKE_ENV += HOSTCC=gcc
++
++#x86_64 is treated as x86 in criu
++ifeq ($(BR2_ARCH),x86_64)
++	CRIU_MAKE_ENV += ARCH=x86
++else
++	CRIU_MAKE_ENV += ARCH=$(BR2_ARCH)
++endif
++
++define CRIU_BUILD_CMDS
++    rm -rf $(@D)/images/google/protobuf/descriptor.proto
++    ln -s  $(STAGING_DIR)/usr/include/google/protobuf/descriptor.proto $(@D)/images/google/protobuf/descriptor.proto
++	$(CRIU_MAKE_ENV) $(MAKE) USERCFLAGS="$(CRIU_CFLAGS)" -C $(@D)
 +endef
 +
-+LUAJIT_POST_EXTRACT_HOOKS = LUAJIT_ROLLING_VERSION
-+HOST_LUAJIT_POST_EXTRACT_HOOKS = LUAJIT_ROLLING_VERSION
++define CRIU_INSTALL_TARGET_CMDS
++	$(CRIU_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install-criu install-lib install-compel
++endef
 +
- # We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
- # build system uses non conventional variable names.
- define LUAJIT_BUILD_CMDS
++$(eval $(generic-package))
 -- 
-2.39.2
+2.41.0
 
 _______________________________________________
 buildroot mailing list
