@@ -4,82 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 308C0EEB570
-	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 20:58:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EF97EEB56E
+	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 20:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4ACB41869;
-	Fri,  8 Sep 2023 20:58:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4ACB41869
+	by smtp4.osuosl.org (Postfix) with ESMTP id D29B14180D;
+	Fri,  8 Sep 2023 20:59:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D29B14180D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VW6NcwmrLWjV; Fri,  8 Sep 2023 20:58:41 +0000 (UTC)
+	with ESMTP id BpBmxkNv8FpW; Fri,  8 Sep 2023 20:59:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3B6041800;
-	Fri,  8 Sep 2023 20:58:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3B6041800
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D35421BF2BA
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:58:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 843C141841;
+	Fri,  8 Sep 2023 20:59:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 843C141841
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 224971BF277
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8CFE4180D
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:58:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8CFE4180D
+ by smtp1.osuosl.org (Postfix) with ESMTP id EEBC282E5F
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:59:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEBC282E5F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wlaXcG-RcwFJ for <buildroot@lists.busybox.net>;
- Fri,  8 Sep 2023 20:58:37 +0000 (UTC)
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com
- [IPv6:2607:f8b0:4864:20::836])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87AFC41800
- for <buildroot@buildroot.org>; Fri,  8 Sep 2023 20:58:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87AFC41800
-Received: by mail-qt1-x836.google.com with SMTP id
- d75a77b69052e-414b0bdea1cso15886341cf.1
- for <buildroot@buildroot.org>; Fri, 08 Sep 2023 13:58:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694206716; x=1694811516;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=vxzc0QWaMiG8XD5EGtgbE/pWtDWw6PDtj5KgWBvWLfw=;
- b=HC1S8fS3mKjAe0402wl0p7FDItgPRbAno9s7cMdAydgN2cgYeOBwOP1IiGIGHRDAxh
- vGMkfcOtNMw/QkRAbaKarajGw26yODx2ghQPJ+lQeGGJwmTCfQFkBSapvCnF4I9nkdgK
- 4VM7PALfA446Bqf3nXIzY9XsNM9DgwwDMvI8v+o4fkCTTCrRaoIafTFanQ7cd24uAlEk
- 9xtg1Z+Rg4wQx0GGBw8j9Zidi92Raf/cbEeZugmmpssf+zFdYdo1mPd5mN/LeAEpdtCM
- EDFvIDKDlE/smi7O0/QAYY9pARN93k2GAaCNk4KHjS/NxUJk+KPbz0lgxMV4s25gW7lH
- +y6g==
-X-Gm-Message-State: AOJu0YwkqF+bgsr/gnLQZr81zlLOhKVeX1iDjx+JtYBvLuJhUcBUemLO
- t8i4dJ1PUuI/luE6tXmMKqL7Nal7jL/FY/2aiSo=
-X-Google-Smtp-Source: AGHT+IE1vhEt14iM9e/CLnhsSrfkptxuKOAG8G9p4JTptLEaFBucDIaD5yNAZkuz37A+ugxkMtkdIAD1NGbd5vt6wjE=
-X-Received: by 2002:ac8:5802:0:b0:412:fa6:56f8 with SMTP id
- g2-20020ac85802000000b004120fa656f8mr4408239qtg.12.1694206715850; Fri, 08 Sep
- 2023 13:58:35 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LowILpQmIBJE for <buildroot@lists.busybox.net>;
+ Fri,  8 Sep 2023 20:59:43 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8FEAB82E19
+ for <buildroot@buildroot.org>; Fri,  8 Sep 2023 20:59:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FEAB82E19
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5865120005;
+ Fri,  8 Sep 2023 20:59:39 +0000 (UTC)
+Date: Fri, 8 Sep 2023 22:59:38 +0200
+To: nvd@nist.gov
+Message-ID: <20230908225938.249f3ff6@windsurf>
+In-Reply-To: <20230903000100.0c1b187b@windsurf>
+References: <20230903000100.0c1b187b@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230908192714.2716398-1-james.hilliard1@gmail.com>
- <20230908214620.0d515173@windsurf>
-In-Reply-To: <20230908214620.0d515173@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 8 Sep 2023 14:58:23 -0600
-Message-ID: <CADvTj4qEN2LesjKx3Ct20xgETaVUpzoVSMfG+3Y+FVF601X05w@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1694206716; x=1694811516; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=vxzc0QWaMiG8XD5EGtgbE/pWtDWw6PDtj5KgWBvWLfw=;
- b=meKGFIE9/HJ1mP2MA3MLjshUp3i0iszUfx/NurkNUab0Hih5vi0Gac+g6QG9KGj0ma
- 7dQfCYlp+hYH00dKuVxjCh/2IllvPRWJ71UyvD66U9pUzfs8Et/i00YXyR/TOZKyqDMS
- lagR7hk8VPK0SNhuvp9S2Ax/Rav9mkJYz2S8Zy20mvjnIwIKTVlhA5tyhwV/fbIPrwJF
- d6odd266MZDUnd7u8pKbgzhag9nX/lfmndTes54hNZnzvSaksqhZkDODXpz1WiPxGPr8
- c6iuELIsJUBJXcHq0ZuHeAw2Ofr0YNB7r/sqRRbh3yKYWofO51Z1hencYVtJzuPWapSu
- DdcQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=meKGFIE9
-Subject: Re: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.18.0
+ d=bootlin.com; s=gm1; t=1694206779;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=w4EVfEZ+LuadFp08mnK2jIJS7l+V09Y7hkeS0vFhYA4=;
+ b=IyAyyD9YX1liS2DP3/Rud2545/Z+XTp9ng1Zx02pB+bTCzJW5F8E/xNnyvqoz3AVHri25m
+ IXGLaORu/UcQB61FJocHUm7CluBsbvQDe5XgMAADU7RfwFdKXBwt+ekFGt7Pg2RdfO4qCO
+ aFdypSSOXpKgNo5Xd/FxaiWSH47UQm+Y682/WRJJBgQY3oGamb7OosXOE0l6HGcs0s+a/H
+ XBEjItgMfQDMJtcaqj2GgBznhXWbtEpR9OLCmdc3r7HAuqH/y3Rvz1cqQIQbKCV0dL+zYo
+ 1woqzaxbCS6tdYEUGf58LURHYqxhhgKd+FZDpvLTYGZDYuHCs8C8zzCST0AFlw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IyAyyD9Y
+Subject: Re: [Buildroot] CVE-2018-11574 version range fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,30 +74,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCBTZXAgOCwgMjAyMyBhdCAxOjQ24oCvUE0gVGhvbWFzIFBldGF6em9uaQo8dGhvbWFz
-LnBldGF6em9uaUBib290bGluLmNvbT4gd3JvdGU6Cj4KPiBPbiBGcmksICA4IFNlcCAyMDIzIDEz
-OjI3OjE0IC0wNjAwCj4gSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+
-IHdyb3RlOgo+Cj4gPiAtQ09HX1ZFUlNJT04gPSAwLjE2LjEKPiA+ICtDT0dfVkVSU0lPTiA9IDAu
-MTguMAo+ID4gIENPR19TSVRFID0gaHR0cHM6Ly93cGV3ZWJraXQub3JnL3JlbGVhc2VzCj4gPiAg
-Q09HX1NPVVJDRSA9IGNvZy0kKENPR19WRVJTSU9OKS50YXIueHoKPiA+ICBDT0dfSU5TVEFMTF9T
-VEFHSU5HID0gWUVTCj4gPiBAQCAtMTUsNyArMTUsNyBAQCBDT0dfQ09ORl9PUFRTID0gXAo+ID4g
-ICAgICAgLURkb2N1bWVudGF0aW9uPWZhbHNlIFwKPiA+ICAgICAgIC1EbWFucGFnZXM9ZmFsc2Ug
-XAo+ID4gICAgICAgLURwcm9ncmFtcz10cnVlIFwKPiA+IC0gICAgIC1Ec291cDI9ZW5hYmxlZCBc
-Cj4KPiBTaG91bGRuJ3QgdGhpcyBoYXZlIGJlZW4gY2hhbmdlZCB0byAtRHNvdXAyPWRpc2FibGVk
-IGFzIHBhcnQgb2YgY29tbWl0Cj4gZGZmNjcxNzBmNzM5NTllNjgyNmVjM2U4N2U4OTI3NDdmOGQz
-YTVmYiwgd2hpY2ggY2hhbmdlZCB3cGV3ZWJraXQgdG8KPiB1c2UgbGlic291cDMgaW5zdGVhZCBv
-ZiBsaWJzb3VwMiA/CgpUaGVyZSB3ZXJlIGJ1aWxkIGVycm9ycywgdGhlIHZlcnNpb24gYnVtcCBz
-ZWVtcyB0byBiZSByZXF1aXJlZCB0byB1c2UgbGlic291cDMuCgo+Cj4gSSB0aGluayBpdCBtYWtl
-cyBzZW5zZSB0byBoYXZlIHRoaXMgc2VwYXJhdGUgZnJvbSB0aGUgY29nIHZlcnNpb24gYnVtcC4K
-Pgo+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9v
-dGxpbgo+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWluaW5n
-Cj4gaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+Hello,
+
+Gentle ping on the below bug report. Thanks!
+
+Thomas Petazzoni
+
+On Sun, 3 Sep 2023 00:01:00 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> Hello,
+> 
+> CVE-2018-11574 is marked in the NVD database as affecting all pppd
+> versions, as it has as its only "Configuration" the following CPE
+> identifier match:
+> 
+>   cpe:2.3:a:point-to-point_protocol_project:point-to-point_protocol:-:*:*:*:*:*:*:*
+> 
+> However, it turns out that the upstream pppd was *never* affected by
+> CVE-2018-11574. Let me walk through the story.
+> 
+> CVE-2018-11574 affects the EAP-TLS implementation in pppd. However,
+> EAP-TLS was not supported in upstream pppd before its 2.4.9 release,
+> thanks to commit
+> https://github.com/ppp-project/ppp/commit/e87fe1bbd37a1486c5223f110e9ce3ef75971f93.
+> 
+> Before that EAP-TLS support for pppd was provided as an out-of-tree
+> patch, provided by a third party developer at
+> https://jjkeijser.github.io/ppp/download.html. It is this patch that
+> was affected by CVE-2018-11574. As can be seen at
+> https://jjkeijser.github.io/ppp/download.html, all versions of the
+> patch prior to version 1.101 are affected, as 1.101 was precisely
+> released to fix CVE-2018-11574.
+> 
+> So: before pppd 2.4.9, the only way to be affected by CVE-2018-11574
+> was by having applied a third-party patch. I am not sure how to reflect
+> this correctly in the CVE-2018-11574 information in the NVD database.
+> To me, if one applies random patches to a code base, for sure those
+> patches can introduce additional security vulnerabilities, so it
+> doesn't make sense that CVE-2018-11574 is reported against pppd
+> upstream.
+> 
+> In addition, in the EAP-TLS code that was added in pppd 2.4.9, the
+> issue of CVE-2018-11574 is already fixed. Indeed, we did a diff between
+> the out-of-tree EAP-TLS patch in version 0.999 (affected) and 1.101
+> (not affected), which gives the attached file. And those fixes are
+> indeed present in commit
+> https://github.com/ppp-project/ppp/commit/e87fe1bbd37a1486c5223f110e9ce3ef75971f93,
+> which introduced EAP-TLS support in upstream pppd.
+> 
+> Therefore: upstream pppd was never affected by this issue. Prior to
+> pppd 2.4.9, there was no EAP-TLS support, and starting from 2.4.9, the
+> EAP-TLS is correct with regard to CVE-2018-11574.
+> 
+> At the very least, I would suggest to change the CVE-2018-11574
+> information to indicate that only versions up to (and excluding) 2.4.9
+> are affected. Do you think this would be possible ?
+> 
+> Best regards,
+> 
+> Thomas
+
+
+
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
