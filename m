@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CD27EE57EC
-	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 10:01:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8342EE57ED
+	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 10:02:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E98E61080;
-	Fri,  8 Sep 2023 10:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E98E61080
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B17B61324;
+	Fri,  8 Sep 2023 10:02:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B17B61324
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rcBHhBHdDa3Y; Fri,  8 Sep 2023 10:01:53 +0000 (UTC)
+	with ESMTP id vOI1rKrlsL-R; Fri,  8 Sep 2023 10:02:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0346761078;
-	Fri,  8 Sep 2023 10:01:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0346761078
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6AB9D1BF3E8
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 10:01:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB5DC61094;
+	Fri,  8 Sep 2023 10:02:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB5DC61094
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC7A21BF3E8
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 10:01:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 42A2741C01
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 10:01:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42A2741C01
+ by smtp3.osuosl.org (Postfix) with ESMTP id A39C26106C
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 10:01:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A39C26106C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jiBlmnEzsNHg for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DCnsmF8Nwvmf for <buildroot@lists.busybox.net>;
+ Fri,  8 Sep 2023 10:01:53 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9F1DD61086
+ for <buildroot@buildroot.org>; Fri,  8 Sep 2023 10:01:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F1DD61086
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3726DE0004;
  Fri,  8 Sep 2023 10:01:49 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 35C9A41C2C
- for <buildroot@buildroot.org>; Fri,  8 Sep 2023 10:01:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35C9A41C2C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B64CEC000A;
- Fri,  8 Sep 2023 10:01:45 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qeYJ6-008WDN-SL; Fri, 08 Sep 2023 12:01:44 +0200
+ id 1qeYJB-008WDT-6g; Fri, 08 Sep 2023 12:01:49 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Stefan Agner <stefan@agner.ch>
 References: <0a92454be5519ae93ca3c07770bc9cf8c0b6c19d.1694078576.git.stefan@agner.ch>
-Date: Fri, 08 Sep 2023 12:01:44 +0200
-In-Reply-To: <0a92454be5519ae93ca3c07770bc9cf8c0b6c19d.1694078576.git.stefan@agner.ch>
- (Stefan Agner's message of "Thu, 7 Sep 2023 11:23:24 +0200")
-Message-ID: <87pm2tf0fr.fsf@48ers.dk>
+ <d913f7da2bb9720535c0e1826960d01fb1c53e3f.1694078576.git.stefan@agner.ch>
+Date: Fri, 08 Sep 2023 12:01:49 +0200
+In-Reply-To: <d913f7da2bb9720535c0e1826960d01fb1c53e3f.1694078576.git.stefan@agner.ch>
+ (Stefan Agner's message of "Thu, 7 Sep 2023 11:23:25 +0200")
+Message-ID: <87ledhf0fm.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/docker-engine: bump version to
- v24.0.6
+Subject: Re: [Buildroot] [PATCH] package/docker-cli: bump version to v24.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
