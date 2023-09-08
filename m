@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE7DEEB566
-	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 20:01:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FCB7EEB569
+	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 20:02:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87174410B7;
-	Fri,  8 Sep 2023 20:01:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87174410B7
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6C0D410D1;
+	Fri,  8 Sep 2023 20:02:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C0D410D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AfX3j3JpOQeu; Fri,  8 Sep 2023 20:01:51 +0000 (UTC)
+	with ESMTP id 5y61c4aDNr6k; Fri,  8 Sep 2023 20:02:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83E95410D7;
-	Fri,  8 Sep 2023 20:01:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83E95410D7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F26201BF303
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77E9D4148B;
+	Fri,  8 Sep 2023 20:02:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77E9D4148B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 12AA31BF997
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:01:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8EDE416CC
+ by smtp1.osuosl.org (Postfix) with ESMTP id E048A82F32
  for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8EDE416CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E048A82F32
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id A7gl_tAMF6Ds for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jrdyVoL-5jAq for <buildroot@lists.busybox.net>;
  Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0089D40220
- for <buildroot@buildroot.org>; Fri,  8 Sep 2023 20:01:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0089D40220
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C27081F3D
+ for <buildroot@buildroot.org>; Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C27081F3D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E409386B2A; Fri,  8 Sep 2023 20:01:47 +0000 (UTC)
+ id 062D586B2C; Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 8 Sep 2023 21:47:13 +0200
+Date: Fri, 8 Sep 2023 21:47:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25e18c30636b5d3156dee860a0a0ab0e2b5fdb32
-X-Git-Newrev: 0d68ad6afec153ad1268dafa8b98fb2197c2ef61
+X-Git-Oldrev: c142cd2354846885ce9ddb6a3bb8becd2b261740
+X-Git-Newrev: 73a78cbac480e0d6740637c61d2d348bae8f9442
 X-Patchwork-Hint: ignore
-Message-Id: <20230908200147.E409386B2A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-pam: bump version to 2.2.4
+Message-Id: <20230908200148.062D586B2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php-ssh2: bump version to 1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d68ad6afec153ad1268dafa8b98fb2197c2ef61
+commit: https://git.buildroot.net/buildroot/commit/?id=73a78cbac480e0d6740637c61d2d348bae8f9442
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@gmail.comm>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php-pam/php-pam.hash | 2 +-
- package/php-pam/php-pam.mk   | 2 +-
+ package/php-ssh2/php-ssh2.hash | 2 +-
+ package/php-ssh2/php-ssh2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php-pam/php-pam.hash b/package/php-pam/php-pam.hash
-index c3eb49fbe7..be15237f7d 100644
---- a/package/php-pam/php-pam.hash
-+++ b/package/php-pam/php-pam.hash
+diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
+index 3fbb0b24c8..69e0b92071 100644
+--- a/package/php-ssh2/php-ssh2.hash
++++ b/package/php-ssh2/php-ssh2.hash
 @@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  fda3b5f719d51cb278351eedd3d7a96db75661324d81fdcf8072a4309121bc92  pam-2.2.3.tgz
-+sha256  d5c818c73c9cde4d2118bb08322dec0b532f3be48c3ef7d3f23a05af5080eb24  pam-2.2.4.tgz
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php-pam/php-pam.mk b/package/php-pam/php-pam.mk
-index c35ad4f5d0..a348fb9d44 100644
---- a/package/php-pam/php-pam.mk
-+++ b/package/php-pam/php-pam.mk
+ # Locally calculated
+-sha256  9093a1f8d24dc65836027b0e239c50de8d5eaebf8396bc3331fdd38c5d69afd9  ssh2-1.3.1.tgz
++sha256  988b52e0315bb5ed725050cb02de89b541034b7be6b94623dcb2baa33f811d87  ssh2-1.4.tgz
+ sha256  ac7c56f1e416ce6e60abcf26269395128bc9e5a2e4f3293e5dcc124aac606508  LICENSE
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+index b79ac04179..e7955a2c07 100644
+--- a/package/php-ssh2/php-ssh2.mk
++++ b/package/php-ssh2/php-ssh2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_PAM_VERSION = 2.2.3
-+PHP_PAM_VERSION = 2.2.4
- PHP_PAM_SITE = http://pecl.php.net/get
- PHP_PAM_SOURCE = pam-$(PHP_PAM_VERSION).tgz
- PHP_PAM_LICENSE = PHP-3.01
+-PHP_SSH2_VERSION = 1.3.1
++PHP_SSH2_VERSION = 1.4
+ PHP_SSH2_SOURCE = ssh2-$(PHP_SSH2_VERSION).tgz
+ PHP_SSH2_SITE = https://pecl.php.net/get
+ PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
