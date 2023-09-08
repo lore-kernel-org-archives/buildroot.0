@@ -1,87 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73C90EEB566
-	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 19:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BC44EEB569
+	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 19:46:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB3434057B;
-	Fri,  8 Sep 2023 19:27:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB3434057B
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2F2F41D71;
+	Fri,  8 Sep 2023 19:46:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2F2F41D71
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7bJdzeJ_m0if; Fri,  8 Sep 2023 19:27:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dZgucfw6dsLK; Fri,  8 Sep 2023 19:46:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F47740523;
-	Fri,  8 Sep 2023 19:27:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F47740523
+	by smtp4.osuosl.org (Postfix) with ESMTP id DFF8E41C25;
+	Fri,  8 Sep 2023 19:46:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFF8E41C25
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D59AC1BF303
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 19:27:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 512231BF303
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 19:46:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC4D382FB1
- for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 19:27:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC4D382FB1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0FD7882EB5
+ for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 19:46:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FD7882EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id g87QnC-qYWBs for <buildroot@lists.busybox.net>;
- Fri,  8 Sep 2023 19:27:17 +0000 (UTC)
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com
- [IPv6:2607:f8b0:4864:20::c2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C6B2D81F47
- for <buildroot@buildroot.org>; Fri,  8 Sep 2023 19:27:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6B2D81F47
-Received: by mail-oo1-xc2b.google.com with SMTP id
- 006d021491bc7-573921661a6so1476365eaf.1
- for <buildroot@buildroot.org>; Fri, 08 Sep 2023 12:27:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694201236; x=1694806036;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ptYKjjxmqLQgs9C7Y4873pL89DfiByOj3NLb4X4VYFo=;
- b=C0qIrEh1iEN+sN0JPLla4J1cZFZqIOC7oBD/HwHFgQSybnvmTSNs5ZuHeGsRs0TpVF
- n7eCk0UZ0r//6YpnaPj9icKkm8tkNMui7kde0x153clLhUeoZ1LfT/01w8dWqQv1ldHF
- PUCtMcYKh76Zyv5dWre3bt0KBUgdoGQVNG/XZgQSP2f+69KksRoY3xzV0Pgg0tK8uiHj
- cHagsOIMSiGHrq+8Fgw+Pn9qGrAzMuMGjYteq3W1hC/U5swprB4E0Ot3XT8aJSd4oB4n
- zZh47/c2X/qB8sB4D8dH6u7u3b3fE8sTHiIqGdQ7h7GqEEbm/j9CkaRwTFToxKgLDlPJ
- AAKw==
-X-Gm-Message-State: AOJu0YyvL6T0buS0YPNBHpDNW2PUbUs8Eb5lxFYbW+iYtQBdRnlXzwRY
- Geq/lsN6Dd0BZl3XHEXwf3JN6vj8tX8=
-X-Google-Smtp-Source: AGHT+IHki1LqeHYvkQfXk0Gtk0yhjHE2JplFz/HEewngzRMRljhgxuF9MSCLOFZb816NcZTsO+MLaA==
-X-Received: by 2002:a05:6870:e305:b0:1d1:425b:802d with SMTP id
- z5-20020a056870e30500b001d1425b802dmr3717341oad.7.1694201236139; 
- Fri, 08 Sep 2023 12:27:16 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-146-15.hlrn.qwest.net.
- [97.118.146.15]) by smtp.gmail.com with ESMTPSA id
- 4-20020a0566380a4400b0042b39b2289asm635258jap.102.2023.09.08.12.27.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 08 Sep 2023 12:27:15 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  8 Sep 2023 13:27:14 -0600
-Message-Id: <20230908192714.2716398-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ with ESMTP id DGwZ3Kq0P7aU for <buildroot@lists.busybox.net>;
+ Fri,  8 Sep 2023 19:46:25 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D8BB382EAD
+ for <buildroot@buildroot.org>; Fri,  8 Sep 2023 19:46:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8BB382EAD
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6BE641BF204;
+ Fri,  8 Sep 2023 19:46:21 +0000 (UTC)
+Date: Fri, 8 Sep 2023 21:46:20 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230908214620.0d515173@windsurf>
+In-Reply-To: <20230908192714.2716398-1-james.hilliard1@gmail.com>
+References: <20230908192714.2716398-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1694201236; x=1694806036; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ptYKjjxmqLQgs9C7Y4873pL89DfiByOj3NLb4X4VYFo=;
- b=mnhV2PQ4JdxlJUVL2UYUM4rrbqvADwcXv3jcvDOE3kEIxQPPEVuEg2fzpJbW8bI2OV
- fa8wksGS2DQdHlRQqXULnG3LaTE8REjbcQ6b2+rqSBU659njoRVmWy67knfl9qU77VBB
- 7aE1NfDwQ28S7ATON5GyhX4EZCFsBO5qjm5tSIEzqvfkJEVYTy6S+94TYX4VjlOzpkH6
- UaRXvzeinG8vs6G1MYyBE6YyJxawoxK1AU6hbBHbRcmFuL5w8bKqth/9H29wlSn5Drqf
- YrwfXGVrL2+JZ1BAAwB1DK1GuRrzEjoowGXnqnjvVtOdm2TblQLiyRCwxx53TrAfE+KZ
- 8YVQ==
+ d=bootlin.com; s=gm1; t=1694202381;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Ux+zl58o94JrSuLUArb3UNknbyyNQy1Ls+LfvqPsyjU=;
+ b=GlbwI0aTpLgoFWKfOH6lt/Xa89/gC5Mmhes5j5mhX67/V5xL/erLCafhwScSSJkRheQ4iJ
+ 5WgtQU/IDXHgVI6iZfHCpwxJFqA26IP7vQtFNYNMz7doOWdSLSnby9Yk9wJjKIKHn6wJKj
+ 8uPARsTgjo1t7wKtvSu6exsKHyINLbZgtdlWvzY3HmfNuI81k5zdShnvWLoazBabhm4p7w
+ QyELUFmxLV/+7cf5KOYy5QEjpjsa3V4KD7QZGuI0BhmcPsCI/vfldeSrjvkq9dut8Yvtnp
+ XaxD1xvmwont+oj2gOImJMqLmJG1FEJw+bnYp55MoBaCSR+PigEMiAOwBgzW+g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=mnhV2PQ4
-Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.18.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GlbwI0aT
+Subject: Re: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.18.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,65 +74,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- James Hilliard <james.hilliard1@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove no longer supported soup2 config option
+On Fri,  8 Sep 2023 13:27:14 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-We now build webkit with soup3 so we need to set wpe_api to 2.0 to
-be compatible.
+> -COG_VERSION = 0.16.1
+> +COG_VERSION = 0.18.0
+>  COG_SITE = https://wpewebkit.org/releases
+>  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+>  COG_INSTALL_STAGING = YES
+> @@ -15,7 +15,7 @@ COG_CONF_OPTS = \
+>  	-Ddocumentation=false \
+>  	-Dmanpages=false \
+>  	-Dprograms=true \
+> -	-Dsoup2=enabled \
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Shouldn't this have been changed to -Dsoup2=disabled as part of commit
+dff67170f73959e6826ec3e87e892747f8d3a5fb, which changed wpewebkit to
+use libsoup3 instead of libsoup2 ?
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 2ea3ddee08..9fb386dfa0 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.16.1.tar.xz.sums
--md5  1489740db6b4ea568578035c30b8b2f4  cog-0.16.1.tar.xz
--sha1  1235203085e7ccd8fc76eab6bdfcdb2e3ae38ea9  cog-0.16.1.tar.xz
--sha256  37c5f14123b8dcf077839f6c60f0d721d2a91bb37829e796f420126e6b0d38b5  cog-0.16.1.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.18.0.tar.xz.sums
-+md5  9521458c72322e1b2e39e8b1cca93d24  cog-0.18.0.tar.xz
-+sha1  73ec1684c31de7247ecbd5e852c16cf88416bedd  cog-0.18.0.tar.xz
-+sha256  410bf70f9aa3812db72d75c25cefee421efa0391ab03dc3c37299dfaa388f4fd  cog-0.18.0.tar.xz
- 
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index da4bfc7ac6..f41c114fa5 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.16.1
-+COG_VERSION = 0.18.0
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
-@@ -15,7 +15,7 @@ COG_CONF_OPTS = \
- 	-Ddocumentation=false \
- 	-Dmanpages=false \
- 	-Dprograms=true \
--	-Dsoup2=enabled \
-+	-Dwpe_api=2.0 \
- 	-Dcog_home_uri='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
- 	-Dplatforms='$(subst $(space),$(comma),$(strip $(COG_PLATFORMS_LIST)))'
- 
+I think it makes sense to have this separate from the cog version bump.
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
