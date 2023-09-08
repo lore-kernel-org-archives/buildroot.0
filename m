@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FCB7EEB569
-	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 20:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3B44EEB566
+	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 20:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6C0D410D1;
-	Fri,  8 Sep 2023 20:02:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6C0D410D1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35C14414CE;
+	Fri,  8 Sep 2023 20:02:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35C14414CE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5y61c4aDNr6k; Fri,  8 Sep 2023 20:02:05 +0000 (UTC)
+	with ESMTP id AuG26oU-LakW; Fri,  8 Sep 2023 20:02:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77E9D4148B;
-	Fri,  8 Sep 2023 20:02:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77E9D4148B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12AA31BF997
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FA8441D77;
+	Fri,  8 Sep 2023 20:02:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA8441D77
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14DCE1BF99A
  for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:01:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E048A82F32
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFE63410D7
  for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E048A82F32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFE63410D7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jrdyVoL-5jAq for <buildroot@lists.busybox.net>;
- Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YiB1f35qHprn for <buildroot@lists.busybox.net>;
+ Fri,  8 Sep 2023 20:01:47 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C27081F3D
- for <buildroot@buildroot.org>; Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C27081F3D
+ by smtp4.osuosl.org (Postfix) with ESMTP id D65B7410B7
+ for <buildroot@buildroot.org>; Fri,  8 Sep 2023 20:01:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D65B7410B7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 062D586B2C; Fri,  8 Sep 2023 20:01:48 +0000 (UTC)
+ id C280B86B2B; Fri,  8 Sep 2023 20:01:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 8 Sep 2023 21:47:14 +0200
+Date: Fri, 8 Sep 2023 21:46:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c142cd2354846885ce9ddb6a3bb8becd2b261740
-X-Git-Newrev: 73a78cbac480e0d6740637c61d2d348bae8f9442
+X-Git-Oldrev: 1c0ec66203ca841f0d4af383403300f7024990f9
+X-Git-Newrev: c024ab1732b5fdf131ac8cfad5530225b976f610
 X-Patchwork-Hint: ignore
-Message-Id: <20230908200148.062D586B2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-ssh2: bump version to 1.4
+Message-Id: <20230908200147.C280B86B2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php-apcu: bump version to 5.1.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73a78cbac480e0d6740637c61d2d348bae8f9442
+commit: https://git.buildroot.net/buildroot/commit/?id=c024ab1732b5fdf131ac8cfad5530225b976f610
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@gmail.comm>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php-ssh2/php-ssh2.hash | 2 +-
- package/php-ssh2/php-ssh2.mk   | 2 +-
+ package/php-apcu/php-apcu.hash | 2 +-
+ package/php-apcu/php-apcu.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
-index 3fbb0b24c8..69e0b92071 100644
---- a/package/php-ssh2/php-ssh2.hash
-+++ b/package/php-ssh2/php-ssh2.hash
+diff --git a/package/php-apcu/php-apcu.hash b/package/php-apcu/php-apcu.hash
+index 3aae4120d2..4a5eadf803 100644
+--- a/package/php-apcu/php-apcu.hash
++++ b/package/php-apcu/php-apcu.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9093a1f8d24dc65836027b0e239c50de8d5eaebf8396bc3331fdd38c5d69afd9  ssh2-1.3.1.tgz
-+sha256  988b52e0315bb5ed725050cb02de89b541034b7be6b94623dcb2baa33f811d87  ssh2-1.4.tgz
- sha256  ac7c56f1e416ce6e60abcf26269395128bc9e5a2e4f3293e5dcc124aac606508  LICENSE
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
-index b79ac04179..e7955a2c07 100644
---- a/package/php-ssh2/php-ssh2.mk
-+++ b/package/php-ssh2/php-ssh2.mk
+ # Locally computed:
+-sha256  b99d40fafec06f4d132fcee53e7526ddbfc1d041ea6e04e17389dfad28f9c390  apcu-5.1.20.tgz
++sha256  010a0d8fd112e1ed7a52a356191da3696a6b76319423f7b0dfdeaeeafcb41a1e  apcu-5.1.22.tgz
+ sha256  ecc8b74820c32fb82ddee80446205408585d75d1632ac959fb3cdf8eaf3877b5  LICENSE
+diff --git a/package/php-apcu/php-apcu.mk b/package/php-apcu/php-apcu.mk
+index d381c9054f..b8eeb9de7c 100644
+--- a/package/php-apcu/php-apcu.mk
++++ b/package/php-apcu/php-apcu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_SSH2_VERSION = 1.3.1
-+PHP_SSH2_VERSION = 1.4
- PHP_SSH2_SOURCE = ssh2-$(PHP_SSH2_VERSION).tgz
- PHP_SSH2_SITE = https://pecl.php.net/get
- PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-PHP_APCU_VERSION = 5.1.20
++PHP_APCU_VERSION = 5.1.22
+ PHP_APCU_SITE = http://pecl.php.net/get
+ PHP_APCU_SOURCE = apcu-$(PHP_APCU_VERSION).tgz
+ PHP_APCU_LICENSE = PHP-3.01
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
