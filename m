@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1C6FEE57EE
-	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 10:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CF0AEE57EC
+	for <buildroot@archiver.kernel.org>; Fri,  8 Sep 2023 10:11:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F42460A8A;
-	Fri,  8 Sep 2023 10:11:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F42460A8A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 304E061303;
+	Fri,  8 Sep 2023 10:11:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 304E061303
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lTpaqEmOiygv; Fri,  8 Sep 2023 10:11:34 +0000 (UTC)
+	with ESMTP id PJ52k6eW9eza; Fri,  8 Sep 2023 10:11:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDEEB6108A;
-	Fri,  8 Sep 2023 10:11:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDEEB6108A
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 81BA51BF997
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E024610AB;
+	Fri,  8 Sep 2023 10:11:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E024610AB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F3FB1BF99A
  for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 10:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5397C401AD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 75EEA40571
  for <buildroot@lists.busybox.net>; Fri,  8 Sep 2023 10:11:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5397C401AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75EEA40571
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wtacc2Xy1ZbG for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oTn_gDZGv3mL for <buildroot@lists.busybox.net>;
  Fri,  8 Sep 2023 10:11:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E95E40042
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DD4F4009D
  for <buildroot@buildroot.org>; Fri,  8 Sep 2023 10:11:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E95E40042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DD4F4009D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C46886A99; Fri,  8 Sep 2023 10:11:18 +0000 (UTC)
+ id 5857486A96; Fri,  8 Sep 2023 10:11:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 8 Sep 2023 12:09:08 +0200
+Date: Fri, 8 Sep 2023 12:00:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9204d644a9e81bb51b938a4fe09f7ff9ea5e974c
-X-Git-Newrev: f9abda63520b0b2c14353af90b9b6160d4fadea9
+X-Git-Oldrev: 600e36f8f2cc0702b603ea62c76d90fc9cbe0394
+X-Git-Newrev: 4e80116562a126e4ea0936b6a052e269f660b71e
 X-Patchwork-Hint: ignore
-Message-Id: <20230908101118.6C46886A99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gmp: fix !RISC-V RVM conditional
- after merge of next
+Message-Id: <20230908101118.5857486A96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-engine: bump version to
+ v24.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,31 +63,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9abda63520b0b2c14353af90b9b6160d4fadea9
+commit: https://git.buildroot.net/buildroot/commit/?id=4e80116562a126e4ea0936b6a052e269f660b71e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This was added both on master and next, but the symbol was also renamed in
-next by commit cbd91e89e43d6 (arch/Config.in.riscv: allow extensions for
-generic) and resolved wrong.  Ensure we use the new symbol name.
+Bug fixes in containerd storage backend and Docker itself and a single
+new warning about old Docker image format deprecation.
 
+https://github.com/moby/moby/releases/tag/v24.0.6
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Reviewed-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gmp/gmp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 33399f5166..bd401c6a80 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -21,7 +21,7 @@ GMP_CONF_OPTS += --disable-assembly
- endif
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 061999464e..7a8b17d3f3 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  837d7d667fb64508bf6e53cb5915b4b5ef356599294ffdd5ca8678168230cb38  docker-engine-24.0.5.tar.gz
++sha256  29a8ee54e9ea008b40eebca42dec8b67ab257eb8ac175f67e79c110e4187d7d2  docker-engine-24.0.6.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 22cd2c58ed..a8f47254a4 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # GMP needs M extension for riscv assembly
--ifeq ($(BR2_riscv):$(BR2_RISCV_ISA_CUSTOM_RVM),y:)
-+ifeq ($(BR2_riscv):$(BR2_RISCV_ISA_RVM),y:)
- GMP_CONF_OPTS += --disable-assembly
- endif
+-DOCKER_ENGINE_VERSION = 24.0.5
++DOCKER_ENGINE_VERSION = 24.0.6
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
