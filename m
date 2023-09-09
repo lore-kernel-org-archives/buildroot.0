@@ -4,72 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21E7EEEB585
-	for <buildroot@archiver.kernel.org>; Sat,  9 Sep 2023 10:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD310EEB57C
+	for <buildroot@archiver.kernel.org>; Sat,  9 Sep 2023 10:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5756582259;
-	Sat,  9 Sep 2023 10:00:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5756582259
+	by smtp1.osuosl.org (Postfix) with ESMTP id 193EE82040;
+	Sat,  9 Sep 2023 10:47:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 193EE82040
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZHBh9I_yEd4u; Sat,  9 Sep 2023 10:00:20 +0000 (UTC)
+	with ESMTP id 96FibcG2LOAl; Sat,  9 Sep 2023 10:47:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A89FF82219;
-	Sat,  9 Sep 2023 10:00:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A89FF82219
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A3C121BF84C
- for <buildroot@lists.busybox.net>; Sat,  9 Sep 2023 10:00:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 666ED82043;
+	Sat,  9 Sep 2023 10:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 666ED82043
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 26BD41BF39D
+ for <buildroot@lists.busybox.net>; Sat,  9 Sep 2023 10:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C2AE41F34
- for <buildroot@lists.busybox.net>; Sat,  9 Sep 2023 10:00:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C2AE41F34
+ by smtp2.osuosl.org (Postfix) with ESMTP id 000CA4048B
+ for <buildroot@lists.busybox.net>; Sat,  9 Sep 2023 10:47:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 000CA4048B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w29w41q4IJb0 for <buildroot@lists.busybox.net>;
- Sat,  9 Sep 2023 10:00:17 +0000 (UTC)
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com
- [209.85.128.51])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6DEA941F32
- for <buildroot@buildroot.org>; Sat,  9 Sep 2023 10:00:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DEA941F32
-Received: by mail-wm1-f51.google.com with SMTP id
- 5b1f17b1804b1-401da71b7faso33165885e9.2
- for <buildroot@buildroot.org>; Sat, 09 Sep 2023 03:00:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694253615; x=1694858415;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=f6hC+ugshRJbPL8hJhx53lztj9V806y6EaRPeaKRol0=;
- b=vg/IHlx0jRzz3UshHaiwvJta+FyAGpeMfl+X5kKfaE3HInMxu+LgwxZNvodZsI0yfz
- rQkLMX3ymtotfAnwoKGvoqz8SNnqRJw3WsgzCPeGdPl6iVwZmEsiAHGRpCpJmm5NwRJv
- jRhs8ND2wKqIwBTkEshsJAx8Df78xVF9NlSjAE0yoMFrL6lyvkxZe4Ezoituj8rD6OQA
- 13LrxQOUll2LbVHSio4Q9zT0uo+MOLfZYrph26wUZ8w8xjwhytcLxEHVOB9tt7672E6l
- 4oya2QuwTCnKTaokiwftPPb//HADqC/eK7Vv5lCKY7MccLMK8pVofM1Nxs801DYEANTE
- IZYA==
-X-Gm-Message-State: AOJu0YxcOIcPMF0JpCRUdvWUa3f1JRMDakpc3Vf6TNJXJPxaOaMcwMz1
- 5pUX9LB0dRr+6r8gJmrjIf43cUtMlq88EA==
-X-Google-Smtp-Source: AGHT+IGugu5Ck76X++E8xtv1PkcrD50BlR4g+tEpPqUB8u1iHvBEZ2PGbrXM5ZGDTuKiKTjvJI0Mhg==
-X-Received: by 2002:a7b:c847:0:b0:3fe:e85b:425d with SMTP id
- c7-20020a7bc847000000b003fee85b425dmr4263503wml.9.1694253614679; 
- Sat, 09 Sep 2023 03:00:14 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:433f:f693:47d3:1b18])
- by smtp.gmail.com with ESMTPSA id
- c7-20020a7bc847000000b003fe2bea77ccsm4204633wml.5.2023.09.09.03.00.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Sep 2023 03:00:14 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u7CIYvk1NgCk for <buildroot@lists.busybox.net>;
+ Sat,  9 Sep 2023 10:47:18 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9D0BC400B9
+ for <buildroot@buildroot.org>; Sat,  9 Sep 2023 10:47:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D0BC400B9
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5F5EE13F8B9;
+ Sat,  9 Sep 2023 12:47:14 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat,  9 Sep 2023 12:00:10 +0200
-Message-Id: <20230909100010.9386-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sat,  9 Sep 2023 12:47:07 +0200
+Message-ID: <20230909104707.491203-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1] package/webkitgtk: select wpebackend-fdo if
- wayland target is enabled
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1694256435;
+ bh=78tz1AL9iBIAFoYtCp92FmO68td15gvStQXec1Cm9Rs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=mRCmOrlQ3sAw1OJPuDrd7OmTUslZecUGpyEWVdi5BwXQmS44W/qFuvm7L8ISF7czY
+ H4q5Oe0W3srOv2Cbc5aIrogJ16W+StQOFacFVG6HHf3EThb9uXRjxQlwlHyKUGGvvU
+ EXUhdy38uxUmFKVKAJYwRS9cysOGR83ilRA4I7AVmmqsB6fZJaOmzR8cHhy2mgzAyW
+ E1ZB1svEjoiysTw9PVaTGsPtH3HGgpbf4ChLgHhGchcPoVhpSzRiTqz15kFsQs2pYO
+ Xr2kW9nfn5sIMymGG39Fl5cBn+t/UziaEnTgueM+doCcvkATk+oVb4J5D/+r/QtxAF
+ DHantcgzrk8zQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mRCmOrlQ
+Subject: [Buildroot] [PATCH 1/1] package/zynaddsubfx: fix uclibc compile
+ error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,56 +71,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+When compiling with uclibc, build fails with errors, such as:
 
-libwep & wpebackend-fdo are mandatory if ENABLE_WAYLAND_TARGET and EGL_FOUND
-https://github.com/WebKit/WebKit/blob/2e35890b1fa9da39ffaa88e0acd973beb55d4ad2/Source/cmake/OptionsGTK.cmake#L388-L400
+    In file included from /build/zynaddsubfx-3.0.6/src/Nio/NulEngine.h:21,
+                     from /build/zynaddsubfx-3.0.6/src/Nio/NulEngine.cpp:14:
+    /build/zynaddsubfx-3.0.6/src/Nio/MidiIn.h:37:9: error: 'uint8_t' does not name a type
+       37 |         uint8_t midiSysEx(unsigned char data);
+          |         ^~~~~~~
 
-egl is mandatory if ENABLE_WAYLAND_TARGET
-https://github.com/WebKit/WebKit/blob/2e35890b1fa9da39ffaa88e0acd973beb55d4ad2/Source/cmake/OptionsGTK.cmake#L462-L473
+This commit fixes the issue by adding upstream patches, not yet
+included in a release.
 
-So wpebackend-fdo (-> libwpe) has to be selected if BR2_PACKAGE_LIBGTK3_WAYLAND.
+Fixes:
+http://autobuild.buildroot.net/results/97b5a30c7be820ac91e745cf60f9b759e962aa5c
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/webkitgtk/Config.in    | 1 +
- package/webkitgtk/webkitgtk.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ ...1-MidiIn-Add-stdint.h-header-include.patch | 26 +++++++++++++++++
+ ...002-Bank-Add-stdint.h-header-include.patch | 28 +++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 package/zynaddsubfx/0001-MidiIn-Add-stdint.h-header-include.patch
+ create mode 100644 package/zynaddsubfx/0002-Bank-Add-stdint.h-header-include.patch
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 748e529208..ccea3eb053 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -53,6 +53,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
- 	select BR2_PACKAGE_WOFF2
-+	select BR2_PACKAGE_WPEBACKEND_FDO if BR2_PACKAGE_LIBGTK3_WAYLAND
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
- 	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 39dcaddcd8..083d62c787 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -129,7 +129,7 @@ ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
- WEBKITGTK_DEPENDENCIES += libegl
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND)$(BR2_PACKAGE_WPEBACKEND_FDO),yy)
-+ifeq ($(BR2_PACKAGE_WPEBACKEND_FDO),y)
- WEBKITGTK_CONF_OPTS += -DUSE_WPE_RENDERER=ON
- WEBKITGTK_DEPENDENCIES += wpebackend-fdo
- else
+diff --git a/package/zynaddsubfx/0001-MidiIn-Add-stdint.h-header-include.patch b/package/zynaddsubfx/0001-MidiIn-Add-stdint.h-header-include.patch
+new file mode 100644
+index 0000000000..ea4eb66190
+--- /dev/null
++++ b/package/zynaddsubfx/0001-MidiIn-Add-stdint.h-header-include.patch
+@@ -0,0 +1,26 @@
++From 4f1565f18cf71867f25f31c50c3a5e6995f49ae6 Mon Sep 17 00:00:00 2001
++From: fundamental <mark.d.mccurry@gmail.com>
++Date: Sat, 22 Apr 2023 10:21:09 -0400
++Subject: [PATCH] MidiIn: Add stdint.h header include
++
++Upstream: https://github.com/zynaddsubfx/zynaddsubfx/commit/70905c96fe7b9ffde19bc4bc05b0dc53a1ed1707
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ src/Nio/MidiIn.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/Nio/MidiIn.h b/src/Nio/MidiIn.h
++index ce0bcfec..c6b30c61 100644
++--- a/src/Nio/MidiIn.h
+++++ b/src/Nio/MidiIn.h
++@@ -17,6 +17,7 @@
++ #define MIDI_IN_H
++ 
++ #include "Engine.h"
+++#include <stdint.h>//uint8_t
++ 
++ namespace zyn {
++ 
++-- 
++2.41.0
++
+diff --git a/package/zynaddsubfx/0002-Bank-Add-stdint.h-header-include.patch b/package/zynaddsubfx/0002-Bank-Add-stdint.h-header-include.patch
+new file mode 100644
+index 0000000000..556854a9e2
+--- /dev/null
++++ b/package/zynaddsubfx/0002-Bank-Add-stdint.h-header-include.patch
+@@ -0,0 +1,28 @@
++From eab3bc1712e5af7e6aef942a24e833ce2c429436 Mon Sep 17 00:00:00 2001
++From: fundamental <mark.d.mccurry@gmail.com>
++Date: Wed, 19 Apr 2023 21:52:01 -0400
++Subject: [PATCH] Bank: Add stdint.h header include
++
++As uint8_t is used, this header should be included.
++
++Upstream: https://github.com/zynaddsubfx/zynaddsubfx/commit/f384d92486d6b515cb628d0f52008a9e03341d8c
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ src/Misc/Bank.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/Misc/Bank.h b/src/Misc/Bank.h
++index 5120441a..3f324dd8 100644
++--- a/src/Misc/Bank.h
+++++ b/src/Misc/Bank.h
++@@ -18,6 +18,7 @@
++ #include <vector>
++ #include "../globals.h"
++ #include "Config.h"
+++#include <stdint.h>
++ 
++ //entries in a bank
++ #define BANK_SIZE 160
++-- 
++2.41.0
++
 -- 
-2.34.1
+2.41.0
 
 _______________________________________________
 buildroot mailing list
