@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2BE4EE57DF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:26:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD504EE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:27:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 237B46062F;
-	Sun, 10 Sep 2023 16:26:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 237B46062F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AAF460672;
+	Sun, 10 Sep 2023 16:27:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AAF460672
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uETcgMBg0Mdi; Sun, 10 Sep 2023 16:26:46 +0000 (UTC)
+	with ESMTP id 4Jmwp6JkeIBK; Sun, 10 Sep 2023 16:27:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 846A1605BE;
-	Sun, 10 Sep 2023 16:26:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 846A1605BE
+	by smtp3.osuosl.org (Postfix) with ESMTP id A04F46062F;
+	Sun, 10 Sep 2023 16:27:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A04F46062F
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3780E1BF2A3
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:26:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8DF131BF2A3
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:26:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 10E3F60A8A
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:26:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10E3F60A8A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A0FC605BE
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:26:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A0FC605BE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oTcpcRaFr1HB for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 16:26:42 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 32271607F5
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:26:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32271607F5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8BA2C240004;
- Sun, 10 Sep 2023 16:26:38 +0000 (UTC)
-Date: Sun, 10 Sep 2023 18:26:37 +0200
-To: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Message-ID: <20230910182637.180ac9dc@windsurf>
-In-Reply-To: <20230905064554.806567-1-fido_max@inbox.ru>
-References: <20230905064554.806567-1-fido_max@inbox.ru>
+ with ESMTP id 8RBkHzezy_86 for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 16:26:47 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2FDB860655
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:26:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FDB860655
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E4E4940007;
+ Sun, 10 Sep 2023 16:26:43 +0000 (UTC)
+Date: Sun, 10 Sep 2023 18:26:42 +0200
+To: Maxim Kochetkov <fido_max@inbox.ru>
+Message-ID: <20230910182642.7ade80c5@windsurf>
+In-Reply-To: <20230905071119.1277036-1-fido_max@inbox.ru>
+References: <20230905071119.1277036-1-fido_max@inbox.ru>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1694363199;
+ d=bootlin.com; s=gm1; t=1694363204;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=jhy46m8GRKmxjgufdC9C5RoxiKXlhqFkz+g9WK2SM0k=;
- b=D78ikYD/c596H8Q0T2GeJ5rhI1k5DOhUoktBLTKfIGe0moK3sl4Zmyh7uU8fNJu5yTkqKu
- n9MqiwE7cI8jfnb0TAdilRAe5+TsOr0QdXPH6qHTufYXuMZWVLLDNUJhWYPbxI/UM8dcpW
- Iy4r0sJfdz3edBaLKHgJkVOBht/EyFp8GxrA8+525DUZwehq2LcrRJmnQm7NdwwKsiLCOk
- IMj2z/oPcpQyNjjvvbHr5Pz0wiGGYFXLB8iinpgoAU65DodYNhtpFEZdmj3ZDeOcfzb8WY
- OEIiqddIsQgO1xAymrtdBzt72dzSQtUBjumpfPUsikgnUAN3CbYuhXuT4IOnVw==
+ bh=S0xGx7vIUEXzV5AayL+iVZw5d8sO++QSyKFbWNKUABU=;
+ b=dufHJkaW8rzi61kJ0WbHT43pG6p7mtq+Y8T8fYXPbU0i8E5LxSEDYjLXpA5FdjKoTvWPx1
+ MSwiZMHv6WCQ1nkK3o0O+HoW2szic7/Gj6d+DP2IlsZaEMfsyaZQxJzUkyZWbNpx+rFrHd
+ 2UINK59esIBHvKNyxK/wbh/w1DMiSQMwuBdCnpRZEMvI4rxAW1vzAeXRlBXugL+rP1UAU9
+ P+lXk/Xgy3oHYdufyOAzDMX483bckIxsvQcSJ9upRparlghZAQRiQ5PW/VMOHVzfdvEgyT
+ WxX8HjNkAzhclo7u8kTZTMgx5z1qCuNHPZN4Nk+6emT8qRJtq6oqhPnYLD5pPg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=D78ikYD/
-Subject: Re: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to
- 2.11.2
+ header.s=gm1 header.b=dufHJkaW
+Subject: Re: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 1.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,22 +76,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue,  5 Sep 2023 09:45:54 +0300
-Maxim Kochetkov via buildroot <buildroot@buildroot.org> wrote:
+On Tue,  5 Sep 2023 10:11:19 +0300
+Maxim Kochetkov <fido_max@inbox.ru> wrote:
 
-> Release notes: https://github.com/timescale/timescaledb/blob/2.11.2/CHANGELOG.md
+> Release-notes: https://github.com/openstreetmap/osm2pgsql/releases/tag/1.9.2
 > 
 > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 > ---
->  package/timescaledb/timescaledb.hash | 2 +-
->  package/timescaledb/timescaledb.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/osm2pgsql/Config.in      | 1 +
+>  package/osm2pgsql/osm2pgsql.hash | 2 +-
+>  package/osm2pgsql/osm2pgsql.mk   | 4 ++--
+>  3 files changed, 4 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
