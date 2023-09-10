@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B761EE57DF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58B6EEEB57B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 184D560BE8;
-	Sun, 10 Sep 2023 16:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 184D560BE8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 063C660C00;
+	Sun, 10 Sep 2023 16:35:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 063C660C00
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 15cmvZ2EgewS; Sun, 10 Sep 2023 16:28:27 +0000 (UTC)
+	with ESMTP id zuiljbZ_iy9r; Sun, 10 Sep 2023 16:35:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4402D606EB;
-	Sun, 10 Sep 2023 16:28:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4402D606EB
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4E5B31BF2A3
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:28:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B38C60736;
+	Sun, 10 Sep 2023 16:35:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B38C60736
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 39C0C1BF263
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2743C402A6
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:28:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2743C402A6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 205C1606F2
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:35:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 205C1606F2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Isfne6rH57_C for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 16:28:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S-trLLnBLSO3 for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 16:35:04 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E07A940162
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:28:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E07A940162
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3732260BF0
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:35:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3732260BF0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAE6386A1F; Sun, 10 Sep 2023 16:28:10 +0000 (UTC)
+ id 23AE186B45; Sun, 10 Sep 2023 16:35:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 10 Sep 2023 18:27:41 +0200
+Date: Sun, 10 Sep 2023 18:32:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1dff18f6645d321dd3d678b6c1f204ad4aa2071
-X-Git-Newrev: b86542085df87da91057017b17f261a213bfd918
+X-Git-Oldrev: b492a5414e49ea18309eb17e8f1d3cc81d92b3fa
+X-Git-Newrev: fc942d50334d7fa831f0d47d46aa013f6f26ef5d
 X-Patchwork-Hint: ignore
-Message-Id: <20230910162810.CAE6386A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/swupdate: bump to version 2023.05
+Message-Id: <20230910163504.23AE186B45@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_screen.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,98 +64,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b86542085df87da91057017b17f261a213bfd918
+commit: https://git.buildroot.net/buildroot/commit/?id=fc942d50334d7fa831f0d47d46aa013f6f26ef5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ISC license hash changed due to text update:
-https://github.com/sbabic/swupdate/commit/d217a9b10e7b25296db4899beabc2de2b379c921
-
-Set new HAVE_LIBEBGENV and HAVE_LIBUBOOTENV env variables.
-
-Apply latest updates to swupdate-usb@.service from:
-https://github.com/sbabic/meta-swupdate/commit/d5f84e74aada1212ed877509bdc546dca468451b
-https://github.com/sbabic/meta-swupdate/commit/dac7b2d10ec84b2b6de9afadc12419398ea73615
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/swupdate/swupdate-usb@.service | 10 ++++++----
- package/swupdate/swupdate.hash         |  4 ++--
- package/swupdate/swupdate.mk           |  8 +++++++-
- 3 files changed, 15 insertions(+), 7 deletions(-)
+ DEVELOPERS                                   |  1 +
+ support/testing/tests/package/test_screen.py | 61 ++++++++++++++++++++++++++++
+ 2 files changed, 62 insertions(+)
 
-diff --git a/package/swupdate/swupdate-usb@.service b/package/swupdate/swupdate-usb@.service
-index df1a408421..28d805f8ec 100644
---- a/package/swupdate/swupdate-usb@.service
-+++ b/package/swupdate/swupdate-usb@.service
-@@ -1,9 +1,11 @@
- [Unit]
- Description=usb media swupdate service
- Requires=swupdate.service
--Requires=swupdate-progress.service
-+Wants=swupdate-progress.service
- 
- [Service]
--ExecStartPre=/bin/mount /dev/%I /mnt
--ExecStart=/bin/sh -c "swupdate-client -v /mnt/*.swu"
--ExecStopPost=/bin/umount /mnt
-+ExecStartPre=/bin/mkdir -p /tmp/%I
-+ExecStartPre=/bin/mount /dev/%I /tmp/%I
-+ExecStart=/bin/sh -c "swupdate-client -v /tmp/%I/*.swu"
-+ExecStopPost=/bin/umount /tmp/%I
-+ExecStopPost=/bin/rmdir /tmp/%I
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 1b26f9e5e2..72b71ce12d 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,12 +1,12 @@
- # Locally calculated
--sha256  e6335e87812a98a87f1c55df03c9f4e4ef042789570002c5db120b09f64b0d86  swupdate-2022.12.tar.gz
-+sha256  888df5050035e4fbe14e3a964885646fa3163e727f78c423c3d24c28f7a50b66  swupdate-2023.05.tar.gz
- sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
- sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
- sha256  cde7883b9050a1104f4ac19a1572aafd6e5d7323b68351aaf51fbf4beba54966  LICENSES/CC-BY-SA-4.0.txt
- sha256  5d51b52a40391a26cbb2accf5dc5d1c165de49a022d9d5efb50b22204d2682ec  LICENSES/GPL-2.0-only.txt
- sha256  43fd695e9b198a9a4997cc2d02e10d26cae937e2c4930b9eff9c6d349c85cd32  LICENSES/GPL-2.0-or-later.txt
--sha256  492e801f1b0632185431472f148885a4fe8e990b10da57b4986a8bcf140a5374  LICENSES/ISC.txt
-+sha256  f8f41f38133176a6db6c1bd8d7bd1a9c910e3563f1cb7bbe32b05e8b8d3a9c61  LICENSES/ISC.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
- sha256  8f2368a292194be10b1223a8875815240a9208bb30785cb13d8849eb6a750fe9  LICENSES/OFL-1.1.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 84905d2e0a..ea4a5a62e5 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2022.12
-+SWUPDATE_VERSION = 2023.05
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
- SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
-@@ -24,6 +24,9 @@ SWUPDATE_INSTALL_STAGING = YES
- # TARGET_CC is used for both.
- SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)" SKIP_STRIP=y
- 
-+# we don't package EFI Boot Guard/libebgenv
-+SWUPDATE_MAKE_ENV += HAVE_LIBEBGENV=n
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a7410d61fa..a0e2dcca27 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1768,6 +1768,7 @@ F:	support/testing/tests/package/test_python_pyalsa.py
+ F:	support/testing/tests/package/test_python_spake2.py
+ F:	support/testing/tests/package/test_rdma_core.py
+ F:	support/testing/tests/package/test_rdma_core/
++F:	support/testing/tests/package/test_screen.py
+ F:	support/testing/tests/package/test_stress_ng.py
+ F:	support/testing/tests/package/test_weston.py
+ F:	support/testing/tests/package/test_weston/
+diff --git a/support/testing/tests/package/test_screen.py b/support/testing/tests/package/test_screen.py
+new file mode 100644
+index 0000000000..b6264d34df
+--- /dev/null
++++ b/support/testing/tests/package/test_screen.py
+@@ -0,0 +1,61 @@
++import os
 +
- # swupdate bundles its own version of mongoose (version 6.16)
- 
- ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
-@@ -84,6 +87,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
- SWUPDATE_DEPENDENCIES += libubootenv
-+SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
-+else
-+SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=n
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBURIPARSER),y)
++import infra.basetest
++
++
++class TestScreen(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_SCREEN=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        session_name = "BuildrootSession"
++        message = "HelloBuildroot"
++        screen_dump = "screen.dump.txt"
++
++        # Check the program can execute
++        self.assertRunOk("screen --version")
++
++        # There is no "screen" running yet. Listing sessions is
++        # expected to fail.
++        _, exit_code = self.emulator.run("screen -ls")
++        self.assertNotEqual(exit_code, 0)
++
++        # We now start a detached and named session.
++        self.assertRunOk(f"screen -dmS {session_name}")
++
++        # Since we are supposed to have a running session, it should
++        # appear in the list.
++        output, exit_code = self.emulator.run("screen -ls")
++        self.assertEqual(exit_code, 0)
++        self.assertIn(session_name, "\n".join(output))
++
++        # We send an exec command to print a message in the "screen"
++        # display running in background.
++        cmd = f"screen -S {session_name} -X exec printf {message}"
++        self.assertRunOk(cmd)
++
++        # We request a hardcopy of this "screen" display.
++        cmd = f"screen -S {session_name} -X hardcopy {screen_dump}"
++        self.assertRunOk(cmd)
++
++        # The dump file is supposed to contain our message.
++        self.assertRunOk(f"grep -Fo '{message}' {screen_dump}")
++
++        # We request "screen" to quit...
++        cmd = f"screen -S {session_name} -X quit"
++        self.assertRunOk(cmd)
++
++        # Since the session is supposed to be terminated, listing
++        # sessions is expected to fail (again).
++        _, exit_code = self.emulator.run("screen -ls")
++        self.assertNotEqual(exit_code, 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
