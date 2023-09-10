@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F6DCEE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B8ECEEB57E
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BD77B405B7;
-	Sun, 10 Sep 2023 21:46:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD77B405B7
+	by smtp2.osuosl.org (Postfix) with ESMTP id E9BC940993;
+	Sun, 10 Sep 2023 21:46:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9BC940993
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0D3VMjYgjBO2; Sun, 10 Sep 2023 21:46:01 +0000 (UTC)
+	with ESMTP id BAaPlDomzqr4; Sun, 10 Sep 2023 21:46:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF8DD40533;
-	Sun, 10 Sep 2023 21:46:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF8DD40533
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DAD2D1BF573
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:44:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CA4D40AFC;
+	Sun, 10 Sep 2023 21:46:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CA4D40AFC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 11ADE1BF8C7
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:44:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B4DAF6073F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 751E540A17
  for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:44:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4DAF6073F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 751E540A17
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Dt7_RSybOa56 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EYZSM76JvB9J for <buildroot@lists.busybox.net>;
  Sun, 10 Sep 2023 21:44:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6D0C60737
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9A874052B
  for <buildroot@buildroot.org>; Sun, 10 Sep 2023 21:44:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6D0C60737
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A874052B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B66A386BFA; Sun, 10 Sep 2023 21:44:36 +0000 (UTC)
+ id 9743D86BF7; Sun, 10 Sep 2023 21:44:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Sep 2023 23:39:15 +0200
+Date: Sun, 10 Sep 2023 23:17:21 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7cf98ac971d721593f57a9b030ee4870c3df53de
-X-Git-Newrev: 854e5a54008d74211be9e5dcc55048f8e0084898
+X-Git-Oldrev: 7abf2347be71808f894c34dce9168e5e076ddb2e
+X-Git-Newrev: 1d266076669a66c477bb69798b4f304cbeeb65ed
 X-Patchwork-Hint: ignore
-Message-Id: <20230910214436.B66A386BFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] board/versal: clean
- shellcheck issues
+Message-Id: <20230910214436.9743D86BF7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/stellarium:
+ disable ShowMySky atmosphere model
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,88 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=854e5a54008d74211be9e5dcc55048f8e0084898
+commit: https://git.buildroot.net/buildroot/commit/?id=1d266076669a66c477bb69798b4f304cbeeb65ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-This patch cleans up the shellcheck issues in the versal post scripts.
+Buildroot commit 319c56dfe3309dbf24be01fed3afff6259a2c5dd bumped
+stellarium which included these commits
+https://github.com/Stellarium/stellarium/commit/b3f02beaec2a285251db1e1707abe2e423803834
+https://github.com/Stellarium/stellarium/commit/5d5edd0e5f5630872628a1525685b77854b6e4b4
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+It downloads external packages during the build:
+
+$ find output/build/stellarium-23.2/ -iname *.tar.*
+output/build/stellarium-23.2/_deps/eigen3-subbuild/eigen3-populate-prefix/src/eigen-3.4.0.tar.bz2
+output/build/stellarium-23.2/_deps/showmysky-qt5-subbuild/showmysky-qt5-populate-prefix/src/v0.3.1.tar.gz
+
+which breaks offline builds.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2b738044edbed64e313a2b4f275a70e02e5bc143)
+(cherry picked from commit 2616272339073834c262bc46fdf995fdaa91acf7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore        |  2 --
- board/versal/post-build.sh |  5 ++---
- board/versal/post-image.sh | 14 +++++++-------
- 3 files changed, 9 insertions(+), 12 deletions(-)
+ package/stellarium/stellarium.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index bad664e6d3..5059310cd4 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -99,8 +99,6 @@ board/technologic/ts4900/post-image.sh Shellcheck
- board/toradex/apalis-imx6/post-image.sh Shellcheck
- board/udoo/common/post-build.sh Shellcheck
- board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch Upstream
--board/versal/post-build.sh Shellcheck
--board/versal/post-image.sh Shellcheck TrailingSpace
- board/zynqmp/kria/patches/uboot/v1-0001-makefile-add-multi_dtb_fit-dep.patch ApplyOrder Upstream
- boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch Upstream
- boot/at91bootstrap/0001-eabi-fix.patch Upstream
-diff --git a/board/versal/post-build.sh b/board/versal/post-build.sh
-index ff8f8a6071..ed08ea2d49 100755
---- a/board/versal/post-build.sh
-+++ b/board/versal/post-build.sh
-@@ -3,9 +3,8 @@
- # genimage will need to find the extlinux.conf
- # in the binaries directory
- 
--BOARD_DIR="$(dirname $0)"
--CONSOLE=$2
--ROOT=$3
-+CONSOLE="$2"
-+ROOT="$3"
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/extlinux.conf"
-diff --git a/board/versal/post-image.sh b/board/versal/post-image.sh
-index 92e65ed3b7..1d9802c34d 100755
---- a/board/versal/post-image.sh
-+++ b/board/versal/post-image.sh
-@@ -6,12 +6,12 @@
- 
- FIRST_DT=$(sed -nr \
-                -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="(xilinx/)?([-_/[:alnum:]\\.]*).*"$|\2|p' \
--               ${BR2_CONFIG})
-+               "${BR2_CONFIG}")
- 
--[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
-+[ -z "${FIRST_DT}" ] || ln -fs "${FIRST_DT}.dtb" "${BINARIES_DIR}/system.dtb"
- 
--BOARD_DIR="$(dirname $0)"
--BOARD_NAME=$4
-+BOARD_DIR="$(dirname "$0")"
-+BOARD_NAME="$4"
- 
- mkdir -p "${BINARIES_DIR}"
- cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
-@@ -23,7 +23,7 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	    { core=psm, file=${BINARIES_DIR}/${BOARD_NAME}_psmfw.elf }
- 	  }
- 	  image {
--	    id = 0x1c000000, name=apu_subsystem 
-+	    id = 0x1c000000, name=apu_subsystem
- 	    { type=raw, load=0x00001000, file=${BINARIES_DIR}/u-boot.dtb }
- 	    { core=a72-0, exception_level=el-3, trustzone, file=${BINARIES_DIR}/bl31.elf }
- 	    { core=a72-0, exception_level=el-2, file=${BINARIES_DIR}/u-boot.elf }
-@@ -31,5 +31,5 @@ cat <<-__HEADER_EOF > "${BINARIES_DIR}/bootgen.bif"
- 	}
- 	__HEADER_EOF
- 
--${HOST_DIR}/bin/bootgen -arch versal -image ${BINARIES_DIR}/bootgen.bif -o ${BINARIES_DIR}/boot.bin -w on
--support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
-+"${HOST_DIR}/bin/bootgen" -arch versal -image "${BINARIES_DIR}/bootgen.bif" -o "${BINARIES_DIR}/boot.bin" -w on
-+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 7b48131912..fe7aaf6ac9 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -18,6 +18,7 @@ STELLARIUM_DEPENDENCIES = \
+ STELLARIUM_CONF_OPTS = \
+ 	-DENABLE_MEDIA=ON \
+ 	-DENABLE_NLS=OFF \
++	-DENABLE_SHOWMYSKY=OFF \
+ 	-DENABLE_QTWEBENGINE=OFF \
+ 	-DENABLE_QT6=OFF \
+ 	-DENABLE_XLSX=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
