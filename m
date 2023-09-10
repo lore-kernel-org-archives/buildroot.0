@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6BC6EE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:53:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2868CC71153
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:55:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5583B4051B;
-	Sun, 10 Sep 2023 21:53:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5583B4051B
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4833409C8;
+	Sun, 10 Sep 2023 21:54:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4833409C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kePNeYjDKkUL; Sun, 10 Sep 2023 21:53:52 +0000 (UTC)
+	with ESMTP id bhNR7U9_n5LI; Sun, 10 Sep 2023 21:54:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 941B440ACE;
-	Sun, 10 Sep 2023 21:53:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 941B440ACE
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C1AAF1BF573
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:53:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EEBD54059B;
+	Sun, 10 Sep 2023 21:54:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEBD54059B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C75411BF573
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AB4A40351
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:53:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AB4A40351
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0AE560B06
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:54:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0AE560B06
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uHDj1sb6KY6r for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 21:53:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dG-o1f7OIbAm for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 21:54:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B5944034C
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 21:53:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B5944034C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 831AE60797
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 21:54:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 831AE60797
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6799E86BFD; Sun, 10 Sep 2023 21:53:42 +0000 (UTC)
+ id 72E8186C04; Sun, 10 Sep 2023 21:54:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Sep 2023 23:50:40 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: bf06180dc8718b755dc2347d30cdd76508d2acc2
-X-Git-Newrev: f16afb8d9f2b410fcb190874b59971fef16dfeca
+Date: Sun, 10 Sep 2023 23:50:13 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 072e6d0cffb12ab288fe5883cc60e10bc51f7197
+X-Git-Newrev: 00316d993a186b96f4f643cfe246247a3c34d17d
 X-Patchwork-Hint: ignore
-Message-Id: <20230910215342.6799E86BFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] less: use default "make
+Message-Id: <20230910215455.72E8186C04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] less: use default "make
  install" behavior
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f16afb8d9f2b410fcb190874b59971fef16dfeca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=00316d993a186b96f4f643cfe246247a3c34d17d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 The less package currently installs only the "less" binary, rather
 than running the default "make install" behavior from the autotools
@@ -88,7 +88,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 4 deletions(-)
 
 diff --git a/package/less/less.mk b/package/less/less.mk
-index f01f94d6c8..2c68ac5a11 100644
+index dfbd411863..c4049c074a 100644
 --- a/package/less/less.mk
 +++ b/package/less/less.mk
 @@ -14,8 +14,4 @@ LESS_DEPENDENCIES = ncurses
