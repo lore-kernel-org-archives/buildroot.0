@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2929C71153
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:45:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14A1EEE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 599D5409C8;
-	Sun, 10 Sep 2023 21:45:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 599D5409C8
+	by smtp2.osuosl.org (Postfix) with ESMTP id C151B40610;
+	Sun, 10 Sep 2023 21:45:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C151B40610
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B5TaRYRzEzSB; Sun, 10 Sep 2023 21:45:12 +0000 (UTC)
+	with ESMTP id iNhme85iWEf2; Sun, 10 Sep 2023 21:45:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 864C74051B;
-	Sun, 10 Sep 2023 21:45:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 864C74051B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 13D024051B;
+	Sun, 10 Sep 2023 21:45:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13D024051B
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 683491BF8C7
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:43:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E0781BF8C7
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47D5340051
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:43:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47D5340051
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64E9840914
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:43:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64E9840914
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GmLQy7E-8CrX for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 21:43:30 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 70C8C40114
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 21:43:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70C8C40114
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F95586BC4; Sun, 10 Sep 2023 21:43:30 +0000 (UTC)
+ with ESMTP id JcBcCF2dxAxx for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 21:43:52 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 76C6640048
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 21:43:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76C6640048
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 96642C0003;
+ Sun, 10 Sep 2023 21:43:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qfSDd-00CuZU-O5; Sun, 10 Sep 2023 23:43:49 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 10 Sep 2023 23:36:11 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 5a7695bf97555e104d7722225487ff1c2bc16bad
-X-Git-Newrev: 0f0cd8003166cdfe05a8520ab97a7edcdf5d080c
-X-Patchwork-Hint: ignore
-Message-Id: <20230910214330.5F95586BC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] boot/at91dataflashboot:
- force arm mode instead of Thumb mode
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20230803181544.3064901-1-bernd@kuhls.net>
+Date: Sun, 10 Sep 2023 23:43:49 +0200
+In-Reply-To: <20230803181544.3064901-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Thu, 3 Aug 2023 20:15:44 +0200")
+Message-ID: <87bke9emay.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] {linux,
+ linux-headers}: bump 5.15.x / 6.{1, 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f0cd8003166cdfe05a8520ab97a7edcdf5d080c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-The at91dataflashboot code contains some hand-written ARM assembly
-that uses ARM classic instructions, and will not build in Thumb-1
-mode.
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-This issue has always existed in Buildroot, but it's only since we
-started testing random configurations, including Thumb-1
-configurations, that this issue popped up.
+Committed to 2023.02.x and 2023.05.x, thanks.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/68bf2291201ef1882d8e8d3eca2b1a5ad731e4b0/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 07acc00add7ac09114f3c01b85d794a31c68229c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/at91dataflashboot/at91dataflashboot.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
-index c66f27e343..cb329a90df 100644
---- a/boot/at91dataflashboot/at91dataflashboot.mk
-+++ b/boot/at91dataflashboot/at91dataflashboot.mk
-@@ -11,9 +11,14 @@ AT91DATAFLASHBOOT_SITE = ftp://www.at91.com/pub/buildroot
- AT91DATAFLASHBOOT_INSTALL_TARGET = NO
- AT91DATAFLASHBOOT_INSTALL_IMAGES = YES
- 
-+AT91DATAFLASHBOOT_CFLAGS = $(TARGET_CFLAGS) -fno-stack-protector
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+AT91DATAFLASHBOOT_CFLAGS += -marm
-+endif
-+
- define AT91DATAFLASHBOOT_BUILD_CMDS
- 	make -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) \
--		CFLAGS="$(TARGET_CFLAGS) -fno-stack-protector"
-+		CFLAGS="$(AT91DATAFLASHBOOT_CFLAGS)"
- endef
- 
- define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
