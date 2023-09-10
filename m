@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A916BEE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D98BEEB57B
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63F1C60E4A;
-	Sun, 10 Sep 2023 16:36:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63F1C60E4A
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA32560BF0;
+	Sun, 10 Sep 2023 16:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA32560BF0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EBZYOIn2l0Jo; Sun, 10 Sep 2023 16:36:17 +0000 (UTC)
+	with ESMTP id bJn9TdUR_MV6; Sun, 10 Sep 2023 16:36:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7F0060BF0;
-	Sun, 10 Sep 2023 16:36:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7F0060BF0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E14651BF263
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:36:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 169B660F14;
+	Sun, 10 Sep 2023 16:36:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 169B660F14
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 44E311BF263
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B92A8409A8
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:36:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B92A8409A8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E3E460BF0
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:36:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E3E460BF0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1-xTRShcgoh8 for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 16:36:13 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 32AD64099B
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:36:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32AD64099B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B26B1C0008;
- Sun, 10 Sep 2023 16:36:09 +0000 (UTC)
-Date: Sun, 10 Sep 2023 18:36:08 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20230910183608.246a96a5@windsurf>
-In-Reply-To: <20230910041001.1356119-1-james.hilliard1@gmail.com>
-References: <20230910041001.1356119-1-james.hilliard1@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2fZi5TAAYv5J for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 16:36:18 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B137960BE8
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:36:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B137960BE8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5A9B41BF206;
+ Sun, 10 Sep 2023 16:36:14 +0000 (UTC)
+Date: Sun, 10 Sep 2023 18:36:13 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230910183613.02a16300@windsurf>
+In-Reply-To: <20230910142739.555507-1-ju.o@free.fr>
+References: <20230910142739.555507-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1694363770;
+ d=bootlin.com; s=gm1; t=1694363774;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=qn8RvynNg512xD+K1Z2GFMAdKku1DTaWRJxbdIeK/l4=;
- b=TK+ugCn27DeZ343pmrDzKsu0vxnRai0+pi518ycNeKlVBevEaHOuEooIJdOI2dAcbDfoBC
- Nj5VJR0b3O0KzdlC6snJihfPcU0AffvP89JQxZtJCqN+vL630mL/fXAnQxsT2AMx/7RVcf
- HhAwDz12lzd+DpqBNReSwkPDbCgeCAx0XeoxuMnlGfnxTjVJbVqRHc7Qo+PqnrLstCowvm
- GofubqgDaCxcvMZnTyY210Q7/UpMrXXD3png7rni88N7Cyfzw8Xqc8qyakEei5gnB/ef+z
- 71mcSaVcu/OmU5BHn2eGEddaYQjWTUu4om3ucplA+2Kv+u0pTBdiDrpsXml4BQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=05H6zRn/qwe5biyAF/lrEl56HvbAgzCq3qhlsPIN8bc=;
+ b=giO05UKadD9/0lnaw+FP5ePky47XaH/dEg4fVbqAljCyr7v0ntLmypko1MoqK6y6GnWXU4
+ nWEv8BgUJnJjpkVwJfjx3ADqX8TNOX+xUplpK/n9DZ2vElmuK6xNgDtQpXF7F26tWCoFIY
+ VuUvXLxkYTqM0jRGaNEtyUOhImT3oQ9Yl8JvsYoY116qYjpCuzI9a6Dd/cLLfPqcnw6FWp
+ SO1MMUMwngMqilfJQaP65zUgRKdWNUdY4BLPd4dOSmGmPFATyad9e3JYRWUEAZ+WPu6PyH
+ +0GTwq1BoDdx+ZIM1H6PXMiWOfAtY1DV7qLTb3lex6u0+8pa7XSpfB+mrs4Ljg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TK+ugCn2
-Subject: Re: [Buildroot] [PATCH 1/1] package/swupdate: bump to version
- 2023.05
+ header.s=gm1 header.b=giO05UKa
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/zynaddsubfx: fix build with
+ gcc 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,24 +83,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  9 Sep 2023 22:10:01 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sun, 10 Sep 2023 16:27:39 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> ISC license hash changed due to text update:
-> https://github.com/sbabic/swupdate/commit/d217a9b10e7b25296db4899beabc2de2b379c921
+> When compiling with gcc 13, build fails with errors, such as:
 > 
-> Set new HAVE_LIBEBGENV and HAVE_LIBUBOOTENV env variables.
+>     In file included from /build/zynaddsubfx-3.0.6/src/Nio/NulEngine.h:21,
+>                      from /build/zynaddsubfx-3.0.6/src/Nio/NulEngine.cpp:14:
+>     /build/zynaddsubfx-3.0.6/src/Nio/MidiIn.h:37:9: error: 'uint8_t' does not name a type
+>        37 |         uint8_t midiSysEx(unsigned char data);
+>           |         ^~~~~~~
 > 
-> Apply latest updates to swupdate-usb@.service from:
-> https://github.com/sbabic/meta-swupdate/commit/d5f84e74aada1212ed877509bdc546dca468451b
-> https://github.com/sbabic/meta-swupdate/commit/dac7b2d10ec84b2b6de9afadc12419398ea73615
+> Those gcc 13 changes were announced at:
+> https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> This commit fixes the issue by adding upstream patches, not yet
+> included in a release.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/97b5a30c7be820ac91e745cf60f9b759e962aa5c
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/swupdate/swupdate-usb@.service | 10 ++++++----
->  package/swupdate/swupdate.hash         |  4 ++--
->  package/swupdate/swupdate.mk           |  8 +++++++-
->  3 files changed, 15 insertions(+), 7 deletions(-)
+> Changes v1 -> v2:
+> - Reworded the commit log to correct the root cause of the issue
+>   (v1 was mentioning uclibc. it is in fact gcc-13)
+> ---
+>  ...1-MidiIn-Add-stdint.h-header-include.patch | 26 +++++++++++++++++
+>  ...002-Bank-Add-stdint.h-header-include.patch | 28 +++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+>  create mode 100644 package/zynaddsubfx/0001-MidiIn-Add-stdint.h-header-include.patch
+>  create mode 100644 package/zynaddsubfx/0002-Bank-Add-stdint.h-header-include.patch
 
 Applied to master, thanks.
 
