@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCD06C71153
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 19:09:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E67CEEE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 19:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EFDE60BF0;
-	Sun, 10 Sep 2023 19:09:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EFDE60BF0
+	by smtp3.osuosl.org (Postfix) with ESMTP id A016D60F22;
+	Sun, 10 Sep 2023 19:09:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A016D60F22
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yj87VnXWjfC6; Sun, 10 Sep 2023 19:09:42 +0000 (UTC)
+	with ESMTP id XOhAYF8-Mg86; Sun, 10 Sep 2023 19:09:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9ADA06077D;
-	Sun, 10 Sep 2023 19:09:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ADA06077D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F32941BF350
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 19:09:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E342660BEC;
+	Sun, 10 Sep 2023 19:09:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E342660BEC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C9E61BF350
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 19:09:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D87F6408E0
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 19:09:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D87F6408E0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6571760BA9
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 19:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6571760BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iREt_2kIlAii for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 19:09:37 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2AADF4085C
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 19:09:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AADF4085C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 16A0586B7F; Sun, 10 Sep 2023 19:09:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 10 Sep 2023 21:09:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f8e9314a03d24906aef738283381dea501a4a584
-X-Git-Newrev: 530ea784f1c7ef8176b46245710016ec7bce89dd
-X-Patchwork-Hint: ignore
-Message-Id: <20230910190937.16A0586B7F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/polkit: bump to version 123
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XXcsdQrUi46h for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 19:09:40 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C4E86077D
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 19:09:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C4E86077D
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 008C01BF208;
+ Sun, 10 Sep 2023 19:09:36 +0000 (UTC)
+Date: Sun, 10 Sep 2023 21:09:36 +0200
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Message-ID: <20230910210936.4b0c03c5@windsurf>
+In-Reply-To: <20230902202724.3498579-1-thomas.petazzoni@bootlin.com>
+References: <20230902202724.3498579-1-thomas.petazzoni@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1694372977;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=OCOiMITDhwH+MrxEjYLk/tuRVU9//cFBNBRAjPwfXz8=;
+ b=OO1GZJaDty7DZfxPmTc9HkAANaWcuY04FAuZCGQSpwPBHE4VRuPlYj4Bp8pThhrJDueBs6
+ WBROrMB0Ign48mglHP3zw3MnXPC0oiRKRFrIfaTCQa5dodXRPGtnG0lPscU/peD8FSj8T7
+ tedJkiMhRpLWznqbDp/AzPhx6/0S2IQMIOkq16gugec72mHJDirbdyBjzoNbp80iGdjxOm
+ 2tDiznsnSqwhLtN8PbuAUZcTCt0tEnD/zyzqMl7CBpD+NMkDBS5Phok502Rh81BAr9DLy3
+ lPuDuAqGL1uESb+6YfxNU9uvc6hOrupeNygkdPais7RNwSpMXl4bbxkgYFIGOw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=OO1GZJaD
+Subject: Re: [Buildroot] [PATCH next] package/polkit: bump to version 123
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,47 +76,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Marek Belisko <marek.belisko@open-nandra.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=530ea784f1c7ef8176b46245710016ec7bce89dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  2 Sep 2023 22:27:23 +0200
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
 
-polkit runtime tests are passing successfully with this version bump:
+> polkit runtime tests are passing successfully with this version bump:
+> 
+>   https://gitlab.com/tpetazzoni/buildroot/-/pipelines/989945901
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/polkit/polkit.hash | 2 +-
+>  package/polkit/polkit.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/989945901
+Applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/polkit/polkit.hash | 2 +-
- package/polkit/polkit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
-index ffdc2a7568..5eadc89753 100644
---- a/package/polkit/polkit.hash
-+++ b/package/polkit/polkit.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0d69656d60800835c3d7d1f0a8362b32e1ae3ace2875a35bb624296fc52d5dc4  polkit-122.tar.gz
-+sha256  b69278f6ea0eac406350c45f5720e2fe5e4beaf9f53c16d9902e025965418864  polkit-123.tar.gz
- sha256  d2e2aa973e29c75e1b492e67ea7b7da9de2d501d49a934657971fd74f9a0b0a8  COPYING
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index dab5d542eb..f58dbe43de 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POLKIT_VERSION = 122
-+POLKIT_VERSION = 123
- POLKIT_SITE = https://gitlab.freedesktop.org/polkit/polkit/-/archive/$(POLKIT_VERSION)
- POLKIT_LICENSE = GPL-2.0
- POLKIT_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
