@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 386EDEEB57B
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A916BEE49A4
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 16:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E803460C22;
-	Sun, 10 Sep 2023 16:35:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E803460C22
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63F1C60E4A;
+	Sun, 10 Sep 2023 16:36:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63F1C60E4A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T4iwnwtnN6b9; Sun, 10 Sep 2023 16:35:33 +0000 (UTC)
+	with ESMTP id EBZYOIn2l0Jo; Sun, 10 Sep 2023 16:36:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0940F60E77;
-	Sun, 10 Sep 2023 16:35:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0940F60E77
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 157B41BF263
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:35:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7F0060BF0;
+	Sun, 10 Sep 2023 16:36:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7F0060BF0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E14651BF263
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E3C78606F2
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:35:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3C78606F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id B92A8409A8
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 16:36:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B92A8409A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nA8mG23OOfGB for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 16:35:04 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C05560736
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:35:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C05560736
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14D1B86B40; Sun, 10 Sep 2023 16:35:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 10 Sep 2023 18:32:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 56e7ca5dbc466f301ef6f5810177cfc17f73b9ae
-X-Git-Newrev: b492a5414e49ea18309eb17e8f1d3cc81d92b3fa
-X-Patchwork-Hint: ignore
-Message-Id: <20230910163504.14D1B86B40@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_less.py: new runtime test
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1-xTRShcgoh8 for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 16:36:13 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32AD64099B
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 16:36:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32AD64099B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B26B1C0008;
+ Sun, 10 Sep 2023 16:36:09 +0000 (UTC)
+Date: Sun, 10 Sep 2023 18:36:08 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20230910183608.246a96a5@windsurf>
+In-Reply-To: <20230910041001.1356119-1-james.hilliard1@gmail.com>
+References: <20230910041001.1356119-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1694363770;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qn8RvynNg512xD+K1Z2GFMAdKku1DTaWRJxbdIeK/l4=;
+ b=TK+ugCn27DeZ343pmrDzKsu0vxnRai0+pi518ycNeKlVBevEaHOuEooIJdOI2dAcbDfoBC
+ Nj5VJR0b3O0KzdlC6snJihfPcU0AffvP89JQxZtJCqN+vL630mL/fXAnQxsT2AMx/7RVcf
+ HhAwDz12lzd+DpqBNReSwkPDbCgeCAx0XeoxuMnlGfnxTjVJbVqRHc7Qo+PqnrLstCowvm
+ GofubqgDaCxcvMZnTyY210Q7/UpMrXXD3png7rni88N7Cyfzw8Xqc8qyakEei5gnB/ef+z
+ 71mcSaVcu/OmU5BHn2eGEddaYQjWTUu4om3ucplA+2Kv+u0pTBdiDrpsXml4BQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TK+ugCn2
+Subject: Re: [Buildroot] [PATCH 1/1] package/swupdate: bump to version
+ 2023.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,97 +77,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b492a5414e49ea18309eb17e8f1d3cc81d92b3fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat,  9 Sep 2023 22:10:01 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                 |  1 +
- support/testing/tests/package/test_less.py | 57 ++++++++++++++++++++++++++++++
- 2 files changed, 58 insertions(+)
+> ISC license hash changed due to text update:
+> https://github.com/sbabic/swupdate/commit/d217a9b10e7b25296db4899beabc2de2b379c921
+> 
+> Set new HAVE_LIBEBGENV and HAVE_LIBUBOOTENV env variables.
+> 
+> Apply latest updates to swupdate-usb@.service from:
+> https://github.com/sbabic/meta-swupdate/commit/d5f84e74aada1212ed877509bdc546dca468451b
+> https://github.com/sbabic/meta-swupdate/commit/dac7b2d10ec84b2b6de9afadc12419398ea73615
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/swupdate/swupdate-usb@.service | 10 ++++++----
+>  package/swupdate/swupdate.hash         |  4 ++--
+>  package/swupdate/swupdate.mk           |  8 +++++++-
+>  3 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 648058fcbe..a7410d61fa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1741,6 +1741,7 @@ F:	support/testing/tests/package/test_kexec.py
- F:	support/testing/tests/package/test_kexec/
- F:	support/testing/tests/package/test_kmscube.py
- F:	support/testing/tests/package/test_kmscube/
-+F:	support/testing/tests/package/test_less.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_lrzip.py
- F:	support/testing/tests/package/test_lzip.py
-diff --git a/support/testing/tests/package/test_less.py b/support/testing/tests/package/test_less.py
-new file mode 100644
-index 0000000000..3d8c4fc94c
---- /dev/null
-+++ b/support/testing/tests/package/test_less.py
-@@ -0,0 +1,57 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestLess(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_LESS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check the program can execute. This command also checks that
-+        # the "less" program is from the actual "less" package, rather
-+        # than the Busybox implementation (the Busybox "less" applet
-+        # does not recognize the "--version" option and would fail).
-+        self.assertRunOk("less --version")
-+
-+        # We create a test file.
-+        ref_txt = "Hello Buildroot!"
-+        input_fname = "input.txt"
-+        self.assertRunOk(f"echo \'{ref_txt}\' > {input_fname}")
-+
-+        # "less" is mainly an interactive user program and uses
-+        # terminal control characters. This test checks a basic "less"
-+        # invocation in which there is no user interaction. The
-+        # program is expected to give back the input data.
-+        output, exit_code = self.emulator.run(f"less -F {input_fname}")
-+        self.assertEqual(exit_code, 0)
-+        # "less" might insert a carriage-return ^M control character,
-+        # which will be converted to a new-line (by the
-+        # str.splitlines() in Emulator.run()). We check that our
-+        # reference text line is in the output (rather than only
-+        # testing output[0]).
-+        self.assertIn(ref_txt, output)
-+
-+        # We redo about the same test, with "less" reading stdin this
-+        # time. We also use the "less -o log" option to log the output
-+        # into a file. We expect to see our reference text on stdout.
-+        output_fname = "output.txt"
-+        cmd = f"cat {input_fname} | less -F -o {output_fname}"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn(ref_txt, output)
-+
-+        # The output file content which logged the output is also
-+        # expected to be the same as the input.
-+        self.assertRunOk(f"cmp {input_fname} {output_fname}")
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
