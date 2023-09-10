@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97871EE57CD
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 13:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AD52EE57CD
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 13:49:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 075C2410A1;
-	Sun, 10 Sep 2023 13:10:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 075C2410A1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72E034093B;
+	Sun, 10 Sep 2023 13:49:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72E034093B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YS23m174rsFC; Sun, 10 Sep 2023 13:10:36 +0000 (UTC)
+	with ESMTP id zdRQKaKCLdl7; Sun, 10 Sep 2023 13:49:01 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D92DB410BC;
-	Sun, 10 Sep 2023 13:10:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D92DB410BC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A15211BF32A
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 13:10:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9003D4093E;
+	Sun, 10 Sep 2023 13:49:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9003D4093E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 75C131BF32A
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 13:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 885198176E
- for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 13:10:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 885198176E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FC8760B8E
+ for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 13:48:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FC8760B8E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VmGsWV5tmUSu for <buildroot@lists.busybox.net>;
- Sun, 10 Sep 2023 13:10:33 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 056F88176C
- for <buildroot@buildroot.org>; Sun, 10 Sep 2023 13:10:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 056F88176C
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id CA63713F8AD;
- Sun, 10 Sep 2023 15:10:28 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58478])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 10 Sep 2023 15:10:28 +0200
-MIME-Version: 1.0
-Date: Sun, 10 Sep 2023 15:10:28 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20230910140024.74a2e625@windsurf>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4mI57Qj3Oufr for <buildroot@lists.busybox.net>;
+ Sun, 10 Sep 2023 13:48:57 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 34493607F5
+ for <buildroot@buildroot.org>; Sun, 10 Sep 2023 13:48:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34493607F5
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 21BB5FF802;
+ Sun, 10 Sep 2023 13:48:53 +0000 (UTC)
+Date: Sun, 10 Sep 2023 15:48:53 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230910154853.4f73203f@windsurf>
+In-Reply-To: <7730963f2459b65138c0a4a07dec898c@free.fr>
 References: <20230909104707.491203-1-ju.o@free.fr>
  <20230909170809.4d0fb384@windsurf>
  <1214dd8573105f0075de5019938a5d37@free.fr>
  <20230910140024.74a2e625@windsurf>
-User-Agent: Webmail Free/1.6.1
-Message-ID: <7730963f2459b65138c0a4a07dec898c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694351429;
- bh=cImtqPnag9indO0BGlx+Z5eJOJ1O+q8V1HVlrBcFwXI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=BzE+3+IQF4EubrEXexsVwRGtIJtlkXTSg0YOssfPEE5xkNVOest8ol9HHRZZ3x1IB
- TAcO7c01iYQg9H09M/xxIiRviU6JQ1pnL9o547r4Q4IFEtTPWzZUBgCgcJD8fiJhKy
- KmCrrrrkhipT4KH07K9DWsIJI778lSuv43fxwQiFO3PPPwbXzc8QULwm5Ml0G7L4zf
- y02GR74mIGCqHRV9BI1RXEGvRfD/ijI8nKcS5JXiBSs3uVxqjn5YD/aV794b/LjGOS
- IywRZG+3dKxIQdajPun92TkGEqJqxA0JhGpZsd4Yn5ladb6Tdw6pGyA3XhqYAyy/jf
- CIgeccBvdHBiA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BzE+3+IQ
+ <7730963f2459b65138c0a4a07dec898c@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1694353734;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TYho9j2ClARc/EIRMIGmxvOAg7OtvZ02tokz3tu0Fws=;
+ b=UZb3GEBliHPHPUk2RnNsduotRgudqkxZwaaeTNLHYF+aHYfrE++UVW5dABPoz9C3XgdffI
+ 8WbOpcqXZiofNyj/bUzqfQnXRTrfdjS5goJ6nhudmx98pJ3FBiXfa39+PfJMgeRsYgd2k6
+ uZR0z077F7oU4RZxy4JhEXkn5TjuUuD+K7CrMxxCHuwzpbKedd17/C253iEmwfPXBGx7uH
+ jrb0ezptveavm5BOpaPAn+DaWxTWr6nnuCMbzoeJH7tfAdOxhzGq9o5QJP7XGXH8sffu5f
+ CgK5kxBz2oxMHEC9Hg5xwMTdhhKPl0vNq7KPtkUf1hM/JSBHMo2iWRnGWm5wmw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UZb3GEBl
 Subject: Re: [Buildroot] [PATCH 1/1] package/zynaddsubfx: fix uclibc compile
  error
 X-BeenThere: buildroot@buildroot.org
@@ -80,70 +79,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+On Sun, 10 Sep 2023 15:10:28 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-On 10/09/2023 14:00, Thomas Petazzoni wrote:
-> Hello,
+> In the meantime, this patch needs a v2. Do you want me to:
 > 
-> On Sat, 09 Sep 2023 23:07:19 +0200
-> Julien Olivain <ju.o@free.fr> wrote:
+> 1. just change the commit log, while keeping the current upstream 
+> patches
+>     with <stdint.h>, or
 > 
->> This build failure is the first of its kind, according to autobuild:
->> http://autobuild.buildroot.net/?reason=zynaddsubfx-3.0.6
->> 
->> Looking at the upstream code, this header inclusion is missing, so the
->> bug has always been there. My guess is that this "stdint.h" header was
->> included indirectly from the libc internally. I did not investigated
->> further. Do you want me to?
-> 
-> It seems like it is related to gcc 13.x, and that the right thing would
-> be to include <cstdint>. See commit
-> 27dc49378071a82688d44a5cc592c0200b3991b4 for an example of something
-> similar. So you could try to build (without your patch) using gcc 12.x
-> and gcc 13.x and see if that's the difference that causes the build
-> failure.
+> 2. redo also the upstream patches to have <cstdint> consistently
+>     everywhere in the code?
 
-You are right, it _is_ this GCC 13 change. It is unrelated to uclibc nor
-or1k. I reproduced the build failure from a simplified autobuild 
-defconfig
-from [1]. Just switching back to gcc 12 works. I also tested few other
-configurations (glibc, native compilation, etc.).
+Keep the upstream patches as-is, so option (1).
 
-It is described at:
-https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
+Thanks for the additional research!
 
-I fixed many of those issues last year, but I apparently forgot ;)
-
-I agree with you, the right thing to do would be to include <cstdint>,
-but it seems upstream is struggling a bit to fix those in a consistent
-way. See [2] and [3] for example. I'll try to propose improvements to
-upstream.
-
-In the meantime, this patch needs a v2. Do you want me to:
-
-1. just change the commit log, while keeping the current upstream 
-patches
-    with <stdint.h>, or
-
-2. redo also the upstream patches to have <cstdint> consistently
-    everywhere in the code?
-
-Best regards,
-
-Julien.
-
-[1] 
-http://autobuild.buildroot.net/results/97b5a30c7be820ac91e745cf60f9b759e962aa5c/defconfig
-[2] 
-https://github.com/zynaddsubfx/zynaddsubfx/commit/70905c96fe7b9ffde19bc4bc05b0dc53a1ed1707
-[3] 
-https://github.com/zynaddsubfx/zynaddsubfx/commit/806674849b276a560d2996f25ba0ddbfe50838ef
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
