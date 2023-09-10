@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97E31EE49A4
-	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 253CEC71153
+	for <buildroot@archiver.kernel.org>; Sun, 10 Sep 2023 21:44:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F6464056E;
-	Sun, 10 Sep 2023 21:43:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F6464056E
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1C4040453;
+	Sun, 10 Sep 2023 21:44:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1C4040453
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EOF8tka9IFnO; Sun, 10 Sep 2023 21:43:58 +0000 (UTC)
+	with ESMTP id WzFvY1CwxmL3; Sun, 10 Sep 2023 21:44:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93F29405D8;
-	Sun, 10 Sep 2023 21:43:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93F29405D8
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 626501BF573
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0048140541;
+	Sun, 10 Sep 2023 21:44:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0048140541
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 945451BF8C7
  for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C76A8148D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D5F840051
  for <buildroot@lists.busybox.net>; Sun, 10 Sep 2023 21:43:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C76A8148D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D5F840051
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id AZT3iOCe_Alb for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IGq_VKawI_yJ for <buildroot@lists.busybox.net>;
  Sun, 10 Sep 2023 21:43:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43E188148B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F69840080
  for <buildroot@buildroot.org>; Sun, 10 Sep 2023 21:43:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43E188148B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F69840080
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30B6D86BC4; Sun, 10 Sep 2023 21:43:30 +0000 (UTC)
+ id 4D2C386BC7; Sun, 10 Sep 2023 21:43:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 10 Sep 2023 23:15:37 +0200
+Date: Sun, 10 Sep 2023 23:17:14 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: eef7d67a4ff0f0f4f774eaaf110fb2db41af8d3e
-X-Git-Newrev: 2eb849ac1663f2dd0322dc2a117f504e9a935d36
+X-Git-Oldrev: 635da4557f94f5776581539c556affc1195cb297
+X-Git-Newrev: f2a10a4f0d6831136ddfd812545533eebf2225e3
 X-Patchwork-Hint: ignore
-Message-Id: <20230910214330.30B6D86BC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] boot/uboot: add
- host-python-pylibfdt dependency if needed
+Message-Id: <20230910214330.4D2C386BC7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/stellarium:
+ disable ShowMySky atmosphere model
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,53 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2eb849ac1663f2dd0322dc2a117f504e9a935d36
+commit: https://git.buildroot.net/buildroot/commit/?id=f2a10a4f0d6831136ddfd812545533eebf2225e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Until now, BR2_TARGET_UBOOT_NEEDS_PYLIBFDT was only bringing host-swig
-as a dependency, because U-Boot was building its own pylibfdt, which
-requires host-swig.
+Buildroot commit 319c56dfe3309dbf24be01fed3afff6259a2c5dd bumped
+stellarium which included these commits
+https://github.com/Stellarium/stellarium/commit/b3f02beaec2a285251db1e1707abe2e423803834
+https://github.com/Stellarium/stellarium/commit/5d5edd0e5f5630872628a1525685b77854b6e4b4
 
-However, since commit
-231d79c81e9a1f8c2ef14861374a40fcdc5e6b33 ("boot/uboot: set DTC path
-when BR2_TARGET_UBOOT_NEEDS_DTC"), in which we tell U-Boot to use the
-Buildroot built DTC, a consequence is that U-Boot no longer builds its
-own pylibfdt: it expects the system to provided it. So now,
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT really needs to bring
-host-python-pylibfdt. The dependency on host-swig is no longer needed,
-as what we need is host-python-pylibfdt, and it is an internal detail
-of pylibfdt that it needs host-swig to build.
+It downloads external packages during the build:
 
-Fixes:
+$ find output/build/stellarium-23.2/ -iname *.tar.*
+output/build/stellarium-23.2/_deps/eigen3-subbuild/eigen3-populate-prefix/src/eigen-3.4.0.tar.bz2
+output/build/stellarium-23.2/_deps/showmysky-qt5-subbuild/showmysky-qt5-populate-prefix/src/v0.3.1.tar.gz
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556137
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556224
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556227
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556229
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/4749556230
+which breaks offline builds.
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f788a8f527c038112671ff6fdc968823a54cf3aa)
+(cherry picked from commit 2616272339073834c262bc46fdf995fdaa91acf7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/stellarium/stellarium.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 1a6e70a792..c3e3829362 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -217,7 +217,7 @@ UBOOT_DEPENDENCIES += host-python3 host-python-setuptools
- endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
--UBOOT_DEPENDENCIES += host-swig
-+UBOOT_DEPENDENCIES += host-python-pylibfdt
- endif
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS),y)
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 7b48131912..fe7aaf6ac9 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -18,6 +18,7 @@ STELLARIUM_DEPENDENCIES = \
+ STELLARIUM_CONF_OPTS = \
+ 	-DENABLE_MEDIA=ON \
+ 	-DENABLE_NLS=OFF \
++	-DENABLE_SHOWMYSKY=OFF \
+ 	-DENABLE_QTWEBENGINE=OFF \
+ 	-DENABLE_QT6=OFF \
+ 	-DENABLE_XLSX=OFF \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
