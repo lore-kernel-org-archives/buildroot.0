@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 063E8EE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 18:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EF01EE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:07:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B5D38414EC;
-	Mon, 11 Sep 2023 18:57:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5D38414EC
+	by smtp2.osuosl.org (Postfix) with ESMTP id C1B3E403FF;
+	Mon, 11 Sep 2023 19:07:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1B3E403FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gG2taA81EX8l; Mon, 11 Sep 2023 18:57:05 +0000 (UTC)
+	with ESMTP id M4_A4QFKmKNZ; Mon, 11 Sep 2023 19:07:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B8DE41517;
-	Mon, 11 Sep 2023 18:57:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B8DE41517
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 848231BF20B
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 18:57:02 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D54340199;
+	Mon, 11 Sep 2023 19:07:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D54340199
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9FB6D1BF479
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:07:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DF4D61051
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 18:57:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DF4D61051
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86CB1403FF
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:07:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86CB1403FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3wXCCun1YRnY for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 18:57:01 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 66CCD60777
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 18:57:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66CCD60777
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 795772000A;
- Mon, 11 Sep 2023 18:56:41 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qfm5Q-00FiuL-Jx; Mon, 11 Sep 2023 20:56:40 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SBhiHd8KGiz6 for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:07:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6539400FE
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:07:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6539400FE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9491686C8D; Mon, 11 Sep 2023 19:07:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Daniel Lang <dalang@gmx.at>
-References: <20230808184917.4929-1-dalang@gmx.at>
-Date: Mon, 11 Sep 2023 20:56:40 +0200
-In-Reply-To: <20230808184917.4929-1-dalang@gmx.at> (Daniel Lang's message of
- "Tue, 8 Aug 2023 20:49:16 +0200")
-Message-ID: <87sf7ka68n.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/yajl: add CPE ID
+To: buildroot@buildroot.org
+Date: Mon, 11 Sep 2023 18:17:13 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: a472c7278a105f7de565ed517012b0299d2aea0f
+X-Git-Newrev: 6bd5c5e19f3080b41e6de00be2b2797a6e599ea0
+X-Patchwork-Hint: ignore
+Message-Id: <20230911190748.9491686C8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/chocolate-doom:
+ add VENDOR and PRODUCT CPE IDs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,24 +57,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2521899928217576251=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
+--===============2521899928217576251==
+Content-Type: text/plain
 
- > yajl_project:yajl is a valid CPE ID:
- > https://nvd.nist.gov/products/cpe/detail/CD8C46A4-151E-4DC3-BCE8-4C322E9E10DB?namingFormat=2.3&orderBy=CPEURI&keyword=yajl&status=FINAL
+commit: https://git.buildroot.net/buildroot/commit/?id=6bd5c5e19f3080b41e6de00be2b2797a6e599ea0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > Signed-off-by: Daniel Lang <dalang@gmx.at>
+cpe:2.3:a:chocolate-doom:chocolate_doom is a valid identifier for
+this package:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=chocolate-doom
 
-Committed to 2023.02.x and 2023.05.x, thanks.
+Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 606beef3527b0dacc7a3d8b870330b10f6dc566a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/chocolate-doom/chocolate-doom.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+index 8318c123bd..581b2c51c2 100644
+--- a/package/chocolate-doom/chocolate-doom.mk
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -8,6 +8,8 @@ CHOCOLATE_DOOM_VERSION = 3.0.1
+ CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
+ CHOCOLATE_DOOM_LICENSE = GPL-2.0+
+ CHOCOLATE_DOOM_LICENSE_FILES = COPYING
++CHOCOLATE_DOOM_CPE_ID_VENDOR = chocolate-doom
++CHOCOLATE_DOOM_CPE_ID_PRODUCT = chocolate_doom
+ CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl2 sdl2_mixer sdl2_net
+ 
+ # Avoid installing desktop entries, icons, etc.
+
+--===============2521899928217576251==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2521899928217576251==--
