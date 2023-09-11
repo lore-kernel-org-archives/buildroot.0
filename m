@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7642EE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:11:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C1B9C71153
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:11:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8C1240199;
-	Mon, 11 Sep 2023 19:11:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8C1240199
+	by smtp2.osuosl.org (Postfix) with ESMTP id 030174154D;
+	Mon, 11 Sep 2023 19:11:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 030174154D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2GvBXFFxNneV; Mon, 11 Sep 2023 19:11:21 +0000 (UTC)
+	with ESMTP id xlHQXIXWuhDf; Mon, 11 Sep 2023 19:11:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E025541532;
-	Mon, 11 Sep 2023 19:11:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E025541532
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 111871BF479
+	by smtp2.osuosl.org (Postfix) with ESMTP id 55EB54154C;
+	Mon, 11 Sep 2023 19:11:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55EB54154C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 21E231BF860
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B585F813FA
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B585F813FA
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0738414E7
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0738414E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GUvz1f9ahGXW for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yKrUzWVO7-RI for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01E3F81323
+ by smtp2.osuosl.org (Postfix) with ESMTP id D40DE414DB
  for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01E3F81323
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D40DE414DB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E657D86CB1; Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
+ id C3D4E86CAE; Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 18:19:32 +0200
+Date: Mon, 11 Sep 2023 18:18:51 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: d504025058e484b64cc8c32d0fc0b141ddbd4576
-X-Git-Newrev: 2c4bb5306be70b3398f4dd5c916f7e826eac231d
+X-Git-Oldrev: b84c105d18d7bdc6d8079793faae686eea307da7
+X-Git-Newrev: ecdfc9bb2faafb01e9c9c86bbf52ecfcad9dc5a6
 X-Patchwork-Hint: ignore
-Message-Id: <20230911190853.E657D86CB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/log4cxx: add CPE
- ID
+Message-Id: <20230911190853.C3D4E86CAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/bwm-ng: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +62,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c4bb5306be70b3398f4dd5c916f7e826eac231d
+commit: https://git.buildroot.net/buildroot/commit/?id=ecdfc9bb2faafb01e9c9c86bbf52ecfcad9dc5a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-apache:log4cxx is a valid CPE ID:
-https://nvd.nist.gov/products/cpe/detail/BFD3FB55-EE37-4297-BB3F-DD0A051DAD65?namingFormat=2.3&orderBy=CPEURI&keyword=log4cxx&status=FINAL
+bwm-ng_project:bwm-ng is a valid CPE ID:
+https://nvd.nist.gov/products/cpe/detail/DBF33404-2CC8-41FD-B0FF-039B27A19871?namingFormat=2.3&orderBy=CPEURI&keyword=bwm-ng&status=FINAL
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8ca41303efbada05fa0acf577ca86bd8f1a7eb15)
+(cherry picked from commit d74515a3e83b6139aed764a5ef0f40115dc92e22)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/log4cxx/log4cxx.mk | 1 +
+ package/bwm-ng/bwm-ng.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
-index f50267d737..a5569126d4 100644
---- a/package/log4cxx/log4cxx.mk
-+++ b/package/log4cxx/log4cxx.mk
-@@ -10,6 +10,7 @@ LOG4CXX_SOURCE = apache-log4cxx-$(LOG4CXX_VERSION).tar.gz
- LOG4CXX_INSTALL_STAGING = YES
- LOG4CXX_LICENSE = Apache-2.0
- LOG4CXX_LICENSE_FILES = LICENSE
-+LOG4CXX_CPE_ID_VENDOR = apache
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+index de09eafae5..bf3ed74afc 100644
+--- a/package/bwm-ng/bwm-ng.mk
++++ b/package/bwm-ng/bwm-ng.mk
+@@ -9,6 +9,7 @@ BWM_NG_SITE = $(call github,vgropp,bwm-ng,v$(BWM_NG_VERSION))
+ BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
+ BWM_NG_LICENSE = GPL-2.0+
+ BWM_NG_LICENSE_FILES = COPYING
++BWM_NG_CPE_ID_VENDOR = bwm-ng_project
+ BWM_NG_AUTORECONF = YES
  
- LOG4CXX_CONF_OPTS = \
- 	-DAPR_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/apr-1-config \
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
