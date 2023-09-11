@@ -4,54 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C180DEE3F00
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45640EE3F2B
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:52:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BABF417C6;
-	Mon, 11 Sep 2023 20:51:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BABF417C6
+	by smtp4.osuosl.org (Postfix) with ESMTP id E196C4188F;
+	Mon, 11 Sep 2023 20:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E196C4188F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e7WTZtcpyThM; Mon, 11 Sep 2023 20:51:04 +0000 (UTC)
+	with ESMTP id qxkTU58gQ2pn; Mon, 11 Sep 2023 20:52:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C2CE4188F;
-	Mon, 11 Sep 2023 20:51:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C2CE4188F
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DDA0A1BF215
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:51:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 121B741873;
+	Mon, 11 Sep 2023 20:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 121B741873
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1792E1BF215
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6ED960BDC
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:51:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6ED960BDC
+ by smtp2.osuosl.org (Postfix) with ESMTP id F284A40158
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:52:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F284A40158
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sBqY5_XtKfvz for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 20:51:01 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CBBA660BC8
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 20:51:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBBA660BC8
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BE1D540007;
- Mon, 11 Sep 2023 20:50:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id iDmwxlHtBo-e for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 20:52:26 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8015D400F2
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 20:52:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8015D400F2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E1ED21BF211;
+ Mon, 11 Sep 2023 20:50:37 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qfnrX-00Fn55-Q6; Mon, 11 Sep 2023 22:50:27 +0200
+ id 1qfnrg-00Fn5O-Vm; Mon, 11 Sep 2023 22:50:37 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 References: <20230807174515.3261136-1-bernd@kuhls.net>
-Date: Mon, 11 Sep 2023 22:50:27 +0200
-In-Reply-To: <20230807174515.3261136-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Mon, 7 Aug 2023 19:45:14 +0200")
-Message-ID: <8734zka0z0.fsf@48ers.dk>
+ <20230807174515.3261136-2-bernd@kuhls.net>
+Date: Mon, 11 Sep 2023 22:50:36 +0200
+In-Reply-To: <20230807174515.3261136-2-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Mon, 7 Aug 2023 19:45:15 +0200")
+Message-ID: <87y1hc8meb.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/berkeleydb: add option for
- historic dbm interface
+Subject: Re: [Buildroot] [PATCH 2/2] package/python3: berkeleydb support
+ needs the dbm interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,14 +77,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
  > to detect libdb:
  > https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
 
- > quoting python configure log:
+ > quoting configure log:
  > checking for libdb... no
 
  > quoting python config.log:
  > conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
 
- > This patch provides a configure option for the historic dbm interface
- > to be used by the python package.
+ > Only with this patch python builds a berkeleydb module:
+
+ >   output/build/python3-3.11.4$ find -iname *dbm*.so
+ >   ./build/lib.linux-x86_64-3.11/_dbm.cpython-311-x86_64-linux-gnu.so
+
+ > since python 3.11 (added with buildroot commit
+ > 738500c296c8b1206f20e94ca3e7c5932a6a0486) changed the way it detects libdb:
+ > https://github.com/python/cpython/commit/0a9f69539be27acf1cddf1b58d02a88d02e5008d
 
  > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
