@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1776AEEB593
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C180DEE3F00
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:51:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A3774187C;
-	Mon, 11 Sep 2023 20:47:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A3774187C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BABF417C6;
+	Mon, 11 Sep 2023 20:51:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BABF417C6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pPC1r63Ptg1c; Mon, 11 Sep 2023 20:47:42 +0000 (UTC)
+	with ESMTP id e7WTZtcpyThM; Mon, 11 Sep 2023 20:51:04 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72F5841877;
-	Mon, 11 Sep 2023 20:47:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F5841877
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3342D1BF215
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:47:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C2CE4188F;
+	Mon, 11 Sep 2023 20:51:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C2CE4188F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DDA0A1BF215
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CB0C40158
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:47:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CB0C40158
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6ED960BDC
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:51:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6ED960BDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fDeke3GerSeL for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 20:47:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id sBqY5_XtKfvz for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 20:51:01 +0000 (UTC)
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 97821400FE
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 20:47:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97821400FE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A62874000A;
- Mon, 11 Sep 2023 20:47:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CBBA660BC8
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 20:51:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBBA660BC8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BE1D540007;
+ Mon, 11 Sep 2023 20:50:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qfnoM-00Fmv8-GQ; Mon, 11 Sep 2023 22:47:10 +0200
+ id 1qfnrX-00Fn55-Q6; Mon, 11 Sep 2023 22:50:27 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Cl=C3=A9ment?= Ramirez via buildroot <buildroot@buildroot.org>
-References: <20230809093237.326383-1-clement.ramirez@bootlin.com>
-Date: Mon, 11 Sep 2023 22:47:10 +0200
-In-Reply-To: <20230809093237.326383-1-clement.ramirez@bootlin.com>
- (=?utf-8?Q?=22Cl=C3=A9ment?=
- Ramirez via buildroot"'s message of "Wed, 9 Aug 2023 11:32:37 +0200")
-Message-ID: <877cowa14h.fsf@48ers.dk>
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20230807174515.3261136-1-bernd@kuhls.net>
+Date: Mon, 11 Sep 2023 22:50:27 +0200
+In-Reply-To: <20230807174515.3261136-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Mon, 7 Aug 2023 19:45:14 +0200")
+Message-ID: <8734zka0z0.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/flite: add FLITE_CPE_ID_VENDOR
+Subject: Re: [Buildroot] [PATCH 1/2] package/berkeleydb: add option for
+ historic dbm interface
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,20 +63,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- =?utf-8?Q?Cl=C3=A9ment?= Ramirez <clement.ramirez@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkNsw6ltZW50IiA9PSBDbMOpbWVudCBSYW1pcmV6IHZpYSBidWlsZHJvb3QgPGJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnPiB3cml0ZXM6CgogPiBjcGU6Mi4zOmE6Y211OmZsaXRlIGlzIGEg
-dmFsaWQgaWRlbnRpZmllciBmb3IKID4gdGhpcyBwYWNrYWdlOgogPiBodHRwczovL252ZC5uaXN0
-Lmdvdi9wcm9kdWN0cy9jcGUvc2VhcmNoL3Jlc3VsdHM/bmFtaW5nRm9ybWF0PTIuMyZrZXl3b3Jk
-PWZsaXRlCgogPiBTaWduZWQtb2ZmLWJ5OiBDbMOpbWVudCBSYW1pcmV6IDxjbGVtZW50LnJhbWly
-ZXpAYm9vdGxpbi5jb20+CgpDb21taXR0ZWQgdG8gMjAyMy4wMi54IGFuZCAyMDIzLjA1LngsIHRo
-YW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+
+ > Berkeley DB support in python depends on dbm, when missing python fails
+ > to detect libdb:
+ > https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
+
+ > quoting python configure log:
+ > checking for libdb... no
+
+ > quoting python config.log:
+ > conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
+
+ > This patch provides a configure option for the historic dbm interface
+ > to be used by the python package.
+
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
