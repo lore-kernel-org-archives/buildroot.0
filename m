@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ED79EE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 10:34:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 818AAEE7FF4
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 10:34:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB48140C43;
-	Mon, 11 Sep 2023 10:34:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB48140C43
+	by smtp2.osuosl.org (Postfix) with ESMTP id 27C01401A1;
+	Mon, 11 Sep 2023 10:34:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27C01401A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5jwIzIOy7Rne; Mon, 11 Sep 2023 10:34:29 +0000 (UTC)
+	with ESMTP id L_YrgWCgYQKF; Mon, 11 Sep 2023 10:34:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ED5D540CA7;
-	Mon, 11 Sep 2023 10:34:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED5D540CA7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8A80A1BF95F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B0C940C5C;
+	Mon, 11 Sep 2023 10:34:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B0C940C5C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D45C51BF28E
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6397E81376
+ by smtp4.osuosl.org (Postfix) with ESMTP id B91FC408A1
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:34:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6397E81376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B91FC408A1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kQzYJMCYhzpu for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lrpPVERFktK1 for <buildroot@lists.busybox.net>;
  Mon, 11 Sep 2023 10:34:01 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89A6981368
+ by smtp4.osuosl.org (Postfix) with ESMTP id 99FF14089C
  for <buildroot@buildroot.org>; Mon, 11 Sep 2023 10:34:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89A6981368
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99FF14089C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7768686C5C; Mon, 11 Sep 2023 10:34:01 +0000 (UTC)
+ id 8815D86C5E; Mon, 11 Sep 2023 10:34:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 12:29:10 +0200
+Date: Mon, 11 Sep 2023 12:33:21 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: de194a06309da951ee17558f130cce12526185c7
-X-Git-Newrev: 43e8ac7a6ae2548d98bb1686b3ad19443594cc05
+X-Git-Oldrev: 0c93b9ac47ed15abcc34688721f32eeebf196c36
+X-Git-Newrev: 8357eb8a94893328a2799ebfc1c9d93fb2a7ef3a
 X-Patchwork-Hint: ignore
-Message-Id: <20230911103401.7768686C5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libglib2: fix
- libiconv handling
+Message-Id: <20230911103401.8815D86C5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libksba: update
+ CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,65 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43e8ac7a6ae2548d98bb1686b3ad19443594cc05
+commit: https://git.buildroot.net/buildroot/commit/?id=8357eb8a94893328a2799ebfc1c9d93fb2a7ef3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-In upstream commit e71ecc8771a4f13bc6046438ab0845944831b9a6 ("build:
-Remove deprecated -Diconv option"), merged since glib 2.75.1, the
-meson -Diconv option was removed.
+libksba_project:libksba has been deprecated by NVD [0],
+gnupg:libksba should be used instead.
 
-In Buildroot, this means that the build of libglib2 has been broken
-since commit 3f9622fe3d85b4d9f734b879abc1d485afea19b2, which bumped
-libglib2 from 2.72.3 to 2.76.1 for configurations that have libiconv
-enabled, causing this build failure:
+[0]: https://nvd.nist.gov/products/cpe/detail/AA709F75-0B9E-4B67-ACEA-C1DCF33E7745?namingFormat=2.3&orderBy=CPEURI&keyword=libksba&status=FINAL
 
-../output-1/build/libglib2-2.76.1/meson.build:1:0: ERROR: Unknown options: "iconv"
-
-iconv is now automatically detected by Meson machinery, and so the
-option was considered as no longer being needed. This commit fixes
-that by dropping the useless -Diconv=external.
-
-Another related change done is remove the double addition of libiconv
-into the <pkg>_DEPENDENCIES variable: libiconv can only be enabled
-when BR2_ENABLE_LOCALE is disabled, and libglib2/Config.in selects
-BR2_PACKAGE_LIBICONV when !BR2_ENABLE_LOCALE. So testing
-BR2_ENABLE_LOCALE!=y and BR2_PACKAGE_LIBICONV=y is exactly the same
-thing, causing libiconv to be added twice to the dependencies.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/d2da03f7558f3b6ee59c813bb64115702e52704c/
-
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ff050de534eed1dab152890d748952fc659882a0)
+(cherry picked from commit 4936a8e9e2c5cc03b30f32ac8476d6bcfb0412e8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglib2/libglib2.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/libksba/libksba.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index ecd7d5dbfe..c06ded2a5b 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -60,10 +60,6 @@ LIBGLIB2_MESON_EXTRA_PROPERTIES = \
- 	have_c99_snprintf=true \
- 	have_unix98_printf=true
- 
--ifneq ($(BR2_ENABLE_LOCALE),y)
--LIBGLIB2_DEPENDENCIES += libiconv
--endif
--
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- LIBGLIB2_DEPENDENCIES += elfutils
- endif
-@@ -74,7 +70,6 @@ LIBGLIB2_LDFLAGS += -latomic
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
--LIBGLIB2_CONF_OPTS += -Diconv=external
- LIBGLIB2_DEPENDENCIES += libiconv
- endif
- 
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index b7c0508df8..122914d524 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -9,7 +9,7 @@ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
+ LIBKSBA_LICENSE_FILES = AUTHORS COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv3
+-LIBKSBA_CPE_ID_VENDOR = libksba_project
++LIBKSBA_CPE_ID_VENDOR = gnupg
+ LIBKSBA_INSTALL_STAGING = YES
+ LIBKSBA_DEPENDENCIES = libgpg-error
+ LIBKSBA_CONF_OPTS = --with-gpg-error-prefix=$(STAGING_DIR)/usr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
