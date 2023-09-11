@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21FE7CA0EC1
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EE84CA0EC0
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C50B0418C3;
-	Mon, 11 Sep 2023 20:59:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C50B0418C3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B41940576;
+	Mon, 11 Sep 2023 20:59:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B41940576
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HnN3IngCmiog; Mon, 11 Sep 2023 20:59:04 +0000 (UTC)
+	with ESMTP id vmKTFG7C1BCG; Mon, 11 Sep 2023 20:59:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF4D9418BD;
-	Mon, 11 Sep 2023 20:59:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF4D9418BD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B5321BF955
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CF614189B;
+	Mon, 11 Sep 2023 20:59:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CF614189B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 765381BF3A9
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32E9F81EFC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 309B061064
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:58:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32E9F81EFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 309B061064
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ev6NhYIGnxgq for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uOj88baeD9p5 for <buildroot@lists.busybox.net>;
  Mon, 11 Sep 2023 20:58:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72A1B81E84
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67BD56105A
  for <buildroot@buildroot.org>; Mon, 11 Sep 2023 20:58:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72A1B81E84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67BD56105A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 62CA586D43; Mon, 11 Sep 2023 20:58:23 +0000 (UTC)
+ id 572C386D42; Mon, 11 Sep 2023 20:58:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 22:48:24 +0200
+Date: Mon, 11 Sep 2023 22:46:46 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 8d9f6075cac0d7e9e43c022e23b67b38fca58942
-X-Git-Newrev: 5c6c6d9634fe47a6b356a37389d59e6ab37ae78f
+X-Git-Oldrev: 24acc5978d8d0e72c949781b8af34a95610074da
+X-Git-Newrev: 8d9f6075cac0d7e9e43c022e23b67b38fca58942
 X-Patchwork-Hint: ignore
-Message-Id: <20230911205823.62CA586D43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/berkeleydb: add
- option for historic dbm interface
+Message-Id: <20230911205823.572C386D42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/flite: add
+ FLITE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,65 +58,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2234217578335130653=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c6c6d9634fe47a6b356a37389d59e6ab37ae78f
+--===============2234217578335130653==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8d9f6075cac0d7e9e43c022e23b67b38fca58942
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Berkeley DB support in python depends on dbm, when missing python fails
-to detect libdb:
-https://github.com/python/cpython/blob/d2340ef25721b6a72d45d4508c672c4be38c67d3/configure.ac#L4002
+cpe:2.3:a:cmu:flite is a valid identifier for
+this package:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=flite
 
-quoting python configure log:
-checking for libdb... no
-
-quoting python config.log:
-conftest.c:(.text.startup+0x8): undefined reference to `__db_ndbm_open'
-
-This patch provides a configure option for the historic dbm interface
-to be used by the python package.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 244a8c52ef25bafdee6577d08e47c091b2093cc8)
+(cherry picked from commit 144cacd07bd613bc4a293b8c0ec7c7304bdf8cc0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/berkeleydb/Config.in     | 5 +++++
- package/berkeleydb/berkeleydb.mk | 1 +
- 2 files changed, 6 insertions(+)
+ package/flite/flite.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/berkeleydb/Config.in b/package/berkeleydb/Config.in
-index f32d13ab17..f8fbb5cc09 100644
---- a/package/berkeleydb/Config.in
-+++ b/package/berkeleydb/Config.in
-@@ -13,6 +13,11 @@ config BR2_PACKAGE_BERKELEYDB_COMPAT185
- 	help
- 	  Build and install DB 1.85 compatibility API.
+diff --git a/package/flite/flite.mk b/package/flite/flite.mk
+index 79b2288fe3..bee4c7394f 100644
+--- a/package/flite/flite.mk
++++ b/package/flite/flite.mk
+@@ -8,6 +8,7 @@ FLITE_VERSION = 2.2
+ FLITE_SITE = $(call github,festvox,flite,v$(FLITE_VERSION))
+ FLITE_LICENSE = BSD-4-Clause
+ FLITE_LICENSE_FILES = COPYING
++FLITE_CPE_ID_VENDOR = cmu
  
-+config BR2_PACKAGE_BERKELEYDB_DBM
-+	bool "historic dbm interface"
-+	help
-+	  Enable the historic dbm interface.
-+
- config BR2_PACKAGE_BERKELEYDB_TOOLS
- 	bool "install tools"
- 	help
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index 36b1894f34..1c121370db 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -39,6 +39,7 @@ define BERKELEYDB_CONFIGURE_CMDS
- 		--disable-java \
- 		--disable-tcl \
- 		$(if $(BR2_PACKAGE_BERKELEYDB_COMPAT185),--enable-compat185,--disable-compat185) \
-+		$(if $(BR2_PACKAGE_BERKELEYDB_DBM),--enable-dbm,--disable-dbm) \
- 		$(SHARED_STATIC_LIBS_OPTS) \
- 		--with-pic \
- 		--enable-o_direct \
+ FLITE_INSTALL_STAGING = YES
+ # Patching configure.in
+
+--===============2234217578335130653==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2234217578335130653==--
