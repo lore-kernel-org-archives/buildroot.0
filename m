@@ -4,48 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18F55EEB57E
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:10:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83E5AEE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:10:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CBDD44031C;
-	Mon, 11 Sep 2023 19:10:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBDD44031C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B90941509;
+	Mon, 11 Sep 2023 19:10:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B90941509
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3kRU2BHNK6Lu; Mon, 11 Sep 2023 19:10:45 +0000 (UTC)
+	with ESMTP id 2PcbfarnNBkf; Mon, 11 Sep 2023 19:10:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 145B34154A;
-	Mon, 11 Sep 2023 19:10:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 145B34154A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D89B11BF964
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 74BA64154E;
+	Mon, 11 Sep 2023 19:10:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74BA64154E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 12D251BF479
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF80C417B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id E13A4414EC
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF80C417B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E13A4414EC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mxZ9_bnAPbE6 for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id FlOm5vm0o7fw for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4FD7417B2
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4FD7417B2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 062A541517
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 062A541517
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A412386CAF; Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
+ id F227086CAE; Mon, 11 Sep 2023 19:08:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 18:17:31 +0200
+Date: Mon, 11 Sep 2023 18:20:05 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 9f17d41773707e654c6d922b4657ef5f42da88b1
-X-Git-Newrev: bc19b0ca3361063265b60a08a53d5b03d673dfc7
+X-Git-Oldrev: 2c4bb5306be70b3398f4dd5c916f7e826eac231d
+X-Git-Newrev: 6eff45c030be190a14f18ae822913cb2ccf74497
 X-Patchwork-Hint: ignore
-Message-Id: <20230911190853.A412386CAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/aubio: add
- AUBIO_CPE_ID_VENDOR
+Message-Id: <20230911190853.F227086CAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/sngrep: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +57,38 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4172436374033260649=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4172436374033260649==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=bc19b0ca3361063265b60a08a53d5b03d673dfc7
+commit: https://git.buildroot.net/buildroot/commit/?id=6eff45c030be190a14f18ae822913cb2ccf74497
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-cpe:2.3:a:aubio:aubio is a valid identifier for
-this package:
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=aubio
+irontec:sngrep is a valid CPE ID:
+https://nvd.nist.gov/products/cpe/detail/558A213D-A36B-4ED8-8671-2C38110F47FD?namingFormat=2.3&orderBy=CPEURI&keyword=sngrep&status=FINAL
 
-Signed-off-by: Clément Ramirez <clement.ramirez@bootlin.com>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 969bd6e3ddf3567495bab190e828dc9135d31e87)
+(cherry picked from commit 159e469f53a1220249e8df41e287668a3d726678)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aubio/aubio.mk | 1 +
+ package/sngrep/sngrep.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index 64174a113d..bfc627fa91 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
-@@ -9,6 +9,7 @@ AUBIO_SITE = https://aubio.org/pub
- AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
- AUBIO_LICENSE = GPL-3.0+
- AUBIO_LICENSE_FILES = COPYING
-+AUBIO_CPE_ID_VENDOR = aubio
- AUBIO_INSTALL_STAGING = YES
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index eedb99492f..0e344550d3 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -9,6 +9,7 @@ SNGREP_SITE = \
+ 	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
+ SNGREP_LICENSE = GPL-3.0+
+ SNGREP_LICENSE_FILES = LICENSE
++SNGREP_CPE_ID_VENDOR = irontec
+ SNGREP_AUTORECONF = YES
+ SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
  
- AUBIO_DEPENDENCIES = host-pkgconf
-
---===============4172436374033260649==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4172436374033260649==--
