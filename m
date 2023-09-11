@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E76B8EE7FF4
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 10:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50270EE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 10:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A176D40CCF;
-	Mon, 11 Sep 2023 10:35:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A176D40CCF
+	by smtp2.osuosl.org (Postfix) with ESMTP id F394440C2C;
+	Mon, 11 Sep 2023 10:35:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F394440C2C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WlvAGjpbMVpR; Mon, 11 Sep 2023 10:35:21 +0000 (UTC)
+	with ESMTP id ZT1GT1EHjNFE; Mon, 11 Sep 2023 10:35:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE9C240C3F;
-	Mon, 11 Sep 2023 10:35:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE9C240C3F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2D6671BF955
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2DCD740C5A;
+	Mon, 11 Sep 2023 10:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DCD740C5A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 324B61BF28E
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:35:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0739D40CC8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0872A81406
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:35:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0739D40CC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0872A81406
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KhAbrXSBTVFW for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 2sSdKtUMF8Gn for <buildroot@lists.busybox.net>;
  Mon, 11 Sep 2023 10:35:06 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15A8B40C3F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2423181407
  for <buildroot@buildroot.org>; Mon, 11 Sep 2023 10:35:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15A8B40C3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2423181407
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 012B286C6B; Mon, 11 Sep 2023 10:35:05 +0000 (UTC)
+ id 13FA686C6D; Mon, 11 Sep 2023 10:35:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 12:27:22 +0200
+Date: Mon, 11 Sep 2023 12:33:11 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 3a019470eaa5aa9a47d3465848eebaef66c7491d
-X-Git-Newrev: fda8cb53f81e8796b4762c6daba89d4e00606e2d
+X-Git-Oldrev: eebbfb5f286e55ae11df49b5ff5b85d313c14707
+X-Git-Newrev: f8c6a08f1a7ab3d290f8f5969cd144a5e231d6fd
 X-Patchwork-Hint: ignore
-Message-Id: <20230911103506.012B286C6B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/openssh: fix
- build failure due to gcc bug 110934
+Message-Id: <20230911103506.13FA686C6D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libksba: update
+ CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,54 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fda8cb53f81e8796b4762c6daba89d4e00606e2d
+commit: https://git.buildroot.net/buildroot/commit/?id=f8c6a08f1a7ab3d290f8f5969cd144a5e231d6fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Following ICE occurs for m68k builds:
-(cd openbsd-compat && /home/autobuild/make/make)
-/home/autobuild/autobuild/instance-10/output-1/host/bin/m68k-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3 -g0  -pipe -Wno-error=format-truncation -Wall
-+-Wpointer-arith -Wuninitialized -Wsign-compare -Wformat-security -Wsizeof-pointer-memaccess -Wno-pointer-sign -Wno-unused-result -Wimplicit-fallthrough -Wmisleading-indentation -fno-strict-aliasing
-+-D_FORTIFY_SOURCE=2 -ftrapv -fzero-call-used-regs=all -fno-builtin-memset   -fPIC -I. -I.. -I. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=600 -D_BSD_SOURCE
-+-D_DEFAULT_SOURCE -D_GNU_SOURCE -DHAVE_CONFIG_H -c bsd-closefrom.c
-during RTL pass: zero_call_used_regs
-bsd-closefrom.c: In function 'closefrom':
-bsd-closefrom.c:151:1: internal compiler error: in change_address_1, at emit-rtl.c:2275
-  151 | }
-      | ^
-0x7fa76f4bad09 __libc_start_main
-        ../csu/libc-start.c:308
-Please submit a full bug report,
-with preprocessed source if appropriate.
-Please include the complete backtrace with any bug report.
-See <http://bugs.buildroot.net/> for instructions.
-make[2]: *** [Makefile:106: bsd-closefrom.o] Error 1
+libksba_project:libksba has been deprecated by NVD [0],
+gnupg:libksba should be used instead.
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/d29/d29c662e41d8969e6a8aa24870e728bcc7050563/
+[0]: https://nvd.nist.gov/products/cpe/detail/AA709F75-0B9E-4B67-ACEA-C1DCF33E7745?namingFormat=2.3&orderBy=CPEURI&keyword=libksba&status=FINAL
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5b60f2782e6d2d5235842671a8837eefbaca4712)
+(cherry picked from commit 4936a8e9e2c5cc03b30f32ac8476d6bcfb0412e8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libksba/libksba.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index e14d752290..a2c3f16129 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -35,6 +35,10 @@ define OPENSSH_PERMISSIONS
- 	/var/empty d 755 root root - - - - -
- endef
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_110934),y)
-+OPENSSH_CONF_OPTS += --without-hardening
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- OPENSSH_CONF_OPTS += --without-pie
- endif
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index b7c0508df8..122914d524 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -9,7 +9,7 @@ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
+ LIBKSBA_LICENSE_FILES = AUTHORS COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv3
+-LIBKSBA_CPE_ID_VENDOR = libksba_project
++LIBKSBA_CPE_ID_VENDOR = gnupg
+ LIBKSBA_INSTALL_STAGING = YES
+ LIBKSBA_DEPENDENCIES = libgpg-error
+ LIBKSBA_CONF_OPTS = --with-gpg-error-prefix=$(STAGING_DIR)/usr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
