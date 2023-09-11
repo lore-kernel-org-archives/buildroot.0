@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A072EE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 09:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6935EEB57E
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 09:46:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0A33408F2;
-	Mon, 11 Sep 2023 09:45:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0A33408F2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35B2A408FA;
+	Mon, 11 Sep 2023 09:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B2A408FA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lynsfzpGl1-m; Mon, 11 Sep 2023 09:45:12 +0000 (UTC)
+	with ESMTP id p-zXFHdqg0ag; Mon, 11 Sep 2023 09:46:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A72A5408DF;
-	Mon, 11 Sep 2023 09:45:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A72A5408DF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8983B1BF20D
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:45:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B9EF408E7;
+	Mon, 11 Sep 2023 09:46:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B9EF408E7
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ADB41BF20D
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:46:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6401540C99
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:45:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6401540C99
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7308F60FA5
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:46:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7308F60FA5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1zSh3-sGEDB3 for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 09:45:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7jYAYIzprRIq for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 09:46:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E08340CB6
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 09:45:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E08340CB6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D3D860FA3
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 09:46:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D3D860FA3
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77C3886C42; Mon, 11 Sep 2023 09:45:09 +0000 (UTC)
+ id 8D19486C44; Mon, 11 Sep 2023 09:46:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 11:24:00 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: cd3b0fa07d7e0431923cdcee06b10d45f9d5a5fb
-X-Git-Newrev: 2625ea6bf2f77b0292811432ea627c44b81f9ee3
+Date: Mon, 11 Sep 2023 09:41:22 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 3427fa6fc6398311bc7f0e90c832ab14f7b00098
+X-Git-Newrev: cdc2edd0ab04844a4b97466f6bbabce5ea41552e
 X-Patchwork-Hint: ignore
-Message-Id: <20230911094509.77C3886C42@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/gcc: disable
+Message-Id: <20230911094615.8D19486C44@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/gcc: disable
  libsanitizer on ARM Thumb classic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2625ea6bf2f77b0292811432ea627c44b81f9ee3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cdc2edd0ab04844a4b97466f6bbabce5ea41552e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 libsanitizer is broken for Thumb1, sanitizer_linux.cc contains
 unconditional "ldr ip, [sp], #8", which causes:
