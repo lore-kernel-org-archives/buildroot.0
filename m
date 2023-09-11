@@ -1,68 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 340E3C71153
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1776AEEB593
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 20:47:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E078E8127F;
-	Mon, 11 Sep 2023 20:09:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E078E8127F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A3774187C;
+	Mon, 11 Sep 2023 20:47:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A3774187C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I4eN_3888krs; Mon, 11 Sep 2023 20:09:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id pPC1r63Ptg1c; Mon, 11 Sep 2023 20:47:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34E4281220;
-	Mon, 11 Sep 2023 20:08:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34E4281220
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72F5841877;
+	Mon, 11 Sep 2023 20:47:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F5841877
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C66991BF357
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:08:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3342D1BF215
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:47:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FB5B400FE
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FB5B400FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0CB0C40158
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 20:47:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CB0C40158
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wfykZKH2Xl3I for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 20:08:54 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 91B2040158
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 20:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91B2040158
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A1F611C0012;
- Mon, 11 Sep 2023 20:08:28 +0000 (UTC)
-Date: Mon, 11 Sep 2023 22:08:27 +0200
-To: Daniel Lang <dalang@gmx.at>
-Message-ID: <20230911220827.0330eb1b@windsurf>
-In-Reply-To: <20230911035202.51266-2-dalang@gmx.at>
-References: <20230911035202.51266-2-dalang@gmx.at>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ with ESMTP id fDeke3GerSeL for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 20:47:38 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 97821400FE
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 20:47:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97821400FE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A62874000A;
+ Mon, 11 Sep 2023 20:47:11 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qfnoM-00Fmv8-GQ; Mon, 11 Sep 2023 22:47:10 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: =?utf-8?Q?Cl=C3=A9ment?= Ramirez via buildroot <buildroot@buildroot.org>
+References: <20230809093237.326383-1-clement.ramirez@bootlin.com>
+Date: Mon, 11 Sep 2023 22:47:10 +0200
+In-Reply-To: <20230809093237.326383-1-clement.ramirez@bootlin.com>
+ (=?utf-8?Q?=22Cl=C3=A9ment?=
+ Ramirez via buildroot"'s message of "Wed, 9 Aug 2023 11:32:37 +0200")
+Message-ID: <877cowa14h.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1694462932;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=omITyceY7chjTBpSYeKrCAPDI9LsBOHPycd/sMXvza0=;
- b=dD2PbuFH3CruYr0DeCj3d/RCXoFpthKYGIUnkUgUGc41GpqhUk3yMoSwgjRqG78nfwSUoi
- B3otxgtoDS7O/iu2nNeiyAUbb5gSd583B/dQAmuWN4ShjR3I7uvaotEryU2Bl4lTyusASa
- 1NSf54/4vOuKn6BY5bO/ZxvijYssYUDqdM5jDVtoAIwLjFM5h0vuJjnUWC8nDezReaZspD
- 6qBZhjUzzDk0ZVG0Nfir9Uu5rS+17/cHjwDQTOp6rypOM/PadT5MULwuxhopCV0wlJ06t6
- 6FmWRbVlW94vhfFCC0wxBYFxUbWxnJ7cOH7CjP+WUUhEJaeGuiFcB8RmYbcUeQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dD2PbuFH
-Subject: Re: [Buildroot] [PATCH] package/libxcrypt: drop upstream patches
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/flite: add FLITE_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,41 +63,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Guillaume William Brs <guillaume.bressaix@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ =?utf-8?Q?Cl=C3=A9ment?= Ramirez <clement.ramirez@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 11 Sep 2023 05:52:02 +0200
-Daniel Lang <dalang@gmx.at> wrote:
-
-> These patches were backported (47b7947 and 7dd5233) before the 2023.08
-> release. Meanwhile the package was bumped on next (be5e4a1) to a version
-> containing these patches. Therefore they can be dropped.
-> 
-> Fixes:
-> - http://autobuild.buildroot.net/results/7f7ec74e80cd1ab782d87f5db3e4631c12611101/
-> 
-> Signed-off-by: Daniel Lang <dalang@gmx.at>
-> ---
->  ...ommon.pm-compatible-with-latest-perl.patch | 50 ---------------
->  ...ve-smartmatch-usage-from-gen-crypt-h.patch | 61 -------------------
->  2 files changed, 111 deletions(-)
->  delete mode 100644 package/libxcrypt/0001-Make-BuildCommon.pm-compatible-with-latest-perl.patch
->  delete mode 100644 package/libxcrypt/0002-Remove-smartmatch-usage-from-gen-crypt-h.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkNsw6ltZW50IiA9PSBDbMOpbWVudCBSYW1pcmV6IHZpYSBidWlsZHJvb3QgPGJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnPiB3cml0ZXM6CgogPiBjcGU6Mi4zOmE6Y211OmZsaXRlIGlzIGEg
+dmFsaWQgaWRlbnRpZmllciBmb3IKID4gdGhpcyBwYWNrYWdlOgogPiBodHRwczovL252ZC5uaXN0
+Lmdvdi9wcm9kdWN0cy9jcGUvc2VhcmNoL3Jlc3VsdHM/bmFtaW5nRm9ybWF0PTIuMyZrZXl3b3Jk
+PWZsaXRlCgogPiBTaWduZWQtb2ZmLWJ5OiBDbMOpbWVudCBSYW1pcmV6IDxjbGVtZW50LnJhbWly
+ZXpAYm9vdGxpbi5jb20+CgpDb21taXR0ZWQgdG8gMjAyMy4wMi54IGFuZCAyMDIzLjA1LngsIHRo
+YW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
