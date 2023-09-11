@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1528AEE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 07:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 564AFEE801F
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 07:26:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA7DA4058C;
-	Mon, 11 Sep 2023 07:23:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA7DA4058C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02128404E9;
+	Mon, 11 Sep 2023 07:26:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02128404E9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id egwPMxggroJW; Mon, 11 Sep 2023 07:23:36 +0000 (UTC)
+	with ESMTP id 7TeRTbTSvb2i; Mon, 11 Sep 2023 07:26:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5A7B400EA;
-	Mon, 11 Sep 2023 07:23:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5A7B400EA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 035041BF3FB
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 07:23:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0B97404E2;
+	Mon, 11 Sep 2023 07:26:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0B97404E2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4A4EF1BF3FB
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 07:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DEF39817AE
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 07:23:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEF39817AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24974401D5
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 07:26:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24974401D5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ajJ9yhbSTuIH for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 07:23:22 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1D868817AD
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 07:23:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D868817AD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C88C840008;
- Mon, 11 Sep 2023 07:23:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qfbGP-00DAfC-RF; Mon, 11 Sep 2023 09:23:17 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vCS6eirElGja for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 07:26:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64EE640122
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 07:26:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64EE640122
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 52FB986C23; Mon, 11 Sep 2023 07:26:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Ziegler <br015@umbiko.net>
-References: <20220409160921.GA3547512@scaer>
- <20221005091032.3014-4-br015@umbiko.net>
-Date: Mon, 11 Sep 2023 09:23:17 +0200
-In-Reply-To: <20221005091032.3014-4-br015@umbiko.net> (Andreas Ziegler's
- message of "Wed, 5 Oct 2022 11:10:31 +0200")
-Message-ID: <87leddcgwq.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2 3/4] package/mpd: introduce id3tag
- feature dependency
+To: buildroot@buildroot.org
+Date: Mon, 11 Sep 2023 09:21:20 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 20ed5635f14bfcc2b14b9498001d848919c06c5c
+X-Git-Newrev: 99d5bacae619c68f2f9270a5943a5b0cd2a69aaa
+X-Patchwork-Hint: ignore
+Message-Id: <20230911072609.52FB986C23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mpd: introduce
+ id3tag feature dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,33 +57,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: YANN E MORIN <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Andreas" == Andreas Ziegler <br015@umbiko.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=99d5bacae619c68f2f9270a5943a5b0cd2a69aaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > id3tag is a sub-feature that is needed to extract information from mp3 files.
- > It selects the corresponding library and handles config settings. Two other
- > features need this sub-feature, but handle all library selections themselves
- > and omit enabling the id3tag feature. In consequence, users have to remember
- > to select both mp3 library and id3tag, otherwise the mpd executable will not
- > process mp3 files.
+id3tag is a sub-feature that is needed to extract information from mp3 files.
+It selects the corresponding library and handles config settings. Two other
+features need this sub-feature, but handle all library selections themselves
+and omit enabling the id3tag feature. In consequence, users have to remember
+to select both mp3 library and id3tag, otherwise the mpd executable will not
+process mp3 files.
 
- > Reflect feature dependency in mpd Config.in to make id3tag selection automatic.
+Reflect feature dependency in mpd Config.in to make id3tag selection automatic.
 
- > Signed-off-by: Andreas Ziegler <br015@umbiko.net>
- > ---
- > Changes v1 -> v2:
- >  - make this a separate patch 
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 876a365ea2a1c48477eabfe3ae600a9d48f1b4ab)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpd/Config.in | 4 ++--
+ package/mpd/mpd.mk    | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 8f0af7b2d3..f350b7e72a 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -127,7 +127,7 @@ config BR2_PACKAGE_MPD_LIBSNDFILE
+ config BR2_PACKAGE_MPD_MAD
+ 	bool "mad"
+ 	default y
+-	select BR2_PACKAGE_LIBID3TAG
++	select BR2_PACKAGE_MPD_ID3TAG
+ 	select BR2_PACKAGE_LIBMAD
+ 	help
+ 	  Enable mad input support.
+@@ -141,7 +141,7 @@ config BR2_PACKAGE_MPD_MODPLUG
+ 
+ config BR2_PACKAGE_MPD_MPG123
+ 	bool "mpg123"
+-	select BR2_PACKAGE_LIBID3TAG
++	select BR2_PACKAGE_MPD_ID3TAG
+ 	select BR2_PACKAGE_MPG123
+ 	help
+ 	  Enable mpg123 input support.
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index b599e320e0..0205208946 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -190,7 +190,7 @@ MPD_CONF_OPTS += -Dsoxr=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_MAD),y)
+-MPD_DEPENDENCIES += libid3tag libmad
++MPD_DEPENDENCIES += libmad
+ MPD_CONF_OPTS += -Dmad=enabled
+ else
+ MPD_CONF_OPTS += -Dmad=disabled
+@@ -204,7 +204,7 @@ MPD_CONF_OPTS += -Dmodplug=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MPD_MPG123),y)
+-MPD_DEPENDENCIES += libid3tag mpg123
++MPD_DEPENDENCIES += mpg123
+ MPD_CONF_OPTS += -Dmpg123=enabled
+ else
+ MPD_CONF_OPTS += -Dmpg123=disabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
