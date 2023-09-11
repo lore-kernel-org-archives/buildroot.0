@@ -4,64 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E4FCCA0EC1
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 21:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7791CCA0EC0
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 21:08:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12EBB40576;
-	Mon, 11 Sep 2023 21:07:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12EBB40576
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2505240905;
+	Mon, 11 Sep 2023 21:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2505240905
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SMGMbZQb2dC5; Mon, 11 Sep 2023 21:07:22 +0000 (UTC)
+	with ESMTP id 8j8OyQwSa6WW; Mon, 11 Sep 2023 21:08:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFA58417C7;
-	Mon, 11 Sep 2023 21:07:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFA58417C7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A79A01BF309
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 21:07:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDE6F40922;
+	Mon, 11 Sep 2023 21:08:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDE6F40922
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 376E11BF32E
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 21:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80E9E81EC0
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 21:07:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80E9E81EC0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 10A9760BDC
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 21:08:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10A9760BDC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GNat0SxSsQge for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 21:07:18 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 49BB981EAE
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 21:07:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49BB981EAE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7760320007;
- Mon, 11 Sep 2023 21:06:52 +0000 (UTC)
-Date: Mon, 11 Sep 2023 23:06:51 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230911230651.4739c3d1@windsurf>
-In-Reply-To: <20230729103022.378621-1-bernd@kuhls.net>
-References: <20230729103022.378621-1-bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BBjC052kE7fj for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 21:08:42 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9712560AD5
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 21:08:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9712560AD5
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E0926E0009;
+ Mon, 11 Sep 2023 21:08:21 +0000 (UTC)
+Date: Mon, 11 Sep 2023 23:08:21 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230911230821.12471642@windsurf>
+In-Reply-To: <20230223153236.914358-1-fontaine.fabrice@gmail.com>
+References: <20230223153236.914358-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1694466436;
+ d=bootlin.com; s=gm1; t=1694466520;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=yv+loPAwhQ94S6NldYWR8rE8Tu2aPyBEwMeivrI7oSg=;
- b=NabTvWZrm9NY3VOIk93SP/jeuGvPEDA/nkL7pGSdfhMTFJjVSpnlzBsfZ6hYcoalAH4HtA
- M508ddpN3IHVv2/3vCBSBQsuEQ8RzFSX1w7CtKJ/0PQ0sAsfXrJt5/QsxoFZNy73EQUUdp
- CNPaNRUsVbrLnMFg5E6UKI8wGUXuXzbwepIS43jclOKtRS6erdEJZh8frOPyCjsDjabQEE
- rO4VUOE+Qteta4oBgWupJipGuqrV1obWF4hkOnrgWZIgDCBg56M13wF2VaTBLYKwPq4dUD
- cdRPSzcd3xUYAxcQFq0JrhncJcOZblpWfU+6ZmMrnLFc9kv12lF8NyGlZli+mg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=l+Qvg8urVJ9i/z3gTJpfUX/63x6KRoIUOqbiO8mTZZI=;
+ b=PPlbll5xm9Y3Y50kfhYUdy5MYAJ6sSl486BklcAezgWXD/YNTu1/hVMk4fQrI/b9Y8w2Hr
+ 5uZ1OMW4KkWtb0TtFJZXKeLJ3my4ab9Qx3nZ7ZegjG14yWW9aCtGl7X9CPZ3pBYs+KLnvh
+ GOQpyPe4t6J8d3YjtvL3pzntL6yXehwG0kr202d8uzjCh3Po6BukIpkchnIPOPMxJcYmUS
+ E4WHPKbN9Zi/VTbeDQZnByddMXVtOazR0pfZIWK9JSsQXMcFE7EbkBzeH5/C9yui1nOyOk
+ TyGSHzQAc29ONtaRfTx2kWKFuOAJ+ImjruVvobA6J+iZ3rKn1Vgk9JAWFMrEQg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NabTvWZr
+ header.s=gm1 header.b=PPlbll5x
 Subject: Re: [Buildroot] [PATCH 1/1] package/cairo: fix pthread detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -76,56 +76,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 29 Jul 2023 12:30:22 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+On Thu, 23 Feb 2023 16:32:36 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Cairo's link check for pthreads support "must complete without warnings
-> or errors to stderr":
-> https://cgit.freedesktop.org/cairo/tree/build/aclocal.cairo.m4?h=1.16.0#n83
-> https://cgit.freedesktop.org/cairo/tree/build/configure.ac.pthread?h=1.16.0#n137
+> pthreads detection fails if a warning is emitted resulting in the
+> following build failure with some toolchains:
 > 
-> The pthread check fails with this defconfig
+> onfigure:34189: checking for cairo's pthread feature
+> configure:34300: /home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O0 -g2  -D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lrt -latomic -lexecinfo -lm -lpthread >&5
+> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: warning: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/crtend.o: missing .note.GNU-stack section implies executable stack
+> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+> configure:34300: $? = 0
+> configure:34419: /home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O0 -g2  -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lrt -latomic -lexecinfo -lm  >&5
+> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: warning: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/crtend.o: missing .note.GNU-stack section implies executable stack
+> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+> configure:34419: $? = 0
+> configure:34500: /home/buildroot/autobuild/instance-1/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -O0 -g2  -D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lrt -latomic -lexecinfo -lm  >&5
+> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: warning: /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/crtend.o: missing .note.GNU-stack section implies executable stack
+> /home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/11.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+> configure:34500: $? = 0
+> configure:34555: checking whether cairo's pthread feature could be enabled
+> configure:34557: result: no (can't link with -lpthread or -pthread)
 > 
-> checking for cairo's pthread feature...
-> checking whether cairo's pthread feature could be enabled... no (can't link with -lpthread or -pthread)
+> [...]
 > 
-> due a warning thrown by ld:
+> In file included from cairo-mutex-type-private.h:45,
+>                  from cairo-scaled-font-private.h:45,
+>                  from cairoint.h:434,
+>                  from cairo-analysis-surface.c:37:
+> cairo-mutex-impl-private.h:262:3: error: #error "XXX: No mutex implementation found.  Cairo will not work with multiple threads.  Define CAIRO_NO_MUTEX to 1 to acknowledge and accept this limitation and compile cairo without thread-safety support."
+>   262 | # error "XXX: No mutex implementation found.  Cairo will not work with multiple threads.  Define CAIRO_NO_MUTEX to 1 to acknowledge and accept this limitation and compile cairo without thread-safety support."
+>       |   ^~~~~
 > 
-> /home/bernd/buildroot/output/per-package/cairo/host/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld:
->  warning: /home/bernd/buildroot/br4/output/per-package/cairo/host/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/crtendS.o:
->  missing .note.GNU-stack section implies executable stack
-> 
-> /home/bernd/buildroot/output/per-package/cairo/host/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/12.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld:
->  NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-> 
-> These linker warnings were introduced by binutils 2.39:
-> https://www.redhat.com/en/blog/linkers-warnings-about-executable-stacks-and-segments
-> 
-> Silence them by adding "-Wl,-z,noexecstack" to fix cairo's pthread check
-> 
-> Meanwhile upstream removed autoconf support on the master branch:
-> https://cgit.freedesktop.org/cairo/commit/?id=efe303d9db6e24d5786c15252327811338bc9b0a
-> so no need to notify them.
+> To avoid this build failure, add a patch that overrides this broken
+> mechanism
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/408/408a900ac01dbce145aff302c75f9f4e147f5672/
+>  - http://autobuild.buildroot.org/results/5420beaf94855e47eeb08627e8e3c169dc00419a
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/cairo/cairo.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  ...e.ac.pthread-respect-enable-pthreads.patch | 59 +++++++++++++++++++
+>  package/cairo/cairo.mk                        | 13 ++--
+>  2 files changed, 68 insertions(+), 4 deletions(-)
+>  create mode 100644 package/cairo/0005-build-configure.ac.pthread-respect-enable-pthreads.patch
 
-The correct fix for this was to fix gcc:
+This has been fixed directly in gcc by:
 
   https://gitlab.com/buildroot.org/buildroot/-/commit/ab4f3fafaa839593b3efd9ea12c8ee5d9340cdeb
 
-So I've marked this patch as Rejected. Thanks!
+Best regards,
 
 Thomas
 -- 
