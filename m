@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C4EFC71153
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:41:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7352BC71153
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD98881ECD;
-	Mon, 11 Sep 2023 19:41:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD98881ECD
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1989A81EE4;
+	Mon, 11 Sep 2023 19:42:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1989A81EE4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rDaOY_5Rcxby; Mon, 11 Sep 2023 19:41:18 +0000 (UTC)
+	with ESMTP id HSgWlarRSu4l; Mon, 11 Sep 2023 19:42:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B65B81EC0;
-	Mon, 11 Sep 2023 19:41:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B65B81EC0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9B9FE1BF2BB
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:41:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6400781EDD;
+	Mon, 11 Sep 2023 19:42:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6400781EDD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EB97E1BF2BB
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3CCA94187D
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:41:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CCA94187D
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1CF581EDD
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:42:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1CF581EDD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OYoimASxFC9s for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 19:41:13 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 152FF4185B
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:41:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 152FF4185B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 44FFDFF80B;
- Mon, 11 Sep 2023 19:40:53 +0000 (UTC)
-Date: Mon, 11 Sep 2023 21:40:51 +0200
-To: Chris Packham <judge.packham@gmail.com>
-Message-ID: <20230911214051.0da8179c@windsurf>
-In-Reply-To: <20230911155225.0a63879f@windsurf>
-References: <20230911085000.559230-1-judge.packham@gmail.com>
- <20230911155225.0a63879f@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1694461271;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=dVji5XveIzH61ZlDs6Zb8tEXeI5Q6hw5IV6le8fdOmc=;
- b=O/MqrcjYYDN/5kODV68o5WbnDVt5mVcODKJxH1hvx4eV75wl1nBZycZL1Zz4c+f2RhyK3z
- xA8i9SXfTz1IRCVDnofFuM05vW5oOf5581cTBhV1YWCiL19fo/XSbq64fccPgeojYaITSo
- 8ZIrmg8O+XIryYj1876LSFsUCUd2r/grkBLdDJrrmQGH3YEmRC6u0daCl3TE/AfiOPKJE5
- vJlkH24kqyVueXB1rxNIOQIboRAKn6zPqv4KAGPWsOTPnPGRkvYzws/MVUuYPD6aYTV3lL
- CeACnP44uMa519b7UtYVBx7QPiboaGdAuY1ksr/k1Px3dnqHWj/8UpTndJ0y+A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=O/MqrcjY
-Subject: Re: [Buildroot] [PATCH 1/2] syslog-ng: bump version to 4.3.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zDls1rCPP0DL for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:42:24 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3AED81EBC
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:42:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3AED81EBC
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C12F986CEE; Mon, 11 Sep 2023 19:42:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 11 Sep 2023 21:41:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 530ea784f1c7ef8176b46245710016ec7bce89dd
+X-Git-Newrev: 8d55b912d762809e24a09bb7f47ddcd4c238f7b6
+X-Patchwork-Hint: ignore
+Message-Id: <20230911194224.C12F986CEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-shark: bump
+ version to v0.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,37 +58,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Chris,
+commit: https://git.buildroot.net/buildroot/commit/?id=8d55b912d762809e24a09bb7f47ddcd4c238f7b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Sep 2023 15:52:25 +0200
-Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+Update to the latest release.
 
-> On Mon, 11 Sep 2023 20:49:59 +1200
-> Chris Packham <judge.packham@gmail.com> wrote:
-> 
-> > Update to latest version. This includes a fix for CVE-2022-38725.  
-> 
-> So this is a security bump?
+Release notes:
+https://github.com/RidgeRun/gst-shark/releases/tag/v0.8.1
+https://github.com/RidgeRun/gst-shark/releases/tag/v0.8.0
 
-Actually, are you sure it is related to CVE-2022-38725. According to
-https://nvd.nist.gov/vuln/detail/CVE-2022-38725, this CVE only affects
-versions up to 3.38, and we're at 4.2.0. In addition,
-https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.3.1
-does not mention "CVE" anywhere. Could you clarify this?
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-shark/gst1-shark.hash | 2 +-
+ package/gstreamer1/gst1-shark/gst1-shark.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/gstreamer1/gst1-shark/gst1-shark.hash b/package/gstreamer1/gst1-shark/gst1-shark.hash
+index cfd72dd2a6..37276cc93d 100644
+--- a/package/gstreamer1/gst1-shark/gst1-shark.hash
++++ b/package/gstreamer1/gst1-shark/gst1-shark.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256  413dbd8b6be1b09751e8d00abf9784de18cb74283c95ac078f6fb7d8750de26a  gst1-shark-v0.7.5-br1.tar.gz
++sha256  07587922dc49d12abe2444590a88c530409854b02904ad50357b312f9b6ea736  gst1-shark-v0.8.1-br1.tar.gz
+ 
+ # Hashes for license files:
+ sha256  6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
+diff --git a/package/gstreamer1/gst1-shark/gst1-shark.mk b/package/gstreamer1/gst1-shark/gst1-shark.mk
+index 17df001cef..a059d41cb8 100644
+--- a/package/gstreamer1/gst1-shark/gst1-shark.mk
++++ b/package/gstreamer1/gst1-shark/gst1-shark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_SHARK_VERSION = v0.7.5
++GST1_SHARK_VERSION = v0.8.1
+ GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
+ GST1_SHARK_SITE_METHOD = git
+ GST1_SHARK_GIT_SUBMODULES = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
