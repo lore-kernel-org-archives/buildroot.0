@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22ABDC71153
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 920DDEE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CEA9A41548;
-	Mon, 11 Sep 2023 19:21:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEA9A41548
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4BEED4152B;
+	Mon, 11 Sep 2023 19:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BEED4152B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AaPZH_BBn63i; Mon, 11 Sep 2023 19:21:00 +0000 (UTC)
+	with ESMTP id a0if4EVHaAyR; Mon, 11 Sep 2023 19:21:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BC8A41547;
-	Mon, 11 Sep 2023 19:20:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BC8A41547
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A7E891BF860
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:20:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 76AB841551;
+	Mon, 11 Sep 2023 19:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76AB841551
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F178C1BF2BB
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:20:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DE2F41871
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1BAC818C9
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:20:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DE2F41871
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D1BAC818C9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ihqXMGZMz6mf for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VXWtXdJchwPU for <buildroot@lists.busybox.net>;
  Mon, 11 Sep 2023 19:20:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F05941829
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76511817A4
  for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:20:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F05941829
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76511817A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BE4186CC6; Mon, 11 Sep 2023 19:20:22 +0000 (UTC)
+ id 6298186CC4; Mon, 11 Sep 2023 19:20:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 21:17:39 +0200
+Date: Mon, 11 Sep 2023 21:14:47 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 4564db20f3128d4177e3e8e1cc3fa1bcc6a26b0e
-X-Git-Newrev: c8d3d288358c06eb076d4cce735e807c6a5e0ee8
+X-Git-Oldrev: a4dc365b9ab68491a3bca54a0066dbbfb904fffc
+X-Git-Newrev: 4564db20f3128d4177e3e8e1cc3fa1bcc6a26b0e
 X-Patchwork-Hint: ignore
-Message-Id: <20230911192022.6BE4186CC6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/intel-microcode:
- security bump version to 20230808
+Message-Id: <20230911192022.6298186CC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] {linux,
+ linux-headers}: security bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1,
+ 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8d3d288358c06eb076d4cce735e807c6a5e0ee8
+commit: https://git.buildroot.net/buildroot/commit/?id=4564db20f3128d4177e3e8e1cc3fa1bcc6a26b0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 Fixes CVE-2022-40982:
@@ -73,35 +74,61 @@ https://www.phoronix.com/news/Linux-Git-INCEPTION-DOWNFALL
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b10ceec75520fab80f76081f50daaaab9df890f5)
+(cherry picked from commit e0a786a46733cc473f0e4c35064a3b09ccf548e6)
+[Peter: drop 6.4.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 3f12b71191..64c50dd6f7 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 69b6d8edc1..8f72e0edd4 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  ea460560e2898022c5f3c4649908694dcd75a094ffde726e8c6ca5e0a09491fb  linux-6.3.13.tar.xz
+-sha256  245248470a62d4e94b46f753afc01e19e45b9e6f3a0fa06e7f5da21fe845a808  linux-6.1.43.tar.xz
++sha256  2e51d41fe11d082ae167cee05772bb07ca7f19448d2b46772d8ca2db7673a1a5  linux-6.1.44.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  00036a0260ad012aa832a8698a4afcf23b2410091527738ce48ce3fcc23f22ed  linux-5.15.124.tar.xz
+-sha256  c9558bab35e23ae67661bfb3192c609c857f78582a035449ae63e33d04ab6112  linux-5.10.188.tar.xz
+-sha256  bcb4953ed68131ef17f9f1ba52cac8b9d70007f5ab600bf3dee1fbf8beb218ca  linux-5.4.251.tar.xz
++sha256  150f3846b76cd23a6135f49cef71372bade5a06e851cb4f8558df8b862d8fec7  linux-5.15.125.tar.xz
++sha256  4c03516ae1d417571faaef175932d0892710bcbe0173e40550014d043d9098c9  linux-5.10.189.tar.xz
++sha256  3a78587523940374a7319089b63357c7dc412b90f5879d512265e59173588267  linux-5.4.252.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  118f7411793868db8dcb043cdc82e9ac6f722fbec8dcdde30b07889d941aa3b3  linux-4.19.289.tar.xz
+-sha256  ed82679c0c6e600db80050d09e2294fb28b61cf27dc98657296c7eb5250a7625  linux-4.14.320.tar.xz
++sha256  6ee30a46f3fa6576602085b7b4b0c640586f99d1c110982db411819308b5755c  linux-4.19.250.tar.xz
++sha256  d0e32bd47a547cc20e0ce09ff45514282742edb2af38df5dc0a03f22d4321715  linux-4.14.321.tar.xz
  # Locally computed
--sha256  58f3321dcf900175d87d5b39455138c2a24e69df4ba997fb44e3e0d19e531ad1  intel-microcode-20230512.tar.gz
-+sha256  fe49bb719441f20335ed6004090ab38cdc374134d36d4f5d30be7ed93b820313  intel-microcode-20230808.tar.gz
- sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 48c6340af8..0a89d3a603 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 337be012e3..c0a130c96a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -396,12 +396,12 @@ endchoice
  
--INTEL_MICROCODE_VERSION = 20230512
-+INTEL_MICROCODE_VERSION = 20230808
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.14.320"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.289"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.251"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.188"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.124"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.43"	if BR2_KERNEL_HEADERS_6_1
++	default "4.14.321"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.290"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.252"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.189"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.125"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.44"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.3.13"	if BR2_KERNEL_HEADERS_6_3
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
