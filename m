@@ -4,47 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C285EE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:12:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 131B5C71153
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55DA841504;
-	Mon, 11 Sep 2023 19:12:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55DA841504
+	by smtp2.osuosl.org (Postfix) with ESMTP id A8B55414DA;
+	Mon, 11 Sep 2023 19:17:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8B55414DA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p_U-TtcyHWix; Mon, 11 Sep 2023 19:11:59 +0000 (UTC)
+	with ESMTP id iAtyNgZ0CCDx; Mon, 11 Sep 2023 19:17:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77533414FA;
-	Mon, 11 Sep 2023 19:11:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77533414FA
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B8C31BF860
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F040640A41;
+	Mon, 11 Sep 2023 19:17:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F040640A41
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B69951BF2BB
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:17:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD17D81300
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD17D81300
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FDDF40A41
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:17:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FDDF40A41
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PrJemiuJs5GR for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C2C7813E8
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C2C7813E8
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A0CC86CAF; Mon, 11 Sep 2023 19:08:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id bbCojj3d1Rnj for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:17:16 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9210C400FE
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:17:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9210C400FE
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CA9656000C;
+ Mon, 11 Sep 2023 19:16:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qfmP1-00FjgX-Sv; Mon, 11 Sep 2023 21:16:55 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 18:20:13 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 6eff45c030be190a14f18ae822913cb2ccf74497
-X-Git-Newrev: 293c4664a124ee1da694dc140c7d6937b4203af5
-X-Patchwork-Hint: ignore
-Message-Id: <20230911190854.0A0CC86CAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/yajl: add CPE ID
+To: Bernd Kuhls <bernd@kuhls.net>
+References: <20230808193157.2042920-1-bernd@kuhls.net>
+Date: Mon, 11 Sep 2023 21:16:55 +0200
+In-Reply-To: <20230808193157.2042920-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Tue, 8 Aug 2023 21:31:56 +0200")
+Message-ID: <87o7i8a5aw.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] {linux,
+ linux-headers}: security bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1,
+ 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,37 +64,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=293c4664a124ee1da694dc140c7d6937b4203af5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-yajl_project:yajl is a valid CPE ID:
-https://nvd.nist.gov/products/cpe/detail/CD8C46A4-151E-4DC3-BCE8-4C322E9E10DB?namingFormat=2.3&orderBy=CPEURI&keyword=yajl&status=FINAL
+ > Fixes CVE-2022-40982:
+ > https://downfall.page/
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00828.html
+ > https://www.phoronix.com/news/Linux-Git-INCEPTION-DOWNFALL
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 35d97842a234b429531be8164028497d59446ca8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/yajl/yajl.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
-index d14a68b402..cd23c8728d 100644
---- a/package/yajl/yajl.mk
-+++ b/package/yajl/yajl.mk
-@@ -9,5 +9,6 @@ YAJL_SITE = $(call github,lloyd,yajl,refs/tags/$(YAJL_VERSION))
- YAJL_INSTALL_STAGING = YES
- YAJL_LICENSE = ISC
- YAJL_LICENSE_FILES = COPYING
-+YAJL_CPE_ID_VENDOR = yajl_project
- 
- $(eval $(cmake-package))
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
