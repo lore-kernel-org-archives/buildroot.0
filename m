@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 670B9EE7FF4
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 10:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B922EE7FF4
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 10:34:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1D4AF40C59;
-	Mon, 11 Sep 2023 10:33:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D4AF40C59
+	by smtp2.osuosl.org (Postfix) with ESMTP id A397C40C82;
+	Mon, 11 Sep 2023 10:34:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A397C40C82
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LUfSHZAHtS7f; Mon, 11 Sep 2023 10:33:39 +0000 (UTC)
+	with ESMTP id Kwrc-V9D5Gcv; Mon, 11 Sep 2023 10:34:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 69D2F40C2C;
-	Mon, 11 Sep 2023 10:33:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69D2F40C2C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 017C040C88;
+	Mon, 11 Sep 2023 10:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 017C040C88
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 767731BF28E
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:33:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7074C1BF28E
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D401606A0
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:33:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D401606A0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 49D0860DF4
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 10:34:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49D0860DF4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id cabKSkWWn-L0 for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 10:33:35 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 49E2F606F5
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 10:33:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49E2F606F5
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 22C3F6000B;
- Mon, 11 Sep 2023 10:33:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qfeEV-00Ef4i-2H; Mon, 11 Sep 2023 12:33:31 +0200
+ with ESMTP id HKg1vM5w76yN for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 10:34:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7968560B24
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 10:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7968560B24
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6640586C5A; Mon, 11 Sep 2023 10:34:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Daniel Lang <dalang@gmx.at>
-References: <20230808031350.116041-1-dalang@gmx.at>
-Date: Mon, 11 Sep 2023 12:33:31 +0200
-In-Reply-To: <20230808031350.116041-1-dalang@gmx.at> (Daniel Lang's message of
- "Tue, 8 Aug 2023 05:13:48 +0200")
-Message-ID: <87v8chatj8.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libksba: update CPE ID
+To: buildroot@buildroot.org
+Date: Mon, 11 Sep 2023 12:22:52 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: cdc2edd0ab04844a4b97466f6bbabce5ea41552e
+X-Git-Newrev: d236dd9a062f8d25fa54e3a503027e8dbd551c38
+X-Patchwork-Hint: ignore
+Message-Id: <20230911103401.6640586C5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_110934
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,26 +57,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d236dd9a062f8d25fa54e3a503027e8dbd551c38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > libksba_project:libksba has been deprecated by NVD [0],
- > gnupg:libksba should be used instead.
+openssh package fails to build for the M68K architecture with -fzero-call-used-regs=all
+passed to gcc = 12.3.0 and it's still present in gcc = 13.2.0:
+http://autobuild.buildroot.net/results/d29/d29c662e41d8969e6a8aa24870e728bcc7050563/
 
- > [0]:
- > https://nvd.nist.gov/products/cpe/detail/AA709F75-0B9E-4B67-ACEA-C1DCF33E7745?namingFormat=2.3&orderBy=CPEURI&keyword=libksba&status=FINAL
+It's been reported upstream:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
 
- > Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 51435d30ba283036d027f2d02c693da138bbdf71)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ff0eb93017..1f9edb71b7 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -244,6 +244,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_OPTIMIZE_0
+ 
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110934
++# ICE: on M68K: in change_address_1, at emit-rtl.cc:2287
++# This bug exists in gcc = 12.3.0 and gcc = 13.2.0
++config BR2_TOOLCHAIN_HAS_GCC_BUG_110934
++	bool
++	default y if BR2_m68k
++
+ config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	bool
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
