@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D87EFC71153
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CC90C71153
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:44:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DCBE81E81;
-	Mon, 11 Sep 2023 19:44:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DCBE81E81
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFB9281EC3;
+	Mon, 11 Sep 2023 19:44:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFB9281EC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2qOFOSm73TGA; Mon, 11 Sep 2023 19:44:26 +0000 (UTC)
+	with ESMTP id KevZmrS33Pex; Mon, 11 Sep 2023 19:44:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4B8D81ABA;
-	Mon, 11 Sep 2023 19:44:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4B8D81ABA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A85711BF2BB
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:44:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17D8C81EBC;
+	Mon, 11 Sep 2023 19:44:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17D8C81EBC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 189281BF2BB
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FBD44030E
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:44:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FBD44030E
+ by smtp3.osuosl.org (Postfix) with ESMTP id E55DF60D52
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:44:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E55DF60D52
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fsjIsOggv6mm for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 19:44:22 +0000 (UTC)
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E8E8402EF
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:44:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E8E8402EF
-Received: from [192.168.50.162] ([146.241.108.254])
- by Aruba Outgoing Smtp  with ESMTPSA
- id fmpVqfbxHQSEzfmpVqqslV; Mon, 11 Sep 2023 21:44:18 +0200
-Message-ID: <ccd9ae2f-3c57-3f02-13a1-2e6d480717f9@benettiengineering.com>
-Date: Mon, 11 Sep 2023 21:44:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id QM0v1B8PyDFS for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:44:47 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A8C6605A6
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:44:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A8C6605A6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1348F86CF9; Mon, 11 Sep 2023 19:44:47 +0000 (UTC)
 To: buildroot@buildroot.org
-References: <20230819211825.60854-1-giulio.benetti@benettiengineering.com>
- <20230819211825.60854-2-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20230819211825.60854-2-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfOmkSm4TzWT3Jvyc/eWE4U6e6ZN4nCYZCg9kFBFuWEchjCK77/DkVMj7nM5ELuLo1snjqKy7EYTG5FQqaH5R3tXZZ77NwZFakS0eYMCWRpW1NNxie/6H
- Ue3URzxDn74y3aP1ZQAm+OrUpZaNFm0WebyOZZA5z/gMDjuVt74oUZWQq4XAsDRYjF8vbDxQPLMnFmygiwTDKyl38bCqXThA/tVkoXjxYcELL72keH4gSty+
- ykpQcjC70y3Yx1ofmajXQz6MPCCv1pA4MmajazJVq8b2yfZiRoRkdCgMDTice4H5TOa1rF/0VGn6PFTUInnDKA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1694461458; bh=3AIfa1RZNqcLzIcHoZ3El1twVcRIDpkeQi7K2ha2ywo=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=QbMRd58HnXTeEPDuOaZs7y4KiohldCFahGAvTCYUNljLuo+aLSOz64fsi3kYPYqX5
- KwMYWiu+TKUPlRlNbp/Fa+CwHpOswiQuXIbjnZJ+Nznwr2cXRSMr7oU4IqDwjT10ZF
- plPZIzUdfx1EakgzFgkN4FLiLYaCwBtQokulkEvf8oxYancd151XprXmZBGTQJhj6/
- NI5vDP1PfssT8E4o/ofIP/OTWh6nT+JBJeUYYLkZfcMQcMhf0bouRCr8lzAAGE+km2
- KNkhpEKUhhQ17F5kMkH2AB2JUYihCFyA4rGtNPIOl53ZTZ9F3IF4KyxBoCoKzK+fRi
- BmphLpob7qQYg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=QbMRd58H
-Subject: Re: [Buildroot] [PATCH 1/1] docs/manual: add Sponsored-by tag
+Date: Mon, 11 Sep 2023 21:43:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8d55b912d762809e24a09bb7f47ddcd4c238f7b6
+X-Git-Newrev: 9318e583ada4c72e7a67f1bfe19f33ae5ec49374
+X-Patchwork-Hint: ignore
+Message-Id: <20230911194447.1348F86CF9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-kobs: bump to
+ version ff13a99a22aa73cca0e09a33c2ebb6a94ad698da
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,70 +56,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9318e583ada4c72e7a67f1bfe19f33ae5ec49374
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 19/08/23 23:18, Giulio Benetti wrote:
-> Sometimes it happens that a Company or a Physical Person sponsors the
-> creation and/or the upstreaming process of a patch, but at the moment
-> there is no way to give credits to it. In Linux there are some commit that
-> include a sort of tag "Sponsored by" without the dash to avoid
-> scripts/checkpatch.pl to complain but a real standard has not been defined.
-> With this patch let's try to define a method to give credits consistently.
-> The goal is to improve contributions from companies or physical persons
-> that this way should gain visibility in Buildroot and so they should be
-> more prone to let the work done for them for to be upstreamed.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   docs/manual/contribute.txt | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index 94f1c64496..384fdb08c1 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -118,6 +118,11 @@ Acked-by:: Indicates that you code-reviewed the patch and you are
->     Reviewed-by is thus mainly that you are prepared to take the blame on
->     Acked patches, but not on Reviewed ones.
->   
-> +Sponsored-by:: Indicates that someone sponsored the creation and/or the
-> +  upstreaming process of the patch. Sponsored-by can contain a company
-> +  name or a physical person name plus its e-mail the same way it's done
-> +  for the other tags listed above.
-> +
->   If you reviewed a patch and have comments on it, you should simply reply
->   to the patch stating these comments, without providing a Reviewed-by or
->   Acked-by tag. These tags should only be provided if you judge the patch
-> @@ -128,7 +133,7 @@ that testing has been performed. To indicate that you both reviewed and
->   tested the patch, provide two separate tags (Reviewed/Acked-by and
->   Tested-by).
->   
-> -Note also that _any developer_ can provide Tested/Reviewed/Acked-by
-> +Note also that _any developer_ can provide Tested/Reviewed/Acked-by/Sponsored-by
->   tags, without exception, and we encourage everyone to do this. Buildroot
->   does not have a defined group of _core_ developers, it just so happens
->   that some developers are more active than others. The maintainer will
+Update github organization name to nxp-imx which is being
+redirected to.
 
-after sending the same proposal to Linux Kernel Mailing List I've found
-that there already are 2 possible ways to give credits to the sponsor:
-Name Surname (Sponsor) <name.surname@mail.com>
-or
-Name Surname <name.surname+sponsor@mail.com>
+Rename COPYING TO LICENSE.
 
-The latter is the most used at the moment so I send a V2 of this patch
-describing it.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/imx-kobs/imx-kobs.hash | 4 ++--
+ package/freescale-imx/imx-kobs/imx-kobs.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Best regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
+index 39f02ea04a..39ab2b6545 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.hash
++++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5855c8964f908ad30e5d4500180ee57c51af68186289ef1bdf8553ee60d3b1f5  imx-kobs-a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b.tar.gz
+-sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
++sha256  e83c9bca2706a33832174fc609b434d513a39b54ca90a714a6d0bb6f7a0386f7  imx-kobs-ff13a99a22aa73cca0e09a33c2ebb6a94ad698da.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+index 91b39f6fa4..d33d3a1b77 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.mk
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-IMX_KOBS_VERSION = a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b
+-IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
++IMX_KOBS_VERSION = ff13a99a22aa73cca0e09a33c2ebb6a94ad698da
++IMX_KOBS_SITE = $(call github,nxp-imx,imx-kobs,$(IMX_KOBS_VERSION))
+ IMX_KOBS_LICENSE = GPL-2.0+
+-IMX_KOBS_LICENSE_FILES = COPYING
++IMX_KOBS_LICENSE_FILES = LICENSE
+ 
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
