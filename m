@@ -4,55 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94765EE7FF4
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 09:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A072EE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 09:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED2E14021E;
-	Mon, 11 Sep 2023 09:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED2E14021E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0A33408F2;
+	Mon, 11 Sep 2023 09:45:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0A33408F2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xus4IyQKFK6K; Mon, 11 Sep 2023 09:34:07 +0000 (UTC)
+	with ESMTP id lynsfzpGl1-m; Mon, 11 Sep 2023 09:45:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D7D440121;
-	Mon, 11 Sep 2023 09:34:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D7D440121
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 041121BF20D
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:34:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A72A5408DF;
+	Mon, 11 Sep 2023 09:45:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A72A5408DF
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8983B1BF20D
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DEDED60E34
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:34:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEDED60E34
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6401540C99
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 09:45:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6401540C99
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WD32zmFyOhay for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 09:34:03 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E12DA60C0C
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 09:34:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E12DA60C0C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F4BAFF811;
- Mon, 11 Sep 2023 09:33:59 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qfdIs-00EcI2-EY; Mon, 11 Sep 2023 11:33:58 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1zSh3-sGEDB3 for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 09:45:09 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E08340CB6
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 09:45:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E08340CB6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 77C3886C42; Mon, 11 Sep 2023 09:45:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20230604163535.1102239-1-alexander.sverdlin@gmail.com>
- <20230807221454.0e0eb258@windsurf>
-Date: Mon, 11 Sep 2023 11:33:58 +0200
-In-Reply-To: <20230807221454.0e0eb258@windsurf> (Thomas Petazzoni via
- buildroot's message of "Mon, 7 Aug 2023 22:14:54 +0200")
-Message-ID: <87h6o1caux.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/gcc: Disable libsanitizer on
- arm920t/thumb
+To: buildroot@buildroot.org
+Date: Mon, 11 Sep 2023 11:24:00 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: cd3b0fa07d7e0431923cdcee06b10d45f9d5a5fb
+X-Git-Newrev: 2625ea6bf2f77b0292811432ea627c44b81f9ee3
+X-Patchwork-Hint: ignore
+Message-Id: <20230911094509.77C3886C42@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/gcc: disable
+ libsanitizer on ARM Thumb classic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,37 +57,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2625ea6bf2f77b0292811432ea627c44b81f9ee3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > On Sun,  4 Jun 2023 18:35:35 +0200
- > Alexander Sverdlin <alexander.sverdlin@gmail.com> wrote:
+libsanitizer is broken for Thumb1, sanitizer_linux.cc contains
+unconditional "ldr ip, [sp], #8", which causes:
 
- >> libsanitizer is broken for Thumb1, sanitizer_linux.cc contains
- >> unconditional "ldr ip, [sp], #8", which causes:
- >> 
- >> ....s: Assembler messages:
- >> ....s:4190: Error: lo register required -- `ldr ip,[sp],#8'
- >> 
- >> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
- >> ---
- >> package/gcc/gcc.mk | 8 ++++++++
- >> 1 file changed, 8 insertions(+)
+....s: Assembler messages:
+....s:4190: Error: lo register required -- `ldr ip,[sp],#8'
 
- > Sorry for the long delay, this is absolutely correct. I've only added a
- > reference to an autobuilder issue fixed by this commit in the commit
- > log. Thanks!
+Fixes:
 
-Committed to 2023.02.x and 2023.05.x, thanks.
+  http://autobuild.buildroot.net/results/5e15820c5db8c4c48c1de62a0c77171aeee381ba/
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fd17b3dd44363b8d47f2394cc5320b271229982c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 25cb4ce8e2..1ecbf7e9b4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -154,6 +154,14 @@ ifeq ($(BR2_mips)$(BR2_mipsel):$(BR2_TOOLCHAIN_GCC_AT_LEAST_12),y:y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
+ endif
+ 
++# libsanitizer is broken for Thumb1, sanitizer_linux.cc contains unconditional
++# "ldr ip, [sp], #8", which causes:
++# ....s: Assembler messages:
++# ....s:4190: Error: lo register required -- `ldr ip,[sp],#8'
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
++endif
++
+ # The logic in libbacktrace/configure.ac to detect if __sync builtins
+ # are available assumes they are as soon as target_subdir is not
+ # empty, i.e when cross-compiling. However, some platforms do not have
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
