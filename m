@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB589EE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44696EE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 918B14117A;
-	Mon, 11 Sep 2023 19:09:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 918B14117A
+	by smtp2.osuosl.org (Postfix) with ESMTP id F080C40A41;
+	Mon, 11 Sep 2023 19:09:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F080C40A41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id TQowojmisy1L; Mon, 11 Sep 2023 19:09:18 +0000 (UTC)
+	with ESMTP id aIlvTZ87mghA; Mon, 11 Sep 2023 19:09:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9F32414E9;
-	Mon, 11 Sep 2023 19:09:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9F32414E9
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E1831BF964
+	by smtp2.osuosl.org (Postfix) with ESMTP id 284CD4151B;
+	Mon, 11 Sep 2023 19:09:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 284CD4151B
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F7991BF97A
  for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD54A4031C
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:07:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD54A4031C
+ by smtp1.osuosl.org (Postfix) with ESMTP id B934C81EB9
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:07:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B934C81EB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sqPcogcDvFM2 for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 19:07:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id nYtSkc6vFbK5 for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:07:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C46C240199
+ by smtp1.osuosl.org (Postfix) with ESMTP id E11F281EC1
  for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:07:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C46C240199
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E11F281EC1
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B309686C8C; Mon, 11 Sep 2023 19:07:48 +0000 (UTC)
+ id D0D9286C8E; Mon, 11 Sep 2023 19:07:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 18:19:14 +0200
+Date: Mon, 11 Sep 2023 18:20:01 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 67a31a5575c2c0f8aa2c9bae45b429b00338bad7
-X-Git-Newrev: 9c185ea3d5318346ee56d3fd4c31df343059880b
+X-Git-Oldrev: 5d50259ecca6848e6bf19ad5776f98533787e057
+X-Git-Newrev: abbc941e6fe17e3a566f215ef7acbfac7fef21bb
 X-Patchwork-Hint: ignore
-Message-Id: <20230911190748.B309686C8C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/dracut: add CPE ID
+Message-Id: <20230911190748.D0D9286C8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/sngrep: add CPE ID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,31 +62,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c185ea3d5318346ee56d3fd4c31df343059880b
+commit: https://git.buildroot.net/buildroot/commit/?id=abbc941e6fe17e3a566f215ef7acbfac7fef21bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-dracut_project:dracut is a valid CPE ID:
-https://nvd.nist.gov/products/cpe/detail/8050B12A-93FB-453E-8459-9B8B9CC7544E?namingFormat=2.3&orderBy=CPEURI&keyword=dracut&status=FINAL
+irontec:sngrep is a valid CPE ID:
+https://nvd.nist.gov/products/cpe/detail/558A213D-A36B-4ED8-8671-2C38110F47FD?namingFormat=2.3&orderBy=CPEURI&keyword=sngrep&status=FINAL
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fc2a530c5b8a700978e29eae2ef6deef3cefe20c)
+(cherry picked from commit 159e469f53a1220249e8df41e287668a3d726678)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dracut/dracut.mk | 1 +
+ package/sngrep/sngrep.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
-index 597492bc5e..3eb9bcc474 100644
---- a/package/dracut/dracut.mk
-+++ b/package/dracut/dracut.mk
-@@ -8,6 +8,7 @@ DRACUT_VERSION = 057
- DRACUT_SITE = $(call github,dracutdevs,dracut,$(DRACUT_VERSION))
- DRACUT_LICENSE = GPL-2.0
- DRACUT_LICENSE_FILES = COPYING
-+DRACUT_CPE_ID_VENDOR = dracut_project
- 
- HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-prelink-cross
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index eedb99492f..0e344550d3 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -9,6 +9,7 @@ SNGREP_SITE = \
+ 	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
+ SNGREP_LICENSE = GPL-3.0+
+ SNGREP_LICENSE_FILES = LICENSE
++SNGREP_CPE_ID_VENDOR = irontec
+ SNGREP_AUTORECONF = YES
+ SNGREP_DEPENDENCIES = libpcap ncurses host-pkgconf
  
 _______________________________________________
 buildroot mailing list
