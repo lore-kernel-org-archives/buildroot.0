@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 131B5C71153
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE154EE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 19:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A8B55414DA;
-	Mon, 11 Sep 2023 19:17:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8B55414DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id A869940A41;
+	Mon, 11 Sep 2023 19:18:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A869940A41
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iAtyNgZ0CCDx; Mon, 11 Sep 2023 19:17:20 +0000 (UTC)
+	with ESMTP id 6WYUWrS7CLHp; Mon, 11 Sep 2023 19:18:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F040640A41;
-	Mon, 11 Sep 2023 19:17:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F040640A41
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B69951BF2BB
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:17:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FCFE414D8;
+	Mon, 11 Sep 2023 19:18:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FCFE414D8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 262781BF2BB
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FDDF40A41
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:17:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FDDF40A41
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2A964018E
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 19:18:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2A964018E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bbCojj3d1Rnj for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 19:17:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mPDy2ySfRevO for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 19:18:08 +0000 (UTC)
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9210C400FE
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:17:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9210C400FE
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CA9656000C;
- Mon, 11 Sep 2023 19:16:56 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5FFD400BF
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 19:18:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5FFD400BF
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CA06560004;
+ Mon, 11 Sep 2023 19:17:47 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qfmP1-00FjgX-Sv; Mon, 11 Sep 2023 21:16:55 +0200
+ id 1qfmPr-00Fjl7-0x; Mon, 11 Sep 2023 21:17:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Bernd Kuhls <bernd@kuhls.net>
 References: <20230808193157.2042920-1-bernd@kuhls.net>
-Date: Mon, 11 Sep 2023 21:16:55 +0200
-In-Reply-To: <20230808193157.2042920-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Tue, 8 Aug 2023 21:31:56 +0200")
-Message-ID: <87o7i8a5aw.fsf@48ers.dk>
+ <20230808193157.2042920-2-bernd@kuhls.net>
+Date: Mon, 11 Sep 2023 21:17:47 +0200
+In-Reply-To: <20230808193157.2042920-2-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Tue, 8 Aug 2023 21:31:57 +0200")
+Message-ID: <87jzswa59g.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] {linux,
- linux-headers}: security bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1,
- 4}.x series
+Subject: Re: [Buildroot] [PATCH 2/2] package/intel-microcode: security bump
+ version to 20230808
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
