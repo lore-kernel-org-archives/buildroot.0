@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6726EE7FF4
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 13:03:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A961BEE57DF
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 13:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19D3D415A4;
-	Mon, 11 Sep 2023 13:03:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19D3D415A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CAED41731;
+	Mon, 11 Sep 2023 13:04:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CAED41731
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1IXr4yCOMRXS; Mon, 11 Sep 2023 13:03:39 +0000 (UTC)
+	with ESMTP id R9r6D3hyf2Ba; Mon, 11 Sep 2023 13:04:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2002741695;
-	Mon, 11 Sep 2023 13:03:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2002741695
+	by smtp4.osuosl.org (Postfix) with ESMTP id 256DD416D2;
+	Mon, 11 Sep 2023 13:04:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 256DD416D2
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1C6EC1BF2C5
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 13:03:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4F5601BF2C5
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 13:04:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 016FB80F1E
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 13:03:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 016FB80F1E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 29D0A81493
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 13:04:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29D0A81493
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NtCTq2__pYim for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 13:03:36 +0000 (UTC)
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1A03F80EE1
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 13:03:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A03F80EE1
-Received: by mail-io1-xd33.google.com with SMTP id
- ca18e2360f4ac-76c64da0e46so156594339f.0
- for <buildroot@buildroot.org>; Mon, 11 Sep 2023 06:03:35 -0700 (PDT)
+ with ESMTP id aFKP5CIjV7Un for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 13:04:08 +0000 (UTC)
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
+ [IPv6:2607:f8b0:4864:20::d31])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7AB4E80A8D
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 13:04:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AB4E80A8D
+Received: by mail-io1-xd31.google.com with SMTP id
+ ca18e2360f4ac-79329a8f78bso156024139f.3
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 06:04:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694437415; x=1695042215;
+ d=1e100.net; s=20230601; t=1694437447; x=1695042247;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=cZvER4a6fgSJ/4x4WWfuphjJ1Ftt1vPNPuASDT9+vMw=;
- b=Hs5WMQh6Fz4X2AsJ6XXIC9H1w5hbUU2c/3PRFy2QAa9XoJ7kDN/SXsVs6D/qt8gA+o
- XFMgtDzLBWwF9Tt1iGk5EJw4vdEJgx7/wZfYkzn4ddlZQTx6MJU2c6Beg89gVexlDHuk
- b0Y3CmMSF9fnrDU2Ltp8H5d3svyIQ6wk5IYkZ/vWHKxr65tso6ZDNnD5YKN33S8Ae8v2
- 1htZeSerOxKQmmNABCMEE8jXpz1WscPjq49hCQvK1pE6rmyLzBbSrHGV2GXBf8Ji8O0H
- 5wtTDugDqd4+Swyqbu+6blDTzHDS27eoJnYVLaU5fOA808MWWiPlU1R6rf6vYP5/YOQO
- B/5A==
-X-Gm-Message-State: AOJu0YyDBjTGhBXal3s0aWz8XVZ2AKYbK4BPrZbSvOwPR6KabGok4AsD
- kEmwrsJwk54C3VxPw9P73NdewdkXF5F5LA==
-X-Google-Smtp-Source: AGHT+IGWwaNHGEGCpKza5kz8arFFhqQ7WGMhyqeCKYBweo3Pe7QUY11prVV95Q1/HISG9Fr1/USgew==
-X-Received: by 2002:a5e:de41:0:b0:783:56f2:e733 with SMTP id
- e1-20020a5ede41000000b0078356f2e733mr11720183ioq.4.1694437414757; 
- Mon, 11 Sep 2023 06:03:34 -0700 (PDT)
+ bh=jURRG+f5QMhuOuc39nZ09/sYrs4sjZ7RIFepVzbJ5oA=;
+ b=Y3St6RvgLtXdbUvv4GZUT/3aqnH7Nx826HtAbAfixCdP1I1hSTbJLDNknzQcQjuYIR
+ SPbruPCrAANrjLq381LDOf2Nw11QI601lfZ9uTJkD4s6h2JH2Ungt2ZjMom/4/NKMday
+ gtq9Vuk7X76E4A4CroQccgHdml+SUiMib6Ry0CUUQEvKdoETP8eEC1sX8UwzRZk2YoAS
+ QOiNi7We5UpM7K3kHqEawjXsRmO5o0Sx/LDTYN29IGjNNxQPdel43T4FP1dvzV/mhEYH
+ gHUmxoJn7gwR7Al1ILdfnedW45FXa8lYuFWq15zgRbXAeKqq2FCmamn6eC22VgamAoHz
+ lR6g==
+X-Gm-Message-State: AOJu0YykHYljQySB1U7Sah9D022dOQNVasfTPeIwoHrHqv1w9vx6BEsj
+ ZwFMN2j9SorVeehYflOrWOU1Hwwc/wN3JA==
+X-Google-Smtp-Source: AGHT+IE6PUTzbTTak3DFo0yz817CpDPMCRrUgFFE7/2Gn/hm9f1ReZNJkJsACUTHOLrGRauEj9qA9g==
+X-Received: by 2002:a6b:e917:0:b0:787:ff98:c38c with SMTP id
+ u23-20020a6be917000000b00787ff98c38cmr11785449iof.10.1694437447073; 
+ Mon, 11 Sep 2023 06:04:07 -0700 (PDT)
 Received: from james-x399.localdomain (71-33-152-19.hlrn.qwest.net.
  [71.33.152.19]) by smtp.gmail.com with ESMTPSA id
- d13-20020a5e8a0d000000b007870289f4fdsm2154441iok.51.2023.09.11.06.03.33
+ fs12-20020a05663865cc00b0043193e32c78sm2149019jab.152.2023.09.11.06.04.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 Sep 2023 06:03:34 -0700 (PDT)
+ Mon, 11 Sep 2023 06:04:06 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 11 Sep 2023 07:03:32 -0600
-Message-Id: <20230911130332.3010048-1-james.hilliard1@gmail.com>
+Date: Mon, 11 Sep 2023 07:04:02 -0600
+Message-Id: <20230911130402.3010064-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20221208; t=1694437415; x=1695042215; darn=buildroot.org;
+ d=gmail.com; s=20221208; t=1694437447; x=1695042247; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=cZvER4a6fgSJ/4x4WWfuphjJ1Ftt1vPNPuASDT9+vMw=;
- b=br7LephrByMuR8NrPgW6YfF457LMxWjaK0ohcktrNCf1sCUzcudHq8dDKmFvN9FeFe
- f9/V2v/T3uZ8lhLYF2YhOp80rvRDykM4yV3WTMbqc+zOWDf86QKZfJWCJRF4v/U1GPto
- Ezh52U6CMRRXXi4jl5eFh7BWAfIHnYNBy/5WArCdDk9F+ZoVQhqzH62rhVyhaWtr7E6h
- CCA3dHPfnNOf2kp8NqX0HfpnAwjMcTuCKxYbEbFLn8n2B0PUHyWuqCmMy0IE+nNIaBxN
- vS0F2zI96f85mMedJXdkxbxLQPwr9tHsgHOTiR+k5Jje9zLgkL6rwVN9v/9Rzk9Jvm21
- 9p+Q==
+ bh=jURRG+f5QMhuOuc39nZ09/sYrs4sjZ7RIFepVzbJ5oA=;
+ b=X7nq5AUH4OYPFxt5TrwYVdAW9A3oDTY8Nh4J+S59Bu7zn3xwrEw4gdjGJkzksXVV5L
+ CIjk726hR7/i49pNM6LrQc0f594skC4S8K9idN5LsYjyd5Le9xsbrLc4wLC7eUjD0jUV
+ O1qRrsWWdkAXUhphmClpnmXVEEu0sBJu26bVlEjkMu8koll0pHPNSvt81+w/Pil0SK6t
+ 2d+XliKoED4fVu5DtiNVpr8QpXx02wax+iGbQbgT9A07J8G3ySyM1BEqsSpbmI/2Z/bL
+ GrKgmlivEfjzKyKzJpK1VmxvmoFOSHwCPJFAxJc7fxzZKJsE2EDMYzLlf94YofWSLu52
+ IHZg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20221208 header.b=br7Lephr
-Subject: [Buildroot] [PATCH 1/1] package/swupdate: add embedded lua handler
- config option
+ header.a=rsa-sha256 header.s=20221208 header.b=X7nq5AUH
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-kobs: bump to
+ version ff13a99a22aa73cca0e09a33c2ebb6a94ad698da
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,79 +94,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Gary Bisson <bisson.gary@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-We are able to configure most swupdate options using a swupdate
-config file, however the embedded lua source option may need to point
-to a buildroot generated source path.
+Update github organization name to nxp-imx which is being
+redirected to.
 
-To simplify configuration of this swupdate option add a buildroot
-config option which will pass a source file path to swupdate when
-enabled in buildroot. We also need a config option to enable this
-feature in swupdate which the source file path config option will
-depend on.
+Rename COPYING TO LICENSE.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/swupdate/Config.in   | 12 ++++++++++++
- package/swupdate/swupdate.mk | 10 ++++++++++
- 2 files changed, 22 insertions(+)
+ package/freescale-imx/imx-kobs/imx-kobs.hash | 4 ++--
+ package/freescale-imx/imx-kobs/imx-kobs.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index 7d9fc90e10..4e3573569b 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -60,6 +60,18 @@ config BR2_PACKAGE_SWUPDATE_CONFIG
- 	  I you wish to use your own modified swupdate configuration
- 	  file specify the config file location with this option.
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
+index 39f02ea04a..39ab2b6545 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.hash
++++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5855c8964f908ad30e5d4500180ee57c51af68186289ef1bdf8553ee60d3b1f5  imx-kobs-a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b.tar.gz
+-sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
++sha256  e83c9bca2706a33832174fc609b434d513a39b54ca90a714a6d0bb6f7a0386f7  imx-kobs-ff13a99a22aa73cca0e09a33c2ebb6a94ad698da.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+index 91b39f6fa4..d33d3a1b77 100644
+--- a/package/freescale-imx/imx-kobs/imx-kobs.mk
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER
-+	bool "swupdate embedded lua handler"
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	help
-+	  Enable the embedded lua handler.
-+
-+config BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER_SOURCE
-+	string "swupdate embedded lua handler source"
-+	depends on BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER
-+	help
-+	  Path to the embedded lua handler source.
-+
- config BR2_PACKAGE_SWUPDATE_USB
- 	bool "swupdate usb"
- 	depends on BR2_PACKAGE_SYSTEMD
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index ea4a5a62e5..8a4f3b2d2f 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -113,6 +113,15 @@ define SWUPDATE_SET_LUA_VERSION
- 	$(call KCONFIG_SET_OPT,CONFIG_LUAPKG,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER))
- endef
- SWUPDATE_MAKE_ENV += HAVE_LUA=y
-+ifeq ($(BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER),y)
-+define SWUPDATE_SET_EMBEDDED_LUA
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_LUA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_LUASCRIPTHANDLER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HANDLER_IN_LUA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_EMBEDDED_LUA_HANDLER)
-+	$(call KCONFIG_SET_OPT,CONFIG_EMBEDDED_LUA_HANDLER_SOURCE,$(BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER_SOURCE))
-+endef
-+endif
- else
- SWUPDATE_MAKE_ENV += HAVE_LUA=n
- endif
-@@ -225,6 +234,7 @@ SWUPDATE_MAKE_OPTS = \
+-IMX_KOBS_VERSION = a0e9adce2fb7fcd57e794d7f9a5deba0f94f521b
+-IMX_KOBS_SITE = $(call github,NXPmicro,imx-kobs,$(IMX_KOBS_VERSION))
++IMX_KOBS_VERSION = ff13a99a22aa73cca0e09a33c2ebb6a94ad698da
++IMX_KOBS_SITE = $(call github,nxp-imx,imx-kobs,$(IMX_KOBS_VERSION))
+ IMX_KOBS_LICENSE = GPL-2.0+
+-IMX_KOBS_LICENSE_FILES = COPYING
++IMX_KOBS_LICENSE_FILES = LICENSE
  
- define SWUPDATE_KCONFIG_FIXUP_CMDS
- 	$(SWUPDATE_SET_LUA_VERSION)
-+	$(SWUPDATE_SET_EMBEDDED_LUA)
- 	$(SWUPDATE_SET_SYSTEMD)
- 	$(SWUPDATE_SET_WEBSERVER)
- endef
+ $(eval $(autotools-package))
 -- 
 2.34.1
 
