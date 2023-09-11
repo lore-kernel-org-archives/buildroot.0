@@ -1,68 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 730BFEE57DF
-	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 06:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7F21C71153
+	for <buildroot@archiver.kernel.org>; Mon, 11 Sep 2023 18:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4C0940953;
-	Mon, 11 Sep 2023 06:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4C0940953
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6111A4117A;
+	Mon, 11 Sep 2023 18:50:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6111A4117A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id z3GDEhQDchlm; Mon, 11 Sep 2023 06:26:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id etzxdjIitkKv; Mon, 11 Sep 2023 18:50:48 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC4A840967;
-	Mon, 11 Sep 2023 06:26:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC4A840967
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBE2B40A41;
+	Mon, 11 Sep 2023 18:50:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBE2B40A41
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6CE9A1BF5A5
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 06:26:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A4821BF20B
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 18:50:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5317D60E25
- for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 06:26:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5317D60E25
+ by smtp3.osuosl.org (Postfix) with ESMTP id D71B76104F
+ for <buildroot@lists.busybox.net>; Mon, 11 Sep 2023 18:50:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D71B76104F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C5rVK2fZwtDp for <buildroot@lists.busybox.net>;
- Mon, 11 Sep 2023 06:26:32 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A5BA60C28
- for <buildroot@uclibc.org>; Mon, 11 Sep 2023 06:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A5BA60C28
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 06C8B86528; Mon, 11 Sep 2023 06:26:32 +0000 (UTC)
-From: bugzilla@busybox.net
-To: buildroot@uclibc.org
-Date: Mon, 11 Sep 2023 06:26:31 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2023.08
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jose@source.parts
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone attachments.created
-Message-ID: <bug-15766-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
+ with ESMTP id XYuXSDoK0sUw for <buildroot@lists.busybox.net>;
+ Mon, 11 Sep 2023 18:50:44 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5BEBF60777
+ for <buildroot@buildroot.org>; Mon, 11 Sep 2023 18:50:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BEBF60777
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1FF4540003;
+ Mon, 11 Sep 2023 18:50:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qflzJ-00Filc-Uf; Mon, 11 Sep 2023 20:50:21 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Waldemar Brodkorb <wbx@openadk.org>
+References: <ZNJZ7Huyn6K+Pgwy@waldemar-brodkorb.de>
+Date: Mon, 11 Sep 2023 20:50:21 +0200
+In-Reply-To: <ZNJZ7Huyn6K+Pgwy@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Tue, 8 Aug 2023 17:06:20 +0200")
+Message-ID: <87r0n4bl3m.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15766] New: BR2_PACKAGE_WESTON_XWAYLAND -- 12.0.1
- -- fails to build::missing dependencies
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v3] package/uclibc: update to 1.0.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,77 +62,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15766
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-            Bug ID: 15766
-           Summary: BR2_PACKAGE_WESTON_XWAYLAND -- 12.0.1 -- fails to
-                    build::missing dependencies
-           Product: buildroot
-           Version: 2023.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned@buildroot.uclibc.org
-          Reporter: jose@source.parts
-                CC: buildroot@uclibc.org
-  Target Milestone: ---
+ > - mostly stability improvements
+ > - patch is included so remove it
+ > - add a hotfix for aarch64 missing hwcap header
 
-Created attachment 9640
-  --> https://bugs.busybox.net/attachment.cgi?id=9640&action=edit
-proposed preview patch, will not be able to be applied directly to mainline!
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/823/823aac32b0ff365ebb3d99073f34276362a2c530
+ >  - http://autobuild.buildroot.net/results/0eb/0eb921e07a3d13bd76e76ab6bafad3a13632f8bf
+ >  - http://autobuild.buildroot.net/results/f4f/f4f37179a732d1bd4a31c929608a963f291e21a2
 
-Hello,
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ > v1 -> v2:
+ >  - add Fixes for haveged and stress-ng
+ > v2 -> v3:
+ >  - add a patch to fix glorytun compile when using aarch64
 
-This is my first time submitting a bug report for buildroot.
-I have a few more on the way with patches in tow including this one.
-
-Problem:
-Weston 12.0.1 fails to build when BR2_PACKAGE_WESTON_XWAYLAND is selected.
-Despite proper dependencies being listed in Defconfig. 
-
-Reason for failure:
-Config.in for BR2_PACKAGE_WESTON_XWAYLAND does not select BR2_PACKAGE_XCB_UTIL
-and BR2_PACKAGE_XCB_UTIL_CURSOR. Additionally, weston.mk does not list xcb-util
-and xcb-util-cursor for dependencies of BR2_PACKAGE_WESTON_XWAYLAND.
-
-Error Log Snippet:
-"""
->>> weston 12.0.1 Configuring
-...
-...
-Run-time dependency xcb-cursor found: NO (tried pkgconfig and cmake)
-
-output/build/weston-12.0.1/tests/meson.build:317:2: ERROR: Problem encountered:
-xcb and xcb-cursor required for running xwayland tests
-"""
-
-Relevant DefConfig Snippet:
-"""
-BR2_PACKAGE_XCB_UTIL=y
-BR2_PACKAGE_XCB_UTIL_CURSOR=y
-BR2_PACKAGE_XCB_UTIL_IMAGE=y
-BR2_PACKAGE_XCB_UTIL_RENDERUTIL=y
-...
-BR2_PACKAGE_WESTON=y
-BR2_PACKAGE_WESTON_DEFAULT_WAYLAND=y
-BR2_PACKAGE_WESTON_XWAYLAND=y
-"""
-
-Fix/Solution:
-(See preview patch attached. Will not directly apply, will be sending a proper
-patch to the mailing list within the next day or so.)
+Committed to 2023.02.x and 2023.05.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
