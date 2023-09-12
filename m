@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A3DDCA0ECA
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85462CA0ECA
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:27:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F338160E03;
-	Tue, 12 Sep 2023 06:27:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F338160E03
+	by smtp3.osuosl.org (Postfix) with ESMTP id 293CD610F4;
+	Tue, 12 Sep 2023 06:27:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 293CD610F4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZrFpg33bVDN1; Tue, 12 Sep 2023 06:27:13 +0000 (UTC)
+	with ESMTP id CddU-epwGSUA; Tue, 12 Sep 2023 06:27:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A6EA610C3;
-	Tue, 12 Sep 2023 06:27:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A6EA610C3
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C1E9A1BF27E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83930610F2;
+	Tue, 12 Sep 2023 06:27:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83930610F2
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C71501BF964
  for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C2E581F8A
+ by smtp2.osuosl.org (Postfix) with ESMTP id A13914019D
  for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C2E581F8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A13914019D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KHDqNoNlkpcw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YACAZmkO6Pf3 for <buildroot@lists.busybox.net>;
  Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD17681F38
+ by smtp2.osuosl.org (Postfix) with ESMTP id E83D140105
  for <buildroot@buildroot.org>; Tue, 12 Sep 2023 06:27:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD17681F38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E83D140105
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3BF786D74; Tue, 12 Sep 2023 06:27:09 +0000 (UTC)
+ id D6CC386D76; Tue, 12 Sep 2023 06:27:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Sep 2023 08:04:34 +0200
+Date: Tue, 12 Sep 2023 08:08:02 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 575aa623698f83c3ba942236e46e6c8570c146fa
-X-Git-Newrev: 2ca34cdf187ea06745b791987127a90a34e97d4a
+X-Git-Oldrev: 39e856e8911ce71f7065be2413373c0a5a8ea70f
+X-Git-Newrev: e8077da481b8b22512ab70ddcedbf82e128e1fc3
 X-Patchwork-Hint: ignore
-Message-Id: <20230912062709.C3BF786D74@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] board/raspberrypi: enable
- hdmi console for systemd
+Message-Id: <20230912062709.D6CC386D76@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/gdb: disable
+ source-highlight
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,37 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ca34cdf187ea06745b791987127a90a34e97d4a
+commit: https://git.buildroot.net/buildroot/commit/?id=e8077da481b8b22512ab70ddcedbf82e128e1fc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Most of the users use HDMI console on RPi and with increasing popularity
-of systemd they face a trouble.
-systemd doesn't use /etc/inittab, enable getty@tty1.service instead.
+The dependency is not provided by Buildroot, and it can potentially be
+found by gdb's build system from the host system, which results in the
+following build errors:
 
-Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+../../gdb/source-cache.c:37:10: fatal error: srchilite/sourcehighlight.h: No such file or directory
+   37 | #include <srchilite/sourcehighlight.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[4]: *** [Makefile:1645: source-cache.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c415820662661a6ef3cc8b2d9ea1a79791c1d7eb)
+(cherry picked from commit 4de60e41c3487946712da6d889ef89d325c2032a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/post-build.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/gdb/gdb.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
-index b24256fcea..38fdc80734 100755
---- a/board/raspberrypi/post-build.sh
-+++ b/board/raspberrypi/post-build.sh
-@@ -8,6 +8,11 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
-     grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
- 	sed -i '/GENERIC_SERIAL/a\
- tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
-+# systemd doesn't use /etc/inittab, enable getty.tty1.service instead
-+elif [ -d ${TARGET_DIR}/etc/systemd ]; then
-+    mkdir -p "${TARGET_DIR}/etc/systemd/system/getty.target.wants"
-+    ln -sf /lib/systemd/system/getty@.service \
-+       "${TARGET_DIR}/etc/systemd/system/getty.target.wants/getty@tty1.service"
- fi
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 4b9c5c6b70..cee7b37bcd 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -134,7 +134,8 @@ GDB_CONF_OPTS = \
+ 	--with-system-zlib \
+ 	--disable-werror \
+ 	--enable-static \
+-	--without-mpfr
++	--without-mpfr \
++	--disable-source-highlight
  
- # exnsure overlays exists for genimage
+ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
+ GDB_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
