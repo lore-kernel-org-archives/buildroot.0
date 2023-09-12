@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7737FCA0EC3
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:06:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05D11CA0EC3
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:08:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CABD761060;
-	Tue, 12 Sep 2023 06:06:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CABD761060
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B91A60FB4;
+	Tue, 12 Sep 2023 06:08:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B91A60FB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YbaLXkn05yKF; Tue, 12 Sep 2023 06:06:12 +0000 (UTC)
+	with ESMTP id HvOkEUjfM3Z8; Tue, 12 Sep 2023 06:08:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27F5660B0B;
-	Tue, 12 Sep 2023 06:06:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27F5660B0B
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BB3581BF3A3
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:06:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB87661060;
+	Tue, 12 Sep 2023 06:08:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB87661060
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E64451BF3A3
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:08:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92CC581F62
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:06:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92CC581F62
+ by smtp4.osuosl.org (Postfix) with ESMTP id C346D418EF
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:08:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C346D418EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id GysoNrmZ20qv for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 06:06:08 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1836481F5D
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 06:06:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1836481F5D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2979BE001D;
- Tue, 12 Sep 2023 06:05:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fDDaZni91BER for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 06:08:03 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2B384418E1
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 06:08:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B384418E1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CE166C001E;
+ Tue, 12 Sep 2023 06:06:35 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qfwWD-00G07R-6x; Tue, 12 Sep 2023 08:05:01 +0200
+ id 1qfwXi-00G0EM-VY; Tue, 12 Sep 2023 08:06:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Alexey Roslyakov <alexey.roslyakov@gmail.com>
-References: <20230812050845.1551717-1-alexey.roslyakov@gmail.com>
-Date: Tue, 12 Sep 2023 08:05:01 +0200
-In-Reply-To: <20230812050845.1551717-1-alexey.roslyakov@gmail.com> (Alexey
- Roslyakov's message of "Sat, 12 Aug 2023 13:08:45 +0800")
-Message-ID: <87h6o07wqa.fsf@48ers.dk>
+To: Nicolas Boichat via buildroot <buildroot@buildroot.org>
+References: <20230812010118.2654653-1-drinkcat@google.com>
+Date: Tue, 12 Sep 2023 08:06:34 +0200
+In-Reply-To: <20230812010118.2654653-1-drinkcat@google.com> (Nicolas Boichat
+ via buildroot's message of "Sat, 12 Aug 2023 01:01:17 +0000")
+Message-ID: <87cyyo7wnp.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] board/raspberrypi: enable hdmi console
- for systemd
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/screenfetch: Add upstream
+ awk detection patch.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,19 +63,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Nicolas Boichat <drinkcat@google.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Alexey" == Alexey Roslyakov <alexey.roslyakov@gmail.com> writes:
+>>>>> "Nicolas" == Nicolas Boichat via buildroot <buildroot@buildroot.org> writes:
 
- > Most of the users use HDMI console on RPi and with increasing popularity
- > of systemd they face a trouble.
- > systemd doesn't use /etc/inittab, enable getty@tty1.service instead.
+ > screenfetch requires an "awk" implementation, but upstream would
+ > only use an executable called "awk": pick up upstream patch that
+ > can autodetect awk implementation, so that "mawk" can be used.
 
- > Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+ > Signed-off-by: Nicolas Boichat <drinkcat@google.com>
+ > ---
+
+ > Changes v2 -> v3:
+ >  - Simply assume that an awk implementation is provided [Arnout Vandecappelle]
+
+ > Changes v1 -> v2:
+ >  - Busybox's awk also works, so add that as a possible dependency [Thomas Petazzoni]
+ >    - Tried to use "select" instead of "depends" as suggested, but that
+ >      creates a circular dependency.
+ >  - Fixed boolean logic in "comment" part (&& not ||)
+
+ >  .../0001-Detect-which-awk-to-use.patch        | 783 ++++++++++++++++++
+ >  1 file changed, 783 insertions(+)
+ >  create mode 100644 package/screenfetch/0001-Detect-which-awk-to-use.patch
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
