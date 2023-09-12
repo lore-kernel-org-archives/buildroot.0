@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEE77EE3F29
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 21:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0ED5EE3F31
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 21:13:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CA4182020;
-	Tue, 12 Sep 2023 21:12:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CA4182020
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB01282020;
+	Tue, 12 Sep 2023 21:13:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB01282020
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FbX9Hn8Xi-WL; Tue, 12 Sep 2023 21:12:46 +0000 (UTC)
+	with ESMTP id SAOzp4BnsPqP; Tue, 12 Sep 2023 21:13:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B42D1818CD;
-	Tue, 12 Sep 2023 21:12:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B42D1818CD
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5DC601BF421
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 21:12:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA7CD817A9;
+	Tue, 12 Sep 2023 21:13:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA7CD817A9
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E7DC01BF421
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 21:13:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43FAA818CD
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 21:12:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43FAA818CD
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEFCE404C4
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 21:13:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CEFCE404C4
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Kqh6UW7yh1G5 for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 21:12:43 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 19AD7817A9
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 21:12:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19AD7817A9
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C2461C0003;
- Tue, 12 Sep 2023 21:12:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eDkQve92JPQg for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 21:12:59 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 78F3C4002B
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 21:12:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78F3C4002B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 26B121BF206;
+ Tue, 12 Sep 2023 21:12:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qgAgZ-001tyE-4p; Tue, 12 Sep 2023 23:12:39 +0200
+ id 1qgAgp-001u0C-Aq; Tue, 12 Sep 2023 23:12:55 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20230820085920.DF56985D69@busybox.osuosl.org>
-Date: Tue, 12 Sep 2023 23:12:39 +0200
-In-Reply-To: <20230820085920.DF56985D69@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sun, 20 Aug 2023 10:58:48 +0200")
-Message-ID: <87jzsv5c54.fsf@48ers.dk>
+References: <20230820091331.D46B185DAB@busybox.osuosl.org>
+Date: Tue, 12 Sep 2023 23:12:55 +0200
+In-Reply-To: <20230820091331.D46B185DAB@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 20 Aug 2023 11:05:36 +0200")
+Message-ID: <87fs3j5c4o.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/mosquitto: security bump to
- version 2.0.16
+Subject: Re: [Buildroot] [git commit] package/connman: security bump version
+ to 1.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,28 +71,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=9f1ca943d554afe855f7eca2a0199481cc2c0426
+ > commit: https://git.buildroot.net/buildroot/commit/?id=d5162e790d1cc2724caf6b918dbca00971c96ae9
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issues:
+ > The 1.42 version of connman comes with the following CVEs fixes :
+ >  - CVE-2022-32292
+ >  - CVE-2022-32293
+ >  - CVE-2023-28488
 
- > - CVE-2023-28366: Fix memory leak in broker when clients send multiple QoS 2
- >   messages with the same message ID, but then never respond to the PUBREC
- >   commands.
- > - CVE-2023-0809: Fix excessive memory being allocated based on malicious
- >   initial packets that are not CONNECT packets.
- > - CVE-2023-3592: Fix memory leak when clients send v5 CONNECT packets with a
- >   will message that contains invalid property types.
- > - Broker will now reject Will messages that attempt to publish to $CONTROL/.
- > - Broker now validates usernames provided in a TLS certificate or TLS-PSK
- >   identity are valid UTF-8.
- > - Fix potential crash when loading invalid persistence file.
- > - Library will no longer allow single level wildcard certificates, e.g. *.com
+ > The first two CVEs have been fixed wuth upstream patches [0] which we
+ > carry since 2f2b4c80f44a (package/connman: fix CVE-2022-3229{2,3}), now
+ > included in this version bump; the third CVE [2] is also fixed by this
+ > version bump [3].
 
- > For more details, see the changelog:
- > https://mosquitto.org/ChangeLog.txt
+ > [0] https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d1a5ede5d255bde8ef707f8441b997563b9312bd
+ >     https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=72343929836de80727a27d6744c869dff045757c
+ >     https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=416bfaff988882c553c672e5bfc2d4f648d29e8a
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > [1] 2f2b4c80f4 package/connman: fix CVE-2022-3229{2,3}
+
+ > [2] https://nvd.nist.gov/vuln/detail/CVE-2023-28488
+
+ > [3] https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138
+
+ > Signed-off-by: Clement Ramirez <ramirez.clement3@gmail.com>
+ > [yann.morin.1998@free.fr:
+ >   - squash CVE-2023-28488 backport with version bump
+ >   - reword commit log
+ > ]
  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2023.02.x and 2023.05.x, thanks.
