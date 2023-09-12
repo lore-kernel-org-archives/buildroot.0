@@ -4,56 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAFFCEE3F00
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:28:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAA2AEE3F09
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:29:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D65280E07;
-	Tue, 12 Sep 2023 18:28:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D65280E07
+	by smtp1.osuosl.org (Postfix) with ESMTP id 805548133B;
+	Tue, 12 Sep 2023 18:29:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 805548133B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7hvhMk3Rc2Da; Tue, 12 Sep 2023 18:28:56 +0000 (UTC)
+	with ESMTP id fZjJk2cbS1_A; Tue, 12 Sep 2023 18:29:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8103780DBF;
-	Tue, 12 Sep 2023 18:28:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8103780DBF
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC9A581331;
+	Tue, 12 Sep 2023 18:29:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC9A581331
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F4471BF2A5
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:28:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8FAF41BF2A5
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:29:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 559594056D
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:28:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 559594056D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74FCF415C8
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:29:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74FCF415C8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PTd7XzObb7EC for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 18:28:52 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7E0BE4042B
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 18:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E0BE4042B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 40589C0003;
- Tue, 12 Sep 2023 18:28:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qg881-000X1j-98; Tue, 12 Sep 2023 20:28:49 +0200
+ with ESMTP id R-KOdNwqtOLs for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE90D4042B
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE90D4042B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9AADA86701; Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20230814063639.1145396-1-thomas@devoogdt.com>
- <20230814112336.GC421096@scaer>
-Date: Tue, 12 Sep 2023 20:28:49 +0200
-In-Reply-To: <20230814112336.GC421096@scaer> (Yann E. MORIN's message of "Mon, 
- 14 Aug 2023 13:23:36 +0200")
-Message-ID: <87v8cf5jq6.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2,
- next] package/llvm-project/compiler-rt: fix circular dependency
- warning
+To: buildroot@buildroot.org
+Date: Tue, 12 Sep 2023 20:00:12 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: e8eecbff45e99720a908ff7870724b9ec09ce871
+X-Git-Newrev: ca84d11e2fe2bd8888d5e1020af4e957730d4098
+X-Patchwork-Hint: ignore
+Message-Id: <20230912182931.9AADA86701@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x]
+ board/qemu/ppc64le-powernv8: fixup paths to images in qemu command line
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,42 +57,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>, Daniel Lang <dalang@gmx.at>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ca84d11e2fe2bd8888d5e1020af4e957730d4098
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > Thomas, All,
- > On 2023-08-14 08:36 +0200, Thomas Devoogdt spake thusly:
- >> make[4]: Circular include/sanitizer/allocator_interface.h <- include/sanitizer/allocator_interface.h dependency dropped.
- >> make[4]: Circular include/sanitizer/asan_interface.h <- include/sanitizer/asan_interface.h dependency dropped.
- > [--SNIP--]
- >> It's not clear why this cycle happens,
+Use full relative pathes for rootfs and kernel, like in other
+readme's.
 
- > Well, it is rather easy to understand:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0a5bb69982f759e64251e61dd29ec28ee3771fd4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/qemu/ppc64le-powernv8/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >   - include/CMakeLists.txt unconditionally declares dependency rules
- >     between header files in ${output_dir} and ${CMAKE_CURRENT_SOURCE_DIR}
- >     without provision for them to be the same directories;
-
- >   - this triggers the above warnings from make, hich arbitrarily breaks
- >     circular dependencies, which in our case happens to be OK.
-
- > See how I extended the commit log for more details.
-
- > And this is actually a fix for an issue that already happens on master.
- > So: applied to master, thanks.
-
-Committed to 2023.02.x and 2023.05.x, thanks. Luckily git is smart
-enough to notice that those don't have the llvm-project/ sub directory
-and do the right thing.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/qemu/ppc64le-powernv8/readme.txt b/board/qemu/ppc64le-powernv8/readme.txt
+index 059f55fbc9..b57c97464a 100644
+--- a/board/qemu/ppc64le-powernv8/readme.txt
++++ b/board/qemu/ppc64le-powernv8/readme.txt
+@@ -1,5 +1,5 @@
+ Run the emulation with:
+ 
+-qemu-system-ppc64 -M powernv9 -kernel vmlinux -append "console=hvc0 rootwait root=/dev/nvme0n1" -device nvme,bus=pcie.3,addr=0x0,drive=drive0,serial=1234 -drive file=./rootfs.ext2,if=none,id=drive0,format=raw,cache=none -device e1000e,netdev=net0,mac=C0:FF:EE:00:01:03,bus=pcie.1,addr=0x0  -netdev user,id=net0 -serial mon:stdio -nographic # qemu_ppc64le_powernv8_defconfig
++qemu-system-ppc64 -M powernv9 -kernel output/images/vmlinux -append "console=hvc0 rootwait root=/dev/nvme0n1" -device nvme,bus=pcie.3,addr=0x0,drive=drive0,serial=1234 -drive file=output/images/rootfs.ext2,if=none,id=drive0,format=raw,cache=none -device e1000e,netdev=net0,mac=C0:FF:EE:00:01:03,bus=pcie.1,addr=0x0  -netdev user,id=net0 -serial mon:stdio -nographic # qemu_ppc64le_powernv8_defconfig
+ 
+ The login prompt will appear in the terminal window.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
