@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9F84CA0EC3
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:24:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A3DDCA0ECA
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:27:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EC69610E9;
-	Tue, 12 Sep 2023 06:24:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EC69610E9
+	by smtp3.osuosl.org (Postfix) with ESMTP id F338160E03;
+	Tue, 12 Sep 2023 06:27:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F338160E03
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jngBscWQPGLO; Tue, 12 Sep 2023 06:24:54 +0000 (UTC)
+	with ESMTP id ZrFpg33bVDN1; Tue, 12 Sep 2023 06:27:13 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC0BA60E03;
-	Tue, 12 Sep 2023 06:24:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC0BA60E03
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5915A1BF27E
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:24:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A6EA610C3;
+	Tue, 12 Sep 2023 06:27:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A6EA610C3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C1E9A1BF27E
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31729418EF
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:24:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31729418EF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9C2E581F8A
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C2E581F8A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fsbm77bbGCHB for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 06:24:51 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 15EB3418BB
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 06:24:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15EB3418BB
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E964024001C;
- Tue, 12 Sep 2023 06:23:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qfwoK-00G1cW-3B; Tue, 12 Sep 2023 08:23:44 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KHDqNoNlkpcw for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD17681F38
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 06:27:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD17681F38
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C3BF786D74; Tue, 12 Sep 2023 06:27:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <ZNWRuw83P+HDmpjP@waldemar-brodkorb.de>
-Date: Tue, 12 Sep 2023 08:23:44 +0200
-In-Reply-To: <ZNWRuw83P+HDmpjP@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Fri, 11 Aug 2023 03:41:15 +0200")
-Message-ID: <87r0n37vv3.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/uclibc: add upstream patch to fix
- missing f_owner_ex
+To: buildroot@buildroot.org
+Date: Tue, 12 Sep 2023 08:04:34 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 575aa623698f83c3ba942236e46e6c8570c146fa
+X-Git-Newrev: 2ca34cdf187ea06745b791987127a90a34e97d4a
+X-Patchwork-Hint: ignore
+Message-Id: <20230912062709.C3BF786D74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] board/raspberrypi: enable
+ hdmi console for systemd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,27 +57,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2ca34cdf187ea06745b791987127a90a34e97d4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > This was previously only defined for aarch64, define the missing
- > stuff for all architectures.
- > This is required for the zeek package.
+Most of the users use HDMI console on RPi and with increasing popularity
+of systemd they face a trouble.
+systemd doesn't use /etc/inittab, enable getty@tty1.service instead.
 
- > Fixes:
- >  - http://autobuild.buildroot.net/results/f32/f32777b27c6b4f5a41c255df53502164d21b0fd4
+Signed-off-by: Alexey Roslyakov <alexey.roslyakov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c415820662661a6ef3cc8b2d9ea1a79791c1d7eb)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/raspberrypi/post-build.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-
-Committed to 2023.02.x and 2023.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+index b24256fcea..38fdc80734 100755
+--- a/board/raspberrypi/post-build.sh
++++ b/board/raspberrypi/post-build.sh
+@@ -8,6 +8,11 @@ if [ -e ${TARGET_DIR}/etc/inittab ]; then
+     grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
+ 	sed -i '/GENERIC_SERIAL/a\
+ tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
++# systemd doesn't use /etc/inittab, enable getty.tty1.service instead
++elif [ -d ${TARGET_DIR}/etc/systemd ]; then
++    mkdir -p "${TARGET_DIR}/etc/systemd/system/getty.target.wants"
++    ln -sf /lib/systemd/system/getty@.service \
++       "${TARGET_DIR}/etc/systemd/system/getty.target.wants/getty@tty1.service"
+ fi
+ 
+ # exnsure overlays exists for genimage
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
