@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5170CA0ECA
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:28:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CDA6CA0ECA
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 06:28:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B7CF60C06;
-	Tue, 12 Sep 2023 06:28:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B7CF60C06
+	by smtp3.osuosl.org (Postfix) with ESMTP id D729D610DD;
+	Tue, 12 Sep 2023 06:28:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D729D610DD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T4d1vK9oH9jk; Tue, 12 Sep 2023 06:28:29 +0000 (UTC)
+	with ESMTP id ZSqACH34VLhW; Tue, 12 Sep 2023 06:28:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFCC761110;
-	Tue, 12 Sep 2023 06:28:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFCC761110
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A65F81BF27E
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B8FD61100;
+	Tue, 12 Sep 2023 06:28:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B8FD61100
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C1AC1BF27E
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F1E881F38
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F1E881F38
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8197E418EF
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 06:27:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8197E418EF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id bKuADZqQOTTz for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20BD281F88
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20BD281F88
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1129486D75; Tue, 12 Sep 2023 06:27:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id X3iaS7YVI6fO for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 06:27:45 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 67BE9418BB
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 06:27:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67BE9418BB
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D4BC1C0033;
+ Tue, 12 Sep 2023 06:26:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qfwr8-00G1lU-3F; Tue, 12 Sep 2023 08:26:38 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 12 Sep 2023 08:26:05 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: c8ab50d20696b4cea98ac4984606e2d43699dc20
-X-Git-Newrev: e8eecbff45e99720a908ff7870724b9ec09ce871
-X-Patchwork-Hint: ignore
-Message-Id: <20230912062710.1129486D75@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/xfsprogs: fix
- linking error when -O0 is used
+To: Waldemar Brodkorb <wbx@openadk.org>
+References: <ZNeDSjN9ON9dG18Q@waldemar-brodkorb.de>
+Date: Tue, 12 Sep 2023 08:26:38 +0200
+In-Reply-To: <ZNeDSjN9ON9dG18Q@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Sat, 12 Aug 2023 15:04:10 +0200")
+Message-ID: <87msxr7vq9.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/xfsprogs: fix linking error
+ when -O0 is used
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,49 +63,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8eecbff45e99720a908ff7870724b9ec09ce871
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-Urcu does not like -O0 it needs gcc optimizations.
-Force -O1 in this case. Inspired by package fwts.
+ > Urcu does not like -O0 it needs gcc optimizations.
+ > Force -O1 in this case. Inspired by package fwts.
 
-The issue got introduced in commit 2f8f69012e0eee7f3e98212fb3da118c211f3c0b:
-before this commit, xfsprogs builds fine at -O0, after this commit, it fails
-to build at -O0. As this commit went into 2022.02, the fix needs to be
-backported to stable branches.
+ > The issue got introduced in commit 2f8f69012e0eee7f3e98212fb3da118c211f3c0b:
+ > before this commit, xfsprogs builds fine at -O0, after this commit, it fails
+ > to build at -O0. As this commit went into 2022.02, the fix needs to be
+ > backported to stable branches.
 
-Fixes:
- - http://autobuild.buildroot.net/results/3bd/3bd7de784953ab1fa70bf5572eccd7b10e4a0e17
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/3bd/3bd7de784953ab1fa70bf5572eccd7b10e4a0e17
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2bd93a30a60ad224f0ee974878d9d9b5dd1206af)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xfsprogs/xfsprogs.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ > v1 -> v2:
+ >   - add more information about when the problem was introduced
+ >     from Thomas Petazzoni's review
 
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 695471bddc..09f59a76f4 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -27,6 +27,10 @@ else
- XFSPROGS_CONF_OPTS += --disable-libicu
- endif
- 
-+ifeq ($(BR2_OPTIMIZE_0),y)
-+XFSPROGS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
-+endif
-+
- XFSPROGS_INSTALL_TARGET_OPTS = DIST_ROOT=$(TARGET_DIR) install
- 
- $(eval $(autotools-package))
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
