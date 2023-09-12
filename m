@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82016EE3F00
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1CC3EE3F09
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:06:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 297AC821C5;
-	Tue, 12 Sep 2023 18:06:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 297AC821C5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86B22821B4;
+	Tue, 12 Sep 2023 18:06:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86B22821B4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gkQlps1XGYFO; Tue, 12 Sep 2023 18:06:14 +0000 (UTC)
+	with ESMTP id 7eKn6WpH9nPT; Tue, 12 Sep 2023 18:06:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83713821B4;
-	Tue, 12 Sep 2023 18:06:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83713821B4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BDD291BF83B
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:06:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8DA3821EB;
+	Tue, 12 Sep 2023 18:06:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8DA3821EB
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EA3001BF83B
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9732F61186
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:06:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9732F61186
+ by smtp2.osuosl.org (Postfix) with ESMTP id D1814402F6
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1814402F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MAO9Cg5AtITA for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 18:06:11 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9EAFD6111C
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 18:06:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EAFD6111C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4C0F01C0002;
- Tue, 12 Sep 2023 18:06:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6yfEpPRRsiHP for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 18:06:19 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E7D384010F
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 18:06:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7D384010F
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92C7AFF802;
+ Tue, 12 Sep 2023 18:06:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qg7m4-000Vjp-7r; Tue, 12 Sep 2023 20:06:08 +0200
+ id 1qg7mB-000Vjx-Gk; Tue, 12 Sep 2023 20:06:15 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230221160036.2903448-1-fontaine.fabrice@gmail.com>
-Date: Tue, 12 Sep 2023 20:06:08 +0200
-In-Reply-To: <20230221160036.2903448-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 21 Feb 2023 17:00:36 +0100")
-Message-ID: <878r9b6zcf.fsf@48ers.dk>
+References: <20230221160137.2904208-1-fontaine.fabrice@gmail.com>
+Date: Tue, 12 Sep 2023 20:06:15 +0200
+In-Reply-To: <20230221160137.2904208-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 21 Feb 2023 17:01:37 +0100")
+Message-ID: <874jjz6zc8.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 Subject: Re: [Buildroot] [PATCH 1/1]
- toolchain/toolchain-external/toolchain-external-codescape-mti-mips: disable
+ toolchain/toolchain-external/toolchain-external-codescape-img-mips: disable
  gdbserver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -76,11 +76,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
  > Fix the following build failure:
- >>>> toolchain-external-codescape-mti-mips 2018.09-02 Copying gdbserver
+ >>>> toolchain-external-codescape-img-mips 2018.09-02 Copying gdbserver
  > Could not find gdbserver in external toolchain
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/ead304285a9cf32bf6b9dcc7fc30acece25ec680
+ >  - http://autobuild.buildroot.org/results/b0786965e0b249c8168df855682e54cfe95fa0cc
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
