@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B05F0EE3F00
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:30:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09A90EE3F00
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A46582222;
-	Tue, 12 Sep 2023 18:30:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A46582222
+	by smtp1.osuosl.org (Postfix) with ESMTP id B652E8221A;
+	Tue, 12 Sep 2023 18:30:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B652E8221A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gG4mbDepHtxB; Tue, 12 Sep 2023 18:30:24 +0000 (UTC)
+	with ESMTP id Or5A0Hy19tOh; Tue, 12 Sep 2023 18:30:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FA4F82218;
-	Tue, 12 Sep 2023 18:30:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FA4F82218
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4699A1BF964
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:29:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7874821FD;
+	Tue, 12 Sep 2023 18:30:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7874821FD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C159C1BF2A5
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:29:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1EA014088A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2212A415C2
  for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EA014088A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2212A415C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id xouCqNQ6Y4Op for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 18:29:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id I2xVdjiF9xHy for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E62824087E
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD62F414B8
  for <buildroot@buildroot.org>; Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E62824087E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD62F414B8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D536086708; Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
+ id AB93486708; Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Sep 2023 20:28:40 +0200
+Date: Tue, 12 Sep 2023 20:00:20 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 4d50613e86ff2e3f42dc0563bdca839031b0e0e7
-X-Git-Newrev: c57af4987e0f568805ea787c971a29e382c36769
+X-Git-Oldrev: ca84d11e2fe2bd8888d5e1020af4e957730d4098
+X-Git-Newrev: be80331cf569588deec55103788371426cfe58cd
 X-Patchwork-Hint: ignore
-Message-Id: <20230912182931.D536086708@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/compiler-rt: fix
- circular dependency warning
+Message-Id: <20230912182931.AB93486708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] utils/genrandconfig: add
+ ubi handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,78 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c57af4987e0f568805ea787c971a29e382c36769
+commit: https://git.buildroot.net/buildroot/commit/?id=be80331cf569588deec55103788371426cfe58cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-The compiler-rt project intructs to build out of tree:
-    https://compiler-rt.llvm.org/
+Add a custom case to make sure that a random configuration with an empty
+configuration file for ubi doesn't fail.
 
-Otherwise, the dependency chain declared in the include/CMakelLists.txt
-causes a circular dependency of source files upon themselves:
+ubinize: error!: no sections found the ini-file "/home/buildroot/autobuild/instance-2/output-1/build/ubinize.cfg"
 
-    make[4]: Circular include/sanitizer/allocator_interface.h <- include/sanitizer/allocator_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/asan_interface.h <- include/sanitizer/asan_interface.h dependency dropped.
-    make[4]: Circular include/sanitizer/common_interface_defs.h <- include/sanitizer/common_interface_defs.h dependency dropped.
-    [--snip 19 other files--]
+Fixes:
+ - http://autobuild.buildroot.org/results/f678c17cc4df06fb2737467e769cd8f72a3ea420
 
-This is because include/CMakeLists.txt unconctional declares
-dependencies in this manner:
-
-    set(SANITIZER_HEADERS
-        sanitizer/allocator_interface.h
-        sanitizer/asan_interface.h
-        sanitizer/common_interface_defs.h
-        [...]
-        )
-
-    set(COMPILER_RT_HEADERS
-        ${SANITIZER_HEADERS}
-        [...])
-
-    set(output_dir ${COMPILER_RT_OUTPUT_DIR}/include)
-
-    foreach( f ${COMPILER_RT_HEADERS} )
-      set( src ${CMAKE_CURRENT_SOURCE_DIR}/${f} )
-      set( dst ${output_dir}/${f} )
-      add_custom_command(OUTPUT ${dst}
-        [...]
-      )
-      [...]
-    endforeach( f )
-
-The froeach() loop creates dependency rules between the files in
-output_dir and CMAKE_CURRENT_SOURCE_DIR, without provision for the
-case they are both the same directories, thus in-source builds are
-not supported.
-
-With the Makefiles backend, this only triggers the above warning
-from make, because make arbitrarily breaks circluar dependencies, and
-in this case it makes it work. But when we switch to the ninja backend,
-this is going to be a hard error.
-
-Anyway, ninja or make, compiler-rt does not support in-source builds.
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-[yann.morin.1998@free.fr: drastically expand commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit dedb686dd283a692376e000e61b64f6b055b1c42)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 283e6859f15473cc1d0b2eb336e1db6f4335b61b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/compiler-rt/compiler-rt.mk | 1 +
- 1 file changed, 1 insertion(+)
+ utils/genrandconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-index c8ea86e899..fbf4707bfc 100644
---- a/package/compiler-rt/compiler-rt.mk
-+++ b/package/compiler-rt/compiler-rt.mk
-@@ -12,6 +12,7 @@ COMPILER_RT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmor
- COMPILER_RT_LICENSE = NCSA MIT
- COMPILER_RT_LICENSE_FILES = LICENSE.TXT
- COMPILER_RT_DEPENDENCIES = host-clang llvm
-+COMPILER_RT_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 60922e871c..846cf1aa9f 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -530,6 +530,12 @@ def fixup_config(sysinfo, configfile):
+         configlines.remove('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2048\n')
+         configlines.append('BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=41610\n')
  
- COMPILER_RT_INSTALL_STAGING = YES
- COMPILER_RT_INSTALL_TARGET = NO
++    if 'BR2_TARGET_ROOTFS_UBI=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y\n' in configlines and \
++       'BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE=""\n' in configlines:
++        configlines.remove('BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG=y\n')
++        configlines.remove('BR2_TARGET_ROOTFS_UBI_CUSTOM_CONFIG_FILE=""\n')
++
+     if 'BR2_TARGET_S500_BOOTLOADER=y\n' in configlines and \
+        'BR2_TARGET_S500_BOOTLOADER_BOARD=""\n' in configlines:
+         configlines.remove('BR2_TARGET_S500_BOOTLOADER=y\n')
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
