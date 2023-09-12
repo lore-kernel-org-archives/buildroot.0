@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09A90EE3F00
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4A3EEE3F09
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 18:30:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B652E8221A;
-	Tue, 12 Sep 2023 18:30:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B652E8221A
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2366821E6;
+	Tue, 12 Sep 2023 18:30:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2366821E6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Or5A0Hy19tOh; Tue, 12 Sep 2023 18:30:37 +0000 (UTC)
+	with ESMTP id hLhCRJ-2ZCBI; Tue, 12 Sep 2023 18:30:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7874821FD;
-	Tue, 12 Sep 2023 18:30:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7874821FD
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA9B982254;
+	Tue, 12 Sep 2023 18:30:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA9B982254
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C159C1BF2A5
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:29:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C3741BF964
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:30:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2212A415C2
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:29:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2212A415C2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 334154056D
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 18:30:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 334154056D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id I2xVdjiF9xHy for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
+ with ESMTP id FsLz5Z7e_nVp for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 18:30:42 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD62F414B8
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD62F414B8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60B304042B
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 18:30:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60B304042B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB93486708; Tue, 12 Sep 2023 18:29:31 +0000 (UTC)
+ id 4FD2B867F1; Tue, 12 Sep 2023 18:30:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Sep 2023 20:00:20 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: ca84d11e2fe2bd8888d5e1020af4e957730d4098
-X-Git-Newrev: be80331cf569588deec55103788371426cfe58cd
+Date: Tue, 12 Sep 2023 20:00:24 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 84bfb47d93707f7f0936ac507ed5846721d28612
+X-Git-Newrev: 58e865f06fd50606e067c6454dac8438d0169bb3
 X-Patchwork-Hint: ignore
-Message-Id: <20230912182931.AB93486708@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] utils/genrandconfig: add
+Message-Id: <20230912183042.4FD2B867F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] utils/genrandconfig: add
  ubi handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be80331cf569588deec55103788371426cfe58cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=58e865f06fd50606e067c6454dac8438d0169bb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Add a custom case to make sure that a random configuration with an empty
 configuration file for ubi doesn't fail.
