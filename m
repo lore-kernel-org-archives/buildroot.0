@@ -1,74 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EAEAEE3F3B
-	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 21:53:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 257DDEE3F3F
+	for <buildroot@archiver.kernel.org>; Tue, 12 Sep 2023 22:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE9858139B;
-	Tue, 12 Sep 2023 21:53:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE9858139B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 92AEF41B87;
+	Tue, 12 Sep 2023 22:15:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92AEF41B87
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1xX6qqcEzd-J; Tue, 12 Sep 2023 21:53:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id XME0qrNiAnwR; Tue, 12 Sep 2023 22:15:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7DF18135B;
-	Tue, 12 Sep 2023 21:53:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7DF18135B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 734181BF421
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 21:53:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0C6B41B77;
+	Tue, 12 Sep 2023 22:15:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0C6B41B77
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 528591BF831
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 22:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5924640BFA
- for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 21:53:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5924640BFA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 35FB341B77
+ for <buildroot@lists.busybox.net>; Tue, 12 Sep 2023 22:15:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35FB341B77
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Im5RukQM4YIr for <buildroot@lists.busybox.net>;
- Tue, 12 Sep 2023 21:53:38 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B994A40550
- for <buildroot@buildroot.org>; Tue, 12 Sep 2023 21:53:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B994A40550
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id A1A0719F574;
- Tue, 12 Sep 2023 23:53:32 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:37174])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 12 Sep 2023 23:53:32 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oyQcSX9Exqjw for <buildroot@lists.busybox.net>;
+ Tue, 12 Sep 2023 22:15:54 +0000 (UTC)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9E34041B67
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 22:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E34041B67
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-31c4d5bd69cso6377086f8f.3
+ for <buildroot@buildroot.org>; Tue, 12 Sep 2023 15:15:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1694556951; x=1695161751;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=FuUdgybIzioJQgU+A3XXy4gixHVTNwGzneO9YO/XveI=;
+ b=tDRZNrYVsSeq3LcNgrHoCGvsDdgMinQh1CV7OGl4pXGqQgkbQTSRCBRYtxmc0kh5QU
+ 6rNXnO0JwJSlZdRnJetqlOVn+vIY4FgF/0l1ak3K8xfcUuDMTiIqrtFcEtxWG6ufv2Rc
+ 6EET+BJ51x0NKcnz4I4sPbB+gWsNFJQmqoYHnv8CaDQXKVNnnuKE6rtqLhC0RjEI25gi
+ jXjgSaP94OQfRoj7kOVnLkb+iE6kShGfoIUqemHPOjd2I5oRZZE5uJT5fx3upXwrvJpc
+ QoUwI8wYnFt+RuSGrJUEm7Q0gAc94HbVRaFGL/v/L+4F516at7rcYmdYLmZUAdSS1NHL
+ gB1Q==
+X-Gm-Message-State: AOJu0Yxfa6LKD3gYwI4kd8d/pYfmMvN6UfxylXsVBoup6UiV2cfd9JeR
+ EG04XWA4cKQ2psJhTWN0HFJTjx5+FIk=
+X-Google-Smtp-Source: AGHT+IGN8o8l7fz+noVK6yeEnkQ3EadEXzDhQOEN+kIrwZzomjK4NMJhmk44ePRRR++/LpmmFR3u2w==
+X-Received: by 2002:a5d:470f:0:b0:31a:d8c0:cb8b with SMTP id
+ y15-20020a5d470f000000b0031ad8c0cb8bmr610339wrq.25.1694556951149; 
+ Tue, 12 Sep 2023 15:15:51 -0700 (PDT)
+Received: from scaer.home ([2a01:cb19:8b44:b00:d377:8b3f:c881:5464])
+ by smtp.gmail.com with ESMTPSA id
+ g3-20020a5d6983000000b003197c7d08ddsm13819783wru.71.2023.09.12.15.15.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 12 Sep 2023 15:15:50 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 13 Sep 2023 00:15:49 +0200
+Message-Id: <cover.1694556946.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date: Tue, 12 Sep 2023 23:53:32 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Marcus Folkesson <marcus.folkesson@gmail.com>
-In-Reply-To: <ZQBfUcvieaqDg7sv@gmail.com>
-References: <20230908082741.409005-1-marcus.folkesson@gmail.com>
- <20230908225704.0aafa7eb@windsurf> <ZPxtEfe6FVIucVWS@gmail.com>
- <20230909155549.15a4b507@windsurf>
- <35d775ed8e08f7082c025d0c32f53bb4@free.fr> <ZP4cBkx2VFsfsN7M@gmail.com>
- <6316e92cc730f0e9fdd11379a95dd10b@free.fr> <ZQBfUcvieaqDg7sv@gmail.com>
-User-Agent: Webmail Free/1.6.1
-Message-ID: <a0991242abf58a2ea58071b1e32837f0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694555614;
- bh=24XX4cvxwEkpiJJse3LbKCQY7S/dh50pWBG0S+ktsDE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=NYzbl2bkXx86qnYQ4q27hnxvIpAOkZzvNXSQAXAR+YR8iTrVGRt3nMNcXBGqRbSEb
- MLepNnEdOtfMaFnIxiUIOnUpUcPBDnX3aPv6HyAdWInTdhM0m8EQ7q+3qMiy6GDKDp
- wp/7KjVCFbgMcd01ECoHZx+HmJn3fU9FM3cPzaZYvfsw/MJjHDb3SG/vqjQf0oW0Yr
- W5bG3/lsKH1liLPCAwTYgfZm4jghZRBHhIA4wRlOD2bAmKlxDgKguJCWyiqoklCpqK
- xGfBr2Zfk9m1JnMfyZhVHslsqioE8/FHPWeASXue6Ht4EVInsuF4c+BiAucl5YZkGb
- 8NkBy3ijwh5GA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NYzbl2bk
-Subject: Re: [Buildroot] [PATCH 1/2] package/criu: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20221208; t=1694556951; x=1695161751; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=FuUdgybIzioJQgU+A3XXy4gixHVTNwGzneO9YO/XveI=;
+ b=RPkQClGpsXez8qT0a3TsM5+HWEFPnZdA8xmlsbTyALIPpcN6vnhpEQdRQTn69V0diG
+ DsWGRu7yU5+TeQdlVOPQ/3ZAAHz4zpSk5KvNW296uiZmVR/+gI2/HkjSCciVdY5VOoGI
+ /p6qjBO/GHAHAio6oJ3puIKsATqPoau48gsxQEfaHdsjYbKS+XpOdfuR3CgHqhZ3maz/
+ TlkT1ujA3AZmPQfn+UjTONx45wYspebBqEy2PYfTesf3izbJIvc4qxmXO2tqmEB6kz1K
+ rg5tRqBijdVp7q2Bq8H3hXtUbWaFuRo5DezwCUaqkf7oLirGGHelmc+opCGSDlyEVzug
+ XHQQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=RPkQClGp
+Subject: [Buildroot] [PATCH 0/5] support/downloaf/git: add support for git
+ attirbutes (branch yem/git-attributes)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,96 +94,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Vincent Fazio <vfazio@xes-inc.com>,
+ Woody Douglass <wdouglass@carnegierobotics.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Peter Seiderer <ps.report@gmx.net>, Julien Corjon <corjon.j@ecagroup.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Francois Perrad <fperrad@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgTWFyY3VzLAoKT24gMTIvMDkvMjAyMyAxNDo1MywgTWFyY3VzIEZvbGtlc3NvbiB3cm90ZToK
-PiBIaSBKdWxpZW4sCj4gCj4gCj4gT24gU3VuLCBTZXAgMTAsIDIwMjMgYXQgMTE6MDU6MTlQTSAr
-MDIwMCwgSnVsaWVuIE9saXZhaW4gd3JvdGU6Cj4+IEhpIE1hcmN1cywKPj4gCj4+IE9uIDEwLzA5
-LzIwMjMgMjE6NDEsIE1hcmN1cyBGb2xrZXNzb24gd3JvdGU6Cj4+ID4gSGkgSnVsaWVuLAo+PiA+
-Cj4+ID4gT24gU2F0LCBTZXAgMDksIDIwMjMgYXQgMTE6MTY6MjdQTSArMDIwMCwgSnVsaWVuIE9s
-aXZhaW4gd3JvdGU6Cj4+ID4gPiBIaSBUaG9tYXMsIE1hcmN1cywKPj4gPiA+Cj4+ID4gPiBPbiAw
-OS8wOS8yMDIzIDE1OjU1LCBUaG9tYXMgUGV0YXp6b25pIHdyb3RlOgo+PiA+ID4gPiBPbiBTYXQs
-IDkgU2VwIDIwMjMgMTU6MDM6MTMgKzAyMDAKPj4gPiA+ID4gTWFyY3VzIEZvbGtlc3NvbiA8bWFy
-Y3VzLmZvbGtlc3NvbkBnbWFpbC5jb20+IHdyb3RlOgo+PiA+ID4gPgo+PiA+ID4gPiA+IFRoYW5r
-IHlvdSBmb3IgeW91ciBzb2xpZCByZXZpZXcuCj4+ID4gPgo+PiA+ID4gWy4uLl0KPj4gPiA+Cj4+
-ID4gPiA+IE9uZSBnb29kIHRoaW5nIHdvdWxkIGJlIHRvIGhhdmUgYSBydW50aW1lIHRlc3QgZm9y
-IGNyaXUsIGluCj4+ID4gPiA+IHN1cHBvcnQvdGVzdGluZy4gSnVsaWVuIE9saXZhaW4gKGluIENj
-KSBjYW4gcHJvYmFibHkgcHJvdmlkZSBzb21lCj4+ID4gPiA+IGd1aWRhbmNlIGhlcmUuCj4+ID4g
-Pgo+PiA+ID4KPj4gPiA+IE1hcmN1cywgeW91IHNob3VsZCBiZSBhYmxlIHRvIHJlcHJvZHVjZSB0
-aGF0IHdpdGggdGhlIGNvbW1hbmQ6Cj4+ID4gPgo+PiA+ID4gICAgIHV0aWxzL3Rlc3QtcGtnIC1w
-IGNyaXUKPj4gPgo+PiA+IEkndmUgc2VudCBvdXQgYSB2MiB3aGVyZSB0aGUgY29tbWVudHMgZnJv
-bSBUaG9tYXMgaXMgYWRkcmVzc2VkLiBCdXQgSSBhbQo+PiA+IG5vdCBhYmxlIHRvIHJlcHJvZHVj
-ZSB0aGUgZXJyb3JzIHlvdSBnb3Qgd2l0aCB0ZXN0LXBrZy4KPj4gPgo+PiA+IEknbSBub3Qgc3Vy
-ZSB3aHkgaXQgc2tpcHMgbXkgdGVzdHMuIENvdWxkIHlvdSBwbGVhc2UgcHJvdmlkZSBzb21lCj4+
-ID4gZ3VpZGFuY2U/Cj4+IAo+PiBBbGwgdGVzdCBhcmUgc2tpcHBlZCBiZWNhdXNlIG9mIHRoZSAi
-ZGVwZW5kcyBvbgo+PiBCUjJfUEFDS0FHRV9IT1NUX1BZVEhPTjMiIG5vdCBiZWluZyBzZXQgYnkg
-ZGVmYXVsdC4KPj4gCj4+IEknbSBub3Qgc3VyZSBpcyB0aGlzICJkZXBlbmRzIG9uIiBpcyByZWFs
-bHkgbmVlZGVkLCBhcyBJIGV4cGVjdCBpdAo+PiB0byBiZSBhIGJ1aWxkIGRlcGVuZGVuY3kuIElm
-IGl0J3MgdGhlIGNhc2UsIHRoZSBkZXBlbmRlbmN5IGlzIG9ubHkKPj4gbmVlZGVkIGluIHRoZSAu
-bWsgZmlsZS4gSSBsZXQgdGhlIHJldmlld2VycyBjb21tZW50IHRoZSB2MiBwYXRjaAo+PiBvbiB0
-aGF0IHRvcGljLi4uCj4+IAo+PiBBbnl3YXlzLCBmb3IgdGhlIG1vbWVudCwgdGhpcyBjYW4gYmUg
-bWFuYWdlZCBieSBtYW51YWxseSBjcmVhdGluZyBhCj4+IGNvbmZpZyBzZXR0aW5nIHRoaXMgZm9y
-IHRlc3QtcGtnLiBGb3IgZXhhbXBsZToKPj4gCj4+ICAgICBjYXQgPiBjcml1LmNvbmZpZyA8PEVP
-Rgo+PiAgICAgQlIyX1BBQ0tBR0VfSE9TVF9QWVRIT04zPXkKPj4gICAgIEJSMl9QQUNLQUdFX0NS
-SVU9eQo+PiAgICAgRU9GCj4+IAo+PiBUaGVuLCB0ZXN0LXBrZyB3aWxsIG5vIGxvbmdlciBza2lw
-IHRoZSB0ZXN0cy4gT24gbXkgc2lkZSwgSSBub3cgc2VlOgo+PiAKPj4gICAgIHV0aWxzL3Rlc3Qt
-cGtnIC1jIGNyaXUuY29uZmlnIC1wIGNyaXUKPj4gICAgICAgICAgICAgICAgICAgICBib290bGlu
-LWFybXY1LXVjbGliYyBbMS82XTogRkFJTEVECj4+ICAgICAgICAgICAgICAgICAgICAgIGJvb3Rs
-aW4tYXJtdjctZ2xpYmMgWzIvNl06IEZBSUxFRAo+PiAgICAgICAgICAgICAgICAgICAgYm9vdGxp
-bi1hcm12N20tdWNsaWJjIFszLzZdOiBTS0lQUEVECj4+ICAgICAgICAgICAgICAgICAgICAgIGJv
-b3RsaW4teDg2LTY0LW11c2wgWzQvNl06IE9LCj4+ICAgICAgICAgICAgICAgICAgICAgICBici1h
-cm0tZnVsbC1zdGF0aWMgWzUvNl06IFNLSVBQRUQKPj4gICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIHNvdXJjZXJ5LWFybSBbNi82XTogRkFJTEVECj4+ICAgICA2IGJ1aWxkcywgMiBza2lwcGVk
-LCAzIGJ1aWxkIGZhaWxlZCwgMCBsZWdhbC1pbmZvIGZhaWxlZCwgMCAKPj4gc2hvdy1pbmZvCj4+
-IGZhaWxlZAo+PiAKPj4gSSBsZXQgeW91IGluc3BlY3QgdGhlIGJ1aWxkIGxvZyBmaWxlcyB+L2Jy
-LXRlc3QtcGtnLyovbG9nZmlsZSBmb3IKPj4gdGhlIGRldGFpbHMuCj4gCj4gCj4gVGhlIGVycm9y
-IHNlZW1zIHRvIGJlIHJlbGF0ZWQgdG8gaG9zdC1saWJ6bGliIHJhdGhlciB0aGFuIGNyaXUgOi0v
-Cj4gCj4gCj4gbWFrZVsxXTogTGVhdmluZyBkaXJlY3RvcnkgCj4gJy9ob21lL21hcmN1cy9tbnQv
-ZW5jd29yay9naXQvYnItdGVzdC1wa2cvYm9vdGxpbi1hcm12NS11Y2xpYmMvYnVpbGQvaG9zdC1s
-aWJ6bGliLTEuMycKPiAqKioKPiAqKiogRVJST1I6IHBhY2thZ2UgaG9zdC1saWJ6bGliIGluc3Rh
-bGxzIGV4ZWN1dGFibGVzIHdpdGhvdXQgcHJvcGVyIAo+IFJQQVRIOgo+ICoqKiAgIAo+IC9ob21l
-L21hcmN1cy9tbnQvZW5jd29yay9naXQvYnItdGVzdC1wa2cvYm9vdGxpbi1hcm12NS11Y2xpYmMv
-aG9zdC9iaW4veG1sd2YKPiAqKiogICAKPiAvaG9tZS9tYXJjdXMvbW50L2VuY3dvcmsvZ2l0L2Jy
-LXRlc3QtcGtnL2Jvb3RsaW4tYXJtdjUtdWNsaWJjL2hvc3QvYmluL3BrZ2NvbmYKPiAqKiogICAK
-PiAvaG9tZS9tYXJjdXMvbW50L2VuY3dvcmsvZ2l0L2JyLXRlc3QtcGtnL2Jvb3RsaW4tYXJtdjUt
-dWNsaWJjL2hvc3QvYmluL3Byb3RvYwo+ICoqKiAgIAo+IC9ob21lL21hcmN1cy9tbnQvZW5jd29y
-ay9naXQvYnItdGVzdC1wa2cvYm9vdGxpbi1hcm12NS11Y2xpYmMvaG9zdC9iaW4vcHJvdG9jLWdl
-bi1jCj4gKioqICAgCj4gL2hvbWUvbWFyY3VzL21udC9lbmN3b3JrL2dpdC9ici10ZXN0LXBrZy9i
-b290bGluLWFybXY1LXVjbGliYy9ob3N0L2Jpbi9weXRob24zLjExCj4gKioqICAgCj4gL2hvbWUv
-bWFyY3VzL21udC9lbmN3b3JrL2dpdC9ici10ZXN0LXBrZy9ib290bGluLWFybXY1LXVjbGliYy9o
-b3N0L2Jpbi9vcGVuc3NsCj4gbWFrZTogKioqIFtwYWNrYWdlL3BrZy1nZW5lcmljLm1rOjMwNTog
-Cj4gL2hvbWUvbWFyY3VzL21udC9lbmN3b3JrL2dpdC9ici10ZXN0LXBrZy9ib290bGluLWFybXY1
-LXVjbGliYy9idWlsZC9ob3N0LWxpYnpsaWItMS4zLy5zdGFtcF9ob3N0X2luc3RhbGxlZF0gCj4g
-RXJyb3IgMQoKRm9yIGluZm9ybWF0aW9uLCBvbiBteSBzaWRlLCBJIHNlZSB0aGUgY3JpdSBwYWNr
-YWdlIGJ1aWxkIGZhaWxpbmcKZm9yIHZhcmlvdXMgcmVhc29ucy4KCkZvciBleGFtcGxlLCB0b29s
-Y2hhaW4gYm9vdGxpbi1hcm12NS11Y2xpYmMgaXMgZmFpbGluZyB3aXRoOgoKY29tcGVsL2FyY2gv
-YXJtL3NyYy9saWIvaW5mZWN0LmM6IEluIGZ1bmN0aW9uIArigJhjb21wZWxfc2V0X3Rhc2tfZXh0
-X3JlZ3PigJk6CmNvbXBlbC9hcmNoL2FybS9zcmMvbGliL2luZmVjdC5jOjEwNzoyMDogZXJyb3I6
-IOKAmFBUUkFDRV9TRVRWRlBSRUdT4oCZIAp1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBm
-dW5jdGlvbik7IGRpZCB5b3UgbWVhbiAK4oCYUFRSQUNFX1NFVEZQUkVHU+KAmT8KICAgMTA3IHwg
-ICAgICAgICBpZiAocHRyYWNlKFBUUkFDRV9TRVRWRlBSRUdTLCBwaWQsIE5VTEwsIGV4dF9yZWdz
-KSkgewogICAgICAgfCAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn4KICAgICAg
-IHwgICAgICAgICAgICAgICAgICAgIFBUUkFDRV9TRVRGUFJFR1MKClRvb2xjaGFpbiBib290bGlu
-LWFybXY3LWdsaWJjIGZhaWxpbmcgd2l0aDoKCi9ici10ZXN0LXBrZy9ib290bGluLWFybXY3LWds
-aWJjL2hvc3QvYmluL2FybS1saW51eC1sZDogCi4vY29tcGVsL3BsdWdpbnMvc3RkLmxpYi5hKGxv
-Zy5vKTogaW4gZnVuY3Rpb24gYHN0ZF92cHJpbnRfbnVtJzoKbG9nLmM6KC50ZXh0KzB4MmMwKTog
-dW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgX19hZWFiaV9pZGl2bW9kJwovYnItdGVzdC1wa2cvYm9v
-dGxpbi1hcm12Ny1nbGliYy9ob3N0L2Jpbi9hcm0tbGludXgtbGQ6IAouL2NvbXBlbC9wbHVnaW5z
-L3N0ZC5saWIuYShsb2cubyk6IGluIGZ1bmN0aW9uIGBzYnVmX3ByaW50Zic6CmxvZy5jOigudGV4
-dCsweDQxYyk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYF9fYWVhYmlfaWRpdm1vZCcKL2JyLXRl
-c3QtcGtnL2Jvb3RsaW4tYXJtdjctZ2xpYmMvaG9zdC9iaW4vYXJtLWxpbnV4LWxkOiAKLi9jb21w
-ZWwvcGx1Z2lucy9zdGQubGliLmEoc3RyaW5nLm8pOiBpbiBmdW5jdGlvbiBgc3RkX3ZkcHJpbnRm
-JzoKc3RyaW5nLmM6KC50ZXh0KzB4MTE0KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgX19hZWFi
-aV9pZGl2bW9kJwoKVGhlcmUgaXMgcG9zc2libHkgb3RoZXJzLiAgSSdsbCB0cnkgdG8gaW52ZXN0
-aWdhdGUgaG93IHRvIHJlc29sdmUgdGhvc2UgCmlzc3Vlcy4KCj4+IFdpdGggdGhpcyB2MiwgSSBh
-bSBub3cgYWJsZSB0byBidWlsZCBjcml1IG9uIHNvbWUgeDg2XzY0IGFuZCBBYXJjaDY0Cj4+IGNv
-bmZpZ3VyYXRpb25zLCBzbyBJIGNhbiBzdGFydCB3cml0aW5nIGEgcnVudGltZSB0ZXN0IDspCj4g
-Cj4gWWVheSEKCkkgaGF2ZSBub3cgYSBmdWxseSB3b3JraW5nIHRlc3Qgb24gQWFyY2g2NC4gSSds
-bCBzZW5kIGl0IHdoZW4gY3JpdQp3aWxsIGJlIG1lcmdlZC4KCkJlc3QgcmVnYXJkcywKCkp1bGll
-bi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello All!
+
+This litle series, after a few fixups and cleanup commits, introduces
+support for git attributes to the git download backend.
+
+Git attriibutes are very similar to the decades-old CVS-style keywords
+and placeholders; except they are acted on while generating an archive
+with git-archive, rather than on checkout.
+
+Some packages (pcm-tools already, luajit soon) use such markers for
+versioning information; luajit uses the UNIX timestamp as its semver
+patch-level.
+
+While introducing this support, a few fixes were first needed; the git
+backend was also cleaned up to pass shellcheck.
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/qt5: fix upstream git trees
+      support/download: generate even more reproducible tarballs
+      support/download/git: properly catch failures
+      support/download/git: fix shellcheck errors
+      support/download/git: handle git attributes
+
+ .checkpackageignore                                |   1 -
+ boot/edk2/edk2.hash                                |   2 +-
+ boot/vexpress-firmware/vexpress-firmware.hash      |   2 +-
+ package/abootimg/abootimg.hash                     |   2 +-
+ package/aer-inject/aer-inject.hash                 |   2 +-
+ package/am33x-cm3/am33x-cm3.hash                   |   2 +-
+ package/armbian-firmware/armbian-firmware.hash     |   2 +-
+ package/azure-iot-sdk-c/azure-iot-sdk-c.hash       |   2 +-
+ package/bayer2rgb-neon/bayer2rgb-neon.hash         |   2 +-
+ package/bpftool/bpftool.hash                       |   2 +-
+ package/brickd/brickd.hash                         |   2 +-
+ package/c-capnproto/c-capnproto.hash               |   2 +-
+ package/dbus-triggerd/dbus-triggerd.hash           |   2 +-
+ package/dtv-scan-tables/dtv-scan-tables.hash       |   2 +-
+ package/edid-decode/edid-decode.hash               |   2 +-
+ package/firmware-utils/firmware-utils.hash         |   2 +-
+ package/flashbench/flashbench.hash                 |   2 +-
+ package/freescale-imx/imx-lib/imx-lib.hash         |   2 +-
+ package/google-breakpad/google-breakpad.hash       |   2 +-
+ .../gstreamer1/gst1-interpipe/gst1-interpipe.hash  |   2 +-
+ .../gst1-plugins-bayer2rgb-neon.hash               |   2 +-
+ package/gstreamer1/gst1-shark/gst1-shark.hash      |   3 +-
+ package/ibm-sw-tpm2/ibm-sw-tpm2.hash               |   2 +-
+ package/kvmtool/kvmtool.hash                       |   2 +-
+ package/libbroadvoice/libbroadvoice.hash           |   2 +-
+ package/libcamera/libcamera.hash                   |   2 +-
+ package/libdbi-drivers/libdbi-drivers.hash         |   2 +-
+ package/libdbi/libdbi.hash                         |   2 +-
+ package/libg7221/libg7221.hash                     |   2 +-
+ package/libilbc/libilbc.hash                       |   2 +-
+ package/libsilk/libsilk.hash                       |   2 +-
+ package/libsvgtiny/libsvgtiny.hash                 |   2 +-
+ package/libubox/libubox.hash                       |   2 +-
+ package/libuci/libuci.hash                         |   2 +-
+ package/libyuv/libyuv.hash                         |   2 +-
+ .../linux-syscall-support.hash                     |   2 +-
+ package/mmc-utils/mmc-utils.hash                   |   3 +-
+ .../netsurf-buildsystem/netsurf-buildsystem.hash   |   2 +-
+ package/odhcp6c/odhcp6c.hash                       |   2 +-
+ package/ogre/ogre.hash                             |   2 +-
+ package/open62541/open62541.hash                   |   2 +-
+ package/opkg-utils/opkg-utils.hash                 |   2 +-
+ package/pcm-tools/pcm-tools.hash                   |   2 +-
+ package/pcm-tools/pcm-tools.mk                     |   8 ---
+ package/piglit/piglit.hash                         |   2 +-
+ package/pkg-download.mk                            |   2 +-
+ package/prelink-cross/prelink-cross.hash           |   2 +-
+ package/psplash/psplash.hash                       |   2 +-
+ package/qt-webkit-kiosk/qt-webkit-kiosk.hash       |   2 +-
+ package/qt5/qt5coap/qt5coap.hash                   |   2 +-
+ package/qt5/qt5coap/qt5coap.mk                     |   2 +-
+ package/qt5/qt5knx/qt5knx.hash                     |   2 +-
+ package/qt5/qt5knx/qt5knx.mk                       |   2 +-
+ package/qt5/qt5location/qt5location.hash           |   2 +-
+ package/qt5/qt5mqtt/qt5mqtt.hash                   |   2 +-
+ package/qt5/qt5mqtt/qt5mqtt.mk                     |   2 +-
+ package/qt5/qt5opcua/qt5opcua.hash                 |   2 +-
+ .../qt5webengine-chromium-catapult.hash            |   2 +-
+ package/rockchip-rkbin/rockchip-rkbin.hash         |   2 +-
+ package/rtc-tools/rtc-tools.hash                   |   2 +-
+ package/rtmpdump/rtmpdump.hash                     |   2 +-
+ package/signal-estimator/signal-estimator.hash     |   2 +-
+ package/sox/sox.hash                               |   2 +-
+ package/tftpd/tftpd.hash                           |   2 +-
+ package/ti-sgx-demos/ti-sgx-demos.hash             |   2 +-
+ package/ti-sgx-km/ti-sgx-km.hash                   |   2 +-
+ package/ti-sgx-um/ti-sgx-um.hash                   |   2 +-
+ package/tl-expected/tl-expected.hash               |   2 +-
+ package/tremor/tremor.hash                         |   2 +-
+ package/ubus/ubus.hash                             |   2 +-
+ package/uclibc-ng-test/uclibc-ng-test.hash         |   2 +-
+ package/uemacs/uemacs.hash                         |   2 +-
+ package/uhttpd/uhttpd.hash                         |   2 +-
+ package/uqmi/uqmi.hash                             |   2 +-
+ package/ustream-ssl/ustream-ssl.hash               |   2 +-
+ package/vboot-utils/vboot-utils.hash               |   2 +-
+ package/wilink-bt-firmware/wilink-bt-firmware.hash |   2 +-
+ .../xdriver_xf86-video-intel.hash                  |   2 +-
+ .../xdriver_xf86-video-openchrome.hash             |   2 +-
+ package/x264/x264.hash                             |   2 +-
+ package/yavta/yavta.hash                           |   2 +-
+ support/download/git                               |  72 +++++++++++++++++++--
+ support/download/helpers                           |   3 +
+ .../br2-external/git-hash/package/bad/bad.hash     |   2 +-
+ .../package/export-subst/export-subst.hash         |   1 +
+ .../git-hash/package/export-subst/export-subst.mk  |  10 +++
+ .../br2-external/git-hash/package/good/good.hash   |   2 +-
+ .../git-partial-sha1-branch-head.hash              |   2 +-
+ .../git-partial-sha1-reachable-by-branch.hash      |   2 +-
+ .../git-partial-sha1-reachable-by-tag.hash         |   2 +-
+ .../git-partial-sha1-tag-itself.hash               |   2 +-
+ .../git-partial-sha1-tag-points-to.hash            |   2 +-
+ .../git-sha1-branch-head/git-sha1-branch-head.hash |   2 +-
+ .../git-sha1-reachable-by-branch.hash              |   2 +-
+ .../git-sha1-reachable-by-tag.hash                 |   2 +-
+ .../git-sha1-tag-itself/git-sha1-tag-itself.hash   |   2 +-
+ .../git-sha1-tag-points-to.hash                    |   2 +-
+ .../git-submodule-disabled.hash                    |   2 +-
+ .../git-submodule-enabled.hash                     |   2 +-
+ .../git-refs/package/git-tag/git-tag.hash          |   2 +-
+ .../git-wrong-content/git-wrong-content.hash       |   2 +-
+ .../05/482df734b3715b849ef4a3147a9b1b1f8cca38      | Bin 0 -> 35 bytes
+ .../0f/db95cf4f3c5ed4003287649cabb33c5f843e26      | Bin 0 -> 197 bytes
+ .../68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8      | Bin 0 -> 28 bytes
+ .../6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0      | Bin 0 -> 112 bytes
+ .../download/git-remote/repo.git/refs/heads/master |   2 +-
+ support/testing/tests/download/test_git.py         |   4 ++
+ 107 files changed, 182 insertions(+), 111 deletions(-)
+ create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
+ create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
+ create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38
+ create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26
+ create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8
+ create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
