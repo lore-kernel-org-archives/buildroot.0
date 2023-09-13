@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A0B1CA5500
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 07:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30768CA5501
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 07:45:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45BD141AEF;
-	Wed, 13 Sep 2023 07:45:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45BD141AEF
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2D4041D9B;
+	Wed, 13 Sep 2023 07:45:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2D4041D9B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id st1Y-Kqf5PNd; Wed, 13 Sep 2023 07:45:36 +0000 (UTC)
+	with ESMTP id T6K2Iy6RrdW5; Wed, 13 Sep 2023 07:45:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B38941B35;
-	Wed, 13 Sep 2023 07:45:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B38941B35
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5C9BB1BF980
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B48941DA5;
+	Wed, 13 Sep 2023 07:45:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B48941DA5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A3821BF3B9
  for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCDDB405AA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92A9382094
  for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:44:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCDDB405AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92A9382094
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C3IFKFytbqH1 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VLmtb6GCvV_a for <buildroot@lists.busybox.net>;
  Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B107F41C25
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FBF181FCB
  for <buildroot@buildroot.org>; Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B107F41C25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FBF181FCB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A090786DB7; Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
+ id 6FBC486DB6; Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 09:40:23 +0200
+Date: Wed, 13 Sep 2023 08:34:30 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 4e02baaf5141ec647a257d8d2b923b4a2ccc8915
-X-Git-Newrev: e95a26d6c5c0c3b87a1255b6943b1723a18b40f3
+X-Git-Oldrev: 7e7397baf1fe4c6d6b3169afc900f7b2789f649b
+X-Git-Newrev: 1cec87d9057154f1829770a5bf69e497c138b8ad
 X-Patchwork-Hint: ignore
-Message-Id: <20230913074434.A090786DB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/freeswitch:
- security bump version to 1.10.10
+Message-Id: <20230913074434.6FBC486DB6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] configs/pc_x86_64_{bios,
+ efi}_defconfig: add missing libelf kernel dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e95a26d6c5c0c3b87a1255b6943b1723a18b40f3
+commit: https://git.buildroot.net/buildroot/commit/?id=1cec87d9057154f1829770a5bf69e497c138b8ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Release notes:
-https://github.com/signalwire/freeswitch/releases/tag/v1.10.10
-"This is a major release containing critical security fixes, adding
- Debian 12 Bookworm, OpenSSL 3 and FFmpeg5 support."
+objtool built by the kernel requires libelf
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ldd output/build/linux-6.1.24/tools/objtool/objtool
+  linux-vdso.so.1
+  libelf.so.1 => output/host/lib/libelf.so.1
+
+While updating the kernel [1] we forgot to select
+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF to provide Buildroot's host-libelf.
+Using host-libelf avoid linking with libelf installed on the host or
+failing to build objtool if libelf is not installed.
+
+[1] d45538f2e7acc1b330b191d559a81e8c1a961648
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436869
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436872
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b9a864d03d66b1132f484060f3724182f51cdfbc)
+(cherry picked from commit b661f635b5cc08ded6ab14c19f2370c9f478e52e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/pc_x86_64_bios_defconfig | 1 +
+ configs/pc_x86_64_efi_defconfig  | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 3497a3283f..504be12090 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,5 +1,5 @@
--# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.9.-release.tar.xz.sha256
--sha256  f649d53af7beccb59c1d03864cd8f2d287e4ea26ef652b5c4969d29121ced063  freeswitch-1.10.9.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.10.-release.tar.xz.sha256
-+sha256  d2c702c7f4bd6eca539c3981cf859ad5c1846d9283829e24cd75686f2322b9df  freeswitch-1.10.10.-release.tar.xz
- # Locally computed
- sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
- sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 7497cc4964..07d436cf0b 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+index a057ddd259..6032544d2d 100644
+--- a/configs/pc_x86_64_bios_defconfig
++++ b/configs/pc_x86_64_bios_defconfig
+@@ -32,6 +32,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
  
--FREESWITCH_VERSION = 1.10.9
-+FREESWITCH_VERSION = 1.10.10
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
- FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
+ # Firmware
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+index efa603f0c0..afb652f3fc 100644
+--- a/configs/pc_x86_64_efi_defconfig
++++ b/configs/pc_x86_64_efi_defconfig
+@@ -33,6 +33,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+ 
+ # Firmware
+ BR2_PACKAGE_LINUX_FIRMWARE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
