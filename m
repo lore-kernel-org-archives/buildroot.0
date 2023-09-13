@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE6E2EE020A
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 19:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30322EE020A
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 19:29:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 639FB8175B;
-	Wed, 13 Sep 2023 19:29:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 639FB8175B
+	by smtp1.osuosl.org (Postfix) with ESMTP id C70D08227C;
+	Wed, 13 Sep 2023 19:29:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C70D08227C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7Ww0GVnBw78T; Wed, 13 Sep 2023 19:29:44 +0000 (UTC)
+	with ESMTP id t-cnuYWJCWnQ; Wed, 13 Sep 2023 19:29:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C0FB81F95;
-	Wed, 13 Sep 2023 19:29:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C0FB81F95
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFBB18226E;
+	Wed, 13 Sep 2023 19:29:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFBB18226E
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 835311BF98E
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 19:29:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 72D3A1BF980
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 19:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67D27415CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id B56D8415CB
  for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 19:29:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67D27415CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56D8415CB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qOfmJlJhRI3T for <buildroot@lists.busybox.net>;
+ with ESMTP id 6_NcoY7ddCA7 for <buildroot@lists.busybox.net>;
  Wed, 13 Sep 2023 19:29:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D6A04098F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A51C4159C
  for <buildroot@buildroot.org>; Wed, 13 Sep 2023 19:29:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D6A04098F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A51C4159C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4AC9D86E5A; Wed, 13 Sep 2023 19:29:16 +0000 (UTC)
+ id 67D8086E5E; Wed, 13 Sep 2023 19:29:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 20:56:21 +0200
+Date: Wed, 13 Sep 2023 21:28:23 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: e8239372e7eb82e3f7b1763f64a8c067aa9d432f
-X-Git-Newrev: f8501593e9a7e09dadcc9ed90105d4d64fd9c5f3
+X-Git-Oldrev: 01c6662b7e44f4aa72c2dcdc47f132dae5b17a59
+X-Git-Newrev: 35cbef7f6f7b33f1701ee508ca5d86f90637660e
 X-Patchwork-Hint: ignore
-Message-Id: <20230913192916.4AC9D86E5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python3: security
- bump version to 3.11.5
+Message-Id: <20230913192916.67D8086E5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x]
+ support/misc/gitlab-ci.yml.in: retry a job only if it failed due to a
+ runner issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +64,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8501593e9a7e09dadcc9ed90105d4d64fd9c5f3
+commit: https://git.buildroot.net/buildroot/commit/?id=35cbef7f6f7b33f1701ee508ca5d86f90637660e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Added md5 hash provided by upstream.
+Each time a new pipeline is triggered, some jobs may fail due to
+temporary issue with a Gitlab runner (network, power supply, docker or
+maintainance).
 
-Release notes: https://www.python.org/downloads/release/python-3115/
+Most of the problems are "runner system failure" [1] and require to
+retart each failed jobs manually by maintainers to complete the
+pipeline with only real failures if any.
 
-Fixes CVE-2023-40217.
+The "retry" keyword allows to configure how many times a job is retried
+if it fails. "retry:when" allows to retry a failed job only on
+specific failure types like "runner_system_failure".
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+While at it, retry a job if it failed due to a timeout failure (this
+timeout means that the job was pending for more than 24h) [2].
+
+Such timeout failures occur on pipelines testing each Buildroot's
+defconfig since there is not enough gitlab runner available to build
+all of them within 24h.
+
+Retry only jobs that are more likely to wait for a runner
+(generate-gitlab-ci-yml, runtime_test_base, defconfig_base and test_pkg).
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949397 (runner system failure)
+[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/4936949530 (timeout failure or the job got stuck)
+
+https://docs.gitlab.com/ee/ci/yaml/#retrywhen
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a26fa40853ff6033647f034d16270cdc66e22469)
+(cherry picked from commit e0166ecba0109f7f6757415afa7e7a67b058d406)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 4 +++-
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ .gitlab-ci.yml                |  5 +++++
+ support/misc/gitlab-ci.yml.in | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 6c43e01a44..1a0fee3290 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,3 +1,5 @@
-+# From https://www.python.org/downloads/release/python-3115/
-+md5  393856f1b7713aa8bba4b642ab9985d3  Python-3.11.5.tar.xz
- # Locally computed
--sha256  2f0e409df2ab57aa9fc4cbddfb976af44e4e55bf6f619eee6bc5c2297264a7f6  Python-3.11.4.tar.xz
-+sha256  85cd12e9cf1d6d5a45f17f7afe1cebe7ee628d3282281c492e86adf636defa3f  Python-3.11.5.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index bdb7cfd22f..5f8fa5b58d 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.11
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index ed17bb14b9..3d7719568f 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -10,6 +10,11 @@ stages:
+ generate-gitlab-ci-yml:
+   stage: generate-gitlab-ci
+   script: ./support/scripts/generate-gitlab-ci-yml support/misc/gitlab-ci.yml.in > generated-gitlab-ci.yml
++  retry:
++    max: 2
++    when:
++      - runner_system_failure
++      - stuck_or_timeout_failure
+   artifacts:
+     when: always
+     paths:
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index 38aca31fb5..656f39d570 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -60,6 +60,11 @@ before_script:
+                 tail -200 runtime-test.log
+                 exit 1
+             }
++    retry:
++        max: 2
++        when:
++            - runner_system_failure
++            - stuck_or_timeout_failure
+     artifacts:
+         when: always
+         expire_in: 2 weeks
+@@ -81,6 +86,11 @@ before_script:
+         - TEST_CASE_NAME=${CI_JOB_NAME}
+         - echo "Starting runtime test ${TEST_CASE_NAME}"
+         - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
++    retry:
++        max: 2
++        when:
++            - runner_system_failure
++            - stuck_or_timeout_failure
+     artifacts:
+         when: always
+         expire_in: 2 weeks
+@@ -101,6 +111,11 @@ before_script:
+     needs:
+         - pipeline: $PARENT_PIPELINE_ID
+           job: generate-gitlab-ci-yml
++    retry:
++        max: 2
++        when:
++            - runner_system_failure
++            - stuck_or_timeout_failure
+     artifacts:
+         when: always
+         expire_in: 2 weeks
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
