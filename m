@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7BD9EDEC7C
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 15:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C304EDEC7E
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 15:57:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4603482EB6;
-	Wed, 13 Sep 2023 15:55:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4603482EB6
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3260A82BA1;
+	Wed, 13 Sep 2023 15:57:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3260A82BA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qg3EAoQ7GZlR; Wed, 13 Sep 2023 15:55:56 +0000 (UTC)
+	with ESMTP id 5u5nveyMwMAg; Wed, 13 Sep 2023 15:57:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3DAC82162;
-	Wed, 13 Sep 2023 15:55:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3DAC82162
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0F9391BF5EA
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 15:55:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8378C8175B;
+	Wed, 13 Sep 2023 15:57:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8378C8175B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DC111BF5EA
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 15:57:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD0706108F
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 15:55:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD0706108F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 84DC6416A6
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 15:57:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84DC6416A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n9oApPuXaeVZ for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 15:55:53 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E6C3960760
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 15:55:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6C3960760
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 38BB4E0009;
- Wed, 13 Sep 2023 15:55:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XJn4OgOqkHw6 for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 15:57:14 +0000 (UTC)
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84363405F8
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 15:57:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84363405F8
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C47761C0009;
+ Wed, 13 Sep 2023 15:57:12 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qgSDW-005zbk-Bf; Wed, 13 Sep 2023 17:55:50 +0200
+ id 1qgSEq-005zm1-4U; Wed, 13 Sep 2023 17:57:12 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-References: <20230813172524.354647-1-giulio.benetti@benettiengineering.com>
-Date: Wed, 13 Sep 2023 17:55:50 +0200
-In-Reply-To: <20230813172524.354647-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sun, 13 Aug 2023 19:25:24 +0200")
-Message-ID: <87h6ny2hkp.fsf@48ers.dk>
+To: Frank Vanbever via buildroot <buildroot@buildroot.org>
+References: <20230823145300.1499071-1-frank.vanbever@mind.be>
+Date: Wed, 13 Sep 2023 17:57:12 +0200
+In-Reply-To: <20230823145300.1499071-1-frank.vanbever@mind.be> (Frank Vanbever
+ via buildroot's message of "Wed, 23 Aug 2023 16:53:00 +0200")
+Message-ID: <87cyym2hif.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/ramspeed: disable package if
- affected from gcc bug 43744
+Subject: Re: [Buildroot] [PATCH 1/1] package/libmodsecurity: security bump
+ to version 3.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,22 +63,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Frank Vanbever <frank.vanbever@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Frank" == Frank Vanbever via buildroot <buildroot@buildroot.org> writes:
 
- > This package is affected by gcc bug 43744 and I have not found a work
- > around for it(i.e. the common -O0 we use or other), so let's disable it if
- > gcc has such bug.
+ > - Fixes CVE-2023-38285 [1]
+ > - Adapted 0001-configure.ac-drop-usage-of-git-at-configure-time.patch due to
+ >   upstream moving to autoconf portable shell constructs.
+ > - Added missing Upstream comments
 
- > Fixes:
- > http://autobuild.buildroot.net/results/ab289769c5fea435934ed260d38e0a4fdd2ba72d
+ > Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > [1] https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/modsecurity-v3-dos-vulnerability-in-four-transformations-cve-2023-38285/
+
+ > Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
