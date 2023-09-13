@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18008EE020C
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:09:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DE68EE020B
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A303081376;
-	Wed, 13 Sep 2023 20:09:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A303081376
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3977582BC3;
+	Wed, 13 Sep 2023 20:12:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3977582BC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zGkBJQi7e-Me; Wed, 13 Sep 2023 20:09:38 +0000 (UTC)
+	with ESMTP id cHJu8M6zQOv0; Wed, 13 Sep 2023 20:12:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE2308136E;
-	Wed, 13 Sep 2023 20:09:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE2308136E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 25FC71BF5F5
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:09:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7678B82BC4;
+	Wed, 13 Sep 2023 20:12:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7678B82BC4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 671F81BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:12:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F38ED60ABE
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:09:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F38ED60ABE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A1C182BC3
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:12:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A1C182BC3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mEc7ZQgiwW0m for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 20:09:36 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BCED060A89
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:09:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCED060A89
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 954571C0002;
- Wed, 13 Sep 2023 20:09:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 05JugW5ZdWEL for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 20:12:33 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C730C82BA7
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:12:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C730C82BA7
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E7CB240005;
+ Wed, 13 Sep 2023 20:12:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qgWB2-007jbF-LH; Wed, 13 Sep 2023 22:09:32 +0200
+ id 1qgWDs-007jjZ-58; Wed, 13 Sep 2023 22:12:28 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adam Duskett <aduskett@gmail.com>
-References: <20230830155926.2831345-1-aduskett@gmail.com>
-Date: Wed, 13 Sep 2023 22:09:32 +0200
-In-Reply-To: <20230830155926.2831345-1-aduskett@gmail.com> (Adam Duskett's
- message of "Wed, 30 Aug 2023 09:59:26 -0600")
-Message-ID: <87sf7hzvgj.fsf@48ers.dk>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+References: <20230829120933.335227-1-yann.morin.1998@free.fr>
+Date: Wed, 13 Sep 2023 22:12:28 +0200
+In-Reply-To: <20230829120933.335227-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 29 Aug 2023 14:09:33 +0200")
+Message-ID: <87o7i5zvbn.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/openjdk{-bin}: security bump
- versions to 11.0.20+8 and 17.0.8+7
+Subject: Re: [Buildroot] [PATCH] package/pcm-tools: fix github-download
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +62,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Tudor Holton <buildroot@tudorholton.com>, buildroot@buildroot.org
+Cc: Woody Douglass <wdouglass@carnegierobotics.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixed the following security issues:
- > * CVEs
- >   - CVE-2023-22006
- >   - CVE-2023-22036
- >   - CVE-2023-22041
- >   - CVE-2023-22044
- >   - CVE-2023-22045
- >   - CVE-2023-22049
- >   - CVE-2023-25193
- > * Security fixes
- >   - JDK-8298676: Enhanced Look and Feel
- >   - JDK-8300285: Enhance TLS data handling
- >   - JDK-8300596: Enhance Jar Signature validation
- >   - JDK-8301998, JDK-8302084: Update HarfBuzz to 7.0.1
- >   - JDK-8302475: Enhance HTTP client file downloading
- >   - JDK-8302483: Enhance ZIP performance
- >   - JDK-8303376: Better launching of JDI
- >   - JDK-8304468: Better array usages
- >   - JDK-8305312: Enhanced path handling
- >   - JDK-8308682: Enhance AES performance
+ > The pcm-tools package contains a version.h with git attributes:
+ >     $ cat version.h
+ >     #define PCM_VERSION " ($Format:%ci ID=%h$)"
 
- > For details, see the announcements:
- > https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024064.html
- > https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024063.html
+ >     $ man 5 gitattributes
+ >        Creating an archive
+ >          export-subst
+ >            If the attribute export-subst is set for a file then Git
+ >            will expand several placeholders when adding this file to
+ >            an archive. The expansion depends on the availability of
+ >            a commit ID, i.e., if git-archive(1) has been given a tree
+ >            instead of a commit or a tag then no replacement will be
+ >            done. The placeholders are the same as those for the option
+ >            --pretty=format: of git-log(1), except that they need to be
+ >            wrapped like this: $Format:PLACEHOLDERS$ in the file. E.g.
+ >            the string $Format:%H$ will be replaced by the commit hash.
 
- > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ > So, the archive generated by github has changed since we updated
+ > pcm-tools in 2021-12-08 with commit d1d93d488c76 (package/pcm-tools:
+ > bump to version 202110). The downlad was still OK in 2022-01-04 [0]
+ > but has been failing at least since 202-08-25 [1].
+
+ > Since the archive is generated on the github side, there is not much we
+ > can do to fix this up.
+
+ > We switch over to using git to do the download, and we generate the
+ > archive localy, which we know is reproducible.
+
+ > We fix the version.h so that it contains the same string as the backup
+ > tarball we host on s.b.o.
+
+ > There are three other files in pcm-tools that have git attributes, to
+ > exclude them from the generated archive, all pertaining to CI/CD stuff:
+ >     .cirrus.yml export-ignore
+ >     .gitlab-ci.yml export-ignore
+ >     .travis.yml export-ignore
+
+ > We don't remove them, because they have no impact on the build, and they
+ > are anyway already present in the archive by the time we could act on it
+ > anyway...
+
+ > [0] http://autobuild.buildroot.org/results/127/1276a3d49c8848039f034e7f03632df365097e94/
+ > [1] http://autobuild.buildroot.org/results/8bb/8bbf9c36af332bbf5e7c1abcbb594a0b231ef97e/
+
+ > Reported-by: Woody Douglass <wdouglass@carnegierobotics.com>
+ > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Committed to 2023.02.x and 2023.05.x, thanks.
 
