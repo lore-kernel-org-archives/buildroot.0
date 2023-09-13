@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55867CA5537
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 16:09:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87903EDEC7C
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 16:09:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 031328223A;
-	Wed, 13 Sep 2023 16:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 031328223A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 442E3811F4;
+	Wed, 13 Sep 2023 16:09:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 442E3811F4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i3XSJ9UaImJD; Wed, 13 Sep 2023 16:09:27 +0000 (UTC)
+	with ESMTP id gOAMVJJkq7gQ; Wed, 13 Sep 2023 16:09:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B4F882640;
-	Wed, 13 Sep 2023 16:09:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B4F882640
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 100341BF980
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FFCC82324;
+	Wed, 13 Sep 2023 16:09:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FFCC82324
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3339C1BF2AB
  for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE28E6060A
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE28E6060A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BDCF41DDA
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BDCF41DDA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sgtpezTrE_aw for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7-wOFuCCdn6p for <buildroot@lists.busybox.net>;
  Wed, 13 Sep 2023 16:09:11 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA789600B3
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 16:09:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA789600B3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A9CB41DD9
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 16:09:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A9CB41DD9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3D0886E21; Wed, 13 Sep 2023 16:09:10 +0000 (UTC)
+ id EBE2386E2F; Wed, 13 Sep 2023 16:09:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 18:03:37 +0200
+Date: Wed, 13 Sep 2023 18:08:18 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 64ac64b89bfda86460c3cb16898ceda1de34d44d
-X-Git-Newrev: c8e676ca8ab85edd9ffc3ba0cc345774cdc51781
+X-Git-Oldrev: e48b285188435edd055246e79da84a79ce68940b
+X-Git-Newrev: 7ce77eac68ea2dc742db456610cea5b8bb841bc5
 X-Patchwork-Hint: ignore
-Message-Id: <20230913160910.D3D0886E21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/rtl8189fs: fix
- build with big endian
+Message-Id: <20230913160910.EBE2386E2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/mosquitto: bump
+ to version 2.0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,93 +63,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8e676ca8ab85edd9ffc3ba0cc345774cdc51781
+commit: https://git.buildroot.net/buildroot/commit/?id=7ce77eac68ea2dc742db456610cea5b8bb841bc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Add local patch to allow to override CFLAGS and undefine
-CONFIG_LITTLE_ENDIAN by default and use the correct endianness according
-to target architecture.
+Bugfix release, fixing a number of regressions in 2.0.16
 
-Fixes:
-http://autobuild.buildroot.net/results/fe67db3884573ef750eda9d0dccd5f97b3ae698e
+From the changelog
+(https://github.com/eclipse/mosquitto/blob/master/ChangeLog.txt)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+2.0.17 - 2023-08-22
+===================
+
+Broker:
+- Fix `max_queued_messages 0` stopping clients from receiving messages.
+  Closes #2879.
+- Fix `max_inflight_messages` not being set correctly. Closes #2876.
+
+Apps:
+- Fix `mosquitto_passwd -U` backup file creation. Closes #2873.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 624814f4ec26d470606aefeb1a817a31399a04c2)
+(cherry picked from commit c11950fe4a2817c4bd1fa6d9c9e3cd3783b3f96f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ve-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch | 41 ++++++++++++++++++++++
- package/rtl8189fs/rtl8189fs.mk                     |  7 +++-
- 2 files changed, 47 insertions(+), 1 deletion(-)
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch b/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-new file mode 100644
-index 0000000000..f9e2d6845d
---- /dev/null
-+++ b/package/rtl8189fs/0001-Makefile-move-EXTRA_CFLAGS-USER_EXTRA_CFLAGS-at-the-.patch
-@@ -0,0 +1,41 @@
-+From f48d99fab8b79e573850067a3ff2d8c16aa95ce1 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 28 Sep 2022 21:17:17 +0200
-+Subject: [PATCH] Makefile: move 'EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)' at the
-+ end of EXTRA_FLAGS assignment
-+
-+At the moment USER_EXTRA_CFLAGS can't override local Makfile EXTRA_CFLAGS
-+since it's assigned at the beginning of the Makefile. For example it's not
-+possible to undefine the hardcoded CONFIG_LITTLE_ENDIAN and this doesn't
-+allow to build these modules for big endian architectures. So let's move
-+the assignment of USER_EXTRA_CFLAGS to EXTRA_CFLAGS after the last
-+EXTRA_CFLAGS assignment.
-+
-+Upstream: https://github.com/jwrdegoede/rtl8189ES_linux/pull/101
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index dfca305..6f91d0a 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,4 +1,3 @@
-+-EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-+ EXTRA_CFLAGS += -O1
-+ #EXTRA_CFLAGS += -O3
-+ #EXTRA_CFLAGS += -Wall
-+@@ -2208,6 +2207,8 @@ ifneq ($(USER_MODULE_NAME),)
-+ MODULE_NAME := $(USER_MODULE_NAME)
-+ endif
-+ 
-++EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-++
-+ ifneq ($(KERNELRELEASE),)
-+ 
-+ ########### this part for *.mk ############################
-+-- 
-+2.34.1
-+
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index c3eef6e071..bd29469242 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -8,10 +8,15 @@ RTL8189FS_VERSION = 75a566a830037c7d1309c5a9fe411562772a1cf2
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index cbe54d6d1a..df0a51df3a 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.16.tar.gz.asc
+-sha256  638db9e43e89d243ea98d10d66e76ff376131217780decd01abaffacc66d8035  mosquitto-2.0.16.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.17.tar.gz.asc
++sha256  3be7a911236567c1a9fbe25baf3e3167004ba4a0c151a448ef1f7fc077dba52f  mosquitto-2.0.17.tar.gz
  
-+RTL8189FS_USER_EXTRA_CFLAGS = \
-+	-UCONFIG_LITTLE_ENDIAN \
-+	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
-+
- RTL8189FS_MODULE_MAKE_OPTS = \
- 	CONFIG_RTL8189FS=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
--	KSRC=$(LINUX_DIR)
-+	KSRC=$(LINUX_DIR) \
-+	USER_EXTRA_CFLAGS="$(RTL8189FS_USER_EXTRA_CFLAGS)"
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index f146a86d0a..0b85246f39 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
- RTL8189FS_MODULE_MAKE_OPTS += CONFIG_RTW_DEBUG=n
+-MOSQUITTO_VERSION = 2.0.16
++MOSQUITTO_VERSION = 2.0.17
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
