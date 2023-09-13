@@ -4,59 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1601EEE020D
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE744EE020B
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:26:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF612813B1;
-	Wed, 13 Sep 2023 20:23:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF612813B1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 311C482BC3;
+	Wed, 13 Sep 2023 20:26:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 311C482BC3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 7QVOHCXvvZrR; Wed, 13 Sep 2023 20:23:07 +0000 (UTC)
+	with ESMTP id 4Hb9xDEGb-E5; Wed, 13 Sep 2023 20:26:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00D8D82C1E;
-	Wed, 13 Sep 2023 20:23:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00D8D82C1E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 624031BF5F5
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:23:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EE4981F4C;
+	Wed, 13 Sep 2023 20:26:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EE4981F4C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 44E891BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:26:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42D9A82BA7
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:23:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42D9A82BA7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E2D740C96
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:26:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E2D740C96
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ncMYgIQBaIdB for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 20:23:02 +0000 (UTC)
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7B88E813B1
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:23:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B88E813B1
-Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
- by mail.kmu-office.ch (Postfix) with ESMTPSA id B8C305C1703;
- Wed, 13 Sep 2023 22:22:58 +0200 (CEST)
-From: Stefan Agner <stefan@agner.ch>
-To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 22:22:39 +0200
-Message-ID: <8ea671337eeee89169fec537dc0f4eca9e2a51ca.1694636470.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.42.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0WsPxAINN7yf for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 20:26:54 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A01D0405E1
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:26:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A01D0405E1
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 674E4E0003;
+ Wed, 13 Sep 2023 20:26:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qgWRl-007kdr-GX; Wed, 13 Sep 2023 22:26:49 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20230828224312.2430429-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 13 Sep 2023 22:26:49 +0200
+In-Reply-To: <20230828224312.2430429-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Tue, 29 Aug 2023 00:43:11
+ +0200")
+Message-ID: <87jzstzunq.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=agner.ch; s=dkim; t=1694636578;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:
- content-transfer-encoding:content-transfer-encoding:in-reply-to:
- references; bh=+KBZATK8ESh4SGlQLMf2/cQWYVuysaIw1wiJ9C4n+Is=;
- b=ysvT39VMLfWYiYPWWCs6UTe+c+3UY8ROP0rLTv7FTNhcZvHn6hk+aS3kzuS1W8R43QHifJ
- 21wVI+VTLjlHXqEGD5k6uGilvvLpqYqv9ZBGs8qbRSYf77neyMW8smQTnzo4DOIYn2SZD5
- rdYVsQg7N4j+1Vvk78Ff4JC7ctfx0sM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
- header.a=rsa-sha256 header.s=dkim header.b=ysvT39VM
-Subject: [Buildroot] [git commit branch/2023.02.x] package/go: bump to
- v1.19.13
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH] boot/grub2: backport fixes for numerous CVEs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,48 +63,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: dominique.tronche@eviden.com, Stefan Agner <stefan@agner.ch>,
- christian@aperture.us
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-go1.19.13 (released 2023-09-06) includes a couple of bug fixes. In
-particular it fixes a bug introduced in with the update o v1.19.11
-which broke http using a unix socket addressing.
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Grub 2.06 is affected by a number of CVEs, which have been fixed in
+ > the master branch of Grub, but are not yet part of any release (there
+ > is a 2.12-rc1 release, but nothing else between 2.06 and 2.12-rc1).
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index ac8499e7dc..d61663cac9 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  ee5d50e0a7fd74ba1b137cb879609aaaef9880bf72b5d1742100e38ae72bb557  go1.19.12.src.tar.gz
-+sha256  ccf36b53fb0024a017353c3ddb22c1f00bc7a8073c6aac79042da24ee34434d3  go1.19.13.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 9189032ba8..ea2a46f36c 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.19.12
-+GO_VERSION = 1.19.13
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ > So this patch backports the relevant fixes for CVE-2022-28736,
+ > CVE-2022-28735, CVE-2021-3695, CVE-2021-3696, CVE-2021-3697,
+ > CVE-2022-28733, CVE-2022-28734, CVE-2022-2601 and CVE-2022-3775.
+
+ > It should be noted that CVE-2021-3695, CVE-2021-3696, CVE-2021-3697
+ > are not reported as affecting Grub by our CVE matching logic because
+ > the NVD database uses an incorrect CPE ID in those CVEs: it uses
+ > "grub" as the product instead of "grub2" like all other CVEs for
+ > grub. This issue has been reported to the NVD maintainers.
+
+ > This requires backporting a lot of patches, but jumping from 2.06 to
+ > 2.12-rc1 implies getting 592 commits, which is quite a lot.
+
+ > All Grub test cases are working fine:
+
+ >   https://gitlab.com/tpetazzoni/buildroot/-/pipelines/984500585
+ >   https://gitlab.com/tpetazzoni/buildroot/-/pipelines/984500679
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2023.02.x and 2023.05.x, thanks.
+
 -- 
-2.42.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
