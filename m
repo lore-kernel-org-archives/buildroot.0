@@ -4,56 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE84EDEC7E
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 15:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 095A4CA5537
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 16:00:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D4A682F14;
-	Wed, 13 Sep 2023 15:58:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D4A682F14
+	by smtp1.osuosl.org (Postfix) with ESMTP id B690882F6C;
+	Wed, 13 Sep 2023 16:00:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B690882F6C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9ydSYiPHPwgl; Wed, 13 Sep 2023 15:58:14 +0000 (UTC)
+	with ESMTP id 7BdV7fYjsbwC; Wed, 13 Sep 2023 16:00:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF5018175B;
-	Wed, 13 Sep 2023 15:58:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF5018175B
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E2311BF5EA
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 15:58:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F90282F19;
+	Wed, 13 Sep 2023 16:00:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F90282F19
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 81FA51BF5EA
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:00:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 483C96108F
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 15:58:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 483C96108F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BCC9405F8
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:00:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BCC9405F8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ApzL_jeaMO1o for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 15:58:11 +0000 (UTC)
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8160760760
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 15:58:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8160760760
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9CC7020003;
- Wed, 13 Sep 2023 15:58:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id O97tL5ssF7CT for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 16:00:54 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E210940151
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 16:00:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E210940151
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E132460004;
+ Wed, 13 Sep 2023 16:00:50 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qgSFj-005zqS-ML; Wed, 13 Sep 2023 17:58:07 +0200
+ id 1qgSIM-0060AN-0g; Wed, 13 Sep 2023 18:00:50 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= via buildroot
- <buildroot@buildroot.org>
-References: <20230824150950.56165-1-raphael.melotte@mind.be>
-Date: Wed, 13 Sep 2023 17:58:07 +0200
-In-Reply-To: <20230824150950.56165-1-raphael.melotte@mind.be>
- (=?utf-8?Q?=22Rapha=C3=ABl=09M=C3=A9lotte?= via buildroot"'s message of
- "Thu, 24 Aug 2023 17:09:48 +0200")
-Message-ID: <878r9a2hgw.fsf@48ers.dk>
+To: Julien Olivain <ju.o@free.fr>
+References: <20230822194922.71368-1-ju.o@free.fr>
+Date: Wed, 13 Sep 2023 18:00:49 +0200
+In-Reply-To: <20230822194922.71368-1-ju.o@free.fr> (Julien Olivain's message
+ of "Tue, 22 Aug 2023 21:49:21 +0200")
+Message-ID: <874jjy2hce.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: remove
- leftover comment about headers
+Subject: Re: [Buildroot] [PATCH 1/2] package/screen: security bump to
+ version 4.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,20 +63,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlJhcGhhw6tsIiA9PSBSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IDxidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gQ29tbWl0IDBhOGVmMmYzZjdiYzIxMWQz
-OGE1YTM3MDA3YmRlYjQ4OWJkMzdhYWUgYnVtcGVkIHRoZSBoZWFkZXJzCiA+IHZlcnNpb24gcmVx
-dWlyZW1lbnRzLCBidXQgZGlkIG5vdCB1cGRhdGUgdGhlIGFzc29jaWF0ZWQgY29tbWVudC4KCiA+
-IFJlbW92ZSB0aGUgY29tbWVudCBlbnRpcmVseSwgYXMgaXQgZG9lcyBub3QgYXBwbHkgYW55bW9y
-ZS4KCiA+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVA
-bWluZC5iZT4KCkNvbW1pdHRlZCB0byAyMDIzLjAyLnggYW5kIDIwMjMuMDUueCwgdGhhbmtzLgoK
-LS0gCkJ5ZSwgUGV0ZXIgS29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+
+ > See release announce:
+ > https://lists.gnu.org/archive/html/screen-users/2023-08/msg00000.html
+
+ > Fixes:
+ > CVE-2023-24626: https://www.cve.org/CVERecord?id=CVE-2023-24626
+
+ > Note: Buildroot installs screen as setuid, so the described scenario
+ > in CVE applies.
+
+ > This commit also rebases all patches on this release. Patch were
+ > regenerated with 'git format-patch -N', so patch file name changed in
+ > this process. The file .checkpackageignore is also updated accordingly.
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+Committed to 2023.02.x and 2023.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
