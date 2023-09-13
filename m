@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7D03CA5537
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 16:04:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83A3EEDEC7C
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 16:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A135081D2D;
-	Wed, 13 Sep 2023 16:04:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A135081D2D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3879781FA1;
+	Wed, 13 Sep 2023 16:05:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3879781FA1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Wi1IL9Jw-vUi; Wed, 13 Sep 2023 16:04:47 +0000 (UTC)
+	with ESMTP id sTBP6z9j5lq1; Wed, 13 Sep 2023 16:05:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6FC281AD1;
-	Wed, 13 Sep 2023 16:04:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6FC281AD1
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4B9AA1BF5EA
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:03:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4631781F62;
+	Wed, 13 Sep 2023 16:04:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4631781F62
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D3A91BF5EA
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:03:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 13A4340151
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF08D82FD7
  for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:03:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13A4340151
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF08D82FD7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id k8PFj-6542MX for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id b0hZTuocxUQf for <buildroot@lists.busybox.net>;
  Wed, 13 Sep 2023 16:03:23 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45590416BF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 62F5A83183
  for <buildroot@buildroot.org>; Wed, 13 Sep 2023 16:03:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45590416BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62F5A83183
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 317B386E11; Wed, 13 Sep 2023 16:03:23 +0000 (UTC)
+ id 5096B86E14; Wed, 13 Sep 2023 16:03:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 17:26:00 +0200
+Date: Wed, 13 Sep 2023 17:56:57 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 8f1bc63d5b68b4be73744a4d4a05b0ff1bfb6101
-X-Git-Newrev: 91c74b5185639f265fb1ffc47f5baff367dbdce2
+X-Git-Oldrev: b0be067143001ce5074243b042bf6b5ebbac61c0
+X-Git-Newrev: 03be91896d3c97dfce95836da49ae86c0718021c
 X-Patchwork-Hint: ignore
-Message-Id: <20230913160323.317B386E11@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/gmp: fix compile
- error for riscv
+Message-Id: <20230913160323.5096B86E14@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libmodsecurity:
+ security bump to version 3.0.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,47 +63,141 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91c74b5185639f265fb1ffc47f5baff367dbdce2
+commit: https://git.buildroot.net/buildroot/commit/?id=03be91896d3c97dfce95836da49ae86c0718021c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-In commit 87b2a30319394c2cc79efae1af7833cad8c62b32 gmp got updated
-to 6.2.1, since then the compile error exist.
+- Fixes CVE-2023-38285 [1]
+- Adapted 0001-configure.ac-drop-usage-of-git-at-configure-time.patch due to
+  upstream moving to autoconf portable shell constructs.
 
-Compile error looks like this:
-tmp-mul_1.s: Assembler messages:
-tmp-mul_1.s:55: Error: unrecognized opcode `mul a5,a7,a3'
-tmp-mul_1.s:57: Error: unrecognized opcode `mulhu a7,a7,a3'
+Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
 
-Patch should be backported to stable branches.
+[1] https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/modsecurity-v3-dos-vulnerability-in-four-transformations-cve-2023-38285/
 
-Fixes:
- - http://autobuild.buildroot.net/results/2f2/2f2112bea73adbf49eabb62fe6cda6a9cd5d0567
- - http://autobuild.buildroot.net/results/566/566a4945555b781ed127997176f73b3c17ecab5d
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6d8deb4b23ee57a69308bcdc5ceafa02aacc1edd)
+(cherry picked from commit 670329f057b656be06b217fab411d90695988b41)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gmp/gmp.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ ...nfigure.ac-drop-usage-of-git-at-configure-time.patch | 17 +++++++++--------
+ .../0002-modsecurity.pc.in-add-lstdc.patch              |  5 +++--
+ package/libmodsecurity/libmodsecurity.hash              |  4 ++--
+ package/libmodsecurity/libmodsecurity.mk                |  2 +-
+ 4 files changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 9b402767fd..3b732dfa71 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -23,6 +23,11 @@ ifeq ($(BR2_m68k_cf)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6)$(BR2_ARM_CP
- GMP_CONF_OPTS += --disable-assembly
- endif
+diff --git a/package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch b/package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch
+index 14767fb28e..6853b19ccd 100644
+--- a/package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch
++++ b/package/libmodsecurity/0001-configure.ac-drop-usage-of-git-at-configure-time.patch
+@@ -1,4 +1,4 @@
+-From a2116312068b6b2c5732dfebde19b751cc81d4f3 Mon Sep 17 00:00:00 2001
++From d242b011a8f0d84781bbf7667a44a12646903ca4 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 1 Aug 2021 23:21:35 +0200
+ Subject: [PATCH] configure.ac: drop usage of git at configure time
+@@ -8,12 +8,13 @@ which is not very useful, and causes a significant number of warning
+ when regenerating the configure script.
  
-+# GMP needs M extension for riscv assembly
-+ifeq ($(BR2_RISCV_ISA_CUSTOM_RVM),)
-+GMP_CONF_OPTS += --disable-assembly
-+endif
-+
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- GMP_CONF_OPTS += --enable-cxx
- else
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
+ ---
+  configure.ac | 23 -----------------------
+  1 file changed, 23 deletions(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 20163e1e..14e5892a 100644
++index 66d6f4f2..746b1fb4 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+ @@ -3,7 +3,6 @@
+@@ -46,7 +47,7 @@ index 20163e1e..14e5892a 100644
+  
+  
+  # Check for yajl
+-@@ -217,10 +208,6 @@ AC_SUBST([MSC_VERSION_WITH_PATCHLEVEL])
++@@ -224,10 +215,6 @@ AC_SUBST([MSC_VERSION_WITH_PATCHLEVEL])
+  MSC_VERSION=msc_version
+  AC_SUBST([MSC_VERSION])
+  
+@@ -55,9 +56,9 @@ index 20163e1e..14e5892a 100644
+ -
+ -
+  AC_ARG_ENABLE(debug-logs,
+-     [AC_HELP_STRING([--disable-debug-logs],[Turn off the SecDebugLog feature])],
++     [AS_HELP_STRING([--disable-debug-logs],[Turn off the SecDebugLog feature])],
+  
+-@@ -412,16 +399,6 @@ AC_OUTPUT
++@@ -419,16 +406,6 @@ AC_OUTPUT
+  
+  
+  # Print a fancy summary
+@@ -66,14 +67,14 @@ index 20163e1e..14e5892a 100644
+ -echo "ModSecurity - ${MSC_GIT_VERSION} for $PLATFORM"
+ -echo " "
+ -echo " Mandatory dependencies"
+--echo -n "   + libInjection                                  ...."
++-AS_ECHO_N("   + libInjection                                  ....")
+ -echo LIBINJECTION_VERSION
+--echo -n "   + SecLang tests                                 ...."
++-AS_ECHO_N("   + SecLang tests                                 ....")
+ -echo SECLANG_TEST_VERSION
+ -
+  echo " "
+  echo " Optional dependencies"
+  
+ -- 
+-2.31.1
++2.39.2
+ 
+diff --git a/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch b/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch
+index 6511e6f1e0..9e0b672c8d 100644
+--- a/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch
++++ b/package/libmodsecurity/0002-modsecurity.pc.in-add-lstdc.patch
+@@ -1,4 +1,4 @@
+-From 1a84881b280eb08852d5495c57e44351a40d3f91 Mon Sep 17 00:00:00 2001
++From 4129643d657b5d0cce83f9ec4ca27289fd69ec43 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Mon, 26 Jul 2021 00:24:57 +0200
+ Subject: [PATCH] modsecurity.pc.in: add -lstdc++
+@@ -13,6 +13,7 @@ Fixes:
+  - http://autobuild.buildroot.org/results/e5a9eb8448980f1c5cafe97180b7d1f48ddf02ca
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
+ ---
+  modsecurity.pc.in | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -28,5 +29,5 @@ index 96cdf5ca..7c895ddc 100644
+ -Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@
+ +Libs.private: @CURL_LDADD@ @GEOIP_LDADD@ @MAXMIND_LDADD@ @GLOBAL_LDADD@ @LIBXML2_LDADD@ @LMDB_LDADD@ @LUA_LDADD@ @PCRE_LDADD@ @SSDEEP_LDADD@ @YAJL_LDADD@ -lstdc++
+ -- 
+-2.30.2
++2.39.2
+ 
+diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
+index c79ae1cf45..7bcf99e167 100644
+--- a/package/libmodsecurity/libmodsecurity.hash
++++ b/package/libmodsecurity/libmodsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.9/modsecurity-v3.0.9.tar.gz.sha256
+-sha256  a5111ecd23e332a1d7c9652dbdb18517a96b21573315cb887a8e86761b95d3d8  modsecurity-v3.0.9.tar.gz
++# From https://github.com/SpiderLabs/ModSecurity/releases/download/v3.0.10/modsecurity-v3.0.10.tar.gz.sha256
++sha256  d5d459f7c2e57a69a405f3222d8e285de419a594b0ea8829058709962227ead0  modsecurity-v3.0.10.tar.gz
+ # Localy calculated
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index 335f3a41e5..257f0a56df 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMODSECURITY_VERSION = 3.0.9
++LIBMODSECURITY_VERSION = 3.0.10
+ LIBMODSECURITY_SOURCE = modsecurity-v$(LIBMODSECURITY_VERSION).tar.gz
+ LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(LIBMODSECURITY_VERSION)
+ LIBMODSECURITY_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
