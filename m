@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EAF3EE020C
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 475D6EE020B
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45A1880DD1;
-	Wed, 13 Sep 2023 20:13:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45A1880DD1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 005C58175F;
+	Wed, 13 Sep 2023 20:13:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 005C58175F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aRq94iLyzuu5; Wed, 13 Sep 2023 20:13:33 +0000 (UTC)
+	with ESMTP id twi3sjf3qOmd; Wed, 13 Sep 2023 20:13:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 626FB80B45;
-	Wed, 13 Sep 2023 20:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 626FB80B45
+	by smtp1.osuosl.org (Postfix) with ESMTP id F347081415;
+	Wed, 13 Sep 2023 20:13:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F347081415
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 620311BF5F5
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:13:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 285D31BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:13:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABF474001F
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:13:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF474001F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 02F3F4005E
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:13:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02F3F4005E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8qLE2loVA-Vv for <buildroot@lists.busybox.net>;
+ with ESMTP id X5cc6NJ1xVJN for <buildroot@lists.busybox.net>;
  Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 930DF408B5
+ by smtp4.osuosl.org (Postfix) with ESMTP id A5348408B6
  for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 930DF408B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5348408B6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7DA6386E87; Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
+ id 925E286E89; Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 21:58:46 +0200
+Date: Wed, 13 Sep 2023 22:08:40 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 35cbef7f6f7b33f1701ee508ca5d86f90637660e
-X-Git-Newrev: eee1040f28fa629b38711f3fef5a66a254d72de2
+X-Git-Oldrev: 8b5f6a766eb7bde949bed9a692860564b592ecbd
+X-Git-Newrev: 0374d95facb124bc7ca478b4293b41fdaf20b140
 X-Patchwork-Hint: ignore
-Message-Id: <20230913201305.7DA6386E87@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/clamav: security
- bump to version 0.103.10
+Message-Id: <20230913201305.925E286E89@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/openjdk{-bin}:
+ security bump versions to 11.0.20+8 and 17.0.8+7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,115 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eee1040f28fa629b38711f3fef5a66a254d72de2
+commit: https://git.buildroot.net/buildroot/commit/?id=0374d95facb124bc7ca478b4293b41fdaf20b140
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Release notes:
-https://blog.clamav.net/2023/08/clamav-120-feature-version-and-111-102.html
+Fixed the following security issues:
 
-Fixes CVE-2023-40477:
-"Upgrade the bundled UnRAR library (libclamunrar) to version 6.2.10."
+* CVEs
+  - CVE-2023-22006
+  - CVE-2023-22036
+  - CVE-2023-22041
+  - CVE-2023-22044
+  - CVE-2023-22045
+  - CVE-2023-22049
+  - CVE-2023-25193
+* Security fixes
+  - JDK-8298676: Enhanced Look and Feel
+  - JDK-8300285: Enhance TLS data handling
+  - JDK-8300596: Enhance Jar Signature validation
+  - JDK-8301998, JDK-8302084: Update HarfBuzz to 7.0.1
+  - JDK-8302475: Enhance HTTP client file downloading
+  - JDK-8302483: Enhance ZIP performance
+  - JDK-8303376: Better launching of JDI
+  - JDK-8304468: Better array usages
+  - JDK-8305312: Enhanced path handling
+  - JDK-8308682: Enhance AES performance
 
+For details, see the announcements:
+https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024064.html
+https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024063.html
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit c1038fe47c705fd7bf4bbc6e8b8557d5417adaad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openjdk-bin/openjdk-bin.hash                              | 8 ++++----
+ package/openjdk-bin/openjdk-bin.mk                                | 4 ++--
+ .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch           | 0
+ package/openjdk/openjdk.hash                                      | 4 ++--
+ package/openjdk/openjdk.mk                                        | 4 ++--
+ 5 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index e8173cd0f9..235b1e9048 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  bd9345671c8089b2bbbd8c34be3bca04cffa3142cf7a3afc12527037dfd3aa88  clamav-0.103.9.tar.gz
-+sha256  9a2608971efee6092c009babf71d3b891ec6cf902bafa1dd6616f5308549a640  clamav-0.103.10.tar.gz
- sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index c4ef395cec..5f8eebbe9a 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index eb9d7396e3..401e83e75e 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,10 +1,10 @@
+ # https://github.com/adoptium/temurin17-binaries/releases
+-sha256  e9458b38e97358850902c2936a1bb5f35f6cffc59da9fcd28c63eab8dbbfbc3b  OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz
+-sha256  0084272404b89442871e0a1f112779844090532978ad4d4191b8d03fc6adfade  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz
++sha256  aa5fc7d388fe544e5d85902e68399d5299e931f9b280d358a3cbee218d6017b0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz
++sha256  c43688163cfdcb1a6e6fe202cc06a51891df746b954c55dbd01430e7d7326d00  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz
  
--CLAMAV_VERSION = 0.103.9
-+CLAMAV_VERSION = 0.103.10
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+ # From https://github.com/adoptium/temurin11-binaries/releases
+-sha256  5f19fb28aea3e28fcc402b73ce72f62b602992d48769502effe81c52ca39a581  OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
+-sha256  0c7763a19b4af4ef5fbae831781b5184e988d6f131d264482399eeaf51b6e254  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.19_7.tar.gz
++sha256  7a99258af2e3ee9047e90f1c0c1775fd6285085759501295358d934d662e01f9  OpenJDK11U-jdk_x64_linux_hotspot_11.0.20_8.tar.gz
++sha256  eb821c049c2d2f7c3fbf8ddcce2d608d3aa7d488700e76bfbbebabba93021748  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.20_8.tar.gz
+ 
+ # Locally calculated
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index dad846534b..616c8d917d 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -6,10 +6,10 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.7_7
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.8_7
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 11
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.19_7
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.20_8
+ endif
+ 
+ ifeq ($(HOSTARCH),x86_64)
+diff --git a/package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+similarity index 100%
+rename from package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+rename to package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index 3b36289628..ba398b84be 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  43b80a5aec5fce908e80858e9b34efdf1b49255a12ce303650325af65141d3e8  openjdk-17.0.7+7.tar.gz
+-sha256  25fd9ab3042a284aa4e6348969403016404bc2706a4a02c149a0054fbe477337  openjdk-11.0.19+7.tar.gz
++sha256  643ff42dcdf8751e0fee716c1a1914ddc7348b174e871a5eb2636578a181f20d  openjdk-17.0.8+7.tar.gz
++sha256  b2a37ef209ae7eaf8f34182b7c9aa3252af20a214d02970f96ce62242c805479  openjdk-11.0.20+8.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 39d461a87c..d1a2fa23ee 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -6,10 +6,10 @@
+ 
+ ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
+ OPENJDK_VERSION_MAJOR = 17
+-OPENJDK_VERSION_MINOR = 0.7+7
++OPENJDK_VERSION_MINOR = 0.8+7
+ else
+ OPENJDK_VERSION_MAJOR = 11
+-OPENJDK_VERSION_MINOR = 0.19+7
++OPENJDK_VERSION_MINOR = 0.20+8
+ endif
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
