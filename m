@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30768CA5501
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 07:45:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF694CA5501
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 07:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2D4041D9B;
-	Wed, 13 Sep 2023 07:45:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2D4041D9B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88DC640889;
+	Wed, 13 Sep 2023 07:46:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88DC640889
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id T6K2Iy6RrdW5; Wed, 13 Sep 2023 07:45:49 +0000 (UTC)
+	with ESMTP id e9Xt_StdAwHb; Wed, 13 Sep 2023 07:46:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B48941DA5;
-	Wed, 13 Sep 2023 07:45:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B48941DA5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29F31410A6;
+	Wed, 13 Sep 2023 07:46:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29F31410A6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A3821BF3B9
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:44:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D2801BF3B9
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:44:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92A9382094
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:44:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92A9382094
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3421181FC7
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:44:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3421181FC7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id VLmtb6GCvV_a for <buildroot@lists.busybox.net>;
+ with ESMTP id gu-5PE8PNMfb for <buildroot@lists.busybox.net>;
  Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FBF181FCB
+ by smtp1.osuosl.org (Postfix) with ESMTP id B8D0082050
  for <buildroot@buildroot.org>; Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FBF181FCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8D0082050
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6FBC486DB6; Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
+ id A8E2086DBA; Wed, 13 Sep 2023 07:44:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 08:34:30 +0200
+Date: Wed, 13 Sep 2023 09:41:46 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7e7397baf1fe4c6d6b3169afc900f7b2789f649b
-X-Git-Newrev: 1cec87d9057154f1829770a5bf69e497c138b8ad
+X-Git-Oldrev: e95a26d6c5c0c3b87a1255b6943b1723a18b40f3
+X-Git-Newrev: 116fb0285dff0deeaccf8f9fee693b2d56a2385a
 X-Patchwork-Hint: ignore
-Message-Id: <20230913074434.6FBC486DB6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] configs/pc_x86_64_{bios,
- efi}_defconfig: add missing libelf kernel dependency
+Message-Id: <20230913074434.A8E2086DBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/cups: security
+ bump version to 2.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,59 +63,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cec87d9057154f1829770a5bf69e497c138b8ad
+commit: https://git.buildroot.net/buildroot/commit/?id=116fb0285dff0deeaccf8f9fee693b2d56a2385a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-objtool built by the kernel requires libelf
+Fixes CVE-2023-34241 (see [0] for details)
 
-ldd output/build/linux-6.1.24/tools/objtool/objtool
-  linux-vdso.so.1
-  libelf.so.1 => output/host/lib/libelf.so.1
+[0] https://github.com/OpenPrinting/cups/releases/tag/v2.4.6
 
-While updating the kernel [1] we forgot to select
-BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF to provide Buildroot's host-libelf.
-Using host-libelf avoid linking with libelf installed on the host or
-failing to build objtool if libelf is not installed.
+The number of changes between 2.4.4 and 2.4.6 is really small, and
+limited to bug fixes:
 
-[1] d45538f2e7acc1b330b191d559a81e8c1a961648
+9d614a4b3184205294c55355a1d2eb54d4532ccd (tag: v2.4.6) Update CHANGES.md
+6f6da74ec284e28c156f0b9f62f3bd610e61aa78 Fix use-after-free in cupsdAcceptClient() (fixes CVE-2023-34241)
+3f12185ca9cbb5350a6370d6046066907b8abc12 Merge pull request #735 from AtariDreams/Fixer
+f5281777c80cdf820a2a71c9e7f08b91f0e11160 Fix compilation on older macOS versions
+ee82c5b18409def3ec1424ce2eb343aabb0ff0d1 Merge pull request #730 from zdohnal/cupssinglefile_24x
+1504527b2415a4b67b0e3e17593b053f3628746f  cups/ppd-cache.c: Put cupsSingleFile into generated PPD
+3be1d5da8fe9ee13aab5ee6ecc11b2f9387821a6 Prepare files for next release
+c1f54ec966ccc5d5564eed95dcb540842af7b5ca (tag: v2.4.5) cups/cups.h: Update for 2.4.5
+70dba05b7511a96476ea0ef8fe1d92c6500c6e61 Finish hotfix release 2.4.5
+87f5cb7d8f0da8fa2835bb0aa3ca48b5e5a66a3f Merge pull request #727 from AtariDreams/hotfix
+61aa0b259183fe59124566f08ecf649bb806cd24 Regression: Certificate data is corrupted during base64 conversion
+7362f41c45d834564f876ffac536f59eece843ec Prepare files for next release
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436869
-https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436872
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Clement Ramirez <ramirez.clement3@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b661f635b5cc08ded6ab14c19f2370c9f478e52e)
+(cherry picked from commit db46428e0ad00b6916fff2a41a33a45db8fb778f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/pc_x86_64_bios_defconfig | 1 +
- configs/pc_x86_64_efi_defconfig  | 1 +
- 2 files changed, 2 insertions(+)
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
-index a057ddd259..6032544d2d 100644
---- a/configs/pc_x86_64_bios_defconfig
-+++ b/configs/pc_x86_64_bios_defconfig
-@@ -32,6 +32,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index cc6fe25446..501d8c12a6 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  209259e8fe8df9112af49f4e5765f50dad6da1f869296de41d6eaab1b98003cb  cups-2.4.4-source.tar.gz
++sha256  58e970cf1955e1cc87d0847c32526d9c2ccee335e5f0e3882b283138ba0e7262  cups-2.4.6-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256  5320b6e3c252423e4153eb2dd63e57e3b630afb21139f44e43b02d85fe33e279  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 7bbea9a218..a3bb2f8dfc 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
-diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
-index efa603f0c0..afb652f3fc 100644
---- a/configs/pc_x86_64_efi_defconfig
-+++ b/configs/pc_x86_64_efi_defconfig
-@@ -33,6 +33,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
- 
- # Firmware
- BR2_PACKAGE_LINUX_FIRMWARE=y
+-CUPS_VERSION = 2.4.4
++CUPS_VERSION = 2.4.6
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
