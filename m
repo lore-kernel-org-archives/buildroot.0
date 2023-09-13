@@ -4,48 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2DC8EE020C
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1601EEE020D
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:23:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E35080BCC;
-	Wed, 13 Sep 2023 20:15:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E35080BCC
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF612813B1;
+	Wed, 13 Sep 2023 20:23:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF612813B1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gUl4rwqyBMP7; Wed, 13 Sep 2023 20:15:19 +0000 (UTC)
+	with ESMTP id 7QVOHCXvvZrR; Wed, 13 Sep 2023 20:23:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 468FF83126;
-	Wed, 13 Sep 2023 20:15:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 468FF83126
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 93B8B1BF980
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:14:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00D8D82C1E;
+	Wed, 13 Sep 2023 20:23:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00D8D82C1E
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 624031BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 603D860B46
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:14:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 603D860B46
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42D9A82BA7
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:23:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42D9A82BA7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yyDF--BowFVW for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 20:14:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 54F6460E65
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:14:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54F6460E65
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4460186E9D; Wed, 13 Sep 2023 20:14:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ncMYgIQBaIdB for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 20:23:02 +0000 (UTC)
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7B88E813B1
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:23:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B88E813B1
+Received: from allenwind.lan (unknown [IPv6:2a02:169:3df5:10::ed4])
+ by mail.kmu-office.ch (Postfix) with ESMTPSA id B8C305C1703;
+ Wed, 13 Sep 2023 22:22:58 +0200 (CEST)
+From: Stefan Agner <stefan@agner.ch>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 22:05:03 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 74ebf46e43dc9d3f2c23fcbc082c2897561bc51f
-X-Git-Newrev: f77fa78b1bea52ae516a92531e490cf9568b5380
-X-Patchwork-Hint: ignore
-Message-Id: <20230913201426.4460186E9D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/openjdk{-bin}:
- security bump versions to 11.0.20+8 and 17.0.8+7
+Date: Wed, 13 Sep 2023 22:22:39 +0200
+Message-ID: <8ea671337eeee89169fec537dc0f4eca9e2a51ca.1694636470.git.stefan@agner.ch>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=agner.ch; s=dkim; t=1694636578;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:
+ content-transfer-encoding:content-transfer-encoding:in-reply-to:
+ references; bh=+KBZATK8ESh4SGlQLMf2/cQWYVuysaIw1wiJ9C4n+Is=;
+ b=ysvT39VMLfWYiYPWWCs6UTe+c+3UY8ROP0rLTv7FTNhcZvHn6hk+aS3kzuS1W8R43QHifJ
+ 21wVI+VTLjlHXqEGD5k6uGilvvLpqYqv9ZBGs8qbRSYf77neyMW8smQTnzo4DOIYn2SZD5
+ rdYVsQg7N4j+1Vvk78Ff4JC7ctfx0sM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=agner.ch header.i=@agner.ch
+ header.a=rsa-sha256 header.s=dkim header.b=ysvT39VM
+Subject: [Buildroot] [git commit branch/2023.02.x] package/go: bump to
+ v1.19.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,121 +68,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: dominique.tronche@eviden.com, Stefan Agner <stefan@agner.ch>,
+ christian@aperture.us
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f77fa78b1bea52ae516a92531e490cf9568b5380
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+go1.19.13 (released 2023-09-06) includes a couple of bug fixes. In
+particular it fixes a bug introduced in with the update o v1.19.11
+which broke http using a unix socket addressing.
 
-Fixed the following security issues:
-
-* CVEs
-  - CVE-2023-22006
-  - CVE-2023-22036
-  - CVE-2023-22041
-  - CVE-2023-22044
-  - CVE-2023-22045
-  - CVE-2023-22049
-  - CVE-2023-25193
-* Security fixes
-  - JDK-8298676: Enhanced Look and Feel
-  - JDK-8300285: Enhance TLS data handling
-  - JDK-8300596: Enhance Jar Signature validation
-  - JDK-8301998, JDK-8302084: Update HarfBuzz to 7.0.1
-  - JDK-8302475: Enhance HTTP client file downloading
-  - JDK-8302483: Enhance ZIP performance
-  - JDK-8303376: Better launching of JDI
-  - JDK-8304468: Better array usages
-  - JDK-8305312: Enhanced path handling
-  - JDK-8308682: Enhance AES performance
-
-For details, see the announcements:
-https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024064.html
-https://mail.openjdk.org/pipermail/jdk-updates-dev/2023-July/024063.html
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit c1038fe47c705fd7bf4bbc6e8b8557d5417adaad)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
 ---
- package/openjdk-bin/openjdk-bin.hash                              | 8 ++++----
- package/openjdk-bin/openjdk-bin.mk                                | 4 ++--
- .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch           | 0
- package/openjdk/openjdk.hash                                      | 4 ++--
- package/openjdk/openjdk.mk                                        | 4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index eb9d7396e3..401e83e75e 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,10 +1,10 @@
- # https://github.com/adoptium/temurin17-binaries/releases
--sha256  e9458b38e97358850902c2936a1bb5f35f6cffc59da9fcd28c63eab8dbbfbc3b  OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz
--sha256  0084272404b89442871e0a1f112779844090532978ad4d4191b8d03fc6adfade  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz
-+sha256  aa5fc7d388fe544e5d85902e68399d5299e931f9b280d358a3cbee218d6017b0  OpenJDK17U-jdk_x64_linux_hotspot_17.0.8_7.tar.gz
-+sha256  c43688163cfdcb1a6e6fe202cc06a51891df746b954c55dbd01430e7d7326d00  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.8_7.tar.gz
+diff --git a/package/go/go.hash b/package/go/go.hash
+index ac8499e7dc..d61663cac9 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  ee5d50e0a7fd74ba1b137cb879609aaaef9880bf72b5d1742100e38ae72bb557  go1.19.12.src.tar.gz
++sha256  ccf36b53fb0024a017353c3ddb22c1f00bc7a8073c6aac79042da24ee34434d3  go1.19.13.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 9189032ba8..ea2a46f36c 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # From https://github.com/adoptium/temurin11-binaries/releases
--sha256  5f19fb28aea3e28fcc402b73ce72f62b602992d48769502effe81c52ca39a581  OpenJDK11U-jdk_x64_linux_hotspot_11.0.19_7.tar.gz
--sha256  0c7763a19b4af4ef5fbae831781b5184e988d6f131d264482399eeaf51b6e254  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.19_7.tar.gz
-+sha256  7a99258af2e3ee9047e90f1c0c1775fd6285085759501295358d934d662e01f9  OpenJDK11U-jdk_x64_linux_hotspot_11.0.20_8.tar.gz
-+sha256  eb821c049c2d2f7c3fbf8ddcce2d608d3aa7d488700e76bfbbebabba93021748  OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.20_8.tar.gz
+-GO_VERSION = 1.19.12
++GO_VERSION = 1.19.13
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index dad846534b..616c8d917d 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.7_7
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.8_7
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 11
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.19_7
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.20_8
- endif
- 
- ifeq ($(HOSTARCH),x86_64)
-diff --git a/package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-similarity index 100%
-rename from package/openjdk/17.0.7+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-rename to package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 3b36289628..ba398b84be 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  43b80a5aec5fce908e80858e9b34efdf1b49255a12ce303650325af65141d3e8  openjdk-17.0.7+7.tar.gz
--sha256  25fd9ab3042a284aa4e6348969403016404bc2706a4a02c149a0054fbe477337  openjdk-11.0.19+7.tar.gz
-+sha256  643ff42dcdf8751e0fee716c1a1914ddc7348b174e871a5eb2636578a181f20d  openjdk-17.0.8+7.tar.gz
-+sha256  b2a37ef209ae7eaf8f34182b7c9aa3252af20a214d02970f96ce62242c805479  openjdk-11.0.20+8.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 39d461a87c..d1a2fa23ee 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_17),y)
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.7+7
-+OPENJDK_VERSION_MINOR = 0.8+7
- else
- OPENJDK_VERSION_MAJOR = 11
--OPENJDK_VERSION_MINOR = 0.19+7
-+OPENJDK_VERSION_MINOR = 0.20+8
- endif
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+-- 
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
