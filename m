@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B83EBCA5500
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 07:42:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66AF4CA5501
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 07:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6348B417C1;
-	Wed, 13 Sep 2023 07:42:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6348B417C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04F1640164;
+	Wed, 13 Sep 2023 07:43:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04F1640164
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e4JGJBscysTO; Wed, 13 Sep 2023 07:42:50 +0000 (UTC)
+	with ESMTP id A_-_RP6_Kilg; Wed, 13 Sep 2023 07:43:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 723E640889;
-	Wed, 13 Sep 2023 07:42:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 723E640889
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8C3540277;
+	Wed, 13 Sep 2023 07:43:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8C3540277
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A02DC1BF37C
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:42:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 254CF1BF37C
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:43:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 87AA8400F9
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:42:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87AA8400F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id F375A400F9
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 07:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F375A400F9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pyWFiMZ-vR9p for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 07:42:46 +0000 (UTC)
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5EBA340065
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 07:42:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EBA340065
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C072E000C;
- Wed, 13 Sep 2023 07:42:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qgKWH-005Y9P-V5; Wed, 13 Sep 2023 09:42:41 +0200
+ with ESMTP id LoyeW-i47mh1 for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 07:43:05 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D18A4041C
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 07:43:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D18A4041C
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 27CA386D9D; Wed, 13 Sep 2023 07:43:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20230817162249.449943-1-bernd@kuhls.net>
-Date: Wed, 13 Sep 2023 09:42:41 +0200
-In-Reply-To: <20230817162249.449943-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Thu, 17 Aug 2023 18:22:49 +0200")
-Message-ID: <87fs3i4iz2.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: security bump
- version to 15.4
+To: buildroot@buildroot.org
+Date: Wed, 13 Sep 2023 08:59:21 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: e26d9f53d8a409f6959935e2d96d6820a4144cb8
+X-Git-Newrev: 8e8dc2eb3a4e9eb7b297fa108e337b533b9431a3
+X-Patchwork-Hint: ignore
+Message-Id: <20230913074305.27CA386D9D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] configs/ci20_defconfig:
+ bump to kernel 5.4.254
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,25 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8e8dc2eb3a4e9eb7b297fa108e337b533b9431a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > Release notes:
- > https://www.postgresql.org/about/news/postgresql-154-149-1312-1216-1121-and-postgresql-16-beta-3-released-2689/
+Bump the kernel to the latest release of 5.4 kernel series
+to fix an issue with gcc 12.
 
- > Fixes CVE-2023-39417 & CVE-2023-39418.
+arch/mips/jz4740/setup.c: In function 'plat_mem_setup':
+arch/mips/jz4740/setup.c:64:25: error: comparison between two arrays [-Werror=array-compare]
+   64 |         if (__dtb_start != __dtb_end)
+      |                         ^~
+arch/mips/jz4740/setup.c:64:25: note: use '&__dtb_start[0] != &__dtb_end[0]' to compare the addresses
+  CC      fs/debugfs/file.o
+cc1: all warnings being treated as errors
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixed in v5.4.195:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a60def7568216684f62b117c199429c4a9a89570
 
-Committed to 2023.02.x and 2023.05.x, thanks.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4889436573
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 486a3ba4c3a78668eee1dd4f4b312a75a1b029c5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/ci20_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 09eddc4e68..7e119376e1 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -15,7 +15,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/ci20/genimage.cfg"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.58"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.254"
+ BR2_LINUX_KERNEL_DEFCONFIG="ci20"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
