@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87903EDEC7C
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 16:09:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC9FEDEC7C
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 16:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 442E3811F4;
-	Wed, 13 Sep 2023 16:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 442E3811F4
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAE328144A;
+	Wed, 13 Sep 2023 16:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAE328144A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gOAMVJJkq7gQ; Wed, 13 Sep 2023 16:09:39 +0000 (UTC)
+	with ESMTP id goqSnk92lE29; Wed, 13 Sep 2023 16:10:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FFCC82324;
-	Wed, 13 Sep 2023 16:09:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FFCC82324
+	by smtp1.osuosl.org (Postfix) with ESMTP id D81F18135D;
+	Wed, 13 Sep 2023 16:10:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D81F18135D
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3339C1BF2AB
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:09:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6E45E1BF2AB
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BDCF41DDA
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:09:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BDCF41DDA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46CEA41DE9
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 16:10:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46CEA41DE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7-wOFuCCdn6p for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 16:09:11 +0000 (UTC)
+ with ESMTP id I_0mOG-P7ch1 for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 16:10:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0A9CB41DD9
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 16:09:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A9CB41DD9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B41E41DE7
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 16:10:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B41E41DE7
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBE2386E2F; Wed, 13 Sep 2023 16:09:10 +0000 (UTC)
+ id 2A6BE86E40; Wed, 13 Sep 2023 16:10:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 18:08:18 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: e48b285188435edd055246e79da84a79ce68940b
-X-Git-Newrev: 7ce77eac68ea2dc742db456610cea5b8bb841bc5
+Date: Wed, 13 Sep 2023 18:06:57 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 4e4df2044aaee476e383be736b83851d3ca41555
+X-Git-Newrev: 703675b84522dda6e17793ef58f7a1f19b756016
 X-Patchwork-Hint: ignore
-Message-Id: <20230913160910.EBE2386E2F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/mosquitto: bump
- to version 2.0.17
+Message-Id: <20230913161016.2A6BE86E40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
+ linux-headers}: bump 6.{1, 4}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ce77eac68ea2dc742db456610cea5b8bb841bc5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=703675b84522dda6e17793ef58f7a1f19b756016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Bugfix release, fixing a number of regressions in 2.0.16
-
-From the changelog
-(https://github.com/eclipse/mosquitto/blob/master/ChangeLog.txt)
-
-2.0.17 - 2023-08-22
-===================
-
-Broker:
-- Fix `max_queued_messages 0` stopping clients from receiving messages.
-  Closes #2879.
-- Fix `max_inflight_messages` not being set correctly. Closes #2876.
-
-Apps:
-- Fix `mosquitto_passwd -U` backup file creation. Closes #2873.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c11950fe4a2817c4bd1fa6d9c9e3cd3783b3f96f)
+(cherry picked from commit 47ac12bd4ee4025e94e82a5484c2a2a60cb59281)
+[Peter: drop 6.4.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index cbe54d6d1a..df0a51df3a 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.16.tar.gz.asc
--sha256  638db9e43e89d243ea98d10d66e76ff376131217780decd01abaffacc66d8035  mosquitto-2.0.16.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.17.tar.gz.asc
-+sha256  3be7a911236567c1a9fbe25baf3e3167004ba4a0c151a448ef1f7fc077dba52f  mosquitto-2.0.17.tar.gz
+diff --git a/linux/Config.in b/linux/Config.in
+index 67b85f8363..98822b0ec0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index f146a86d0a..0b85246f39 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 2.0.16
-+MOSQUITTO_VERSION = 2.0.17
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.1.46" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.1.47" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 272331c785..e8f97127a7 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  f5f67bcfccd47f8d9db2d5ba24e33af7778f40a777577d1fba424f4a1712a296  linux-6.1.46.tar.xz
++sha256  93d58b6af007a5f44dd26831ff310707deb1ab9380c5136a534287eb3fddfcab  linux-6.1.47.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  add0a575341b263a06e93599fc220a5dd34cb4ca5b9d05097a5db2a061928f26  linux-5.15.127.tar.xz
+ sha256  cb54660ed4917cc4f9a9ab93d117defefd8bcbe745ec6082d909bbfd5ae962c2  linux-5.10.191.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 54bd74534a..9d7ece452f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -389,7 +389,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.4.254"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.191"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.127"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.46"	if BR2_KERNEL_HEADERS_6_1
++	default "6.1.47"	if BR2_KERNEL_HEADERS_6_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
