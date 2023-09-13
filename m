@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ED67EE0213
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EAF3EE020C
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8DBC8308B;
-	Wed, 13 Sep 2023 20:13:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8DBC8308B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45A1880DD1;
+	Wed, 13 Sep 2023 20:13:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45A1880DD1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IyCOrYKN6zGD; Wed, 13 Sep 2023 20:13:21 +0000 (UTC)
+	with ESMTP id aRq94iLyzuu5; Wed, 13 Sep 2023 20:13:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C58E8302F;
-	Wed, 13 Sep 2023 20:13:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C58E8302F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CC9E01BF980
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:13:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 626FB80B45;
+	Wed, 13 Sep 2023 20:13:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 626FB80B45
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 620311BF5F5
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:13:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4F3F82F14
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABF474001F
  for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:13:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4F3F82F14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABF474001F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Q8z9axposNAW for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8qLE2loVA-Vv for <buildroot@lists.busybox.net>;
  Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE45B82BA7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 930DF408B5
  for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE45B82BA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 930DF408B5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C95686E8A; Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
+ id 7DA6386E87; Wed, 13 Sep 2023 20:13:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 22:11:30 +0200
+Date: Wed, 13 Sep 2023 21:58:46 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 0374d95facb124bc7ca478b4293b41fdaf20b140
-X-Git-Newrev: 0b8afffe3b3f13cd93abe15e2a6989a7dcb2cb49
+X-Git-Oldrev: 35cbef7f6f7b33f1701ee508ca5d86f90637660e
+X-Git-Newrev: eee1040f28fa629b38711f3fef5a66a254d72de2
 X-Patchwork-Hint: ignore
-Message-Id: <20230913201305.9C95686E8A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/pcm-tools: fix
- github-download
+Message-Id: <20230913201305.7DA6386E87@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/clamav: security
+ bump to version 0.103.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,108 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b8afffe3b3f13cd93abe15e2a6989a7dcb2cb49
+commit: https://git.buildroot.net/buildroot/commit/?id=eee1040f28fa629b38711f3fef5a66a254d72de2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The pcm-tools package contains a version.h with git attributes:
+Release notes:
+https://blog.clamav.net/2023/08/clamav-120-feature-version-and-111-102.html
 
-    $ cat version.h
-    #define PCM_VERSION " ($Format:%ci ID=%h$)"
+Fixes CVE-2023-40477:
+"Upgrade the bundled UnRAR library (libclamunrar) to version 6.2.10."
 
-    $ man 5 gitattributes
-       Creating an archive
-         export-subst
-           If the attribute export-subst is set for a file then Git
-           will expand several placeholders when adding this file to
-           an archive. The expansion depends on the availability of
-           a commit ID, i.e., if git-archive(1) has been given a tree
-           instead of a commit or a tag then no replacement will be
-           done. The placeholders are the same as those for the option
-           --pretty=format: of git-log(1), except that they need to be
-           wrapped like this: $Format:PLACEHOLDERS$ in the file. E.g.
-           the string $Format:%H$ will be replaced by the commit hash.
-
-So, the archive generated by github has changed since we updated
-pcm-tools in 2021-12-08 with commit d1d93d488c76 (package/pcm-tools:
-bump to version 202110). The downlad was still OK in 2022-01-04 [0]
-but has been failing at least since 202-08-25 [1].
-
-Since the archive is generated on the github side, there is not much we
-can do to fix this up.
-
-We switch over to using git to do the download, and we generate the
-archive localy, which we know is reproducible.
-
-We fix the version.h so that it contains the same string as the backup
-tarball we host on s.b.o.
-
-There are three other files in pcm-tools that have git attributes, to
-exclude them from the generated archive, all pertaining to CI/CD stuff:
-    .cirrus.yml export-ignore
-    .gitlab-ci.yml export-ignore
-    .travis.yml export-ignore
-
-We don't remove them, because they have no impact on the build, and they
-are anyway already present in the archive by the time we could act on it
-anyway...
-
-[0] http://autobuild.buildroot.org/results/127/1276a3d49c8848039f034e7f03632df365097e94/
-[1] http://autobuild.buildroot.org/results/8bb/8bbf9c36af332bbf5e7c1abcbb594a0b231ef97e/
-
-Reported-by: Woody Douglass <wdouglass@carnegierobotics.com>
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 60f50a5e34e1bb5fd7236cd9d562070135b6116d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcm-tools/pcm-tools.hash |  2 +-
- package/pcm-tools/pcm-tools.mk   | 16 ++++++++++++++--
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pcm-tools/pcm-tools.hash b/package/pcm-tools/pcm-tools.hash
-index 1853dcebb5..cfa3faeff7 100644
---- a/package/pcm-tools/pcm-tools.hash
-+++ b/package/pcm-tools/pcm-tools.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index e8173cd0f9..235b1e9048 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  aa48ab1473720aeb7837b67bfc612100f484748720a8b8034daff00419709057  pcm-tools-202110.tar.gz
-+sha256  29416f83d1de95594d225f63af34f8f074ee4822010ce2e05b1fabc66933472a  pcm-tools-93fc9193a70e2f1f054be554c48f4a4791be5032-br1.tar.gz
- sha256  0f476c77009f982dcc4bdff41e692ddd456a9862908e99f2ae3d57296decc649  LICENSE
-diff --git a/package/pcm-tools/pcm-tools.mk b/package/pcm-tools/pcm-tools.mk
-index d676df57f9..c530492696 100644
---- a/package/pcm-tools/pcm-tools.mk
-+++ b/package/pcm-tools/pcm-tools.mk
-@@ -4,8 +4,12 @@
+-sha256  bd9345671c8089b2bbbd8c34be3bca04cffa3142cf7a3afc12527037dfd3aa88  clamav-0.103.9.tar.gz
++sha256  9a2608971efee6092c009babf71d3b891ec6cf902bafa1dd6616f5308549a640  clamav-0.103.10.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index c4ef395cec..5f8eebbe9a 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCM_TOOLS_VERSION = 202110
--PCM_TOOLS_SITE = $(call github,opcm,pcm,$(PCM_TOOLS_VERSION))
-+# Don't use the github helper, as pcm-tools uses git attributes that are
-+# replaced when gnerating the archive.
-+# 93fc9193a70e2f1f054be554c48f4a4791be5032 is the hash of the 202110 tag.
-+PCM_TOOLS_VERSION = 93fc9193a70e2f1f054be554c48f4a4791be5032
-+PCM_TOOLS_SITE = https://github.com/opcm/pcm
-+PCM_TOOLS_SITE_METHOD = git
- PCM_TOOLS_LICENSE = BSD-3-Clause
- PCM_TOOLS_LICENSE_FILES = LICENSE
- 
-@@ -13,6 +17,14 @@ PCM_TOOLS_EXE_FILES = \
- 	pcm-core pcm-iio pcm-lspci pcm-memory pcm-msr pcm-numa \
- 	pcm-pcicfg pcm-pcie pcm-power pcm-sensor pcm-tsx pcm
- 
-+# version.h contains git attributes; replace them with the previously-known
-+# value.
-+define PCM_TOOLS_FIXUP_VERSION_H
-+	$(SED) 's/\$$Format:%ci ID=%h\$$/2021-10-25 16:07:54 +0200 ID=93fc9193/' \
-+		$(@D)/version.h
-+endef
-+PCM_TOOLS_POST_EXTRACT_HOOKS += PCM_TOOLS_FIXUP_VERSION_H
-+
- define PCM_TOOLS_BUILD_CMDS
- 	touch $(@D)/daemon-binaries
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-CLAMAV_VERSION = 0.103.9
++CLAMAV_VERSION = 0.103.10
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
