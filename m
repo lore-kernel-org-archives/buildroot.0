@@ -1,51 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D550BEE020C
-	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 20:28:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54662EE020D
+	for <buildroot@archiver.kernel.org>; Wed, 13 Sep 2023 21:21:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5633C8137A;
-	Wed, 13 Sep 2023 20:28:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5633C8137A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95D34416EE;
+	Wed, 13 Sep 2023 21:21:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95D34416EE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m_97NEy8CMAa; Wed, 13 Sep 2023 20:28:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yuXGt7W4KA5c; Wed, 13 Sep 2023 21:21:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 962EC81369;
-	Wed, 13 Sep 2023 20:28:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 962EC81369
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E7E561BF5F5
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:28:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CBB6B4095F;
+	Wed, 13 Sep 2023 21:21:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBB6B4095F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D15181BF5DF
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 21:21:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CDBE641DFA
- for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 20:28:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDBE641DFA
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA645416E8
+ for <buildroot@lists.busybox.net>; Wed, 13 Sep 2023 21:21:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AA645416E8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jIGBkOOhMy7o for <buildroot@lists.busybox.net>;
- Wed, 13 Sep 2023 20:28:51 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A868241D9F
- for <buildroot@buildroot.org>; Wed, 13 Sep 2023 20:28:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A868241D9F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 970D486EA3; Wed, 13 Sep 2023 20:28:51 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id qR1SLyhXChbM for <buildroot@lists.busybox.net>;
+ Wed, 13 Sep 2023 21:21:17 +0000 (UTC)
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com
+ [IPv6:2607:f8b0:4864:20::f43])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 97D6C401A3
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 21:21:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97D6C401A3
+Received: by mail-qv1-xf43.google.com with SMTP id
+ 6a1803df08f44-64f383be0d4so1808056d6.3
+ for <buildroot@buildroot.org>; Wed, 13 Sep 2023 14:21:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1694640076; x=1695244876;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8e9X3R4jrilm78nmZ3/V+zRrWyRGeIZjwQmVT3blEg0=;
+ b=HJA21EGJXQQ/u0hoyVIlEwi6Ss466QoJj+YAYN4oHp7ayU+vVpl9T1GIAW2rlfz+jw
+ wSNSGgW82fTSzZeqm0aunLv0tt9EHk1aA+oFpDkbGnMNjHN96rUZMRmqdRulFW1b8Sgh
+ GC4Y6HJQWi6zY9OsdCxbZl9eHPAvuk6pxAKVKmeEb5sF0othvlESD8ZbUsuQMbOR37GQ
+ uzEik4dlVRQSAwCDQUcz9QsbfuOsDkI0Qa8TSVVqQHxJ72hjfKdou9Vk0zcKN04+EbE2
+ ft6qEyLKaYHYokFFzxCyatSzdGGAq00tQYR0WfMETBq2SNNGLFgq2mMxi3pnBqJtiKZk
+ KJaQ==
+X-Gm-Message-State: AOJu0YyTqK+YGjGjZYUCKWSWqp/0uXBwI5U8cuXtE9rZCsegcDu6RjUb
+ w9JJ0nxwB2p7eQ1tNbZb9gozTOkZFoDmXfMoKkkEmeTE
+X-Google-Smtp-Source: AGHT+IGN6bL/SNh3katR/AkLIm5185UxoD+ArKZlVyphMdD0WkSLa3HieSOcwQVzOsvG9dTlFaE74A==
+X-Received: by 2002:a0c:8cc1:0:b0:653:5b5e:7a96 with SMTP id
+ q1-20020a0c8cc1000000b006535b5e7a96mr4123249qvb.1.1694640075706; 
+ Wed, 13 Sep 2023 14:21:15 -0700 (PDT)
+Received: from localhost.localdomain ([50.212.55.89])
+ by smtp.gmail.com with ESMTPSA id
+ t29-20020a0cb39d000000b0063d162a8b8bsm37824qve.19.2023.09.13.14.21.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 13 Sep 2023 14:21:15 -0700 (PDT)
+From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
 To: buildroot@buildroot.org
-Date: Wed, 13 Sep 2023 22:22:33 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 8075b43085a59ceb8800008ee6112219e5f547f3
-X-Git-Newrev: 4c6f56ebbc0778bb8014a54efe884f7c88a9ef13
-X-Patchwork-Hint: ignore
-Message-Id: <20230913202851.970D486EA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] boot/grub2: backport
- fixes for numerous CVEs
+Date: Wed, 13 Sep 2023 17:20:01 -0400
+Message-ID: <20230913212000.987236-2-ben.wolsieffer@hefring.com>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=hefring-com.20230601.gappssmtp.com; s=20230601; t=1694640076; x=1695244876;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8e9X3R4jrilm78nmZ3/V+zRrWyRGeIZjwQmVT3blEg0=;
+ b=C4Z4BCTEOU48ajiHXtMuQaGURd+K1MC9zEplI2X3iCPsqGNkxCJ4+zDnS1UsZE0RZ+
+ aastvq7pCWZBbQ/c//UVKGVxbPCAige+CuazdSEEu1nmrZQdw+/Rz0LwLO+18lwX9KZh
+ R5Jt7LyDpzVHj0qvZ61VL8T7ZqBTmU/OT5uKgzCMZLprqKpG2SfCrKVzYF6ZBJQocKfz
+ ZKwTTYPtazXPkLgkyHyhnsMfvXWcC1ud4XStZQP4LzTP9EM++40N8g0n4xslYgBAyj5w
+ 6jP0dvlA/wq4COL7EoVmPWv+ma9cabekzF5zT4gVYajtXeeDvTWDYM0mWNzgeSP0+n+4
+ kHHQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com
+ header.i=@hefring-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=C4Z4BCTE
+Subject: [Buildroot] [PATCH] package/gptfdisk: fix bug with util-linux
+ (libuuid) 2.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,65 +96,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>, Ben Wolsieffer <ben.wolsieffer@hefring.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c6f56ebbc0778bb8014a54efe884f7c88a9ef13
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+Fix the following error message by backporting an upstream patch [0]:
 
-Grub 2.06 is affected by a number of CVEs, which have been fixed in
-the master branch of Grub, but are not yet part of any release (there
-is a 2.12-rc1 release, but nothing else between 2.06 and 2.12-rc1).
+  Warning! Unable to generate a proper UUID! Creating an improper one as a last
+  resort! Windows 7 may crash if you save this partition table!
 
-So this patch backports the relevant fixes for CVE-2022-28736,
-CVE-2022-28735, CVE-2021-3695, CVE-2021-3696, CVE-2021-3697,
-CVE-2022-28733, CVE-2022-28734, CVE-2022-2601 and CVE-2022-3775.
+Additionally, now that gptfdisk uses libuuid again, the build fails
+because passing LIBS to make overrides the default value in the
+Makefile. To fix this, this patch adds -luuid to GPTFDISK_LDLIBS.
 
-It should be noted that CVE-2021-3695, CVE-2021-3696, CVE-2021-3697
-are not reported as affecting Grub by our CVE matching logic because
-the NVD database uses an incorrect CPE ID in those CVEs: it uses
-"grub" as the product instead of "grub2" like all other CVEs for
-grub. This issue has been reported to the NVD maintainers.
+[0] https://sourceforge.net/p/gptfdisk/code/ci/6a8416cbd12d55f882bb751993b94f72d338d96f
 
-This requires backporting a lot of patches, but jumping from 2.06 to
-2.12-rc1 implies getting 592 commits, which is quite a lot.
-
-All Grub test cases are working fine:
-
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/984500585
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/984500679
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Arnout: fix check-package warning in patch 0002]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 65c99394ff2e6cd52a79366ad693c28daca07fb0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ben Wolsieffer <ben.wolsieffer@hefring.com>
 ---
- .checkpackageignore                                |   1 -
- ...b-mkconfig-Restore-umask-for-the-grub.cfg.patch |   6 +-
- ...efi-chainloader-Simplify-the-loader-state.patch | 126 ++++
- ...ds-boot-Add-API-to-pass-context-to-loader.patch | 165 +++++
- ...er-efi-chainloader-Use-grub_loader_set_ex.patch |  80 +++
- ...-Reject-non-kernel-files-in-the-shim_lock.patch | 105 ++++
- .../0007-video-Remove-trailing-whitespaces.patch   | 689 +++++++++++++++++++++
- ...rs-png-Abort-sooner-if-a-read-operation-f.patch | 204 ++++++
- ...rs-png-Refuse-to-handle-multiple-image-he.patch |  34 +
- ...rs-png-Drop-greyscale-support-to-fix-heap.patch | 173 ++++++
- ...rs-png-Avoid-heap-OOB-R-W-inserting-huff-.patch |  44 ++
- ...rs-jpeg-Block-int-underflow-wild-pointer-.patch |  78 +++
- .../0013-net-ip-Do-IP-fragment-maths-safely.patch  |  56 ++
- ...http-Fix-OOB-write-for-split-http-headers.patch |  50 ++
- ...p-Error-out-on-headers-with-LF-without-CR.patch |  52 ++
- ...ze-overflow-in-grub_font_get_glyph_intern.patch | 116 ++++
- ...veral-integer-overflows-in-grub_font_cons.patch |  83 +++
- ...ont-Fix-an-integer-underflow-in-blit_comb.patch |  93 +++
- boot/grub2/grub2.mk                                |  19 +
- 19 files changed, 2170 insertions(+), 4 deletions(-)
+ ...to-deal-with-minor-change-in-libuuid.patch | 40 +++++++++++++++++++
+ package/gptfdisk/gptfdisk.mk                  |  2 +
+ 2 files changed, 42 insertions(+)
+ create mode 100644 package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
 
-Patch is too large, so refusing to show it
+diff --git a/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch b/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
+new file mode 100644
+index 0000000000..6e4f5253e8
+--- /dev/null
++++ b/package/gptfdisk/0004-Updated-guid.cc-to-deal-with-minor-change-in-libuuid.patch
+@@ -0,0 +1,40 @@
++From 6a8416cbd12d55f882bb751993b94f72d338d96f Mon Sep 17 00:00:00 2001
++From: Rod Smith <rodsmith@rodsbooks.com>
++Date: Sat, 16 Apr 2022 09:32:04 -0400
++Subject: [PATCH] Updated guid.cc to deal with minor change in libuuid
++
++Upstream: https://sourceforge.net/p/gptfdisk/code/ci/6a8416cbd12d55f882bb751993b94f72d338d96f
++---
++ NEWS    | 2 ++
++ guid.cc | 2 +-
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/NEWS b/NEWS
++index 9e153fd..9ec7e63 100644
++--- a/NEWS
+++++ b/NEWS
++@@ -6,6 +6,8 @@
++   (commit 740, which is pre-release as I type; presumably version 1.19 and
++   later once released).
++ 
+++- Updated guid.cc to deal with minor change in libuuid.
+++
++ 1.0.9 (4/14/2022):
++ ------------------
++ 
++diff --git a/guid.cc b/guid.cc
++index 1e73ab7..d3e4fd5 100644
++--- a/guid.cc
+++++ b/guid.cc
++@@ -141,7 +141,7 @@ void GUIDData::Zero(void) {
++ void GUIDData::Randomize(void) {
++    int i, uuidGenerated = 0;
++ 
++-#ifdef _UUID_UUID_H
+++#if defined (_UUID_UUID_H) || defined (_UL_LIBUUID_UUID_H)
++    uuid_generate(uuidData);
++    ReverseBytes(&uuidData[0], 4);
++    ReverseBytes(&uuidData[4], 2);
++-- 
++2.42.0
++
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index f3fc930202..4a15780bae 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -22,6 +22,8 @@ ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
+ GPTFDISK_DEPENDENCIES += ncurses
+ endif
+ 
++GPTFDISK_LDLIBS += -luuid
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # gptfdisk dependencies may link against libiconv, so we need to do so
+ # as well when linking statically
+-- 
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
