@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79E2EEDE99E
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:48:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFFC1EDE99E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:48:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DD516120E;
-	Thu, 14 Sep 2023 09:48:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DD516120E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 640F960FDF;
+	Thu, 14 Sep 2023 09:48:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 640F960FDF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id R4ds7_uPMqgm; Thu, 14 Sep 2023 09:48:02 +0000 (UTC)
+	with ESMTP id DzCxejqqLCi9; Thu, 14 Sep 2023 09:48:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A24760FDF;
-	Thu, 14 Sep 2023 09:48:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A24760FDF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7A2F60F78;
+	Thu, 14 Sep 2023 09:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7A2F60F78
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0C0E01BF42E
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:47:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9D89A1BF42E
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:48:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCAA982200
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:47:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCAA982200
+ by smtp1.osuosl.org (Postfix) with ESMTP id 79D7781E65
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:48:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79D7781E65
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QJ80jpmQ4oAa for <buildroot@lists.busybox.net>;
- Thu, 14 Sep 2023 09:47:56 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96A0581E56
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:47:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96A0581E56
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4221BC0005;
- Thu, 14 Sep 2023 09:47:52 +0000 (UTC)
+ with ESMTP id qMYU0cHZLm5t for <buildroot@lists.busybox.net>;
+ Thu, 14 Sep 2023 09:48:18 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8402B81E56
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:48:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8402B81E56
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1C41E24000E;
+ Thu, 14 Sep 2023 09:48:14 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qgiwy-008AIG-7t; Thu, 14 Sep 2023 11:47:52 +0200
+ id 1qgixK-008AL0-4c; Thu, 14 Sep 2023 11:48:14 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20230902221217.3577073-1-thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Sep 2023 11:47:52 +0200
-In-Reply-To: <20230902221217.3577073-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Sun, 3 Sep 2023 00:12:17 +0200")
-Message-ID: <87a5tpxf07.fsf@48ers.dk>
+References: <20230902221425.3577627-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Sep 2023 11:48:14 +0200
+In-Reply-To: <20230902221425.3577627-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Sun, 3 Sep 2023 00:14:24 +0200")
+Message-ID: <875y4dxezl.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/python-django: security bump to
- 4.1.10
+Subject: Re: [Buildroot] [PATCH] package/python-pip: ignore CVE-2018-20225
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,8 +63,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -73,18 +71,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > 4.1.9 is affected by CVE-2023-36053, and 4.1.10 was released to fix
- > it. The changes between 4.1.9 and 4.1.10 are just:
-
- > f9a14b8f0668029fb7e0aebcae57b60dcec4a529 (tag: 4.1.10) [4.1.x] Bumped version for 4.1.10 release.
- > beb3f3d55940d9aa7198bf9d424ab74e873aec3d [4.1.x] Fixed CVE-2023-36053
- > -- Prevented potential ReDoS in EmailValidator and URLValidator.
- > 3b48fe413f91612fb8c43fe9d489860d10c84bf7 [4.1.x] Added stub release notes for 4.1.10 and 3.2.20.
- > 0e5948b8df5d25deb48a505cbf16f010d9dc603c [4.1.x] Fixed
- > MultipleFileFieldTest.test_file_multiple_validation() test if Pillow
- > isn't installed.
- > 66e1e9b006618ba00e804d18bd90d3a9e94801b3 [4.1.x] Added CVE-2023-31047 to security archive.
- > d1385cc51b142b05b21b721d9d68fc461bc7241f [4.1.x] Post-release version bump.
+ > See https://security-tracker.debian.org/tracker/CVE-2018-20225 for the
+ > rationale of ignoring this CVE. Things basically work as intended.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
