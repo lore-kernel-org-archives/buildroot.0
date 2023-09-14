@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D494EEAA65
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 19:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A4AEEAA65
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 19:20:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0588141FFC;
-	Thu, 14 Sep 2023 19:20:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0588141FFC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EF8F4024A;
+	Thu, 14 Sep 2023 19:20:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EF8F4024A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ELdte41o9VBG; Thu, 14 Sep 2023 19:20:09 +0000 (UTC)
+	with ESMTP id iiRJZMH-7sOE; Thu, 14 Sep 2023 19:20:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9A3241FFB;
-	Thu, 14 Sep 2023 19:20:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9A3241FFB
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 115DC1BF410
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F7FB401D0;
+	Thu, 14 Sep 2023 19:20:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F7FB401D0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 59F531BF410
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEC77836F1
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE19540207
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:19:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEC77836F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE19540207
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id iTrL2zitnKRu for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id YG3Ta7AdVcz3 for <buildroot@lists.busybox.net>;
  Thu, 14 Sep 2023 19:19:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E53F78340C
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 19:19:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E53F78340C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A84740200
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 19:19:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A84740200
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4D5386F9C; Thu, 14 Sep 2023 19:19:24 +0000 (UTC)
+ id 77A3E86F9E; Thu, 14 Sep 2023 19:19:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 20:55:07 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ade02bab3b14c68d8ced25afbff3fd89840502f1
-X-Git-Newrev: baa0fe9ec56ca08b92d9413a3a2b9eabfa80f883
+Date: Thu, 14 Sep 2023 20:58:12 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 84503913ef3ba4d56bca576645408463a8cde6fa
+X-Git-Newrev: 6a753f9db26ac64a700f9926e35e24e5b450eeaa
 X-Patchwork-Hint: ignore
-Message-Id: <20230914191924.D4D5386F9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/go: bump to
- v1.19.13
+Message-Id: <20230914191925.77A3E86F9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/php: bump version
+ to 8.2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=baa0fe9ec56ca08b92d9413a3a2b9eabfa80f883
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6a753f9db26ac64a700f9926e35e24e5b450eeaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-go1.19.13 (released 2023-09-06) includes a couple of bug fixes.  In
-particular it fixes a bug introduced with the update to v1.19.11 which
-broke http using a unix socket addressing.
-
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Adam Duskett <aduskett@gmail.comm>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9bf196ce287ecb4e772a935614132d492f5884a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/0003-configure-disable-the-phar-tool.patch | 2 +-
+ package/php/php.hash                                   | 2 +-
+ package/php/php.mk                                     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index ac8499e7dc..d61663cac9 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  ee5d50e0a7fd74ba1b137cb879609aaaef9880bf72b5d1742100e38ae72bb557  go1.19.12.src.tar.gz
-+sha256  ccf36b53fb0024a017353c3ddb22c1f00bc7a8073c6aac79042da24ee34434d3  go1.19.13.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 9189032ba8..ea2a46f36c 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/php/0003-configure-disable-the-phar-tool.patch b/package/php/0003-configure-disable-the-phar-tool.patch
+index ab3aecdaa3..6bfaf6640f 100644
+--- a/package/php/0003-configure-disable-the-phar-tool.patch
++++ b/package/php/0003-configure-disable-the-phar-tool.patch
+@@ -22,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
+ index 0dfab302..6026fb66 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1566,13 +1566,8 @@ CFLAGS_CLEAN="$CFLAGS \$(PROF_FLAGS)"
++@@ -1638,13 +1638,8 @@ CFLAGS_CLEAN="$CFLAGS \$(PROF_FLAGS)"
+  CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
+  CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
+  
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 02cc1e6c7a..b8ff7ccc5c 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  1e6cb77f997613864ab3127fbfc6a8c7fdaa89a95e8ed6167617b913b4de4765  php-8.2.9.tar.xz
++sha256  561dc4acd5386e47f25be76f2c8df6ae854756469159248313bcf276e282fbb3  php-8.2.10.tar.xz
+ 
+ # License file
+ sha256  080d0d0cca64181ef8bf1df9fba0c6f0c485f78f79540c479a45b593bb3b33b5  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index e4b19c8eba..6c70de2742 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.19.12
-+GO_VERSION = 1.19.13
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-PHP_VERSION = 8.2.9
++PHP_VERSION = 8.2.10
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
