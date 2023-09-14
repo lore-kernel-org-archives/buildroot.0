@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04600EDE990
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 08:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 903BFEDE994
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 08:35:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AC0C14170E;
-	Thu, 14 Sep 2023 08:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC0C14170E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 458444170A;
+	Thu, 14 Sep 2023 08:35:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 458444170A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8OUSBj5OvZjg; Thu, 14 Sep 2023 08:35:27 +0000 (UTC)
+	with ESMTP id mhNnUXmWXqce; Thu, 14 Sep 2023 08:35:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC5CB417E1;
-	Thu, 14 Sep 2023 08:35:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC5CB417E1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C94571BF5A2
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 08:34:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5C86641799;
+	Thu, 14 Sep 2023 08:35:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C86641799
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B5EB1BF5A2
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 08:34:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4ADB60F62
+ by smtp1.osuosl.org (Postfix) with ESMTP id 837B081238
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 08:34:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4ADB60F62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 837B081238
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lg1m0OlFMpzl for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id u-AwP5kJk8sj for <buildroot@lists.busybox.net>;
  Thu, 14 Sep 2023 08:34:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA8EA60F34
+ by smtp1.osuosl.org (Postfix) with ESMTP id 98BB981258
  for <buildroot@buildroot.org>; Thu, 14 Sep 2023 08:34:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA8EA60F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98BB981258
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9F0086EF2; Thu, 14 Sep 2023 08:34:02 +0000 (UTC)
+ id 8894586EF3; Thu, 14 Sep 2023 08:34:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 10:28:16 +0200
+Date: Thu, 14 Sep 2023 10:19:53 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 0b02b9c17c49f2bbd7a2dfbf83fde617758438fe
-X-Git-Newrev: 82ddf2070cf1612e0702a446dc24d11863876453
+X-Git-Oldrev: 43e316ca8ae166e2c38d666a7730f8a298974158
+X-Git-Newrev: a0e84303d5ea14398bb741826419c3687a325e8c
 X-Patchwork-Hint: ignore
-Message-Id: <20230914083402.A9F0086EF2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] toolchain/helpers.mk:
- strengthen uClibc locale check
+Message-Id: <20230914083402.8894586EF3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/log4cxx: ignore
+ CVE-2023-31038
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +63,150 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82ddf2070cf1612e0702a446dc24d11863876453
+commit: https://git.buildroot.net/buildroot/commit/?id=a0e84303d5ea14398bb741826419c3687a325e8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Currently, when verifying the configuration of a uClibc toolchain for
-the presence of locale support, we check __UCLIBC_HAS_LOCALE__. It
-turns out that we in fact also expect __UCLIBC_HAS_XLOCALE__ to be
-defined, as without it locale_t is not defined, causing build failure
-in some packages, such as libcpprestsdk:
+CVE-2023-31038 affects log4cxx only if ODBC is supported. While
+CVE-2023-31038 has been fixed in newer versions of log4cxx, there is
+quite a huge gap to do a version bump, and the commit that fixes
+CVE-2023-31038 could not be identified.
 
-In file included from /home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/include/cpprest/json.h:18,
-                 from /home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/src/pch/stdafx.h:88,
-                 from /home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/src/http/client/http_client_msg.cpp:13:
-/home/thomas/autobuild/instance-0/output-1/build/libcpprestsdk-2.10.18/Release/include/cpprest/asyncrt_utils.h:317:13: error: 'locale_t' does not name a type
-  317 |     typedef locale_t xplat_locale;
-      |             ^~~~~~~~
+Therefore, we want to rely on the fact that our log4cxx package does
+not support ODBC: there is indeed no explicit dependency on our
+unixodbc package in log4cxx.mk. However, log4cxx automatically detects
+if ODBC is available and if it is, it uses it.
 
-As essentially our requirement for uClibc in external toolchains is
-"it should match the uClibc configuration used by Buildroot for
-internal toolchains", it makes sense to verify
-__UCLIBC_HAS_XLOCALE__. Note that of course checking
-__UCLIBC_HAS_XLOCALE__ is sufficient, as it cannot be enabled if
-__UCLIBC_HAS_LOCALE isn't.
+So what we do in this commit is backport an upstream commit, which
+adds explicitly options to enable/disable ODBC and ESMTP support, and
+we use them to (1) always disable ODBC and (2) explicitly
+enable/disable ESMTP support.
 
-This addresses an issue with the Synopsys ARC external toolchain,
-which is built with __UCLIBC_HAS_LOCALE__, but without
-__UCLIBC_HAS_XLOCALE__ causing a build failure with some
-packages (such as libcpprestsdk).
+Thanks to ODBC being disabled, we're not affected by CVE-2023-31038.
 
-Therefore, this patch also changes how the Synospys ARC external
-toolchain is exposed in Buildroot: it no longer advertise locale
-support.
+Of course, there is a potential regression for users who were relying
+on the implicit unixodbc dependency, but as we could not identify the
+commit fixing the CVE-2023-31038, this is the best we can do at the
+moment.
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/e6778e60cc1ea455f5b4511d5824f04d8040f67b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3c8d890c1946308f5396aa6428da5274b25c3a5f)
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit cf686670b99ae0388b27867db64516c09b2de91f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/helpers.mk                                                   | 2 +-
- toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ .../0001-Make-ODBC-and-SMTP-opt-in-191.patch       | 73 ++++++++++++++++++++++
+ package/log4cxx/log4cxx.mk                         |  9 ++-
+ 2 files changed, 81 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 24c482923a..08ee6060b0 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -307,7 +307,7 @@ check_uclibc = \
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,,$${UCLIBC_CONFIG_FILE},Large file support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_XLOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS__,BR2_TOOLCHAIN_HAS_THREADS,$${UCLIBC_CONFIG_FILE},Thread support) ;\
- 	$(call check_uclibc_feature,__PTHREADS_DEBUG_SUPPORT__,BR2_TOOLCHAIN_HAS_THREADS_DEBUG,$${UCLIBC_CONFIG_FILE},Thread debugging support) ;\
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-index c3483f331c..37c7b82644 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-@@ -4,7 +4,6 @@ config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	depends on BR2_HOSTARCH = "x86_64"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/log4cxx/0001-Make-ODBC-and-SMTP-opt-in-191.patch b/package/log4cxx/0001-Make-ODBC-and-SMTP-opt-in-191.patch
+new file mode 100644
+index 0000000000..a116fcc491
+--- /dev/null
++++ b/package/log4cxx/0001-Make-ODBC-and-SMTP-opt-in-191.patch
+@@ -0,0 +1,73 @@
++From 4900c27cc284ba2f671ae92e6ffb4ab391f9507a Mon Sep 17 00:00:00 2001
++From: Robert Middleton <rm5248@users.noreply.github.com>
++Date: Mon, 6 Feb 2023 20:39:02 -0500
++Subject: [PATCH] Make ODBC and SMTP opt-in (#191)
++
++See #189
++
++Upstream: afeaab6d0f0107c77dfadcbe3708f170c48d5ed9
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/main/include/CMakeLists.txt | 40 ++++++++++++++++++++++++---------
++ 1 file changed, 30 insertions(+), 10 deletions(-)
++
++diff --git a/src/main/include/CMakeLists.txt b/src/main/include/CMakeLists.txt
++index e31443fb..d6835293 100644
++--- a/src/main/include/CMakeLists.txt
+++++ b/src/main/include/CMakeLists.txt
++@@ -85,22 +85,42 @@ include(CheckIncludeFiles)
++ include(CheckIncludeFileCXX)
++ include(CheckLibraryExists)
++ 
++-if(WIN32)
++-	CHECK_INCLUDE_FILES(sqlext.h HAS_ODBC)
+++option(LOG4CXX_ENABLE_ODBC "Support logging via ODBC" OFF)
+++if(LOG4CXX_ENABLE_ODBC)
+++    if(WIN32)
+++            CHECK_INCLUDE_FILES(sqlext.h HAS_ODBC)
+++    else()
+++            include(FindPkgConfig)
+++
+++            pkg_check_modules( odbc odbc )
+++            if(${odbc_FOUND})
+++                    set(HAS_ODBC 1)
+++            else()
+++                    set(HAS_ODBC 0)
+++            endif(${odbc_FOUND})
+++    endif(WIN32)
+++
+++    if(NOT ${HAS_ODBC})
+++        message(SEND_ERROR "ODBC not found but requested")
+++    endif()
++ else()
++-	include(FindPkgConfig)
++-
++-	pkg_check_modules( odbc QUIET odbc )
++-	if(${odbc_FOUND})
++-		set(HAS_ODBC 1)
++-	endif(${odbc_FOUND})
++-endif(WIN32)
+++    set(HAS_ODBC 0)
+++endif(LOG4CXX_ENABLE_ODBC)
+++
+++option(LOG4CXX_ENABLE_ESMTP "Support logging via libesmtp" OFF)
+++if(LOG4CXX_ENABLE_ESMTP)
+++    CHECK_LIBRARY_EXISTS(esmtp smtp_create_session "" HAS_LIBESMTP)
+++    if(NOT HAS_LIBESMTP)
+++        message(SEND_ERROR "SMTP support with libesmtp not found but requested")
+++    endif()
+++else()
+++    set(HAS_LIBESMTP 0)
+++endif(LOG4CXX_ENABLE_ESMTP)
++ 
++ CHECK_INCLUDE_FILE_CXX(locale HAS_STD_LOCALE)
++ CHECK_FUNCTION_EXISTS(mbsrtowcs HAS_MBSRTOWCS)
++ CHECK_FUNCTION_EXISTS(wcstombs HAS_WCSTOMBS)
++ CHECK_FUNCTION_EXISTS(fwide HAS_FWIDE)
++-CHECK_LIBRARY_EXISTS(esmtp smtp_create_session "" HAS_LIBESMTP)
++ CHECK_FUNCTION_EXISTS(syslog HAS_SYSLOG)
++ if(UNIX)
++     set(CMAKE_REQUIRED_LIBRARIES "pthread")
++-- 
++2.41.0
++
+diff --git a/package/log4cxx/log4cxx.mk b/package/log4cxx/log4cxx.mk
+index a5569126d4..aee682529c 100644
+--- a/package/log4cxx/log4cxx.mk
++++ b/package/log4cxx/log4cxx.mk
+@@ -11,10 +11,14 @@ LOG4CXX_INSTALL_STAGING = YES
+ LOG4CXX_LICENSE = Apache-2.0
+ LOG4CXX_LICENSE_FILES = LICENSE
+ LOG4CXX_CPE_ID_VENDOR = apache
++# We do not support ODBC functionality
++LOG4CXX_IGNORE_CVES = CVE-2023-31038
+ 
++# Note: if you want to support odbc, make sure CVE-2023-31038 is fixed
+ LOG4CXX_CONF_OPTS = \
+ 	-DAPR_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/apr-1-config \
+-	-DAPR_UTIL_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/apu-1-config
++	-DAPR_UTIL_CONFIG_EXECUTABLE=$(STAGING_DIR)/usr/bin/apu-1-config \
++	-DLOG4CXX_ENABLE_ODBC=OFF
+ 
+ LOG4CXX_DEPENDENCIES = apr apr-util
+ 
+@@ -23,7 +27,10 @@ LOG4CXX_DEPENDENCIES += boost
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBESMTP),y)
++LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_LIBESMTP=ON
+ LOG4CXX_DEPENDENCIES += libesmtp
++else
++LOG4CXX_CONF_OPTS += -DLOG4CXX_ENABLE_LIBESMTP=OFF
+ endif
+ 
+ ifeq ($(BR2_USE_WCHAR),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
