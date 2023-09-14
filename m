@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95B87EDE99E
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:53:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 072C7EDE99E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51F8B607CE;
-	Thu, 14 Sep 2023 09:53:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51F8B607CE
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3CE06124A;
+	Thu, 14 Sep 2023 09:53:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3CE06124A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UiudIECk3P4Q; Thu, 14 Sep 2023 09:53:35 +0000 (UTC)
+	with ESMTP id nuw1Ys0RtDbm; Thu, 14 Sep 2023 09:53:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9137F60F78;
-	Thu, 14 Sep 2023 09:53:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9137F60F78
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF3FC1BF42E
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2C0E61246;
+	Thu, 14 Sep 2023 09:53:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2C0E61246
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FFB91BF990
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA6BA41F20
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C1C360D72
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA6BA41F20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C1C360D72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uKccy9fjOCTo for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xPMqvOFu1Fhl for <buildroot@lists.busybox.net>;
  Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AEF9441E6B
+ by smtp3.osuosl.org (Postfix) with ESMTP id D2A856121E
  for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF9441E6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2A856121E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9966386F2B; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
+ id C034D86F2A; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 11:38:08 +0200
+Date: Thu, 14 Sep 2023 11:47:41 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 316eedb5e144370e255f6949e89ad1503490c1ec
-X-Git-Newrev: 290790630be42173f28dae47e78dce5dd6685e7d
+X-Git-Oldrev: 9d86c326431062e376e816044985ef987e40beb3
+X-Git-Newrev: ac74741cbf82abdc674bb391895debc462015b9e
 X-Patchwork-Hint: ignore
-Message-Id: <20230914095229.9966386F2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.{4, 10, 15}.x / 6.{1, 4}.x series
+Message-Id: <20230914095229.C034D86F2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python-django:
+ security bump to 4.1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +63,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=290790630be42173f28dae47e78dce5dd6685e7d
+commit: https://git.buildroot.net/buildroot/commit/?id=ac74741cbf82abdc674bb391895debc462015b9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+4.1.9 is affected by CVE-2023-36053, and 4.1.10 was released to fix
+it. The changes between 4.1.9 and 4.1.10 are just:
+
+f9a14b8f0668029fb7e0aebcae57b60dcec4a529 (tag: 4.1.10) [4.1.x] Bumped version for 4.1.10 release.
+beb3f3d55940d9aa7198bf9d424ab74e873aec3d [4.1.x] Fixed CVE-2023-36053 -- Prevented potential ReDoS in EmailValidator and URLValidator.
+3b48fe413f91612fb8c43fe9d489860d10c84bf7 [4.1.x] Added stub release notes for 4.1.10 and 3.2.20.
+0e5948b8df5d25deb48a505cbf16f010d9dc603c [4.1.x] Fixed MultipleFileFieldTest.test_file_multiple_validation() test if Pillow isn't installed.
+66e1e9b006618ba00e804d18bd90d3a9e94801b3 [4.1.x] Added CVE-2023-31047 to security archive.
+d1385cc51b142b05b21b721d9d68fc461bc7241f [4.1.x] Post-release version bump.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 99674f64ba8f87b7489b5380d0e6bafa25930341)
-[Peter: drop 6.4.x bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2397349fa99787a4ccbf75917e113087fa1a67d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 52595a02a3..1d9d69603a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 922f468a67..ee1776b44f 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  1a6f4e5318e3272deaa9cfd61e252fab  Django-4.1.9.tar.gz
+-sha256  e9f074a84930662104871bfcea55c3c180c50a0a47739db82435deae6cbaf032  Django-4.1.9.tar.gz
++md5  3720c85a8c25cacbce2f95d345d0f5ad  Django-4.1.10.tar.gz
++sha256  56343019a9fd839e2e5bf203daf45f25af79d5bffa4c71d56eae4f4404d82ade  Django-4.1.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index fa58f65797..61dfd54dcd 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.1.50" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.1.51" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 1d1e5bc1d6..1468eb5f21 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  b27ac1443eea563bc546ee1f67d9802bc8d6c0f6f18707407fba01f9f78c488c  linux-6.1.50.tar.xz
-+sha256  58b0446d8ea4bc0b26a35e2e3509bd53efcdeb295c9e4f48d33a23b1cdaa103b  linux-6.1.51.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  750ec97ce4f1473e392b367a55eca4ea7a6b1e9e65ca2fb3bbca2eaa64802b66  linux-5.15.129.tar.xz
--sha256  bd4036da47612d0d8c5f8c43e7700e8c996ae3b51084aa8fc6530c9d00f1ded0  linux-5.10.193.tar.xz
--sha256  34d5ed902f47d90f27b9d5d6b8db0d3fa660834111f9452e166d920968a4a061  linux-5.4.255.tar.xz
-+sha256  ab464e4107329ff5262f1c585c40fc29dc68f17687a9a918f3e90faba5303d62  linux-5.15.130.tar.xz
-+sha256  240d5e47bb378c6813ecd07704fb887651ea7617159d2771071fd70bf33cd995  linux-5.10.194.tar.xz
-+sha256  c7a4086ba23507b8539d18534565de0d6591138bfa2e449e93964fd5132e353a  linux-5.4.256.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  cd95a8cb8fefb749e32359b8a915c036abc37e80746285da6535cb5a0776b3f0  linux-4.19.293.tar.xz
--sha256  24e8b21647a0f270291ea56d9123d59c511fa10efc23f5d28b5cb51611e1d9f0  linux-4.14.324.tar.xz
-+sha256  ccadbde939a788934436125a1ecd4464175b68ebe6c18072fbc90c8596eea00f  linux-4.19.294.tar.xz
-+sha256  5b69e182ced5190a1fca117682cf7967c5bab24c4cf1364733ee14055b0df784  linux-4.14.325.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fc4d2600b4..740fd55669 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -384,12 +384,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.14.324"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.293"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.255"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.193"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.129"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.50"	if BR2_KERNEL_HEADERS_6_1
-+	default "4.14.325"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.294"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.256"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.194"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.130"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.51"	if BR2_KERNEL_HEADERS_6_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-PYTHON_DJANGO_VERSION = 4.1.9
++PYTHON_DJANGO_VERSION = 4.1.10
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/11/ea/8b514434c57c3bef89a475b75f74d768471d8e1bc61f4e5c79daeae9b5ef
+-
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/70/d4/eded564fa5928f68771d082ec0eef4d023f9d19dfa1d2923305bc3e62afe
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
