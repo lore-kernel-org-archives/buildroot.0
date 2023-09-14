@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2A4AEEAA65
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 19:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67CE3EEAA62
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 19:20:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EF8F4024A;
-	Thu, 14 Sep 2023 19:20:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EF8F4024A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 128BA42003;
+	Thu, 14 Sep 2023 19:20:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 128BA42003
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iiRJZMH-7sOE; Thu, 14 Sep 2023 19:20:22 +0000 (UTC)
+	with ESMTP id m2emFlVbpQsG; Thu, 14 Sep 2023 19:20:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F7FB401D0;
-	Thu, 14 Sep 2023 19:20:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F7FB401D0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 59F531BF410
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:19:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C09C641FFD;
+	Thu, 14 Sep 2023 19:20:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C09C641FFD
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B078E1BF410
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE19540207
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:19:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE19540207
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05DF48340C
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:19:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05DF48340C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YG3Ta7AdVcz3 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5mY4A0E2I8d6 for <buildroot@lists.busybox.net>;
  Thu, 14 Sep 2023 19:19:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A84740200
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 19:19:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A84740200
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF42E83684
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 19:19:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF42E83684
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77A3E86F9E; Thu, 14 Sep 2023 19:19:25 +0000 (UTC)
+ id DF63686F9E; Thu, 14 Sep 2023 19:19:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 20:58:12 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 84503913ef3ba4d56bca576645408463a8cde6fa
-X-Git-Newrev: 6a753f9db26ac64a700f9926e35e24e5b450eeaa
+Date: Thu, 14 Sep 2023 20:58:19 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: baa0fe9ec56ca08b92d9413a3a2b9eabfa80f883
+X-Git-Newrev: 7fc1eeea27dc54b739e76a106541c3ad75fdf7f3
 X-Patchwork-Hint: ignore
-Message-Id: <20230914191925.77A3E86F9E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/php: bump version
+Message-Id: <20230914191924.DF63686F9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/php: bump version
  to 8.2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a753f9db26ac64a700f9926e35e24e5b450eeaa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7fc1eeea27dc54b739e76a106541c3ad75fdf7f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Signed-off-by: Adam Duskett <aduskett@gmail.comm>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
