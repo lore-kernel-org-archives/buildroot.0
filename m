@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2ACBEDE99C
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:56:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 127F5EDE99E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:56:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63BF7612B2;
-	Thu, 14 Sep 2023 09:56:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63BF7612B2
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDA5A612AA;
+	Thu, 14 Sep 2023 09:56:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDA5A612AA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GRkEGenPHdcX; Thu, 14 Sep 2023 09:56:04 +0000 (UTC)
+	with ESMTP id sfJXupVRZ15I; Thu, 14 Sep 2023 09:56:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B798612A6;
-	Thu, 14 Sep 2023 09:56:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B798612A6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8445A1BF42E
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0CAE612A7;
+	Thu, 14 Sep 2023 09:56:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0CAE612A7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CAF2E1BF42E
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:53:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 680D641B56
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:53:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 680D641B56
+ by smtp2.osuosl.org (Postfix) with ESMTP id A58124061F
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A58124061F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kOWFZkLZAr3M for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zZPPVyO6foE3 for <buildroot@lists.busybox.net>;
  Thu, 14 Sep 2023 09:53:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA45841B31
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBE06408D5
  for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:53:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA45841B31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBE06408D5
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B964886F5C; Thu, 14 Sep 2023 09:53:40 +0000 (UTC)
+ id C74C386F59; Thu, 14 Sep 2023 09:53:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 11:48:45 +0200
+Date: Thu, 14 Sep 2023 11:49:40 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: b877cf88b821ed79de5a1ab938539e8f224acf1d
-X-Git-Newrev: ccc3376195b55fbc1e8d77be8114271e4908beef
+X-Git-Oldrev: ccc3376195b55fbc1e8d77be8114271e4908beef
+X-Git-Newrev: eba4944528b481b50e3f1c6970ba6d4931cdb080
 X-Patchwork-Hint: ignore
-Message-Id: <20230914095340.B964886F5C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/python-ipython:
- ignore CVE-2023-24816
+Message-Id: <20230914095340.C74C386F59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/pixman: ignore
+ CVE-2023-37769
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccc3376195b55fbc1e8d77be8114271e4908beef
+commit: https://git.buildroot.net/buildroot/commit/?id=eba4944528b481b50e3f1c6970ba6d4931cdb080
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
-
-It affects only Windows, so we don't care in the context of Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a9c74c5b7f4b2fb35ee32c2f1f8fffdd16d4db85)
+(cherry picked from commit 19921699b3aaed330343e65418ddca6833bb3cd1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ipython/python-ipython.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/pixman/pixman.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index f5a114c2f3..aa274314eb 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -11,6 +11,8 @@ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
- PYTHON_IPYTHON_CPE_ID_PRODUCT = ipython
-+# Affects only Windows. Can be dropped once we update to >= 8.10.0
-+PYTHON_IPYTHON_IGNORE_CVES += CVE-2023-24816
- PYTHON_IPYTHON_SETUP_TYPE = setuptools
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 6e6d787d27..37eb974c46 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -24,6 +24,13 @@ PIXMAN_CONF_OPTS = \
+ 	--disable-loongson-mmi \
+ 	--disable-arm-iwmmxt
  
- $(eval $(python-package))
++# Affects only tests, and we don't build tests (see
++# 0001-Disable-tests.patch). See
++# https://gitlab.freedesktop.org/pixman/pixman/-/issues/76, which says
++# "not sure why NVD keeps assigning CVEs like this. This is just a
++# test executable".
++PIXMAN_IGNORE_CVES += CVE-2023-37769
++
+ # The ARM SIMD code from pixman requires a recent enough ARM core, but
+ # there is a runtime CPU check that makes sure it doesn't get used if
+ # the HW doesn't support it. The only case where the ARM SIMD code
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
