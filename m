@@ -4,65 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C137EEAA6A
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 19:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DB5CEEAA72
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 20:00:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C28841E8C;
-	Thu, 14 Sep 2023 19:49:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C28841E8C
+	by smtp4.osuosl.org (Postfix) with ESMTP id D672741FD3;
+	Thu, 14 Sep 2023 20:00:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D672741FD3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id micChwnKbdmK; Thu, 14 Sep 2023 19:49:51 +0000 (UTC)
+	with ESMTP id vuHtuEno4D9A; Thu, 14 Sep 2023 20:00:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A6FF402A1;
-	Thu, 14 Sep 2023 19:49:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A6FF402A1
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 129D31BF3C3
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:49:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4192F41FD0;
+	Thu, 14 Sep 2023 20:00:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4192F41FD0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ABB3B1BF3C3
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:00:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFF116129E
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 19:49:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFF116129E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 142CF83ABF
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:00:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 142CF83ABF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LefLDDcbPFea for <buildroot@lists.busybox.net>;
- Thu, 14 Sep 2023 19:49:48 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C56BE60D6E
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 19:49:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C56BE60D6E
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DF358240002;
- Thu, 14 Sep 2023 19:49:43 +0000 (UTC)
-Date: Thu, 14 Sep 2023 21:49:42 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20230914214942.41dd792a@windsurf>
-In-Reply-To: <20230914191726.28670-1-giulio.benetti@benettiengineering.com>
-References: <20230914191726.28670-1-giulio.benetti@benettiengineering.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7vHveSipF4ez for <buildroot@lists.busybox.net>;
+ Thu, 14 Sep 2023 20:00:39 +0000 (UTC)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E3EAC81EFC
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 20:00:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3EAC81EFC
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-400a087b0bfso14576785e9.2
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 13:00:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1694721636; x=1695326436;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=F9+w0jhwQ9t/VYMnXecuzCMqxm0UDOpYO9c1U+2zhQU=;
+ b=JM/H/gxf1RT3q98qne98qMUa4PQfSsEt2aj/it2NWhyPeFTtox4OUoMLIVeEYHdiV6
+ 7haPBC+WBJZwDY0dBbG8Top3RBz75n6X8H3RJOlMsp0/9MBkPwRbhblGgQ7Mp5oMWqnk
+ +eZ9bw7994yx2obvF2bcbskWz2dU/agmjVMWaaD9Lx8ME9GeJGivK1/lzEa60aFfo3R/
+ T+4SEGATkN2egnqAOT5IPBwNn0GOe9AXv2j9WgJslp8J18aOUBJTpyA8vc5DAeh3gTIC
+ Uf7NDS/YO+iBToTJWBuHNo4EXB8+bHh0gVjQa0Gufq7BlEBQcW0v4n+uAs6ZgI0H2Y+l
+ 7Vog==
+X-Gm-Message-State: AOJu0Yz5lP7jZFJ6cCTrGhLB28KjCEDSj5ru7X4rqz6wvb7By4DLMS7V
+ GFgdWMVRT3AXCtzVr+QKu807OVoC024=
+X-Google-Smtp-Source: AGHT+IF4tOebuVwrOmgIAdSezllvyWbaVldsrJWof6RZk6oDveH/r0MCODkTvmVCjb5NU94oQjuNOA==
+X-Received: by 2002:a5d:69cf:0:b0:317:7af4:5297 with SMTP id
+ s15-20020a5d69cf000000b003177af45297mr5653786wrw.62.1694721636450; 
+ Thu, 14 Sep 2023 13:00:36 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ u8-20020a5d6ac8000000b003179b3fd837sm2563955wrw.33.2023.09.14.13.00.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 14 Sep 2023 13:00:35 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 14 Sep 2023 21:59:29 +0200
+Message-Id: <20230914195929.356335-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1694720985;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SnEw77FAAW/NBZwTlY1HKUq4zLglc+DfnYLHickvyos=;
- b=mfeEpSMKg+NAqkGMr65d2EuwE4gtCAhLNx9qvVghtO+cWFQ+a9ZbMSBTpUUDQzX0X7B/lQ
- kRghbCxR7ZJPLm+Ta/jtr1XkqEwpaZol/VNQ708UWhZrk+HZV2s26pZ/O28/BlzNDs+0EX
- zl3zDWo1BA15SxXnX9NazhKIPszvEIyxjTFPPfrhqwNhLNxaVIAbUSUlV3ioLSpIs8aAhZ
- LKW/L/84tP0F0H3G5ufnCPkq48WgUmsGRN/tJaX/OqW4bq4jruNaFMLneudEP6fs/TLpZo
- MONdz51wCiVm2ane5An1M2YP3td8zwcaOKl68lTx8xrIobMNcrx9s03t6g8RzQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mfeEpSMK
-Subject: Re: [Buildroot] [PATCH] package/apache-utils: new package
+ d=gmail.com; s=20221208; t=1694721636; x=1695326436; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=F9+w0jhwQ9t/VYMnXecuzCMqxm0UDOpYO9c1U+2zhQU=;
+ b=Xa5693G0IBJidG7lWZOUbnjGSwN4C/2f8WzzxAhpk08GK/c0ifNAbH4HAuBF/AW9K+
+ EZruMmDrxAiQZU7Gj+z9B0PmduxBfqqY1+mgpWtHZ69TOyNAWz8tYLNGSw4UzQLypZQc
+ amrTOE040OHk2OiBxsI252FlMeKjpXYTU/4P8nNWX8Pv6VtzhWaasbGlmcMCUMYi50fH
+ XOjop/iQcd21OkWwg/phg4uL/aCsbq6ntS0o17xSOaEZgBrmD3IofYHFGiEX3/9u/qkD
+ qA0cKClkZ2RR6q6s6QcohxZqNxn4KSaL6YeMnLMFGDSzMb4UEFbJl20wZ6Ydf3sVG4cB
+ kwJQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=Xa5693G0
+Subject: [Buildroot] [PATCH 1/1] package/libspdm: add LIBSPDM_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,46 +93,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jim Reinhart <jimr@tekvox.com>, James Autry <jautry@tekvox.com>,
- Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>,
- Matthew Maron <matthewm@tekvox.com>, buildroot@buildroot.org
+Cc: Alistair Francis <alistair@alistair23.me>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Giulio,
+cpe:2.3:a:dmtf:libspdm is a valid CPE identifier for this package:
 
-On Thu, 14 Sep 2023 21:17:26 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Admtf%3Alibspdm
 
-> From: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
-> 
-> Build htdigest and htpasswd utilities only without building entire Apache
-> package.
-> 
-> Cc: Jim Reinhart <jimr@tekvox.com>
-> Cc: James Autry <jautry@tekvox.com>
-> Cc: Matthew Maron <matthewm@tekvox.com>
-> Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libspdm/libspdm.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for the proposal. I'm always a bit "meh" when it comes to adding
-a new package that uses the same source code as another package. It
-causes extra maintenance work (you need to update both packages, apply
-patches to both, keep tracking of CVEs for both, etc.).
-
-What is the use case for needing this without the Apache server? Can we
-change the Apache package to instead allow installing only those tools?
-
-Best regards,
-
-Thomas
+diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+index 48c46e41f7..cbcbed29de 100644
+--- a/package/libspdm/libspdm.mk
++++ b/package/libspdm/libspdm.mk
+@@ -8,6 +8,7 @@ LIBSPDM_VERSION = 3.0.0
+ LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+ LIBSPDM_LICENSE = BSD-3-Clause
+ LIBSPDM_LICENSE_FILES = LICENSE.md
++LIBSPDM_CPE_ID_VENDOR = dmtf
+ 
+ LIBSPDM_INSTALL_STAGING = YES
+ LIBSPDM_INSTALL_TARGET = NO
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
