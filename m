@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B39EEDE99C
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68742EDE99E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:52:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B8D33610BA;
-	Thu, 14 Sep 2023 09:52:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8D33610BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F59060D72;
+	Thu, 14 Sep 2023 09:52:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F59060D72
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VOehV_srFcm8; Thu, 14 Sep 2023 09:52:34 +0000 (UTC)
+	with ESMTP id Vy76Gvke_y7Y; Thu, 14 Sep 2023 09:52:46 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2374C60D72;
-	Thu, 14 Sep 2023 09:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2374C60D72
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AD04B1BF42E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 656FE60F2D;
+	Thu, 14 Sep 2023 09:52:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 656FE60F2D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BBE101BF990
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89207416E6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 96A8C41F2D
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89207416E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96A8C41F2D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id WgZSCU7hNy3Z for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vayeZwaKOH0X for <buildroot@lists.busybox.net>;
  Thu, 14 Sep 2023 09:52:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F2CED408D5
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2CED408D5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B1D341F21
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:52:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B1D341F21
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2DDA86F2D; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
+ id 12E5186F2C; Thu, 14 Sep 2023 09:52:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 11:48:59 +0200
+Date: Thu, 14 Sep 2023 11:51:54 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 08d60b1c61177bc72a7813e76296a1faeaef21f1
-X-Git-Newrev: efca66f637649bb1c9cc584123571fe786505a30
+X-Git-Oldrev: 1cceeecaf4307819bb5bda2d8b784337546135ee
+X-Git-Newrev: ade02bab3b14c68d8ced25afbff3fd89840502f1
 X-Patchwork-Hint: ignore
-Message-Id: <20230914095229.E2DDA86F2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python-ipython:
- ignore CVE-2023-24816
+Message-Id: <20230914095230.12E5186F2C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/dt: fix Kconfig
+ package URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efca66f637649bb1c9cc584123571fe786505a30
+commit: https://git.buildroot.net/buildroot/commit/?id=ade02bab3b14c68d8ced25afbff3fd89840502f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-It affects only Windows, so we don't care in the context of Buildroot.
+The old package URL is no longer working. This commit updates it to
+the one advertised at [1].
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[1] https://github.com/RobinTMiller/dt/blob/b30eb7a123cfba900f26ceda413ea8ae49c3817e/html/dt.html#L33
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a9c74c5b7f4b2fb35ee32c2f1f8fffdd16d4db85)
+(cherry picked from commit 79c7a67a4cbc93cdff3f70797b7a24fb09d17b11)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ipython/python-ipython.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/dt/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index f5a114c2f3..aa274314eb 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -11,6 +11,8 @@ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
- PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
- PYTHON_IPYTHON_CPE_ID_PRODUCT = ipython
-+# Affects only Windows. Can be dropped once we update to >= 8.10.0
-+PYTHON_IPYTHON_IGNORE_CVES += CVE-2023-24816
- PYTHON_IPYTHON_SETUP_TYPE = setuptools
+diff --git a/package/dt/Config.in b/package/dt/Config.in
+index 826a66ebd5..af20cc9bca 100644
+--- a/package/dt/Config.in
++++ b/package/dt/Config.in
+@@ -18,4 +18,4 @@ config BR2_PACKAGE_DT
+ 	  before exiting. Since verification of data is performed,
+ 	  dt can be thought of as a generic diagnostic tool.
  
- $(eval $(python-package))
+-	  http://www.scsifaq.org/RMiller_Tools/dt.html
++	  https://github.com/RobinTMiller/dt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
