@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DFCAEEAA71
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 21:03:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87154EEAA77
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 21:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 235BE612C7;
-	Thu, 14 Sep 2023 21:03:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 235BE612C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 43326612D0;
+	Thu, 14 Sep 2023 21:03:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43326612D0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Oc3tEdliXmjh; Thu, 14 Sep 2023 21:03:18 +0000 (UTC)
+	with ESMTP id WrL1lWCoBAxK; Thu, 14 Sep 2023 21:03:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76065612C8;
-	Thu, 14 Sep 2023 21:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76065612C8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B3DBD1BF368
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 21:02:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AFA960F3A;
+	Thu, 14 Sep 2023 21:03:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AFA960F3A
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DA9E1BF368
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 21:02:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CF674206E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 46B2183A46
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 21:02:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CF674206E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46B2183A46
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DLB0JeN61Kx0 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S9RqeSOltOH4 for <buildroot@lists.busybox.net>;
  Thu, 14 Sep 2023 21:02:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 59DF94206A
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6EADB83A3C
  for <buildroot@buildroot.org>; Thu, 14 Sep 2023 21:02:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59DF94206A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EADB83A3C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4036486FF7; Thu, 14 Sep 2023 21:02:36 +0000 (UTC)
+ id 55A6086FF9; Thu, 14 Sep 2023 21:02:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 22:57:22 +0200
+Date: Thu, 14 Sep 2023 23:02:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd94f49566fc420913a3cabda9a87b44a822ea53
-X-Git-Newrev: 0055c9c63457627159f2aff1b9b596748c20fb8f
+X-Git-Oldrev: 768f9f80f62c1da6e298c680f0f4bfa887f38c78
+X-Git-Newrev: daa341cb9bc82d8bcb175c46da1ba80fd9203a98
 X-Patchwork-Hint: ignore
-Message-Id: <20230914210236.4036486FF7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5: fix upstream git trees
+Message-Id: <20230914210236.55A6086FF9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/download/git: properly catch
+ failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,76 +64,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0055c9c63457627159f2aff1b9b596748c20fb8f
+commit: https://git.buildroot.net/buildroot/commit/?id=daa341cb9bc82d8bcb175c46da1ba80fd9203a98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commits 4e8b5f9bee9c [0], 6cfbd51d98d1 [1], and d838a416c4ed [2],
-the repository we clone from is the cgit browser, and it does not serve
-the git tree, only the browser:
+Since commit b7efb43e86da (download/git: try to recover from
+utterly-broken repositories), we catch errors through an ERR
+trap, so we can try and recover from a broken repository. In
+that commit, we switched from using "set -e" to "set -E", so
+that trap is inherited in functions, command substitutions,
+and subshells.
 
-    $ git clone https://code.qt.io/cgit/qt/qtcoap.git
-    Cloning into 'qtcoap'...
-    fatal: repository 'https://code.qt.io/cgit/qt/qtcoap.git/' not found
+However, the trap is not defined until we have parsed the
+options, created the cache directory, and eventually chdir()ed
+into it. Athough improbable, it is possible for the git helper
+to fail in any of those steps, and that would not get caught.
 
-Browsing there displays the cgit UI, which gives a proper URI to clone
-from; switch to using that. Things happened to "work" so far thanks to
-sources.buildroot.net.
-
-[0] 4e8b5f9bee9c package/qt5/qt5mqtt: bump version to 5.15.2 (and fix download)
-[1] 6cfbd51d98d1 package/qt5/qt5coap: bump version to 5.15.2 (and fix download)
-[2] d838a416c4ed package/qt5/qt5knx: bump version to 5.15.2 (and fix download)
+Fix that
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-CC: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5coap/qt5coap.mk | 2 +-
- package/qt5/qt5knx/qt5knx.mk   | 2 +-
- package/qt5/qt5mqtt/qt5mqtt.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ support/download/git | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5coap/qt5coap.mk b/package/qt5/qt5coap/qt5coap.mk
-index a50f19d7f2..5feb1e5bc2 100644
---- a/package/qt5/qt5coap/qt5coap.mk
-+++ b/package/qt5/qt5coap/qt5coap.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/support/download/git b/support/download/git
+index 1a1c315f73..729c553f8f 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -5,8 +5,8 @@
+ # (e.g. tar options, compression ratio or method)), we MUST update the format
+ # version in the variable BR_FMT_VERSION_git, in package/pkg-download.mk.
  
- QT5COAP_VERSION = 5.15.2
--QT5COAP_SITE = https://code.qt.io/cgit/qt/qtcoap.git
-+QT5COAP_SITE = https://code.qt.io/qt/qtcoap.git
- QT5COAP_SITE_METHOD = git
- QT5COAP_INSTALL_STAGING = YES
- QT5COAP_LICENSE = GPL-3.0, GFDL-1.3
-diff --git a/package/qt5/qt5knx/qt5knx.mk b/package/qt5/qt5knx/qt5knx.mk
-index 412e31c652..91b99aaa87 100644
---- a/package/qt5/qt5knx/qt5knx.mk
-+++ b/package/qt5/qt5knx/qt5knx.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+-# We want to catch any unexpected failure, and exit immediately
+-set -E
++# We want to catch any unexpected failure
++set -e
  
- QT5KNX_VERSION = 5.15.2
--QT5KNX_SITE = https://code.qt.io/cgit/qt/qtknx.git
-+QT5KNX_SITE = https://code.qt.io/qt/qtknx.git
- QT5KNX_SITE_METHOD = git
- QT5KNX_INSTALL_STAGING = YES
- QT5KNX_LICENSE = GPL-3.0 with exception
-diff --git a/package/qt5/qt5mqtt/qt5mqtt.mk b/package/qt5/qt5mqtt/qt5mqtt.mk
-index 0b62cf1bed..824d58d1d1 100644
---- a/package/qt5/qt5mqtt/qt5mqtt.mk
-+++ b/package/qt5/qt5mqtt/qt5mqtt.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ # Download helper for git, to be called from the download wrapper script
+ #
+@@ -77,6 +77,7 @@ pushd "${git_cache}" >/dev/null
  
- QT5MQTT_VERSION = 5.15.2
--QT5MQTT_SITE = https://code.qt.io/cgit/qt/qtmqtt.git
-+QT5MQTT_SITE = https://code.qt.io/qt/qtmqtt.git
- QT5MQTT_SITE_METHOD = git
- QT5MQTT_INSTALL_STAGING = YES
- QT5MQTT_LICENSE = GPL-3.0 with exception
+ # Any error now should try to recover
+ trap _on_error ERR
++set -E
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
