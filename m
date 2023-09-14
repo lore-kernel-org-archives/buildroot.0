@@ -4,46 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83B26EEAA71
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 20:53:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E59E4EEAA71
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 20:55:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AAA360BF0;
-	Thu, 14 Sep 2023 20:53:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AAA360BF0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DA6360F49;
+	Thu, 14 Sep 2023 20:55:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DA6360F49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B042Fuu-oK-T; Thu, 14 Sep 2023 20:53:50 +0000 (UTC)
+	with ESMTP id faqZINgQeQgn; Thu, 14 Sep 2023 20:55:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F32960783;
-	Thu, 14 Sep 2023 20:53:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F32960783
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ECACC1BF31E
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:53:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E0EAF60709;
+	Thu, 14 Sep 2023 20:55:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0EAF60709
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9E61B1BF368
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D425A813F9
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:53:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D425A813F9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 626B141F1A
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:55:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 626B141F1A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Uv8yYxoLny6b for <buildroot@lists.busybox.net>;
- Thu, 14 Sep 2023 20:53:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AB6A813F6
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 20:53:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AB6A813F6
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A1CA86FC3; Thu, 14 Sep 2023 20:53:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 22:53:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68df20336664d4d0b1a9d8d0285d23eba631845a
-X-Git-Newrev: b169bebd7ed4f3f6246f5ef2f3c6228d4e4e9978
-X-Patchwork-Hint: ignore
-Message-Id: <20230914205346.3A1CA86FC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libspdm: add LIBSPDM_CPE_ID_VENDOR
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vJEZe4Fc8t8J for <buildroot@lists.busybox.net>;
+ Thu, 14 Sep 2023 20:55:20 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C6AFA41F05
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 20:55:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6AFA41F05
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CDCF040003;
+ Thu, 14 Sep 2023 20:55:16 +0000 (UTC)
+Date: Thu, 14 Sep 2023 22:55:15 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230914225515.1bd21055@windsurf>
+In-Reply-To: <20230914195929.356335-1-fontaine.fabrice@gmail.com>
+References: <20230914195929.356335-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1694724917;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=DlX3BDD5Y5GHhSRnyjOTtvwXzHEGLS1nCi3OtsDb7oA=;
+ b=ZigTnIeov3G9gcNr8oTeVuJdkRPro/VeuMD/40dE2z89KiodakrDQ5UPJ14L+q2DU/7LUL
+ 00t8ocs3mOve50a10yRQFWWKXpEdYCGMuFP9xlye1lEZQBY13Je7bBLYbSF1uA6kcsE88M
+ Q6I+3ZjRAWGv+zOamq789ENE2f6H3mTPKAlJ/2ytO6auJr8BjLhd52ktGYWukF3F20ornT
+ bGOPoi6G28ane4GEtFc41lmnaKvEh/RoNfCWmsQ0uEXT7A413DeE44U5q63mb4peFhxyAO
+ DXdY6sI51SBpPuIzH9O+diC4xzhSHKGnNxRjYp3w6TQ2M5LOjHIgpcB3dCHilQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZigTnIeo
+Subject: Re: [Buildroot] [PATCH 1/1] package/libspdm: add
+ LIBSPDM_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,37 +77,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Alistair Francis <alistair@alistair23.me>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b169bebd7ed4f3f6246f5ef2f3c6228d4e4e9978
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hey Fabrice,
 
-cpe:2.3:a:dmtf:libspdm is a valid CPE identifier for this package:
+First of all, great to see you back! After several months without
+contributions from you, we're glad to see you back at sending patches!
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Admtf%3Alibspdm
+On Thu, 14 Sep 2023 21:59:29 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libspdm/libspdm.mk | 1 +
- 1 file changed, 1 insertion(+)
+> cpe:2.3:a:dmtf:libspdm is a valid CPE identifier for this package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Admtf%3Alibspdm
 
-diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
-index 48c46e41f7..cbcbed29de 100644
---- a/package/libspdm/libspdm.mk
-+++ b/package/libspdm/libspdm.mk
-@@ -8,6 +8,7 @@ LIBSPDM_VERSION = 3.0.0
- LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
- LIBSPDM_LICENSE = BSD-3-Clause
- LIBSPDM_LICENSE_FILES = LICENSE.md
-+LIBSPDM_CPE_ID_VENDOR = dmtf
- 
- LIBSPDM_INSTALL_STAGING = YES
- LIBSPDM_INSTALL_TARGET = NO
+In fact, I think I now prefer links such as:
+
+  https://nvd.nist.gov/products/cpe/detail/1855641A-1A1D-4B4A-ADCD-EB3A35D35815
+
+(which you can easily find from the previous link). Indeed this link
+shows the upstream web page of the project, which is an even better
+hint that the CPE identifier is indeed the right one. No need to resend
+this patch nor any other you have already sent, just a suggestion for
+future ones.
+
+In any case: applied to master, thanks!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
