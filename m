@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95FAAEDE9A0
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1F10EDE99E
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A347608A6;
-	Thu, 14 Sep 2023 09:54:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A347608A6
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABAA161257;
+	Thu, 14 Sep 2023 09:54:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABAA161257
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FDOJiYzCUnSk; Thu, 14 Sep 2023 09:54:37 +0000 (UTC)
+	with ESMTP id Twyhq1AmdZkd; Thu, 14 Sep 2023 09:54:49 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7ADFD6125F;
-	Thu, 14 Sep 2023 09:54:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ADFD6125F
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 489D71BF42E
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E38386126A;
+	Thu, 14 Sep 2023 09:54:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E38386126A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 780481BF42E
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FE374017A
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FE374017A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61204608A6
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:53:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61204608A6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id doC86FtAwzUc for <buildroot@lists.busybox.net>;
- Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id x8x2kOUyQ4es for <buildroot@lists.busybox.net>;
+ Thu, 14 Sep 2023 09:53:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAD8D4061F
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAD8D4061F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 785CB60F32
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:53:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 785CB60F32
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAF2A86F2B; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
+ id 689ED86F59; Thu, 14 Sep 2023 09:53:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 11:48:02 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: ac74741cbf82abdc674bb391895debc462015b9e
-X-Git-Newrev: 3fc491c12765a358db6850ff7eaf2d5c5aec567c
+Date: Thu, 14 Sep 2023 11:07:01 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 78c498be21a7ae7396f4e58b582cd647d4d83481
+X-Git-Newrev: 7817b9c2a6b4c117895b53accdaca541fa4af06a
 X-Patchwork-Hint: ignore
-Message-Id: <20230914095229.CAF2A86F2B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/python-pip:
- ignore CVE-2018-20225
+Message-Id: <20230914095340.689ED86F59@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] support/testing:
+ python-magic-wormhole: fix random failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fc491c12765a358db6850ff7eaf2d5c5aec567c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7817b9c2a6b4c117895b53accdaca541fa4af06a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-See https://security-tracker.debian.org/tracker/CVE-2018-20225 for the
-rationale of ignoring this CVE. Things basically work as intended.
+The magic-wormhole "receive" command can output "waiting" messages
+when key receival or verification are longer than a predefined
+timeout:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L135
 
+The intent is to have an interactive user experience.
+
+This behavior makes the runtime test unreliable as the test always
+expect the sent message as the exact output. When the test execution
+is slower, it sometimes get the "waiting" message instead of the
+expected message.
+
+Some test jobs are succeeding:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4968059737
+while some other are failing.
+
+magic-wormhole can override those timers with environment variables.
+See:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L26
+
+This commit sets those environment variable to larger values
+(100 seconds instread of 1 by default), to make sure the test will
+always pass.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4962923235
+
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 57229c22f17fa892c18dff1e424dedc7e3d05358)
+(cherry picked from commit d44a888c320bd5fc850bccf5a1e09facb9fdad0d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pip/python-pip.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ support/testing/tests/package/test_python_magic_wormhole.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-index 8cf3aaa3ec..fdcb113f0c 100644
---- a/package/python-pip/python-pip.mk
-+++ b/package/python-pip/python-pip.mk
-@@ -12,5 +12,8 @@ PYTHON_PIP_LICENSE = MIT
- PYTHON_PIP_LICENSE_FILES = LICENSE.txt
- PYTHON_PIP_CPE_ID_VENDOR = pypa
- PYTHON_PIP_CPE_ID_PRODUCT = pip
-+# Disputed CVE: things work as designed, and only affects the
-+# --extra-index-url option. This CVE will never be fixed.
-+PYTHON_PIP_IGNORE_CVES += CVE-2018-20225
+diff --git a/support/testing/tests/package/test_python_magic_wormhole.py b/support/testing/tests/package/test_python_magic_wormhole.py
+index d6541a2480..d1a37acbc6 100644
+--- a/support/testing/tests/package/test_python_magic_wormhole.py
++++ b/support/testing/tests/package/test_python_magic_wormhole.py
+@@ -56,7 +56,9 @@ class TestPythonPy3MagicWormhole(TestPythonPackageBase):
+         cmd += "sleep 25"
+         self.assertRunOk(cmd, timeout=30)
  
- $(eval $(python-package))
+-        cmd = wormhole_cmd + " receive {}".format(code)
++        wormhole_env = "_MAGIC_WORMHOLE_TEST_KEY_TIMER=100 "
++        wormhole_env += "_MAGIC_WORMHOLE_TEST_VERIFY_TIMER=100 "
++        cmd = wormhole_env + wormhole_cmd + " receive {}".format(code)
+         output, exit_code = self.emulator.run(cmd, timeout=35)
+         self.assertEqual(exit_code, 0)
+         self.assertEqual(output[0], text)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
