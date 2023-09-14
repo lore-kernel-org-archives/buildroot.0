@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68742EDE99E
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:52:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0836EDE9A0
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 09:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F59060D72;
-	Thu, 14 Sep 2023 09:52:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F59060D72
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70E2F61240;
+	Thu, 14 Sep 2023 09:52:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70E2F61240
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Vy76Gvke_y7Y; Thu, 14 Sep 2023 09:52:46 +0000 (UTC)
+	with ESMTP id 7icGoG5ueA5U; Thu, 14 Sep 2023 09:52:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 656FE60F2D;
-	Thu, 14 Sep 2023 09:52:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 656FE60F2D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BBE101BF990
+	by smtp3.osuosl.org (Postfix) with ESMTP id B04D96123D;
+	Thu, 14 Sep 2023 09:52:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B04D96123D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BE8151BF995
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96A8C41F2D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AE5360D72
  for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 09:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96A8C41F2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AE5360D72
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vayeZwaKOH0X for <buildroot@lists.busybox.net>;
- Thu, 14 Sep 2023 09:52:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5JUBZvFhmd_2 for <buildroot@lists.busybox.net>;
+ Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B1D341F21
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:52:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B1D341F21
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3C8961206
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3C8961206
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12E5186F2C; Thu, 14 Sep 2023 09:52:30 +0000 (UTC)
+ id 8C2E686F2A; Thu, 14 Sep 2023 09:52:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Sep 2023 11:51:54 +0200
+Date: Thu, 14 Sep 2023 11:07:12 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1cceeecaf4307819bb5bda2d8b784337546135ee
-X-Git-Newrev: ade02bab3b14c68d8ced25afbff3fd89840502f1
+X-Git-Oldrev: 181793bb3ddfbc3b0ad35d26017e0dab46c71ece
+X-Git-Newrev: 316eedb5e144370e255f6949e89ad1503490c1ec
 X-Patchwork-Hint: ignore
-Message-Id: <20230914095230.12E5186F2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/dt: fix Kconfig
- package URL
+Message-Id: <20230914095229.8C2E686F2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] support/testing:
+ python-magic-wormhole: fix random failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,32 +63,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ade02bab3b14c68d8ced25afbff3fd89840502f1
+commit: https://git.buildroot.net/buildroot/commit/?id=316eedb5e144370e255f6949e89ad1503490c1ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The old package URL is no longer working. This commit updates it to
-the one advertised at [1].
+The magic-wormhole "receive" command can output "waiting" messages
+when key receival or verification are longer than a predefined
+timeout:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L135
 
-[1] https://github.com/RobinTMiller/dt/blob/b30eb7a123cfba900f26ceda413ea8ae49c3817e/html/dt.html#L33
+The intent is to have an interactive user experience.
 
+This behavior makes the runtime test unreliable as the test always
+expect the sent message as the exact output. When the test execution
+is slower, it sometimes get the "waiting" message instead of the
+expected message.
+
+Some test jobs are succeeding:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4968059737
+while some other are failing.
+
+magic-wormhole can override those timers with environment variables.
+See:
+https://github.com/magic-wormhole/magic-wormhole/blob/0.13.0/src/wormhole/cli/cmd_receive.py#L26
+
+This commit sets those environment variable to larger values
+(100 seconds instread of 1 by default), to make sure the test will
+always pass.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/4962923235
+
+Reported-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 79c7a67a4cbc93cdff3f70797b7a24fb09d17b11)
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d44a888c320bd5fc850bccf5a1e09facb9fdad0d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dt/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/test_python_magic_wormhole.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/dt/Config.in b/package/dt/Config.in
-index 826a66ebd5..af20cc9bca 100644
---- a/package/dt/Config.in
-+++ b/package/dt/Config.in
-@@ -18,4 +18,4 @@ config BR2_PACKAGE_DT
- 	  before exiting. Since verification of data is performed,
- 	  dt can be thought of as a generic diagnostic tool.
+diff --git a/support/testing/tests/package/test_python_magic_wormhole.py b/support/testing/tests/package/test_python_magic_wormhole.py
+index d6541a2480..d1a37acbc6 100644
+--- a/support/testing/tests/package/test_python_magic_wormhole.py
++++ b/support/testing/tests/package/test_python_magic_wormhole.py
+@@ -56,7 +56,9 @@ class TestPythonPy3MagicWormhole(TestPythonPackageBase):
+         cmd += "sleep 25"
+         self.assertRunOk(cmd, timeout=30)
  
--	  http://www.scsifaq.org/RMiller_Tools/dt.html
-+	  https://github.com/RobinTMiller/dt
+-        cmd = wormhole_cmd + " receive {}".format(code)
++        wormhole_env = "_MAGIC_WORMHOLE_TEST_KEY_TIMER=100 "
++        wormhole_env += "_MAGIC_WORMHOLE_TEST_VERIFY_TIMER=100 "
++        cmd = wormhole_env + wormhole_cmd + " receive {}".format(code)
+         output, exit_code = self.emulator.run(cmd, timeout=35)
+         self.assertEqual(exit_code, 0)
+         self.assertEqual(output[0], text)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
