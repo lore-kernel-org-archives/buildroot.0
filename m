@@ -4,65 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86CD0EEAA6E
-	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 20:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E275CEEAA76
+	for <buildroot@archiver.kernel.org>; Thu, 14 Sep 2023 20:40:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CA1461036;
-	Thu, 14 Sep 2023 20:33:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CA1461036
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AF4760760;
+	Thu, 14 Sep 2023 20:40:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AF4760760
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UDX5Lpw7qaca; Thu, 14 Sep 2023 20:33:48 +0000 (UTC)
+	with ESMTP id VUOulB3cZmLr; Thu, 14 Sep 2023 20:40:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D9A060A4F;
-	Thu, 14 Sep 2023 20:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D9A060A4F
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AA7111BF3E3
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:33:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 730C260709;
+	Thu, 14 Sep 2023 20:40:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 730C260709
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BD721BF3E3
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9086E80EEC
- for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:33:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9086E80EEC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F07440B34
+ for <buildroot@lists.busybox.net>; Thu, 14 Sep 2023 20:39:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F07440B34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HlfRNf2XJj_1 for <buildroot@lists.busybox.net>;
- Thu, 14 Sep 2023 20:33:44 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A47680EB0
- for <buildroot@buildroot.org>; Thu, 14 Sep 2023 20:33:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A47680EB0
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5C6EE1BF209;
- Thu, 14 Sep 2023 20:33:40 +0000 (UTC)
-Date: Thu, 14 Sep 2023 22:33:39 +0200
-To: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Message-ID: <20230914223339.5ee8e854@windsurf>
-In-Reply-To: <20230912110420.1111238-1-niklas.cassel@wdc.com>
-References: <20230912110420.1111238-1-niklas.cassel@wdc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id KUCl_BQQ292q for <buildroot@lists.busybox.net>;
+ Thu, 14 Sep 2023 20:39:58 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3862A403A2
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 20:39:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3862A403A2
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-402c46c49f4so15043345e9.1
+ for <buildroot@buildroot.org>; Thu, 14 Sep 2023 13:39:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1694723996; x=1695328796;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gypIhSudxiPP3rlhWfWbsQVR0jOpklCvL8xBZRrcgC4=;
+ b=k44VQOZH+uQKsoJ8TjMaHGv6KWwXyDBoCc9b8PIEE5co6XAUSU6A9RYg1wvwpf5Nq3
+ ompR+3N0XwvaLHofrRuV+WwVR0awCcG3+OmLZvYaB0aJ4wHd8akPjie363KZYy8PEsql
+ 2AuXHzZnMxvhpHLOAc+3y05Wad8MjOHBA2VR3og2SsvAWOcT68zZDcUg0z4HUXf0k9y8
+ avqrJ8L9eDfnXW16oWD3s2//6nzCNXn68L0YFIDpoV+2edV9OVubpgPQLVcRnFHzyI2X
+ 7ZB83PAUI8EVj1IaNvW6h9+14nkxMwH4lxc7+GYb+9VXBimrsQTsU5S+Ngfq+S1KEU8s
+ QXIg==
+X-Gm-Message-State: AOJu0YyMYijYCqEIaLnaoF23PqGqEwKg205lkbtjUYzJHpCXF5gdJigT
+ a0CRC3xQCoXZqH27gQyKledTgQLLna4=
+X-Google-Smtp-Source: AGHT+IHZGB7pzV2qS+wNnZ1AF79PsnU8NDPGgeiURJiXBr8fazhJkT511YK9YV4NVDR23K7AQ3suzg==
+X-Received: by 2002:a7b:c445:0:b0:3f8:fac0:ad40 with SMTP id
+ l5-20020a7bc445000000b003f8fac0ad40mr5593532wmi.29.1694723995865; 
+ Thu, 14 Sep 2023 13:39:55 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ k11-20020a7bc40b000000b003fefca26c72sm2894372wmi.23.2023.09.14.13.39.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 14 Sep 2023 13:39:55 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Thu, 14 Sep 2023 22:39:52 +0200
+Message-Id: <20230914203952.406379-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1694723621;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aexHucq/FjZpsQPbw8oTlFESTA+MUyBRsK0zHWB2+QQ=;
- b=awrI4gnurdiyPSX6FUvlWwqEn519HU9ZAYTI8VBUmj88asTCbNPfBkerIqdNYtBZhLEXpI
- LVg6kdb+3h/CTDmZQb+DSoCccgjK/DYI6b0byPGkS68gL30zmGhm1VEoCoGf7HYWR5JCTD
- qP+ttkezYKsllyH67SFxHilgxJ4Gftop6dGy/QcHIfPSojci9n/K8uPFODNJ7d3J4i77np
- Ah4XJhVJtCWOEAXzGoPLLSugzFgAb1XUSbqlGSeoijE6v9mwXFIv5ZI5NRMGZPWsseTNjt
- GlXjYduXAEXLmBR+x1ccItNVzWvQlPaVxmH6w8kbcOfiY1Pvtk52IqFDSmkw/A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=awrI4gnu
-Subject: Re: [Buildroot] [PATCH] package/elf2flt: update to version 2023.09
+ d=gmail.com; s=20221208; t=1694723996; x=1695328796; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gypIhSudxiPP3rlhWfWbsQVR0jOpklCvL8xBZRrcgC4=;
+ b=QT+YXRC9744glSx52MKJTW3ivIy8Pe8KWpTdUf+DAvf9jpELwVU12IUhcp3450NkE+
+ rJPzNiVs+9Ns9G6mzNHqx4HOMF3UbG4TLE0RoekLpXP9btuLXDI9tF02kwCBGXVoKvph
+ TVKxpKPRCXTP9Cf71PUflf+DzWtytw/UcAXS9ilXGarkqfErcT+FP+WyUuW6+pOJ37yx
+ 7FbSBxwF4yIyQRzuF7ruyrALGz7YU83GE56wDIWqG4q2OlXUNmhmPDyM+ocW7ktQeGza
+ doMynWiOJ9NVAkE7+du0wQMfB7nLNmF9SoKKbV9qtNYfkI2pj3lWBfB4rrDMapoNu1Jn
+ zgEg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20221208 header.b=QT+YXRC9
+Subject: [Buildroot] [PATCH 1/1] package/libde265: add LIBDE265_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,71 +93,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Greg Ungerer <gregungerer@westnet.com.au>,
- Niklas Cassel <niklas.cassel@wdc.com>, Damien Le Moal <Damien.LeMoal@wdc.com>,
- Waldemar Brodkorb <mail@waldemar-brodkorb.de>,
- Jesse T <mr.bossman075@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 12 Sep 2023 13:04:20 +0200
-Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
+cpe:2.3:a:struktur:libde265 is a valid CPE identifier for this package:
 
-> Several of our patches have been accepted upstream and are included in
-> elf2flt version 2023.09.
-> 
-> Patch 0001-elf2flt-handle-binutils-2.34.patch is upstream as of commit
-> c70b9f208979 ("elf2flt: handle binutils >= 2.34").
-> 
-> Patch 0002-elf2flt.ld-reinstate-32-byte-alignment-for-.data-sec.patch is
-> upstream as of commit 679c94adf27c ("elf2flt.ld: reinstate 32 byte
-> alignment for .data section").
-> 
-> Patch 0003-elf2flt-add-riscv-64-bits-support.patch is upstream as of
-> commit c5c8043c4d79 ("elf2flt: add riscv 64-bits support").
-> 
-> Patch 0008-riscv64-add-more-relocations-required-to-be-handled.patch was
-> squashed into upstream commit c5c8043c4d79 ("elf2flt: add riscv 64-bits
-> support") during upstreaming.
-> 
-> Patch 0006-xtensa-fix-text-relocations.patch is upstream as of commit
-> 26dfb54a59c8 ("elf2flt: xtensa: fix text relocations").
-> 
-> Patch 0007-elf2flt-remove-use-of-BFD_VMA_FMT.patch is upstream as of
-> commit a36df7407d9e ("elf2flt: remove use of BFD_VMA_FMT").
-> 
-> Patch 0004-elf2flt-create-a-common-helper-function.patch simply added
-> a helper function to make the changes in the follow-up patch
-> 0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
-> less intrusive.
-> 
-> Patch 0005-elf2flt-fix-fatal-error-regression-on-m68k-xtensa-ri.patch
-> is no longer needed as upstream has reverted the commit that necessitated
-> this patch, see upstream commit 35c692ca4546 ("Revert "elf2flt: fix for
-> segfault on some ARM ELFs""). The problem that the reverted upstream patch
-> solved is now instead solved by the combination of upstream commits
-> 7a59b265c2dc ("Revert "elf2flt: fix relocations for read-only data"") and
-> a934fb42cf59 ("elf2flt: force ARM.exidx section into text").
-> 
-> Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-> ---
-> Resending from an email address that is subscribed to the buildroot
-> mailing list, since my previous mail got rejected.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Astruktur%3Alibde265
 
-Amazing to see that we're down to 0 patches against elf2flt. Thanks for
-doing this, and thanks for the testing. Just the update of the
-.checkpackageignore file was missing, so I did that when applying.
-Thanks again!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libde265/libde265.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
+index 60424c0de6..208fa24e27 100644
+--- a/package/libde265/libde265.mk
++++ b/package/libde265/libde265.mk
+@@ -8,6 +8,7 @@ LIBDE265_VERSION = 1.0.12
+ LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
+ LIBDE265_LICENSE = LGPL-3.0+
+ LIBDE265_LICENSE_FILES = COPYING
++LIBDE265_CPE_ID_VENDOR = struktur
+ LIBDE265_INSTALL_STAGING = YES
+ 
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
