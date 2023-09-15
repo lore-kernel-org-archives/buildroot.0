@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55A3EEED619
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51592EED619
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EED3661366;
-	Fri, 15 Sep 2023 17:04:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EED3661366
+	by smtp3.osuosl.org (Postfix) with ESMTP id C76EC6133C;
+	Fri, 15 Sep 2023 17:16:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C76EC6133C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c3eeAEJdDYF3; Fri, 15 Sep 2023 17:04:24 +0000 (UTC)
+	with ESMTP id jit8aZ7FoJY4; Fri, 15 Sep 2023 17:16:42 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 243966131D;
-	Fri, 15 Sep 2023 17:04:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 243966131D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B0221BF5A8
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:04:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 133E061355;
+	Fri, 15 Sep 2023 17:16:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 133E061355
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6F45E1BF5A8
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:16:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 240326131D
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:04:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 240326131D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5629E4038E
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:16:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5629E4038E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ADowGd6ZvoYD for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 17:04:20 +0000 (UTC)
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28B2F60B53
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:04:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28B2F60B53
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-403004a96eeso25740905e9.3
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 10:04:19 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Y58t1cq3HDg0 for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 17:16:38 +0000 (UTC)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 579CB4018F
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:16:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 579CB4018F
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-40472c3faadso21476585e9.2
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 10:16:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694797458; x=1695402258;
+ d=1e100.net; s=20230601; t=1694798196; x=1695402996;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=oNUN5XthK5JL2M6IK/2F/4zA5JezWTelmoWJ7VfilTA=;
- b=BozMInroJ4d/M+bigu5PHikCzNAE7NqlaHN0faKu5fn9RL03mtfsjNS3zBY1Tivhbd
- putLIksHUaY870d+w6Vz/yJAkLF9izVm9TsCaqqKj2UaQmNq0dylD98KQd4s5ciXmkmn
- Kfz563QunzDW1s/QbhXW4PkGVokZu5vD2sDhVLGj70au6h9I7b/h+DPgk3MreK2jPMHS
- 35p/a87TcA2KAZ6o+uvygo0hbB2xi4UFDbQkayeOssAlK6E3c1/iAXSabMqDSaoAXO6/
- uALMMZMreIQAxesJLhUd0Is0g03pj8W4FzGeWpQsm7yL6jMSMiFzpwbk1pjmVe5tGHFf
- cZAw==
-X-Gm-Message-State: AOJu0Yxpi3eWRdiImYrsiNXDhqOP7viFOq996BnKozUdXtXNnswoiIoK
- Iaw7JR9v57BqnPa4/2Bl9R7D/oR72rs=
-X-Google-Smtp-Source: AGHT+IFi2rCk1U9kNj8KyBRi4CepxGMaP7NYHVoAftXNM2n/VQMb/v0HMPufKPZr6+uqnoidHSBYKA==
-X-Received: by 2002:a05:600c:241:b0:3fb:a0fc:1ba1 with SMTP id
- 1-20020a05600c024100b003fba0fc1ba1mr2084138wmj.35.1694797457620; 
- Fri, 15 Sep 2023 10:04:17 -0700 (PDT)
+ bh=N8wm5KOyTKCb/OHLqcjXOJvBuVHWFBFsh4Qv9+rOuPk=;
+ b=EpaQgdkSFEXP2DDAFFpzvhcdw+fWh4cJGj50axgD6bfjSaP1BdUE3RtVMeyUr5gLF6
+ fawAg9dXBVzO6VkY5tkHyt4EEkIB6wV6Vg709OBAh/rTZmgHHEA0I03aw2EWjg8kYCwN
+ wF1uojKbs+DHUUG8hQXkhgJU5LFS0UWvJOSRfaGv3AQdBad/cYj9saPb66ktYYmVP6vI
+ lthra1zQijJEpBp7Qyiql5twaLQLdnuVR2ZP1OnFXq4t2yfIy55JmngJ2XipH1FTIqmy
+ eA4iDXlefKbqS+nSNKJKWByGvASvtiQI2YHQlm4whDlBuLkEyRezn3yOpi4dZORxoR9K
+ j5JQ==
+X-Gm-Message-State: AOJu0YwgLfscGMIGPboYmP1GZPZw83Ve17t+EAVnaUqhbJf7D/Ovu9AO
+ rMhbqYWRRHY3li0UVkZ99s9ioj/glgg=
+X-Google-Smtp-Source: AGHT+IEoN8s1/CY1yULDMT+xk0Tpsb10F9HL6el3VDc/cZRw2Ke/M2zZMvmjk2e4Jz7NvYHKofpjPA==
+X-Received: by 2002:a05:600c:3ba3:b0:3fe:1f93:8cf4 with SMTP id
+ n35-20020a05600c3ba300b003fe1f938cf4mr2027530wms.8.1694798195993; 
+ Fri, 15 Sep 2023 10:16:35 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- l26-20020a056000023a00b0031ff1ef7dc0sm2050274wrz.66.2023.09.15.10.04.16
+ t9-20020a7bc3c9000000b003fe23b10fdfsm8018061wmj.36.2023.09.15.10.16.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Sep 2023 10:04:16 -0700 (PDT)
+ Fri, 15 Sep 2023 10:16:35 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 19:04:12 +0200
-Message-Id: <20230915170412.855864-1-fontaine.fabrice@gmail.com>
+Date: Fri, 15 Sep 2023 19:16:31 +0200
+Message-Id: <20230915171631.896844-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694797458; x=1695402258; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1694798196; x=1695402996; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oNUN5XthK5JL2M6IK/2F/4zA5JezWTelmoWJ7VfilTA=;
- b=LtpZdjCshk+gIQ39+RhSlRrIj4zS+WK442uU0Q1hiB+E/jhMeYBItnJ60fXVn1f/3C
- h0822JvZrkaRaf+1r4wzHfWL6z7dWunEdEXVj/kp1T1wdCxL0oDeLAZq8Je8Ot4O9MwM
- vzwqsqGdHlcN9J5MhIWuwBbA3firpHOCSv57vGnVV6wX6yHerxgIar8OzcWJ3w4x81UA
- nDlCD2Tpd2c4BEbG/Av6QnTLvYWMYvX6N+BKQgm6gwKmmtJatILI3tcio/vX+Qzgxiuk
- 4CsPv1tEu+CxycNbsElw723+WyMB490MI7xvmRNwp0yhJpurRMHJbrPOHcz/4Hz7vDCH
- a0LQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=N8wm5KOyTKCb/OHLqcjXOJvBuVHWFBFsh4Qv9+rOuPk=;
+ b=aHiiVC5yTdt9HfwR6ciuKefUr/UlPID5jFcTT6p2jFdMNNPJZnjy9BFSB+mGMzAYTy
+ wUk/Hr4vafgEqzY4bYfYz6vejR0M9uC85wdQPpkx/r9EyHHE3VSoLSiIR8u5bnfKCvNJ
+ sCZa8BX8XvR/my4vrVOhHw3PC6XFB9xYE74zEk6zAiLzkLk/8a6pSe/9ooy/Yo+u7wxR
+ 3Up6jl9M4FsEIzVhY/ajniPbyQsLbdpK537ajkC01qf7dLzPNzQtSINRgiEteGjFtrH/
+ wsIB3kwQqPylgMV4v02HkWP9HKiNTP7lS6n4CRKHNXkzlpcFXpQKwZeTYOYtq0mo19e8
+ 1U3Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LtpZdjCs
-Subject: [Buildroot] [PATCH 1/1] package/hwlock: security bump to version
- 2.9.3
+ header.a=rsa-sha256 header.s=20230601 header.b=aHiiVC5y
+Subject: [Buildroot] [PATCH 1/1] package/sngrep: security bump to version
+ 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,51 +94,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Steven Noonan <steven@uplinklabs.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2022-47022: An issue was discovered in open-mpi hwloc 2.1.0
-allows attackers to cause a denial of service or other unspecified
-impacts via glibc-cpuset in topology-linux.c.
+Fix CVE-2023-31981 and CVE-2023-31982
 
-https://github.com/open-mpi/hwloc/blob/hwloc-2.9.3/NEWS
-https://github.com/open-mpi/hwloc/compare/hwloc-2.9.2...hwloc-2.9.3
+https://github.com/irontec/sngrep/blob/v1.7.0/ChangeLog
+https://github.com/irontec/sngrep/compare/v1.6.0...v1.7.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/hwloc/hwloc.hash | 4 ++--
- package/hwloc/hwloc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sngrep/sngrep.hash | 6 +++---
+ package/sngrep/sngrep.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
-index d40315a3af..8010b857f0 100644
---- a/package/hwloc/hwloc.hash
-+++ b/package/hwloc/hwloc.hash
-@@ -1,5 +1,5 @@
- # From https://www.open-mpi.org/software/hwloc/v2.9/
--sha1  be2a4f299c0da7670d39724986268bfa3fac6aee  hwloc-2.9.2.tar.bz2
--sha256  0a87fdf677f8b00b567d229b6320bf6b25c693edaa43e0b85268d999d6b060cf  hwloc-2.9.2.tar.bz2
-+sha1  76b49087619b46d71e18bd1131d35a5ccf5de791  hwloc-2.9.3.tar.bz2
-+sha256  5c4062ce556f6d3451fc177ffb8673a2120f81df6835dea6a21a90fbdfff0dec  hwloc-2.9.3.tar.bz2
+diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
+index 60a32022e6..c9b9c8be8d 100644
+--- a/package/sngrep/sngrep.hash
++++ b/package/sngrep/sngrep.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/irontec/sngrep/releases/download/v1.6.0/sngrep-1.6.0.tar.gz.md5sum
+-md5  1519ca6cd1167c0722debfb96e2ac173  sngrep-1.6.0.tar.gz
++# From https://github.com/irontec/sngrep/releases/download/v1.7.0/sngrep-1.7.0.tar.gz.md5sum
++md5  ee3cc7bd75adeb713411aa678e45ae4c  sngrep-1.7.0.tar.gz
+ 
  # Locally computed
- sha256  d79a936a42f3c6cb7c8375a023d43f4435f4664d3a5a2ea6b4623cff83c7fc06  COPYING
-diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
-index f6cf5433c4..0524ec17fd 100644
---- a/package/hwloc/hwloc.mk
-+++ b/package/hwloc/hwloc.mk
-@@ -5,7 +5,7 @@
+-sha256  fd80964d6560f2ff57b4f5bef2353d1a6f7c48d2f1a5f0a167c854bd2e801999  sngrep-1.6.0.tar.gz
++sha256  2e5ba3a4d6486ea00bd73d2cceff383ba162dcd6d0170ae74cfa3b1c206e2cb1  sngrep-1.7.0.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index 0e344550d3..b86d7e83f0 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HWLOC_VERSION_MAJOR = 2.9
--HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).2
-+HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).3
- HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
- HWLOC_SITE = https://download.open-mpi.org/release/hwloc/v$(HWLOC_VERSION_MAJOR)
- HWLOC_LICENSE = BSD-3-Clause
+-SNGREP_VERSION = 1.6.0
++SNGREP_VERSION = 1.7.0
+ SNGREP_SITE = \
+ 	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
+ SNGREP_LICENSE = GPL-3.0+
 -- 
 2.40.1
 
