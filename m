@@ -4,61 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 445B9EEEC01
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 19:23:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D526CC4826B
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 19:30:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC98F400D7;
-	Fri, 15 Sep 2023 19:23:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC98F400D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63F6D403C0;
+	Fri, 15 Sep 2023 19:30:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63F6D403C0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GfyIzNuw_gkK; Fri, 15 Sep 2023 19:23:26 +0000 (UTC)
+	with ESMTP id cP1eyIFOPvN6; Fri, 15 Sep 2023 19:30:14 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 13ACB40153;
-	Fri, 15 Sep 2023 19:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13ACB40153
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FFAA40153;
+	Fri, 15 Sep 2023 19:30:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FFAA40153
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 46D271BF5D7
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 19:23:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7ABC81BF5D7
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 19:30:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26FE840153
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 19:23:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26FE840153
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5419140153
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 19:30:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5419140153
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ukqnxHPDDmlB for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 19:23:22 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ADA66400D7
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 19:23:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADA66400D7
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ with ESMTP id AE7s6hB_EJMs for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 19:30:11 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 44618400D7
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 19:30:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44618400D7
+Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5C5B713F88F;
- Fri, 15 Sep 2023 21:23:17 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 21:23:07 +0200
-Message-ID: <20230915192308.1432032-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 591C3B004FF;
+ Fri, 15 Sep 2023 21:30:07 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:55796])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 15 Sep 2023 21:30:07 +0200
 MIME-Version: 1.0
+Date: Fri, 15 Sep 2023 21:30:07 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20230914215606.309735-1-fontaine.fabrice@gmail.com>
+References: <20230914215606.309735-1-fontaine.fabrice@gmail.com>
+User-Agent: Webmail Free/1.6.1
+Message-ID: <80eccb888c17302f362990c956de8529@free.fr>
+X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694805798;
- bh=eHAanh6lxPYxgAjLYi6MCrGrjL98V1/KmK052mgr8PQ=;
- h=From:To:Cc:Subject:Date:From;
- b=WA7DjI82alHcy0fRNNSb9PBL4bikFLDUFVD0P17pA5xFa9OY8EtHw04TrDhA1BiUy
- TQQZjnyJer7FiVQ8O0cfxuQD4azKyKUuXG+HMcjlgtXGAMCsQL8/lyrTI1G8mdpJGd
- 6Oirm8irH63jrVZLCazvuQ8i+ps2p4a7wCVBeQFLWkuohlkp9NOfHnwVTuStPqVFkw
- 5ye3oyO5gs7R7q7JztnkDKVn5j3C+JG0Ag16ED6rj5Q4Yp3kr0wn+JGg9nNjuiPR70
- V40VuY1jNRmrJ5+4967OzzZAarHVWaXazLtFZ9Id2A8vKXR23xdC3hSIAANtj2y/kR
- N68ckLKsb5lxw==
+ d=free.fr; s=smtp-20201208; t=1694806208;
+ bh=o/ZiSHEkwljqfzE9ZAoTHHfpOvFoT8s2XjjP+v7+3vU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=H82/5Ngwjj1ytfWxY+vcoWzA6Xk0NG+SUJvMiuiDCY6lHjX4b5X9Ol8VQ78ERs8hY
+ YZ5/LTgPzQW9ej42SfehSsiip6P16BwCCLQ1I9CIj6BKoUK4z0qxwt1qtPIFLffR7/
+ BuV3RcBm7sQ1424DLw58MPWIs1a8v1m3vbQR88Jpo1oWbv2UMF7ucpEbF06Q7Q6jX6
+ BQBYXS2RBxndyGD0iTicl6q9F0hpiL6mt6AyziupPTvBiNsKeN3+obPAMB4k9LYsE6
+ kHXl7avCA5CzAixF3H3f08hmL57FAWCTkkrxQemBnwFrxM0tyocGPcfwXS55VjRfiY
+ hKt5pkUkmwG5g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=WA7DjI82
-Subject: [Buildroot] [PATCH 1/1] package/libjxl: fix riscv build
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=H82/5Ngw
+Subject: Re: [Buildroot] [PATCH 1/1] package/libjxl: security bump to
+ version 0.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,74 +77,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-bGlianhsIHdhcyBmYWlsaW5nIHRvIGJ1aWxkIGZvciByaXNjdiB0YXJnZXRzLCBzaW5jZSBjb21t
-aXQgZmY3YzM3ZTU3CiJwYWNrYWdlL2xpYmp4bDogc2VjdXJpdHkgYnVtcCB0byB2ZXJzaW9uIDAu
-OC4xIi4gQnVpbGQgd2FzIGZhaWxpbmcgd2l0aApvdXRwdXQ6CgogICAgL2J1aWxkL2xpYmp4bC0w
-LjguMS9saWIvanhsL2VuY194eWIuY2M6IEluIGZ1bmN0aW9uICdqeGw6OkltYWdlM0YganhsOjpO
-X1NDQUxBUjo6VHJhbnNmb3JtVG9MaW5lYXJSR0IoY29uc3QganhsOjpJbWFnZTNGJiwgY29uc3Qg
-anhsOjpDb2xvckVuY29kaW5nJiwgZmxvYXQsIGNvbnN0IEp4bENtc0ludGVyZmFjZSYsIGp4bDo6
-VGhyZWFkUG9vbCopJzoKICAgIC9idWlsZC9saWJqeGwtMC44LjEvbGliL2p4bC9lbmNfeHliLmNj
-OjIyMzoyMTogZXJyb3I6IHZhcmlhYmxlICdzdGQ6OmF0b21pYzxib29sPiBvaycgaGFzIGluaXRp
-YWxpemVyIGJ1dCBpbmNvbXBsZXRlIHR5cGUKICAgICAgMjIzIHwgICBzdGQ6OmF0b21pYzxib29s
-PiBva3t0cnVlfTsKICAgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICBefgoKVGhpcyBidWls
-ZCBmYWlsdXJlIHdhcyBkdWUgdG8gYSBtaXNzaW5nIDxhdG9taWM+IGhlYWRlciBpbmNsdXNpb24u
-IEZvcgpzb21lIHJlYXNvbiwgdGhlIGJ1aWxkIGZhaWx1cmUgd2FzIG9ic2VydmVkIG9ubHkgd2l0
-aCBSSVNDLVYgdG9vbGNoYWlucy4KClRoaXMgY29tbWl0IGZpeGVzIHRoZSBpc3N1ZSBieSBhZGRp
-bmcgYW4gdXBzdHJlYW0gY29tbWl0LCBub3QgeWV0IGluIGEKcGFja2FnZSByZWxlYXNlLiBTZWUg
-WzFdLgoKRml4ZXM6Cmh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzEyMS8x
-MjEwN2JjN2FlYTdhZmFlMWQyZmI5MzVkMzFiNDRlZWU2ZWExNTAxCgpbMV0gaHR0cHM6Ly9naXRo
-dWIuY29tL2xpYmp4bC9saWJqeGwvY29tbWl0LzIyZDEyZDc0ZTdiYzU2YjA5Y2ZiMTk3M2FhODll
-YzhkNzE0ZmEzZmMKClNpZ25lZC1vZmYtYnk6IEp1bGllbiBPbGl2YWluIDxqdS5vQGZyZWUuZnI+
-Ci0tLQpQYXRjaCB0ZXN0ZWQgb24gYnJhbmNoIG1hc3RlciBhdCBjb21taXQgMzU1N2E3YiB3aXRo
-IGNvbW1hbmRzOgoKICAgIG1ha2UgY2hlY2stcGFja2FnZQogICAgLi4uCiAgICAwIHdhcm5pbmdz
-IGdlbmVyYXRlZAoKICAgIHN1cHBvcnQvdGVzdGluZy9ydW4tdGVzdHMgXAogICAgICAgIC1kIGRs
-IC1vIG91dHB1dF9mb2xkZXIgXAogICAgICAgIHRlc3RzLnBhY2thZ2UudGVzdF9saWJqeGwKICAg
-IC4uLgogICAgT0sKCiAgICB1dGlscy90ZXN0LXBrZyAtYSAtcCBsaWJqeGwKICAgIC4uLgogICAg
-NDUgYnVpbGRzLCAxMSBza2lwcGVkLCAwIGJ1aWxkIGZhaWxlZCwgMCBsZWdhbC1pbmZvIGZhaWxl
-ZCwgMCBzaG93LWluZm8gZmFpbGVkCiAgICAKTm90ZTogdGhpcyBwYXRjaCB3YXMgYWxzbyB0ZXN0
-ZWQgb24gdG9wIG9mIHRoZSBwYXRjaCBwcm9wb3NlZCBhdDoKaHR0cHM6Ly9wYXRjaHdvcmsub3ps
-YWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDIzMDkxNDIxNTYwNi4zMDk3MzUtMS1m
-b250YWluZS5mYWJyaWNlQGdtYWlsLmNvbS8KLS0tCiAuLi5pYy1jb250ZW50LXRvLWZpeC1nY2Mt
-Y29tcGlsYXRpb24tZm8ucGF0Y2ggfCA0NyArKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hh
-bmdlZCwgNDcgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlianhs
-LzAwMDItQWRkLW1pc3NpbmctYXRvbWljLWNvbnRlbnQtdG8tZml4LWdjYy1jb21waWxhdGlvbi1m
-by5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlianhsLzAwMDItQWRkLW1pc3NpbmctYXRv
-bWljLWNvbnRlbnQtdG8tZml4LWdjYy1jb21waWxhdGlvbi1mby5wYXRjaCBiL3BhY2thZ2UvbGli
-anhsLzAwMDItQWRkLW1pc3NpbmctYXRvbWljLWNvbnRlbnQtdG8tZml4LWdjYy1jb21waWxhdGlv
-bi1mby5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5iODU2YjAw
-NzI4Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9saWJqeGwvMDAwMi1BZGQtbWlzc2luZy1h
-dG9taWMtY29udGVudC10by1maXgtZ2NjLWNvbXBpbGF0aW9uLWZvLnBhdGNoCkBAIC0wLDAgKzEs
-NDcgQEAKK0Zyb20gNDJlOTQ0YTQ3MTY3MmRhZTg1MjJmYmNmMTYxOTQxODk1YmExNjYzMiBNb24g
-U2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IEVhc3Rkb25nIDwzMTkyMDkyNStJRUFTVEB1c2Vy
-cy5ub3JlcGx5LmdpdGh1Yi5jb20+CitEYXRlOiBUaHUsIDIzIEZlYiAyMDIzIDA2OjA4OjM2ICsw
-ODAwCitTdWJqZWN0OiBbUEFUQ0hdIEFkZCBtaXNzaW5nIDxhdG9taWM+IGNvbnRlbnQgdG8gZml4
-IGdjYyBjb21waWxhdGlvbiBmb3IgUklTQ1YKKyBhcmNoaXRlY3R1cmUuICgjMjIxMSkKKworKiBB
-ZGQgbWlzc2luZyA8YXRvbWljPiBjb250ZW50IHRvIGZpeCBnY2MgY29tcGlsYXRpb24gZm9yIFJJ
-U0NWIGFyY2hpdGVjdHVyZS4KKworKiBhZGQgbmFtZSB0byBBVVRIT1JTCisKKyogbGludCBmaXgK
-KworQ28tYXV0aG9yZWQtYnk6IE1vcml0eiBGaXJzY2hpbmcgPGZpcnNjaGluZ0Bnb29nbGUuY29t
-PgorVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9saWJqeGwvbGlianhsL2NvbW1pdC8yMmQx
-MmQ3NGU3YmM1NmIwOWNmYjE5NzNhYTg5ZWM4ZDcxNGZhM2ZjCitTaWduZWQtb2ZmLWJ5OiBKdWxp
-ZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgorLS0tCisgQVVUSE9SUyAgICAgICAgICAgIHwgMSAr
-CisgbGliL2p4bC9lbmNfeHliLmNjIHwgMSArCisgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlv
-bnMoKykKKworZGlmZiAtLWdpdCBhL0FVVEhPUlMgYi9BVVRIT1JTCitpbmRleCA0NGRjYzQwOS4u
-MzM0MDQyMmQgMTAwNjQ0CistLS0gYS9BVVRIT1JTCisrKysgYi9BVVRIT1JTCitAQCAtMzAsNiAr
-MzAsNyBAQCBEYW5pZWwgTm92b21lc2vDvSA8ZG5vdm9tZXNreUBnbWFpbC5jb20+CisgRGF2aWQg
-QnVybmV0dCA8dmFyZ29sc29mdEBnbWFpbC5jb20+CisgRGlyayBMZW1zdHJhIDxkaXJrQGxlbXN0
-cmEub3JnPgorIERvbiBPbG1zdGVhZCA8ZG9uLmoub2xtc3RlYWRAZ21haWwuY29tPgorK0Rvbmcg
-WHUgPHhkb25nMTgxQGdtYWlsLmNvbT4KKyBFdmVuIFJvdWF1bHQgPGV2ZW4ucm91YXVsdEBzcGF0
-aWFseXMuY29tPgorIEZyZWQgQnJlbm5hbiA8Y29weXBhc3RlQGtpdHRlbnMucGg+CisgSGVpa28g
-QmVja2VyIDxoZWlyZWNrYUBleGhlcmJvLm9yZz4KK2RpZmYgLS1naXQgYS9saWIvanhsL2VuY194
-eWIuY2MgYi9saWIvanhsL2VuY194eWIuY2MKK2luZGV4IGM3MzEwNzY1Li4yZmQ1ZDAyNSAxMDA2
-NDQKKy0tLSBhL2xpYi9qeGwvZW5jX3h5Yi5jYworKysrIGIvbGliL2p4bC9lbmNfeHliLmNjCitA
-QCAtNiw2ICs2LDcgQEAKKyAjaW5jbHVkZSAibGliL2p4bC9lbmNfeHliLmgiCisgCisgI2luY2x1
-ZGUgPGFsZ29yaXRobT4KKysjaW5jbHVkZSA8YXRvbWljPgorICNpbmNsdWRlIDxjc3RkbGliPgor
-IAorICN1bmRlZiBIV1lfVEFSR0VUX0lOQ0xVREUKKy0tIAorMi40MS4wCisKLS0gCjIuNDEuMAoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hi Fabrice,
+
+I tested this patch on branch master at commit 3557a7b
+with commands:
+
+     support/testing/run-tests \
+         -d dl -o output_folder \
+         tests.package.test_libjxl
+     ...
+     OK
+
+While trying with:
+
+     utils/test-pkg -a -p libjxl
+     ...
+         bootlin-riscv32-glibc [17/45]: FAILED
+         bootlin-riscv64-glibc [18/45]: FAILED
+          bootlin-riscv64-musl [19/45]: FAILED
+     ...
+     45 builds, 11 skipped, 3 build failed, 0 legal-info failed, 0 
+show-info failed
+
+I had those 3 build failures. They were introduced by v0.8.1 and are
+unrelated to this patch. I proposed a fix at:
+https://patchwork.ozlabs.org/project/buildroot/patch/20230915192308.1432032-1-ju.o@free.fr/
+
+and also made sure this fix works for both v0.8.1 and v0.8.2 proposed in
+this patch.
+
+On 14/09/2023 23:56, Fabrice Fontaine wrote:
+> Fix CVE-2023-35790: An issue was discovered in dec_patch_dictionary.cc
+> in libjxl before 0.8.2. An integer underflow in patch decoding can lead
+> to a denial of service, such as an infinite loop.
+> 
+> https://github.com/libjxl/libjxl/releases/tag/v0.8.2
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+Tested-by: Julien Olivain <ju.o@free.fr>
+
+> ---
+>  package/libjxl/libjxl.hash | 2 +-
+>  package/libjxl/libjxl.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
+> index 6b4c9d8d0a..c8f98d10ea 100644
+> --- a/package/libjxl/libjxl.hash
+> +++ b/package/libjxl/libjxl.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256  
+> 60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56  
+> libjxl-0.8.1.tar.gz
+> +sha256  
+> c70916fb3ed43784eb840f82f05d390053a558e2da106e40863919238fa7b420  
+> libjxl-0.8.2.tar.gz
+>  sha256  
+> 8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  
+> LICENSE
+>  sha256  
+> 91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  
+> PATENTS
+> diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
+> index f603327bf6..47c110eb53 100644
+> --- a/package/libjxl/libjxl.mk
+> +++ b/package/libjxl/libjxl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -LIBJXL_VERSION = 0.8.1
+> +LIBJXL_VERSION = 0.8.2
+>  LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
+>  LIBJXL_LICENSE = BSD-3-Clause
+>  LIBJXL_LICENSE_FILES = LICENSE PATENTS
+
+Best regards,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
