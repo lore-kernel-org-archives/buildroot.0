@@ -4,85 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51592EED619
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:16:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E10D3EED61B
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C76EC6133C;
-	Fri, 15 Sep 2023 17:16:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C76EC6133C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 861B761370;
+	Fri, 15 Sep 2023 17:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 861B761370
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jit8aZ7FoJY4; Fri, 15 Sep 2023 17:16:42 +0000 (UTC)
+	with ESMTP id TbqdHiIF_pbW; Fri, 15 Sep 2023 17:25:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 133E061355;
-	Fri, 15 Sep 2023 17:16:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 133E061355
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F45E1BF5A8
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:16:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AECB361355;
+	Fri, 15 Sep 2023 17:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AECB361355
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A8AE91BF5A8
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5629E4038E
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:16:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5629E4038E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80CE6838F0
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:25:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80CE6838F0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y58t1cq3HDg0 for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 17:16:38 +0000 (UTC)
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 579CB4018F
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:16:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 579CB4018F
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-40472c3faadso21476585e9.2
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 10:16:38 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3zZdnQGjBALA for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 17:25:04 +0000 (UTC)
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com
+ [IPv6:2607:f8b0:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B0E081ED7
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:25:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B0E081ED7
+Received: by mail-pf1-x435.google.com with SMTP id
+ d2e1a72fcca58-68fdd6011f2so1985122b3a.3
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 10:25:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694798196; x=1695402996;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=N8wm5KOyTKCb/OHLqcjXOJvBuVHWFBFsh4Qv9+rOuPk=;
- b=EpaQgdkSFEXP2DDAFFpzvhcdw+fWh4cJGj50axgD6bfjSaP1BdUE3RtVMeyUr5gLF6
- fawAg9dXBVzO6VkY5tkHyt4EEkIB6wV6Vg709OBAh/rTZmgHHEA0I03aw2EWjg8kYCwN
- wF1uojKbs+DHUUG8hQXkhgJU5LFS0UWvJOSRfaGv3AQdBad/cYj9saPb66ktYYmVP6vI
- lthra1zQijJEpBp7Qyiql5twaLQLdnuVR2ZP1OnFXq4t2yfIy55JmngJ2XipH1FTIqmy
- eA4iDXlefKbqS+nSNKJKWByGvASvtiQI2YHQlm4whDlBuLkEyRezn3yOpi4dZORxoR9K
- j5JQ==
-X-Gm-Message-State: AOJu0YwgLfscGMIGPboYmP1GZPZw83Ve17t+EAVnaUqhbJf7D/Ovu9AO
- rMhbqYWRRHY3li0UVkZ99s9ioj/glgg=
-X-Google-Smtp-Source: AGHT+IEoN8s1/CY1yULDMT+xk0Tpsb10F9HL6el3VDc/cZRw2Ke/M2zZMvmjk2e4Jz7NvYHKofpjPA==
-X-Received: by 2002:a05:600c:3ba3:b0:3fe:1f93:8cf4 with SMTP id
- n35-20020a05600c3ba300b003fe1f938cf4mr2027530wms.8.1694798195993; 
- Fri, 15 Sep 2023 10:16:35 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- t9-20020a7bc3c9000000b003fe23b10fdfsm8018061wmj.36.2023.09.15.10.16.35
+ d=1e100.net; s=20230601; t=1694798703; x=1695403503;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=JIuTVgtZcnCOY+rY9pEXjQMpAtwRO5xPTQXIOlDpszw=;
+ b=mr/+eEcJfOU5ppmyRotX5OqPY4atkzhgSROUEz+lLFvS9mSq/WcLs6ksAg8VFwr6KI
+ Og6UgBws191pwUqzoHasTuUZGKC8pd9u9CXLLJIefwtvHwJ2d1tBMDMbTEVAGYBr4YCm
+ lMZYPHBsXwlNWb5bYlfvPwO26FA15Qd5dV42VVmwhaxEzm0hCGBqzQ3HhOZj72bK9/8b
+ Fr6nIXZURyMV3RgJkbdxjJW8X21gn1ULMqX/HZYmSR6eHs+mXn+ArPiYopsNABDaklFa
+ sSFy/WSvHr94vYvyP9uyO3eors/1dsFcSoTROvt3zjnELKLLCYZKeigo/Ce4LkiFWT/R
+ 0/mQ==
+X-Gm-Message-State: AOJu0Yxzw7imjmdUXSwYWw1rEzVbsSUX5GW3IqERdGcXmoGfNBV0bsCx
+ 33WPECCvNPz+GadiykajYlXp26o2/QQ=
+X-Google-Smtp-Source: AGHT+IEUGHVrwThTo1pOKNoorNtk+cjFWMXWlyX6nEMqjeoIIMAN4fda4vx7wGVTIlXaaumUYPIPsw==
+X-Received: by 2002:a05:6a20:d90b:b0:13b:a2c9:922e with SMTP id
+ jd11-20020a056a20d90b00b0013ba2c9922emr2270099pzb.27.1694798703085; 
+ Fri, 15 Sep 2023 10:25:03 -0700 (PDT)
+Received: from localhost.localdomain (cpe-70-95-248-239.san.res.rr.com.
+ [70.95.248.239]) by smtp.gmail.com with ESMTPSA id
+ v6-20020a62a506000000b00687f845f41fsm3187702pfm.119.2023.09.15.10.25.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Sep 2023 10:16:35 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Fri, 15 Sep 2023 10:25:02 -0700 (PDT)
+From: Yanghao Cheng <yanghaobillcheng@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 19:16:31 +0200
-Message-Id: <20230915171631.896844-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Date: Fri, 15 Sep 2023 10:24:56 -0700
+Message-Id: <20230915172458.3388709-1-yanghaobillcheng@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230914235043.2538981-1-yanghaobillcheng@gmail.com>
+References: <20230914235043.2538981-1-yanghaobillcheng@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694798196; x=1695402996; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=N8wm5KOyTKCb/OHLqcjXOJvBuVHWFBFsh4Qv9+rOuPk=;
- b=aHiiVC5yTdt9HfwR6ciuKefUr/UlPID5jFcTT6p2jFdMNNPJZnjy9BFSB+mGMzAYTy
- wUk/Hr4vafgEqzY4bYfYz6vejR0M9uC85wdQPpkx/r9EyHHE3VSoLSiIR8u5bnfKCvNJ
- sCZa8BX8XvR/my4vrVOhHw3PC6XFB9xYE74zEk6zAiLzkLk/8a6pSe/9ooy/Yo+u7wxR
- 3Up6jl9M4FsEIzVhY/ajniPbyQsLbdpK537ajkC01qf7dLzPNzQtSINRgiEteGjFtrH/
- wsIB3kwQqPylgMV4v02HkWP9HKiNTP7lS6n4CRKHNXkzlpcFXpQKwZeTYOYtq0mo19e8
- 1U3Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1694798703; x=1695403503; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=JIuTVgtZcnCOY+rY9pEXjQMpAtwRO5xPTQXIOlDpszw=;
+ b=VhU4swIb3/gWbaYWNfvfM/caHniqu9XU8E9t6vtRNvUKNOHCAziICWM/xjyW7jvl+o
+ ZA5acxgeSLZp+Ku7iN68ZaPv76tton75TPvp/YCtGfG4Y/5WVpoXe1ZLHl3gSZF2Le/4
+ HcYQ4rQ9Nic+wJH+ZJ8Zv+o/Yw4RH+ZrhtO+t9KBLp9FUgz+kAxCLsxDsDKDHdoZN4Ss
+ qqQXxwnqYDLRnk+o0l9hrQR453AXTWMFOGUXin8JdUQ3pXRCwOoikeUCxV66zwf1UKYX
+ swfyf2951r6aXZDQom4g+iHwvY+wkx3/147TJbL1661L8QdVd3cbM/wCx0eQNBU/hLWh
+ VLvw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=aHiiVC5y
-Subject: [Buildroot] [PATCH 1/1] package/sngrep: security bump to version
- 1.7.0
+ header.a=rsa-sha256 header.s=20230601 header.b=VhU4swIb
+Subject: [Buildroot] [PATCH v2 1/3] package/xserver_xorg-server: fix init
+ script conflicts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,52 +97,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-31981 and CVE-2023-31982
+From: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
 
-https://github.com/irontec/sngrep/blob/v1.7.0/ChangeLog
-https://github.com/irontec/sngrep/compare/v1.6.0...v1.7.0
+xdm package also installs a init script that utimately starts X server
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
 ---
- package/sngrep/sngrep.hash | 6 +++---
- package/sngrep/sngrep.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
-index 60a32022e6..c9b9c8be8d 100644
---- a/package/sngrep/sngrep.hash
-+++ b/package/sngrep/sngrep.hash
-@@ -1,6 +1,6 @@
--# From https://github.com/irontec/sngrep/releases/download/v1.6.0/sngrep-1.6.0.tar.gz.md5sum
--md5  1519ca6cd1167c0722debfb96e2ac173  sngrep-1.6.0.tar.gz
-+# From https://github.com/irontec/sngrep/releases/download/v1.7.0/sngrep-1.7.0.tar.gz.md5sum
-+md5  ee3cc7bd75adeb713411aa678e45ae4c  sngrep-1.7.0.tar.gz
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 593bbd4276..e5df7f7e93 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -181,12 +181,14 @@ define XSERVER_XORG_SERVER_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/xorg.service
+ endef
  
- # Locally computed
--sha256  fd80964d6560f2ff57b4f5bef2353d1a6f7c48d2f1a5f0a167c854bd2e801999  sngrep-1.6.0.tar.gz
-+sha256  2e5ba3a4d6486ea00bd73d2cceff383ba162dcd6d0170ae74cfa3b1c206e2cb1  sngrep-1.7.0.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index 0e344550d3..b86d7e83f0 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# init script conflicts with S90nodm
+-ifneq ($(BR2_PACKAGE_NODM),y)
+-define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
+-		$(TARGET_DIR)/etc/init.d/S40xorg
+-endef
++# init script conflicts with S90nodm and S99xdm
++ifneq ($(or $(BR2_PACKAGE_NODM), $(BR2_PACKAGE_XAPP_XDM)),)
++    # NODM or XDM is defined, do not define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
++else
++    define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
++        $(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
++            $(TARGET_DIR)/etc/init.d/S40xorg
++    endef
+ endif
  
--SNGREP_VERSION = 1.6.0
-+SNGREP_VERSION = 1.7.0
- SNGREP_SITE = \
- 	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
- SNGREP_LICENSE = GPL-3.0+
+ $(eval $(autotools-package))
 -- 
-2.40.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
