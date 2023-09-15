@@ -1,59 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19615EE645B
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 12:59:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 358C3EED615
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 15:58:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C3994193C;
-	Fri, 15 Sep 2023 12:59:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C3994193C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EB1A40089;
+	Fri, 15 Sep 2023 15:58:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EB1A40089
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HhjzHzybRxYi; Fri, 15 Sep 2023 12:59:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id wHz1IjBXN1Qs; Fri, 15 Sep 2023 15:58:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9AB0341938;
-	Fri, 15 Sep 2023 12:59:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AB0341938
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7888B400EA;
+	Fri, 15 Sep 2023 15:58:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7888B400EA
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98F481BF271
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 12:59:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C4621BF31E
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 15:58:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B4DB61346
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 12:59:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B4DB61346
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C67661363
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 15:58:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C67661363
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id G3X-sOV-ddGJ for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 12:59:20 +0000 (UTC)
-X-Greylist: delayed 566 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 15 Sep 2023 12:59:19 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87FF761341
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 87FF761341
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 12:59:19 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DA3151814B9; Fri, 15 Sep 2023 14:49:48 +0200 (CEST)
+ with ESMTP id RSXkP0_QspTu for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 15:58:51 +0000 (UTC)
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
+ [148.163.158.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4E7C160BAD
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 15:58:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E7C160BAD
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+ by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 38FFQ36N009374; Fri, 15 Sep 2023 15:58:50 GMT
+Received: from ppma21.wdc07v.mail.ibm.com
+ (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+ by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t4swhrx7t-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Fri, 15 Sep 2023 15:58:49 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+ by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 38FFESsG023142; Fri, 15 Sep 2023 15:58:49 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+ by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3t141pd50a-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Fri, 15 Sep 2023 15:58:49 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com
+ [10.39.53.229])
+ by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ 38FFwmDJ1245876
+ (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 15 Sep 2023 15:58:48 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id BA98F58058;
+ Fri, 15 Sep 2023 15:58:48 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id A32B65805B;
+ Fri, 15 Sep 2023 15:58:48 +0000 (GMT)
+Received: from arbab-laptop.localdomain (unknown [9.53.178.221])
+ by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+ Fri, 15 Sep 2023 15:58:48 +0000 (GMT)
+Received: by arbab-laptop.localdomain (Postfix, from userid 152845)
+ id DC08F180F3E; Fri, 15 Sep 2023 10:58:47 -0500 (CDT)
+From: Reza Arbab <arbab@linux.ibm.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 14:49:33 +0200
-Message-Id: <20230915124933.2975234-1-buildroot@heine.tech>
+Date: Fri, 15 Sep 2023 10:58:33 -0500
+Message-Id: <20230915155835.51140-4-arbab@linux.ibm.com>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20230915155835.51140-1-arbab@linux.ibm.com>
+References: <20230915155835.51140-1-arbab@linux.ibm.com>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5_TDNeuVuE_9B2lbGIdfICMnzPaLdiz9
+X-Proofpoint-ORIG-GUID: 5_TDNeuVuE_9B2lbGIdfICMnzPaLdiz9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-15_12,2023-09-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0
+ priorityscore=1501 mlxlogscore=494 mlxscore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309150138
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1694782190; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=2FT+zhRCaH+u478dXiQPJNlQKeo69/51kg++s44iISs=;
- b=AwSvtSOgxFPIPVawTeUea2Q+QLE/GkJ9ukaDd+bL7um3xytAa1x0pxX1lbLL9nJMy76+rn
- 5F2IyX4elV61puPaivc3LfwKcXYRVDjdvaz+PZZCHl6YT8lRyauuxaEvYnEyTeXO8nYLx7
- nkB0qJT+9KS2Chk6XuxfLWE9s5z0wdA=
+ d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=subcyLncRrQcrivvyDyzKPrQDQJHL/fXo23gHME18Zo=;
+ b=WOSqNpOttaou451wmc+b6lTHcnUNJ6ZHM+sBHW18wHmMx2elZyS4Ed0n6REsfg9gPkKV
+ Q7Xr5/uUJ40dhY8OXgpKHi946Zwdzm/nOlmA0BiKlXcyz+QPlyq+lsy5rvNFAX7LGl1o
+ 6KXHH/xE8AxlvsLFPqhHB2Z2xXSoUba/w1/R+8NbEgphphTVVx49ZpwBsFc8Cj3pDH7K
+ CFNnKTMmeqALAmejlkTotR+UJr+OgfqRQYGlh03oKvRCFCVNalGS2WISHL3egJ87NDrb
+ rM4nxy+rSNcw7ef5sDfBl4g+/+2dw9EX+1NAopDrbrEQbMgA0G3mHmQ44SS3GWGrCuNr ng== 
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=heine.tech header.i=@heine.tech
- header.a=rsa-sha256 header.s=dkim header.b=AwSvtSOg
-Subject: [Buildroot] [PATCH] package/boost: bump to version 1.83.0
+ dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
+ header.a=rsa-sha256 header.s=pp1 header.b=WOSqNpOt
+Subject: [Buildroot] [PATCH v2 3/5] package/petitboot: poll removable devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,171 +112,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Reza Arbab <arbab@linux.ibm.com>, Laurent Vivier <laurent@vivier.eu>,
+ Joel Stanley <joel@jms.id.au>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- add upstream patch for Unordered available on the Release Page.
+Add a udev rule to enable notification of media change events on
+removable devices, so petitboot can dynamically adapt to them.
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
+Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+Reviewed-by: Laurent Vivier <laurent@vivier.eu>
 ---
+ package/petitboot/petitboot.mk               | 2 ++
+ package/petitboot/removable-event-poll.rules | 3 +++
+ 2 files changed, 5 insertions(+)
+ create mode 100644 package/petitboot/removable-event-poll.rules
 
-Compile-tested with the following defconfigs:
-
-BR2_arm=y
-BR2_cortex_a15=y
-BR2_ARM_FPU_NEON=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_CC_TOOL=y
-BR2_PACKAGE_LIBUBOOTENV=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_BOTAN=y
-BR2_PACKAGE_LOG4CXX=y
-BR2_PACKAGE_LIBCPPRESTSDK=y
-BR2_PACKAGE_BOOST_CONTRACT=y
-BR2_PACKAGE_BOOST_COROUTINE=y
-BR2_PACKAGE_BOOST_EXCEPTION=y
-BR2_PACKAGE_BOOST_FIBER=y
-BR2_PACKAGE_BOOST_GRAPH=y
-BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
-BR2_PACKAGE_BOOST_IOSTREAMS=y
-BR2_PACKAGE_BOOST_JSON=y
-BR2_PACKAGE_BOOST_LOCALE=y
-BR2_PACKAGE_BOOST_LOG=y
-BR2_PACKAGE_BOOST_MATH=y
-BR2_PACKAGE_BOOST_MPI=y
-BR2_PACKAGE_BOOST_NOWIDE=y
-BR2_PACKAGE_BOOST_PYTHON=y
-BR2_PACKAGE_BOOST_SERIALIZATION=y
-BR2_PACKAGE_BOOST_STACKTRACE=y
-BR2_PACKAGE_BOOST_TEST=y
-BR2_PACKAGE_BOOST_TYPE_ERASURE=y
-BR2_PACKAGE_BOOST_URL=y
-BR2_PACKAGE_BOOST_WAVE=y
-BR2_PACKAGE_BITCOIN=y
-BR2_PACKAGE_I2PD=y
-
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_PULSEVIEW=y
-BR2_PACKAGE_GNURADIO=y
-
-BR2_sh=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_SH_SH4_UCLIBC_STABLE=y
-BR2_PACKAGE_BOOST=y
-BR2_PACKAGE_BOOST_CONTRACT=y
-BR2_PACKAGE_BOOST_EXCEPTION=y
-BR2_PACKAGE_BOOST_GRAPH=y
-BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
-BR2_PACKAGE_BOOST_IOSTREAMS=y
-BR2_PACKAGE_BOOST_JSON=y
-BR2_PACKAGE_BOOST_LOCALE=y
-BR2_PACKAGE_BOOST_LOG=y
-BR2_PACKAGE_BOOST_MATH=y
-BR2_PACKAGE_BOOST_MPI=y
-BR2_PACKAGE_BOOST_NOWIDE=y
-BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
-BR2_PACKAGE_BOOST_RANDOM=y
-BR2_PACKAGE_BOOST_SERIALIZATION=y
-BR2_PACKAGE_BOOST_STACKTRACE=y
-BR2_PACKAGE_BOOST_TEST=y
-BR2_PACKAGE_BOOST_TYPE_ERASURE=y
-BR2_PACKAGE_BOOST_URL=y
-BR2_PACKAGE_BOOST_WAVE=y
-
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_BOOST=y
-BR2_PACKAGE_BOOST_CONTRACT=y
-BR2_PACKAGE_BOOST_COROUTINE=y
-BR2_PACKAGE_BOOST_EXCEPTION=y
-BR2_PACKAGE_BOOST_FIBER=y
-BR2_PACKAGE_BOOST_GRAPH=y
-BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
-BR2_PACKAGE_BOOST_IOSTREAMS=y
-BR2_PACKAGE_BOOST_JSON=y
-BR2_PACKAGE_BOOST_LOCALE=y
-BR2_PACKAGE_BOOST_LOG=y
-BR2_PACKAGE_BOOST_MATH=y
-BR2_PACKAGE_BOOST_MPI=y
-BR2_PACKAGE_BOOST_NOWIDE=y
-BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
-BR2_PACKAGE_BOOST_RANDOM=y
-BR2_PACKAGE_BOOST_SERIALIZATION=y
-BR2_PACKAGE_BOOST_STACKTRACE=y
-BR2_PACKAGE_BOOST_TEST=y
-BR2_PACKAGE_BOOST_TYPE_ERASURE=y
-BR2_PACKAGE_BOOST_URL=y
-BR2_PACKAGE_BOOST_WAVE=y
----
- .../0001-unordered-fix-copy-assign.patch      | 22 +++++++++++++++++++
- package/boost/boost.hash                      |  4 ++--
- package/boost/boost.mk                        |  2 +-
- 3 files changed, 25 insertions(+), 3 deletions(-)
- create mode 100644 package/boost/0001-unordered-fix-copy-assign.patch
-
-diff --git a/package/boost/0001-unordered-fix-copy-assign.patch b/package/boost/0001-unordered-fix-copy-assign.patch
+diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+index 556d41230237..9326738aa038 100644
+--- a/package/petitboot/petitboot.mk
++++ b/package/petitboot/petitboot.mk
+@@ -57,6 +57,8 @@ define PETITBOOT_POST_INSTALL
+ 		$(TARGET_DIR)/etc/init.d/S15pb-discover
+ 	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
+ 		$(TARGET_DIR)/etc/udev/rules.d/petitboot-console-ui.rules
++	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/removable-event-poll.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/removable-event-poll.rules
+ 	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/sysctl.conf \
+ 		$(TARGET_DIR)/etc/sysctl.d/petitboot.conf
+ 	mkdir -p $(TARGET_DIR)/usr/share/udhcpc/default.script.d/
+diff --git a/package/petitboot/removable-event-poll.rules b/package/petitboot/removable-event-poll.rules
 new file mode 100644
-index 0000000000..55f5ccf245
+index 000000000000..57bb74d3c00c
 --- /dev/null
-+++ b/package/boost/0001-unordered-fix-copy-assign.patch
-@@ -0,0 +1,22 @@
-+Upstream Patch for Unordered
-+
-+Prevent erroneous copying of groups data, update max load to properly propagate
-+
-+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-+Upstream: https://github.com/boostorg/unordered/pull/210
-+diff --git a/include/boost/unordered/detail/foa/core.hpp b/include/boost/unordered/detail/foa/core.hpp
-+index 239d05d3..7ae9f2c8 100644
-+--- a/boost/unordered/detail/foa/core.hpp
-++++ b/boost/unordered/detail/foa/core.hpp
-+@@ -1870,9 +1870,10 @@ private:
-+ 
-+   void fast_copy_elements_from(const table_core& x)
-+   {
-+-    if(arrays.elements){
-++    if(arrays.elements&&x.arrays.elements){
-+       copy_elements_array_from(x);
-+       copy_groups_array_from(x);
-++      size_ctrl.ml=std::size_t(x.size_ctrl.ml);
-+       size_ctrl.size=std::size_t(x.size_ctrl.size);
-+     }
-+   }
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index 36de2b9b06..14403758ac 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,5 +1,5 @@
--# From https://www.boost.org/users/history/version_1_82_0.html
--sha256  a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6  boost_1_82_0.tar.bz2
-+# From https://www.boost.org/users/history/version_1_83_0.html
-+sha256  6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e  boost_1_83_0.tar.bz2
- 
- # Locally computed
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index d432ab48cc..9b1baec5bf 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOOST_VERSION = 1.82.0
-+BOOST_VERSION = 1.83.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source
- BOOST_INSTALL_STAGING = YES
++++ b/package/petitboot/removable-event-poll.rules
+@@ -0,0 +1,3 @@
++# petitboot needs notification for media change events on removable devices,
++# which we only get if we've set the poll_msecs sysfs attribute.
++ACTION!="remove", ATTR{removable}=="1", ATTR{events_poll_msecs}="2000"
 -- 
-2.34.1
+2.39.3
 
 _______________________________________________
 buildroot mailing list
