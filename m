@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A84AEE6425
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 07:25:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E315EE6432
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 07:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B8ED82240;
-	Fri, 15 Sep 2023 07:25:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B8ED82240
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0EC883BA7;
+	Fri, 15 Sep 2023 07:44:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0EC883BA7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I7of18HTTZiL; Fri, 15 Sep 2023 07:25:26 +0000 (UTC)
+	with ESMTP id 11rEGazyux9M; Fri, 15 Sep 2023 07:44:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF32982144;
-	Fri, 15 Sep 2023 07:25:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF32982144
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 50AF61BF271
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 07:25:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0325683BA5;
+	Fri, 15 Sep 2023 07:44:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0325683BA5
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 118441BF271
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 07:44:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35B1741F9D
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 07:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B1741F9D
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB70B83B9F
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 07:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB70B83B9F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sKoAEjpgl7OV for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 07:25:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ECbHRhcGWNPR for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 07:44:02 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA7DB41F26
- for <buildroot@uclibc.org>; Fri, 15 Sep 2023 07:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA7DB41F26
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F9CD83B9E
+ for <buildroot@uclibc.org>; Fri, 15 Sep 2023 07:44:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F9CD83B9E
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id C2B4586FC2; Fri, 15 Sep 2023 07:25:22 +0000 (UTC)
+ id 0DD9986FF2; Fri, 15 Sep 2023 07:44:01 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Fri, 15 Sep 2023 07:25:22 +0000
+Date: Fri, 15 Sep 2023 07:44:01 +0000
 X-Bugzilla-Reason: CC
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: buildroot
 X-Bugzilla-Component: Other
@@ -54,14 +54,14 @@ X-Bugzilla-Priority: P5
 X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
 X-Bugzilla-Target-Milestone: ---
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter cc
- target_milestone
-Message-ID: <bug-15772-163@https.bugs.busybox.net/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-15772-163-55fkk6lyYS@https.bugs.busybox.net/>
+In-Reply-To: <bug-15772-163@https.bugs.busybox.net/>
+References: <bug-15772-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15772] New: lz4 failed to compile with gcc 10.4.0
+Subject: [Buildroot] [Bug 15772] lz4 failed to compile with gcc 10.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,106 +73,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9idWdzLmJ1c3lib3gubmV0L3Nob3dfYnVnLmNnaT9pZD0xNTc3MgoKICAgICAgICAg
-ICAgQnVnIElEOiAxNTc3MgogICAgICAgICAgIFN1bW1hcnk6IGx6NCBmYWlsZWQgdG8gY29tcGls
-ZSB3aXRoIGdjYyAxMC40LjAKICAgICAgICAgICBQcm9kdWN0OiBidWlsZHJvb3QKICAgICAgICAg
-ICBWZXJzaW9uOiAyMDIzLjAyCiAgICAgICAgICBIYXJkd2FyZTogQWxsCiAgICAgICAgICAgICAg
-ICBPUzogTGludXgKICAgICAgICAgICAgU3RhdHVzOiBORVcKICAgICAgICAgIFNldmVyaXR5OiBj
-cml0aWNhbAogICAgICAgICAgUHJpb3JpdHk6IFA1CiAgICAgICAgIENvbXBvbmVudDogT3RoZXIK
-ICAgICAgICAgIEFzc2lnbmVlOiB1bmFzc2lnbmVkQGJ1aWxkcm9vdC51Y2xpYmMub3JnCiAgICAg
-ICAgICBSZXBvcnRlcjogdHJ1bmcubGVAcnVieS1qb3VybmFsLmNvbQogICAgICAgICAgICAgICAg
-Q0M6IGJ1aWxkcm9vdEB1Y2xpYmMub3JnCiAgVGFyZ2V0IE1pbGVzdG9uZTogLS0tCgpJIGdvdCBm
-b2xsb3dpbmcgZXJyb3I6CgpgYGAKPj4+IGhvc3QtbHo0IDEuOS40IEJ1aWxkaW5nClBBVEg9Ii9o
-b21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9ob3N0L2JpbjovaG9tZS90bGUvV29yay9vcC1i
-dWlsZC9vdXRwdXQvaG9zdC9zYmluOi9ob21lL3RsZS8ubG9jYWwvYmluOi9ob21lL3RsZS9iaW46
-L3Vzci9sb2NhbC9zYmluOi91c3IvbG9jYWwvYmluOi91c3Ivc2JpbjovdXNyL2Jpbjovc2Jpbjov
-YmluIgpQS0dfQ09ORklHPSIvaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9iaW4v
-cGtnLWNvbmZpZyIKUEtHX0NPTkZJR19TWVNST09UX0RJUj0iLyIgUEtHX0NPTkZJR19BTExPV19T
-WVNURU1fQ0ZMQUdTPTEKUEtHX0NPTkZJR19BTExPV19TWVNURU1fTElCUz0xClBLR19DT05GSUdf
-TElCRElSPSIvaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9saWIvcGtnY29uZmln
-Oi9ob21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9ob3N0L3NoYXJlL3BrZ2NvbmZpZyIKUEFU
-SD0iL2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2hvc3QvYmluOi9ob21lL3RsZS9Xb3Jr
-L29wLWJ1aWxkL291dHB1dC9ob3N0L3NiaW46L2hvbWUvdGxlLy5sb2NhbC9iaW46L2hvbWUvdGxl
-L2JpbjovdXNyL2xvY2FsL3NiaW46L3Vzci9sb2NhbC9iaW46L3Vzci9zYmluOi91c3IvYmluOi9z
-YmluOi9iaW4iClBLR19DT05GSUc9Ii9ob21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9ob3N0
-L2Jpbi9wa2ctY29uZmlnIgpQS0dfQ09ORklHX1NZU1JPT1RfRElSPSIvIiBQS0dfQ09ORklHX0FM
-TE9XX1NZU1RFTV9DRkxBR1M9MQpQS0dfQ09ORklHX0FMTE9XX1NZU1RFTV9MSUJTPTEKUEtHX0NP
-TkZJR19MSUJESVI9Ii9ob21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9ob3N0L2xpYi9wa2dj
-b25maWc6L2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2hvc3Qvc2hhcmUvcGtnY29uZmln
-IgpBUj0iL3Vzci9iaW4vYXIiIEFTPSIvdXNyL2Jpbi9hcyIgTEQ9Ii91c3IvYmluL2xkIiBOTT0i
-L3Vzci9iaW4vbm0iCkNDPSIvdXNyL2Jpbi9nY2MiIEdDQz0iL3Vzci9iaW4vZ2NjIiBDWFg9Ii91
-c3IvYmluL2crKyIgQ1BQPSIvdXNyL2Jpbi9jcHAiCk9CSkNPUFk9Ii91c3IvYmluL29iamNvcHki
-IFJBTkxJQj0iL3Vzci9iaW4vcmFubGliIgpDUFBGTEFHUz0iLUkvaG9tZS90bGUvV29yay9vcC1i
-dWlsZC9vdXRwdXQvaG9zdC9pbmNsdWRlIiBDRkxBR1M9Ii1PMgotSS9ob21lL3RsZS9Xb3JrL29w
-LWJ1aWxkL291dHB1dC9ob3N0L2luY2x1ZGUiIENYWEZMQUdTPSItTzIKLUkvaG9tZS90bGUvV29y
-ay9vcC1idWlsZC9vdXRwdXQvaG9zdC9pbmNsdWRlIgpMREZMQUdTPSItTC9ob21lL3RsZS9Xb3Jr
-L29wLWJ1aWxkL291dHB1dC9ob3N0L2xpYgotV2wsLXJwYXRoLC9ob21lL3RsZS9Xb3JrL29wLWJ1
-aWxkL291dHB1dC9ob3N0L2xpYiIgSU5UTFRPT0xfUEVSTD0vdXNyL2Jpbi9wZXJsCi91c3IvYmlu
-L21ha2UgLWozMyAtQyAvaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvYnVpbGQvaG9zdC1s
-ejQtMS45LjQgbGliCm1ha2VbMV06IEVudGVyaW5nIGRpcmVjdG9yeQonL2hvbWUvdGxlL1dvcmsv
-b3AtYnVpbGQvb3V0cHV0L2J1aWxkL2hvc3QtbHo0LTEuOS40JwptYWtlWzJdOiBFbnRlcmluZyBk
-aXJlY3RvcnkKJy9ob21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9idWlsZC9ob3N0LWx6NC0x
-LjkuNC9saWInCm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5CicvaG9tZS90bGUvV29yay9vcC1i
-dWlsZC9vdXRwdXQvYnVpbGQvaG9zdC1sejQtMS45LjQvbGliJwptYWtlWzJdOiBFbnRlcmluZyBk
-aXJlY3RvcnkKJy9ob21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9idWlsZC9ob3N0LWx6NC0x
-LjkuNC9saWInCm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5CicvaG9tZS90bGUvV29yay9vcC1i
-dWlsZC9vdXRwdXQvYnVpbGQvaG9zdC1sejQtMS45LjQvbGliJwptYWtlWzFdOiBMZWF2aW5nIGRp
-cmVjdG9yeQonL2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2J1aWxkL2hvc3QtbHo0LTEu
-OS40JwpQQVRIPSIvaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9iaW46L2hvbWUv
-dGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2hvc3Qvc2JpbjovaG9tZS90bGUvLmxvY2FsL2Jpbjov
-aG9tZS90bGUvYmluOi91c3IvbG9jYWwvc2JpbjovdXNyL2xvY2FsL2JpbjovdXNyL3NiaW46L3Vz
-ci9iaW46L3NiaW46L2JpbiIKUEtHX0NPTkZJRz0iL2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0
-cHV0L2hvc3QvYmluL3BrZy1jb25maWciClBLR19DT05GSUdfU1lTUk9PVF9ESVI9Ii8iIFBLR19D
-T05GSUdfQUxMT1dfU1lTVEVNX0NGTEFHUz0xClBLR19DT05GSUdfQUxMT1dfU1lTVEVNX0xJQlM9
-MQpQS0dfQ09ORklHX0xJQkRJUj0iL2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2hvc3Qv
-bGliL3BrZ2NvbmZpZzovaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9zaGFyZS9w
-a2djb25maWciClBBVEg9Ii9ob21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9ob3N0L2Jpbjov
-aG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9zYmluOi9ob21lL3RsZS8ubG9jYWwv
-YmluOi9ob21lL3RsZS9iaW46L3Vzci9sb2NhbC9zYmluOi91c3IvbG9jYWwvYmluOi91c3Ivc2Jp
-bjovdXNyL2Jpbjovc2JpbjovYmluIgpQS0dfQ09ORklHPSIvaG9tZS90bGUvV29yay9vcC1idWls
-ZC9vdXRwdXQvaG9zdC9iaW4vcGtnLWNvbmZpZyIKUEtHX0NPTkZJR19TWVNST09UX0RJUj0iLyIg
-UEtHX0NPTkZJR19BTExPV19TWVNURU1fQ0ZMQUdTPTEKUEtHX0NPTkZJR19BTExPV19TWVNURU1f
-TElCUz0xClBLR19DT05GSUdfTElCRElSPSIvaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQv
-aG9zdC9saWIvcGtnY29uZmlnOi9ob21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9ob3N0L3No
-YXJlL3BrZ2NvbmZpZyIKQVI9Ii91c3IvYmluL2FyIiBBUz0iL3Vzci9iaW4vYXMiIExEPSIvdXNy
-L2Jpbi9sZCIgTk09Ii91c3IvYmluL25tIgpDQz0iL3Vzci9iaW4vZ2NjIiBHQ0M9Ii91c3IvYmlu
-L2djYyIgQ1hYPSIvdXNyL2Jpbi9nKysiIENQUD0iL3Vzci9iaW4vY3BwIgpPQkpDT1BZPSIvdXNy
-L2Jpbi9vYmpjb3B5IiBSQU5MSUI9Ii91c3IvYmluL3JhbmxpYiIKQ1BQRkxBR1M9Ii1JL2hvbWUv
-dGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2hvc3QvaW5jbHVkZSIgQ0ZMQUdTPSItTzIKLUkvaG9t
-ZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9pbmNsdWRlIiBDWFhGTEFHUz0iLU8yCi1J
-L2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2hvc3QvaW5jbHVkZSIKTERGTEFHUz0iLUwv
-aG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9saWIKLVdsLC1ycGF0aCwvaG9tZS90
-bGUvV29yay9vcC1idWlsZC9vdXRwdXQvaG9zdC9saWIiIElOVExUT09MX1BFUkw9L3Vzci9iaW4v
-cGVybAovdXNyL2Jpbi9tYWtlIC1qMzMgLUMgL2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0
-L2J1aWxkL2hvc3QtbHo0LTEuOS40IGx6NAptYWtlWzFdOiBFbnRlcmluZyBkaXJlY3RvcnkKJy9o
-b21lL3RsZS9Xb3JrL29wLWJ1aWxkL291dHB1dC9idWlsZC9ob3N0LWx6NC0xLjkuNCcKbWFrZVsy
-XTogRW50ZXJpbmcgZGlyZWN0b3J5CicvaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvYnVp
-bGQvaG9zdC1sejQtMS45LjQvbGliJwptYWtlWzJdOiBMZWF2aW5nIGRpcmVjdG9yeQonL2hvbWUv
-dGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2J1aWxkL2hvc3QtbHo0LTEuOS40L2xpYicKbWFrZVsy
-XTogRW50ZXJpbmcgZGlyZWN0b3J5CicvaG9tZS90bGUvV29yay9vcC1idWlsZC9vdXRwdXQvYnVp
-bGQvaG9zdC1sejQtMS45LjQvcHJvZ3JhbXMnCmJlbmNoLmM6IEluIGZ1bmN0aW9uIOKAmExaNEZf
-ZGVjb21wcmVzc19iaW5kaW5n4oCZOgpiZW5jaC5jOjMyNDozNzogd2FybmluZzogbWlzc2luZyBi
-cmFjZXMgYXJvdW5kIGluaXRpYWxpemVyIFstV21pc3NpbmctYnJhY2VzXQogIDMyNCB8ICAgICBM
-WjRGX2RlY29tcHJlc3NPcHRpb25zX3QgZE9wdCA9IHsgMSwgMCwgMCwgMCB9OwogICAgICB8ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4KICAgICAgfCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHsgICAgICAgfQpiZW5jaC5jOjMyNjo5OiBlcnJv
-cjog4oCYTFo0Rl9kZWNvbXByZXNzT3B0aW9uc1904oCZIGhhcyBubyBtZW1iZXIgbmFtZWQK4oCY
-c2tpcENoZWNrc3Vtc+KAmQogIDMyNiB8ICAgICBkT3B0LnNraXBDaGVja3N1bXMgPSBnX3NraXBD
-aGVja3N1bXM7CiAgICAgIHwgICAgICAgICBeCm1ha2VbMl06ICoqKiBbPGJ1aWx0aW4+OiBiZW5j
-aC5vXSBFcnJvciAxCm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5CicvaG9tZS90bGUvV29yay9v
-cC1idWlsZC9vdXRwdXQvYnVpbGQvaG9zdC1sejQtMS45LjQvcHJvZ3JhbXMnCm1ha2VbMV06ICoq
-KiBbTWFrZWZpbGU6NjM6IGx6NF0gRXJyb3IgMgptYWtlWzFdOiBMZWF2aW5nIGRpcmVjdG9yeQon
-L2hvbWUvdGxlL1dvcmsvb3AtYnVpbGQvb3V0cHV0L2J1aWxkL2hvc3QtbHo0LTEuOS40JwptYWtl
-OiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MjkzOiAvaG9tZS90bGUvV29yay9vcC1idWls
-ZC9vCmBgYAoKSSBkbyBub3Qgc2VlIGFueSBjaGFuZ2VzIGJldHdlZW4gMjAyMy4wMiBhbmQgMjAy
-My4wOCBmb3IgbHo0IHNvIEkgYXNzdW1lIHRoaXMKaXNzdWUgbWlnaHQgYWxzbyBpbXBhY3QgMjAy
-My4wOAoKLS0gCllvdSBhcmUgcmVjZWl2aW5nIHRoaXMgbWFpbCBiZWNhdXNlOgpZb3UgYXJlIG9u
-IHRoZSBDQyBsaXN0IGZvciB0aGUgYnVnLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+https://bugs.busybox.net/show_bug.cgi?id=15772
+
+--- Comment #1 from trung.le@ruby-journal.com ---
+The fix is quite trivial:
+
+```diff
+# file: programs/bench.c
+- #include "lz4frame.h"   /* LZ4F_decompress */
++ #include "../lib/lz4frame.h"   /* LZ4F_decompress */
+```
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
