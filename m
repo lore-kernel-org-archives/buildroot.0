@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E9BDEED61E
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:52:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A99BCEED61E
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:53:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2ECDA4182C;
-	Fri, 15 Sep 2023 17:52:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2ECDA4182C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 624DB404EB;
+	Fri, 15 Sep 2023 17:53:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 624DB404EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3U_82QZDd_DV; Fri, 15 Sep 2023 17:52:13 +0000 (UTC)
+	with ESMTP id zLPnCEw0EjJH; Fri, 15 Sep 2023 17:53:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7FB83404EB;
-	Fri, 15 Sep 2023 17:52:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FB83404EB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3EF971BF2FD
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:52:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5EF64031E;
+	Fri, 15 Sep 2023 17:53:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5EF64031E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6323F1BF2FD
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 182BF404EB
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:52:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 182BF404EB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A63D61385
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:53:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A63D61385
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7qiQgiXkNwhI for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 17:52:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gp26eyM4lG3w for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 17:53:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F5824014B
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:52:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F5824014B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BD9560BDA
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:53:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BD9560BDA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4CCAA87031; Fri, 15 Sep 2023 17:52:10 +0000 (UTC)
+ id 5A1718703F; Fri, 15 Sep 2023 17:53:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 19:50:55 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1094120d6ad6f6094716a44d73107022af262d9b
-X-Git-Newrev: 4c3f927d51ac6a7a16c993e2284277197dbf0a0d
+Date: Fri, 15 Sep 2023 19:50:49 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: c42be1a5524d2f8a193881717977d3a0f4225171
+X-Git-Newrev: b52299adfdb930a8bb5da9ac1f6896e4eab5ba3d
 X-Patchwork-Hint: ignore
-Message-Id: <20230915175210.4CCAA87031@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] utils/getdeveloperlib.py:
+Message-Id: <20230915175318.5A1718703F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] utils/getdeveloperlib.py:
  handle file removal
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c3f927d51ac6a7a16c993e2284277197dbf0a0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b52299adfdb930a8bb5da9ac1f6896e4eab5ba3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 If a patch only removes files, it is ignored. Meaning, that the
 registered developer isn't automatically picked up when calling
