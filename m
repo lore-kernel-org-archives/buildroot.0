@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23434CD37AA
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 21:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46262CD37AD
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 21:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C309D419AC;
-	Fri, 15 Sep 2023 21:37:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C309D419AC
+	by smtp2.osuosl.org (Postfix) with ESMTP id F135340443;
+	Fri, 15 Sep 2023 21:37:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F135340443
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4ykCc-s26Yzz; Fri, 15 Sep 2023 21:37:12 +0000 (UTC)
+	with ESMTP id xMbIeVD5dncn; Fri, 15 Sep 2023 21:37:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 103F340482;
-	Fri, 15 Sep 2023 21:37:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 103F340482
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 39F271BF3D2
+	by smtp2.osuosl.org (Postfix) with ESMTP id 48538419CC;
+	Fri, 15 Sep 2023 21:37:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48538419CC
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DE521BF3D2
  for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1379483ED1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CA0C4223F
  for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:37:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1379483ED1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CA0C4223F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lKwcFi2npTqp for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9n-Qw-fLIzSd for <buildroot@lists.busybox.net>;
  Fri, 15 Sep 2023 21:37:08 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C1F983ECE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52E104223D
  for <buildroot@buildroot.org>; Fri, 15 Sep 2023 21:37:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C1F983ECE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52E104223D
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 285998707F; Fri, 15 Sep 2023 21:37:08 +0000 (UTC)
+ id 3E51987081; Fri, 15 Sep 2023 21:37:08 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 23:32:45 +0200
+Date: Fri, 15 Sep 2023 23:32:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9434a379dc852dc7b35430089e5a4b9a2cc80a0f
-X-Git-Newrev: db2e1539182a6d5332939eb1a2dc090d9c5db325
+X-Git-Oldrev: db2e1539182a6d5332939eb1a2dc090d9c5db325
+X-Git-Newrev: 7ef2e9896fb95f6fb12881bee498f568eb6af56f
 X-Patchwork-Hint: ignore
-Message-Id: <20230915213708.285998707F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mg: bump to v3.7
+Message-Id: <20230915213708.3E51987081@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysklogd: bump to v2.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,52 +62,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db2e1539182a6d5332939eb1a2dc090d9c5db325
+commit: https://git.buildroot.net/buildroot/commit/?id=7ef2e9896fb95f6fb12881bee498f568eb6af56f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Sync w/ OpenBSD upstream
- - Fix key bindings, Home/End
- - Fix buffer overflow on no match in i-search
- - Fix mark reset
- - Usability:
-   - persistent help in status bar
-   - F1 toggle quick-help buffer
-   - F2 save
-   - F3/F4 macro start/end + run, like GNU Emacs
-
-Full ChangeLog https://github.com/troglobit/mg/releases/tag/v3.7
+- Improved accuracy of MARK timer, optional, default: 20 minutes.
+ - Fix sub-second faking of kernel timestamps
+ - Fix reading kernel logs from /proc/kmsg, regression in v2.4.0.
+   Only relevant to really old kernels (pre 4.4?) or systems with
+   static device nodes and no auto-devtmpfs mounting in kernel
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mg/mg.hash | 4 ++--
- package/mg/mg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sysklogd/sysklogd.hash | 2 +-
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mg/mg.hash b/package/mg/mg.hash
-index e8eedb8921..6a3e3465b8 100644
---- a/package/mg/mg.hash
-+++ b/package/mg/mg.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/troglobit/mg/releases/tag/v3.6
--sha256  0e30f99b7606ddd92535aec0ba0118557afa4adca0961267314a4bf7791865fb  mg-3.6.tar.gz
-+# From https://github.com/troglobit/mg/releases/tag/v3.7
-+sha256  05101360d2194392da0950e8b6f18d067d8af0fd2f572461ba4d4e7b4ccbb4c1  mg-3.7.tar.gz
- # Locally computed:
- sha256  7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  UNLICENSE
-diff --git a/package/mg/mg.mk b/package/mg/mg.mk
-index 88f8f60257..59f1d1e316 100644
---- a/package/mg/mg.mk
-+++ b/package/mg/mg.mk
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 30ce6d9c0b..7e00990174 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,5 +1,5 @@
+ # Upstream .sha256 from GitHub
+-sha256  e1d635944e5a6062c8ea18b9506668ebdaefacea1965147f60cf3fb3a25770e8  sysklogd-2.5.0.tar.gz
++sha256  9da4444285772ce2bfc9c687be8f978b7a9fe7d3937347cd4938eda0c4545e05  sysklogd-2.5.2.tar.gz
+ 
+ # Locally calculated
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index ebc9f89cf7..7a46d759d3 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MG_VERSION = 3.6
-+MG_VERSION = 3.7
- MG_SITE = https://github.com/troglobit/mg/releases/download/v$(MG_VERSION)
- MG_LICENSE = Public Domain
- MG_LICENSE_FILES = UNLICENSE
+-SYSKLOGD_VERSION = 2.5.0
++SYSKLOGD_VERSION = 2.5.2
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
