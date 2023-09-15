@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20565CD37AA
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 21:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56FF9CD37AA
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 21:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E531419BF;
-	Fri, 15 Sep 2023 21:09:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E531419BF
+	by smtp2.osuosl.org (Postfix) with ESMTP id 048F641989;
+	Fri, 15 Sep 2023 21:10:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 048F641989
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hJEKc85fvH3d; Fri, 15 Sep 2023 21:09:29 +0000 (UTC)
+	with ESMTP id OVa9Xurbv8eM; Fri, 15 Sep 2023 21:10:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AEEDB41980;
-	Fri, 15 Sep 2023 21:09:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEDB41980
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32C1841980;
+	Fri, 15 Sep 2023 21:10:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32C1841980
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2E2C21BF29D
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:09:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C8C5E1BF29D
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 070B3612D8
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:09:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 070B3612D8
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF58660E4A
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF58660E4A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0SUXcmAjrVzB for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 21:09:21 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2884D60AD2
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 21:09:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2884D60AD2
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 154A08704C; Fri, 15 Sep 2023 21:09:21 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 23:08:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eb4f5a2cbc8f6caf8929495318f5f3dbb11f134a
-X-Git-Newrev: de45aea47bfaffaa3ccef02b247f94ab78ab1add
-X-Patchwork-Hint: ignore
-Message-Id: <20230915210921.154A08704C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libjxl: fix riscv build
+ with ESMTP id aU_dQjvN3vSc for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 21:10:19 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A22F060AD2
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 21:10:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A22F060AD2
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:9162:d12f:41c1:9c3])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 6A2CA2003A4;
+ Fri, 15 Sep 2023 23:10:14 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 15 Sep 2023 23:10:14 +0200
+Date: Fri, 15 Sep 2023 23:10:14 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20230915211014.GD2571@scaer>
+References: <20230915182305.975086-1-fontaine.fabrice@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230915182305.975086-1-fontaine.fabrice@gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1694812217;
+ bh=9Qu654gkdd24Ri+8mPUgT2j6Exx1aOfm6cevGMchKVE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DxZAc50cUy4ci+MhWpteIZE0FLx+oVKgEg0EwRtuvVCmSN5FnaYTvUdskPIHtLD+D
+ Z76SwQWznW/6chTvu75nxAj6I8XCttDiO7zhaflJ03tqqUrwOHRRiJURfHmAPSlPyX
+ HaDAkhlW5SElyY3EdRgeUMDcYCztOXCraQoNobRtiEPTfDt9AEMr5PF/Re2HS3HAzV
+ YPw76/RpVgI17vVNK9YVpOv2jeVM8/uTDN9RpHRYWL/5dpuzx0RTFsvdEBdLoKMd0x
+ +64o1tscGC88gnPMkAxIwSZ3ZjnhNibJXl1eJbAYi2eLy7hb98W8z0DyvedRXJt41t
+ 0ubiACCwkDDig==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DxZAc50c
+Subject: Re: [Buildroot] [PATCH 1/1] package/irssi: bump to version 1.4.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,106 +75,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1414914085644940382=="
+Cc: Rodrigo Rebello <rprebello@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1414914085644940382==
-Content-Type: text/plain
+Fabrice, All,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de45aea47bfaffaa3ccef02b247f94ab78ab1add
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2023-09-15 20:23 +0200, Fabrice Fontaine spake thusly:
+> Fix CVE-2023-29132: Irssi 1.3.x and 1.4.x before 1.4.4 has a
+> use-after-free because of use of a stale special collector reference.
+> This occurs when printing of a non-formatted line is concurrent with
+> printing of a formatted line.
+> 
+> https://irssi.org/NEWS/#news-v1-4-4
+> https://irssi.org/NEWS/#news-v1-4-3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-libjxl was failing to build for riscv targets, since commit ff7c37e57
-"package/libjxl: security bump to version 0.8.1". Build was failing with
-output:
+Applied to master, thanks.
 
-    /build/libjxl-0.8.1/lib/jxl/enc_xyb.cc: In function 'jxl::Image3F jxl::N_SCALAR::TransformToLinearRGB(const jxl::Image3F&, const jxl::ColorEncoding&, float, const JxlCmsInterface&, jxl::ThreadPool*)':
-    /build/libjxl-0.8.1/lib/jxl/enc_xyb.cc:223:21: error: variable 'std::atomic<bool> ok' has initializer but incomplete type
-      223 |   std::atomic<bool> ok{true};
-          |                     ^~
+Regards,
+Yann E. MORIN.
 
-This build failure was due to a missing <atomic> header inclusion. For
-some reason, the build failure was observed only with RISC-V toolchains.
+> ---
+>  package/irssi/irssi.hash | 2 +-
+>  package/irssi/irssi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+> index ecd339d83d..df72ee4d76 100644
+> --- a/package/irssi/irssi.hash
+> +++ b/package/irssi/irssi.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -sha256  79a4765d2dfe153c440a1775b074d5d0682b96814c7cf92325b5e15ce50e26a8  irssi-1.4.2.tar.xz
+> +sha256  fefe9ec8c7b1475449945c934a2360ab12693454892be47a6d288c63eb107ead  irssi-1.4.4.tar.xz
+>  # Locally calculated
+>  sha256  a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+> diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+> index c2d02289ad..6790bf0c96 100644
+> --- a/package/irssi/irssi.mk
+> +++ b/package/irssi/irssi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -IRSSI_VERSION = 1.4.2
+> +IRSSI_VERSION = 1.4.4
+>  IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+>  IRSSI_SITE = https://codeberg.org/irssi/irssi/releases/download/$(IRSSI_VERSION)
+>  IRSSI_LICENSE = GPL-2.0+
+> -- 
+> 2.40.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-This commit fixes the issue by adding an upstream commit, not yet in a
-package release. See [1].
-
-Fixes:
-http://autobuild.buildroot.org/results/121/12107bc7aea7afae1d2fb935d31b44eee6ea1501
-
-[1] https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...-atomic-content-to-fix-gcc-compilation-fo.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch b/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch
-new file mode 100644
-index 0000000000..b856b00728
---- /dev/null
-+++ b/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch
-@@ -0,0 +1,47 @@
-+From 42e944a471672dae8522fbcf161941895ba16632 Mon Sep 17 00:00:00 2001
-+From: Eastdong <31920925+IEAST@users.noreply.github.com>
-+Date: Thu, 23 Feb 2023 06:08:36 +0800
-+Subject: [PATCH] Add missing <atomic> content to fix gcc compilation for RISCV
-+ architecture. (#2211)
-+
-+* Add missing <atomic> content to fix gcc compilation for RISCV architecture.
-+
-+* add name to AUTHORS
-+
-+* lint fix
-+
-+Co-authored-by: Moritz Firsching <firsching@google.com>
-+Upstream: https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ AUTHORS            | 1 +
-+ lib/jxl/enc_xyb.cc | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/AUTHORS b/AUTHORS
-+index 44dcc409..3340422d 100644
-+--- a/AUTHORS
-++++ b/AUTHORS
-+@@ -30,6 +30,7 @@ Daniel Novomeský <dnovomesky@gmail.com>
-+ David Burnett <vargolsoft@gmail.com>
-+ Dirk Lemstra <dirk@lemstra.org>
-+ Don Olmstead <don.j.olmstead@gmail.com>
-++Dong Xu <xdong181@gmail.com>
-+ Even Rouault <even.rouault@spatialys.com>
-+ Fred Brennan <copypaste@kittens.ph>
-+ Heiko Becker <heirecka@exherbo.org>
-+diff --git a/lib/jxl/enc_xyb.cc b/lib/jxl/enc_xyb.cc
-+index c7310765..2fd5d025 100644
-+--- a/lib/jxl/enc_xyb.cc
-++++ b/lib/jxl/enc_xyb.cc
-+@@ -6,6 +6,7 @@
-+ #include "lib/jxl/enc_xyb.h"
-+ 
-+ #include <algorithm>
-++#include <atomic>
-+ #include <cstdlib>
-+ 
-+ #undef HWY_TARGET_INCLUDE
-+-- 
-+2.41.0
-+
-
---===============1414914085644940382==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1414914085644940382==--
