@@ -4,62 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5125CD37AD
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 22:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ECBFCD37AA
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 22:16:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 274C7613E5;
-	Fri, 15 Sep 2023 22:15:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 274C7613E5
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6C8A613F7;
+	Fri, 15 Sep 2023 22:16:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6C8A613F7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id CKvtUHxvfel7; Fri, 15 Sep 2023 22:15:07 +0000 (UTC)
+	with ESMTP id Y24ReyprARcf; Fri, 15 Sep 2023 22:16:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43ED8613F0;
-	Fri, 15 Sep 2023 22:15:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43ED8613F0
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EC9B41BF3EA
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 22:15:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0016613F0;
+	Fri, 15 Sep 2023 22:16:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0016613F0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 858A51BF3EA
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 22:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C1350613E5
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 22:15:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1350613E5
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B556405DD
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 22:16:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B556405DD
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id P3AFfvxhgLps for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 22:15:02 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 67239613F0
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 22:15:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67239613F0
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id B97DC13F838;
- Sat, 16 Sep 2023 00:14:55 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5sPwZNAoH05I for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 22:16:29 +0000 (UTC)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E84B540545
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 22:16:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E84B540545
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-31fa666000dso2415038f8f.2
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 15:16:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1694816186; x=1695420986;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=122V7YcBGHMYfCPglk/otoV3EhYPdi4UCo9N2Dxtn1s=;
+ b=J+HoqDtFdNAX9I8tNEtdAFbrEiVAp3bRDizd/ukfMl8SNxIlBS0Rpi5kVvuU21u5eX
+ p5sKAtm5djr3pbXoLU+ccjl/beM7FuVEaWlcvCDVYdUeTn7+Oda2KPoUdyRAEEXmlyVz
+ tgpdPI0XyBkOuH5X2EOSZfD6mPYrmxCx4S9jMQvJ5+EVCK5BSY3LrZPq/2luEZIaFeme
+ 9Dp7Zlce4XQftAmtewkNHaLrrSnY/hWEXL18kBY5s0JfhVjA3LqYsv0DQMbYYgK8c5ht
+ E1kk02fJwO5ukfrG2fAP23NOKwQ76tUFU6Kqnsaokh5pbGKDIRKF+xdjbXB30O1mlF7s
+ AflQ==
+X-Gm-Message-State: AOJu0YxDoGR6yBPDSGfcTyu6G6XZWvIX7jBgS3e7S+zI4OWUqX24wOp0
+ /UXRsDBokpaEdwBuwEvf45uB6OpNfv8=
+X-Google-Smtp-Source: AGHT+IGtzi1bixQPtFrj3QaOQgAOM1FyFb8zfH0IO/COtzyPKEpGq0rmKParzHGOqMkAIw5dJqGJAg==
+X-Received: by 2002:a05:6000:38e:b0:31f:fdd8:7d56 with SMTP id
+ u14-20020a056000038e00b0031ffdd87d56mr535718wrf.12.1694816186534; 
+ Fri, 15 Sep 2023 15:16:26 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ k8-20020a5d4288000000b0031431fb40fasm5421512wrq.89.2023.09.15.15.16.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 15 Sep 2023 15:16:26 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Sep 2023 00:14:44 +0200
-Message-ID: <20230915221444.1686011-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Date: Sat, 16 Sep 2023 00:16:22 +0200
+Message-Id: <20230915221622.207938-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694816099;
- bh=M4svdXeJGymalntB7z4KU8bc++zJ8SUPJtGEseKx4xY=;
- h=From:To:Cc:Subject:Date:From;
- b=SdJxXaCgW/YftsiqqjHHOfiaJQgxMLRP3Yvo17nV46iiv0kt82WisBcUHeP/WRFaz
- tK2jWGtVRcplHcBx2ueZvYbDcT/qmU7QKybVoUlspAyTR/8EBCTxXSkFnzecSvf6Dg
- n08FP5vN5exBbRw3dF3BQMX4hF7htJr4muhDzkJedxO827qB861SUwMn2QXriTmAaJ
- mDZoHq28KLL10aMIWMhUCNqeKWbhu68BWgj+nJTw8YxqE//B6g2UtseE5CUFAJweDL
- UuTQctxTarDBIlksDkpuFh82fisRYFYf4dZS73w+CzsfsfumFYRltuCMgq3TDNbfq2
- +sGYWeznmbmnA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SdJxXaCg
-Subject: [Buildroot] [PATCH RFC 1/1]
- support/testing/tests/package/test_criu.py: new runtime test
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1694816186; x=1695420986; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=122V7YcBGHMYfCPglk/otoV3EhYPdi4UCo9N2Dxtn1s=;
+ b=HY/7i3ZsixeqgKMmy9nGiRJ3T42Yb+hktJPpEtK+U52/VZ9cE4nb3EMDwgZkHtgOo7
+ GlxiICIM4KJ1pV2niM2E1oC4bm8At4Jlses/kDDSEOlwytKXSTNVKPdG6U17D8dRHSyX
+ hxZrZ58z62k7Rq5h0kKxbblRrlwQLYbqkP7ut8hOXh4Y4hcvLmf2Ghtrtahj5AunsDMK
+ eZvX2+eC5MltMEy+JnKYea8tTOtzpM+zBfj3/MnXvc3TbLElRN3t40vSW35IdcE+0IiU
+ /L8urQQKJCLLODr+sCWbCCT4+mnW0RUiH4AI6PASU4+vt3jMH1i5M8FiXhfI+eyttn7U
+ RnEA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=HY/7i3Zs
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: security bump to version
+ 2.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,220 +94,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Marcus Folkesson <marcus.folkesson@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+- Fix CVE-2023-39350 to CVE-2023-39354, CVE-2023-39356, CVE-2023-40181,
+  CVE-2023-40186, CVE-2023-40188, CVE-2023-40567, CVE-2023-40569 and
+  CVE-2023-40589
+- Drop fourth patch (already in version)
+
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.11.0
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-rrrv-3w42-pffh
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-q9x9-cqjc-rgwq
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-whwr-qcf2-2mvj
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hg53-9j9h-3c8f
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-c3r2-pxxp-f8r6
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-q5v5-qhj5-mh6m
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-mxp4-rx7x-h2g8
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hcj4-3c3r-5j3v
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-9w28-wwj5-p4xq
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-2w9f-8wg4-8jfp
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hm8c-rcjg-c8qp
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-gc34-mw6m-g42x
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-This test was suggested by Thomas in [1] during the criu package
-proposal in [2]. criu is not accepted yet. This is a first version
-of the test for review. Minor rework is expected to align the the
-final criu package patch.
+ .checkpackageignore                           |  1 -
+ ...e-sha3-and-shake-hashes-for-libressl.patch | 38 -------------------
+ package/freerdp/freerdp.hash                  |  4 +-
+ package/freerdp/freerdp.mk                    |  2 +-
+ 4 files changed, 3 insertions(+), 42 deletions(-)
+ delete mode 100644 package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
 
-Tested on branch master at commit c89d7a2, on top of criu patch [2],
-with command:
-
-    support/testing/run-tests \
-        -d dl -o output_folder \
-        tests.package.test_criu
-    ...
-    OK
-
-[1] https://lists.buildroot.org/pipermail/buildroot/2023-September/674567.html
-[2] https://patchwork.ozlabs.org/project/buildroot/patch/20230910193725.1435827-1-marcus.folkesson@gmail.com/
----
- DEVELOPERS                                    |   2 +
- support/testing/tests/package/test_criu.py    | 127 ++++++++++++++++++
- .../package/test_criu/linux-criu.fragment     |   1 +
- .../rootfs-overlay/root/criu-loop.sh          |  15 +++
- 4 files changed, 145 insertions(+)
- create mode 100644 support/testing/tests/package/test_criu.py
- create mode 100644 support/testing/tests/package/test_criu/linux-criu.fragment
- create mode 100755 support/testing/tests/package/test_criu/rootfs-overlay/root/criu-loop.sh
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d6e6a98202..7220e66af3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1723,6 +1723,8 @@ F:	support/testing/tests/package/test_acpica/
- F:	support/testing/tests/package/test_brotli.py
- F:	support/testing/tests/package/test_bzip2.py
- F:	support/testing/tests/package/test_compressor_base.py
-+F:	support/testing/tests/package/test_criu.py
-+F:	support/testing/tests/package/test_criu/
- F:	support/testing/tests/package/test_ddrescue.py
- F:	support/testing/tests/package/test_ddrescue/
- F:	support/testing/tests/package/test_dos2unix.py
-diff --git a/support/testing/tests/package/test_criu.py b/support/testing/tests/package/test_criu.py
-new file mode 100644
-index 0000000000..af2def85e1
---- /dev/null
-+++ b/support/testing/tests/package/test_criu.py
-@@ -0,0 +1,127 @@
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestCriu(infra.basetest.BRTest):
-+    # Criu needs to recompile a Kernel, to enable
-+    # CONFIG_CHECKPOINT_RESTORE=y
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.53"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_CRIU=y
-+        BR2_PACKAGE_HOST_PYTHON3=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+            infra.filepath("tests/package/test_criu/linux-criu.fragment"),
-+            infra.filepath("tests/package/test_criu/rootfs-overlay")
-+        )
-+    # Define constants for the test
-+    test_script_name = "criu-loop.sh"
-+    test_script_path = f"/root/{test_script_name}"
-+    test_flag_file = "/tmp/wait-flag"
-+    test_log = "/tmp/criu-loop.log"
-+    pidof_cmd = f"pidof {test_script_name}"
-+    checkpoint_dir = "/root/checkpoint"
-+    tail1_log_cmd = f"tail -1 {test_log}"
-+    expected_log_end = "Done"
-+
-+    def assert_script_is_running(self):
-+        # We check our script is running if the command "pidof"
-+        # succeed to find a valid PID.
-+        self.assertRunOk(self.pidof_cmd)
-+
-+    def assert_script_is_not_running(self):
-+        # Conversely, the "pidof" command will fail if it cannot find
-+        # a valid PID for our script.
-+        _, exit_code = self.emulator.run(self.pidof_cmd)
-+        self.assertNotEqual(exit_code, 0)
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt",
-+                                    "-cpu", "cortex-a57",
-+                                    "-m", "256M",
-+                                    "-initrd", img])
-+        self.emulator.login()
-+
-+        # We check the program can execute.
-+        self.assertRunOk("criu --version")
-+
-+        # We run the "criu check" command, which validates the kernel
-+        # supports the needed features. We also add verbose logs for
-+        # easier debugging.
-+        self.assertRunOk("criu check -v")
-+
-+        # We start our test script, in a new session. Note: to make
-+        # sure this test will be reliable in different execution speed
-+        # conditions, the script implement a simple synchronization
-+        # mechanism by creating a flag file and wait for it to be
-+        # removed by this test controller.
-+        cmd = f"setsid {self.test_script_path}"
-+        cmd += f" < /dev/null &> {self.test_log} &"
-+        self.assertRunOk(cmd)
-+
-+        # Let the script make few loops, then create and wait on its
-+        # flag file.
-+        time.sleep(3)
-+
-+        # Our script is supposed to be running.
-+        self.assert_script_is_running()
-+
-+        # We dump the process tree with criu.
-+        self.assertRunOk(f"mkdir -p {self.checkpoint_dir}")
-+        cmd = f"criu dump -D {self.checkpoint_dir} -t $({self.pidof_cmd})"
-+        self.assertRunOk(cmd)
-+
-+        # We check some criu image files were created.
-+        self.assertRunOk(f"ls -1 --color=never {self.checkpoint_dir}/*.img")
-+
-+        # Our script is no longer supposed to be running (it was
-+        # supposed to be stopped bu criu during the dump).
-+        self.assert_script_is_not_running()
-+
-+        # We expect the last line of the log to NOT be "Done" yet.
-+        output, exit_code = self.emulator.run(self.tail1_log_cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertNotEqual(output[0], self.expected_log_end)
-+
-+        # We restore the process image.
-+        self.assertRunOk(f"criu restore -d -D {self.checkpoint_dir}")
-+
-+        # Our script is supposed to be running again.
-+        self.assert_script_is_running()
-+
-+        # We remove our test flag, to let our script to end its loop
-+        # (this flag was created by the test script, while we were
-+        # waiting earlier).
-+        self.assertRunOk(f"rm {self.test_flag_file}")
-+
-+        # We wait for the script to finish its loop.
-+        time.sleep(5)
-+
-+        # Our script is supposed to have reached its end, and
-+        # exited. The script is no longer supposed to be running.
-+        self.assert_script_is_not_running()
-+
-+        # We expect the last line of the log to be the end message.
-+        output, exit_code = self.emulator.run(self.tail1_log_cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], self.expected_log_end)
-diff --git a/support/testing/tests/package/test_criu/linux-criu.fragment b/support/testing/tests/package/test_criu/linux-criu.fragment
-new file mode 100644
-index 0000000000..c554a09cec
---- /dev/null
-+++ b/support/testing/tests/package/test_criu/linux-criu.fragment
-@@ -0,0 +1 @@
-+CONFIG_CHECKPOINT_RESTORE=y
-diff --git a/support/testing/tests/package/test_criu/rootfs-overlay/root/criu-loop.sh b/support/testing/tests/package/test_criu/rootfs-overlay/root/criu-loop.sh
-new file mode 100755
-index 0000000000..6a1f72b442
---- /dev/null
-+++ b/support/testing/tests/package/test_criu/rootfs-overlay/root/criu-loop.sh
-@@ -0,0 +1,15 @@
-+#! /bin/sh
-+set -eu
-+echo "Start"
-+for LOOP in $(seq 6) ; do
-+    echo "Loop $LOOP"
-+    if [ "$LOOP" -eq 3 ] ; then
-+        touch /tmp/wait-flag
-+    fi
-+    while [ -e /tmp/wait-flag ] ; do
-+        sleep 1
-+        echo "Waiting..."
-+    done
-+    sleep 1
-+done
-+echo "Done"
+diff --git a/.checkpackageignore b/.checkpackageignore
+index dfeaaf46eb..73a00d610c 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -446,7 +446,6 @@ package/freeradius-client/0001-fix-for-nettle.patch Upstream
+ package/freerdp/0001-Fix-variable-declaration-in-loop.patch Upstream
+ package/freerdp/0002-Fixed-variable-declaration-in-loop.patch Upstream
+ package/freerdp/0003-winpr-include-winpr-file.h-fix-build-on-uclibc.patch Upstream
+-package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch Upstream
+ package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch Upstream
+ package/freescale-imx/imx-kobs/0002-Fix-build-for-recent-toolchains.patch Upstream
+ package/freescale-imx/imx-uuc/S80imx-uuc Indent Shellcheck Variables
+diff --git a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch b/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
+deleted file mode 100644
+index 14f615e2e7..0000000000
+--- a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From bd093454fe126163634c00b7484ab7fee6ffe670 Mon Sep 17 00:00:00 2001
+-From: akallabeth <akallabeth@posteo.net>
+-Date: Mon, 20 Feb 2023 16:23:39 +0100
+-Subject: [PATCH] Fix #8702: Disable sha3 and shake hashes for libressl
+-
+-[Retrieved (and backported) from:
+-https://github.com/FreeRDP/FreeRDP/pull/8708/commits/bd093454fe126163634c00b7484ab7fee6ffe670]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- libfreerdp/crypto/x509_utils.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/libfreerdp/crypto/crypto.c b/libfreerdp/crypto/crypto.c
+-index 6e87a88b8d8..62cf2939be7 100644
+---- a/libfreerdp/crypto/crypto.c
+-+++ b/libfreerdp/crypto/crypto.c
+-@@ -748,7 +748,7 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
+- 			return WINPR_MD_SHA512;
+- 		case NID_ripemd160:
+- 			return WINPR_MD_RIPEMD160;
+--#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) && !defined(LIBRESSL_VERSION_NUMBER)
+- 		case NID_sha3_224:
+- 			return WINPR_MD_SHA3_224;
+- 		case NID_sha3_256:
+-@@ -757,11 +757,11 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
+- 			return WINPR_MD_SHA3_384;
+- 		case NID_sha3_512:
+- 			return WINPR_MD_SHA3_512;
+--#endif
+- 		case NID_shake128:
+- 			return WINPR_MD_SHAKE128;
+- 		case NID_shake256:
+- 			return WINPR_MD_SHAKE256;
+-+#endif
+- 		case NID_undef:
+- 		default:
+- 			return WINPR_MD_NONE;
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 55314cfdd3..02268f55ea 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.10.0.tar.gz.sha256
+-sha256  a673d3fc21911dd9f196834f2f3a23c3ebc7e5e4deab2f7686fcec879279e2c1  freerdp-2.10.0.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.11.0.tar.gz.sha256
++sha256  8d08e638df21e67c3761462b4efb9e596576f58bd6886f902e6021cdd17d396e  freerdp-2.11.0.tar.gz
+ 
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 01c511819d..6f71ef796f 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREERDP_VERSION = 2.10.0
++FREERDP_VERSION = 2.11.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 -- 
-2.41.0
+2.40.1
 
 _______________________________________________
 buildroot mailing list
