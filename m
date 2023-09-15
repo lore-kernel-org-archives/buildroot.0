@@ -4,89 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AFFBEED619
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61E99EED61A
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 17:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2F0E613C2;
-	Fri, 15 Sep 2023 17:25:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2F0E613C2
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3B3060B7C;
+	Fri, 15 Sep 2023 17:41:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3B3060B7C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f_XMSLuazrPF; Fri, 15 Sep 2023 17:25:33 +0000 (UTC)
+	with ESMTP id uG6Irz5-1zJY; Fri, 15 Sep 2023 17:41:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14D5E613C6;
-	Fri, 15 Sep 2023 17:25:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14D5E613C6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB5BE1BF5A8
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:25:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C3C160B12;
+	Fri, 15 Sep 2023 17:41:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C3C160B12
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E4B5B1BF995
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B415061370
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B415061370
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE916404EB
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 17:41:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE916404EB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yAy2zSJk-0YT for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 17:25:07 +0000 (UTC)
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1D0546131D
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:25:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D0546131D
-Received: by mail-pf1-x42b.google.com with SMTP id
- d2e1a72fcca58-68fc292de9dso1772561b3a.0
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 10:25:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694798706; x=1695403506;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=cKu2h295ybqsld3Vwnwotjyd8SSxTul7Hqs8r9IK5XQ=;
- b=W5azNBI5c3B+h3h+vAFxywWTfLkzTiJs/u1I4+exEEF4h0Pq+Ph9x/NiJrCY8KeABh
- ja5peMfJGOFGB/uUuV66EjprwnxY6ryjL+K3sAzUN7mfvnaH7ZXThv7NRAt7xYPama4s
- WjG0BdfzSykBgqM9hLLfAD1RX7CPHb8xwnT74ngD3pL1DZTJY7x5GRZEkLD/x36cPQry
- l+YXqV9dE0I7HCxncQ/gkL8WnCDNNmwHabzcICFLdXIpTsel241eMaEYUcgPofW0RlXk
- i2zCHKuRfLZJlg23UMa9MaDsKkdsCavfJh2j+saJEOj/BvFqDKLL4hQbCarUIonybsJG
- tkVQ==
-X-Gm-Message-State: AOJu0YwRD1NL8aiJ0rSLa+VCNOUnKhSUWLKNtHSzBlxtIOd7r5z6chXn
- wb8qQ0zAR8JP+rmhbs4PmmDVr+NfeCM=
-X-Google-Smtp-Source: AGHT+IE2aRDnG9aM0L2u5W25A0ITDqSciEKYJGvIQDVSL1Vd1qg9uQawczLwHoCwhgSqNLjRo12ozA==
-X-Received: by 2002:a05:6a00:2d1a:b0:68f:d6db:5d4b with SMTP id
- fa26-20020a056a002d1a00b0068fd6db5d4bmr2892206pfb.12.1694798706112; 
- Fri, 15 Sep 2023 10:25:06 -0700 (PDT)
-Received: from localhost.localdomain (cpe-70-95-248-239.san.res.rr.com.
- [70.95.248.239]) by smtp.gmail.com with ESMTPSA id
- v6-20020a62a506000000b00687f845f41fsm3187702pfm.119.2023.09.15.10.25.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Sep 2023 10:25:05 -0700 (PDT)
-From: Yanghao Cheng <yanghaobillcheng@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 15 Sep 2023 10:24:58 -0700
-Message-Id: <20230915172458.3388709-3-yanghaobillcheng@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230915172458.3388709-1-yanghaobillcheng@gmail.com>
-References: <20230914235043.2538981-1-yanghaobillcheng@gmail.com>
- <20230915172458.3388709-1-yanghaobillcheng@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id DeO3aplFcDw0 for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 17:41:22 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8D03D4012E
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 17:41:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D03D4012E
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2F77060004;
+ Fri, 15 Sep 2023 17:41:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qhCog-009RkV-93; Fri, 15 Sep 2023 19:41:18 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+References: <20230910142739.555507-1-ju.o@free.fr>
+Date: Fri, 15 Sep 2023 19:41:18 +0200
+In-Reply-To: <20230910142739.555507-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sun, 10 Sep 2023 16:27:39 +0200")
+Message-ID: <875y4buyf5.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694798706; x=1695403506; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=cKu2h295ybqsld3Vwnwotjyd8SSxTul7Hqs8r9IK5XQ=;
- b=D7ph8lK3bbiA4FY42yDpKTrzjskUdZG6tkOR0AyieMJ7jdaM1C5y03S9T1gQY9m5Ha
- QvqNHmAP8rUbP2hWScg7tLsQoB8LxQzCIzvF1/Aeg2jj1Re9pgCLmFJooTEvbZuMbu7y
- hP1qUgsVi1hjU5pTemOJ9m/TueUr1VK3tjt7x2rHcUzfI8tau8MrZnX28IHLUlDcGWU0
- Mj9u1F4MN9GNhUje6ARqs03AL3A5p2Ys5D5Jov4pipuK9h4V54Hf4ssETvaOPY1CAyjA
- Fe2FUFuXoaH6AcBGJhn5ydz+xF9pN3VFvsWtdfEv9ycUB8nuZWxqiDfrh+Ztzghii19I
- AGhw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=D7ph8lK3
-Subject: [Buildroot] [PATCH v2 3/3] package/xserver_xorg-server: fix init
- script conflicts
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/zynaddsubfx: fix build with
+ gcc 13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,55 +63,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-Simplify the condition per Thomas's suggestion
+ > When compiling with gcc 13, build fails with errors, such as:
+ >     In file included from /build/zynaddsubfx-3.0.6/src/Nio/NulEngine.h:21,
+ >                      from /build/zynaddsubfx-3.0.6/src/Nio/NulEngine.cpp:14:
+ >     /build/zynaddsubfx-3.0.6/src/Nio/MidiIn.h:37:9: error: 'uint8_t' does not name a type
+ >        37 |         uint8_t midiSysEx(unsigned char data);
+ >           |         ^~~~~~~
 
-Signed-off-by: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
----
-Changes v1 -> v2:
-    - Simplify the condition per Thomas's suggestion
+ > Those gcc 13 changes were announced at:
+ > https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
 
- .../x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ > This commit fixes the issue by adding upstream patches, not yet
+ > included in a release.
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 7566541067..6be9eee099 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -177,9 +177,8 @@ XSERVER_XORG_SERVER_DEPENDENCIES += libsha1
- endif
- 
- # Systemd unit conflicts with nodm and xdm
--ifneq ($(or $(BR2_PACKAGE_NODM), $(BR2_PACKAGE_XAPP_XDM)),)
--    # NODM or XDM is defined, do not define XSERVER_XORG_SERVER_INSTALL_INIT_SYSTEMD
--else
-+ifeq ($(BR2_PACKAGE_NODM)$(BR2_PACKAGE_XAPP_XDM),)
-+# Install the systemd unit only when nodm nor xdm are enabled
- 	define XSERVER_XORG_SERVER_INSTALL_INIT_SYSTEMD
- 		$(INSTALL) -D -m 0644 package/x11r7/xserver_xorg-server/xorg.service \
- 			$(TARGET_DIR)/usr/lib/systemd/system/xorg.service
-@@ -187,9 +186,8 @@ else
- endif
- 
- # init script conflicts with S90nodm and S99xdm
--ifneq ($(or $(BR2_PACKAGE_NODM), $(BR2_PACKAGE_XAPP_XDM)),)
--    # NODM or XDM is defined, do not define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
--else
-+ifeq ($(BR2_PACKAGE_NODM)$(BR2_PACKAGE_XAPP_XDM),)
-+# Install the init script only when nodm nor xdm are enabled
-     define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
-         $(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
-             $(TARGET_DIR)/etc/init.d/S40xorg
+ > Fixes:
+ > http://autobuild.buildroot.net/results/97b5a30c7be820ac91e745cf60f9b759e962aa5c
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Changes v1 -> v2:
+ > - Reworded the commit log to correct the root cause of the issue
+ >   (v1 was mentioning uclibc. it is in fact gcc-13)
+
+Committed to 2023.08.x, thanks.
+
 -- 
-2.25.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
