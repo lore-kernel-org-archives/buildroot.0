@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA10CD37AA
-	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 21:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20565CD37AA
+	for <buildroot@archiver.kernel.org>; Fri, 15 Sep 2023 21:09:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 021CD41980;
-	Fri, 15 Sep 2023 21:09:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 021CD41980
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E531419BF;
+	Fri, 15 Sep 2023 21:09:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E531419BF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YKdbQxhuLmtB; Fri, 15 Sep 2023 21:09:17 +0000 (UTC)
+	with ESMTP id hJEKc85fvH3d; Fri, 15 Sep 2023 21:09:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27ECB404BF;
-	Fri, 15 Sep 2023 21:09:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27ECB404BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A56E11BF29D
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:09:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEEDB41980;
+	Fri, 15 Sep 2023 21:09:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AEEDB41980
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E2C21BF29D
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:09:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B9BB404BF
- for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:09:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B9BB404BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 070B3612D8
+ for <buildroot@lists.busybox.net>; Fri, 15 Sep 2023 21:09:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 070B3612D8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IoBK-k-1qiY2 for <buildroot@lists.busybox.net>;
- Fri, 15 Sep 2023 21:09:12 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4F438400CE
- for <buildroot@buildroot.org>; Fri, 15 Sep 2023 21:09:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F438400CE
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:9162:d12f:41c1:9c3])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 0AE2A2003D3;
- Fri, 15 Sep 2023 23:09:06 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 15 Sep 2023 23:09:06 +0200
-Date: Fri, 15 Sep 2023 23:09:06 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230915210906.GC2571@scaer>
-References: <20230915192308.1432032-1-ju.o@free.fr>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230915192308.1432032-1-ju.o@free.fr>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694812149;
- bh=RWmSvlei8v/004AJj/GAlF7F4QlUwHtfPx9tbXMcLmQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=FWPdsA2O57zhf5fUW0m26QDwKffKFb4mV1jn4n7KOGzQMqUFu5VNgJW9U2weoKB2z
- rHrAL3R+N2hicu3U6L6KZlgLNfE1GPzUUxm56hVNWrSJ44V7BYJCvUGmljH8nBW5Pr
- 8opWn7AbgFrxrIMdKLI4SVPfMj0g122jeratrfjj6nBX9LUwF9jNssseC5g65XYUyw
- eNO6daV8d2X1zA18AmAv7lcLeBYWD2LFTJcOfbpMSPwnTDyzc5YRRveO6GaV6/oHmv
- UbjXVC7nmoKmU/vNllpK+S+zHGbs6cGg51cwrx8T5x/4WaItzF6iMssJkS0H/rCgYz
- LEjdXBaLlpJUQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FWPdsA2O
-Subject: Re: [Buildroot] [PATCH 1/1] package/libjxl: fix riscv build
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0SUXcmAjrVzB for <buildroot@lists.busybox.net>;
+ Fri, 15 Sep 2023 21:09:21 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2884D60AD2
+ for <buildroot@buildroot.org>; Fri, 15 Sep 2023 21:09:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2884D60AD2
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 154A08704C; Fri, 15 Sep 2023 21:09:21 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 15 Sep 2023 23:08:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: eb4f5a2cbc8f6caf8929495318f5f3dbb11f134a
+X-Git-Newrev: de45aea47bfaffaa3ccef02b247f94ab78ab1add
+X-Patchwork-Hint: ignore
+Message-Id: <20230915210921.154A08704C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libjxl: fix riscv build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,91 +56,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1414914085644940382=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SnVsaWVuLCBBbGwsCgpPbiAyMDIzLTA5LTE1IDIxOjIzICswMjAwLCBKdWxpZW4gT2xpdmFpbiBz
-cGFrZSB0aHVzbHk6Cj4gbGlianhsIHdhcyBmYWlsaW5nIHRvIGJ1aWxkIGZvciByaXNjdiB0YXJn
-ZXRzLCBzaW5jZSBjb21taXQgZmY3YzM3ZTU3Cj4gInBhY2thZ2UvbGlianhsOiBzZWN1cml0eSBi
-dW1wIHRvIHZlcnNpb24gMC44LjEiLiBCdWlsZCB3YXMgZmFpbGluZyB3aXRoCj4gb3V0cHV0Ogo+
-IAo+ICAgICAvYnVpbGQvbGlianhsLTAuOC4xL2xpYi9qeGwvZW5jX3h5Yi5jYzogSW4gZnVuY3Rp
-b24gJ2p4bDo6SW1hZ2UzRiBqeGw6Ok5fU0NBTEFSOjpUcmFuc2Zvcm1Ub0xpbmVhclJHQihjb25z
-dCBqeGw6OkltYWdlM0YmLCBjb25zdCBqeGw6OkNvbG9yRW5jb2RpbmcmLCBmbG9hdCwgY29uc3Qg
-SnhsQ21zSW50ZXJmYWNlJiwganhsOjpUaHJlYWRQb29sKiknOgo+ICAgICAvYnVpbGQvbGlianhs
-LTAuOC4xL2xpYi9qeGwvZW5jX3h5Yi5jYzoyMjM6MjE6IGVycm9yOiB2YXJpYWJsZSAnc3RkOjph
-dG9taWM8Ym9vbD4gb2snIGhhcyBpbml0aWFsaXplciBidXQgaW5jb21wbGV0ZSB0eXBlCj4gICAg
-ICAgMjIzIHwgICBzdGQ6OmF0b21pYzxib29sPiBva3t0cnVlfTsKPiAgICAgICAgICAgfCAgICAg
-ICAgICAgICAgICAgICAgIF5+Cj4gCj4gVGhpcyBidWlsZCBmYWlsdXJlIHdhcyBkdWUgdG8gYSBt
-aXNzaW5nIDxhdG9taWM+IGhlYWRlciBpbmNsdXNpb24uIEZvcgo+IHNvbWUgcmVhc29uLCB0aGUg
-YnVpbGQgZmFpbHVyZSB3YXMgb2JzZXJ2ZWQgb25seSB3aXRoIFJJU0MtViB0b29sY2hhaW5zLgo+
-IAo+IFRoaXMgY29tbWl0IGZpeGVzIHRoZSBpc3N1ZSBieSBhZGRpbmcgYW4gdXBzdHJlYW0gY29t
-bWl0LCBub3QgeWV0IGluIGEKPiBwYWNrYWdlIHJlbGVhc2UuIFNlZSBbMV0uCj4gCj4gRml4ZXM6
-Cj4gaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMTIxLzEyMTA3YmM3YWVh
-N2FmYWUxZDJmYjkzNWQzMWI0NGVlZTZlYTE1MDEKPiAKPiBbMV0gaHR0cHM6Ly9naXRodWIuY29t
-L2xpYmp4bC9saWJqeGwvY29tbWl0LzIyZDEyZDc0ZTdiYzU2YjA5Y2ZiMTk3M2FhODllYzhkNzE0
-ZmEzZmMKPiAKPiBTaWduZWQtb2ZmLWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgoK
-QXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IC0t
-LQo+IFBhdGNoIHRlc3RlZCBvbiBicmFuY2ggbWFzdGVyIGF0IGNvbW1pdCAzNTU3YTdiIHdpdGgg
-Y29tbWFuZHM6Cj4gCj4gICAgIG1ha2UgY2hlY2stcGFja2FnZQo+ICAgICAuLi4KPiAgICAgMCB3
-YXJuaW5ncyBnZW5lcmF0ZWQKPiAKPiAgICAgc3VwcG9ydC90ZXN0aW5nL3J1bi10ZXN0cyBcCj4g
-ICAgICAgICAtZCBkbCAtbyBvdXRwdXRfZm9sZGVyIFwKPiAgICAgICAgIHRlc3RzLnBhY2thZ2Uu
-dGVzdF9saWJqeGwKPiAgICAgLi4uCj4gICAgIE9LCj4gCj4gICAgIHV0aWxzL3Rlc3QtcGtnIC1h
-IC1wIGxpYmp4bAo+ICAgICAuLi4KPiAgICAgNDUgYnVpbGRzLCAxMSBza2lwcGVkLCAwIGJ1aWxk
-IGZhaWxlZCwgMCBsZWdhbC1pbmZvIGZhaWxlZCwgMCBzaG93LWluZm8gZmFpbGVkCj4gICAgIAo+
-IE5vdGU6IHRoaXMgcGF0Y2ggd2FzIGFsc28gdGVzdGVkIG9uIHRvcCBvZiB0aGUgcGF0Y2ggcHJv
-cG9zZWQgYXQ6Cj4gaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9v
-dC9wYXRjaC8yMDIzMDkxNDIxNTYwNi4zMDk3MzUtMS1mb250YWluZS5mYWJyaWNlQGdtYWlsLmNv
-bS8KPiAtLS0KPiAgLi4uaWMtY29udGVudC10by1maXgtZ2NjLWNvbXBpbGF0aW9uLWZvLnBhdGNo
-IHwgNDcgKysrKysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgNDcgaW5zZXJ0aW9u
-cygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJqeGwvMDAwMi1BZGQtbWlzc2lu
-Zy1hdG9taWMtY29udGVudC10by1maXgtZ2NjLWNvbXBpbGF0aW9uLWZvLnBhdGNoCj4gCj4gZGlm
-ZiAtLWdpdCBhL3BhY2thZ2UvbGlianhsLzAwMDItQWRkLW1pc3NpbmctYXRvbWljLWNvbnRlbnQt
-dG8tZml4LWdjYy1jb21waWxhdGlvbi1mby5wYXRjaCBiL3BhY2thZ2UvbGlianhsLzAwMDItQWRk
-LW1pc3NpbmctYXRvbWljLWNvbnRlbnQtdG8tZml4LWdjYy1jb21waWxhdGlvbi1mby5wYXRjaAo+
-IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uYjg1NmIwMDcyOAo+IC0t
-LSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2xpYmp4bC8wMDAyLUFkZC1taXNzaW5nLWF0b21p
-Yy1jb250ZW50LXRvLWZpeC1nY2MtY29tcGlsYXRpb24tZm8ucGF0Y2gKPiBAQCAtMCwwICsxLDQ3
-IEBACj4gK0Zyb20gNDJlOTQ0YTQ3MTY3MmRhZTg1MjJmYmNmMTYxOTQxODk1YmExNjYzMiBNb24g
-U2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogRWFzdGRvbmcgPDMxOTIwOTI1K0lFQVNUQHVz
-ZXJzLm5vcmVwbHkuZ2l0aHViLmNvbT4KPiArRGF0ZTogVGh1LCAyMyBGZWIgMjAyMyAwNjowODoz
-NiArMDgwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIEFkZCBtaXNzaW5nIDxhdG9taWM+IGNvbnRlbnQg
-dG8gZml4IGdjYyBjb21waWxhdGlvbiBmb3IgUklTQ1YKPiArIGFyY2hpdGVjdHVyZS4gKCMyMjEx
-KQo+ICsKPiArKiBBZGQgbWlzc2luZyA8YXRvbWljPiBjb250ZW50IHRvIGZpeCBnY2MgY29tcGls
-YXRpb24gZm9yIFJJU0NWIGFyY2hpdGVjdHVyZS4KPiArCj4gKyogYWRkIG5hbWUgdG8gQVVUSE9S
-Uwo+ICsKPiArKiBsaW50IGZpeAo+ICsKPiArQ28tYXV0aG9yZWQtYnk6IE1vcml0eiBGaXJzY2hp
-bmcgPGZpcnNjaGluZ0Bnb29nbGUuY29tPgo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29t
-L2xpYmp4bC9saWJqeGwvY29tbWl0LzIyZDEyZDc0ZTdiYzU2YjA5Y2ZiMTk3M2FhODllYzhkNzE0
-ZmEzZmMKPiArU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiAr
-LS0tCj4gKyBBVVRIT1JTICAgICAgICAgICAgfCAxICsKPiArIGxpYi9qeGwvZW5jX3h5Yi5jYyB8
-IDEgKwo+ICsgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPiArCj4gK2RpZmYgLS1n
-aXQgYS9BVVRIT1JTIGIvQVVUSE9SUwo+ICtpbmRleCA0NGRjYzQwOS4uMzM0MDQyMmQgMTAwNjQ0
-Cj4gKy0tLSBhL0FVVEhPUlMKPiArKysrIGIvQVVUSE9SUwo+ICtAQCAtMzAsNiArMzAsNyBAQCBE
-YW5pZWwgTm92b21lc2vDvSA8ZG5vdm9tZXNreUBnbWFpbC5jb20+Cj4gKyBEYXZpZCBCdXJuZXR0
-IDx2YXJnb2xzb2Z0QGdtYWlsLmNvbT4KPiArIERpcmsgTGVtc3RyYSA8ZGlya0BsZW1zdHJhLm9y
-Zz4KPiArIERvbiBPbG1zdGVhZCA8ZG9uLmoub2xtc3RlYWRAZ21haWwuY29tPgo+ICsrRG9uZyBY
-dSA8eGRvbmcxODFAZ21haWwuY29tPgo+ICsgRXZlbiBSb3VhdWx0IDxldmVuLnJvdWF1bHRAc3Bh
-dGlhbHlzLmNvbT4KPiArIEZyZWQgQnJlbm5hbiA8Y29weXBhc3RlQGtpdHRlbnMucGg+Cj4gKyBI
-ZWlrbyBCZWNrZXIgPGhlaXJlY2thQGV4aGVyYm8ub3JnPgo+ICtkaWZmIC0tZ2l0IGEvbGliL2p4
-bC9lbmNfeHliLmNjIGIvbGliL2p4bC9lbmNfeHliLmNjCj4gK2luZGV4IGM3MzEwNzY1Li4yZmQ1
-ZDAyNSAxMDA2NDQKPiArLS0tIGEvbGliL2p4bC9lbmNfeHliLmNjCj4gKysrKyBiL2xpYi9qeGwv
-ZW5jX3h5Yi5jYwo+ICtAQCAtNiw2ICs2LDcgQEAKPiArICNpbmNsdWRlICJsaWIvanhsL2VuY194
-eWIuaCIKPiArIAo+ICsgI2luY2x1ZGUgPGFsZ29yaXRobT4KPiArKyNpbmNsdWRlIDxhdG9taWM+
-Cj4gKyAjaW5jbHVkZSA8Y3N0ZGxpYj4KPiArIAo+ICsgI3VuZGVmIEhXWV9UQVJHRVRfSU5DTFVE
-RQo+ICstLSAKPiArMi40MS4wCj4gKwo+IC0tIAo+IDIuNDEuMAo+IAo+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlz
-dAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0t
-LS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4K
-fCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9O
-IHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVz
-aWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYx
-IDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAg
-VGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAv
-IFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0t
-LS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============1414914085644940382==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=de45aea47bfaffaa3ccef02b247f94ab78ab1add
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+libjxl was failing to build for riscv targets, since commit ff7c37e57
+"package/libjxl: security bump to version 0.8.1". Build was failing with
+output:
+
+    /build/libjxl-0.8.1/lib/jxl/enc_xyb.cc: In function 'jxl::Image3F jxl::N_SCALAR::TransformToLinearRGB(const jxl::Image3F&, const jxl::ColorEncoding&, float, const JxlCmsInterface&, jxl::ThreadPool*)':
+    /build/libjxl-0.8.1/lib/jxl/enc_xyb.cc:223:21: error: variable 'std::atomic<bool> ok' has initializer but incomplete type
+      223 |   std::atomic<bool> ok{true};
+          |                     ^~
+
+This build failure was due to a missing <atomic> header inclusion. For
+some reason, the build failure was observed only with RISC-V toolchains.
+
+This commit fixes the issue by adding an upstream commit, not yet in a
+package release. See [1].
+
+Fixes:
+http://autobuild.buildroot.org/results/121/12107bc7aea7afae1d2fb935d31b44eee6ea1501
+
+[1] https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-atomic-content-to-fix-gcc-compilation-fo.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+
+diff --git a/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch b/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch
+new file mode 100644
+index 0000000000..b856b00728
+--- /dev/null
++++ b/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch
+@@ -0,0 +1,47 @@
++From 42e944a471672dae8522fbcf161941895ba16632 Mon Sep 17 00:00:00 2001
++From: Eastdong <31920925+IEAST@users.noreply.github.com>
++Date: Thu, 23 Feb 2023 06:08:36 +0800
++Subject: [PATCH] Add missing <atomic> content to fix gcc compilation for RISCV
++ architecture. (#2211)
++
++* Add missing <atomic> content to fix gcc compilation for RISCV architecture.
++
++* add name to AUTHORS
++
++* lint fix
++
++Co-authored-by: Moritz Firsching <firsching@google.com>
++Upstream: https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ AUTHORS            | 1 +
++ lib/jxl/enc_xyb.cc | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/AUTHORS b/AUTHORS
++index 44dcc409..3340422d 100644
++--- a/AUTHORS
+++++ b/AUTHORS
++@@ -30,6 +30,7 @@ Daniel Novomeský <dnovomesky@gmail.com>
++ David Burnett <vargolsoft@gmail.com>
++ Dirk Lemstra <dirk@lemstra.org>
++ Don Olmstead <don.j.olmstead@gmail.com>
+++Dong Xu <xdong181@gmail.com>
++ Even Rouault <even.rouault@spatialys.com>
++ Fred Brennan <copypaste@kittens.ph>
++ Heiko Becker <heirecka@exherbo.org>
++diff --git a/lib/jxl/enc_xyb.cc b/lib/jxl/enc_xyb.cc
++index c7310765..2fd5d025 100644
++--- a/lib/jxl/enc_xyb.cc
+++++ b/lib/jxl/enc_xyb.cc
++@@ -6,6 +6,7 @@
++ #include "lib/jxl/enc_xyb.h"
++ 
++ #include <algorithm>
+++#include <atomic>
++ #include <cstdlib>
++ 
++ #undef HWY_TARGET_INCLUDE
++-- 
++2.41.0
++
+
+--===============1414914085644940382==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1414914085644940382==--
