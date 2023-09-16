@@ -4,88 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54554CD37BF
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 15:46:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DAB1CD37BF
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 15:46:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F6794114E;
-	Sat, 16 Sep 2023 15:46:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F6794114E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 45F80409EF;
+	Sat, 16 Sep 2023 15:46:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45F80409EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SFfi-DJpfEPv; Sat, 16 Sep 2023 15:46:19 +0000 (UTC)
+	with ESMTP id 1EW0wGTqbgtR; Sat, 16 Sep 2023 15:46:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 473064116C;
-	Sat, 16 Sep 2023 15:46:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 473064116C
+	by smtp2.osuosl.org (Postfix) with ESMTP id 750834119B;
+	Sat, 16 Sep 2023 15:46:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 750834119B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E0FC21BF4E7
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 15:44:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EBB7A1BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 15:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DE6781CC3
+ by smtp1.osuosl.org (Postfix) with ESMTP id AAE1D81CE3
  for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 15:44:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DE6781CC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAE1D81CE3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pU114dRHt_Yc for <buildroot@lists.busybox.net>;
- Sat, 16 Sep 2023 15:44:18 +0000 (UTC)
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2732C81CA3
+ with ESMTP id OQdOXNzp5ejS for <buildroot@lists.busybox.net>;
+ Sat, 16 Sep 2023 15:44:19 +0000 (UTC)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BB0AD81CAD
  for <buildroot@busybox.net>; Sat, 16 Sep 2023 15:44:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2732C81CA3
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-31c7912416bso2870993f8f.1
- for <buildroot@busybox.net>; Sat, 16 Sep 2023 08:44:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB0AD81CAD
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-40479f8325fso20891245e9.1
+ for <buildroot@busybox.net>; Sat, 16 Sep 2023 08:44:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694879056; x=1695483856;
+ d=1e100.net; s=20230601; t=1694879057; x=1695483857;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=T/mMAcJo3KF1P40QNF5rT47RAnf6v+mkE7h8tMPHtHs=;
- b=mV+nAbv/nOw9bikk/Euilb9kJoYDMvkuJQUEM9YREGdHvCBrQEx95iooImaKA8IByI
- NqS+pgpoShFioRwrRTR3ry2lPHO3cpPy1D+PpxWzdYAWnwzqDcdBhhp8rh1knGrZ8AGc
- s3VVo7l9SPDOKLfnAZRHlrnb3OcbO9c4hLJeXQ35YaqWBkvu+p8QsOcOhDMncH6JACT2
- 0Or9uDTYXhlAjk+fCYwcfy6CRDPgZvXCNDBcQBLaEHy+o6rSUi5K9S/9LA8CcG2NSK96
- Wmhgc//NzsRUrPCXz21dY9AIxaA2X/NyJOD9bsleDq8Cg2iR/hniM/+miqUcuOpFN365
- 9UYA==
-X-Gm-Message-State: AOJu0YyDkD3e0YUtt+8xVUg8BuRK08i/cO7gVjs5sLeP/g6JM0ZBFl7Q
- 2VNO1mNW8EvvCgRHRUZFNsImxt5NCsc=
-X-Google-Smtp-Source: AGHT+IHWrBEj29Mq8PZ/SVD1iJcBmb0g2xTHy7y+hlcgKBs09Rq4GBGD7zAqW52/zzuipuRhdX9koQ==
-X-Received: by 2002:adf:e686:0:b0:319:8333:a2d4 with SMTP id
- r6-20020adfe686000000b003198333a2d4mr3688570wrm.29.1694879056159; 
+ bh=L9Ft3o9IRuFhGITKTHt3Ys9fn2eVKLwXiJ88rE7V2os=;
+ b=awDS6GsmByCbirBWq+9ZW0Irx0MnOhLrpblNiTa03l0IkYvylP+0YWKaUkF1A7e2u3
+ cabHP3AoynZFovIOJJkmQp8dIZHWKL8+kKmwpGw+PkItUKrdBGVJ48FglL64NpKV03sQ
+ W21ISxMO1vVYgk5TrVz4g5CtlDfqLiv2ubi3jhC3KaBk+9ost0kPhVMfRfYGcCxoGcjY
+ inH0ff3CR9bPPa+pyiaIJUkG+zHUosHUv8EaAfO4FfXbdCfQxU3JycSvboCgenbbRaNB
+ qxW8/QeCv7B9nQ/9DZsCc28fpAibvgem3qIinwsMVXF19P4eKhF+K6jRWF4woTqhi4TH
+ JcfA==
+X-Gm-Message-State: AOJu0YwRLgtoFBdCYrvlwViirkaH8t7jKRcOI40TbYe0pRnjHjnz+P8X
+ cvFgcYnOgDXtSXTVFXh74LoUT4jS2Z8=
+X-Google-Smtp-Source: AGHT+IFvCj/mPhpH7ocWk4QN9m3bFGPe0gKt94HslA6h+yI3RgqraeX1TzXeDTIu1SiW9ThcLRnA0w==
+X-Received: by 2002:adf:f651:0:b0:31f:e32f:a503 with SMTP id
+ x17-20020adff651000000b0031fe32fa503mr3398818wrp.20.1694879056790; 
  Sat, 16 Sep 2023 08:44:16 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- q8-20020a5d5748000000b0031de43fe9bfsm7522010wrw.0.2023.09.16.08.44.15
+ q8-20020a5d5748000000b0031de43fe9bfsm7522010wrw.0.2023.09.16.08.44.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Sep 2023 08:44:15 -0700 (PDT)
+ Sat, 16 Sep 2023 08:44:16 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sat, 16 Sep 2023 17:43:46 +0200
-Message-Id: <20230916154351.2747233-11-francois.perrad@gadz.org>
+Date: Sat, 16 Sep 2023 17:43:47 +0200
+Message-Id: <20230916154351.2747233-12-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230916154351.2747233-1-francois.perrad@gadz.org>
 References: <20230916154351.2747233-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694879056; x=1695483856; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1694879057; x=1695483857; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=T/mMAcJo3KF1P40QNF5rT47RAnf6v+mkE7h8tMPHtHs=;
- b=MEHYdjK9fH7LZAEwzcxj2kJCJHddqde3JBehUbxg6YAdnNQictniDsIDrCzavGM5VE
- 11DE33gC1+OZ7PWK15K+szZ56xCdCeiVPy6MNEN5QS/chhZbI9OD8LahdRNnWTLgwdds
- LkoFaDWHSC0y0CvYWDThGNchLq43QwbOrkH7d6WEiO13ybpWXqtLc/2qSOEfn0iBlM7R
- 38Nm20BDs71VvNxCVm8S/0T50JfwN0omavRNsD6RWKn74GfDRDc7txG/HdnleJw7hvP6
- nnr1/jv1remCLIoaumFEk2ooax+igCPBPMMaCjEAAC5Ymp9CI8pw+7U0aLF+A3ecKXFU
- KdBQ==
+ bh=L9Ft3o9IRuFhGITKTHt3Ys9fn2eVKLwXiJ88rE7V2os=;
+ b=nDaGOxWA2mrx9452k5V+17OI58NYGGPdsVTBkiBjDLxLX17+xKENN2uQaQzAKo/j/X
+ 2YOQ3BVyUph3dSbG2YrNXYqLlZqxWUnwsnKQTOxPm/DQAuwboFSe25TTh5lgyDNHdNcs
+ 9eNRVrxdt/KQlvd3X3Ppn47nsLw9KY8q1LYr8nZFvWil2Is/3OReJMqXW5LKkT16AyRV
+ Ori1ZCVdD3F5lrKfhUc+aX97QMNIIFU88sUjoEVfTzJgbowXRnIIkk8mH2s7jlUD7Gl2
+ 9fZkdxAMfU8kk7NKeXXNevaAnpauC+zzBs7vkjvv68M4Z5eyptdFtyaIvztFtCoaWClR
+ hQKg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=MEHYdjK9
-Subject: [Buildroot] [PATCH 11/16] package/perl-package-stash: bump to
- version 0.40
+ header.a=rsa-sha256 header.s=20230601 header.b=nDaGOxWA
+Subject: [Buildroot] [PATCH 12/16] package/perl-plack: bump to version 1.0050
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,57 +101,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LICENSE: update copyright dates && remove trailing spaces
-see https://metacpan.org/release/ETHER/Package-Stash-0.39/diff/ETHER/Package-Stash-0.40#LICENSE
+LICENSE: remove  trailing spaces
+see https://metacpan.org/release/MIYAGAWA/Plack-1.0048/diff/MIYAGAWA/Plack-1.0050#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-package-stash/Config.in               | 4 ++--
- package/perl-package-stash/perl-package-stash.hash | 8 ++++----
- package/perl-package-stash/perl-package-stash.mk   | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/perl-plack/perl-plack.hash | 8 ++++----
+ package/perl-plack/perl-plack.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-package-stash/Config.in b/package/perl-package-stash/Config.in
-index 6b7ca2478..05506c242 100644
---- a/package/perl-package-stash/Config.in
-+++ b/package/perl-package-stash/Config.in
-@@ -3,6 +3,6 @@ config BR2_PACKAGE_PERL_PACKAGE_STASH
- 	select BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS # runtime
- 	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION # runtime
- 	help
--	  routines for manipulating stashes.
-+	  Routines for manipulating stashes.
- 
--	  http://metacpan.org/release/Package-Stash
-+	  https://github.com/moose/Package-Stash
-diff --git a/package/perl-package-stash/perl-package-stash.hash b/package/perl-package-stash/perl-package-stash.hash
-index 0bbac515e..329d2dbbb 100644
---- a/package/perl-package-stash/perl-package-stash.hash
-+++ b/package/perl-package-stash/perl-package-stash.hash
+diff --git a/package/perl-plack/perl-plack.hash b/package/perl-plack/perl-plack.hash
+index c763d2c17..84d65ec52 100644
+--- a/package/perl-plack/perl-plack.hash
++++ b/package/perl-plack/perl-plack.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  287d80c9115c9230912aca684f8ca92e  Package-Stash-0.39.tar.gz
--sha256  9165f555112e080493ce0e9129de0886da30b2593fb353a2abd1c76b2d2621b5  Package-Stash-0.39.tar.gz
+-md5  36282b473b4521219c44a9db437b650f  Plack-1.0048.tar.gz
+-sha256  30f5f25e19b437859156a2526f61ca9ab708d50d5730c279189403aabfe542a6  Plack-1.0048.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  7a2922941cc2aad6a52642e4fb13d07b  Package-Stash-0.40.tar.gz
-+sha256  5a9722c6d9cb29ee133e5f7b08a5362762a0b5633ff5170642a5b0686e95e066  Package-Stash-0.40.tar.gz
++md5  0856a900a981769e3d79f0a10ccc3e65  Plack-1.0050.tar.gz
++sha256  d2651ade82ebbff7abe0a3a189fc932dadc4779186ce89468e56d0189eaa6ed4  Plack-1.0050.tar.gz
  
  # computed by scancpan
--sha256  810b319a6f4a53c9cbbef513da17b2f0c872accd149bb889f153f4b78cf8cbb8  LICENSE
-+sha256  5f82745d355b43f451c557642618cbd903251192b89f31ca53eaab90c35aeb7c  LICENSE
-diff --git a/package/perl-package-stash/perl-package-stash.mk b/package/perl-package-stash/perl-package-stash.mk
-index bc116abca..dd93314d8 100644
---- a/package/perl-package-stash/perl-package-stash.mk
-+++ b/package/perl-package-stash/perl-package-stash.mk
+-sha256  fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d  LICENSE
++sha256  8a0c0ad4682691b5bc138e553636adfc8bb38f8885c4c44fd421ec8cc69c9a8f  LICENSE
+diff --git a/package/perl-plack/perl-plack.mk b/package/perl-plack/perl-plack.mk
+index b95f204d2..c39c3d8fd 100644
+--- a/package/perl-plack/perl-plack.mk
++++ b/package/perl-plack/perl-plack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PACKAGE_STASH_VERSION = 0.39
-+PERL_PACKAGE_STASH_VERSION = 0.40
- PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_STASH_VERSION).tar.gz
- PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
+-PERL_PLACK_VERSION = 1.0048
++PERL_PLACK_VERSION = 1.0050
+ PERL_PLACK_SOURCE = Plack-$(PERL_PLACK_VERSION).tar.gz
+ PERL_PLACK_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
+ PERL_PLACK_DEPENDENCIES = host-perl-file-sharedir-install
 -- 
 2.39.2
 
