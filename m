@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4EF8CD37B7
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 09:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B8A8CD37BB
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 09:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16B1A405ED;
-	Sat, 16 Sep 2023 09:22:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16B1A405ED
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81E78409D7;
+	Sat, 16 Sep 2023 09:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81E78409D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5bO5d65-pytU; Sat, 16 Sep 2023 09:22:34 +0000 (UTC)
+	with ESMTP id Wnm1oWNlrFGH; Sat, 16 Sep 2023 09:25:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5F67D402A7;
-	Sat, 16 Sep 2023 09:22:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F67D402A7
+	by smtp2.osuosl.org (Postfix) with ESMTP id BD45540459;
+	Sat, 16 Sep 2023 09:25:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD45540459
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CFC2D1BF574
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 09:22:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 70E911BF574
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 09:25:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F25B42064
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 09:22:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F25B42064
+ by smtp4.osuosl.org (Postfix) with ESMTP id 558ED42077
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 09:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 558ED42077
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id d44mGxUZGMuL for <buildroot@lists.busybox.net>;
- Sat, 16 Sep 2023 09:22:28 +0000 (UTC)
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 80DC441FA9
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 09:22:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80DC441FA9
-X-Virus-Scanned: by amavisd-new using ClamAV (6)
-Received: from zm.lan (pub-46.182.29.194.multiplay.pl [194.29.182.46])
- by server220076.nazwa.pl (Postfix) with ESMTP id 936541BC070;
- Sat, 16 Sep 2023 11:22:24 +0200 (CEST)
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
+ with ESMTP id AlkC-Qk4erhR for <buildroot@lists.busybox.net>;
+ Sat, 16 Sep 2023 09:25:47 +0000 (UTC)
+X-Greylist: delayed 432 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 16 Sep 2023 09:25:46 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3E2542075
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B3E2542075
+ for <buildroot@buildroot.org>; Sat, 16 Sep 2023 09:25:46 +0000 (UTC)
+Received: from submission (posteo.de [185.67.36.169]) 
+ by mout01.posteo.de (Postfix) with ESMTPS id 0F8A2240027
+ for <buildroot@buildroot.org>; Sat, 16 Sep 2023 11:18:32 +0200 (CEST)
+Received: from customer (localhost [127.0.0.1])
+ by submission (posteo.de) with ESMTPSA id 4Rnlpv51MQz9rxP;
+ Sat, 16 Sep 2023 11:18:31 +0200 (CEST)
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
 To: buildroot@buildroot.org
-Date: Sat, 16 Sep 2023 11:22:05 +0200
-Message-ID: <20230916092206.851843-1-m.niestroj@grinn-global.com>
-X-Mailer: git-send-email 2.42.0
+Date: Sat, 16 Sep 2023 09:18:31 +0000
+Message-ID: <20230916091831.13118-2-egorenar-dev@posteo.net>
+In-Reply-To: <20230916091831.13118-1-egorenar-dev@posteo.net>
+References: <20230916091831.13118-1-egorenar-dev@posteo.net>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] board/orangepi-zero-plus: update link in readme
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=posteo.net; s=2017; 
+ t=1694855912; bh=8Q6WjBUjEWhN6cisXmYpeGekq7k9Tog5bxmMuiD+YhE=;
+ h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
+ Content-Transfer-Encoding:From;
+ b=aX1d8t/CSrL31Cdf6ZAW0cgH39jJ2VFKRXAVwfgWj09Z8LeoQasvJty0c46FFy0aQ
+ 0RD/6ltQjteTjD5ghI4M5B4v8KKubTgi/+2i5MlCCfJl1EKWrqK74BQjaKkCOwUb27
+ IFV0k0MhyzHB6W8Jcrr560SDxFFgWz1QlSEwl+On22tAtzbJi6xefRCi1YnLAIC+ZC
+ uusvW6koZeQHjWkQxt+zsQ1GgM+lPI/ByBO2Qzi75jgRum9TGybcFcxisFkozYJ7TW
+ JW4Lo0uJgeSnFeIa75PnUSEoSMCnaL8YsDMvxzUw3qmVkn9PrIop222yYTfz4TCisi
+ 0g1IUApiPtrQg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net
+ header.a=rsa-sha256 header.s=2017 header.b=aX1d8t/C
+Subject: [Buildroot] [PATCH 2/2] package/makedumpfile: bump version to 1.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,33 +75,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Alexander Egorenkov <egorenar-dev@posteo.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Old link is no longer working, so use new link instead.
-
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 ---
- board/orangepi/orangepi-zero-plus/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/makedumpfile/makedumpfile.hash | 2 +-
+ package/makedumpfile/makedumpfile.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/orangepi/orangepi-zero-plus/readme.txt b/board/orangepi/orangepi-zero-plus/readme.txt
-index 5556eae890..1e60e0f825 100644
---- a/board/orangepi/orangepi-zero-plus/readme.txt
-+++ b/board/orangepi/orangepi-zero-plus/readme.txt
-@@ -6,7 +6,7 @@ buildroot environment for the Orangepi Zero Plus. With the current configuration
- it will bring-up the board, and allow access through the serial console.
+diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
+index f38d93c04aa4..665023d87be5 100644
+--- a/package/makedumpfile/makedumpfile.hash
++++ b/package/makedumpfile/makedumpfile.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  748583ea4c0b32346008aa53b313e9708f60a8481959c25c76e5c94740032d9b  makedumpfile-1.7.2.tar.gz
++sha256  f059dbebf5156a9ab97cd3c1f41ad5df3436c7ab4dd6dbffa234fc4e93cfa2ce  makedumpfile-1.7.3.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 8dc60b043e21..6102c92bd8bb 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Orangepi Zero Plus link:
--http://www.orangepi.org/OrangePiZeroPlus/
-+http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-Plus.html
- 
- This configuration uses U-Boot mainline and kernel mainline.
- 
+-MAKEDUMPFILE_VERSION = 1.7.2
++MAKEDUMPFILE_VERSION = 1.7.3
+ MAKEDUMPFILE_SITE = https://github.com/makedumpfile/makedumpfile/releases/download/$(MAKEDUMPFILE_VERSION)
+ MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
+ MAKEDUMPFILE_LICENSE = GPL-2.0
 -- 
 2.42.0
 
