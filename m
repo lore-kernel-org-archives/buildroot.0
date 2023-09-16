@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BBB7CD37BB
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 13:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD14CD37BB
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 13:10:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04FED818BE;
-	Sat, 16 Sep 2023 13:09:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04FED818BE
+	by smtp1.osuosl.org (Postfix) with ESMTP id 881D7818C2;
+	Sat, 16 Sep 2023 13:10:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 881D7818C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Bu9Bjr-CMzzE; Sat, 16 Sep 2023 13:09:41 +0000 (UTC)
+	with ESMTP id d12o64UX5Q-1; Sat, 16 Sep 2023 13:10:28 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 352D38148B;
-	Sat, 16 Sep 2023 13:09:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 352D38148B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 259BD1BF4E7
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:09:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B7B781A2B;
+	Sat, 16 Sep 2023 13:10:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B7B781A2B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 340C81BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F30E440B3B
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:09:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F30E440B3B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06D2741DB9
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:10:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06D2741DB9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BO48bggEzMap for <buildroot@lists.busybox.net>;
- Sat, 16 Sep 2023 13:09:37 +0000 (UTC)
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CE61940235
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 13:09:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE61940235
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id wxbdNvnm5bS3 for <buildroot@lists.busybox.net>;
+ Sat, 16 Sep 2023 13:10:19 +0000 (UTC)
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3303F41E5B
+ for <buildroot@buildroot.org>; Sat, 16 Sep 2023 13:10:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3303F41E5B
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:9162:d12f:41c1:9c3])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 0B1DB2003E8;
- Sat, 16 Sep 2023 15:09:28 +0200 (CEST)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 6F7112003BE;
+ Sat, 16 Sep 2023 15:10:13 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 16 Sep 2023 15:09:28 +0200
-Date: Sat, 16 Sep 2023 15:09:28 +0200
+ Sat, 16 Sep 2023 15:10:13 +0200
+Date: Sat, 16 Sep 2023 15:10:13 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Marcin Niestroj <m.niestroj@grinn-global.com>
-Message-ID: <20230916130928.GA415981@scaer>
-References: <20230916050022.1364264-1-m.niestroj@grinn-global.com>
+Message-ID: <20230916131013.GB415981@scaer>
+References: <20230916052401.1666157-1-m.niestroj@grinn-global.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230916050022.1364264-1-m.niestroj@grinn-global.com>
+In-Reply-To: <20230916052401.1666157-1-m.niestroj@grinn-global.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694869773;
- bh=40+mCPWDEnC3DT88nrrNO5aLxh/2KavAzOkHnbJEnIk=;
+ d=free.fr; s=smtp-20201208; t=1694869817;
+ bh=6Ki0hCQ82KACSnSUCrsVdE6h0tpFw122Sr2KqC6gh44=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=pVuFo9SDN1F1/cVGl6a2ofzu2pYZTzHSmQNafScAKKBCBZeo0ikX3wyip4wQTCZM5
- dtC5nWL/SQjRb7GdsizYzD+bsB9rJNO7M42QZ6I7aBMU5loJVV1wL/ZX2eH+lnzSCO
- NmKvBMN8k9jNsHX5qHQaIQPiG3EKCBWn3nsSXlEwCy1EyQm+yiP5afnpAkEt182RpO
- GxDjdv7Bk95H+Nk9/6L52vienR66nCB4DAvanI7/Bay+93I6zoCn4L1MHNGUk196yl
- tjSp6EOYu/zrF8oeBisWLP6JXt9ICfI7OGgl9Z5TSDeZ8R6sOSBOwFrvsLPfmWiOSO
- XuzFNnh2P1G/Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=k7fmjR8tOtQceYFFGwzTEeLNd0HJnBu37iNLUydZWccYJHL+kHV5s3qznjQR1DL+V
+ vYyxvvAX59AAr9WcUqPcfwZGeHci+Ftq7ok324Y4t/s/AvwsGhjJk++K8UUaBMHmUk
+ F1CsfAci7noQi87SJP6LH4xTO5WrEwWIDfTkTC/Px7socstHNOalhcvcbDx92CkdVd
+ FZd8egmxPqXxVhtIhP7lUEazy5hVTXmXQ76JIhZgQvC99aNb+vN8C008gzD3RgIRCP
+ b1rM7VRdQ1YwgS5zziwGWPmFkUuh1crgwt2bKhDtIcAHpPQNwzkGJDeE+1WsScrNf/
+ aENzTykMlwFfA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pVuFo9SD
-Subject: Re: [Buildroot] [PATCH] package/python-dbus-next: bump to version
- 2.7.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=k7fmjR8t
+Subject: Re: [Buildroot] [PATCH] package/python-pytest-asyncio: bump to
+ version 0.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,49 +85,47 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Marcin, All,
 
-On 2023-09-16 07:00 +0200, Marcin Niestroj spake thusly:
+On 2023-09-16 07:24 +0200, Marcin Niestroj spake thusly:
 > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/python-dbus-fast/python-dbus-fast.hash | 4 ++--
->  package/python-dbus-fast/python-dbus-fast.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-dbus-fast/python-dbus-fast.hash b/package/python-dbus-fast/python-dbus-fast.hash
-> index dce258c0f9..83382bfb29 100644
-> --- a/package/python-dbus-fast/python-dbus-fast.hash
-> +++ b/package/python-dbus-fast/python-dbus-fast.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/dbus-fast/json
-> -md5  1fc61ba29ed79162c651be4bae4a9dee  dbus_fast-1.86.0.tar.gz
-> -sha256  ca376a360f1bc2c3d59e9edfb5e4de5be389cca37e8c92f4539176ddf755341e  dbus_fast-1.86.0.tar.gz
-> +md5  810a5b08cc14e269207efa9cb651e86b  dbus_fast-2.7.0.tar.gz
-> +sha256  9110c689fea4869647ebad3cd80317554c9f77e3825eed2e36f4cb9aec749761  dbus_fast-2.7.0.tar.gz
->  # Locally computed sha256 checksums
->  sha256  c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af  LICENSE
-> diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
-> index 1456d5600d..737406c9ab 100644
-> --- a/package/python-dbus-fast/python-dbus-fast.mk
-> +++ b/package/python-dbus-fast/python-dbus-fast.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -PYTHON_DBUS_FAST_VERSION = 1.86.0
-> +PYTHON_DBUS_FAST_VERSION = 2.7.0
-
-Commit title references python-dbus-next, but this is s/-next/-fast/
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  PYTHON_DBUS_FAST_SOURCE = dbus_fast-$(PYTHON_DBUS_FAST_VERSION).tar.gz
-> -PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/08/9d/ad27f451198724d6e5b4f0435a13f2b2f839716bbcdede2ccf6d99743ec5
-> +PYTHON_DBUS_FAST_SITE = https://files.pythonhosted.org/packages/e5/ba/beeaf36821f0164a208e8cbe9adbdc75ce0a6eafdebd4011912a806a4275
->  PYTHON_DBUS_FAST_SETUP_TYPE = setuptools
->  PYTHON_DBUS_FAST_LICENSE = MIT
->  PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
+> ---
+>  package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+>  package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+> index 6198a46608..f6cc1d2413 100644
+> --- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
+> +++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+> -md5  805da62a533c75a9bccadee485f98c27  pytest-asyncio-0.21.0.tar.gz
+> -sha256  2b38a496aef56f56b0e87557ec313e11e1ab9276fc3863f6a7be0f1d0e415e1b  pytest-asyncio-0.21.0.tar.gz
+> +md5  1d10f607444a375c1425a2a90960006e  pytest-asyncio-0.21.1.tar.gz
+> +sha256  40a7eae6dded22c7b604986855ea48400ab15b069ae38116e8c01238e9eeb64d  pytest-asyncio-0.21.1.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+> diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+> index 6bf7e33577..5c5efd819c 100644
+> --- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
+> +++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_PYTEST_ASYNCIO_VERSION = 0.21.0
+> +PYTHON_PYTEST_ASYNCIO_VERSION = 0.21.1
+>  PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+> -PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/85/c7/9db0c6215f12f26b590c24acc96d048e03989315f198454540dff95109cd
+> +PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/5a/85/d39ef5f69d5597a206f213ce387bcdfa47922423875829f7a98a87d33281
+>  PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+>  PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+>  PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
 > -- 
 > 2.42.0
 > 
