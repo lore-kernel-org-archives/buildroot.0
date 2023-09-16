@@ -4,49 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CCA0CD37B1
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 04:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E76F5CD37B1
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 04:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA21D405CA;
-	Sat, 16 Sep 2023 04:45:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA21D405CA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6FAF1405AF;
+	Sat, 16 Sep 2023 04:56:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FAF1405AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fMVTdYRzRAWE; Sat, 16 Sep 2023 04:45:04 +0000 (UTC)
+	with ESMTP id el95mL3FEiKK; Sat, 16 Sep 2023 04:56:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 004044057B;
-	Sat, 16 Sep 2023 04:45:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 004044057B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 87D0A1BF352
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 04:45:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C30D8408C3;
+	Sat, 16 Sep 2023 04:56:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C30D8408C3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 935B81BF352
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 04:56:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D1CC421D7
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 04:45:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D1CC421D7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 76ACF83D0F
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 04:56:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76ACF83D0F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eosw6glt4zIS for <buildroot@lists.busybox.net>;
- Sat, 16 Sep 2023 04:45:00 +0000 (UTC)
-X-Greylist: delayed 405 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 16 Sep 2023 04:44:59 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E053F421CC
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3OIL0A1b-PrP for <buildroot@lists.busybox.net>;
+ Sat, 16 Sep 2023 04:56:30 +0000 (UTC)
 Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E053F421CC
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 04:44:59 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (12)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5BFDA83CB4
+ for <buildroot@buildroot.org>; Sat, 16 Sep 2023 04:56:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BFDA83CB4
+X-Virus-Scanned: by amavisd-new using ClamAV (1)
 Received: from zm.lan (pub-46.182.29.194.multiplay.pl [194.29.182.46])
- by server220076.nazwa.pl (Postfix) with ESMTP id B97E31BBD82;
- Sat, 16 Sep 2023 06:38:10 +0200 (CEST)
+ by server220076.nazwa.pl (Postfix) with ESMTP id 60E351BBC8C;
+ Sat, 16 Sep 2023 06:56:27 +0200 (CEST)
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Sep 2023 06:37:57 +0200
-Message-ID: <20230916043757.138677-1-m.niestroj@grinn-global.com>
+Date: Sat, 16 Sep 2023 06:56:20 +0200
+Message-ID: <20230916045622.1272999-1-m.niestroj@grinn-global.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/dt-utils: bump to version 2023.08.0
+Subject: [Buildroot] [PATCH] package/python-bleak: bump to version 0.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,63 +56,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-COPYING is now a symlink pointing to LICENSES/GPL-2.0-only.txt. More
-license files were added and all source code files were updated with
-proper license being used. See [1-4].
-
-List all licenses used in runtime by produced binary (and omit
-GPL-3.0-or-later for check-news.sh script).
-
-[1] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=893c6c9f628fed614537fd548b7a851d2d9ee868
-[2] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=c1880166d1e34efcf606297c8189b228aa78f78a
-[3] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=fa56be74c3bd991a40384e9be4a485f3febea19e
-[4] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=6c7ccb22ea30ee28d42679a7ba66c0199f135db1
-
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/dt-utils/dt-utils.hash | 7 +++++--
- package/dt-utils/dt-utils.mk   | 7 ++++---
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ package/python-bleak/python-bleak.hash | 4 ++--
+ package/python-bleak/python-bleak.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
-index 9fca594db5..c57145b835 100644
---- a/package/dt-utils/dt-utils.hash
-+++ b/package/dt-utils/dt-utils.hash
-@@ -1,3 +1,6 @@
- # Locally computed
--sha256  63cf47c70911bb3605bafac38a5a7e19eb753ac1c90de2abceaf2fdefd71be6d  dt-utils-2021.03.0.tar.xz
--sha256  a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
-+sha256  a6988b889418737324ed3db3785d3a9692e802c1dff4a2323c962008b7b646b1  dt-utils-2023.08.0.tar.xz
-+sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSES/CC0-1.0.txt
-+sha256  2c9d733cadb50e33cc83f05f1fe7cc4b6c5ff7260fd9eea1b839151c7fa64742  LICENSES/GPL-2.0-only.txt
-+sha256  d6e37cb7eff6ef15ae3c4082cf40eae80a94cd59b636991d1149d4a5c9dc3537  LICENSES/GPL-2.0-or-later.txt
-+sha256  aa8c4e84680f7653d9a6f9f92b692239e5aa839a48dcdbce6108a3bbde451e30  LICENSES/Zlib.txt
-diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
-index d264e2cdc9..05c2c530e7 100644
---- a/package/dt-utils/dt-utils.mk
-+++ b/package/dt-utils/dt-utils.mk
-@@ -4,11 +4,12 @@
+diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
+index aae230dac2..8462e19d39 100644
+--- a/package/python-bleak/python-bleak.hash
++++ b/package/python-bleak/python-bleak.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/bleak/json
+-md5  97e2987748f1def21e1910a258027c17  bleak-0.20.2.tar.gz
+-sha256  6c92a47abe34e6dea8ffc5cea9457cbff6e1be966854839dbc25cddb36b79ee4  bleak-0.20.2.tar.gz
++md5  5e27e052efc45b64da1a1f017610c561  bleak-0.21.1.tar.gz
++sha256  ec4a1a2772fb315b992cbaa1153070c7e26968a52b0e2727035f443a1af5c18f  bleak-0.21.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
+diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
+index 9532774ae8..ed3c3f2f93 100644
+--- a/package/python-bleak/python-bleak.mk
++++ b/package/python-bleak/python-bleak.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--DT_UTILS_VERSION = 2021.03.0
-+DT_UTILS_VERSION = 2023.08.0
- DT_UTILS_SOURCE = dt-utils-$(DT_UTILS_VERSION).tar.xz
- DT_UTILS_SITE = https://git.pengutronix.de/cgit/tools/dt-utils/snapshot
--DT_UTILS_LICENSE = GPL-2.0
--DT_UTILS_LICENSE_FILES = COPYING
-+DT_UTILS_LICENSE = CC0-1.0 GPL-2.0 GPL-2.0+ Zlib
-+DT_UTILS_LICENSE_FILES = LICENSES/CC0-1.0.txt LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-2.0-or-later.txt LICENSES/Zlib.txt
- DT_UTILS_DEPENDENCIES = udev
- DT_UTILS_AUTORECONF = YES
- 
+-PYTHON_BLEAK_VERSION = 0.20.2
++PYTHON_BLEAK_VERSION = 0.21.1
+ PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
+-PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/87/95/a6f614fae12a6fe1cf517f8600004dd6abd4af0e0e1177c03164d0637e81
++PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/6a/c0/3aca655fa43b8ff5340d99fac4e67061f53f42f092fc847bdd0559d67846
+ PYTHON_BLEAK_SETUP_TYPE = setuptools
+ PYTHON_BLEAK_LICENSE = MIT
+ PYTHON_BLEAK_LICENSE_FILES = LICENSE
 -- 
 2.42.0
 
