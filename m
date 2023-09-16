@@ -4,84 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09966CD37BB
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 12:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8CA7CD37BB
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 13:08:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C57A82C61;
-	Sat, 16 Sep 2023 12:51:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C57A82C61
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22D71832EB;
+	Sat, 16 Sep 2023 13:08:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22D71832EB
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UnjK6iTBWZTr; Sat, 16 Sep 2023 12:51:42 +0000 (UTC)
+	with ESMTP id uYVFxHUq15f8; Sat, 16 Sep 2023 13:08:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E637F82BC3;
-	Sat, 16 Sep 2023 12:51:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E637F82BC3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EB3701BF578
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 12:51:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50BF4832E6;
+	Sat, 16 Sep 2023 13:08:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50BF4832E6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 59A771BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0A1740AFF
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 12:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D0A1740AFF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EF3141B34
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:08:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EF3141B34
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id W5rRRfMGmm3d for <buildroot@lists.busybox.net>;
- Sat, 16 Sep 2023 12:51:39 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 625764013C
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 12:51:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 625764013C
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-401187f8071so19923175e9.0
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 05:51:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694868697; x=1695473497;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=e2gzHR5w+pbto5fgHhvj2tKwFVHP2QE4w2CjNQoSNF4=;
- b=ncNOghSykDDeTQv825ClexeY26Sa68zgL4y0W0qjoAQHFA3IKNbroGieBaiB4Lu5Ju
- adt74lOSz8QcjIhg2oWt5rD2vQ1Ivir1/V1lFFI9Y7OFqV8DVEsgAjvXSq3ei7XNNGXu
- ANLTM8oFaluygNvruVMWKWJet8zys+uCUN3tBXCu+p+hCLR+pnmMaqcrg4Q2P9s9qSbE
- mVGs4pzdk3Nl8zaKN9quJyekcTEBlki7VImvmEgxASnLncCgu4AOHrO4nspoNn30GDCe
- ew4HqB/WTAHdMzlQpYESAAOJYSScasND2V89xgaLkmxXvgGSXiZldfIHmgHq2E4hwT/i
- PjdQ==
-X-Gm-Message-State: AOJu0YxJvkcqjloLO/NncEX/13IPbiHBsaGUEAeH3P6A5R2OLv3DeRES
- gZB/lWGvSFcpiEKs1JRY+WedTeOA5eE=
-X-Google-Smtp-Source: AGHT+IFeW0Bol+zl+6vs5xeEEpmLcdLDWYxpKrvXek7rteNV2/jUXCz4fLYe2gghOonSj7pCDtCDNA==
-X-Received: by 2002:a05:600c:b4b:b0:401:c7ec:b930 with SMTP id
- k11-20020a05600c0b4b00b00401c7ecb930mr5271766wmr.10.1694868696870; 
- Sat, 16 Sep 2023 05:51:36 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- j5-20020a5d6045000000b0032008f99216sm362819wrt.96.2023.09.16.05.51.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Sep 2023 05:51:36 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XRNT5U98dQvS for <buildroot@lists.busybox.net>;
+ Sat, 16 Sep 2023 13:08:18 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72F3540325
+ for <buildroot@buildroot.org>; Sat, 16 Sep 2023 13:08:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72F3540325
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5E9A3870CD; Sat, 16 Sep 2023 13:08:18 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Sep 2023 14:51:32 +0200
-Message-Id: <20230916125132.1509289-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694868697; x=1695473497; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=e2gzHR5w+pbto5fgHhvj2tKwFVHP2QE4w2CjNQoSNF4=;
- b=a/Z1dR13TKPPhYEMnmf5Aj2qGU3XgOS6iBc9osSMcHqsqeypUSMlGQ3lU6h8fxPxDg
- z/55kEJ5FYMg7Lm3dSm3RV+ROX7wS8nczTltEyQAi1P+DKMFSYBH9IqU/H3FrDClsBlC
- g/vwUp9YvxapSDo2F1mRzdgPZOiyuv54RNcHWRQtDLGOcyZ9HfytYiSWBCUINckxh5af
- WaqqAF/iUUCSb4riyGEMHJ7hhbGMOtVlMcaqQA+ESRrgcTi7Td3DlZuX7zscwubgebK4
- vPe4/CvrK1vviH9YVEpFwI6QUF0LsrxUvMqbzYQajANjDVMaXW6pDikhdvQ/cm6F3KEB
- zNvg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=a/Z1dR13
-Subject: [Buildroot] [PATCH 1/1] package/conmon: fix libseccomp shared build
+Date: Sat, 16 Sep 2023 15:04:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d3bed8861356a8c1ac3167746b736b9f17840512
+X-Git-Newrev: 37fd844c951f01c95a731844213ba1ef02b8e402
+X-Patchwork-Hint: ignore
+Message-Id: <20230916130818.5E9A3870CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dt-utils: bump to version 2023.08.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,84 +56,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Christian Stewart <christian@aperture.us>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop patch and disable libseccomp when building statically to avoid the
-following build failure raised since commit
-29834d8a12d984e8efe05398c5aaa6a61f7880e0:
+commit: https://git.buildroot.net/buildroot/commit/?id=37fd844c951f01c95a731844213ba1ef02b8e402
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-src/seccomp_notify.c: In function 'seccomp_notify_plugins_load':
-src/seccomp_notify.c:136:42: warning: implicit declaration of function 'dlopen'; did you mean 'popen'? [-Wimplicit-function-declaration]
-  136 |                 ctx->plugins[s].handle = dlopen(it, RTLD_NOW);
-      |                                          ^~~~~~
-      |                                          popen
-src/seccomp_notify.c:136:53: error: 'RTLD_NOW' undeclared (first use in this function)
-  136 |                 ctx->plugins[s].handle = dlopen(it, RTLD_NOW);
-      |                                                     ^~~~~~~~
+COPYING is now a symlink pointing to LICENSES/GPL-2.0-only.txt. More
+license files were added and all source code files were updated with
+proper license being used. See [1-4].
 
-Fixes:
- - http://autobuild.buildroot.org/results/13d3b46990720bba8621c922b5dce54ab650e96d
+List all licenses used in runtime by produced binary (and omit
+GPL-3.0-or-later for check-news.sh script).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=893c6c9f628fed614537fd548b7a851d2d9ee868
+[2] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=c1880166d1e34efcf606297c8189b228aa78f78a
+[3] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=fa56be74c3bd991a40384e9be4a485f3febea19e
+[4] https://git.pengutronix.de/cgit/tools/dt-utils/commit/?id=6c7ccb22ea30ee28d42679a7ba66c0199f135db1
+
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+[yann.morin.1998@free.fr:
+  - _LICENSE is space-comma separated
+  - multi-line assignment for license files
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...01-remove-unused-dlfcn.h-header-file.patch | 26 -------------------
- package/conmon/conmon.mk                      |  2 +-
- 2 files changed, 1 insertion(+), 27 deletions(-)
- delete mode 100644 package/conmon/0001-remove-unused-dlfcn.h-header-file.patch
+ package/dt-utils/dt-utils.hash |  7 +++++--
+ package/dt-utils/dt-utils.mk   | 11 ++++++++---
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch b/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch
-deleted file mode 100644
-index 14f817942e..0000000000
---- a/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From e28634a0e847a14c58482f962bc9b1d69937387f Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Sat, 12 Aug 2023 12:53:37 +0200
--Subject: [PATCH] remove unused dlfcn.h header file
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://github.com/containers/conmon/issues/443
-----
-- src/seccomp_notify.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/seccomp_notify.c b/src/seccomp_notify.c
--index 8d34d9d..2a8371d 100644
----- a/src/seccomp_notify.c
--+++ b/src/seccomp_notify.c
--@@ -7,7 +7,6 @@
-- 
-- #include <errno.h>
-- #include <sys/ioctl.h>
---#include <dlfcn.h>
-- #include <sys/wait.h>
-- #include <sys/mount.h>
-- #include <signal.h>
---- 
--2.39.2
--
-diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
-index 29deb2af47..50807f8c6a 100644
---- a/package/conmon/conmon.mk
-+++ b/package/conmon/conmon.mk
-@@ -11,7 +11,7 @@ CONMON_LICENSE_FILES = LICENSE
+diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
+index 9fca594db5..c57145b835 100644
+--- a/package/dt-utils/dt-utils.hash
++++ b/package/dt-utils/dt-utils.hash
+@@ -1,3 +1,6 @@
+ # Locally computed
+-sha256  63cf47c70911bb3605bafac38a5a7e19eb753ac1c90de2abceaf2fdefd71be6d  dt-utils-2021.03.0.tar.xz
+-sha256  a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
++sha256  a6988b889418737324ed3db3785d3a9692e802c1dff4a2323c962008b7b646b1  dt-utils-2023.08.0.tar.xz
++sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSES/CC0-1.0.txt
++sha256  2c9d733cadb50e33cc83f05f1fe7cc4b6c5ff7260fd9eea1b839151c7fa64742  LICENSES/GPL-2.0-only.txt
++sha256  d6e37cb7eff6ef15ae3c4082cf40eae80a94cd59b636991d1149d4a5c9dc3537  LICENSES/GPL-2.0-or-later.txt
++sha256  aa8c4e84680f7653d9a6f9f92b692239e5aa839a48dcdbce6108a3bbde451e30  LICENSES/Zlib.txt
+diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+index d264e2cdc9..198b36d5fe 100644
+--- a/package/dt-utils/dt-utils.mk
++++ b/package/dt-utils/dt-utils.mk
+@@ -4,11 +4,16 @@
+ #
+ ################################################################################
  
- CONMON_DEPENDENCIES = host-pkgconf libglib2
+-DT_UTILS_VERSION = 2021.03.0
++DT_UTILS_VERSION = 2023.08.0
+ DT_UTILS_SOURCE = dt-utils-$(DT_UTILS_VERSION).tar.xz
+ DT_UTILS_SITE = https://git.pengutronix.de/cgit/tools/dt-utils/snapshot
+-DT_UTILS_LICENSE = GPL-2.0
+-DT_UTILS_LICENSE_FILES = COPYING
++DT_UTILS_LICENSE = CC0-1.0, GPL-2.0, GPL-2.0+, Zlib
++DT_UTILS_LICENSE_FILES = \
++	LICENSES/CC0-1.0.txt \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-2.0-or-later.txt \
++	LICENSES/Zlib.txt
++
+ DT_UTILS_DEPENDENCIES = udev
+ DT_UTILS_AUTORECONF = YES
  
--ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP):$(BR2_STATIC_LIBS),y:)
- CONMON_DISABLE_SECCOMP = 0
- CONMON_DEPENDENCIES += libseccomp
- else
--- 
-2.40.1
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
