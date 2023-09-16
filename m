@@ -4,84 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78F9ECD37BC
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 13:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29BD5CD37BB
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 14:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E984040B3B;
-	Sat, 16 Sep 2023 13:54:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E984040B3B
+	by smtp2.osuosl.org (Postfix) with ESMTP id B24AC4026E;
+	Sat, 16 Sep 2023 14:03:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B24AC4026E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m8joHtNXixPv; Sat, 16 Sep 2023 13:54:46 +0000 (UTC)
+	with ESMTP id F4BIp7ASqi-a; Sat, 16 Sep 2023 14:03:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 110594026E;
-	Sat, 16 Sep 2023 13:54:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 110594026E
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D0A6C1BF291
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:54:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8BB7040C12;
+	Sat, 16 Sep 2023 14:03:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8BB7040C12
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 90CC71BF863
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 14:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9A6B4026E
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 13:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9A6B4026E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6700282B08
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 14:03:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6700282B08
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dxNd6MrFTKlF for <buildroot@lists.busybox.net>;
- Sat, 16 Sep 2023 13:54:41 +0000 (UTC)
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5772B4016F
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 13:54:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5772B4016F
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-401187f8071so20130645e9.0
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 06:54:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694872479; x=1695477279;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=8oXIgLz2CV+lQPLZg9eP+tcCbrlcp/WU/wrcd4OlVHk=;
- b=wwrlpTKzlV2TTH6Ur/kz+B+BSMFksRILOTSlizaUEGhuTUafJi6AfD673ET1/iZ+If
- m+Z+TxkHX2wnghwOPf/VcAG9Dm+CJc0SDT0JDBhUdjsgOPn6MmuY7LoN2udx3Ix5L3xq
- x8LL5MV8f55/9Fcg5BmmArvn8/QqlptBXxLjfJ+oIVWR/NAkj/K6bHYzNB7O8p1YPDqe
- mdkiATTu/gV3R+fW2rNB4iRXLd4bsQdDwolOy5es8KG2/mpJI35Ma9cTLcukiUFhKRDy
- 0wWmX3n9rNgV0zvUAUhKeQA5rp0YBkAurlLJrRyDNXHRHa0KXgR/1qW5oSv0Mh/QFGOV
- 5sXw==
-X-Gm-Message-State: AOJu0YwW3gqlYOuEg+MfjkdeRuMJfj/6Q2ehBnItBMDjXOb6WPyul1Vx
- uk2U3LpGjcERJblh3i8Q18laarSKu+A=
-X-Google-Smtp-Source: AGHT+IGk4aga9d/op4dRV4ntZ1WQzO1eplyDpw/LnOEw2MdN4fvmvhNbYW/+x7VYt+onPwdeDWCRUg==
-X-Received: by 2002:a05:600c:690f:b0:3fe:d67d:5040 with SMTP id
- fo15-20020a05600c690f00b003fed67d5040mr5689379wmb.5.1694872478706; 
- Sat, 16 Sep 2023 06:54:38 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- 18-20020a05600c025200b003fe1a092925sm7435296wmj.19.2023.09.16.06.54.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Sep 2023 06:54:38 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oeTkTtJrNTyN for <buildroot@lists.busybox.net>;
+ Sat, 16 Sep 2023 14:03:17 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E0A6382897
+ for <buildroot@buildroot.org>; Sat, 16 Sep 2023 14:03:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0A6382897
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id DA83213F899;
+ Sat, 16 Sep 2023 16:03:12 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 16 Sep 2023 15:54:35 +0200
-Message-Id: <20230916135435.113400-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Date: Sat, 16 Sep 2023 16:03:08 +0200
+Message-ID: <20230916140308.1869279-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694872479; x=1695477279; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8oXIgLz2CV+lQPLZg9eP+tcCbrlcp/WU/wrcd4OlVHk=;
- b=Gxd7rcyPD+OULr4r33jBpU4ZMZBm808wgJZ8xWgKOAXeqComxhQlbfYuTB3fY439e1
- 14rZFmABz0RWcPCq/652jJbcAjsUtowkYyrtucJFI/dS9Sh6uJtUBDiPF+kLuQN3+rkZ
- NAbUXeGgriQQREGngUSDSQz6omG0yIUg/agxS64bPUzZuwp4XZF23TlLsXXJSsDhPidH
- p1DmMlh9FjINbtyfVNcGsvsR5E/2Z6iV0jEq4PpQoM6GzVAUbonixKeb4ECn3GkYHEkI
- 3KqpsgojgJ/x7BP0I5eYJtMEGmmPtGZd40i3cFDBOf9gOuDd3X+RAHDyCKvad2bFXi6D
- BLnw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Gxd7rcyP
-Subject: [Buildroot] [PATCH 1/1] package/linux-pam: needs gcc >= 4.9
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1694872994;
+ bh=xrgLsBuWI7AGhlsidZPvjJ7P006VWVF3p9jjHSI9FHQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ld9Fkffg/7JebrEKb1H6uvKWjidKbIErQ71ZtmNYXsmceC+ProXwo4qXKA4RuZMWl
+ XAML+QJQA+ZDVF9QsrnHOYOV1Vw5CjV0o9vj4R5DGoBhq4PyXhQ3yIZ+sHrebOmqR+
+ UCHpLD/TG/MFgnhVLhbLujQQNF+zo+Xd1oZagt7ZUNYQ9i9/tndI5CFZlk4p8SKfwb
+ T4n/8xyE/s/7cQw38k/1ybH5cq0iEWOCzndvXFH/MZxV8kEt4vsIM9jbKhRnAWZMFy
+ 89+HLctYVIh+ROiD7BTPB9MdI47UAd0KoDrb3D274GCNqXpX3ncguLr5BaRZcw99Z8
+ exYLzkSdQxNKg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ld9Fkffg
+Subject: [Buildroot] [PATCH 1/1] configs/imx8mpico: bump bsp components to
+ version tn-kirkstone_5.15.71-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,186 +71,210 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>,
- =?UTF-8?q?Herv=C3=A9=20Codina?= <herve.codina@bootlin.com>,
- Karoly Kasza <kaszak@gmail.com>, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-linux-pam raises the following build failure with gcc 4.8 since bump to
-version 1.5.3 in commit f8147e27cdac8f998ec6644a09ce4e8d62b6433c and
-https://github.com/linux-pam/linux-pam/commit/8f9816b57e3a475fc2d2cbb106c188b778098f85:
+Those components are aligned with NXP BSP lf-5.15.71-2.2.0.
 
-pam_access.c: In function 'pam_sm_authenticate':
-pam_access.c:1084:13: error: 'for' loop initial declarations are only allowed in C99 mode
-             for (int i = 0; filename_list[i] != NULL; i++) {
-             ^
-
-Those build failures could be fixed by adding -std=c99 but then the
-build will fails because stdadtomic.h is mandatory since
-https://github.com/linux-pam/linux-pam/commit/a35e092e24ee7632346a0e1b4a203c04d4cd2c62
+This commit introduces arm-trusted-firmware upstream patches to
+compile the needed version with newer gcc and binutils.
 
 Fixes:
- - http://autobuild.buildroot.org/results/9b2ba987d2c873f4a7caea72707acb655279d16b
+https://gitlab.com/buildroot.org/buildroot/-/jobs/5083366622
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/linux-pam/Config.in   |  5 +++--
- package/nodm/Config.in        |  5 +++--
- package/openvmtools/Config.in |  5 +++--
- package/php-pam/Config.in     |  5 +++--
- package/rsh-redone/Config.in  | 11 +++++++----
- package/shadow/Config.in      |  6 ++++--
- 6 files changed, 23 insertions(+), 14 deletions(-)
+Patch tested on branch master at commit 971f8ad with commands:
 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index 27ba55bd61..b17716f2f7 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LINUX_PAM
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
- 	select BR2_PACKAGE_FLEX
- 	help
- 	  A Security Framework that Provides Authentication for
-@@ -11,7 +12,7 @@ config BR2_PACKAGE_LINUX_PAM
- 
- 	  http://linux-pam.org
- 
--comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library"
-+comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/nodm/Config.in b/package/nodm/Config.in
-index 2dd6f1e1cf..52fd031b9b 100644
---- a/package/nodm/Config.in
-+++ b/package/nodm/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_NODM
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
- 	depends on !BR2_STATIC_LIBS # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
-@@ -17,7 +18,7 @@ config BR2_PACKAGE_NODM
- 
- 	  https://github.com/spanezz/nodm/
- 
--comment "nodm needs a toolchain w/ wchar, locale, dynamic library"
-+comment "nodm needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 67855f50e0..066a7a4736 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -32,13 +32,14 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
- 	bool "PAM support"
- 	# linux-pam needs locale and wchar, but we already have this
- 	# dependency on the main symbol, above.
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Support for PAM in openvmtools
- 
--comment "PAM support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "PAM support needs a toolchain w/ dynamic library, gcc >= 4.9"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS
- 	bool "resolutionkms support"
-diff --git a/package/php-pam/Config.in b/package/php-pam/Config.in
-index 70f62a3180..c91fa8b6fe 100644
---- a/package/php-pam/Config.in
-+++ b/package/php-pam/Config.in
-@@ -4,13 +4,14 @@ config BR2_PACKAGE_PHP_PAM
- 	depends on BR2_USE_WCHAR # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
- 	depends on !BR2_STATIC_LIBS # linux-pam
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  PHP PAM (Pluggable Authentication Modules) integration
- 
- 	  https://pecl.php.net/package/PAM
- 
--comment "php-pam needs a toolchain w/ wchar, locale, dynamic library"
-+comment "php-pam needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
-index 53ff2bea7f..fed643def4 100644
---- a/package/rsh-redone/Config.in
-+++ b/package/rsh-redone/Config.in
-@@ -19,11 +19,13 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_USE_MMU # linux-pam
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
--comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_RSH_REDONE_RSH
- 	bool "rsh"
-@@ -33,10 +35,11 @@ config BR2_PACKAGE_RSH_REDONE_RSHD
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # linux-pam
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
--comment "rshd needs a toolchain w/ wchar, locale, dynamic library"
-+comment "rshd needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- endif
-diff --git a/package/shadow/Config.in b/package/shadow/Config.in
-index e3580c2cf5..e85e5884d2 100644
---- a/package/shadow/Config.in
-+++ b/package/shadow/Config.in
-@@ -20,14 +20,16 @@ config BR2_PACKAGE_SHADOW_ACCOUNT_TOOLS_SETUID
- 	depends on BR2_ENABLE_LOCALE  # linux-pam
- 	depends on BR2_USE_WCHAR  # linux-pam
- 	depends on !BR2_STATIC_LIBS  # linux-pam
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Install the user and group management tools (e.g. groupadd)
- 	  with setuid and authenticate the callers via PAM.
- 
--comment "account-tools-setuid needs a toolchain w/ dynamic library, wchar, locale"
-+comment "account-tools-setuid needs a toolchain w/ dynamic library, wchar, locale, gcc >= 4.9"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-+		!BR2_ENABLE_LOCALE || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_SHADOW_UTMPX
- 	bool "utmpx"
+    make check-package
+    ...
+    0 warnings generated
+
+    make imx8mpico_defconfig
+    make
+---
+ ...low-lower-address-access-with-gcc-12.patch | 62 +++++++++++++++++++
+ ...dd-support-for-new-binutils-versions.patch | 62 +++++++++++++++++++
+ configs/imx8mpico_defconfig                   |  9 +--
+ 3 files changed, 129 insertions(+), 4 deletions(-)
+ create mode 100644 board/technexion/imx8mpico/patches/arm-trusted-firmware/0001-fix-build-allow-lower-address-access-with-gcc-12.patch
+ create mode 100644 board/technexion/imx8mpico/patches/arm-trusted-firmware/0002-feat-build-add-support-for-new-binutils-versions.patch
+
+diff --git a/board/technexion/imx8mpico/patches/arm-trusted-firmware/0001-fix-build-allow-lower-address-access-with-gcc-12.patch b/board/technexion/imx8mpico/patches/arm-trusted-firmware/0001-fix-build-allow-lower-address-access-with-gcc-12.patch
+new file mode 100644
+index 0000000000..90e808cc8e
+--- /dev/null
++++ b/board/technexion/imx8mpico/patches/arm-trusted-firmware/0001-fix-build-allow-lower-address-access-with-gcc-12.patch
+@@ -0,0 +1,62 @@
++From 078cbf942c86d77775a26d83fc87ca244de02d4c Mon Sep 17 00:00:00 2001
++From: Govindraj Raja <govindraj.raja@arm.com>
++Date: Fri, 5 May 2023 09:09:36 -0500
++Subject: [PATCH] fix(build): allow lower address access with gcc-12
++
++With gcc-12 any lower address access can trigger a warning/error
++this would be useful in other parts of system but in TF-A
++there are various reasons to access to the lower address ranges,
++example using mmio_read_*/writes_*
++
++So setup to allow access to lower addresses while using gcc-12
++
++Change-Id: Id1b4012b13bc6876d83b90a347fee12478a1921d
++Signed-off-by: Govindraj Raja <govindraj.raja@arm.com>
++Upstream: https://github.com/ARM-software/arm-trusted-firmware/commit/dea23e245fb890c6c06eff7d1aed8fffa981fc05
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ Makefile                     |  4 ++++
++ make_helpers/build_macros.mk | 12 ++++++++++++
++ 2 files changed, 16 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index dccf0121d..edd7f5886 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -385,6 +385,10 @@ ifeq ($(findstring clang,$(notdir $(CC))),)
++ WARNINGS	+=		-Wunused-but-set-variable -Wmaybe-uninitialized	\
++ 				-Wpacked-bitfield-compat -Wshift-overflow=2 \
++ 				-Wlogical-op
+++
+++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
+++TF_CFLAGS		+= 	$(call cc_option, --param=min-pagesize=0)
+++
++ else
++ # using clang
++ WARNINGS	+=		-Wshift-overflow -Wshift-sign-overflow \
++diff --git a/make_helpers/build_macros.mk b/make_helpers/build_macros.mk
++index 12aaee684..3a54bf67c 100644
++--- a/make_helpers/build_macros.mk
+++++ b/make_helpers/build_macros.mk
++@@ -86,6 +86,18 @@ define assert_numerics
++     $(foreach num,$1,$(eval $(call assert_numeric,$(num))))
++ endef
++ 
+++# Convenience function to check for a given linker option. An call to
+++# $(call ld_option, --no-XYZ) will return --no-XYZ if supported by the linker
+++define ld_option
+++	$(shell if $(LD) $(1) -v >/dev/null 2>&1; then echo $(1); fi )
+++endef
+++
+++# Convenience function to check for a given compiler option. A call to
+++# $(call cc_option, --no-XYZ) will return --no-XYZ if supported by the compiler
+++define cc_option
+++	$(shell if $(CC) $(1) -c -x c /dev/null -o /dev/null >/dev/null 2>&1; then echo $(1); fi )
+++endef
+++
++ # CREATE_SEQ is a recursive function to create sequence of numbers from 1 to
++ # $(2) and assign the sequence to $(1)
++ define CREATE_SEQ
++-- 
++2.41.0
++
+diff --git a/board/technexion/imx8mpico/patches/arm-trusted-firmware/0002-feat-build-add-support-for-new-binutils-versions.patch b/board/technexion/imx8mpico/patches/arm-trusted-firmware/0002-feat-build-add-support-for-new-binutils-versions.patch
+new file mode 100644
+index 0000000000..d989bdb06b
+--- /dev/null
++++ b/board/technexion/imx8mpico/patches/arm-trusted-firmware/0002-feat-build-add-support-for-new-binutils-versions.patch
+@@ -0,0 +1,62 @@
++From cc14748257e07ed5b2caf5194c4c333a8d09a1f4 Mon Sep 17 00:00:00 2001
++From: Marco Felsch <m.felsch@pengutronix.de>
++Date: Wed, 9 Nov 2022 12:59:09 +0100
++Subject: [PATCH] feat(build): add support for new binutils versions
++
++Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
++of a new warning when linking the bl*.elf in the form:
++
++  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
++  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
++  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
++  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
++
++These new warnings are enbaled by default to secure elf binaries:
++ - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
++ - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
++
++Fix it in a similar way to what the Linux kernel does, see:
++https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
++
++Following the reasoning there, we set "-z noexecstack" for all linkers
++(although LLVM's LLD defaults to it) and optional add
++--no-warn-rwx-segments since this a ld.bfd related.
++
++Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
++Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
++Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
++Upstream: https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ Makefile | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index edd7f5886..4c0e1473e 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -418,6 +418,8 @@ endif
++ 
++ GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
++ 
+++TF_LDFLAGS		+=	-z noexecstack
+++
++ # LD = armlink
++ ifneq ($(findstring armlink,$(notdir $(LD))),)
++ TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
++@@ -445,6 +447,12 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
++ # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
++ else
++ TF_LDFLAGS		+=	--fatal-warnings -O1
+++
+++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
+++# are not loaded by a elf loader.
+++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
+++TF_LDFLAGS		+=	-O1
+++
++ TF_LDFLAGS		+=	--gc-sections
++ # ld.lld doesn't recognize the errata flags,
++ # therefore don't add those in that case
++-- 
++2.41.0
++
+diff --git a/configs/imx8mpico_defconfig b/configs/imx8mpico_defconfig
+index 1df8c104ec..3e3290b9dd 100644
+--- a/configs/imx8mpico_defconfig
++++ b/configs/imx8mpico_defconfig
+@@ -1,10 +1,11 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-pico-pi.dtb"
++BR2_GLOBAL_PATCH_DIR="board/technexion/imx8mpico/patches"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux-tn-imx,tn-hardknott_5.10.72-2.2.0_20220207)/linux-tn-im-tn-hardknott_5.10.72-2.2.0_20220207.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,linux-tn-imx,tn-kirkstone_5.15.71-2.2.0_20230512)/linux-tn-imx-tn-kirkstone_5.15.71-2.2.0_20230512.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="tn_imx8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-pico-pi freescale/imx8mq-pico-pi-dcss-ili9881c"
+@@ -18,13 +19,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.72-2.2.0)/imx-atf-lf-5.10.72-2.2.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.15.71-2.2.0)/imx-atf-lf-5.15.71-2.2.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-tn-imx,tn-hardknott_5.10.72-2.2.0_20220207)/u-boot-tn-imx-tn-hardknott_5.10.72-2.2.0_20220207.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,TechNexion,u-boot-tn-imx,tn-kirkstone_5.15.71-2.2.0_20230512)/u-boot-tn-imx-tn-kirkstone_5.15.71-2.2.0_20230512.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pico-imx8mq"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 -- 
-2.40.1
+2.41.0
 
 _______________________________________________
 buildroot mailing list
