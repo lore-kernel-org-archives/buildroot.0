@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E45ADCD37B1
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 04:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 165C2CD37B1
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 05:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CD9C405AF;
-	Sat, 16 Sep 2023 04:59:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CD9C405AF
+	by smtp2.osuosl.org (Postfix) with ESMTP id C16B9408C3;
+	Sat, 16 Sep 2023 05:00:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C16B9408C3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Hl88qNXu0gti; Sat, 16 Sep 2023 04:59:18 +0000 (UTC)
+	with ESMTP id n32odkpgsDZ9; Sat, 16 Sep 2023 05:00:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B2901402E0;
-	Sat, 16 Sep 2023 04:59:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2901402E0
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 82C0B1BF20B
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 04:59:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0F047402E0;
+	Sat, 16 Sep 2023 05:00:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F047402E0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A14C11BF352
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 05:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68432421D2
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 04:59:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68432421D2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 883CC83BF8
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 05:00:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 883CC83BF8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wRb6Wthsnhle for <buildroot@lists.busybox.net>;
- Sat, 16 Sep 2023 04:59:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kYUcCpbHJkwh for <buildroot@lists.busybox.net>;
+ Sat, 16 Sep 2023 05:00:26 +0000 (UTC)
 Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FD69421CE
- for <buildroot@buildroot.org>; Sat, 16 Sep 2023 04:59:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FD69421CE
-X-Virus-Scanned: by amavisd-new using ClamAV (29)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99DF683BF7
+ for <buildroot@buildroot.org>; Sat, 16 Sep 2023 05:00:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99DF683BF7
+X-Virus-Scanned: by amavisd-new using ClamAV (30)
 Received: from zm.lan (pub-46.182.29.194.multiplay.pl [194.29.182.46])
- by server220076.nazwa.pl (Postfix) with ESMTP id 8F7D71BBDB4;
- Sat, 16 Sep 2023 06:59:11 +0200 (CEST)
+ by server220076.nazwa.pl (Postfix) with ESMTP id 348211BBEAC;
+ Sat, 16 Sep 2023 07:00:24 +0200 (CEST)
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
 To: buildroot@buildroot.org
-Date: Sat, 16 Sep 2023 06:59:09 +0200
-Message-ID: <20230916045910.1363154-1-m.niestroj@grinn-global.com>
+Date: Sat, 16 Sep 2023 07:00:21 +0200
+Message-ID: <20230916050022.1364264-1-m.niestroj@grinn-global.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/dbus-next: bump to version 2.7.0
+Subject: [Buildroot] [PATCH] package/python-dbus-next: bump to version 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
