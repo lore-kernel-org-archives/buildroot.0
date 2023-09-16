@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E86CD37BD
-	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 15:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42B0ACD37BD
+	for <buildroot@archiver.kernel.org>; Sat, 16 Sep 2023 15:45:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B0AD940610;
-	Sat, 16 Sep 2023 15:45:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0AD940610
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2275409EF;
+	Sat, 16 Sep 2023 15:45:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2275409EF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LHOjQuje_v8u; Sat, 16 Sep 2023 15:45:16 +0000 (UTC)
+	with ESMTP id JCYg-d5HGqZ4; Sat, 16 Sep 2023 15:45:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E557140CC8;
-	Sat, 16 Sep 2023 15:45:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E557140CC8
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E7334107B;
+	Sat, 16 Sep 2023 15:45:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E7334107B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BABB1BF4E7
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 15:44:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7203C1BF4E7
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 15:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED79881CC3
- for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 15:44:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED79881CC3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5758F81CAD
+ for <buildroot@lists.busybox.net>; Sat, 16 Sep 2023 15:44:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5758F81CAD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZiSyW7bh70TK for <buildroot@lists.busybox.net>;
+ with ESMTP id pzDitJgZy7rX for <buildroot@lists.busybox.net>;
  Sat, 16 Sep 2023 15:44:15 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DA4DF81CAD
- for <buildroot@busybox.net>; Sat, 16 Sep 2023 15:44:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA4DF81CAD
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-32001d16a14so419665f8f.1
- for <buildroot@busybox.net>; Sat, 16 Sep 2023 08:44:14 -0700 (PDT)
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 557AE81CA3
+ for <buildroot@busybox.net>; Sat, 16 Sep 2023 15:44:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 557AE81CA3
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-3200257b9a3so354864f8f.3
+ for <buildroot@busybox.net>; Sat, 16 Sep 2023 08:44:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1694879053; x=1695483853;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=5qJnEyaJX4hXhTm8ap4jRGH76RxbOcyMD+LikQZ6znI=;
- b=MXR8FTUkxXflizNKuLU1w+Vi5Pp1q9tVNIlUb+IKhDlKxIV+PqhZCBxTtfW6hYC5M3
- 9t1jAIbuq6IRyGXCbW+rFY4fU5DRK10eflrT/u6XWqiLd9cjKuvHNPbp9eVSYXHqkK8L
- wwr1ZKaIBmmYSQpKAYd+yeC1Oa9m9Ws5WXNKeN7ao4AZMngExUsh67no1UqCTS2nAT7W
- k14cHC7ZjMgFr8P+NXhAExUvmE4ASdevSLVBnkwfB5jswGAuCSwj/ZvfsegAgJ1JL1KS
- 19Mfhrh3p85XFFrBond0TN6qAUBxCVWXVsRrbVmdcAEmmilEHYeLUAHWTtEixxgjgaBM
- 18Bg==
-X-Gm-Message-State: AOJu0Yy2+Thq+lhMgSC3qcCy074LAylit0knrZDr2OgMwjW3TS6IWgkC
- k9HHnayQXvnxRsBlJcAd2NccdsfhmtM=
-X-Google-Smtp-Source: AGHT+IFSNyqKFWGX2svQCDWtusTBXi1kU7NOhNBnWzevFnf3Xt0Fyd9zwXYGfIJN9QI8z/SPObjL+Q==
-X-Received: by 2002:a5d:6309:0:b0:315:9e1b:4ea6 with SMTP id
- i9-20020a5d6309000000b003159e1b4ea6mr3358224wru.58.1694879052786; 
- Sat, 16 Sep 2023 08:44:12 -0700 (PDT)
+ bh=T0DK3BmQsqpGu/I6vtU7NzFlRQgTRa2g5y9kO6xsJ9w=;
+ b=v3Dn0qSjldJIvXZpltJZRUQ2l92XSrfPz4lMnCl8PjMsP7FnYz8ubpwJZP16v0Bu3v
+ X6wwGfhzlRveftxtnLdwnBewstRJqp6CKUOGwKd4Ki9U6e1G5zwJWU8DOsHkvGUd1F4V
+ SaVhgeDeEXNboUw5iQy0wnSuHd8TVC1CB9BAgxPZAq1OixgrdF9lDj/KwbMResd8hMDP
+ /msAfNNiTJmYS90ld3FKuHJgRWa9LsI+WeYbxrlW/brZ5uKlMF72DmtwMrNEXOW4WRfG
+ E4kgS2Z0mUnqYs2M1FsU695eTyFUKD/ZZm5YDZJfjeDcGZeCz0V+ASq9nGoeNyRv7nMu
+ S9rA==
+X-Gm-Message-State: AOJu0YxZMc4LnrEWDfcJhATqNzxR/xFeHEB695tIuXqk4qBCMPYBdpvA
+ pLGY2a9bUmSthwP+XOmV4ycjrmfPiMU=
+X-Google-Smtp-Source: AGHT+IELX6Z7nf+dG0480lb4sOnN95XmHWMd6TkavZFjc0Phw8/zxyjoxjwimGZRHnFMaH5FwHwHCA==
+X-Received: by 2002:a5d:508e:0:b0:31f:e1b4:5846 with SMTP id
+ a14-20020a5d508e000000b0031fe1b45846mr3628270wrt.53.1694879053463; 
+ Sat, 16 Sep 2023 08:44:13 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
  q8-20020a5d5748000000b0031de43fe9bfsm7522010wrw.0.2023.09.16.08.44.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 16 Sep 2023 08:44:12 -0700 (PDT)
+ Sat, 16 Sep 2023 08:44:13 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sat, 16 Sep 2023 17:43:41 +0200
-Message-Id: <20230916154351.2747233-6-francois.perrad@gadz.org>
+Date: Sat, 16 Sep 2023 17:43:42 +0200
+Message-Id: <20230916154351.2747233-7-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230916154351.2747233-1-francois.perrad@gadz.org>
 References: <20230916154351.2747233-1-francois.perrad@gadz.org>
@@ -74,18 +74,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=5qJnEyaJX4hXhTm8ap4jRGH76RxbOcyMD+LikQZ6znI=;
- b=blzyDxYxUqrIWPEGL3P6wwSVVqifuaJ0zRnQ7cnJeu6scanrG0OEkHBYu7Crkm/Jbl
- yZoP6Lmi77qkMCF8/MqPjY73igOxBybCtLeoG5zEoVup3nyAmvOEen2S2cQnPuQxk2eI
- YiuBgAzMkTLfUnMQ71Iv78KY3i0/sedf+ZiFv65FJYzdMjSgWpx3m3a83OLR+qpXuZsv
- R/QgirDQ1KEnKl5DLmlSiRkHDBYnlNJro9gs8/V9kjVGEAPcvRWwTQcMnHg9NXCGTbY0
- bl7CyZ6/9SrNqdEa/b4sKSKZEyDJbE/HNkW9O2w2vkT9RQ1PjMcphFNyZ4fzSs8LZAMc
- 0LAQ==
+ bh=T0DK3BmQsqpGu/I6vtU7NzFlRQgTRa2g5y9kO6xsJ9w=;
+ b=hK7EDWuB25ratVEGiB0oq9WYjbCOSsWcFIc5m5SbaoX1ihkHf0CvqNdqeh0jvFm8Q3
+ sPw+aeZv5fGVzL35PB9rSrAT3c1v2gxb6xMsjmukVanXLW8PjWCQ8EhOCfCtrQPB56kx
+ NcQo7GV1+T3yHkLX3eBADW9WjGqAagY9p6PonMiOUB0739fi2m+I9Z+ydSbBlq2bln8q
+ oVxNWoReNROjAcum4QNCladK1zA3lZDez5tjX1xsqBlzDt7h/IwXCU2ra6SOt2YWeNFW
+ kH7fhJMu7v7NjHuW2/zZfFn94fSVepZw1aPGeRffiLUn7Q1jerwDnwdYh8xNbunsaWO/
+ wrCQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=blzyDxYx
-Subject: [Buildroot] [PATCH 06/16] package/perl-http-date: bump to version
- 6.06
+ header.a=rsa-sha256 header.s=20230601 header.b=hK7EDWuB
+Subject: [Buildroot] [PATCH 07/16] package/perl-json-maybexs: bump to
+ version 1.004005
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,43 +102,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LICENSE: update copyright dates & reformated Artistic License part
-see https://metacpan.org/release/OALDERS/HTTP-Date-6.05/diff/OALDERS/HTTP-Date-6.06#LICENSE
+LICENSE: update copyright dates & remove trailing spaces
+see https://metacpan.org/release/ETHER/JSON-MaybeXS-1.004003/diff/ETHER/JSON-MaybeXS-1.004005#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-date/perl-http-date.hash | 8 ++++----
- package/perl-http-date/perl-http-date.mk   | 2 +-
+ package/perl-json-maybexs/perl-json-maybexs.hash | 8 ++++----
+ package/perl-json-maybexs/perl-json-maybexs.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
-index b27842300..a6f770182 100644
---- a/package/perl-http-date/perl-http-date.hash
-+++ b/package/perl-http-date/perl-http-date.hash
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash b/package/perl-json-maybexs/perl-json-maybexs.hash
+index a53d4ec61..3b603310f 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.hash
++++ b/package/perl-json-maybexs/perl-json-maybexs.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  2ecbb3aedf6aef062605191813ca3027  HTTP-Date-6.05.tar.gz
--sha256  365d6294dfbd37ebc51def8b65b81eb79b3934ecbc95a2ec2d4d827efe6a922b  HTTP-Date-6.05.tar.gz
+-md5  e46181e34588428d317932744597a7ab  JSON-MaybeXS-1.004003.tar.gz
+-sha256  5bee3b17ff9dcffd6e99ab8cf7f35747650bfce1dc622e3ad10b85a194462fbf  JSON-MaybeXS-1.004003.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  60462359bfeb1e6d14602508cfd07885  HTTP-Date-6.06.tar.gz
-+sha256  7b685191c6acc3e773d1fc02c95ee1f9fae94f77783175f5e78c181cc92d2b52  HTTP-Date-6.06.tar.gz
++md5  bee9d0cba3f87e05e9613684e4ee2159  JSON-MaybeXS-1.004005.tar.gz
++sha256  f5b6bc19f579e66b7299f8748b8ac3e171936dc4e7fcb72a8a257a9bd482a331  JSON-MaybeXS-1.004005.tar.gz
  
  # computed by scancpan
--sha256  305b71c4d2fd6380585689c5f1c620737a36a318ce0f9c772badce0fe293a44e  LICENSE
-+sha256  6186a79a305a0e62c5087f9737b4f66fa5793fa1b396da0126e3c8722c460245  LICENSE
-diff --git a/package/perl-http-date/perl-http-date.mk b/package/perl-http-date/perl-http-date.mk
-index 43583be30..1e46f1414 100644
---- a/package/perl-http-date/perl-http-date.mk
-+++ b/package/perl-http-date/perl-http-date.mk
+-sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
++sha256  de7a14750e81d97e19e111df58a3b51e3f2c8ec2d2dd90f576f54243251972c6  LICENSE
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk b/package/perl-json-maybexs/perl-json-maybexs.mk
+index e6891f680..13c9439ea 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.mk
++++ b/package/perl-json-maybexs/perl-json-maybexs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_DATE_VERSION = 6.05
-+PERL_HTTP_DATE_VERSION = 6.06
- PERL_HTTP_DATE_SOURCE = HTTP-Date-$(PERL_HTTP_DATE_VERSION).tar.gz
- PERL_HTTP_DATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_DATE_LICENSE = Artistic or GPL-1.0+
+-PERL_JSON_MAYBEXS_VERSION = 1.004003
++PERL_JSON_MAYBEXS_VERSION = 1.004005
+ PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_MAYBEXS_VERSION).tar.gz
+ PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
 -- 
 2.39.2
 
