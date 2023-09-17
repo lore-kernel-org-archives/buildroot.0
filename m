@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FD58CD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 11:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B49CCD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5633610DC;
-	Sun, 17 Sep 2023 11:58:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5633610DC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9522F610DC;
+	Sun, 17 Sep 2023 12:06:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9522F610DC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HG7lmtJG62dz; Sun, 17 Sep 2023 11:58:36 +0000 (UTC)
+	with ESMTP id AXeUDooRlShA; Sun, 17 Sep 2023 12:06:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37541610D7;
-	Sun, 17 Sep 2023 11:58:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37541610D7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C9D6C1BF38D
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:58:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8FCF610D7;
+	Sun, 17 Sep 2023 12:06:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8FCF610D7
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D3BF1BF473
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 986874014E
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:58:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 986874014E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55F2F415AB
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:06:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55F2F415AB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kvI33-C-83nE for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 11:58:32 +0000 (UTC)
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 728FB4010C
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:58:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 728FB4010C
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-402c46c49f4so38871275e9.1
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 04:58:32 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9KjmWdv-AfJg for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 12:06:18 +0000 (UTC)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EF7B6415A7
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:06:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF7B6415A7
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-31c4d5bd69cso3507118f8f.3
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 05:06:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694951910; x=1695556710;
+ d=1e100.net; s=20230601; t=1694952376; x=1695557176;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=rq+pYiR3jZ6a0+xIovlDhYIdJfdvQxGVSmLWYkG0CcU=;
- b=T8Rnhif6SzW+MI407/e2thOdOpa7d3AQDOL3FRGv1gdgxviyNikRZjzWx+aaIzWnMZ
- LwmLz3rlMFlT/kO6NTL+uq4WbPEBSFKsPZ0i8ySzokrUDEFYMBRXOwq6eivsy3PrkuJ0
- UP2ZVAbk7gRuFxb2EZGQZct+s0uaoeJyZHhjk6KrOEhGevczsGEQnViqEqlR6jPeFxqO
- AC6wTuhPSFfotkEkxs8p8jC1wnZd+WGa6f6zxmINgADdV3/3Obplv9B46cszrQiGmO9Z
- w/GyxTO9JhBLv4w6zEOnQbUrDRs1WDMnMmWRDTHddS733wV/m1mJ2BZC0gg30O4TlSEO
- iQXw==
-X-Gm-Message-State: AOJu0YzPYlMwTuc2cHmnfsGhp3SHxANREGn7PaWGJrtV0Ddnu4Q7RU3w
- f/sH6TWiNeA28CVXagM4H6nnwSyxSqA=
-X-Google-Smtp-Source: AGHT+IHFLKJlHK+Pd+F494AcCuRVgng8DL803eqQB1mty77TP6fugwyLUhcz+R3K50Dw/XUV2dqUxA==
-X-Received: by 2002:a05:600c:2614:b0:402:f517:9c07 with SMTP id
- h20-20020a05600c261400b00402f5179c07mr5603327wma.0.1694951909847; 
- Sun, 17 Sep 2023 04:58:29 -0700 (PDT)
+ bh=0XSiVfhaIuUFJ9RkmcBG5dFFHA/xD+/CtCDmSG9jXX0=;
+ b=xRtUq/DxrhH4h+cyyf9YYTEn1zDjwxc//vgReUnayhs9b/3sKrFx3JTxPJCImdB2O5
+ a6kMIMcxgfZjwt6LLmx+3gnTelLojxKKYKEvInsadsf4ZOT9aae0N4uKuOKvEYfTKWkV
+ xW37acXr79hAUoD0ZhMKsAGwgFtjFpsH76MUqVMwd8xcWAVjTxKth6MS+1GbQ5Wgqsul
+ jvqhYFDWOUIeWboSfeW4SFjD1MA/sQHuygBXY94x8W1E2aVEQG9boA9C/rLIrOhrvKBg
+ eyYtpeKXlOmhCh00zVIt18soOACoiQhrWzeO0UudMBh3vswPvPdo7IU7MGUX5kFOY7wd
+ 5CQA==
+X-Gm-Message-State: AOJu0Yzt2dx4g+TVn2SBhPVkGZ8ysQoPEgQZ5tCr+kj5b9ET5WTq5itl
+ DBfUgxb3GWhFZFR17vkzUtW6Secpd2I=
+X-Google-Smtp-Source: AGHT+IF2hGi3D1V1EKmDaqmWJnyjfdF0n+I7REWQ+cNbqvyAxp/YGDim2U5BNiWcp5HmFItSSX895g==
+X-Received: by 2002:a05:6000:238:b0:320:1c4:e213 with SMTP id
+ l24-20020a056000023800b0032001c4e213mr2577820wrz.1.1694952375495; 
+ Sun, 17 Sep 2023 05:06:15 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m10-20020a7bce0a000000b003fee53feab5sm9583518wmc.10.2023.09.17.04.58.29
+ t3-20020a5d5343000000b00317ab75748bsm9566186wrv.49.2023.09.17.05.06.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Sep 2023 04:58:29 -0700 (PDT)
+ Sun, 17 Sep 2023 05:06:15 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 13:58:23 +0200
-Message-Id: <20230917115823.27662-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Sep 2023 14:06:13 +0200
+Message-Id: <20230917120613.63980-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694951910; x=1695556710; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1694952376; x=1695557176; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rq+pYiR3jZ6a0+xIovlDhYIdJfdvQxGVSmLWYkG0CcU=;
- b=NibMbKrEpYhnAV57StADhYddOWTqT1ChZzJK0RYLCbjWqmiCROgcP9fU6dFZcmhNJe
- q3R3ToSSyencBhtaQhIzMoBLtKlQrbWYmZgHA/orWDRb3zJ2t4OqlHVTxJJnyleDOmgZ
- FSI7Kx3DDE0D4U5ibC7FuZwuK15ld8sSGlerA5gxt3YKkExf4VBi0h6P8phL2Qbc9l9E
- koq+rlMlWrt6SYyrTWa4nYrj0C+VJwf1kBafzTzskssFdWP69LaC71Ieit0AQAqQoQ8b
- QYt+f74UhN86YmxdjxNbD6/MqOFjimOlQyQ2tGFy/rqMKh44HKf6OanHyiRBZ1W3NM2K
- Z7pg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=0XSiVfhaIuUFJ9RkmcBG5dFFHA/xD+/CtCDmSG9jXX0=;
+ b=Bt5Biz4vVgcVn+Co6dukzdJnbl0QLCpLQydEP/WfrOUbFpsOrgPq/Bqd27jMF7nKTX
+ GouOvQ70a0DT15k80dji1Mu+79bUyQgfh7sf3PYug9TRujwFqELZi+fP1285Gg/2lhro
+ AEGPxcyO4Iiq5XOVl0mniv+L+SVfbKGokeUujqKq9oGaq8pIsjtTw7yyvoUkCdq5DpTN
+ /ZGD+65bMQsfGUGvmCWWzVvV4IIWaYc9b20LG9ha76oSDpucBVBUq7G3yT6ue7Faz2pw
+ liXwrtSfoKCAvm6iQTajpiXtahg8pUByRHwnBnTx6hFhZB0jq9qBx2QyLfGqsL0iZqSs
+ jn2A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NibMbKrE
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: security bump to version
- 2.6.15
+ header.a=rsa-sha256 header.s=20230601 header.b=Bt5Biz4v
+Subject: [Buildroot] [PATCH 1/1] package/strongswan: security bump to
+ version 5.9.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,52 +94,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix CVE-2023-40225: HAProxy through 2.0.32, 2.1.x and 2.2.x through
-2.2.30, 2.3.x and 2.4.x through 2.4.23, 2.5.x and 2.6.x before 2.6.15,
-2.7.x before 2.7.10, and 2.8.x before 2.8.2 forwards empty
-Content-Length headers, violating RFC 9110 section 8.6. In uncommon
-cases, an HTTP/1 server behind HAProxy may interpret the payload as an
-extra request.
+Fix CVE-2023-26463: strongSwan 5.9.8 and 5.9.9 potentially allows remote
+code execution because it uses a variable named "public" for two
+different purposes within the same function. There is initially
+incorrect access control, later followed by an expired pointer
+dereference. One attack vector is sending an untrusted client
+certificate during EAP-TLS. A server is affected only if it loads
+plugins that implement TLS-based EAP methods (EAP-TLS, EAP-TTLS,
+EAP-PEAP, or EAP-TNC). This is fixed in 5.9.10.
 
-https://www.mail-archive.com/haproxy@formilux.org/msg43864.html
+https://github.com/strongswan/strongswan/blob/5.9.11/NEWS
+https://www.strongswan.org/blog/2023/03/02/strongswan-vulnerability-(cve-2023-26463).html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/strongswan/strongswan.hash | 6 +++---
+ package/strongswan/strongswan.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 20048da7ec..74390c2ff5 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.14.tar.gz.sha256
--sha256  bd3dd9fa60391ca09e1225e1ac3163e45be83c3f54f2fd76a30af289cc6e4fd4  haproxy-2.6.14.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.15.tar.gz.sha256
-+sha256  41f8e1695e92fafdffe39690a68993f1a0f5f7f06931a99e9a153f749ea39cfd  haproxy-2.6.15.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index dc59047fb5..8143572021 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 4822f9152f..de8f18747a 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,7 +1,7 @@
+-# From http://download.strongswan.org/strongswan-5.9.8.tar.bz2.md5
+-md5  f46b0d3e7aed88824650d0721c887443  strongswan-5.9.8.tar.bz2
++# From http://download.strongswan.org/strongswan-5.9.11.tar.bz2.md5
++md5  673e194cd256af77b46928179f2c81ad  strongswan-5.9.11.tar.bz2
+ # Calculated based on the hash above
+-sha256  d3303a43c0bd7b75a12b64855e8edcb53696f06190364f26d1533bde1f2e453c  strongswan-5.9.8.tar.bz2
++sha256  ddf53f1f26ad26979d5f55e8da95bd389552f5de3682e35593f9a70b2584ed2d  strongswan-5.9.11.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index cae1433e39..6058631696 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).15
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-STRONGSWAN_VERSION = 5.9.8
++STRONGSWAN_VERSION = 5.9.11
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPL-2.0+
 -- 
 2.40.1
 
