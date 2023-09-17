@@ -1,87 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD8DCD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 11:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14D6ECD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 11:51:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86AA340874;
-	Sun, 17 Sep 2023 11:28:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86AA340874
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FcaUoWi9gtFq; Sun, 17 Sep 2023 11:28:44 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B11E40891;
-	Sun, 17 Sep 2023 11:28:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B11E40891
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B10231BF38D
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:28:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A839610C2
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:28:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A839610C2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9408B610D1;
+	Sun, 17 Sep 2023 11:51:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9408B610D1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Nm4Zq2T4GDcX for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 11:28:40 +0000 (UTC)
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6CB01610C1
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:28:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CB01610C1
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-31ad9155414so3347140f8f.3
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 04:28:40 -0700 (PDT)
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id HbHBOr3uLZnJ; Sun, 17 Sep 2023 11:51:49 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81894610CF;
+	Sun, 17 Sep 2023 11:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81894610CF
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3ABE01BF38D
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:51:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17DA94151B
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:51:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17DA94151B
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id zs9qTdQj73Uu for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 11:51:46 +0000 (UTC)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9E5D44150F
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:51:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E5D44150F
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-32008b5e2d2so414583f8f.0
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 04:51:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694950118; x=1695554918;
+ d=1e100.net; s=20230601; t=1694951503; x=1695556303;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=T+0YgBPvOyJIcM1aMQ4btrO01/yDto0obh6N+aejFKY=;
- b=PvWdHFvCOZAWcdNpT+v7QFGjTPdkLk99SpeBpFsBw49pNdA0KCqFu00WRMyUzDhANn
- B4T11wYfwShKnKxmCKWfbYUK2HT0KjfS89xYZmL0F6Qx4o+aoX6JR6CwLYOZyjFZ0s4g
- la9mGTfoVY7qK+YX/7BfaIXeLk/y8dlrnrDcEFkNtk5HvQVCnH6Hs9Sl2pKDcpd5Roc8
- aLsF7uOvSlqMmxuyGB2cp4soWhY2ggTqYtOX/MUqwocvdwWuWsURz8vDmIRAFbmnrGZP
- IRNpMvainkUoPvN9QZVKNMe6y+PURvPa9MIW/7A1G12FokBMDcSkeJiqa+m41oKSTG6j
- iAkg==
-X-Gm-Message-State: AOJu0YzTUkAVMBVvXYudTvUGUXjG3iO53JBZ1/rdhPIXhg/5xX1Yx+Ib
- XdCCOeuOXJ/EmC4qjGDyt5STe1J5LJw=
-X-Google-Smtp-Source: AGHT+IFEAUO3iRYNP0WZH0ntr/H8AL2CW+Mt8Gv1SwYszAeVgjI/p5NaKBxV4h5/BEr46K86fBEySA==
-X-Received: by 2002:a05:6000:98d:b0:320:6db:3548 with SMTP id
- by13-20020a056000098d00b0032006db3548mr2712637wrb.55.1694950117872; 
- Sun, 17 Sep 2023 04:28:37 -0700 (PDT)
+ bh=f3VKK5yC3bbgbv8gIPFSDDz0pQIIAB68+JCOqoOApM8=;
+ b=i5Jz4uo7/Et85C96C0ZSPMV9XlrT1OvE7/SHhA+72+M3E1QD4/5xxU2ArYEHwx91Sb
+ H3cHFvAy7u/LrgAvoHmeAZBulphp3wb2v818R4t48BWYoP6kOaStYM0LFkRp2WTWElFd
+ l2j0gwWqLSx+ye5e4O/LfY4+eJg5qkbopjSMzYMROSVCysWvtZ/ZdDvNtfJVAH4UeP7W
+ iiHjIxbpZ4mmgPxYjlJ2uvWqHN8Tmr/s6CxA4ZQF5iNpA9anzYcqo+VX+5U7VGvJQCty
+ 4Ezupg3DwIkGyhGNDGaWWIzwQnP3Qo+Au/UC1pL1/BUIXoW0WhYQgzD1JfeL721sDWVj
+ NKRw==
+X-Gm-Message-State: AOJu0Yy1nvXHxNeZ5c/fOSduX64hZ44hB+fhflObvUvjj5FnytMQwmST
+ zpCjw/QceI1y8lu7BPVzZOqX2MsaTQg=
+X-Google-Smtp-Source: AGHT+IEwDS/j2fXC7AEr67DURuvL9nKtpJrm8QleVTKGpg9XJmxMONb8BZv0hSqPtocGLNXZ1PT2dQ==
+X-Received: by 2002:adf:dcc1:0:b0:314:c6b:b9a2 with SMTP id
+ x1-20020adfdcc1000000b003140c6bb9a2mr4402715wrm.13.1694951503036; 
+ Sun, 17 Sep 2023 04:51:43 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- q2-20020adff782000000b00317f70240afsm9445429wrp.27.2023.09.17.04.28.37
+ m12-20020a056000024c00b0031989784d96sm7382261wrz.76.2023.09.17.04.51.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Sep 2023 04:28:37 -0700 (PDT)
+ Sun, 17 Sep 2023 04:51:42 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 13:28:28 +0200
-Message-Id: <20230917112828.9695-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Sep 2023 13:51:39 +0200
+Message-Id: <20230917115139.21621-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694950118; x=1695554918; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1694951503; x=1695556303; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=T+0YgBPvOyJIcM1aMQ4btrO01/yDto0obh6N+aejFKY=;
- b=LlngzH+/n+4WxcV2wj7N9q700SbeN0QjItefWQZLNEk0WOIb+54UGpXrHOPKO7kIIz
- ze54kvPkFGONnykFD8yhsp1m16fi/TLmm/f8KKP09XK9othg+TrkQkPS9PrhnxomNeee
- wd7jwFmCKNyfCsfSQrqBA4QyNHdjLVCIwMWh0DmXmEKrgVJHq6nb4mG651tw3N45JbXr
- +yrd+/qq/+T/mH6k+1TYm8F4/Fdy+6PXtapjqLtFwvlg/lJPcsx8HGUbmyjmg+Nge+fU
- vSO6SHg9rZ5EVErzvYJ8wlbAcna8NDKyvZE+Vnhfw3PuzZ/NMWunolQbyzO8bzwcW03K
- HxQA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=f3VKK5yC3bbgbv8gIPFSDDz0pQIIAB68+JCOqoOApM8=;
+ b=JbXHvFUKh20AoOxMhXrbgCEjvSd6MzB51PGWhAXyS+0C0H6Dbm+iSnszFSlybyCsFz
+ V/eSbLM4WX8B3MpDTD4gQHTS3zV6NvF2upPupOYXhPXx1BvMRxZe1VgQO7KqNWRh6Bt6
+ 6tEXYLwPfpraWDkTwFCh7Igqsgj1ChjMDrx6sjc9x5svtTk+gy5fBMIkGcYvMVAoANBp
+ FsM/4dJHNXd/FEhomeIHaYw+lNMYixREBc7VVRAp/IHz595OJIKULq+sCQZUvLeJ4Lx+
+ c8kHVJtXf5VMSjBTony4O2iSJ33nAIQ5rQZu7ibK8ZqXiMogC/Jf5IGov3IeivF1TkSh
+ QWlw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LlngzH+/
-Subject: [Buildroot] [PATCH 1/1] package/libeaw: fix CVE-2023-1729
+ header.a=rsa-sha256 header.s=20230601 header.b=JbXHvFUK
+Subject: [Buildroot] [PATCH v2,1/1] package/libraw: fix CVE-2023-1729
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,6 +104,9 @@ caused by a maliciously crafted file may lead to an application crash.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix title typo
+
  ...shrink-flag-for-3-4-component-images.patch | 24 +++++++++++++++++++
  package/libraw/libraw.mk                      |  3 +++
  2 files changed, 27 insertions(+)
