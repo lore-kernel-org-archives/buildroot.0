@@ -4,84 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78A63CD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 18:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0C14CD13CF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 18:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 079A560774;
-	Sun, 17 Sep 2023 18:51:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 079A560774
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63576608B7;
+	Sun, 17 Sep 2023 18:59:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63576608B7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EXGAtHTdGN0J; Sun, 17 Sep 2023 18:51:26 +0000 (UTC)
+	with ESMTP id VzRvBnmquMX7; Sun, 17 Sep 2023 18:59:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02427608B7;
-	Sun, 17 Sep 2023 18:51:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02427608B7
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 95C001BF3D1
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:51:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CD1F60E5F;
+	Sun, 17 Sep 2023 18:59:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CD1F60E5F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D0AFD1BF20B
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68C4A410D5
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:51:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68C4A410D5
+ by smtp1.osuosl.org (Postfix) with ESMTP id A9A3081F06
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:59:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9A3081F06
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id MeTI5S1GJlIR for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 18:51:21 +0000 (UTC)
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 444974005B
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 18:51:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 444974005B
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-3214cdb4b27so353442f8f.1
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:51:21 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7Dcq5QX950pj for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 18:59:04 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4ED8B81F00
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 18:59:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ED8B81F00
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-321530de76eso108937f8f.0
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:59:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694976679; x=1695581479;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wYrsuKK7JrGrLP3MttJISN4GmKf1r3GLkBXxMGiSgok=;
- b=vOdOn6F1CSICHCB2CdMXDUIhMu3aiJANSWEj4V9V4VafJsqiWubE0G5rADBPmfZ0M1
- hAiyh+3jVYBh4YR9eZTBAqd9MSl4PVlqhEX5yyefUIYVqC04GPHuT4ayv48CFzXi7NaX
- fPn9kS9kZeIi4Ax5FA2Cclkjg+HLPWhds4Ek4mecgCN7gy3yM752BzvuCPbt4tjZdUOm
- huXluOmB6YpOfK8YhFtMqTL2cJgSwIISB/oXDPCwB/7Yn8VNbi5GYhQSjynz7Zp6ojWS
- AJ+LSPFbvjfoQwBX9zH0iazFNB+9q6ANcfy3gZJBKZETRgA1c6Ox08utXD8lHoAdXAc4
- 6otg==
-X-Gm-Message-State: AOJu0YwFuYM57xVJHYF+PsU6JRoh4Wv7zRezlE8NcA3owB/f+zCIyYFc
- dmD3aLLrKLWqeWo4E3qQey4x2eTTSgc=
-X-Google-Smtp-Source: AGHT+IGQS6YivwL8ADxV+Itck6+lc4XuZcGHGMePIihFcH7hNWk4lIV0vKf0kY3hJf0A29SUIMWfkg==
-X-Received: by 2002:a5d:4e46:0:b0:31a:d2f9:7372 with SMTP id
- r6-20020a5d4e46000000b0031ad2f97372mr5859040wrt.29.1694976678646; 
- Sun, 17 Sep 2023 11:51:18 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- m18-20020a5d4a12000000b0031f65cdd271sm10308071wrq.100.2023.09.17.11.51.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Sep 2023 11:51:18 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 20:51:16 +0200
-Message-Id: <20230917185116.182810-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
+ d=1e100.net; s=20230601; t=1694977142; x=1695581942;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=hSMPU4LSGUkhdOxC8bvQ8Pj1hRDhIxoKA1Gx9KsnJEk=;
+ b=nbgVGz9EHOZ9MB1NAzH1yx61DUxZqhL+Ip0jSsSnAl8nM4nC9zURvUWEz7wlPedkor
+ 2kXWXpT7fbxNrcck2f/yOY0D7KCI2fzpEh9jfKhIyad3Fs38l6OAPhrX1TpRi7QFUfXh
+ Y8CPwzBR+e1YY584VYZ3BKel7tvs3xAU9A0ccya09/97BP+C8JxkAhluVuNKXZ6bwDuE
+ 76O41iBSg4tXzQX6m3aEv/f/7DK5uAfSQB56b00YLld3iH1tcaOhGkzEOQ/V0amzl3L4
+ XtZ4vMn4rMDU7eLS1gbt3F1cvt3vnslmVLjpG14oeCy+F3IAkdQU/33+g4tXg45+IJwR
+ pjJA==
+X-Gm-Message-State: AOJu0YwZfVW3ZI1hcIgkyZ5YYhYkJnXCmaTh5hza7pKkU9Rxr4KfknMV
+ MKvQLeAFXxhg5EnANTCPYrz9qgydvCkbqf4IH2Y=
+X-Google-Smtp-Source: AGHT+IGVSXRZdUUKzWxYD2+4qnA3pfW/6b5tSIBL2Z+nIk7SIm97OcC97+YegJEv694VNE368wJKhw==
+X-Received: by 2002:adf:d20a:0:b0:320:896:5ea8 with SMTP id
+ j10-20020adfd20a000000b0032008965ea8mr2766245wrh.19.1694977142320; 
+ Sun, 17 Sep 2023 11:59:02 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ mc17-20020a170906eb5100b009786c8249d6sm5431671ejb.175.2023.09.17.11.59.00
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 17 Sep 2023 11:59:01 -0700 (PDT)
+Message-ID: <7a4a1ab2-da6c-24aa-0106-3e427627a8a7@mind.be>
+Date: Sun, 17 Sep 2023 20:58:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Reza Arbab <arbab@linux.ibm.com>, buildroot@buildroot.org
+References: <20230915155835.51140-1-arbab@linux.ibm.com>
+ <20230915155835.51140-5-arbab@linux.ibm.com>
+In-Reply-To: <20230915155835.51140-5-arbab@linux.ibm.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694976679; x=1695581479; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wYrsuKK7JrGrLP3MttJISN4GmKf1r3GLkBXxMGiSgok=;
- b=HkmoVSR9Xe6nHskJ1h3yHosoTZpOQBCb9R/sTF7oAEaFNrOrQw2j1FMoxB1IgqKUZL
- Y6M2c6JN2gfn4YhO9L02m1x5Sy4i6lWtF1vftaU/5Z6/vvy3ok+E5nsgqTBfjFjU5NVC
- RlC0PKnutajcPKYfrjAgGvhOLtnKva3j+Vqfm0VKo8TfRWadCbzWBBY34NPyHcLkWV7p
- pbYKk7t2cINukg9eL9NOL2tiR3mco0Zsir6sqz+54Q0BKsSB4kFf8sp19a4FxnpYnvAn
- XH/MXqDokxLolxMAq5D8iRKaEYviXLDYhb9tYDNg0AvJeujpkMIj08DMh+WNlUSQMk7Q
- u9gQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HkmoVSR9
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix atomic handling
+ d=mind.be; s=google; t=1694977142; x=1695581942; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=hSMPU4LSGUkhdOxC8bvQ8Pj1hRDhIxoKA1Gx9KsnJEk=;
+ b=e15cP33X43RqmS9Su7PebSDZ8MnV2L+EzHSvr9goVi+ngkrfrlaOl4RgHsDt1Cz4LT
+ kA7NGo62VkV+HCPxA1uk+tHygffHCBoGhzeq9wBQtB3iHxm1eldDjx0omHNXHPRDA7ls
+ vnem7AyanrQwL5hNhExhDNtoZbCVuWWyAQPu/h+R/FLqD1xVshOISqYRNM1J1UBcac+P
+ hBX6i9pAANjREQT+kvyMoWCnmOScUF8HeCFh7ZYSUTAhKzCzJ/Mdr3YrrCEkf4h4jyCD
+ LMYPW5W61fK1D8qgFtCbvam1ZnrITBgYCiHSP74nS0dmdb7NcpPxTK+tRentIEnzZUrT
+ mlSw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=e15cP33X
+Subject: Re: [Buildroot] [PATCH v2 4/5] package/petitboot: enable discovery
+ of software RAID devices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,99 +101,184 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Laurent Vivier <laurent@vivier.eu>, Joel Stanley <joel@jms.id.au>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Correctly fix atomic handling to avoid the following build failure with
-all users of libglib2 (e.g. gdk-pixbuf) raised since bump to version
-2.76.1 in commit 3f9622fe3d85b4d9f734b879abc1d485afea19b2:
 
-/usr/lib/libglib-2.0.a(gthread-posix.c.o): in function `g_mutex_trylock':
-gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
 
-Fixes:
- - http://autobuild.buildroot.org/results/24a358869b98d83ab374c7c3a185ced450064d35
+On 15/09/2023 17:58, Reza Arbab wrote:
+> Petitboot can support filesystems on software RAID arrays. If mdadm is
+> selected, install the associated udev rules to assemble the device.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0004-link-with-latomic-when-needed.patch  | 45 +++++++++++++++++++
- package/libglib2/libglib2.mk                  |  5 ---
- 2 files changed, 45 insertions(+), 5 deletions(-)
- create mode 100644 package/libglib2/0004-link-with-latomic-when-needed.patch
+  Wow, this looks again like something very specific and way outside what we 
+normally do in Buildroot. If it's appropriate to do this, I think it makes a lot 
+more sense to have this as part of petitboot itself.
 
-diff --git a/package/libglib2/0004-link-with-latomic-when-needed.patch b/package/libglib2/0004-link-with-latomic-when-needed.patch
-new file mode 100644
-index 0000000000..275d86032b
---- /dev/null
-+++ b/package/libglib2/0004-link-with-latomic-when-needed.patch
-@@ -0,0 +1,45 @@
-+From d1814dbd3a88c95a43d4c9805bb4a523cf62d97b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 17 Sep 2023 20:42:00 +0200
-+Subject: [PATCH] link with -latomic when needed
-+
-+Some architecture such as sparc and some flavors of arm needs -latomic
-+to avoid the following build failure:
-+
-+gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3586
-+---
-+ glib/meson.build | 1 +
-+ meson.build      | 2 ++
-+ 2 files changed, 3 insertions(+)
-+
-+diff --git a/glib/meson.build b/glib/meson.build
-+index c26a35e42..7a761306b 100644
-+--- a/glib/meson.build
-++++ b/glib/meson.build
-+@@ -426,6 +426,7 @@ libglib = library('glib-2.0',
-+     pcre2,
-+     platform_deps,
-+     thread_dep,
-++    atomic_dep
-+   ],
-+   c_args : glib_c_args,
-+   objc_args : glib_c_args,
-+diff --git a/meson.build b/meson.build
-+index 25ae10fc2..5ae84b3b3 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -2130,6 +2130,8 @@ libffi_dep = dependency('libffi', version : '>= 3.0.0')
-+ 
-+ libz_dep = dependency('zlib')
-+ 
-++atomic_dep = cc.find_library('atomic', required: false)
-++
-+ # First check in libc, fallback to libintl, and as last chance build
-+ # proxy-libintl subproject.
-+ # FIXME: glib-gettext.m4 has much more checks to detect broken/uncompatible
-+-- 
-+2.40.1
-+
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index c06ded2a5b..bffc565f11 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -64,11 +64,6 @@ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- LIBGLIB2_DEPENDENCIES += elfutils
- endif
- 
--# Uses __atomic_compare_exchange_4
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--LIBGLIB2_LDFLAGS += -latomic
--endif
--
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- LIBGLIB2_DEPENDENCIES += libiconv
- endif
--- 
-2.40.1
+  So I suggest to send these udev rules to petitboot upstream instead, and 
+install them as part of the package installation.
 
+  Regards,
+  Arnout
+
+> 
+> Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+> Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+> ---
+>   package/petitboot/63-md-raid-arrays.rules | 41 ++++++++++++++
+>   package/petitboot/65-md-incremental.rules | 69 +++++++++++++++++++++++
+>   package/petitboot/petitboot.mk            | 10 ++++
+>   3 files changed, 120 insertions(+)
+>   create mode 100644 package/petitboot/63-md-raid-arrays.rules
+>   create mode 100644 package/petitboot/65-md-incremental.rules
+> 
+> diff --git a/package/petitboot/63-md-raid-arrays.rules b/package/petitboot/63-md-raid-arrays.rules
+> new file mode 100644
+> index 000000000000..92aec36e69d4
+> --- /dev/null
+> +++ b/package/petitboot/63-md-raid-arrays.rules
+> @@ -0,0 +1,41 @@
+> +# do not edit this file, it will be overwritten on update
+> +
+> +SUBSYSTEM!="block", GOTO="md_end"
+> +
+> +# handle md arrays
+> +ACTION!="add|change", GOTO="md_end"
+> +KERNEL!="md*", GOTO="md_end"
+> +
+> +# partitions have no md/{array_state,metadata_version}, but should not
+> +# for that reason be ignored.
+> +ENV{DEVTYPE}=="partition", GOTO="md_ignore_state"
+> +
+> +# container devices have a metadata version of e.g. 'external:ddf' and
+> +# never leave state 'inactive'
+> +ATTR{md/metadata_version}=="external:[A-Za-z]*", ATTR{md/array_state}=="inactive", GOTO="md_ignore_state"
+> +TEST!="md/array_state", ENV{SYSTEMD_READY}="0", GOTO="md_end"
+> +ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0", GOTO="md_end"
+> +LABEL="md_ignore_state"
+> +
+> +IMPORT{program}="/sbin/mdadm --detail --export $devnode"
+> +ENV{DEVTYPE}=="disk", ENV{MD_NAME}=="?*", SYMLINK+="disk/by-id/md-name-$env{MD_NAME}", OPTIONS+="string_escape=replace"
+> +ENV{DEVTYPE}=="disk", ENV{MD_UUID}=="?*", SYMLINK+="disk/by-id/md-uuid-$env{MD_UUID}"
+> +ENV{DEVTYPE}=="disk", ENV{MD_DEVNAME}=="?*", SYMLINK+="md/$env{MD_DEVNAME}"
+> +ENV{DEVTYPE}=="partition", ENV{MD_NAME}=="?*", SYMLINK+="disk/by-id/md-name-$env{MD_NAME}-part%n", OPTIONS+="string_escape=replace"
+> +ENV{DEVTYPE}=="partition", ENV{MD_UUID}=="?*", SYMLINK+="disk/by-id/md-uuid-$env{MD_UUID}-part%n"
+> +ENV{DEVTYPE}=="partition", ENV{MD_DEVNAME}=="*[^0-9]", SYMLINK+="md/$env{MD_DEVNAME}%n"
+> +ENV{DEVTYPE}=="partition", ENV{MD_DEVNAME}=="*[0-9]", SYMLINK+="md/$env{MD_DEVNAME}p%n"
+> +
+> +IMPORT{builtin}="blkid"
+> +OPTIONS+="link_priority=100"
+> +OPTIONS+="watch"
+> +ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{ID_FS_UUID_ENC}=="?*", SYMLINK+="disk/by-uuid/$env{ID_FS_UUID_ENC}"
+> +ENV{ID_FS_USAGE}=="filesystem|other", ENV{ID_FS_LABEL_ENC}=="?*", SYMLINK+="disk/by-label/$env{ID_FS_LABEL_ENC}"
+> +
+> +ENV{MD_LEVEL}=="raid[1-9]*", ENV{SYSTEMD_WANTS}+="mdmonitor.service"
+> +
+> +# Tell systemd to run mdmon for our container, if we need it.
+> +ENV{MD_LEVEL}=="raid[1-9]*", ENV{MD_CONTAINER}=="?*", PROGRAM="/usr/bin/readlink $env{MD_CONTAINER}", ENV{MD_MON_THIS}="%c"
+> +ENV{MD_MON_THIS}=="?*", PROGRAM="/usr/bin/basename $env{MD_MON_THIS}", ENV{SYSTEMD_WANTS}+="mdmon@%c.service"
+> +
+> +LABEL="md_end"
+> diff --git a/package/petitboot/65-md-incremental.rules b/package/petitboot/65-md-incremental.rules
+> new file mode 100644
+> index 000000000000..153d12fe6f7e
+> --- /dev/null
+> +++ b/package/petitboot/65-md-incremental.rules
+> @@ -0,0 +1,69 @@
+> +# This file causes block devices with Linux RAID (mdadm) signatures to
+> +# automatically cause mdadm to be run.
+> +# See udev(8) for syntax
+> +
+> +# Don't process any events if anaconda is running as anaconda brings up
+> +# raid devices manually
+> +ENV{ANACONDA}=="?*", GOTO="md_end"
+> +
+> +# Also don't process disks that are slated to be a multipath device
+> +ENV{DM_MULTIPATH_DEVICE_PATH}=="?*", GOTO="md_end"
+> +
+> +# We process add events on block devices (since they are ready as soon as
+> +# they are added to the system), but we must process change events as well
+> +# on any dm devices (like LUKS partitions or LVM logical volumes) and on
+> +# md devices because both of these first get added, then get brought live
+> +# and trigger a change event.  The reason we don't process change events
+> +# on bare hard disks is because if you stop all arrays on a disk, then
+> +# run fdisk on the disk to change the partitions, when fdisk exits it
+> +# triggers a change event, and we want to wait until all the fdisks on
+> +# all member disks are done before we do anything.  Unfortunately, we have
+> +# no way of knowing that, so we just have to let those arrays be brought
+> +# up manually after fdisk has been run on all of the disks.
+> +
+> +# First, process all add events (md and dm devices will not really do
+> +# anything here, just regular disks, and this also won't get any imsm
+> +# array members either)
+> +SUBSYSTEM=="block", ACTION=="add|change", ENV{ID_FS_TYPE}=="linux_raid_member", \
+> +	RUN+="/sbin/mdadm -I --export $env{DEVNAME}"
+> +
+> +# Next, check to make sure the BIOS raid stuff wasn't turned off via cmdline
+> +IMPORT{cmdline}="noiswmd"
+> +IMPORT{cmdline}="nodmraid"
+> +ENV{noiswmd}=="?*", GOTO="md_imsm_inc_end"
+> +ENV{nodmraid}=="?*", GOTO="md_imsm_inc_end"
+> +SUBSYSTEM=="block", ACTION=="add", ENV{ID_FS_TYPE}=="isw_raid_member", \
+> +	RUN+="/sbin/mdadm -I $env{DEVNAME}"
+> +LABEL="md_imsm_inc_end"
+> +
+> +SUBSYSTEM=="block", ACTION=="remove", ENV{ID_PATH}=="?*", \
+> +	RUN+="/sbin/mdadm -If $name --path $env{ID_PATH}"
+> +SUBSYSTEM=="block", ACTION=="remove", ENV{ID_PATH}!="?*", \
+> +	RUN+="/sbin/mdadm -If $name"
+> +
+> +# Next make sure that this isn't a dm device we should skip for some reason
+> +ENV{DM_UDEV_RULES_VSN}!="?*", GOTO="dm_change_end"
+> +ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", GOTO="dm_change_end"
+> +ENV{DM_SUSPENDED}=="1", GOTO="dm_change_end"
+> +KERNEL=="dm-*", SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="linux_raid_member", \
+> +	ACTION=="change", RUN+="/sbin/mdadm -I $env{DEVNAME}"
+> +LABEL="dm_change_end"
+> +
+> +# Finally catch any nested md raid arrays.  If we brought up an md raid
+> +# array that's part of another md raid array, it won't be ready to be used
+> +# until the change event that occurs when it becomes live
+> +KERNEL=="md*", SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="linux_raid_member", \
+> +	ACTION=="change", RUN+="/sbin/mdadm -I $env{DEVNAME}"
+> +
+> +# In case the initramfs only started some of the arrays in our container,
+> +# run incremental assembly on the container itself.  Note: we ran mdadm
+> +# on the container in 64-md-raid.rules, and that's how the MD_LEVEL
+> +# environment variable is already set.  If that disappears from the other
+> +# file, we will need to add this line into the middle of the next rule:
+> +#	IMPORT{program}="/sbin/mdadm -D --export $tempnode", \
+> +
+> +SUBSYSTEM=="block", ACTION=="add|change", KERNEL=="md*", \
+> +	ENV{MD_LEVEL}=="container", RUN+="/sbin/mdadm -I $env{DEVNAME}"
+> +
+> +
+> +LABEL="md_end"
+> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+> index 9326738aa038..596e801b781c 100644
+> --- a/package/petitboot/petitboot.mk
+> +++ b/package/petitboot/petitboot.mk
+> @@ -46,6 +46,16 @@ else
+>   PETITBOOT_CONF_OPTS += --without-fdt
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_MDADM),y)
+> +define PETITBOOT_POST_INSTALL_MDADM
+> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/63-md-raid-arrays.rules \
+> +		$(TARGET_DIR)/etc/udev/rules.d/63-md-raid-arrays.rules
+> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/65-md-incremental.rules \
+> +		$(TARGET_DIR)/etc/udev/rules.d/65-md-incremental.rules
+> +endef
+> +PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL_MDADM
+> +endif
+> +
+>   define PETITBOOT_POST_INSTALL
+>   	$(INSTALL) -D -m 0755 $(@D)/utils/bb-kexec-reboot \
+>   		$(TARGET_DIR)/usr/libexec/petitboot/bb-kexec-reboot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
