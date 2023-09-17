@@ -4,67 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09EA1CD13CF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EAF2CD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:48:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9FE3240547;
-	Sun, 17 Sep 2023 19:41:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FE3240547
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2806440124;
+	Sun, 17 Sep 2023 19:48:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2806440124
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id esrHKmetEeko; Sun, 17 Sep 2023 19:41:35 +0000 (UTC)
+	with ESMTP id 6DwHQc8HP5ut; Sun, 17 Sep 2023 19:48:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84B0E4056A;
-	Sun, 17 Sep 2023 19:41:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84B0E4056A
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AAF801BF2C6
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:41:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C99354053E;
+	Sun, 17 Sep 2023 19:48:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C99354053E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F3B81BF2C6
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 829AD405DE
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:41:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 829AD405DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 383D860B48
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:48:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 383D860B48
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ypWorN_rRk0f for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 19:41:31 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AD60F405B7
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:41:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD60F405B7
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:6c46:319:6f5d:1ada])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 569A06012D;
- Sun, 17 Sep 2023 21:41:23 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Sep 2023 21:41:23 +0200
-Date: Sun, 17 Sep 2023 21:41:23 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <20230917194123.GA2573@scaer>
-References: <20230917152303.1300577-1-yann.morin.1998@free.fr>
- <23f8c528-9158-07ae-615e-e2ca44c842e8@mind.be>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id eFWd_GAnEFK2 for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 19:48:27 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6A66060B1E
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:48:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A66060B1E
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-401f68602a8so42148595e9.3
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:48:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1694980105; x=1695584905;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6kIPaFvAn8p44F7DoRk7kveZMh6dco+Xhfva6MBu19s=;
+ b=Tit8NwtdzVkBu37ZX6glYdPoOFvJilK7hYyITCU2QgyIb01GWRmotGSqhxWdOaCHnZ
+ NBuyv76r6PI5wywgDuhEMLP960cNGlcMVKK2h/dnswlUbCmOfVdlF2jKTjOVx+cjRCI5
+ B8UowW5DKC1f0bo/WWhgY+o56lRRjsVpn76nRDZusSkq3N90glsSo08k0/JwdvDhwzQ9
+ IEW1U/FChx+XJySKCwX7VrWQTDfupKLxcq9IvXOR7NDUV83xGq1zCBhRHSaBbIAvsmdr
+ 3GP6+/ygX+vQh2puDpmAod0X3MkXxuSVDlGNDXt4d0BemO0EoDYkotlIo2FE4uXSU/9K
+ uTQA==
+X-Gm-Message-State: AOJu0YzrpQ3HJ+C9oiApDN41Hb5iHCLzLKFI5ffqR0f8cQn8AZsWgZoY
+ 0kxeaAXdc7ayrJ5hmlHGxtuT6/oCal0=
+X-Google-Smtp-Source: AGHT+IFMxJB2J11UxXHeLtYa+AaMvGgfnZbnQVbhuDlOGlNGQQnM/xsG936uZCsb7yS7RvzZVux0og==
+X-Received: by 2002:a05:600c:210c:b0:401:b204:3b8d with SMTP id
+ u12-20020a05600c210c00b00401b2043b8dmr6176959wml.27.1694980104973; 
+ Sun, 17 Sep 2023 12:48:24 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ y14-20020a7bcd8e000000b004030e8ff964sm13358830wmj.34.2023.09.17.12.48.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 17 Sep 2023 12:48:24 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 17 Sep 2023 21:48:04 +0200
+Message-Id: <20230917194804.768692-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <23f8c528-9158-07ae-615e-e2ca44c842e8@mind.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694979688;
- bh=tThTmCpJokIiTjBP8dqCyniQHkD3kO8bFvlaxI1UgKs=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=JQ0n3PZC/3I1p83UK5dBgFwZ25ZHM9v/sSCuzCfbuJxdgKWXNRqlSIS9wh8gFrmtt
- 3JoEn8nqlJuveOiHbRzsT2uVzD0jXaeDZt1f05tW3nN0gfXzFzFD9p18vsqgib4ltC
- 6JBWHqEOR1m5/XyzrlbnUWkrxmJvC7n6ReY+cP8YkZ6iCXAjUzutof/Rn6jjLb0xeM
- jRmEwsDPn2KPhrUEq8zPRFe8has6bh/1jicUrrPpEghbzqKm5ibuZGi95/rh3XFn9n
- gd96pMM9SgbOhk3Y0YUUUHjhZw/4FYBsvhNP6FQCcEtmPBAiOC4OgcpqrHB93wReKF
- WLOOeJTqbjbxQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JQ0n3PZC
-Subject: Re: [Buildroot] [PATCH] package/gdb: gdbserver does not need zlib
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1694980105; x=1695584905; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6kIPaFvAn8p44F7DoRk7kveZMh6dco+Xhfva6MBu19s=;
+ b=TuGmUMEXf8oDV/8o1RUeDQRYJbPoDzGVnno1SqZ8JXapHUTaUkPLUSC1/DVMXkpDPU
+ htb3BmYf6rIIofukLYh18cjSskiEYJ6rph/D//L+nUnEvkrJEJvghStvPqt78f1UzwL8
+ MKzR9k6iyU9fVMxkCyXjt/mHM5EfiVdLRXxHhqzry8wzW7KFOxybzHJrSxIFuGVB3fL9
+ cbHRiJ57cRgKi6KTbG+uR3FJPIPkBvbqTTimDONIcYZ7b6BvgyZfTLvfRfS8c+AJ6FP7
+ tsQ0EQ/nPgmDj9gZRFRbUMT9Qu1eCwMUEiYEXUXvjFb/UJSa0QDFgo2B8Kf3COp+MkRd
+ 0ZQQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=TuGmUMEX
+Subject: [Buildroot] [PATCH 1/1] package/libuv: needs gcc >= 4.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,125 +93,312 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, Bartosz Bilas <b.bilas@grinn-global.com>,
+ Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Arnout, All,
+libuv unconditionally uses stdatomic since
+https://github.com/libuv/libuv/commit/2f33980a9141bd49cb2c34361854355b23b1e6fc
+resulting in the following build failure with gcc < 4.9 since bump to
+version 1.45.0 in commit 21764235cb7f7fb767ea4b5d825e39c711aee235:
 
-On 2023-09-17 21:32 +0200, Arnout Vandecappelle via buildroot spake thusly:
-> On 17/09/2023 17:23, Yann E. MORIN wrote:
-[--SNIP--]
-> >As Julien noticed, for example, tcl will try and link with zlib if
-> >available, and at build time it is. But at runtime, it is not, and thus
-> >tclsh fails to run; see 7af8dee3a8a0 (package/tcl: add mandatory
-> >dependency to zlib)
->  So this commit should be reverted now?
+In file included from src/fs-poll.c:23:0:
+src/uv-common.h:41:24: fatal error: stdatomic.h: No such file or directory
+ # include <stdatomic.h>
+                        ^
 
-No, because tcl unconditionally uses zlib: either a bundled version, or
-the system one. 7af8dee3a8a0 ensured the system one is available and
-used.
+Fixes:
+ - http://autobuild.buildroot.org/results/6b9ce25ba7e5c5602313d533f460f8829f767f81
 
-> >So, when we onlyt build gdbserver, we tell configure to not use a system
-> >zlib, which triggers a build of the bundled one, which we do not use...
->  I didn't think this paragraph was very clear, so I reformulated it a
-> little, and applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/bind/Config.in          | 6 ++++--
+ package/cmake/Config.in         | 6 +++---
+ package/libuv/Config.in         | 6 ++++--
+ package/luv/Config.in           | 6 ++++--
+ package/luvi/Config.in          | 6 ++++--
+ package/moarvm/Config.in        | 6 ++++--
+ package/netdata/Config.in       | 6 ++++--
+ package/python-uvloop/Config.in | 6 ++++--
+ package/ttyd/Config.in          | 6 ++++--
+ package/wampcc/Config.in        | 6 ++++--
+ package/xmrig/Config.in         | 6 ++++--
+ 11 files changed, 43 insertions(+), 23 deletions(-)
 
-Better, indeed, thanks!
-
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> >
-> >Reported-by: Julien Olivain <ju.o@free.fr>
-> >Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> >Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> >Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >---
-> >  package/gdb/Config.in |  2 +-
-> >  package/gdb/gdb.mk    | 14 ++++++++++----
-> >  2 files changed, 11 insertions(+), 5 deletions(-)
-> >
-> >diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-> >index 20fd262c93..e4ab39a2bd 100644
-> >--- a/package/gdb/Config.in
-> >+++ b/package/gdb/Config.in
-> >@@ -24,7 +24,6 @@ config BR2_PACKAGE_GDB
-> >  	# The or1k musl port is incomplete, elf_gregset_t definition is missing:
-> >  	# https://git.musl-libc.org/cgit/musl/tree/arch/or1k/bits/user.h?h=v1.2.3
-> >  	depends on !BR2_or1k || !BR2_TOOLCHAIN_USES_MUSL
-> >-	select BR2_PACKAGE_ZLIB
-> >  	# When the external toolchain gdbserver is copied to the
-> >  	# target, we don't allow building a separate gdbserver. The
-> >  	# one from the external toolchain should be used.
-> >@@ -61,6 +60,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
-> >  	depends on !BR2_sh
-> >  	select BR2_PACKAGE_GMP if !BR2_arc
-> >  	select BR2_PACKAGE_NCURSES
-> >+	select BR2_PACKAGE_ZLIB
-> >  comment "full gdb on target needs a toolchain w/ wchar"
-> >  	depends on !BR2_sh
-> >diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> >index 0d41548ed0..070598b385 100644
-> >--- a/package/gdb/gdb.mk
-> >+++ b/package/gdb/gdb.mk
-> >@@ -32,7 +32,6 @@ GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
-> >  # also need ncurses.
-> >  # As for libiberty, gdb may use a system-installed one if present, so
-> >  # we must ensure ours is installed first.
-> >-GDB_DEPENDENCIES = zlib
-> >  HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses host-zlib
-> >  # Disable building documentation
-> >@@ -131,22 +130,29 @@ GDB_CONF_OPTS = \
-> >  	--disable-sim \
-> >  	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
-> >  	--without-included-gettext \
-> >-	--with-system-zlib \
-> >  	--disable-werror \
-> >  	--enable-static \
-> >  	--without-mpfr \
-> >  	--disable-source-highlight
-> >  ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
-> >+GDB_DEPENDENCIES += zlib
-> >  GDB_CONF_OPTS += \
-> >  	--enable-gdb \
-> >-	--with-curses
-> >+	--with-curses \
-> >+	--with-system-zlib
-> >  GDB_DEPENDENCIES += ncurses \
-> >  	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> >  else
-> >+# When only building gdbserver, we don't need zlib. But we have no way to
-> >+# tell the top-level configure that we don't need zlib: it either wants to
-> >+# build the bundled one, or use the system one.
-> >+# Since we're going to only install the gdbserver to the target, we don't
-> >+# care that the bundled zlib is built, as it is not used.
-> >  GDB_CONF_OPTS += \
-> >  	--disable-gdb \
-> >-	--without-curses
-> >+	--without-curses \
-> >+	--without-system-zlib
-> >  endif
-> >  # Starting from GDB 11.x, gmp is needed as a dependency to build full
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index 63ccd57db7..512e948ca2 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BIND
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+@@ -43,7 +44,8 @@ config BR2_PACKAGE_BIND_TOOLS
+ 
+ endif
+ 
+-comment "bind needs a toolchain w/ NPTL, dynamic library"
++comment "bind needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index 4ef5612b57..57b1ebf9fd 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_CMAKE
+ config BR2_PACKAGE_CMAKE_CTEST
+ 	bool "ctest"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+@@ -40,10 +40,10 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 
+ 	  http://www.cmake.org/
+ 
+-comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, NPTL"
++comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.9, NPTL"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/libuv/Config.in b/package/libuv/Config.in
+index cdd73a672f..e23b2c5fe0 100644
+--- a/package/libuv/Config.in
++++ b/package/libuv/Config.in
+@@ -4,13 +4,15 @@ config BR2_PACKAGE_LIBUV
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	help
+ 	  libuv is a multi-platform support library with a focus
+ 	  on asynchronous I/O.
+ 
+ 	  https://github.com/libuv/libuv
+ 
+-comment "libuv needs a toolchain w/ NPTL, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "libuv needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/luv/Config.in b/package/luv/Config.in
+index 434cb3b459..d6aff8b6f7 100644
+--- a/package/luv/Config.in
++++ b/package/luv/Config.in
+@@ -4,13 +4,15 @@ config BR2_PACKAGE_LUV
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	select BR2_PACKAGE_LIBUV
+ 	help
+ 	  libuv bindings for LuaJIT and Lua.
+ 
+ 	  https://github.com/luvit/luv
+ 
+-comment "luv needs a toolchain w/ NPTL, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "luv needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/luvi/Config.in b/package/luvi/Config.in
+index 6e96f85f32..3a724acebb 100644
+--- a/package/luvi/Config.in
++++ b/package/luvi/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LUVI
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_PACKAGE_LUAJIT
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LUV
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+@@ -25,8 +26,9 @@ config BR2_PACKAGE_LUVI
+ 
+ 	  https://github.com/luvit/luvi
+ 
+-comment "luvi needs a toolchain w/ NPTL, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "luvi needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+index 11d8ac7ebc..6972a5f8a6 100644
+--- a/package/moarvm/Config.in
++++ b/package/moarvm/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_MOARVM
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # libatomic_ops
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LIBTOMMATH
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+@@ -18,8 +19,9 @@ config BR2_PACKAGE_MOARVM
+ 
+ 	  http://moarvm.com
+ 
+-comment "moarvm needs a toolchain w/ NPTL, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "moarvm needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/netdata/Config.in b/package/netdata/Config.in
+index 34d139125d..d17b5e89aa 100644
+--- a/package/netdata/Config.in
++++ b/package/netdata/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_NETDATA
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -35,7 +36,8 @@ comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 4.8"
+ 
+ endif
+ 
+-comment "netdata needs a toolchain w/ NPTL, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "netdata needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/python-uvloop/Config.in b/package/python-uvloop/Config.in
+index b3fb275091..c9a05111cb 100644
+--- a/package/python-uvloop/Config.in
++++ b/package/python-uvloop/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_UVLOOP
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_PYTHON3_SSL
+ 	help
+@@ -11,7 +12,8 @@ config BR2_PACKAGE_PYTHON_UVLOOP
+ 
+ 	  http://github.com/MagicStack/uvloop
+ 
+-comment "python-uvloop needs a toolchain w/ NPTL, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "python-uvloop needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+diff --git a/package/ttyd/Config.in b/package/ttyd/Config.in
+index ecc705b17e..103a4ac4aa 100644
+--- a/package/ttyd/Config.in
++++ b/package/ttyd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_TTYD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv, json-c
+ 	depends on BR2_USE_MMU # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	select BR2_PACKAGE_JSON_C
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LIBWEBSOCKETS
+@@ -15,7 +16,8 @@ config BR2_PACKAGE_TTYD
+ 
+ 	  https://github.com/tsl0922/ttyd
+ 
+-comment "ttyd needs a toolchain w/ NPTL, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "ttyd needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
+index 92abc9cb25..4191936113 100644
+--- a/package/wampcc/Config.in
++++ b/package/wampcc/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_WAMPCC
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_JANSSON
+@@ -16,12 +17,13 @@ config BR2_PACKAGE_WAMPCC
+ 
+ 	  https://github.com/darrenjs/wampcc
+ 
+-comment "wampcc needs a toolchain w/ C++, NPTL, dynamic library"
++comment "wampcc needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ comment "wampcc needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_USE_MMU
+diff --git a/package/xmrig/Config.in b/package/xmrig/Config.in
+index 4dd16fa2b0..0b5f5370e4 100644
+--- a/package/xmrig/Config.in
++++ b/package/xmrig/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_XMRIG
+ 	# xmrig needs fenv.h which is not provided by uclibc
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBUV
+ 	help
+@@ -22,10 +23,11 @@ config BR2_PACKAGE_XMRIG
+ 
+ 	  https://xmrig.com
+ 
+-comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library, C++"
++comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library, C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_XMRIG_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS || \
+-		!BR2_INSTALL_LIBSTDCPP
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
