@@ -4,67 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFA73CD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:48:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3138CCD37B3
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:49:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A92E461103;
-	Sun, 17 Sep 2023 12:48:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A92E461103
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE3E261100;
+	Sun, 17 Sep 2023 12:49:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE3E261100
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gF8Om4tCE3Ck; Sun, 17 Sep 2023 12:48:51 +0000 (UTC)
+	with ESMTP id s0KIMWRl0irE; Sun, 17 Sep 2023 12:49:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E006261112;
-	Sun, 17 Sep 2023 12:48:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E006261112
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1508C1BF473
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:48:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C805610F6;
+	Sun, 17 Sep 2023 12:49:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C805610F6
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 224321BF473
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:49:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F04A640531
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:48:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F04A640531
+ by smtp3.osuosl.org (Postfix) with ESMTP id 092DE610F6
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:49:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 092DE610F6
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Es5KN2RKTape for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 12:48:48 +0000 (UTC)
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F337940111
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:48:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F337940111
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:6a7e:c3f3:1d37:8ba2])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2D848B0054E;
- Sun, 17 Sep 2023 14:48:43 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Sep 2023 14:48:42 +0200
-Date: Sun, 17 Sep 2023 14:48:42 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230917124842.GW415981@scaer>
-References: <20230917120613.63980-1-fontaine.fabrice@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20230917120613.63980-1-fontaine.fabrice@gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694954926;
- bh=OYLNwGTtTiUr+oF68YqpxRgRoEYplDViAfdMaSu9LdA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=uhCGmvCfnTOX7OeSrdT201OmeBM9hn0UuGPm+WNQcyDkt1rnG6b+6XxUCLuWXOrh1
- ca1ytUeXs3Tw7evlBWeKd2lepsHvEUS+u6FQksTQ7gNy35Z4VDQMCJW/ubt6e3P7Xb
- 8G2q9nuoVqCNZe3RPcPwC1GAkRUBslZmLVRZ4/Xyuns3HWEnmGUvXG8g+Bz67gJKcb
- KED4ALzdLVUFtEmpm4J7vzj6k6lVvDtnDmDkThW9bDKNTOhOsVrzhUdEhG+C6/jyMq
- PvAFmltQATkekRAwcm7KVJRb7seZNIbSS68FXfk1t0gW9F9wAH7zg08WCbeqcS76MO
- 3eJx34TuVq9Qw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uhCGmvCf
-Subject: Re: [Buildroot] [PATCH 1/1] package/strongswan: security bump to
- version 5.9.11
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GcOwRZj8mZ2p for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 12:49:14 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3AB26610F4
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:49:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AB26610F4
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 27FC687162; Sun, 17 Sep 2023 12:49:14 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 17 Sep 2023 14:40:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7691377873f26d2e8e7c3bcd2f1dcb0ea0712ce7
+X-Git-Newrev: 01ec478cb642dc6d221ab4c2f7f2938d629dcec1
+X-Patchwork-Hint: ignore
+Message-Id: <20230917124914.27FC687162@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/asterisk: security bump to version
+ 16.30.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,83 +57,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jezz@sysmic.org>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=01ec478cb642dc6d221ab4c2f7f2938d629dcec1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2023-09-17 14:06 +0200, Fabrice Fontaine spake thusly:
-> Fix CVE-2023-26463: strongSwan 5.9.8 and 5.9.9 potentially allows remote
-> code execution because it uses a variable named "public" for two
-> different purposes within the same function. There is initially
-> incorrect access control, later followed by an expired pointer
-> dereference. One attack vector is sending an untrusted client
-> certificate during EAP-TLS. A server is affected only if it loads
-> plugins that implement TLS-based EAP methods (EAP-TLS, EAP-TTLS,
-> EAP-PEAP, or EAP-TNC). This is fixed in 5.9.10.
-> 
-> https://github.com/strongswan/strongswan/blob/5.9.11/NEWS
-> https://www.strongswan.org/blog/2023/03/02/strongswan-vulnerability-(cve-2023-26463).html
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes the following security vulnerabilities:
 
-Applied to master, thanks.
+CVE-2022-23537: Heap buffer overflow when decoding STUN message in pjproject
 
-Regards,
-Yann E. MORIN.
+Possible buffer overread when parsing a specially crafted STUN message with
+unknown attribute.  The vulnerability affects Asterisk users using ICE
+and/or WebRTC.
 
-> ---
->  package/strongswan/strongswan.hash | 6 +++---
->  package/strongswan/strongswan.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-> index 4822f9152f..de8f18747a 100644
-> --- a/package/strongswan/strongswan.hash
-> +++ b/package/strongswan/strongswan.hash
-> @@ -1,7 +1,7 @@
-> -# From http://download.strongswan.org/strongswan-5.9.8.tar.bz2.md5
-> -md5  f46b0d3e7aed88824650d0721c887443  strongswan-5.9.8.tar.bz2
-> +# From http://download.strongswan.org/strongswan-5.9.11.tar.bz2.md5
-> +md5  673e194cd256af77b46928179f2c81ad  strongswan-5.9.11.tar.bz2
->  # Calculated based on the hash above
-> -sha256  d3303a43c0bd7b75a12b64855e8edcb53696f06190364f26d1533bde1f2e453c  strongswan-5.9.8.tar.bz2
-> +sha256  ddf53f1f26ad26979d5f55e8da95bd389552f5de3682e35593f9a70b2584ed2d  strongswan-5.9.11.tar.bz2
->  # Locally calculated
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-> diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-> index cae1433e39..6058631696 100644
-> --- a/package/strongswan/strongswan.mk
-> +++ b/package/strongswan/strongswan.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -STRONGSWAN_VERSION = 5.9.8
-> +STRONGSWAN_VERSION = 5.9.11
->  STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
->  STRONGSWAN_SITE = http://download.strongswan.org
->  STRONGSWAN_LICENSE = GPL-2.0+
-> -- 
-> 2.40.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+https://github.com/asterisk/asterisk/security/advisories/GHSA-4xjp-22g4-9fxm
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 98ee3bdc71..41e1da2962 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  9b93006a87be9c29492299118200e4f66c8369851c66a50fdef5b15dfc4eb2c2  asterisk-16.29.1.tar.gz
++sha256  ef1ddc07dc02bb0c5f5ba58a5e42e42bcb63e55ac94199be8e3b5d3910f43736  asterisk-16.30.1.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 22ac0334fd..4f1a80ba8b 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 16.29.1
++ASTERISK_VERSION = 16.30.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
