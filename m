@@ -4,65 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 027FFCD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 20:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D395CD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 20:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 945C84054E;
-	Sun, 17 Sep 2023 20:51:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 945C84054E
+	by smtp2.osuosl.org (Postfix) with ESMTP id CCCBF40598;
+	Sun, 17 Sep 2023 20:51:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCCBF40598
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id I5RnVI0siu2R; Sun, 17 Sep 2023 20:51:19 +0000 (UTC)
+	with ESMTP id 5jHYEJSbDDif; Sun, 17 Sep 2023 20:51:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9258740598;
-	Sun, 17 Sep 2023 20:51:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9258740598
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 94CCD1BF4E2
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE9A7411A1;
+	Sun, 17 Sep 2023 20:51:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE9A7411A1
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 976AF1BF870
  for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 20:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7AB8781604
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B66A415E7
  for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 20:51:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AB8781604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B66A415E7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Y1iY4aFnddYW for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id IGy-9Ry4YpzP for <buildroot@lists.busybox.net>;
  Sun, 17 Sep 2023 20:51:15 +0000 (UTC)
 Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 78AB88151E
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 79AA9415E5
  for <buildroot@buildroot.org>; Sun, 17 Sep 2023 20:51:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78AB88151E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79AA9415E5
 Received: from localhost.localdomain ([146.241.100.148])
  by Aruba Outgoing Smtp  with ESMTPSA
- id hyjUqU2javDh7hyjVqmc5O; Sun, 17 Sep 2023 22:51:09 +0200
+ id hyjUqU2javDh7hyjVqmc5J; Sun, 17 Sep 2023 22:51:09 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 22:51:07 +0200
-Message-Id: <20230917205107.366824-2-giulio.benetti@benettiengineering.com>
+Date: Sun, 17 Sep 2023 22:51:06 +0200
+Message-Id: <20230917205107.366824-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230917205107.366824-1-giulio.benetti@benettiengineering.com>
-References: <20230917205107.366824-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4xfKZmtonaB9fvQAsVx3RO/+jZ5N5VP0VbsQ+ZUKIEUhclYvFpfBZmpezn/KoK3q/vRuo3rkl2YjqXX0EdA3fXaP0rjqJVoK2/luTXe9gy8ElfF1oCvdLr
  gNE4DIG0+BoxVIfXYnUVyd/mh4T92kxrhAw0BHZ6KPcUGoaQ/j+JxcvRfecKrVl4VzXVsyJc5v5nYL80R3ubELEZNbR1bG4ymzMPSe8icIfAnEwKh5T+pjxF
  VdI0yeokVG7EDdE5nZo0/zT4y6nGs1nF4aoQSlYQGJtWtdXWPF2qBKBDqONItUZryjlOwHmjovehWrdsKvRTiq9KlFOf7fjRcFYhYt15M88=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1694983869; bh=YjH8zVeGWEL8eoOmy/kbGx35eNWjKgUTfrnOVv5L1pw=;
+ t=1694983869; bh=6SexFWijCddHDZ5FEWqzDxUEuzrABrGfUnPIE3afqQY=;
  h=From:To:Subject:Date:MIME-Version;
- b=lmY9RihGawypeW/fIrjOSuDLfpdLCEpA+ptTxq9/fjHvv6PZ360JUzD+QvO7y2orS
- uVCa7EoMNX8fyR9wxBTccnDYEClRAOUUwHWUjA8gUvilyfRLAjLCBr4o919eroHo5Y
- CejYRyYBbpTTJl2hbZ4tFlWtmD/R+AplV3v6vf8J1/4HrEoybarN3MaFlcktOpH2qf
- bcPVSjn9KiG0EJWz9xvwE3JpPhF9IquHJlS3tO/tI3VvkdpF8WpOYOZgNP7XdMsqo9
- UR+b+KHo18JHdDguzLTcjaASJiTo58QoMbN8tfDS7sOBYU6AtsPsJjpqWdTxzTdgMf
- QVo91Kuy7tJuw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=iNLGEbJBXt8SRWfj8G8PnQ2sFWuIGEgzOgk7EYUQ8NoSToQFWY5PDo+jLez/vmMPC
+ trMK7YMLSB5DXm4FFkZXvD/eEAlO4vVGZK1mkEe/33ObnKmsmeoub8Y+BWv12eAFAU
+ frXCcfCKyuwR94xAVfYZPTvWB72xlJSKeO46cKXHldjL3S0KOSwMYMQIaGk96LHIkc
+ fj79FJud6MtcQcJY0ii3KUAOxEp4fhDidz7kHL++Q2k+MloJdUah1HbX7JCdXLcPXA
+ l07jT9i+TaDjNdXlH5M9JtZV/QAqPNbLWTa3hTEadRhVnvA3pfpSPVvRMTQ3rEWmrc
+ ahssJPmSP32tA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=lmY9RihG
-Subject: [Buildroot] [PATCH 1/1] docs/manual: add section to explain how to
- give credits to a sponsor
+ header.a=rsa-sha256 header.s=a1 header.b=iNLGEbJB
+Subject: [Buildroot] [PATCH 0/1] docs/manual: document how to give credits
+ to a sponsor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,38 +79,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sometimes it happens that a Company or a Physical Person sponsors the
-creation and/or the upstreaming process of a patch, but at the moment
-there is no way to give credits to it. In Linux they prepend '+sponsor'
-to the e-mail of the contributor in both authorship and commit log tag as
-discussed here[0]. So let's describe in the manual how to do that as a
-standard.
+Following my previous patch:
+https://patchwork.ozlabs.org/project/buildroot/patch/20230819211825.60854-2-giulio.benetti@benettiengineering.com/
 
-[0]: https://lore.kernel.org/linux-doc/20230817220957.41582-1-giulio.benetti@benettiengineering.com/
+I come up with this after having feedbacks from Linux ML:
+https://lore.kernel.org/linux-doc/20230817220957.41582-1-giulio.benetti@benettiengineering.com/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
+Basically they have 2 ways to give credits to sponsors, but the most used
+way that is used a lot by analysis tools is the one prepending '+sponsor'
+to developer's e-mail domain.
+
+Best regards
+Giulio
+
+Giulio Benetti (1):
+  docs/manual: add section to explain how to give credits to a sponsor
+
  docs/manual/contribute.txt | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 384fdb08c1..df3e0af4b4 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -147,6 +147,13 @@ Buildroot's Patchwork website can be used to pull in patches for testing
- purposes. Please see xref:apply-patches-patchwork[] for more
- information on using Buildroot's Patchwork website to apply patches.
- 
-+To give credits to who sponsored the creation of a patch or the process of
-+upstreaming it add '+sponsor' before the e-mail domain in autorship and in
-+any possible tag listed above. For a company which sponsored:
-+"Name Surname <name.surname+companyname@mail.com>"
-+or in case of a physical person his name and surname all together:
-+"Name Surname <name.surname+namesurname@mail.com>"
-+
- [[apply-patches-patchwork]]
- ==== Applying Patches from Patchwork
- 
 -- 
 2.34.1
 
