@@ -4,92 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35FB7CD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 18:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78A63CD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 18:51:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9327F60BBC;
-	Sun, 17 Sep 2023 18:44:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9327F60BBC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 079A560774;
+	Sun, 17 Sep 2023 18:51:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 079A560774
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UkCjQEWbtlEe; Sun, 17 Sep 2023 18:44:10 +0000 (UTC)
+	with ESMTP id EXGAtHTdGN0J; Sun, 17 Sep 2023 18:51:26 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76E4060BD9;
-	Sun, 17 Sep 2023 18:44:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76E4060BD9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02427608B7;
+	Sun, 17 Sep 2023 18:51:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02427608B7
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 601111BF3D1
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:44:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 95C001BF3D1
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31DE6403CA
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:44:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31DE6403CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68C4A410D5
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 18:51:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68C4A410D5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dT4EFbJtmb-D for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 18:44:06 +0000 (UTC)
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 71433403B8
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 18:44:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 71433403B8
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-9adcb89b48bso305254366b.2
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:44:06 -0700 (PDT)
+ with ESMTP id MeTI5S1GJlIR for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 18:51:21 +0000 (UTC)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 444974005B
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 18:51:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 444974005B
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-3214cdb4b27so353442f8f.1
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:51:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694976244; x=1695581044;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=C/L2Iq7uEJhgpoIOR0ViRIX/uppDap/2VpZ2VWqBwdE=;
- b=wRItSu4Fw/sOqbRQpMv6A02eOQs/q0Yp8H6N92JTLRoCNuvv42Lu3HAsEBOX6pRIs7
- d3pHMtvRUZo007XwGnWPraFJy1DejcIB/Afg5qrOK4u6AeFcZonlCyuZmc/9NbjWOOrL
- Ln6315Zm4yxBvBfvEGTE8/7l9dxOoeeP9DpiXo9TeavC2E4HBS0DZdh3+9Pv9SMsYyZm
- 0MN5F2fWSQ/TM4bbyd6otP/g+sb74n+XezLE+ZEMRZ8TUi3GD7CjSYwRTlueuJa79RF9
- Jrev6+maxBuOXWH5jy6PLKwg/acPGolSulxWeZOByKBtLWwJx7WwlRqDfZnSUv615O4z
- ljBg==
-X-Gm-Message-State: AOJu0YyUT0LSyzB8CkUjcBN8Ig0jTYRlyEj4JLByhu/0J1ZeJzHhSSba
- y+5xdGauHHusVAjjccBGDRei4w==
-X-Google-Smtp-Source: AGHT+IFHe7zdMDT1ZQE5vLEWYVJdXffD3xKJzAz6W1yZkaqq0/vkFpaOWe7EMOTz3JBTKzdCCsD+sQ==
-X-Received: by 2002:a17:906:51d0:b0:9a1:abae:8d30 with SMTP id
- v16-20020a17090651d000b009a1abae8d30mr6112265ejk.47.1694976244017; 
- Sun, 17 Sep 2023 11:44:04 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- gv23-20020a170906f11700b0098ec690e6d7sm5316735ejb.73.2023.09.17.11.44.01
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 17 Sep 2023 11:44:02 -0700 (PDT)
-Message-ID: <3756a0b6-4b33-a4e5-18c4-f65c41ec3da1@mind.be>
-Date: Sun, 17 Sep 2023 20:44:00 +0200
+ d=1e100.net; s=20230601; t=1694976679; x=1695581479;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wYrsuKK7JrGrLP3MttJISN4GmKf1r3GLkBXxMGiSgok=;
+ b=vOdOn6F1CSICHCB2CdMXDUIhMu3aiJANSWEj4V9V4VafJsqiWubE0G5rADBPmfZ0M1
+ hAiyh+3jVYBh4YR9eZTBAqd9MSl4PVlqhEX5yyefUIYVqC04GPHuT4ayv48CFzXi7NaX
+ fPn9kS9kZeIi4Ax5FA2Cclkjg+HLPWhds4Ek4mecgCN7gy3yM752BzvuCPbt4tjZdUOm
+ huXluOmB6YpOfK8YhFtMqTL2cJgSwIISB/oXDPCwB/7Yn8VNbi5GYhQSjynz7Zp6ojWS
+ AJ+LSPFbvjfoQwBX9zH0iazFNB+9q6ANcfy3gZJBKZETRgA1c6Ox08utXD8lHoAdXAc4
+ 6otg==
+X-Gm-Message-State: AOJu0YwFuYM57xVJHYF+PsU6JRoh4Wv7zRezlE8NcA3owB/f+zCIyYFc
+ dmD3aLLrKLWqeWo4E3qQey4x2eTTSgc=
+X-Google-Smtp-Source: AGHT+IGQS6YivwL8ADxV+Itck6+lc4XuZcGHGMePIihFcH7hNWk4lIV0vKf0kY3hJf0A29SUIMWfkg==
+X-Received: by 2002:a5d:4e46:0:b0:31a:d2f9:7372 with SMTP id
+ r6-20020a5d4e46000000b0031ad2f97372mr5859040wrt.29.1694976678646; 
+ Sun, 17 Sep 2023 11:51:18 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ m18-20020a5d4a12000000b0031f65cdd271sm10308071wrq.100.2023.09.17.11.51.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 17 Sep 2023 11:51:18 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 17 Sep 2023 20:51:16 +0200
+Message-Id: <20230917185116.182810-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-GB
-To: Reza Arbab <arbab@linux.ibm.com>, buildroot@buildroot.org
-References: <20230915155835.51140-1-arbab@linux.ibm.com>
- <20230915155835.51140-3-arbab@linux.ibm.com>
-In-Reply-To: <20230915155835.51140-3-arbab@linux.ibm.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1694976244; x=1695581044; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=C/L2Iq7uEJhgpoIOR0ViRIX/uppDap/2VpZ2VWqBwdE=;
- b=YuAFyiCIVoKpuDiSRgX3a4/clZDGLa2EagQBinZAZTSp6QVuY6Lg2un85JkM+xSD+W
- n6f7RaaFvNavLCF3Iwd/qiE9GfeUzlBq8OlT0YLp8dUjcOTuiqfUDwJVIaJs1Kf0kSnG
- e5BSAQ59j4H0kKSYo7a4zKs+ZTpTIc5XRQHNqL2l15lvsGdiSJ/DHVGna+rSp3IUk2Ys
- ATb+tD+2BTGNSa9NiZtik6arN4qkp5upFbSmPbDkMVkrnoxruk4YJ0b3stiD6Q6eYjZX
- CPIxV5FP+eoIJf5UoEDmwJQLK8OpwBQQi+SdMm3Udlngvh2OT5UbJ1NNiDOxmY0zMdt4
- o9XA==
+ d=gmail.com; s=20230601; t=1694976679; x=1695581479; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wYrsuKK7JrGrLP3MttJISN4GmKf1r3GLkBXxMGiSgok=;
+ b=HkmoVSR9Xe6nHskJ1h3yHosoTZpOQBCb9R/sTF7oAEaFNrOrQw2j1FMoxB1IgqKUZL
+ Y6M2c6JN2gfn4YhO9L02m1x5Sy4i6lWtF1vftaU/5Z6/vvy3ok+E5nsgqTBfjFjU5NVC
+ RlC0PKnutajcPKYfrjAgGvhOLtnKva3j+Vqfm0VKo8TfRWadCbzWBBY34NPyHcLkWV7p
+ pbYKk7t2cINukg9eL9NOL2tiR3mco0Zsir6sqz+54Q0BKsSB4kFf8sp19a4FxnpYnvAn
+ XH/MXqDokxLolxMAq5D8iRKaEYviXLDYhb9tYDNg0AvJeujpkMIj08DMh+WNlUSQMk7Q
+ u9gQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YuAFyiCI
-Subject: Re: [Buildroot] [PATCH v2 2/5] package/petitboot: run pb-console at
- boot
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=HkmoVSR9
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix atomic handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,117 +93,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Laurent Vivier <laurent@vivier.eu>, Joel Stanley <joel@jms.id.au>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Correctly fix atomic handling to avoid the following build failure with
+all users of libglib2 (e.g. gdk-pixbuf) raised since bump to version
+2.76.1 in commit 3f9622fe3d85b4d9f734b879abc1d485afea19b2:
 
+/usr/lib/libglib-2.0.a(gthread-posix.c.o): in function `g_mutex_trylock':
+gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
 
-On 15/09/2023 17:58, Reza Arbab wrote:
-> Install a udev rule to run the petitboot UI on commonly-known consoles
-> instead of getty. To prevent the kernel's console output from trampling
-> the UI, also add a sysctl file to reduce the kernel log levels to
-> KERN_ALERT.
-> 
-> Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
-> ---
-> v2:
-> * Add ttyGF* to list of commonly-known consoles.
-> * Don't select BR2_TARGET_GENERIC_GETTY by default.
-> 
->   package/petitboot/petitboot-console-ui.rules | 5 +++++
->   package/petitboot/petitboot.mk               | 4 ++++
->   package/petitboot/sysctl.conf                | 1 +
->   system/Config.in                             | 2 +-
->   4 files changed, 11 insertions(+), 1 deletion(-)
->   create mode 100644 package/petitboot/petitboot-console-ui.rules
->   create mode 100644 package/petitboot/sysctl.conf
-> 
-> diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
-> new file mode 100644
-> index 000000000000..e5c188387bc5
-> --- /dev/null
-> +++ b/package/petitboot/petitboot-console-ui.rules
-> @@ -0,0 +1,5 @@
-> +# spawn a petitboot UI on common user-visible interface devices
-> +SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
-> +SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
-> +SUBSYSTEM=="tty", KERNEL=="ttyGF*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
-> +SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
+Fixes:
+ - http://autobuild.buildroot.org/results/24a358869b98d83ab374c7c3a185ced450064d35
 
-  In general, it's quite likely that there are some serial ports where some 
-device is connected rather that a console (e.g. GPS, Bluetooth, cell modem, 
-...). So starting pb-console on "anything that looks ike a serial port" is a bad 
-idea.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0004-link-with-latomic-when-needed.patch  | 45 +++++++++++++++++++
+ package/libglib2/libglib2.mk                  |  5 ---
+ 2 files changed, 45 insertions(+), 5 deletions(-)
+ create mode 100644 package/libglib2/0004-link-with-latomic-when-needed.patch
 
-  In Buildroot, we by default assume that the console is on /dev/console - which 
-is why that is the default for BR2_TARGET_GENERIC_GETTY_PORT. If it's needed to 
-run pb-console on a different port or ports than the default /dev/console, then 
-that's a system-specific configuration.
+diff --git a/package/libglib2/0004-link-with-latomic-when-needed.patch b/package/libglib2/0004-link-with-latomic-when-needed.patch
+new file mode 100644
+index 0000000000..275d86032b
+--- /dev/null
++++ b/package/libglib2/0004-link-with-latomic-when-needed.patch
+@@ -0,0 +1,45 @@
++From d1814dbd3a88c95a43d4c9805bb4a523cf62d97b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 17 Sep 2023 20:42:00 +0200
++Subject: [PATCH] link with -latomic when needed
++
++Some architecture such as sparc and some flavors of arm needs -latomic
++to avoid the following build failure:
++
++gthread-posix.c:(.text+0xda8): undefined reference to `__atomic_compare_exchange_4'
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3586
++---
++ glib/meson.build | 1 +
++ meson.build      | 2 ++
++ 2 files changed, 3 insertions(+)
++
++diff --git a/glib/meson.build b/glib/meson.build
++index c26a35e42..7a761306b 100644
++--- a/glib/meson.build
+++++ b/glib/meson.build
++@@ -426,6 +426,7 @@ libglib = library('glib-2.0',
++     pcre2,
++     platform_deps,
++     thread_dep,
+++    atomic_dep
++   ],
++   c_args : glib_c_args,
++   objc_args : glib_c_args,
++diff --git a/meson.build b/meson.build
++index 25ae10fc2..5ae84b3b3 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -2130,6 +2130,8 @@ libffi_dep = dependency('libffi', version : '>= 3.0.0')
++ 
++ libz_dep = dependency('zlib')
++ 
+++atomic_dep = cc.find_library('atomic', required: false)
+++
++ # First check in libc, fallback to libintl, and as last chance build
++ # proxy-libintl subproject.
++ # FIXME: glib-gettext.m4 has much more checks to detect broken/uncompatible
++-- 
++2.40.1
++
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index c06ded2a5b..bffc565f11 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -64,11 +64,6 @@ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ LIBGLIB2_DEPENDENCIES += elfutils
+ endif
+ 
+-# Uses __atomic_compare_exchange_4
+-ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-LIBGLIB2_LDFLAGS += -latomic
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
+ endif
+-- 
+2.40.1
 
-  I see no way we can have this generic assumption of "all ttys need pb-console" 
-in Buildroot.
-
-  It _does_ make sense, however, to put pb-console on /dev/console. However, 
-wouldn't it make more sense to do that in inittab instead of with a udev rule - 
-like the getty line?
-
-  BTW, I don't understand why you even have a KERNEL filter. Anything that is a 
-tty could be the console, no?
-
-
-> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-> index 8d220f88f45a..556d41230237 100644
-> --- a/package/petitboot/petitboot.mk
-> +++ b/package/petitboot/petitboot.mk
-> @@ -55,6 +55,10 @@ define PETITBOOT_POST_INSTALL
->   		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
->   	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
->   		$(TARGET_DIR)/etc/init.d/S15pb-discover
-> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
-> +		$(TARGET_DIR)/etc/udev/rules.d/petitboot-console-ui.rules
-> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/sysctl.conf \
-> +		$(TARGET_DIR)/etc/sysctl.d/petitboot.conf
->   	mkdir -p $(TARGET_DIR)/usr/share/udhcpc/default.script.d/
->   	ln -sf /usr/sbin/pb-udhcpc \
->   		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
-> diff --git a/package/petitboot/sysctl.conf b/package/petitboot/sysctl.conf
-> new file mode 100644
-> index 000000000000..02ab8e3275b5
-> --- /dev/null
-> +++ b/package/petitboot/sysctl.conf
-> @@ -0,0 +1 @@
-> +kernel.printk = 1 1 1 1
-
-  I'm not sure how useful this is... There is still output from the init scripts 
-coming on the console, so why block the kernel output but not those? In 
-addition, by the time we get to S10udev (or definitely by the time we get to the 
-inittab stuff), most kernel output has already passed.
-
-> diff --git a/system/Config.in b/system/Config.in
-> index 24798dc06803..9587dd9ce4db 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -375,7 +375,7 @@ config BR2_SYSTEM_BIN_SH
->   
->   menuconfig BR2_TARGET_GENERIC_GETTY
->   	bool "Run a getty (login prompt) after boot"
-> -	default y
-> +	default y if !BR2_PACKAGE_PETITBOOT
-
-  Ugh, this is super ugly to have to do something petitboot-specific in the 
-system menu. But I don't readily know a better way to do this.
-
-  Regards,
-  Arnout
-
->   
->   if BR2_TARGET_GENERIC_GETTY
->   config BR2_TARGET_GENERIC_GETTY_PORT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
