@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8FB3CD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 06:50:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 155B5CD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 06:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84E284117C;
-	Sun, 17 Sep 2023 06:50:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84E284117C
+	by smtp2.osuosl.org (Postfix) with ESMTP id C16304117C;
+	Sun, 17 Sep 2023 06:51:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C16304117C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DW9kQuES4-9p; Sun, 17 Sep 2023 06:50:55 +0000 (UTC)
+	with ESMTP id AZZKpPlN7ySN; Sun, 17 Sep 2023 06:51:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ACFFC4117D;
-	Sun, 17 Sep 2023 06:50:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACFFC4117D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0898E41190;
+	Sun, 17 Sep 2023 06:51:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0898E41190
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA99A1BF870
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 06:50:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 222AB1BF424
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 06:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1DC241712
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFD584159C
  for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 06:50:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1DC241712
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFD584159C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1RqIh9DKO1Uf for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 06:50:39 +0000 (UTC)
+ with ESMTP id dvmS1rGFLpyZ for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 06:50:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8EB154159C
+ by smtp4.osuosl.org (Postfix) with ESMTP id DCF64416BC
  for <buildroot@buildroot.org>; Sun, 17 Sep 2023 06:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EB154159C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCF64416BC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69A9B870EB; Sun, 17 Sep 2023 06:50:39 +0000 (UTC)
+ id C8BFE87109; Sun, 17 Sep 2023 06:50:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 08:41:11 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: b52299adfdb930a8bb5da9ac1f6896e4eab5ba3d
-X-Git-Newrev: 25d59c073ac355d5b499a9db5318fb4dc14ad56c
+Date: Sun, 17 Sep 2023 08:38:16 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 44919c0a6efe04d5f278edbde713e18a31805185
+X-Git-Newrev: afdd2760e65c77b5063c76dc8f158c558de57c35
 X-Patchwork-Hint: ignore
-Message-Id: <20230917065039.69A9B870EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/qt5: fix upstream
- git trees
+Message-Id: <20230917065039.C8BFE87109@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libde265: add
+ LIBDE265_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,78 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25d59c073ac355d5b499a9db5318fb4dc14ad56c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=afdd2760e65c77b5063c76dc8f158c558de57c35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Since commits 4e8b5f9bee9c [0], 6cfbd51d98d1 [1], and d838a416c4ed [2],
-the repository we clone from is the cgit browser, and it does not serve
-the git tree, only the browser:
+cpe:2.3:a:struktur:libde265 is a valid CPE identifier for this package:
 
-    $ git clone https://code.qt.io/cgit/qt/qtcoap.git
-    Cloning into 'qtcoap'...
-    fatal: repository 'https://code.qt.io/cgit/qt/qtcoap.git/' not found
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Astruktur%3Alibde265
 
-Browsing there displays the cgit UI, which gives a proper URI to clone
-from; switch to using that. Things happened to "work" so far thanks to
-sources.buildroot.net.
-
-[0] 4e8b5f9bee9c package/qt5/qt5mqtt: bump version to 5.15.2 (and fix download)
-[1] 6cfbd51d98d1 package/qt5/qt5coap: bump version to 5.15.2 (and fix download)
-[2] d838a416c4ed package/qt5/qt5knx: bump version to 5.15.2 (and fix download)
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-CC: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0055c9c63457627159f2aff1b9b596748c20fb8f)
+(cherry picked from commit fd94f49566fc420913a3cabda9a87b44a822ea53)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5coap/qt5coap.mk | 2 +-
- package/qt5/qt5knx/qt5knx.mk   | 2 +-
- package/qt5/qt5mqtt/qt5mqtt.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/libde265/libde265.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt5coap/qt5coap.mk b/package/qt5/qt5coap/qt5coap.mk
-index a50f19d7f2..5feb1e5bc2 100644
---- a/package/qt5/qt5coap/qt5coap.mk
-+++ b/package/qt5/qt5coap/qt5coap.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libde265/libde265.mk b/package/libde265/libde265.mk
+index 60424c0de6..208fa24e27 100644
+--- a/package/libde265/libde265.mk
++++ b/package/libde265/libde265.mk
+@@ -8,6 +8,7 @@ LIBDE265_VERSION = 1.0.12
+ LIBDE265_SITE = https://github.com/strukturag/libde265/releases/download/v$(LIBDE265_VERSION)
+ LIBDE265_LICENSE = LGPL-3.0+
+ LIBDE265_LICENSE_FILES = COPYING
++LIBDE265_CPE_ID_VENDOR = struktur
+ LIBDE265_INSTALL_STAGING = YES
  
- QT5COAP_VERSION = 5.15.2
--QT5COAP_SITE = https://code.qt.io/cgit/qt/qtcoap.git
-+QT5COAP_SITE = https://code.qt.io/qt/qtcoap.git
- QT5COAP_SITE_METHOD = git
- QT5COAP_INSTALL_STAGING = YES
- QT5COAP_LICENSE = GPL-3.0, GFDL-1.3
-diff --git a/package/qt5/qt5knx/qt5knx.mk b/package/qt5/qt5knx/qt5knx.mk
-index 412e31c652..91b99aaa87 100644
---- a/package/qt5/qt5knx/qt5knx.mk
-+++ b/package/qt5/qt5knx/qt5knx.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- QT5KNX_VERSION = 5.15.2
--QT5KNX_SITE = https://code.qt.io/cgit/qt/qtknx.git
-+QT5KNX_SITE = https://code.qt.io/qt/qtknx.git
- QT5KNX_SITE_METHOD = git
- QT5KNX_INSTALL_STAGING = YES
- QT5KNX_LICENSE = GPL-3.0 with exception
-diff --git a/package/qt5/qt5mqtt/qt5mqtt.mk b/package/qt5/qt5mqtt/qt5mqtt.mk
-index 0b62cf1bed..824d58d1d1 100644
---- a/package/qt5/qt5mqtt/qt5mqtt.mk
-+++ b/package/qt5/qt5mqtt/qt5mqtt.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- QT5MQTT_VERSION = 5.15.2
--QT5MQTT_SITE = https://code.qt.io/cgit/qt/qtmqtt.git
-+QT5MQTT_SITE = https://code.qt.io/qt/qtmqtt.git
- QT5MQTT_SITE_METHOD = git
- QT5MQTT_INSTALL_STAGING = YES
- QT5MQTT_LICENSE = GPL-3.0 with exception
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
