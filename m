@@ -4,61 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D63ECD37B3
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 13:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35109CD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 13:31:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E15040111;
-	Sun, 17 Sep 2023 13:01:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E15040111
+	by smtp2.osuosl.org (Postfix) with ESMTP id 89D0940111;
+	Sun, 17 Sep 2023 13:31:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89D0940111
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 4Zn0uoR-4sFw; Sun, 17 Sep 2023 13:01:33 +0000 (UTC)
+	with ESMTP id w4eU_jq6G_qx; Sun, 17 Sep 2023 13:31:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAA50408DA;
-	Sun, 17 Sep 2023 13:01:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAA50408DA
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2FCDB1BF473
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 13:01:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BB026402F2;
+	Sun, 17 Sep 2023 13:31:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB026402F2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 02C0E1BF41F
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 13:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14B6041506
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 13:01:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14B6041506
+ by smtp1.osuosl.org (Postfix) with ESMTP id D01F581D67
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 13:31:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D01F581D67
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id FYEv-cHiU1Q8 for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 13:01:29 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AC71F414FA
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 13:01:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC71F414FA
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id CB24613F8B5;
- Sun, 17 Sep 2023 15:01:26 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PIgKR7yhpwop for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 13:31:00 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFB6C81D5A
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 13:30:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFB6C81D5A
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DD2A38716F; Sun, 17 Sep 2023 13:30:59 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 15:01:22 +0200
-Message-ID: <20230917130122.576967-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694955688;
- bh=tkkOy7niXNdVSED61O4DR4Gb5cciZZUwp9sEhlTon6k=;
- h=From:To:Cc:Subject:Date:From;
- b=FSqYDCrJyU1esX+awxbG9wueNCB/jWXyMZ9F7Zjy8Fda3/xFnCPgNBUZ6gFIWbdOM
- tbASznLQGn5Ka8cLATajK2wdNUhs2K4+IwK3zDiXyEL/+M8WxnrCoQ03r2bTT3AVFt
- gxw5PHCO/xsZv5N6ok2tR3eZdygq8Hdv/kxwK+Y14etRrGwE3tzAQOvrppJ0uD5IJT
- sHLzPL9+0Wj4lZRJPLu8soMGXN9bTDhw+Cfqlj0egoQxQkatE9wOE91uswFlultSKE
- rN5MNcJLRW30WXTdfGEG3KKMYXmqnst4VFhNjq9IOv3MHPHfpgwKBLbg29Mdn6FXX0
- JwOwQW1zyrM4A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FSqYDCrJ
-Subject: [Buildroot] [PATCH 1/1] package/tcl: add mandatory dependency to
+Date: Sun, 17 Sep 2023 15:27:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 78959665b94b412d7a82ee43e3ede14278a5d924
+X-Git-Newrev: 7af8dee3a8a0559c2685237ec24f817f37669efc
+X-Patchwork-Hint: ignore
+Message-Id: <20230917133059.DD2A38716F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tcl: add mandatory dependency to
  zlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -71,11 +57,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7af8dee3a8a0559c2685237ec24f817f37669efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Tcl changed its zlib handling in upstream commit [1]. Before this
 commit, the HAVE_ZLIB macro was defined only if a zlib headers/library
@@ -87,13 +76,23 @@ a shipped version in [2]. See also [3] and [4].
 This tcl commit is included in Buildroot since commit 7fda943b43
 "tcl: bump to version 8.6.1".
 
+In Buildroot, we prefer to not use bundled libraries wherever possible,
+so add an unconditional dependency to zlib.
+
+Further notes:
+
 This behavior leads to runtime failures, when the package is compiled
 with toolchains including zlib in their sysroot. This is because at
 configuration time, the package will detect zlib in the sysroot and
 link against it, but the library files won't be installed on target.
 
-This happen to be the case with Bootlin toolchains such as [5]. This
-toolchain also happen to be the one used in basic configurations
+This happen to be the case with Bootlin toolchains such as [5], as they
+also contaions gdbserver, and since 3341ceb1e585 (package/gdb: zlib is
+mandatory, not optional), we also build zlib even if only gdbserver is
+built (gdbserver does not use zlib, so that's a bug in our gdb
+packaging).
+
+This toolchain also happen to be the one used in basic configurations
 of the runtime test infrastructure (this issue was found while
 attempting to write a runtime test for tcl).
 
@@ -109,8 +108,6 @@ libtcl library also miss its dependency.
 	    libc.so.6 => /lib/libc.so.6 (0xb6c65000)
 	    /lib/ld-linux.so.3 (0xb6f6c000)
 
-This commit fixes this issue by adding zlib as a mandatory dependency.
-
 [1] https://github.com/tcltk/tcl/commit/6f3dea45cee94f12ffa0b2acbbdb3eedbc01807b
 [2] https://github.com/tcltk/tcl/tree/core-8-6-13/compat/zlib
 [3] https://github.com/tcltk/tcl/blob/core-8-6-13/unix/configure.in#L172
@@ -118,19 +115,7 @@ This commit fixes this issue by adding zlib as a mandatory dependency.
 [5] https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/tarballs/armv5-eabi--glibc--stable-2023.08-1.tar.bz2
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested on branch master at commit 7691377 with commands:
-
-    make check-package
-    ...
-    0 warnings generated
-
-    utils/test-pkg -p tcl
-    ...
-    6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-Also runtime-tested manually with the case described in the
-commit log. I'll send an automated runtime test later...
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/tcl/Config.in | 1 +
  package/tcl/tcl.mk    | 3 ++-
@@ -162,9 +147,6 @@ index 843d58a4ae..1943bc7b27 100644
  
  $(eval $(autotools-package))
  $(eval $(host-autotools-package))
--- 
-2.41.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
