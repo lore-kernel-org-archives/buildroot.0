@@ -4,91 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A24DCCD13CF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAC9BCD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:23:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3107340488;
-	Sun, 17 Sep 2023 19:15:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3107340488
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B65E404A0;
+	Sun, 17 Sep 2023 19:23:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B65E404A0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BExGuLCV5vGj; Sun, 17 Sep 2023 19:15:18 +0000 (UTC)
+	with ESMTP id xMUCkMJu9JxJ; Sun, 17 Sep 2023 19:23:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DFD34053E;
-	Sun, 17 Sep 2023 19:15:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DFD34053E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C1D04042B;
+	Sun, 17 Sep 2023 19:23:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C1D04042B
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 54CFD1BF406
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:15:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E57B61BF406
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:22:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DCC6817A1
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:15:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DCC6817A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB8E281C6E
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:22:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB8E281C6E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id F9WSuoX0XywJ for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 19:15:08 +0000 (UTC)
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B280781765
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:15:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B280781765
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-500cfb168c6so6283462e87.2
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:15:07 -0700 (PDT)
+ with ESMTP id ghGkmbdQq3O9 for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 19:22:55 +0000 (UTC)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B85A81C46
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:22:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B85A81C46
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-3200bc30666so601917f8f.2
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:22:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694978105; x=1695582905;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=XgfXKODnO+MNsHKNssiFocBlLbekNwmQ/AKccZMiR38=;
- b=gWGj60616zh/VAKazh/zuqPozFze1OB2UU6wfWQ2NxoTHcnXSkNFdhp43DSgD8rTeD
- HjI+xM1LNBztn1HrTvpdZOmb0V0ZrcHhlErMffYxcgGWJWn4d7zMae4/tOYuJP5SjYxM
- 0F+BO/pz82gi4RwPhbg2yiPFLFg710UOxBhr+Iu3U69ctRQhFejlrHZFaY/Ro7uUtm2f
- 2rqdIE8MKIqNs/ASbchQ6Vi8zjqS/gYuHyCTrxwOgkTYKYiQhBwkI8c3uP3enK2E76d/
- Tw8lFlKMUExPsdR3TtIBlsU4tgSE7axjqjontteNvZYVq6BHIBUdWyWUjLc1Zy0qzUna
- dF7w==
-X-Gm-Message-State: AOJu0YzlBLcreGcvBML0u2ybWw7JVLFZK8nlFbelpn+qDzLytSYYHjXO
- uYtI2+WxZQsdBrHGZNT1gIKlrg==
-X-Google-Smtp-Source: AGHT+IH1q7nl6eNxICC5ZU33vjiyA5G9xJiw4UfDB1OjxPhd3SpK3wnlKYz4Cfah/XzrojRjpCmSiQ==
-X-Received: by 2002:a05:6512:33c8:b0:502:a942:d7a8 with SMTP id
- d8-20020a05651233c800b00502a942d7a8mr7463526lfg.69.1694978104933; 
- Sun, 17 Sep 2023 12:15:04 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- t16-20020aa7d4d0000000b0052574ef0da1sm4938160edr.28.2023.09.17.12.15.03
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 17 Sep 2023 12:15:03 -0700 (PDT)
-Message-ID: <85c64452-6420-35ee-f097-b5fa3f93fe4e@mind.be>
-Date: Sun, 17 Sep 2023 21:15:01 +0200
+ d=1e100.net; s=20230601; t=1694978573; x=1695583373;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=3N/G47zV8jCJgdtRxw7EEm8mhRtD0WkkQfg+8fjyx2k=;
+ b=DM6GIUE8pZf7ayJQBUN8YmK17+Y0NL4l+yQbkZVYt9+bWar/fYVDL5EO16NcFIltFE
+ cAGeDeNN6YS9aQHLL8us9z6j5g6Nva2yqR2PEpYl6GX/D7u21PEdw3aNt1GQpvL/yUsm
+ NfAIAp3ES66/k3nBIXxXfnXiGAWwU1GZ2WFXRE7ALG40asHvzjjW6hic7oQNEawAhXON
+ Pvf1svb/T1T+6ivFYvMizqVJMSNJCtTiXZ5wAdrXrmBfcitU386KwAHZorgFbEvC716Q
+ HZX03Rt2LdmxvvIfHatCX1mVLHLtR9GSUx3vIfCYd6FBX5ALAtv4x1nHIw/YdVUjzwH+
+ QkXg==
+X-Gm-Message-State: AOJu0Yyj8Yohasm9haj9M8+4rPDMR2cneFHZsT9zBzul6YtGlmtp/V1H
+ Rx4s8vAGetVbHhDFzCnalMsp8LBoUEc=
+X-Google-Smtp-Source: AGHT+IEfwewnZPoNuEvUxU9v2rQuEy6KJjWJbDl7umZih61irO6Pcf5G1l8WZKvfzF55D9Opatiqow==
+X-Received: by 2002:adf:dcc1:0:b0:31f:e86f:cc12 with SMTP id
+ x1-20020adfdcc1000000b0031fe86fcc12mr6148211wrm.41.1694978573057; 
+ Sun, 17 Sep 2023 12:22:53 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ w7-20020adfec47000000b0031fba0a746bsm3335887wrn.9.2023.09.17.12.22.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 17 Sep 2023 12:22:52 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 17 Sep 2023 21:22:43 +0200
+Message-Id: <20230917192243.753931-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-GB
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-References: <20230917163157.700211-1-fontaine.fabrice@gmail.com>
-In-Reply-To: <20230917163157.700211-1-fontaine.fabrice@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1694978105; x=1695582905; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=XgfXKODnO+MNsHKNssiFocBlLbekNwmQ/AKccZMiR38=;
- b=Q9mwpBs0+rgNtMugiaZP7nmydjUcLjFsr75n+LBMs/1Q/1/dvG0HbX1vFEh7mkVFY/
- MYdHTu/fmWgDqBITQHyL8JqeGK5Jr+eUY+NiaDsyBbt/GrM53VnULyjlKTTSQnqFubil
- sOnZDx7z8O9e5eytVTnaUFh01RS7qkRi2G2ctKMtuKYwd5nlMOpRsyQF+8hiBxhmIgDE
- mCURrrsW+qpJDRwY9OUGXjpzUe7bxCVAz+HlrKXFzAf6u37WOHh9CNpFe3CTYXTPiZBv
- Wm9hgOohcmQk0exxmpP7qjb40GtfvLZZysnyLMPMUysahvHsI/fdluMoKeIRuJuQgyES
- FjeA==
+ d=gmail.com; s=20230601; t=1694978573; x=1695583373; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=3N/G47zV8jCJgdtRxw7EEm8mhRtD0WkkQfg+8fjyx2k=;
+ b=lepOpYVPcd+jwbRDvzM3KceLxcgjaRV/ldGINyJfc7SCfVpZHtC5PbIFnHueDCKLRq
+ O/uT+jXwKXPGsmNBqigwIbUPg1SCGLzTZYJ3jF47aiWu+lco4hW7qXBIbmpIZ5H5Elh0
+ QEsnOkmWRAESQgBcHoUZ4UIh+VAwaDEr0SAj+gppMTl7vyZtyV5McqtwVPY5jmcqLKtO
+ yfxrakeBzuWmCGkquzbgdSqXkLWLcWmMOGV3HkuEbbjZyLTuteffZ0AFRNaeov8qn0TH
+ GOOEQ1TcZNbGVreNvL8rAaDYmfwdoPVIxTcISM8mpUkrUI9JUloVPNY/mkKs0FjHmI1I
+ 9QTQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Q9mwpBs0
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
- version 4.0.8
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=lepOpYVP
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: fix musl build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,66 +93,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fix the following musl build failure raised since bump to version
+2023.05 in commit b86542085df87da91057017b17f261a213bfd918 and
+https://github.com/sbabic/swupdate/commit/8228b1390632195158f4387d7aae659ebd6f1469:
 
+In file included from core/bootloader.c:9:
+include/util.h:210:23: error: unknown type name 'mode_t'
+  210 | int mkpath(char *dir, mode_t mode);
+      |                       ^~~~~~
 
-On 17/09/2023 18:31, Fabrice Fontaine wrote:
-> Fix CVE-2023-3648 and CVE-2023-3649
-> 
-> https://www.wireshark.org/security/wnpa-sec-2023-21
-> https://www.wireshark.org/security/wnpa-sec-2023-22
-> https://www.wireshark.org/security/wnpa-sec-2023-23
-> https://www.wireshark.org/security/wnpa-sec-2023-24
-> https://www.wireshark.org/security/wnpa-sec-2023-25
-> https://www.wireshark.org/security/wnpa-sec-2023-26
-> https://www.wireshark.org/docs/relnotes/wireshark-4.0.7.html
-> https://www.wireshark.org/docs/relnotes/wireshark-4.0.8.html
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/e545f294c7f032fd7434fdb91aa18a38b2e19038
 
-  Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-include-util-h-fix-build-on-musl.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/swupdate/0001-include-util-h-fix-build-on-musl.patch
 
-  Regards,
-  Arnout
+diff --git a/package/swupdate/0001-include-util-h-fix-build-on-musl.patch b/package/swupdate/0001-include-util-h-fix-build-on-musl.patch
+new file mode 100644
+index 0000000000..d1e0db6b56
+--- /dev/null
++++ b/package/swupdate/0001-include-util-h-fix-build-on-musl.patch
+@@ -0,0 +1,41 @@
++From 1999685830d6e9b57014666b9e53e46de17a471c Mon Sep 17 00:00:00 2001
++From: Dominique Martinet <dominique.martinet@atmark-techno.com>
++Date: Fri, 15 Sep 2023 18:14:57 +0900
++Subject: [PATCH] include/util.h: fix build on musl
++
++Building on musl 1.2.4 fails with the following error/warnings:
++
++include/util.h:211:23: error: unknown type name 'mode_t'
++  211 | int mkpath(char *dir, mode_t mode);
++include/util.h:269:36: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
++  269 | char *swupdate_time_iso8601(struct timeval *tv);
++
++These were caused by a recent reorganization of the headers and glibc
++appears more tolerant here.
++
++Fixes: 8228b1390632 ("Reorganize includes to have smaller files")
++Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
++Upstream: https://github.com/sbabic/swupdate/commit/1999685830d6e9b57014666b9e53e46de17a471c
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/util.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/include/util.h b/include/util.h
++index 2f5c7adc..5f4cdc01 100644
++--- a/include/util.h
+++++ b/include/util.h
++@@ -8,11 +8,13 @@
++ #ifndef _UTIL_H
++ #define _UTIL_H
++ 
+++#include <fcntl.h>
++ #include <stdint.h>
++ #include <stdlib.h>
++ #include <string.h>
++ #include <stdio.h>
++ #include <stdbool.h>
+++#include <sys/time.h>
++ #if defined(__linux__)
++ #include <linux/types.h>
++ #endif
+-- 
+2.40.1
 
-> ---
->   package/wireshark/wireshark.hash | 6 +++---
->   package/wireshark/wireshark.mk   | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-> index 6598f51f53..f044f99483 100644
-> --- a/package/wireshark/wireshark.hash
-> +++ b/package/wireshark/wireshark.hash
-> @@ -1,6 +1,6 @@
-> -# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.6.txt
-> -sha1  a60b6f8063df2a711932ba869ae86e6476087cf0  wireshark-4.0.6.tar.xz
-> -sha256  0079097a1b17ebc7250a73563f984c13327dac5016b7d53165810fbcca4bd884  wireshark-4.0.6.tar.xz
-> +# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.8.txt
-> +sha1  8ca1cc4471d0cb835cd5216833c393fa23bc154f  wireshark-4.0.8.tar.xz
-> +sha256  16663585c0ffefd5593a6628d4a20cc8241b9703b11283cfe71ead2b750888c8  wireshark-4.0.8.tar.xz
->   
->   # Locally calculated
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-> index 80a986cfa3..500bdbb77a 100644
-> --- a/package/wireshark/wireshark.mk
-> +++ b/package/wireshark/wireshark.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -WIRESHARK_VERSION = 4.0.6
-> +WIRESHARK_VERSION = 4.0.8
->   WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
->   WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
->   WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
