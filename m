@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FFD5CD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70183CD37B3
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:48:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D95C1610F9;
-	Sun, 17 Sep 2023 12:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D95C1610F9
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1460D61106;
+	Sun, 17 Sep 2023 12:48:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1460D61106
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Nsf27cuz67iz; Sun, 17 Sep 2023 12:47:47 +0000 (UTC)
+	with ESMTP id YQcg3SinIlh4; Sun, 17 Sep 2023 12:48:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 140CC610F6;
-	Sun, 17 Sep 2023 12:47:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 140CC610F6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA87C1BF473
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:47:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A995610F6;
+	Sun, 17 Sep 2023 12:48:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A995610F6
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EC561BF473
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:48:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 93C50610F6
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:47:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93C50610F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id E971640531
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:48:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E971640531
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id qgloUqx3AVnD for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 12:47:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id OOo7OSrT9w1L for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 12:48:17 +0000 (UTC)
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9DC1F610F4
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:47:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DC1F610F4
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DD56D40111
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:48:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD56D40111
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:6a7e:c3f3:1d37:8ba2])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E7BFCB0053E;
- Sun, 17 Sep 2023 14:47:39 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 361B7B0054E;
+ Sun, 17 Sep 2023 14:48:13 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Sep 2023 14:47:39 +0200
-Date: Sun, 17 Sep 2023 14:47:39 +0200
+ Sun, 17 Sep 2023 14:48:12 +0200
+Date: Sun, 17 Sep 2023 14:48:12 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230917124739.GT415981@scaer>
-References: <20230917112828.9695-1-fontaine.fabrice@gmail.com>
+Message-ID: <20230917124812.GU415981@scaer>
+References: <20230917115139.21621-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230917112828.9695-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20230917115139.21621-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694954862;
- bh=H6XFBQcSeUtvwayuyp5+BoJtFYsXMC+o3/6aj2RJ6yI=;
+ d=free.fr; s=smtp-20201208; t=1694954895;
+ bh=RwANr8AgxojXG/4ag6kPW8PFB1TrdJoaLY1wd3bf1fo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=a3pApwvi/nEUnH8X7IzmVyG8k4I5cByp8BHEx3wIw/etZ5qBhkZutBFDGG+1akBKt
- TLA0KaE/uZrxgF585+RJMcs8MUPmo1ky5DNwMODxr453jEfjOEXiGdnRnFBAwo/Tmn
- cPUPopzGLhxvVUVd7OHJGQdlxyqGwiWmfCTAiT3rPcE9/2z6yQHyLrdxcO7DX6aV6Q
- g25TjqVPxGNDkhbx/2uz+S/DYqDC6mqCH09Q9h+/b9pPZFGFxrWVoy34FVHq24rOOI
- Disr4CJ1aoikuVAC6k/MsCIxvwuz+SrxhSGwYgYio0KnqTfuOzSXJxyQocVpuM+n+J
- Ul3U0MJz40gQw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=im1ta1W8eTyzePvymLWPno1RGi8nibM8jqXrTx8MkpB8clNEI9wVxeYaz6Jc0ILzd
+ 9XTK3++ptv/wgiBFUhfWSzmYn+Wb6bEKNMqCTI+nOORTcIZYyLrEx1CkqK7z1gqmL+
+ nhBB/sDpFyWK2fnvLcoPcGiHVxIsOlDy51C8nlEvYM+Wphzb4NhhhR4FwXZMJkW7gp
+ UdrUV7GLm7OUG9A3EPbyCvsrh4kLwc6pj3pEpIY8Eu/L0n5kSj3PPwRS95bc6tW/9y
+ 5MvvYmqt2AmTFh/P7PSCF6kkaysSonsMQcDtEbXNl/VnAN5zOwX7+sAPTjoet+AfOE
+ Qz0Cj4HbKDqgA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=a3pApwvi
-Subject: Re: [Buildroot] [PATCH 1/1] package/libeaw: fix CVE-2023-1729
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=im1ta1W8
+Subject: Re: [Buildroot] [PATCH v2,1/1] package/libraw: fix CVE-2023-1729
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,18 +83,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2023-09-17 13:28 +0200, Fabrice Fontaine spake thusly:
+On 2023-09-17 13:51 +0200, Fabrice Fontaine spake thusly:
 > A flaw was found in LibRaw. A heap-buffer-overflow in raw2image_ex()
 > caused by a maliciously crafted file may lead to an application crash.
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Fix title typo
 
-Applied to master, thanks.
+*This one* is the patch I applied! ;-)
 
 Regards,
 Yann E. MORIN.
 
-> ---
 >  ...shrink-flag-for-3-4-component-images.patch | 24 +++++++++++++++++++
 >  package/libraw/libraw.mk                      |  3 +++
 >  2 files changed, 27 insertions(+)
