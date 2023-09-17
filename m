@@ -4,61 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33E0ECD37B3
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 10:41:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AD8DCD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 11:28:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9748F41720;
-	Sun, 17 Sep 2023 10:41:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9748F41720
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86AA340874;
+	Sun, 17 Sep 2023 11:28:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86AA340874
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mFbY4hy7IRx6; Sun, 17 Sep 2023 10:41:41 +0000 (UTC)
+	with ESMTP id FcaUoWi9gtFq; Sun, 17 Sep 2023 11:28:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 900C541745;
-	Sun, 17 Sep 2023 10:41:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 900C541745
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B11E40891;
+	Sun, 17 Sep 2023 11:28:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B11E40891
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7B4D41BF20B
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 10:41:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B10231BF38D
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 61EB360FAE
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 10:41:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61EB360FAE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A839610C2
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 11:28:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A839610C2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id vehUjtmzqaF7 for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 10:41:37 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1408160F83
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 10:41:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1408160F83
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:64fe:9015:874f:9d44])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id D7E7B13F8B9;
- Sun, 17 Sep 2023 12:41:30 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ with ESMTP id Nm4Zq2T4GDcX for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 11:28:40 +0000 (UTC)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6CB01610C1
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 11:28:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CB01610C1
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-31ad9155414so3347140f8f.3
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 04:28:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1694950118; x=1695554918;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=T+0YgBPvOyJIcM1aMQ4btrO01/yDto0obh6N+aejFKY=;
+ b=PvWdHFvCOZAWcdNpT+v7QFGjTPdkLk99SpeBpFsBw49pNdA0KCqFu00WRMyUzDhANn
+ B4T11wYfwShKnKxmCKWfbYUK2HT0KjfS89xYZmL0F6Qx4o+aoX6JR6CwLYOZyjFZ0s4g
+ la9mGTfoVY7qK+YX/7BfaIXeLk/y8dlrnrDcEFkNtk5HvQVCnH6Hs9Sl2pKDcpd5Roc8
+ aLsF7uOvSlqMmxuyGB2cp4soWhY2ggTqYtOX/MUqwocvdwWuWsURz8vDmIRAFbmnrGZP
+ IRNpMvainkUoPvN9QZVKNMe6y+PURvPa9MIW/7A1G12FokBMDcSkeJiqa+m41oKSTG6j
+ iAkg==
+X-Gm-Message-State: AOJu0YzTUkAVMBVvXYudTvUGUXjG3iO53JBZ1/rdhPIXhg/5xX1Yx+Ib
+ XdCCOeuOXJ/EmC4qjGDyt5STe1J5LJw=
+X-Google-Smtp-Source: AGHT+IFEAUO3iRYNP0WZH0ntr/H8AL2CW+Mt8Gv1SwYszAeVgjI/p5NaKBxV4h5/BEr46K86fBEySA==
+X-Received: by 2002:a05:6000:98d:b0:320:6db:3548 with SMTP id
+ by13-20020a056000098d00b0032006db3548mr2712637wrb.55.1694950117872; 
+ Sun, 17 Sep 2023 04:28:37 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ q2-20020adff782000000b00317f70240afsm9445429wrp.27.2023.09.17.04.28.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 17 Sep 2023 04:28:37 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 12:41:24 +0200
-Message-ID: <20230917104124.192919-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.41.0
+Date: Sun, 17 Sep 2023 13:28:28 +0200
+Message-Id: <20230917112828.9695-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694947293;
- bh=/3Z/VeqoaAsj+xH2cFQNxzFuIOuq1DR+l45CzOrNZPE=;
- h=From:To:Cc:Subject:Date:From;
- b=YfLWWQMyiz6WtMAFliq2b27SoQZMwVdhh/FCm75oSEDJMO2HeBhAUJNWv3kXpaPvW
- vuNgnsMmbi/voUjg7olBZnR0ZAzu0lPztUCEyg2CKVNtPOze8Kfp04QNJKh/F4hkUy
- nF345clXSfabG9n4/04OlyrAGOXEsL14nf3/H5VBAvPq+AnVhBxVuE9++clFuSwkvD
- r3VjX4/37m2WGE8Fj7dNUgRHI8ih+RQrOW2BMfhmDrbI9XdZJcifgCZfszKwWb3d5m
- vkMKmcWgwiARIDoNzFMRhggI9+qhUUAldzfOAj+SbDPoohAziP99Txu2HXiN3jijKu
- xUjMEFGxIUImw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1694950118; x=1695554918; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=T+0YgBPvOyJIcM1aMQ4btrO01/yDto0obh6N+aejFKY=;
+ b=LlngzH+/n+4WxcV2wj7N9q700SbeN0QjItefWQZLNEk0WOIb+54UGpXrHOPKO7kIIz
+ ze54kvPkFGONnykFD8yhsp1m16fi/TLmm/f8KKP09XK9othg+TrkQkPS9PrhnxomNeee
+ wd7jwFmCKNyfCsfSQrqBA4QyNHdjLVCIwMWh0DmXmEKrgVJHq6nb4mG651tw3N45JbXr
+ +yrd+/qq/+T/mH6k+1TYm8F4/Fdy+6PXtapjqLtFwvlg/lJPcsx8HGUbmyjmg+Nge+fU
+ vSO6SHg9rZ5EVErzvYJ8wlbAcna8NDKyvZE+Vnhfw3PuzZ/NMWunolQbyzO8bzwcW03K
+ HxQA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YfLWWQMy
-Subject: [Buildroot] [PATCH 1/1] package/tcllib: bump to version 1.21
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=LlngzH+/
+Subject: [Buildroot] [PATCH 1/1] package/libeaw: fix CVE-2023-1729
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,62 +93,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Davide Viti <zinosat@gmail.com>, Julien Olivain <ju.o@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://core.tcl-lang.org/tcllib/doc/tcllib-1-21/support/releases/history/README-1.21.txt
+A flaw was found in LibRaw. A heap-buffer-overflow in raw2image_ex()
+caused by a maliciously crafted file may lead to an application crash.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Patch tested on branch master at commit 9584c80 with commands:
+ ...shrink-flag-for-3-4-component-images.patch | 24 +++++++++++++++++++
+ package/libraw/libraw.mk                      |  3 +++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
 
-    make check-package
-    ...
-    0 warnings generated
-
-    cat > tcllib.config <<EOF
-    BR2_PACKAGE_TCL=y
-    BR2_PACKAGE_TCLLIB=y
-    EOF
-    utils/test-pkg -c tcllib.config -p tcllib
-    ...
-    6 builds, 2 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
----
- package/tcllib/tcllib.hash | 4 ++--
- package/tcllib/tcllib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/tcllib/tcllib.hash b/package/tcllib/tcllib.hash
-index fb80841998..fe0ece238e 100644
---- a/package/tcllib/tcllib.hash
-+++ b/package/tcllib/tcllib.hash
-@@ -1,5 +1,5 @@
--# From https://core.tcl-lang.org/tcllib/uv/tcllib-1.20.SHA256
--sha256  199e8ec7ee26220e8463bc84dd55c44965fc8ef4d4ac6e4684b2b1c03b1bd5b9  tcllib-1.20.tar.xz
-+# From https://core.tcl-lang.org/tcllib/uv/tcllib-1.21.SHA256
-+sha256  10c7749e30fdd6092251930e8a1aa289b193a3b7f1abf17fee1d4fa89814762f  tcllib-1.21.tar.xz
+diff --git a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch b/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+new file mode 100644
+index 0000000000..ef93e0901b
+--- /dev/null
++++ b/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+@@ -0,0 +1,24 @@
++From 477e0719ffc07190c89b4f3d12d51b1292e75828 Mon Sep 17 00:00:00 2001
++From: Alex Tutubalin <lexa@lexa.ru>
++Date: Sat, 14 Jan 2023 18:32:59 +0300
++Subject: [PATCH] do not set shrink flag for 3/4 component images
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/LibRaw/LibRaw/commit/477e0719ffc07190c89b4f3d12d51b1292e75828
++---
++ src/preprocessing/raw2image.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/preprocessing/raw2image.cpp b/src/preprocessing/raw2image.cpp
++index e65e2ad7..702cf290 100644
++--- a/src/preprocessing/raw2image.cpp
+++++ b/src/preprocessing/raw2image.cpp
++@@ -43,6 +43,8 @@ void LibRaw::raw2image_start()
++ 
++   // adjust for half mode!
++   IO.shrink =
+++	  !imgdata.rawdata.color4_image && !imgdata.rawdata.color3_image &&
+++	  !imgdata.rawdata.float4_image && !imgdata.rawdata.float3_image &&
++       P1.filters &&
++       (O.half_size || ((O.threshold || O.aber[0] != 1 || O.aber[2] != 1)));
++ 
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index b6616f0c10..cbd509cfea 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -18,6 +18,9 @@ LIBRAW_DEPENDENCIES = host-pkgconf
+ LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
+ LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
  
- # Locally computed:
- sha256  38e1f556213f4008cfd280457af57c76a1fe043dc026ece1c704c09b5f6e865c  license.terms
-diff --git a/package/tcllib/tcllib.mk b/package/tcllib/tcllib.mk
-index 0f60eb8aca..1f2b575b29 100644
---- a/package/tcllib/tcllib.mk
-+++ b/package/tcllib/tcllib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCLLIB_VERSION = 1.20
-+TCLLIB_VERSION = 1.21
- TCLLIB_SOURCE = tcllib-$(TCLLIB_VERSION).tar.xz
- TCLLIB_SITE = http://downloads.sourceforge.net/project/tcllib/tcllib/$(TCLLIB_VERSION)
- TCLLIB_LICENSE = TCL
++# 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
++LIBRAW_IGNORE_CVES += 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
++
+ ifeq ($(BR2_PACKAGE_JASPER),y)
+ LIBRAW_CONF_OPTS += --enable-jasper
+ LIBRAW_DEPENDENCIES += jasper
 -- 
-2.41.0
+2.40.1
 
 _______________________________________________
 buildroot mailing list
