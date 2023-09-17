@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B459CD37B3
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:38:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CF3ECD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B506610F0;
-	Sun, 17 Sep 2023 12:38:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B506610F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C844610F8;
+	Sun, 17 Sep 2023 12:38:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C844610F8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XEoDyGROs9A0; Sun, 17 Sep 2023 12:37:59 +0000 (UTC)
+	with ESMTP id Ulb4lCbOdmDQ; Sun, 17 Sep 2023 12:38:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F076E610EE;
-	Sun, 17 Sep 2023 12:37:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F076E610EE
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9E0981BF473
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7916E610F0;
+	Sun, 17 Sep 2023 12:38:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7916E610F0
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A03991BF870
  for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77D62610F0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A13F81EB3
  for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:37:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77D62610F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A13F81EB3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 2jAhxMNIvbkO for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Wx5OGspLy4WG for <buildroot@lists.busybox.net>;
  Sun, 17 Sep 2023 12:37:55 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B35D1610EF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9C7D781E78
  for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:37:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B35D1610EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C7D781E78
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D37387140; Sun, 17 Sep 2023 12:37:55 +0000 (UTC)
+ id 8B89C8713D; Sun, 17 Sep 2023 12:37:55 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 14:35:26 +0200
+Date: Sun, 17 Sep 2023 14:35:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 094c76a2bcd301e4aa1e27c9694314079440ce5b
-X-Git-Newrev: 7691377873f26d2e8e7c3bcd2f1dcb0ea0712ce7
+X-Git-Oldrev: 4e365d1768b9f1b47634ea4ff46481df32299054
+X-Git-Newrev: 7a52ee04a5b10477eff6167ea2746529df9f0b69
 X-Patchwork-Hint: ignore
-Message-Id: <20230917123755.9D37387140@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/crun: needs MMU
+Message-Id: <20230917123755.8B89C8713D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tk: bump to version 8.6.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,42 +62,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7691377873f26d2e8e7c3bcd2f1dcb0ea0712ce7
+commit: https://git.buildroot.net/buildroot/commit/?id=7a52ee04a5b10477eff6167ea2746529df9f0b69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure with uclibc but without MMU raised since
-commit 223596c75d73a7eb29152235d3c5d9bf53bd58f5:
+For release note, see:
+https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcltk-release-notes-8.6.13.txt
 
-/home/autobuild/autobuild/instance-6/output-1/host/riscv64-buildroot-linux-uclibc/bin/ld.real: ./.libs/libcrun.a(libcrun_la-container.o): in function `.L0 ':
-container.c:(.text+0x4e7c): undefined reference to `fork'
-
-Fixes:
- - http://autobuild.buildroot.org/results/f19482753e9262ec806cf550619170467a144daf
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/crun/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/tk/tk.hash | 2 +-
+ package/tk/tk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/crun/Config.in b/package/crun/Config.in
-index 1b69034459..f6a1ec7c66 100644
---- a/package/crun/Config.in
-+++ b/package/crun/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CRUN
- 	bool "crun"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
- 	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_YAJL # libocispec
-@@ -9,5 +10,6 @@ config BR2_PACKAGE_CRUN
- 	  https://github.com/containers/crun
+diff --git a/package/tk/tk.hash b/package/tk/tk.hash
+index acf5e45157..968b351b41 100644
+--- a/package/tk/tk.hash
++++ b/package/tk/tk.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  12395c1f3fcb6bed2938689f797ea3cdf41ed5cb6c4766eec8ac949560310630  tk8.6.12-src.tar.gz
++sha256  2e65fa069a23365440a3c56c556b8673b5e32a283800d8d9b257e3f584ce0675  tk8.6.13-src.tar.gz
+ sha256  2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198  license.terms
+diff --git a/package/tk/tk.mk b/package/tk/tk.mk
+index 830b241f74..dfa7a7c694 100644
+--- a/package/tk/tk.mk
++++ b/package/tk/tk.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- comment "crun needs a glibc or musl toolchain, gcc >= 4.9"
-+	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ TK_VERSION_MAJOR = 8.6
+-TK_VERSION = $(TK_VERSION_MAJOR).12
++TK_VERSION = $(TK_VERSION_MAJOR).13
+ TK_SOURCE = tk$(TK_VERSION)-src.tar.gz
+ TK_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TK_VERSION)
+ TK_LICENSE = TCL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
