@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47834CD37B3
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F86CCD37B3
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:39:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E49ED610F0;
-	Sun, 17 Sep 2023 12:38:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E49ED610F0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B2EF61100;
+	Sun, 17 Sep 2023 12:39:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B2EF61100
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lmcqCkjxp4cE; Sun, 17 Sep 2023 12:38:48 +0000 (UTC)
+	with ESMTP id B5aAFVA5P0Qg; Sun, 17 Sep 2023 12:39:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EAB761114;
-	Sun, 17 Sep 2023 12:38:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EAB761114
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A2651BF473
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:38:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3ACAD610F3;
+	Sun, 17 Sep 2023 12:39:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ACAD610F3
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C04941BF870
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3325E610EE
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:38:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3325E610EE
+ by smtp1.osuosl.org (Postfix) with ESMTP id A660281E78
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A660281E78
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ntJJhWi319rC for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 12:38:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jTbaLMwAyWse for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 12:39:04 +0000 (UTC)
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 99925610FD
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:38:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99925610FD
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 689F081E30
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:39:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 689F081E30
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:6a7e:c3f3:1d37:8ba2])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7D2B3B0056A;
- Sun, 17 Sep 2023 14:38:06 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 95208B00563;
+ Sun, 17 Sep 2023 14:38:59 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Sep 2023 14:38:06 +0200
-Date: Sun, 17 Sep 2023 14:38:06 +0200
+ Sun, 17 Sep 2023 14:38:59 +0200
+Date: Sun, 17 Sep 2023 14:38:59 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230917123806.GN415981@scaer>
-References: <20230916212717.1181744-1-fontaine.fabrice@gmail.com>
+Message-ID: <20230917123859.GO415981@scaer>
+References: <20230916211714.1175631-1-fontaine.fabrice@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230916212717.1181744-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20230916211714.1175631-1-fontaine.fabrice@gmail.com>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694954289;
- bh=pWxMvC6eW4dxRhgq4/71Hn7jHZ2c8oT3VG1Pz1N5Ya0=;
+ d=free.fr; s=smtp-20201208; t=1694954342;
+ bh=3bQghgeoGtw5+rx+gOdqwzeR8s/JQHGGWZh3cUvhwtM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=XINoKomiQrT9w6sgW/TqJ7jTJygFZy3nymry478QNM6PF/VHA9OY3j/ocCTlcT34h
- TSWatEgmPVcVLvXc1datbhQe175VH1vUAmNV7AmcdCNHV7LK9z2qkuTkwO1ExcwSLU
- t5XEfUNpJNze4wINNS5yzmDMHjTKqax5hVsVFbkNUoJPspxSovZqrKYqzG/T7PReXu
- 0fV1D8Z/mMZIi+6lDEtBIrvafCaF5E0coAuzPCnhgN7Nda9HlEoz1ppkMiXp8qMSeF
- OnKTwwxLAdAX5P+vIgKmNf+SSpKgWTxhrVf62pBTWb7pzf4gq9hOyhqpcXkDdnEBqf
- KPZfM6PnfAJJg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=rPBu5dl0Et0f5/9FP+TcSqArPF+fMk7GQTtD24SejL++JTnZhuNSG/Lk23wPRJMAi
+ gPJk9DtklhM8W2Ejh1fFUjWvsh8DqOTgsL30O68J0WXAtKQDepWWMCl0DIJhf71SaC
+ c26oV/MszTQSorrgOXGFrAKLAHNOSVtAKY61LAjT5k/OPofj7R/Lq2Gsv+er+sYRo6
+ igmIT31U20X+MU538Ey5RmFcQw6GqkMmAJfT5snjtZcXcSIkwNFQpjdJaFMfXhA2bq
+ CTWouA4HevA9hVfPW/oFD2K8h+ofXi8+Yt9OvTRx76f5AZbX21AM7VlM17iSSL8+aI
+ mdiF6sYJkQLfw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XINoKomi
-Subject: Re: [Buildroot] [PATCH 1/1] package/crun: needs MMU
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rPBu5dl0
+Subject: Re: [Buildroot] [PATCH 1/1] package/fstrcmp: fix musl static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,7 +75,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -83,45 +83,51 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fabrice, All,
 
-On 2023-09-16 23:27 +0200, Fabrice Fontaine spake thusly:
-> Fix the following build failure with uclibc but without MMU raised since
-> commit 223596c75d73a7eb29152235d3c5d9bf53bd58f5:
+On 2023-09-16 23:17 +0200, Fabrice Fontaine spake thusly:
+> Fix the following musl static build failure raised because host libtool
+> is not patched to manage "-static" as "-all-static".
 > 
-> /home/autobuild/autobuild/instance-6/output-1/host/riscv64-buildroot-linux-uclibc/bin/ld.real: ./.libs/libcrun.a(libcrun_la-container.o): in function `.L0 ':
-> container.c:(.text+0x4e7c): undefined reference to `fork'
+> /home/buildroot/autobuild/instance-2/output-1/host/bin/libtool --mode=link --tag=CC /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -Wall -Wextra -Wshadow -o bin/test_user \
+> 	test_user/main.lo lib/libfstrcmp.la -static
+> chmod a+rx bin/test_prelude
+> libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/test_user test_user/main.o  lib/.libs/libfstrcmp.a
+> libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/fstrcmp fstrcmp/main.o  lib/.libs/libfstrcmp.a
+> /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
+> /home/buildroot/autobuild/instance-2/output-1/build/host-gcc-final-10.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/f19482753e9262ec806cf550619170467a144daf
+>  - http://autobuild.buildroot.org/results/ffbee12f13e3d6c180d8891a428c6c490163083d
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/fstrcmp/fstrcmp.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/fstrcmp/fstrcmp.mk b/package/fstrcmp/fstrcmp.mk
+> index 9c42159afb..cafb451833 100644
+> --- a/package/fstrcmp/fstrcmp.mk
+> +++ b/package/fstrcmp/fstrcmp.mk
+> @@ -15,6 +15,11 @@ FSTRCMP_CONF_ENV = LIBTOOL="$(HOST_DIR)/bin/libtool"
+>  
+>  FSTRCMP_MAKE_OPTS = all-bin libdir/pkgconfig/fstrcmp.pc
+>  
+> +# host-libtool is not patched to make -static behave like -all-static
+
+I was a bit confused about the mention of host-libtool here. So I
+slightly reworded the comment to refer to ltmain.sh instead.
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/crun/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/crun/Config.in b/package/crun/Config.in
-> index 1b69034459..f6a1ec7c66 100644
-> --- a/package/crun/Config.in
-> +++ b/package/crun/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_CRUN
->  	bool "crun"
-> +	depends on BR2_USE_MMU # fork()
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
->  	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
->  	select BR2_PACKAGE_YAJL # libocispec
-> @@ -9,5 +10,6 @@ config BR2_PACKAGE_CRUN
->  	  https://github.com/containers/crun
->  
->  comment "crun needs a glibc or musl toolchain, gcc >= 4.9"
-> +	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +FSTRCMP_MAKE_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -all-static"
+> +endif
+> +
+>  # We need to install the package files ourselves due to upstream trying
+>  # to install a .lai file which is missing because of rpath removal
+>  define FSTRCMP_INSTALL_STAGING_CMDS
 > -- 
 > 2.40.1
 > 
