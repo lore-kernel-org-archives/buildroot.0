@@ -4,91 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C09C7CD13CF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:40:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09EA1CD13CF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:41:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74CC94053E;
-	Sun, 17 Sep 2023 19:40:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74CC94053E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9FE3240547;
+	Sun, 17 Sep 2023 19:41:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FE3240547
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id O3szLas0dtI0; Sun, 17 Sep 2023 19:40:11 +0000 (UTC)
+	with ESMTP id esrHKmetEeko; Sun, 17 Sep 2023 19:41:35 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 127B74056A;
-	Sun, 17 Sep 2023 19:40:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 127B74056A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 222081BF2C6
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:40:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84B0E4056A;
+	Sun, 17 Sep 2023 19:41:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84B0E4056A
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AAF801BF2C6
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:41:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EAC9560B48
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:40:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAC9560B48
+ by smtp4.osuosl.org (Postfix) with ESMTP id 829AD405DE
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:41:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 829AD405DE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 1vCnEKOckK7A for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 19:40:03 +0000 (UTC)
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
- [IPv6:2a00:1450:4864:20::532])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 138B860B19
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:40:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 138B860B19
-Received: by mail-ed1-x532.google.com with SMTP id
- 4fb4d7f45d1cf-52889bc61b6so4610891a12.0
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:40:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694979601; x=1695584401;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=VCySkO93LAFr1rad/JRKK1+AwtEKGtItormaSvAckbY=;
- b=UNkdakNnyUHJ59FtmrP9hS8yLwvJbTgepndxOnYs+n3qs3Z4wed64DFODumBp0cO+7
- VYjK6InmW30fsrd3OLhnL4m/Vnm004As4peQ5PwoFcxD+iUVyTN3l8kT8qlaXb+LbatM
- dWFP+4+k1dei/63K/MVFkHE/jGV3VZxEWt+KkjNfSDAEG6MJgwptfzB7WEcn2Wp/Yk4B
- 4S4KJFz2fVRgsjuGUAJILDpTM30euacbPqUxgNfU3Xte9OvqGR8ZJd65ae3X/vI7PDy9
- 6fbB2+LU8M9Q/Ov9q7iAJyCEOAdG1REPR1f1NB8MxMRi61mOziCsuD9bw871ye5pQ4R6
- 5Xwg==
-X-Gm-Message-State: AOJu0YzLn5stdd5Ch7tmFkuPjpnVcfloPHS2Oo/Y9wm5uPjgQfwnbF6t
- NYelwGg6sQ7EfTuGNyJFtvURvp+J5qAaXfAbZE8=
-X-Google-Smtp-Source: AGHT+IEezWDUrfiOpwpKiY5icPFhrZ7n1NYC7QQ3n1iK9DqQUiX4m7Vtrf2+lMOrK9LbrpfAaXP5Rw==
-X-Received: by 2002:a17:906:53da:b0:9a9:e659:a8aa with SMTP id
- p26-20020a17090653da00b009a9e659a8aamr6204197ejo.57.1694979601082; 
- Sun, 17 Sep 2023 12:40:01 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- g24-20020a170906199800b0099364d9f0e9sm5369588ejd.102.2023.09.17.12.39.59
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 17 Sep 2023 12:40:00 -0700 (PDT)
-Message-ID: <7d17acdf-5f84-ddba-40ee-1b5afcc209b6@mind.be>
-Date: Sun, 17 Sep 2023 21:39:58 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ypWorN_rRk0f for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 19:41:31 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AD60F405B7
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:41:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD60F405B7
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:6c46:319:6f5d:1ada])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 569A06012D;
+ Sun, 17 Sep 2023 21:41:23 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 17 Sep 2023 21:41:23 +0200
+Date: Sun, 17 Sep 2023 21:41:23 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <20230917194123.GA2573@scaer>
+References: <20230917152303.1300577-1-yann.morin.1998@free.fr>
+ <23f8c528-9158-07ae-615e-e2ca44c842e8@mind.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-GB
-To: Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
-References: <20230915215211.214167-1-christian@aperture.us>
-In-Reply-To: <20230915215211.214167-1-christian@aperture.us>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1694979601; x=1695584401; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=VCySkO93LAFr1rad/JRKK1+AwtEKGtItormaSvAckbY=;
- b=DrsX/fNgToSzos3b5Rz1oEH8S+sye7HrYMHQASqUNTkB5Hbse+zhlp/MhJgP+4AWGE
- lA89guBFj75B+yl7j94s8Wo9R8ww050u8bnpR91D05hkmtq97TMooze9cN483W6s8yz2
- rGrrxXSxCu/wi8oQgWrBs2u3JBDweWrzuMIq6P5k+t9/HbhAZpYbN2gVKsc+WHLFfl/Z
- p7YDRfKQ82l6wxyaF9ditrE/fm7TwsOPu6A9LRWCjyaMN87fhNPMtOEblepkPgsQk83F
- qUiOki3jwBdhWcZccrJdZbLYKxfx2jcRgbMrGK9bJCx7irZ/fR8vcWSK6gH/ajvn/OY+
- BJWA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DrsX/fNg
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/containerd: bump to version
- 1.7.6
+Content-Disposition: inline
+In-Reply-To: <23f8c528-9158-07ae-615e-e2ca44c842e8@mind.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1694979688;
+ bh=tThTmCpJokIiTjBP8dqCyniQHkD3kO8bFvlaxI1UgKs=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=JQ0n3PZC/3I1p83UK5dBgFwZ25ZHM9v/sSCuzCfbuJxdgKWXNRqlSIS9wh8gFrmtt
+ 3JoEn8nqlJuveOiHbRzsT2uVzD0jXaeDZt1f05tW3nN0gfXzFzFD9p18vsqgib4ltC
+ 6JBWHqEOR1m5/XyzrlbnUWkrxmJvC7n6ReY+cP8YkZ6iCXAjUzutof/Rn6jjLb0xeM
+ jRmEwsDPn2KPhrUEq8zPRFe8has6bh/1jicUrrPpEghbzqKm5ibuZGi95/rh3XFn9n
+ gd96pMM9SgbOhk3Y0YUUUHjhZw/4FYBsvhNP6FQCcEtmPBAiOC4OgcpqrHB93wReKF
+ WLOOeJTqbjbxQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JQ0n3PZC
+Subject: Re: [Buildroot] [PATCH] package/gdb: gdbserver does not need zlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,59 +76,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Tian Yuanhao <tianyuanhao3@163.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Stefan Agner <stefan@agner.ch>, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Arnout, All,
 
+On 2023-09-17 21:32 +0200, Arnout Vandecappelle via buildroot spake thusly:
+> On 17/09/2023 17:23, Yann E. MORIN wrote:
+[--SNIP--]
+> >As Julien noticed, for example, tcl will try and link with zlib if
+> >available, and at build time it is. But at runtime, it is not, and thus
+> >tclsh fails to run; see 7af8dee3a8a0 (package/tcl: add mandatory
+> >dependency to zlib)
+>  So this commit should be reverted now?
 
-On 15/09/2023 23:52, Christian Stewart via buildroot wrote:
-> Bugfixes and updates.
+No, because tcl unconditionally uses zlib: either a bundled version, or
+the system one. 7af8dee3a8a0 ensured the system one is available and
+used.
+
+> >So, when we onlyt build gdbserver, we tell configure to not use a system
+> >zlib, which triggers a build of the bundled one, which we do not use...
+>  I didn't think this paragraph was very clear, so I reformulated it a
+> little, and applied to master, thanks.
+
+Better, indeed, thanks!
+
+Regards,
+Yann E. MORIN.
+
+>  Regards,
+>  Arnout
 > 
-> Containerd v1.7.x comes with new features including container sandboxing.
-> 
-> https://github.com/containerd/containerd/releases/tag/v1.7.6
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+> >
+> >Reported-by: Julien Olivain <ju.o@free.fr>
+> >Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> >Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> >Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >---
+> >  package/gdb/Config.in |  2 +-
+> >  package/gdb/gdb.mk    | 14 ++++++++++----
+> >  2 files changed, 11 insertions(+), 5 deletions(-)
+> >
+> >diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+> >index 20fd262c93..e4ab39a2bd 100644
+> >--- a/package/gdb/Config.in
+> >+++ b/package/gdb/Config.in
+> >@@ -24,7 +24,6 @@ config BR2_PACKAGE_GDB
+> >  	# The or1k musl port is incomplete, elf_gregset_t definition is missing:
+> >  	# https://git.musl-libc.org/cgit/musl/tree/arch/or1k/bits/user.h?h=v1.2.3
+> >  	depends on !BR2_or1k || !BR2_TOOLCHAIN_USES_MUSL
+> >-	select BR2_PACKAGE_ZLIB
+> >  	# When the external toolchain gdbserver is copied to the
+> >  	# target, we don't allow building a separate gdbserver. The
+> >  	# one from the external toolchain should be used.
+> >@@ -61,6 +60,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
+> >  	depends on !BR2_sh
+> >  	select BR2_PACKAGE_GMP if !BR2_arc
+> >  	select BR2_PACKAGE_NCURSES
+> >+	select BR2_PACKAGE_ZLIB
+> >  comment "full gdb on target needs a toolchain w/ wchar"
+> >  	depends on !BR2_sh
+> >diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> >index 0d41548ed0..070598b385 100644
+> >--- a/package/gdb/gdb.mk
+> >+++ b/package/gdb/gdb.mk
+> >@@ -32,7 +32,6 @@ GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
+> >  # also need ncurses.
+> >  # As for libiberty, gdb may use a system-installed one if present, so
+> >  # we must ensure ours is installed first.
+> >-GDB_DEPENDENCIES = zlib
+> >  HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses host-zlib
+> >  # Disable building documentation
+> >@@ -131,22 +130,29 @@ GDB_CONF_OPTS = \
+> >  	--disable-sim \
+> >  	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
+> >  	--without-included-gettext \
+> >-	--with-system-zlib \
+> >  	--disable-werror \
+> >  	--enable-static \
+> >  	--without-mpfr \
+> >  	--disable-source-highlight
+> >  ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
+> >+GDB_DEPENDENCIES += zlib
+> >  GDB_CONF_OPTS += \
+> >  	--enable-gdb \
+> >-	--with-curses
+> >+	--with-curses \
+> >+	--with-system-zlib
+> >  GDB_DEPENDENCIES += ncurses \
+> >  	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+> >  else
+> >+# When only building gdbserver, we don't need zlib. But we have no way to
+> >+# tell the top-level configure that we don't need zlib: it either wants to
+> >+# build the bundled one, or use the system one.
+> >+# Since we're going to only install the gdbserver to the target, we don't
+> >+# care that the bundled zlib is built, as it is not used.
+> >  GDB_CONF_OPTS += \
+> >  	--disable-gdb \
+> >-	--without-curses
+> >+	--without-curses \
+> >+	--without-system-zlib
+> >  endif
+> >  # Starting from GDB 11.x, gmp is needed as a dependency to build full
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/containerd/containerd.hash | 2 +-
->   package/containerd/containerd.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-> index 8404675e30..d5e0ef4517 100644
-> --- a/package/containerd/containerd.hash
-> +++ b/package/containerd/containerd.hash
-> @@ -1,3 +1,3 @@
->   # Computed locally
-> -sha256  b109aceacc814d7a637ed94ba5ade829cd2642841d03e06971ef124fa3b86899  containerd-1.6.22.tar.gz
-> +sha256  084a62f78f96cb5fda02221425f14df09d3e0acd093e4d4b3527900e3ff94677  containerd-1.7.6.tar.gz
->   sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-> diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-> index c4a6d854c3..0591400709 100644
-> --- a/package/containerd/containerd.mk
-> +++ b/package/containerd/containerd.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -CONTAINERD_VERSION = 1.6.22
-> +CONTAINERD_VERSION = 1.7.6
->   CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
->   CONTAINERD_LICENSE = Apache-2.0
->   CONTAINERD_LICENSE_FILES = LICENSE
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
