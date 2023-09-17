@@ -1,95 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 484A5CD13CF
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:01:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E65CCCD13CF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 021A960E8D;
-	Sun, 17 Sep 2023 19:01:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 021A960E8D
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D79C4042B;
+	Sun, 17 Sep 2023 19:15:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D79C4042B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yt3CDv3gcj0u; Sun, 17 Sep 2023 19:01:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id V4j4Cw12OG7d; Sun, 17 Sep 2023 19:15:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3F7E60AAD;
-	Sun, 17 Sep 2023 19:01:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3F7E60AAD
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B989A1BF3D1
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:01:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E3009404A0;
+	Sun, 17 Sep 2023 19:15:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3009404A0
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E35B1BF406
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:15:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DD86410DC
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:01:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DD86410DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74C53404A0
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:15:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74C53404A0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id TvF_mYcaAtMX for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 19:01:47 +0000 (UTC)
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 59755410D5
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:01:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59755410D5
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-50300e9e75bso2000406e87.1
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:01:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694977305; x=1695582105;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=fXqrL9AbhCdJxylmB76ExbtgvZUXbXqKCr8slLpuoKE=;
- b=jnUThwY03sA+oLtQHcbr1gSHFc0io0T8iDAG8/x8jUGPQXWjhSZPQwrgG/ZSI5z+cM
- nnMtp+kk7afUiC+HGOx9R/K/Ftd0Hkz2iGR2FYA+UdqiCxFPN1QZ80OWVE2i4kHPqHU3
- +uiIS7eaVIYlHEr0EzQtnzoTq0Y1MQwyiT5jnuQXueS8vTcjrizZJUQp2hLW6UMpOBNm
- N7N4fZvL3584XKkz+UX4/Jc0N/UU2BCGfeqgo/QVeltWQeloWwedaBPfD2g+smSty5Lt
- 5ApgGclpHRQ8O/2hJUHHDiIz2NvGhBpBgZCSnV50WV36ku2QBPvq2N+Br3vSGIZwbrG0
- q5aQ==
-X-Gm-Message-State: AOJu0YxJsVxFQHQBaxCy8uradnpIp949BNtZgnsZirMIHDpbEiFEL41e
- lpIvDqYdxOC3sNKyzcYBEoMX1A==
-X-Google-Smtp-Source: AGHT+IH3muiValhmjpoopntXu+rFJv6F1PEXblL2I7DXMteXzwImFX5BV5hg9ZV8kCEmN6et3HoGVA==
-X-Received: by 2002:a05:6512:2fc:b0:4f8:77db:1d9e with SMTP id
- m28-20020a05651202fc00b004f877db1d9emr5416953lfq.12.1694977304889; 
- Sun, 17 Sep 2023 12:01:44 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- r18-20020a056402019200b00527e7087d5dsm4962547edv.15.2023.09.17.12.01.42
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 17 Sep 2023 12:01:43 -0700 (PDT)
-Message-ID: <65559c37-a6d0-9018-0518-53b5a40883b9@mind.be>
-Date: Sun, 17 Sep 2023 21:01:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-GB
-To: Reza Arbab <arbab@linux.ibm.com>, buildroot@buildroot.org
-References: <20230915155835.51140-1-arbab@linux.ibm.com>
- <20230915155835.51140-6-arbab@linux.ibm.com>
-In-Reply-To: <20230915155835.51140-6-arbab@linux.ibm.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1694977305; x=1695582105; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=fXqrL9AbhCdJxylmB76ExbtgvZUXbXqKCr8slLpuoKE=;
- b=InFw55/a8dmW9yFVJIq5260fgalMPYr+41Oo04fkCcCJ5eujfaHa0TIIDWJg8OC9ay
- eU0oU7qYq0xwJqGJmLv1mVOu1zHxqr2GVZVa1CMIuTRXIwOTMbuTIhT+7iQUfpeGz3nF
- mpLqYzycCFUCtTmczKBnXZw/pIVtg5uhn01gfBXv2Z543vdfDCgBqbYTT7IFJI5b5Kpu
- /6Mn63gWdcxasM12LAoweMnxo5cro2IebJ+kReanGjsfmo76AalRnA3FGk+ebZDs4yOM
- /+dqkJB9I8au5ncaEsjuUN+yAxfahK9D+tmEoFCTzvecZAXUc5oXa1FJkvoVPCDEA6Ie
- dZBA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=InFw55/a
-Subject: Re: [Buildroot] [PATCH v2 5/5] package/petitboot: enable discovery
- of SCSI devices
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 4-VMRMTHt1Oz for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 19:15:01 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 17C754042B
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:15:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 17C754042B
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0475587188; Sun, 17 Sep 2023 19:15:01 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 17 Sep 2023 21:08:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ab91ddd8a8ebdc10fa26a6d9541cf5e50e297973
+X-Git-Newrev: de0f8c66adae6f60914bf2144e9b88eeee21718e
+X-Patchwork-Hint: ignore
+Message-Id: <20230917191501.0475587188@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireshark: security bump to
+ version 4.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,56 +58,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Laurent Vivier <laurent@vivier.eu>, Joel Stanley <joel@jms.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=de0f8c66adae6f60914bf2144e9b88eeee21718e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix CVE-2023-3648 and CVE-2023-3649
 
-On 15/09/2023 17:58, Reza Arbab wrote:
-> It's likely that the "sg" kernel driver needed to scan SCSI devices is a
-> module. Install a udev rule to load it automatically when devices are
-> present.
+https://www.wireshark.org/security/wnpa-sec-2023-21
+https://www.wireshark.org/security/wnpa-sec-2023-22
+https://www.wireshark.org/security/wnpa-sec-2023-23
+https://www.wireshark.org/security/wnpa-sec-2023-24
+https://www.wireshark.org/security/wnpa-sec-2023-25
+https://www.wireshark.org/security/wnpa-sec-2023-26
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.7.html
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.8.html
 
-  This is completely independent of petitboot. If the system is likely to have 
-SCSI devices and scsi generic is built as a module, it's up to the user to make 
-sure that module is loaded.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-  Regards,
-  Arnout
-
-> 
-> Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
-> Reviewed-by: Laurent Vivier <laurent@vivier.eu>
-> ---
->   package/petitboot/66-add-sg-module.rules | 2 ++
->   package/petitboot/petitboot.mk           | 2 ++
->   2 files changed, 4 insertions(+)
->   create mode 100644 package/petitboot/66-add-sg-module.rules
-> 
-> diff --git a/package/petitboot/66-add-sg-module.rules b/package/petitboot/66-add-sg-module.rules
-> new file mode 100644
-> index 000000000000..ae18d28c570e
-> --- /dev/null
-> +++ b/package/petitboot/66-add-sg-module.rules
-> @@ -0,0 +1,2 @@
-> +# load modules to scsi disks, if they aren't in kernel
-> +SUBSYSTEM=="scsi", ENV{DEVTYPE}=="scsi_device", TEST!="[module/sg]", RUN+="/sbin/modprobe sg"
-> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-> index 596e801b781c..590b58e9c71a 100644
-> --- a/package/petitboot/petitboot.mk
-> +++ b/package/petitboot/petitboot.mk
-> @@ -63,6 +63,8 @@ define PETITBOOT_POST_INSTALL
->   		$(TARGET_DIR)/etc/petitboot/boot.d/01-create-default-dtb
->   	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/90-sort-dtb \
->   		$(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
-> +	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/66-add-sg-module.rules \
-> +		$(TARGET_DIR)/etc/udev/rules.d/66-add-sg-module.rules
->   	$(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
->   		$(TARGET_DIR)/etc/init.d/S15pb-discover
->   	$(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 6598f51f53..f044f99483 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.6.txt
+-sha1  a60b6f8063df2a711932ba869ae86e6476087cf0  wireshark-4.0.6.tar.xz
+-sha256  0079097a1b17ebc7250a73563f984c13327dac5016b7d53165810fbcca4bd884  wireshark-4.0.6.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.8.txt
++sha1  8ca1cc4471d0cb835cd5216833c393fa23bc154f  wireshark-4.0.8.tar.xz
++sha256  16663585c0ffefd5593a6628d4a20cc8241b9703b11283cfe71ead2b750888c8  wireshark-4.0.8.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 80a986cfa3..500bdbb77a 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 4.0.6
++WIRESHARK_VERSION = 4.0.8
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
