@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F86CCD37B3
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:39:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DD10CD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 12:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B2EF61100;
-	Sun, 17 Sep 2023 12:39:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B2EF61100
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25CEC610FD;
+	Sun, 17 Sep 2023 12:39:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25CEC610FD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id B5aAFVA5P0Qg; Sun, 17 Sep 2023 12:39:08 +0000 (UTC)
+	with ESMTP id QnhaERXLsyQB; Sun, 17 Sep 2023 12:39:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3ACAD610F3;
-	Sun, 17 Sep 2023 12:39:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ACAD610F3
+	by smtp3.osuosl.org (Postfix) with ESMTP id 664B0610F6;
+	Sun, 17 Sep 2023 12:39:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 664B0610F6
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C04941BF870
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:39:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2C8D81BF473
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A660281E78
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:39:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A660281E78
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0607381E78
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 12:39:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0607381E78
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jTbaLMwAyWse for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 12:39:04 +0000 (UTC)
+ with ESMTP id sMnszM5U7OMz for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 12:39:25 +0000 (UTC)
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 689F081E30
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:39:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 689F081E30
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0484081E30
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:39:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0484081E30
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:6a7e:c3f3:1d37:8ba2])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 95208B00563;
- Sun, 17 Sep 2023 14:38:59 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 400C9B0056A;
+ Sun, 17 Sep 2023 14:39:21 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 17 Sep 2023 14:38:59 +0200
-Date: Sun, 17 Sep 2023 14:38:59 +0200
+ Sun, 17 Sep 2023 14:39:20 +0200
+Date: Sun, 17 Sep 2023 14:39:20 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230917123859.GO415981@scaer>
-References: <20230916211714.1175631-1-fontaine.fabrice@gmail.com>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20230917123920.GP415981@scaer>
+References: <20230916174838.3537042-1-ju.o@free.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230916211714.1175631-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20230916174838.3537042-1-ju.o@free.fr>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1694954342;
- bh=3bQghgeoGtw5+rx+gOdqwzeR8s/JQHGGWZh3cUvhwtM=;
+ d=free.fr; s=smtp-20201208; t=1694954363;
+ bh=Qv5jKPtdkhZkR/rfhLEYFTjIm0luLR97vpZexwAp6gk=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=rPBu5dl0Et0f5/9FP+TcSqArPF+fMk7GQTtD24SejL++JTnZhuNSG/Lk23wPRJMAi
- gPJk9DtklhM8W2Ejh1fFUjWvsh8DqOTgsL30O68J0WXAtKQDepWWMCl0DIJhf71SaC
- c26oV/MszTQSorrgOXGFrAKLAHNOSVtAKY61LAjT5k/OPofj7R/Lq2Gsv+er+sYRo6
- igmIT31U20X+MU538Ey5RmFcQw6GqkMmAJfT5snjtZcXcSIkwNFQpjdJaFMfXhA2bq
- CTWouA4HevA9hVfPW/oFD2K8h+ofXi8+Yt9OvTRx76f5AZbX21AM7VlM17iSSL8+aI
- mdiF6sYJkQLfw==
+ b=QzLyJ1dJ8nf/a9O5CS1JmHPxi2jzs4fXJj5o7g4j4Jl9Ay26R8qBJ8pPnf6yjP0eH
+ 5S2HJJwhY+3ZuYZVTioMbWLec64JXUAWrZWWLrJi4m8EGUwzpKGFAnDr5r0flsZOUr
+ 59I4ET08LazZqCOJw2UxBOWIKjuEH0k5GzhcXYemgEnm8It6fqYmcPgRg+pWh24B94
+ SjS8lw63WYv7OPSTX34+NwaxUlw7DW6hbWK+N6HgHRbEHzyZyHRxtFffXF2TBpsMdz
+ jI5jusdnQl+Lz7tX+JpPTogWeH5ViCG7xzGjQwdqmdHUU7vM2HttZhoHaYZLENlW9n
+ V48aV6aSAPh2A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=rPBu5dl0
-Subject: Re: [Buildroot] [PATCH 1/1] package/fstrcmp: fix musl static build
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=QzLyJ1dJ
+Subject: Re: [Buildroot] [PATCH 1/1] package/tcl: bump to version 8.6.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,61 +75,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fabrice, All,
+Julien, All,
 
-On 2023-09-16 23:17 +0200, Fabrice Fontaine spake thusly:
-> Fix the following musl static build failure raised because host libtool
-> is not patched to manage "-static" as "-all-static".
+On 2023-09-16 19:48 +0200, Julien Olivain spake thusly:
+> For release note, see:
+> https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcltk-release-notes-8.6.13.txt
 > 
-> /home/buildroot/autobuild/instance-2/output-1/host/bin/libtool --mode=link --tag=CC /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -Wall -Wextra -Wshadow -o bin/test_user \
-> 	test_user/main.lo lib/libfstrcmp.la -static
-> chmod a+rx bin/test_prelude
-> libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/test_user test_user/main.o  lib/.libs/libfstrcmp.a
-> libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/fstrcmp fstrcmp/main.o  lib/.libs/libfstrcmp.a
-> /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
-> /home/buildroot/autobuild/instance-2/output-1/build/host-gcc-final-10.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ffbee12f13e3d6c180d8891a428c6c490163083d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/fstrcmp/fstrcmp.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/fstrcmp/fstrcmp.mk b/package/fstrcmp/fstrcmp.mk
-> index 9c42159afb..cafb451833 100644
-> --- a/package/fstrcmp/fstrcmp.mk
-> +++ b/package/fstrcmp/fstrcmp.mk
-> @@ -15,6 +15,11 @@ FSTRCMP_CONF_ENV = LIBTOOL="$(HOST_DIR)/bin/libtool"
->  
->  FSTRCMP_MAKE_OPTS = all-bin libdir/pkgconfig/fstrcmp.pc
->  
-> +# host-libtool is not patched to make -static behave like -all-static
-
-I was a bit confused about the mention of host-libtool here. So I
-slightly reworded the comment to refer to ltmain.sh instead.
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +FSTRCMP_MAKE_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -all-static"
-> +endif
-> +
->  # We need to install the package files ourselves due to upstream trying
->  # to install a .lai file which is missing because of rpath removal
->  define FSTRCMP_INSTALL_STAGING_CMDS
+> ---
+> Patch tested on branch master at commit 9584c80 with commands:
+> 
+>     make check-package
+>     ...
+>     0 warnings generated
+> 
+>     utils/test-pkg -a -p tcl
+>     ...
+>     45 builds, 4 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+> ---
+>  package/tcl/tcl.hash | 2 +-
+>  package/tcl/tcl.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
+> index 2b82a1938b..109ea3d79c 100644
+> --- a/package/tcl/tcl.hash
+> +++ b/package/tcl/tcl.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  26c995dd0f167e48b11961d891ee555f680c175f7173ff8cb829f4ebcde4c1a6  tcl8.6.12-src.tar.gz
+> +sha256  43a1fae7412f61ff11de2cfd05d28cfc3a73762f354a417c62370a54e2caf066  tcl8.6.13-src.tar.gz
+>  sha256  c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
+> diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+> index 97754b63d0..843d58a4ae 100644
+> --- a/package/tcl/tcl.mk
+> +++ b/package/tcl/tcl.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  TCL_VERSION_MAJOR = 8.6
+> -TCL_VERSION = $(TCL_VERSION_MAJOR).12
+> +TCL_VERSION = $(TCL_VERSION_MAJOR).13
+>  TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
+>  TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
+>  TCL_LICENSE = TCL
 > -- 
-> 2.40.1
+> 2.41.0
 > 
 > _______________________________________________
 > buildroot mailing list
