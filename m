@@ -1,51 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E286DCD37B3
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 06:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29AEFCD37B4
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 08:19:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99AAA41461;
-	Sun, 17 Sep 2023 06:51:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99AAA41461
+	by smtp3.osuosl.org (Postfix) with ESMTP id 957BA60AC1;
+	Sun, 17 Sep 2023 08:19:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 957BA60AC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id p7eRKhYYsBo8; Sun, 17 Sep 2023 06:51:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Kaq10noooJnY; Sun, 17 Sep 2023 08:19:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8278541462;
-	Sun, 17 Sep 2023 06:51:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8278541462
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 20F601BF424
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 06:50:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE7A561084;
+	Sun, 17 Sep 2023 08:19:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE7A561084
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 34AC01BF3E5
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 08:19:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6649F416DD
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 06:50:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6649F416DD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1ABFD81D4F
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 08:19:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ABFD81D4F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id q_1mSFGf4uWi for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 06:50:39 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA958415FA
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 06:50:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA958415FA
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B89B0870EB; Sun, 17 Sep 2023 06:50:39 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 08:29:52 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 15639f42994d98ba2811f26e973680a92550e749
-X-Git-Newrev: a256ff6080d4a93e33417ca4913e30be566fb8f5
-X-Patchwork-Hint: ignore
-Message-Id: <20230917065039.B89B0870EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/gcc: fix missing
- .note.GNU-stack section
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9buxC16piHIX for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 08:19:03 +0000 (UTC)
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E6F0081D3A
+ for <buildroot@busybox.net>; Sun, 17 Sep 2023 08:19:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6F0081D3A
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:6a7e:c3f3:1d37:8ba2])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0AD96B0053D;
+ Sun, 17 Sep 2023 10:18:57 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 17 Sep 2023 10:18:56 +0200
+Date: Sun, 17 Sep 2023 10:18:56 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230917081856.GI415981@scaer>
+References: <20230916154351.2747233-1-francois.perrad@gadz.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230916154351.2747233-1-francois.perrad@gadz.org>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1694938739;
+ bh=oW0FY8immby3e/CDDtj4tOmim0jag9hKmRlmkPQ1qHQ=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=koFxFaTISBz553bvpnzlB5Lo1ppp6F50pQDp/LpABHRvfXO+0RCohJvT9mxpKsT+Y
+ 2mOtXCgJ4Qvdgev+Myt1XXeAvK++nO9CPd3ZxYVP/F6U2GRT/+JhlVqVUcjvPDaY2e
+ m3GgUAA9wTg+rH5W5DYkeCxzOFDXTiXOnGj5FVRIqUshbXdKkHCGl6HZV0oB21EKZD
+ rj37OY1Eu/utbY1fS+pqQCuDhPvMU7LJrvUe7GSCSgAb0EPEPV7QEPYyk1kPrbq8SN
+ SI94C8cG7GC21nZzCGrGiKYdnH41dHq/FjjwrpLdyTYfLjRXIIruiU6mKivomT3RaU
+ LRha24umI4/Gg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=koFxFaTI
+Subject: Re: [Buildroot] [PATCH 01/16] package/perl-class-method-modifiers:
+ bump to version 2.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,261 +76,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@busybox.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a256ff6080d4a93e33417ca4913e30be566fb8f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
-
-Shellinabox configure fails to detect ptsname_r, because of the following warning
-binutils 2.39+ emits:
-ld: warning: crtend.o: missing .note.GNU-stack section implies executable stack
-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-
-Then the build errors out with:
-shellinabox/launcher.c:772:12: error: static declaration of 'ptsname_r' follows non-static declaration
-
-The same issue exist for cairo 1.16.0 and the detection of pthreads.
-
-Fixes:
- - http://autobuild.buildroot.net/results/3e4/3e478d22e820703ddfd11d1491e631ef8ed6b29b
- - http://autobuild.buildroot.net/results/f60/f602ea17d5938a5beb81d07e13de75ba41d5f6a1
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ab4f3fafaa839593b3efd9ea12c8ee5d9340cdeb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ensa-add-.note.GNU-stack-section-on-linux.patch | 105 +++++++++++++++++++++
- ...ensa-add-.note.GNU-stack-section-on-linux.patch | 105 +++++++++++++++++++++
- 2 files changed, 210 insertions(+)
-
-diff --git a/package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch b/package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch
-new file mode 100644
-index 0000000000..967bbaf3fe
---- /dev/null
-+++ b/package/gcc/11.4.0/0007-xtensa-add-.note.GNU-stack-section-on-linux.patch
-@@ -0,0 +1,105 @@
-+From 4958020ecc85a30c52544deaf3c017cea82a0fb0 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 2 Mar 2023 09:45:41 -0800
-+Subject: [PATCH] xtensa: add .note.GNU-stack section on linux
-+
-+gcc/
-+	* config/xtensa/linux.h (TARGET_ASM_FILE_END): New macro.
-+
-+libgcc/
-+	* config/xtensa/crti.S: Add .note.GNU-stack section on linux.
-+	* config/xtensa/crtn.S: Likewise.
-+	* config/xtensa/lib1funcs.S: Likewise.
-+	* config/xtensa/lib2funcs.S: Likewise.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=6360bf9a2d08f08c151464c77c0da53cd702ff25
-+---
-+ gcc/config/xtensa/linux.h        | 1 +
-+ libgcc/config/xtensa/crti.S      | 6 ++++++
-+ libgcc/config/xtensa/crtn.S      | 6 ++++++
-+ libgcc/config/xtensa/lib1funcs.S | 6 ++++++
-+ libgcc/config/xtensa/lib2funcs.S | 6 ++++++
-+ 5 files changed, 25 insertions(+)
-+
-+diff --git a/gcc/config/xtensa/linux.h b/gcc/config/xtensa/linux.h
-+index 468a48489e7..a69e38c58ee 100644
-+--- a/gcc/config/xtensa/linux.h
-++++ b/gcc/config/xtensa/linux.h
-+@@ -69,3 +69,4 @@ along with GCC; see the file COPYING3.  If not see
-+ 
-+ #undef DBX_REGISTER_NUMBER
-+ 
-++#define TARGET_ASM_FILE_END file_end_indicate_exec_stack
-+diff --git a/libgcc/config/xtensa/crti.S b/libgcc/config/xtensa/crti.S
-+index 87a66e32e4a..40dd8c0dbc2 100644
-+--- a/libgcc/config/xtensa/crti.S
-++++ b/libgcc/config/xtensa/crti.S
-+@@ -26,6 +26,12 @@
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ 	.section .init
-+ 	.globl _init
-+ 	.type _init,@function
-+diff --git a/libgcc/config/xtensa/crtn.S b/libgcc/config/xtensa/crtn.S
-+index 8d2c2b1f22b..9d29f8fce1a 100644
-+--- a/libgcc/config/xtensa/crtn.S
-++++ b/libgcc/config/xtensa/crtn.S
-+@@ -27,6 +27,12 @@
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ 	.section .init
-+ #if XCHAL_HAVE_WINDOWED && !__XTENSA_CALL0_ABI__
-+ 	retw
-+diff --git a/libgcc/config/xtensa/lib1funcs.S b/libgcc/config/xtensa/lib1funcs.S
-+index a482a6eefc8..5245d7ad8ad 100644
-+--- a/libgcc/config/xtensa/lib1funcs.S
-++++ b/libgcc/config/xtensa/lib1funcs.S
-+@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ /* Define macros for the ABS and ADDX* instructions to handle cases
-+    where they are not included in the Xtensa processor configuration.  */
-+ 
-+diff --git a/libgcc/config/xtensa/lib2funcs.S b/libgcc/config/xtensa/lib2funcs.S
-+index 36938c84924..a574a45fa68 100644
-+--- a/libgcc/config/xtensa/lib2funcs.S
-++++ b/libgcc/config/xtensa/lib2funcs.S
-+@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ /* __xtensa_libgcc_window_spill: This function flushes out all but the
-+    current register window.  This is used to set up the stack so that
-+    arbitrary frames can be accessed.  */
-+-- 
-+2.39.2
-+
-diff --git a/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch b/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-new file mode 100644
-index 0000000000..4c79c3448f
---- /dev/null
-+++ b/package/gcc/12.3.0/0003-xtensa-add-.note.GNU-stack-section-on-linux.patch
-@@ -0,0 +1,105 @@
-+From 38cdfcc4b2cca8d251ff8d8d34201dfe9849333e Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 2 Mar 2023 09:45:41 -0800
-+Subject: [PATCH] xtensa: add .note.GNU-stack section on linux
-+
-+gcc/
-+	* config/xtensa/linux.h (TARGET_ASM_FILE_END): New macro.
-+
-+libgcc/
-+	* config/xtensa/crti.S: Add .note.GNU-stack section on linux.
-+	* config/xtensa/crtn.S: Likewise.
-+	* config/xtensa/lib1funcs.S: Likewise.
-+	* config/xtensa/lib2funcs.S: Likewise.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=6360bf9a2d08f08c151464c77c0da53cd702ff25
-+---
-+ gcc/config/xtensa/linux.h        | 1 +
-+ libgcc/config/xtensa/crti.S      | 6 ++++++
-+ libgcc/config/xtensa/crtn.S      | 6 ++++++
-+ libgcc/config/xtensa/lib1funcs.S | 6 ++++++
-+ libgcc/config/xtensa/lib2funcs.S | 6 ++++++
-+ 5 files changed, 25 insertions(+)
-+
-+diff --git a/gcc/config/xtensa/linux.h b/gcc/config/xtensa/linux.h
-+index edce618fb94..fe0e3a43797 100644
-+--- a/gcc/config/xtensa/linux.h
-++++ b/gcc/config/xtensa/linux.h
-+@@ -69,3 +69,4 @@ along with GCC; see the file COPYING3.  If not see
-+ 
-+ #undef DBX_REGISTER_NUMBER
-+ 
-++#define TARGET_ASM_FILE_END file_end_indicate_exec_stack
-+diff --git a/libgcc/config/xtensa/crti.S b/libgcc/config/xtensa/crti.S
-+index 3de7bc101f4..0996e7cb29b 100644
-+--- a/libgcc/config/xtensa/crti.S
-++++ b/libgcc/config/xtensa/crti.S
-+@@ -26,6 +26,12 @@
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ 	.section .init
-+ 	.globl _init
-+ 	.type _init,@function
-+diff --git a/libgcc/config/xtensa/crtn.S b/libgcc/config/xtensa/crtn.S
-+index 06b932edb14..a4cc9830096 100644
-+--- a/libgcc/config/xtensa/crtn.S
-++++ b/libgcc/config/xtensa/crtn.S
-+@@ -27,6 +27,12 @@
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ 	.section .init
-+ #if XCHAL_HAVE_WINDOWED && !__XTENSA_CALL0_ABI__
-+ 	retw
-+diff --git a/libgcc/config/xtensa/lib1funcs.S b/libgcc/config/xtensa/lib1funcs.S
-+index 5a2bd20534f..7177dd4f73a 100644
-+--- a/libgcc/config/xtensa/lib1funcs.S
-++++ b/libgcc/config/xtensa/lib1funcs.S
-+@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ /* Define macros for the ABS and ADDX* instructions to handle cases
-+    where they are not included in the Xtensa processor configuration.  */
-+ 
-+diff --git a/libgcc/config/xtensa/lib2funcs.S b/libgcc/config/xtensa/lib2funcs.S
-+index 681bac1be8c..a40c1a45604 100644
-+--- a/libgcc/config/xtensa/lib2funcs.S
-++++ b/libgcc/config/xtensa/lib2funcs.S
-+@@ -25,6 +25,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-+ 
-+ #include "xtensa-config.h"
-+ 
-++/* An executable stack is *not* required for these functions.  */
-++#if defined(__ELF__) && defined(__linux__)
-++.section .note.GNU-stack,"",%progbits
-++.previous
-++#endif
-++
-+ /* __xtensa_libgcc_window_spill: This function flushes out all but the
-+    current register window.  This is used to set up the stack so that
-+    arbitrary frames can be accessed.  */
-+-- 
-+2.39.2
-+
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJhbsOnb2lzLCBBbGwsCgpPbiAyMDIzLTA5LTE2IDE3OjQzICswMjAwLCBGcmFuY29pcyBQZXJy
+YWQgc3Bha2UgdGh1c2x5Ogo+IExJQ0VOU0U6IHJlbW92ZSB0cmFpbGluZyBzcGFjZXMKPiBzZWUg
+aHR0cHM6Ly9tZXRhY3Bhbi5vcmcvcmVsZWFzZS9FVEhFUi9DbGFzcy1NZXRob2QtTW9kaWZpZXJz
+LTIuMTMvZGlmZi9FVEhFUi9DbGFzcy1NZXRob2QtTW9kaWZpZXJzLTIuMTUjTElDRU5TRQoKVGhp
+cyBkaWZmIHNob3dzICphZGRlZCogdHJhaWxpbmcgc3BhY2VzLCB3aGljaCBnb2VzIGFnYWluc3Qg
+d2hhdCB5b3UKc2FpZCB0aGUgbGluZSBhYm92ZS4gU28gSSBoYWQgdG8gZGlnIGEgYml0IGFuZCBz
+cGVuZCBhIGJpdCBvZiB0aW1lIHRvCnVuZGVyc3RhbmQgd2hhdCB3YXMgZ29pbmcgb24uLi4KClRo
+YXQncyBiZWNhdXNlIHRoZSBkaWZmIGlzIGJhY2thd2FyZHM6IGl0IGNvbXBhcmVzIDIuMTMgYWdh
+aW5zdCAyLjE1LAp3aGlsZSB3ZSB3YW50IHRvIGNvbXBhcmUgMi4xNSBhZ2Fpc250IDIuMTMuCgpB
+bmQgdGhlcmUgd2FzIGFsc28gYSB0eXBvIGZpeGVkIGluIHRoZSBsaWNlbnNpbmcgdGVybXM6CiAg
+ICBzL01FUkNIQU5USUJJTElUWS9NRVJDSEFOVEFCSUxJVFkvCgpTbyBJIGZpeGVkIHRob3NlIHR3
+byB3aGVuIGFwcGx5aW5nLgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClJlZ2FyZHMsCllh
+bm4gRS4gTU9SSU4uCgo+IFNpZ25lZC1vZmYtYnk6IEZyYW5jb2lzIFBlcnJhZCA8ZnJhbmNvaXMu
+cGVycmFkQGdhZHoub3JnPgo+IC0tLQo+ICAuLi4vcGVybC1jbGFzcy1tZXRob2QtbW9kaWZpZXJz
+Lmhhc2ggICAgICAgICAgICAgICAgICAgICAgfCA4ICsrKystLS0tCj4gIC4uLi9wZXJsLWNsYXNz
+LW1ldGhvZC1tb2RpZmllcnMubWsgICAgICAgICAgICAgICAgICAgICAgICB8IDIgKy0KPiAgMiBm
+aWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAt
+LWdpdCBhL3BhY2thZ2UvcGVybC1jbGFzcy1tZXRob2QtbW9kaWZpZXJzL3BlcmwtY2xhc3MtbWV0
+aG9kLW1vZGlmaWVycy5oYXNoIGIvcGFja2FnZS9wZXJsLWNsYXNzLW1ldGhvZC1tb2RpZmllcnMv
+cGVybC1jbGFzcy1tZXRob2QtbW9kaWZpZXJzLmhhc2gKPiBpbmRleCBlZTBmNWVjMzIuLmUzZTg4
+MTQwYiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3BlcmwtY2xhc3MtbWV0aG9kLW1vZGlmaWVycy9w
+ZXJsLWNsYXNzLW1ldGhvZC1tb2RpZmllcnMuaGFzaAo+ICsrKyBiL3BhY2thZ2UvcGVybC1jbGFz
+cy1tZXRob2QtbW9kaWZpZXJzL3BlcmwtY2xhc3MtbWV0aG9kLW1vZGlmaWVycy5oYXNoCj4gQEAg
+LTEsNiArMSw2IEBACj4gLSMgcmV0cmlldmVkIGJ5IHNjYW5jcGFuIGZyb20gaHR0cDovL2NwYW4u
+bWV0YWNwYW4ub3JnLwo+IC1tZDUgIGIxMzk4ZTM2ODJhYTJlMDc1YjkxM2I5ZjkwMDBiNTk2ICBD
+bGFzcy1NZXRob2QtTW9kaWZpZXJzLTIuMTMudGFyLmd6Cj4gLXNoYTI1NiAgYWI1ODA3ZjcxMDE4
+YTg0MmRlNmI3YTQ4MjZkNmMxZjI0YjhkNWIwOWZjY2U1MDA1YTMzMDljZjZlYTQwZmQ2MyAgQ2xh
+c3MtTWV0aG9kLU1vZGlmaWVycy0yLjEzLnRhci5nego+ICsjIHJldHJpZXZlZCBieSBzY2FuY3Bh
+biBmcm9tIGh0dHBzOi8vY3Bhbi5tZXRhY3Bhbi5vcmcvCj4gK21kNSAgMWFlYTg5ZDBmMjNjMzUz
+NzU4MGNhZTU0OWI1YzU4NjQgIENsYXNzLU1ldGhvZC1Nb2RpZmllcnMtMi4xNS50YXIuZ3oKPiAr
+c2hhMjU2ICA2NWNkODViZmU0NzVkMDY2ZTkxODZmN2E4Y2M2MzYwNzA5ODViMzBiMGViYjFjZGU4
+NjgxY2YwNjJjMmUxNWZjICBDbGFzcy1NZXRob2QtTW9kaWZpZXJzLTIuMTUudGFyLmd6Cj4gIAo+
+ICAjIGNvbXB1dGVkIGJ5IHNjYW5jcGFuCj4gLXNoYTI1NiAgZDE3ZTVjYmE4ZDQwMzlmNjk3M2Q1
+ODczZjczYjBjODk0OWMxY2ZmYjMzOGZhZmU3YTU3ZTk3Mjc2NzU0NjU2MSAgTElDRU5TRQo+ICtz
+aGEyNTYgIDNhNGQxNWQ3OGRhYTdmYmI4YjlmOTBkYTFiOGNiNjBhNmNkNTI3NWM2YTVmZGIwZmNh
+NWRiMmU3NGI1MjJkZWUgIExJQ0VOU0UKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9wZXJsLWNsYXNz
+LW1ldGhvZC1tb2RpZmllcnMvcGVybC1jbGFzcy1tZXRob2QtbW9kaWZpZXJzLm1rIGIvcGFja2Fn
+ZS9wZXJsLWNsYXNzLW1ldGhvZC1tb2RpZmllcnMvcGVybC1jbGFzcy1tZXRob2QtbW9kaWZpZXJz
+Lm1rCj4gaW5kZXggZWY2ODhhY2Y3Li5kNGE3ZjExYjggMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9w
+ZXJsLWNsYXNzLW1ldGhvZC1tb2RpZmllcnMvcGVybC1jbGFzcy1tZXRob2QtbW9kaWZpZXJzLm1r
+Cj4gKysrIGIvcGFja2FnZS9wZXJsLWNsYXNzLW1ldGhvZC1tb2RpZmllcnMvcGVybC1jbGFzcy1t
+ZXRob2QtbW9kaWZpZXJzLm1rCj4gQEAgLTQsNyArNCw3IEBACj4gICMKPiAgIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMKPiAgCj4gLVBFUkxfQ0xBU1NfTUVUSE9EX01PRElGSUVSU19WRVJTSU9OID0g
+Mi4xMwo+ICtQRVJMX0NMQVNTX01FVEhPRF9NT0RJRklFUlNfVkVSU0lPTiA9IDIuMTUKPiAgUEVS
+TF9DTEFTU19NRVRIT0RfTU9ESUZJRVJTX1NPVVJDRSA9IENsYXNzLU1ldGhvZC1Nb2RpZmllcnMt
+JChQRVJMX0NMQVNTX01FVEhPRF9NT0RJRklFUlNfVkVSU0lPTikudGFyLmd6Cj4gIFBFUkxfQ0xB
+U1NfTUVUSE9EX01PRElGSUVSU19TSVRFID0gJChCUjJfQ1BBTl9NSVJST1IpL2F1dGhvcnMvaWQv
+RS9FVC9FVEhFUgo+ICBQRVJMX0NMQVNTX01FVEhPRF9NT0RJRklFUlNfTElDRU5TRSA9IEFydGlz
+dGljIG9yIEdQTC0xLjArCj4gLS0gCj4gMi4zOS4yCj4gCj4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVp
+bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QKCi0tIAouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0t
+LS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZYW5u
+IEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8IC8iXCBBU0NJSSBSSUJCT04gfCBFcmlj
+cycgY29uc3BpcmFjeTogfAp8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3YXJlICBEZXNpZ25lciB8
+IFwgLyBDQU1QQUlHTiAgICAgfCAgX19fICAgICAgICAgICAgICAgfAp8ICszMyA1NjEgMDk5IDQy
+NyBgLS0tLS0tLS0tLS0tLi0tLS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBp
+cyBubyAgfAp8IGh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1M
+IE1BSUwgICAgfCAgIHYgICBjb25zcGlyYWN5LiAgfAonLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tXi0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLS0tJwpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
