@@ -4,84 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EAF2CD37B4
-	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E90E0CD13CF
+	for <buildroot@archiver.kernel.org>; Sun, 17 Sep 2023 19:50:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2806440124;
-	Sun, 17 Sep 2023 19:48:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2806440124
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8460A40124;
+	Sun, 17 Sep 2023 19:50:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8460A40124
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6DwHQc8HP5ut; Sun, 17 Sep 2023 19:48:31 +0000 (UTC)
+	with ESMTP id 0PADf0VDkZq9; Sun, 17 Sep 2023 19:50:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C99354053E;
-	Sun, 17 Sep 2023 19:48:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C99354053E
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5F3B81BF2C6
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:48:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 508F740463;
+	Sun, 17 Sep 2023 19:50:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 508F740463
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 62EE41BF2C6
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 383D860B48
- for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:48:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 383D860B48
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AF8C40463
+ for <buildroot@lists.busybox.net>; Sun, 17 Sep 2023 19:50:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AF8C40463
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eFWd_GAnEFK2 for <buildroot@lists.busybox.net>;
- Sun, 17 Sep 2023 19:48:27 +0000 (UTC)
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6A66060B1E
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:48:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A66060B1E
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-401f68602a8so42148595e9.3
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:48:27 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id opLULFIt1I8H for <buildroot@lists.busybox.net>;
+ Sun, 17 Sep 2023 19:50:07 +0000 (UTC)
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BD32840124
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 19:50:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD32840124
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-52e5900cf77so4655859a12.2
+ for <buildroot@buildroot.org>; Sun, 17 Sep 2023 12:50:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1694980105; x=1695584905;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=6kIPaFvAn8p44F7DoRk7kveZMh6dco+Xhfva6MBu19s=;
- b=Tit8NwtdzVkBu37ZX6glYdPoOFvJilK7hYyITCU2QgyIb01GWRmotGSqhxWdOaCHnZ
- NBuyv76r6PI5wywgDuhEMLP960cNGlcMVKK2h/dnswlUbCmOfVdlF2jKTjOVx+cjRCI5
- B8UowW5DKC1f0bo/WWhgY+o56lRRjsVpn76nRDZusSkq3N90glsSo08k0/JwdvDhwzQ9
- IEW1U/FChx+XJySKCwX7VrWQTDfupKLxcq9IvXOR7NDUV83xGq1zCBhRHSaBbIAvsmdr
- 3GP6+/ygX+vQh2puDpmAod0X3MkXxuSVDlGNDXt4d0BemO0EoDYkotlIo2FE4uXSU/9K
- uTQA==
-X-Gm-Message-State: AOJu0YzrpQ3HJ+C9oiApDN41Hb5iHCLzLKFI5ffqR0f8cQn8AZsWgZoY
- 0kxeaAXdc7ayrJ5hmlHGxtuT6/oCal0=
-X-Google-Smtp-Source: AGHT+IFMxJB2J11UxXHeLtYa+AaMvGgfnZbnQVbhuDlOGlNGQQnM/xsG936uZCsb7yS7RvzZVux0og==
-X-Received: by 2002:a05:600c:210c:b0:401:b204:3b8d with SMTP id
- u12-20020a05600c210c00b00401b2043b8dmr6176959wml.27.1694980104973; 
- Sun, 17 Sep 2023 12:48:24 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- y14-20020a7bcd8e000000b004030e8ff964sm13358830wmj.34.2023.09.17.12.48.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 17 Sep 2023 12:48:24 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 17 Sep 2023 21:48:04 +0200
-Message-Id: <20230917194804.768692-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
+ d=1e100.net; s=20230601; t=1694980205; x=1695585005;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=jXU0Jk3VkwVpRL/AiC61QouPHRxKqAtHFjT+mvbCjlc=;
+ b=OQHDWS3CcDnWwyOetZt4eZeIwdt1sSDlugtSE9ZaAGe+jE3w5fImUX4+QIYNJcdVyF
+ 8ObyiYGyr5LHhE6RNSuBOQsG7TXWlhyx2bS2e8otoEtLXZgMyU6seAAw/qEydpyjDUzE
+ uLxkVjBxdfrjsf60GRAZx9MTJudBivMdnOTjYDBd1pOJQDJu8bMbmzc3HwGJr8GCkPP1
+ KPx8wwDMT+ri+urAJT1DHy+bCgzP1qTlkJ/givh18V/MgT3gI6s+fikyqOKBs897lONM
+ 7HwOHy+/PtghRp7SPPv4c7sVNGedzW0aSSVxr4h4hxQTwrQjCFUm7nh4VUQaLhIOXfaQ
+ R3HA==
+X-Gm-Message-State: AOJu0YzDNjNzm0/cyVh68lc0G41T9R7EpC+zrvDfMKuF/TWxNHDWgyy+
+ J7jEb0scvjZXPWWWG8rNgzSi5w==
+X-Google-Smtp-Source: AGHT+IFlDVkxQaxfPSYyHHO69kYrjBj8X5WocHOgiIeTORHBvsak2zQkTBgnMugkXgx3FGkiaF1YzA==
+X-Received: by 2002:a05:6402:1a32:b0:525:6c9f:e1a3 with SMTP id
+ be18-20020a0564021a3200b005256c9fe1a3mr6415445edb.20.1694980204713; 
+ Sun, 17 Sep 2023 12:50:04 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ r25-20020aa7d599000000b0052a1c0c859asm5053224edq.59.2023.09.17.12.50.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 17 Sep 2023 12:50:02 -0700 (PDT)
+Message-ID: <8aa7890d-c570-4952-3f7d-4a4f992f6367@mind.be>
+Date: Sun, 17 Sep 2023 21:49:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+References: <20230917143452.1374576-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20230917143452.1374576-1-dario.binacchi@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1694980105; x=1695584905; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6kIPaFvAn8p44F7DoRk7kveZMh6dco+Xhfva6MBu19s=;
- b=TuGmUMEXf8oDV/8o1RUeDQRYJbPoDzGVnno1SqZ8JXapHUTaUkPLUSC1/DVMXkpDPU
- htb3BmYf6rIIofukLYh18cjSskiEYJ6rph/D//L+nUnEvkrJEJvghStvPqt78f1UzwL8
- MKzR9k6iyU9fVMxkCyXjt/mHM5EfiVdLRXxHhqzry8wzW7KFOxybzHJrSxIFuGVB3fL9
- cbHRiJ57cRgKi6KTbG+uR3FJPIPkBvbqTTimDONIcYZ7b6BvgyZfTLvfRfS8c+AJ6FP7
- tsQ0EQ/nPgmDj9gZRFRbUMT9Qu1eCwMUEiYEXUXvjFb/UJSa0QDFgo2B8Kf3COp+MkRd
- 0ZQQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=TuGmUMEX
-Subject: [Buildroot] [PATCH 1/1] package/libuv: needs gcc >= 4.9
+ d=mind.be; s=google; t=1694980205; x=1695585005; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=jXU0Jk3VkwVpRL/AiC61QouPHRxKqAtHFjT+mvbCjlc=;
+ b=QfajaLZGbL+AlLjRPizmtJS0wj7coxWCSzZ+yYYfHtl8Xa4zXxQkR1pz5r63oBsGBa
+ nhjMZZpJy6A7E0QNRf5yssVuztqTi47A0zcxx/s9Zd5wKbrbvhVBLPZVqO7qHKflMsAs
+ sSRD/sjNkZ0bt0qGPGp7sOmOFhcEyA2DZ4P17O16cCodbmuqRkX+RaRpWImgteuZ63Cw
+ UBDMMQ05MYrJ0rKzYNt9rDdADepFvfix0kyHTwCyspq0Z7BFYx95sWsULH+/k744Rlox
+ l3ee1JHF9aCvUDLLSDAAMsGd/0W6jiwQK3s2pgbQtCNJJ2VolItMOCLvM3zpPxgX72tF
+ wvMg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=QfajaLZG
+Subject: Re: [Buildroot] [PATCH 1/1] package/davinci-bootcount: rename as
+ uboot-bootcount
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,312 +101,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Bartosz Bilas <b.bilas@grinn-global.com>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: linux-amarula@amarulasolutions.com,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+ Dario Binacchi <dariobin@libero.it>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libuv unconditionally uses stdatomic since
-https://github.com/libuv/libuv/commit/2f33980a9141bd49cb2c34361854355b23b1e6fc
-resulting in the following build failure with gcc < 4.9 since bump to
-version 1.45.0 in commit 21764235cb7f7fb767ea4b5d825e39c711aee235:
 
-In file included from src/fs-poll.c:23:0:
-src/uv-common.h:41:24: fatal error: stdatomic.h: No such file or directory
- # include <stdatomic.h>
-                        ^
 
-Fixes:
- - http://autobuild.buildroot.org/results/6b9ce25ba7e5c5602313d533f460f8829f767f81
+On 17/09/2023 16:34, Dario Binacchi wrote:
+> Born as a project to read/write the bootcount on the TI am3xx platform,
+> over time it has introduced bootcount management on EEPROM and for the
+> stm32mp1 platform. As a result, the project removed the 'davinci' tag
+> from its name and GitHub link.
+> The patch aligns the package name in Buildroot with the current one on
+> GitHub.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/bind/Config.in          | 6 ++++--
- package/cmake/Config.in         | 6 +++---
- package/libuv/Config.in         | 6 ++++--
- package/luv/Config.in           | 6 ++++--
- package/luvi/Config.in          | 6 ++++--
- package/moarvm/Config.in        | 6 ++++--
- package/netdata/Config.in       | 6 ++++--
- package/python-uvloop/Config.in | 6 ++++--
- package/ttyd/Config.in          | 6 ++++--
- package/wampcc/Config.in        | 6 ++++--
- package/xmrig/Config.in         | 6 ++++--
- 11 files changed, 43 insertions(+), 23 deletions(-)
+  We try to avoid package renames unless it's really needed, because it causes 
+some annoyance when updating Buildroot.
 
-diff --git a/package/bind/Config.in b/package/bind/Config.in
-index 63ccd57db7..512e948ca2 100644
---- a/package/bind/Config.in
-+++ b/package/bind/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_BIND
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_OPENSSL
- 	help
-@@ -43,7 +44,8 @@ config BR2_PACKAGE_BIND_TOOLS
- 
- endif
- 
--comment "bind needs a toolchain w/ NPTL, dynamic library"
-+comment "bind needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index 4ef5612b57..57b1ebf9fd 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_CMAKE
- config BR2_PACKAGE_CMAKE_CTEST
- 	bool "ctest"
- 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	depends on BR2_USE_WCHAR # libarchive
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-@@ -40,10 +40,10 @@ config BR2_PACKAGE_CMAKE_CTEST
- 
- 	  http://www.cmake.org/
- 
--comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7, NPTL"
-+comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.9, NPTL"
- 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/libuv/Config.in b/package/libuv/Config.in
-index cdd73a672f..e23b2c5fe0 100644
---- a/package/libuv/Config.in
-+++ b/package/libuv/Config.in
-@@ -4,13 +4,15 @@ config BR2_PACKAGE_LIBUV
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
- 	help
- 	  libuv is a multi-platform support library with a focus
- 	  on asynchronous I/O.
- 
- 	  https://github.com/libuv/libuv
- 
--comment "libuv needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "libuv needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/luv/Config.in b/package/luv/Config.in
-index 434cb3b459..d6aff8b6f7 100644
---- a/package/luv/Config.in
-+++ b/package/luv/Config.in
-@@ -4,13 +4,15 @@ config BR2_PACKAGE_LUV
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	help
- 	  libuv bindings for LuaJIT and Lua.
- 
- 	  https://github.com/luvit/luv
- 
--comment "luv needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "luv needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/luvi/Config.in b/package/luvi/Config.in
-index 6e96f85f32..3a724acebb 100644
---- a/package/luvi/Config.in
-+++ b/package/luvi/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LUVI
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_PACKAGE_LUAJIT
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_LUV
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
-@@ -25,8 +26,9 @@ config BR2_PACKAGE_LUVI
- 
- 	  https://github.com/luvit/luvi
- 
--comment "luvi needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "luvi needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
-diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
-index 11d8ac7ebc..6972a5f8a6 100644
---- a/package/moarvm/Config.in
-+++ b/package/moarvm/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_MOARVM
- 	depends on BR2_USE_MMU # libuv
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # libatomic_ops
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_LIBTOMMATH
- 	select BR2_PACKAGE_LIBATOMIC_OPS
-@@ -18,8 +19,9 @@ config BR2_PACKAGE_MOARVM
- 
- 	  http://moarvm.com
- 
--comment "moarvm needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "moarvm needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/netdata/Config.in b/package/netdata/Config.in
-index 34d139125d..d17b5e89aa 100644
---- a/package/netdata/Config.in
-+++ b/package/netdata/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_NETDATA
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-@@ -35,7 +36,8 @@ comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 4.8"
- 
- endif
- 
--comment "netdata needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "netdata needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/python-uvloop/Config.in b/package/python-uvloop/Config.in
-index b3fb275091..c9a05111cb 100644
---- a/package/python-uvloop/Config.in
-+++ b/package/python-uvloop/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_UVLOOP
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_PYTHON3_SSL
- 	help
-@@ -11,7 +12,8 @@ config BR2_PACKAGE_PYTHON_UVLOOP
- 
- 	  http://github.com/MagicStack/uvloop
- 
--comment "python-uvloop needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "python-uvloop needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU
-diff --git a/package/ttyd/Config.in b/package/ttyd/Config.in
-index ecc705b17e..103a4ac4aa 100644
---- a/package/ttyd/Config.in
-+++ b/package/ttyd/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_TTYD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv, json-c
- 	depends on BR2_USE_MMU # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_LIBWEBSOCKETS
-@@ -15,7 +16,8 @@ config BR2_PACKAGE_TTYD
- 
- 	  https://github.com/tsl0922/ttyd
- 
--comment "ttyd needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "ttyd needs a toolchain w/ NPTL, dynamic library, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
-index 92abc9cb25..4191936113 100644
---- a/package/wampcc/Config.in
-+++ b/package/wampcc/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_WAMPCC
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_JANSSON
-@@ -16,12 +17,13 @@ config BR2_PACKAGE_WAMPCC
- 
- 	  https://github.com/darrenjs/wampcc
- 
--comment "wampcc needs a toolchain w/ C++, NPTL, dynamic library"
-+comment "wampcc needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- comment "wampcc needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_USE_MMU
-diff --git a/package/xmrig/Config.in b/package/xmrig/Config.in
-index 4dd16fa2b0..0b5f5370e4 100644
---- a/package/xmrig/Config.in
-+++ b/package/xmrig/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_XMRIG
- 	# xmrig needs fenv.h which is not provided by uclibc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on !BR2_STATIC_LIBS # libuv
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libuv
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBUV
- 	help
-@@ -22,10 +23,11 @@ config BR2_PACKAGE_XMRIG
- 
- 	  https://xmrig.com
- 
--comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library, C++"
-+comment "xmrig needs a glibc or musl toolchain w/ NPTL, dynamic library, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_XMRIG_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		BR2_TOOLCHAIN_USES_UCLIBC || BR2_STATIC_LIBS || \
--		!BR2_INSTALL_LIBSTDCPP
-+		!BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--- 
-2.40.1
+  In this specific case, the package name (davinci-bootcount) was already not 
+aligned with the (original) upstream name (uboot-davinci-bootcount).
 
+  That said - if you don't have a davinci, then with the name "uboot-bootcount" 
+the package is a lot more discoverable, so there is probably a good reason to 
+update it.
+
+  Still, I think it's worth to make two separate patches: one which updates the 
+URL (both in the .mk and Config.in), and perhaps also updates the help text. 
+This patch can be backported to the stable branches. And then a second patch 
+that changes the package name.
+
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>   DEVELOPERS                                        |  2 +-
+>   package/Config.in                                 |  2 +-
+>   package/davinci-bootcount/Config.in               | 11 -----------
+>   package/davinci-bootcount/davinci-bootcount.mk    | 15 ---------------
+>   package/uboot-bootcount/Config.in                 | 10 ++++++++++
+>   .../uboot-bootcount.hash}                         |  2 +-
+>   package/uboot-bootcount/uboot-bootcount.mk        | 15 +++++++++++++++
+
+  You're missing legacy handling. The top of Config.in.legacy is hopefully 
+sufficient documentation to know how to do it (if not, patches welcome :-).
+
+[snip]
+> diff --git a/package/uboot-bootcount/Config.in b/package/uboot-bootcount/Config.in
+> new file mode 100644
+> index 000000000000..0a18e5d1bbad
+> --- /dev/null
+> +++ b/package/uboot-bootcount/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_UBOOT_BOOTCOUNT
+> +	bool "uboot-bootcount"
+> +	depends on BR2_arm
+
+  Below you write that it can also come from EEPROM, which means it's not 
+limited to ARM.
+
+  Regards,
+  Arnout
+
+
+> +	help
+> +	  U-Boot implements a boot count scheme that can be used to
+> +	  detect multiple failed attempts to boot Linux. This tool
+> +	  allows to read and write bootcount from userspace for some
+> +	  platforms (TI AM335X or STM32MP1) or from I2C EEPROM.
+> +
+> +	  https://github.com/VoltServer/uboot-bootcount
+> diff --git a/package/davinci-bootcount/davinci-bootcount.hash b/package/uboot-bootcount/uboot-bootcount.hash
+> similarity index 80%
+> rename from package/davinci-bootcount/davinci-bootcount.hash
+> rename to package/uboot-bootcount/uboot-bootcount.hash
+> index 53435b1d1d6d..e1ebc442357e 100644
+> --- a/package/davinci-bootcount/davinci-bootcount.hash
+> +++ b/package/uboot-bootcount/uboot-bootcount.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  12b5aa83736efb2fefd22cd4d9f305a25c68dfaa10401d5efb17e55a5163934e  davinci-bootcount-2.0.0.tar.gz
+> +sha256  12b5aa83736efb2fefd22cd4d9f305a25c68dfaa10401d5efb17e55a5163934e  uboot-bootcount-2.0.0.tar.gz
+>   sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/uboot-bootcount/uboot-bootcount.mk b/package/uboot-bootcount/uboot-bootcount.mk
+> new file mode 100644
+> index 000000000000..07b52ab89eb5
+> --- /dev/null
+> +++ b/package/uboot-bootcount/uboot-bootcount.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# uboot-bootcount
+> +#
+> +################################################################################
+> +
+> +UBOOT_BOOTCOUNT_VERSION = 2.0.0
+> +UBOOT_BOOTCOUNT_SITE = $(call github,VoltServer,uboot-bootcount,v$(UBOOT_BOOTCOUNT_VERSION))
+> +UBOOT_BOOTCOUNT_LICENSE = GPL-3.0
+> +UBOOT_BOOTCOUNT_LICENSE_FILES = COPYING
+> +
+> +# sources fetched from github, no configure script
+> +UBOOT_BOOTCOUNT_AUTORECONF = YES
+> +
+> +$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
