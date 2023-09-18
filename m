@@ -4,79 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E09BCD37B0
-	for <buildroot@archiver.kernel.org>; Mon, 18 Sep 2023 06:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E902ECD37B0
+	for <buildroot@archiver.kernel.org>; Mon, 18 Sep 2023 06:47:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 44B95404F7;
-	Mon, 18 Sep 2023 06:47:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44B95404F7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9D46D40C0E;
+	Mon, 18 Sep 2023 06:47:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D46D40C0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9S5j2_vfcUHp; Mon, 18 Sep 2023 06:47:09 +0000 (UTC)
+	with ESMTP id hK0dn3XjKDYw; Mon, 18 Sep 2023 06:47:25 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A0BE40446;
-	Mon, 18 Sep 2023 06:47:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A0BE40446
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 54DCD1BF40F
- for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 06:47:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B19CC41486;
+	Mon, 18 Sep 2023 06:47:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B19CC41486
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 31A9C1BF40F
+ for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 06:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E0DF40446
- for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 06:47:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E0DF40446
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0802740992
+ for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 06:47:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0802740992
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RAgviO0wt3ud for <buildroot@lists.busybox.net>;
- Mon, 18 Sep 2023 06:47:06 +0000 (UTC)
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
- [IPv6:2a00:1450:4864:20::534])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 38F4D400FE
- for <buildroot@buildroot.org>; Mon, 18 Sep 2023 06:47:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 38F4D400FE
-Received: by mail-ed1-x534.google.com with SMTP id
- 4fb4d7f45d1cf-52a1ce52ef4so5101069a12.2
- for <buildroot@buildroot.org>; Sun, 17 Sep 2023 23:47:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695019624; x=1695624424;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=iJ68q5vLQ1mz20LVO/Cy0cnr2Zv0Wpf7NfOsx/RBZgs=;
- b=ZqXGBL2UvUrcOn9WK0WROkM4EIUV1/D9duevPQUfL0f2U/Nb7JTE9aiA6RrDK7PglW
- EVcrYKSEfN+/qfa1nPwUI99nCxpqGNoRrGW/bgMCTeG9IdlDZbUZ2o+g8L8uaJeWe9gi
- BgMSbu2E8HEDmQjE3yjDTBitMyw3p+EL2RbGRq1ny6VaReh36iMllMzKYWbXzqbx3KKU
- 6HF153eIK5/OEbd2AMxw3LIWkouU2UoYJjR0ktvK+a1BKx7IMkORydK+guW5nWs4C9Vc
- JZR/eT/wGSsQgJIsHaoYPOd/M6gK+0bceVOWrXWkVUdzOi//L5uJfjTyzz4tMtzFJQ8r
- sovA==
-X-Gm-Message-State: AOJu0YxOVLtFsZE/E/A3SmWo0R2ACE1qpZ2zp4qgVTHz3SwRKn5mhgbO
- L4X0LuAU6Lwid+1oegfFXtFTXYGwDwz3Q1yg4QM=
-X-Google-Smtp-Source: AGHT+IEEVmzg2nfLxuyAEuFMtfgL7i7ecTdnP9Rg4stkmhAG6QBpPsacNoTiIXOaVOYypUK0C/IR1HJdX/iAtAnFT3g=
-X-Received: by 2002:a17:906:8a61:b0:9a2:185b:5375 with SMTP id
- hy1-20020a1709068a6100b009a2185b5375mr6707633ejc.18.1695019623797; Sun, 17
- Sep 2023 23:47:03 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id BgfTm_Mlnmeh for <buildroot@lists.busybox.net>;
+ Mon, 18 Sep 2023 06:47:21 +0000 (UTC)
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0C3F140955
+ for <buildroot@buildroot.org>; Mon, 18 Sep 2023 06:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C3F140955
+X-Virus-Scanned: by amavisd-new using ClamAV (7)
+Received: from zm.lan (pub-46.182.29.194.multiplay.pl [194.29.182.46])
+ by server220076.nazwa.pl (Postfix) with ESMTP id EBD051BC06E;
+ Mon, 18 Sep 2023 08:47:17 +0200 (CEST)
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+To: buildroot@buildroot.org
+Date: Mon, 18 Sep 2023 08:47:11 +0200
+Message-ID: <20230918064711.1379428-1-m.niestroj@grinn-global.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-References: <20230915155835.51140-1-arbab@linux.ibm.com>
- <20230915155835.51140-3-arbab@linux.ibm.com>
-In-Reply-To: <20230915155835.51140-3-arbab@linux.ibm.com>
-From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 18 Sep 2023 06:46:52 +0000
-Message-ID: <CACPK8XcymC=5-EO8j3yjUZj3q548ZJDY6GSUSgbSHJbb+c4bjQ@mail.gmail.com>
-To: Reza Arbab <arbab@linux.ibm.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jms.id.au; s=google; t=1695019624; x=1695624424; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=iJ68q5vLQ1mz20LVO/Cy0cnr2Zv0Wpf7NfOsx/RBZgs=;
- b=Zo9LrrTdLGrvJvJTLorZ2r/6hHK/K083dE2aWH/oy5WjBcDegE/5/Y0Yu/IBHlfvoK
- ZwIcm0/TrMRQ7ezi0KJGMlm5P9SuVak0JBvgIbkycGGbJrdCmVEvSE9amGNqqAX0ntME
- alZCuvRt5r0QMAYlCl4oBac914mOmWNfG9eiA=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au
- header.a=rsa-sha256 header.s=google header.b=Zo9LrrTd
-Subject: Re: [Buildroot] [PATCH v2 2/5] package/petitboot: run pb-console at
- boot
+Subject: [Buildroot] [PATCH v2] board: add Orangepi Zero3 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,85 +56,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Laurent Vivier <laurent@vivier.eu>, buildroot@buildroot.org
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 15 Sept 2023 at 15:58, Reza Arbab <arbab@linux.ibm.com> wrote:
->
-> Install a udev rule to run the petitboot UI on commonly-known consoles
-> instead of getty. To prevent the kernel's console output from trampling
-> the UI, also add a sysctl file to reduce the kernel log levels to
-> KERN_ALERT.
->
-> Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+Add initial support for Orangepi Zero3 board:
+- U-Boot 2021.07 fork by Orangepi
+- Linux 6.1.31 fork by Orangepi
+- Default packages from buildroot
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Enable CONFIG_MFD_AC200 as it is used directly by other module,
+resulting in build failure when disabled.
 
-> ---
-> v2:
-> * Add ttyGF* to list of commonly-known consoles.
-> * Don't select BR2_TARGET_GENERIC_GETTY by default.
->
->  package/petitboot/petitboot-console-ui.rules | 5 +++++
->  package/petitboot/petitboot.mk               | 4 ++++
->  package/petitboot/sysctl.conf                | 1 +
->  system/Config.in                             | 2 +-
->  4 files changed, 11 insertions(+), 1 deletion(-)
->  create mode 100644 package/petitboot/petitboot-console-ui.rules
->  create mode 100644 package/petitboot/sysctl.conf
->
-> diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
-> new file mode 100644
-> index 000000000000..e5c188387bc5
-> --- /dev/null
-> +++ b/package/petitboot/petitboot-console-ui.rules
-> @@ -0,0 +1,5 @@
-> +# spawn a petitboot UI on common user-visible interface devices
-> +SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
-> +SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
-> +SUBSYSTEM=="tty", KERNEL=="ttyGF*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
-> +SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name linux"
-> diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-> index 8d220f88f45a..556d41230237 100644
-> --- a/package/petitboot/petitboot.mk
-> +++ b/package/petitboot/petitboot.mk
-> @@ -55,6 +55,10 @@ define PETITBOOT_POST_INSTALL
->                 $(TARGET_DIR)/etc/petitboot/boot.d/90-sort-dtb
->         $(INSTALL) -m 0755 -D $(PETITBOOT_PKGDIR)/S15pb-discover \
->                 $(TARGET_DIR)/etc/init.d/S15pb-discover
-> +       $(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/petitboot-console-ui.rules \
-> +               $(TARGET_DIR)/etc/udev/rules.d/petitboot-console-ui.rules
-> +       $(INSTALL) -D -m 0755 $(PETITBOOT_PKGDIR)/sysctl.conf \
-> +               $(TARGET_DIR)/etc/sysctl.d/petitboot.conf
->         mkdir -p $(TARGET_DIR)/usr/share/udhcpc/default.script.d/
->         ln -sf /usr/sbin/pb-udhcpc \
->                 $(TARGET_DIR)/usr/share/udhcpc/default.script.d/
-> diff --git a/package/petitboot/sysctl.conf b/package/petitboot/sysctl.conf
-> new file mode 100644
-> index 000000000000..02ab8e3275b5
-> --- /dev/null
-> +++ b/package/petitboot/sysctl.conf
-> @@ -0,0 +1 @@
-> +kernel.printk = 1 1 1 1
-> diff --git a/system/Config.in b/system/Config.in
-> index 24798dc06803..9587dd9ce4db 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -375,7 +375,7 @@ config BR2_SYSTEM_BIN_SH
->
->  menuconfig BR2_TARGET_GENERIC_GETTY
->         bool "Run a getty (login prompt) after boot"
-> -       default y
-> +       default y if !BR2_PACKAGE_PETITBOOT
->
->  if BR2_TARGET_GENERIC_GETTY
->  config BR2_TARGET_GENERIC_GETTY_PORT
-> --
-> 2.39.3
->
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+v1 -> v2:
+ * use 'linux_sunxi64' instead of default arch defconfig, which fixes
+   ethernet networking (suggested by Sergey)
+ * disabled rootfs.tar generation (suggested by Sergey)
+ * increased ext2 fs size to 180M to fit more kernel modules
+ * added DEVELOPERS entries for board files
+
+ DEVELOPERS                                 |  2 +
+ board/orangepi/orangepi-zero3/linux.config |  1 +
+ board/orangepi/orangepi-zero3/readme.txt   | 34 +++++++++++++
+ configs/orangepi_zero3_defconfig           | 57 ++++++++++++++++++++++
+ 4 files changed, 94 insertions(+)
+ create mode 100644 board/orangepi/orangepi-zero3/linux.config
+ create mode 100644 board/orangepi/orangepi-zero3/readme.txt
+ create mode 100644 configs/orangepi_zero3_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e8b78a8d46..66abc39e16 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1953,8 +1953,10 @@ F:	package/ecryptfs-utils/
+ N:	Marcin Niestroj <m.niestroj@grinn-global.com>
+ F:	board/grinn/
+ F:	board/orangepi/orangepi-zero-plus/
++F:	board/orangepi/orangepi-zero3/
+ F:	configs/grinn_*
+ F:	configs/orangepi_zero_plus_defconfig
++F:	configs/orangepi_zero3_defconfig
+ F:	package/argparse/
+ F:	package/dt-utils/
+ F:	package/easydbus/
+diff --git a/board/orangepi/orangepi-zero3/linux.config b/board/orangepi/orangepi-zero3/linux.config
+new file mode 100644
+index 0000000000..09b7a93a5a
+--- /dev/null
++++ b/board/orangepi/orangepi-zero3/linux.config
+@@ -0,0 +1 @@
++CONFIG_MFD_AC200=y
+diff --git a/board/orangepi/orangepi-zero3/readme.txt b/board/orangepi/orangepi-zero3/readme.txt
+new file mode 100644
+index 0000000000..4872a363e7
+--- /dev/null
++++ b/board/orangepi/orangepi-zero3/readme.txt
+@@ -0,0 +1,34 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Orangepi Zero3. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Orangepi Zero3 link:
++http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-3.html
++
++This configuration uses Orangepi's fork of U-Boot and Linux kernel.
++
++How to build
++============
++
++    $ make orangepi_zero3_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your Orangepi Zero3 and power it up. The console
++is on the serial line, 115200 8N1.
+diff --git a/configs/orangepi_zero3_defconfig b/configs/orangepi_zero3_defconfig
+new file mode 100644
+index 0000000000..51a6efd3ed
+--- /dev/null
++++ b/configs/orangepi_zero3_defconfig
+@@ -0,0 +1,57 @@
++BR2_aarch64=y
++BR2_cortex_a53=y
++BR2_ARM_FPU_VFPV4=y
++
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_SYSTEM_DHCP="eth0"
++
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h616"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,orangepi-xunlong,u-boot-orangepi,6fe17fac388aad17490cf386578b7532975e567f)/u-boot-orangepi-6fe17fac388aad17490cf386578b7532975e567f.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero3"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,orangepi-xunlong,linux-orangepi,3495b5ee0594566c9fed930b96b1cae90600412e)/linux-orangepi-3495b5ee0594566c9fed930b96b1cae90600412e.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="linux_sunxi64"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h616-orangepi-zero3"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-zero3/linux.config"
++
++# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero3"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="180M"
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# host tools
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++
++# image scripts
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+-- 
+2.42.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
