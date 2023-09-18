@@ -4,85 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 627AAC46CA1
-	for <buildroot@archiver.kernel.org>; Mon, 18 Sep 2023 20:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA467C46CA1
+	for <buildroot@archiver.kernel.org>; Mon, 18 Sep 2023 20:31:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0684941594;
-	Mon, 18 Sep 2023 20:31:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0684941594
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8DFCC40948;
+	Mon, 18 Sep 2023 20:31:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DFCC40948
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 1DAVKZosIQ9K; Mon, 18 Sep 2023 20:31:11 +0000 (UTC)
+	with ESMTP id bzv56AmoR7ZD; Mon, 18 Sep 2023 20:31:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0435C41595;
-	Mon, 18 Sep 2023 20:31:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0435C41595
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 46BBB1BF3D8
- for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 20:31:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7EC384158E;
+	Mon, 18 Sep 2023 20:31:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EC384158E
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B6E371BF3D8
+ for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 20:31:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 20F7041989
- for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 20:31:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20F7041989
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FCB141596
+ for <buildroot@lists.busybox.net>; Mon, 18 Sep 2023 20:31:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9FCB141596
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id DpAgi2uIZbq4 for <buildroot@lists.busybox.net>;
- Mon, 18 Sep 2023 20:31:05 +0000 (UTC)
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 033EF41993
- for <buildroot@buildroot.org>; Mon, 18 Sep 2023 20:31:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 033EF41993
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4018af103bcso32999935e9.1
- for <buildroot@buildroot.org>; Mon, 18 Sep 2023 13:31:04 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id E-rMQC2LFWsv for <buildroot@lists.busybox.net>;
+ Mon, 18 Sep 2023 20:31:08 +0000 (UTC)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2115C40948
+ for <buildroot@buildroot.org>; Mon, 18 Sep 2023 20:31:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2115C40948
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-401da71b83cso56028775e9.2
+ for <buildroot@buildroot.org>; Mon, 18 Sep 2023 13:31:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695069062; x=1695673862;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=lLKdRcoWb+1dpQwaQam11SWshIgHoqyjNeEYcqTqu0Q=;
- b=iSNvD1V5J7n/tcLsJJIA2bbqfvQlkERsDpOtTghuYxqxU7y/hXDQ4RSUeoukp+hbuq
- bW2WFpLTwhdX6KLRcJg3hojD3IVguE0Ao2ODJ03tXyLZKr/1kd/1KCMk7pYKkLuGhLE7
- uNPwKP6tG8+tMOXmSIiuNG7Hf98KmOVXPrPyYKc6sYFxjUiGHx1ecsQWBoAb3ywijXbQ
- 8pP1IbKfKzSNz66oHdkSyQmornVgaAdZSysLxqRCY/Q4yF6pd5iB8gIeLvVGl8hmrv3M
- iHf5vTZ14eIC0g+NDr4LIXOzvTRdTBH94a89x2IenQ35gnstUjqbL6WiwGH70cWzRkjl
- 4Mew==
-X-Gm-Message-State: AOJu0YxmXifzsszAtNmYJLpKkIqpLX6otSs2CUd6MB/ixbGrTJ11TsGi
- O04cn1lE6ZA7BlA3H4b0uY01lnW/ghc=
-X-Google-Smtp-Source: AGHT+IFd9akMABUzGkYz7sK2PQWYsMV5tcDb0SW/Ks86i7WEgM4NvCPB/Id/O31OylF9iCkBcqMEmQ==
-X-Received: by 2002:a05:600c:1d17:b0:401:b393:da18 with SMTP id
- l23-20020a05600c1d1700b00401b393da18mr541849wms.6.1695069062409; 
- Mon, 18 Sep 2023 13:31:02 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1695069066; x=1695673866;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=f9ZvsU5tZiNVwlqHHl+VgQ69nCjMVZswlK0my/jWSHU=;
+ b=cPZszaGUILytLH884iUobDMcnJKQNoCF0qveW/G6MA2oNUIN7/huEtXPH3bKS/JnL3
+ /xCathewRxSjKRUAHNMDKt4pNu2VZ8FHnQb7U+JyJGW6Q0VHIS2Ej0LG+F7LNu8PDuI2
+ 1wbatbE9xTLb9fthcPRq3+0Zs/DJucnJBfXhyEhvwpqUZ6KHrKiDLPYP6bBjRNPyduk2
+ rjFeCP0XKk2LBsVY2qZZuZxM9c6aK2li0DyziVM7bcyFcdo3xniVWZ2xFLUcHHQjXbns
+ /Tg1g25+Gt5yRx/IpSt8NQ6/TG7EWQynuOXScVFJiI5lOOnArcENZdFXj9R8THHZDb2e
+ wIMg==
+X-Gm-Message-State: AOJu0Ywrst25chWU3XDCTdT+smTp4VLZVJovzkZYuZfmA8rj5/dXbjPk
+ SAbGk8L7d3khWPWDPB8KV+6OzPSSpH0=
+X-Google-Smtp-Source: AGHT+IE5HBgLXdrG+gP8kNj+KWu3tkH1bRSP4owIubwZ47tajKFWTnIbYR0m69cc2InpQ7iZCsNe5A==
+X-Received: by 2002:a05:600c:229a:b0:3fe:25b3:951d with SMTP id
+ 26-20020a05600c229a00b003fe25b3951dmr8435188wmf.5.1695069066055; 
+ Mon, 18 Sep 2023 13:31:06 -0700 (PDT)
 Received: from scaer.home ([2a01:cb19:8b44:b00:9624:48f1:9fd0:3d3c])
  by smtp.gmail.com with ESMTPSA id
- hn40-20020a05600ca3a800b003fef19bb55csm13287460wmb.34.2023.09.18.13.31.01
+ f10-20020a7bc8ca000000b00401d8181f8bsm16238956wml.25.2023.09.18.13.31.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Sep 2023 13:31:01 -0700 (PDT)
+ Mon, 18 Sep 2023 13:31:05 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
 Date: Mon, 18 Sep 2023 22:31:01 +0200
-Message-Id: <cover.1695069059.git.yann.morin.1998@free.fr>
+Message-Id: <1e19b88b0da10c014997ee3f2d2f98921202af7d.1695069059.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1695069059.git.yann.morin.1998@free.fr>
+References: <cover.1695069059.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695069062; x=1695673862; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=lLKdRcoWb+1dpQwaQam11SWshIgHoqyjNeEYcqTqu0Q=;
- b=OT3lelpMB49i3PJAHKbZHlKJVQABa45s37eptfNw9XYsVXpMm60M5NlSLIo1+8BWAQ
- MQdmQOgcVZlTWg9e9zdFVxuvSqEqNAOFbaYT3dyxJd6BAFc/sxYAn8E/l0fFRlJ25B7p
- tjtIDX4C2l8/uitXqg6kiQs/be952BiAJ9ep66R8UA7UDCUh5ryOxo9ly6X9eNTAqoQh
- f/Ysd9g+Yh76fGRcjUSyZBSxzW/rlGRqpo6scZIEQ9euTG9L98OzuV3EWvfvOhbypoWr
- PIjkNLJWkW9luH6UpmCKdlFMKPJBMcaHQ8JNOPYdgNeO5q99NCPkpiKV98lh7fXqwGRT
- w5Fw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1695069066; x=1695673866; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=f9ZvsU5tZiNVwlqHHl+VgQ69nCjMVZswlK0my/jWSHU=;
+ b=e+CvpMMaABFJOtk4ysRoFF34N8xbLtoG3uiMMIBurivN76ThOjGIC4DFROJ/iIoHU3
+ t82qQd5M4cvqw2RPGy+wYKvEvtukMwR9PpatlSUJjNwWYlTofDYqUCWSYz2KzLh6uyoL
+ tpNqDOuaTipdVTubB6x3VW0Jt6VjJc7B1muwWIgnoML4UlW10k+lGtNQD2UM4P0BOZMT
+ DGGa4FfWOtW0jC6QubxQ6YsBb/DWdHnBJZlIoe71Kr8ww73geIeAuDEaMDgTE/dWQbFr
+ O+l4CMIhjSFjU3UBO4kq7fSa+vlYf3JDmOKyUtVvv6E3nVope83DO93oIECTZeRHwMEy
+ wbdg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OT3lelpM
-Subject: [Buildroot] [PATCH 0/6 v2] support/downloaf/git: add support for
- git attirbutes (branch yem/git-attributes)
+ header.a=rsa-sha256 header.s=20230601 header.b=e+CvpMMa
+Subject: [Buildroot] [PATCH 4/6 v2] package/luajit: use the git download for
+ known-reproducible tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,169 +98,88 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Francois Perrad <fperrad@gmail.com>,
- Woody Douglass <wdouglass@carnegierobotics.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+Since version 2.1, LuaJIT foolows a rolling-release scheme, which means
+that any commit is as good as any other; LuaJIT uses the comitter's UNIX
+timestamp as its semver patch level. It uses the git-attribute
+export-subst for the .relver file that contains the %ct placeholderfor
+git-archive to expand it.
 
-Git attributes are very similar to the decades-old CVS-style keywords
-and placeholders; except they are acted on while generating an archive
-with git-archive, rather than on checkout.
+In c9dcd9e459d6 (package/luajit: bump to version 41fb94defa8f...), we
+switched to such an upstream version. There was some confusion around
+the handling of the git-attribute and where/when it is generated, and
+the first revision of the patch used the git download method, so had to
+use post-extract hooks to do the replacement, but the second iteration
+kept retrieving the archive generated by github, which has the
+replacement already done, but the post-extract hooks were not dropped
+although now useless...
 
-Some packages (pcm-tools, luajit) use such markers for versioning
-information; pcm-tools needs a (short-)hash, while luajit uses the UNIX
-timestamp as its semver patch-level.
+In the future, there is no guarantee that LuaJIT will not change the
+format it uses; this will require a bit of care when reviewing every
+version bump, to check whether this is the case or not...
 
-This series introduces support for git attributes in the git download
-backend, cleans up pcm-tools, converts luajit, and updates all other
-packages with the new -br2 git version suffix to filenames of generate
-archives.
+To avoid any confusion, and to be future-proof, switch over to using the
+git download helper, which now has support for handling export-subst in
+a reproducible way. Drop the post-extract hooks as they are not needed.
 
-Changes v1 -> v2;
-  - drop applied preparatory patches
-  - split the update of hash files and runtime test in separate patches
-  - convert luajit
-  - add migration section in the manual
-  - small coding style in awk script
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Francois Perrad <fperrad@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luajit/luajit.hash |  2 +-
+ package/luajit/luajit.mk   | 12 ++----------
+ 2 files changed, 3 insertions(+), 11 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      support/download/git: handle git attributes
-      package/*: update hashes for packages with export-subst git attibute
-      package/*: update filename for git-download packages
-      package/luajit: use the git download for known-reproducible tarball
-      support/testing: add test for export-subst support in git-download
-      docs/manual: document git backend handling of export-subst attribute
-
- boot/edk2/edk2.hash                                |   2 +-
- boot/vexpress-firmware/vexpress-firmware.hash      |   2 +-
- docs/manual/migrating.txt                          |  19 ++++---
- package/abootimg/abootimg.hash                     |   2 +-
- package/aer-inject/aer-inject.hash                 |   2 +-
- package/am33x-cm3/am33x-cm3.hash                   |   2 +-
- package/armbian-firmware/armbian-firmware.hash     |   2 +-
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash       |   2 +-
- package/bayer2rgb-neon/bayer2rgb-neon.hash         |   2 +-
- package/bpftool/bpftool.hash                       |   2 +-
- package/brickd/brickd.hash                         |   2 +-
- package/c-capnproto/c-capnproto.hash               |   2 +-
- package/dbus-triggerd/dbus-triggerd.hash           |   2 +-
- package/dtv-scan-tables/dtv-scan-tables.hash       |   2 +-
- package/edid-decode/edid-decode.hash               |   2 +-
- package/firmware-utils/firmware-utils.hash         |   2 +-
- package/flashbench/flashbench.hash                 |   2 +-
- package/freescale-imx/imx-lib/imx-lib.hash         |   2 +-
- package/google-breakpad/google-breakpad.hash       |   2 +-
- .../gstreamer1/gst1-interpipe/gst1-interpipe.hash  |   2 +-
- .../gst1-plugins-bayer2rgb-neon.hash               |   2 +-
- package/gstreamer1/gst1-shark/gst1-shark.hash      |   3 +-
- package/ibm-sw-tpm2/ibm-sw-tpm2.hash               |   2 +-
- package/kvmtool/kvmtool.hash                       |   2 +-
- package/libbroadvoice/libbroadvoice.hash           |   2 +-
- package/libcamera/libcamera.hash                   |   2 +-
- package/libdbi-drivers/libdbi-drivers.hash         |   2 +-
- package/libdbi/libdbi.hash                         |   2 +-
- package/libg7221/libg7221.hash                     |   2 +-
- package/libilbc/libilbc.hash                       |   2 +-
- package/libsilk/libsilk.hash                       |   2 +-
- package/libsvgtiny/libsvgtiny.hash                 |   2 +-
- package/libubox/libubox.hash                       |   2 +-
- package/libuci/libuci.hash                         |   2 +-
- package/libyuv/libyuv.hash                         |   2 +-
- .../linux-syscall-support.hash                     |   2 +-
- package/luajit/luajit.hash                         |   2 +-
- package/luajit/luajit.mk                           |  12 +----
- package/mmc-utils/mmc-utils.hash                   |   3 +-
- .../netsurf-buildsystem/netsurf-buildsystem.hash   |   2 +-
- package/odhcp6c/odhcp6c.hash                       |   2 +-
- package/ogre/ogre.hash                             |   2 +-
- package/open62541/open62541.hash                   |   2 +-
- package/opkg-utils/opkg-utils.hash                 |   2 +-
- package/pcm-tools/pcm-tools.hash                   |   2 +-
- package/pcm-tools/pcm-tools.mk                     |   8 ---
- package/piglit/piglit.hash                         |   2 +-
- package/pkg-download.mk                            |   2 +-
- package/prelink-cross/prelink-cross.hash           |   2 +-
- package/psplash/psplash.hash                       |   2 +-
- package/qt-webkit-kiosk/qt-webkit-kiosk.hash       |   2 +-
- package/qt5/qt5coap/qt5coap.hash                   |   2 +-
- package/qt5/qt5knx/qt5knx.hash                     |   2 +-
- package/qt5/qt5location/qt5location.hash           |   2 +-
- package/qt5/qt5mqtt/qt5mqtt.hash                   |   2 +-
- package/qt5/qt5opcua/qt5opcua.hash                 |   2 +-
- .../qt5webengine-chromium-catapult.hash            |   2 +-
- package/rockchip-rkbin/rockchip-rkbin.hash         |   2 +-
- package/rtc-tools/rtc-tools.hash                   |   2 +-
- package/rtmpdump/rtmpdump.hash                     |   2 +-
- package/signal-estimator/signal-estimator.hash     |   2 +-
- package/sox/sox.hash                               |   2 +-
- package/tftpd/tftpd.hash                           |   2 +-
- package/ti-sgx-demos/ti-sgx-demos.hash             |   2 +-
- package/ti-sgx-km/ti-sgx-km.hash                   |   2 +-
- package/ti-sgx-um/ti-sgx-um.hash                   |   2 +-
- package/tl-expected/tl-expected.hash               |   2 +-
- package/tremor/tremor.hash                         |   2 +-
- package/ubus/ubus.hash                             |   2 +-
- package/uclibc-ng-test/uclibc-ng-test.hash         |   2 +-
- package/uemacs/uemacs.hash                         |   2 +-
- package/uhttpd/uhttpd.hash                         |   2 +-
- package/uqmi/uqmi.hash                             |   2 +-
- package/ustream-ssl/ustream-ssl.hash               |   2 +-
- package/vboot-utils/vboot-utils.hash               |   2 +-
- package/wilink-bt-firmware/wilink-bt-firmware.hash |   2 +-
- .../xdriver_xf86-video-intel.hash                  |   2 +-
- .../xdriver_xf86-video-openchrome.hash             |   2 +-
- package/x264/x264.hash                             |   2 +-
- package/yavta/yavta.hash                           |   2 +-
- support/download/git                               |  60 +++++++++++++++++++++
- .../br2-external/git-hash/package/bad/bad.hash     |   2 +-
- .../package/export-subst/export-subst.hash         |   1 +
- .../git-hash/package/export-subst/export-subst.mk  |  10 ++++
- .../br2-external/git-hash/package/good/good.hash   |   2 +-
- .../git-partial-sha1-branch-head.hash              |   2 +-
- .../git-partial-sha1-reachable-by-branch.hash      |   2 +-
- .../git-partial-sha1-reachable-by-tag.hash         |   2 +-
- .../git-partial-sha1-tag-itself.hash               |   2 +-
- .../git-partial-sha1-tag-points-to.hash            |   2 +-
- .../git-sha1-branch-head/git-sha1-branch-head.hash |   2 +-
- .../git-sha1-reachable-by-branch.hash              |   2 +-
- .../git-sha1-reachable-by-tag.hash                 |   2 +-
- .../git-sha1-tag-itself/git-sha1-tag-itself.hash   |   2 +-
- .../git-sha1-tag-points-to.hash                    |   2 +-
- .../git-submodule-disabled.hash                    |   2 +-
- .../git-submodule-enabled.hash                     |   2 +-
- .../git-refs/package/git-tag/git-tag.hash          |   2 +-
- .../git-wrong-content/git-wrong-content.hash       |   2 +-
- .../05/482df734b3715b849ef4a3147a9b1b1f8cca38      | Bin 0 -> 35 bytes
- .../0f/db95cf4f3c5ed4003287649cabb33c5f843e26      | Bin 0 -> 197 bytes
- .../68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8      | Bin 0 -> 28 bytes
- .../6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0      | Bin 0 -> 112 bytes
- .../download/git-remote/repo.git/refs/heads/master |   2 +-
- support/testing/tests/download/test_git.py         |   4 ++
- 105 files changed, 183 insertions(+), 121 deletions(-)
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.hash
- create mode 100644 support/testing/tests/download/br2-external/git-hash/package/export-subst/export-subst.mk
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/05/482df734b3715b849ef4a3147a9b1b1f8cca38
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/0f/db95cf4f3c5ed4003287649cabb33c5f843e26
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/68/28f88dcb0e88b8cd738ad6044ce74d7a9a13c8
- create mode 100644 support/testing/tests/download/git-remote/repo.git/objects/6d/a12b257e47f6089612fe97a8746d2d9c4ca0e0
-
+diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
+index 578bb7a3e2..da243d8c2a 100644
+--- a/package/luajit/luajit.hash
++++ b/package/luajit/luajit.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  b518721280390e4cec1af30f6819d86756ce4234d82410a55a4e121855f64e08  luajit-41fb94defa8f830ce69a8122b03f6ac3216d392a.tar.gz
++sha256  df50bfe78919691ce9a630c8312386a8cb6ca49f327922a833e77656e82ef6c6  luajit-41fb94defa8f830ce69a8122b03f6ac3216d392a-br2.tar.gz
+ 
+ # Locally calculated
+ sha256  1130331ac861a4b4520e9c8ad0814efdc6f1e79ea55ea9c460c73733d13ccb5f  COPYRIGHT
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 06c8993391..6b1c6b3386 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ LUAJIT_VERSION = 41fb94defa8f830ce69a8122b03f6ac3216d392a
+-LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
++LUAJIT_SITE = https://github.com/LuaJIT/LuaJIT
++LUAJIT_SITE_METHOD = git
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
+ LUAJIT_CPE_ID_VENDOR = luajit
+@@ -33,15 +34,6 @@ LUAJIT_HOST_CC = $(HOSTCC) -m32
+ LUAJIT_XCFLAGS += -DLUAJIT_DISABLE_GC64
+ endif
+ 
+-# emulation of git archive with .gitattributes & export-subst
+-# Timestamp of the $(LUAJIT_VERSION) commit, obtained in the LuaJit
+-# repo, with:   git show -s --format=%ct $(LUAJIT_VERSION)
+-define LUAJIT_GEN_RELVER_FILE
+-	echo 1693350652 >$(@D)/.relver
+-endef
+-LUAJIT_POST_EXTRACT_HOOKS = LUAJIT_GEN_RELVER_FILE
+-HOST_LUAJIT_POST_EXTRACT_HOOKS = LUAJIT_GEN_RELVER_FILE
+-
+ # We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
+ # build system uses non conventional variable names.
+ define LUAJIT_BUILD_CMDS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
