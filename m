@@ -4,90 +4,183 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6939ACD343B
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 05:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3744CD3437
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 05:29:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3FDC400D7;
-	Tue, 19 Sep 2023 05:11:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3FDC400D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C6964058F;
+	Tue, 19 Sep 2023 05:29:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C6964058F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uTell3Pwh3Fo; Tue, 19 Sep 2023 05:11:27 +0000 (UTC)
+	with ESMTP id HJ8yT72CxDWp; Tue, 19 Sep 2023 05:29:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9C349416A4;
-	Tue, 19 Sep 2023 05:11:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C349416A4
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AE7A21BF34F
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 05:11:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95E9B41587;
+	Tue, 19 Sep 2023 05:29:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 95E9B41587
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 67A911BF34F
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 05:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9453E61025
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 05:11:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9453E61025
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C2CA822C2
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 05:29:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C2CA822C2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id glBHR0NTWyv4 for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 05:11:21 +0000 (UTC)
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com
- [IPv6:2607:f8b0:4864:20::22e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D77960EC2
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 05:11:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D77960EC2
-Received: by mail-oi1-x22e.google.com with SMTP id
- 5614622812f47-3a88ff732aeso3327930b6e.0
- for <buildroot@buildroot.org>; Mon, 18 Sep 2023 22:11:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695100280; x=1695705080;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=5sp4dW3xlLsGxAcXkqMm9XAi/edF0kXHgkfeXuox5TI=;
- b=pXVCgZApPaV8uoigaSKxE+mUbuV7YYJbBgb+3/PzQpJFHiGsh1ljYeMhEKkHeDCjp2
- r91zISNciSeuPuxBlmdBQRUYobev7IWksWReBbB7Jc6xFl5ZXAzWdxodJzcQ8ArBzGjX
- r/0bcl8E9G+1R986BPrcuVj4eihV42R1BpWQkqdK2RcXX5wv8SRnVQgGNN+odljbXQw8
- HYXm6Tkb+NDHeMIUyEnce8jfkHWCoDp54mUwT6jDXTKxGY7zWGMDuKTbBs2AiiBTjPz9
- S+dqTbUg9/skEcCWKLjbDFztSabAfi26t2+YmJIHR5zrPVLxGsiuVg3v30FmLJh/pUVM
- P7UQ==
-X-Gm-Message-State: AOJu0YwBT9F0BSld65Ap40UogX9nn1U62HXWlwwxhiYow72IK6V0+MfH
- rvcdN5VWmY/BTPZq8xm6dqPKJV5ojpOonERkmAXF3xa0
-X-Google-Smtp-Source: AGHT+IHUbp9FejL3vd4Bn9WwAXwmVswGlN22ESYvx5FqXzuSbiCOqjCeSianNXIlXJbVByY+0c7IniRx4DNhpZYKBM0=
-X-Received: by 2002:a05:6808:1407:b0:3aa:1369:e11 with SMTP id
- w7-20020a056808140700b003aa13690e11mr1026116oiv.5.1695100279878; Mon, 18 Sep
- 2023 22:11:19 -0700 (PDT)
-MIME-Version: 1.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D53oJKFY6284 for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 05:29:02 +0000 (UTC)
+X-Greylist: delayed 307 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 19 Sep 2023 05:29:01 UTC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F17C081442
+Received: from mx-ginzinger.sigmacloud.services
+ (mx-ginzinger.sigmacloud.services [185.154.235.147])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F17C081442
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 05:29:01 +0000 (UTC)
+Received: from mail-db8eur05lp2109.outbound.protection.outlook.com
+ ([104.47.17.109]:31113 helo=EUR05-DB8-obe.outbound.protection.outlook.com)
+ by mx-ginzinger.sigmacloud.services with esmtps (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.96)
+ (envelope-from <Stefan.Hager@ginzinger.com>) id 1qiTD6-00067V-0V;
+ Tue, 19 Sep 2023 07:23:44 +0200
+Received: from DUZPR01CA0077.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:46a::15) by DB9PR06MB7307.eurprd06.prod.outlook.com
+ (2603:10a6:10:218::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Tue, 19 Sep
+ 2023 05:23:23 +0000
+Received: from DB8EUR05FT061.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:10:46a:cafe::51) by DUZPR01CA0077.outlook.office365.com
+ (2603:10a6:10:46a::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27 via Frontend
+ Transport; Tue, 19 Sep 2023 05:23:23 +0000
+X-SASI-Hits: BODY_SIZE_10000_PLUS 0.000000, BODY_SIZE_25K_PLUS 0.000000,
+ CTE_BASE64 0.000000, HTML_00_01 0.050000, HTML_00_10 0.050000,
+ IN_REP_TO 0.000000, LEGITIMATE_SIGNS 0.000000, MSG_THREAD 0.000000,
+ MULTIPLE_REAL_RCPTS 0.000000, NO_FUR_HEADER 0.000000, OUTBOUND 0.000000,
+ OUTBOUND_SOPHOS 0.000000, REFERENCES 0.000000, SUPERLONG_LINE 0.050000,
+ SUSP_DH_NEG 0.000000, URI_WITH_PATH_ONLY 0.000000, __ANY_URI 0.000000,
+ __ARCAUTH_DKIM_PASSED 0.000000, __ARCAUTH_DMARC_PASSED 0.000000,
+ __ARCAUTH_PASSED 0.000000, __ARC_SEAL_MICROSOFT 0.000000,
+ __ARC_SIGNATURE_MICROSOFT 0.000000, __AUTH_RES_ORIG_DKIM_NONE 0.000000,
+ __AUTH_RES_ORIG_DMARC_NONE 0.000000, __BODY_NO_MAILTO 0.000000,
+ __BOUNCE_CHALLENGE_SUBJ 0.000000, __BOUNCE_NDR_SUBJ_EXEMPT 0.000000,
+ __BULK_NEGATE 0.000000, __CC_NAME 0.000000, __COURIER_PHRASE 0.000000,
+ __CP_URI_IN_BODY 0.000000, __CT 0.000000, __CTE 0.000000,
+ __CT_TEXT_PLAIN 0.000000, __DQ_NEG_DOMAIN 0.000000, __DQ_NEG_HEUR 0.000000,
+ __DQ_NEG_IP 0.000000, __FORWARDED_MSG 0.000000,
+ __FRAUD_BODY_WEBMAIL 0.000000, __FRAUD_MONEY_CURRENCY 0.000000,
+ __FRAUD_MONEY_CURRENCY_DOLLAR 0.000000, __FRAUD_WEBMAIL 0.000000,
+ __FUR_RDNS_SOPHOS 0.000000, __HAS_CC_HDR 0.000000, __HAS_FROM 0.000000,
+ __HAS_MSGID 0.000000, __HAS_REFERENCES 0.000000, __HAS_X_FF_ASR 0.000000,
+ __HAS_X_FF_ASR_CAT 0.000000, __HAS_X_FF_ASR_SFV 0.000000,
+ __HIGHBITS 0.000000, __HIGHBIT_ASCII_MIX 0.000000, __HTTPS_URI 0.000000,
+ __IN_REP_TO 0.000000, __LINES_OF_YELLING 0.000000, __MAIL_CHAIN 0.000000,
+ __MIME_BOUND_CHARSET 0.000000, __MIME_TEXT_ONLY 0.000000,
+ __MIME_TEXT_P 0.000000, __MIME_TEXT_P1 0.000000, __MIME_VERSION 0.000000,
+ __MSGID_32_64_CAPS 0.000000, __MULTIPLE_RCPTS_TO_X2 0.000000,
+ __MULTIPLE_URI_TEXT 0.000000, __OUTBOUND_SOPHOS_FUR 0.000000,
+ __OUTBOUND_SOPHOS_FUR_IP 0.000000, __OUTBOUND_SOPHOS_FUR_RDNS 0.000000,
+ __PHISH_SPEAR_SUBJ_ALERT 0.000000, __RCVD_PASS 0.000000,
+ __REFERENCES 0.000000, __SANE_MSGID 0.000000, __SCAN_D_NEG 0.000000,
+ __SCAN_D_NEG2 0.000000, __SCAN_D_NEG_HEUR 0.000000,
+ __SCAN_D_NEG_HEUR2 0.000000, __STOCK_PHRASE_7 0.000000,
+ __SUBJ_ALPHA_END 0.000000, __SUBJ_ALPHA_NEGATE 0.000000,
+ __SUBJ_REPLY 0.000000, __TO_GMAIL 0.000000, __TO_MALFORMED_2 0.000000,
+ __TO_NAME 0.000000, __TO_NAME_DIFF_FROM_ACC 0.000000,
+ __TO_REAL_NAMES 0.000000, __URI_HAS_HYPHEN_USC 0.000000,
+ __URI_IN_BODY 0.000000, __URI_MAILTO 0.000000, __URI_NOT_IMG 0.000000,
+ __URI_NO_WWW 0.000000, __URI_NS 0.000000, __URI_WITH_PATH 0.000000,
+ __X_FF_ASR_SCL_NSP 0.000000, __X_FF_ASR_SFV_NSPM 0.000000
+X-SASI-Probability: 8%
+X-SASI-RCODE: 200
+X-SASI-Version: Antispam-Engine: 5.1.1, AntispamData: 2023.9.19.45416
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.93.42.39)
+ smtp.mailfrom=ginzinger.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=ginzinger.com;
+Received-SPF: Pass (protection.outlook.com: domain of ginzinger.com designates
+ 13.93.42.39 as permitted sender) receiver=protection.outlook.com; 
+ client-ip=13.93.42.39; helo=westeu12-emailsignatures-cloud.codetwo.com; pr=C
+Received: from westeu12-emailsignatures-cloud.codetwo.com (13.93.42.39) by
+ DB8EUR05FT061.mail.protection.outlook.com (10.233.238.67) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6813.16 via Frontend Transport; Tue, 19 Sep 2023 05:23:23 +0000
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (104.47.0.56) by
+ westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12)
+ via SMTP; Tue, 19 Sep 2023 05:23:21 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eYYbUShcvz/pxBNnP9UGP54ZivhKF9g48de8yfqV56UEXNlT5D7NfqHZK+ZNxHE2YpG6cKQrhSYxOyGvZmJGn+85ux/yujjz/oh51Q1zCzXiKm9imNw+btu3vv5fNc+VB2o5yytV05VEMGYChzvE69BEZmaCPcYJcH3GLSO1QIaKtugmMgFI04vVEfBq13Usm1jyRCG7VYLwacSTeWm5eOA1Kr4i7igXEqnRFbP63AWZueSV6pcvOltB+VEZHHL/9vL9Vbo9YM5sUc1ovj1ofheMux+HyohHNfa3VMC208kV6+TBjst6jRjJVudj0z9Ubr4Qjm3xB/4trCkRAIqHxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PeMe4Uv3okOU6QfEe+y5hHacrESxh7pWazSbgQDrWVE=;
+ b=RtDX2fqqTFrM294TGRIKj88ymSU6MRSHGhAe0Hs2cBS0QXwne2DUU6TrRFy8Y9+G7MYaO5RfE7Wn8j+IHcZuhHQ6OCejdFXUssIF1CNBZX0xB6Vekku3+FNEJUNLkRyJ1uQA+/YNzIaH1TWLkmSlXbxK6yGvRn4onWn/OAdZeHGOKLrkwsQbcheau0QMPtuEBhe9+jwGzxVZURJqkUfpRfqYYcB/TZD89TXspjbu/6EZpU+vzM/caU938R2J3uAXHumoIa/QUAXAg5jzwVnEJxMOloKRare4fs64tPIShWSDJSeyIE/FZnsmxh0Afv0dTy4728uQ/a45AJrPGts/PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ginzinger.com; dmarc=pass action=none
+ header.from=ginzinger.com; dkim=pass header.d=ginzinger.com; arc=none
+Received: from AM5PR06MB3153.eurprd06.prod.outlook.com (2603:10a6:206:6::18)
+ by VE1PR06MB6879.eurprd06.prod.outlook.com (2603:10a6:800:1a2::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26; Tue, 19 Sep
+ 2023 05:23:02 +0000
+Received: from AM5PR06MB3153.eurprd06.prod.outlook.com
+ ([fe80::6ac:bc05:5e3c:f518]) by AM5PR06MB3153.eurprd06.prod.outlook.com
+ ([fe80::6ac:bc05:5e3c:f518%7]) with mapi id 15.20.6792.026; Tue, 19 Sep 2023
+ 05:23:02 +0000
+From: Hager Stefan <Stefan.Hager@ginzinger.com>
+To: Sourabh Hegde <hrsourabh011@gmail.com>, James Hilliard
+ <james.hilliard1@gmail.com>
+Thread-Index: AQHZ31MjrSy2RpFmN0ySfl6fuWdtN7ALv++AgACtgYCAC/XpgIADxxUAgASqgICAANv19Q==
+Date: Tue, 19 Sep 2023 05:23:01 +0000
+Message-ID: <AM5PR06MB31539BA280C2EC05C5F1F23284FAA@AM5PR06MB3153.eurprd06.prod.outlook.com>
 References: <CADYjeSs8Ou5-Kn4zYqAZa-qr7ALbp2xtiksY1vEb6L+D+7guZQ@mail.gmail.com>
  <CADvTj4pZXmewYMzSRF2QJcvRgzV9nA0bLDCrzEt4Yw_vAZEqBQ@mail.gmail.com>
  <CADYjeSv4hOWHjf78ULEszUUFSKbxqTCzb0ZLAw0tNHhA6LfyVg@mail.gmail.com>
  <CADYjeStbPRHh7jge5vU0Z1_5qXUdgVbQCghV2fZ6zSXASP46XQ@mail.gmail.com>
  <CADYjeStGD0sdj9iT7MDLQG8APoyBFKcLCQEtkcvDz-8WOJ4dcQ@mail.gmail.com>
  <CADYjeSvoxnVhWW9BYkEyJeudsB8ZvYk6pGOjuXJUyh49XQAU_Q@mail.gmail.com>
- <CADvTj4ou41gxNjqMbwjCwtNKGhFzz6uhCwZa+iCgBRwnjUBziQ@mail.gmail.com>
- <CADvTj4q7bCjTN75deJr=WGgoPKNCdqnQt_fkBMY9yiA-2m1v_Q@mail.gmail.com>
- <CADYjeStNG+u8osymoboH7ChLNjNGY3i3BeGLwSppybSWB9bcRg@mail.gmail.com>
- <CADvTj4qx52yQkTvR5XOu58+ssOEodovr0wynVNNhYi9tUe6KXw@mail.gmail.com>
- <CADYjeStEDyGBq3zTOiveO8vhA6v1N5UPvzVZfgrtfTCKC+iAGA@mail.gmail.com>
- <CADvTj4r37uTdWjmY2pgJKMuwizPAziQtCeCXvAL2-TPW4zyV1Q@mail.gmail.com>
-In-Reply-To: <CADvTj4r37uTdWjmY2pgJKMuwizPAziQtCeCXvAL2-TPW4zyV1Q@mail.gmail.com>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Tue, 19 Sep 2023 07:11:08 +0200
-Message-ID: <CADYjeSv9JSqQ2h160R60z75h2DJdW8pyTHdMUZksmpTi-H64=w@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695100280; x=1695705080; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=5sp4dW3xlLsGxAcXkqMm9XAi/edF0kXHgkfeXuox5TI=;
- b=fvEoOss44FriOu6o0mUxS7IOe1ZK3F1mhHO7x2fSRh5LIlrDERXuUF5r+dA06KMV02
- 4dPZRcmkeOvKOfqyAa4azbviVUDnqXGdLtFEXzvsPxthy4/nK62TByZFsqN1SEPVH5SY
- ICOQ7tyr9jylvkcsmgAfCM5mOGbDFrNmwOyrofbj6FxBDLpkWbS0qk0kanM5W1UHWj86
- kpQ79oBbAu1H/yDYvJlTDa7km0qkhKYdb76uo5gSKqI5rGZi+TY1u92XuE1Csui2fhxD
- QA8KEkrxDqbnyW0CwzUhMuVoUXliBk9CV2ecVjutDs78ozMu5VgEzsKEUG6f2/GoZa3m
- YWIw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fvEoOss4
+In-Reply-To: <CADYjeSvoxnVhWW9BYkEyJeudsB8ZvYk6pGOjuXJUyh49XQAU_Q@mail.gmail.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=ginzinger.com;
+x-ms-traffictypediagnostic: AM5PR06MB3153:EE_|VE1PR06MB6879:EE_|DB8EUR05FT061:EE_|DB9PR06MB7307:EE_
+X-MS-Office365-Filtering-Correlation-Id: a1dfef87-89de-4c95-c2d2-08dbb8d08b46
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: YgYKOpl+kbPeV5O2RiFLF6muZmlii1miXI5GML5KaztO9UNGC0UdPlU3ny13hYC5zcKHcDDRCqV002XpXHYnVK7oDC5anLbX77F9moTa2RCrx4PR0Z8MoatP+N6JFVquvpSLhAhTnl8sLa0hHUeVduoL7/NKJNqsXXxWZnwEf9N+BHW7lVaj0xwU7hLgRoMYPuSTXMsk0+4uN4+9+odqo/FQNwUr8kF/GO+bb6tQiNPvDlZl6qAFFnjx2MDNES7gCRUgkeYx834M1Pi823qin07VArog8fWRaDV88Jfx3Y72x2LVGBr8xN9/KAq1kSMb4XA+DOcvDnrhj+FUAl+AA35yQPdzq9xJKWXG6lWzQcaDPLMoqclpGNd6LE1g7dzbEj3U0VkKp4wZTT5I+1Alazr1uZJcUBn23diZg/uRdbafF7KIUXplPVI4UZ1j9D9LaB0L6dBtNiNSdhvnxWX98kASnBR/+9HN1pVvBb2qkgk0oMs6Z6kkgUn6wBVHFcmX1xkbOJbQGP+T1R8B5Px4+MVQv8upmZDBvB9zftfTudMJ8aVHtobdvtVmkEHOEXrwJ9cg1hTOrLdRNc9A7g/T4hIuCwCrJmqgn3Xzyfi7wLI=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255; CTRY:; LANG:en;
+ SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:AM5PR06MB3153.eurprd06.prod.outlook.com;
+ PTR:; CAT:NONE;
+ SFS:(13230031)(376002)(366004)(136003)(346002)(39840400004)(396003)(186009)(1800799009)(451199024)(8676002)(26005)(83380400001)(9686003)(110136005)(91956017)(30864003)(41300700001)(316002)(66476007)(66556008)(64756008)(66446008)(52536014)(5660300002)(66946007)(2906002)(4326008)(71200400001)(8936002)(53546011)(6506007)(478600001)(19627235002)(966005)(76116006)(7696005)(38070700005)(33656002)(38100700002)(86362001)(55016003)(122000001)(579004);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR06MB6879
+X-CodeTwo-MessageID: 91ff6750-939c-44e9-95f6-81ac4f05ce48.20230919052321@westeu12-emailsignatures-cloud.codetwo.com
+X-CodeTwoProcessed: true
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB8EUR05FT061.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 101b87df-d211-4051-41c7-08dbb8d07e96
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a3TMpk2+PfoTvneIAFtY44kpZ6wBOCO9NWjvkd7s9BAnRCNktG70+/7jj2MPE8t/Tqj64umw7iheiA1oFgR3N+01Ps7i7S6aJxwO0CMdtnE6E2i90XOC0xHwTu3fM9hN9lB7y/2fbjRv5VpO12FuH0I1DMgrVXr8ZB45BmL5qCWtkB7RIdFGT1RdkrHYPROOBhmmbSVfdedBevY9GNzggnzwinOPX87ZXx1kUVTHtH/eBmt5g4/szys6vhrIsnEhomPK2ol5kwvh5dYEF4xKcp3/qJCvtK8dnm/0N4OMku8fwj+gYg1xEEoo++6PndSxeTWfUEmylPaS1u8cYJkbsCXy+6O516EI/yrlbci1gI7CA1Hwvz0sqQEf7ScyqfO56wgewieG5EZLYP5m/GxT0aLe+QQW+iEgfCYw6jTYZ0WZMthERbhxvECYIo/sC6UMxGIubvSdFIGZB01W2tkkgB2RFE3la1P3p9WaF/fZI4rJ4pmGk3MduFhH05TlB6J7pX/xjedBLAlKww/6Js26V/NpG9jcmMJ3LjXW8zd716Rm/mGXWOl6T4NQYZOetpG7mclsGUmpHrH5rqt1KW2kkv98MDNUxQ4ElrUXQulQXEpgIfr19YsIrRVwt18NNvO4ZHa1TGM/DD5i6adfAo88VkkWSCy8Ct5SO4K9UTB0GbymqJi2/HQYljgajVCoJS8Z
+X-Forefront-Antispam-Report: CIP:13.93.42.39; CTRY:NL; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:westeu12-emailsignatures-cloud.codetwo.com;
+ PTR:westeu12-emailsignatures-cloud.codetwo.com; CAT:NONE;
+ SFS:(13230031)(4636009)(376002)(136003)(39840400004)(346002)(396003)(82310400011)(186009)(451199024)(1800799009)(46966006)(36840700001)(19627235002)(478600001)(6506007)(7696005)(36860700001)(316002)(9686003)(40480700001)(33656002)(55016003)(2906002)(53546011)(26005)(30864003)(86362001)(356005)(966005)(7596003)(8676002)(7636003)(4326008)(8936002)(52536014)(110136005)(336012)(83380400001)(41300700001)(70586007)(5660300002)(70206006)(47076005);
+ DIR:OUT; SFP:1102; 
+X-OriginatorOrg: ginzinger.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 05:23:23.0092 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1dfef87-89de-4c95-c2d2-08dbb8d08b46
+X-MS-Exchange-CrossTenant-Id: 198354b3-f56d-4ad5-b1e4-7eb8b115ed44
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=198354b3-f56d-4ad5-b1e4-7eb8b115ed44; Ip=[13.93.42.39];
+ Helo=[westeu12-emailsignatures-cloud.codetwo.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB8EUR05FT061.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR06MB7307
+MIME-Version: 1.0
 Subject: Re: [Buildroot] Error while building tensorflow-lite package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -100,1288 +193,502 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: stefan.hager@ginzinger.com, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1028131744417957000=="
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============7358459191809942958=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1028131744417957000==
-Content-Type: multipart/alternative; boundary="0000000000000a79520605af4aad"
+This is an S/MIME signed message
 
---0000000000000a79520605af4aad
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--===============7358459191809942958==
+Content-Type: multipart/signed; protocol="application/x-pkcs7-signature"; micalg="sha-256"; boundary="----99E7632F889BC87790C198072F9D645F"
 
-Yes, I have commented it. I also tried your PR for label_example and
-it worked.
+This is an S/MIME signed message
 
-On Tue, Sep 19, 2023, 04:58 James Hilliard <james.hilliard1@gmail.com>
-wrote:
+------99E7632F889BC87790C198072F9D645F
+Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 
-> On Mon, Sep 18, 2023 at 2:11=E2=80=AFPM Sourabh Hegde <hrsourabh011@gmail=
-.com>
-> wrote:
-> >
-> > Hello James,
-> >
-> > I tried your PR. I created a .patch file to enable benchmark model
-> config option and updated tensorflow/lite/tools/benchmark/CMakeLists.txt
-> and passed -DTFLITE_ENABLE_BENCHMARK_MODEL=3DON to TENSORFLOW_LITE_CONF_O=
-PTS
-> in tensorflow-lite.mk but, I get same error as above
->
-> Just to confirm you also removed the TENSORFLOW_LITE_BENCHMARK_BUILD_CMDS
-> right?
->
-> >
-> > [ 98%] Building CXX object
-> tools/benchmark/CMakeFiles/benchmark_model.dir/__/delegates/xnnpack_deleg=
-ate_provider.cc.o
-> > 2023-09-13T06:49:10 [ 98%] Building CXX object
-> tools/benchmark/CMakeFiles/benchmark_model.dir/__/delegates/external_dele=
-gate_provider.cc.o
-> > 2023-09-13T06:49:11 [100%] Linking CXX executable benchmark_model
-> > 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> CMakeFiles/benchmark_model.dir/benchmark_tflite_model.cc.o: in function
-> `absl::lts_20211102::strings_internal::Splitter<absl::lts_20211102::ByCha=
-r,
-> absl::lts_20211102::AllowEmpty, std::basic_string_view<char,
-> std::char_traits<char> >
-> >::ConvertToContainer<std::vector<std::basic_string_view<char,
-> std::char_traits<char> >, std::allocator<std::basic_string_view<char,
-> std::char_traits<char> > > >, std::basic_string_view<char,
-> std::char_traits<char> >,
-> false>::operator()(absl::lts_20211102::strings_internal::Splitter<absl::l=
-ts_20211102::ByChar,
-> absl::lts_20211102::AllowEmpty, std::basic_string_view<char,
-> std::char_traits<char> > > const&) const [clone .isra.0]':
-> > 2023-09-13T06:49:11 benchmark_tflite_model.cc:(.text+0x204): undefined
-> reference to `absl::lts_20211102::ByChar::Find(std::basic_string_view<cha=
-r,
-> std::char_traits<char> >, unsigned long) const'
-> > 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> benchmark_tflite_model.cc:(.text+0x284): undefined reference to
-> `absl::lts_20211102::ByChar::Find(std::basic_string_view<char,
-> std::char_traits<char> >, unsigned long) const'
-> > 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> CMakeFiles/benchmark_model.dir/benchmark_tflite_model.cc.o: in function
-> `tflite::benchmark::SplitInputLayerNameAndValueFile(std::__cxx11::basic_s=
-tring<char,
-> std::char_traits<char>, std::allocator<char> > const&,
-> std::pair<std::__cxx11::basic_string<char, std::char_traits<char>,
-> std::allocator<char> >, std::__cxx11::basic_string<char,
-> std::char_traits<char>, std::allocator<char> > >&)':
-> >
-> > On Mon, 18 Sept 2023 at 19:17, James Hilliard <james.hilliard1@gmail.co=
-m>
-> wrote:
-> >>
-> >> On Mon, Sep 18, 2023 at 11:01=E2=80=AFAM Sourabh Hegde <hrsourabh011@g=
-mail.com>
-> wrote:
-> >> >
-> >> > Hi James,
-> >> >
-> >> > Thanks for the update and PR:
-> >> > I will try this.
-> >> >
-> >> > However, for testing I changed the c++ std in libabseil-cpp.mk to
-> "17" and rebuilt the libabseil-cpp package. There were no errors.
-> >> > I did this because I read a similar error in abseil-cpp repo.
-> >> >
-> >> > Now I cleaned the tensorflow-lite package and rebuilt it. There were
-> no errors related to linking now.. and benchmark_model is installed to
-> target dir.
-> >> >
-> >> > Do you think is this a good approach? And is it possible to tell
-> Buildroot to use c++std=3D17 for libabseil in tensorflow-lite.mk as
-> TENSORFLOW_LITE_CONF_OPTS or TENSORFLOW_LITE_ENV variable?
-> >>
-> >> I suspect that may just be masking an issue with incorrect cmake
-> options being
-> >> passed to the benchmark_model build.
-> >>
-> >> See if the new config option in my PR fixes the build as that allows
-> the build
-> >> to properly use our cmake infrastructure by making it part of the main
-> >> tensorflow
-> >> build invocation.
-> >>
-> >> >
-> >> > On Mon, 18 Sept 2023 at 18:38, James Hilliard <
-> james.hilliard1@gmail.com> wrote:
-> >> >>
-> >> >> On Mon, Sep 18, 2023 at 10:22=E2=80=AFAM James Hilliard
-> >> >> <james.hilliard1@gmail.com> wrote:
-> >> >> >
-> >> >> > On Mon, Sep 18, 2023 at 10:04=E2=80=AFAM Sourabh Hegde <
-> hrsourabh011@gmail.com> wrote:
-> >> >> > >
-> >> >> > > Hello Stefan, James,
-> >> >> > >
-> >> >> > > Have you tried building the benchmark_model from
-> tensorflow-lite? I am getting above errors during the build...
-> >> >> > >
-> >> >> > > On Fri, 15 Sept 2023 at 18:49, Sourabh Hegde <
-> hrsourabh011@gmail.com> wrote:
-> >> >> > >>
-> >> >> > >> Hello James,
-> >> >> > >>
-> >> >> > >> Do you have any updates on below issue?
-> >> >> > >> This would be helpful
-> >> >> > >>
-> >> >> > >> Thanks in advance
-> >> >> > >>
-> >> >> > >> On Wed, Sep 13, 2023, 09:07 Sourabh Hegde <
-> hrsourabh011@gmail.com> wrote:
-> >> >> > >>>
-> >> >> > >>> Hello James,
-> >> >> > >>>
-> >> >> > >>> I am trying to build the "benchmark_model" in the
-> tensorflow-lite package. The benchmarking application performs a simple
-> TensorFlow Lite model inference and prints benchmarking information.
-> >> >> > >>>
-> >> >> > >>> In the tensorflow-lite.mk  I added new section (similar to
-> label_image example)
-> >> >> > >>> ifeq ($(BR2_PACKAGE_TENSORFLOW_LITE_BUILD_BENCHMARK_MODEL),y)
-> >> >> > >>> define TENSORFLOW_LITE_BENCHMARK_BUILD_CMDS
-> >> >> > >>>         $(TARGET_MAKE_ENV) $(BR2_CMAKE) --build
-> $(TENSORFLOW_LITE_BUILDDIR) -t benchmark_model
-> >> >> > >>> endef
-> >> >> > >>> TENSORFLOW_LITE_POST_BUILD_HOOKS +=3D
-> TENSORFLOW_LITE_BENCHMARK_BUILD_CMDS
-> >> >> > >>>
-> >> >> > >>> define TENSORFLOW_LITE_INSTALL_TARGET_BENCHMARK_MODEL
-> >> >> > >>>          $(INSTALL) -D -m0755
-> $(@D)/tensorflow/lite/buildroot-build/tools/benchmark/benchmark_model
-> $(TARGET_DIR)/usr/bin/benchmark_model
-> >> >> > >>> endef
-> >> >> > >>> TENSORFLOW_LITE_POST_INSTALL_TARGET_HOOKS +=3D
-> TENSORFLOW_LITE_INSTALL_TARGET_BENCHMARK_MODEL
-> >> >> > >>> endif
-> >> >> > >>>
-> >> >> > >>> But while building this is giving error:
-> >> >> > >>>
-> >> >> > >>> [ 98%] Building CXX object
-> tools/benchmark/CMakeFiles/benchmark_model.dir/__/delegates/xnnpack_deleg=
-ate_provider.cc.o
-> >> >> > >>> 2023-09-13T06:49:10 [ 98%] Building CXX object
-> tools/benchmark/CMakeFiles/benchmark_model.dir/__/delegates/external_dele=
-gate_provider.cc.o
-> >> >> > >>> 2023-09-13T06:49:11 [100%] Linking CXX executable
-> benchmark_model
-> >> >> > >>> 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> CMakeFiles/benchmark_model.dir/benchmark_tflite_model.cc.o: in function
-> `absl::lts_20211102::strings_internal::Splitter<absl::lts_20211102::ByCha=
-r,
-> absl::lts_20211102::AllowEmpty, std::basic_string_view<char,
-> std::char_traits<char> >
-> >::ConvertToContainer<std::vector<std::basic_string_view<char,
-> std::char_traits<char> >, std::allocator<std::basic_string_view<char,
-> std::char_traits<char> > > >, std::basic_string_view<char,
-> std::char_traits<char> >,
-> false>::operator()(absl::lts_20211102::strings_internal::Splitter<absl::l=
-ts_20211102::ByChar,
-> absl::lts_20211102::AllowEmpty, std::basic_string_view<char,
-> std::char_traits<char> > > const&) const [clone .isra.0]':
-> >> >> > >>> 2023-09-13T06:49:11 benchmark_tflite_model.cc:(.text+0x204):
-> undefined reference to
-> `absl::lts_20211102::ByChar::Find(std::basic_string_view<char,
-> std::char_traits<char> >, unsigned long) const'
-> >> >> > >>> 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> benchmark_tflite_model.cc:(.text+0x284): undefined reference to
-> `absl::lts_20211102::ByChar::Find(std::basic_string_view<char,
-> std::char_traits<char> >, unsigned long) const'
-> >> >> > >>> 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> CMakeFiles/benchmark_model.dir/benchmark_tflite_model.cc.o: in function
-> `tflite::benchmark::SplitInputLayerNameAndValueFile(std::__cxx11::basic_s=
-tring<char,
-> std::char_traits<char>, std::allocator<char> > const&,
-> std::pair<std::__cxx11::basic_string<char, std::char_traits<char>,
-> std::allocator<char> >, std::__cxx11::basic_string<char,
-> std::char_traits<char>, std::allocator<char> > >&)':
-> >> >> > >>> 2023-09-13T06:49:11 benchmark_tflite_model.cc:(.text+0xcf0):
-> undefined reference to
-> `absl::lts_20211102::StrReplaceAll[abi:cxx11](std::basic_string_view<char=
-,
-> std::char_traits<char> >,
-> std::initializer_list<std::pair<std::basic_string_view<char,
-> std::char_traits<char> >, std::basic_string_view<char,
-> std::char_traits<char> > > >)'
-> >> >> > >>> 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> benchmark_tflite_model.cc:(.text+0xdd4): undefined reference to
-> `absl::lts_20211102::StrReplaceAll[abi:cxx11](std::basic_string_view<char=
-,
-> std::char_traits<char> >,
-> std::initializer_list<std::pair<std::basic_string_view<char,
-> std::char_traits<char> >, std::basic_string_view<char,
-> std::char_traits<char> > > >)'
-> >> >> > >>> 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> CMakeFiles/benchmark_model.dir/benchmark_tflite_model.cc.o: in function
-> `tflite::benchmark::BenchmarkTfLiteModel::ValidateParams()':
-> >> >> > >>> 2023-09-13T06:49:11 benchmark_tflite_model.cc:(.text+0x8388):
-> undefined reference to
-> `absl::lts_20211102::numbers_internal::safe_strto32_base(std::basic_strin=
-g_view<char,
-> std::char_traits<char> >, int*, int)'
-> >> >> > >>> 2023-09-13T06:49:11
-> /home/.../per-package/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/g=
-cc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-g=
-nu/bin/ld:
-> benchmark_tflite_model.cc:(.text+0x83a4): undefined reference to
-> `absl::lts_20211102::numbers_internal::safe_strto32_base(std::basic_strin=
-g_view<char,
-> std::char_traits<char> >, int*, int)'
-> >> >> > >>> 2023-09-13T06:49:11 collect2: error: ld returned 1 exit statu=
-s
-> >> >> > >>> 2023-09-13T06:49:11 make[6]: ***
-> [tools/benchmark/CMakeFiles/benchmark_model.dir/build.make:476:
-> tools/benchmark/benchmark_model] Error 1
-> >> >> > >>> 2023-09-13T06:49:11 make[5]: *** [CMakeFiles/Makefile2:370:
-> tools/benchmark/CMakeFiles/benchmark_model.dir/all] Error 2
-> >> >> > >>> 2023-09-13T06:49:11 make[4]: *** [CMakeFiles/Makefile2:377:
-> tools/benchmark/CMakeFiles/benchmark_model.dir/rule] Error 2
-> >> >> > >>> 2023-09-13T06:49:11 make[3]: *** [Makefile:268:
-> benchmark_model] Error 2
-> >> >> > >>>
-> >> >> > >>> Do you know what the issue here?
-> >> >> >
-> >> >> > You probably need to patch the tensorflow source code similar to
-> this
-> >> >> > as we don't
-> >> >> > really support multiple cmake build invocations for a single
-> package:
-> >> >> > https://github.com/tensorflow/tensorflow/pull/60021
-> >> >> >
-> >> >> > This line is preventing it from being built properly as part of t=
-he
-> >> >> > normal tensorflow-lite
-> >> >> > build:
-> >> >> >
-> https://github.com/tensorflow/tensorflow/blob/v2.11.0/tensorflow/lite/too=
-ls/benchmark/CMakeLists.txt#L84
-> >> >>
-> >> >> Try applying these changes and enabling the new cmake config flag:
-> >> >> https://github.com/tensorflow/tensorflow/pull/61897
-> >> >>
-> >> >> >
-> >> >> > >>>
-> >> >> > >>> Thank you,
-> >> >> > >>> Sourabh
-> >> >> > >>>
-> >> >> > >>> On Tue, 5 Sept 2023 at 18:28, Sourabh Hegde <
-> hrsourabh011@gmail.com> wrote:
-> >> >> > >>>>
-> >> >> > >>>> Hello James,
-> >> >> > >>>>
-> >> >> > >>>> Thanks for the update.
-> >> >> > >>>>
-> >> >> > >>>> I could build the tensorflow-lite package.
-> >> >> > >>>>
-> >> >> > >>>> Best Regards,
-> >> >> > >>>> Sourabh
-> >> >> > >>>>
-> >> >> > >>>>
-> >> >> > >>>>
-> >> >> > >>>> On Tue, 5 Sept 2023 at 08:07, James Hilliard <
-> james.hilliard1@gmail.com> wrote:
-> >> >> > >>>>>
-> >> >> > >>>>> On Mon, Sep 4, 2023 at 11:13=E2=80=AFAM Sourabh Hegde <
-> hrsourabh011@gmail.com> wrote:
-> >> >> > >>>>> >
-> >> >> > >>>>> > Hello All,
-> >> >> > >>>>> >
-> >> >> > >>>>> > I am trying to add tensorflow-lite to Buildroot package
-> and I found a git (quite old)
-> https://github.com/Exein-io/buildroot-tensorflow-lite/tree/master that I
-> wanted to test.
-> >> >> > >>>>>
-> >> >> > >>>>> Try my v6 patch series:
-> >> >> > >>>>>
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=3D346546&subm=
-itter=3D&state=3D*&q=3D&archive=3Dboth&delegate=3D
-> >> >> > >>>>>
-> >> >> > >>>>> > But while building it I am getting below error:
-> >> >> > >>>>> >
-> >> >> > >>>>> >
-> file=3D'/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c6=
-8cc4b2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-download/pthre=
-adpool-prefix/src/545ebe9f225aec6dca49109516fac02e973a3de2.zip'
-> >> >> > >>>>> > -- Downloading... done
-> >> >> > >>>>> > -- extracting...
-> >> >> > >>>>> >
-> src=3D'/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68=
-cc4b2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-download/pthrea=
-dpool-prefix/src/545ebe9f225aec6dca49109516fac02e973a3de2.zip'
-> >> >> > >>>>> >
-> dst=3D'/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68=
-cc4b2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-source'
-> >> >> > >>>>> > -- extracting... [tar xfz]
-> >> >> > >>>>> > -- extracting... [analysis]
-> >> >> > >>>>> > -- extracting... [rename]
-> >> >> > >>>>> > -- extracting... [clean up]
-> >> >> > >>>>> > -- extracting... done
-> >> >> > >>>>> > [ 33%] No patch step for 'pthreadpool'
-> >> >> > >>>>> > [ 44%] No update step for 'pthreadpool'
-> >> >> > >>>>> > [ 55%] No configure step for 'pthreadpool'
-> >> >> > >>>>> > [ 66%] No build step for 'pthreadpool'
-> >> >> > >>>>> > [ 77%] No install step for 'pthreadpool'
-> >> >> > >>>>> > [ 88%] No test step for 'pthreadpool'
-> >> >> > >>>>> > [100%] Completed 'pthreadpool'
-> >> >> > >>>>> > make[4]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/pthreadpool-download'
-> >> >> > >>>>> > [100%] Built target pthreadpool
-> >> >> > >>>>> > make[3]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/pthreadpool-download'
-> >> >> > >>>>> > make[2]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/pthreadpool-download'
-> >> >> > >>>>> > -- Configuring incomplete, errors occurred!
-> >> >> > >>>>> > See also
-> "/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeOutput.log".
-> >> >> > >>>>> > See also
-> "/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeError.log".
-> >> >> > >>>>> > make[1]: *** [package/pkg-generic.mk:283:
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/.stamp_configured]
-> Error 1
-> >> >> > >>>>> > make: *** [Makefile:23: _all] Error 2
-> >> >> > >>>>> >
-> >> >> > >>>>> > The CMakeError.log
-> build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorflow=
-/lite/buildroot-build/CM
-> >> >> > >>>>> > akeFiles shows
-> >> >> > >>>>> >
-> >> >> > >>>>> > Performing C++ SOURCE FILE Test
-> COMPILER_SUPPORT_Wshorten64to32 failed with the following output:
-> >> >> > >>>>> > Change Dir:
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp
-> >> >> > >>>>> >
-> >> >> > >>>>> > Run Build Command(s):/usr/bin/make cmTC_76002/fast &&
-> make[2]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > /usr/bin/make -f CMakeFiles/cmTC_76002.dir/build.make
-> CMakeFiles/cmTC_76002.dir/build
-> >> >> > >>>>> > make[3]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > Building CXX object CMakeFiles/cmTC_76002.dir/src.cxx.o
-> >> >> > >>>>> >
-> /home/test/tmp/.../per-package/tensorflow-lite/host/bin/aarch64-linux-g++
-> --sysroot=3D/home/test/tmp/.../per-package/tensorflow-lite/host/aarch64-b=
-uildroot-linux-gnu/sysroot
->   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64  -O3=
- -g0
-> -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimizations
-> -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -Wcast-alig=
-n
-> -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs
-> -Wpointer-arith -Wwrite-strings -Wformat-security
-> -DCOMPILER_SUPPORT_Wshorten64to32 -Werror  -DNDEBUG -fPIE
->  -Wshorten-64-to-32 -o CMakeFiles/cmTC_76002.dir/src.cxx.o -c
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/src.cxx
-> >> >> > >>>>> > aarch64-linux-g++.br_real: error: unrecognized
-> command-line option '-Wshorten-64-to-32'
-> >> >> > >>>>> > make[3]: *** [CMakeFiles/cmTC_76002.dir/build.make:66:
-> CMakeFiles/cmTC_76002.dir/src.cxx.o] Error 1
-> >> >> > >>>>> > make[3]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > make[2]: *** [Makefile:121: cmTC_76002/fast] Error 2
-> >> >> > >>>>> > make[2]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> >
-> >> >> > >>>>> >
-> >> >> > >>>>> > Source file was:
-> >> >> > >>>>> > int main() { return 0; }
-> >> >> > >>>>> > Performing C++ SOURCE FILE Test
-> COMPILER_SUPPORT_Wcpp11extensions failed with the following output:
-> >> >> > >>>>> > Change Dir:
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp
-> >> >> > >>>>> >
-> >> >> > >>>>> > Run Build Command(s):/usr/bin/make cmTC_0b14f/fast &&
-> make[2]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > /usr/bin/make -f CMakeFiles/cmTC_0b14f.dir/build.make
-> CMakeFiles/cmTC_0b14f.dir/build
-> >> >> > >>>>> > make[3]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > Building CXX object CMakeFiles/cmTC_0b14f.dir/src.cxx.o
-> >> >> > >>>>> >
-> /home/test/tmp/.../per-package/tensorflow-lite/host/bin/aarch64-linux-g++
-> --sysroot=3D/home/test/tmp/.../per-package/tensorflow-lite/host/aarch64-b=
-uildroot-linux-gnu/sysroot
->   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64  -O3=
- -g0
-> -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimizations
-> -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -Wcast-alig=
-n
-> -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs
-> -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op
-> -Wenum-conversion -DCOMPILER_SUPPORT_Wcpp11extensions -Werror  -DNDEBUG
-> -fPIE   -Wc++11-extensions -o CMakeFiles/cmTC_0b14f.dir/src.cxx.o -c
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/src.cxx
-> >> >> > >>>>> > aarch64-linux-g++.br_real: error: unrecognized
-> command-line option '-Wc++11-extensions'; did you mean '-fms-extensions'?
-> >> >> > >>>>> > make[3]: *** [CMakeFiles/cmTC_0b14f.dir/build.make:66:
-> CMakeFiles/cmTC_0b14f.dir/src.cxx.o] Error 1
-> >> >> > >>>>> > make[3]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > make[2]: *** [Makefile:121: cmTC_0b14f/fast] Error 2
-> >> >> > >>>>> > make[2]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> >
-> >> >> > >>>>> >
-> >> >> > >>>>> > Source file was:
-> >> >> > >>>>> > int main() { return 0; }
-> >> >> > >>>>> > Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd981
-> failed with the following output:
-> >> >> > >>>>> > Change Dir:
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp
-> >> >> > >>>>> >
-> >> >> > >>>>> > Run Build Command(s):/usr/bin/make cmTC_4c191/fast &&
-> make[2]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > /usr/bin/make -f CMakeFiles/cmTC_4c191.dir/build.make
-> CMakeFiles/cmTC_4c191.dir/build
-> >> >> > >>>>> > make[3]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > Building CXX object CMakeFiles/cmTC_4c191.dir/src.cxx.o
-> >> >> > >>>>> >
-> /home/test/tmp/.../per-package/tensorflow-lite/host/bin/aarch64-linux-g++
-> --sysroot=3D/home/test/tmp/.../per-package/tensorflow-lite/host/aarch64-b=
-uildroot-linux-gnu/sysroot
->   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64  -O3=
- -g0
-> -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimizations
-> -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -Wcast-alig=
-n
-> -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs
-> -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op
-> -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi
-> -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common
-> -fstrict-aliasing -DCOMPILER_SUPPORT_wd981 -Werror  -DNDEBUG -fPIE   -wd9=
-81
-> -o CMakeFiles/cmTC_4c191.dir/src.cxx.o -c
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/src.cxx
-> >> >> > >>>>> > aarch64-linux-g++.br_real: error: unrecognized
-> command-line option '-wd981'
-> >> >> > >>>>> > make[3]: *** [CMakeFiles/cmTC_4c191.dir/build.make:66:
-> CMakeFiles/cmTC_4c191.dir/src.cxx.o] Error 1
-> >> >> > >>>>> > make[3]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > make[2]: *** [Makefile:121: cmTC_4c191/fast] Error 2
-> >> >> > >>>>> > make[2]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> >
-> >> >> > >>>>> >
-> >> >> > >>>>> > Source file was:
-> >> >> > >>>>> > int main() { return 0; }
-> >> >> > >>>>> > Performing C++ SOURCE FILE Test COMPILER_SUPPORT_wd2304
-> failed with the following output:
-> >> >> > >>>>> > Change Dir:
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp
-> >> >> > >>>>> >
-> >> >> > >>>>> > Run Build Command(s):/usr/bin/make cmTC_3d2da/fast &&
-> make[2]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > /usr/bin/make -f CMakeFiles/cmTC_3d2da.dir/build.make
-> CMakeFiles/cmTC_3d2da.dir/build
-> >> >> > >>>>> > make[3]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > Building CXX object CMakeFiles/cmTC_3d2da.dir/src.cxx.o
-> >> >> > >>>>> >
-> /home/test/tmp/.../per-package/tensorflow-lite/host/bin/aarch64-linux-g++
-> --sysroot=3D/home/test/tmp/.../per-package/tensorflow-lite/host/aarch64-b=
-uildroot-linux-gnu/sysroot
->   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64  -O3=
- -g0
-> -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimizations
-> -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -Wcast-alig=
-n
-> -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs
-> -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op
-> -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi
-> -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common
-> -fstrict-aliasing -DCOMPILER_SUPPORT_wd2304 -Werror  -DNDEBUG -fPIE
->  -wd2304 -o CMakeFiles/cmTC_3d2da.dir/src.cxx.o -c
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/src.cxx
-> >> >> > >>>>> > aarch64-linux-g++.br_real: error: unrecognized
-> command-line option '-wd2304'
-> >> >> > >>>>> > make[3]: *** [CMakeFiles/cmTC_3d2da.dir/build.make:66:
-> CMakeFiles/cmTC_3d2da.dir/src.cxx.o] Error 1
-> >> >> > >>>>> > make[3]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > make[2]: *** [Makefile:121: cmTC_3d2da/fast] Error 2
-> >> >> > >>>>> > make[2]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> >
-> >> >> > >>>>> >
-> >> >> > >>>>> > Source file was:
-> >> >> > >>>>> > int main() { return 0; }
-> >> >> > >>>>> > Performing C++ SOURCE FILE Test
-> COMPILER_SUPPORT_STRICTANSI failed with the following output:
-> >> >> > >>>>> > Change Dir:
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp
-> >> >> > >>>>> >
-> >> >> > >>>>> > Run Build Command(s):/usr/bin/make cmTC_b2340/fast &&
-> make[2]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > /usr/bin/make -f CMakeFiles/cmTC_b2340.dir/build.make
-> CMakeFiles/cmTC_b2340.dir/build
-> >> >> > >>>>> > make[3]: Entering directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > Building CXX object CMakeFiles/cmTC_b2340.dir/src.cxx.o
-> >> >> > >>>>> >
-> /home/test/tmp/.../per-package/tensorflow-lite/host/bin/aarch64-linux-g++
-> --sysroot=3D/home/test/tmp/.../per-package/tensorflow-lite/host/aarch64-b=
-uildroot-linux-gnu/sysroot
->   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64  -O3=
- -g0
-> -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimizations
-> -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -Wcast-alig=
-n
-> -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs
-> -Wpointer-arith -Wwrite-strings -Wformat-security -Wlogical-op
-> -Wenum-conversion -Wdouble-promotion -Wshadow -Wno-psabi
-> -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common
-> -fstrict-aliasing -DCOMPILER_SUPPORT_STRICTANSI -Werror  -DNDEBUG -fPIE
->  -strict-ansi -o CMakeFiles/cmTC_b2340.dir/src.cxx.o -c
-> /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba=
-991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/src.cxx
-> >> >> > >>>>> > aarch64-linux-g++.br_real: error: unrecognized
-> command-line option '-strict-ansi'; did you mean '-fstrict-enums'?
-> >> >> > >>>>> > make[3]: *** [CMakeFiles/cmTC_b2340.dir/build.make:66:
-> CMakeFiles/cmTC_b2340.dir/src.cxx.o] Error 1
-> >> >> > >>>>> > make[3]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> > make[2]: *** [Makefile:121: cmTC_b2340/fast] Error 2
-> >> >> > >>>>> > make[2]: Leaving directory
-> '/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2b=
-a991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp'
-> >> >> > >>>>> >
-> >> >> > >>>>> > Can anyone please let me know what could be an issue and
-> how to resolve it?
-> >> >> > >>>>> >
-> >> >> > >>>>> > Thanks in advance
-> >> >> > >>>>> >
-> >> >> > >>>>> > _______________________________________________
-> >> >> > >>>>> > buildroot mailing list
-> >> >> > >>>>> > buildroot@buildroot.org
-> >> >> > >>>>> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
+SGVsbG8gU291cmFiaCBIZWdkZSwKCkkgZXhwZXJpZW5jZWQgdGhlIHNhbWUgcHJvYmxlbSBidXQg
+d2l0aCBhbiBvbGRlciB2ZXJzaW9uIG9mIHRmbGl0ZSBzb21lIHRpbWUgYWdvLgpTaW5jZSBteSB1
+c2UgY2FzZSBpcyBqdXN0IGluZmVyZW5jZSBhbmQgdGhlIGJlbmNobWFyayBtb2RlbCB3YXMgbm90
+IGEgcmVxdWlyZW1lbnQKaSBkaWQgbm90IGludmVzdGlnYXRlIHRoYXQgZnVydGhlciB3aXRoIHRo
+ZSBjdXJyZW50IHZlcnNpb24gb2YgdGZsaXRlLgoKVGhhbmtzIGZvciB5b3VyIHN1Z2dlc3RlZCBm
+aXggb2YgdXBkYXRpbmcgdGhlIGMrKyBzdGQgb2YgbGliYWJzZWlsLgoKQmVzdCByZWdhcmRzClN0
+ZWZhbgoKCkZyb206IFNvdXJhYmggSGVnZGUgPGhyc291cmFiaDAxMUBnbWFpbC5jb20+ClNlbnQ6
+IE1vbmRheSwgU2VwdGVtYmVyIDE4LCAyMDIzIDE4OjA0ClRvOiBKYW1lcyBIaWxsaWFyZCA8amFt
+ZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT47IEhhZ2VyIFN0ZWZhbiA8U3RlZmFuLkhhZ2VyQGdpbnpp
+bmdlci5jb20+CkNjOiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZyA8YnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmc+ClN1YmplY3Q6IFJlOiBbQnVpbGRyb290XSBFcnJvciB3aGlsZSBidWlsZGluZyB0ZW5z
+b3JmbG93LWxpdGUgcGFja2FnZSAKwqAKSGVsbG8gU3RlZmFuLCBKYW1lcywgCgpIYXZlIHlvdSB0
+cmllZCBidWlsZGluZyB0aGUgYmVuY2htYXJrX21vZGVsIGZyb20gdGVuc29yZmxvdy1saXRlPyBJ
+IGFtIGdldHRpbmfCoGFib3ZlIGVycm9ycyBkdXJpbmcgdGhlIGJ1aWxkLi4uCgpPbiBGcmksIDE1
+IFNlcHQgMjAyMyBhdCAxODo0OSwgU291cmFiaCBIZWdkZSA8aHJzb3VyYWJoMDExQGdtYWlsLmNv
+bT4gd3JvdGU6CkhlbGxvIEphbWVzLAoKRG8geW91IGhhdmUgYW55IHVwZGF0ZXMgb24gYmVsb3cg
+aXNzdWU/wqAKVGhpcyB3b3VsZCBiZSBoZWxwZnVsCgpUaGFua3MgaW4gYWR2YW5jZQoKT24gV2Vk
+LCBTZXAgMTMsIDIwMjMsIDA5OjA3IFNvdXJhYmggSGVnZGUgPGhyc291cmFiaDAxMUBnbWFpbC5j
+b20+IHdyb3RlOgpIZWxsbyBKYW1lcywgCgpJIGFtIHRyeWluZyB0byBidWlsZCB0aGUgImJlbmNo
+bWFya19tb2RlbCIgaW4gdGhlIHRlbnNvcmZsb3ctbGl0ZSBwYWNrYWdlLiBUaGUgYmVuY2htYXJr
+aW5nIGFwcGxpY2F0aW9uIHBlcmZvcm1zIGEgc2ltcGxlIFRlbnNvckZsb3cgTGl0ZSBtb2RlbCBp
+bmZlcmVuY2UgYW5kIHByaW50cyBiZW5jaG1hcmtpbmcgaW5mb3JtYXRpb24uCgpJbiB0aGUgdGVu
+c29yZmxvdy1saXRlLm1rwqAgSSBhZGRlZCBuZXcgc2VjdGlvbiAoc2ltaWxhciB0byBsYWJlbF9p
+bWFnZSBleGFtcGxlKQppZmVxICgkKEJSMl9QQUNLQUdFX1RFTlNPUkZMT1dfTElURV9CVUlMRF9C
+RU5DSE1BUktfTU9ERUwpLHkpCmRlZmluZSBURU5TT1JGTE9XX0xJVEVfQkVOQ0hNQVJLX0JVSUxE
+X0NNRFMKwqAgwqAgwqAgwqAgJChUQVJHRVRfTUFLRV9FTlYpICQoQlIyX0NNQUtFKSAtLWJ1aWxk
+ICQoVEVOU09SRkxPV19MSVRFX0JVSUxERElSKSAtdCBiZW5jaG1hcmtfbW9kZWwKZW5kZWYKVEVO
+U09SRkxPV19MSVRFX1BPU1RfQlVJTERfSE9PS1MgKz0gVEVOU09SRkxPV19MSVRFX0JFTkNITUFS
+S19CVUlMRF9DTURTCgpkZWZpbmUgVEVOU09SRkxPV19MSVRFX0lOU1RBTExfVEFSR0VUX0JFTkNI
+TUFSS19NT0RFTArCoCDCoCDCoCDCoCDCoCQoSU5TVEFMTCkgLUQgLW0wNzU1ICQoQEQpL3RlbnNv
+cmZsb3cvbGl0ZS9idWlsZHJvb3QtYnVpbGQvdG9vbHMvYmVuY2htYXJrL2JlbmNobWFya19tb2Rl
+bCAkKFRBUkdFVF9ESVIpL3Vzci9iaW4vYmVuY2htYXJrX21vZGVsCmVuZGVmClRFTlNPUkZMT1df
+TElURV9QT1NUX0lOU1RBTExfVEFSR0VUX0hPT0tTICs9IFRFTlNPUkZMT1dfTElURV9JTlNUQUxM
+X1RBUkdFVF9CRU5DSE1BUktfTU9ERUwKZW5kaWYKCkJ1dCB3aGlsZSBidWlsZGluZyB0aGlzIGlz
+IGdpdmluZyBlcnJvcjoKClsgOTglXSBCdWlsZGluZyBDWFggb2JqZWN0IHRvb2xzL2JlbmNobWFy
+ay9DTWFrZUZpbGVzL2JlbmNobWFya19tb2RlbC5kaXIvX18vZGVsZWdhdGVzL3hubnBhY2tfZGVs
+ZWdhdGVfcHJvdmlkZXIuY2MubwoyMDIzLTA5LTEzVDA2OjQ5OjEwIFsgOTglXSBCdWlsZGluZyBD
+WFggb2JqZWN0IHRvb2xzL2JlbmNobWFyay9DTWFrZUZpbGVzL2JlbmNobWFya19tb2RlbC5kaXIv
+X18vZGVsZWdhdGVzL2V4dGVybmFsX2RlbGVnYXRlX3Byb3ZpZGVyLmNjLm8KMjAyMy0wOS0xM1Qw
+Njo0OToxMSBbMTAwJV0gTGlua2luZyBDWFggZXhlY3V0YWJsZSBiZW5jaG1hcmtfbW9kZWwKMjAy
+My0wOS0xM1QwNjo0OToxMSAvaG9tZS8uLi4vcGVyLXBhY2thZ2UvdGVuc29yZmxvdy1saXRlL2hv
+c3Qvb3B0L2V4dC10b29sY2hhaW4vYmluLy4uL2xpYi9nY2MvYWFyY2g2NC1idWlsZHJvb3QtbGlu
+dXgtZ251LzEwLjMuMC8uLi8uLi8uLi8uLi9hYXJjaDY0LWJ1aWxkcm9vdC1saW51eC1nbnUvYmlu
+L2xkOiBDTWFrZUZpbGVzL2JlbmNobWFya19tb2RlbC5kaXIvYmVuY2htYXJrX3RmbGl0ZV9tb2Rl
+bC5jYy5vOiBpbiBmdW5jdGlvbiBgYWJzbDo6bHRzXzIwMjExMTAyOjpzdHJpbmdzX2ludGVybmFs
+OjpTcGxpdHRlcjxhYnNsOjpsdHNfMjAyMTExMDI6OkJ5Q2hhciwgYWJzbDo6bHRzXzIwMjExMTAy
+OjpBbGxvd0VtcHR5LCBzdGQ6OmJhc2ljX3N0cmluZ192aWV3PGNoYXIsIHN0ZDo6Y2hhcl90cmFp
+dHM8Y2hhcj4gPiA+OjpDb252ZXJ0VG9Db250YWluZXI8c3RkOjp2ZWN0b3I8c3RkOjpiYXNpY19z
+dHJpbmdfdmlldzxjaGFyLCBzdGQ6OmNoYXJfdHJhaXRzPGNoYXI+ID4sIHN0ZDo6YWxsb2NhdG9y
+PHN0ZDo6YmFzaWNfc3RyaW5nX3ZpZXc8Y2hhciwgc3RkOjpjaGFyX3RyYWl0czxjaGFyPiA+ID4g
+Piwgc3RkOjpiYXNpY19zdHJpbmdfdmlldzxjaGFyLCBzdGQ6OmNoYXJfdHJhaXRzPGNoYXI+ID4s
+IGZhbHNlPjo6b3BlcmF0b3IoKShhYnNsOjpsdHNfMjAyMTExMDI6OnN0cmluZ3NfaW50ZXJuYWw6
+OlNwbGl0dGVyPGFic2w6Omx0c18yMDIxMTEwMjo6QnlDaGFyLCBhYnNsOjpsdHNfMjAyMTExMDI6
+OkFsbG93RW1wdHksIHN0ZDo6YmFzaWNfc3RyaW5nX3ZpZXc8Y2hhciwgc3RkOjpjaGFyX3RyYWl0
+czxjaGFyPiA+ID4gY29uc3QmKSBjb25zdCBbY2xvbmUgLmlzcmEuMF0nOgoyMDIzLTA5LTEzVDA2
+OjQ5OjExIGJlbmNobWFya190ZmxpdGVfbW9kZWwuY2M6KC50ZXh0KzB4MjA0KTogdW5kZWZpbmVk
+IHJlZmVyZW5jZSB0byBgYWJzbDo6bHRzXzIwMjExMTAyOjpCeUNoYXI6OkZpbmQoc3RkOjpiYXNp
+Y19zdHJpbmdfdmlldzxjaGFyLCBzdGQ6OmNoYXJfdHJhaXRzPGNoYXI+ID4sIHVuc2lnbmVkIGxv
+bmcpIGNvbnN0JwoyMDIzLTA5LTEzVDA2OjQ5OjExIC9ob21lLy4uLi9wZXItcGFja2FnZS90ZW5z
+b3JmbG93LWxpdGUvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9iaW4vLi4vbGliL2djYy9hYXJjaDY0
+LWJ1aWxkcm9vdC1saW51eC1nbnUvMTAuMy4wLy4uLy4uLy4uLy4uL2FhcmNoNjQtYnVpbGRyb290
+LWxpbnV4LWdudS9iaW4vbGQ6IGJlbmNobWFya190ZmxpdGVfbW9kZWwuY2M6KC50ZXh0KzB4Mjg0
+KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgYWJzbDo6bHRzXzIwMjExMTAyOjpCeUNoYXI6OkZp
+bmQoc3RkOjpiYXNpY19zdHJpbmdfdmlldzxjaGFyLCBzdGQ6OmNoYXJfdHJhaXRzPGNoYXI+ID4s
+IHVuc2lnbmVkIGxvbmcpIGNvbnN0JwoyMDIzLTA5LTEzVDA2OjQ5OjExIC9ob21lLy4uLi9wZXIt
+cGFja2FnZS90ZW5zb3JmbG93LWxpdGUvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9iaW4vLi4vbGli
+L2djYy9hYXJjaDY0LWJ1aWxkcm9vdC1saW51eC1nbnUvMTAuMy4wLy4uLy4uLy4uLy4uL2FhcmNo
+NjQtYnVpbGRyb290LWxpbnV4LWdudS9iaW4vbGQ6IENNYWtlRmlsZXMvYmVuY2htYXJrX21vZGVs
+LmRpci9iZW5jaG1hcmtfdGZsaXRlX21vZGVsLmNjLm86IGluIGZ1bmN0aW9uIGB0ZmxpdGU6OmJl
+bmNobWFyazo6U3BsaXRJbnB1dExheWVyTmFtZUFuZFZhbHVlRmlsZShzdGQ6Ol9fY3h4MTE6OmJh
+c2ljX3N0cmluZzxjaGFyLCBzdGQ6OmNoYXJfdHJhaXRzPGNoYXI+LCBzdGQ6OmFsbG9jYXRvcjxj
+aGFyPiA+IGNvbnN0Jiwgc3RkOjpwYWlyPHN0ZDo6X19jeHgxMTo6YmFzaWNfc3RyaW5nPGNoYXIs
+IHN0ZDo6Y2hhcl90cmFpdHM8Y2hhcj4sIHN0ZDo6YWxsb2NhdG9yPGNoYXI+ID4sIHN0ZDo6X19j
+eHgxMTo6YmFzaWNfc3RyaW5nPGNoYXIsIHN0ZDo6Y2hhcl90cmFpdHM8Y2hhcj4sIHN0ZDo6YWxs
+b2NhdG9yPGNoYXI+ID4gPiYpJzoKMjAyMy0wOS0xM1QwNjo0OToxMSBiZW5jaG1hcmtfdGZsaXRl
+X21vZGVsLmNjOigudGV4dCsweGNmMCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGFic2w6Omx0
+c18yMDIxMTEwMjo6U3RyUmVwbGFjZUFsbFthYmk6Y3h4MTFdKHN0ZDo6YmFzaWNfc3RyaW5nX3Zp
+ZXc8Y2hhciwgc3RkOjpjaGFyX3RyYWl0czxjaGFyPiA+LCBzdGQ6OmluaXRpYWxpemVyX2xpc3Q8
+c3RkOjpwYWlyPHN0ZDo6YmFzaWNfc3RyaW5nX3ZpZXc8Y2hhciwgc3RkOjpjaGFyX3RyYWl0czxj
+aGFyPiA+LCBzdGQ6OmJhc2ljX3N0cmluZ192aWV3PGNoYXIsIHN0ZDo6Y2hhcl90cmFpdHM8Y2hh
+cj4gPiA+ID4pJwoyMDIzLTA5LTEzVDA2OjQ5OjExIC9ob21lLy4uLi9wZXItcGFja2FnZS90ZW5z
+b3JmbG93LWxpdGUvaG9zdC9vcHQvZXh0LXRvb2xjaGFpbi9iaW4vLi4vbGliL2djYy9hYXJjaDY0
+LWJ1aWxkcm9vdC1saW51eC1nbnUvMTAuMy4wLy4uLy4uLy4uLy4uL2FhcmNoNjQtYnVpbGRyb290
+LWxpbnV4LWdudS9iaW4vbGQ6IGJlbmNobWFya190ZmxpdGVfbW9kZWwuY2M6KC50ZXh0KzB4ZGQ0
+KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgYWJzbDo6bHRzXzIwMjExMTAyOjpTdHJSZXBsYWNl
+QWxsW2FiaTpjeHgxMV0oc3RkOjpiYXNpY19zdHJpbmdfdmlldzxjaGFyLCBzdGQ6OmNoYXJfdHJh
+aXRzPGNoYXI+ID4sIHN0ZDo6aW5pdGlhbGl6ZXJfbGlzdDxzdGQ6OnBhaXI8c3RkOjpiYXNpY19z
+dHJpbmdfdmlldzxjaGFyLCBzdGQ6OmNoYXJfdHJhaXRzPGNoYXI+ID4sIHN0ZDo6YmFzaWNfc3Ry
+aW5nX3ZpZXc8Y2hhciwgc3RkOjpjaGFyX3RyYWl0czxjaGFyPiA+ID4gPiknCjIwMjMtMDktMTNU
+MDY6NDk6MTEgL2hvbWUvLi4uL3Blci1wYWNrYWdlL3RlbnNvcmZsb3ctbGl0ZS9ob3N0L29wdC9l
+eHQtdG9vbGNoYWluL2Jpbi8uLi9saWIvZ2NjL2FhcmNoNjQtYnVpbGRyb290LWxpbnV4LWdudS8x
+MC4zLjAvLi4vLi4vLi4vLi4vYWFyY2g2NC1idWlsZHJvb3QtbGludXgtZ251L2Jpbi9sZDogQ01h
+a2VGaWxlcy9iZW5jaG1hcmtfbW9kZWwuZGlyL2JlbmNobWFya190ZmxpdGVfbW9kZWwuY2Mubzog
+aW4gZnVuY3Rpb24gYHRmbGl0ZTo6YmVuY2htYXJrOjpCZW5jaG1hcmtUZkxpdGVNb2RlbDo6VmFs
+aWRhdGVQYXJhbXMoKSc6CjIwMjMtMDktMTNUMDY6NDk6MTEgYmVuY2htYXJrX3RmbGl0ZV9tb2Rl
+bC5jYzooLnRleHQrMHg4Mzg4KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgYWJzbDo6bHRzXzIw
+MjExMTAyOjpudW1iZXJzX2ludGVybmFsOjpzYWZlX3N0cnRvMzJfYmFzZShzdGQ6OmJhc2ljX3N0
+cmluZ192aWV3PGNoYXIsIHN0ZDo6Y2hhcl90cmFpdHM8Y2hhcj4gPiwgaW50KiwgaW50KScKMjAy
+My0wOS0xM1QwNjo0OToxMSAvaG9tZS8uLi4vcGVyLXBhY2thZ2UvdGVuc29yZmxvdy1saXRlL2hv
+c3Qvb3B0L2V4dC10b29sY2hhaW4vYmluLy4uL2xpYi9nY2MvYWFyY2g2NC1idWlsZHJvb3QtbGlu
+dXgtZ251LzEwLjMuMC8uLi8uLi8uLi8uLi9hYXJjaDY0LWJ1aWxkcm9vdC1saW51eC1nbnUvYmlu
+L2xkOiBiZW5jaG1hcmtfdGZsaXRlX21vZGVsLmNjOigudGV4dCsweDgzYTQpOiB1bmRlZmluZWQg
+cmVmZXJlbmNlIHRvIGBhYnNsOjpsdHNfMjAyMTExMDI6Om51bWJlcnNfaW50ZXJuYWw6OnNhZmVf
+c3RydG8zMl9iYXNlKHN0ZDo6YmFzaWNfc3RyaW5nX3ZpZXc8Y2hhciwgc3RkOjpjaGFyX3RyYWl0
+czxjaGFyPiA+LCBpbnQqLCBpbnQpJwoyMDIzLTA5LTEzVDA2OjQ5OjExIGNvbGxlY3QyOiBlcnJv
+cjogbGQgcmV0dXJuZWQgMSBleGl0IHN0YXR1cwoyMDIzLTA5LTEzVDA2OjQ5OjExIG1ha2VbNl06
+ICoqKiBbdG9vbHMvYmVuY2htYXJrL0NNYWtlRmlsZXMvYmVuY2htYXJrX21vZGVsLmRpci9idWls
+ZC5tYWtlOjQ3NjogdG9vbHMvYmVuY2htYXJrL2JlbmNobWFya19tb2RlbF0gRXJyb3IgMQoyMDIz
+LTA5LTEzVDA2OjQ5OjExIG1ha2VbNV06ICoqKiBbQ01ha2VGaWxlcy9NYWtlZmlsZTI6MzcwOiB0
+b29scy9iZW5jaG1hcmsvQ01ha2VGaWxlcy9iZW5jaG1hcmtfbW9kZWwuZGlyL2FsbF0gRXJyb3Ig
+MgoyMDIzLTA5LTEzVDA2OjQ5OjExIG1ha2VbNF06ICoqKiBbQ01ha2VGaWxlcy9NYWtlZmlsZTI6
+Mzc3OiB0b29scy9iZW5jaG1hcmsvQ01ha2VGaWxlcy9iZW5jaG1hcmtfbW9kZWwuZGlyL3J1bGVd
+IEVycm9yIDIKMjAyMy0wOS0xM1QwNjo0OToxMSBtYWtlWzNdOiAqKiogW01ha2VmaWxlOjI2ODog
+YmVuY2htYXJrX21vZGVsXSBFcnJvciAyCgpEbyB5b3Uga25vdyB3aGF0IHRoZSBpc3N1ZSBoZXJl
+PwoKVGhhbmsgeW91LApTb3VyYWJoCgpPbiBUdWUsIDUgU2VwdCAyMDIzIGF0IDE4OjI4LCBTb3Vy
+YWJoIEhlZ2RlIDxocnNvdXJhYmgwMTFAZ21haWwuY29tPiB3cm90ZToKSGVsbG8gSmFtZXMsIAoK
+VGhhbmtzIGZvciB0aGUgdXBkYXRlLgoKSSBjb3VsZCBidWlsZCB0aGUgdGVuc29yZmxvdy1saXRl
+IHBhY2thZ2UuCgpCZXN0IFJlZ2FyZHMsClNvdXJhYmgKCsKgCgpPbiBUdWUsIDUgU2VwdCAyMDIz
+IGF0IDA4OjA3LCBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4gd3Jv
+dGU6Ck9uIE1vbiwgU2VwIDQsIDIwMjMgYXQgMTE6MTPigK9BTSBTb3VyYWJoIEhlZ2RlIDxocnNv
+dXJhYmgwMTFAZ21haWwuY29tPiB3cm90ZToKPgo+IEhlbGxvIEFsbCwKPgo+IEkgYW0gdHJ5aW5n
+IHRvIGFkZCB0ZW5zb3JmbG93LWxpdGUgdG8gQnVpbGRyb290IHBhY2thZ2UgYW5kIEkgZm91bmQg
+YSBnaXQgKHF1aXRlIG9sZCkgaHR0cHM6Ly9naXRodWIuY29tL0V4ZWluLWlvL2J1aWxkcm9vdC10
+ZW5zb3JmbG93LWxpdGUvdHJlZS9tYXN0ZXIgdGhhdCBJIHdhbnRlZCB0byB0ZXN0LgoKVHJ5IG15
+IHY2IHBhdGNoIHNlcmllczoKaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1
+aWxkcm9vdC9saXN0Lz9zZXJpZXM9MzQ2NTQ2JnN1Ym1pdHRlcj0mc3RhdGU9KiZxPSZhcmNoaXZl
+PWJvdGgmZGVsZWdhdGU9Cgo+IEJ1dCB3aGlsZSBidWlsZGluZyBpdCBJIGFtIGdldHRpbmcgYmVs
+b3cgZXJyb3I6Cj4KPiBmaWxlPScvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVuc29yZmxvdy1s
+aXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVuc29yZmxvdy9s
+aXRlL2J1aWxkcm9vdC1idWlsZC9wdGhyZWFkcG9vbC1kb3dubG9hZC9wdGhyZWFkcG9vbC1wcmVm
+aXgvc3JjLzU0NWViZTlmMjI1YWVjNmRjYTQ5MTA5NTE2ZmFjMDJlOTczYTNkZTIuemlwJwo+IC0t
+IERvd25sb2FkaW5nLi4uIGRvbmUKPiAtLSBleHRyYWN0aW5nLi4uCj7CoCDCoCDCoCBzcmM9Jy9o
+b21lL3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIw
+YjQ5N2M2OGNjNGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL3B0
+aHJlYWRwb29sLWRvd25sb2FkL3B0aHJlYWRwb29sLXByZWZpeC9zcmMvNTQ1ZWJlOWYyMjVhZWM2
+ZGNhNDkxMDk1MTZmYWMwMmU5NzNhM2RlMi56aXAnCj7CoCDCoCDCoCBkc3Q9Jy9ob21lL3Rlc3Qv
+dG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNj
+NGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL3B0aHJlYWRwb29s
+LXNvdXJjZScKPiAtLSBleHRyYWN0aW5nLi4uIFt0YXIgeGZ6XQo+IC0tIGV4dHJhY3RpbmcuLi4g
+W2FuYWx5c2lzXQo+IC0tIGV4dHJhY3RpbmcuLi4gW3JlbmFtZV0KPiAtLSBleHRyYWN0aW5nLi4u
+IFtjbGVhbiB1cF0KPiAtLSBleHRyYWN0aW5nLi4uIGRvbmUKPiBbIDMzJV0gTm8gcGF0Y2ggc3Rl
+cCBmb3IgJ3B0aHJlYWRwb29sJwo+IFsgNDQlXSBObyB1cGRhdGUgc3RlcCBmb3IgJ3B0aHJlYWRw
+b29sJwo+IFsgNTUlXSBObyBjb25maWd1cmUgc3RlcCBmb3IgJ3B0aHJlYWRwb29sJwo+IFsgNjYl
+XSBObyBidWlsZCBzdGVwIGZvciAncHRocmVhZHBvb2wnCj4gWyA3NyVdIE5vIGluc3RhbGwgc3Rl
+cCBmb3IgJ3B0aHJlYWRwb29sJwo+IFsgODglXSBObyB0ZXN0IHN0ZXAgZm9yICdwdGhyZWFkcG9v
+bCcKPiBbMTAwJV0gQ29tcGxldGVkICdwdGhyZWFkcG9vbCcKPiBtYWtlWzRdOiBMZWF2aW5nIGRp
+cmVjdG9yeSAnL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNvcmZsb3ctbGl0ZS05NjYzYWJl
+NGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNvcmZsb3cvbGl0ZS9idWlsZHJv
+b3QtYnVpbGQvcHRocmVhZHBvb2wtZG93bmxvYWQnCj4gWzEwMCVdIEJ1aWx0IHRhcmdldCBwdGhy
+ZWFkcG9vbAo+IG1ha2VbM106IExlYXZpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4v
+YnVpbGQvdGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkx
+OTY3ZGQvdGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9wdGhyZWFkcG9vbC1kb3dubG9h
+ZCcKPiBtYWtlWzJdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxk
+L3RlbnNvcmZsb3ctbGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2Rk
+L3RlbnNvcmZsb3cvbGl0ZS9idWlsZHJvb3QtYnVpbGQvcHRocmVhZHBvb2wtZG93bmxvYWQnCj4g
+LS0gQ29uZmlndXJpbmcgaW5jb21wbGV0ZSwgZXJyb3JzIG9jY3VycmVkIQo+IFNlZSBhbHNvICIv
+aG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBi
+MGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9D
+TWFrZUZpbGVzL0NNYWtlT3V0cHV0LmxvZyIuCj4gU2VlIGFsc28gIi9ob21lL3Rlc3QvdG1wLy4u
+Li9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5
+OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VF
+cnJvci5sb2ciLgo+IG1ha2VbMV06ICoqKiBbcGFja2FnZS9wa2ctZ2VuZXJpYy5tazoyODM6IC9o
+b21lL3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIw
+YjQ5N2M2OGNjNGIyYmE5OTE5NjdkZC8uc3RhbXBfY29uZmlndXJlZF0gRXJyb3IgMQo+IG1ha2U6
+ICoqKiBbTWFrZWZpbGU6MjM6IF9hbGxdIEVycm9yIDIKPgo+IFRoZSBDTWFrZUVycm9yLmxvZyBi
+dWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5OTE5
+NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNCj4gYWtlRmlsZXMgc2hvd3MK
+Pgo+IFBlcmZvcm1pbmcgQysrIFNPVVJDRSBGSUxFIFRlc3QgQ09NUElMRVJfU1VQUE9SVF9Xc2hv
+cnRlbjY0dG8zMiBmYWlsZWQgd2l0aCB0aGUgZm9sbG93aW5nIG91dHB1dDoKPiBDaGFuZ2UgRGly
+OiAvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcw
+MzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWls
+ZC9DTWFrZUZpbGVzL0NNYWtlVG1wCj4KPiBSdW4gQnVpbGQgQ29tbWFuZChzKTovdXNyL2Jpbi9t
+YWtlIGNtVENfNzYwMDIvZmFzdCAmJiBtYWtlWzJdOiBFbnRlcmluZyBkaXJlY3RvcnkgJy9ob21l
+L3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5
+N2M2OGNjNGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNYWtl
+RmlsZXMvQ01ha2VUbXAnCj4gL3Vzci9iaW4vbWFrZSAtZiBDTWFrZUZpbGVzL2NtVENfNzYwMDIu
+ZGlyL2J1aWxkLm1ha2UgQ01ha2VGaWxlcy9jbVRDXzc2MDAyLmRpci9idWlsZAo+IG1ha2VbM106
+IEVudGVyaW5nIGRpcmVjdG9yeSAnL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNvcmZsb3ct
+bGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNvcmZsb3cv
+bGl0ZS9idWlsZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRtcCcKPiBCdWlsZGluZyBDWFgg
+b2JqZWN0IENNYWtlRmlsZXMvY21UQ183NjAwMi5kaXIvc3JjLmN4eC5vCj4gL2hvbWUvdGVzdC90
+bXAvLi4uL3Blci1wYWNrYWdlL3RlbnNvcmZsb3ctbGl0ZS9ob3N0L2Jpbi9hYXJjaDY0LWxpbnV4
+LWcrKyAtLXN5c3Jvb3Q9L2hvbWUvdGVzdC90bXAvLi4uL3Blci1wYWNrYWdlL3RlbnNvcmZsb3ct
+bGl0ZS9ob3N0L2FhcmNoNjQtYnVpbGRyb290LWxpbnV4LWdudS9zeXNyb290wqAgwqAgLURfTEFS
+R0VGSUxFX1NPVVJDRSAtRF9MQVJHRUZJTEU2NF9TT1VSQ0UgLURfRklMRV9PRkZTRVRfQklUUz02
+NMKgIC1PMyAtZzAgLURfRk9SVElGWV9TT1VSQ0U9MiAtbGRsIC1sYXRvbWljIC1mdW5zYWZlLW1h
+dGgtb3B0aW1pemF0aW9uc8KgIC1tYXJjaD1hcm12OC1hIC1zdGQ9YysrMDMgLXBlZGFudGljIC1X
+YWxsIC1XZXh0cmEgLVd1bmRlZiAtV2Nhc3QtYWxpZ24gLVdjaGFyLXN1YnNjcmlwdHMgLVdub24t
+dmlydHVhbC1kdG9yIC1XdW51c2VkLWxvY2FsLXR5cGVkZWZzIC1XcG9pbnRlci1hcml0aCAtV3dy
+aXRlLXN0cmluZ3MgLVdmb3JtYXQtc2VjdXJpdHkgLURDT01QSUxFUl9TVVBQT1JUX1dzaG9ydGVu
+NjR0bzMyIC1XZXJyb3LCoCAtRE5ERUJVRyAtZlBJRcKgIMKgLVdzaG9ydGVuLTY0LXRvLTMyIC1v
+IENNYWtlRmlsZXMvY21UQ183NjAwMi5kaXIvc3JjLmN4eC5vIC1jIC9ob21lL3Rlc3QvdG1wLy4u
+Li9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5
+OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VU
+bXAvc3JjLmN4eAo+IGFhcmNoNjQtbGludXgtZysrLmJyX3JlYWw6IGVycm9yOiB1bnJlY29nbml6
+ZWQgY29tbWFuZC1saW5lIG9wdGlvbiAnLVdzaG9ydGVuLTY0LXRvLTMyJwo+IG1ha2VbM106ICoq
+KiBbQ01ha2VGaWxlcy9jbVRDXzc2MDAyLmRpci9idWlsZC5tYWtlOjY2OiBDTWFrZUZpbGVzL2Nt
+VENfNzYwMDIuZGlyL3NyYy5jeHgub10gRXJyb3IgMQo+IG1ha2VbM106IExlYXZpbmcgZGlyZWN0
+b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVuc29yZmxvdy1saXRlLTk2NjNhYmU0Yzkw
+MzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1i
+dWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wJwo+IG1ha2VbMl06ICoqKiBbTWFrZWZpbGU6MTIxOiBj
+bVRDXzc2MDAyL2Zhc3RdIEVycm9yIDIKPiBtYWtlWzJdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hv
+bWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNvcmZsb3ctbGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBi
+NDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNvcmZsb3cvbGl0ZS9idWlsZHJvb3QtYnVpbGQvQ01h
+a2VGaWxlcy9DTWFrZVRtcCcKPgo+Cj4gU291cmNlIGZpbGUgd2FzOgo+IGludCBtYWluKCkgeyBy
+ZXR1cm4gMDsgfQo+IFBlcmZvcm1pbmcgQysrIFNPVVJDRSBGSUxFIFRlc3QgQ09NUElMRVJfU1VQ
+UE9SVF9XY3BwMTFleHRlbnNpb25zIGZhaWxlZCB3aXRoIHRoZSBmb2xsb3dpbmcgb3V0cHV0Ogo+
+IENoYW5nZSBEaXI6IC9ob21lL3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2
+M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVp
+bGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VUbXAKPgo+IFJ1biBCdWlsZCBDb21tYW5kKHMp
+Oi91c3IvYmluL21ha2UgY21UQ18wYjE0Zi9mYXN0ICYmIG1ha2VbMl06IEVudGVyaW5nIGRpcmVj
+dG9yeSAnL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNvcmZsb3ctbGl0ZS05NjYzYWJlNGM5
+MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNvcmZsb3cvbGl0ZS9idWlsZHJvb3Qt
+YnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRtcCcKPiAvdXNyL2Jpbi9tYWtlIC1mIENNYWtlRmlsZXMv
+Y21UQ18wYjE0Zi5kaXIvYnVpbGQubWFrZSBDTWFrZUZpbGVzL2NtVENfMGIxNGYuZGlyL2J1aWxk
+Cj4gbWFrZVszXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQv
+dGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQv
+dGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wJwo+IEJ1
+aWxkaW5nIENYWCBvYmplY3QgQ01ha2VGaWxlcy9jbVRDXzBiMTRmLmRpci9zcmMuY3h4Lm8KPiAv
+aG9tZS90ZXN0L3RtcC8uLi4vcGVyLXBhY2thZ2UvdGVuc29yZmxvdy1saXRlL2hvc3QvYmluL2Fh
+cmNoNjQtbGludXgtZysrIC0tc3lzcm9vdD0vaG9tZS90ZXN0L3RtcC8uLi4vcGVyLXBhY2thZ2Uv
+dGVuc29yZmxvdy1saXRlL2hvc3QvYWFyY2g2NC1idWlsZHJvb3QtbGludXgtZ251L3N5c3Jvb3TC
+oCDCoCAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09G
+RlNFVF9CSVRTPTY0wqAgLU8zIC1nMCAtRF9GT1JUSUZZX1NPVVJDRT0yIC1sZGwgLWxhdG9taWMg
+LWZ1bnNhZmUtbWF0aC1vcHRpbWl6YXRpb25zwqAgLW1hcmNoPWFybXY4LWEgLXN0ZD1jKyswMyAt
+cGVkYW50aWMgLVdhbGwgLVdleHRyYSAtV3VuZGVmIC1XY2FzdC1hbGlnbiAtV2NoYXItc3Vic2Ny
+aXB0cyAtV25vbi12aXJ0dWFsLWR0b3IgLVd1bnVzZWQtbG9jYWwtdHlwZWRlZnMgLVdwb2ludGVy
+LWFyaXRoIC1Xd3JpdGUtc3RyaW5ncyAtV2Zvcm1hdC1zZWN1cml0eSAtV2xvZ2ljYWwtb3AgLVdl
+bnVtLWNvbnZlcnNpb24gLURDT01QSUxFUl9TVVBQT1JUX1djcHAxMWV4dGVuc2lvbnMgLVdlcnJv
+csKgIC1ETkRFQlVHIC1mUElFwqAgwqAtV2MrKzExLWV4dGVuc2lvbnMgLW8gQ01ha2VGaWxlcy9j
+bVRDXzBiMTRmLmRpci9zcmMuY3h4Lm8gLWMgL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNv
+cmZsb3ctbGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNv
+cmZsb3cvbGl0ZS9idWlsZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRtcC9zcmMuY3h4Cj4g
+YWFyY2g2NC1saW51eC1nKysuYnJfcmVhbDogZXJyb3I6IHVucmVjb2duaXplZCBjb21tYW5kLWxp
+bmUgb3B0aW9uICctV2MrKzExLWV4dGVuc2lvbnMnOyBkaWQgeW91IG1lYW4gJy1mbXMtZXh0ZW5z
+aW9ucyc/Cj4gbWFrZVszXTogKioqIFtDTWFrZUZpbGVzL2NtVENfMGIxNGYuZGlyL2J1aWxkLm1h
+a2U6NjY6IENNYWtlRmlsZXMvY21UQ18wYjE0Zi5kaXIvc3JjLmN4eC5vXSBFcnJvciAxCj4gbWFr
+ZVszXTogTGVhdmluZyBkaXJlY3RvcnkgJy9ob21lL3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3Jm
+bG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5OTE5NjdkZC90ZW5zb3Jm
+bG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VUbXAnCj4gbWFrZVsyXTog
+KioqIFtNYWtlZmlsZToxMjE6IGNtVENfMGIxNGYvZmFzdF0gRXJyb3IgMgo+IG1ha2VbMl06IExl
+YXZpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVuc29yZmxvdy1saXRl
+LTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVuc29yZmxvdy9saXRl
+L2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wJwo+Cj4KPiBTb3VyY2UgZmlsZSB3
+YXM6Cj4gaW50IG1haW4oKSB7IHJldHVybiAwOyB9Cj4gUGVyZm9ybWluZyBDKysgU09VUkNFIEZJ
+TEUgVGVzdCBDT01QSUxFUl9TVVBQT1JUX3dkOTgxIGZhaWxlZCB3aXRoIHRoZSBmb2xsb3dpbmcg
+b3V0cHV0Ogo+IENoYW5nZSBEaXI6IC9ob21lL3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3JmbG93
+LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93
+L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VUbXAKPgo+IFJ1biBCdWlsZCBD
+b21tYW5kKHMpOi91c3IvYmluL21ha2UgY21UQ180YzE5MS9mYXN0ICYmIG1ha2VbMl06IEVudGVy
+aW5nIGRpcmVjdG9yeSAnL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNvcmZsb3ctbGl0ZS05
+NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNvcmZsb3cvbGl0ZS9i
+dWlsZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRtcCcKPiAvdXNyL2Jpbi9tYWtlIC1mIENN
+YWtlRmlsZXMvY21UQ180YzE5MS5kaXIvYnVpbGQubWFrZSBDTWFrZUZpbGVzL2NtVENfNGMxOTEu
+ZGlyL2J1aWxkCj4gbWFrZVszXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8u
+Li4vYnVpbGQvdGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJh
+OTkxOTY3ZGQvdGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtl
+VG1wJwo+IEJ1aWxkaW5nIENYWCBvYmplY3QgQ01ha2VGaWxlcy9jbVRDXzRjMTkxLmRpci9zcmMu
+Y3h4Lm8KPiAvaG9tZS90ZXN0L3RtcC8uLi4vcGVyLXBhY2thZ2UvdGVuc29yZmxvdy1saXRlL2hv
+c3QvYmluL2FhcmNoNjQtbGludXgtZysrIC0tc3lzcm9vdD0vaG9tZS90ZXN0L3RtcC8uLi4vcGVy
+LXBhY2thZ2UvdGVuc29yZmxvdy1saXRlL2hvc3QvYWFyY2g2NC1idWlsZHJvb3QtbGludXgtZ251
+L3N5c3Jvb3TCoCDCoCAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAt
+RF9GSUxFX09GRlNFVF9CSVRTPTY0wqAgLU8zIC1nMCAtRF9GT1JUSUZZX1NPVVJDRT0yIC1sZGwg
+LWxhdG9taWMgLWZ1bnNhZmUtbWF0aC1vcHRpbWl6YXRpb25zwqAgLW1hcmNoPWFybXY4LWEgLXN0
+ZD1jKyswMyAtcGVkYW50aWMgLVdhbGwgLVdleHRyYSAtV3VuZGVmIC1XY2FzdC1hbGlnbiAtV2No
+YXItc3Vic2NyaXB0cyAtV25vbi12aXJ0dWFsLWR0b3IgLVd1bnVzZWQtbG9jYWwtdHlwZWRlZnMg
+LVdwb2ludGVyLWFyaXRoIC1Xd3JpdGUtc3RyaW5ncyAtV2Zvcm1hdC1zZWN1cml0eSAtV2xvZ2lj
+YWwtb3AgLVdlbnVtLWNvbnZlcnNpb24gLVdkb3VibGUtcHJvbW90aW9uIC1Xc2hhZG93IC1Xbm8t
+cHNhYmkgLVduby12YXJpYWRpYy1tYWNyb3MgLVduby1sb25nLWxvbmcgLWZuby1jaGVjay1uZXcg
+LWZuby1jb21tb24gLWZzdHJpY3QtYWxpYXNpbmcgLURDT01QSUxFUl9TVVBQT1JUX3dkOTgxIC1X
+ZXJyb3LCoCAtRE5ERUJVRyAtZlBJRcKgIMKgLXdkOTgxIC1vIENNYWtlRmlsZXMvY21UQ180YzE5
+MS5kaXIvc3JjLmN4eC5vIC1jIC9ob21lL3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxp
+dGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93L2xp
+dGUvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VUbXAvc3JjLmN4eAo+IGFhcmNoNjQt
+bGludXgtZysrLmJyX3JlYWw6IGVycm9yOiB1bnJlY29nbml6ZWQgY29tbWFuZC1saW5lIG9wdGlv
+biAnLXdkOTgxJwo+IG1ha2VbM106ICoqKiBbQ01ha2VGaWxlcy9jbVRDXzRjMTkxLmRpci9idWls
+ZC5tYWtlOjY2OiBDTWFrZUZpbGVzL2NtVENfNGMxOTEuZGlyL3NyYy5jeHgub10gRXJyb3IgMQo+
+IG1ha2VbM106IExlYXZpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVu
+c29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVu
+c29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wJwo+IG1ha2Vb
+Ml06ICoqKiBbTWFrZWZpbGU6MTIxOiBjbVRDXzRjMTkxL2Zhc3RdIEVycm9yIDIKPiBtYWtlWzJd
+OiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNvcmZsb3ct
+bGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNvcmZsb3cv
+bGl0ZS9idWlsZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRtcCcKPgo+Cj4gU291cmNlIGZp
+bGUgd2FzOgo+IGludCBtYWluKCkgeyByZXR1cm4gMDsgfQo+IFBlcmZvcm1pbmcgQysrIFNPVVJD
+RSBGSUxFIFRlc3QgQ09NUElMRVJfU1VQUE9SVF93ZDIzMDQgZmFpbGVkIHdpdGggdGhlIGZvbGxv
+d2luZyBvdXRwdXQ6Cj4gQ2hhbmdlIERpcjogL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3RlbnNv
+cmZsb3ctbGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3RlbnNv
+cmZsb3cvbGl0ZS9idWlsZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRtcAo+Cj4gUnVuIEJ1
+aWxkIENvbW1hbmQocyk6L3Vzci9iaW4vbWFrZSBjbVRDXzNkMmRhL2Zhc3QgJiYgbWFrZVsyXTog
+RW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVuc29yZmxvdy1s
+aXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVuc29yZmxvdy9s
+aXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wJwo+IC91c3IvYmluL21ha2Ug
+LWYgQ01ha2VGaWxlcy9jbVRDXzNkMmRhLmRpci9idWlsZC5tYWtlIENNYWtlRmlsZXMvY21UQ18z
+ZDJkYS5kaXIvYnVpbGQKPiBtYWtlWzNdOiBFbnRlcmluZyBkaXJlY3RvcnkgJy9ob21lL3Rlc3Qv
+dG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNj
+NGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMv
+Q01ha2VUbXAnCj4gQnVpbGRpbmcgQ1hYIG9iamVjdCBDTWFrZUZpbGVzL2NtVENfM2QyZGEuZGly
+L3NyYy5jeHgubwo+IC9ob21lL3Rlc3QvdG1wLy4uLi9wZXItcGFja2FnZS90ZW5zb3JmbG93LWxp
+dGUvaG9zdC9iaW4vYWFyY2g2NC1saW51eC1nKysgLS1zeXNyb290PS9ob21lL3Rlc3QvdG1wLy4u
+Li9wZXItcGFja2FnZS90ZW5zb3JmbG93LWxpdGUvaG9zdC9hYXJjaDY0LWJ1aWxkcm9vdC1saW51
+eC1nbnUvc3lzcm9vdMKgIMKgIC1EX0xBUkdFRklMRV9TT1VSQ0UgLURfTEFSR0VGSUxFNjRfU09V
+UkNFIC1EX0ZJTEVfT0ZGU0VUX0JJVFM9NjTCoCAtTzMgLWcwIC1EX0ZPUlRJRllfU09VUkNFPTIg
+LWxkbCAtbGF0b21pYyAtZnVuc2FmZS1tYXRoLW9wdGltaXphdGlvbnPCoCAtbWFyY2g9YXJtdjgt
+YSAtc3RkPWMrKzAzIC1wZWRhbnRpYyAtV2FsbCAtV2V4dHJhIC1XdW5kZWYgLVdjYXN0LWFsaWdu
+IC1XY2hhci1zdWJzY3JpcHRzIC1Xbm9uLXZpcnR1YWwtZHRvciAtV3VudXNlZC1sb2NhbC10eXBl
+ZGVmcyAtV3BvaW50ZXItYXJpdGggLVd3cml0ZS1zdHJpbmdzIC1XZm9ybWF0LXNlY3VyaXR5IC1X
+bG9naWNhbC1vcCAtV2VudW0tY29udmVyc2lvbiAtV2RvdWJsZS1wcm9tb3Rpb24gLVdzaGFkb3cg
+LVduby1wc2FiaSAtV25vLXZhcmlhZGljLW1hY3JvcyAtV25vLWxvbmctbG9uZyAtZm5vLWNoZWNr
+LW5ldyAtZm5vLWNvbW1vbiAtZnN0cmljdC1hbGlhc2luZyAtRENPTVBJTEVSX1NVUFBPUlRfd2Qy
+MzA0IC1XZXJyb3LCoCAtRE5ERUJVRyAtZlBJRcKgIMKgLXdkMjMwNCAtbyBDTWFrZUZpbGVzL2Nt
+VENfM2QyZGEuZGlyL3NyYy5jeHgubyAtYyAvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVuc29y
+Zmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVuc29y
+Zmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wL3NyYy5jeHgKPiBh
+YXJjaDY0LWxpbnV4LWcrKy5icl9yZWFsOiBlcnJvcjogdW5yZWNvZ25pemVkIGNvbW1hbmQtbGlu
+ZSBvcHRpb24gJy13ZDIzMDQnCj4gbWFrZVszXTogKioqIFtDTWFrZUZpbGVzL2NtVENfM2QyZGEu
+ZGlyL2J1aWxkLm1ha2U6NjY6IENNYWtlRmlsZXMvY21UQ18zZDJkYS5kaXIvc3JjLmN4eC5vXSBF
+cnJvciAxCj4gbWFrZVszXTogTGVhdmluZyBkaXJlY3RvcnkgJy9ob21lL3Rlc3QvdG1wLy4uLi9i
+dWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAzMGIwYjQ5N2M2OGNjNGIyYmE5OTE5
+NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxkL0NNYWtlRmlsZXMvQ01ha2VUbXAn
+Cj4gbWFrZVsyXTogKioqIFtNYWtlZmlsZToxMjE6IGNtVENfM2QyZGEvZmFzdF0gRXJyb3IgMgo+
+IG1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQvdGVu
+c29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQvdGVu
+c29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wJwo+Cj4KPiBT
+b3VyY2UgZmlsZSB3YXM6Cj4gaW50IG1haW4oKSB7IHJldHVybiAwOyB9Cj4gUGVyZm9ybWluZyBD
+KysgU09VUkNFIEZJTEUgVGVzdCBDT01QSUxFUl9TVVBQT1JUX1NUUklDVEFOU0kgZmFpbGVkIHdp
+dGggdGhlIGZvbGxvd2luZyBvdXRwdXQ6Cj4gQ2hhbmdlIERpcjogL2hvbWUvdGVzdC90bXAvLi4u
+L2J1aWxkL3RlbnNvcmZsb3ctbGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5
+MTk2N2RkL3RlbnNvcmZsb3cvbGl0ZS9idWlsZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRt
+cAo+Cj4gUnVuIEJ1aWxkIENvbW1hbmQocyk6L3Vzci9iaW4vbWFrZSBjbVRDX2IyMzQwL2Zhc3Qg
+JiYgbWFrZVsyXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4vYnVpbGQv
+dGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkxOTY3ZGQv
+dGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1wJwo+IC91
+c3IvYmluL21ha2UgLWYgQ01ha2VGaWxlcy9jbVRDX2IyMzQwLmRpci9idWlsZC5tYWtlIENNYWtl
+RmlsZXMvY21UQ19iMjM0MC5kaXIvYnVpbGQKPiBtYWtlWzNdOiBFbnRlcmluZyBkaXJlY3Rvcnkg
+Jy9ob21lL3Rlc3QvdG1wLy4uLi9idWlsZC90ZW5zb3JmbG93LWxpdGUtOTY2M2FiZTRjOTAzNzAz
+MGIwYjQ5N2M2OGNjNGIyYmE5OTE5NjdkZC90ZW5zb3JmbG93L2xpdGUvYnVpbGRyb290LWJ1aWxk
+L0NNYWtlRmlsZXMvQ01ha2VUbXAnCj4gQnVpbGRpbmcgQ1hYIG9iamVjdCBDTWFrZUZpbGVzL2Nt
+VENfYjIzNDAuZGlyL3NyYy5jeHgubwo+IC9ob21lL3Rlc3QvdG1wLy4uLi9wZXItcGFja2FnZS90
+ZW5zb3JmbG93LWxpdGUvaG9zdC9iaW4vYWFyY2g2NC1saW51eC1nKysgLS1zeXNyb290PS9ob21l
+L3Rlc3QvdG1wLy4uLi9wZXItcGFja2FnZS90ZW5zb3JmbG93LWxpdGUvaG9zdC9hYXJjaDY0LWJ1
+aWxkcm9vdC1saW51eC1nbnUvc3lzcm9vdMKgIMKgIC1EX0xBUkdFRklMRV9TT1VSQ0UgLURfTEFS
+R0VGSUxFNjRfU09VUkNFIC1EX0ZJTEVfT0ZGU0VUX0JJVFM9NjTCoCAtTzMgLWcwIC1EX0ZPUlRJ
+RllfU09VUkNFPTIgLWxkbCAtbGF0b21pYyAtZnVuc2FmZS1tYXRoLW9wdGltaXphdGlvbnPCoCAt
+bWFyY2g9YXJtdjgtYSAtc3RkPWMrKzAzIC1wZWRhbnRpYyAtV2FsbCAtV2V4dHJhIC1XdW5kZWYg
+LVdjYXN0LWFsaWduIC1XY2hhci1zdWJzY3JpcHRzIC1Xbm9uLXZpcnR1YWwtZHRvciAtV3VudXNl
+ZC1sb2NhbC10eXBlZGVmcyAtV3BvaW50ZXItYXJpdGggLVd3cml0ZS1zdHJpbmdzIC1XZm9ybWF0
+LXNlY3VyaXR5IC1XbG9naWNhbC1vcCAtV2VudW0tY29udmVyc2lvbiAtV2RvdWJsZS1wcm9tb3Rp
+b24gLVdzaGFkb3cgLVduby1wc2FiaSAtV25vLXZhcmlhZGljLW1hY3JvcyAtV25vLWxvbmctbG9u
+ZyAtZm5vLWNoZWNrLW5ldyAtZm5vLWNvbW1vbiAtZnN0cmljdC1hbGlhc2luZyAtRENPTVBJTEVS
+X1NVUFBPUlRfU1RSSUNUQU5TSSAtV2Vycm9ywqAgLUROREVCVUcgLWZQSUXCoCDCoC1zdHJpY3Qt
+YW5zaSAtbyBDTWFrZUZpbGVzL2NtVENfYjIzNDAuZGlyL3NyYy5jeHgubyAtYyAvaG9tZS90ZXN0
+L3RtcC8uLi4vYnVpbGQvdGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhj
+YzRiMmJhOTkxOTY3ZGQvdGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVz
+L0NNYWtlVG1wL3NyYy5jeHgKPiBhYXJjaDY0LWxpbnV4LWcrKy5icl9yZWFsOiBlcnJvcjogdW5y
+ZWNvZ25pemVkIGNvbW1hbmQtbGluZSBvcHRpb24gJy1zdHJpY3QtYW5zaSc7IGRpZCB5b3UgbWVh
+biAnLWZzdHJpY3QtZW51bXMnPwo+IG1ha2VbM106ICoqKiBbQ01ha2VGaWxlcy9jbVRDX2IyMzQw
+LmRpci9idWlsZC5tYWtlOjY2OiBDTWFrZUZpbGVzL2NtVENfYjIzNDAuZGlyL3NyYy5jeHgub10g
+RXJyb3IgMQo+IG1ha2VbM106IExlYXZpbmcgZGlyZWN0b3J5ICcvaG9tZS90ZXN0L3RtcC8uLi4v
+YnVpbGQvdGVuc29yZmxvdy1saXRlLTk2NjNhYmU0YzkwMzcwMzBiMGI0OTdjNjhjYzRiMmJhOTkx
+OTY3ZGQvdGVuc29yZmxvdy9saXRlL2J1aWxkcm9vdC1idWlsZC9DTWFrZUZpbGVzL0NNYWtlVG1w
+Jwo+IG1ha2VbMl06ICoqKiBbTWFrZWZpbGU6MTIxOiBjbVRDX2IyMzQwL2Zhc3RdIEVycm9yIDIK
+PiBtYWtlWzJdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvdGVzdC90bXAvLi4uL2J1aWxkL3Rl
+bnNvcmZsb3ctbGl0ZS05NjYzYWJlNGM5MDM3MDMwYjBiNDk3YzY4Y2M0YjJiYTk5MTk2N2RkL3Rl
+bnNvcmZsb3cvbGl0ZS9idWlsZHJvb3QtYnVpbGQvQ01ha2VGaWxlcy9DTWFrZVRtcCcKPgo+IENh
+biBhbnlvbmUgcGxlYXNlIGxldCBtZSBrbm93IHdoYXQgY291bGQgYmUgYW4gaXNzdWUgYW5kIGhv
+dyB0byByZXNvbHZlIGl0Pwo+Cj4gVGhhbmtzIGluIGFkdmFuY2UKPgo+IF9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlz
+dAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
 
---0000000000000a79520605af4aad
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+------99E7632F889BC87790C198072F9D645F
+Content-Type: application/x-pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
 
-<div dir=3D"auto">Yes, I have commented it. I also tried your PR for label_=
-example and it=C2=A0worked.</div><br><div class=3D"gmail_quote"><div dir=3D=
-"ltr" class=3D"gmail_attr">On Tue, Sep 19, 2023, 04:58 James Hilliard &lt;<=
-a href=3D"mailto:james.hilliard1@gmail.com">james.hilliard1@gmail.com</a>&g=
-t; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 =
-.8ex;border-left:1px #ccc solid;padding-left:1ex">On Mon, Sep 18, 2023 at 2=
-:11=E2=80=AFPM Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail.com" =
-target=3D"_blank" rel=3D"noreferrer">hrsourabh011@gmail.com</a>&gt; wrote:<=
-br>
-&gt;<br>
-&gt; Hello James,<br>
-&gt;<br>
-&gt; I tried your PR. I created a .patch file to enable benchmark model con=
-fig option and updated tensorflow/lite/tools/benchmark/CMakeLists.txt and p=
-assed -DTFLITE_ENABLE_BENCHMARK_MODEL=3DON to TENSORFLOW_LITE_CONF_OPTS in =
-<a href=3D"http://tensorflow-lite.mk" rel=3D"noreferrer noreferrer" target=
-=3D"_blank">tensorflow-lite.mk</a> but, I get same error as above<br>
-<br>
-Just to confirm you also removed the TENSORFLOW_LITE_BENCHMARK_BUILD_CMDS r=
-ight?<br>
-<br>
-&gt;<br>
-&gt; [ 98%] Building CXX object tools/benchmark/CMakeFiles/benchmark_model.=
-dir/__/delegates/xnnpack_delegate_provider.cc.o<br>
-&gt; 2023-09-13T06:49:10 [ 98%] Building CXX object tools/benchmark/CMakeFi=
-les/benchmark_model.dir/__/delegates/external_delegate_provider.cc.o<br>
-&gt; 2023-09-13T06:49:11 [100%] Linking CXX executable benchmark_model<br>
-&gt; 2023-09-13T06:49:11 /home/.../per-package/tensorflow-lite/host/opt/ext=
--toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aa=
-rch64-buildroot-linux-gnu/bin/ld: CMakeFiles/benchmark_model.dir/benchmark_=
-tflite_model.cc.o: in function `absl::lts_20211102::strings_internal::Split=
-ter&lt;absl::lts_20211102::ByChar, absl::lts_20211102::AllowEmpty, std::bas=
-ic_string_view&lt;char, std::char_traits&lt;char&gt; &gt; &gt;::ConvertToCo=
-ntainer&lt;std::vector&lt;std::basic_string_view&lt;char, std::char_traits&=
-lt;char&gt; &gt;, std::allocator&lt;std::basic_string_view&lt;char, std::ch=
-ar_traits&lt;char&gt; &gt; &gt; &gt;, std::basic_string_view&lt;char, std::=
-char_traits&lt;char&gt; &gt;, false&gt;::operator()(absl::lts_20211102::str=
-ings_internal::Splitter&lt;absl::lts_20211102::ByChar, absl::lts_20211102::=
-AllowEmpty, std::basic_string_view&lt;char, std::char_traits&lt;char&gt; &g=
-t; &gt; const&amp;) const [clone .isra.0]&#39;:<br>
-&gt; 2023-09-13T06:49:11 benchmark_tflite_model.cc:(.text+0x204): undefined=
- reference to `absl::lts_20211102::ByChar::Find(std::basic_string_view&lt;c=
-har, std::char_traits&lt;char&gt; &gt;, unsigned long) const&#39;<br>
-&gt; 2023-09-13T06:49:11 /home/.../per-package/tensorflow-lite/host/opt/ext=
--toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aa=
-rch64-buildroot-linux-gnu/bin/ld: benchmark_tflite_model.cc:(.text+0x284): =
-undefined reference to `absl::lts_20211102::ByChar::Find(std::basic_string_=
-view&lt;char, std::char_traits&lt;char&gt; &gt;, unsigned long) const&#39;<=
-br>
-&gt; 2023-09-13T06:49:11 /home/.../per-package/tensorflow-lite/host/opt/ext=
--toolchain/bin/../lib/gcc/aarch64-buildroot-linux-gnu/10.3.0/../../../../aa=
-rch64-buildroot-linux-gnu/bin/ld: CMakeFiles/benchmark_model.dir/benchmark_=
-tflite_model.cc.o: in function `tflite::benchmark::SplitInputLayerNameAndVa=
-lueFile(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, s=
-td::allocator&lt;char&gt; &gt; const&amp;, std::pair&lt;std::__cxx11::basic=
-_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &=
-gt;, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std:=
-:allocator&lt;char&gt; &gt; &gt;&amp;)&#39;:<br>
-&gt;<br>
-&gt; On Mon, 18 Sept 2023 at 19:17, James Hilliard &lt;<a href=3D"mailto:ja=
-mes.hilliard1@gmail.com" target=3D"_blank" rel=3D"noreferrer">james.hilliar=
-d1@gmail.com</a>&gt; wrote:<br>
-&gt;&gt;<br>
-&gt;&gt; On Mon, Sep 18, 2023 at 11:01=E2=80=AFAM Sourabh Hegde &lt;<a href=
-=3D"mailto:hrsourabh011@gmail.com" target=3D"_blank" rel=3D"noreferrer">hrs=
-ourabh011@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; Hi James,<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; Thanks for the update and PR:<br>
-&gt;&gt; &gt; I will try this.<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; However, for testing I changed the c++ std in <a href=3D"http=
-://libabseil-cpp.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">libabs=
-eil-cpp.mk</a> to &quot;17&quot; and rebuilt the libabseil-cpp package. The=
-re were no errors.<br>
-&gt;&gt; &gt; I did this because I read a similar error in abseil-cpp repo.=
-<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; Now I cleaned the tensorflow-lite package and rebuilt it. The=
-re were no errors related to linking now.. and benchmark_model is installed=
- to target dir.<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; Do you think is this a good approach? And is it possible to t=
-ell Buildroot to use c++std=3D17 for libabseil in <a href=3D"http://tensorf=
-low-lite.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">tensorflow-lit=
-e.mk</a> as TENSORFLOW_LITE_CONF_OPTS or TENSORFLOW_LITE_ENV variable?<br>
-&gt;&gt;<br>
-&gt;&gt; I suspect that may just be masking an issue with incorrect cmake o=
-ptions being<br>
-&gt;&gt; passed to the benchmark_model build.<br>
-&gt;&gt;<br>
-&gt;&gt; See if the new config option in my PR fixes the build as that allo=
-ws the build<br>
-&gt;&gt; to properly use our cmake infrastructure by making it part of the =
-main<br>
-&gt;&gt; tensorflow<br>
-&gt;&gt; build invocation.<br>
-&gt;&gt;<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; On Mon, 18 Sept 2023 at 18:38, James Hilliard &lt;<a href=3D"=
-mailto:james.hilliard1@gmail.com" target=3D"_blank" rel=3D"noreferrer">jame=
-s.hilliard1@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt;<br>
-&gt;&gt; &gt;&gt; On Mon, Sep 18, 2023 at 10:22=E2=80=AFAM James Hilliard<b=
-r>
-&gt;&gt; &gt;&gt; &lt;<a href=3D"mailto:james.hilliard1@gmail.com" target=
-=3D"_blank" rel=3D"noreferrer">james.hilliard1@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; On Mon, Sep 18, 2023 at 10:04=E2=80=AFAM Sourabh Heg=
-de &lt;<a href=3D"mailto:hrsourabh011@gmail.com" target=3D"_blank" rel=3D"n=
-oreferrer">hrsourabh011@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt; Hello Stefan, James,<br>
-&gt;&gt; &gt;&gt; &gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt; Have you tried building the benchmark_model fro=
-m tensorflow-lite? I am getting above errors during the build...<br>
-&gt;&gt; &gt;&gt; &gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt; On Fri, 15 Sept 2023 at 18:49, Sourabh Hegde &l=
-t;<a href=3D"mailto:hrsourabh011@gmail.com" target=3D"_blank" rel=3D"norefe=
-rrer">hrsourabh011@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt; Hello James,<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt; Do you have any updates on below issue?<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt; This would be helpful<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt; Thanks in advance<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt; On Wed, Sep 13, 2023, 09:07 Sourabh Hegde &=
-lt;<a href=3D"mailto:hrsourabh011@gmail.com" target=3D"_blank" rel=3D"noref=
-errer">hrsourabh011@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; Hello James,<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; I am trying to build the &quot;benchmar=
-k_model&quot; in the tensorflow-lite package. The benchmarking application =
-performs a simple TensorFlow Lite model inference and prints benchmarking i=
-nformation.<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; In the <a href=3D"http://tensorflow-lit=
-e.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">tensorflow-lite.mk</a=
->=C2=A0 I added new section (similar to label_image example)<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; ifeq ($(BR2_PACKAGE_TENSORFLOW_LITE_BUI=
-LD_BENCHMARK_MODEL),y)<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; define TENSORFLOW_LITE_BENCHMARK_BUILD_=
-CMDS<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$(TARG=
-ET_MAKE_ENV) $(BR2_CMAKE) --build $(TENSORFLOW_LITE_BUILDDIR) -t benchmark_=
-model<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; endef<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; TENSORFLOW_LITE_POST_BUILD_HOOKS +=3D T=
-ENSORFLOW_LITE_BENCHMARK_BUILD_CMDS<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; define TENSORFLOW_LITE_INSTALL_TARGET_B=
-ENCHMARK_MODEL<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(INS=
-TALL) -D -m0755 $(@D)/tensorflow/lite/buildroot-build/tools/benchmark/bench=
-mark_model $(TARGET_DIR)/usr/bin/benchmark_model<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; endef<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; TENSORFLOW_LITE_POST_INSTALL_TARGET_HOO=
-KS +=3D TENSORFLOW_LITE_INSTALL_TARGET_BENCHMARK_MODEL<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; endif<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; But while building this is giving error=
-:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; [ 98%] Building CXX object tools/benchm=
-ark/CMakeFiles/benchmark_model.dir/__/delegates/xnnpack_delegate_provider.c=
-c.o<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:10 [ 98%] Building CXX=
- object tools/benchmark/CMakeFiles/benchmark_model.dir/__/delegates/externa=
-l_delegate_provider.cc.o<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 [100%] Linking CXX =
-executable benchmark_model<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 /home/.../per-packa=
-ge/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-=
-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: CMakeFiles=
-/benchmark_model.dir/benchmark_tflite_model.cc.o: in function `absl::lts_20=
-211102::strings_internal::Splitter&lt;absl::lts_20211102::ByChar, absl::lts=
-_20211102::AllowEmpty, std::basic_string_view&lt;char, std::char_traits&lt;=
-char&gt; &gt; &gt;::ConvertToContainer&lt;std::vector&lt;std::basic_string_=
-view&lt;char, std::char_traits&lt;char&gt; &gt;, std::allocator&lt;std::bas=
-ic_string_view&lt;char, std::char_traits&lt;char&gt; &gt; &gt; &gt;, std::b=
-asic_string_view&lt;char, std::char_traits&lt;char&gt; &gt;, false&gt;::ope=
-rator()(absl::lts_20211102::strings_internal::Splitter&lt;absl::lts_2021110=
-2::ByChar, absl::lts_20211102::AllowEmpty, std::basic_string_view&lt;char, =
-std::char_traits&lt;char&gt; &gt; &gt; const&amp;) const [clone .isra.0]&#3=
-9;:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 benchmark_tflite_mo=
-del.cc:(.text+0x204): undefined reference to `absl::lts_20211102::ByChar::F=
-ind(std::basic_string_view&lt;char, std::char_traits&lt;char&gt; &gt;, unsi=
-gned long) const&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 /home/.../per-packa=
-ge/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-=
-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: benchmark_=
-tflite_model.cc:(.text+0x284): undefined reference to `absl::lts_20211102::=
-ByChar::Find(std::basic_string_view&lt;char, std::char_traits&lt;char&gt; &=
-gt;, unsigned long) const&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 /home/.../per-packa=
-ge/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-=
-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: CMakeFiles=
-/benchmark_model.dir/benchmark_tflite_model.cc.o: in function `tflite::benc=
-hmark::SplitInputLayerNameAndValueFile(std::__cxx11::basic_string&lt;char, =
-std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, s=
-td::pair&lt;std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt=
-;, std::allocator&lt;char&gt; &gt;, std::__cxx11::basic_string&lt;char, std=
-::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; &gt;&amp;)&#39;:=
-<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 benchmark_tflite_mo=
-del.cc:(.text+0xcf0): undefined reference to `absl::lts_20211102::StrReplac=
-eAll[abi:cxx11](std::basic_string_view&lt;char, std::char_traits&lt;char&gt=
-; &gt;, std::initializer_list&lt;std::pair&lt;std::basic_string_view&lt;cha=
-r, std::char_traits&lt;char&gt; &gt;, std::basic_string_view&lt;char, std::=
-char_traits&lt;char&gt; &gt; &gt; &gt;)&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 /home/.../per-packa=
-ge/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-=
-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: benchmark_=
-tflite_model.cc:(.text+0xdd4): undefined reference to `absl::lts_20211102::=
-StrReplaceAll[abi:cxx11](std::basic_string_view&lt;char, std::char_traits&l=
-t;char&gt; &gt;, std::initializer_list&lt;std::pair&lt;std::basic_string_vi=
-ew&lt;char, std::char_traits&lt;char&gt; &gt;, std::basic_string_view&lt;ch=
-ar, std::char_traits&lt;char&gt; &gt; &gt; &gt;)&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 /home/.../per-packa=
-ge/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-=
-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: CMakeFiles=
-/benchmark_model.dir/benchmark_tflite_model.cc.o: in function `tflite::benc=
-hmark::BenchmarkTfLiteModel::ValidateParams()&#39;:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 benchmark_tflite_mo=
-del.cc:(.text+0x8388): undefined reference to `absl::lts_20211102::numbers_=
-internal::safe_strto32_base(std::basic_string_view&lt;char, std::char_trait=
-s&lt;char&gt; &gt;, int*, int)&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 /home/.../per-packa=
-ge/tensorflow-lite/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-buildroot-=
-linux-gnu/10.3.0/../../../../aarch64-buildroot-linux-gnu/bin/ld: benchmark_=
-tflite_model.cc:(.text+0x83a4): undefined reference to `absl::lts_20211102:=
-:numbers_internal::safe_strto32_base(std::basic_string_view&lt;char, std::c=
-har_traits&lt;char&gt; &gt;, int*, int)&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 collect2: error: ld=
- returned 1 exit status<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 make[6]: *** [tools=
-/benchmark/CMakeFiles/benchmark_model.dir/build.make:476: tools/benchmark/b=
-enchmark_model] Error 1<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 make[5]: *** [CMake=
-Files/Makefile2:370: tools/benchmark/CMakeFiles/benchmark_model.dir/all] Er=
-ror 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 make[4]: *** [CMake=
-Files/Makefile2:377: tools/benchmark/CMakeFiles/benchmark_model.dir/rule] E=
-rror 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; 2023-09-13T06:49:11 make[3]: *** [Makef=
-ile:268: benchmark_model] Error 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; Do you know what the issue here?<br>
-&gt;&gt; &gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; You probably need to patch the tensorflow source cod=
-e similar to this<br>
-&gt;&gt; &gt;&gt; &gt; as we don&#39;t<br>
-&gt;&gt; &gt;&gt; &gt; really support multiple cmake build invocations for =
-a single package:<br>
-&gt;&gt; &gt;&gt; &gt; <a href=3D"https://github.com/tensorflow/tensorflow/=
-pull/60021" rel=3D"noreferrer noreferrer" target=3D"_blank">https://github.=
-com/tensorflow/tensorflow/pull/60021</a><br>
-&gt;&gt; &gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; This line is preventing it from being built properly=
- as part of the<br>
-&gt;&gt; &gt;&gt; &gt; normal tensorflow-lite<br>
-&gt;&gt; &gt;&gt; &gt; build:<br>
-&gt;&gt; &gt;&gt; &gt; <a href=3D"https://github.com/tensorflow/tensorflow/=
-blob/v2.11.0/tensorflow/lite/tools/benchmark/CMakeLists.txt#L84" rel=3D"nor=
-eferrer noreferrer" target=3D"_blank">https://github.com/tensorflow/tensorf=
-low/blob/v2.11.0/tensorflow/lite/tools/benchmark/CMakeLists.txt#L84</a><br>
-&gt;&gt; &gt;&gt;<br>
-&gt;&gt; &gt;&gt; Try applying these changes and enabling the new cmake con=
-fig flag:<br>
-&gt;&gt; &gt;&gt; <a href=3D"https://github.com/tensorflow/tensorflow/pull/=
-61897" rel=3D"noreferrer noreferrer" target=3D"_blank">https://github.com/t=
-ensorflow/tensorflow/pull/61897</a><br>
-&gt;&gt; &gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; Thank you,<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; Sourabh<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt; On Tue, 5 Sept 2023 at 18:28, Sourabh H=
-egde &lt;<a href=3D"mailto:hrsourabh011@gmail.com" target=3D"_blank" rel=3D=
-"noreferrer">hrsourabh011@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt; Hello James,<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt; Thanks for the update.<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt; I could build the tensorflow-lite p=
-ackage.<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt; Best Regards,<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt; Sourabh<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt; On Tue, 5 Sept 2023 at 08:07, James=
- Hilliard &lt;<a href=3D"mailto:james.hilliard1@gmail.com" target=3D"_blank=
-" rel=3D"noreferrer">james.hilliard1@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; On Mon, Sep 4, 2023 at 11:13=E2=
-=80=AFAM Sourabh Hegde &lt;<a href=3D"mailto:hrsourabh011@gmail.com" target=
-=3D"_blank" rel=3D"noreferrer">hrsourabh011@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Hello All,<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; I am trying to add tensorf=
-low-lite to Buildroot package and I found a git (quite old) <a href=3D"http=
-s://github.com/Exein-io/buildroot-tensorflow-lite/tree/master" rel=3D"noref=
-errer noreferrer" target=3D"_blank">https://github.com/Exein-io/buildroot-t=
-ensorflow-lite/tree/master</a> that I wanted to test.<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; Try my v6 patch series:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; <a href=3D"https://patchwork.oz=
-labs.org/project/buildroot/list/?series=3D346546&amp;submitter=3D&amp;state=
-=3D*&amp;q=3D&amp;archive=3Dboth&amp;delegate=3D" rel=3D"noreferrer norefer=
-rer" target=3D"_blank">https://patchwork.ozlabs.org/project/buildroot/list/=
-?series=3D346546&amp;submitter=3D&amp;state=3D*&amp;q=3D&amp;archive=3Dboth=
-&amp;delegate=3D</a><br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; But while building it I am=
- getting below error:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; file=3D&#39;/home/test/tmp=
-/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorf=
-low/lite/buildroot-build/pthreadpool-download/pthreadpool-prefix/src/545ebe=
-9f225aec6dca49109516fac02e973a3de2.zip&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- Downloading... done<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- extracting...<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;=C2=A0 =C2=A0 =C2=A0 src=3D=
-&#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b=
-2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-download/pthreadpoo=
-l-prefix/src/545ebe9f225aec6dca49109516fac02e973a3de2.zip&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;=C2=A0 =C2=A0 =C2=A0 dst=3D=
-&#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b=
-2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-source&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- extracting... [tar xfz]=
-<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- extracting... [analysis=
-]<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- extracting... [rename]<=
-br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- extracting... [clean up=
-]<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- extracting... done<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [ 33%] No patch step for &=
-#39;pthreadpool&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [ 44%] No update step for =
-&#39;pthreadpool&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [ 55%] No configure step f=
-or &#39;pthreadpool&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [ 66%] No build step for &=
-#39;pthreadpool&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [ 77%] No install step for=
- &#39;pthreadpool&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [ 88%] No test step for &#=
-39;pthreadpool&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [100%] Completed &#39;pthr=
-eadpool&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[4]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-download&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; [100%] Built target pthrea=
-dpool<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-download&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/pthreadpool-download&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; -- Configuring incomplete,=
- errors occurred!<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; See also &quot;/home/test/=
-tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tens=
-orflow/lite/buildroot-build/CMakeFiles/CMakeOutput.log&quot;.<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; See also &quot;/home/test/=
-tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tens=
-orflow/lite/buildroot-build/CMakeFiles/CMakeError.log&quot;.<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[1]: *** [package/<a h=
-ref=3D"http://pkg-generic.mk:283" rel=3D"noreferrer noreferrer" target=3D"_=
-blank">pkg-generic.mk:283</a>: /home/test/tmp/.../build/tensorflow-lite-966=
-3abe4c9037030b0b497c68cc4b2ba991967dd/.stamp_configured] Error 1<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make: *** [Makefile:23: _a=
-ll] Error 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; The CMakeError.log build/t=
-ensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorflow/lite/bui=
-ldroot-build/CM<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; akeFiles shows<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Performing C++ SOURCE FILE=
- Test COMPILER_SUPPORT_Wshorten64to32 failed with the following output:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Change Dir: /home/test/tmp=
-/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorf=
-low/lite/buildroot-build/CMakeFiles/CMakeTmp<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Run Build Command(s):/usr/=
-bin/make cmTC_76002/fast &amp;&amp; make[2]: Entering directory &#39;/home/=
-test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd=
-/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /usr/bin/make -f CMakeFile=
-s/cmTC_76002.dir/build.make CMakeFiles/cmTC_76002.dir/build<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Entering director=
-y &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc=
-4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Building CXX object CMakeF=
-iles/cmTC_76002.dir/src.cxx.o<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /home/test/tmp/.../per-pac=
-kage/tensorflow-lite/host/bin/aarch64-linux-g++ --sysroot=3D/home/test/tmp/=
-.../per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot=C2=
-=A0 =C2=A0 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D=
-64=C2=A0 -O3 -g0 -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimiza=
-tions=C2=A0 -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -=
-Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -W=
-pointer-arith -Wwrite-strings -Wformat-security -DCOMPILER_SUPPORT_Wshorten=
-64to32 -Werror=C2=A0 -DNDEBUG -fPIE=C2=A0 =C2=A0-Wshorten-64-to-32 -o CMake=
-Files/cmTC_76002.dir/src.cxx.o -c /home/test/tmp/.../build/tensorflow-lite-=
-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorflow/lite/buildroot-build/CM=
-akeFiles/CMakeTmp/src.cxx<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; aarch64-linux-g++.br_real:=
- error: unrecognized command-line option &#39;-Wshorten-64-to-32&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: *** [CMakeFiles/c=
-mTC_76002.dir/build.make:66: CMakeFiles/cmTC_76002.dir/src.cxx.o] Error 1<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: *** [Makefile:121=
-: cmTC_76002/fast] Error 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Source file was:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; int main() { return 0; }<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Performing C++ SOURCE FILE=
- Test COMPILER_SUPPORT_Wcpp11extensions failed with the following output:<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Change Dir: /home/test/tmp=
-/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorf=
-low/lite/buildroot-build/CMakeFiles/CMakeTmp<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Run Build Command(s):/usr/=
-bin/make cmTC_0b14f/fast &amp;&amp; make[2]: Entering directory &#39;/home/=
-test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd=
-/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /usr/bin/make -f CMakeFile=
-s/cmTC_0b14f.dir/build.make CMakeFiles/cmTC_0b14f.dir/build<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Entering director=
-y &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc=
-4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Building CXX object CMakeF=
-iles/cmTC_0b14f.dir/src.cxx.o<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /home/test/tmp/.../per-pac=
-kage/tensorflow-lite/host/bin/aarch64-linux-g++ --sysroot=3D/home/test/tmp/=
-.../per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot=C2=
-=A0 =C2=A0 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D=
-64=C2=A0 -O3 -g0 -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimiza=
-tions=C2=A0 -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -=
-Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -W=
-pointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-convers=
-ion -DCOMPILER_SUPPORT_Wcpp11extensions -Werror=C2=A0 -DNDEBUG -fPIE=C2=A0 =
-=C2=A0-Wc++11-extensions -o CMakeFiles/cmTC_0b14f.dir/src.cxx.o -c /home/te=
-st/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/t=
-ensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/src.cxx<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; aarch64-linux-g++.br_real:=
- error: unrecognized command-line option &#39;-Wc++11-extensions&#39;; did =
-you mean &#39;-fms-extensions&#39;?<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: *** [CMakeFiles/c=
-mTC_0b14f.dir/build.make:66: CMakeFiles/cmTC_0b14f.dir/src.cxx.o] Error 1<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: *** [Makefile:121=
-: cmTC_0b14f/fast] Error 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Source file was:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; int main() { return 0; }<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Performing C++ SOURCE FILE=
- Test COMPILER_SUPPORT_wd981 failed with the following output:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Change Dir: /home/test/tmp=
-/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorf=
-low/lite/buildroot-build/CMakeFiles/CMakeTmp<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Run Build Command(s):/usr/=
-bin/make cmTC_4c191/fast &amp;&amp; make[2]: Entering directory &#39;/home/=
-test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd=
-/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /usr/bin/make -f CMakeFile=
-s/cmTC_4c191.dir/build.make CMakeFiles/cmTC_4c191.dir/build<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Entering director=
-y &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc=
-4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Building CXX object CMakeF=
-iles/cmTC_4c191.dir/src.cxx.o<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /home/test/tmp/.../per-pac=
-kage/tensorflow-lite/host/bin/aarch64-linux-g++ --sysroot=3D/home/test/tmp/=
-.../per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot=C2=
-=A0 =C2=A0 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D=
-64=C2=A0 -O3 -g0 -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimiza=
-tions=C2=A0 -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -=
-Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -W=
-pointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-convers=
-ion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-l=
-ong -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd981 -=
-Werror=C2=A0 -DNDEBUG -fPIE=C2=A0 =C2=A0-wd981 -o CMakeFiles/cmTC_4c191.dir=
-/src.cxx.o -c /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b4=
-97c68cc4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/sr=
-c.cxx<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; aarch64-linux-g++.br_real:=
- error: unrecognized command-line option &#39;-wd981&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: *** [CMakeFiles/c=
-mTC_4c191.dir/build.make:66: CMakeFiles/cmTC_4c191.dir/src.cxx.o] Error 1<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: *** [Makefile:121=
-: cmTC_4c191/fast] Error 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Source file was:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; int main() { return 0; }<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Performing C++ SOURCE FILE=
- Test COMPILER_SUPPORT_wd2304 failed with the following output:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Change Dir: /home/test/tmp=
-/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorf=
-low/lite/buildroot-build/CMakeFiles/CMakeTmp<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Run Build Command(s):/usr/=
-bin/make cmTC_3d2da/fast &amp;&amp; make[2]: Entering directory &#39;/home/=
-test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd=
-/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /usr/bin/make -f CMakeFile=
-s/cmTC_3d2da.dir/build.make CMakeFiles/cmTC_3d2da.dir/build<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Entering director=
-y &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc=
-4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Building CXX object CMakeF=
-iles/cmTC_3d2da.dir/src.cxx.o<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /home/test/tmp/.../per-pac=
-kage/tensorflow-lite/host/bin/aarch64-linux-g++ --sysroot=3D/home/test/tmp/=
-.../per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot=C2=
-=A0 =C2=A0 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D=
-64=C2=A0 -O3 -g0 -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimiza=
-tions=C2=A0 -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -=
-Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -W=
-pointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-convers=
-ion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-l=
-ong -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_wd2304 =
--Werror=C2=A0 -DNDEBUG -fPIE=C2=A0 =C2=A0-wd2304 -o CMakeFiles/cmTC_3d2da.d=
-ir/src.cxx.o -c /home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0=
-b497c68cc4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp/=
-src.cxx<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; aarch64-linux-g++.br_real:=
- error: unrecognized command-line option &#39;-wd2304&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: *** [CMakeFiles/c=
-mTC_3d2da.dir/build.make:66: CMakeFiles/cmTC_3d2da.dir/src.cxx.o] Error 1<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: *** [Makefile:121=
-: cmTC_3d2da/fast] Error 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Source file was:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; int main() { return 0; }<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Performing C++ SOURCE FILE=
- Test COMPILER_SUPPORT_STRICTANSI failed with the following output:<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Change Dir: /home/test/tmp=
-/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd/tensorf=
-low/lite/buildroot-build/CMakeFiles/CMakeTmp<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Run Build Command(s):/usr/=
-bin/make cmTC_b2340/fast &amp;&amp; make[2]: Entering directory &#39;/home/=
-test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4b2ba991967dd=
-/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /usr/bin/make -f CMakeFile=
-s/cmTC_b2340.dir/build.make CMakeFiles/cmTC_b2340.dir/build<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Entering director=
-y &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc=
-4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Building CXX object CMakeF=
-iles/cmTC_b2340.dir/src.cxx.o<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; /home/test/tmp/.../per-pac=
-kage/tensorflow-lite/host/bin/aarch64-linux-g++ --sysroot=3D/home/test/tmp/=
-.../per-package/tensorflow-lite/host/aarch64-buildroot-linux-gnu/sysroot=C2=
-=A0 =C2=A0 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D=
-64=C2=A0 -O3 -g0 -D_FORTIFY_SOURCE=3D2 -ldl -latomic -funsafe-math-optimiza=
-tions=C2=A0 -march=3Darmv8-a -std=3Dc++03 -pedantic -Wall -Wextra -Wundef -=
-Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -W=
-pointer-arith -Wwrite-strings -Wformat-security -Wlogical-op -Wenum-convers=
-ion -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-l=
-ong -fno-check-new -fno-common -fstrict-aliasing -DCOMPILER_SUPPORT_STRICTA=
-NSI -Werror=C2=A0 -DNDEBUG -fPIE=C2=A0 =C2=A0-strict-ansi -o CMakeFiles/cmT=
-C_b2340.dir/src.cxx.o -c /home/test/tmp/.../build/tensorflow-lite-9663abe4c=
-9037030b0b497c68cc4b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/=
-CMakeTmp/src.cxx<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; aarch64-linux-g++.br_real:=
- error: unrecognized command-line option &#39;-strict-ansi&#39;; did you me=
-an &#39;-fstrict-enums&#39;?<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: *** [CMakeFiles/c=
-mTC_b2340.dir/build.make:66: CMakeFiles/cmTC_b2340.dir/src.cxx.o] Error 1<b=
-r>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[3]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: *** [Makefile:121=
-: cmTC_b2340/fast] Error 2<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; make[2]: Leaving directory=
- &#39;/home/test/tmp/.../build/tensorflow-lite-9663abe4c9037030b0b497c68cc4=
-b2ba991967dd/tensorflow/lite/buildroot-build/CMakeFiles/CMakeTmp&#39;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Can anyone please let me k=
-now what could be an issue and how to resolve it?<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; Thanks in advance<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; __________________________=
-_____________________<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; buildroot mailing list<br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; <a href=3D"mailto:buildroo=
-t@buildroot.org" target=3D"_blank" rel=3D"noreferrer">buildroot@buildroot.o=
-rg</a><br>
-&gt;&gt; &gt;&gt; &gt; &gt;&gt;&gt;&gt;&gt; &gt; <a href=3D"https://lists.b=
-uildroot.org/mailman/listinfo/buildroot" rel=3D"noreferrer noreferrer" targ=
-et=3D"_blank">https://lists.buildroot.org/mailman/listinfo/buildroot</a><br=
->
-</blockquote></div>
+MIISDQYJKoZIhvcNAQcCoIIR/jCCEfoCAQExDzANBglghkgBZQMEAgEFADALBgkq
+hkiG9w0BBwGggg7BMIIFXzCCBEegAwIBAgIQD/rh8xorQzw9muFtZDtYizANBgkq
+hkiG9w0BAQsFADBlMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5j
+MRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSQwIgYDVQQDExtEaWdpQ2VydCBB
+c3N1cmVkIElEIFJvb3QgRzIwHhcNMTkwOTIzMTIyNTMyWhcNMzQwOTIzMTIyNTMy
+WjBqMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQL
+ExB3d3cuZGlnaWNlcnQuY29tMSkwJwYDVQQDEyBEaWdpQ2VydCBBc3N1cmVkIElE
+IENsaWVudCBDQSBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOqx
+Ra06rLwKBvrDb/qQ8RtXfeKA9o0A42oZbLF4GYr4Xdt9JE8r3PJRIOUZD1U3mEln
+4S/aZoS54Q+5Ecs3q2GGT/Z82VeAPLeGvJoT0LS5t/zXeUcbMuDFWgyj33kiesnu
+usnOWvpISoxN+oBH4oo0+oUiHI65mMjMAlb93x6sabh9kKvHQvHC4x2u7wYv5+NX
+jnbOhJS/1NjGq+ugLMXeldFMz0O5qFIDpn3aQGU0htyJQ2SZyxEqlUrgunsrYj9w
+gfW7XuhAi2j0y5d9oMT0SuVeKFFnQhTEk5B3fq+OBOW0AU2JdW1r929UtRbAr8Rp
+Lt05WI2G2RNVVlHYaU0CAwEAAaOCAgQwggIAMB0GA1UdDgQWBBSlYiBQ3LtbV5et
+I4814lRsqX75TjAfBgNVHSMEGDAWgBTOw0q5mVXyuNtgv6l+vVa1lzan1jAOBgNV
+HQ8BAf8EBAMCAYYwTAYDVR0lBEUwQwYIKwYBBQUHAwIGCCsGAQUFBwMEBgorBgEE
+AYI3CgMEBgorBgEEAYI3FAICBgorBgEEAYI3CgMMBgkqhkiG9y8BAQUwEgYDVR0T
+AQH/BAgwBgEB/wIBADA0BggrBgEFBQcBAQQoMCYwJAYIKwYBBQUHMAGGGGh0dHA6
+Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBFBgNVHR8EPjA8MDqgOKA2hjRodHRwOi8vY3Js
+My5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURSb290RzIuY3JsMIHOBgNV
+HSAEgcYwgcMwgcAGBFUdIAAwgbcwKAYIKwYBBQUHAgEWHGh0dHBzOi8vd3d3LmRp
+Z2ljZXJ0LmNvbS9DUFMwgYoGCCsGAQUFBwICMH4MfEFueSB1c2Ugb2YgdGhpcyBD
+ZXJ0aWZpY2F0ZSBjb25zdGl0dXRlcyBhY2NlcHRhbmNlIG9mIHRoZSBSZWx5aW5n
+IFBhcnR5IEFncmVlbWVudCBsb2NhdGVkIGF0IGh0dHBzOi8vd3d3LmRpZ2ljZXJ0
+LmNvbS9ycGEtdWEwDQYJKoZIhvcNAQELBQADggEBAHZrbCQCo3MAIqR0kekGYrC7
+0EAGRDRq11COufNEXhcpv3YH6BMhUoVinPPNgfo5HPrZAFrLK/KPXYdJdgkASGsI
+NabAfY2ljUaJwKlpIewwjS6KuGEn59MgidaAUPh6lbetIoRsLhCqCzAnX1aL99fj
+CMf4NMWLUC8TqotnnrKNuw4JSjx4fcQs+U5T1bbgnyDx+8ybONuIEDvinHdKDu2V
+joECzez2y/1IVTPlh57zBfjHJQFqLWzHdou8M+ucdJtr2swXII6s3nkq4pfEn7Kn
+bzMS9quFSuyOGILcg/3qVwaHNLM5R+8nB5gPI5+u5Uh56w1i+9Ds1pjYAiTHdeUw
+ggOWMIICfqADAgECAhALkxw61jln6mcjv8OvmvRLMA0GCSqGSIb3DQEBCwUAMGUx
+CzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3
+dy5kaWdpY2VydC5jb20xJDAiBgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9v
+dCBHMjAeFw0xMzA4MDExMjAwMDBaFw0zODAxMTUxMjAwMDBaMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2Vy
+dC5jb20xJDAiBgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBHMjCCASIw
+DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANnnKC9SPzZySYiTNPP4ah4xVICf
+rVRBtUfflqjUr4AtuQrPdf2JpX0k+uMiDCu8lRcLM78ZTUEGkAC9DE0Q/ge15xxu
+IlUxZZe90xfSHmLz2+psUIw/hAyWz7fLA+DKbaEUTBuJ3e0AsFJ8r5FssTgT0ekS
+CMAAsBwrEdp3cDabrs55h9yCcOYJdHBVaa+jaJ+/3bZ5s/KdcClV9Kv/lWHzyUBv
+HdG+k7vTiCq7nb9yWlZxOz/U89EK/ijvo+7Zma8D049gt/KSobG9iYkfMM3Dpi5i
+M64WAndEWueBCjynRC55uD8EvFygh+Ebr1GOzews+vj+bfA6fKqL5GeVMY0CAwEA
+AaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0OBBYE
+FM7DSrmZVfK422C/qX69VrWXNqfWMA0GCSqGSIb3DQEBCwUAA4IBAQDKpVWM48hB
+bmknp3UR7zyGNm/SncZ4OB1plqKSaS44bJt9BNSJpbExN4rJIcyrbM2LHJrWv0jS
+MmbBisDzLzrvwOPUkYbRUOMD23N3b0o5U+3eJse1fa8rQtF1YuNKKwLHUEvgaeKW
+bA5EZhBEj60F6/h5rKYb6Dc0nVPJYaqiUq9KcBaGwjrIsRNwNtjP7vQKNNVbTP0H
+nKK62QFyXPNNwd0OsRwNxGO+rfQU+4nsokEOTMzIV0DQbgOqzQyOiZmZbPA8MK84
+32+8o74pICerdP8TInjel1JVHoO1VCAD7q7AT1beN8zDf6oEJ7vTd7hi2xd8nCgi
+E3Nszyb1iinnMIIFwDCCBKigAwIBAgIQDGW+hPuss5Tc1j96Q5g6rTANBgkqhkiG
+9w0BAQsFADBqMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkw
+FwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSkwJwYDVQQDEyBEaWdpQ2VydCBBc3N1
+cmVkIElEIENsaWVudCBDQSBHMjAeFw0yMjEwMDcwMDAwMDBaFw0yNTEwMDcyMzU5
+NTlaMFAxIzAhBgNVBAMMGnN0ZWZhbi5oYWdlckBnaW56aW5nZXIuY29tMSkwJwYJ
+KoZIhvcNAQkBFhpzdGVmYW4uaGFnZXJAZ2luemluZ2VyLmNvbTCCAaIwDQYJKoZI
+hvcNAQEBBQADggGPADCCAYoCggGBALLxSkM9EsxkQXXj3kZ/6dJOhNoLOTjKGQW1
+ddcuYyOhaOFAlwTiWOJsF+zupjR6cNzNorR8PZfAYjdrE3L8ROzQy1+HpJnOF0a7
+gXgjF+AwyHz5Cuu083jZAaCw/csVTrQZe9T0a8/b2g+MUUhmvlfo7jMby0TiV4eE
+AUe3X3COMvna1i9j9Uk2QruwgrfZsG/tG6IEUBKyjcRBbh76LuFym6tKum+dQxMG
+RxuQ8KzthVoSndJ4uWL9yZz6/03yTSknRaS1qlwEDsThZ8M642/feqQ1dg4t+0P6
+OKGYz40Lln6KtCE+f8WMjwZ0zwVzylCdXxYGDuo7vkMTlbkrzg4vl3U8Sxm8uwVO
+tx6mVxkXWfUMJ6pAjmHVgvwIDpvFlXQChoMB+fNx9MtxGRB/x4bvbruvvcMg3HsR
+b+nzQPQhTRmZ5Tnv/d88Wlriby3pZtz+jkk0/eNEbiJsV4FFE15VMhvdnqB9u8c1
+WQjk5k/4VNUtzxvuGAi3JcTWWfSrywIDAQABo4IB+jCCAfYwHwYDVR0jBBgwFoAU
+pWIgUNy7W1eXrSOPNeJUbKl++U4wHQYDVR0OBBYEFBKUfzpvibxxH4xLryC37QDB
+TEu0MAwGA1UdEwEB/wQCMAAwJQYDVR0RBB4wHIEac3RlZmFuLmhhZ2VyQGdpbnpp
+bmdlci5jb20wDgYDVR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggr
+BgEFBQcDAjBDBgNVHSAEPDA6MDgGCmCGSAGG/WwEAQEwKjAoBggrBgEFBQcCARYc
+aHR0cHM6Ly93d3cuZGlnaWNlcnQuY29tL0NQUzCBiwYDVR0fBIGDMIGAMD6gPKA6
+hjhodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURDbGll
+bnRDQUcyLmNybDA+oDygOoY4aHR0cDovL2NybDQuZGlnaWNlcnQuY29tL0RpZ2lD
+ZXJ0QXNzdXJlZElEQ2xpZW50Q0FHMi5jcmwwfQYIKwYBBQUHAQEEcTBvMCQGCCsG
+AQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wRwYIKwYBBQUHMAKGO2h0
+dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRENsaWVu
+dENBRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBIPYM+hSk3JsrbTSvw969Hyo0q
+5+maixbUrVPlQdS+4brWiFdcKLOEhmqliUVeuEYIpstCSf+jRtuupI7m5EnIwf6s
+aiGxHcLmC/BZ7C7eIXGUx3eYDzZ0aqyXnmzo+WYSHnIhUeVRJMmzIOgLOqfiOdGI
+slKn5jrR8AgHpc3KO0p4yATSp9f0X6V7RSXuxL56BRzsponJiPkUu5ZlIUlvkXpQ
+8FHSRqgAZU+h7lkXDUfpXB3pMRqpWUdPTFfLVGOfnfVAzoq1227xYYnb7NgcLbCw
+tQDB/J7BifTyjx203oQ2Pqw2FbSYNFIKyyc9gDEMAh7+RVEY6Bj05nR+UjN7MYID
+EDCCAwwCAQEwfjBqMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5j
+MRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSkwJwYDVQQDEyBEaWdpQ2VydCBB
+c3N1cmVkIElEIENsaWVudCBDQSBHMgIQDGW+hPuss5Tc1j96Q5g6rTANBglghkgB
+ZQMEAgEFAKCB5DAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMzA5MTkwNTIzNTBaMC8GCSqGSIb3DQEJBDEiBCAXc7Ev5fWdH785KtHM
+sBUxbLggGea/WrpYpwapWUdb+TB5BgkqhkiG9w0BCQ8xbDBqMAsGCWCGSAFlAwQB
+KjALBglghkgBZQMEARYwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4GCCqGSIb3
+DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDAN
+BgkqhkiG9w0BAQEFAASCAYAxgq7jEVrXENiODShtarWpLbuB+XrGLWyFBrdVUdo+
+KQ7A0lOpuVW3g/CQLMtXnR/sF2+TsxFoCreS/wTeCcYj0XWOqcB8p7dwVVYqS3mr
+0UF8SqrcegwpcrZgVAj5S2SZO6HDdCrFks2tvEjqIA4Dxywd6KkeLug0aqfoyc/8
+tb/1CRZl/2wPMrtYSQ9pT8flxPh05av3CFG0y4QpLtBQSueph92q1RsXeTeWLUxp
+QFNV1F8xiYrSH8xZWqgSZ6iqUlPYvr8R0z061g5WIAohej69rCuhocyrB/BymPwX
+eUnG2aauiWYUx1VyrsV6sdIsah2O989RE5H8+mLanlxt9SsSW/vuLszvsffZ3aSH
+wcl+ypuX82fkPAXZKHKbwp2htB3sZMf4NVcm4R9AvOF8W7mWUdH72qr4m3/mXS96
+R4pDko6Mh936ywoB/VcyQYEYQTD3c5MtgqtpnCaJ/6yzG7VimcKpEvk+XEDo2dO6
+XVr3r6ksc88KCqzNICrLbtI=
 
---0000000000000a79520605af4aad--
+------99E7632F889BC87790C198072F9D645F--
 
---===============1028131744417957000==
+
+--===============7358459191809942958==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -1392,4 +699,5 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1028131744417957000==--
+--===============7358459191809942958==--
+
