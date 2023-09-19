@@ -4,61 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 177B2CE79A9
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 17:23:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F05CE79A8
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 17:23:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 997C2610AD;
-	Tue, 19 Sep 2023 17:23:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 997C2610AD
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8ECC610BA;
+	Tue, 19 Sep 2023 17:23:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8ECC610BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qAeME01gWSNl; Tue, 19 Sep 2023 17:23:24 +0000 (UTC)
+	with ESMTP id DK-fUhZRVXtT; Tue, 19 Sep 2023 17:23:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0B01610BA;
-	Tue, 19 Sep 2023 17:23:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0B01610BA
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B808C1BF409
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 17:23:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11CBF61647;
+	Tue, 19 Sep 2023 17:23:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11CBF61647
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D6DD31BF409
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 17:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F191610BA
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 17:23:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F191610BA
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB03940990
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 17:23:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB03940990
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id n98vzDwKsqyg for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 17:23:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ghC_Pj2_0tDR for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 17:23:25 +0000 (UTC)
 Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
  [67.231.152.184])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A9719610AD
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 17:23:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9719610AD
-Received: from pps.filterd (m0346901.ppops.net [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D324F40193
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 17:23:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D324F40193
+Received: from pps.filterd (m0346902.ppops.net [127.0.0.1])
  by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 38JFjluR006454; Tue, 19 Sep 2023 17:23:14 GMT
-Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3t793t4ycy-1
+ 38JHKFXW010652; Tue, 19 Sep 2023 17:23:22 GMT
+Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 3t7cbruc3p-1
  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 19 Sep 2023 17:23:14 +0000
-Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
- by xusxph004rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 38JHNDWU003098
+ Tue, 19 Sep 2023 17:23:22 +0000
+Received: from xusxph004rp020.corp.ray.com ([128.13.120.224])
+ by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 38JHNLxF020648
  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Tue, 19 Sep 2023 17:23:13 GMT
+ Tue, 19 Sep 2023 17:23:21 GMT
 Received: from ciulimr02.rockwellcollins.com
  (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 38JHNDwV020967
+ by xusxph004rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 38JHNLv8004065
  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Tue, 19 Sep 2023 17:23:13 GMT
+ Tue, 19 Sep 2023 17:23:21 GMT
 X-Received: from bspbox.kirk (kirk.rockwellcollins.lab [10.148.204.208])
- by ciulimr02.rockwellcollins.com (Postfix) with ESMTP id D3B8420121;
- Tue, 19 Sep 2023 12:23:12 -0500 (CDT)
+ by ciulimr02.rockwellcollins.com (Postfix) with ESMTP id 2FD72200F1;
+ Tue, 19 Sep 2023 12:23:21 -0500 (CDT)
 To: buildroot@buildroot.org
-Date: Tue, 19 Sep 2023 17:22:59 +0000
-Message-ID: <20230919172300.9901-1-brandon.maier@collins.com>
+Date: Tue, 19 Sep 2023 17:23:00 +0000
+Message-ID: <20230919172300.9901-2-brandon.maier@collins.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230919172300.9901-1-brandon.maier@collins.com>
+References: <20230919172300.9901-1-brandon.maier@collins.com>
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
@@ -66,37 +68,39 @@ X-Proofpoint-Virus-Version: vendor=baseguard
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-19_09,2023-09-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- spamscore=0
- mlxlogscore=872 mlxscore=0 phishscore=0 malwarescore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309190150
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
- bulkscore=0 phishscore=0
- spamscore=0 malwarescore=0 mlxlogscore=767 adultscore=0 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ mlxscore=0 phishscore=0
+ spamscore=0 adultscore=0 mlxlogscore=252 bulkscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
  definitions=main-2309190150
-X-Proofpoint-ORIG-GUID: UPh4Dcsowu2-q8lbw4OGr8GH4u-kzMkf
-X-Proofpoint-GUID: UPh4Dcsowu2-q8lbw4OGr8GH4u-kzMkf
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=1 mlxlogscore=188
+ adultscore=0 mlxscore=1
+ bulkscore=0 malwarescore=0 spamscore=1 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309190150
+X-Proofpoint-ORIG-GUID: 0vxQ6AaABdmWGY5XLiYqf3PxwVYqWJdP
+X-Proofpoint-GUID: 0vxQ6AaABdmWGY5XLiYqf3PxwVYqWJdP
 X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 mlxscore=0
- mlxlogscore=937 phishscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- bulkscore=0 priorityscore=1501 clxscore=1011 adultscore=0
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2308100000 definitions=main-2309190150
+ policy=outbound_default score=0
+ priorityscore=1501 phishscore=0 mlxlogscore=307 suspectscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1015 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309190150
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=collins.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=POD051818; bh=NWmO/AaL2CAPvVfD9HZoH5iSSunxtyp0Yqkz3wz6R84=;
- b=OcLHgf3WmUzP7t79R5WcFKTBAy5F7SQv4IALbZ8WdnE+lY3dUyQN3mfuK4jwiz2ncfl8
- PjbFK+U026ZAvW+dpNjT4O7tnXA5Tqp2Msc3m/tBBS6ruvGPhKhLrX3joSyhqYvcVAF5
- 8JPPJFmjcQ+zADgg5Ylu0e/6EZVCfHqjFAVDzbBSH5wq7Yubp6TIVtSmLBssakZJBHLy
- Ogsi5iB3+zGUfWsCsKjvbTqSHI5SEbQPwlilKOtvAPwulYe6yiq8zvkuZdpWJKeBlD5j
- VoJ+vHxJEzpgXQ6kQfDlXQ2afDjgwB58zcLsK3aC04DcvXGSW8YTzQepPW17e+A84jxE Pw== 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=POD051818;
+ bh=4kOvaIH/7k19yde2weQlD5EIIDZ+hFosdKS4NKqzPvI=;
+ b=nb1gmoUssNLeEIP30js2t5Ey9Exb0Svn5QK9t92jtNDFPb3xUZ+wtycMS+d8k10Rl0jG
+ jv7psXse2Yxu0zjDu/A5sv2ZI+fSO/5vcmEoNk5f59GLiynOVC5hhAsga8kHJpaP1fkE
+ U4cH429D3q4DovWUJX5ekiFKuJVtMVWdrFQluzwIzdaLH72tzFaZBH2hBcC39m9NBNWw
+ NbgnnteLLGRnkF6ziRf26O3LzMIP0YOYKqEhiNla+ZFwZsMz+fqyHJwrkK9InFwhNkyM
+ 1dpSkUqAHT/rGFFAiEYPgvtTrv0+YUC3zrdprDH11KKmozCuA3dZ328iOPPyekko8MUa jg== 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=collins.com header.i=@collins.com
- header.a=rsa-sha256 header.s=POD051818 header.b=OcLHgf3W
-Subject: [Buildroot] [PATCH 1/2] unifdef: add missing license
+ header.a=rsa-sha256 header.s=POD051818 header.b=nb1gmoUs
+Subject: [Buildroot] [PATCH 2/2] unifdef: add target package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -118,28 +122,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The COPYING also contains a BSD-3-Clause license. The BSD-3-Clause
-applies to "manual page unifdef.1 and the portability support code in
-the FreeBSD subdirectory". The BSD-2-Clause applies to everything else.
-
 Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 ---
- package/unifdef/unifdef.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS                 | 1 +
+ package/Config.in          | 1 +
+ package/unifdef/Config.in  | 9 +++++++++
+ package/unifdef/unifdef.mk | 9 +++++++++
+ 4 files changed, 20 insertions(+)
+ create mode 100644 package/unifdef/Config.in
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e8b78a8d46..defeb502ab 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -513,6 +513,7 @@ F:	package/iftop/
+ F:	package/ncdu/
+ 
+ N:	Brandon Maier <brandon.maier@collins.com>
++F:	package/unifdef/
+ F:	package/vmtouch/
+ 
+ N:	Brock Williams <brock@cottonwoodcomputer.com>
+diff --git a/package/Config.in b/package/Config.in
+index e8dbadadf3..1cf147c0fa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2267,6 +2267,7 @@ menu "Miscellaneous"
+ 	source "package/shared-mime-info/Config.in"
+ 	source "package/sunwait/Config.in"
+ 	source "package/taskd/Config.in"
++	source "package/unifdef/Config.in"
+ 	source "package/wine/Config.in"
+ 	source "package/xmrig/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
+diff --git a/package/unifdef/Config.in b/package/unifdef/Config.in
+new file mode 100644
+index 0000000000..a1a44d9f5a
+--- /dev/null
++++ b/package/unifdef/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_UNIFDEF
++	bool "unifdef"
++	help
++	  The unifdef utility selectively processes conditional C
++	  preprocessor #if and #ifdef directives. It removes from a file
++	  both the #directives and the additional text that they
++	  delimit, while otherwise leaving the file alone.
++
++	  http://dotat.at/prog/unifdef/
 diff --git a/package/unifdef/unifdef.mk b/package/unifdef/unifdef.mk
-index 7d10595d1b..fd74455894 100644
+index fd74455894..6761e32b69 100644
 --- a/package/unifdef/unifdef.mk
 +++ b/package/unifdef/unifdef.mk
-@@ -6,7 +6,7 @@
- 
- UNIFDEF_VERSION = 2.12
- UNIFDEF_SITE = https://dotat.at/prog/unifdef
--UNIFDEF_LICENSE = BSD-2-Clause
-+UNIFDEF_LICENSE = BSD-2-Clause, BSD-3-Clause
+@@ -9,6 +9,14 @@ UNIFDEF_SITE = https://dotat.at/prog/unifdef
+ UNIFDEF_LICENSE = BSD-2-Clause, BSD-3-Clause
  UNIFDEF_LICENSE_FILES = COPYING
  
++define UNIFDEF_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define UNIFDEF_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(TARGET_DIR) install
++endef
++
  define HOST_UNIFDEF_BUILD_CMDS
+ 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+@@ -17,4 +25,5 @@ define HOST_UNIFDEF_INSTALL_CMDS
+ 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
+ endef
+ 
++$(eval $(generic-package))
+ $(eval $(host-generic-package))
 -- 
 2.41.0
 
