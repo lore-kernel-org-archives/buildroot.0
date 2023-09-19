@@ -4,84 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5A10CE79AA
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 20:10:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92339CE79A8
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 20:31:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35ED981773;
-	Tue, 19 Sep 2023 20:10:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35ED981773
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2572C81495;
+	Tue, 19 Sep 2023 20:31:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2572C81495
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Uicimd4xdalG; Tue, 19 Sep 2023 20:10:36 +0000 (UTC)
+	with ESMTP id hbhLI8AbVzo1; Tue, 19 Sep 2023 20:31:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9066D81656;
-	Tue, 19 Sep 2023 20:10:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9066D81656
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1C0971BF379
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:10:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35A0381496;
+	Tue, 19 Sep 2023 20:31:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35A0381496
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E56181BF20B
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:31:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E927260E7A
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:10:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E927260E7A
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7B6640C01
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:31:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7B6640C01
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 8lE_nOYN-aWv for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 20:10:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id rpVilRZ255ss for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 20:31:46 +0000 (UTC)
 Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
  [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C0D2660BF7
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 20:10:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0D2660BF7
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D412403E5
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 20:31:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D412403E5
 Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-3ff1c397405so65853685e9.3
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 13:10:32 -0700 (PDT)
+ 5b1f17b1804b1-4018af103bcso1380445e9.1
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 13:31:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695154230; x=1695759030;
+ d=1e100.net; s=20230601; t=1695155504; x=1695760304;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=nEHR5J4IfV44AlqhqdZtgCVJkBjJpdQuBQHQ8383lXY=;
- b=jLrPtz5dZZ/FBYa3s5HLJKYr0Lz9Qh5UIYqDkDg1XmhCuEShtvtuSkBzSiA+6Y8Hvt
- /Q/rBUK4SCclUEncDZ9goo3bwg4ab3mDRpMiC7f24ry1vvOZo62f42G+r6HRVSHpXyOT
- 2U+pFJVA2qBBO0SXYqScV+2wzpnIV7h3Fw5lkc0B/seqD5o45ZFlEjiPyaPZjiSKnw0P
- pX/JUxB+VdNcyWdaZF9U7sfZEZ+4JlfAH7oa/2R8qmbPbPq4n5uTJwek4Em4BbdkSeoN
- SyXDU+uMHXp/pL+G4XXHeeEnKfrJYuMAO8yYVwrzeaBp2xARuIZngAh7MTwsH8awkvaZ
- 0W0A==
-X-Gm-Message-State: AOJu0YxWRA2mOZy8aKmCjwN2xyvsClNPpui2uoQdddp3Cflb08bC1TXJ
- c2RkIY4XAWKpzWqAWUYLiOzYk3Ook7k=
-X-Google-Smtp-Source: AGHT+IExZ+8k/7eIEvdMcyRU68KWOm1YxWAzShJLjqotI5dBLESTxG0WQShb03bwUqWXtj4K/zzQ4w==
-X-Received: by 2002:a7b:ca48:0:b0:401:c297:affb with SMTP id
- m8-20020a7bca48000000b00401c297affbmr668374wml.37.1695154229790; 
- Tue, 19 Sep 2023 13:10:29 -0700 (PDT)
+ bh=XHvcioz1bMrxAHmGc/tl2aNR2ZTpK4Ku9LP6/zJzi9Y=;
+ b=bY+hDVlZC4LrcvK3pFvNAva/vWubWAfniOfRWpvqON5f91p0G34aT/tA/p0tuqg17U
+ 4wbZ7Z50Bdq4zzq3uaa3ouGOhb1KnOH+ghxgsu2sBcCfhFS6hFd4rUQAcKcK+T3vIUmo
+ bAtbs1LrDAtK4CqI8q5RTIVkP8DLdai1QJBl4TLNwlvF5lhympiGYFbGjI7I4a4F/I4H
+ HCS1/+cn6EghmKTfV+h0e7FnXfw+CmdPjE5avjRmDvXXdkWw7MJde69IzKCom41WfyfX
+ VvFyzJHOnRA5RGmAQ1aX7kLoFOg1g0ZXuJdCKdMjIFj6FV0aLWJxxW2vvAGmWhflQEOH
+ 2+tg==
+X-Gm-Message-State: AOJu0YzoDh8iOtucAyrbHPnvD3GnSUeoMRhGYZmWVlRdimdtPDzHnQTJ
+ 72MFnkW9BNgf5AlHO9p60dNKGBoNgrw=
+X-Google-Smtp-Source: AGHT+IEMhyLFJFhbXbsZvyw11Isbu5RMrmGtbvYSJizyWT3EfXGfGnHy02KsLJornlZk5253lpx7Zg==
+X-Received: by 2002:a05:600c:3ba2:b0:401:cf93:3103 with SMTP id
+ n34-20020a05600c3ba200b00401cf933103mr2983919wms.0.1695155503503; 
+ Tue, 19 Sep 2023 13:31:43 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
  [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- c18-20020a5d4cd2000000b0031762e89f94sm16246458wrt.117.2023.09.19.13.10.29
+ d10-20020a5d6dca000000b0031c5b380291sm16671221wrz.110.2023.09.19.13.31.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Sep 2023 13:10:29 -0700 (PDT)
+ Tue, 19 Sep 2023 13:31:42 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Sep 2023 22:10:24 +0200
-Message-Id: <20230919201024.357601-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Sep 2023 22:31:39 +0200
+Message-Id: <20230919203139.432632-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695154230; x=1695759030; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1695155504; x=1695760304; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=nEHR5J4IfV44AlqhqdZtgCVJkBjJpdQuBQHQ8383lXY=;
- b=jzkGAqWQllLyhxUKCVWRLeapyLNhdV7JCqtpS+ZYf4vB5uN1tuFenwXD99RQIw+gTf
- f1gmbGu9SMIbiGeDcUGpmjBJGcCZcjhfIG5VwZXwYJ34pxvfsRhsushPhEllebbKPEwD
- VPL6jTn9sMKWn0hN9va2Nn7JZlldhPjcmQyC7rk1uUayyjSZUIwhZRSVHKXiXjIXhirs
- gGJZCJu7n/A9pJQbpxbNZ/8GZhDIPISARSKfglCQUwLL3MFvxkxWWlnZPcs3iIMKvGZV
- sedxbpFBTHP+r8XTAdRDC729CDRF+LXx14MHsmCMND2YhBqLycehomTBTVIwhDbW9ln1
- mRZw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=XHvcioz1bMrxAHmGc/tl2aNR2ZTpK4Ku9LP6/zJzi9Y=;
+ b=PRTqE+lRuWcsA7t17PJfKDK+VwGPKM3DakaX3eH/deuZdK210ZUUHpnUpphb6SUM1E
+ t5DVwaxRPv2J86x6kaN7X7T7dwTA6uNUgmYPD4tugGDQ2AeBLGZIzhEFq50y9IN+336V
+ GAHFglL6Q5Ggi/iFMWBpsKA+oPcc8KtpIGt9HcVYQA6xctYRROkMtqYtvlU9c0iVJyoO
+ yAwRyo5VA7uJ9aHSQaNjQeIflAlBnwptbaf7snJNaUvoMNMbJfiF8sFpWXU+zzfwLj//
+ cfKMIOBkv3FZlg+sciL3ZPl+0XvbsG8ITSNSuRt7JWqFzU78NPpP7aOwPhYWoYSQfvtS
+ n1OQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jzkGAqWQ
-Subject: [Buildroot] [PATCH 1/1] package/domoticz: bump to version 2023.2
+ header.a=rsa-sha256 header.s=20230601 header.b=PRTqE+lR
+Subject: [Buildroot] [PATCH 1/1] package/netatalk: security bump to version
+ 3.1.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,36 +100,175 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/domoticz/domoticz/blob/2023.2/History.txt
+- Drop patches (already in version) and so autoreconf
+- Update COPYING hash (gpl mailing address updated with
+  https://github.com/Netatalk/netatalk/commit/9bd45cc06e02e9bbfe8156bb1e5e2843b7727a51
+  https://github.com/Netatalk/netatalk/commit/6a5997fbd64d6cd5a5400ea6a0a930d005ed89df)
+- Fix CVE-2022-43634: This vulnerability allows remote attackers to
+  execute arbitrary code on affected installations of Netatalk.
+  Authentication is not required to exploit this vulnerability. The
+  specific flaw exists within the dsi_writeinit function. The issue
+  results from the lack of proper validation of the length of
+  user-supplied data prior to copying it to a fixed-length heap-based
+  buffer. An attacker can leverage this vulnerability to execute code in
+  the context of root. Was ZDI-CAN-17646.
+- Fix CVE-2022-45188: Netatalk through 3.1.13 has an afp_getappl
+  heap-based buffer overflow resulting in code execution via a crafted
+  .appl file. This provides remote root access on some platforms such as
+  FreeBSD (used for TrueNAS).
+- Fix CVE-2023-42464: Validate data type in dalloc_value_for_key()
+
+https://github.com/Netatalk/netatalk/blob/netatalk-3-1-17/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/domoticz/domoticz.hash | 2 +-
- package/domoticz/domoticz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ng-of-LD_LIBRARY_FLAGS-shlibpath_var.patch | 48 -------------------
+ ..._compat.h-fix-build-with-libressl-2..patch | 43 -----------------
+ package/netatalk/netatalk.hash                | 10 ++--
+ package/netatalk/netatalk.mk                  |  8 ++--
+ 4 files changed, 8 insertions(+), 101 deletions(-)
+ delete mode 100644 package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
+ delete mode 100644 package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch
 
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index fccb4ea420..b54d0229fc 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  3144372d0847cb4d22a8c4b1362cd31885b37671adc682c3a8e9435762cde338  domoticz-2023.1.tar.gz
-+sha256  32bcf49df8c80c470352e63004a82d9601b90ccf406096099656250a4515ac28  domoticz-2023.2.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index ed82131dd3..3fbff5f4d8 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch b/package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
+deleted file mode 100644
+index 01d5776596..0000000000
+--- a/package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 60d100713b5289948e9cdf5b0646ff3cdd2c206b Mon Sep 17 00:00:00 2001
+-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+-Date: Mon, 17 Dec 2012 22:32:44 +0100
+-Subject: [PATCH] Fix setting of LD_LIBRARY_FLAGS ($shlibpath_var).
+-
+-LD_LIBRARY_PATH should not be set when cross-compiling, because it
+-adds the cross-libraries to the build's LD-path.
+-
+-Also the restoring of LD_LIBRARY_PATH was done incorrectly: it would
+-set LD_LIBRARY_PATH=LD_LIBRARY_PATH.
+-
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- macros/db3-check.m4 |    6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/macros/db3-check.m4 b/macros/db3-check.m4
+-index 902220b..d5a5446 100644
+---- a/macros/db3-check.m4
+-+++ b/macros/db3-check.m4
+-@@ -94,7 +94,7 @@ if test "x$bdb_required" = "xyes"; then
+-     savedldflags="$LDFLAGS"
+-     savedcppflags="$CPPFLAGS"
+-     savedlibs="$LIBS"
+--    saved_shlibpath_var=$shlibpath_var
+-+    eval saved_shlibpath_var=\$$shlibpath_var
+- 
+-     dnl required BDB version: 4.6, because of cursor API change
+-     DB_MAJOR_REQ=4
+-@@ -148,7 +148,7 @@ if test "x$bdb_required" = "xyes"; then
+-                         dnl -- LD_LIBRARY_PATH on many platforms. This will be fairly
+-                         dnl -- portable hopefully. Reference:
+-                         dnl -- http://lists.gnu.org/archive/html/autoconf/2009-03/msg00040.html
+--                        eval export $shlibpath_var=$bdblibdir
+-+                        test "$cross_compiling" = yes || eval export $shlibpath_var=$bdblibdir
+-                         NETATALK_BDB_TRY_LINK
+-                         eval export $shlibpath_var=$saved_shlibpath_var
+- 
+-@@ -171,7 +171,7 @@ if test "x$bdb_required" = "xyes"; then
+-                            CPPFLAGS="-I${bdbdir}/include${subdir} $CPPFLAGS"
+-                            LDFLAGS="-L$bdblibdir $LDFLAGS"
+- 
+--                           eval export $shlibpath_var=$bdblibdir
+-+                           test "$cross_compiling" = yes || eval export $shlibpath_var=$bdblibdir
+-                            NETATALK_BDB_TRY_LINK
+-                            eval export $shlibpath_var=$saved_shlibpath_var
+- 
+--- 
+diff --git a/package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch b/package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch
+deleted file mode 100644
+index 05913862f6..0000000000
+--- a/package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 58ddc137021a938f37c3794305a839f8df449d3f Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 5 Apr 2022 23:59:15 +0200
+-Subject: [PATCH] etc/uams/openssl_compat.h: fix build with libressl >= 2.7.0
+-
+-Fix the following build failure with libressl >= 2.7.0 which added
+-DH_set0_pqg with
+-https://github.com/libressl-portable/openbsd/commit/848e2a019c796b685fc8c5848283b86e48fbe0bf:
+-
+-In file included from uams_dhx_passwd.c:35:
+-openssl_compat.h:15:19: error: static declaration of 'DH_set0_pqg' follows non-static declaration
+-   15 | inline static int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
+-      |                   ^~~~~~~~~~~
+-In file included from uams_dhx_passwd.c:33:
+-/home/autobuild/autobuild/instance-2/output-1/host/mips64-buildroot-linux-uclibc/sysroot/usr/include/openssl/dh.h:195:5: note: previous declaration of 'DH_set0_pqg' was here
+-  195 | int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g);
+-      |     ^~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/fc6e308f346570f8198542602bc8c1bdd0a4869e
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: not sent yet]
+----
+- etc/uams/openssl_compat.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/etc/uams/openssl_compat.h b/etc/uams/openssl_compat.h
+-index ded377bc..5cc8de34 100644
+---- a/etc/uams/openssl_compat.h
+-+++ b/etc/uams/openssl_compat.h
+-@@ -11,7 +11,7 @@ http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+- #ifndef OPENSSL_COMPAT_H
+- #define OPENSSL_COMPAT_H
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000L)
+- inline static int DH_set0_pqg(DH *dh, BIGNUM *p, BIGNUM *q, BIGNUM *g)
+- {
+-    /* If the fields p and g in d are NULL, the corresponding input
+--- 
+-2.35.1
+-
+diff --git a/package/netatalk/netatalk.hash b/package/netatalk/netatalk.hash
+index 6dead5457c..a35e6bc36c 100644
+--- a/package/netatalk/netatalk.hash
++++ b/package/netatalk/netatalk.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.13/
+-md5  697421623c32ee0ab9c8076191766e5f  netatalk-3.1.13.tar.bz2
+-sha1  16dd7fa84962a44b36b795b8c44393e728785947  netatalk-3.1.13.tar.bz2
++# From http://sourceforge.net/projects/netatalk/files/netatalk/3.1.17/
++md5  a6429a28948f85b69c9012fb437dd9c2  netatalk-3.1.17.tar.xz
++sha1  bc6578d9fa874b3816fd4ddd60a30a8f3aadc71d  netatalk-3.1.17.tar.xz
+ # Locally computed
+-sha256  89ada6bcfe1b39ad94f58c236654d1d944f2645c3e7de98b3374e0bd37d5e05d  netatalk-3.1.13.tar.bz2
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  8c208e2c94bf3047db33cdbc3ce4325d2b80db61d6cc527f18f9dbd8e95b5cff  netatalk-3.1.17.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  7599ae145e53be03a08f8b558b2f2e0c828e1630f1843cc04f41981b8cefcd65  COPYRIGHT
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index 7cc950beb6..a47bfa7e84 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -4,11 +4,9 @@
  #
  ################################################################################
  
--DOMOTICZ_VERSION = 2023.1
-+DOMOTICZ_VERSION = 2023.2
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
+-NETATALK_VERSION = 3.1.13
+-NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+-NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+-# For 0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
+-NETATALK_AUTORECONF = YES
++NETATALK_VERSION = 3.1.17
++NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk-$(subst .,-,$(NETATALK_VERSION))
++NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.xz
+ NETATALK_CONFIG_SCRIPTS = netatalk-config
+ NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error \
+ 	libevent
 -- 
 2.40.1
 
