@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7A52CD342E
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 00:34:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C9ECD3425
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 00:35:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E9F1416AA;
-	Tue, 19 Sep 2023 00:34:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E9F1416AA
+	by smtp2.osuosl.org (Postfix) with ESMTP id F0DF741699;
+	Tue, 19 Sep 2023 00:35:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0DF741699
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mYeEvcCyJGBY; Tue, 19 Sep 2023 00:34:52 +0000 (UTC)
+	with ESMTP id Z837EtG44-cv; Tue, 19 Sep 2023 00:35:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E02C416A9;
-	Tue, 19 Sep 2023 00:34:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E02C416A9
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 689001BF95F
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 00:33:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BFB2B40012;
+	Tue, 19 Sep 2023 00:35:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BFB2B40012
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 67B3F1BF95F
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 00:33:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43FDC61577
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 00:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43FDC61577
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EE9040EC1
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 00:33:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EE9040EC1
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rqthaipDCt4u for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 00:33:50 +0000 (UTC)
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4460260A5D
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 00:33:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4460260A5D
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-1bf6ea270b2so38430445ad.0
- for <buildroot@buildroot.org>; Mon, 18 Sep 2023 17:33:50 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id B3wJ8GD9HaOw for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 00:33:51 +0000 (UTC)
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5B8C140961
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 00:33:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B8C140961
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-1c3cbfa40d6so46021355ad.1
+ for <buildroot@buildroot.org>; Mon, 18 Sep 2023 17:33:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695083629; x=1695688429;
+ d=1e100.net; s=20230601; t=1695083630; x=1695688430;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=y9X1gJmWu5/esjehB8UHEzrO//IJs+IPv4Iwer2mBYA=;
- b=LJEzxaBN6qIszd388cZ6z6nSBE1OMKynAul8KKLxGoYodxym24TQ0NfGcODPAv2ReY
- rsz7rGzNi5mv4USZwkbodcU1DoghaREPObmJG1z/tV27oIxZP5xlUWSmaQIkuocAqS3B
- OqUTpfUvsypM4dqonjXFyUq/5azWdHkTCGxITROy7dtl8UcHme4zuruqZLu/DzTJ9+tt
- yOU/H+wEOh/gaYItjEjdsBmbecw19a5sXEtgyoGYEsyySVwgjppjczplX+FQGoVhiVed
- FpB0jFzS/Ce8QAXEwkWTiIKMif32AQ3yywEV0LUW8ecM+c7R2qe0MKEpVIuEE47VxKv+
- 32tg==
-X-Gm-Message-State: AOJu0YxxNYwQ+ZGs/baOgn4Dc2fimxqZVt85sYaVs8krLfBU3A/ZPWh6
- UwtEF69abilEoHpdfmUKSk2GaW3MxOc/hrQ+2sWQ1g==
-X-Google-Smtp-Source: AGHT+IEDAMj0rn3Gjg8D96MVPub9SugYFoLvsCKWgmGebB3BrN0G2RHyx7gnGsPfDNaYjnjbAUs/xw==
-X-Received: by 2002:a17:902:c10d:b0:1b8:7fd7:e022 with SMTP id
- 13-20020a170902c10d00b001b87fd7e022mr8327864pli.28.1695083629297; 
- Mon, 18 Sep 2023 17:33:49 -0700 (PDT)
+ bh=KmdN13LXcVP2Thc5koluhxd1eCxrvuRRg6tvvP6vorQ=;
+ b=pz1ghS/KSs+1kQv70OOiUVwPi0jWJi8jy8x2wgV8jIFWCtiQ6XC1fILRb2iQkL7dI4
+ 6UoNvHb4GsLYYmnRapm+R+CewsXfKnDYaK31KATH02gdx+G6xFtW73v6Spm9syAlQm0l
+ kKlbm2xmsE9XLRwuwc/UQxIUOa53EvkH2vtqcI4iVZZTulH8VzIZtwC53XK7DSzQm3Cr
+ DdKviofvPxoJ8E/AyXIgsAV9c+1j40fOpSOAGARFVN1BMG2qcuq7iSQ27PH/MTIMSEKT
+ cAObVpsW4ediZrYgZiGYo7InywyGtCPel70o5NeEKP2dSIYWSU1liy70rKlMvUlpMrh/
+ kB8w==
+X-Gm-Message-State: AOJu0YxTf6uQXlUr2HFQ3pFyQm58U++SDWDOtLTO0mJZI6qoaLJxgc3p
+ Ev2eUID8PVEhTYwpqffqMKAJ+Av2ULo52XrJFrur6A==
+X-Google-Smtp-Source: AGHT+IEoajmxRWe9kVvbQ+UzYJJlEtEh+BB2xWbAm4eG3FCGkjOCIz2NY4+RQCxgMnBYE4hBJ+3L9A==
+X-Received: by 2002:a17:902:e5c7:b0:1c0:ec66:f2b2 with SMTP id
+ u7-20020a170902e5c700b001c0ec66f2b2mr14078220plf.27.1695083630479; 
+ Mon, 18 Sep 2023 17:33:50 -0700 (PDT)
 Received: from Adam-laptop.amarulasolutions.com ([172.56.200.164])
  by smtp.gmail.com with ESMTPSA id
- iw13-20020a170903044d00b001c582de968dsm1558001plb.72.2023.09.18.17.33.48
+ iw13-20020a170903044d00b001c582de968dsm1558001plb.72.2023.09.18.17.33.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Sep 2023 17:33:48 -0700 (PDT)
+ Mon, 18 Sep 2023 17:33:50 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Sep 2023 18:33:36 -0600
-Message-Id: <20230919003337.565432-6-adam.duskett@amarulasolutions.com>
+Date: Mon, 18 Sep 2023 18:33:37 -0600
+Message-Id: <20230919003337.565432-7-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230919003337.565432-1-adam.duskett@amarulasolutions.com>
 References: <20230919003337.565432-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1695083629; x=1695688429;
+ d=amarulasolutions.com; s=google; t=1695083630; x=1695688430;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=y9X1gJmWu5/esjehB8UHEzrO//IJs+IPv4Iwer2mBYA=;
- b=PV6fh8r6p4alcQi+3CxivWizbqAK2kk7e7h+AryM04om+IJjI/JrS8vQsQDxB9UOHn
- x/RxFEK+0Y7WpFcKVZ5UWNhBvynqTtLoXDGY8aS4UX9jsBDAidu7fM4pXc1ZJFPHTTyC
- Pm54X4sL+x3Z+8lWPV4OmJ9ojStokMQHM6GCk=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=KmdN13LXcVP2Thc5koluhxd1eCxrvuRRg6tvvP6vorQ=;
+ b=ml9HYwA3ItNIxOCNgX8GhGxz4ZC3GZZxqjjJkaouPP0aXMEey34Caz4Njl/pg/1zGi
+ vCD5exi8fM+vzBz5vxzvPwc3wpN8cmWn1M6yCkXjh8tMSk9jQjm5nkzTWsTrWYkwahFA
+ y2eGrKbKfZrc27cJMSR+i9pM2EM2JidFdFFu4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=PV6fh8r6
-Subject: [Buildroot] [PATCH v8 6/7] package/flutter-gallery: new package
+ header.b=ml9HYwA3
+Subject: [Buildroot] [PATCH v8 7/7]
+ support/testing/tests/package/test_flutter.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,226 +106,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Flutter Gallery is a resource to help developers evaluate and use Flutter.
-It is a collection of Material Design & Cupertino widgets, behaviors, and
-vignettes implemented with Flutter.
+This is a simple test that builds and runs the futter-gallery application and
+checks if the service is active.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-Changes v6 -> v7:
-  - Drop $(FLUTTER_ENGINE_VERSION) from symlinks.
+v7 -> v8:
+  - Remove -enable-kvm
+  - Remove -vga virtio
+  - Add -vnc none
 
-Changes v4 -> v5:
-  - Depend on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
-  - select BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
+v6 -> v7:
+  - Call /usr/share/flutter/gallery/release/ in the flutter-gallery.service
+    file.
 
  DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../0001-remove-GetStorage.patch              | 84 +++++++++++++++++++
- package/flutter-gallery/Config.in             | 16 ++++
- package/flutter-gallery/flutter-gallery.hash  |  3 +
- package/flutter-gallery/flutter-gallery.mk    | 44 ++++++++++
- 6 files changed, 149 insertions(+)
- create mode 100644 package/flutter-gallery/0001-remove-GetStorage.patch
- create mode 100644 package/flutter-gallery/Config.in
- create mode 100644 package/flutter-gallery/flutter-gallery.hash
- create mode 100644 package/flutter-gallery/flutter-gallery.mk
+ support/testing/tests/package/test_flutter.py | 58 +++++++++++++++++++
+ .../package/test_flutter/linux-vkms.fragment  |  2 +
+ .../flutter-gallery.service                   |  1 +
+ .../systemd/system/flutter-gallery.service    | 11 ++++
+ 5 files changed, 73 insertions(+)
+ create mode 100644 support/testing/tests/package/test_flutter.py
+ create mode 100644 support/testing/tests/package/test_flutter/linux-vkms.fragment
+ create mode 120000 support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+ create mode 100644 support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c9b972e8ab..48a4ec776a 100644
+index 48a4ec776a..f46d83679a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -34,6 +34,7 @@ F:	package/vulkan-tools/
- N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools/
- F:	package/flutter-engine/
-+F:	package/flutter-gallery/
+@@ -37,6 +37,7 @@ F:	package/flutter-engine/
+ F:	package/flutter-gallery/
  F:	package/flutter-pi/
  F:	package/flutter-sdk-bin/
++F:	support/testing/tests/package/test_flutter.py
  
-diff --git a/package/Config.in b/package/Config.in
-index b73bb33bf6..109c2921a2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -343,6 +343,7 @@ comment "Graphic libraries"
- 	source "package/fbset/Config.in"
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
-+	source "package/flutter-gallery/Config.in"
- 	source "package/flutter-pi/Config.in"
- 	source "package/freerdp/Config.in"
- 	source "package/graphicsmagick/Config.in"
-diff --git a/package/flutter-gallery/0001-remove-GetStorage.patch b/package/flutter-gallery/0001-remove-GetStorage.patch
+ N:	Adam Heinrich <adam@adamh.cz>
+ F:	package/jack1/
+diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
 new file mode 100644
-index 0000000000..142cf853da
+index 0000000000..7e1227d8be
 --- /dev/null
-+++ b/package/flutter-gallery/0001-remove-GetStorage.patch
-@@ -0,0 +1,84 @@
-+From a1d38d78163d84d3506c188e195cd5fa363f4be6 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <adam.duskett@amarulasolutions.com>
-+Date: Thu, 17 Aug 2023 13:00:07 -0600
-+Subject: [PATCH] remove GetStorage
++++ b/support/testing/tests/package/test_flutter.py
+@@ -0,0 +1,58 @@
++import os
++import time
++import infra.basetest
 +
-+Commit 287b20a8bfc71196cd733625e622b98b2f84bef1 introduced the get_storage
-+plugin which breaks with the following error when the application is ran:
 +
-+Unhandled Exception: MissingPluginException(No implementation found for method
-+getApplicataionDocumentsDirectory on channel plugins.flutter.io/path_provider)
++class TestFlutter(infra.basetest.BRTest):
++    config = f"""
++        BR2_x86_64=y
++        BR2_x86_corei7_avx=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_GLIBC_STABLE=y
++        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_flutter/overlay")}"
++        BR2_PER_PACKAGE_DIRECTORIES=y
++        BR2_INIT_SYSTEMD=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.49"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_flutter/linux-vkms.fragment")}"
++        BR2_PACKAGE_LIBDRM=y
++        BR2_PACKAGE_MESA3D=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
++        BR2_PACKAGE_MESA3D_LLVM=y
++        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
++        BR2_PACKAGE_MESA3D_OPENGL_ES=y
++        BR2_PACKAGE_FLUTTER_PI=y
++        BR2_PACKAGE_FLUTTER_PI_RAW_KEYBOARD_PLUGIN=y
++        BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
++        BR2_PACKAGE_FLUTTER_GALLERY=y
++        BR2_PACKAGE_FLUTTER_ENGINE=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+Revert the change.
-+
-+Upstream: https://github.com/flutter/gallery/issues/994
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-+---
-+ lib/feature_discovery/feature_discovery.dart | 10 ----------
-+ lib/main.dart                                |  2 --
-+ pubspec.yaml                                 |  1 -
-+ 3 files changed, 13 deletions(-)
-+
-+diff --git a/lib/feature_discovery/feature_discovery.dart b/lib/feature_discovery/feature_discovery.dart
-+index 288c78b..965d83c 100644
-+--- a/lib/feature_discovery/feature_discovery.dart
-++++ b/lib/feature_discovery/feature_discovery.dart
-+@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
-+ import 'package:flutter/scheduler.dart';
-+ import 'package:gallery/feature_discovery/animation.dart';
-+ import 'package:gallery/feature_discovery/overlay.dart';
-+-import 'package:get_storage/get_storage.dart';
-+ 
-+ const _featureHighlightShownKey = 'feature_highlight_shown';
-+ 
-+@@ -271,15 +270,6 @@ class _FeatureDiscoveryState extends State<FeatureDiscovery>
-+ 
-+     initAnimationControllers();
-+     initAnimations();
-+-
-+-    final localStorage = GetStorage();
-+-    final featureHiglightShown =
-+-        localStorage.read<bool>(_featureHighlightShownKey) ?? false;
-+-    localStorage.write(_featureHighlightShownKey, true);
-+-    showOverlay = widget.showOverlay && !featureHiglightShown;
-+-    if (showOverlay) {
-+-      localStorage.write(_featureHighlightShownKey, true);
-+-    }
-+   }
-+ 
-+   void initAnimationControllers() {
-+diff --git a/lib/main.dart b/lib/main.dart
-+index e9f4ff9..8c7a4e3 100644
-+--- a/lib/main.dart
-++++ b/lib/main.dart
-+@@ -16,7 +16,6 @@ import 'package:gallery/pages/backdrop.dart';
-+ import 'package:gallery/pages/splash.dart';
-+ import 'package:gallery/routes.dart';
-+ import 'package:gallery/themes/gallery_theme_data.dart';
-+-import 'package:get_storage/get_storage.dart';
-+ import 'package:google_fonts/google_fonts.dart';
-+ 
-+ import 'firebase_options.dart';
-+@@ -26,7 +25,6 @@ export 'package:gallery/data/demos.dart' show pumpDeferredLibraries;
-+ 
-+ void main() async {
-+   GoogleFonts.config.allowRuntimeFetching = false;
-+-  await GetStorage.init();
-+ 
-+   if (defaultTargetPlatform != TargetPlatform.linux &&
-+       defaultTargetPlatform != TargetPlatform.windows &&
-+diff --git a/pubspec.yaml b/pubspec.yaml
-+index 964edad..4b00e40 100644
-+--- a/pubspec.yaml
-++++ b/pubspec.yaml
-+@@ -24,7 +24,6 @@ dependencies:
-+   firebase_core: ^2.7.0
-+   firebase_crashlytics: ^3.1.1
-+   firebase_performance: ^0.9.0+14
-+-  get_storage: ^2.1.1
-+   google_fonts: ^5.0.0
-+   intl: any # An exact version pin will be provided by the Flutter SDK
-+   meta: ^1.7.0
-+-- 
-+2.41.0
-+
-diff --git a/package/flutter-gallery/Config.in b/package/flutter-gallery/Config.in
++    def test_run(self):
++        timeout = 35 * self.emulator.timeout_multiplier
++        img = os.path.join(self.builddir, "images", "rootfs.ext2")
++        kern = os.path.join(self.builddir, "images", "bzImage")
++        self.emulator.boot(
++            arch="x86_64",
++            kernel=kern,
++            kernel_cmdline=["root=/dev/vda console=ttyS0"],
++            options=["-M", "pc",
++                     "-cpu", "IvyBridge",
++                     "-m", "512M",
++                     "-vga", "std",
++                     "-vnc", "none",
++                     "-drive", f"file={img},if=virtio,format=raw"])
++        self.emulator.login()
++        cmd = "systemctl is-active flutter-gallery"
++        output, exit_code = self.emulator.run(cmd, 10)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], "active")
+diff --git a/support/testing/tests/package/test_flutter/linux-vkms.fragment b/support/testing/tests/package/test_flutter/linux-vkms.fragment
 new file mode 100644
-index 0000000000..224457ea6f
+index 0000000000..3fc7a5dded
 --- /dev/null
-+++ b/package/flutter-gallery/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_FLUTTER_GALLERY
-+	bool "flutter-gallery"
-+	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_FLUTTER_ENGINE
-+	select BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
-+	help
-+	  Flutter Gallery is a resource to help developers evaluate
-+	  and use Flutter. It is a collection of Material Design &
-+	  Cupertino widgets, behaviors, and vignettes implemented
-+	  with Flutter.
-+
-+	  https://github.com/flutter/gallery
-+
-+comment "flutter-gallery needs flutter-engine"
-+	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_FLUTTER_ENGINE
-diff --git a/package/flutter-gallery/flutter-gallery.hash b/package/flutter-gallery/flutter-gallery.hash
++++ b/support/testing/tests/package/test_flutter/linux-vkms.fragment
+@@ -0,0 +1,2 @@
++CONFIG_DEBUG_FS=y
++CONFIG_DRM_VKMS=y
+diff --git a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+new file mode 120000
+index 0000000000..40993fb16c
+--- /dev/null
++++ b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+@@ -0,0 +1 @@
++../../../../usr/lib/systemd/system/flutter-gallery.service
+\ No newline at end of file
+diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
 new file mode 100644
-index 0000000000..aea1ed39be
+index 0000000000..88a2bcbf0b
 --- /dev/null
-+++ b/package/flutter-gallery/flutter-gallery.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  14272aba90b7d26db33bac7b4692f0e3ed1a008286a08eaf2ea79abd478f23e9  flutter-gallery-2.10.2.tar.gz
-+sha256  c731cf5a33db0e12647e0680ef0bc7839f99749404ac1ba4626cf7192065b3b0  LICENSE
-diff --git a/package/flutter-gallery/flutter-gallery.mk b/package/flutter-gallery/flutter-gallery.mk
-new file mode 100644
-index 0000000000..e89fbb009d
---- /dev/null
-+++ b/package/flutter-gallery/flutter-gallery.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# flutter-gallery
-+#
-+################################################################################
++++ b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+@@ -0,0 +1,11 @@
++[Unit]
++Description=flutter-gallery daemon
++After=dbus.service systemd-udevd.service
 +
-+FLUTTER_GALLERY_VERSION = 2.10.2
-+FLUTTER_GALLERY_SITE = $(call github,flutter,gallery,v$(FLUTTER_GALLERY_VERSION))
-+FLUTTER_GALLERY_LICENSE = BSD-3-Clause
-+FLUTTER_GALLERY_LICENSE_FILES = LICENSE
-+FLUTTER_GALLERY_DEPENDENCIES = \
-+	host-flutter-sdk-bin \
-+	flutter-engine 
++[Service]
++ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/gallery/release/
++Restart=always
++KillMode=process
 +
-+FLUTTER_GALLERY_INSTALL_DIR = $(TARGET_DIR)/usr/share/flutter/gallery/$(FLUTTER_ENGINE_RUNTIME_MODE)
-+
-+define FLUTTER_GALLERY_BUILD_CMDS
-+	cd $(@D) && \
-+		FLUTTER_RUNTIME_MODES=$(FLUTTER_ENGINE_RUNTIME_MODE) \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) clean && \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) packages get && \
-+		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle && \
-+		$(HOST_FLUTTER_SDK_BIN_DART_BIN) package:gallery/main.dart && \
-+		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
-+			--deterministic \
-+			--snapshot_kind=app-aot-elf \
-+			--elf=libapp.so \
-+			.dart_tool/flutter_build/*/app.dill
-+endef
-+
-+define FLUTTER_GALLERY_INSTALL_TARGET_CMDS
-+	mkdir -p $(FLUTTER_GALLERY_INSTALL_DIR)/{data,lib}
-+	cp -dprf $(@D)/build/flutter_assets $(FLUTTER_GALLERY_INSTALL_DIR)/data/
-+
-+	$(INSTALL) -D -m 0755 $(@D)/libapp.so \
-+		$(FLUTTER_GALLERY_INSTALL_DIR)/lib/libapp.so
-+
-+	ln -sf ../../../$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
-+	$(FLUTTER_GALLERY_INSTALL_DIR)/data/
-+
-+	ln -sf ../../../../../lib/libflutter_engine.so $(FLUTTER_GALLERY_INSTALL_DIR)/lib/
-+endef
-+
-+$(eval $(generic-package))
++[Install]
++WantedBy=multi-user.target
 -- 
 2.39.2
 
