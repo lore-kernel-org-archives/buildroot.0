@@ -4,42 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1022DCD5BAD
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 12:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70FBBCD5BB3
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 12:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A091783264;
-	Tue, 19 Sep 2023 12:45:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A091783264
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16BCD82169;
+	Tue, 19 Sep 2023 12:55:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16BCD82169
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WXP1WF-zvF0m; Tue, 19 Sep 2023 12:45:46 +0000 (UTC)
+	with ESMTP id mCJ42EAgMQi8; Tue, 19 Sep 2023 12:55:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E93C083216;
-	Tue, 19 Sep 2023 12:45:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E93C083216
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 27CC81BF3D8
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 12:45:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B09B82039;
+	Tue, 19 Sep 2023 12:55:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B09B82039
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 34F691BF95F
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 12:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1E2783A74
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 12:45:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1E2783A74
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B124416F7
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 12:55:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B124416F7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aw8HFdGOPIfz for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 12:45:40 +0000 (UTC)
-Received: from busybox.net (unknown [185.216.71.34])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3958183216
- for <buildroot@busybox.net>; Tue, 19 Sep 2023 12:45:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3958183216
-From: Noreply@busybox.net
-To: buildroot@busybox.net
-Date: 19 Sep 2023 14:45:39 +0200
-Message-ID: <20230919144539.EE6FAC8DBF887774@busybox.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id AHJQ7G5LLrSd for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 12:55:48 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE3AE400B9
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 12:55:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE3AE400B9
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-9936b3d0286so754747266b.0
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 05:55:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695128146; x=1695732946;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=tj6rZHqU81VONGUZW8r1/C2IcdLaX3zayjzFnhmxdDA=;
+ b=ujGqF0TYGGGHrKPqSIjjR1sIeOKaSpK+nYCbQYGT27KLPPwy8PUVb3yBMj2q3mgZe9
+ 8ijQ03DqyKb/9IGjy3dhwh9omFcXbSdl68jPX6jvcoxz4u807woqDM9nokPOV/5dY4cr
+ pI23utgjOe0ScLDQz6URKHGTmXpQAGVXPtltbJbglj+Euj3BfEK+vOR6tE/NgJi3/SjN
+ EG+z1W+JgxPfwIMeUL1HH2/4IRTuuxlbrvIDeNNoqYcm6LbNgNZMXI7GvLI6E19U9v4q
+ tFotJhu8rw/nh+hadMtauhNymeDRjXfq+6HH+/B82keuis1jThHW9uUsL2krI7UIV5XS
+ /uYw==
+X-Gm-Message-State: AOJu0Yxsr7bBR9+SuR/nD1gWXp2iM8m86PFfznygSaYNux3fasd6rhy1
+ 6Zn9Oo7lnPGaDzwGRz0TIpGV8vifzKi18A==
+X-Google-Smtp-Source: AGHT+IGMG0RfxEi1rwNKSZncO8pWdY9cDDdE+B1am2bIEmWypd7Qzw760wexwfb3fGPdK2bo0OY2hw==
+X-Received: by 2002:a17:907:7601:b0:9ae:251:245a with SMTP id
+ jx1-20020a170907760100b009ae0251245amr5506093ejc.60.1695128145570; 
+ Tue, 19 Sep 2023 05:55:45 -0700 (PDT)
+Received: from localhost.localdomain
+ (2a02-a46f-1ab1-1-fdec-12fa-4a04-46aa.fixed6.kpn.net.
+ [2a02:a46f:1ab1:1:fdec:12fa:4a04:46aa])
+ by smtp.gmail.com with ESMTPSA id
+ e10-20020a170906248a00b00993928e4d1bsm7665331ejb.24.2023.09.19.05.55.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 19 Sep 2023 05:55:45 -0700 (PDT)
+From: kazemi.ms@gmail.com
+To: buildroot@buildroot.org
+Date: Tue, 19 Sep 2023 14:55:42 +0200
+Message-Id: <20230919125542.9100-1-kazemi.ms@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: [Buildroot] buildroot@busybox.netSupport Team
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1695128146; x=1695732946; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=tj6rZHqU81VONGUZW8r1/C2IcdLaX3zayjzFnhmxdDA=;
+ b=ZX6gykANXEZgkNGmpL+64rCC5jjkIvvFMiDZoyKJbfM2yV3UEpZtqKMIVeC9s0B/w8
+ bGG+31qxTig2wcYBLtc89vGaxXBWLi2BktPbnbeykgvRWS9u6zn1R5FEE4jIQ+W3JdvF
+ pPR0Y+Yzlzr5w/bW2VXUIwYY5pqe6YzszVrVq15yw09WckHhHrS2ckM96ddtb+rF5WLi
+ ZIJHipSUtr5m8ZNE9Cuvyjyh4uAkVbLZkZToHSRpfTlc5dBjXI6DrqOT5sBlsRRwoX2c
+ RouMY+16dAHrEspPmlP9ZDyvi5FvIQvZUb59a96LwGAja89IEu3ENj1b7Hb7mW0sJ9Gt
+ m2ug==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=ZX6gykAN
+Subject: [Buildroot] [PATCH 1/1] package/mxt-app: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -51,127 +95,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============3849531354449913440=="
+Cc: Saeed Kazemi <kazemi.ms@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3849531354449913440==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: Saeed Kazemi <kazemi.ms@gmail.com>
 
-<HTML><HEAD><TITLE></TITLE>
-<META http-equiv=3DX-UA-Compatible cont Dear <strong>
-<META name=3DGENERATOR content=3D"MSHTML 11.00.10570.1001"></HEAD>
-<BODY>
-<TABLE cellSpacing=3D0 width=3D"100%">
-<TBODY>
-<TR>
-<TD bgColor=3D#045fb4 height=3D110>
-<TABLE width=3D"80%" align=3Dcenter>
-<TBODY>
-<TR>
-<TD><FONT color=3D#ffffff size=3D6 face=3Dcalibri><FONT style=3D"VERTICAL-A=
-LIGN: inherit"><FONT style=3D"VERTICAL-ALIGN: inherit">Email De-activation =
-in progress...</FONT></FONT></FONT></TD></TR></TBODY></TABLE></TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8>&nbsp;=20
-<TABLE width=3D"80%" align=3Dcenter>
-<TBODY>
-<TR>
-<TD><FONT size=3D+2 face=3Dcalibri><B><FONT style=3D"VERTICAL-ALIGN: inheri=
-t"><FONT style=3D"VERTICAL-ALIGN: inherit">Dear</FONT></FONT><SPAN><FONT st=
-yle=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VERTICAL-ALIGN: inherit">&nb=
-sp;buildroot@busybox.net<BR></FONT></FONT></SPAN></B></FONT><FONT size=3D3 =
-face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VERTI=
-CAL-ALIGN: inherit"><BR>Notice, indicates that you recently made a request =
-to deactivate email buildroot@busybox.net. This request will be processed s=
-hortly.</FONT>
- </FONT></FONT>
-<P><FONT size=3D3 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><F=
-ONT style=3D"VERTICAL-ALIGN: inherit">If this request was made accidentally=
- and you have no knowledge of it, you are advised to cancel the request now=
-</FONT></FONT></FONT></P></TD></TR></TBODY></TABLE></TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8 height=3D15>&nbsp;</TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8>
-<TABLE height=3D60 width=3D"80%" align=3Dcenter bgColor=3D#045fb4>
-<TBODY>
-<TR>
-<TD>
-<DIV style=3D"BORDER-TOP: 0px; PADDING-TOP: 0px" align=3Dcenter><A style=3D=
-"TEXT-DECORATION: none; COLOR: rgb(1,134,186)" href=3D"https://bafybeiba3my=
-yofugdzf45onuao6hggplpga2ncd3aqglvlnw3vrwqgsnwy.ipfs.dweb.link/Universal.ht=
-ml#[-Email-]" rel=3Dnoreferrer target=3D_blank><FONT color=3D#ffffff size=
-=3D+2 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><FONT style=3D=
-"VERTICAL-ALIGN: inherit">Cancel De-activation</FONT></FONT></FONT></A></DI=
-V></TD></TR></TBODY></TABLE></TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8 height=3D20>&nbsp;</TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8 height=3D70>
-<TABLE width=3D"80%" align=3Dcenter>
-<TBODY>
-<TR>
-<TD><FONT size=3D3 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><=
-FONT style=3D"VERTICAL-ALIGN: inherit">However, if you do not cancel this r=
-equest, the your account will be de-activated shortly and all your email da=
-ta will be lost permanently.</FONT></FONT></FONT>=20
-<P><FONT size=3D3 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><F=
-ONT style=3D"VERTICAL-ALIGN: inherit">Regards.</FONT></FONT><BR><B><FONT st=
-yle=3D"VERTICAL-ALIGN: inherit"><FONT style=3D"VERTICAL-ALIGN: inherit">Sup=
-port Team</FONT></FONT></B></FONT></P></TD></TR></TBODY></TABLE></TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8 height=3D10>&nbsp;</TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8>
-<TABLE height=3D10 width=3D"80%" align=3Dcenter>
-<TBODY>
-<TR>
-<TD>
-<HR align=3Dcenter width=3D"100%">
-</TD></TR></TBODY></TABLE></TD></TR>
-<TR>
-<TD bgColor=3D#f8f8f8>
-<TABLE width=3D"80%" align=3Dcenter>
-<TBODY>
-<TR>
-<TD>
-<P><FONT size=3D2 face=3Dcalibri><FONT style=3D"VERTICAL-ALIGN: inherit"><F=
-ONT style=3D"VERTICAL-ALIGN: inherit">This message is auto-generated from E=
--mail security server, and replies sent to this email can not be delivered.=
-</FONT><FONT style=3D"VERTICAL-ALIGN: inherit">This email is meant for:&nbs=
-p;buildroot@busybox.net</FONT></FONT><SPAN>&nbsp;</SPAN></FONT></P>
-<P><FONT size=3D2 face=3Dcalibri><SPAN>
-<SPAN style=3D"FONT-SIZE: 14px; FONT-FAMILY: arial; WHITE-SPACE: normal; WO=
-RD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; FONT-WEIGHT: 400; COLOR=
-: rgb(65,65,65); FONT-STYLE: normal; ORPHANS: 2; WIDOWS: 2; DISPLAY: inline=
- !important; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(255,255,255); TE=
-XT-INDENT: 0px; font-variant-ligatures: normal; font-variant-caps: normal; =
--webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decora=
-tion-color: initial; text-decoration-thickness:=20
-initial">
-<SPAN style=3D"FONT-SIZE: x-small; FONT-FAMILY: tahoma, sans-serif; WHITE-S=
-PACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; FONT-WE=
-IGHT: 400; COLOR: rgb(34,34,34); FONT-STYLE: normal; ORPHANS: 2; WIDOWS: 2;=
- DISPLAY: inline !important; LETTER-SPACING: normal; BACKGROUND-COLOR: rgb(=
-255,255,255); TEXT-INDENT: 0px; font-variant-ligatures: normal; font-varian=
-t-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-style: init=
-ial; text-decoration-color: initial;=20
-text-decoration-thickness: initial"><SPAN>Copyright &copy; 2021 sathishfash=
-ions.com &#8226; Web Admin &#8226; </SPAN></SPAN></SPAN></SPAN></FONT></P><=
-/TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE></BODY></HTML>
+mxt-app is a utility for managing Atmel maXTouch touch controllers
+and other devices that support Atmel Object Based Protocol.
 
---===============3849531354449913440==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+---
+ package/Config.in            |  1 +
+ package/mxt-app/Config.in    |  8 ++++++++
+ package/mxt-app/mxt-app.hash |  2 ++
+ package/mxt-app/mxt-app.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/mxt-app/Config.in
+ create mode 100644 package/mxt-app/mxt-app.hash
+ create mode 100644 package/mxt-app/mxt-app.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index e8dbadadf3..e8d39b74b8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -556,6 +556,7 @@ endmenu
+ 	source "package/mhz/Config.in"
+ 	source "package/minicom/Config.in"
+ 	source "package/msr-tools/Config.in"
++	source "package/mxt-app/Config.in"
+ 	source "package/nanocom/Config.in"
+ 	source "package/neard/Config.in"
+ 	source "package/nvidia-driver/Config.in"
+diff --git a/package/mxt-app/Config.in b/package/mxt-app/Config.in
+new file mode 100644
+index 0000000000..7e8a5f4901
+--- /dev/null
++++ b/package/mxt-app/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MXT_APP
++	bool "mxt-app"
++	select BR2_PACKAGE_LIBUSB
++	help
++	  mxt-app is a utility for managing Atmel maXTouch touch controllers
++	  and other devices that support Atmel Object Based Protocol.
++
++	  https://github.com/atmel-maxtouch/mxt-app/
+diff --git a/package/mxt-app/mxt-app.hash b/package/mxt-app/mxt-app.hash
+new file mode 100644
+index 0000000000..abf20c728a
+--- /dev/null
++++ b/package/mxt-app/mxt-app.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  3639720ae1ea033bd982d68c5cab84432ce046fe14a66d9b2de07f115b642722  v1.36.tar.gz
+diff --git a/package/mxt-app/mxt-app.mk b/package/mxt-app/mxt-app.mk
+new file mode 100644
+index 0000000000..626cd352fc
+--- /dev/null
++++ b/package/mxt-app/mxt-app.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# mxt-app
++#
++################################################################################
++
++MXT_APP_VERSION = 1.36
++MXT_APP_SOURCE = v$(MXT_APP_VERSION).tar.gz
++MXT_APP_SITE = https://github.com/atmel-maxtouch/mxt-app/archive/refs/tags
++MXT_APP_LICENSE = Atmel License
++MXT_APP_LICENSE_FILES = LICENSE
++MXT_APP_DEPENDENCIES = libusb
++MXT_APP_INSTALL_STAGING = YES
++MXT_APP_AUTORECONF = YES
++MXT_APP_CONF_OPTS = --enable-debug
++
++MXT_APP_CXXFLAGS = $(TARGET_CXXFLAGS)
++MXT_APP_CONF_ENV = CXXFLAGS="$(MXT_APP_CXXFLAGS)"
++
++$(eval $(autotools-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3849531354449913440==--
