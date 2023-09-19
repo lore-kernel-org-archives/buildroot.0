@@ -4,87 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31986CE79A9
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 20:44:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5703CCE79A8
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 20:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C721C80F02;
-	Tue, 19 Sep 2023 20:44:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C721C80F02
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07E20822A8;
+	Tue, 19 Sep 2023 20:49:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07E20822A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pOIvvZe3rL6o; Tue, 19 Sep 2023 20:44:28 +0000 (UTC)
+	with ESMTP id TjX7cfbxSTBK; Tue, 19 Sep 2023 20:49:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C02B180BB3;
-	Tue, 19 Sep 2023 20:44:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C02B180BB3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 407ED82182;
+	Tue, 19 Sep 2023 20:49:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 407ED82182
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C66381BF20B
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:43:08 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2AC121BF419
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:49:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96CA383443
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96CA383443
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02E6882182
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 20:49:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02E6882182
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9WDrcIk7tnfO for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 20:43:08 +0000 (UTC)
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com
- [IPv6:2607:f8b0:4864:20::52d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E54C6830B8
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 20:43:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E54C6830B8
-Received: by mail-pg1-x52d.google.com with SMTP id
- 41be03b00d2f7-517ab9a4a13so5082205a12.1
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 13:43:07 -0700 (PDT)
+ with ESMTP id ew1c3LasRkQd for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 20:49:15 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E171F820AF
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 20:49:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E171F820AF
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-40413ccdd4cso1471095e9.0
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 13:49:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695156187; x=1695760987;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=8I+wdyMCNeEkJIQEG940taWqHwCQPhNLjFQlpjiZKKg=;
- b=Zju788QUB3/sVtZmRgAeuoRSwe23f57JXqnoyAuY1ilwE2f+2nQLnH+ks9u1C7Z084
- Xry+axZ0qnt0UBeQWZtluo6rk2PbR4iUWy+CWjzIP5598e3rJcuOA4ua4jtgJljIOHJE
- 16euBa3KZ5Gm9Ex3Ddsrc7LP8+sTM+9aM9OJ3YGr/RBaCKu+UWac+zpw0sXTQFuttF1D
- ZfE88o7FrjOdjd+ZBMKUvp2d7TyJtbQYvitc+4MMZuRaK8V0VVHianttFR3PxPXhqFbB
- fIM6bns5oSUsnl1jG2A6UlVoU8z1lFQfWXY9trKFVYGzqZNLm0WucBZx0eJPOVW002al
- hlMQ==
-X-Gm-Message-State: AOJu0YzXheCipwfdJikcqtcKjtaFud1KqfuPBEVMVYVTyWzmEhN0BKsw
- 4Jvs1bthQ6bxRJ33OODryx6xvsUw8nOCT9zSotjkYg==
-X-Google-Smtp-Source: AGHT+IGJyh2f56CSB7xNuVA3zY9YkLms9ldpTH6NycUHrrb3VkcZOEwo7d15lej9SNgPMXPdEVMA+Q==
-X-Received: by 2002:a05:6a20:f388:b0:13c:ca8b:7e29 with SMTP id
- qr8-20020a056a20f38800b0013cca8b7e29mr661832pzb.12.1695156187065; 
- Tue, 19 Sep 2023 13:43:07 -0700 (PDT)
-Received: from Adam-laptop.amarulasolutions.com ([172.56.201.58])
- by smtp.gmail.com with ESMTPSA id
- 18-20020a056a00073200b0068844ee18dfsm8918700pfm.83.2023.09.19.13.43.05
+ d=1e100.net; s=20230601; t=1695156552; x=1695761352;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dIJZRjgHH2RmwylU4awkkI8ZTcPss07K9fuTYq74fkQ=;
+ b=Qii1cdWLwCe9XDAc2+LHw/rHiWks81bL8RRvD138scyTEgiXisrvl4c1o54LRNyZbI
+ cOm6vrw//xLZZUvCUnbNkS5h3JNy540AtlRd5VQllf+amkxaitX1mHTf7YKDEorGxjca
+ Gb3C4u4vrLOPCOD7WmOQNgVyNBxa9ZBlxE8bP3tL1R7m7zukKjr0VY9nlwXg0BIlIhcO
+ n2eTCd6GqSXgxaoLD4v6HMeJ83IBTXTPZAA9Wc1JvehXv4hEwCQdQfXfFRP6ZMEOYD2F
+ 2VeRci/3bNMVo2dpVqe1psZ6d5+vTt9glE9QJit9fxwq7elybfC+DPWSbTVJk59MBdAa
+ kStw==
+X-Gm-Message-State: AOJu0Yxm4NF21tVAaAj4kvQRpbDKFajmxBSME+x+vQOi6dDQR496hJrT
+ IqPQD0A/cK/AwI+0rju3cWKwUef9k3g=
+X-Google-Smtp-Source: AGHT+IGC7zxRruZulR416157xsu0364QSJVxs9on9+cp1av9EOZ2z/nwRNplnglEmU/mpWimsvuhBA==
+X-Received: by 2002:adf:f1cd:0:b0:317:dd94:d38b with SMTP id
+ z13-20020adff1cd000000b00317dd94d38bmr2826045wro.10.1695156552382; 
+ Tue, 19 Sep 2023 13:49:12 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ z8-20020a056000110800b0031f3ad17b2csm16495742wrw.52.2023.09.19.13.49.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Sep 2023 13:43:06 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Tue, 19 Sep 2023 13:49:12 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Sep 2023 14:42:52 -0600
-Message-Id: <20230919204252.2272594-7-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230919204252.2272594-1-adam.duskett@amarulasolutions.com>
-References: <20230919204252.2272594-1-adam.duskett@amarulasolutions.com>
+Date: Tue, 19 Sep 2023 22:49:10 +0200
+Message-Id: <20230919204910.444965-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1695156187; x=1695760987;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=8I+wdyMCNeEkJIQEG940taWqHwCQPhNLjFQlpjiZKKg=;
- b=KeL3f55McNznkiQTzQPFs/EFUikkQujgdd7ng98liiRTSS5xu6bN9urpzkZv7sNCZu
- MXTqvQhTnVA8CmBtFwMCEDE3C6GE691Hng2rpYS+8OZOe8cYseTdhGDyEO1fEBYBqhWC
- PkZd3VvlMVQe/+gNkwOYxaO3uCCgWD795NMq4=
+ d=gmail.com; s=20230601; t=1695156552; x=1695761352; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=dIJZRjgHH2RmwylU4awkkI8ZTcPss07K9fuTYq74fkQ=;
+ b=Vafi6B+4/DQzLnbW3o/sVCKdr+QeVaa2uy2t9IRzmjqEmdkErEJ5TLqnucaMj2SKH2
+ 9JxNW82Zwkyp324zmEDxjtXrHLpuzbD9XLUttWqLh4ggG42uyjG9m2dHVOi60MEfZ2G5
+ cWluPpB+weAXqOjW4t+O/V0YKMZKEPCPWUcTAKHhhwXxPXl54NgpKMn+FXRTa9Lmi3Hx
+ BLnq/X612tOIlGjH0Y4BFRBahiNcR3HqlXpBKpS12UJO8GXcQ0S44GMUDTU0gdQWzuWW
+ JIaHOOaRpKvOJLM/YFOxeloIf/dITAKhQB/f043TnZn+/PpGDOgV5unUrHYdcdzRE0gO
+ /MwQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=KeL3f55M
-Subject: [Buildroot] [PATCH v9 7/7]
- support/testing/tests/package/test_flutter.py: new runtime test
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Vafi6B+4
+Subject: [Buildroot] [PATCH 1/1] package/opensc: fix CVE-2023-2977
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,145 +93,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Angelo Compagnucci <angelo@amarulasolutions.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a simple test that builds and runs the futter-gallery application and
-checks if the service is active.
+A vulnerability was found in OpenSC. This security flaw cause a buffer
+overrun vulnerability in pkcs15 cardos_have_verifyrc_package. The
+attacker can supply a smart card package with malformed ASN1 context.
+The cardos_have_verifyrc_package function scans the ASN1 buffer for 2
+tags, where remaining length is wrongly caculated due to moved starting
+pointer. This leads to possible heap-based buffer oob read. In cases
+where ASAN is enabled while compiling this causes a crash. Further info
+leak or more damage is possible.
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v8 -> v9:
-  - Changed to aarch64 to avoid problems with older versions of qemu.
-  - Added BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
+ ...alculation-to-fix-buffer-overrun-bug.patch | 51 +++++++++++++++++++
+ package/opensc/opensc.mk                      |  3 ++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
 
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_flutter.py | 56 +++++++++++++++++++
- .../package/test_flutter/linux-vkms.fragment  |  2 +
- .../flutter-gallery.service                   |  1 +
- .../systemd/system/flutter-gallery.service    | 11 ++++
- 5 files changed, 71 insertions(+)
- create mode 100644 support/testing/tests/package/test_flutter.py
- create mode 100644 support/testing/tests/package/test_flutter/linux-vkms.fragment
- create mode 120000 support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
- create mode 100644 support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 48a4ec776a..f46d83679a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -37,6 +37,7 @@ F:	package/flutter-engine/
- F:	package/flutter-gallery/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-+F:	support/testing/tests/package/test_flutter.py
+diff --git a/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch b/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
+new file mode 100644
+index 0000000000..079f960b59
+--- /dev/null
++++ b/package/opensc/0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
+@@ -0,0 +1,51 @@
++From 81944d1529202bd28359bede57c0a15deb65ba8a Mon Sep 17 00:00:00 2001
++From: fullwaywang <fullwaywang@tencent.com>
++Date: Mon, 29 May 2023 10:38:48 +0800
++Subject: [PATCH] pkcs15init: correct left length calculation to fix buffer
++ overrun bug. Fixes #2785
++
++Upstream: https://github.com/OpenSC/OpenSC/commit/81944d1529202bd28359bede57c0a15deb65ba8a
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/pkcs15init/pkcs15-cardos.c | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/pkcs15init/pkcs15-cardos.c b/src/pkcs15init/pkcs15-cardos.c
++index 9715cf390f..f41f73c349 100644
++--- a/src/pkcs15init/pkcs15-cardos.c
+++++ b/src/pkcs15init/pkcs15-cardos.c
++@@ -872,7 +872,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
++ 	sc_apdu_t apdu;
++         u8        rbuf[SC_MAX_APDU_BUFFER_SIZE];
++         int       r;
++-	const u8  *p = rbuf, *q;
+++	const u8  *p = rbuf, *q, *pp;
++ 	size_t    len, tlen = 0, ilen = 0;
++ 
++ 	sc_format_apdu(card, &apdu, SC_APDU_CASE_2_SHORT, 0xca, 0x01, 0x88);
++@@ -888,13 +888,13 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
++ 		return 0;
++ 
++ 	while (len != 0) {
++-		p = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
++-		if (p == NULL)
+++		pp = sc_asn1_find_tag(card->ctx, p, len, 0xe1, &tlen);
+++		if (pp == NULL)
++ 			return 0;
++ 		if (card->type == SC_CARD_TYPE_CARDOS_M4_3)	{
++ 			/* the verifyRC package on CardOS 4.3B use Manufacturer ID 0x01	*/
++ 			/* and Package Number 0x07					*/
++-			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x01, &ilen);
+++			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x01, &ilen);
++ 			if (q == NULL || ilen != 4)
++ 				return 0;
++ 			if (q[0] == 0x07)
++@@ -902,7 +902,7 @@ static int cardos_have_verifyrc_package(sc_card_t *card)
++ 		} else if (card->type == SC_CARD_TYPE_CARDOS_M4_4)	{
++ 			/* the verifyRC package on CardOS 4.4 use Manufacturer ID 0x03	*/
++ 			/* and Package Number 0x02					*/
++-			q = sc_asn1_find_tag(card->ctx, p, tlen, 0x03, &ilen);
+++			q = sc_asn1_find_tag(card->ctx, pp, tlen, 0x03, &ilen);
++ 			if (q == NULL || ilen != 4)
++ 				return 0;
++ 			if (q[0] == 0x02)
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+index 32f0fdaa8b..823bc50102 100644
+--- a/package/opensc/opensc.mk
++++ b/package/opensc/opensc.mk
+@@ -15,4 +15,7 @@ OPENSC_DEPENDENCIES = openssl pcsc-lite
+ OPENSC_INSTALL_STAGING = YES
+ OPENSC_CONF_OPTS = --disable-cmocka --disable-strict --disable-tests
  
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
-diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
-new file mode 100644
-index 0000000000..e17ed9f659
---- /dev/null
-+++ b/support/testing/tests/package/test_flutter.py
-@@ -0,0 +1,56 @@
-+import os
-+import time
-+import infra.basetest
++# 0004-pkcs15init-correct-left-length-calculation-to-fix-buffer-overrun-bug.patch
++OPENSC_IGNORE_CVES += CVE-2023-2977
 +
-+
-+class TestFlutter(infra.basetest.BRTest):
-+    config = f"""
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_flutter/overlay")}"
-+        BR2_PER_PACKAGE_DIRECTORIES=y
-+        BR2_INIT_SYSTEMD=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.54"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_flutter/linux-vkms.fragment")}"
-+        BR2_PACKAGE_LIBDRM=y
-+        BR2_PACKAGE_MESA3D=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
-+        BR2_PACKAGE_MESA3D_OPENGL_ES=y
-+        BR2_PACKAGE_FLUTTER_PI=y
-+        BR2_PACKAGE_FLUTTER_PI_RAW_KEYBOARD_PLUGIN=y
-+        BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
-+        BR2_PACKAGE_FLUTTER_GALLERY=y
-+        BR2_PACKAGE_FLUTTER_ENGINE=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        timeout = 35 * self.emulator.timeout_multiplier
-+        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(
-+            arch="aarch64",
-+            kernel=kern,
-+            kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+            options=["-M", "virt",
-+                     "-cpu", "cortex-a57",
-+                     "-m", "512M",
-+                     "-smp", "4",
-+                     "-vga", "std",
-+                     "-vnc", "none",
-+                     "-drive", f"file={img},if=virtio,format=raw"])
-+        self.emulator.login()
-+        cmd = "systemctl is-active flutter-gallery"
-+        output, exit_code = self.emulator.run(cmd, 10)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], "active")
-diff --git a/support/testing/tests/package/test_flutter/linux-vkms.fragment b/support/testing/tests/package/test_flutter/linux-vkms.fragment
-new file mode 100644
-index 0000000000..3fc7a5dded
---- /dev/null
-+++ b/support/testing/tests/package/test_flutter/linux-vkms.fragment
-@@ -0,0 +1,2 @@
-+CONFIG_DEBUG_FS=y
-+CONFIG_DRM_VKMS=y
-diff --git a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
-new file mode 120000
-index 0000000000..40993fb16c
---- /dev/null
-+++ b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
-@@ -0,0 +1 @@
-+../../../../usr/lib/systemd/system/flutter-gallery.service
-\ No newline at end of file
-diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
-new file mode 100644
-index 0000000000..88a2bcbf0b
---- /dev/null
-+++ b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=flutter-gallery daemon
-+After=dbus.service systemd-udevd.service
-+
-+[Service]
-+ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/gallery/release/
-+Restart=always
-+KillMode=process
-+
-+[Install]
-+WantedBy=multi-user.target
+ $(eval $(autotools-package))
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
