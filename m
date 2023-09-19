@@ -4,86 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8460BCE79A8
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 19:35:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00560CE79A8
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 19:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D59F041E60;
-	Tue, 19 Sep 2023 19:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D59F041E60
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42DA141E61;
+	Tue, 19 Sep 2023 19:38:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 42DA141E61
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cd3IMqyZwmNC; Tue, 19 Sep 2023 19:35:41 +0000 (UTC)
+	with ESMTP id 8lpQ7MYcq11t; Tue, 19 Sep 2023 19:38:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B02FD41E61;
-	Tue, 19 Sep 2023 19:35:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B02FD41E61
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F353F1BF853
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 19:35:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4478C41E67;
+	Tue, 19 Sep 2023 19:38:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4478C41E67
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D3441BF853
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 19:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9FDF4174A
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 19:35:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9FDF4174A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62E7D6121E
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 19:38:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62E7D6121E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wbtAJIo1SZs0 for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 19:35:39 +0000 (UTC)
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D8E3641761
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 19:35:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8E3641761
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-99bdeae1d0aso765786466b.1
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 12:35:38 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9SbBc3kxgMOL for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 19:38:01 +0000 (UTC)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4B08560FEB
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 19:38:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B08560FEB
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-404314388ceso64574055e9.2
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 12:38:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695152137; x=1695756937;
+ d=1e100.net; s=20230601; t=1695152279; x=1695757079;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8LZM/d23bZRgrxeWaaQktaR2Zjjc3Tp5J87nv5x7c1A=;
- b=c7ilVbmjO6dWGC0Pknpy7NkUkln6+4+O/gzKYx1uaEJ43aFycDkXkwXRUPyYnpJwKk
- Suki1TxT2dw5A+fxrsh8UNJRYu6xwhkU8oryyL7KuMLOJN/l+OnkJMjF8LpEx8IUS5Cz
- fWrBXnIBSUmkMIYDa6yYBeRItjm/9yxMlmyIAeaCFPbL2xIId6+sziqCj0tZ4c5k0MOy
- mejzqbvvgo0n4OKGpA+uRerinVtOuAjRByd/F1VOeB7DwklvKqamN5Re0/zYXlEDs8Rr
- bsprHEXergaBBMl+KWJIOw56tRKwYr02zw1xx13hCIY0QVnpRnEcfVCUd34q3saafNod
- BqAQ==
-X-Gm-Message-State: AOJu0YxD64M0dtfJWaD6+wwLm4R2XhCxFbxHHB3kvMjlQtiwGXkh3nHx
- tnMY6Ap7VR4DF5G1UJ/kbEcMYplNowI1bQ==
-X-Google-Smtp-Source: AGHT+IGz51YOLGIW5igvw9EUnmg4MZlm21kxIUMTgRIyXFCvfdSYA/07E411GutF6Y1v2ld4+kcHAQ==
-X-Received: by 2002:a17:907:75f6:b0:9ad:f87c:57a2 with SMTP id
- jz22-20020a17090775f600b009adf87c57a2mr302565ejc.12.1695152136366; 
- Tue, 19 Sep 2023 12:35:36 -0700 (PDT)
-Received: from localhost.localdomain
- (2a02-a46f-1ab1-1-97f-1365-4b31-c06d.fixed6.kpn.net.
- [2a02:a46f:1ab1:1:97f:1365:4b31:c06d])
- by smtp.gmail.com with ESMTPSA id
- f26-20020a170906495a00b0099d45ed589csm8131156ejt.125.2023.09.19.12.35.35
+ bh=6DEtYeMmBiOBW605T5HNYPvqPumQpMaUqSyTbs4+E44=;
+ b=eEkQS5CR+I/3UJSKX+ALNqj3ifx5+Gw/k8JKOLp7LlSa67wYoC31fxzLh0eAHAUoH3
+ rwHyqVdz23/lzcoy6QAM9om+ItTqBEU32MzZR4xgw9uYABxRaeh43lTPu4qwKBb82IZs
+ 2mdEdAzQSjCi7KLe095K7/eVo8j/NlcB0mDPlILFde+oEo1iUsYCX79hGkgd2ug+NcN3
+ VGr0XjKUy9FhNCiPXqZbMnVfWVyWXkZyztpp71hQY0ezO/SAeRcYqgszLrMc9yD/hwWq
+ 5pAcBK9pxvNOXlv2kNgJeAtu+ExJHRC5OwzFPi8PPcnDkz7+3z+evATXxriY5qiaVJiv
+ Sy9A==
+X-Gm-Message-State: AOJu0YxsKB7Z8XwdKr2BCzl487Yj7jCRGt2xW1Dx91DomG+vK6GZapzN
+ b/04FS6k+LUJ2BqY2kx4vldKV22fXLI=
+X-Google-Smtp-Source: AGHT+IHV4E+o15cuGa3JBGh3gLOimaqs0I6WHjIdiFyFUXLAvUbEUvXWP7AZPsxiyzR17/MZLVBmaQ==
+X-Received: by 2002:a05:600c:2483:b0:403:b86:f620 with SMTP id
+ 3-20020a05600c248300b004030b86f620mr630401wms.12.1695152278784; 
+ Tue, 19 Sep 2023 12:37:58 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ a4-20020a5d5704000000b0031fc9402b47sm16442917wrv.4.2023.09.19.12.37.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Sep 2023 12:35:35 -0700 (PDT)
-From: kazemi.ms@gmail.com
+ Tue, 19 Sep 2023 12:37:58 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 19 Sep 2023 21:35:14 +0200
-Message-Id: <20230919193514.18212-1-kazemi.ms@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 19 Sep 2023 21:37:54 +0200
+Message-Id: <20230919193754.121091-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695152137; x=1695756937; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1695152279; x=1695757079; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8LZM/d23bZRgrxeWaaQktaR2Zjjc3Tp5J87nv5x7c1A=;
- b=WExgoac/9kOwbOytG5w6zV5fTaw75DYb++4tn+WJttLCONhWRKLPlJNCm3IaWcPRTw
- qXmtKPUEK3cB7hhc8mrVW4/eeLFq1zZeisqRsDhhUT3FCmv1XJ018Djc1+Snzz8Wvsii
- WBW1RceFQ9AmgPijdYSWEPj25Yh7hudpWcXp7a89pOLggBxtCyZlVCC3Vzlm/8T+xa6y
- Wf/huQQFy7xQpqv1dAcqP0YD33Kdpip/vPApDjf5yKXsy681r3ViWwEi2KJ+UMQjQXvU
- VrZIV57PK3RVn5c+ow6uq83dlo8nATlhnv3bCWw+hf3u/CQIV8kSF3LqMDmI7WCiA9la
- hD4g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=6DEtYeMmBiOBW605T5HNYPvqPumQpMaUqSyTbs4+E44=;
+ b=kL9poS+TSZbWOJZwyhzyb46sfDgQbIBhFsJqo7QrPce5uSqT24HFx4MMMZ1ezZwh1B
+ u9JOIN+p2OQDd7L637mmVjOcoJXLti7BswbRB6rV/knzMATdiJx7S0y597OGIfhonoNl
+ 6L+Nat22Dq3zojj2UtRox0iS3U3WbKaDNg6xx3HPsUTX1jrMbgFxFOS11SDAO9g549um
+ tbd6dK0832p0Jp2O6pkH2XLft9gza81kI2f4e8D/gFB/RKr8I2lCwV+exK3pRzgOjYX9
+ hj1CNTtazjDaVI+CWTOA0SC8lGtpkQEuBOpFaJ+nwsF37KwmQrd7wnnW8rlodPpBf9W1
+ 22fg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=WExgoac/
-Subject: [Buildroot] [PATCH 1/1] package/mxt-app: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=kL9poS+T
+Subject: [Buildroot] [PATCH 1/1] package/vulkan-loader: fix x11 handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,118 +93,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Saeed Kazemi <kazemi.ms@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Adam Duskett <aduskett@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Saeed Kazemi <kazemi.ms@gmail.com>
+Fix the following build failure raised since the addition of the package
+in commit 6aa1bc31678ff9f8013084fda34b9f941cc63fc3:
 
-mxt-app is a utility for managing Atmel maXTouch touch controllers
-and other devices that support Atmel Object Based Protocol.
+In file included from /home/buildroot/autobuild/run/instance-3/output-1/build/vulkan-loader-1.3.262/loader/extension_manual.h:24,
+                 from /home/buildroot/autobuild/run/instance-3/output-1/build/vulkan-loader-1.3.262/loader/extension_manual.c:23:
+/home/buildroot/autobuild/run/instance-3/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/vulkan/vulkan.h:71:10: fatal error: X11/extensions/Xrandr.h: No such file or directory
+   71 | #include <X11/extensions/Xrandr.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/55ddfd44393e3bcc2f25bad2f9ecb7e1b142a985
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/mxt-app/Config.in    | 20 ++++++++++++++++++++
- package/mxt-app/mxt-app.hash |  3 +++
- package/mxt-app/mxt-app.mk   | 19 +++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 package/mxt-app/Config.in
- create mode 100644 package/mxt-app/mxt-app.hash
- create mode 100644 package/mxt-app/mxt-app.mk
+ package/vulkan-loader/Config.in        |  1 +
+ package/vulkan-loader/vulkan-loader.mk | 15 +++++++++------
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e8b78a8d46..19d637d847 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2604,6 +2604,9 @@ F:	package/agent-proxy/
- N:	Ryan Wilkins <ryan@deadfrog.net>
- F:	package/biosdevname/
+diff --git a/package/vulkan-loader/Config.in b/package/vulkan-loader/Config.in
+index 9c215dc9ce..1ea6c94505 100644
+--- a/package/vulkan-loader/Config.in
++++ b/package/vulkan-loader/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_VULKAN_LOADER
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_VULKAN_HEADERS
++	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
+ 	help
+ 	  The Khronos official Vulkan ICD desktop loader.
  
-+N:	Saeed Kazemi <kazemi.ms@gmail.com>
-+F:	package/mxt-app/
-+
- N:	Sam Lancia <sam@gpsm.co.uk>
- F:	package/lrzip/
+diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
+index f6dd9d0ac3..b1545a4972 100644
+--- a/package/vulkan-loader/vulkan-loader.mk
++++ b/package/vulkan-loader/vulkan-loader.mk
+@@ -26,13 +26,16 @@ endif
  
-diff --git a/package/Config.in b/package/Config.in
-index e8dbadadf3..e8d39b74b8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -556,6 +556,7 @@ endmenu
- 	source "package/mhz/Config.in"
- 	source "package/minicom/Config.in"
- 	source "package/msr-tools/Config.in"
-+	source "package/mxt-app/Config.in"
- 	source "package/nanocom/Config.in"
- 	source "package/neard/Config.in"
- 	source "package/nvidia-driver/Config.in"
-diff --git a/package/mxt-app/Config.in b/package/mxt-app/Config.in
-new file mode 100644
-index 0000000000..2b153901de
---- /dev/null
-+++ b/package/mxt-app/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_MXT_APP
-+	bool "mxt-app"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  mxt-app is a utility for managing Atmel maXTouch touch
-+	  controllers and other devices that support Atmel Object Based
-+	  Protocol.
-+
-+	  https://github.com/atmel-maxtouch/mxt-app/
-+
-+config BR2_PACKAGE_MXT_APP_DEBUG
-+	bool "mxt-app debugging"
-+	help
-+	  Compile mxt-app with debug enabled
-+
-+comment "mxt-app needs a toolchain w/ threads, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/mxt-app/mxt-app.hash b/package/mxt-app/mxt-app.hash
-new file mode 100644
-index 0000000000..b7851cea37
---- /dev/null
-+++ b/package/mxt-app/mxt-app.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  3639720ae1ea033bd982d68c5cab84432ce046fe14a66d9b2de07f115b642722  mxt-app-1.36.tar.gz
-+sha256  3682b125a40a4da00b6ab69bdbd38c25ed4beae69b3fe32458d2e32638477c4c  LICENSE
-diff --git a/package/mxt-app/mxt-app.mk b/package/mxt-app/mxt-app.mk
-new file mode 100644
-index 0000000000..da0aa65328
---- /dev/null
-+++ b/package/mxt-app/mxt-app.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# mxt-app
-+#
-+################################################################################
-+
-+MXT_APP_VERSION = 1.36
-+MXT_APP_SITE = $(call github,atmel-maxtouch,mxt-app,v$(MXT_APP_VERSION))
-+MXT_APP_LICENSE = BSD-2-Clause
-+MXT_APP_LICENSE_FILES = LICENSE
-+MXT_APP_DEPENDENCIES = libusb
-+MXT_APP_INSTALL_STAGING = YES
-+MXT_APP_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_MXT_APP_DEBUG),y)
-+MXT_APP_CONF_OPTS += --enable-debug
+ ifeq ($(BR2_PACKAGE_LIBXCB),y)
+ VULKAN_LOADER_DEPENDENCIES += libxcb
+-VULKAN_LOADER_CONF_OPTS += \
+-	-DBUILD_WSI_XCB_SUPPORT=ON \
+-	-DBUILD_WSI_XLIB_SUPPORT=ON
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=ON
+ else
+-VULKAN_LOADER_CONF_OPTS += \
+-	-DBUILD_WSI_XCB_SUPPORT=OFF \
+-	-DBUILD_WSI_XLIB_SUPPORT=OFF
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=OFF
 +endif
 +
-+$(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRANDR),yy)
++VULKAN_LOADER_DEPENDENCIES += xlib_libX11 xlib_libXrandr
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XLIB_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XLIB_SUPPORT=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
 -- 
-2.34.1
+2.40.1
 
 _______________________________________________
 buildroot mailing list
