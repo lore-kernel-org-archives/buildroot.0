@@ -4,84 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1731DCE79AD
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 21:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92BAECE79A9
+	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 22:08:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0CAF80D20;
-	Tue, 19 Sep 2023 21:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0CAF80D20
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C2D983437;
+	Tue, 19 Sep 2023 22:08:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C2D983437
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id N0SS9Ga1Yth3; Tue, 19 Sep 2023 21:04:27 +0000 (UTC)
+	with ESMTP id 3c41Cku09N8G; Tue, 19 Sep 2023 22:08:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E61EA82331;
-	Tue, 19 Sep 2023 21:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E61EA82331
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F020C1BF401
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 21:04:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 403A683487;
+	Tue, 19 Sep 2023 22:08:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 403A683487
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CD431BF2C4
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 22:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C860C41C3C
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 21:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C860C41C3C
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2F1E83487
+ for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 22:08:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2F1E83487
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 9ksYLWtlts0t for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 21:04:24 +0000 (UTC)
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8D78341BF0
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 21:04:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D78341BF0
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4051fea48a8so2215935e9.2
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 14:04:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695157462; x=1695762262;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=pDk2faxMPYh0VmRqcltfDWhaqqBAlQh9dxEsf+I2dps=;
- b=c7RTk8NR3hH9uIPVY+KrjlbryQ+wJUJ3UM+UdlQvatIGxxx0fuES8dXsiNwzMGyYhI
- HgW09keHG/8uS8DLwed/RpulkAas/ThPXvljSnm5kMzMUMoj4mTJU4GAaUHgPknRqkTD
- djGD22P1T+Ffo/ltyrYK+lY2hdzwszX0BUjRmvVhR+bRk9dHsYhQDfULnG8/4VR7xnzB
- ajmbPo43xt+ZhVILxPHhNiC6OT+5XzJxzjiUiaUujxH07b9mHO/1d5P9pqzDt3T6tIHx
- Q7AjwZmyhp2COqKviZtOKIJtIg34Z+6kzIv23khwShOZCfwHsMTXrY/KI43ARkZIjbg/
- L7Tw==
-X-Gm-Message-State: AOJu0Yw5BdxvtbQATE36dMv0CquGl48kka9wPOlzjyr3vPNe2oV1X6Jj
- pzs8inbWAze1OVdfl2O9Fo+dAnPQDPY=
-X-Google-Smtp-Source: AGHT+IEGLUj4LzGJIDI2G0XclAXYRIuB3TDxodpAf3PSZez++4fGLkfkKE1mx1mukd30xMnrnnCcfA==
-X-Received: by 2002:adf:f1cd:0:b0:321:4ecb:1935 with SMTP id
- z13-20020adff1cd000000b003214ecb1935mr574535wro.42.1695157462064; 
- Tue, 19 Sep 2023 14:04:22 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- r6-20020a5d4e46000000b003198a9d758dsm16667906wrt.78.2023.09.19.14.04.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Sep 2023 14:04:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 19 Sep 2023 23:04:05 +0200
-Message-Id: <20230919210405.554008-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id RFDgmmkuaqJd for <buildroot@lists.busybox.net>;
+ Tue, 19 Sep 2023 22:08:12 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3023383437
+ for <buildroot@buildroot.org>; Tue, 19 Sep 2023 22:08:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3023383437
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:5f63:9bfc:8d71:54af])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id AFAA213F8BA;
+ Wed, 20 Sep 2023 00:08:02 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 20 Sep 2023 00:08:02 +0200
+Date: Wed, 20 Sep 2023 00:08:02 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20230919220802.GA512384@scaer>
+References: <20230919204252.2272594-1-adam.duskett@amarulasolutions.com>
+ <20230919204252.2272594-4-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695157462; x=1695762262; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pDk2faxMPYh0VmRqcltfDWhaqqBAlQh9dxEsf+I2dps=;
- b=cagcR6HhFfrwh30ONk+g3dQY052wnCOnUX8FQRA2lK9Muzo3kDlND8Ge43I1l9fJQR
- m6uwjvnufZeEZPRef4LmNtKJnob9QU2rYS2FuKMlKYJQ4V7LztfAqXjM7aqibcl/o8D4
- 1KARh5yr935L/cq0+AXySVEHBrxBdz5hi+txWEXcurkqVlVqvHxfuwX0sTpY8wW7cSU5
- RDzZ9IKYmMWHXv7KmAOg7HpThp4bu/ExIXYdY1aRGOA7A3koNQDxchesBvPQSYGmqHYN
- 0idAbG5kiRUQ5d8mdvdCoO4Wxzoj52F4s7514T9jYk38d802RDQgNXkLR0V0lM6yRfYF
- TEGQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cagcR6Hh
-Subject: [Buildroot] [PATCH 1/1] package/xterm: bump to version 384
+Content-Disposition: inline
+In-Reply-To: <20230919204252.2272594-4-adam.duskett@amarulasolutions.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1695161289;
+ bh=yMdEBgCAQq1xtpVJzhoY5BG4VwMbSDl70DBIlxk6fzk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=tQ6upPWvroGaUn+jmFO5q00ebiChz8gFIQdjsaoCdnWe5CsLz41dplSjb3TZoVO1P
+ OwyYvvKJGvP5IuG9qNjrK4pSq1lfT6jDO0BHJQr0EqwQOQvQGSJ9WoK9F3zgz29EH6
+ vaKx5l1EmsJrfJVVP2PypnrZEtFaG0IBhuKw71en/IRoMn0f3jEyOBNHaCRucX2DfG
+ d2KxKaw3SeY6priJMM+p9PJThJgiKmig/fRTtauLDG7g5xdKJ/+MF0uUIZuClIuVl0
+ X/fyF2jRC/pEB5c3bztc1aEgRh78vc93pT0wyiLHmhEpDnG3CWJG/+uJQHd33J+Uos
+ GkeuRAIWBch/A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tQ6upPWv
+Subject: Re: [Buildroot] [PATCH v9 4/7] package/flutter-engine: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,54 +76,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Fix CVE-2023-40359: xterm before 380 supports ReGIS reporting for
-  character-set names even if they have unexpected characters (i.e.,
-  neither alphanumeric nor underscore), aka a pointer/overflow issue.
-  This can only occur for xterm installations that are configured at
-  compile time to use a certain experimental feature.
-- Update COPYING hash (update in year and version)
+Adam, All,
 
-https://invisible-island.net/xterm/xterm.log.html#xterm_384
+This is really a good job you did on such a tough package!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/xterm/xterm.hash | 4 ++--
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+We're entering the realm of the details, so it is a good sign that we're
+close to a merge!
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 12cd2e639b..1a2ad8fea0 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  1e5bb7aad068fb31d6d3cbb77f80c7ad1526cd4c956a4ddcf2c5cf28af5334e1  xterm-376.tgz
-+sha256  31ef870740ceae020c3c4b4a9601c7f47bfd46672c1aaf2d213a565d64cbc373  xterm-384.tgz
- # Locally calculated
--sha256  9521ef761474cd31ea406f56a751646a7b42a9287cdc6f2f8e52ed4c4d2a73e7  COPYING
-+sha256  98d02d0b7f7b8aabb742b05e6960caaa9ae20e26d2f0d0dc57808362f2ac79bc  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index d01b608d99..2fc2f734c8 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XTERM_VERSION = 376
-+XTERM_VERSION = 384
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+On 2023-09-19 14:42 -0600, Adam Duskett spake thusly:
+[--SNIP--]
+> diff --git a/package/flutter-engine/dot-gclient b/package/flutter-engine/dot-gclient
+> new file mode 100644
+> index 0000000000..4e5787419b
+> --- /dev/null
+> +++ b/package/flutter-engine/dot-gclient
+> @@ -0,0 +1,12 @@
+> +# This file is taken from the output of meta-flutter/lib/gn.py
+
+This comment is a bit misleading: it hints that this file is generated
+(it is!) from some metadata. So my question was goign to be: why can't
+we carry that metadata, the script, and generate the file ourselves?
+
+But in fact, there is no interesting metadata needed to generate that
+file; the only thing that is not hard-coded in the generating script
+(besides the name, version and URI) is the set of download dependencies,
+all set to False in the bitbake recipe.
+
+So indeed it is not interesting to generate that file. And thus the
+comment is indeed a bit misleading. I'll try to tweak it when
+applying...
+
+> +solutions = [{
+> +    "managed": False,
+> +    "name": "src/flutter",
+> +    "url": "https://github.com/flutter/engine.git@!FLUTTER_VERSION!",
+> +    "custom_vars": {
+> +        "download_android_deps": False,
+> +        "download_windows_deps": False,
+> +        "download_linux_deps": False
+> +    },
+> +}]
+> diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
+> new file mode 100644
+> index 0000000000..76c6610fcd
+> --- /dev/null
+> +++ b/package/flutter-engine/flutter-engine.mk
+> @@ -0,0 +1,234 @@
+> +################################################################################
+> +#
+> +# flutter-engine
+> +#
+> +################################################################################
+[--SNIP--]
+> +# Generate a tarball if one does not already exist.
+> +define FLUTTER_ENGINE_GENERATE_TARBALL
+> +	PATH=$(BR_PATH):$(HOST_DIR)/share/depot_tools \
+
+So here, two things:
+  - you put $(HOST_DIR)/share/depot_tools in the PATH but .. -> [0]
+  - you should probably set it in the front:
+        PATH="$(HOST_DIR)/share/depot_tools:$(BR_PATH)"
+
+> +	PYTHONPATH=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
+> +	$(FLUTTER_ENGINE_PKGDIR)/gen-tarball \
+> +		--dot-gclient $(FLUTTER_ENGINE_PKGDIR)/dot-gclient \
+> +		--jobs $(PARALLEL_JOBS) \
+> +		--scratch-dir $(@D)/dl-tmp \
+> +		--tarball-dl-path $(FLUTTER_ENGINE_TARBALL_PATH) \
+> +		--version $(FLUTTER_ENGINE_VERSION)
+> +endef
+> +FLUTTER_ENGINE_POST_DOWNLOAD_HOOKS += FLUTTER_ENGINE_GENERATE_TARBALL
+> +
+> +define FLUTTER_ENGINE_EXTRACT_CMDS
+> +	gzip -d -c $(FLUTTER_ENGINE_TARBALL_PATH) | tar --strip-components 1 -C $(@D) -xf -
+
+We usually use suitable-extractor to decompress, and use $(TAR) and
+$(TAR_OPTIONS) to extract:
+
+    $(call suitable-extractor,$(not dir $(FLUTTER_ENGINE_TARBALL_PATH))) $(FLUTTER_ENGINE_TARBALL_PATH) \
+    |$(TAR) --strip-components 1 -C $(@D) $(TAR_OPTIONS) -
+
+[--SNIP--]
+> diff --git a/package/flutter-engine/gen-tarball b/package/flutter-engine/gen-tarball
+> new file mode 100755
+> index 0000000000..e040beac75
+> --- /dev/null
+> +++ b/package/flutter-engine/gen-tarball
+> @@ -0,0 +1,111 @@
+[--SNIP--]
+> +run_gclient() {
+> +  local gclient="${HOST_DIR}"/share/depot_tools/gclient.py
+
+[0] here you don't use PATH to locate gclient.py.
+
+> +  if [[ ! -e "${gclient}" ]]; then
+> +    message "${gclient} does not exist. Is host-depot-tools built and installed?"
+
+That should not happen because host-depot-tools is a dependency of
+flutter-engine.
+
+> +    exit 1
+> +  fi
+> +  message "Downloading"
+> +  "${gclient}" \
+
+Assuming $(HOST_DIR)/share/depot_tools first int he PATH, can we just
+run:
+
+    gclient.py \
+        sync \
+        [...]
+
+> +    sync \
+> +    --delete_unversioned_trees \
+> +    --no-history \
+> +    --reset \
+> +    --shallow \
+> +    -j"${JOBS}"
+> +}
+> +
+> +gen_tarball() {
+> +  message "Generating tarball"
+> +  mkdir -p "${DL_DIR}"
+> +  # We would use the mk_tar_gz helper method from the support/download/helpers
+> +  # script here. However, due to unknown reasons other than what I can
+> +  # articulate as "Google," this is not possible. Even though creating a
+> +  # tarball using the mk_tar_gz command results in a tarball that extracts and
+> +  # builds flutter-engine without warnings or errors, the gen_snapshot host
+> +  # utility, which turns dart applications into usable .so files for the
+> +  # flutter engine, results in the error:
+> +  # "Can't load kernel binary: Invalid SDK hash." As we are not interested in
+> +  # creating a reproducible tarball, we need to use tar -C instead.
+
+As discussed on IRC, I think the real reason was that mk_tar_gz only
+archives non-directories, i.e. files, symlinks, etc... so empty
+directories are missing, and the flutter-engine buildsystem requires
+them.
+
+So, based on your replies, I may be able to ammend the commit when
+applying and save you a respin. So, be careful in your replies! ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.40.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
