@@ -4,65 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D0F6C04FEE
-	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 19:32:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC9FCC04FF1
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 19:33:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D844E41FC2;
-	Wed, 20 Sep 2023 19:32:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D844E41FC2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C81640866;
+	Wed, 20 Sep 2023 19:33:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C81640866
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id BZMqvfWJeynz; Wed, 20 Sep 2023 19:32:38 +0000 (UTC)
+	with ESMTP id J1SDgZ7ot7B4; Wed, 20 Sep 2023 19:33:53 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABB5341FC8;
-	Wed, 20 Sep 2023 19:32:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABB5341FC8
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 75B2B1BF2AF
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 19:32:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35050400C8;
+	Wed, 20 Sep 2023 19:33:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35050400C8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CA02F1BF2AF
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 19:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50CB541FC8
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 19:32:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50CB541FC8
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2EA483BEF
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 19:33:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2EA483BEF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id lPbfJGSpsEXG for <buildroot@lists.busybox.net>;
- Wed, 20 Sep 2023 19:32:35 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3338641FAD
- for <buildroot@buildroot.org>; Wed, 20 Sep 2023 19:32:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3338641FAD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8EBC940002;
- Wed, 20 Sep 2023 19:32:30 +0000 (UTC)
-Date: Wed, 20 Sep 2023 21:32:29 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230920213229.7f6670e9@windsurf>
-In-Reply-To: <20230918201623.2639458-1-fontaine.fabrice@gmail.com>
-References: <20230918201623.2639458-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695238351;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=yAhUEj4jCdq2gcHCo2TUZzQXF9uGUzhvBxYs4lsBDNw=;
- b=NoTOC821d7slA7TWyc5yqr0kA+sVq7GKxmGU8hQQqBpqprH+ZLmEK+NcsWIdVxmGYj3c5b
- c1DeUwFc08Nfb6jPHEZxhEllVSx0yU+6Sq+LWaqqM0JVd8hUpip2Sd4l8mHHbNzOH13AJQ
- bvQX2FD1Rh4nO86cL5cZhUUlXh/OfG9TK1NwaHezQQDHmTEmSDZ7Ao7/rTAe/pcee7oIDq
- Lou+G3He1+sdXdfVQu8MCafc8jMJINDgbHtG6MkkiDKrhD+EuO216rV5ZZ+SmJ8oTYXK+o
- JY1SWWyFiEYlQRN43qv5XcZlJ98ef5yRU79XvxlKG++iCPZQEwKRlUemBAXb9w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NoTOC821
-Subject: Re: [Buildroot] [PATCH 1/1] package/agentpp: fix build with gcc 4.8
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l0OClaMKOPtu for <buildroot@lists.busybox.net>;
+ Wed, 20 Sep 2023 19:33:49 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5AFA83BED
+ for <buildroot@buildroot.org>; Wed, 20 Sep 2023 19:33:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5AFA83BED
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 92264873D6; Wed, 20 Sep 2023 19:33:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 20 Sep 2023 21:33:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7c6c018ad45c952a47e7f0e707da0d797cdbe4c3
+X-Git-Newrev: e9f2f48a7ebba2d5f0b38b6e9d2f12627575141a
+X-Patchwork-Hint: ignore
+Message-Id: <20230920193349.92264873D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/binutils: install libsframe for
+ all relevant binutils versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,49 +58,93 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 18 Sep 2023 22:16:23 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e9f2f48a7ebba2d5f0b38b6e9d2f12627575141a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure with gcc 4.8 raised since bump of snmppp
-> to version 3.5.0 in commit e011fa0415883b9d44df616cfaf6956e1a11da88:
-> 
-> configure: error: Cannot find suitable libsnmp++ library
-> 
-> [...]
-> 
-> configure:9496: checking if libsnmp++ can be linked with flags from pkg-config
-> configure:9528: /home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-none-linux-gnueabi-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_XOPEN_SOURCE=XPG6  conftest.cpp -L/home/buildroot/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib -lsnmp++ >&5
-> In file included from /home/buildroot/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/snmp_pp/snmp_pp.h:71:0,
->                  from conftest.cpp:92:
-> /home/buildroot/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/snmp_pp/uxsnmp.h:628:35: error: 'nullptr' was not declared in this scope
->       CSNMPMessage *snmp_message = nullptr);
->                                    ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f272473e7b588f5390b183072935a0217290ee4e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/agentpp/agentpp.mk | 1 +
->  1 file changed, 1 insertion(+)
+Fix the following build failure with oprofile raised since bump of
+binutils to version 2.40 in commit
+35656482d3b74ab12a6c2395ac9ca61b60a2fd49:
 
-Applied to master, thanks. That being said, I think ideally it should
-be the agentpp build system that passes -std=c++11, rather than having
-Buildroot need to know about this.
+configure: error: bfd library not found
 
-Best regards,
+[...]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+configure:17928: checking for bfd_openr in -lbfd
+configure:17953: /home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lbfd  -liberty -lpopt  -ldl -lintl >&5
+/home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/12.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: warning: libsframe.so.0, needed by /home/buildroot/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libbfd.so, not found (try using -rpath or -rpath-link)
+
+Indeed, in this case, libsframe is not installed even after applying
+commit 1b4d921e1da614a72fed2a79d5c4f8e0b6d1cd45 because
+BR2_BINUTILS_VERSION_2_40_X is not selected by anyone (binutils package
+is selected by oprofile and the toolchain is not generated by buildroot)
+
+To fix this issue, invert the logic: install libsframe by default (i.e.
+when binutils is selected or with a buildroot toolchain). libsframe will
+not be installed only if binutils < 2.40 is detected.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/af9a2d52823a332b48e6df14d2708b6a4b3833a4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/binutils/Config.in.host | 6 +++---
+ package/binutils/binutils.mk    | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 36436c0b27..bc7dc4443c 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+ 	default y
+ 	depends on !BR2_microblaze
+ 
+-config BR2_PACKAGE_BINUTILS_HAS_LIBSFRAME
++config BR2_PACKAGE_BINUTILS_HAS_NO_LIBSFRAME
+ 	bool
+ 
+ choice
+@@ -17,18 +17,18 @@ choice
+ 
+ config BR2_BINUTILS_VERSION_2_39_X
+ 	bool "binutils 2.39"
++	select BR2_PACKAGE_BINUTILS_HAS_NO_LIBSFRAME
+ 
+ config BR2_BINUTILS_VERSION_2_40_X
+ 	bool "binutils 2.40"
+-	select BR2_PACKAGE_BINUTILS_HAS_LIBSFRAME
+ 
+ config BR2_BINUTILS_VERSION_2_41_X
+ 	bool "binutils 2.41"
+-	select BR2_PACKAGE_BINUTILS_HAS_LIBSFRAME
+ 
+ config BR2_BINUTILS_VERSION_ARC
+ 	bool "binutils arc (2.34.50)"
+ 	depends on BR2_arc
++	select BR2_PACKAGE_BINUTILS_HAS_NO_LIBSFRAME
+ 
+ endchoice
+ 
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index ecb00077d6..4bc1b69fa0 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -105,7 +105,7 @@ endif
+ # our TARGET_CONFIGURE_ARGS are taken into consideration for those
+ BINUTILS_MAKE_ENV = $(TARGET_CONFIGURE_ARGS)
+ 
+-ifeq ($(BR2_PACKAGE_BINUTILS_HAS_LIBSFRAME),y)
++ifeq ($(BR2_PACKAGE_BINUTILS_HAS_NO_LIBSFRAME),)
+ define BINUTILS_INSTALL_STAGING_LIBSFRAME
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libsframe DESTDIR=$(STAGING_DIR) install
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
