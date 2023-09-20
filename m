@@ -4,47 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7100C04AB8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 17:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 070CFC04AB8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 17:37:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D47F60EDD;
-	Wed, 20 Sep 2023 17:36:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D47F60EDD
+	by smtp3.osuosl.org (Postfix) with ESMTP id B149660C19;
+	Wed, 20 Sep 2023 17:37:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B149660C19
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id HKmGZObC874q; Wed, 20 Sep 2023 17:36:54 +0000 (UTC)
+	with ESMTP id hAuXxmZMYe5k; Wed, 20 Sep 2023 17:37:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7733612BD;
-	Wed, 20 Sep 2023 17:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7733612BD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 978331BF95F
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEC9461389;
+	Wed, 20 Sep 2023 17:37:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC9461389
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 981DF1BF97A
  for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 17:36:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7039E60C19
+ by smtp2.osuosl.org (Postfix) with ESMTP id 709384055F
  for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 17:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7039E60C19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 709384055F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JEnAC6G5pBRG for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZQVWEBGKYTUC for <buildroot@lists.busybox.net>;
  Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79F9360EDD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A56340280
  for <buildroot@buildroot.org>; Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79F9360EDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A56340280
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68C5E873AE; Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
+ id 569E8873AA; Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 20 Sep 2023 19:35:01 +0200
+Date: Wed, 20 Sep 2023 19:34:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 880e03ba7519597e813e910543b87b5a077c906c
-X-Git-Newrev: dc0c7552735d299107385458c1889c7dc4633864
+X-Git-Oldrev: 93ef6997aeef443336651dab46b31ff87be07860
+X-Git-Newrev: 8bf82aab0c0b7a1d329a02395e0353bb9c2eae67
 X-Patchwork-Hint: ignore
-Message-Id: <20230920173650.68C5E873AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/e2fsprogs: drop CVE-2022-1304
+Message-Id: <20230920173650.569E8873AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: drop CVE-2017-3139 from
+ IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,32 +63,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc0c7552735d299107385458c1889c7dc4633864
+commit: https://git.buildroot.net/buildroot/commit/?id=8bf82aab0c0b7a1d329a02395e0353bb9c2eae67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2022-1304 only affects e2fsprogs 1.46.5.
-The mentioned patch was removed in 6a21733f when bumping to 1.47.0.
+As of 2021-05-14 CVE-2017-3139 is no longer listed as affecting bind, only RHEL.
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/e2fsprogs/e2fsprogs.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/bind/bind.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 80090621bf..7491f4c067 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -12,9 +12,6 @@ E2FSPROGS_LICENSE_FILES = NOTICE lib/ss/mit-sipb-copyright.h lib/et/internal.h
- E2FSPROGS_CPE_ID_VENDOR = e2fsprogs_project
- E2FSPROGS_INSTALL_STAGING = YES
- 
--# 0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
--E2FSPROGS_IGNORE_CVES += CVE-2022-1304
--
- # Use libblkid and libuuid from util-linux for host and target packages.
- # This prevents overriding them with e2fsprogs' ones, which may cause
- # problems for other packages.
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b934ab3190..618b5b9278 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -14,8 +14,6 @@ BIND_LICENSE = MPL-2.0
+ BIND_LICENSE_FILES = COPYRIGHT
+ BIND_CPE_ID_VENDOR = isc
+ BIND_SELINUX_MODULES = bind
+-# Only applies to RHEL6.x with DNSSEC validation on
+-BIND_IGNORE_CVES = CVE-2017-3139
+ # Library CVE and not used by bind but used by ISC DHCP
+ BIND_IGNORE_CVES += CVE-2019-6470
+ BIND_TARGET_SERVER_SBIN = arpaname ddns-confgen dnssec-checkds dnssec-coverage
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
