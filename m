@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 070CFC04AB8
-	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 17:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 187A4C04AB8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 17:37:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B149660C19;
-	Wed, 20 Sep 2023 17:37:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B149660C19
+	by smtp3.osuosl.org (Postfix) with ESMTP id C98CB6139F;
+	Wed, 20 Sep 2023 17:37:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C98CB6139F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hAuXxmZMYe5k; Wed, 20 Sep 2023 17:37:06 +0000 (UTC)
+	with ESMTP id 9BL26LphMPFm; Wed, 20 Sep 2023 17:37:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEC9461389;
-	Wed, 20 Sep 2023 17:37:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC9461389
+	by smtp3.osuosl.org (Postfix) with ESMTP id 375716136F;
+	Wed, 20 Sep 2023 17:37:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 375716136F
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 981DF1BF97A
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 17:36:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D5E2D1BF95F
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 17:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 709384055F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70D8B408A8
  for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 17:36:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 709384055F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70D8B408A8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZQVWEBGKYTUC for <buildroot@lists.busybox.net>;
+ with ESMTP id PDXTXNgFJQTc for <buildroot@lists.busybox.net>;
  Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A56340280
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72265404DA
  for <buildroot@buildroot.org>; Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A56340280
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 72265404DA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 569E8873AA; Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
+ id 60383873AB; Wed, 20 Sep 2023 17:36:50 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 20 Sep 2023 19:34:49 +0200
+Date: Wed, 20 Sep 2023 19:34:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 93ef6997aeef443336651dab46b31ff87be07860
-X-Git-Newrev: 8bf82aab0c0b7a1d329a02395e0353bb9c2eae67
+X-Git-Oldrev: 8bf82aab0c0b7a1d329a02395e0353bb9c2eae67
+X-Git-Newrev: 880e03ba7519597e813e910543b87b5a077c906c
 X-Patchwork-Hint: ignore
-Message-Id: <20230920173650.569E8873AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: drop CVE-2017-3139 from
+Message-Id: <20230920173650.60383873AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cpio: drop CVE-2021-38185 from
  IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,30 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bf82aab0c0b7a1d329a02395e0353bb9c2eae67
+commit: https://git.buildroot.net/buildroot/commit/?id=880e03ba7519597e813e910543b87b5a077c906c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As of 2021-05-14 CVE-2017-3139 is no longer listed as affecting bind, only RHEL.
+CVE-2021-38185 affects cpio <= 2.13.
+The mentioned patches were removed in b0306d94 when bumping to 2.14.
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bind/bind.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/cpio/cpio.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index b934ab3190..618b5b9278 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -14,8 +14,6 @@ BIND_LICENSE = MPL-2.0
- BIND_LICENSE_FILES = COPYRIGHT
- BIND_CPE_ID_VENDOR = isc
- BIND_SELINUX_MODULES = bind
--# Only applies to RHEL6.x with DNSSEC validation on
--BIND_IGNORE_CVES = CVE-2017-3139
- # Library CVE and not used by bind but used by ISC DHCP
- BIND_IGNORE_CVES += CVE-2019-6470
- BIND_TARGET_SERVER_SBIN = arpaname ddns-confgen dnssec-checkds dnssec-coverage
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+index 19224000bb..911d16822b 100644
+--- a/package/cpio/cpio.mk
++++ b/package/cpio/cpio.mk
+@@ -12,10 +12,6 @@ CPIO_LICENSE = GPL-3.0+
+ CPIO_LICENSE_FILES = COPYING
+ CPIO_CPE_ID_VENDOR = gnu
+ 
+-# 0002-Rewrite-dynamic-string-support.patch
+-# 0003-Fix-previous-commit.patch
+-CPIO_IGNORE_CVES += CVE-2021-38185
+-
+ # cpio uses argp.h which is not provided by uclibc or musl by default.
+ # Use the argp-standalone package to provide this.
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
