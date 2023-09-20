@@ -1,84 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DABAECE79A9
-	for <buildroot@archiver.kernel.org>; Tue, 19 Sep 2023 22:34:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21029CE79AC
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 03:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 623D040865;
-	Tue, 19 Sep 2023 22:34:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 623D040865
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4E7804013D;
+	Wed, 20 Sep 2023 03:51:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E7804013D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
-	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 40NiMHrYE2qB; Tue, 19 Sep 2023 22:34:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id YUeRuNCpO9ri; Wed, 20 Sep 2023 03:51:36 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1DA64088F;
-	Tue, 19 Sep 2023 22:34:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1DA64088F
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78B7A40195;
+	Wed, 20 Sep 2023 03:51:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78B7A40195
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6D1C91BF2C4
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 22:34:07 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6139E1BF2FE
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 03:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45518833CE
- for <buildroot@lists.busybox.net>; Tue, 19 Sep 2023 22:34:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45518833CE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A45E82F0F
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 03:51:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A45E82F0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id e25YUHrFwE_Z for <buildroot@lists.busybox.net>;
- Tue, 19 Sep 2023 22:34:05 +0000 (UTC)
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6DC55831F8
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 22:34:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DC55831F8
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-9a6190af24aso830102966b.0
- for <buildroot@buildroot.org>; Tue, 19 Sep 2023 15:34:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695162843; x=1695767643;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=z77Htxjn8Gg/fsi88xP/uPQHh/0VAyY4n8nzzRfXPKI=;
- b=SdAtaCsaiSehxKhQeWgxMlk4rf4DZD5ZaAr6quA17KYqolt+sJGEF9uHF7HGcawu41
- IWD103eRaLvgMc6Whwqw1jet/75bil8LLRPjwr8U+Zo8Mm+iVcXyjuZFHz7tWyjcQgB/
- DbU6FUN6UaeNGfpTh80gw8WpddGYN5EXBjqiFPRFQWNU4NpQU9R1c8Zq1fJNAj9fYLtz
- llzvUwa/+UlCP9fDBuJ6Cojod3da+Z6+FuFCfefPCh1iz/Lx30Ml5HNWPZ/uJ3RqeaGz
- Wdz6b2ElEVKUW47CKcTvYGSdzCsNcpTof7aJH8Rbk7rR+AzzMOgiGxLsYHZhzNLNGJhi
- /pQA==
-X-Gm-Message-State: AOJu0Yzoubls8jpcoi9+iqrhfD7CzivzkIfprXTWuKIJksWYJpK/4E1E
- 1P7cT4dh7S+mX+x/+mxETqtTfYEhUwPzYj8qt3wluw==
-X-Google-Smtp-Source: AGHT+IGrq7J2eu7Amj/zEFhGqKINseODJxCNN3nnoG9gJZ1/aa/0/3WqBqD6cCTI7FL8EUFCBt6YG263fYw1Ct1ApHI=
-X-Received: by 2002:a17:906:29a:b0:9ae:37c2:11b2 with SMTP id
- 26-20020a170906029a00b009ae37c211b2mr668183ejf.15.1695162843379; Tue, 19 Sep
- 2023 15:34:03 -0700 (PDT)
+ with ESMTP id LhDH2JW3rOSG for <buildroot@lists.busybox.net>;
+ Wed, 20 Sep 2023 03:51:32 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A819B82EF1
+ for <buildroot@buildroot.org>; Wed, 20 Sep 2023 03:51:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A819B82EF1
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.8.36] ([213.147.166.97]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7i8Y-1rmJFg3QZe-014ndJ; Wed, 20
+ Sep 2023 05:51:23 +0200
+Message-ID: <8c7c1d56-02a1-4a1f-a5b2-cae3928d79ba@gmx.at>
+Date: Wed, 20 Sep 2023 05:51:21 +0200
 MIME-Version: 1.0
-References: <20230919204252.2272594-1-adam.duskett@amarulasolutions.com>
- <20230919204252.2272594-4-adam.duskett@amarulasolutions.com>
- <20230919220802.GA512384@scaer>
-In-Reply-To: <20230919220802.GA512384@scaer>
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Tue, 19 Sep 2023 16:33:52 -0600
-Message-ID: <CAHDQB6PuKZCk4Ax8mTzqXrpZK_2jGHf-FLQCTJCHowND1kfKGg@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1695162843; x=1695767643;
- darn=buildroot.org; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=z77Htxjn8Gg/fsi88xP/uPQHh/0VAyY4n8nzzRfXPKI=;
- b=fbBGJebV5RmizfgOdZRLfBF/FGLD0CeawDzmQZNDMHasFfYWBucV/UgaK0LhKOaYm4
- Km35iYlDGUAL3r9dytKpjiZpIV9ak0J/3upJTiPIXOO3qQrqlP4eYaL6hjzWzANFjUfb
- FiQMZYAiHdqeALsp3dGr4p1NIxASb37jjxh+o=
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230916154940.746749-1-fontaine.fabrice@gmail.com>
+ <37f6d34b-589e-4570-88d7-28aa967d45b5@gmx.at>
+ <CAPi7W83Uf-Cjr7EWJEmN_E90FkqBq50jv2vJtK5yk+DJ2CLMTw@mail.gmail.com>
+From: Daniel Lang <dalang@gmx.at>
+In-Reply-To: <CAPi7W83Uf-Cjr7EWJEmN_E90FkqBq50jv2vJtK5yk+DJ2CLMTw@mail.gmail.com>
+X-Provags-ID: V03:K1:HLjAqYJE3LM6Pol+ve1zI2ik9kEs50MZO/MtIgika1nBdwULByc
+ BmQR6VpKwdY9ZVQEpJ83yTaoXVfli82j5lwMX9IpAxfp2b5yKBNoZyJ/LsHZU22593O3igd
+ nNhOY6LYZJfPg+sHvgy5A/yDbDQsmQ965SxjjAmbx1gggvd4FRb+grLJOqjuEGvA5uQQ6Ic
+ HPfhEB/zq24VkB0lt3+fA==
+UI-OutboundReport: notjunk:1;M01:P0:slo0ZdJX0+Y=;ksO4quT3EwE4yAVMa78xJx3XLlY
+ ze6UdPRe3ze5BdKp8v+HPuzn6zdulNGCJbDCAaYuPkbclgTDadoq9m6rnaUlz+RVl3/2rIdXC
+ M7+E3XwnrnBUKEGWEC4VR5l30OnE14pKwFrGpsGggvCeSTQmfUrNFf3kQ2UmFH3GUWx4D/IoQ
+ hm5LjyoQY8Cg+mlBKXSQqbrlVlVBp3M5oTzDS4igp3p0cgVuNXgn9W2svc81Cpf7E76/gpyHX
+ Hbnp+nM4oFPVMmrw9xagx4/CNRNbJzA2NOTbbjkf6ZmthKwcb7iqjfWQ155TNXMv0NJP0/k/K
+ ly/Di+28SCyr1OGOsApSgtAJiQhSraPMiec2d5QCWrS7/S0yCOSbzw9hE1+V4SBqkjDRY6Vzo
+ tS1x94DTbta2kS/JnhGFjB2TlLfTI3EgqobDdQWOx6FCx0WhOTIZ97PZTlskRjf41iURXfF92
+ oE6VPe6uxxx+cZltvnGPf+a/1jnFo4TKLakQoaSB34XCWweYWfYuF8MjpndHykn+4kVkol1fX
+ rQ1Q58kP1TT+5oVv1VYHvrsll1PsH4qsZFVRv9cii5TxistP9ZLDCqCBN3rdM+rG/FnDPcN09
+ aAltcuZV+qD7pTYAM6K1MopJ4SH6ubJwBLGSlQBLQBW1m/pbRtW2LoSKCDrAxBLJh9pEDY/J6
+ TySp0fZg9GxYbyxrTig6PGM0OcZd6s62RR2Phr+Gntmj4b5GZno30W5Fo1adPqiIrhS/lgetW
+ Ql1klEMVVkva7NQjulRtv88e5q74krcD87+nRYWGyKUMh5cGEQS7L4RsekRkcB1BqHnNXuzOf
+ M7x6rVDWiLPKI+lR1vYr1L+69gc8FhTaMp4QXJPihM35VtOYoaz7dVByq6SOnqde8yiTT6UP7
+ mnya4BeotYsj3ZZ8kced55+T3dP0Bx76omRSbxD2P0rJ+6UQRLjqSefLYc2NwbTWb/vKEH78g
+ IdS2s7lfqaUI4fJ9OOSmjoCW8Bo=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=gmx.at; s=s31663417; 
+ t=1695181883; x=1695786683; i=dalang@gmx.at;
+ bh=gmmMScRK4BwK5MPz6PzcIDshTTvQ6LHPU3IrbVQI+9A=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=A/P7A3+HYzu0OqvMGRXI60m9iPIO2+rD1bA1jAG9NZMp4Ys2EfFnkmGNeGKOrFNAaZC+DyUN24M
+ bXR4J3gJ5E7fRlYanchZEFICrr8nJOmNWOCUd8/mlz9fsSZ0URslWb/qwVuH1HvYcB7FSJRQNYF3A
+ xbHlFQKDq5vslvZC0SoKwLU+EFfOxsSwcSl19lEH2Jo1C0e/bfLW++l8IPalKQOu+oWv0QZDLBzpj
+ SKZeLCyQh9trx4kUh+Yde8Ib9ooxmqB+WMhYHuXvr0xUSnJ4vwhSB43Twj7wKBo1r7SK0/nw/CYuG
+ hxWmrVD+xvWKHxcrdI2LFaQIoB7yNSKUsoRQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=fbBGJebV
-Subject: Re: [Buildroot] [PATCH v9 4/7] package/flutter-engine: new package
+ dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
+ header.a=rsa-sha256 header.s=s31663417 header.b=A/P7A3+H
+Subject: Re: [Buildroot] [PATCH 1/1] package/at-spi2-core: propagate dynamic
+ library dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,548 +94,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1762244515863407881=="
+Cc: Bernd Kuhls <bernd@kuhls.net>, Simon Dawson <spdawson@gmail.com>,
+ James Knight <james.knight@collins.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1762244515863407881==
-Content-Type: multipart/alternative; boundary="0000000000001dcea40605bddb9f"
-
---0000000000001dcea40605bddb9f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hello Yann;
-
-Adam Duskett
-
-Senior Embedded Systems Developer
-
-M. +1208-515-8102
-
-adam.duskett@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions BV
-
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-
-T. +31 (0)85 111 9170
-info@amarulasolutions.com
-
-www.amarulasolutions.com
-
-
-
-On Tue, Sep 19, 2023 at 4:08=E2=80=AFPM Yann E. MORIN <yann.morin.1998@free=
-.fr>
-wrote:
-
-> Adam, All,
->
-> This is really a good job you did on such a tough package!
->
-> We're entering the realm of the details, so it is a good sign that we're
-> close to a merge!
->
-> On 2023-09-19 14:42 -0600, Adam Duskett spake thusly:
-> [--SNIP--]
-> > diff --git a/package/flutter-engine/dot-gclient
-> b/package/flutter-engine/dot-gclient
-> > new file mode 100644
-> > index 0000000000..4e5787419b
-> > --- /dev/null
-> > +++ b/package/flutter-engine/dot-gclient
-> > @@ -0,0 +1,12 @@
-> > +# This file is taken from the output of meta-flutter/lib/gn.py
->
-> This comment is a bit misleading: it hints that this file is generated
-> (it is!) from some metadata. So my question was goign to be: why can't
-> we carry that metadata, the script, and generate the file ourselves?
->
-> But in fact, there is no interesting metadata needed to generate that
-> file; the only thing that is not hard-coded in the generating script
-> (besides the name, version and URI) is the set of download dependencies,
-> all set to False in the bitbake recipe.
->
-> So indeed it is not interesting to generate that file. And thus the
-> comment is indeed a bit misleading. I'll try to tweak it when
-> applying...
->
-> Yeah, Originally there was a custom_deps line that was required for
-3.10.x, but is no longer needed for
-3.13.x. So it's a vestige comment that can be removed.
-
-> +solutions =3D [{
-> > +    "managed": False,
-> > +    "name": "src/flutter",
-> > +    "url": "https://github.com/flutter/engine.git@!FLUTTER_VERSION!",
-> > +    "custom_vars": {
-> > +        "download_android_deps": False,
-> > +        "download_windows_deps": False,
-> > +        "download_linux_deps": False
-> > +    },
-> > +}]
-> > diff --git a/package/flutter-engine/flutter-engine.mk
-> b/package/flutter-engine/flutter-engine.mk
-> > new file mode 100644
-> > index 0000000000..76c6610fcd
-> > --- /dev/null
-> > +++ b/package/flutter-engine/flutter-engine.mk
-> > @@ -0,0 +1,234 @@
-> >
-> +########################################################################=
-########
-> > +#
-> > +# flutter-engine
-> > +#
-> >
-> +########################################################################=
-########
-> [--SNIP--]
-> > +# Generate a tarball if one does not already exist.
-> > +define FLUTTER_ENGINE_GENERATE_TARBALL
-> > +     PATH=3D$(BR_PATH):$(HOST_DIR)/share/depot_tools \
->
-> So here, two things:
->   - you put $(HOST_DIR)/share/depot_tools in the PATH but .. -> [0]
->   - you should probably set it in the front:
->         PATH=3D"$(HOST_DIR)/share/depot_tools:$(BR_PATH)"
->
-> Good call. Doing this for all three lines (169, 188, and 195) works
-perfectly fine.
-
-> +     PYTHONPATH=3D$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR) \
-> > +     $(FLUTTER_ENGINE_PKGDIR)/gen-tarball \
-> > +             --dot-gclient $(FLUTTER_ENGINE_PKGDIR)/dot-gclient \
-> > +             --jobs $(PARALLEL_JOBS) \
-> > +             --scratch-dir $(@D)/dl-tmp \
-> > +             --tarball-dl-path $(FLUTTER_ENGINE_TARBALL_PATH) \
-> > +             --version $(FLUTTER_ENGINE_VERSION)
-> > +endef
-> > +FLUTTER_ENGINE_POST_DOWNLOAD_HOOKS +=3D FLUTTER_ENGINE_GENERATE_TARBAL=
-L
-> > +
-> > +define FLUTTER_ENGINE_EXTRACT_CMDS
-> > +     gzip -d -c $(FLUTTER_ENGINE_TARBALL_PATH) | tar --strip-component=
-s
-> 1 -C $(@D) -xf -
->
-> We usually use suitable-extractor to decompress, and use $(TAR) and
-> $(TAR_OPTIONS) to extract:
->
->     $(call suitable-extractor,$(not dir $(FLUTTER_ENGINE_TARBALL_PATH)))
-> $(FLUTTER_ENGINE_TARBALL_PATH) \
->     |$(TAR) --strip-components 1 -C $(@D) $(TAR_OPTIONS) -
->
-> Sounds good. Also tested and working properly.
-
-
-> [--SNIP--]
-> > diff --git a/package/flutter-engine/gen-tarball
-> b/package/flutter-engine/gen-tarball
-> > new file mode 100755
-> > index 0000000000..e040beac75
-> > --- /dev/null
-> > +++ b/package/flutter-engine/gen-tarball
-> > @@ -0,0 +1,111 @@
-> [--SNIP--]
-> > +run_gclient() {
-> > +  local gclient=3D"${HOST_DIR}"/share/depot_tools/gclient.py
->
-> [0] here you don't use PATH to locate gclient.py.
->
-> > +  if [[ ! -e "${gclient}" ]]; then
-> > +    message "${gclient} does not exist. Is host-depot-tools built and
-> installed?"
->
-> That should not happen because host-depot-tools is a dependency of
-> flutter-engine.
->
-> Fair enough. Easy to remove the check.
-
-> > +    exit 1
-> > +  fi
-> > +  message "Downloading"
-> > +  "${gclient}" \
->
-> Assuming $(HOST_DIR)/share/depot_tools first int he PATH, can we just
-> run:
->
->     gclient.py \
->         sync \
->         [...]
->
-> Tested and working properly.
-
-> > +    sync \
-> > +    --delete_unversioned_trees \
-> > +    --no-history \
-> > +    --reset \
-> > +    --shallow \
-> > +    -j"${JOBS}"
-> > +}
-> > +
-> > +gen_tarball() {
-> > +  message "Generating tarball"
-> > +  mkdir -p "${DL_DIR}"
-> > +  # We would use the mk_tar_gz helper method from the
-> support/download/helpers
-> > +  # script here. However, due to unknown reasons other than what I can
-> > +  # articulate as "Google," this is not possible. Even though creating=
- a
-> > +  # tarball using the mk_tar_gz command results in a tarball that
-> extracts and
-> > +  # builds flutter-engine without warnings or errors, the gen_snapshot
-> host
-> > +  # utility, which turns dart applications into usable .so files for t=
-he
-> > +  # flutter engine, results in the error:
-> > +  # "Can't load kernel binary: Invalid SDK hash." As we are not
-> interested in
-> > +  # creating a reproducible tarball, we need to use tar -C instead.
->
-> As discussed on IRC, I think the real reason was that mk_tar_gz only
-> archives non-directories, i.e. files, symlinks, etc... so empty
-> directories are missing, and the flutter-engine buildsystem requires
-> them.
->
-> Something like the following will work:
-
-  # We would use the mk_tar_gz helper method from the
-support/download/helpers
-  # script here. However, mk_tar_gz does not archive empty directories,
-which
-  # flutter-engine needs.
-  # Even though creating a tarball using the mk_tar_gz command results
-  # in a tarball that extracts and builds flutter-engine without warnings o=
-r
-  # errors, the gen_snapshot host utility, which turns dart applications
-into
-  # usable .so files for the flutter engine, results in the error:
-  # "Can't load kernel binary: Invalid SDK hash." As we are not interested
-in
-  # creating a reproducible tarball, we need to use tar -C instead.
-
-
-> So, based on your replies, I may be able to ammend the commit when
-> applying and save you a respin. So, be careful in your replies! ;-)
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------=
-------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There i=
-s
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------=
-------'
->
-
---0000000000001dcea40605bddb9f
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hello Yann;</div><div dir=3D"ltr"><br cle=
-ar=3D"all"><div><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"=
-><span><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;margin-bottom=
-:0pt"><span style=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb=
-(0,0,0);background-color:transparent;vertical-align:baseline;white-space:pr=
-e-wrap">Adam Duskett</span></p><p dir=3D"ltr" style=3D"line-height:1.8;marg=
-in-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&qu=
-ot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparen=
-t;vertical-align:baseline;white-space:pre-wrap">Senior Embedded Systems Dev=
-eloper</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;mar=
-gin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono=
-&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-ali=
-gn:baseline;white-space:pre-wrap">M. +1208-515-8102</span></p><p dir=3D"ltr=
-" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D=
-"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0=
-,0);background-color:transparent;vertical-align:baseline;white-space:pre-wr=
-ap"><a href=3D"mailto:adam.duskett@amarulasolutions.com" target=3D"_blank">=
-adam.duskett@amarulasolutions.com</a></span></p><p dir=3D"ltr" style=3D"lin=
-e-height:1.8;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10p=
-t;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background=
--color:transparent;vertical-align:baseline;white-space:pre-wrap">__________=
-________________________</span></p><p dir=3D"ltr" style=3D"line-height:1.8;=
-margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family=
-:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transp=
-arent;vertical-align:baseline;white-space:pre-wrap"><br></span><span style=
-=3D"font-size:10pt;font-family:Ubuntu,sans-serif;color:rgb(0,0,0);backgroun=
-d-color:transparent;vertical-align:baseline;white-space:pre-wrap">Amarula S=
-olutions BV</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0p=
-t;margin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu=
- Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertica=
-l-align:baseline;white-space:pre-wrap">Joop Geesinkweg 125, 1114 AB, Amster=
-dam, NL</span></p><p dir=3D"ltr" style=3D"line-height:1.8;margin-top:0pt;ma=
-rgin-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mon=
-o&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-al=
-ign:baseline;white-space:pre-wrap">T. +31 (0)85 111 9170</span><span style=
-=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(=
-0,0,0);background-color:transparent;vertical-align:baseline;white-space:pre=
--wrap"><br></span><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mo=
-no&quot;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-a=
-lign:baseline;white-space:pre-wrap"><a href=3D"mailto:info@amarulasolutions=
-.com" target=3D"_blank">info@amarulasolutions.com</a></span></p><p dir=3D"l=
-tr" style=3D"line-height:1.8;margin-top:0pt;margin-bottom:0pt"><a href=3D"h=
-ttp://www.amarulasolutions.com/" target=3D"_blank"><span style=3D"font-size=
-:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);backgr=
-ound-color:transparent;vertical-align:baseline;white-space:pre-wrap">www.am=
-arulasolutions.com</span></a></p><div><br></div></span></div></div></div><b=
-r></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr=
-">On Tue, Sep 19, 2023 at 4:08=E2=80=AFPM Yann E. MORIN &lt;<a href=3D"mail=
-to:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a>&gt; wrote:<br></div=
-><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
--left:1px solid rgb(204,204,204);padding-left:1ex">Adam, All,<br>
-<br>
-This is really a good job you did on such a tough package!<br>
-<br>
-We&#39;re entering the realm of the details, so it is a good sign that we&#=
-39;re<br>
-close to a merge!<br>
-<br>
-On 2023-09-19 14:42 -0600, Adam Duskett spake thusly:<br>
-[--SNIP--]<br>
-&gt; diff --git a/package/flutter-engine/dot-gclient b/package/flutter-engi=
-ne/dot-gclient<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..4e5787419b<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/flutter-engine/dot-gclient<br>
-&gt; @@ -0,0 +1,12 @@<br>
-&gt; +# This file is taken from the output of meta-flutter/lib/gn.py<br>
-<br>
-This comment is a bit misleading: it hints that this file is generated<br>
-(it is!) from some metadata. So my question was goign to be: why can&#39;t<=
-br>
-we carry that metadata, the script, and generate the file ourselves?<br>
-<br>
-But in fact, there is no interesting metadata needed to generate that<br>
-file; the only thing that is not hard-coded in the generating script<br>
-(besides the name, version and URI) is the set of download dependencies,<br=
->
-all set to False in the bitbake recipe.<br>
-<br>
-So indeed it is not interesting to generate that file. And thus the<br>
-comment is indeed a bit misleading. I&#39;ll try to tweak it when<br>
-applying...<br>
-<br></blockquote><div>Yeah, Originally there was a=C2=A0<span style=3D"font=
--family:Menlo,Monaco,Consolas,&quot;Courier New&quot;,monospace;font-size:1=
-3px"><font color=3D"#000000">custom_deps</font></span>=C2=A0line that was r=
-equired for 3.10.x, but is no longer needed for</div><div>3.13.x. So it&#39=
-;s a vestige comment that can be removed.</div><div><br></div><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px soli=
-d rgb(204,204,204);padding-left:1ex">
-&gt; +solutions =3D [{<br>
-&gt; +=C2=A0 =C2=A0 &quot;managed&quot;: False,<br>
-&gt; +=C2=A0 =C2=A0 &quot;name&quot;: &quot;src/flutter&quot;,<br>
-&gt; +=C2=A0 =C2=A0 &quot;url&quot;: &quot;<a href=3D"https://github.com/fl=
-utter/engine.git@!FLUTTER_VERSION" rel=3D"noreferrer" target=3D"_blank">htt=
-ps://github.com/flutter/engine.git@!FLUTTER_VERSION</a>!&quot;,<br>
-&gt; +=C2=A0 =C2=A0 &quot;custom_vars&quot;: {<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;download_android_deps&quot;: False,=
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;download_windows_deps&quot;: False,=
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;download_linux_deps&quot;: False<br=
->
-&gt; +=C2=A0 =C2=A0 },<br>
-&gt; +}]<br>
-&gt; diff --git a/package/flutter-engine/<a href=3D"http://flutter-engine.m=
-k" rel=3D"noreferrer" target=3D"_blank">flutter-engine.mk</a> b/package/flu=
-tter-engine/<a href=3D"http://flutter-engine.mk" rel=3D"noreferrer" target=
-=3D"_blank">flutter-engine.mk</a><br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..76c6610fcd<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/flutter-engine/<a href=3D"http://flutter-engine.mk" rel=
-=3D"noreferrer" target=3D"_blank">flutter-engine.mk</a><br>
-&gt; @@ -0,0 +1,234 @@<br>
-&gt; +#####################################################################=
-###########<br>
-&gt; +#<br>
-&gt; +# flutter-engine<br>
-&gt; +#<br>
-&gt; +#####################################################################=
-###########<br>
-[--SNIP--]<br>
-&gt; +# Generate a tarball if one does not already exist.<br>
-&gt; +define FLUTTER_ENGINE_GENERATE_TARBALL<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0PATH=3D$(BR_PATH):$(HOST_DIR)/share/depot_tools \=
-<br>
-<br>
-So here, two things:<br>
-=C2=A0 - you put $(HOST_DIR)/share/depot_tools in the PATH but .. -&gt; [0]=
-<br>
-=C2=A0 - you should probably set it in the front:<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 PATH=3D&quot;$(HOST_DIR)/share/depot_tools:$(BR=
-_PATH)&quot;<br>
-<br></blockquote><div>Good call. Doing this for all three lines (169, 188, =
-and 195) works perfectly fine.</div><div><br></div><blockquote class=3D"gma=
-il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
-04,204);padding-left:1ex">
-&gt; +=C2=A0 =C2=A0 =C2=A0PYTHONPATH=3D$(HOST_DIR)/lib/python$(PYTHON3_VERS=
-ION_MAJOR) \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0$(FLUTTER_ENGINE_PKGDIR)/gen-tarball \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--dot-gclient $(FLUTT=
-ER_ENGINE_PKGDIR)/dot-gclient \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--jobs $(PARALLEL_JOB=
-S) \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--scratch-dir $(@D)/d=
-l-tmp \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--tarball-dl-path $(F=
-LUTTER_ENGINE_TARBALL_PATH) \<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--version $(FLUTTER_E=
-NGINE_VERSION)<br>
-&gt; +endef<br>
-&gt; +FLUTTER_ENGINE_POST_DOWNLOAD_HOOKS +=3D FLUTTER_ENGINE_GENERATE_TARBA=
-LL<br>
-&gt; +<br>
-&gt; +define FLUTTER_ENGINE_EXTRACT_CMDS<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0gzip -d -c $(FLUTTER_ENGINE_TARBALL_PATH) | tar -=
--strip-components 1 -C $(@D) -xf -<br>
-<br>
-We usually use suitable-extractor to decompress, and use $(TAR) and<br>
-$(TAR_OPTIONS) to extract:<br>
-<br>
-=C2=A0 =C2=A0 $(call suitable-extractor,$(not dir $(FLUTTER_ENGINE_TARBALL_=
-PATH))) $(FLUTTER_ENGINE_TARBALL_PATH) \<br>
-=C2=A0 =C2=A0 |$(TAR) --strip-components 1 -C $(@D) $(TAR_OPTIONS) -<br>
-<br></blockquote><div>Sounds good. Also tested and working properly.</div><=
-div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0=
-px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-[--SNIP--]<br>
-&gt; diff --git a/package/flutter-engine/gen-tarball b/package/flutter-engi=
-ne/gen-tarball<br>
-&gt; new file mode 100755<br>
-&gt; index 0000000000..e040beac75<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/flutter-engine/gen-tarball<br>
-&gt; @@ -0,0 +1,111 @@<br>
-[--SNIP--]<br>
-&gt; +run_gclient() {<br>
-&gt; +=C2=A0 local gclient=3D&quot;${HOST_DIR}&quot;/share/depot_tools/gcli=
-ent.py<br>
-<br>
-[0] here you don&#39;t use PATH to locate gclient.py.<br>
-<br>
-&gt; +=C2=A0 if [[ ! -e &quot;${gclient}&quot; ]]; then<br>
-&gt; +=C2=A0 =C2=A0 message &quot;${gclient} does not exist. Is host-depot-=
-tools built and installed?&quot;<br>
-<br>
-That should not happen because host-depot-tools is a dependency of<br>
-flutter-engine.<br>
-<br></blockquote><div>Fair enough. Easy to remove the check.=C2=A0</div><bl=
-ockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-lef=
-t:1px solid rgb(204,204,204);padding-left:1ex">
-&gt; +=C2=A0 =C2=A0 exit 1<br>
-&gt; +=C2=A0 fi<br>
-&gt; +=C2=A0 message &quot;Downloading&quot;<br>
-&gt; +=C2=A0 &quot;${gclient}&quot; \<br>
-<br>
-Assuming $(HOST_DIR)/share/depot_tools first int he PATH, can we just<br>
-run:<br>
-<br>
-=C2=A0 =C2=A0 gclient.py \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 sync \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 [...]<br>
-<br></blockquote><div>Tested and working properly.=C2=A0</div><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px soli=
-d rgb(204,204,204);padding-left:1ex">
-&gt; +=C2=A0 =C2=A0 sync \<br>
-&gt; +=C2=A0 =C2=A0 --delete_unversioned_trees \<br>
-&gt; +=C2=A0 =C2=A0 --no-history \<br>
-&gt; +=C2=A0 =C2=A0 --reset \<br>
-&gt; +=C2=A0 =C2=A0 --shallow \<br>
-&gt; +=C2=A0 =C2=A0 -j&quot;${JOBS}&quot;<br>
-&gt; +}<br>
-&gt; +<br>
-&gt; +gen_tarball() {<br>
-&gt; +=C2=A0 message &quot;Generating tarball&quot;<br>
-&gt; +=C2=A0 mkdir -p &quot;${DL_DIR}&quot;<br>
-&gt; +=C2=A0 # We would use the mk_tar_gz helper method from the support/do=
-wnload/helpers<br>
-&gt; +=C2=A0 # script here. However, due to unknown reasons other than what=
- I can<br>
-&gt; +=C2=A0 # articulate as &quot;Google,&quot; this is not possible. Even=
- though creating a<br>
-&gt; +=C2=A0 # tarball using the mk_tar_gz command results in a tarball tha=
-t extracts and<br>
-&gt; +=C2=A0 # builds flutter-engine without warnings or errors, the gen_sn=
-apshot host<br>
-&gt; +=C2=A0 # utility, which turns dart applications into usable .so files=
- for the<br>
-&gt; +=C2=A0 # flutter engine, results in the error:<br>
-&gt; +=C2=A0 # &quot;Can&#39;t load kernel binary: Invalid SDK hash.&quot; =
-As we are not interested in<br>
-&gt; +=C2=A0 # creating a reproducible tarball, we need to use tar -C inste=
-ad.<br>
-<br>
-As discussed on IRC, I think the real reason was that mk_tar_gz only<br>
-archives non-directories, i.e. files, symlinks, etc... so empty<br>
-directories are missing, and the flutter-engine buildsystem requires<br>
-them.<br>
-<br></blockquote><div>Something like the following will work:</div><div><br=
-></div><div>=C2=A0 # We would use the mk_tar_gz helper method from the supp=
-ort/download/helpers<br>=C2=A0 # script here. However, mk_tar_gz does not a=
-rchive empty directories, which<br>=C2=A0 # flutter-engine needs.<br>=C2=A0=
- # Even though creating a tarball using the mk_tar_gz command results<br>=
-=C2=A0 # in a tarball that extracts and builds flutter-engine without warni=
-ngs or<br>=C2=A0 # errors, the gen_snapshot host utility, which turns dart =
-applications into<br>=C2=A0 # usable .so files for the flutter engine, resu=
-lts in the error:<br>=C2=A0 # &quot;Can&#39;t load kernel binary: Invalid S=
-DK hash.&quot; As we are not interested in<br>=C2=A0 # creating a reproduci=
-ble tarball, we need to use tar -C instead.<br></div><div>=C2=A0</div><bloc=
-kquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:=
-1px solid rgb(204,204,204);padding-left:1ex">
-So, based on your replies, I may be able to ammend the commit when<br>
-applying and save you a respin. So, be careful in your replies! ;-)<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer" target=3D"_bl=
-ank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=A0 =C2=A0 =
-|=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br>
-</blockquote></div></div>
-
---0000000000001dcea40605bddb9f--
-
---===============1762244515863407881==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1762244515863407881==--
+SGkgRmFicmljZSwKCk9uIDE5LjA5LjIzIDA4OjIyLCBGYWJyaWNlIEZvbnRhaW5lIHdyb3RlOgo+
+IEhpIERhbmllbCwKPgo+IExlwqBtYXIuIDE5IHNlcHQuIDIwMjMgw6DCoDA2OjQyLCBEYW5pZWwg
+TGFuZyA8ZGFsYW5nQGdteC5hdCA8bWFpbHRvOmRhbGFuZ0BnbXguYXQ+PiBhIMOpY3JpdMKgOgo+
+Cj4gICAgIEhpIEZhYnJpY2UsCj4KPiAgICAgT24gMTYuMDkuMjMgMTc6NDksIEZhYnJpY2UgRm9u
+dGFpbmUgd3JvdGU6Cj4gICAgID4gRml4IHRoZSBmb2xsb3dpbmcgYnVpbGQgZmFpbHVyZSByYWlz
+ZWQgc2luY2UgYnVtcCBvZiBhdC1zcGkyLWNvcmUgdG8KPiAgICAgPiB2ZXJzaW9uIDIuNDguMCBp
+biBjb21taXQgZDE3NTdmZGZiMDAxMGQyOWYyMGNkNjhjYjZlMTZmMDE5ZTIzNjQyNDoKPiAgICAg
+Pgo+ICAgICA+IE1ha2VmaWxlOjU3NjogKioqIGRidXMgaXMgaW4gdGhlIGRlcGVuZGVuY3kgY2hh
+aW4gb2YgYXQtc3BpMi1jb3JlIHRoYXQgaGFzIGFkZGVkIGl0IHRvIGl0cyBfREVQRU5ERU5DSUVT
+IHZhcmlhYmxlIHdpdGhvdXQgc2VsZWN0aW5nIGl0IG9yIGRlcGVuZGluZyBvbiBpdCBmcm9tIENv
+bmZpZy5pbi7CoCBTdG9wLgo+Cj4gICAgIFRoYW5rcyBmb3IgbG9va2luZyBpbnRvIHRoaXMuCj4g
+ICAgIEknbSBub3Qgc3VyZSBhZGRpbmcgdGhpcyBkZXBlbmRlbmN5IGlzIHRoZSBiZXN0IGFwcHJv
+YWNoLAo+ICAgICBhcyBpdCB3b3VsZCByZXF1aXJlIHByb3BhZ2F0aW5nIGl0IHRvIGV2ZXJ5dGhp
+bmcgdGhhdCB1c2VzIGxpYmd0azMsCj4gICAgIHdoaWNoIHlvdSBkaWRuJ3QgZG8sIGlmIEkgdW5k
+ZXJzdGFuZCB0aGlzIHBhdGNoIGNvcnJlY3RseS4KPgo+Cj4gSWYgSSBkaWRuJ3QgbWlzcyBzb21l
+dGhpbmcsIHRoZSBvbmx5IHBhY2thZ2UgdGhhdCBoYXMgYSBtYW5kYXRvcnkgZGVwZW5kZW5jeSB0
+byBsaWJndGszIGlzIHZ0ZSB3aGljaCBpcyB1cGRhdGVkIGJ5IHRoaXMgcGF0Y2guCj4gUGFja2Fn
+ZXMgZGVwZW5kaW5nIG9uIGxpYmd0azIgaGF2ZSBhbHNvIGJlZW4gdXBkYXRlZCAoZS5nLiBna3Jl
+bGxtLCBwY21hbmZtKS4KCllvdSBhcmUgcmlnaHQsIG15IGJhZC4KCj4gwqAKPgo+Cj4gICAgIEkg
+d291bGQgbGlrZSB0byBwcm9wb3NlIGFub3RoZXIgc29sdXRpb24sIHRoYXQgd291bGQgZml4IHRo
+ZSBwcm9ibGVtOgo+ICAgICBTb21lIHdlZWtzIGFnbyBJIHNlbmQgaW4gYSBwYXRjaCBbMF0gdG8g
+YXQtc3BpMi1jb3JlIHRoYXQgbWFrZXMgaXQgcG9zc2libGUKPiAgICAgdG8gZGVzZWxlY3QgdGhl
+IHJ1bnRpbWUgbW9kdWxlIG5lZWRlZCBieSBHVEsyLiBUaGlzIG1vZHVsZSBpcyBhbHdheXMgY29t
+cGlsZWQKPiAgICAgYXMgbGlicmFyeSBhbmQgc2VlbXMgdG8gYmUgdGhlIG9ubHkgdGhpbmcgdGhh
+dCB3b3VsZCBmb3JjZSAiZGVwZW5kcyBvbiAhQlIyX1NUQVRJQ19MSUJTIi4KPgo+ICAgICBTbyBt
+eSBwcm9wb3NhbCB3b3VsZCBiZSB0byBvbmx5IGFkZCB0aGUgImRlcGVuZHMuLi4iIGlmIExJQkdU
+SzIgaXMgc2VsZWN0ZWQgYW5kCj4gICAgIHVzZSB0aGUgcGF0Y2ggdG8gZXhjbHVkZSB0aGUgcnVu
+dGltZSBtb2R1bGUuIFdpdGggdGhpcyB3ZSBvbmx5IG5lZWQgdG8gcHJvcGFnYXRlCj4gICAgIGl0
+IHRvIExJQkdUSzIuCj4KPiAgICAgVmVyc2lvbiAyLjUwIHdhcyByZWxlYXNlZCBpbiB0aGUgbWVh
+biB0aW1lLCB3aGljaCBjb250YWlucyB0aGUgbWVudGlvbmVkIHBhdGNoLgo+ICAgICBGb3Igc3Rh
+YmxlIGJyYW5jaGVzIHRoZSBwYXRjaCBpcyBuZWVkZWQuCj4KPgo+IElmIHlvdSBjYW4gZHJvcCB0
+aGUgZHluYW1pYyBsaWJyYXJ5IGRlcGVuZGVuY3kgZnJvbSBhdC1zcGkyLWNvcmUsIGZlZWwgZnJl
+ZSB0byBzZW5kIGFub3RoZXIgcGF0Y2guCgpJJ20gbm90IGFibGUgdG8gZHJvcCB0aGUgZGVwZW5k
+ZW5jeSBjb21wbGV0ZWx5LgpCdXQgdGhlIHNldCBvZiBhZmZlY3RlZCBwYWNrYWdlcyB3b3VsZCBk
+cm9wIGZyb20gMTIgdG8gNy4KYXRrbW0sIGF0a21tMl8yOCwgZ3RrbW0zLCBsaWJndGszLCB2dGUg
+d291bGQgbm90IGJlIGNoYW5nZWQuCgpJJ20gbm90IHF1aWV0IHN1cmUgd2hhdCB0aGUgYmVzdCBh
+cHByb2FjaCB3b3VsZCBiZSB0byBhbHNvIG1ha2UgaXQKdmlhYmxlIGZvciBzdGFibGUgYnJhbmNo
+ZXMuCk15IHByb3Bvc2FsIG5lZWRzIGEgcGF0Y2ggWzBdLCB3aGljaCByZW1vdmVzIHRoZSBydW50
+aW1lIGxpYnJhcnkuCk5vdCBzdXJlIHRoYXQgcGF0Y2ggc2hvdWxkIGJlIHBpY2tlZCB1cCBieSBz
+dGFibGUuCkZvciBtYXN0ZXIgdGhlIHBhdGNoIGlzbid0IG5lZWRlZCwgYSBidW1wIHRvIDIuNTAg
+aW5jbHVkZXMgaXQuCgpTbyBJIGd1ZXNzIHRoZXJlIGFyZSB0d28gb3B0aW9uczoKMS4gVXNlIHRo
+aXMgcGF0Y2ggZm9yIG1hc3RlciBhbmQgc3RhYmxlLiBCdW1wIGFuZCBkcm9wIGR5bmFtaWMgbGli
+cmFyeQpkZXBlbmRlbmN5IGxhdGVyLgoyLiBVc2UgdGhpcyBwYXRjaCBmb3Igc3RhYmxlIG9ubHku
+IEJ1bXAgYW5kIGRyb3AgZHluYW1pYyBsaWJyYXJ5CmRlcGVuZGVuY3kgZGlyZWN0bHkuCgpPbmx5
+IG9waW5pb25zPwoKUmVnYXJkcywgRGFuaWVsCgpbMF06IGh0dHBzOi8vZ2l0bGFiLmdub21lLm9y
+Zy9HTk9NRS9hdC1zcGkyLWNvcmUvLS9jb21taXQvNTIwYTdiMTZiMDA5M2E5NjU1NDJhMzg4MGIy
+ZTNiMjc2ZmJlMDZkOApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
