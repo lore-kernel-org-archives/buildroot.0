@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 325B8CE79AC
-	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 04:28:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F90CCE79AC
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 04:32:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB42F40136;
-	Wed, 20 Sep 2023 04:28:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB42F40136
+	by smtp2.osuosl.org (Postfix) with ESMTP id 31E48404E0;
+	Wed, 20 Sep 2023 04:32:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31E48404E0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EvjMm_nj20pu; Wed, 20 Sep 2023 04:28:16 +0000 (UTC)
+	with ESMTP id h57II_bsJsgm; Wed, 20 Sep 2023 04:32:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0DA524013D;
-	Wed, 20 Sep 2023 04:28:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DA524013D
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 10F081BF95F
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 04:28:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6363340347;
+	Wed, 20 Sep 2023 04:31:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6363340347
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 312731BF419
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 04:31:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D78AF4035C
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 04:28:13 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D78AF4035C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 14DD440347
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 04:31:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 14DD440347
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id hQcq18OYBt4R for <buildroot@lists.busybox.net>;
- Wed, 20 Sep 2023 04:28:12 +0000 (UTC)
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 294E240296
- for <buildroot@buildroot.org>; Wed, 20 Sep 2023 04:28:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 294E240296
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id krvRmtVl-CsT for <buildroot@lists.busybox.net>;
+ Wed, 20 Sep 2023 04:31:56 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5ACAC4013D
+ for <buildroot@buildroot.org>; Wed, 20 Sep 2023 04:31:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ACAC4013D
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.localdomain ([213.147.166.97]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M5fIW-1qkShv2Cra-007Dd9 for <buildroot@buildroot.org>; Wed, 20 Sep 2023
- 06:28:09 +0200
+ 1MAONd-1qp7Sb0Het-00BxT9 for <buildroot@buildroot.org>; Wed, 20 Sep 2023
+ 06:31:54 +0200
 From: Daniel Lang <dalang@gmx.at>
 To: buildroot@buildroot.org
-Date: Wed, 20 Sep 2023 06:26:54 +0200
-Message-ID: <20230920042655.35662-2-dalang@gmx.at>
+Date: Wed, 20 Sep 2023 06:31:12 +0200
+Message-ID: <20230920043113.36674-2-dalang@gmx.at>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:v27AmDfgcos3kcBsTawOT3GhGENZea64PfVgX4LrIFYv68j2FUh
- MPL2gJI01Ozk23oDwgla9bW5O8JHrgBzEt3QB6oTTs2/NWnqDEsFTIcq7bX/KyGKf5JnnhD
- pid6V2m6pFLv/6QUCNkKXBNxNwg3fsa6QaNUhJSWlYwCsHT9Gl4mdedxWrgaL2J0VLTwX0X
- Pc8Yk+GJUpah11LEBoE9w==
-UI-OutboundReport: notjunk:1;M01:P0:1C2ex6jDlk0=;9pUYWovtBzGI22MLLTi6JE/Y0t7
- EO/XnWQHSusU95ndN6A+2mze28vvV+iAykSF/zLG5ON08P154vVhkpis2r3vKpkyqWawOP8cW
- llxZNmZOBYdteg8hei4+yl20IR3azxfnZ7EmL8BfO5ox60LPI+JmZqX7Oe5WIoSysVqTIMiN7
- ycxTinUFI+26KCNMHGI6csubFpfk1z3anXE95KbjoHdAyY93WU/Y3WvCEZxrjJ4Jd5kpCbwjx
- MU2N4CsWm47Sh7Jnm9tjhambMGBrwbR7CSmyJaprMtxElruj+ls/LG+YVSkBk9D7H9soJuXri
- ER7V4Kqax2flWRgb73VmJXAf3DTl4c2ap2rWpja9QUeGMKD6ZptB2lY2f+MyghYyXh7UUCnZa
- bpyhnC/S6R7TA+U5aoAWafkf65wOp/gbKt7dKa529aOpFofvCvBH/4spToObji0QFRiB5an+3
- XQoBvQVJuS6muIOIpgmRc2rZ/FI7e6OyytRlbEc81t3zCHhOqtEa1qDNrTmg9GtJdy1QcCJ6E
- IH9NWRiPH8tbzvnh4hB0FyRX4npopOVWSINz8c02U8+pkiMESJyqWD9QviI9hveej0SNzv46S
- 6py7RZezKFNh5Tt3HNgUlldICgkT8geCrRe6mA1mJfwqjG4g2oSrjLYh++xec03zduivxt6gm
- KcmBjT6WY4TMssviVHra41gogxup634yR6pGUaZQi7Vz+joF25IHxMIfPNzbTrBYX6IISyqp3
- IlZuwGzqIXhmM0e5uEiN0qRaU4TqeX9XrrHEnKOco/bcCmH7ZNMQYYnzVIjs8Be3tYDJFHa0d
- /2aG3f45S/Zbzgan3PYIiDuSilvVcr9loe7ChXW7z4CMHCTSwTiLrHugKMWvOzpLfy6SQ2JQj
- P0yi+aaKLpWwlDrNc7iZoIa8bbnzS9+U6lwBHjSGxPxYb0Sj2b9luvYyDgL9ZmVmA6AquKxvw
- nSoZ2SrtpR0LrtBteeFLZ8qJ6EA=
+X-Provags-ID: V03:K1:8Og7cwmk6kiuXyiWRRoGO0zyieOBJ7Z108lee1SDXMWjudKCHE8
+ zXno1eK6vahQI4OSYwy8e1osn497LA8Wt9j48sNL4/l5832YieE0LKfemAU+W1NUoHvYrjP
+ iy5k2sgdHS7hat1j6nEt/yqeXE89OMiKIO8rj6a3+tDDn0zYzhsI5RnaTGJRZ5El6p8UFuh
+ 1KHhM/UnK3Ra+vudX2N2Q==
+UI-OutboundReport: notjunk:1;M01:P0:M+tuvibl4hI=;mM9xmHs2iuRYJAdGhj0AkMn808r
+ 6p1uz8TY8AtmaNluX3631nA4J9d0ugF/cgTJN2Ymet6HfLDA4zuGfkMTOacy3iVhqi2YsqjYL
+ aT3Vhc5qoLQtdzDBjQQGfww7SUGkQ4fw06bdzlXXKngGWZVejYvbaplRy6pfBPrreXc0sD3U3
+ OmdgktMzcapFjmcYzMmJ1LzIjPm7WNc4jyl0XddrCf7tLDDB1m5b8i1/qYOGF9MZpfBEbH1zX
+ 6rKFW7nSaxWVSliSnsZNEBtvMAUVAvk+nGkqVB/ElqWzuUamTnRX2iXAUzDgo0Ur6YkO6sDFo
+ Hu06+bzZ+6LlK2/PZ9P4e8P1BbxJrq2rO7zaoj0hGh+TOSyarRA2ZFOG2BjI0+KZZCQtAPyAL
+ L+voLbCHCc3CtpCJCrt1UmQhPLhzl/ZcuQ6T75IV9J36i4xUe89XfihDC5li3Kev5nm2fttUV
+ Hk5AM7YIOz/r/7vVDr3J2Z6pB0wEzxNq/MSSzHtLtesmYdoDACC48bN3XdbGOPTGJyc4wpJnt
+ EMbUT760OfncUH+vrOThpQhAL4z9so6x6WIHpC0BbhwkUigOhwMpfe7cvCoYlcdDKAQRWbIYF
+ nNvb9Cz89Tf/gTIXK4GHvY+okQdTW2FY+LZmV09jvJ5VvI/QMcWYMUSZ8XNxar63QBk8PEJ88
+ mkkSD/pOJ31syCZ4NcDWCBrh2aVYcwe/7+gCBSZvcH98e5/lDbrMa8dghgMa126ZXkRzzT4Db
+ 5PguufTrnvtbdkKPL2sUX5QoUHueS17h0JdaGSq1zh2GMCdqq7k7mhYKtz6sf9XnLoytxdDbT
+ bixxFE/IXINgHFTYFHJn9qzxghDQZ8JJ62+YWnOXQe/VMXeCN3Fu4YtPlpOx+KdoFRyVES063
+ fjXI8GTY3iD4LzjR41BHegox8XmwoXuzrMlsxbKnHjL54ls+krrqWjbVv+FqdRdQF0zrkflH6
+ 3HK6GjzqmcAg4w07TWqiEuB788Y=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=gmx.at; s=s31663417; 
- t=1695184089; x=1695788889; i=dalang@gmx.at;
- bh=wMobjRPtz7Zahukolofz5oPJ1gU70cmDLWBxQrVYhTE=;
+ t=1695184314; x=1695789114; i=dalang@gmx.at;
+ bh=bud2oEVkXBp1CMgq8c9c0VArvgFkeuVJFftq98YBJ7E=;
  h=X-UI-Sender-Class:From:To:Subject:Date;
- b=A9cZAX+q1UCh5QqHLuBYOIaj74SQL5PZ/5yQ1pJv504FkgRrGJzb94fPQjXiSflqqopxtjP7Cvm
- sLidfLrnDvfi2P1Bl+TaHgu2lH+7b5No54HohG2e8RNbA4ONV3LIwwoG1IJOXTyDEDtFQEPttEjrX
- sxL6+nm/11y0cnzztxh0SzwMDCY49STK5MQQN+P1vwqBL7wx2EsdS1N+NfslBviFAKfXSEWRPwNAz
- qve4lD/QkjBG5TwVJSGTe6Kk9an8pyA9i3oOaR9/GXTpdlaC34dtHXxm0nk9O2XJD4UXrWhmdTSYt
- Nz35k9cKXYjDUjj63O3FSKdP4PiucASPtxig==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=QJAO5WENUs2rohOcvlZPmDcyAatoCUozX+fIbSP+aeKv5j7e9alQ9J9+XoeAjguxFKE1e5iPgQD
+ yjurqH/WZ4Fqg+Lsajw4yVWRo2StzmOt6XoRGDiXDA80PHxFPdsEvKg02K5MoMTi8VIOyv9AHy7hx
+ jlGfH7hF6tdgAuQt7NISaXL5+EIP166GKwhcZ/IpSQ9bcakiqOFR0fmRTszyD+XhT/YS8KTUHG/Eh
+ 5aoZ/nMAZvdtUATlpXfqQDlTNnARFeIs+acZQnc/74L7Tvb6NZTQGZYx/cTgklTm+hwM+skF3uuTQ
+ Hb0Ah07C07gox9UY1h50muB3aNt6g53FNoPA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.at header.i=dalang@gmx.at
- header.a=rsa-sha256 header.s=s31663417 header.b=A9cZAX+q
-Subject: [Buildroot] [PATCH] package/bind: drop CVE-2017-3139 from
+ header.a=rsa-sha256 header.s=s31663417 header.b=QJAO5WEN
+Subject: [Buildroot] [PATCH v2] package/bind: drop CVE-2017-3139 from
  IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -96,6 +96,11 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 As of 2021-05-14 CVE-2017-3139 is no longer listed as affecting bind, only RHEL.
+
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+---
+v1 -> v2:
+add Signed-off-by
 ---
  package/bind/bind.mk | 2 --
  1 file changed, 2 deletions(-)
