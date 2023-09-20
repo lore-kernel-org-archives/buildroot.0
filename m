@@ -4,46 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF70BC05021
-	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 20:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7D45C05022
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 20:35:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6692381494;
-	Wed, 20 Sep 2023 20:35:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6692381494
+	by smtp1.osuosl.org (Postfix) with ESMTP id 93E7283BE8;
+	Wed, 20 Sep 2023 20:35:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93E7283BE8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UHuGYzE_aEee; Wed, 20 Sep 2023 20:35:43 +0000 (UTC)
+	with ESMTP id jvifxGifX2Cp; Wed, 20 Sep 2023 20:35:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8E3B81444;
-	Wed, 20 Sep 2023 20:35:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8E3B81444
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A51D31BF392
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBC3283BB9;
+	Wed, 20 Sep 2023 20:35:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBC3283BB9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E20F31BF392
  for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:35:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DFBC81444
+ by smtp4.osuosl.org (Postfix) with ESMTP id BADF541ED8
  for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:35:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DFBC81444
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BADF541ED8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id D_oagfIp8KMh for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VBtQkubtlBPr for <buildroot@lists.busybox.net>;
  Wed, 20 Sep 2023 20:35:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC07D8140B
+ by smtp4.osuosl.org (Postfix) with ESMTP id C311F41EBE
  for <buildroot@buildroot.org>; Wed, 20 Sep 2023 20:35:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC07D8140B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C311F41EBE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A854E873F6; Wed, 20 Sep 2023 20:35:39 +0000 (UTC)
+ id B0962873F7; Wed, 20 Sep 2023 20:35:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 20 Sep 2023 22:33:49 +0200
+Date: Wed, 20 Sep 2023 22:34:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e6045322853d8405a56c0c8e38d58dc76eb10832
-X-Git-Newrev: 60fad6628efbb187e243737704cac3778a7fb09a
+X-Git-Oldrev: 60fad6628efbb187e243737704cac3778a7fb09a
+X-Git-Newrev: ec3b960418670db556d3aa1db9ed9f6f4c74d878
 X-Patchwork-Hint: ignore
-Message-Id: <20230920203539.A854E873F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/domoticz: bump to version 2023.2
+Message-Id: <20230920203539.B0962873F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/roc_pc_rk3399: enable OpenSSL for
+ U-Boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,40 +64,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60fad6628efbb187e243737704cac3778a7fb09a
+commit: https://git.buildroot.net/buildroot/commit/?id=ec3b960418670db556d3aa1db9ed9f6f4c74d878
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/domoticz/domoticz/blob/2023.2/History.txt
+Enable OpenSSL to build U-boot. Reported by the daily autobuild.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/5083367140
+
+Signed-off-by: Roberto Medina <robertoxmed@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/domoticz/domoticz.hash | 2 +-
- package/domoticz/domoticz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/roc_pc_rk3399_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index fccb4ea420..b54d0229fc 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  3144372d0847cb4d22a8c4b1362cd31885b37671adc682c3a8e9435762cde338  domoticz-2023.1.tar.gz
-+sha256  32bcf49df8c80c470352e63004a82d9601b90ccf406096099656250a4515ac28  domoticz-2023.2.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index ed82131dd3..3fbff5f4d8 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOMOTICZ_VERSION = 2023.1
-+DOMOTICZ_VERSION = 2023.2
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
+diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
+index 3cc64be176..79a51a8230 100644
+--- a/configs/roc_pc_rk3399_defconfig
++++ b/configs/roc_pc_rk3399_defconfig
+@@ -31,6 +31,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="roc-pc-rk3399"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
