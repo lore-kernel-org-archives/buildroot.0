@@ -4,46 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62E47C05022
-	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 20:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0154C05021
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 20:34:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C81A583C10;
-	Wed, 20 Sep 2023 20:33:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C81A583C10
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BB0B83C0F;
+	Wed, 20 Sep 2023 20:34:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BB0B83C0F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8oCXebjzLyOj; Wed, 20 Sep 2023 20:33:51 +0000 (UTC)
+	with ESMTP id cRMfEen_Pk1B; Wed, 20 Sep 2023 20:34:05 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3BA883C0E;
-	Wed, 20 Sep 2023 20:33:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3BA883C0E
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 569A71BF392
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:33:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96D6183C27;
+	Wed, 20 Sep 2023 20:34:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96D6183C27
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F09A1BF392
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:34:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3CA3683C0E
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:33:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CA3683C0E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 189DE61363
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:34:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 189DE61363
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rHNFSUFTTQah for <buildroot@lists.busybox.net>;
- Wed, 20 Sep 2023 20:33:46 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1A44B836F1
- for <buildroot@buildroot.org>; Wed, 20 Sep 2023 20:33:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A44B836F1
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 07276873E6; Wed, 20 Sep 2023 20:33:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Sep 2023 22:33:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ebf9fa28e380a808c6b823a675447167ec0b0db0
-X-Git-Newrev: e6045322853d8405a56c0c8e38d58dc76eb10832
-X-Patchwork-Hint: ignore
-Message-Id: <20230920203346.07276873E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/harfbuzz: bump version to 8.2.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fKQHWcrmoCdy for <buildroot@lists.busybox.net>;
+ Wed, 20 Sep 2023 20:34:02 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0DD8E60B83
+ for <buildroot@buildroot.org>; Wed, 20 Sep 2023 20:34:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DD8E60B83
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 30B681BF207;
+ Wed, 20 Sep 2023 20:34:00 +0000 (UTC)
+Date: Wed, 20 Sep 2023 22:33:58 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <20230920223358.372e82ff@windsurf>
+In-Reply-To: <20230919200149.3712528-1-giulio.benetti@benettiengineering.com>
+References: <20230919200149.3712528-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1695242040;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=kPxDcVCwiDghPd3r2tCOQ+8JDfpVNWsiq42ZYBjM9Gc=;
+ b=gRUekXuuL96lkccYvsk7hvquN06mxk5a9fvOZnr3s+z7q1czn3BTBkS6JLjiDMx73Eb4yS
+ ec/FHjFV2cZKdTzBNRU+uvLl/MHYUkWKV5Ke0TR/5G8N0leErjFdCoVtGA78JOEruX6lxB
+ CFSS7RYsm0jvrVqMqBBROe/HqUiVqmAKMvzC9CIQFNYEqMioZ7mWLRFx0wvYq43ewI/qau
+ ONLnAEFnjGXOxeRFu3WuNZEYhOmQHkH0B9P24R3kuvyvUh1occYH3ixVU+HUKYD9VGvHXb
+ 8/oMvaoJf6flA7jNJ/76CgWnjiNVbL9R/+GkCz0EM4tyzdsI3Th3XZe1W97/lQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gRUekXuu
+Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump version to 8.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +76,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6045322853d8405a56c0c8e38d58dc76eb10832
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 19 Sep 2023 22:01:49 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Release notes: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS
+> Release notes: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/harfbuzz/harfbuzz.hash | 2 +-
+>  package/harfbuzz/harfbuzz.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 8791899a4a..3f601d29ee 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  8cb7117a62f42d5ad25d4a697e1bbfc65933b3eed2ee7f247203c79c9f1b514c  harfbuzz-8.2.0.tar.xz
-+sha256  0fec78f98c9c8faf228957a201c8846f809452c20f8445eb092a1ba6f22dbea5  harfbuzz-8.2.1.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 43c559ed1b..9a9859c133 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 8.2.0
-+HARFBUZZ_VERSION = 8.2.1
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
