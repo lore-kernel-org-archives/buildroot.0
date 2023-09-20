@@ -4,65 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28D2CC04AB7
-	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 20:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62E47C05022
+	for <buildroot@archiver.kernel.org>; Wed, 20 Sep 2023 20:33:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D8E0A82133;
-	Wed, 20 Sep 2023 20:26:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8E0A82133
+	by smtp1.osuosl.org (Postfix) with ESMTP id C81A583C10;
+	Wed, 20 Sep 2023 20:33:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C81A583C10
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id GpN0EK2mDq0j; Wed, 20 Sep 2023 20:26:37 +0000 (UTC)
+	with ESMTP id 8oCXebjzLyOj; Wed, 20 Sep 2023 20:33:51 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B87F82142;
-	Wed, 20 Sep 2023 20:26:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B87F82142
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3BA883C0E;
+	Wed, 20 Sep 2023 20:33:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3BA883C0E
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7E14E1BF392
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:26:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 569A71BF392
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:33:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A0A882133
- for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:26:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A0A882133
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3CA3683C0E
+ for <buildroot@lists.busybox.net>; Wed, 20 Sep 2023 20:33:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CA3683C0E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BHpBMayZSS0Y for <buildroot@lists.busybox.net>;
- Wed, 20 Sep 2023 20:26:33 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7E3B28208B
- for <buildroot@buildroot.org>; Wed, 20 Sep 2023 20:26:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E3B28208B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2BAF4FF803;
- Wed, 20 Sep 2023 20:26:29 +0000 (UTC)
-Date: Wed, 20 Sep 2023 22:26:28 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230920222628.6eb43e25@windsurf>
-In-Reply-To: <20230918204405.2654720-1-fontaine.fabrice@gmail.com>
-References: <20230918204405.2654720-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695241589;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BbpLPibD7qAl+X3MOkvGBxF+0WjxbSKclnhxajCNPpk=;
- b=KhZZ9lYo2yVW8INYRMi2Bvzs0jI/8qsfulEXPQoISh9MZOYLw5+20NTMBmdZ4UoYDtW9vB
- XMjdncwliRf8UM1o5Kw9I/g+2ybXIzOgBQY+SBH7bwcldg8lL+PaQZhAmQjnjFe/QMQIlG
- 1SMH9oBZ70ZIVB8F7zsFJ40zWYeD2soZrggJoBcTuZIGiMNVbYqXQgHaoa5DzeKK9287J/
- ugXz+rtecqU9+pnRIzseWxy+8TzuvB/nBznqpfMJlcSuv+7yzqN/INEfvDAmWZCOyJL2Fz
- g2pkiMQacFe9pmRSbjhurpiLByTN62EKD81MkSVh4JnLCQRvO2Rcgn2pN7sysg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KhZZ9lYo
-Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: needs headers >= 4.16
+ with ESMTP id rHNFSUFTTQah for <buildroot@lists.busybox.net>;
+ Wed, 20 Sep 2023 20:33:46 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A44B836F1
+ for <buildroot@buildroot.org>; Wed, 20 Sep 2023 20:33:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A44B836F1
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 07276873E6; Wed, 20 Sep 2023 20:33:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 20 Sep 2023 22:33:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ebf9fa28e380a808c6b823a675447167ec0b0db0
+X-Git-Newrev: e6045322853d8405a56c0c8e38d58dc76eb10832
+X-Patchwork-Hint: ignore
+Message-Id: <20230920203346.07276873E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/harfbuzz: bump version to 8.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,75 +57,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 18 Sep 2023 22:44:05 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e6045322853d8405a56c0c8e38d58dc76eb10832
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> NLMSGERR_ATTR_MAX has been added in kernel 4.16 with
-> https://github.com/torvalds/linux/commit/dc2b9f19e3bdaa87a7c3d123b8bba8a42d96d942
-> resulting in the following build failure since bump to version 2.6.4 in
-> commit a46ac2346558d05afe405dda3730169df4b677d2 and
-> https://github.com/OpenVPN/openvpn/commit/e34437c26b764851555e4acbe2ccca6bec235c7e:
-> 
-> dco_linux.c: In function 'ovpn_nl_cb_error':
-> dco_linux.c:303:27: error: 'NLMSGERR_ATTR_MAX' undeclared (first use in this function); did you mean '__CTRL_ATTR_MAX'?
->      struct nlattr *tb_msg[NLMSGERR_ATTR_MAX + 1];
->                            ^~~~~~~~~~~~~~~~~
->                            __CTRL_ATTR_MAX
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/69b9737913ac0b5cd2c117d526602874da3ee487
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/openvpn/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
-> index 5aa2386d36..16fc93efae 100644
-> --- a/package/openvpn/Config.in
-> +++ b/package/openvpn/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_OPENVPN
->  	bool "openvpn"
->  	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+Release notes: https://github.com/harfbuzz/harfbuzz/blob/main/NEWS
 
-I think that's a bit brutal. Looking a bit at the OpenVPN code, it
-looks like NLMSGERR_ATTR_MAX is only used by the DCO code added in
-commit e34437c26b764851555e4acbe2ccca6bec235c7e, and this code can be
-disabled using --disable-dco. Which we actually already support:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-ifeq ($(BR2_PACKAGE_LIBNL),y)
-OPENVPN_CONF_OPTS += --enable-dco
-OPENVPN_DEPENDENCIES += libnl
-else
-OPENVPN_CONF_OPTS += --disable-dco
-endif
-
-So I guess the correct fix is rather:
-
-ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16),yy)
-OPENVPN_CONF_OPTS += --enable-dco
-OPENVPN_DEPENDENCIES += libnl
-else
-OPENVPN_CONF_OPTS += --disable-dco
-endif
-
-Could you check this?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 8791899a4a..3f601d29ee 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8cb7117a62f42d5ad25d4a697e1bbfc65933b3eed2ee7f247203c79c9f1b514c  harfbuzz-8.2.0.tar.xz
++sha256  0fec78f98c9c8faf228957a201c8846f809452c20f8445eb092a1ba6f22dbea5  harfbuzz-8.2.1.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 43c559ed1b..9a9859c133 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 8.2.0
++HARFBUZZ_VERSION = 8.2.1
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
