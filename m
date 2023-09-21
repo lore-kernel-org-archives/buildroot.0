@@ -4,80 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AFEDE706E3
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 08:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB462E7070C
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 10:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E10B83A9B;
-	Thu, 21 Sep 2023 08:09:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E10B83A9B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17A4A83C49;
+	Thu, 21 Sep 2023 10:29:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17A4A83C49
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gU4oROHrlcxr; Thu, 21 Sep 2023 08:09:07 +0000 (UTC)
+	with ESMTP id xDkidQXChEw0; Thu, 21 Sep 2023 10:29:06 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05A01838B6;
-	Thu, 21 Sep 2023 08:09:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05A01838B6
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A2F9D1BF2EF
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 08:09:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54EF483C4A;
+	Thu, 21 Sep 2023 10:29:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54EF483C4A
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 695AF1BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7741E41BC4
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 08:09:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7741E41BC4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4747A60BA9
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4747A60BA9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PHGYEn5vzvMj for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 08:09:03 +0000 (UTC)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com
- [209.85.208.170])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9F0A641961
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 08:09:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F0A641961
-Received: by mail-lj1-f170.google.com with SMTP id
- 38308e7fff4ca-2bffa8578feso10494151fa.2
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 01:09:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695283741; x=1695888541;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=XjvYygbYFDwgCuWLHivpaqYEtYm+8q/X7K6TyKzQR3I=;
- b=YWKXRlnp4oKUx79ckLJBMewXXNIqzM2IoomR/Rq51NSva4CZvcAPwTkvPzXqlAzMee
- JPt1kFscyqMPf3/IIwxypQlz3X7gz78shnFLc7giHnwbQnVY+4RurA6jWI/nTloFI8Bh
- v2uxYlgpxY13TK5yuzB7kKdAtRG7Orzh+hJaCgqJpAuKqpFUZbjbhqBgErZ3RU2XBzPT
- diojVoCASyQXi1tejiHLJuS5uazFqYGiHgpOP61hoPqQFEuGfOA2Y977dxVi97FmwAYh
- jhXLu/SW63comcVs0Yqp3P6XFDRJiB1k9iS+2IvTezrOEvpOArs7xVHzJk/sfsRPhh0D
- goqA==
-X-Gm-Message-State: AOJu0YyntfLc8aiX8g+6TKF8FVoeMGVEkUu/iPgWYLjIUXjRZbCVnjAF
- 28TDcSXDuN2A+dHRAZcUUOritU5ZZjnVxw==
-X-Google-Smtp-Source: AGHT+IExbLbpswFggYPsgX5uKSKknZFPJuCOZJsgrpOt6tJi70KAhn8seUC7hR1UWYdB32PUkd4ZdA==
-X-Received: by 2002:a05:651c:93:b0:2be:54b4:ff90 with SMTP id
- 19-20020a05651c009300b002be54b4ff90mr3869386ljq.53.1695283741196; 
- Thu, 21 Sep 2023 01:09:01 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com.
- [209.85.167.46]) by smtp.gmail.com with ESMTPSA id
- j8-20020a2e8008000000b002bcb89e92dcsm221482ljg.6.2023.09.21.01.09.01
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 21 Sep 2023 01:09:01 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id
- 2adb3069b0e04-50307acd445so1198489e87.0
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 01:09:01 -0700 (PDT)
-X-Received: by 2002:ac2:5a50:0:b0:500:90d1:90a6 with SMTP id
- r16-20020ac25a50000000b0050090d190a6mr4096227lfn.63.1695283740968; Thu, 21
- Sep 2023 01:09:00 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id po8yTIc2woE9 for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 10:29:02 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 388CC60BA7
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 10:29:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 388CC60BA7
+Received: by mail.gandi.net (Postfix) with ESMTPA id 1E80C1BF209;
+ Thu, 21 Sep 2023 10:28:58 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 21 Sep 2023 12:28:56 +0200
+Message-ID: <20230921102857.375294-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230919172300.9901-1-brandon.maier@collins.com>
- <20230919172300.9901-2-brandon.maier@collins.com>
-In-Reply-To: <20230919172300.9901-2-brandon.maier@collins.com>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Thu, 21 Sep 2023 10:08:49 +0200
-X-Gmail-Original-Message-ID: <CACXRmJirVYUH98cf9d-g0DnNo+ubMgWUOhRa_V6_0A3Fh-0oyQ@mail.gmail.com>
-Message-ID: <CACXRmJirVYUH98cf9d-g0DnNo+ubMgWUOhRa_V6_0A3Fh-0oyQ@mail.gmail.com>
-To: Brandon Maier <brandon.maier@collins.com>
-Subject: Re: [Buildroot] [PATCH 2/2] unifdef: add target package
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1695292139;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=77zpxYWxXqDCSWyYe5B1+bpNKGxOs41vVZdKQ4yO4ls=;
+ b=iWi8Ouiz3TB1NXbEeZRlB22T0Rjs4oWAA+QH14ERRsKcd7BJ24Pyo/axbCk8dLKkSEOnrK
+ 7rhjcQqdR3pJyiE2gD0BIPJ75o3lOQw94mPmyf9VaY+SvdWcX7qPxjvqkwKEvlhyY8sTxo
+ Bkxcsh45lHjuFV5cIN4YoAzlFVn2kzNXPyYDpfdIWetOwOFObxlsZaH36LkDWzV2cQ2Tqs
+ m2TisZaUMGcIKlpf44m4h8+fnPJyKk3B5pnnXNRFsQPaxfIH7nsZcKDoRt9UYR2JM9E7ZP
+ 58GcoHa17pI6Qv9GkGT9bLdklsJn8J5kk9aWFd9bWUpnaUd1mKh4rTt/27yTKw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iWi8Ouiz
+Subject: [Buildroot] [PATCH] package/ne10: install shared libraries only
+ when built
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,23 +71,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Brandon, All,
+The install to staging commands of the ne10 package are careful to
+install the shared libraries only if they are built, but we forgot to
+use the same care for the install to target commands, causing a build
+failure on BR2_STATIC_LIBS=y configurations as no shared library was
+built:
 
-Is there a specific package, or reason why you need unifdef to be
-installed to the target? It's a host utility, used e.g. to build
-WebKit, but I don't see why it is useful on a target. Further, I would
-move it to the "Development tools" section, not to "Miscellaneous".
+cp: cannot stat '/home/autobuild/autobuild/instance-15/output-1/build/ne10-1.2.1/modules/libNE10*.so*': No such file or directory
 
-Kind regards,
+This commit fixes this by guarding the target installation commands to
+BR2_STATIC_LIBS being empty.
 
-Thomas
+The problem exists since the package was introduced in commit
+318f3db0dcc052aa770ca57c143b5f7bc40cdaf3 ("ne10: new package"), a good
+10 years ago. Most likely it was not seen for many years as this
+package is only available for ARM with NEON and AArch64, and we were
+not testing fully static builds, except for ARMv5 that don't have
+NEON. Now that we are doing more random testing, the problem started
+being visible.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/45b2c1af052271bc2f1bb96544f138d29e4f7dfd/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ne10/ne10.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+index 3946605556..ce0f7e7b77 100644
+--- a/package/ne10/ne10.mk
++++ b/package/ne10/ne10.mk
+@@ -42,8 +42,10 @@ define NE10_INSTALL_STAGING_CMDS
+ 	$(NE10_INSTALL_STAGING_SHARED_LIB)
+ endef
+ 
++ifeq ($(BR2_STATIC_LIBS),)
+ define NE10_INSTALL_TARGET_CMDS
+ 	cp -dpf $(@D)/modules/libNE10*.so* $(TARGET_DIR)/usr/lib/
+ endef
++endif
+ 
+ $(eval $(cmake-package))
+-- 
+2.41.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
