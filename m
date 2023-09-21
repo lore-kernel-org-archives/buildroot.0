@@ -4,92 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C050E7D0A2
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 18:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 774D1E7D0A2
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 18:25:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8CD881B70;
-	Thu, 21 Sep 2023 18:24:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8CD881B70
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3207A82315;
+	Thu, 21 Sep 2023 18:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3207A82315
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id AEL2a9zQsgRx; Thu, 21 Sep 2023 18:24:02 +0000 (UTC)
+	with ESMTP id xA1Bn7RWqSrZ; Thu, 21 Sep 2023 18:25:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C81B83C77;
-	Thu, 21 Sep 2023 18:24:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C81B83C77
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A1C961BF390
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 18:23:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80ECB822AB;
+	Thu, 21 Sep 2023 18:25:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80ECB822AB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 55F661BF390
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 18:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 77E5483C84
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 18:23:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77E5483C84
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E0224195F
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 18:25:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0224195F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mCOGnYuSqHou for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 18:23:58 +0000 (UTC)
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2362D83C77
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 18:23:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2362D83C77
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-53087f0e18bso1498846a12.3
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 11:23:57 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Xb4oHTX067p4 for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 18:25:18 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DDA004192B
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 18:25:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDA004192B
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-9adb9fa7200so282487866b.0
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 11:25:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695320636; x=1695925436;
+ d=1e100.net; s=20230601; t=1695320716; x=1695925516;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=YzPxUtIbHXX+ODjxNSsozzp6RRtdpR0l/xY/xT7YzV4=;
- b=HzxwFxIXymtaydG1yAgcIjk6QPbSb6GyuK6MPQj6G5VbSyH6DQQmOQGT8kApIz4Ssi
- E8HWuue105UwZ76rZOsSzBlur2qoh9K/msfAMFre1wV5wPDm6n0/sOOH+N43OaFK0maO
- k6jeqcIwBKjquQypucH4G1iI70P7duyd36UxD3jvFhb5oEKmUld6ivMe6tJ9L9BiqWDP
- eitKDX9P2ulgs/WDuOQwAmiZnGGN6yT6ybE3R6Xq2kvX4jnaSMjl4NI7dw/dBfY+G7SV
- V2NgeZe42dUT11+EvlZW82hjiUnDmqEs/PSgxn4YNAK7l20TD/EyInKlKALSMbfk1ADM
- fnHQ==
-X-Gm-Message-State: AOJu0YwLwCB8WbN2QAxotSXCj9OeRTRrY166fDt+P36m8MuEqUqpJzfU
- t0NSZiDfpS52wonSn5CBYG51ig==
-X-Google-Smtp-Source: AGHT+IHMEOW7owjsdqXW4albhieB6ICB/laD+yAv5gj1xxCFq4NZSwteDqPqXMFp1pHTIwDO6eKKJw==
-X-Received: by 2002:aa7:ca46:0:b0:530:1bab:f78f with SMTP id
- j6-20020aa7ca46000000b005301babf78fmr6094471edt.28.1695320635973; 
- Thu, 21 Sep 2023 11:23:55 -0700 (PDT)
+ bh=QVytjVldE+1HYU1+vJl7MEDaOR0k2hqJniMr3l5pRpc=;
+ b=drGvYOrxZEY814yVPfFy4KfefJBUj3oNZnCzuyl6z4PNWz1Ozq7agplq7jioNGkO2F
+ nxrgqCFtN+BaxiuT86cX6tFvyaiqUWt+FibHyer2dAyuTFONFIteHs/HHa1+QAKs7goW
+ BJvwASk1oQi9WUY4rM3E1nGph6pDty7RKl6AKn1p13974ZQALZhhO5Ln0H3LUAlT3hVA
+ dNTuJaV5Zem9NU01NeghR6SfO6PjDB92xEo/F7X+h54ZjJnn8GfKd4NhuI7a0IawnhhZ
+ m7scYBmXYLcZI0KrTb3kQgz2oiKFrS4r3mATuJ+K8CxxHFY2LRUFrkZeaVew4y5QBpIY
+ 4mcg==
+X-Gm-Message-State: AOJu0YxNluJg2/4a5ndHiuuIqZSfvTxHC93Jj6yl/piVQDB0z5rbazzv
+ 08Iqoob8wpKnJVsdzgYMPyl1SSsY2eJDzPjlt2Q=
+X-Google-Smtp-Source: AGHT+IHveIG8o7hq1q7GbSXXe3n/l6fcmi6q9FEHrpAxp4S3PEyHfadvf+KsABSg2bCcdgrydTTh3Q==
+X-Received: by 2002:a17:906:5357:b0:9ae:614e:4560 with SMTP id
+ j23-20020a170906535700b009ae614e4560mr587512ejo.29.1695320715914; 
+ Thu, 21 Sep 2023 11:25:15 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
  (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
  by smtp.gmail.com with ESMTPSA id
- y11-20020aa7cccb000000b005331f6d4a30sm1153895edt.56.2023.09.21.11.23.55
+ l9-20020a170906230900b00993004239a4sm1403212eja.215.2023.09.21.11.25.15
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 21 Sep 2023 11:23:55 -0700 (PDT)
-Message-ID: <059a3f4d-625d-58e2-3bd3-3c699b075842@mind.be>
-Date: Thu, 21 Sep 2023 20:23:52 +0200
+ Thu, 21 Sep 2023 11:25:15 -0700 (PDT)
+Message-ID: <8642cadc-7cea-f0c3-c3c8-8877f2dd3127@mind.be>
+Date: Thu, 21 Sep 2023 20:25:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 Content-Language: en-GB
-To: TIAN Yuanhao <tianyuanhao3@163.com>, buildroot@buildroot.org
-References: <20230920130754.2258-1-tianyuanhao3@163.com>
- <20230921141113.1742-1-tianyuanhao3@163.com>
-In-Reply-To: <20230921141113.1742-1-tianyuanhao3@163.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+References: <20230921111016.1041614-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20230921111016.1041614-1-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1695320636; x=1695925436; darn=buildroot.org;
+ d=mind.be; s=google; t=1695320716; x=1695925516; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:references:to
  :content-language:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=YzPxUtIbHXX+ODjxNSsozzp6RRtdpR0l/xY/xT7YzV4=;
- b=ieS92FIv1XjagR8H0uZ+AXrEoLXod9vJwhts172pjCB9crc6TbTRtbwwPGRiUniQx5
- dKapzHnqRgQXC69VEMDPPR849swcA4BLekE6YSvyGqipEgnqpjJAUcWFf+wjWUb7AGTg
- S0Nf7CJkd0vLLsHxbwadFmW2YWXERVXu2M15O2ETGtmgcTHZE9mfewcQROeRoEA1ea4u
- C+bjmpegXFTOlxVjrVKoFRZj8kzwPUmbKN94jmDx4nyxA3zwGUz0RuD49jxtRapFtaTh
- sJ8i/IaMvaHYw3oFmCLchztzL/VNI+UwiQgHU5B73jg0CIBBl6gZBxozETT5MiIqVc6k
- vJcA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=QVytjVldE+1HYU1+vJl7MEDaOR0k2hqJniMr3l5pRpc=;
+ b=DlEQzicilSQkS6oCwYH3RFR8AXPeI1c6WxkW3P/b8DAEo0bi9KCGL4xrF7ch+0e9AI
+ uUsI2Zo37vX6WTozQR4pfV+sZgJsX2NMuMU/A9L9AzTW1XJfeH8kcegnklHpbMCXgkM+
+ WTkH8s1xNKgmE0yW15Ap66Lzovcj5B8w3fhut4150/MGE2xgkyy+o6zurBn+FzX4lk+l
+ fNyYEQm5NZCrCYeGxB+szRB0uefUYBY6pVDzpWi5kfT1z3XjhtY6a7RmlK6WrOqMueIE
+ vI/8Ob0F7BKVViTIJf9gxHhdKLsotpbV4Q3POIsq1+Vl19b1+G0evzk6Qckx35fJ8JqH
+ T9/Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ieS92FIv
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/nftables: install
- libnftables to staging
+ header.a=rsa-sha256 header.s=google header.b=DlEQzici
+Subject: Re: [Buildroot] [PATCH] package/esp-hosted: fix build failure on
+ s390x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,11 +110,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/09/2023 16:11, TIAN Yuanhao wrote:
-> Needed for network-config-manager:
-> https://github.com/vmware/network-config-manager/blob/v0.6.4/meson.build#L119
+On 21/09/2023 13:10, Giulio Benetti wrote:
+> s390x doesn't support Wi-Fi on Linux so let's disable the package for such
+> architecture.
 > 
-> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+> Fixes:
+> http://autobuild.buildroot.net/results/f52e8a14330ff281a7096baa47f387f8c1859345
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
   Applied to master, thanks.
 
@@ -122,21 +125,24 @@ On 21/09/2023 16:11, TIAN Yuanhao wrote:
   Arnout
 
 > ---
->   package/nftables/nftables.mk | 1 +
->   1 file changed, 1 insertion(+)
+>   package/esp-hosted/Config.in | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-> index 20a7cd07ef..9cba243372 100644
-> --- a/package/nftables/nftables.mk
-> +++ b/package/nftables/nftables.mk
-> @@ -10,6 +10,7 @@ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
->   NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
->   NFTABLES_LICENSE = GPL-2.0
->   NFTABLES_LICENSE_FILES = COPYING
-> +NFTABLES_INSTALL_STAGING = YES
->   NFTABLES_SELINUX_MODULES = iptables
+> diff --git a/package/esp-hosted/Config.in b/package/esp-hosted/Config.in
+> index 43c802fa44..42e1afa8c5 100644
+> --- a/package/esp-hosted/Config.in
+> +++ b/package/esp-hosted/Config.in
+> @@ -1,8 +1,10 @@
+>   comment "esp-hosted needs a Linux kernel to be built"
+> +	depends on !BR2_s390x
+>   	depends on !BR2_LINUX_KERNEL
 >   
->   # Python bindings are handled by package nftables-python
+>   config BR2_PACKAGE_ESP_HOSTED
+>   	bool "esp-hosted"
+> +	depends on !BR2_s390x
+>   	depends on BR2_LINUX_KERNEL
+>   	help
+>   	  This package builds and installs the Linux kernel driver for
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
