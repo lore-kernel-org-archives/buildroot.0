@@ -4,65 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84E40CD5BD4
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 07:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF79CD5BD5
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 07:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BC7383BA2;
-	Thu, 21 Sep 2023 07:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BC7383BA2
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CD14836E1;
+	Thu, 21 Sep 2023 07:53:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CD14836E1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xjsnYld5ryL3; Thu, 21 Sep 2023 07:16:36 +0000 (UTC)
+	with ESMTP id jHkGzlXyR-Ap; Thu, 21 Sep 2023 07:53:33 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DEBC81DF3;
-	Thu, 21 Sep 2023 07:16:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DEBC81DF3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 073361BF3CE
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 07:16:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 978B2836F6;
+	Thu, 21 Sep 2023 07:53:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 978B2836F6
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 205251BF3CE
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 07:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D54C360E58
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 07:16:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D54C360E58
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05E454089A
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 07:53:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05E454089A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fFYfBrslzGve for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 07:16:31 +0000 (UTC)
-Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C3F1360E0B
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 07:16:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3F1360E0B
-Received: by smtpng3.m.smailru.net with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1qjDvH-0008SN-AY; Thu, 21 Sep 2023 10:16:27 +0300
-To: buildroot@buildroot.org
-Date: Thu, 21 Sep 2023 10:16:25 +0300
-Message-Id: <20230921071625.659478-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JD6aFh9KsUsM for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 07:53:29 +0000 (UTC)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com
+ [209.85.167.42])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 858C440898
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 07:53:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 858C440898
+Received: by mail-lf1-f42.google.com with SMTP id
+ 2adb3069b0e04-503f39d3236so1198702e87.0
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 00:53:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695282807; x=1695887607;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YXk8MnE7wVW6WfAz3OouCC7zPWRwBK8/s7Jql4/N8zs=;
+ b=cAVgM7eN0+xat87hi4VvokVIQ8ka5ipoHlAg2Hh+8Oyx+4QtsOpshKHXpYQDKO+46B
+ uJ4Ou31NPAYQ4Iw9mz+qHXrOdJef4/+R649X/AkkmcPl2ipVxM/Gq00BCYvnumpHJMSj
+ +N9O3FbHlgZomKyZgn5WqPXes0N0eUHsvtTssdc6d21X+ejGL0DOPyS5oKSe8TyXUsO1
+ O/Wr07sgTSVd9bFvmPV4HuEY4PBE8WR3LSnrBphDRUJHxEAyjE2xJo2afKDI9yo3XVph
+ 6F/vxnf+Gmkd0bdnrWEf0NCaWwXEGplzg36gELvUwFdlWPlmip7oy+vWP35Iitcrtdq3
+ pN4g==
+X-Gm-Message-State: AOJu0YwSgeQO87GeyXT4eLPU/GheEXdH10tgcdUtTMUZoXq7a96xWts7
+ 8c205v/0mewOan3p4h3b02KrON7VBfrhK8DT
+X-Google-Smtp-Source: AGHT+IEDhABpfNfQXnA5ZrQDQfwBUybF+luOizN8zQhjo+c0keRPiWUUPGq6+7iOTs4f2/Fda2fxxA==
+X-Received: by 2002:a05:6512:3b9c:b0:503:3700:7ec3 with SMTP id
+ g28-20020a0565123b9c00b0050337007ec3mr4757080lfv.39.1695282806989; 
+ Thu, 21 Sep 2023 00:53:26 -0700 (PDT)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com.
+ [209.85.167.50]) by smtp.gmail.com with ESMTPSA id
+ r7-20020a19ac47000000b004fb7359ab83sm187389lfc.80.2023.09.21.00.53.26
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 21 Sep 2023 00:53:26 -0700 (PDT)
+Received: by mail-lf1-f50.google.com with SMTP id
+ 2adb3069b0e04-50309daf971so1161262e87.3
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 00:53:26 -0700 (PDT)
+X-Received: by 2002:a05:6512:32b8:b0:502:adbc:9b75 with SMTP id
+ q24-20020a05651232b800b00502adbc9b75mr3577623lfe.51.1695282806197; Thu, 21
+ Sep 2023 00:53:26 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD9B5EC2F0BC61DBDE71E0CFD4A96D4BEB814584FFDE831C182182A05F5380850406FA57B5CD3D9B29333506BFCAA86B435E180E798CF5D5947B0F6FA2FC55C9DA5
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE73230F712CF4B3924EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006378010A306A5B6F90A8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D85ACA8DFB6F3D9E0AC216C7239AF763476F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE71AE4D56B06699BBC9FA2833FD35BB23D9E625A9149C048EEC24E1E72F37C03A06FD1C55BDD38FC3FD2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B0E6D796F508274C4A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7CB0EC3B1FCAE4A06943847C11F186F3C59DAA53EE0834AAEE
-X-C1DE0DAB: 0D63561A33F958A574ADA80DAA253BBCF334A04D7CC6E1AE728E6775C6E19DF5F87CCE6106E1FC07E67D4AC08A07B9B01F9513A7CA91E5559C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A092FFDA4F57982C5F4CB5012B2E24CD356
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFD835D610A11EC0B3FF15F5B461922B14E44CE211CCC2F19D6286DC360D86A85C744A43F78FC6FA90ADCD6B1B15162EE450B5F2B44A3A42CC4CFF0A26DC87656840B08DDBC5CE87D002C26D483E81D6BEEB84411BD425175970A7FB4ED9620804ADE12199CE9660BE
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojgnCZo68S1SvxrS0PmhKrJA==
-X-Mailru-Sender: 689FA8AB762F73930F533AC2B33E986B646BA6B72CDC01495D9622ABB2FD9A4C98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; s=mail4; 
- h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc;
- bh=Qofwtjd1PCMG/1wS/66KGjTOLOn0iBrCYjE9n+ncPec=; 
- t=1695280590;x=1695370590; 
- b=eIE9cmzY/AQxkVfq7uTkQrr8/1cHxwyNuH5CZmwAsUGl5h4Ji31W0jxtvCWgEkJWBXBZIjnhQuJn/Buvk4ww0D+kpt2DmZMEKmpxQAK03pacMB2aFwwUACluDbQMbOTd4ZNvzonw8HTu+cHJE9v8KQYGeJ1CeQxr9oU4kBBDDRKyRGlMswo3FwxCcIrIl6THgThE3TK/OwGNTS+u5NrV+HyNrqXGC4Fq53blM3KP9RRf5I8Fn2h/okTqLbc+E0/fDrT2UZ4B/5x7RvqKna+/4kHUVpiP5BIa8NMurWuDAmhyaW8A21ppeAvTmyQsSTK60h64P3L71LW5TrD5JOpjOw==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=inbox.ru header.i=@inbox.ru
- header.a=rsa-sha256 header.s=mail4 header.b=eIE9cmzY
-X-Mailman-Original-Authentication-Results: smtpng3.m.smailru.net; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/postgis: bump version to 3.4.0
+References: <20230919172300.9901-1-brandon.maier@collins.com>
+In-Reply-To: <20230919172300.9901-1-brandon.maier@collins.com>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Thu, 21 Sep 2023 09:53:15 +0200
+X-Gmail-Original-Message-ID: <CACXRmJhRUpwfL0TdgTzW2YW+uhr+0DtsMYxuQbZVU2=niLP3QA@mail.gmail.com>
+Message-ID: <CACXRmJhRUpwfL0TdgTzW2YW+uhr+0DtsMYxuQbZVU2=niLP3QA@mail.gmail.com>
+To: Brandon Maier <brandon.maier@collins.com>
+Subject: Re: [Buildroot] [PATCH 1/2] unifdef: add missing license
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,60 +88,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://git.osgeo.org/gitea/postgis/postgis/src/tag/3.4.0/NEWS
-
-Licenses updates:
-- BSD-3-Clause for xsl:
-  https://github.com/postgis/postgis/commit/1a525819301c7b715a74cd1549142dede3e34e49
-
-- Update urls and add SFCGAL links and licenses:
-  https://github.com/postgis/postgis/commit/0015540bc60b716e169f9d2c928897e997bf8632
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/postgis/postgis.hash | 4 ++--
- package/postgis/postgis.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
-index 8550a57939..812d2dc017 100644
---- a/package/postgis/postgis.hash
-+++ b/package/postgis/postgis.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9a2a219da005a1730a39d1959a1c7cec619b1efb009b65be80ffc25bad299068  postgis-3.3.2.tar.gz
--sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
-+sha256  aee9b60a6c884d354164b3096c4657f324454186607f859d1ce05d899798af9d  postgis-3.4.0.tar.gz
-+sha256  2a3bde0a77224496ea6d8efa686da7e29ab0dd6b1a8f90ba12beaf7ae28e878a  LICENSE.TXT
-diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
-index 4148180adf..11eb8e3c5a 100644
---- a/package/postgis/postgis.mk
-+++ b/package/postgis/postgis.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--POSTGIS_VERSION = 3.3.2
-+POSTGIS_VERSION = 3.4.0
- POSTGIS_SITE = https://download.osgeo.org/postgis/source
- # parallel build issues
- POSTGIS_MAKE = $(MAKE1)
--POSTGIS_LICENSE = GPL-2.0+ (PostGIS), BSD-2-Clause, MIT, Apache-2.0, ISC, BSL-1.0, CC-BY-SA-3.0
-+POSTGIS_LICENSE = GPL-2.0+ (PostGIS), BSD-3-Clause(xsl), GPL-2.0+ or LGPL-3.0+ (SFCGAL), MIT, Apache-2.0, ISC, BSL-1.0, CC-BY-SA-3.0
- POSTGIS_LICENSE_FILES = LICENSE.TXT
- POSTGIS_CPE_ID_VENDOR = postgis
- # configure.ac is patched so need to run autoreconf
--- 
-2.40.1
-
+> The COPYING also contains a BSD-3-Clause license. The BSD-3-Clause
+> applies to "manual page unifdef.1 and the portability support code in
+> the FreeBSD subdirectory". The BSD-2-Clause applies to everything else.
+>
+> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Reviewed-by: Thomas Devoogdt <thomas@devoogdt.com>
+> ---
+>  package/unifdef/unifdef.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/unifdef/unifdef.mk b/package/unifdef/unifdef.mk
+> index 7d10595d1b..fd74455894 100644
+> --- a/package/unifdef/unifdef.mk
+> +++ b/package/unifdef/unifdef.mk
+> @@ -6,7 +6,7 @@
+>
+>  UNIFDEF_VERSION = 2.12
+>  UNIFDEF_SITE = https://dotat.at/prog/unifdef
+> -UNIFDEF_LICENSE = BSD-2-Clause
+> +UNIFDEF_LICENSE = BSD-2-Clause, BSD-3-Clause
+>  UNIFDEF_LICENSE_FILES = COPYING
+>
+>  define HOST_UNIFDEF_BUILD_CMDS
+> --
+> 2.41.0
+>
+>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
