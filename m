@@ -4,62 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB462E7070C
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 10:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B1ACE7070C
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 10:29:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17A4A83C49;
-	Thu, 21 Sep 2023 10:29:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17A4A83C49
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2070B812AF;
+	Thu, 21 Sep 2023 10:29:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2070B812AF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xDkidQXChEw0; Thu, 21 Sep 2023 10:29:06 +0000 (UTC)
+	with ESMTP id BIPasIzdaufR; Thu, 21 Sep 2023 10:29:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54EF483C4A;
-	Thu, 21 Sep 2023 10:29:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54EF483C4A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 695AF1BF3C2
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EA06811E8;
+	Thu, 21 Sep 2023 10:29:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EA06811E8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BCBFD1BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4747A60BA9
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4747A60BA9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9531A4173B
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9531A4173B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id po8yTIc2woE9 for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 10:29:02 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 388CC60BA7
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 10:29:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 388CC60BA7
-Received: by mail.gandi.net (Postfix) with ESMTPA id 1E80C1BF209;
- Thu, 21 Sep 2023 10:28:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id lLFhSgRlD0SW for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 10:29:28 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 795F5414DE
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 10:29:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 795F5414DE
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6542E87404; Thu, 21 Sep 2023 10:29:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Sep 2023 12:28:56 +0200
-Message-ID: <20230921102857.375294-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695292139;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=77zpxYWxXqDCSWyYe5B1+bpNKGxOs41vVZdKQ4yO4ls=;
- b=iWi8Ouiz3TB1NXbEeZRlB22T0Rjs4oWAA+QH14ERRsKcd7BJ24Pyo/axbCk8dLKkSEOnrK
- 7rhjcQqdR3pJyiE2gD0BIPJ75o3lOQw94mPmyf9VaY+SvdWcX7qPxjvqkwKEvlhyY8sTxo
- Bkxcsh45lHjuFV5cIN4YoAzlFVn2kzNXPyYDpfdIWetOwOFObxlsZaH36LkDWzV2cQ2Tqs
- m2TisZaUMGcIKlpf44m4h8+fnPJyKk3B5pnnXNRFsQPaxfIH7nsZcKDoRt9UYR2JM9E7ZP
- 58GcoHa17pI6Qv9GkGT9bLdklsJn8J5kk9aWFd9bWUpnaUd1mKh4rTt/27yTKw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iWi8Ouiz
-Subject: [Buildroot] [PATCH] package/ne10: install shared libraries only
- when built
+Date: Thu, 21 Sep 2023 12:29:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ec3b960418670db556d3aa1db9ed9f6f4c74d878
+X-Git-Newrev: 38f39a603167148476684254a57372a5f4ac8e09
+X-Patchwork-Hint: ignore
+Message-Id: <20230921102928.6542E87404@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zxing-cpp: fix python build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,58 +57,68 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The install to staging commands of the ne10 package are careful to
-install the shared libraries only if they are built, but we forgot to
-use the same care for the install to target commands, causing a build
-failure on BR2_STATIC_LIBS=y configurations as no shared library was
-built:
+commit: https://git.buildroot.net/buildroot/commit/?id=38f39a603167148476684254a57372a5f4ac8e09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cp: cannot stat '/home/autobuild/autobuild/instance-15/output-1/build/ne10-1.2.1/modules/libNE10*.so*': No such file or directory
+Fix the following build failures raised since bump to version 1.4.0 in
+commit 456a7398316655ad0b669635f580e4887c24a700:
 
-This commit fixes this by guarding the target installation commands to
-BR2_STATIC_LIBS being empty.
+-- Found PythonInterp: /usr/bin/python3.6 (found suitable version "3.6.9", minimum required is "3.6")
+CMake Error at /home/buildroot/autobuild/run/instance-3/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/share/cmake/pybind11/FindPythonLibsNew.cmake:147 (message):
+  Python config failure:
 
-The problem exists since the package was introduced in commit
-318f3db0dcc052aa770ca57c143b5f7bc40cdaf3 ("ne10: new package"), a good
-10 years ago. Most likely it was not seen for many years as this
-package is only available for ARM with NEON and AArch64, and we were
-not testing fully static builds, except for ARMv5 that don't have
-NEON. Now that we are doing more random testing, the problem started
-being visible.
+  Traceback (most recent call last):
+
+    File "<string>", line 6, in <module>
+
+  ImportError: cannot import name 'sysconfig'
+
+and
+
+In file included from /home/buildroot/autobuild/instance-1/output-1/host/include/python3.11/Python.h:38,
+                 from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/common.h:266,
+                 from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/attr.h:13,
+                 from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/class.h:12,
+                 from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/pybind11.h:13,
+                 from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/numpy.h:12,
+                 from /home/buildroot/autobuild/instance-1/output-1/build/zxing-cpp-2.1.0/wrappers/python/zxing.cpp:18:
+/home/buildroot/autobuild/instance-1/output-1/host/include/python3.11/pyport.h:601:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+  601 | #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+      |  ^~~~~
 
 Fixes:
+ - http://autobuild.buildroot.org/results/665b246a4bb14480152ee59050672a7469148a5b
+ - http://autobuild.buildroot.org/results/0502b05020de57e4910125c699c4264047187c51
+ - http://autobuild.buildroot.org/results/c5e7fe83d46c704e05800e3ae62bf476458c7b71
 
-  http://autobuild.buildroot.net/results/45b2c1af052271bc2f1bb96544f138d29e4f7dfd/
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ne10/ne10.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/zxing-cpp/zxing-cpp.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index 3946605556..ce0f7e7b77 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -42,8 +42,10 @@ define NE10_INSTALL_STAGING_CMDS
- 	$(NE10_INSTALL_STAGING_SHARED_LIB)
- endef
+diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
+index 8256b1a254..b0cadf1b1f 100644
+--- a/package/zxing-cpp/zxing-cpp.mk
++++ b/package/zxing-cpp/zxing-cpp.mk
+@@ -33,7 +33,10 @@ endif
  
-+ifeq ($(BR2_STATIC_LIBS),)
- define NE10_INSTALL_TARGET_CMDS
- 	cp -dpf $(@D)/modules/libNE10*.so* $(TARGET_DIR)/usr/lib/
- endef
-+endif
- 
- $(eval $(cmake-package))
--- 
-2.41.0
-
+ ifeq ($(BR2_PACKAGE_PYTHON3)$(BR2_PACKAGE_PYTHON_PYBIND),yy)
+ ZXING_CPP_DEPENDENCIES += python3 python-pybind
+-ZXING_CPP_CONF_OPTS += -DBUILD_PYTHON_MODULE=ON
++ZXING_CPP_CONF_OPTS += \
++	-DBUILD_PYTHON_MODULE=ON \
++	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python3 \
++	-DPYTHON_INCLUDE_DIRS=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
+ else
+ ZXING_CPP_CONF_OPTS += -DBUILD_PYTHON_MODULE=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
