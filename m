@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE4EEE71060
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 12:52:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87D54E71068
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 12:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54F9983C32;
-	Thu, 21 Sep 2023 12:52:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54F9983C32
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4054983AA8;
+	Thu, 21 Sep 2023 12:57:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4054983AA8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id YI3bvVDCrtEx; Thu, 21 Sep 2023 12:52:30 +0000 (UTC)
+	with ESMTP id V8MEE3YAyA1J; Thu, 21 Sep 2023 12:57:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 964CA83BE2;
-	Thu, 21 Sep 2023 12:52:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 964CA83BE2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D96121BF3AD
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 12:52:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B3B983A93;
+	Thu, 21 Sep 2023 12:57:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B3B983A93
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F6271BF3AD
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 12:57:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2A62409BD
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 12:52:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2A62409BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6617B83A93
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 12:57:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6617B83A93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rB3WuQMlELso for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 12:52:18 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 972C04002B
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 12:52:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 972C04002B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5C91A1C0006;
- Thu, 21 Sep 2023 12:52:15 +0000 (UTC)
-Date: Thu, 21 Sep 2023 14:52:14 +0200
-To: Angelo Compagnucci <angelo@amarulasolutions.com>
-Message-ID: <20230921145214.5ec2846c@windsurf>
-In-Reply-To: <20230919153708.2804432-1-angelo@amarulasolutions.com>
-References: <20230919153708.2804432-1-angelo@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695300735;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=i23njtjHrBtVN2+4IbyyI39R1RJJjIRPGYyCf+oy5Zg=;
- b=HXNCvBq8hG5rSdQ9yRtIqHLqzm4X2DWfhWJ8S4ncqHIyLLvZtMn0v3tmN7NAveXztXHRT5
- G112UK1VQ+f/cNqi3AaFcCFvbF/IcZjz/c3NJyJyTzVlWFKJ+9leBQ98jY9Q/3SOeaPLvR
- Z++kbl25i7pZdq0LRA8bq6JvWWuhg6Iyt3IKzhni96gFlo79an+khxxyd1IuUBmIXk7stt
- FpAhoKcwv/2Q745N/C8ETCj591/zOLC8EGLY80qggg9v3e3uqyHu73MHz31zMGbENQKJ1C
- 57TMuJUlQpntyodHTNToHMPV+NMQFfn3G2pkkPvaS0Jj3CY9j3AwO+nwvf5SXg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HXNCvBq8
-Subject: Re: [Buildroot] [PATCH] package/python-web2py: bump to version
- 2.24.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uTb3lPKQWM6P for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 12:57:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 841FE81FE4
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 12:57:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 841FE81FE4
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5BE8E87468; Thu, 21 Sep 2023 12:57:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 21 Sep 2023 14:52:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 51c497c90fb4fb009338d223f669fb47f4900e39
+X-Git-Newrev: 1defedaf0bfdab6da63b52f4fd9b38cd19af19a4
+X-Patchwork-Hint: ignore
+Message-Id: <20230921125734.5BE8E87468@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pillow: bump to version
+ 10.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,28 +58,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 19 Sep 2023 17:37:08 +0200
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1defedaf0bfdab6da63b52f4fd9b38cd19af19a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/python-web2py/python-web2py.hash | 2 +-
->  package/python-web2py/python-web2py.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-pillow/python-pillow.hash | 4 ++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index bca66a7436..c2c5125678 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  2a8f327ba2250aad26ed101337c8fa56  Pillow-10.0.0.tar.gz
+-sha256  9c82b5b3e043c7af0d95792d0d20ccf68f61a1fec6b3530e718b688422727396  Pillow-10.0.0.tar.gz
++md5  93a0585ab0ee9717a7576129bdabdf93  Pillow-10.0.1.tar.gz
++sha256  d72967b06be9300fed5cfbc8b5bafceec48bf7cdc7dab66b1d2549035287191d  Pillow-10.0.1.tar.gz
+ 
+ # Locally computed sha256 checksums
+ sha256  0fdb68ffb39062553be40be4e6eaea9700b4f5e870a720ae86b8925d67613ddd  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 95a67f304e..d9f6fba861 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PILLOW_VERSION = 10.0.0
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/0f/8b/2ebaf9adcf4260c00f842154865f8730cf745906aa5dd499141fb6063e26
++PYTHON_PILLOW_VERSION = 10.0.1
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/64/9e/7e638579cce7dc346632f020914141a164a872be813481f058883ee8d421
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
