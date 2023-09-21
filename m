@@ -4,62 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60B71E7071B
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 11:10:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F37BAE71060
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 12:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F27CC81AC4;
-	Thu, 21 Sep 2023 11:10:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F27CC81AC4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 910B382355;
+	Thu, 21 Sep 2023 12:25:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 910B382355
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 2-Mmkgu04ghs; Thu, 21 Sep 2023 11:10:26 +0000 (UTC)
+	with ESMTP id fha6hkoUWJxF; Thu, 21 Sep 2023 12:25:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F8C08142A;
-	Thu, 21 Sep 2023 11:10:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F8C08142A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9ACAF83C2C;
+	Thu, 21 Sep 2023 12:25:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ACAF83C2C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4802C1BF3C8
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 11:10:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 102311BF3AD
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 12:25:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D10441EF3
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 11:10:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D10441EF3
+ by smtp4.osuosl.org (Postfix) with ESMTP id B697842074
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 12:25:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B697842074
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id r2dI-cO0DMq8 for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 11:10:21 +0000 (UTC)
-Received: from smtpdh17-1.aruba.it (smtpdh17-1.aruba.it [62.149.155.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AED8241ED1
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 11:10:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AED8241ED1
-Received: from localhost.localdomain ([84.33.144.138])
- by Aruba Outgoing Smtp  with ESMTPSA
- id jHZYqToYlhgyOjHZZqiaHv; Thu, 21 Sep 2023 13:10:17 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ with ESMTP id NMQdTykETbTD for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 12:25:06 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30B9F41602
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 12:25:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30B9F41602
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 192148742E; Thu, 21 Sep 2023 12:25:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Sep 2023 13:10:16 +0200
-Message-Id: <20230921111016.1041614-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfBij+iGU7GfDHO+I5HtKcOi7E8U/KCzm5AuhwyhMhOozxg5jkZ+PRnLxfrqs9vUyg96c+OKkHXj4NE9xFFxovCyyL0q01L8SO2p7tSRXk1KnU6n69t9E
- 4YZlSOH+TlqMLd76qBe7zKLJNEJtNRgBhFmBlk+yQsLeD9PQQkkvPjT5mgucrn1lvl6TLkCr9zy+fyph+enIY2Nz50wU1twnZb/N8VwDkRl8VsQZ98MAZae0
- mYpZOggVYvf27U7UEQi7ORUVsHoN284cGKl7YsT/CvFd160GXS2Khw/CR0lb54Mt
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1695294617; bh=zPUhGjrmDVb5BOBqx/dnTiFAfJWWdfuNsuMV5B6ocv4=;
- h=From:To:Subject:Date:MIME-Version;
- b=ALDDxjdbBybVzwSkilPpIqH2vZ1l2agCo2T5hM3ETGNncaQbIR+1fnmhRVsfbxlvY
- NJg2qosHpo+Dg8x7tVUIMUUvB8yWMMKDsVt3xqJ1PcWs5DVMSOr64517Ys5ieFcQG6
- kX8dgU496QaOUMWbJrTbWQ438/bBLOAlHI4FrBJjEPDmhVhuCyW2OhDFqqVqS9tzyJ
- Y8onv24rrKBQzwfZaHDu3Mm31Y08uDkMnEUeohEtLxcTWebAsPrF8ngqxf2/w9poje
- jAQz+HHyUF5FwdEj5sg2IMeIcimT+6dcs3a6iWfRarTSDkgLBYcZY/yYKfFNzXvdVq
- OyXuCAT6+B5Lg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=ALDDxjdb
-Subject: [Buildroot] [PATCH] package/esp-hosted: fix build failure on s390x
+Date: Thu, 21 Sep 2023 14:24:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 487c12a1f29140bf61abcf4cc575bd83b1fc933b
+X-Git-Newrev: 45c41098ef50e50c4b0aa426e90e5758bf7bc330
+X-Patchwork-Hint: ignore
+Message-Id: <20230921122506.192148742E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openvpn: dco needs headers >= 4.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,41 +55,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-s390x doesn't support Wi-Fi on Linux so let's disable the package for such
-architecture.
+commit: https://git.buildroot.net/buildroot/commit/?id=45c41098ef50e50c4b0aa426e90e5758bf7bc330
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+NLMSGERR_ATTR_MAX has been added in kernel 4.16 with
+https://github.com/torvalds/linux/commit/dc2b9f19e3bdaa87a7c3d123b8bba8a42d96d942
+resulting in the following build failure since bump to version 2.6.4 in
+commit a46ac2346558d05afe405dda3730169df4b677d2 and
+https://github.com/OpenVPN/openvpn/commit/e34437c26b764851555e4acbe2ccca6bec235c7e:
+
+dco_linux.c: In function 'ovpn_nl_cb_error':
+dco_linux.c:303:27: error: 'NLMSGERR_ATTR_MAX' undeclared (first use in this function); did you mean '__CTRL_ATTR_MAX'?
+     struct nlattr *tb_msg[NLMSGERR_ATTR_MAX + 1];
+                           ^~~~~~~~~~~~~~~~~
+                           __CTRL_ATTR_MAX
 
 Fixes:
-http://autobuild.buildroot.net/results/f52e8a14330ff281a7096baa47f387f8c1859345
+ - http://autobuild.buildroot.org/results/69b9737913ac0b5cd2c117d526602874da3ee487
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/esp-hosted/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/openvpn/openvpn.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/esp-hosted/Config.in b/package/esp-hosted/Config.in
-index 43c802fa44..42e1afa8c5 100644
---- a/package/esp-hosted/Config.in
-+++ b/package/esp-hosted/Config.in
-@@ -1,8 +1,10 @@
- comment "esp-hosted needs a Linux kernel to be built"
-+	depends on !BR2_s390x
- 	depends on !BR2_LINUX_KERNEL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 12c090ba3e..619a22c3b3 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -16,7 +16,7 @@ OPENVPN_CONF_OPTS = \
+ 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
+ OPENVPN_CONF_ENV = NETSTAT=/bin/netstat
  
- config BR2_PACKAGE_ESP_HOSTED
- 	bool "esp-hosted"
-+	depends on !BR2_s390x
- 	depends on BR2_LINUX_KERNEL
- 	help
- 	  This package builds and installs the Linux kernel driver for
--- 
-2.34.1
-
+-ifeq ($(BR2_PACKAGE_LIBNL),y)
++ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16),yy)
+ OPENVPN_CONF_OPTS += --enable-dco
+ OPENVPN_DEPENDENCIES += libnl
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
