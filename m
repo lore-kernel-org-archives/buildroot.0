@@ -4,65 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 928F6E7070C
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 10:29:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D91D1E7070C
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 10:30:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B5EF80BE4;
-	Thu, 21 Sep 2023 10:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B5EF80BE4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82FA883C3A;
+	Thu, 21 Sep 2023 10:30:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82FA883C3A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JwydPR4pK7SI; Thu, 21 Sep 2023 10:29:50 +0000 (UTC)
+	with ESMTP id aFCKyY7-zWhc; Thu, 21 Sep 2023 10:30:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94C0C82003;
-	Thu, 21 Sep 2023 10:29:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94C0C82003
+	by smtp1.osuosl.org (Postfix) with ESMTP id C77FC812FF;
+	Thu, 21 Sep 2023 10:30:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C77FC812FF
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A5A001BF3C2
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E9931BF3C2
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:30:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 691C081FC9
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:29:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 691C081FC9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4ADA6812FF
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 10:30:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ADA6812FF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id dYTT14VyOO6x for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 10:29:44 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 537E1838B6
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 10:29:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 537E1838B6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D7A860005;
- Thu, 21 Sep 2023 10:29:41 +0000 (UTC)
-Date: Thu, 21 Sep 2023 12:29:40 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20230921122940.2f48924d@windsurf>
-In-Reply-To: <20230919195216.136460-1-fontaine.fabrice@gmail.com>
-References: <20230919195216.136460-1-fontaine.fabrice@gmail.com>
+ with ESMTP id GfREq3Ye1Xtq for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 10:30:19 +0000 (UTC)
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5948F80D2B
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 10:30:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5948F80D2B
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 76BFC1BF203;
+ Thu, 21 Sep 2023 10:30:17 +0000 (UTC)
+Date: Thu, 21 Sep 2023 12:30:16 +0200
+To: Daniel Lang <dalang@gmx.at>
+Message-ID: <20230921123016.0f3bff25@windsurf>
+In-Reply-To: <20230921035827.70379-2-dalang@gmx.at>
+References: <20230921035827.70379-2-dalang@gmx.at>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695292181;
+ d=bootlin.com; s=gm1; t=1695292217;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=xErPG3xoiGJSIOp7CAnHy51+8f9sz8qY3RhN5tfcDII=;
- b=YWyLDtoTLqVzYP70+sjTvEqiZWV6wtMq57HTPQFDK7UI7GlsAhnhW72y/0+yDNLCNg+Rpb
- lznO2wsl0pQqR4jfMyB6XUWhanypSqGC0OrHEcpqTAMWR52yvQ6xm7kNPs3FH3NzQyZ0GX
- c0yDqZ0FKX2L9UDz32LadlQ7FwtAPP1iKMkWJmhnRPCGpzPwBtQXbxTYqI6sP7eh0ejfix
- 1Ob8Hs297rWR2Nu95m3hqlEmPW4qnN22rQaaAYs/lgNsDHgrUnZdDhkFYv+bjXVmUhRy/j
- ilzAmWxtnwANlXXxrhCz2JduLBtoDFbtd/OCcjxedJeVCcozjc5yn2OeYeXlPg==
+ bh=2yljQ9iEl8j0Dg87W+Q3KLMxQc/AKKStkTxizMDEtMM=;
+ b=mRxL6Yr2+QR+r2ZP/AAqOcB3wRa7Ws5o5FZWkjPFM6Y9pi36rKlCYMs319PpOpf09wrTg2
+ leNiRthL4KFIQvAoljXds568SEm/Fcnlx9cFSnxWt3tKHmsmfxwafb57bs02NqfXm1i14X
+ 4r9mtBpOZjwswwE710mU6HL0tM/JUTFQHkj8ecWF53bRWiYsAQy/yCWOCJupb754xVpyvx
+ zlArt2sX1vlCuVQuD75PrPtFwRpoWLPp8X+GX7EI/UCdYzGtVTboAqFSbNZ863euXegIgT
+ KKMX1BYWVW9x652UB0t0gXCvtWiUp5ayKbut9XHBSLCr8J01EZcoVMWZmlQRag==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YWyLDtoT
-Subject: Re: [Buildroot] [PATCH 1/1] package/zxing-cpp: fix python build
+ header.s=gm1 header.b=mRxL6Yr2
+Subject: Re: [Buildroot] [PATCH] package/fail2ban: drop CVE-2021-32749 from
+ IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,50 +77,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 19 Sep 2023 21:52:16 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 21 Sep 2023 05:58:27 +0200
+Daniel Lang <dalang@gmx.at> wrote:
 
-> Fix the following build failures raised since bump to version 1.4.0 in
-> commit 456a7398316655ad0b669635f580e4887c24a700:
+> CVE-2021-32749 affects fail2ban <= 0.9.7, 0.10.0 through 0.10.6, and
+> 0.11.0 through 0.11.2.
+> The mentioned patch was removed in 76853089 when bumping to 1.0.1.
 > 
-> -- Found PythonInterp: /usr/bin/python3.6 (found suitable version "3.6.9", minimum required is "3.6")
-> CMake Error at /home/buildroot/autobuild/run/instance-3/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/share/cmake/pybind11/FindPythonLibsNew.cmake:147 (message):
->   Python config failure:
-> 
->   Traceback (most recent call last):
-> 
->     File "<string>", line 6, in <module>
-> 
->   ImportError: cannot import name 'sysconfig'
-> 
-> and
-> 
-> In file included from /home/buildroot/autobuild/instance-1/output-1/host/include/python3.11/Python.h:38,
->                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/common.h:266,
->                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/attr.h:13,
->                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/class.h:12,
->                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/pybind11.h:13,
->                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/numpy.h:12,
->                  from /home/buildroot/autobuild/instance-1/output-1/build/zxing-cpp-2.1.0/wrappers/python/zxing.cpp:18:
-> /home/buildroot/autobuild/instance-1/output-1/host/include/python3.11/pyport.h:601:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
->   601 | #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
->       |  ^~~~~
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/665b246a4bb14480152ee59050672a7469148a5b
->  - http://autobuild.buildroot.org/results/0502b05020de57e4910125c699c4264047187c51
->  - http://autobuild.buildroot.org/results/c5e7fe83d46c704e05800e3ae62bf476458c7b71
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Daniel Lang <dalang@gmx.at>
 > ---
->  package/zxing-cpp/zxing-cpp.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/fail2ban/fail2ban.mk | 3 ---
+>  1 file changed, 3 deletions(-)
 
 Applied to master, thanks.
 
