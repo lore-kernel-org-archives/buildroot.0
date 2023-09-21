@@ -4,47 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 027E2E7D0A6
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 19:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F4A5E7D0A2
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 19:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8F5A80ECD;
-	Thu, 21 Sep 2023 19:19:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8F5A80ECD
+	by smtp1.osuosl.org (Postfix) with ESMTP id E731283CB3;
+	Thu, 21 Sep 2023 19:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E731283CB3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lnFyK9xcGB6u; Thu, 21 Sep 2023 19:19:56 +0000 (UTC)
+	with ESMTP id rT7SiIQaVvo3; Thu, 21 Sep 2023 19:21:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E868481584;
-	Thu, 21 Sep 2023 19:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E868481584
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8B27B1BF3EE
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 19:19:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D55183C16;
+	Thu, 21 Sep 2023 19:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D55183C16
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F285E1BF360
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 19:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6510C61389
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 19:19:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6510C61389
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8DD783C16
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 19:21:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8DD783C16
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UN7n6iN44cJY for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 19:19:47 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45ABE61388
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 19:19:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45ABE61388
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32704874E4; Thu, 21 Sep 2023 19:19:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 21 Sep 2023 21:18:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6fd23d68d53f13fe041894ac2eaf746874ce5a2c
-X-Git-Newrev: 565e494f8649a4085d6733c067aaf0927fc4ed85
-X-Patchwork-Hint: ignore
-Message-Id: <20230921191947.32704874E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-firmware: add iwlwifi quz
- firmware
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id jeDrJd1f7a6m for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 19:21:33 +0000 (UTC)
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com
+ [IPv6:2a00:1450:4864:20::12f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D621183BA6
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 19:21:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D621183BA6
+Received: by mail-lf1-x12f.google.com with SMTP id
+ 2adb3069b0e04-5041cc983f9so2222856e87.3
+ for <buildroot@buildroot.org>; Thu, 21 Sep 2023 12:21:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695324090; x=1695928890;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=OjGSZh54ocRIlGWN5S8MgaM9J68+1KYtCS8rqt731Ls=;
+ b=DNOWbXG6wHq1742+En411rJrmLdVJ0v99+GX44efcT8OpF0M5/EzCN1T5NQI3unFWh
+ BYV+r9719wAudBCiOH1Umq5ZMkUaNXEuB0Dr/v1R4nNl9tYqJNXuNx77TzMjYp6PUfvf
+ X3KMKpRcWlKRFc5eu50Z+Ni+MSBO57S/X0d4He0gZVDtqZBvc6/vNgjnfWAhUId5BeWE
+ 8KQEjp4BSqG27E1Lrs3UeL42Vgxzq88zw6v61dZjR5oupQCjNinyilD2UfTSdJWYTq7i
+ ORipysEbiSPFzxvoPazzEc8wz0wv2qumSSlwfaFkhcWzxbd6S7/Slu3fAlZeUfJgy9DZ
+ tISg==
+X-Gm-Message-State: AOJu0Yxnr3MnZhooAcuiNQT3vovN+3YRooFAhShg/WCq6gUxtFCUlM+n
+ Ih/4lskF4oYvw2b/dPcYcRN+Gg==
+X-Google-Smtp-Source: AGHT+IFgxup+wBdYZSQFCGmiAZ4NFDnHYvfhmMocIZa/YknSOAHszcJOGd8ZQ7SPUuJKHpkvc2RHyA==
+X-Received: by 2002:a19:e051:0:b0:4ff:8863:be01 with SMTP id
+ g17-20020a19e051000000b004ff8863be01mr5108610lfj.8.1695324090566; 
+ Thu, 21 Sep 2023 12:21:30 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ k10-20020aa7c38a000000b00530cf354746sm1232071edq.48.2023.09.21.12.21.29
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 21 Sep 2023 12:21:30 -0700 (PDT)
+Message-ID: <127267ec-20e1-4761-522f-fafd7fad004f@mind.be>
+Date: Thu, 21 Sep 2023 21:21:28 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20230917202926.10930-1-ju.o@free.fr>
+In-Reply-To: <20230917202926.10930-1-ju.o@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1695324090; x=1695928890; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=OjGSZh54ocRIlGWN5S8MgaM9J68+1KYtCS8rqt731Ls=;
+ b=MLujlorcqKkaP1gFsBIR7WBQ73dUCWwp0tJSnVdqI1uVfGwaV9hhGlDD9h1llO21LS
+ uBuNBSJwxHBzFBxOUYDjFmzV8Ro2yIihRPgqiUUCMpUg4ttLymm5GZvXTAtz9yhgi3YA
+ a8ls0L8mfOCCTqeqoAVeJpYT33IOoXjvWY45rw0HH96L7YB8XMr5dVAftBr6MwcnlHBI
+ jgUFrrjnwaI2/BJpRe/MKOdwyOf9dJSj1sE0OVtpRJpEd+9kegpjWihCbyYPv18t/YXf
+ vG0tvagCPGKuNtRtcQ9EWPuBKNhWgB0ZxQBAcs7gVijkUX0weIn8jf6VT4nFIg8cTzgI
+ 2h9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=MLujlorc
+Subject: Re: [Buildroot] [PATCH 1/1] package/expect: update Kconfig package
+ URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +102,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=565e494f8649a4085d6733c067aaf0927fc4ed85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit integrates support for the iwlwifi QuZ firmware files
-to support the wifi chipsets for the intel NUC10 type of hardware.
-Thus, this change adds BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_QUZ.
 
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/linux-firmware/Config.in         | 6 ++++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
- 2 files changed, 11 insertions(+)
+On 17/09/2023 22:29, Julien Olivain wrote:
+> The old expect homepage URL [1] is now redirecting to [2]. This commit
+> updates the URL to the new one.
+> 
+> [1] http://expect.sourceforge.net/
+> [2] https://core.tcl.tk/expect/
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 46e538776d..5befe50122 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -279,6 +279,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6E
- 	  Firmware files for the Intel Wi-Fi 6 and Wi-Fi 6E devices
- 	  supported by the iwlwifi kernel driver.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_QUZ
-+	bool "Intel iwlwifi QuZ"
-+	help
-+	  Firmware files for the Intel Wifi QuZ devices (used in NUC10)
-+	  supported by the iwlwifi kernel driver.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8
- 	bool "Libertas SD 8686 v8"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index f8c239d816..0cd1f30c16 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -527,6 +527,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-so-a0-gf-a0*.{ucode,pnvm}
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_QUZ),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-QuZ-*.ucode
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BROADCOM_TIGON3),y)
- LINUX_FIRMWARE_FILES += tigon/*
- # No license file; the license is in the file WHENCE
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/expect/Config.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/expect/Config.in b/package/expect/Config.in
+> index 5557f4aee6..67dfe643b2 100644
+> --- a/package/expect/Config.in
+> +++ b/package/expect/Config.in
+> @@ -4,4 +4,4 @@ config BR2_PACKAGE_EXPECT
+>   	  Expect is a tool for automating interactive applications
+>   	  such as telnet, ftp, passwd, fsck, rlogin, ssh, tip, etc.
+>   
+> -	  http://expect.sourceforge.net/
+> +	  https://core.tcl.tk/expect/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
