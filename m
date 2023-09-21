@@ -4,65 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1B4E71060
-	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 13:00:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F26DE71060
+	for <buildroot@archiver.kernel.org>; Thu, 21 Sep 2023 13:03:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD4AA8125D;
-	Thu, 21 Sep 2023 13:00:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD4AA8125D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 255C481026;
+	Thu, 21 Sep 2023 13:03:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 255C481026
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id th623tau7e4i; Thu, 21 Sep 2023 13:00:40 +0000 (UTC)
+	with ESMTP id CXg_hlxsCyax; Thu, 21 Sep 2023 13:03:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E82E81026;
-	Thu, 21 Sep 2023 13:00:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E82E81026
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1C8671BF3AD
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 13:00:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DE9580F54;
+	Thu, 21 Sep 2023 13:03:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DE9580F54
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EB451BF3AD
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 13:03:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E98C7409BD
- for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 13:00:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E98C7409BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 058CD80F54
+ for <buildroot@lists.busybox.net>; Thu, 21 Sep 2023 13:03:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 058CD80F54
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rSbU0sBkEc4C for <buildroot@lists.busybox.net>;
- Thu, 21 Sep 2023 13:00:37 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E86594002B
- for <buildroot@buildroot.org>; Thu, 21 Sep 2023 13:00:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E86594002B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 30C2C1BF212;
- Thu, 21 Sep 2023 13:00:35 +0000 (UTC)
-Date: Thu, 21 Sep 2023 15:00:34 +0200
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Message-ID: <20230921150034.473400dc@windsurf>
-In-Reply-To: <20230918103035.3022611-1-buildroot@heine.tech>
-References: <20230918103035.3022611-1-buildroot@heine.tech>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8wKjtPJubqxV for <buildroot@lists.busybox.net>;
+ Thu, 21 Sep 2023 13:03:07 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A116D83B46
+ for <buildroot@busybox.net>; Thu, 21 Sep 2023 13:03:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A116D83B46
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BC8CF6000C;
+ Thu, 21 Sep 2023 13:03:02 +0000 (UTC)
+Date: Thu, 21 Sep 2023 15:03:01 +0200
+To: Francois Perrad <fperrad@gmail.com>
+Message-ID: <20230921150301.153bdd6c@windsurf>
+In-Reply-To: <20230918112228.2758124-1-francois.perrad@gadz.org>
+References: <20230918112228.2758124-1-francois.perrad@gadz.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695301235;
+ d=bootlin.com; s=gm1; t=1695301383;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=jRHlJMfcqrLmiErqM7A6lFRaJW/KBjMhYkq4ytWvMbA=;
- b=fW1brHxtmkDRHcupw2jMY8mWHakq+fuHwdFBntjp5CXiiWFxYI6qFyOlucY6ioSEKe0k5+
- z2jqg6iS9vI+eShrrUmx4pE4Kr1vFG8OLEmc1TstdfL4t6J+hCWUJisL9lck+Ki9qGbFY0
- +U0aG+9m+Yqgi8rz5x+n6KdJH6HdIkKmsfY1t5V6pVmViVzdWp7KGDEg0ImJP7Pu79s5KL
- Btv1isf0grx/dS3UnOm/ZBmshL5+WkR01cAUrR2j6mp05w7noSbtELFYI2u8PNoWpXhCZJ
- ylA9N9NQVjG46EBBCxvjNkSEqueZv6fJPvAjUGHSs3gwn8Mz0FEgtmvln/3T7w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=s5+CK3/KOMqTtSMR84i5alpQpN13gkH+hvMn3qGHRcw=;
+ b=D8A5E70Ftz2dLw9GI7HgXCNRJDBe5+RIekngz/ifcx42bvX0BAOUbZTjaXIKqruWmvzAxI
+ YqrozPgbsYCLHBVaOhgT27D467lepGjvCgw1BdcDCxojt+jKy23mGXsybUkzYkwiFJpdmA
+ y9Up7FV3dpRlYsZC9hmoX185+jO/BN/Hyw8jX5bJXan4oBU/etWW0AfhK+24U6ekt5Z4Vn
+ dwv1UXcNFI3t5EATFrX3z8FN5lAHnIwPcu3mE75jQ946J7X2NKfNVf/i4gJOUm7eFeO13p
+ VyZ7yPYOAQG6QqboNHa35LFBRjH2wS3gReGhY+/8kL5+UaV7jP8iSa/jZQaRXQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=fW1brHxt
-Subject: Re: [Buildroot] [PATCH] package/gtest bump to version 1.14.0
+ header.s=gm1 header.b=D8A5E70F
+Subject: Re: [Buildroot] [PATCH] package/mbedtls: bump to version 2.28.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,32 +76,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Stephan Hoffmann <sho@relinux.de>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 18 Sep 2023 12:30:35 +0200
-Michael Nosthoff via buildroot <buildroot@buildroot.org> wrote:
+On Mon, 18 Sep 2023 13:22:28 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> - tag prefix changed from 'release-' to 'v'
-> - C++14 is now required which gcc5 already provides
->   (tested with bootlin toolchain armv7-eabihf--glibc--stable-2017.05-toolchains-1-1)
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/gtest/Config.in  | 2 +-
->  package/gtest/gtest.hash | 2 +-
->  package/gtest/gtest.mk   | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
+>  package/mbedtls/mbedtls.hash | 4 ++--
+>  package/mbedtls/mbedtls.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+> index 2281bd5fe..8191d58cf 100644
+> --- a/package/mbedtls/mbedtls.hash
+> +++ b/package/mbedtls/mbedtls.hash
+> @@ -1,4 +1,4 @@
+> -# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.3:
+> -sha256  bdf7c5bbdc338da3edad89b2885d4f8668f9a6fffeba6ec17a60333e36dade6f  mbedtls-2.28.3.tar.gz
+> +# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.4:
+> +sha256  578c4dcd15bbff3f5cd56aa07cd4f850fc733634e3d5947be4f7157d5bfd81ac mbedtls-2.28.4.tar.gz
 
-Applied to master, thanks.
+                                                                           ^^^ Incorrect spacing here
+
+This issue is reported by "make check-package". I fixed that up when
+applying. Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
