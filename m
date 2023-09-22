@@ -4,69 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19178E6FE22
-	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 12:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE637E6FE26
+	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 13:08:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E13F83EB4;
-	Fri, 22 Sep 2023 12:58:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E13F83EB4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E31382139;
+	Fri, 22 Sep 2023 13:08:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E31382139
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id nQ3kkz23Krmm; Fri, 22 Sep 2023 12:58:58 +0000 (UTC)
+	with ESMTP id Rf0vRH7b830X; Fri, 22 Sep 2023 13:08:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82A5E83C5A;
-	Fri, 22 Sep 2023 12:58:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82A5E83C5A
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1F7C11BF2FC
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 12:58:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B83581EB4;
+	Fri, 22 Sep 2023 13:08:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B83581EB4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 444451BF301
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 13:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC2CB83C5A
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 12:58:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC2CB83C5A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BEA1418B5
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 13:08:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BEA1418B5
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NPbGkq0OKTpS for <buildroot@lists.busybox.net>;
- Fri, 22 Sep 2023 12:58:55 +0000 (UTC)
-X-Greylist: delayed 327 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 22 Sep 2023 12:58:54 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEFC283C58
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BEFC283C58
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 12:58:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5465C2000C;
- Fri, 22 Sep 2023 12:58:10 +0000 (UTC)
-Date: Fri, 22 Sep 2023 14:58:09 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 3HTZDy1Une71 for <buildroot@lists.busybox.net>;
+ Fri, 22 Sep 2023 13:08:36 +0000 (UTC)
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 88F04417B8
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 13:08:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88F04417B8
+Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id 7D125D5402
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 12:53:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8DE751C0007;
+ Fri, 22 Sep 2023 12:52:38 +0000 (UTC)
+Date: Fri, 22 Sep 2023 14:52:36 +0200
 To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20230922145809.1b1f0e71@booty>
-In-Reply-To: <20230904100443.1613306-6-neal.frager@amd.com>
+Message-ID: <20230922145236.027dc287@booty>
+In-Reply-To: <20230904100443.1613306-1-neal.frager@amd.com>
 References: <20230904100443.1613306-1-neal.frager@amd.com>
- <20230904100443.1613306-6-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695387533;
+ d=bootlin.com; s=gm1; t=1695387201;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8vIsgxjVUDQGI86YCodYZ0efvn2/MsAcAXSjkw1Av7k=;
- b=dNBri+cRaGgHTDFUiiXnRiAE6yq0buBeZKayXy6T/oEq/ByWHymy7SHYAJ+XL6P/IRkcCz
- RZ0ZNT8rwdPQpd4l13FhC3km6QxuintnYWZ+m8eqauXCgsefD4Ovh4pbnO+PrS2qBkqgsk
- 6gArtFZQa09rlKrqWLQK1bycrsmQ//gODTjX4YtA/1qmT1Jfs75aNoBpyZEqLO9+B+vskW
- khFuI/BEiji1YCMnY5Y+rpWwKGjCLv69mUwVBRU9TY7h/aeJFqNYOocTFO1yIQTIBf+X/i
- LnZf2zebdemRYi/APcN9JxcuR6DoQnSUq3PFrdtROgk4SROq/OPhYw8Zcw1LVg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=vNL4duAMkukdQU5MEabBghXI1TRosrG7M3DyjLxdNK4=;
+ b=pqPfoqIdJonD15PSOlzJ9uEzlo9h67pMXyRfzNDg3Lr+HhUqM5F4MfDw9AAQf+UNGFgP7V
+ SqEgj7CeZJM5A3X043SmqkfEuzriY49CQvz02eqe7B1LkgBT1TYwV8rVX2be1ojQ31rVRz
+ Pz9abukRkaOnA/xiOWGDCD3rkPb0xeCR2Unnkjb6xrBV6GSwuPBlOp01ljYiQQGK/StWHG
+ YOTxceMv4rVOmr5wEWyLdoqth+1FSU01c7NxcYBtgdAgQpxaS51q1FEEph617xhTcyR5r8
+ Opng8MnbbT3Wisle8OPbHU2PqAKQtijupK9PKvS3LO37ptIDZQoOzHbpwnm3yA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dNBri+cR
-Subject: Re: [Buildroot] [PATCH v3 6/6] boot/uboot.mk: new zynqmp pmufw
- build option
+ header.s=gm1 header.b=pqPfoqId
+Subject: Re: [Buildroot] [PATCH v3 1/6] package/binutils-bare-metal: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,64 +86,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 4 Sep 2023 11:04:43 +0100
+Hello Neal, Ibai,
+
+thank you for your persistence in working on this!
+
+The overall patch set appears pretty clean, except for a few remarks as
+you can read in this and the other replies. 
+
+I had a small hiccup while trying to apply your patches using 'git
+am' from my inbox:
+
+  error: cannot convert from y to UTF-8
+
+This is probably due to this weird header value:
+
+  Content-Type: text/plain; charset="y"
+
+Probably some dirt in your git config. However the mbox file as
+downloaded from patchwork did apply without issues. I don't think you
+need to resend the series just for this.
+
+On Mon, 4 Sep 2023 11:04:38 +0100
 Neal Frager <neal.frager@amd.com> wrote:
 
-> The new BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE option will enable u-boot to
-> use the zynqmp-firmware package for building a pmufw.elf that gets included in
-> the generated boot.bin.
+> This patch adds a new package for building binutils for a bare-metal toolchain.
+> The cpu architecture is defined by a toolchain-bare-metal virtual package.
+> While any cpu architecture could be used, the default configuration will be a
+> Xilinx microblaze little endian architecture, so that buildroot will be able
+> to build the microblaze firmware applications for zynqmp and versal.
 > 
-> If the BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE option is enabled, then the
-> BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw will
-> be ignored.
+> When configured for the Xilinx microblaze architecture, all of the binutils
+> patches that are applied to the Xilinx distributed toolchain will be applied
+> in order to generate a toolchain that is equivalent to what Xilinx distributes.
 > 
+> Signed-off-by: Ibai Erkiaga-Elorza <ibai.erkiaga-elorza@amd.com>
 > Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> V1->V2:
->  - patch is now backwards compatible for users already using the
->    BR2_TARGET_UBOOT_ZYNQMP_PMUFW config for downloading a prebuilt pmufw
-> V2->V3:
->  - no changes
-> ---
->  boot/uboot/Config.in | 18 ++++++++++++++++--
->  boot/uboot/uboot.mk  |  5 +++++
->  2 files changed, 21 insertions(+), 2 deletions(-)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 8b726eaa57..6d830e81c6 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -495,11 +495,25 @@ config BR2_TARGET_UBOOT_ZYNQMP
->  
->  if BR2_TARGET_UBOOT_ZYNQMP
->  
-> +config BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
-> +	bool "Build zynqmp PMU firmware from source"
-> +	select BR2_TARGET_ZYNQMP_FIRMWARE
-> +	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+
+...
+
+> diff --git a/package/binutils-bare-metal/Config.in.host b/package/binutils-bare-metal/Config.in.host
+> new file mode 100644
+> index 0000000000..036698d418
+> --- /dev/null
+> +++ b/package/binutils-bare-metal/Config.in.host
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL
+> +	bool "host binutils-bare-metal"
 > +	help
-> +	  This option instructs u-boot to build the zynqmp pmufw using
-> +	  the zynqmp-firmware package.  u-boot will then include this
-> +	  pmufw.elf in the generated boot.bin.
-> +	  
-> +	  If this option is selected, the BR2_TARGET_UBOOT_ZYNQMP_PMUFW
-> +	  prebuilt option will be ignored.
+> +	  binutils-bare-metal is a host utility for a
+> +	  bare-metal toolchain
+
+"a host utility seems a bit of an understatement, I'd rather say "Build
+to GNU binutils for a bare-metal toolchain" to clarify this is building
+no less than the GNU binutils.
+
 > +
-> +	  This feature requires U-Boot >= 2018.07.
+> +if BR2_PACKAGE_HOST_BINUTILS_BARE_METAL
 > +
->  config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
-> -	string "PMU firmware location"
-> +	string "Pre-built zynqmp PMU firmware location"
->  	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_VERSION
+> +	string
+> +	default "2.39"
+> +
+> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_EXTRA_CONFIG_OPTIONS
+> +	string "Additional binutils options"
+> +	default ""
+> +	help
+> +	  Any additional binutils options you may want to include
 
-Maybe here we should add
+Do we really want this without a valid use case?
 
-  depends on !BR2_TARGET_UBOOT_ZYNQMP_PMUFW_SOURCE
+The same question could apply to the _VERSION setting, however I feel
+it's reasonable to keep it...
 
-to hide the prebuilt option when building from source has been chosen.
-It would be confusing otherwise.
+This applies to patches 2 and 3 as well.
 
-Looks good otherwise.
+> diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
+> new file mode 100644
+> index 0000000000..fd983abc93
+> --- /dev/null
+> +++ b/package/binutils-bare-metal/binutils-bare-metal.mk
+> @@ -0,0 +1,56 @@
+> +################################################################################
+> +#
+> +# binutils-bare-metal
+> +#
+> +################################################################################
+> +
+> +HOST_BINUTILS_BARE_METAL_VERSION = $(call qstrip,$(BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_VERSION))
+> +ifeq ($(HOST_BINUTILS_BARE_METAL_VERSION),)
+> +HOST_BINUTILS_BARE_METAL_VERSION = 2.39
+> +endif # BINUTILS_VERSION  
+> +
+> +HOST_BINUTILS_BARE_METAL_SITE ?= $(BR2_GNU_MIRROR)/binutils
+> +HOST_BINUTILS_BARE_METAL_SOURCE ?= binutils-$(HOST_BINUTILS_BARE_METAL_VERSION).tar.xz
+> +
+> +HOST_BINUTILS_BARE_METAL_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
+> +HOST_BINUTILS_BARE_METAL_LICENSE_FILES = COPYING3 COPYING.LIB
+> +HOST_BINUTILS_BARE_METAL_CPE_ID_VENDOR = gnu
+> +
+> +HOST_BINUTILS_BARE_METAL_DEPENDENCIES = host-zlib
+> +
+> +# if toolchain is for microblazeel-xilinx, apply Xilinx patch set
+> +ifeq ($(BR2_PACKAGE_HOST_TOOLCHAIN_BARE_METAL_ARCH),"microblazeel-xilinx")
+
+The toolchain-bare-metal is added in patch 4, thus this series as-is is
+not bisectable. I don't see any obvious solutions as
+toolchain-bare-metal selects binutils-bare-metal so I guess some maintainer
+can provide some hints on how to handle this.
+
+The same issue applies to patches 2 and 3.
+
+> +HOST_BINUTILS_BARE_METAL_EXTRA_DOWNLOADS = https://github.com/Xilinx/meta-xilinx/archive/refs/tags/xlnx-rel-v2023.1.tar.gz
+
+This is not a huge download (500 kB compressed, 5.6 MB  uncompressed),
+but we use the binutils patches only, which account for 10% of the whole
+archive. I wonder whether there is a way to download only a
+subdirectory from github.
+
+And looking at the patches themselves, I wonder how many are actually
+needed. At a cursory look, some don't really look like production code.
+Are those changes being mainlined?
+
+> +define HOST_BINUTILS_BARE_METAL_EXTRACT_PATCHES
+> +  mkdir -p $(@D)/patches
+> +  tar -xf $(HOST_BINUTILS_BARE_METAL_DL_DIR)/xlnx-rel-v2023.1.tar.gz --strip-components=5 -C $(@D)/patches meta-xilinx-xlnx-rel-v2023.1/meta-microblaze/recipes-devtools/binutils/binutils
+
+Please split this very long line. e.g.:
+
+  tar -xf $(HOST_BINUTILS_BARE_METAL_DL_DIR)/xlnx-rel-v2023.1.tar.gz \
+    --strip-components=5 \
+    -C $(@D)/patches
+    meta-xilinx-xlnx-rel-v2023.1/meta-microblaze/recipes-devtools/binutils/binutils
 
 Luca
 
