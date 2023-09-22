@@ -4,92 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0626CD4852
-	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 19:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA21FCD4852
+	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 19:12:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 024B26168B;
-	Fri, 22 Sep 2023 19:12:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 024B26168B
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EC4561696;
+	Fri, 22 Sep 2023 19:12:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EC4561696
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SSG8Mm0gyW1h; Fri, 22 Sep 2023 19:12:26 +0000 (UTC)
+	with ESMTP id FyN1bzZHjZKs; Fri, 22 Sep 2023 19:12:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5637A6162B;
-	Fri, 22 Sep 2023 19:12:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5637A6162B
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9FC4A1BF21A
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:12:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EFFB6162B;
+	Fri, 22 Sep 2023 19:12:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EFFB6162B
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E30331BF21A
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:12:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DC2742229
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:12:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DC2742229
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCF536168B
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:12:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCF536168B
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ZiVq09Wm3OJi for <buildroot@lists.busybox.net>;
- Fri, 22 Sep 2023 19:12:20 +0000 (UTC)
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88F43416E7
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 19:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88F43416E7
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-9a645e54806so321964766b.0
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 12:12:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695409938; x=1696014738;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=AHsvfTBOsfEky9R3YM8KS2eJ4jkeKkFiBDjtQkRk1bU=;
- b=xH8BOizOklaEAsj6HbScKuTEhaJ1HbJp46p1JOnkP6uQlGTbIgcp3KEajyapOuDnmK
- rAoFFifvtPHlh+3LpdWLWOfI77/jJiy5eYNkKpwEvWcj9rqIiHV6IkJW9IHP/v0M1JyM
- 3bPMGSECOLn2YMfCHAi7pf0k9p/RoC34+fsFn3I1Di/zLWwduA1aSWbuUrM79yS6czdz
- xZcZMYX2/Ogxk+Q/3e14SZauikIJlStQpVQTX26EnmFs0GBAx52QeO1J+vb/kQqwtV7N
- DUKB/9P8mdtXLbglZEgdWYtqQjD/s5zXHlgy/lFcVI1JalcIX/sB7SztgL78B9GUrrAM
- Gqeg==
-X-Gm-Message-State: AOJu0Yw96dTUuHJgcsn7WOP9I7CO1UScXa6pcE6yFRO3liQUPR30gEfd
- EEmTG+XtVg6KYF6Xc1XXS6EjSaWkEk15vXmI/ek=
-X-Google-Smtp-Source: AGHT+IGx7LPpgQHF38G0ZUVj7jxWLsxboGcN7e8QO8oPXoQY8GkN3zCiPHPXH5WX9khO+WMTvrBsWw==
-X-Received: by 2002:a17:907:7882:b0:9ae:52fb:2202 with SMTP id
- ku2-20020a170907788200b009ae52fb2202mr262553ejc.40.1695409938436; 
- Fri, 22 Sep 2023 12:12:18 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
- (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
- by smtp.gmail.com with ESMTPSA id
- h1-20020a1709063c0100b0099bc038eb2bsm3071003ejg.58.2023.09.22.12.12.16
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 22 Sep 2023 12:12:17 -0700 (PDT)
-Message-ID: <8c4f296a-e605-c168-9962-e9e04ddd547d@mind.be>
-Date: Fri, 22 Sep 2023 21:12:14 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-GB
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Daniel Lang <dalang@gmx.at>
-References: <20230906194420.279926-2-dalang@gmx.at>
- <20230906194420.279926-4-dalang@gmx.at> <20230907152535.5b47810c@windsurf>
-In-Reply-To: <20230907152535.5b47810c@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1695409938; x=1696014738; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:references:cc:to
- :content-language:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=AHsvfTBOsfEky9R3YM8KS2eJ4jkeKkFiBDjtQkRk1bU=;
- b=SOXibgTLMBe6Gcy7X/mrmwBk/+roZ8SrJ1ZVRmQ6LTsRMKzDYseUPUNn4z7qgGahIF
- actw6LJJZoSkRV0HD45r82syEAaMFwsAlqPoXjbkgToKVqiDu0BaMHqj4d4cYPIfhgx2
- Kvomm9Zo8aExZXgFuhVhef0L260k5a80wRNuNWBrw+VhT+lLjOhEgqLkNJz/Zlhda2PN
- HnZ9fjinJYvvsq3ZYVjI7StLTbFQ9cIe2lc3tWvvNkI+HMbd9lcNn4DSwJE6zpjR8V2y
- QqTPCXNYEQu8w3jVrujzmgayoOwi2bw00VRpI7No5Ac350T24haw88v667k+o0QAyacK
- N65A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SOXibgTL
-Subject: Re: [Buildroot] [PATCH 2/2] package/libcoap: ignore CVE-2023-35862
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id G9vX8ASKvPQg for <buildroot@lists.busybox.net>;
+ Fri, 22 Sep 2023 19:12:40 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAB0361698
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 19:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAB0361698
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B772B87553; Fri, 22 Sep 2023 19:12:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 22 Sep 2023 21:04:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a34a370f4ea27981be43df817f49320a59088e68
+X-Git-Newrev: 868be6f6ae8db1090b97b618d7dca4ec4d9799ed
+X-Patchwork-Hint: ignore
+Message-Id: <20230922191240.B772B87553@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcoap: fix CVE-2023-30362
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,65 +57,100 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: buildroot@buildroot.org, Joris Lijssens <joris.lijssens@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=868be6f6ae8db1090b97b618d7dca4ec4d9799ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ .../0001-Backport-fix-for-CVE-2023-30362.patch     | 59 ++++++++++++++++++++++
+ package/libcoap/libcoap.mk                         |  2 +
+ 2 files changed, 61 insertions(+)
 
-On 07/09/2023 15:25, Thomas Petazzoni via buildroot wrote:
-> On Wed,  6 Sep 2023 21:44:19 +0200
-> Daniel Lang <dalang@gmx.at> wrote:
-> 
->> According to a collaborator [0] the affected code isn't in 4.3.1
->>
->> [0]: https://github.com/obgm/libcoap/issues/1117
->>
->> Signed-off-by: Daniel Lang <dalang@gmx.at>
->> ---
->>   package/libcoap/libcoap.mk | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
->> index 3773ad293c..94bfc59702 100644
->> --- a/package/libcoap/libcoap.mk
->> +++ b/package/libcoap/libcoap.mk
->> @@ -16,6 +16,8 @@ LIBCOAP_CONF_OPTS = \
->>   LIBCOAP_AUTORECONF = YES
->>   # 0001-Backport-fix-for-CVE-2023-30362.patch
->>   LIBCOAP_IGNORE_CVES += CVE-2023-30362
->> +# Doesn't affect 4.3.1, see https://github.com/obgm/libcoap/issues/1117
->> +LIBCOAP_IGNORE_CVES += CVE-2023-35862
-> 
-> Then instead the NVD maintainers need to be reported this issue, so
-> that the NVD database gets fixed. At least for now that's how we've
-> tried to resolve such issues.
-
-  The issue was never in any released version. So if the CPE entry is fixed in 
-NVD, it will be changed from
-   cpe:2.3:a:libcoap:libcoap:4.3.1:*:*:*:*:*:*:*
-to
-   cpe:2.3:a:libcoap:libcoap:-:*:*:*:*:*:*:*
-
-  As I just wrote: we _have_ to treat the - conservatively and assume it's 
-matching. So even if NVD is corrected, we'll need the exclusion.
-
-  Of course, it would be much nicer _not_ to correct the NVD, because then we 
-can simply remove the exclusion after bumping to 4.3.3 :-)
-
-  In any case: applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> 
-> However, admittedly, the last bug reports I did to NVD people were
-> ignored, while in the past, they used to be taken into account quite
-> efficiently.
-> 
-> Thomas
+diff --git a/package/libcoap/0001-Backport-fix-for-CVE-2023-30362.patch b/package/libcoap/0001-Backport-fix-for-CVE-2023-30362.patch
+new file mode 100644
+index 0000000000..ddc5329299
+--- /dev/null
++++ b/package/libcoap/0001-Backport-fix-for-CVE-2023-30362.patch
+@@ -0,0 +1,59 @@
++From c63ecbdc6b38cc7e571a72964fe9ca63834dcc89 Mon Sep 17 00:00:00 2001
++From: Jon Shallow <supjps-libcoap@jpshallow.com>
++Date: Wed, 6 Sep 2023 21:38:13 +0200
++Subject: [PATCH] Backport fix for CVE-2023-30362
++
++Upstream: https://github.com/obgm/libcoap/issues/1063#issuecomment-1626962307
++Signed-off-by: Daniel Lang <dalang@gmx.at>
++---
++ src/net.c | 34 +++++++++++++++++++++-------------
++ 1 file changed, 21 insertions(+), 13 deletions(-)
++
++diff --git a/src/net.c b/src/net.c
++index 98859443..e259ab00 100644
++--- a/src/net.c
+++++ b/src/net.c
++@@ -1305,19 +1305,27 @@ coap_send_internal(coap_session_t *session, coap_pdu_t *pdu) {
++ 
++       /* Need to check that we are not seeing this proxy in the return loop */
++       if (pdu->data && opt == NULL) {
++-        if (pdu->used_size + 1 <= pdu->max_size) {
++-          char *a_match;
++-          size_t data_len = pdu->used_size - (pdu->data - pdu->token);
++-          pdu->data[data_len] = '\000';
++-          a_match = strstr((char*)pdu->data, cp);
++-          if (a_match && (a_match == (char*)pdu->data || a_match[-1] == ' ') &&
++-              ((size_t)(a_match - (char*)pdu->data + len) == data_len ||
++-               a_match[len] == ' ')) {
++-            coap_log(LOG_WARNING, "Proxy loop detected '%s'\n",
++-                     (char*)pdu->data);
++-            coap_delete_pdu(pdu);
++-            return (coap_mid_t)COAP_DROPPED_RESPONSE;
++-          }
+++        char *a_match;
+++        size_t data_len;
+++
+++        if (pdu->used_size + 1 > pdu->max_size) {
+++          /* No space */
+++          return (coap_mid_t)COAP_DROPPED_RESPONSE;
+++        }
+++        if (!coap_pdu_resize(pdu, pdu->used_size + 1)) {
+++          /* Internal error */
+++          return (coap_mid_t)COAP_DROPPED_RESPONSE;
+++        }
+++        data_len = pdu->used_size - (pdu->data - pdu->token);
+++        pdu->data[data_len] = '\000';
+++        a_match = strstr((char*)pdu->data, cp);
+++        if (a_match && (a_match == (char*)pdu->data || a_match[-1] == ' ') &&
+++            ((size_t)(a_match - (char*)pdu->data + len) == data_len ||
+++             a_match[len] == ' ')) {
+++          coap_log(LOG_WARNING, "Proxy loop detected '%s'\n",
+++                   (char*)pdu->data);
+++          coap_delete_pdu(pdu);
+++          return (coap_mid_t)COAP_DROPPED_RESPONSE;
++         }
++       }
++       if (pdu->used_size + len + 1 <= pdu->max_size) {
++-- 
++2.42.0
++
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index 4b536d8117..3773ad293c 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -14,6 +14,8 @@ LIBCOAP_DEPENDENCIES = host-pkgconf
+ LIBCOAP_CONF_OPTS = \
+ 	--disable-examples --disable-examples-source --without-tinydtls
+ LIBCOAP_AUTORECONF = YES
++# 0001-Backport-fix-for-CVE-2023-30362.patch
++LIBCOAP_IGNORE_CVES += CVE-2023-30362
+ 
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LIBCOAP_DEPENDENCIES += gnutls
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
