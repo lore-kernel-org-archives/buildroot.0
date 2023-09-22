@@ -4,67 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B520E81A60
-	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 19:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD2ACE7AB7
+	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 19:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBF2A616B5;
-	Fri, 22 Sep 2023 19:34:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBF2A616B5
+	by smtp3.osuosl.org (Postfix) with ESMTP id E045D6168B;
+	Fri, 22 Sep 2023 19:48:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E045D6168B
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id e0y5NChEQaUY; Fri, 22 Sep 2023 19:34:02 +0000 (UTC)
+	with ESMTP id TL9_so5faBN6; Fri, 22 Sep 2023 19:48:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9527B616BB;
-	Fri, 22 Sep 2023 19:34:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9527B616BB
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 349FF1BF21A
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:33:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C4059614F8;
+	Fri, 22 Sep 2023 19:47:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4059614F8
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EF4F21BF21A
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:47:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E0ED419B3
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:33:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E0ED419B3
+ by smtp1.osuosl.org (Postfix) with ESMTP id C82F483EDA
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 19:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C82F483EDA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BkMeJ5WuOoaf for <buildroot@lists.busybox.net>;
- Fri, 22 Sep 2023 19:33:58 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C8D93419AF
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 19:33:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8D93419AF
-Received: from fli4l.lan.fli4l (p5b3a0af9.dip0.t-ipconnect.de [91.58.10.249])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E5AD6A4C0C8C;
- Fri, 22 Sep 2023 21:33:32 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44318)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qjlu8-0003tt-2B;
- Fri, 22 Sep 2023 21:33:32 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Nw8ahPQa_jlp for <buildroot@lists.busybox.net>;
+ Fri, 22 Sep 2023 19:47:57 +0000 (UTC)
+Received: from mail.light-speed.de (mail.light-speed.de
+ [IPv6:2a01:238:43f2:8900:dd04:e3a0:ee11:a73d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B16C283EC7
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 19:47:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B16C283EC7
+Received: from bilbo.fritz.box (ip5f5a8b4a.dynamic.kabel-deutschland.de
+ [95.90.139.74])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mail.light-speed.de (Postfix) with ESMTPSA id 25EA63D42A55;
+ Fri, 22 Sep 2023 21:47:55 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Fri, 22 Sep 2023 21:33:32 +0200
-Message-Id: <20230922193332.2345183-3-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230922193332.2345183-1-bernd@kuhls.net>
-References: <20230922193332.2345183-1-bernd@kuhls.net>
+Date: Fri, 22 Sep 2023 21:47:54 +0200
+Message-Id: <20230922194754.450547-1-mail@jens-maus.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230917210523.1577198-1-mail@jens-maus.de>
+References: <20230917210523.1577198-1-mail@jens-maus.de>
 MIME-Version: 1.0
-X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1695411212;
- bh=4k3hXpRClwWhvxi/Ee9r5nI0Ih52oFW76qP9A6LTV/s=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=vHllpDeJFTclNZO6T0dF/7zohA4eXNYSgkdiX5bVTeG5G8sAt4doKKOxuyi/wlqCm
- peXzkmPM7sj1Y3KElsjBMr+Bg/zZtMVGYd8hyp4NCjoaSOUQs1Zi03V4KaMvuvsOgH
- nfJ+BNIxfKTSGjhhbp4vobdCr1Nvv+uy4uJNd05jaNjrDBSb/hM000eJXeDAZJjnkN
- g/O/Z5gvd2xx3KZaGOmXKwDnrldApa9+1zxWM3Id0422Ms6QYLhZpJLmCejh3mdsrb
- P9kYQ7bstA/YnbkQorCGnULFZoOiwIGXsrbR/BuJvH6xM/i74t0gzkN89cN/nlS7DT
- qZDGG+ZhFgk7w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=vHllpDeJ
-Subject: [Buildroot] [PATCH 3/3] package/linux-headers: drop 6.4.x option
+ d=jens-maus.de; s=mail; t=1695412075;
+ bh=qrp0pLSces/ytQ+VWkA513Gs8Pyq0ACqA+jKdFpOFss=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=oyXb4RJxWvA2E/7xz+cpezb44IAuZaJ59boe91y6akxP5hHjYFhsVxAdGoZ1GB05p
+ SFWp1WhwxAvVeB9qlCr4NIK/n0Vi6s1LdFRYIvdKyWo9ItzC6M+lC0kq4XShb9vmOS
+ 4/FHlHnH9A9d8ufC45kSm+4AD7K+fTPRkmMeoofg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=jens-maus.de header.i=@jens-maus.de
+ header.a=rsa-sha256 header.s=mail header.b=oyXb4RJx
+Subject: [Buildroot] [PATCH v2] package/monit: update to 5.33.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,79 +71,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Jens Maus via buildroot <buildroot@buildroot.org>
+Reply-To: Jens Maus <mail@jens-maus.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The 6.4.x series is now EOL upstream, so drop the linux-headers option
-and add legacy handling for it.
+This commit updates monit to the latest 5.33.0 version which also
+requires some additional patch to configure as well as enabled ipv6
+support.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+
 ---
- Config.in.legacy                     | 7 +++++++
- linux/linux.hash                     | 1 -
- package/linux-headers/Config.in.host | 5 -----
- 3 files changed, 7 insertions(+), 6 deletions(-)
+Changes v1 -> v2:
+  - added Signed-off-by and Upstream (Arnout)
+  - revised configure.ac patch (Arnout)
+  - minor changes to monit.mk (Arnout)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index daf83dda4a..ca80279212 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2023.11"
- 
-+config BR2_KERNEL_HEADERS_6_4
-+	bool "kernel headers version 6.4.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 6.4.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+---
+ ...re.ac-fixes-missing-config-macro-dir.patch | 44 +++++++++++++++++++
+ package/monit/monit.hash                      |  4 +-
+ package/monit/monit.mk                        | 10 +++--
+ 3 files changed, 52 insertions(+), 6 deletions(-)
+ create mode 100644 package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
+
+diff --git a/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
+new file mode 100644
+index 0000000000..325dcc17e1
+--- /dev/null
++++ b/package/monit/0002-configure.ac-fixes-missing-config-macro-dir.patch
+@@ -0,0 +1,44 @@
++From 2c06ecdc02de75a9e7e1e30e9c3d7d3a64269b7c Mon Sep 17 00:00:00 2001
++From: Jens Maus <mail@jens-maus.de>
++Date: Fri, 22 Sep 2023 21:32:18 +0200
++Subject: [PATCH] configure.ac: fixes missing config macro dir
 +
- config BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS
- 	bool "google-material-design-icons removed"
- 	select BR2_LEGACY
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d770b77627..f0ab738c3d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  bdf76c15229b241e578046b8486106f09534d754ea4cbf105e0660e551fb1669  linux-6.5.4.tar.xz
--sha256  9626ec84a39ecb009bf11a271dd520941159c165d4e62f82e3a77b79d20ff27d  linux-6.4.16.tar.xz
- sha256  a3181e46d407cd6ab15f412402e8220684ff9659b0262b7a3de7384405ce4e27  linux-6.1.54.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  4177b5c4d6e749bb8339ac4aa68eb0932ead9490b956a80d9a597089959618ac  linux-5.15.132.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 77b5d19e2b..986ebb94d5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -49,10 +49,6 @@ config BR2_KERNEL_HEADERS_6_1
- 	bool "Linux 6.1.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++This adds the config dir to the AC_CONFIG_MACRO_DIRS in configure.ac
++so that m4 macros are properly loaded upon autoreconf use.
++
++Upstream: N/A (specific to buildroot)
++Signed-off-by: Jens Maus <mail@jens-maus.de>
++---
++ configure.ac          | 2 +-
++ libmonit/configure.ac | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 3c3d30a2..f4c5ea07 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -8,7 +8,7 @@ AC_PREREQ([2.53])
++ # Example: 5.0_beta2
++ AC_INIT([monit], [5.34.0], [monit-general@nongnu.org])
++ AC_CONFIG_AUX_DIR(config)
++-AC_CONFIG_MACRO_DIR([m4])
+++AC_CONFIG_MACRO_DIRS([m4 config])
++ AM_INIT_AUTOMAKE
++ AC_CONFIG_SRCDIR([src/monit.c])
++ AC_CONFIG_SUBDIRS([libmonit])
++diff --git a/libmonit/configure.ac b/libmonit/configure.ac
++index d4cd0789..5366444a 100644
++--- a/libmonit/configure.ac
+++++ b/libmonit/configure.ac
++@@ -4,7 +4,7 @@ AC_PREREQ([2.53])
++ 
++ AC_INIT([libmonit], [1.0], [monit-dev@tildeslash.com])
++ AC_CONFIG_AUX_DIR(config)
++-AC_CONFIG_MACRO_DIR([m4])
+++AC_CONFIG_MACRO_DIRS([m4 config])
++ AM_INIT_AUTOMAKE
++ AC_CONFIG_SRCDIR([src])
++ 
++-- 
++2.34.1
++
+diff --git a/package/monit/monit.hash b/package/monit/monit.hash
+index 26d665c083..1d9feca57b 100644
+--- a/package/monit/monit.hash
++++ b/package/monit/monit.hash
+@@ -1,4 +1,4 @@
+-# From https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256:
+-sha256  87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2  monit-5.26.0.tar.gz
++# From https://mmonit.com/monit/dist/monit-5.33.0.tar.gz.sha256
++sha256  1ace889c0183473a9d70160df6533bb6e1338dc1354f5928507803e1e2a863b5  monit-5.33.0.tar.gz
+ # Locally computed
+ sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index 6d5d475813..ce0f5f0e92 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -4,26 +4,28 @@
+ #
+ ################################################################################
  
--config BR2_KERNEL_HEADERS_6_4
--	bool "Linux 6.4.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_4
--
- config BR2_KERNEL_HEADERS_6_5
- 	bool "Linux 6.5.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_5
-@@ -414,7 +410,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.196"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.132"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.54"	if BR2_KERNEL_HEADERS_6_1
--	default "6.4.16"	if BR2_KERNEL_HEADERS_6_4
- 	default "6.5.4"		if BR2_KERNEL_HEADERS_6_5
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+-MONIT_VERSION = 5.26.0
++MONIT_VERSION = 5.33.0
+ MONIT_SITE = http://mmonit.com/monit/dist
+ MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
+ MONIT_CPE_ID_VENDOR = mmonit
+ MONIT_SELINUX_MODULES = monit
+-#
++
+ # Touching Makefile.am:
++# 0001-configure.ac-fixes-missing-config-macro-dir.patch touches configure.ac
+ MONIT_AUTORECONF = YES
+ 
+ MONIT_CONF_ENV = \
+ 	libmonit_cv_setjmp_available=yes \
+-	libmonit_cv_vsnprintf_c99_conformant=yes
++	libmonit_cv_vsnprintf_c99_conformant=yes \
++	ac_cv_ipv6=yes
+ 
+ MONIT_CONF_OPTS += \
+ 	--without-pam \
+ 	--with-largefiles
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-MONIT_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
++MONIT_CONF_OPTS += --with-ssl --with-ssl-dir=$(STAGING_DIR)/usr
+ MONIT_DEPENDENCIES += openssl
+ else
+ MONIT_CONF_OPTS += --without-ssl
 -- 
-2.39.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
