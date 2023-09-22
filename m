@@ -1,72 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C906ECD4846
-	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 17:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D0ECD4847
+	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 18:04:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 67AA341193;
-	Fri, 22 Sep 2023 17:06:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67AA341193
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9483E60ACA;
+	Fri, 22 Sep 2023 18:04:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9483E60ACA
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id IhppF4hDWMLu; Fri, 22 Sep 2023 17:06:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id viI5tZy30YQw; Fri, 22 Sep 2023 18:04:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 476A341480;
-	Fri, 22 Sep 2023 17:06:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 476A341480
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 04B881BF2FA
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 17:06:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48581610DB;
+	Fri, 22 Sep 2023 18:04:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48581610DB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D56F61BF2CA
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 18:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF6EF41480
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 17:06:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF6EF41480
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6F6641DED
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 18:04:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6F6641DED
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id l1Nw5X__Q2Fl for <buildroot@lists.busybox.net>;
- Fri, 22 Sep 2023 17:06:20 +0000 (UTC)
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8953741193
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 17:06:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8953741193
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:94e1:f2dc:4d87:6249])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 340D513F86A;
- Fri, 22 Sep 2023 19:06:15 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 22 Sep 2023 19:06:14 +0200
-Date: Fri, 22 Sep 2023 19:06:14 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Sourabh Hegde <hrsourabh011@gmail.com>
-Message-ID: <20230922170614.GS512384@scaer>
-References: <CADYjeSs6=UDJZ_6NHNFnKwagW01pcXAKSO8k-G1EUwsBjD2bpw@mail.gmail.com>
- <20230922160448.GR512384@scaer>
- <CADYjeSv4H7rqSaq5D7a9zHyZxSMp1vJv5sNs6Lj7RJLgmXEd3w@mail.gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 5SY_EWzZliRM for <buildroot@lists.busybox.net>;
+ Fri, 22 Sep 2023 18:04:19 +0000 (UTC)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7F0B541B4E
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 18:04:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F0B541B4E
+Received: by mail-ed1-x534.google.com with SMTP id
+ 4fb4d7f45d1cf-532e6f8125cso2937068a12.3
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 11:04:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695405857; x=1696010657;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=uhBJ3uVcX6L7IrRCOZuSMJYASaSV6GADWtlRNMMoYGc=;
+ b=xCc7BAZxeFhW8zoN+ga+xiI0mXDj+1TwqRlcsfvzGmBrx2IhMobH8Qhg3DPZ0be4PW
+ hvgx2UpYp6vatkvHg6T2vwz2vcDX9+OoAT3qTlFp/aDoet15QE/OakKKAkEi4TtynK2Y
+ SH95yKuIhnx9NXm00iRO1byg0tWxoXaHqChZsjGo3Qg/Bn73BeIvniSCV4Ji7gfuS2gL
+ TkBceLfDEifd7gdzRGbRvtLrNZUUS0TNwS7bJiYtLtu0VigN9iOF3AcU6buO7aXlmEtk
+ qJb20zlfuqAm8AeH2vDhBqhyl0//rPVGVbI7iKKz7ZEQ4b0D6aqqS2kb3+s6Vi95uenZ
+ n4uA==
+X-Gm-Message-State: AOJu0YyvfSbhYOfBmcX2jC57haha5j32xaH85qvgXsd4q9kfDaLg5obq
+ b9JeA2TGdpwBgp3EYuN91pw7JYPLk6uY8wruCb0=
+X-Google-Smtp-Source: AGHT+IFtxtcPNEcC12dqVU9S8j6N/HbTxjs2GSagMTpwwupScemHQWeji1DJP1y4BJ6Ussue0CCFsA==
+X-Received: by 2002:aa7:db99:0:b0:522:2782:537 with SMTP id
+ u25-20020aa7db99000000b0052227820537mr191334edt.15.1695405857259; 
+ Fri, 22 Sep 2023 11:04:17 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ r22-20020aa7da16000000b00532c84e6997sm2559311eds.23.2023.09.22.11.04.15
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 22 Sep 2023 11:04:16 -0700 (PDT)
+Message-ID: <515993ce-d39e-bc01-4346-8506db876b9e@mind.be>
+Date: Fri, 22 Sep 2023 20:04:14 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CADYjeSv4H7rqSaq5D7a9zHyZxSMp1vJv5sNs6Lj7RJLgmXEd3w@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1695402377;
- bh=qGjlYIpBPXNZ0lTfUffOzfeJ2ZaXn3LTBf9OfTLeJmg=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DzHy7MiPZE+bK7pOE53MV2esf8WsaOdYHNPuVUBtGsCgZabr1eb9dt8JRBQS4+NUg
- iTJvJMqaSwOTfqURuNaLjRVNhNnXeuBiBDsqGYyzXU1alqGFOaEflEFi7Ydi7E+L6O
- ZYXsxth+Fdq7XdGJbeedle0f1WB2C6jKETiLAIITDFgSN30cqoLTfbAu302lwihIX0
- zhufDZ+ozOaetjATKbxdCOO5FqKXJVE+dscZEbE6aqOI2KcYMY8zBREzd5Yj5b5ztO
- c3CFSx71UlAa/F3CVHtQSjmVYnIMtE9CM7vkHro1epfacwbVEhpaP4hPghYoTn3wVy
- YTXaWxxzFIe4Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DzHy7MiP
-Subject: Re: [Buildroot] How to pass EXTRA_OECMAKE_BUILD in Buildroot
- package definition?
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Jens Maus <mail@jens-maus.de>, buildroot@buildroot.org
+References: <20230917200134.1251786-1-mail@jens-maus.de>
+In-Reply-To: <20230917200134.1251786-1-mail@jens-maus.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1695405857; x=1696010657; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=uhBJ3uVcX6L7IrRCOZuSMJYASaSV6GADWtlRNMMoYGc=;
+ b=HuOnANlUQY4s0wNYgU8i4x/Ex2lG+w3R3s93sKeizuF2chqCXYldy31mQyDMlxA2k6
+ d0lCgAilnPl/buk1RIKBMuilS8g4sS+QeIYtCFXPIdAsp0Dl1BC8iNCSDYycO4U4mast
+ muZGp5rQcBUeIFm5tc9p6pQf1zawtyUC7Am0BLSlYjCmbhiKfwTlwGdiNqb81UN1plG7
+ kfo2zEmAE9J6MUbcdoLFbkVikGkksHZQX5BQY9w7QPDBEOu405rH5LrIv4FDjs/o9b9Q
+ vmWkQ73jRRVSueN8c9AnqvzfLh51UQE3OxlQgNZVocwKYQfyunLXKuJnUCHKCRry4dEl
+ 65Kw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=HuOnANlU
+Subject: Re: [Buildroot] [PATCH 1/1] boot/grub2: fix incompat e2fsprogs
+ feature use
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,83 +100,188 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U291cmFiaCwgYWxsLAoKUGxlYXNlIGRvIG5vdCB0b3AtcG9zdCwgdGhpcyBpcyBjb25zaWRlcmVk
-IGJhZCBldGlxdWV0dGUuIFJlcGx5IGluLWxpbmUKYXMgSSBkbzoKCk9uIDIwMjMtMDktMjIgMTg6
-MjIgKzAyMDAsIFNvdXJhYmggSGVnZGUgc3Bha2UgdGh1c2x5Ogo+IFllcywgSSBjaGVja2VkIGlu
-ICJJbmZyYXN0cnVjdHVyZSBmb3IgQ21ha2UgYmFzZWQgcGFja2FnZXMiIGJ1dCBjb3VsZG4ndCBm
-aW5kIGFueXRoaW5nIHJlbGV2YW50Lgo+IFRoZXJlIHNlZW1zIHRvIGJlIG5vIGRpcmVjdCB3YXkg
-dG8gZG8gdGhpcyBpbiBCdWlsZHJvb3QuIFBsZWFzZSBjb3JyZWN0IG1lIGlmIEknbSB3cm9uZy4K
-ClNvLCB5b3UgaGF2ZSB0byBrbm93IHdoYXQgdGhhdCBPRSB2YXJpYWJsZSBkb2VzIChJIGhhdmUg
-bm8gaWRlYSwgSSBkb24ndApkbyBPRSkuIEJ1dCBieSB0aGUgbmFtZSwgYW5kIHRoZSB2YWx1ZSBp
-dCBpcyBhc3NpZ25lZCwgaXQgbG9va3MgbGlrZSBpdAppcyB0aGUgbGlzdCBvZiBjbWFrZSBydWxl
-cyB0byBidWlsZC4KCldlIGRvIGhhdmUgdGhhdCBpbiBCdWlsZHJvb3Q6IExJQkZPT19NQUtFX09Q
-VFMKCllvdSBjb3VsZCBsb29rIGF0IGV4aXN0aWduIHBhY2thZ2VzIHRvIHNlZSBob3cgaXQgaXMg
-dXNlZCwgZS5nLjoKCiAgICAkIGdyZXAgX01BS0VfT1BUUyAkKGdpdCBncmVwIC1sIC1FICdldmFs
-IFwkXChjbWFrZS0nKQoKTm93LCBpZiB5b3UgYXJlIHRyeWluZyB0byB1c2UgdGVuc29yZmxvdy1s
-aXRlLCB0aGVyZSBpcyBhIHBlbmRpbmcgc2VyaWVzCmJ5IEphbWVzLCBhbmQgaXQgd291bGQgYmUg
-bmljZSBpZiB5b3UgY291bGQgaGF2ZSBhIGxvb2sgYXQgaXQsIHRlc3QgaXQsCmFuZCByZXBvcnQs
-IHJhdGhlciB0aGFuIHRyeSB5ZXQgc29tZXRoaW5nIGVsc2U6CiAgICBodHRwczovL3BhdGNod29y
-ay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L2xpc3QvP3Nlcmllcz0zNDY1NDYKClJlZ2Fy
-ZHMsCllhbm4gRS4gTU9SSU4uCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiBPbiBGcmksIFNl
-cCAyMiwgMjAyMywgMTg6MDQgWWFubiBFLiBNT1JJTiA8IFsxXXlhbm4ubW9yaW4uMTk5OEBmcmVl
-LmZyPiB3cm90ZToKPiAKPiAgIFNvdXJhYmgsIEFsbCwKPiAKPiAgIE9uIDIwMjMtMDktMjIgMTc6
-MzMgKzAyMDAsIFNvdXJhYmggSGVnZGUgc3Bha2UgdGh1c2x5Ogo+ICAgPiBIaSwKPiAgID4gSSBh
-bSB0cnlpbmcgdG8gYWRkIGEgQnVpbGRyb290IHBhY2thZ2Ugd2hlcmUgSSBuZWVkIHRvIHNwZWNp
-ZnnCoEVYVFJBX09FQ01BS0VfQlVJTEQuIEJ1dCBJIGNvdWxkbid0wqBmaW5kIGFueSByZWxldmFu
-dAo+ICAgPiB2YXJpYWJsZSBpbiBCdWlsZHJvb3QgZm9yIHRoaXMuCj4gCj4gICBUaGlzIHZhcmlh
-YmxlIGlzIHNwZWNpZmljIHRvIHRoZSBPcGVuRW1iZWRkZWQgd29ybGQuCj4gCj4gICBMb29rIGF0
-IHRoZSBCdWlsZHJvb3QgbWFudWFsIHRvIGZpbmQgdGhlIGNvcnJlc3BvbmRpbmcgdmFyaWFibGU6
-Cj4gCj4gICDCoCDCoCBbMl1odHRwczovL2J1aWxkcm9vdC5vcmcvZG93bmxvYWRzL21hbnVhbC9t
-YW51YWwuaHRtbAo+IAo+ICAgSGludDogIkluZnJhc3RydWN0dXJlIGZvciBDTWFrZS1iYXNlZCBw
-YWNrYWdlcyIKPiAKPiAgIFJlZ2FyZHMsCj4gICBZYW5uIEUuIE1PUklOLgo+IAo+ICAgPiBFeGFt
-cGxlIHdpbGwgYmUgZnJvbcKgCj4gICA+IFsxXQo+ICAgWzNdaHR0cHM6Ly9naXRodWIuY29tL254
-cC1pbXgvbWV0YS1pbXgvYmxvYi82NGE4NjRhYjc3ZGUwNmE1NTdhZmNiMDFlNmRkNGQyMTYwNmU2
-OTQ4L21ldGEtbWwvcmVjaXBlcy1saWJyYXJpZXMvdGVuc29yZmxvdy1saXRlL3RlbnNvcmZsb3ct
-bGl0ZV8yLjEwLjAuYmIjTDQxCj4gICA+IENhbiBhbnlvbmUgcGxlYXNlIGxldCBtZSBrbm93IGhv
-dyB0byBhY2hpZXZlIHRoaXM/Cj4gICA+IFRoYW5rcyBpbiBhZHZhbmNlLgo+ICAgPgo+ICAgPiBM
-aW5rczoKPiAgID4gMS4KPiAgIFs0XWh0dHBzOi8vZ2l0aHViLmNvbS9ueHAtaW14L21ldGEtaW14
-L2Jsb2IvNjRhODY0YWI3N2RlMDZhNTU3YWZjYjAxZTZkZDRkMjE2MDZlNjk0OC9tZXRhLW1sL3Jl
-Y2lwZXMtbGlicmFyaWVzL3RlbnNvcmZsb3ctbGl0ZS90ZW5zb3JmbG93LWxpdGVfMi4xMC4wLmJi
-I0w0MQo+IAo+ICAgPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwo+ICAgPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gICA+IFs1XWJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCj4gICA+IFs2XWh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo+IAo+ICAgLS0KPiAgIC4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
-LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCj4g
-ICB8wqAgWWFubiBFLiBNT1JJTsKgIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJ
-QkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4gICB8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3
-YXJlwqAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR07CoCDCoCDCoHzCoCBfX1/CoCDCoCDCoCDCoCDC
-oCDCoAo+ICAgwqAgwqB8Cj4gICB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0t
-LS06wqAgWMKgIEFHQUlOU1TCoCDCoCDCoCB8wqAgXGUvwqAgVGhlcmUgaXMgbm/CoCB8Cj4gICB8
-IFs3XWh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUzC
-oCDCoCB8wqAgwqB2wqAgwqBjb25zcGlyYWN5LsKgIHwKPiAgICctLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0t
-LS0nCj4gCj4gTGlua3M6Cj4gMS4gbWFpbHRvOnlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyCj4gMi4g
-aHR0cHM6Ly9idWlsZHJvb3Qub3JnL2Rvd25sb2Fkcy9tYW51YWwvbWFudWFsLmh0bWwKPiAzLiBo
-dHRwczovL2dpdGh1Yi5jb20vbnhwLWlteC9tZXRhLWlteC9ibG9iLzY0YTg2NGFiNzdkZTA2YTU1
-N2FmY2IwMWU2ZGQ0ZDIxNjA2ZTY5NDgvbWV0YS1tbC9yZWNpcGVzLWxpYnJhcmllcy90ZW5zb3Jm
-bG93LWxpdGUvdGVuc29yZmxvdy1saXRlXzIuMTAuMC5iYiNMNDEKPiA0LiBodHRwczovL2dpdGh1
-Yi5jb20vbnhwLWlteC9tZXRhLWlteC9ibG9iLzY0YTg2NGFiNzdkZTA2YTU1N2FmY2IwMWU2ZGQ0
-ZDIxNjA2ZTY5NDgvbWV0YS1tbC9yZWNpcGVzLWxpYnJhcmllcy90ZW5zb3JmbG93LWxpdGUvdGVu
-c29yZmxvdy1saXRlXzIuMTAuMC5iYiNMNDEKPiA1LiBtYWlsdG86YnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKPiA2LiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QKPiA3LiBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvCgo+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcg
-bGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4t
-LS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0t
-LS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJ
-QkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUg
-IERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMz
-IDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBc
-ZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxf
-IHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0t
-LS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+  Hi Jens,
+
+On 17/09/2023 22:01, Jens Maus via buildroot wrote:
+> With bump of package/e2fsprogs to 1.47.0 [1] a freshly generated
+> ext4 fs has unfortunately different default features enabled
+> (e.g. metadata_csum_seed). This and some other newer fs features
+> (e.g. large_dir) are however not supported by our grub2.
+> Thus, newly generated ext-based rootfs won't be recognized by grub2
+> and are therefore not bootable/usable from grub2 anymore. This is
+> an issue already known to other Linux derivates [2],[3],[4].
+> 
+> This commit introduces two additional upstream patches to
+> package/grub2 which adds EXT4_FEATURE_INCOMPAT_CSUM_SEED and
+> EXT4_FEATURE_INCOMPAT_LARGEDIR to the EXT2_DRIVER_IGNORED_INCOMPAT
+> list of ignored incompatible ext features, allowing grub2 to
+> use ext filesystems with these newer default feature sets.
+> 
+> [1] https://git.buildroot.net/buildroot/commit/?id=6a21733f839478d902f3eab287a82b456e55f708
+> [2] https://bugs.launchpad.net/ubuntu/+source/grub2/+bug/1844012
+> [3] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1031325
+> [4] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1030939
+> 
+> Signed-off-by: Jens Maus <mail@jens-maus.de>
+> ---
+>   ...gnore-checksum-seed-incompat-feature.patch | 59 +++++++++++++++++++
+>   ...gnore-the-large_dir-incompat-feature.patch | 58 ++++++++++++++++++
+>   2 files changed, 117 insertions(+)
+>   create mode 100644 boot/grub2/0019-Ignore-checksum-seed-incompat-feature.patch
+>   create mode 100644 boot/grub2/0020-Ignore-the-large_dir-incompat-feature.patch
+> 
+> diff --git a/boot/grub2/0019-Ignore-checksum-seed-incompat-feature.patch b/boot/grub2/0019-Ignore-checksum-seed-incompat-feature.patch
+> new file mode 100644
+> index 0000000000..27b2277c40
+> --- /dev/null
+> +++ b/boot/grub2/0019-Ignore-checksum-seed-incompat-feature.patch
+> @@ -0,0 +1,59 @@
+> +From 7fd5feff97c4b1f446f8fcf6d37aca0c64e7c763 Mon Sep 17 00:00:00 2001
+> +From: Javier Martinez Canillas <javierm@redhat.com>
+> +Date: Fri, 11 Jun 2021 21:36:16 +0200
+> +Subject: fs/ext2: Ignore checksum seed incompat feature
+> +
+> +This incompat feature is used to denote that the filesystem stored its
+> +metadata checksum seed in the superblock. This is used to allow tune2fs
+> +changing the UUID on a mounted metdata_csum filesystem without having
+> +to rewrite all the disk metadata. However, the GRUB doesn't use the
+> +metadata checksum at all. So, it can just ignore this feature if it
+> +is enabled. This is consistent with the GRUB filesystem code in general
+> +which just does a best effort to access the filesystem's data.
+> +
+> +The checksum seed incompat feature has to be removed from the ignore
+> +list if the support for metadata checksum verification is added to the
+> +GRUB ext2 driver later.
+> +
+> +Suggested-by: Eric Sandeen <esandeen@redhat.com>
+> +Suggested-by: Lukas Czerner <lczerner@redhat.com>
+> +Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> +Reviewed-by: Lukas Czerner <lczerner@redhat.com>
+> +Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+
+  This is missing your Signed-off-by and upstream link (as reported by 
+check-package).
+
+  The signed-off-by is needed separately on patches because the patches may be 
+copied outside of Buildroot, thus loosing the provenance trail.
+
+  For the upstream link, preferably point to the right commit in 
+https://git.savannah.gnu.org/cgit/grub.git
+
+
+  Regards,
+  Arnout
+
+> +---
+> + grub-core/fs/ext2.c | 10 ++++++++--
+> + 1 file changed, 8 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
+> +index e7dd78e..4953a15 100644
+> +--- a/grub-core/fs/ext2.c
+> ++++ b/grub-core/fs/ext2.c
+> +@@ -103,6 +103,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
+> + #define EXT4_FEATURE_INCOMPAT_64BIT		0x0080
+> + #define EXT4_FEATURE_INCOMPAT_MMP		0x0100
+> + #define EXT4_FEATURE_INCOMPAT_FLEX_BG		0x0200
+> ++#define EXT4_FEATURE_INCOMPAT_CSUM_SEED		0x2000
+> + #define EXT4_FEATURE_INCOMPAT_ENCRYPT          0x10000
+> +
+> + /* The set of back-incompatible features this driver DOES support. Add (OR)
+> +@@ -123,10 +124,15 @@ GRUB_MOD_LICENSE ("GPLv3+");
+> +  * mmp:            Not really back-incompatible - was added as such to
+> +  *                 avoid multiple read-write mounts. Safe to ignore for this
+> +  *                 RO driver.
+> ++ * checksum seed:  Not really back-incompatible - was added to allow tools
+> ++ *                 such as tune2fs to change the UUID on a mounted metadata
+> ++ *                 checksummed filesystem. Safe to ignore for now since the
+> ++ *                 driver doesn't support checksum verification. However, it
+> ++ *                 has to be removed from this list if the support is added later.
+> +  */
+> + #define EXT2_DRIVER_IGNORED_INCOMPAT ( EXT3_FEATURE_INCOMPAT_RECOVER \
+> +-				     | EXT4_FEATURE_INCOMPAT_MMP)
+> +-
+> ++				     | EXT4_FEATURE_INCOMPAT_MMP \
+> ++				     | EXT4_FEATURE_INCOMPAT_CSUM_SEED)
+> +
+> + #define EXT3_JOURNAL_MAGIC_NUMBER	0xc03b3998U
+> +
+> +--
+> +cgit v1.1
+> +
+> diff --git a/boot/grub2/0020-Ignore-the-large_dir-incompat-feature.patch b/boot/grub2/0020-Ignore-the-large_dir-incompat-feature.patch
+> new file mode 100644
+> index 0000000000..957b66f2c1
+> --- /dev/null
+> +++ b/boot/grub2/0020-Ignore-the-large_dir-incompat-feature.patch
+> @@ -0,0 +1,58 @@
+> +From 2e9fa73a040462b81bfbfe56c0bc7ad2d30b446b Mon Sep 17 00:00:00 2001
+> +From: Theodore Ts'o <tytso@mit.edu>
+> +Date: Tue, 30 Aug 2022 22:41:59 -0400
+> +Subject: fs/ext2: Ignore the large_dir incompat feature
+> +
+> +Recently, ext4 added the large_dir feature, which adds support for
+> +a 3 level htree directory support.
+> +
+> +The GRUB supports existing file systems with htree directories by
+> +ignoring their existence, and since the index nodes for the hash tree
+> +look like deleted directory entries (by design), the GRUB can simply do
+> +a brute force O(n) linear search of directories. The same is true for
+> +3 level deep htrees indicated by large_dir feature flag.
+> +
+> +Hence, it is safe for the GRUB to ignore the large_dir incompat feature.
+> +
+> +Fixes: https://savannah.gnu.org/bugs/?61606
+> +
+> +Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+> +Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+> +---
+> + grub-core/fs/ext2.c | 10 +++++++++-
+> + 1 file changed, 9 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
+> +index 0989e26..e1cc5e6 100644
+> +--- a/grub-core/fs/ext2.c
+> ++++ b/grub-core/fs/ext2.c
+> +@@ -104,6 +104,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
+> + #define EXT4_FEATURE_INCOMPAT_MMP		0x0100
+> + #define EXT4_FEATURE_INCOMPAT_FLEX_BG		0x0200
+> + #define EXT4_FEATURE_INCOMPAT_CSUM_SEED		0x2000
+> ++#define EXT4_FEATURE_INCOMPAT_LARGEDIR		0x4000 /* >2GB or 3 level htree */
+> + #define EXT4_FEATURE_INCOMPAT_ENCRYPT          0x10000
+> +
+> + /* The set of back-incompatible features this driver DOES support. Add (OR)
+> +@@ -129,10 +130,17 @@ GRUB_MOD_LICENSE ("GPLv3+");
+> +  *                 checksummed filesystem. Safe to ignore for now since the
+> +  *                 driver doesn't support checksum verification. However, it
+> +  *                 has to be removed from this list if the support is added later.
+> ++ * large_dir:      Not back-incompatible given that the GRUB ext2 driver does
+> ++ *                 not implement EXT2_FEATURE_COMPAT_DIR_INDEX. If the GRUB
+> ++ *                 eventually supports the htree feature (aka dir_index)
+> ++ *                 it should support 3 level htrees and then move
+> ++ *                 EXT4_FEATURE_INCOMPAT_LARGEDIR to
+> ++ *                 EXT2_DRIVER_SUPPORTED_INCOMPAT.
+> +  */
+> + #define EXT2_DRIVER_IGNORED_INCOMPAT ( EXT3_FEATURE_INCOMPAT_RECOVER \
+> + 				     | EXT4_FEATURE_INCOMPAT_MMP \
+> +-				     | EXT4_FEATURE_INCOMPAT_CSUM_SEED)
+> ++				     | EXT4_FEATURE_INCOMPAT_CSUM_SEED \
+> ++				     | EXT4_FEATURE_INCOMPAT_LARGEDIR)
+> +
+> + #define EXT3_JOURNAL_MAGIC_NUMBER	0xc03b3998U
+> +
+> +--
+> +cgit v1.1
+> +
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
