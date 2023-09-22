@@ -1,83 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73CB0CD4844
-	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 16:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C906ECD4846
+	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 17:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1374561100;
-	Fri, 22 Sep 2023 16:22:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1374561100
+	by smtp2.osuosl.org (Postfix) with ESMTP id 67AA341193;
+	Fri, 22 Sep 2023 17:06:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67AA341193
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id bxHQ5zNYmR4b; Fri, 22 Sep 2023 16:22:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IhppF4hDWMLu; Fri, 22 Sep 2023 17:06:24 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29372610F3;
-	Fri, 22 Sep 2023 16:22:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29372610F3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D28FA1BF369
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 16:22:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 476A341480;
+	Fri, 22 Sep 2023 17:06:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 476A341480
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 04B881BF2FA
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 17:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AC0B9610F3
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 16:22:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC0B9610F3
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF6EF41480
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 17:06:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DF6EF41480
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id aZTVtKLZZ7QA for <buildroot@lists.busybox.net>;
- Fri, 22 Sep 2023 16:22:12 +0000 (UTC)
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com
- [IPv6:2001:4860:4864:20::2e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 78C7E60E0A
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 16:22:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78C7E60E0A
-Received: by mail-oa1-x2e.google.com with SMTP id
- 586e51a60fabf-1d637f9c587so2105333fac.1
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 09:22:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695399731; x=1696004531;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vRZS2aZSTiVRkP5IuuRG7Ny2z73JKOAeJNe56zjspbU=;
- b=CH6rOAejdYs4Wui3eGh3Qj0fj0yBkVNv5WLWEJy22YIUto37FzlTtPPkjr1g3Snq3Z
- yK8UvsF+oaIchX7J3k8TOE0/FpArzrUEauzY+xRI3YoNasB4QF1D6xrrKFmKrSHU9oOj
- plf9FRsv+D8LC+TZxeLi4IgDOmr2gbiNgjVW5jpEOlNMFJzugN9pUho3SM5UGxIhmKJT
- hcp0lvM9cTyKS2eZtZKqJJ7uZYDaV7qAjQk0HJQrhCFR6GAefElKoThHuWPVIanh3qhA
- F9GWNRTK4EAYz94I8xCn2Hcmoa4t8skAbZeLJcsTtU+KZxXUHx5Lgr2ns+TOK8TjubsH
- g1iA==
-X-Gm-Message-State: AOJu0YxFQGGRXsyDiQ3dplhZCc5eyct5H+xek0hhl7QeRh2Th59UXUP2
- fdnT8xWZXwpXeF1oJIC4TUMPtIA4WOSft3smBSkg/xdn
-X-Google-Smtp-Source: AGHT+IGdKqK4qRzFPQIEk064tnb0uWpvnlfft7GGCYx0c/0HHgVRhexgJZL1yczPYGZP+CpMarWIEmIfy6nDAQI4zoE=
-X-Received: by 2002:a05:6870:3914:b0:1d6:ce75:d472 with SMTP id
- b20-20020a056870391400b001d6ce75d472mr2012853oap.6.1695399731328; Fri, 22 Sep
- 2023 09:22:11 -0700 (PDT)
-MIME-Version: 1.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id l1Nw5X__Q2Fl for <buildroot@lists.busybox.net>;
+ Fri, 22 Sep 2023 17:06:20 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8953741193
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 17:06:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8953741193
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:94e1:f2dc:4d87:6249])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 340D513F86A;
+ Fri, 22 Sep 2023 19:06:15 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 22 Sep 2023 19:06:14 +0200
+Date: Fri, 22 Sep 2023 19:06:14 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Sourabh Hegde <hrsourabh011@gmail.com>
+Message-ID: <20230922170614.GS512384@scaer>
 References: <CADYjeSs6=UDJZ_6NHNFnKwagW01pcXAKSO8k-G1EUwsBjD2bpw@mail.gmail.com>
  <20230922160448.GR512384@scaer>
-In-Reply-To: <20230922160448.GR512384@scaer>
-From: Sourabh Hegde <hrsourabh011@gmail.com>
-Date: Fri, 22 Sep 2023 18:22:00 +0200
-Message-ID: <CADYjeSv4H7rqSaq5D7a9zHyZxSMp1vJv5sNs6Lj7RJLgmXEd3w@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695399731; x=1696004531; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=vRZS2aZSTiVRkP5IuuRG7Ny2z73JKOAeJNe56zjspbU=;
- b=eolh2Jl2xlQOxUIIW7ATzfpsMdnHEC+vQkG6R0JIUWnylBYDN4oIyr6+jzdAB+yF8M
- WgaV593YrJnq7A+poOVel8u6rZkivZO2Nd+w7XtOmWqS32S9p2bHKUDJQs/eco6AWnRE
- Yrv4VfMQpLovoxjMuUZ55aHL6m28iFVaijLdcpSLp3ElielboUImG8qykDrBWjemdecX
- 9raZWUYhhJ0ARvsc104wg/uuB5uffMuX7XjM5nXzJhcnzwAQOhZOFFBEC/5dBButFjxS
- IITWvFEMe6Wt4UbPT+mhBut8YQHYeBo/wKu/XZ/s+piBVOu3ny5TkUIHIi8pfvJjLZ68
- 9ueQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eolh2Jl2
+ <CADYjeSv4H7rqSaq5D7a9zHyZxSMp1vJv5sNs6Lj7RJLgmXEd3w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CADYjeSv4H7rqSaq5D7a9zHyZxSMp1vJv5sNs6Lj7RJLgmXEd3w@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1695402377;
+ bh=qGjlYIpBPXNZ0lTfUffOzfeJ2ZaXn3LTBf9OfTLeJmg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DzHy7MiPZE+bK7pOE53MV2esf8WsaOdYHNPuVUBtGsCgZabr1eb9dt8JRBQS4+NUg
+ iTJvJMqaSwOTfqURuNaLjRVNhNnXeuBiBDsqGYyzXU1alqGFOaEflEFi7Ydi7E+L6O
+ ZYXsxth+Fdq7XdGJbeedle0f1WB2C6jKETiLAIITDFgSN30cqoLTfbAu302lwihIX0
+ zhufDZ+ozOaetjATKbxdCOO5FqKXJVE+dscZEbE6aqOI2KcYMY8zBREzd5Yj5b5ztO
+ c3CFSx71UlAa/F3CVHtQSjmVYnIMtE9CM7vkHro1epfacwbVEhpaP4hPghYoTn3wVy
+ YTXaWxxzFIe4Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DzHy7MiP
 Subject: Re: [Buildroot] How to pass EXTRA_OECMAKE_BUILD in Buildroot
  package definition?
 X-BeenThere: buildroot@buildroot.org
@@ -92,170 +79,82 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1983452238650314297=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1983452238650314297==
-Content-Type: multipart/alternative; boundary="000000000000bcff970605f502f3"
-
---000000000000bcff970605f502f3
-Content-Type: text/plain; charset="UTF-8"
-
-Hello Yann,
-
-Thanks for the update.
-
-Yes, I checked in "Infrastructure for Cmake based packages" but couldn't
-find anything relevant.
-
-There seems to be no direct way to do this in Buildroot. Please correct me
-if I'm wrong.
-
-Thanks in advance
-
-
-On Fri, Sep 22, 2023, 18:04 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-
-> Sourabh, All,
->
-> On 2023-09-22 17:33 +0200, Sourabh Hegde spake thusly:
-> > Hi,
-> > I am trying to add a Buildroot package where I need to
-> specify EXTRA_OECMAKE_BUILD. But I couldn't find any relevant
-> > variable in Buildroot for this.
->
-> This variable is specific to the OpenEmbedded world.
->
-> Look at the Buildroot manual to find the corresponding variable:
->
->     https://buildroot.org/downloads/manual/manual.html
->
-> Hint: "Infrastructure for CMake-based packages"
->
-> Regards,
-> Yann E. MORIN.
->
-> > Example will be from
-> > [1]
-> https://github.com/nxp-imx/meta-imx/blob/64a864ab77de06a557afcb01e6dd4d21606e6948/meta-ml/recipes-libraries/tensorflow-lite/tensorflow-lite_2.10.0.bb#L41
-> > Can anyone please let me know how to achieve this?
-> > Thanks in advance.
-> >
-> > Links:
-> > 1.
-> https://github.com/nxp-imx/meta-imx/blob/64a864ab77de06a557afcb01e6dd4d21606e6948/meta-ml/recipes-libraries/tensorflow-lite/tensorflow-lite_2.10.0.bb#L41
->
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot@buildroot.org
-> > https://lists.buildroot.org/mailman/listinfo/buildroot
->
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
-
---000000000000bcff970605f502f3
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Hello Yann,<div dir=3D"auto"><br></div><div dir=3D"a=
-uto">Thanks for the update.</div><div dir=3D"auto"><br></div><div dir=3D"au=
-to">Yes, I checked in &quot;Infrastructure for Cmake based packages&quot; b=
-ut couldn&#39;t find anything relevant.</div><div dir=3D"auto"><br></div><d=
-iv dir=3D"auto">There seems to be no direct way to do this in Buildroot. Pl=
-ease correct me if I&#39;m wrong.</div><div dir=3D"auto"><br></div><div dir=
-=3D"auto">Thanks in advance</div><br><br><div class=3D"gmail_quote"><div di=
-r=3D"ltr" class=3D"gmail_attr">On Fri, Sep 22, 2023, 18:04 Yann E. MORIN &l=
-t;<a href=3D"mailto:yann.morin.1998@free.fr">yann.morin.1998@free.fr</a>&gt=
-; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .=
-8ex;border-left:1px #ccc solid;padding-left:1ex">Sourabh, All,<br>
-<br>
-On 2023-09-22 17:33 +0200, Sourabh Hegde spake thusly:<br>
-&gt; Hi,<br>
-&gt; I am trying to add a Buildroot package where I need to specify=C2=A0EX=
-TRA_OECMAKE_BUILD. But I couldn&#39;t=C2=A0find any relevant<br>
-&gt; variable in Buildroot for this.<br>
-<br>
-This variable is specific to the OpenEmbedded world.<br>
-<br>
-Look at the Buildroot manual to find the corresponding variable:<br>
-<br>
-=C2=A0 =C2=A0 <a href=3D"https://buildroot.org/downloads/manual/manual.html=
-" rel=3D"noreferrer noreferrer" target=3D"_blank">https://buildroot.org/dow=
-nloads/manual/manual.html</a><br>
-<br>
-Hint: &quot;Infrastructure for CMake-based packages&quot;<br>
-<br>
-Regards,<br>
-Yann E. MORIN.<br>
-<br>
-&gt; Example will be from=C2=A0<br>
-&gt; [1]<a href=3D"https://github.com/nxp-imx/meta-imx/blob/64a864ab77de06a=
-557afcb01e6dd4d21606e6948/meta-ml/recipes-libraries/tensorflow-lite/tensorf=
-low-lite_2.10.0.bb#L41" rel=3D"noreferrer noreferrer" target=3D"_blank">htt=
-ps://github.com/nxp-imx/meta-imx/blob/64a864ab77de06a557afcb01e6dd4d21606e6=
-948/meta-ml/recipes-libraries/tensorflow-lite/tensorflow-lite_2.10.0.bb#L41=
-</a><br>
-&gt; Can anyone please let me know how to achieve this?<br>
-&gt; Thanks in advance.<br>
-&gt; <br>
-&gt; Links:<br>
-&gt; 1. <a href=3D"https://github.com/nxp-imx/meta-imx/blob/64a864ab77de06a=
-557afcb01e6dd4d21606e6948/meta-ml/recipes-libraries/tensorflow-lite/tensorf=
-low-lite_2.10.0.bb#L41" rel=3D"noreferrer noreferrer" target=3D"_blank">htt=
-ps://github.com/nxp-imx/meta-imx/blob/64a864ab77de06a557afcb01e6dd4d21606e6=
-948/meta-ml/recipes-libraries/tensorflow-lite/tensorflow-lite_2.10.0.bb#L41=
-</a><br>
-<br>
-&gt; _______________________________________________<br>
-&gt; buildroot mailing list<br>
-&gt; <a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank" rel=3D"no=
-referrer">buildroot@buildroot.org</a><br>
-&gt; <a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">https://lists.buildroot.org/ma=
-ilman/listinfo/buildroot</a><br>
-<br>
-<br>
--- <br>
-.-----------------.--------------------.------------------.----------------=
-----.<br>
-|=C2=A0 Yann E. MORIN=C2=A0 | Real-Time Embedded | /&quot;\ ASCII RIBBON | =
-Erics&#39; conspiracy: |<br>
-| +33 662 376 056 | Software=C2=A0 Designer | \ / CAMPAIGN=C2=A0 =C2=A0 =C2=
-=A0|=C2=A0 ___=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|<br>
-| +33 561 099 427 `------------.-------:=C2=A0 X=C2=A0 AGAINST=C2=A0 =C2=A0=
- =C2=A0 |=C2=A0 \e/=C2=A0 There is no=C2=A0 |<br>
-| <a href=3D"http://ymorin.is-a-geek.org/" rel=3D"noreferrer noreferrer" ta=
-rget=3D"_blank">http://ymorin.is-a-geek.org/</a> | _/*\_ | / \ HTML MAIL=C2=
-=A0 =C2=A0 |=C2=A0 =C2=A0v=C2=A0 =C2=A0conspiracy.=C2=A0 |<br>
-&#39;------------------------------^-------^------------------^------------=
---------&#39;<br>
-</blockquote></div></div></div>
-
---000000000000bcff970605f502f3--
-
---===============1983452238650314297==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1983452238650314297==--
+U291cmFiaCwgYWxsLAoKUGxlYXNlIGRvIG5vdCB0b3AtcG9zdCwgdGhpcyBpcyBjb25zaWRlcmVk
+IGJhZCBldGlxdWV0dGUuIFJlcGx5IGluLWxpbmUKYXMgSSBkbzoKCk9uIDIwMjMtMDktMjIgMTg6
+MjIgKzAyMDAsIFNvdXJhYmggSGVnZGUgc3Bha2UgdGh1c2x5Ogo+IFllcywgSSBjaGVja2VkIGlu
+ICJJbmZyYXN0cnVjdHVyZSBmb3IgQ21ha2UgYmFzZWQgcGFja2FnZXMiIGJ1dCBjb3VsZG4ndCBm
+aW5kIGFueXRoaW5nIHJlbGV2YW50Lgo+IFRoZXJlIHNlZW1zIHRvIGJlIG5vIGRpcmVjdCB3YXkg
+dG8gZG8gdGhpcyBpbiBCdWlsZHJvb3QuIFBsZWFzZSBjb3JyZWN0IG1lIGlmIEknbSB3cm9uZy4K
+ClNvLCB5b3UgaGF2ZSB0byBrbm93IHdoYXQgdGhhdCBPRSB2YXJpYWJsZSBkb2VzIChJIGhhdmUg
+bm8gaWRlYSwgSSBkb24ndApkbyBPRSkuIEJ1dCBieSB0aGUgbmFtZSwgYW5kIHRoZSB2YWx1ZSBp
+dCBpcyBhc3NpZ25lZCwgaXQgbG9va3MgbGlrZSBpdAppcyB0aGUgbGlzdCBvZiBjbWFrZSBydWxl
+cyB0byBidWlsZC4KCldlIGRvIGhhdmUgdGhhdCBpbiBCdWlsZHJvb3Q6IExJQkZPT19NQUtFX09Q
+VFMKCllvdSBjb3VsZCBsb29rIGF0IGV4aXN0aWduIHBhY2thZ2VzIHRvIHNlZSBob3cgaXQgaXMg
+dXNlZCwgZS5nLjoKCiAgICAkIGdyZXAgX01BS0VfT1BUUyAkKGdpdCBncmVwIC1sIC1FICdldmFs
+IFwkXChjbWFrZS0nKQoKTm93LCBpZiB5b3UgYXJlIHRyeWluZyB0byB1c2UgdGVuc29yZmxvdy1s
+aXRlLCB0aGVyZSBpcyBhIHBlbmRpbmcgc2VyaWVzCmJ5IEphbWVzLCBhbmQgaXQgd291bGQgYmUg
+bmljZSBpZiB5b3UgY291bGQgaGF2ZSBhIGxvb2sgYXQgaXQsIHRlc3QgaXQsCmFuZCByZXBvcnQs
+IHJhdGhlciB0aGFuIHRyeSB5ZXQgc29tZXRoaW5nIGVsc2U6CiAgICBodHRwczovL3BhdGNod29y
+ay5vemxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L2xpc3QvP3Nlcmllcz0zNDY1NDYKClJlZ2Fy
+ZHMsCllhbm4gRS4gTU9SSU4uCgpSZWdhcmRzLApZYW5uIEUuIE1PUklOLgoKPiBPbiBGcmksIFNl
+cCAyMiwgMjAyMywgMTg6MDQgWWFubiBFLiBNT1JJTiA8IFsxXXlhbm4ubW9yaW4uMTk5OEBmcmVl
+LmZyPiB3cm90ZToKPiAKPiAgIFNvdXJhYmgsIEFsbCwKPiAKPiAgIE9uIDIwMjMtMDktMjIgMTc6
+MzMgKzAyMDAsIFNvdXJhYmggSGVnZGUgc3Bha2UgdGh1c2x5Ogo+ICAgPiBIaSwKPiAgID4gSSBh
+bSB0cnlpbmcgdG8gYWRkIGEgQnVpbGRyb290IHBhY2thZ2Ugd2hlcmUgSSBuZWVkIHRvIHNwZWNp
+ZnnCoEVYVFJBX09FQ01BS0VfQlVJTEQuIEJ1dCBJIGNvdWxkbid0wqBmaW5kIGFueSByZWxldmFu
+dAo+ICAgPiB2YXJpYWJsZSBpbiBCdWlsZHJvb3QgZm9yIHRoaXMuCj4gCj4gICBUaGlzIHZhcmlh
+YmxlIGlzIHNwZWNpZmljIHRvIHRoZSBPcGVuRW1iZWRkZWQgd29ybGQuCj4gCj4gICBMb29rIGF0
+IHRoZSBCdWlsZHJvb3QgbWFudWFsIHRvIGZpbmQgdGhlIGNvcnJlc3BvbmRpbmcgdmFyaWFibGU6
+Cj4gCj4gICDCoCDCoCBbMl1odHRwczovL2J1aWxkcm9vdC5vcmcvZG93bmxvYWRzL21hbnVhbC9t
+YW51YWwuaHRtbAo+IAo+ICAgSGludDogIkluZnJhc3RydWN0dXJlIGZvciBDTWFrZS1iYXNlZCBw
+YWNrYWdlcyIKPiAKPiAgIFJlZ2FyZHMsCj4gICBZYW5uIEUuIE1PUklOLgo+IAo+ICAgPiBFeGFt
+cGxlIHdpbGwgYmUgZnJvbcKgCj4gICA+IFsxXQo+ICAgWzNdaHR0cHM6Ly9naXRodWIuY29tL254
+cC1pbXgvbWV0YS1pbXgvYmxvYi82NGE4NjRhYjc3ZGUwNmE1NTdhZmNiMDFlNmRkNGQyMTYwNmU2
+OTQ4L21ldGEtbWwvcmVjaXBlcy1saWJyYXJpZXMvdGVuc29yZmxvdy1saXRlL3RlbnNvcmZsb3ct
+bGl0ZV8yLjEwLjAuYmIjTDQxCj4gICA+IENhbiBhbnlvbmUgcGxlYXNlIGxldCBtZSBrbm93IGhv
+dyB0byBhY2hpZXZlIHRoaXM/Cj4gICA+IFRoYW5rcyBpbiBhZHZhbmNlLgo+ICAgPgo+ICAgPiBM
+aW5rczoKPiAgID4gMS4KPiAgIFs0XWh0dHBzOi8vZ2l0aHViLmNvbS9ueHAtaW14L21ldGEtaW14
+L2Jsb2IvNjRhODY0YWI3N2RlMDZhNTU3YWZjYjAxZTZkZDRkMjE2MDZlNjk0OC9tZXRhLW1sL3Jl
+Y2lwZXMtbGlicmFyaWVzL3RlbnNvcmZsb3ctbGl0ZS90ZW5zb3JmbG93LWxpdGVfMi4xMC4wLmJi
+I0w0MQo+IAo+ICAgPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwo+ICAgPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gICA+IFs1XWJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCj4gICA+IFs2XWh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo+IAo+ICAgLS0KPiAgIC4tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0t
+LS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uCj4g
+ICB8wqAgWWFubiBFLiBNT1JJTsKgIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJ
+QkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4gICB8ICszMyA2NjIgMzc2IDA1NiB8IFNvZnR3
+YXJlwqAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR07CoCDCoCDCoHzCoCBfX1/CoCDCoCDCoCDCoCDC
+oCDCoAo+ICAgwqAgwqB8Cj4gICB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0tLS0t
+LS06wqAgWMKgIEFHQUlOU1TCoCDCoCDCoCB8wqAgXGUvwqAgVGhlcmUgaXMgbm/CoCB8Cj4gICB8
+IFs3XWh0dHA6Ly95bW9yaW4uaXMtYS1nZWVrLm9yZy8gfCBfLypcXyB8IC8gXCBIVE1MIE1BSUzC
+oCDCoCB8wqAgwqB2wqAgwqBjb25zcGlyYWN5LsKgIHwKPiAgICctLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0tLS0tLS0t
+LS0nCj4gCj4gTGlua3M6Cj4gMS4gbWFpbHRvOnlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyCj4gMi4g
+aHR0cHM6Ly9idWlsZHJvb3Qub3JnL2Rvd25sb2Fkcy9tYW51YWwvbWFudWFsLmh0bWwKPiAzLiBo
+dHRwczovL2dpdGh1Yi5jb20vbnhwLWlteC9tZXRhLWlteC9ibG9iLzY0YTg2NGFiNzdkZTA2YTU1
+N2FmY2IwMWU2ZGQ0ZDIxNjA2ZTY5NDgvbWV0YS1tbC9yZWNpcGVzLWxpYnJhcmllcy90ZW5zb3Jm
+bG93LWxpdGUvdGVuc29yZmxvdy1saXRlXzIuMTAuMC5iYiNMNDEKPiA0LiBodHRwczovL2dpdGh1
+Yi5jb20vbnhwLWlteC9tZXRhLWlteC9ibG9iLzY0YTg2NGFiNzdkZTA2YTU1N2FmY2IwMWU2ZGQ0
+ZDIxNjA2ZTY5NDgvbWV0YS1tbC9yZWNpcGVzLWxpYnJhcmllcy90ZW5zb3JmbG93LWxpdGUvdGVu
+c29yZmxvdy1saXRlXzIuMTAuMC5iYiNMNDEKPiA1LiBtYWlsdG86YnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKPiA2LiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QKPiA3LiBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvCgo+IF9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcg
+bGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgoKLS0gCi4tLS0tLS0tLS0tLS0tLS0tLS4t
+LS0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0t
+LS0uCnwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1lIEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJ
+QkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8CnwgKzMzIDY2MiAzNzYgMDU2IHwgU29mdHdhcmUg
+IERlc2lnbmVyIHwgXCAvIENBTVBBSUdOICAgICB8ICBfX18gICAgICAgICAgICAgICB8CnwgKzMz
+IDU2MSAwOTkgNDI3IGAtLS0tLS0tLS0tLS0uLS0tLS0tLTogIFggIEFHQUlOU1QgICAgICB8ICBc
+ZS8gIFRoZXJlIGlzIG5vICB8CnwgaHR0cDovL3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxf
+IHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAgIGNvbnNwaXJhY3kuICB8CictLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS1eLS0tLS0tLS0tLS0t
+LS0tLS0tLS0nCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
