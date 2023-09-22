@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE637E6FE26
-	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 13:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04DA0E6FE25
+	for <buildroot@archiver.kernel.org>; Fri, 22 Sep 2023 13:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E31382139;
-	Fri, 22 Sep 2023 13:08:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E31382139
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7973F81EC9;
+	Fri, 22 Sep 2023 13:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7973F81EC9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Rf0vRH7b830X; Fri, 22 Sep 2023 13:08:41 +0000 (UTC)
+	with ESMTP id xPy-O9JMPhSH; Fri, 22 Sep 2023 13:09:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B83581EB4;
-	Fri, 22 Sep 2023 13:08:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B83581EB4
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 444451BF301
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 13:08:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C79A81F1E;
+	Fri, 22 Sep 2023 13:09:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C79A81F1E
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4FA531BF301
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 13:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BEA1418B5
- for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 13:08:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BEA1418B5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B43E610CB
+ for <buildroot@lists.busybox.net>; Fri, 22 Sep 2023 13:08:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B43E610CB
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 3HTZDy1Une71 for <buildroot@lists.busybox.net>;
- Fri, 22 Sep 2023 13:08:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZGW9xEiSStqj for <buildroot@lists.busybox.net>;
+ Fri, 22 Sep 2023 13:08:48 +0000 (UTC)
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88F04417B8
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 13:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88F04417B8
-Received: from relay5-d.mail.gandi.net (unknown [217.70.183.197])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 7D125D5402
- for <buildroot@buildroot.org>; Fri, 22 Sep 2023 12:53:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8DE751C0007;
- Fri, 22 Sep 2023 12:52:38 +0000 (UTC)
-Date: Fri, 22 Sep 2023 14:52:36 +0200
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1C89A60B0B
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 13:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C89A60B0B
+Received: from relay8-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::228])
+ by mslow1.mail.gandi.net (Postfix) with ESMTP id E3A4FD542B
+ for <buildroot@buildroot.org>; Fri, 22 Sep 2023 12:54:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7F1B31BF209;
+ Fri, 22 Sep 2023 12:53:27 +0000 (UTC)
+Date: Fri, 22 Sep 2023 14:53:26 +0200
 To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20230922145236.027dc287@booty>
-In-Reply-To: <20230904100443.1613306-1-neal.frager@amd.com>
+Message-ID: <20230922145326.348c9e2b@booty>
+In-Reply-To: <20230904100443.1613306-2-neal.frager@amd.com>
 References: <20230904100443.1613306-1-neal.frager@amd.com>
+ <20230904100443.1613306-2-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695387201;
+ d=bootlin.com; s=gm1; t=1695387250;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=vNL4duAMkukdQU5MEabBghXI1TRosrG7M3DyjLxdNK4=;
- b=pqPfoqIdJonD15PSOlzJ9uEzlo9h67pMXyRfzNDg3Lr+HhUqM5F4MfDw9AAQf+UNGFgP7V
- SqEgj7CeZJM5A3X043SmqkfEuzriY49CQvz02eqe7B1LkgBT1TYwV8rVX2be1ojQ31rVRz
- Pz9abukRkaOnA/xiOWGDCD3rkPb0xeCR2Unnkjb6xrBV6GSwuPBlOp01ljYiQQGK/StWHG
- YOTxceMv4rVOmr5wEWyLdoqth+1FSU01c7NxcYBtgdAgQpxaS51q1FEEph617xhTcyR5r8
- Opng8MnbbT3Wisle8OPbHU2PqAKQtijupK9PKvS3LO37ptIDZQoOzHbpwnm3yA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=A6pxY7VxIie8Uz+h7LA8oBtZ+/GoJra+fmDNJEDbAHw=;
+ b=i1sPg1SX+5f2G/Fh3yrtAljAi6DpcYQM+5KlJuWNUOlpm95/c4Aes6rPmPN2UvHJGJpQqq
+ VwJDixn4JA5Qgu7WiFKU8htbVZL+DmKH4ts87MWAftdy0UQpxlhqbPym+YAqVgoqpRS+Ll
+ y2UGKYsPvTvSqL/v6PPVKLnpD1/T+T1XAXq4iAI8OTa2som7aPhMLCu2/GAL6MomGGo5yZ
+ UPNdg7jbY/sYcTKqUg9IUEJOmpk2ZgGStMfWn/yGOEAxdnTK7qaQCP71AYMNp0+yk2sMgV
+ 4/OBPnpWSoh6RAxfuxd8u3kx/V1MXUjDwk/NrtdGoTscjKHWjtcXRbomkAeHwA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pqPfoqId
-Subject: Re: [Buildroot] [PATCH v3 1/6] package/binutils-bare-metal: new
- package
+ header.s=gm1 header.b=i1sPg1SX
+Subject: Re: [Buildroot] [PATCH v3 2/6] package/gcc-bare-metal: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,150 +81,115 @@ From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
 Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Cc: ibai.erkiaga-elorza@amd.com, michal.simek@amd.com,
  thomas.petazzoni@bootlin.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Neal, Ibai,
-
-thank you for your persistence in working on this!
-
-The overall patch set appears pretty clean, except for a few remarks as
-you can read in this and the other replies. 
-
-I had a small hiccup while trying to apply your patches using 'git
-am' from my inbox:
-
-  error: cannot convert from y to UTF-8
-
-This is probably due to this weird header value:
-
-  Content-Type: text/plain; charset="y"
-
-Probably some dirt in your git config. However the mbox file as
-downloaded from patchwork did apply without issues. I don't think you
-need to resend the series just for this.
-
-On Mon, 4 Sep 2023 11:04:38 +0100
-Neal Frager <neal.frager@amd.com> wrote:
-
-> This patch adds a new package for building binutils for a bare-metal toolchain.
-> The cpu architecture is defined by a toolchain-bare-metal virtual package.
-> While any cpu architecture could be used, the default configuration will be a
-> Xilinx microblaze little endian architecture, so that buildroot will be able
-> to build the microblaze firmware applications for zynqmp and versal.
-> 
-> When configured for the Xilinx microblaze architecture, all of the binutils
-> patches that are applied to the Xilinx distributed toolchain will be applied
-> in order to generate a toolchain that is equivalent to what Xilinx distributes.
-> 
-> Signed-off-by: Ibai Erkiaga-Elorza <ibai.erkiaga-elorza@amd.com>
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-
-...
-
-> diff --git a/package/binutils-bare-metal/Config.in.host b/package/binutils-bare-metal/Config.in.host
-> new file mode 100644
-> index 0000000000..036698d418
-> --- /dev/null
-> +++ b/package/binutils-bare-metal/Config.in.host
-> @@ -0,0 +1,19 @@
-> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL
-> +	bool "host binutils-bare-metal"
-> +	help
-> +	  binutils-bare-metal is a host utility for a
-> +	  bare-metal toolchain
-
-"a host utility seems a bit of an understatement, I'd rather say "Build
-to GNU binutils for a bare-metal toolchain" to clarify this is building
-no less than the GNU binutils.
-
-> +
-> +if BR2_PACKAGE_HOST_BINUTILS_BARE_METAL
-> +
-> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_VERSION
-> +	string
-> +	default "2.39"
-> +
-> +config BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_EXTRA_CONFIG_OPTIONS
-> +	string "Additional binutils options"
-> +	default ""
-> +	help
-> +	  Any additional binutils options you may want to include
-
-Do we really want this without a valid use case?
-
-The same question could apply to the _VERSION setting, however I feel
-it's reasonable to keep it...
-
-This applies to patches 2 and 3 as well.
-
-> diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
-> new file mode 100644
-> index 0000000000..fd983abc93
-> --- /dev/null
-> +++ b/package/binutils-bare-metal/binutils-bare-metal.mk
-> @@ -0,0 +1,56 @@
-> +################################################################################
-> +#
-> +# binutils-bare-metal
-> +#
-> +################################################################################
-> +
-> +HOST_BINUTILS_BARE_METAL_VERSION = $(call qstrip,$(BR2_PACKAGE_HOST_BINUTILS_BARE_METAL_VERSION))
-> +ifeq ($(HOST_BINUTILS_BARE_METAL_VERSION),)
-> +HOST_BINUTILS_BARE_METAL_VERSION = 2.39
-> +endif # BINUTILS_VERSION  
-> +
-> +HOST_BINUTILS_BARE_METAL_SITE ?= $(BR2_GNU_MIRROR)/binutils
-> +HOST_BINUTILS_BARE_METAL_SOURCE ?= binutils-$(HOST_BINUTILS_BARE_METAL_VERSION).tar.xz
-> +
-> +HOST_BINUTILS_BARE_METAL_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
-> +HOST_BINUTILS_BARE_METAL_LICENSE_FILES = COPYING3 COPYING.LIB
-> +HOST_BINUTILS_BARE_METAL_CPE_ID_VENDOR = gnu
-> +
-> +HOST_BINUTILS_BARE_METAL_DEPENDENCIES = host-zlib
-> +
-> +# if toolchain is for microblazeel-xilinx, apply Xilinx patch set
-> +ifeq ($(BR2_PACKAGE_HOST_TOOLCHAIN_BARE_METAL_ARCH),"microblazeel-xilinx")
-
-The toolchain-bare-metal is added in patch 4, thus this series as-is is
-not bisectable. I don't see any obvious solutions as
-toolchain-bare-metal selects binutils-bare-metal so I guess some maintainer
-can provide some hints on how to handle this.
-
-The same issue applies to patches 2 and 3.
-
-> +HOST_BINUTILS_BARE_METAL_EXTRA_DOWNLOADS = https://github.com/Xilinx/meta-xilinx/archive/refs/tags/xlnx-rel-v2023.1.tar.gz
-
-This is not a huge download (500 kB compressed, 5.6 MB  uncompressed),
-but we use the binutils patches only, which account for 10% of the whole
-archive. I wonder whether there is a way to download only a
-subdirectory from github.
-
-And looking at the patches themselves, I wonder how many are actually
-needed. At a cursory look, some don't really look like production code.
-Are those changes being mainlined?
-
-> +define HOST_BINUTILS_BARE_METAL_EXTRACT_PATCHES
-> +  mkdir -p $(@D)/patches
-> +  tar -xf $(HOST_BINUTILS_BARE_METAL_DL_DIR)/xlnx-rel-v2023.1.tar.gz --strip-components=5 -C $(@D)/patches meta-xilinx-xlnx-rel-v2023.1/meta-microblaze/recipes-devtools/binutils/binutils
-
-Please split this very long line. e.g.:
-
-  tar -xf $(HOST_BINUTILS_BARE_METAL_DL_DIR)/xlnx-rel-v2023.1.tar.gz \
-    --strip-components=5 \
-    -C $(@D)/patches
-    meta-xilinx-xlnx-rel-v2023.1/meta-microblaze/recipes-devtools/binutils/binutils
-
-Luca
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gTW9uLCA0IFNlcCAyMDIzIDExOjA0OjM5ICswMTAwCk5lYWwgRnJhZ2VyIDxuZWFsLmZyYWdl
+ckBhbWQuY29tPiB3cm90ZToKCj4gVGhpcyBwYXRjaCBhZGRzIGEgbmV3IHBhY2thZ2UgZm9yIGJ1
+aWxkaW5nIGdjYyBmb3IgYSBiYXJlLW1ldGFsIHRvb2xjaGFpbi4KPiBUaGUgY3B1IGFyY2hpdGVj
+dHVyZSBpcyBkZWZpbmVkIGJ5IGEgdG9vbGNoYWluLWJhcmUtbWV0YWwgdmlydHVhbCBwYWNrYWdl
+Lgo+IFdoaWxlIGFueSBjcHUgYXJjaGl0ZWN0dXJlIGNvdWxkIGJlIHVzZWQsIHRoZSBkZWZhdWx0
+IGNvbmZpZ3VyYXRpb24gd2lsbCBiZSBhCj4gWGlsaW54IG1pY3JvYmxhemUgbGl0dGxlIGVuZGlh
+biBhcmNoaXRlY3R1cmUsIHNvIHRoYXQgYnVpbGRyb290IHdpbGwgYmUgYWJsZQo+IHRvIGJ1aWxk
+IHRoZSBtaWNyb2JsYXplIGZpcm13YXJlIGFwcGxpY2F0aW9ucyBmb3IgenlucW1wIGFuZCB2ZXJz
+YWwuCj4gCj4gV2hlbiBjb25maWd1cmVkIGZvciB0aGUgWGlsaW54IG1pY3JvYmxhemUgYXJjaGl0
+ZWN0dXJlLCBhbGwgb2YgdGhlIGdjYwo+IHBhdGNoZXMgdGhhdCBhcmUgYXBwbGllZCB0byB0aGUg
+WGlsaW54IGRpc3RyaWJ1dGVkIHRvb2xjaGFpbiB3aWxsIGJlIGFwcGxpZWQKPiBpbiBvcmRlciB0
+byBnZW5lcmF0ZSBhIHRvb2xjaGFpbiB0aGF0IGlzIGVxdWl2YWxlbnQgdG8gd2hhdCBYaWxpbngg
+ZGlzdHJpYnV0ZXMuCj4gCj4gU2lnbmVkLW9mZi1ieTogSWJhaSBFcmtpYWdhLUVsb3J6YSA8aWJh
+aS5lcmtpYWdhLWVsb3J6YUBhbWQuY29tPgo+IFNpZ25lZC1vZmYtYnk6IE5lYWwgRnJhZ2VyIDxu
+ZWFsLmZyYWdlckBhbWQuY29tPgo+IC0tLQo+IFYxLT5WMjoKPiAgLSByZW1vdmVkIGRlZmF1bHQg
+ZW5hYmxlIHRvIGJlIHJlcGxhY2VkIHdpdGggdG9vbGNoYWluIHNlbGVjdCBjb25maWcKPiBWMi0+
+VjM6Cj4gIC0gbm8gY2hhbmdlcwo+IC0tLQo+ICBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgMiArCj4gIHBhY2thZ2UvZ2NjLWJhcmUtbWV0YWwvQ29uZmlnLmlu
+Lmhvc3QgICAgICB8IDE4ICsrKysrKwo+ICBwYWNrYWdlL2djYy1iYXJlLW1ldGFsL2djYy1iYXJl
+LW1ldGFsLmhhc2ggfCAgNSArKwo+ICBwYWNrYWdlL2djYy1iYXJlLW1ldGFsL2djYy1iYXJlLW1l
+dGFsLm1rICAgfCA2NyArKysrKysrKysrKysrKysrKysrKysrCj4gIDQgZmlsZXMgY2hhbmdlZCwg
+OTIgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nY2MtYmFyZS1t
+ZXRhbC9Db25maWcuaW4uaG9zdAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nY2MtYmFy
+ZS1tZXRhbC9nY2MtYmFyZS1tZXRhbC5oYXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
+L2djYy1iYXJlLW1ldGFsL2djYy1iYXJlLW1ldGFsLm1rCj4gCj4gZGlmZiAtLWdpdCBhL0RFVkVM
+T1BFUlMgYi9ERVZFTE9QRVJTCj4gaW5kZXggMWViZGYwYTJjOS4uOWZjNTk3ZGEwNyAxMDA2NDQK
+PiAtLS0gYS9ERVZFTE9QRVJTCj4gKysrIGIvREVWRUxPUEVSUwo+IEBAIC0xMzI5LDYgKzEzMjks
+NyBAQCBGOglwYWNrYWdlL3B5dGhvbi1ycGktZ3Bpby8KPiAgCj4gIE46CUliYWkgRXJraWFnYS1F
+bG9yemEgPGliYWkuZXJraWFnYS1lbG9yemFAYW1kLmNvbT4KPiAgRjoJcGFja2FnZS9iaW51dGls
+cy1iYXJlLW1ldGFsLwo+ICtGOglwYWNrYWdlL2djYy1iYXJlLW1ldGFsLwo+ICAKPiAgTjoJSWdu
+YWN5IEdhd8SZZHpraSA8aWduYWN5Lmdhd2VkemtpQGdyZWVuLWNvbW11bmljYXRpb25zLmZyPgo+
+ICBGOglwYWNrYWdlL2FuZ3VsYXJqcy8KPiBAQCAtMjE5Niw2ICsyMTk3LDcgQEAgRjoJY29uZmln
+cy96eW5xbXBfemN1MTAyX2RlZmNvbmZpZwo+ICBGOgljb25maWdzL3p5bnFtcF96Y3UxMDZfZGVm
+Y29uZmlnCj4gIEY6CXBhY2thZ2UvYmludXRpbHMtYmFyZS1tZXRhbC8KPiAgRjoJcGFja2FnZS9i
+b290Z2VuLwo+ICtGOglwYWNrYWdlL2djYy1iYXJlLW1ldGFsLwo+ICBGOglwYWNrYWdlL3ZlcnNh
+bC1maXJtd2FyZS8KPiAgCj4gIE46CU5pY29sYSBEaSBMaWV0byA8bmljb2xhLmRpbGlldG9AZ21h
+aWwuY29tPgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2djYy1iYXJlLW1ldGFsL0NvbmZpZy5pbi5o
+b3N0IGIvcGFja2FnZS9nY2MtYmFyZS1tZXRhbC9Db25maWcuaW4uaG9zdAo+IG5ldyBmaWxlIG1v
+ZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uOWUyOGU4NjJlYwo+IC0tLSAvZGV2L251bGwK
+PiArKysgYi9wYWNrYWdlL2djYy1iYXJlLW1ldGFsL0NvbmZpZy5pbi5ob3N0Cj4gQEAgLTAsMCAr
+MSwxOCBAQAo+ICtjb25maWcgQlIyX1BBQ0tBR0VfSE9TVF9HQ0NfQkFSRV9NRVRBTAo+ICsJYm9v
+bCAiaG9zdCBnY2MtYmFyZS1tZXRhbCIKPiArCWhlbHAKPiArCSAgZ2NjLWJhcmUtbWV0YWwgaXMg
+YSBob3N0IHV0aWxpdHkgZm9yIGEgYmFyZS1tZXRhbCB0b29sY2hhaW4KCiJCdWlsZCBHQ0MgZm9y
+IGEgYmFyZS1tZXRhbCB0b29sY2hhaW4iIHNlZW1zIGZvcmUgYWNjdXJhdGUuCgo+ICsKPiAraWYg
+QlIyX1BBQ0tBR0VfSE9TVF9HQ0NfQkFSRV9NRVRBTAo+ICsKPiArY29uZmlnIEJSMl9QQUNLQUdF
+X0hPU1RfR0NDX0JBUkVfTUVUQUxfVkVSU0lPTgo+ICsJc3RyaW5nCj4gKwlkZWZhdWx0ICIxMi4y
+LjAiCj4gKwkKPiArY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfR0NDX0JBUkVfTUVUQUxfRVhUUkFf
+Q09ORklHX09QVElPTlMKPiArCXN0cmluZyAiQWRkaXRpb25hbCBnY2Mgb3B0aW9ucyIKPiArCWRl
+ZmF1bHQgIiIKPiArCWhlbHAKPiArCSAgQW55IGFkZGl0aW9uYWwgZ2NjIG9wdGlvbnMgeW91IG1h
+eSB3YW50IHRvIGluY2x1ZGUuCj4gKwo+ICtlbmRpZiAjQlIyX1BBQ0tBR0VfSE9TVF9HQ0NfQkFS
+RV9NRVRBTAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2djYy1iYXJlLW1ldGFsL2djYy1iYXJlLW1l
+dGFsLmhhc2ggYi9wYWNrYWdlL2djYy1iYXJlLW1ldGFsL2djYy1iYXJlLW1ldGFsLmhhc2gKPiBu
+ZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmQ1MDU1NDBiZjkKPiAtLS0g
+L2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9nY2MtYmFyZS1tZXRhbC9nY2MtYmFyZS1tZXRhbC5o
+YXNoCj4gQEAgLTAsMCArMSw1IEBACj4gKyMgRnJvbSBodHRwczovL2djYy5nbnUub3JnL3B1Yi9n
+Y2MvcmVsZWFzZXMvZ2NjLTEyLjIuMC9zaGE1MTIuc3VtCj4gK3NoYTUxMiAgZTllODU3YmQ4MWJm
+N2EzNzAzMDdkNjg0OGM4MWIyZjU0MDNkYjhjN2I1MjA3ZjU0YmNlM2YzZmFhYzNiZGU2MzQ0NTY4
+NDA5MmMyYmMxYTI0MjdjZGRiNmY3NzQ2NDk2ZDlmYmJlZjA1ZmJiZDc3ZjI4MTBiMjk5OGYxZjkx
+NzMgIGdjYy0xMi4yLjAudGFyLnh6Cj4gKwo+ICsjIGxvY2FsbHkgY29tcHV0ZWQKPiArc2hhNTEy
+ICBiZjM1NjFjMzQ5NWRkMTEyYjI2OWEyYzIxZGQ3NThjMWU1ZTdhNzNmOTU5MDUyZjYzNTExMzEz
+ZTQ0MjIyY2U4NWI4ZGI4MWU4ZGUzYjYwYjJjMGJiODY2OGVlODM0YWM4NTAzNjUxN2ZiNjk3MGUw
+NmZlMzUyNzY1ZGQxMjdkMCAgeGxueC1yZWwtdjIwMjMuMS50YXIuZ3oKPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9nY2MtYmFyZS1tZXRhbC9nY2MtYmFyZS1tZXRhbC5tayBiL3BhY2thZ2UvZ2NjLWJh
+cmUtbWV0YWwvZ2NjLWJhcmUtbWV0YWwubWsKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4
+IDAwMDAwMDAwMDAuLmZkODQ0NTAwMDcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9n
+Y2MtYmFyZS1tZXRhbC9nY2MtYmFyZS1tZXRhbC5tawo+IEBAIC0wLDAgKzEsNjcgQEAKPiArIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArIwo+ICsjIGdjYy1iYXJlLW1ldGFsCj4gKyMKPiArIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArCj4gK0hPU1RfR0NDX0JBUkVfTUVUQUxfVkVSU0lPTiA9
+ICQoY2FsbCBxc3RyaXAsJChCUjJfUEFDS0FHRV9HQ0NfQkFSRV9NRVRBTF9WRVJTSU9OKSkKPiAr
+aWZlcSAoJChIT1NUX0dDQ19CQVJFX01FVEFMX1ZFUlNJT04pLCkKPiArSE9TVF9HQ0NfQkFSRV9N
+RVRBTF9WRVJTSU9OID0gMTIuMi4wCj4gK2VuZGlmCj4gKwo+ICtIT1NUX0dDQ19CQVJFX01FVEFM
+X1NJVEUgPz0gaHR0cHM6Ly9mdHAuZ251Lm9yZy9nbnUvZ2NjL2djYy0kKEhPU1RfR0NDX0JBUkVf
+TUVUQUxfVkVSU0lPTikKPiArSE9TVF9HQ0NfQkFSRV9NRVRBTF9TT1VSQ0UgPz0gZ2NjLSQoSE9T
+VF9HQ0NfQkFSRV9NRVRBTF9WRVJTSU9OKS50YXIueHoKClVzaW5nICc/PScgaW4gdGhlc2UgdHdv
+IGxpbmVzIHNlZW1zIHVzZWxlc3MsIHlvdSBzaG91bGQgdXNlICc9Jy4KCj4gKwo+ICtIT1NUX0dD
+Q19CQVJFX01FVEFMX0RFUEVOREVOQ0lFUyA9IGhvc3QtYmludXRpbHMtYmFyZS1tZXRhbCBob3N0
+LWdtcCBob3N0LW1wYyBob3N0LW1wZnIgaG9zdC1pc2wKPiArCj4gKyMgaWYgdG9vbGNoYWluIGlz
+IGZvciBtaWNyb2JsYXplZWwteGlsaW54LCBhcHBseSBYaWxpbnggcGF0Y2ggc2V0Cj4gK2lmZXEg
+KCQoQlIyX1BBQ0tBR0VfSE9TVF9UT09MQ0hBSU5fQkFSRV9NRVRBTF9BUkNIKSwibWljcm9ibGF6
+ZWVsLXhpbGlueCIpCj4gK0hPU1RfR0NDX0JBUkVfTUVUQUxfRVhUUkFfRE9XTkxPQURTID0gaHR0
+cHM6Ly9naXRodWIuY29tL1hpbGlueC9tZXRhLXhpbGlueC9hcmNoaXZlL3JlZnMvdGFncy94bG54
+LXJlbC12MjAyMy4xLnRhci5negoKU2FtZSBjb25jZXJucyBhcyB0aG9zZSBJIGV4cHJlc3NlZCBm
+b3IgcGF0Y2ggMS4gU29tZSBvZiB0aGUgZ2NjIHBhdGNoZXMKbG9vayByZWFsbHkgbm90IHdlbGwg
+bWFpbnRhaW5lZCB0b28sIHN1Y2ggYXMgcGF0Y2ggMSBpbnRyb2R1Y2luZyBhbgpvYnZpb3VzIG1p
+c3Rha2UgYW5kIHBhdGNoIDMgZml4aW5nIGl0LCB3aGF0IGFib3V0IHNxdWFzaGluZyB0aGVtPwoK
+PiArZGVmaW5lIEhPU1RfR0NDX0JBUkVfTUVUQUxfRVhUUkFDVF9QQVRDSEVTCj4gKyAgbWtkaXIg
+LXAgJChARCkvcGF0Y2hlcwo+ICsgIHRhciAteGYgJChIT1NUX0dDQ19CQVJFX01FVEFMX0RMX0RJ
+UikveGxueC1yZWwtdjIwMjMuMS50YXIuZ3ogLS1zdHJpcC1jb21wb25lbnRzPTUgLUMgJChARCkv
+cGF0Y2hlcyBtZXRhLXhpbGlueC14bG54LXJlbC12MjAyMy4xL21ldGEtbWljcm9ibGF6ZS9yZWNp
+cGVzLWRldnRvb2xzL2djYy9nY2MtMTIKPiArZW5kZWYKPiArSE9TVF9HQ0NfQkFSRV9NRVRBTF9Q
+T1NUX0VYVFJBQ1RfSE9PS1MgKz0gSE9TVF9HQ0NfQkFSRV9NRVRBTF9FWFRSQUNUX1BBVENIRVMK
+PiArCj4gK2RlZmluZSBIT1NUX0dDQ19CQVJFX01FVEFMX0FQUExZX0xPQ0FMX1BBVENIRVMKPiAr
+ICAgICAgICAkKEFQUExZX1BBVENIRVMpICQoQEQpICQoQEQpL3BhdGNoZXMgKi5wYXRjaDsKPiAr
+ZW5kZWYKPiArSE9TVF9HQ0NfQkFSRV9NRVRBTF9QT1NUX1BBVENIX0hPT0tTICs9IEhPU1RfR0ND
+X0JBUkVfTUVUQUxfQVBQTFlfTE9DQUxfUEFUQ0hFUwo+ICtlbmRpZgo+ICsKPiArIyBnY2MgZG9l
+c24ndCBzdXBwb3J0IGluLXRyZWUgYnVpbGQsIHNvIHdlIGNyZWF0ZSBhICdidWlsZCcKPiArIyBz
+dWJkaXJlY3RvcnkgaW4gdGhlIGdjYyBzb3VyY2VzLCBhbmQgYnVpbGQgZnJvbSB0aGVyZS4KClRo
+aXMgY29tbWVudCBpcyBhY3R1YWxseSBtb3JlIHVzZWZ1bCB0aGFuIHRoZSBvbiBpbiBnY2MubWsg
+ZnJvbSB3aGljaCBJCmd1ZXNzIHlvdSB0b29rIGluc3BpcmF0aW9uLiBUaGFua3MhIFlvdSBtYXkg
+d2FudCB0byByZXBsYWNlIHRoZQpvcmlnaW5hbCBjb21tZW50IGluIGdjYy5tayB3aXRoIHlvdXIg
+dmVyc2lvbi4KCk90aGVyd2lzZSBsb29rcyBnb29kLgoKTHVjYQoKLS0gCkx1Y2EgQ2VyZXNvbGks
+IEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jv
+b3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
