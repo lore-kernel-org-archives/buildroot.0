@@ -4,88 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEB3ECE7A8C
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 07:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E162CE7A88
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 07:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 880D94023D;
-	Sat, 23 Sep 2023 07:23:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 880D94023D
+	by smtp2.osuosl.org (Postfix) with ESMTP id B947741AB4;
+	Sat, 23 Sep 2023 07:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B947741AB4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id xXGnoHr93s5n; Sat, 23 Sep 2023 07:23:09 +0000 (UTC)
+	with ESMTP id H2CMx7xzuvsi; Sat, 23 Sep 2023 07:23:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B409C41AA0;
-	Sat, 23 Sep 2023 07:23:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B409C41AA0
+	by smtp2.osuosl.org (Postfix) with ESMTP id 029E041AB5;
+	Sat, 23 Sep 2023 07:23:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 029E041AB5
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 087171BF3DF
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 07:21:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B6E9F1BF3DF
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 07:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7991282145
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 07:21:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7991282145
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3FACC82143
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 07:21:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FACC82143
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eJOx5tb0WkuT for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 07:21:56 +0000 (UTC)
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 75DF5820F1
- for <buildroot@busybox.net>; Sat, 23 Sep 2023 07:21:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75DF5820F1
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-32008b5e2d2so2392839f8f.0
- for <buildroot@busybox.net>; Sat, 23 Sep 2023 00:21:56 -0700 (PDT)
+ with ESMTP id 6mHPZbbIjxeT for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 07:21:54 +0000 (UTC)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3725F820C3
+ for <buildroot@busybox.net>; Sat, 23 Sep 2023 07:21:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3725F820C3
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-32167a4adaaso3187319f8f.1
+ for <buildroot@busybox.net>; Sat, 23 Sep 2023 00:21:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695453714; x=1696058514;
+ d=1e100.net; s=20230601; t=1695453712; x=1696058512;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=pqnCEj0/W9pZrmdNh4ffI8ppHy2+WizhAMEa82oljk0=;
- b=D4pDqMY9ehHOzrnHqALEvt3c8ZnOyzSCRacbZWzbXqRObc4mmt7cEaVuDLRyr2apZL
- HjZkbTQc4HTgC1Unz2S5JjpQ/yTiaQvqaeMZrhQxxjTAMuR9bOFJl+DQWnVUz2odwF/w
- oR9ZxgW0b4kFSHB6FmgD0aC5XjhoEvH1niX1xiTWrQGiPq4joH/N/YVHd9W2se1UGYAU
- /1D64yg3GxakFKlq7Aih+Kfr/yebXb9S4SMOVYVCqa16l95tHrylQeFfdusdN64zd22C
- hPN2nrrUQd/aasadlDx2RGytNDIYCUwCPexecP637wvbYoaEhlrAJs70fXnPh+V8es+3
- UfIA==
-X-Gm-Message-State: AOJu0YzQe5vRHceW+YuZW7zx+PlLEtQ37ZYkZJeWY1SxYy9A2YF5iSLp
- pmCqijvHZ6xPEVinhuJRzV4efLDdqNs=
-X-Google-Smtp-Source: AGHT+IHUG6io6L7s9k+PTmWb2Z1SbscM5S5TceIM2JtB9UyT6917RiH6aH5uCdAOsAU3ZLr7gSwPHQ==
-X-Received: by 2002:adf:fe4d:0:b0:319:789f:fcda with SMTP id
- m13-20020adffe4d000000b00319789ffcdamr3768419wrs.9.1695453714540; 
- Sat, 23 Sep 2023 00:21:54 -0700 (PDT)
+ bh=0aiaIHJPlE2oMGBninYIxHJfnbp5jlDknbzkHS4mow4=;
+ b=EKqOVAbzqOy6L1Oy05vbkUCAVFDsQZep2xFgGmFXpXAz7h7BY9HqOvXi6O/tLm3Fzj
+ wSLdDJDgw9x8QN+ZZ6IEwP3xZqCZAXvxrLhGLs2bVjiwGdb+vmlN3J3ATRi8wMak4K4F
+ dXU9D6V4984cRuWLJeElOcGkdrl+ksSo9WIK8+0DX4S8TpKoeD4C1u636z9A43Q/CSg8
+ AJhB9Bz3mqfQvb6SvQ25bGqM1zRAyKsHqRMseHm0XVbJOlxalzrGfwKqN77GFQjkzOlt
+ Ccr+eRBF3iPsseaIxdFci1oWLNr/wCx7wx1TpOFZNogVET3K8+1V2FEMSthecTbrT2GA
+ 6I5g==
+X-Gm-Message-State: AOJu0Yxe4W+jiXnMTjAmt5Qrf7t0vl1xn9r3hfpqgsctsE6Fh7FmJa5q
+ 9lfgDR5uDGvj6B21EADkweTM+nhknj8=
+X-Google-Smtp-Source: AGHT+IFrEHTzvpTSBDBXu46TyXqRfaQRnLk/xeBhlUKRw8vSUZF0yVOcld6kYUnROd/dC8lsH0kwEA==
+X-Received: by 2002:a5d:6101:0:b0:321:4df5:b860 with SMTP id
+ v1-20020a5d6101000000b003214df5b860mr1530449wrt.34.1695453712322; 
+ Sat, 23 Sep 2023 00:21:52 -0700 (PDT)
 Received: from vm.. ([93.24.197.12]) by smtp.gmail.com with ESMTPSA id
- d4-20020adffd84000000b0031f34a395e7sm6156999wrr.45.2023.09.23.00.21.53
+ d4-20020adffd84000000b0031f34a395e7sm6156999wrr.45.2023.09.23.00.21.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Sep 2023 00:21:54 -0700 (PDT)
+ Sat, 23 Sep 2023 00:21:52 -0700 (PDT)
 From: Francois Perrad <fperrad@gmail.com>
 X-Google-Original-From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Sat, 23 Sep 2023 09:21:30 +0200
-Message-Id: <20230923072133.3122644-9-francois.perrad@gadz.org>
+Date: Sat, 23 Sep 2023 09:21:27 +0200
+Message-Id: <20230923072133.3122644-6-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230923072133.3122644-1-francois.perrad@gadz.org>
 References: <20230923072133.3122644-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695453714; x=1696058514; darn=busybox.net;
+ d=gmail.com; s=20230601; t=1695453712; x=1696058512; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=pqnCEj0/W9pZrmdNh4ffI8ppHy2+WizhAMEa82oljk0=;
- b=G2cjRxLFJ3rd27HE7rw3lkKin3fFisNt1zQRefp5ssuomMeOr+/zzXgScu6zgA6JqI
- LB4tBy1WfyJwQmn/QCrrGcjIc3WfctnjZP2nniLGiMZURwI6qQcveuaKbxKA3B+SGcVW
- QEwv8PpPgKbSISgP6zIiger1F4Q55R7df21dj/E50lkjMPL7qDU88K1rqLR8M4isybDK
- UYOFpJHh+eTe9FJgoIzFBYkg89RzzgU4wj4pdLoWxAvVSyGjlkPOIEevM/ovUSv2yviJ
- 1CaWdnHJI0OYs7asmhjP71fadrAiLr88oCuh+S04MGIjjTlspdhQ4KpXaw7ZcrN6K5MK
- rOeQ==
+ bh=0aiaIHJPlE2oMGBninYIxHJfnbp5jlDknbzkHS4mow4=;
+ b=DKL6dpBmgC3WFUjRnMqS8pCMUF9/l+AA7+VY4Sv+k5BjrkSBPFD3YdvZYSkiYVrmOl
+ gmyaEzYRQrD7ll1Wcf7Ymac6JgzZVitSMHDnGUm1kiwjJfuC+WR4nlVIiubmvfjcfRZV
+ 6xFij4emRhgTPfp04A2tGj7MxWsbjLgVf3GVUmuK4OTnx8Pt+29ZH+qiMv/+YJX5bDBR
+ keDrXt4Vwkd1+LjTjXnRRjHtWft92khdBZv7EZahkmTv2VLEamaIH+s0hAkkJ9RSQEY2
+ ZkgjtxOpyMJpV8LRtHSOdSypbCS0z+m3QmuoPNCNWyd3QhclyP/ZYwatlLITVv9mtvvM
+ aDcA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=G2cjRxLF
-Subject: [Buildroot] [PATCH v2 09/12] package/perl-plack: bump to version
- 1.0050
+ header.a=rsa-sha256 header.s=20230601 header.b=DKL6dpBm
+Subject: [Buildroot] [PATCH v2 06/12]
+ package/perl-mojolicious-plugin-authentication: bump to version 1.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,42 +103,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 LICENSE: remove trailing spaces
-see https://metacpan.org/release/MIYAGAWA/Plack-1.0050/diff/MIYAGAWA/Plack-1.0048#LICENSE
+see https://metacpan.org/release/JJATRIA/Mojolicious-Plugin-Authentication-1.39/diff/JJATRIA/Mojolicious-Plugin-Authentication-1.37#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-plack/perl-plack.hash | 8 ++++----
- package/perl-plack/perl-plack.mk   | 2 +-
+ .../perl-mojolicious-plugin-authentication.hash           | 8 ++++----
+ .../perl-mojolicious-plugin-authentication.mk             | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-plack/perl-plack.hash b/package/perl-plack/perl-plack.hash
-index c763d2c17..84d65ec52 100644
---- a/package/perl-plack/perl-plack.hash
-+++ b/package/perl-plack/perl-plack.hash
+diff --git a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
+index 34362f5d8..fe39b093c 100644
+--- a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
++++ b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  36282b473b4521219c44a9db437b650f  Plack-1.0048.tar.gz
--sha256  30f5f25e19b437859156a2526f61ca9ab708d50d5730c279189403aabfe542a6  Plack-1.0048.tar.gz
+-md5  c475f2d3962441698b178ad1bd7d2e29  Mojolicious-Plugin-Authentication-1.37.tar.gz
+-sha256  a7ed206725b7b395d4fca12e3f1d923da644d913333ff48ea231e064ecb1abb6  Mojolicious-Plugin-Authentication-1.37.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  0856a900a981769e3d79f0a10ccc3e65  Plack-1.0050.tar.gz
-+sha256  d2651ade82ebbff7abe0a3a189fc932dadc4779186ce89468e56d0189eaa6ed4  Plack-1.0050.tar.gz
++md5  141dd090f6d8470a0d3483dc1f7aaa20  Mojolicious-Plugin-Authentication-1.39.tar.gz
++sha256  9f99cbdf5cacaa3fa3f961bee94de97226d177a36a15e7ba303ae79d132874d1  Mojolicious-Plugin-Authentication-1.39.tar.gz
  
  # computed by scancpan
--sha256  fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d  LICENSE
-+sha256  8a0c0ad4682691b5bc138e553636adfc8bb38f8885c4c44fd421ec8cc69c9a8f  LICENSE
-diff --git a/package/perl-plack/perl-plack.mk b/package/perl-plack/perl-plack.mk
-index b95f204d2..c39c3d8fd 100644
---- a/package/perl-plack/perl-plack.mk
-+++ b/package/perl-plack/perl-plack.mk
+-sha256  37d219684a6c5f8754435fb0dd36a779121e416553fd6a75e22a7545039d1021  LICENSE
++sha256  a2b15d79eaf2f13f756816abfe4d3d3fb4c4c206e7fb1a36abb3e741583aac26  LICENSE
+diff --git a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
+index 57c356eee..1d5e2511f 100644
+--- a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
++++ b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PLACK_VERSION = 1.0048
-+PERL_PLACK_VERSION = 1.0050
- PERL_PLACK_SOURCE = Plack-$(PERL_PLACK_VERSION).tar.gz
- PERL_PLACK_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
- PERL_PLACK_DEPENDENCIES = host-perl-file-sharedir-install
+-PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_VERSION = 1.37
++PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_VERSION = 1.39
+ PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_SOURCE = Mojolicious-Plugin-Authentication-$(PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_VERSION).tar.gz
+ PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JJ/JJATRIA
+ PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_LICENSE = Artistic or GPL-1.0+
 -- 
 2.39.2
 
