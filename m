@@ -1,69 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD5A4CE7A89
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 20:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DE49CE7A88
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 20:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87ED381FE9;
-	Sat, 23 Sep 2023 20:16:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87ED381FE9
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LRv_lFlQfFJE; Sat, 23 Sep 2023 20:16:41 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A871F81FE5;
-	Sat, 23 Sep 2023 20:16:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A871F81FE5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 427391BF292
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:16:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1B4B8409F8
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:16:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B4B8409F8
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDF2641142;
+	Sat, 23 Sep 2023 20:31:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDF2641142
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nVQKwYoQ08LA for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 20:16:37 +0000 (UTC)
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B7889409F3
- for <buildroot@buildroot.org>; Sat, 23 Sep 2023 20:16:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7889409F3
+	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DnFHr0WTDpIV; Sat, 23 Sep 2023 20:31:29 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24911409F8;
+	Sat, 23 Sep 2023 20:31:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24911409F8
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CE751BF292
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:31:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7187F4188F
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:31:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7187F4188F
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id NfEz0heZzU6T for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 20:31:25 +0000 (UTC)
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 49B9A4188C
+ for <buildroot@buildroot.org>; Sat, 23 Sep 2023 20:31:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49B9A4188C
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8b44:b00:bf8d:df06:37bc:41df])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id B1DF7780368;
- Sat, 23 Sep 2023 22:16:32 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id F08E07804FD;
+ Sat, 23 Sep 2023 22:31:18 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 23 Sep 2023 22:16:32 +0200
-Date: Sat, 23 Sep 2023 22:16:32 +0200
+ Sat, 23 Sep 2023 22:31:18 +0200
+Date: Sat, 23 Sep 2023 22:31:18 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20230923201632.GD1469982@scaer>
-References: <20230923183424.907966-1-ju.o@free.fr>
+To: Jens Maus <mail@jens-maus.de>
+Message-ID: <20230923203118.GE1469982@scaer>
+References: <20170608153557.30726-1-mail@jens-maus.de>
+ <20230923165214.4014466-1-mail@jens-maus.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20230923183424.907966-1-ju.o@free.fr>
+In-Reply-To: <20230923165214.4014466-1-mail@jens-maus.de>
 User-Agent: Mutt/1.5.22 (2013-10-16)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1695500194;
- bh=y6CJSJ0oSD4trgzIdrH5QeaUJXBXvRDBPq/Ei3Lo70g=;
+ d=free.fr; s=smtp-20201208; t=1695501082;
+ bh=VWBdgSXEb8fa0KEtthn2dL1ZqQ8HEzKD2tAFBSHGla8=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Eng4fMfLULbgcADWIQrlonIvkWYUlcv3famj8jnxor9Cip5FSmK2XmIMg52AOOsbD
- u06rRxP/92KTWGG+gTg0QcWokA2umO52p05VaBauLLASrvekLQhSiG4U/zjMj+7BEc
- teR+h/cRRzjdTmm/mBz6sm3nt+F1RJdXbLjtbJ2n/fnXBRA2gJfmHBpLLC+0VUlodq
- TYGcq+X1Wb0ld3xiDmSuSHYyoP5Hvb6dv+gZBUemWvaumG1/qLioe2KTFhWRWeBCMi
- yj+qCaM1pckBZXJsNNiz3UwfU33vRvZmoyJcRhx+9UOn52uUKntXSVMkVNqSmTvvsW
- Es5CyU34pT+Og==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=RF6yxtiay+ln7ImsR4JVrnw/HwMBZHujiZ7KGKGzZi0nMYt92Y2e/gIOq30tktTkV
+ wuHPk6IzcxcvTSez45/111LhuAcdkN2ldQtMOVDmn6tdLNIzH9Js11qlb/0Vz11PW+
+ W4GIAeW4GRZDSl5CQxH4IyZ8Jugec7DA8qq3rugxp1n9B8GbKcj5IC8c0yAy7pZJg7
+ GlVw3EKFoQ3+8pEh2eI0MIV53rHpn6vopFX+GIq+IiA+qPIzIX31gqIju3cYxfBEL/
+ mhER8pf17DHr3pM27YLZaKw+6Uisa7JCN2B05+JyU0Vpb8gwtOw38ZtRZ6jKF8vRyO
+ 8208JWD+cIW0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Eng4fMfL
-Subject: Re: [Buildroot] [PATCH 1/1] package/kexec: bump to version 2.0.27
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=RF6yxtia
+Subject: Re: [Buildroot] [PATCH v2] package/nut: package/nut: specify
+ --with-user/group when building NUT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,86 +77,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2023-09-23 20:34 +0200, Julien Olivain spake thusly:
-> For release announce, see:
-> https://lists.infradead.org/pipermail/kexec/2023-August/027830.html
-> 
-> This new version introduced a usage of memfd_create() in [1]. This
-> function was introduced in Kernel 3.17. Therefore, this commit adds
-> this new dependency. This direct use of memfd_create() requires a
-> glibc >= 2.27. As is, this version would no longer work with uclibc-ng
-> or musl libc. This commit also adds a patch to allow compilation with
-> glibc < 2.27, and also uclibc and musl. See the patch commit log for
-> more details.
-> 
-> [1] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=714fa11590febc9cf6fd3c6309374a040a05ebb0
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-[--SNIP--]
-> diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-> index 836d740788..3308d56b8d 100644
-> --- a/package/kexec/Config.in
-> +++ b/package/kexec/Config.in
-> @@ -9,6 +9,7 @@ config BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
->  config BR2_PACKAGE_KEXEC
->  	bool "kexec"
->  	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd_create()
->  	help
->  	  Kexec is a user space utility for loading another kernel
->  	  and asking the currently running kernel to do something with
-> @@ -25,3 +26,6 @@ config BR2_PACKAGE_KEXEC_ZLIB
->  	  Support for compressed kernel images
->  
->  endif
-> +
-> +comment "kexec needs a toolchain w/ headers >= 3.17"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+Jens, All,
 
-You forgot to add the dependency on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS.
+On 2023-09-23 18:52 +0200, Jens Maus via buildroot spake thusly:
+> This commit fixes a problem where the NUT package couldn't be
+> used as a NUT server due to the fact that the default group for
+> nobody is "nogroup" and not "nobody" like the internal default
+> of NUT. Thus, when starting a NUT server daemon the daemon starts
+> with incorrect group permissions. This commit fixes this
+> shortcoming by introducing a dedicated 'nut' user and 'nut' group
+> to drop priviledges to it.
+> 
+> Signed-off-by: Jens Maus <mail@jens-maus.de>
 
-Applied to master with the above fixed, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
-> diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-> index 4e16a53a35..650f0992de 100644
-> --- a/package/kexec/kexec.hash
-> +++ b/package/kexec/kexec.hash
-> @@ -1,4 +1,4 @@
->  # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
-> -sha256  7fe36a064101cd5c515e41b2be393dce3ca88adce59d6ee668e0af7c0c4570cd  kexec-tools-2.0.26.tar.xz
-> +sha256  38d78bcfa33a88928324b57dc81f50c1dfc279eede45e80957ca18f4e84b8187  kexec-tools-2.0.27.tar.xz
->  # locally calculated
->  sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
-> diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-> index 562b09012b..5d30f4884b 100644
-> --- a/package/kexec/kexec.mk
-> +++ b/package/kexec/kexec.mk
-> @@ -4,11 +4,13 @@
->  #
->  ################################################################################
+> ---
+> Changes v1 -> v2:
+>   - added NUT_USERS with nut/nut user and group (Yann)
+> 
+> Signed-off-by: Jens Maus <mail@jens-maus.de>
+> ---
+>  package/nut/nut.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+> index fb98ba04f0..4c322aeb85 100644
+> --- a/package/nut/nut.mk
+> +++ b/package/nut/nut.mk
+> @@ -24,7 +24,9 @@ NUT_POST_PATCH_HOOKS += NUT_FIX_CONFIGURE
+>  NUT_CONF_OPTS = \
+>  	--with-altpidpath=/var/run/upsd \
+>  	--with-dev \
+> -	--without-doc
+> +	--without-doc \
+> +	--with-user=nut \
+> +	--with-group=nut
 >  
-> -KEXEC_VERSION = 2.0.26
-> +KEXEC_VERSION = 2.0.27
->  KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
->  KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
->  KEXEC_LICENSE = GPL-2.0
->  KEXEC_LICENSE_FILES = COPYING
-> +# 0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch
-> +KEXEC_AUTORECONF = YES
->  KEXEC_CPE_ID_PRODUCT = kexec-tools
->  KEXEC_CPE_ID_VENDOR = kexec-tools_project
->  KEXEC_SELINUX_MODULES = kdump
+>  NUT_CONF_ENV = \
+>  	ax_cv_check_cflags__Werror__Wno_unknown_warning_option=no \
+> @@ -34,6 +36,10 @@ NUT_CONF_ENV = \
+>  	ac_cv_func_strncasecmp=yes \
+>  	ax_cv__printf_string_null=yes
+>  
+> +define NUT_USERS
+> +	nut -1 nut -1 * - - - NUT user
+> +endef
+> +
+>  ifeq ($(call qstrip,$(BR2_PACKAGE_NUT_DRIVERS)),)
+>  NUT_CONF_OPTS += --with-drivers=auto
+>  else
 > -- 
-> 2.41.0
+> 2.34.1
 > 
 > _______________________________________________
 > buildroot mailing list
