@@ -4,51 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 846C2CE7A88
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 09:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E578CE7A89
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 09:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2E0E41833;
-	Sat, 23 Sep 2023 09:24:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2E0E41833
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17AD641899;
+	Sat, 23 Sep 2023 09:39:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17AD641899
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qnEJ4wgpRPX3; Sat, 23 Sep 2023 09:24:26 +0000 (UTC)
+	with ESMTP id L7m8pTUYvfBX; Sat, 23 Sep 2023 09:39:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 934F5417E6;
-	Sat, 23 Sep 2023 09:24:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 934F5417E6
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 03F2B1BF834
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 09:24:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CE0E41D71;
+	Sat, 23 Sep 2023 09:39:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CE0E41D71
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A21E1BF834
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 09:39:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CAB8B60FDE
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 09:24:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAB8B60FDE
+ by smtp4.osuosl.org (Postfix) with ESMTP id E683C4189D
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 09:39:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E683C4189D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YWztm_LBWnFA for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 09:24:22 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D985660AAC
- for <buildroot@buildroot.org>; Sat, 23 Sep 2023 09:24:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D985660AAC
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5896C240002;
- Sat, 23 Sep 2023 09:24:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peko@48ers.dk>)
- id 1qjys3-00H69l-Tq; Sat, 23 Sep 2023 11:24:15 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id MOknsv3ZNnWX for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 09:39:05 +0000 (UTC)
+Received: from mail.light-speed.de (mail.light-speed.de
+ [IPv6:2a01:238:43f2:8900:dd04:e3a0:ee11:a73d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5CDD41899
+ for <buildroot@buildroot.org>; Sat, 23 Sep 2023 09:39:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5CDD41899
+Received: from bilbo.fritz.box (ip5f5a8b4a.dynamic.kabel-deutschland.de
+ [95.90.139.74])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mail.light-speed.de (Postfix) with ESMTPSA id 4781A3D42A65;
+ Sat, 23 Sep 2023 11:39:02 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Sat, 23 Sep 2023 11:24:14 +0200
-Message-Id: <20230923092414.4075194-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.30.2
+Date: Sat, 23 Sep 2023 11:39:01 +0200
+Message-Id: <20230923093901.1372593-1-mail@jens-maus.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: [Buildroot] [PATCH] package/libpjsip: security bump to version
- 2.13.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=jens-maus.de; s=mail; t=1695461942;
+ bh=tckRiRwIQqRY9X9jC6gz+n41boTNwXO6+g4qndP3FKU=;
+ h=From:To:Cc:Subject:Date;
+ b=i1ujDf3bJcmZkZeu3NvD+tfTtjJfuDTWuPUO91qH5RZDMI9gqvOR8aShTkWH9PNPD
+ y/tPrZ2B7qBjao7IeoTgnjbVR92jbQylZL4Pqdt/UgSe5nQNfUprEcd14GUrWDk2A+
+ VfJqY4h7lGTM+frfJz8ByYdmWZiRa7DVfyPBHUyI=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=jens-maus.de header.i=@jens-maus.de
+ header.a=rsa-sha256 header.s=mail header.b=i1ujDf3b
+Subject: [Buildroot] [PATCH] package/nodejs: fix parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,231 +69,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+From: Jens Maus via buildroot <buildroot@buildroot.org>
+Reply-To: Jens Maus <mail@jens-maus.de>
+Cc: Martin Bark <martin@barkynet.com>, Daniel Price <daniel.price@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security vulnerability:
+In ninja-based nodejs builds performing parallel builds using "make -jX"
+is not working during buildroot initiated builds because the JOBS
+variable is set in the MAKE_OPTS variables in nodejs.mk. This commit
+remedies the issue by setting JOBS to BR2_JLEVEL and also by fixing the
+top-level Makefile of nodejs due to an incorrect tab-based indentation
+being used. Furthermore, it is important to also set LD_LIBRARY_PATH in
+v8-qemu-wrapper.in to our staging libdirs as otherwise execution of
+build tools fail due to host OS libraries being preferred.
 
-- CVE-2023-27585: Heap buffer overflow when parsing DNS packet
-  https://github.com/pjsip/pjproject/security/advisories/GHSA-q9cp-8wcq-7pfr
-
-Drop now upstreamed security fixes for CVE-2022-23537 and CVE-2022-23547.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jens Maus <mail@jens-maus.de>
 ---
- ...ull-request-from-GHSA-9pfh-r8x4-w26w.patch | 99 -------------------
- ...ull-request-from-GHSA-cxwq-5g9x-x7fr.patch | 54 ----------
- package/libpjsip/libpjsip.hash                |  2 +-
- package/libpjsip/libpjsip.mk                  |  8 +-
- 4 files changed, 2 insertions(+), 161 deletions(-)
- delete mode 100644 package/libpjsip/0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch
- delete mode 100644 package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch
+ ...-fixing-Makefile-for-parallel-builds.patch | 37 +++++++++++++++++++
+ package/nodejs/nodejs.mk                      |  6 ++-
+ package/nodejs/v8-qemu-wrapper.in             |  1 +
+ 3 files changed, 42 insertions(+), 2 deletions(-)
+ create mode 100644 package/nodejs/0005-fixing-Makefile-for-parallel-builds.patch
 
-diff --git a/package/libpjsip/0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch b/package/libpjsip/0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch
-deleted file mode 100644
-index 01e1878189..0000000000
---- a/package/libpjsip/0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch
-+++ /dev/null
-@@ -1,99 +0,0 @@
--From d8440f4d711a654b511f50f79c0445b26f9dd1e1 Mon Sep 17 00:00:00 2001
--From: Nanang Izzuddin <nanang@teluu.com>
--Date: Tue, 20 Dec 2022 11:39:12 +0700
--Subject: [PATCH] Merge pull request from GHSA-9pfh-r8x4-w26w
--
--* Fix buffer overread in STUN message decoder
--
--* Updates based on comments
--
--[Retrieved from:
--https://github.com/pjsip/pjproject/commit/d8440f4d711a654b511f50f79c0445b26f9dd1e1]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- pjnath/include/pjnath/stun_msg.h |  4 ++++
-- pjnath/src/pjnath/stun_msg.c     | 14 +++++++++++---
-- 2 files changed, 15 insertions(+), 3 deletions(-)
--
--diff --git a/pjnath/include/pjnath/stun_msg.h b/pjnath/include/pjnath/stun_msg.h
--index b52f95c586..e49f096f3a 100644
----- a/pjnath/include/pjnath/stun_msg.h
--+++ b/pjnath/include/pjnath/stun_msg.h
--@@ -442,6 +442,7 @@ typedef enum pj_stun_status
-- 
--    \endverbatim
--  */
--+#pragma pack(1)
-- typedef struct pj_stun_msg_hdr
-- {
--     /**
--@@ -473,6 +474,7 @@ typedef struct pj_stun_msg_hdr
--     pj_uint8_t          tsx_id[12];
-- 
-- } pj_stun_msg_hdr;
--+#pragma pack()
-- 
-- 
-- /**
--@@ -490,6 +492,7 @@ typedef struct pj_stun_msg_hdr
-- 
--    \endverbatim
--  */
--+#pragma pack(1)
-- typedef struct pj_stun_attr_hdr
-- {
--     /**
--@@ -506,6 +509,7 @@ typedef struct pj_stun_attr_hdr
--     pj_uint16_t         length;
-- 
-- } pj_stun_attr_hdr;
--+#pragma pack()
-- 
-- 
-- /**
--diff --git a/pjnath/src/pjnath/stun_msg.c b/pjnath/src/pjnath/stun_msg.c
--index 3def6b3eac..e904a0ba47 100644
----- a/pjnath/src/pjnath/stun_msg.c
--+++ b/pjnath/src/pjnath/stun_msg.c
--@@ -746,7 +746,7 @@ PJ_DEF(int) pj_stun_set_padding_char(int chr)
-- 
-- #define INIT_ATTR(a,t,l)    (a)->hdr.type=(pj_uint16_t)(t), \
--                             (a)->hdr.length=(pj_uint16_t)(l)
---#define ATTR_HDR_LEN        4
--+#define ATTR_HDR_LEN        sizeof(pj_stun_attr_hdr)
-- 
-- static pj_uint16_t GETVAL16H(const pj_uint8_t *buf, unsigned pos)
-- {
--@@ -2327,6 +2327,14 @@ PJ_DEF(pj_status_t) pj_stun_msg_decode(pj_pool_t *pool,
--         status = pj_stun_msg_check(pdu, pdu_len, options);
--         if (status != PJ_SUCCESS)
--             return status;
--+    } else {
--+        /* For safety, verify packet length at least */
--+        pj_uint32_t msg_len = GETVAL16H(pdu, 2) + 20;
--+        if (msg_len > pdu_len ||
--+            ((options & PJ_STUN_IS_DATAGRAM) && msg_len != pdu_len))
--+        {
--+            return PJNATH_EINSTUNMSGLEN;
--+        }
--     }
-- 
--     /* Create the message, copy the header, and convert to host byte order */
--@@ -2345,7 +2353,7 @@ PJ_DEF(pj_status_t) pj_stun_msg_decode(pj_pool_t *pool,
--         p_response = NULL;
-- 
--     /* Parse attributes */
---    while (pdu_len >= 4) {
--+    while (pdu_len >= ATTR_HDR_LEN) {
--         unsigned attr_type, attr_val_len;
--         const struct attr_desc *adesc;
-- 
--@@ -2357,7 +2365,7 @@ PJ_DEF(pj_status_t) pj_stun_msg_decode(pj_pool_t *pool,
--         attr_val_len = (attr_val_len + 3) & (~3);
-- 
--         /* Check length */
---        if (pdu_len < attr_val_len) {
--+        if (pdu_len < attr_val_len + ATTR_HDR_LEN) {
--             pj_str_t err_msg;
--             char err_msg_buf[80];
-- 
-diff --git a/package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch b/package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch
-deleted file mode 100644
-index 82249a2076..0000000000
---- a/package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From bc4812d31a67d5e2f973fbfaf950d6118226cf36 Mon Sep 17 00:00:00 2001
--From: sauwming <ming@teluu.com>
--Date: Fri, 23 Dec 2022 15:05:28 +0800
--Subject: [PATCH] Merge pull request from GHSA-cxwq-5g9x-x7fr
--
--* Fixed heap buffer overflow when parsing STUN errcode attribute
--
--* Also fixed uint parsing
--
--[Retrieved from:
--https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- pjnath/src/pjnath/stun_msg.c | 11 ++++++-----
-- 1 file changed, 6 insertions(+), 5 deletions(-)
--
--diff --git a/pjnath/src/pjnath/stun_msg.c b/pjnath/src/pjnath/stun_msg.c
--index c6b0bdd284..b55d29849a 100644
----- a/pjnath/src/pjnath/stun_msg.c
--+++ b/pjnath/src/pjnath/stun_msg.c
--@@ -1438,12 +1438,12 @@ static pj_status_t decode_uint_attr(pj_pool_t *pool,
--     attr = PJ_POOL_ZALLOC_T(pool, pj_stun_uint_attr);
--     GETATTRHDR(buf, &attr->hdr);
-- 
---    attr->value = GETVAL32H(buf, 4);
---
--     /* Check that the attribute length is valid */
--     if (attr->hdr.length != 4)
--         return PJNATH_ESTUNINATTRLEN;
-- 
--+    attr->value = GETVAL32H(buf, 4);
--+
--     /* Done */
--     *p_attr = attr;
-- 
--@@ -1757,14 +1757,15 @@ static pj_status_t decode_errcode_attr(pj_pool_t *pool,
--     attr = PJ_POOL_ZALLOC_T(pool, pj_stun_errcode_attr);
--     GETATTRHDR(buf, &attr->hdr);
-- 
--+    /* Check that the attribute length is valid */
--+    if (attr->hdr.length < 4)
--+        return PJNATH_ESTUNINATTRLEN;
--+
--     attr->err_code = buf[6] * 100 + buf[7];
-- 
--     /* Get pointer to the string in the message */
--     value.ptr = ((char*)buf + ATTR_HDR_LEN + 4);
--     value.slen = attr->hdr.length - 4;
---    /* Make sure the length is never negative */
---    if (value.slen < 0)
---        value.slen = 0;
-- 
--     /* Copy the string to the attribute */
--     pj_strdup(pool, &attr->reason, &value);
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index 9935575567..2edd97bed4 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4178bb9f586299111463fc16ea04e461adca4a73e646f8ddef61ea53dafa92d9  pjproject-2.13.tar.gz
-+sha256  32a5ab5bfbb9752cb6a46627e4c410e61939c8dbbd833ac858473cfbd9fb9d7d  pjproject-2.13.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 24db641446..f97d547fd7 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nodejs/0005-fixing-Makefile-for-parallel-builds.patch b/package/nodejs/0005-fixing-Makefile-for-parallel-builds.patch
+new file mode 100644
+index 0000000000..73db129979
+--- /dev/null
++++ b/package/nodejs/0005-fixing-Makefile-for-parallel-builds.patch
+@@ -0,0 +1,37 @@
++From 1c4582c7dd7c80fbac89031d8fa8cf418249d01e Mon Sep 17 00:00:00 2001
++From: Jens Maus <mail@jens-maus.de>
++Date: Sat, 23 Sep 2023 11:09:50 +0200
++Subject: [PATCH] fixing Makefile for parallel builds
++
++This change fixing incorrect GNU makefile indentation in the top-level
++Makefile which causes issues with parallel "make -jXX" builds.
++
++Upstream: N/A (specific to buildroot builds)
++Signed-off-by: Jens Maus <mail@jens-maus.de>
++---
++ Makefile | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index b7871bf218..87c47bcc0b 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -138,12 +138,12 @@ else
++ ifeq ($(BUILD_WITH), ninja)
++ NINJA ?= ninja
++ ifeq ($(V),1)
++-	NINJA_ARGS := $(NINJA_ARGS) -v
+++NINJA_ARGS := $(NINJA_ARGS) -v
++ endif
++ ifdef JOBS
++-	NINJA_ARGS := $(NINJA_ARGS) -j$(JOBS)
+++NINJA_ARGS := $(NINJA_ARGS) -j$(JOBS)
++ else
++-	NINJA_ARGS := $(NINJA_ARGS) $(filter -j%,$(MAKEFLAGS))
+++NINJA_ARGS := $(NINJA_ARGS) $(filter -j%,$(MAKEFLAGS))
++ endif
++ $(NODE_EXE): config.gypi out/Release/build.ninja
++ 	$(NINJA) -C out/Release $(NINJA_ARGS)
++-- 
++2.34.1
++
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index fe629ada21..4e70bd71a3 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -46,14 +46,16 @@ HOST_NODEJS_MAKE_OPTS = \
+ 	CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
+ 	LDFLAGS.host="$(HOST_LDFLAGS)" \
+ 	NO_LOAD=cctest.target.mk \
+-	PATH=$(@D)/bin:$(BR_PATH)
++	PATH=$(@D)/bin:$(BR_PATH) \
++	JOBS=$(BR2_JLEVEL)
  
--LIBPJSIP_VERSION = 2.13
-+LIBPJSIP_VERSION = 2.13.1
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
- LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+ NODEJS_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	NO_LOAD=cctest.target.mk \
+ 	PATH=$(@D)/bin:$(BR_PATH) \
+ 	LDFLAGS="$(NODEJS_LDFLAGS)" \
+-	LD="$(TARGET_CXX)"
++	LD="$(TARGET_CXX)" \
++	JOBS=$(BR2_JLEVEL)
  
-@@ -15,12 +15,6 @@ LIBPJSIP_CPE_ID_PRODUCT = pjsip
- LIBPJSIP_INSTALL_STAGING = YES
- LIBPJSIP_MAKE = $(MAKE1)
+ # nodejs's build system uses python which can be a symlink to an unsupported
+ # python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
+diff --git a/package/nodejs/v8-qemu-wrapper.in b/package/nodejs/v8-qemu-wrapper.in
+index e1083f47f7..48222d089b 100644
+--- a/package/nodejs/v8-qemu-wrapper.in
++++ b/package/nodejs/v8-qemu-wrapper.in
+@@ -5,5 +5,6 @@
+ exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
+     @QEMU_USERMODE_ARGS@ \
+    -L "${STAGING_DIR}/" \
++   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
+     "$@"
  
--# 0001-Merge-pull-request-from-GHSA-9pfh-r8x4-w26w.patch
--LIBPJSIP_IGNORE_CVES += CVE-2022-23537
--
--# 0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch
--LIBPJSIP_IGNORE_CVES += CVE-2022-23547
--
- LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
- 
- # relocation truncated to fit: R_68K_GOT16O
 -- 
-2.30.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
