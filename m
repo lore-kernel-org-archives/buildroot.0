@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 172A8CE7A88
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 22:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D03DCE7A88
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 22:32:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94858414D5;
-	Sat, 23 Sep 2023 22:29:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94858414D5
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1789E414D6;
+	Sat, 23 Sep 2023 22:32:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1789E414D6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id s2qsiwILmR7f; Sat, 23 Sep 2023 22:29:52 +0000 (UTC)
+	with ESMTP id ajT1nKjSQNsD; Sat, 23 Sep 2023 22:32:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D349040298;
-	Sat, 23 Sep 2023 22:29:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D349040298
+	by smtp2.osuosl.org (Postfix) with ESMTP id 602DC40298;
+	Sat, 23 Sep 2023 22:32:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 602DC40298
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB45F1BF86C
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:29:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0667A1BF86C
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:32:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 92CB640611
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:29:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92CB640611
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7D174188E
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:32:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7D174188E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pHNKSI4pkvxW for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 22:29:49 +0000 (UTC)
+ with ESMTP id n5i04jm1dWDf for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 22:32:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 764D240570
- for <buildroot@uclibc.org>; Sat, 23 Sep 2023 22:29:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 764D240570
+ by smtp4.osuosl.org (Postfix) with ESMTP id C53234188C
+ for <buildroot@uclibc.org>; Sat, 23 Sep 2023 22:32:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C53234188C
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 6278987333; Sat, 23 Sep 2023 22:29:49 +0000 (UTC)
+ id A9259872F6; Sat, 23 Sep 2023 22:32:30 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 23 Sep 2023 22:29:49 +0000
+Date: Sat, 23 Sep 2023 22:32:30 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
@@ -57,12 +57,12 @@ X-Bugzilla-Flags:
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
  target_milestone
-Message-ID: <bug-15787-163@https.bugs.busybox.net/>
+Message-ID: <bug-15790-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15787] New: atmel_sama5d3_xplained_mmc_defconfig:
- Missing http://sources.buildroot.net/mpc-1.2.1.tar.gz
+Subject: [Buildroot] [Bug 15790] New: at91sam9x5ek_dev_defconfig: Missing
+ http://sources.buildroot.net/gettext-tiny-0.3.2.tar.gz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,11 +79,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15787
+https://bugs.busybox.net/show_bug.cgi?id=15790
 
-            Bug ID: 15787
-           Summary: atmel_sama5d3_xplained_mmc_defconfig: Missing
-                    http://sources.buildroot.net/mpc-1.2.1.tar.gz
+            Bug ID: 15790
+           Summary: at91sam9x5ek_dev_defconfig: Missing
+                    http://sources.buildroot.net/gettext-tiny-0.3.2.tar.gz
            Product: buildroot
            Version: unspecified
           Hardware: All
@@ -97,12 +97,9 @@ https://bugs.busybox.net/show_bug.cgi?id=15787
                 CC: buildroot@uclibc.org
   Target Milestone: ---
 
-Hi!
-
-Using the atmel_sama5d3_xplained_mmc_defconfig configuration, it is complaining
-about a missing MPC source package as of
-ab4f3fafaa839593b3efd9ea12c8ee5d9340cdeb, see
-http://toolchain.lug-owl.de/laminar/jobs/buildroot-atmel_sama5d3_xplained_mmc_defconfig/6
+Building the at91sam9x5ek_dev_defconfig fails (as of
+ab4f3fafaa839593b3efd9ea12c8ee5d9340cdeb) due to a missing gettext-tiny, see
+http://toolchain.lug-owl.de/laminar/jobs/buildroot-at91sam9x5ek_dev_defconfig/6
 
 -- 
 You are receiving this mail because:
