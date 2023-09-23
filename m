@@ -4,68 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A19CE7A89
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 19:27:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA279CE7A88
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 20:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9AE280E75;
-	Sat, 23 Sep 2023 19:27:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9AE280E75
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43A1881EE9;
+	Sat, 23 Sep 2023 20:15:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43A1881EE9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id PR3Ee6CBW9zM; Sat, 23 Sep 2023 19:27:43 +0000 (UTC)
+	with ESMTP id Y7w-ti5hcR7W; Sat, 23 Sep 2023 20:15:52 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E032381518;
-	Sat, 23 Sep 2023 19:27:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E032381518
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E00F81F46;
+	Sat, 23 Sep 2023 20:15:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E00F81F46
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 44EDE1BF35C
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 19:27:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BF7DB1BF292
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25AF041898
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 19:27:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25AF041898
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4E20408C4
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:15:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4E20408C4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gvhXKWttRnIl for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 19:27:39 +0000 (UTC)
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4B4C3417D2
- for <buildroot@buildroot.org>; Sat, 23 Sep 2023 19:27:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B4C3417D2
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 6E91A5FFA3;
- Sat, 23 Sep 2023 21:27:34 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:55568])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 23 Sep 2023 21:27:34 +0200
-MIME-Version: 1.0
-Date: Sat, 23 Sep 2023 21:27:34 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Yu Chien Peter Lin <peterlin@andestech.com>
-In-Reply-To: <20230923153522.1903628-1-peterlin@andestech.com>
-References: <20230923153522.1903628-1-peterlin@andestech.com>
-User-Agent: Webmail Free/1.6.1
-Message-ID: <27236247f795d4836c8c041835c6899e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1695497255;
- bh=R0rfXA2YcEIxydWjwcAltTMsnlQU4Sq4cwUtZSFllDg=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=piR7o5HyYI+6gba+812wtVnmDx6haHH4D1WYAQqVfwcNoGIMgrTY5fr42bSx3d1C7
- NHJidYXIu7Hp0h7QLcoaozJp2C4M7+mi1TY8Vip634H8LijluxEMOZIZ5/0i1Ohh+R
- BQkKtWMg1pQoCCaofSRkRulh+N/SSOooEP4lb/+9YrqtNKV8HMgXQiIxd5d2fttnoa
- OmynSZX+butLvJHldgLXhr1j8jrhStRO0rfeaXV7KTuWFnp+akfhRNa9VAoYkr547C
- LWSdjvsU2L9AX/TrB0VTErWvchORR9NxPjuHa1jha6kcor3PhqfThhBRE5mWzL3gcF
- qXFvYAa30KQpw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=piR7o5Hy
-Subject: Re: [Buildroot] [PATCH] package/openblas: Add support for RISC-V
- architecture
+ with ESMTP id fS8biCCOdoJO for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 20:15:48 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0E1F408B9
+ for <buildroot@buildroot.org>; Sat, 23 Sep 2023 20:15:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0E1F408B9
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D1F7C8718C; Sat, 23 Sep 2023 20:15:47 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 23 Sep 2023 22:11:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 20c023a3b1363f914a18652a79f83648af2cf1e6
+X-Git-Newrev: 719921bebe1704f5b88b7419bac1fb1105c0c151
+X-Patchwork-Hint: ignore
+Message-Id: <20230923201547.D1F7C8718C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kexec: bump to version 2.0.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,164 +56,206 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yu Chien Peter Lin <peterlin@andestech.com>, buildroot@buildroot.org
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yu,
+commit: https://git.buildroot.net/buildroot/commit/?id=719921bebe1704f5b88b7419bac1fb1105c0c151
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the patch!
+For release announce, see:
+https://lists.infradead.org/pipermail/kexec/2023-August/027830.html
 
-On 23/09/2023 17:35, Yu Chien Peter Lin wrote:
-> The current version of OpenBLAS (v0.3.24) supports the
-> RV64 architecture. With this update, we can install
-> the library and packages such as GNU Octave on RISC-V
-> platforms.
+This new version introduced a usage of memfd_create() in [1]. This
+function was introduced in Kernel 3.17. Therefore, this commit adds
+this new dependency. This direct use of memfd_create() requires a
+glibc >= 2.27. As is, this version would no longer work with uclibc-ng
+or musl libc. This commit also adds a patch to allow compilation with
+glibc < 2.27, and also uclibc and musl. See the patch commit log for
+more details.
 
-I think it would be better to record in the commit log when the RISC-V
-support was added. For example:
+[1] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=714fa11590febc9cf6fd3c6309374a040a05ebb0
 
-OpenBLAS RISC-V 64bit support was added in [1] and was renamed to
-"RISCV64_GENERIC" in [2]. Those commits were first included in
-OpenBLAS release v0.3.13. This support can now be enabled. With this
-commit, we can install the library and packages such as GNU Octave on
-RISC-V platforms.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+[yann.morin.1998@free.fr: add arch dependency to comment]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...de-a-memfd_create-wrapper-if-not-present-.patch | 113 +++++++++++++++++++++
+ package/kexec/Config.in                            |   5 +
+ package/kexec/kexec.hash                           |   2 +-
+ package/kexec/kexec.mk                             |   4 +-
+ 4 files changed, 122 insertions(+), 2 deletions(-)
 
-[1] 
-https://github.com/OpenMathLib/OpenBLAS/commit/c167a3d6f41ed2f5680c2a72846b4c9b5d416543
-[2] 
-https://github.com/OpenMathLib/OpenBLAS/commit/265ab484c89d10dfff2d5df678221918d7a880e3
-
-If you can, please send a v2 updated patch.
-
-> This patch also adjusts the alignment for adding
-> "RISCV64_GENERIC" in Config.in.
-
-I also successfully tested this patch on branch master at
-commit 20c023a, by adding in qemu_riscv64_virt_defconfig a Bootlin
-toolchain and OpenBLAS with its tests. So you can also add:
-
-Reviewed-by: Julien Olivain <ju.o@free.fr>
-Tested-by: Julien Olivain <ju.o@free.fr>
-
-> Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
-> ---
->  package/openblas/Config.in | 73 +++++++++++++++++++-------------------
->  1 file changed, 37 insertions(+), 36 deletions(-)
-> 
-> diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-> index 58976e657a..26a76d29fb 100644
-> --- a/package/openblas/Config.in
-> +++ b/package/openblas/Config.in
-> @@ -1,55 +1,56 @@
->  config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
->  	string
-> -	default "P2"           if BR2_x86_pentium2
-> -	default "KATMAI"       if BR2_x86_pentium3
-> -	default "NORTHWOOD"    if BR2_x86_pentium4
-> -	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
-> -	default "BANIAS"       if BR2_x86_pentium_m
-> -	default "CORE2"        if BR2_x86_core2
-> -	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont || 
-> BR2_x86_westmere
-> -	default "SANDYBRIDGE"  if BR2_x86_corei7_avx
-> -	default "HASWELL"      if BR2_x86_core_avx2
-> -	default "ATOM"         if BR2_x86_atom
-> -	default "ATHLON"       if BR2_x86_athlon || BR2_x86_athlon_4
-> -	default "OPTERON"      if BR2_x86_opteron
-> -	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
-> -	default "BARCELONA"    if BR2_x86_barcelona
-> -	default "BOBCAT"       if BR2_x86_jaguar
-> -	default "STEAMROLLER"  if BR2_x86_steamroller
-> -	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
-> -	default "POWER4"       if BR2_powerpc_power4
-> -	default "POWER5"       if BR2_powerpc_power5
-> -	default "POWER6"       if BR2_powerpc_power6
-> -	default "POWER7"       if BR2_powerpc_power7
-> -	default "POWER8"       if BR2_powerpc_power8
-> -	default "PPCG4"        if BR2_powerpc_7400 || BR2_powerpc_7450
-> -	default "PPC970"       if BR2_powerpc_970
-> -	default "PPC440"       if BR2_powerpc_440
-> -	default "PPC440FP2"    if BR2_powerpc_440fp
-> +	default "P2"              if BR2_x86_pentium2
-> +	default "KATMAI"          if BR2_x86_pentium3
-> +	default "NORTHWOOD"       if BR2_x86_pentium4
-> +	default "PRESCOTT"        if BR2_x86_prescott || BR2_x86_nocona
-> +	default "BANIAS"          if BR2_x86_pentium_m
-> +	default "CORE2"           if BR2_x86_core2
-> +	default "NEHALEM"         if BR2_x86_corei7 || BR2_x86_silvermont || 
-> BR2_x86_westmere
-> +	default "SANDYBRIDGE"     if BR2_x86_corei7_avx
-> +	default "HASWELL"         if BR2_x86_core_avx2
-> +	default "ATOM"            if BR2_x86_atom
-> +	default "ATHLON"          if BR2_x86_athlon || BR2_x86_athlon_4
-> +	default "OPTERON"         if BR2_x86_opteron
-> +	default "OPTERON_SSE3"    if BR2_x86_opteron_sse3
-> +	default "BARCELONA"       if BR2_x86_barcelona
-> +	default "BOBCAT"          if BR2_x86_jaguar
-> +	default "STEAMROLLER"     if BR2_x86_steamroller
-> +	default "VIAC3"           if BR2_x86_c3 || BR2_x86_c32
-> +	default "POWER4"          if BR2_powerpc_power4
-> +	default "POWER5"          if BR2_powerpc_power5
-> +	default "POWER6"          if BR2_powerpc_power6
-> +	default "POWER7"          if BR2_powerpc_power7
-> +	default "POWER8"          if BR2_powerpc_power8
-> +	default "PPCG4"           if BR2_powerpc_7400 || BR2_powerpc_7450
-> +	default "PPC970"          if BR2_powerpc_970
-> +	default "PPC440"          if BR2_powerpc_440
-> +	default "PPC440FP2"       if BR2_powerpc_440fp
->  	# P5600 is built with MSA support which is only available in 
-> Codescape toolchains
-> -	default "P5600"        if BR2_mips_p5600 && 
-> BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
-> -	default "SICORTEX"     if BR2_MIPS_CPU_MIPS64
-> +	default "P5600"           if BR2_mips_p5600 && 
-> BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
-> +	default "SICORTEX"        if BR2_MIPS_CPU_MIPS64
->  	# I6400 is built with MSA support which is only available in 
-> Codescape toolchains
-> -	default "I6400"        if BR2_mips_i6400 && 
-> BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
-> +	default "I6400"           if BR2_mips_i6400 && 
-> BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
->  	# OpenBLAS assumes SPARC=Sparc v9
-> -	default "SPARC"        if BR2_sparc_v9
-> +	default "SPARC"           if BR2_sparc_v9
->  	# Cortex-A15 always have a VFPv4
-> -	default "CORTEXA15"    if (BR2_cortex_a15 && BR2_ARM_EABIHF)
-> +	default "CORTEXA15"       if (BR2_cortex_a15 && BR2_ARM_EABIHF)
->  	# Cortex-A9 have an optional VFPv3, so we need to make sure it
->  	# is available
-> -	default "CORTEXA9"     if (BR2_cortex_a9 && BR2_ARM_EABIHF && \
-> +	default "CORTEXA9"        if (BR2_cortex_a9 && BR2_ARM_EABIHF && \
->  				   BR2_ARM_CPU_HAS_VFPV3)
-> -	default "ARMV5"        if BR2_ARM_CPU_ARMV5
-> +	default "ARMV5"           if BR2_ARM_CPU_ARMV5
->  	# On ARMv6, OpenBLAS assumes that a VFP is available, and
->  	# EABIhf is used
-> -	default "ARMV6"        if (BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && \
-> +	default "ARMV6"           if (BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && 
-> \
->  				   BR2_ARM_CPU_HAS_VFPV2)
->  	# On ARMv7, OpenBLAS assumes that a full VFPv3+ is available
->  	# (and not the more limited D16 variant), and that EABIhf is
->  	# used.
-> -	default "ARMV7"        if (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && \
-> +	default "ARMV7"           if (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && 
-> \
->  				   BR2_ARM_CPU_HAS_VFPV3)
-> -	default "ARMV8"        if BR2_aarch64 || BR2_aarch64_be
-> +	default "ARMV8"           if BR2_aarch64 || BR2_aarch64_be
-> +	default "RISCV64_GENERIC" if BR2_RISCV_64
->  	help
->  	  OpenBLAS target CPU. See TargetList.txt in the source tree for
->  	  the possible target strings. A possible value is set
-
-Best regards,
-
-Julien.
+diff --git a/package/kexec/0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch b/package/kexec/0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch
+new file mode 100644
+index 0000000000..649ec56042
+--- /dev/null
++++ b/package/kexec/0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch
+@@ -0,0 +1,113 @@
++From 417382aecd6964f97a0a0774a5cccd29c1b9edb3 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Sat, 23 Sep 2023 13:09:23 +0200
++Subject: [PATCH] kexec: provide a memfd_create() wrapper if not present in
++ libc
++
++Commit 714fa115 "kexec/arm64: Simplify the code for zImage" introduced
++a use of the memfd_create() system call, included in version
++kexec-tools v2.0.27.
++
++This system call was introduced in kernel commit [1], first included
++in kernel v3.17 (released on 2014-10-05).
++
++The memfd_create() glibc wrapper function was added much later in
++commit [2], first included in glibc version 2.27 (released on
++2018-02-01).
++
++This direct use memfd_create() introduced a requirement on
++Kernel >= 3.17 and glibc >= 2.27.
++
++There is old toolchains like [3] for example (which ships gcc 7.3.1,
++glibc 2.25 and includes kernel v4.10 headers), that can still be used
++to build newer kernels. Even if such toolchains can be seen as
++outdated, they are is still claimed as supported by recent kernel.
++For example, Kernel v6.5.5 has a requirement on gcc version 5.1 and
++greater. See [4].
++
++Moreover, kexec-tools <= 2.0.26 could be compiled using recent
++toolchains with alternative libc (e.g. uclibc-ng, musl) which are not
++providing the memfd_create() wrapper.
++
++When compiling kexec-tools v2.0.27 with a toolchain not providing the
++memfd_create() syscall wrapper, the compilation fail with message:
++
++    kexec/kexec.c: In function 'copybuf_memfd':
++    kexec/kexec.c:645:7: warning: implicit declaration of function 'memfd_create'; did you mean 'SYS_memfd_create'? [-Wimplicit-function-declaration]
++      fd = memfd_create("kernel", MFD_ALLOW_SEALING);
++           ^~~~~~~~~~~~
++           SYS_memfd_create
++    kexec/kexec.c:645:30: error: 'MFD_ALLOW_SEALING' undeclared (first use in this function); did you mean '_PC_ALLOC_SIZE_MIN'?
++      fd = memfd_create("kernel", MFD_ALLOW_SEALING);
++                                  ^~~~~~~~~~~~~~~~~
++                                  _PC_ALLOC_SIZE_MIN
++
++In order to let kexec-tools compile in a wider range of configurations,
++this commit adds a memfd_create() function check in autoconf configure
++script, and adds a system call wrapper which will be used if the
++function is not available. With this commit, the environment
++requirement is relaxed to only kernel >= v3.17.
++
++Note: this issue was found in kexec-tools integration in Buildroot [5]
++using the command "utils/test-pkg -a -p kexec", which tests many
++toolchain/arch combinations.
++
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=9183df25fe7b194563db3fec6dc3202a5855839c
++[2] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=59d2cbb1fe4b8601d5cbd359c3806973eab6c62d
++[3] https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05/aarch64-linux-gnu/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu.tar.xz
++[4] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/process/changes.rst?h=v6.5.5#n32
++[5] https://buildroot.org/
++
++Upstream: https://lists.infradead.org/pipermail/kexec/2023-September/028168.html
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ configure.ac  |  3 +++
++ kexec/kexec.c | 11 +++++++++++
++ 2 files changed, 14 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 192976c..212ef2c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -208,6 +208,9 @@ if test "$ac_cv_lib_xenctrl_xc_kexec_load" = yes ; then
++ 		AC_MSG_NOTICE([The kexec_status call is not available]))
++ fi
++ 
+++dnl Check if libc has the memfd_create() syscall wrapper
+++AC_CHECK_FUNCS([memfd_create])
+++
++ dnl ---Sanity checks
++ if test "$CC"      = "no"; then AC_MSG_ERROR([cc not found]); fi
++ if test "$CPP"     = "no"; then AC_MSG_ERROR([cpp not found]); fi
++diff --git a/kexec/kexec.c b/kexec/kexec.c
++index c3b182e..c44c4b7 100644
++--- a/kexec/kexec.c
+++++ b/kexec/kexec.c
++@@ -31,6 +31,10 @@
++ #include <sys/mount.h>
++ #include <sys/types.h>
++ #include <sys/stat.h>
+++#ifndef HAVE_MEMFD_CREATE
+++#include <linux/memfd.h>
+++#include <sys/syscall.h>
+++#endif
++ #include <sys/reboot.h>
++ #include <sys/mman.h>
++ #include <unistd.h>
++@@ -638,6 +642,13 @@ char *slurp_decompress_file(const char *filename, off_t *r_size)
++ 	return kernel_buf;
++ }
++ 
+++#ifndef HAVE_MEMFD_CREATE
+++static int memfd_create(const char *name, unsigned int flags)
+++{
+++	return syscall(SYS_memfd_create, name, flags);
+++}
+++#endif
+++
++ static int copybuf_memfd(const char *kernel_buf, size_t size)
++ {
++ 	int fd, count;
++-- 
++2.41.0
++
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index 836d740788..707f8663a4 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
+ config BR2_PACKAGE_KEXEC
+ 	bool "kexec"
+ 	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd_create()
+ 	help
+ 	  Kexec is a user space utility for loading another kernel
+ 	  and asking the currently running kernel to do something with
+@@ -25,3 +26,7 @@ config BR2_PACKAGE_KEXEC_ZLIB
+ 	  Support for compressed kernel images
+ 
+ endif
++
++comment "kexec needs a toolchain w/ headers >= 3.17"
++	depends on BR2_PACKAGE_KEXEC_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index 4e16a53a35..650f0992de 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256  7fe36a064101cd5c515e41b2be393dce3ca88adce59d6ee668e0af7c0c4570cd  kexec-tools-2.0.26.tar.xz
++sha256  38d78bcfa33a88928324b57dc81f50c1dfc279eede45e80957ca18f4e84b8187  kexec-tools-2.0.27.tar.xz
+ # locally calculated
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 562b09012b..5d30f4884b 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
+ 
+-KEXEC_VERSION = 2.0.26
++KEXEC_VERSION = 2.0.27
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
+ KEXEC_LICENSE_FILES = COPYING
++# 0002-kexec-provide-a-memfd_create-wrapper-if-not-present-.patch
++KEXEC_AUTORECONF = YES
+ KEXEC_CPE_ID_PRODUCT = kexec-tools
+ KEXEC_CPE_ID_VENDOR = kexec-tools_project
+ KEXEC_SELINUX_MODULES = kdump
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
