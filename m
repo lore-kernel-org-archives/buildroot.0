@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1971CE7A89
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 22:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D43CE7A88
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 22:49:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A0B081EE9;
-	Sat, 23 Sep 2023 22:45:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A0B081EE9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F35B81FE2;
+	Sat, 23 Sep 2023 22:49:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F35B81FE2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id spP52-rSC0MW; Sat, 23 Sep 2023 22:45:36 +0000 (UTC)
+	with ESMTP id jyr9nP8uZkLA; Sat, 23 Sep 2023 22:49:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9714881EFA;
-	Sat, 23 Sep 2023 22:45:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9714881EFA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B17D81FDE;
+	Sat, 23 Sep 2023 22:48:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B17D81FDE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A2181BF86C
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:45:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 318E81BF86C
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 79956417B6
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:45:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79956417B6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 09930416E7
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 22:48:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09930416E7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id runZMw6QWk5e for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 22:45:32 +0000 (UTC)
+ with ESMTP id PlKxRiEoa38t for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 22:48:57 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E27C41751
- for <buildroot@uclibc.org>; Sat, 23 Sep 2023 22:45:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E27C41751
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1A49416CE
+ for <buildroot@uclibc.org>; Sat, 23 Sep 2023 22:48:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1A49416CE
 Received: by busybox.osuosl.org (Postfix, from userid 81)
- id EC636872F6; Sat, 23 Sep 2023 22:45:31 +0000 (UTC)
+ id CDAEE872F6; Sat, 23 Sep 2023 22:48:56 +0000 (UTC)
 From: bugzilla@busybox.net
 To: buildroot@uclibc.org
-Date: Sat, 23 Sep 2023 22:45:31 +0000
+Date: Sat, 23 Sep 2023 22:48:56 +0000
 X-Bugzilla-Reason: CC
 X-Bugzilla-Type: new
 X-Bugzilla-Watch-Reason: None
@@ -57,14 +57,12 @@ X-Bugzilla-Flags:
 X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
  op_sys bug_status bug_severity priority component assigned_to reporter cc
  target_milestone
-Message-ID: <bug-15799-163@https.bugs.busybox.net/>
+Message-ID: <bug-15802-163@https.bugs.busybox.net/>
 X-Bugzilla-URL: https://bugs.busybox.net/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Subject: [Buildroot] [Bug 15799] New: freescale_imx8mmevk_defconfig,
- freescale_imx8mnevk_defconfig, freescale_imx8mpevk_defconfig,
- freescale_imx8mqevk_defconfig: error: array subscript 0 is outside array
- bounds of 'uint32_t[0]'
+Subject: [Buildroot] [Bug 15802] New: freescale_imx8qmmek_defconfig,
+ freescale_imx8qxpmek_defconfig: Segment flags problem
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,14 +79,11 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=15799
+https://bugs.busybox.net/show_bug.cgi?id=15802
 
-            Bug ID: 15799
-           Summary: freescale_imx8mmevk_defconfig,
-                    freescale_imx8mnevk_defconfig,
-                    freescale_imx8mpevk_defconfig,
-                    freescale_imx8mqevk_defconfig: error: array subscript
-                    0 is outside array bounds of 'uint32_t[0]'
+            Bug ID: 15802
+           Summary: freescale_imx8qmmek_defconfig,
+                    freescale_imx8qxpmek_defconfig: Segment flags problem
            Product: buildroot
            Version: unspecified
           Hardware: All
@@ -102,161 +97,31 @@ https://bugs.busybox.net/show_bug.cgi?id=15799
                 CC: buildroot@uclibc.org
   Target Milestone: ---
 
-For some freescale defconfigs (as of ab4f3fafaa839593b3efd9ea12c8ee5d9340cdeb),
-we run into array bounds warnings (-> errors) in arm-trusted-firmware-custom:
+While linking (as of ab4f3fafaa839593b3efd9ea12c8ee5d9340cdeb), two
+configurations face issues with unexpected segment flags:
 
-[build 2023-09-23 17:51:47]   CC      plat/imx/imx8m/hab.c
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c: In function
-'imx_hab_handler':
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:65:57: error: array subscript
-0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'}
-[-Werror=array-bounds]
-[build 2023-09-23 17:51:47]    65 | #define HAB_RVT_CHECK_TARGET_ARM64     
-((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x18))
-[build 2023-09-23 17:51:47]       |                                            
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:76:59: note: in expansion of
-macro 'HAB_RVT_CHECK_TARGET_ARM64'
-[build 2023-09-23 17:51:47]    76 | #define hab_rvt_check_target_p
-((hab_rvt_check_target_t *)HAB_RVT_CHECK_TARGET_ARM64)
-[build 2023-09-23 17:51:47]       |                                            
-              ^~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:114:40: note: in expansion of
-macro 'hab_rvt_check_target_p'
-[build 2023-09-23 17:51:47]   114 |                 hab_rvt_check_target =
-hab_rvt_check_target_p;
-[build 2023-09-23 17:51:47]       |                                       
-^~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:69:57: error: array subscript
-0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'}
-[-Werror=array-bounds]
-[build 2023-09-23 17:51:47]    69 | #define HAB_RVT_FAILSAFE_ARM64         
-((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x50))
-[build 2023-09-23 17:51:47]       |                                            
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:77:51: note: in expansion of
-macro 'HAB_RVT_FAILSAFE_ARM64'
-[build 2023-09-23 17:51:47]    77 | #define hab_rvt_failsafe_p
-((hab_rvt_failsafe_t *)HAB_RVT_FAILSAFE_ARM64)
-[build 2023-09-23 17:51:47]       |                                            
-      ^~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:110:36: note: in expansion of
-macro 'hab_rvt_failsafe_p'
-[build 2023-09-23 17:51:47]   110 |                 hab_rvt_failsafe =
-hab_rvt_failsafe_p;
-[build 2023-09-23 17:51:47]       |                                   
-^~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:68:65: error: array subscript
-0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'}
-[-Werror=array-bounds]
-[build 2023-09-23 17:51:47]    68 | #define HAB_RVT_REPORT_STATUS_ARM64        
-    ((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x48))
-[build 2023-09-23 17:51:47]       |                                            
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:75:61: note: in expansion of
-macro 'HAB_RVT_REPORT_STATUS_ARM64'
-[build 2023-09-23 17:51:47]    75 | #define hab_rvt_report_status_p
-((hab_rvt_report_status_t *)HAB_RVT_REPORT_STATUS_ARM64)
-[build 2023-09-23 17:51:47]       |                                            
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:107:41: note: in expansion of
-macro 'hab_rvt_report_status_p'
-[build 2023-09-23 17:51:47]   107 |                 hab_rvt_report_status =
-hab_rvt_report_status_p;
-[build 2023-09-23 17:51:47]       |                                        
-^~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:67:65: error: array subscript
-0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'}
-[-Werror=array-bounds]
-[build 2023-09-23 17:51:47]    67 | #define HAB_RVT_REPORT_EVENT_ARM64         
-    ((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x40))
-[build 2023-09-23 17:51:47]       |                                            
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:74:59: note: in expansion of
-macro 'HAB_RVT_REPORT_EVENT_ARM64'
-[build 2023-09-23 17:51:47]    74 | #define hab_rvt_report_event_p
-((hab_rvt_report_event_t *)HAB_RVT_REPORT_EVENT_ARM64)
-[build 2023-09-23 17:51:47]       |                                            
-              ^~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:104:40: note: in expansion of
-macro 'hab_rvt_report_event_p'
-[build 2023-09-23 17:51:47]   104 |                 hab_rvt_report_event =
-hab_rvt_report_event_p;
-[build 2023-09-23 17:51:47]       |                                       
-^~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:64:65: error: array subscript
-0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'}
-[-Werror=array-bounds]
-[build 2023-09-23 17:51:47]    64 | #define HAB_RVT_EXIT_ARM64                 
-    ((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x10))
-[build 2023-09-23 17:51:47]       |                                            
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:73:43: note: in expansion of
-macro 'HAB_RVT_EXIT_ARM64'
-[build 2023-09-23 17:51:47]    73 | #define hab_rvt_exit_p ((hab_rvt_exit_t
-*)HAB_RVT_EXIT_ARM64)
-[build 2023-09-23 17:51:47]       |                                          
-^~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:101:32: note: in expansion of
-macro 'hab_rvt_exit_p'
-[build 2023-09-23 17:51:47]   101 |                 hab_rvt_exit =
-hab_rvt_exit_p;
-[build 2023-09-23 17:51:47]       |                               
-^~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:63:65: error: array subscript
-0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'}
-[-Werror=array-bounds]
-[build 2023-09-23 17:51:47]    63 | #define HAB_RVT_ENTRY_ARM64                
-    ((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x08))
-[build 2023-09-23 17:51:47]       |                                            
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:72:45: note: in expansion of
-macro 'HAB_RVT_ENTRY_ARM64'
-[build 2023-09-23 17:51:47]    72 | #define hab_rvt_entry_p ((hab_rvt_entry_t
-*)HAB_RVT_ENTRY_ARM64)
-[build 2023-09-23 17:51:47]       |                                            
-^~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:98:33: note: in expansion of
-macro 'hab_rvt_entry_p'
-[build 2023-09-23 17:51:47]    98 |                 hab_rvt_entry =
-hab_rvt_entry_p;
-[build 2023-09-23 17:51:47]       |                                
-^~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:66:65: error: array subscript
-0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'}
-[-Werror=array-bounds]
-[build 2023-09-23 17:51:47]    66 | #define HAB_RVT_AUTHENTICATE_IMAGE_ARM64   
-    ((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x20))
-[build 2023-09-23 17:51:47]       |                                            
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:71:71: note: in expansion of
-macro 'HAB_RVT_AUTHENTICATE_IMAGE_ARM64'
-[build 2023-09-23 17:51:47]    71 | #define hab_rvt_authenticate_image_p
-((hab_rvt_authenticate_image_t *)HAB_RVT_AUTHENTICATE_IMAGE_ARM64)
-[build 2023-09-23 17:51:47]       |                                            
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] plat/imx/imx8m/hab.c:95:46: note: in expansion of
-macro 'hab_rvt_authenticate_image_p'
-[build 2023-09-23 17:51:47]    95 |                 hab_rvt_authenticate_image
-= hab_rvt_authenticate_image_p;
-[build 2023-09-23 17:51:47]       |                                            
- ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[build 2023-09-23 17:51:47] cc1: all warnings being treated as errors
-[build 2023-09-23 17:51:47] make[1]: *** [Makefile:1104:
-/var/lib/laminar/run/buildroot-freescale_imx8mnevk_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom/build/imx8mn/release/bl31/hab.o]
+[build 2023-09-23 19:17:37]   PP      bl31/bl31.ld.S
+[build 2023-09-23 19:17:37]   LD     
+/var/lib/laminar/run/buildroot-freescale_imx8qmmek_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom/build/imx8qm/release/bl31/bl31.elf
+[build 2023-09-23 19:17:37]
+/var/lib/laminar/run/buildroot-freescale_imx8qmmek_defconfig/6/buildroot/output/host/bin/aarch64-buildroot-linux-gnu-ld:
+warning:
+/var/lib/laminar/run/buildroot-freescale_imx8qmmek_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom/build/imx8qm/release/bl31/bl31.elf
+has a LOAD segment with RWX permissions
+[build 2023-09-23 19:17:37] make[1]: *** [Makefile:1105:
+/var/lib/laminar/run/buildroot-freescale_imx8qmmek_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom/build/imx8qm/release/bl31/bl31.elf]
 Error 1
-[build 2023-09-23 17:51:47] make[1]: Leaving directory
-'/var/lib/laminar/run/buildroot-freescale_imx8mnevk_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom'
-[build 2023-09-23 17:51:47] make: *** [package/pkg-generic.mk:293:
-/var/lib/laminar/run/buildroot-freescale_imx8mnevk_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom/.stamp_built]
+[build 2023-09-23 19:17:37] make[1]: Leaving directory
+'/var/lib/laminar/run/buildroot-freescale_imx8qmmek_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom'
+[build 2023-09-23 19:17:37] make: *** [package/pkg-generic.mk:293:
+/var/lib/laminar/run/buildroot-freescale_imx8qmmek_defconfig/6/buildroot/output/build/arm-trusted-firmware-custom/.stamp_built]
 Error 2
 
-(Build logs are at
-http://toolchain.lug-owl.de/laminar/jobs/buildroot-freescale_imx8mmevk_defconfig/6,
-http://toolchain.lug-owl.de/laminar/jobs/buildroot-freescale_imx8mnevk_defconfig/6,
-http://toolchain.lug-owl.de/laminar/jobs/buildroot-freescale_imx8mpevk_defconfig/6
+Logs at
+http://toolchain.lug-owl.de/laminar/jobs/buildroot-freescale_imx8qmmek_defconfig/6
 and
-http://toolchain.lug-owl.de/laminar/jobs/buildroot-freescale_imx8mqevk_defconfig/6)
+http://toolchain.lug-owl.de/laminar/jobs/buildroot-freescale_imx8qxpmek_defconfig/6
+.
 
 -- 
 You are receiving this mail because:
