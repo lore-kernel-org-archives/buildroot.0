@@ -1,78 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6546FCE7A88
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 08:08:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94F6DCE7A88
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 08:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDA0340471;
-	Sat, 23 Sep 2023 08:08:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDA0340471
-X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kgFSpg4-gKsv; Sat, 23 Sep 2023 08:08:04 +0000 (UTC)
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 365DE40597;
-	Sat, 23 Sep 2023 08:08:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 365DE40597
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 729731BF83C
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 08:08:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58ED8820B3
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 08:08:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 58ED8820B3
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D9AF81E5C;
+	Sat, 23 Sep 2023 08:35:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D9AF81E5C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id z8fsKhz1DlAu for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 08:08:00 +0000 (UTC)
-X-Greylist: delayed 306 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 23 Sep 2023 08:07:59 UTC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8513D820B2
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8513D820B2
- for <buildroot@buildroot.org>; Sat, 23 Sep 2023 08:07:58 +0000 (UTC)
-Received: from methusalix.internal.home.lespocky.de ([89.245.58.44]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MV6G6-1r8oXA2YGE-00S8Sh; Sat, 23 Sep 2023 10:02:46 +0200
-Received: from lemmy.internal.home.lespocky.de ([192.168.243.178]
- helo=lemmy.home.lespocky.de)
- by methusalix.internal.home.lespocky.de with esmtpsa (TLS1.3) tls
- TLS_AES_256_GCM_SHA384 (Exim 4.94.2)
- (envelope-from <alex@home.lespocky.de>)
- id 1qjxb5-0001en-Ck; Sat, 23 Sep 2023 10:02:45 +0200
-Received: (nullmailer pid 1188210 invoked by uid 2001);
- Sat, 23 Sep 2023 08:02:39 -0000
-From: Alexander Dahl <post@lespocky.de>
-To: buildroot@buildroot.org
-Date: Sat, 23 Sep 2023 10:02:29 +0200
-Message-Id: <20230923080229.1188198-1-post@lespocky.de>
-X-Mailer: git-send-email 2.39.2
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KTKe3SzNZ2qh; Sat, 23 Sep 2023 08:35:16 +0000 (UTC)
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 239BC81EFD;
+	Sat, 23 Sep 2023 08:35:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 239BC81EFD
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 188AF1BF83C
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 08:35:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E571840446
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 08:35:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E571840446
+X-Virus-Scanned: amavisd-new at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id j4Pf3RnA9eNj for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 08:35:11 +0000 (UTC)
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E61DA40220
+ for <buildroot@buildroot.org>; Sat, 23 Sep 2023 08:35:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E61DA40220
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:94e1:f2dc:4d87:6249])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B57DE13F880;
+ Sat, 23 Sep 2023 10:35:00 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 23 Sep 2023 10:35:00 +0200
+Date: Sat, 23 Sep 2023 10:35:00 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20230923083500.GA1469982@scaer>
+References: <20230919204252.2272594-1-adam.duskett@amarulasolutions.com>
+ <20230919204252.2272594-7-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
-X-Scan-Signature: 4b5898d038d1415590f3a2ccc7ce21d7
-X-Provags-ID: V03:K1:4CNH3Bz1bNW9HDnJtaEJ/qohWTYPJ5BeqTFyKiVJXMwaMXmcksq
- R3frs1kQM8dl1+CSPi1aw04YTM5ZfIqp9B6OrfdPg9cnNt8xjKOujGD4MuhJCOQyJj+JIq/
- 28dukiINPnUkstsFc44KZeGQi/5Yq/MLWfWtz0S6GPhOjJIapBNkzN+hJMnUqxyQX/3NFjC
- 5GDJnMDa9ygXGLUBT29aw==
-UI-OutboundReport: notjunk:1;M01:P0:md6nw83/DDw=;6ap7UWx5DK5apAbImzLSIHC1nEb
- XoWlKtz/QKwb0d1LeITRESKdhKjXEB89n442cm4yLkTd3SO9zfzoxmijXO2dwCcxPqZSgBh9V
- vYYhzkKKqt1+DjEodfpKf44gxZiENK+eauCZ59K1ViyOUj6O6nq0dvVbdRe56LRywuR36nxvC
- yyQUj7KL1hOmHTXo/5ElNPipGWvY/3qk/4zFuGHudHrDh2tR87Lzab+S2oHx/RFqyta+BO9ru
- J3DuWH3CusiM2dES6We1jc0omVUYnbwDGG7FdWjAg3cab5EqhLvymGmsorsrVy5QA6UAuotcM
- tNSdx/Q0kS/BQB9HawBibdgB9GQRAnfZgbLii6XFc0HFRYgstNxmPCre1S3KEGBkM5FGtVvPQ
- yMmdoX2YbR5Vn7YnTJrpJigAT8po6cOGTPE0wWK5SKzgJ4HBfMKtgqy/3ZD6wqw+SoauDjrmu
- lz0vHFfTqXGBq3Lqz6WbkAkheZt2YLtR6GAhrze8UX34EWkc2dLjv8Hg8hjxn6DBEJ6ctDeLQ
- UsY13/QajCq84bwJCZiT1J46vAFAkJ5CaqTJDg0kqKtQtVFXPfCekdnpiI9f23/D7mOaB+ahP
- RZhyYrnsBUKm8fnsUcs08pmATqSoJx5b1l1HlFKqdxrAoOxe7FyIxwPLAtGvtgkxIiWt855sK
- +1oc0cGdps4EiqAXABJvGo0ikQCgffoYiKU0kf1nG8F2QmP1pe4sZnFSOzBhq7kTuQ3MgvCc/
- 5Ykcxx5I3mpUkFhIHO7w4PPLo+m7vFeKSOKu/b+pWAlQoFauitokoJ4nsITB7cYAzf6f26pps
- 9VzgHfw1yAw5vsyQi9uHZY8sJVWKxZ57/KedPHOpVJg1+jpzDSybSnxkrG8U4CO6PBo9psatD
- BV7rfxjxLM1rgeQ==
-Subject: [Buildroot] [PATCH] package/putty: bump version to 0.79
+Content-Disposition: inline
+In-Reply-To: <20230919204252.2272594-7-adam.duskett@amarulasolutions.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1695458108;
+ bh=M6oq7ZmHRHSYtKB2y8Xt36pd7JvU073lD9e60Za852E=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Ypz8yi4nhSU1q7QFpf6Vayux210sCP/vr4NECygGsJ9abQjj3vrBY6Dxo8a1ebTtS
+ sIhGDgjvfR5ulLd1xPt+W1NumiDji8IGXPAYR7cfLbidwM8v6Xv8DYAar5I0JD/lxq
+ Wva8Bnhxq5c32smpYtAxNMkH5m0TrLUs4nLJ/IUlEXzbnNOOrqHm+GHo6hiQTNs8XM
+ gJGqNw1Qkw2WrMVIAp5Od1mIfnJhLhL2MB12WIFLryx8c6SsSrU/skWRI3cxGSDLo6
+ F4sucB1UgO5woWNYG8zqt49AvxdbgwqVJ0nRBPH504poXSEzvJqs8QBrt4z9LR8AlR
+ +lClfo/RN1DOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ypz8yi4n
+Subject: Re: [Buildroot] [PATCH v9 7/7]
+ support/testing/tests/package/test_flutter.py: new runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,55 +77,221 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Dahl <post@lespocky.de>
+Cc: Asaf Kahlon <asafka7@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Angelo Compagnucci <angelo@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bug fixes mostly.
+Adam, All,
 
-Link: https://www.chiark.greenend.org.uk/~sgtatham/putty/changes.html
-Signed-off-by: Alexander Dahl <post@lespocky.de>
----
- package/putty/putty.hash | 8 ++++----
- package/putty/putty.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
++Julien for his expertise in graphics in runtime tests
 
-diff --git a/package/putty/putty.hash b/package/putty/putty.hash
-index c691a4f975..05c1a9eea6 100644
---- a/package/putty/putty.hash
-+++ b/package/putty/putty.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://the.earth.li/~sgtatham/putty/0.78/{sha1,sha256,sha512}sums
--sha1  198f01db6bea708e480fb11dd23026eda7b3f49f  putty-0.78.tar.gz
--sha256  274e01bcac6bd155dfd647b2f18f791b4b17ff313753aa919fcae2e32d34614f  putty-0.78.tar.gz
--sha512  d7a3e2eabd5f1f65fc0f3f1ee0789c30fbe891b57f63ddeac0b92befcb6aecd4a748f04a21c76ee42d992deb77c2e1a0454a71cc620ef26fbf23af660bd84bb5  putty-0.78.tar.gz
-+# Hashes from: http://the.earth.li/~sgtatham/putty/0.79/{sha1,sha256,sha512}sums
-+sha1  c40c3ce9fd334c40e64c6b33ee7e1096dad52701  putty-0.79.tar.gz
-+sha256  428cc8666fbb938ebf4ac9276341980dcd70de395b33164496cf7995ef0ef0d8  putty-0.79.tar.gz
-+sha512  4f10f870b229c89e928921d3b350955ce1c1170a062e7943d9cc8dbd83389d82a9b844623541605f0db5a429d545c2d188bf8e384c6515466fae69b216120983  putty-0.79.tar.gz
- 
- # Locally calculated
- sha256  7b10c93f0d582e820a9e6f8c6abbcff54192e41e60644f4d09b96b14fdbc74f8  LICENCE
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-index 82b7464bb4..d3c8d923f0 100644
---- a/package/putty/putty.mk
-+++ b/package/putty/putty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PUTTY_VERSION = 0.78
-+PUTTY_VERSION = 0.79
- PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
- PUTTY_LICENSE = MIT
- PUTTY_LICENSE_FILES = LICENCE
+On 2023-09-19 14:42 -0600, Adam Duskett spake thusly:
+> This is a simple test that builds and runs the futter-gallery application and
+> checks if the service is active.
 
-base-commit: 20c023a3b1363f914a18652a79f83648af2cf1e6
+This runtime test does not demonstrate a worlking flutter stack, because
+the application in fact does not work:
+
+    $ journalctl -u flutter-gallery
+    [...]
+    journalctl -u flutter-gallery --boot |cat
+    Sep 23 08:18:24 buildroot systemd[1]: Started flutter-gallery daemon.
+    Sep 23 08:18:24 buildroot flutter-pi[129]: [locales] Warning: The system has no configured locale. The default "C" locale may or may not be supported by the app.
+    Sep 23 08:18:24 buildroot flutter-pi[129]: MESA-LOADER: failed to open vkms: /usr/lib/dri/vkms_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/dri, suffix _dri)
+    Sep 23 08:18:24 buildroot flutter-pi[129]: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/dri, suffix _dri)
+    Sep 23 08:18:28 buildroot flutter-pi[129]: xkbcommon: ERROR: failed to add default include path /usr/share/X11/xkb
+    Sep 23 08:18:28 buildroot flutter-pi[129]: keyboard.c: Could not create XKB context.
+    Sep 23 08:18:28 buildroot flutter-pi[129]: user_input.c: Could not initialize keyboard configuration. Flutter-pi will run without text/raw keyboard input.
+    Sep 23 08:18:28 buildroot flutter-pi[129]: egl_gbm_render_surface.c: Couldn't create GBM surface for rendering.  gbm_surface_create_with_modifiers: Invalid argument
+    Sep 23 08:18:28 buildroot flutter-pi[129]: window.c: Couldn't create EGL GBM rendering surface.
+    Sep 23 08:18:28 buildroot systemd[1]: flutter-gallery.service: Main process exited, code=dumped, status=11/SEGV
+    Sep 23 08:18:28 buildroot systemd[1]: flutter-gallery.service: Failed with result 'core-dump'.
+    Sep 23 08:18:28 buildroot systemd[1]: flutter-gallery.service: Consumed 4.144s CPU time.
+    Sep 23 08:18:29 buildroot systemd[1]: flutter-gallery.service: Scheduled restart job, restart counter is at 1.
+    Sep 23 08:18:29 buildroot systemd[1]: Started flutter-gallery daemon.
+    Sep 23 08:18:29 buildroot flutter-pi[148]: [locales] Warning: The system has no configured locale. The default "C" locale may or may not be supported by the app.
+    Sep 23 08:18:29 buildroot flutter-pi[148]: MESA-LOADER: failed to open vkms: /usr/lib/dri/vkms_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/dri, suffix _dri)
+    Sep 23 08:18:29 buildroot flutter-pi[148]: MESA-LOADER: failed to open zink: /usr/lib/dri/zink_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/dri, suffix _dri)
+    Sep 23 08:18:31 buildroot flutter-pi[148]: xkbcommon: ERROR: failed to add default include path /usr/share/X11/xkb
+    Sep 23 08:18:31 buildroot flutter-pi[148]: keyboard.c: Could not create XKB context.
+    Sep 23 08:18:31 buildroot flutter-pi[148]: user_input.c: Could not initialize keyboard configuration. Flutter-pi will run without text/raw keyboard input.
+    Sep 23 08:18:31 buildroot flutter-pi[148]: egl_gbm_render_surface.c: Couldn't create GBM surface for rendering.  gbm_surface_create_with_modifiers: Invalid argument
+    Sep 23 08:18:31 buildroot flutter-pi[148]: window.c: Couldn't create EGL GBM rendering surface.
+    Sep 23 08:18:31 buildroot systemd[1]: flutter-gallery.service: Main process exited, code=dumped, status=11/SEGV
+    Sep 23 08:18:31 buildroot systemd[1]: flutter-gallery.service: Failed with result 'core-dump'.
+    Sep 23 08:18:31 buildroot systemd[1]: flutter-gallery.service: Consumed 2.401s CPU time.
+    Sep 23 08:18:31 buildroot systemd[1]: flutter-gallery.service: Scheduled restart job, restart counter is at 2.
+    [...ad nauseam......]
+
+So, a few things about this:
+
+  - "-vga std -vnc none" are not needed; whether specified or not has
+    no impact on the test. And indeed, this is now n aarch64 machine,
+    so not sure there's vga on that;
+
+  - the locales issues is not major, we don't care much for a test; the
+    keybioard issue should not be major either ("Flutter-pi will run
+    without text/raw keyboard input");
+
+  - the real issues I'm most afraid of, are the one about mesa failing
+    to load the proper drivers, and/or that it can't create an EGL GBM
+    surface; I think this is the real problem;
+
+  - in the console, I notice "vkms_vblank_simulate: vblank timer
+    overrun" bwing displayed quite a few times;
+
+  - you're pointing the gallery app to /usr/share/flutter/gallery/release/
+    but therat does not exist (what should it contain, btw?).
+
+Can you look at that test, please?
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+> v8 -> v9:
+>   - Changed to aarch64 to avoid problems with older versions of qemu.
+>   - Added BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF
+> 
+>  DEVELOPERS                                    |  1 +
+>  support/testing/tests/package/test_flutter.py | 56 +++++++++++++++++++
+>  .../package/test_flutter/linux-vkms.fragment  |  2 +
+>  .../flutter-gallery.service                   |  1 +
+>  .../systemd/system/flutter-gallery.service    | 11 ++++
+>  5 files changed, 71 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_flutter.py
+>  create mode 100644 support/testing/tests/package/test_flutter/linux-vkms.fragment
+>  create mode 120000 support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+>  create mode 100644 support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 48a4ec776a..f46d83679a 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -37,6 +37,7 @@ F:	package/flutter-engine/
+>  F:	package/flutter-gallery/
+>  F:	package/flutter-pi/
+>  F:	package/flutter-sdk-bin/
+> +F:	support/testing/tests/package/test_flutter.py
+>  
+>  N:	Adam Heinrich <adam@adamh.cz>
+>  F:	package/jack1/
+> diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
+> new file mode 100644
+> index 0000000000..e17ed9f659
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_flutter.py
+> @@ -0,0 +1,56 @@
+> +import os
+> +import time
+> +import infra.basetest
+> +
+> +
+> +class TestFlutter(infra.basetest.BRTest):
+> +    config = f"""
+> +        BR2_aarch64=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> +        BR2_ROOTFS_OVERLAY="{infra.filepath("tests/package/test_flutter/overlay")}"
+> +        BR2_PER_PACKAGE_DIRECTORIES=y
+> +        BR2_INIT_SYSTEMD=y
+> +        BR2_LINUX_KERNEL=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.54"
+> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_flutter/linux-vkms.fragment")}"
+> +        BR2_PACKAGE_LIBDRM=y
+> +        BR2_PACKAGE_MESA3D=y
+> +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+> +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
+> +        BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> +        BR2_PACKAGE_FLUTTER_PI=y
+> +        BR2_PACKAGE_FLUTTER_PI_RAW_KEYBOARD_PLUGIN=y
+> +        BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
+> +        BR2_PACKAGE_FLUTTER_GALLERY=y
+> +        BR2_PACKAGE_FLUTTER_ENGINE=y
+> +        BR2_TARGET_ROOTFS_EXT2=y
+> +        BR2_TARGET_ROOTFS_EXT2_4=y
+> +        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> +
+> +    def test_run(self):
+> +        timeout = 35 * self.emulator.timeout_multiplier
+> +        img = os.path.join(self.builddir, "images", "rootfs.ext2")
+> +        kern = os.path.join(self.builddir, "images", "Image")
+> +        self.emulator.boot(
+> +            arch="aarch64",
+> +            kernel=kern,
+> +            kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
+> +            options=["-M", "virt",
+> +                     "-cpu", "cortex-a57",
+> +                     "-m", "512M",
+> +                     "-smp", "4",
+> +                     "-vga", "std",
+> +                     "-vnc", "none",
+> +                     "-drive", f"file={img},if=virtio,format=raw"])
+> +        self.emulator.login()
+> +        cmd = "systemctl is-active flutter-gallery"
+> +        output, exit_code = self.emulator.run(cmd, 10)
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[0], "active")
+> diff --git a/support/testing/tests/package/test_flutter/linux-vkms.fragment b/support/testing/tests/package/test_flutter/linux-vkms.fragment
+> new file mode 100644
+> index 0000000000..3fc7a5dded
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_flutter/linux-vkms.fragment
+> @@ -0,0 +1,2 @@
+> +CONFIG_DEBUG_FS=y
+> +CONFIG_DRM_VKMS=y
+> diff --git a/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+> new file mode 120000
+> index 0000000000..40993fb16c
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_flutter/overlay/etc/systemd/system/multi-user.target.wants/flutter-gallery.service
+> @@ -0,0 +1 @@
+> +../../../../usr/lib/systemd/system/flutter-gallery.service
+> \ No newline at end of file
+> diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+> new file mode 100644
+> index 0000000000..88a2bcbf0b
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-gallery.service
+> @@ -0,0 +1,11 @@
+> +[Unit]
+> +Description=flutter-gallery daemon
+> +After=dbus.service systemd-udevd.service
+> +
+> +[Service]
+> +ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/gallery/release/
+> +Restart=always
+> +KillMode=process
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.39.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
