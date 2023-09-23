@@ -4,66 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CCB9CE7A88
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 11:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D49ECE7A89
+	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 11:31:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1FFF40137;
-	Sat, 23 Sep 2023 11:17:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1FFF40137
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1EA8A4049A;
+	Sat, 23 Sep 2023 11:31:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1EA8A4049A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hgfRkD_xb0rY; Sat, 23 Sep 2023 11:17:44 +0000 (UTC)
+	with ESMTP id YYKk3W6M0Qgx; Sat, 23 Sep 2023 11:31:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E3AEF40184;
-	Sat, 23 Sep 2023 11:17:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3AEF40184
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 947991BF5E9
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 11:17:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B48E40137;
+	Sat, 23 Sep 2023 11:31:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B48E40137
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id ED08F1BF5E9
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 11:31:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7AFDF81A50
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 11:17:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AFDF81A50
+ by smtp2.osuosl.org (Postfix) with ESMTP id D23B340137
+ for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 11:31:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D23B340137
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5x9eS8m1HLes for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 11:17:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id S-Wy_74G5qxD for <buildroot@lists.busybox.net>;
+ Sat, 23 Sep 2023 11:31:34 +0000 (UTC)
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1D46081A2B
- for <buildroot@buildroot.org>; Sat, 23 Sep 2023 11:17:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D46081A2B
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C0CA740065
+ for <buildroot@buildroot.org>; Sat, 23 Sep 2023 11:31:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0CA740065
 Received: from fli4l.lan.fli4l (p5b3a0af9.dip0.t-ipconnect.de [91.58.10.249])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id F13CBA4C00E5;
- Sat, 23 Sep 2023 13:17:35 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:35578)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DA05EA4C0313
+ for <buildroot@buildroot.org>; Sat, 23 Sep 2023 13:31:31 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60100)
  by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qk0dj-0004Oq-26;
- Sat, 23 Sep 2023 13:17:35 +0200
+ (envelope-from <bernd@kuhls.net>) id 1qk0rD-0006sD-26
+ for buildroot@buildroot.org; Sat, 23 Sep 2023 13:31:31 +0200
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 23 Sep 2023 13:17:35 +0200
-Message-Id: <20230923111735.421028-1-bernd@kuhls.net>
+Date: Sat, 23 Sep 2023 13:31:31 +0200
+Message-Id: <20230923113131.772390-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202306131828; t=1695467855;
- bh=ZVaDP8xTlo60n6SE2iNO0uAjCpyyPmI/5RDwyEMhiBA=;
- h=From:To:Cc:Subject:Date:From;
- b=ZkcDmcuuc3BUDKS8fSp1+RECPIlWQk8LyfUNGmp8k6GDhBmUfsmW1p42t95ARYZp7
- XvbU5BXaAksxHXWEGSXtpJt4QW7pEOfQzz3tcppvUymjo4wDs21clI3Xo//8DiEOk3
- eGvI8DACJHVi1+qoqd/txRNxiBMBOTISoApKH4olfNNUput4eSdoX9HBOAWEPgBp+d
- /Rp371Bzab7xk8K2SuoenskzA1CgVDlA4LV9Gx/m0tvHWNuGVZhygFw5JSRDy5LInt
- IiWYsygLIZ2FTwB0wLGUH0VpG1J0lTgTUQFZfqOtA0XuKa9j2WFEUJz/OizmXxX802
- byPQ2MYdlP8yA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202306131828; t=1695468691;
+ bh=Rd24PP1h35LKF1jOChriNfcVianf38rKglEG4weJ7os=;
+ h=From:To:Subject:Date:From;
+ b=OQtXr/3e8T20RIjBZ7LXXkAoe6xB0Qkh1Smn7O6u/eRplHhcrBE6miNMoG69BoEtt
+ by5cPEpvNhy85t1hfuQub9hrjs1ExeFDV9uBzxJHKusCb45Vii2SXtm+HcXsCWPdus
+ 0f4riBjKtrJaE8GH/12fXAYeOVKhFO5rtNo86U16PFSbf97xGK6cvkciqqVqP0fWsY
+ nILXknDFS2cQscZ/zAEvETbk80p3O4RfsTr7Zo2cFJaJgJq+wRSOQqFmSrd0g6PNP5
+ GDdc2ngCjEkrB/qMNZb0bh1rOMn2A0LulrXriYqkkBifPkOpi9NbruASDirSv/f3sB
+ CuB6UPEKK6jsw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=ZkcDmcuu
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 23.1.8
+ header.a=rsa-sha256 header.s=kas202306131828 header.b=OQtXr/3e
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: bump version to 3.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,63 +74,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2023-September/000729.html
-https://lists.freedesktop.org/archives/mesa-announce/2023-September/000730.html
+Fixes CVE-2023-4807 (Windows-only):
+https://www.openssl.org/news/vulnerabilities.html
+
+Changelog: https://www.openssl.org/news/cl31.txt
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 5dbf984735..e70d3fe137 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 23.1.6
-+MESA3D_HEADERS_VERSION = 23.1.8
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 95133d3de9..a88ec5909f 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 1c82cd7cf8..9126175977 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
 @@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2023-August/000727.html
--sha256  f4c7fd8e7b472a88da7d83e9a48f6f3bd17d4ea2cc4386f7231b796f3964157a  mesa-23.1.6.tar.xz
--sha512  24f1c626fa05a82bcdfb24b67b8e5f96f94d5748309631b83e8d7a62142853cd3be90b92c56bac3bc4d223bf40b424d6d6a9977537b899107295b7d45d7e2575  mesa-23.1.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2023-September/000730.html
-+sha256  45434ff91a709844130a3174d9c0ef39c6b50725b2bb0c13e736f36134db14ad  mesa-23.1.8.tar.xz
-+sha512  02dc6f8b10dd3827a2b62fba3035726b1b60ec0c3188817deea2ad14f80f332a37272e9f15c5f653f20cecb14f8ff91697d73c89afc83674c19b686a674b677d  mesa-23.1.8.tar.xz
- # License
- sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6551105aae..a24a299a55 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+-# From https://www.openssl.org/source/openssl-3.1.2.tar.gz.sha256
+-sha256  a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6767d6539  openssl-3.1.2.tar.gz
++# From https://www.openssl.org/source/openssl-3.1.3.tar.gz.sha256
++sha256  f0316a2ebd89e7f2352976445458689f80302093788c466692fb2a188b2eacf6  openssl-3.1.3.tar.gz
+ 
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 9c1dbe8694..b69ef032f2 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 23.1.6
-+MESA3D_VERSION = 23.1.8
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+-LIBOPENSSL_VERSION = 3.1.2
++LIBOPENSSL_VERSION = 3.1.3
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
 -- 
 2.39.2
 
