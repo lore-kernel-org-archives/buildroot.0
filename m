@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F871CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF489CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20FC440346;
-	Sun, 24 Sep 2023 21:49:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20FC440346
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F46C403C1;
+	Sun, 24 Sep 2023 21:49:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F46C403C1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jO8s7EyftWrK; Sun, 24 Sep 2023 21:49:34 +0000 (UTC)
+	with ESMTP id 8SjpiSsfaDg7; Sun, 24 Sep 2023 21:49:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C58B340319;
-	Sun, 24 Sep 2023 21:49:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C58B340319
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B7A551BF909
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AD71404A4;
+	Sun, 24 Sep 2023 21:49:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AD71404A4
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 06D9C1BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77FA5600C7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1ADDB4150C
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77FA5600C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ADDB4150C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id mbitQR0ELGQz for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id SDEj8kJynLTG for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 30977600BB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4849D418B4
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30977600BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4849D418B4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 20B4287641; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
+ id 452DF87694; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:29:07 +0200
+Date: Sun, 24 Sep 2023 23:33:18 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 46a015194d6826f28851578145aae98e68f31b7b
-X-Git-Newrev: d3020ad78c9e49d21559b7a5a41a542a88523cba
+X-Git-Oldrev: dbd3832f7e805dfded13c526d93f4ed1ad1b3fcd
+X-Git-Newrev: 18e5dc36e410b0f2fdf771ef3da81af641f981a8
 X-Patchwork-Hint: ignore
-Message-Id: <20230924214720.20B4287641@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/fstrcmp: fix musl
- static build
+Message-Id: <20230924214720.452DF87694@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libraw: fix
+ IGNORE_CVES assignment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,48 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3020ad78c9e49d21559b7a5a41a542a88523cba
+commit: https://git.buildroot.net/buildroot/commit/?id=18e5dc36e410b0f2fdf771ef3da81af641f981a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fix the following musl static build failure raised because host libtool
-is not patched to manage "-static" as "-all-static".
+Commit bc4110b0739 ("package/libraw: fix CVE-2023-1729") mistakenly
+added the patch name to IGNORE_CVES instead of the CVE reference. Fix
+that.
 
-/home/buildroot/autobuild/instance-2/output-1/host/bin/libtool --mode=link --tag=CC /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -Wall -Wextra -Wshadow -o bin/test_user \
-	test_user/main.lo lib/libfstrcmp.la -static
-chmod a+rx bin/test_prelude
-libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/test_user test_user/main.o  lib/.libs/libfstrcmp.a
-libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/fstrcmp fstrcmp/main.o  lib/.libs/libfstrcmp.a
-/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
-/home/buildroot/autobuild/instance-2/output-1/build/host-gcc-final-10.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
-
-Fixes:
- - http://autobuild.buildroot.org/results/ffbee12f13e3d6c180d8891a428c6c490163083d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 094c76a2bcd301e4aa1e27c9694314079440ce5b)
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 23166132ebc6cf406f4eac801c8263dabd602127)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fstrcmp/fstrcmp.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libraw/libraw.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fstrcmp/fstrcmp.mk b/package/fstrcmp/fstrcmp.mk
-index 9c42159afb..294104b284 100644
---- a/package/fstrcmp/fstrcmp.mk
-+++ b/package/fstrcmp/fstrcmp.mk
-@@ -15,6 +15,12 @@ FSTRCMP_CONF_ENV = LIBTOOL="$(HOST_DIR)/bin/libtool"
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index cbd509cfea..63b50e340d 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -19,7 +19,7 @@ LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
+ LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
  
- FSTRCMP_MAKE_OPTS = all-bin libdir/pkgconfig/fstrcmp.pc
+ # 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+-LIBRAW_IGNORE_CVES += 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
++LIBRAW_IGNORE_CVES += CVE-2023-1729
  
-+# fstrcmp does not carry and use the usual ltmain.sh wrappers, so it does not
-+# inherit from our libtool patches to make -static behave like -all-static.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+FSTRCMP_MAKE_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -all-static"
-+endif
-+
- # We need to install the package files ourselves due to upstream trying
- # to install a .lai file which is missing because of rpath removal
- define FSTRCMP_INSTALL_STAGING_CMDS
+ ifeq ($(BR2_PACKAGE_JASPER),y)
+ LIBRAW_CONF_OPTS += --enable-jasper
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
