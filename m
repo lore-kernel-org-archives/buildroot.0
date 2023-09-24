@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86ECBCE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 10:35:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A630CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 10:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C76D417A8;
-	Sun, 24 Sep 2023 10:35:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C76D417A8
+	by smtp4.osuosl.org (Postfix) with ESMTP id E25F941903;
+	Sun, 24 Sep 2023 10:35:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E25F941903
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3bMoT4p_j_nQ; Sun, 24 Sep 2023 10:35:05 +0000 (UTC)
+	with ESMTP id FzqHy1j5HGWT; Sun, 24 Sep 2023 10:35:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FA9D418E3;
-	Sun, 24 Sep 2023 10:35:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA9D418E3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 79D081BF909
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CC9D418B9;
+	Sun, 24 Sep 2023 10:35:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CC9D418B9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DED7B1BF365
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 10:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 33DD660EDE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 921864177D
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 10:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33DD660EDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 921864177D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ulDMCgcSY8EQ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6sxh_oVGesIb for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25D3760B98
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C0744171E
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25D3760B98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C0744171E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 135E1874A8; Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
+ id 4794987582; Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 12:24:23 +0200
+Date: Sun, 24 Sep 2023 12:24:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9194e8cdedc02aa3c22636acfec2463277a11305
-X-Git-Newrev: fb8999f59b45c66e06209c9b1ea8de51dd3d5e04
+X-Git-Oldrev: 28c7d826006c14833827c19a6ca493112269cdb1
+X-Git-Newrev: 3ea7e8b80b813424c8b6e103ea48b0872c924f8a
 X-Patchwork-Hint: ignore
-Message-Id: <20230924103354.135E1874A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl: bump version to 3.1.3
+Message-Id: <20230924103354.4794987582@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,46 +62,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb8999f59b45c66e06209c9b1ea8de51dd3d5e04
+commit: https://git.buildroot.net/buildroot/commit/?id=3ea7e8b80b813424c8b6e103ea48b0872c924f8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2023-4807 (Windows-only):
-https://www.openssl.org/news/vulnerabilities.html
-
-Changelog: https://www.openssl.org/news/cl31.txt
+Release notes:
+https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/KYDR7WWPEQOBZA3IA4NL5XDSLODZLG6N/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 1c82cd7cf8..9126175977 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 7036df57a8..e42bb577a8 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
 @@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-3.1.2.tar.gz.sha256
--sha256  a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6767d6539  openssl-3.1.2.tar.gz
-+# From https://www.openssl.org/source/openssl-3.1.3.tar.gz.sha256
-+sha256  f0316a2ebd89e7f2352976445458689f80302093788c466692fb2a188b2eacf6  openssl-3.1.3.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 9c1dbe8694..b69ef032f2 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed after checking signature
+-sha256  caa832eb968148abdf35ee9d0f534b779fa732c0ce4a913d9ab8c3469b218552  dovecot-2.3.20.tar.gz
++sha256  05b11093a71c237c2ef309ad587510721cc93bbee6828251549fc1586c36502d  dovecot-2.3.21.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 4b17784f93..2933401cbc 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBOPENSSL_VERSION = 3.1.2
-+LIBOPENSSL_VERSION = 3.1.3
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).20
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).21
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
