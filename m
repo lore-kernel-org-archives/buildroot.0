@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE1BACE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:08:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44929CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6EB6E60DF0;
-	Sun, 24 Sep 2023 19:08:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EB6E60DF0
+	by smtp3.osuosl.org (Postfix) with ESMTP id E453260585;
+	Sun, 24 Sep 2023 19:08:47 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E453260585
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RSOh-7UHgZHZ; Sun, 24 Sep 2023 19:08:34 +0000 (UTC)
+	with ESMTP id br8hzFcblcwP; Sun, 24 Sep 2023 19:08:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B252F60ADE;
-	Sun, 24 Sep 2023 19:08:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B252F60ADE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6EF7D1BF2A9
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0745C60DF0;
+	Sun, 24 Sep 2023 19:08:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0745C60DF0
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 23D251BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98E4A81B0A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D3FC417A9
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98E4A81B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D3FC417A9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4WD6G4HoMAuk for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 6TPKPbuufUCP for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9B6481A12
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9B6481A12
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29291417A8
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29291417A8
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97F3C875B1; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
+ id 13C70875B0; Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 20:37:18 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 98fa3bd9573def995617ca98fd21918356afa853
-X-Git-Newrev: 3f228eca09a188cf1529a33accc6139aee8930b0
+Date: Sun, 24 Sep 2023 20:37:10 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 504060e734c6b4a3a8fa8cfff728922f0515dd92
+X-Git-Newrev: 5c696e34bf735a3b5619ff8c27cb281328c62730
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190552.97F3C875B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libjxl: fix riscv
+Message-Id: <20230924190551.13C70875B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libjxl: fix riscv
  build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -58,15 +58,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8630047033562714848=="
+Content-Type: multipart/mixed; boundary="===============8707343473210249178=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8630047033562714848==
+--===============8707343473210249178==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f228eca09a188cf1529a33accc6139aee8930b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5c696e34bf735a3b5619ff8c27cb281328c62730
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 libjxl was failing to build for riscv targets, since commit ff7c37e57
 "package/libjxl: security bump to version 0.8.1". Build was failing with
@@ -150,7 +150,7 @@ index 0000000000..b856b00728
 +2.41.0
 +
 
---===============8630047033562714848==
+--===============8707343473210249178==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -161,4 +161,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8630047033562714848==--
+--===============8707343473210249178==--
