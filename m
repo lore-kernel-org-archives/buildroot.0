@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08F81CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:23:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D418CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:23:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B737960E4E;
-	Sun, 24 Sep 2023 19:23:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B737960E4E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4621D60EEE;
+	Sun, 24 Sep 2023 19:23:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4621D60EEE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lGW38ydTb9Lk; Sun, 24 Sep 2023 19:23:45 +0000 (UTC)
+	with ESMTP id XFVmyEZwzgNm; Sun, 24 Sep 2023 19:23:58 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2CD560F18;
-	Sun, 24 Sep 2023 19:23:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2CD560F18
+	by smtp3.osuosl.org (Postfix) with ESMTP id 409B860F1A;
+	Sun, 24 Sep 2023 19:23:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 409B860F1A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EAA5B1BF909
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 07ECB1BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F02240999
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA36440294
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F02240999
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA36440294
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h4Nkt_eIbb6M for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
+ with ESMTP id KBszoTm0pd0w for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9FA540294
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9FA540294
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C5DD410BA
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C5DD410BA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8BC5875DD; Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
+ id 8BF7987522; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:13:52 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 9599db51f53db925798fd3b55fbc8faf2d653edf
-X-Git-Newrev: 1de44f3a0fb8458ee2c629638f9a4a94a0835af2
+Date: Sun, 24 Sep 2023 21:14:08 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 79f0c91b7979a84b82344aeffdc0b4727b8b3638
+X-Git-Newrev: 2d138272ef3804fa6a9476c2145ddc57df5c694c
 X-Patchwork-Hint: ignore
-Message-Id: <20230924192240.B8BC5875DD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libqb: security
+Message-Id: <20230924192241.8BF7987522@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libqb: security
  bump to version 2.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1de44f3a0fb8458ee2c629638f9a4a94a0835af2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2d138272ef3804fa6a9476c2145ddc57df5c694c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
 - Fix CVE-2023-39976: log_blackbox.c in libqb before 2.0.8 allows a
   buffer overflow via long log messages because the header size is not
@@ -87,10 +87,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  4 files changed, 3 insertions(+), 68 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 7c07ec9e18..82860b332e 100644
+index 67529ed0d4..4a61d39f79 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -818,7 +818,6 @@ package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch Upstream
+@@ -760,7 +760,6 @@ package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch Upstream
  package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch Upstream
  package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch Upstream
  package/libpthsem/0001-fix-build-on-linux-3.x-host.patch Upstream
