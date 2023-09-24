@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4141CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49AE5CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 943D760EAB;
-	Sun, 24 Sep 2023 19:23:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 943D760EAB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 077AF60F62;
+	Sun, 24 Sep 2023 19:23:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 077AF60F62
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id r7sYG-zGhJht; Sun, 24 Sep 2023 19:23:08 +0000 (UTC)
+	with ESMTP id u7gPBEqhhw5B; Sun, 24 Sep 2023 19:23:21 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1DAF60F17;
-	Sun, 24 Sep 2023 19:23:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1DAF60F17
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAA0E60F17;
+	Sun, 24 Sep 2023 19:23:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAA0E60F17
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0B6421BF947
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:42 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4795A1BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D9A2F60ED2
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9A2F60ED2
+ by smtp3.osuosl.org (Postfix) with ESMTP id D291F607DE
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D291F607DE
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id w-xDHKRrLDW7 for <buildroot@lists.busybox.net>;
+ with ESMTP id oSTlLAfHcOal for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E419D607DE
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E419D607DE
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3D5660E4E
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3D5660E4E
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1C41875E1; Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
+ id B1F7D875E1; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:19:42 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: e30f1dfea7725d7e0ec7df4806ecad44176e80ab
-X-Git-Newrev: 78c306f01b54d035454161f689721b1cc9bf0427
+Date: Sun, 24 Sep 2023 21:19:52 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 5b0caa8efbfb75b2e47666201e17bf5e9c7600f1
+X-Git-Newrev: 1ff517bd9a844cedaa2bafc0068bc50691b0de2f
 X-Patchwork-Hint: ignore
-Message-Id: <20230924192240.D1C41875E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/freerdp: security
+Message-Id: <20230924192241.B1F7D875E1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/freerdp: security
  bump to version 2.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78c306f01b54d035454161f689721b1cc9bf0427
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1ff517bd9a844cedaa2bafc0068bc50691b0de2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
 - Fix CVE-2023-39350 to CVE-2023-39354, CVE-2023-39356, CVE-2023-40181,
   CVE-2023-40186, CVE-2023-40188, CVE-2023-40567, CVE-2023-40569 and
@@ -97,10 +97,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  4 files changed, 3 insertions(+), 42 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 82860b332e..0249db3233 100644
+index 4a61d39f79..796c3c7573 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -486,7 +486,6 @@ package/freeradius-client/0001-fix-for-nettle.patch Upstream
+@@ -454,7 +454,6 @@ package/freeradius-client/0001-fix-for-nettle.patch Upstream
  package/freerdp/0001-Fix-variable-declaration-in-loop.patch Upstream
  package/freerdp/0002-Fixed-variable-declaration-in-loop.patch Upstream
  package/freerdp/0003-winpr-include-winpr-file.h-fix-build-on-uclibc.patch Upstream
