@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73208CE7A8C
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7DA7CE7A8F
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:25:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2097F4193C;
-	Sun, 24 Sep 2023 21:25:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2097F4193C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 735E5417B0;
+	Sun, 24 Sep 2023 21:25:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 735E5417B0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qLPEwgPjCd6G; Sun, 24 Sep 2023 21:25:37 +0000 (UTC)
+	with ESMTP id jELugPLiMh-W; Sun, 24 Sep 2023 21:25:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D8FD41934;
-	Sun, 24 Sep 2023 21:25:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D8FD41934
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BDF841924;
+	Sun, 24 Sep 2023 21:25:49 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BDF841924
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7EA9C1BF909
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B8911BF909
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 336EB81CEF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4EBE681D47
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 336EB81CEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EBE681D47
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i2oSEvzUDFyJ for <buildroot@lists.busybox.net>;
+ with ESMTP id ux4n15IhaD78 for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 741D681D47
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E36B81D0C
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 741D681D47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E36B81D0C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 727C587643; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
+ id 4F0F684212; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:14:49 +0200
+Date: Sun, 24 Sep 2023 21:35:54 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 1147afc11771161534988a5b5af082876fe0f8fd
-X-Git-Newrev: a04464807afcb461d5e6960da06f446f6393596f
+X-Git-Oldrev: 90df3c558b6a30a878197dbebd06fb4aff76412c
+X-Git-Newrev: 934e95457d1126d5f8486f0d6089410923835d98
 X-Patchwork-Hint: ignore
-Message-Id: <20230924212150.727C587643@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/conmon: fix
- libseccomp shared build
+Message-Id: <20230924212150.4F0F684212@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/stress-ng: link
+ with -latomic when needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,79 +63,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a04464807afcb461d5e6960da06f446f6393596f
+commit: https://git.buildroot.net/buildroot/commit/?id=934e95457d1126d5f8486f0d6089410923835d98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Drop patch and disable libseccomp when building statically to avoid the
-following build failure raised since commit
-29834d8a12d984e8efe05398c5aaa6a61f7880e0:
-
-src/seccomp_notify.c: In function 'seccomp_notify_plugins_load':
-src/seccomp_notify.c:136:42: warning: implicit declaration of function 'dlopen'; did you mean 'popen'? [-Wimplicit-function-declaration]
-  136 |                 ctx->plugins[s].handle = dlopen(it, RTLD_NOW);
-      |                                          ^~~~~~
-      |                                          popen
-src/seccomp_notify.c:136:53: error: 'RTLD_NOW' undeclared (first use in this function)
-  136 |                 ctx->plugins[s].handle = dlopen(it, RTLD_NOW);
-      |                                                     ^~~~~~~~
+Fix the following build failure raised since at least bump to version
+0.15.04 in commit 00553ea186357fd3e2b3c89fa560e9711cc67472:
 
 Fixes:
- - http://autobuild.buildroot.org/results/13d3b46990720bba8621c922b5dce54ab650e96d
+ - http://autobuild.buildroot.org/results/127ed4c110d99c6453a01ce221f628d40e566dc1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8144dd1b4cca2d5c89e329b0497f49f512c9caed)
+(cherry picked from commit 42f25180233df459cd2bfbc5b9ebf8b95c6b60cb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-remove-unused-dlfcn.h-header-file.patch   | 26 ----------------------
- package/conmon/conmon.mk                           |  2 +-
- 2 files changed, 1 insertion(+), 27 deletions(-)
+ package/stress-ng/stress-ng.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch b/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch
-deleted file mode 100644
-index 14f817942e..0000000000
---- a/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From e28634a0e847a14c58482f962bc9b1d69937387f Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@openadk.org>
--Date: Sat, 12 Aug 2023 12:53:37 +0200
--Subject: [PATCH] remove unused dlfcn.h header file
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://github.com/containers/conmon/issues/443
-----
-- src/seccomp_notify.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/src/seccomp_notify.c b/src/seccomp_notify.c
--index 8d34d9d..2a8371d 100644
----- a/src/seccomp_notify.c
--+++ b/src/seccomp_notify.c
--@@ -7,7 +7,6 @@
-- 
-- #include <errno.h>
-- #include <sys/ioctl.h>
---#include <dlfcn.h>
-- #include <sys/wait.h>
-- #include <sys/mount.h>
-- #include <signal.h>
---- 
--2.39.2
--
-diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
-index 29deb2af47..50807f8c6a 100644
---- a/package/conmon/conmon.mk
-+++ b/package/conmon/conmon.mk
-@@ -11,7 +11,7 @@ CONMON_LICENSE_FILES = LICENSE
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 0f204bcf79..a7b57459f1 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -20,6 +20,10 @@ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+ STRESS_NG_DEPENDENCIES += keyutils
+ endif
  
- CONMON_DEPENDENCIES = host-pkgconf libglib2
- 
--ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP):$(BR2_STATIC_LIBS),y:)
- CONMON_DISABLE_SECCOMP = 0
- CONMON_DEPENDENCIES += libseccomp
- else
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++STRESS_NG_MAKE_FLAGS += LDFLAGS_EXTRA=-latomic
++endif
++
+ define STRESS_NG_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(STRESS_NG_MAKE_FLAGS)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
