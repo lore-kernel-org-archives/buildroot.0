@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4A2FCE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C27CE7A8C
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EAD5418B9;
-	Sun, 24 Sep 2023 21:25:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EAD5418B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6CFE417F5;
+	Sun, 24 Sep 2023 21:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6CFE417F5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id n_Gygw2PrpYU; Sun, 24 Sep 2023 21:25:10 +0000 (UTC)
+	with ESMTP id vp1kdDK651Oy; Sun, 24 Sep 2023 21:25:23 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4752341919;
-	Sun, 24 Sep 2023 21:25:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4752341919
+	by smtp4.osuosl.org (Postfix) with ESMTP id 981D44190C;
+	Sun, 24 Sep 2023 21:25:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 981D44190C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6A0421BF2CC
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7A0E51BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9F3A81839
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9F3A81839
+ by smtp1.osuosl.org (Postfix) with ESMTP id 144C681CAF
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 144C681CAF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zlceYQKDnM9T for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
+ with ESMTP id rMnEkb618Cq2 for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 21:21:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80CF481D5F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A79F781DCA
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80CF481D5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A79F781DCA
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B50D87642; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
+ id A578787642; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:15:28 +0200
+Date: Sun, 24 Sep 2023 23:19:03 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: a04464807afcb461d5e6960da06f446f6393596f
-X-Git-Newrev: 775d2ef83e165291ed6e9e562944b645f3272eff
+X-Git-Oldrev: 58b385e557789a316db76b6553a8dba8bc63e11d
+X-Git-Newrev: 2f529f1f9c9b190fd59b992d975211cf08e3d865
 X-Patchwork-Hint: ignore
-Message-Id: <20230924212150.7B50D87642@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] board/orangepi*: update
- links in readme files
+Message-Id: <20230924212150.A578787642@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/vim: security
+ bump to version 9.0.1903
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,60 +63,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=775d2ef83e165291ed6e9e562944b645f3272eff
+commit: https://git.buildroot.net/buildroot/commit/?id=2f529f1f9c9b190fd59b992d975211cf08e3d865
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Old links are no longer working, so use new links instead.
+- Fix CVE-2023-2426, CVE-2023-2609, CVE-2023-2610, CVE-2023-4733,
+  CVE-2023-4734, CVE-2023-4735, CVE-2023-4736, CVE-2023-4738,
+  CVE-2023-4750, CVE-2023-4752 and CVE-2023-4781
+- Update hash of license file and readme (maintainers updated with
+  https://github.com/vim/vim/commit/e978b4534a5e10471108259118c0ef791106fd92
+  https://github.com/vim/vim/commit/1688938dd5ac78ab67e54299b9d5b93499dba762)
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9584c8073a3b0d7453683d32bfafa0eb2c856a64)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9165262aa0486d9cf9bb1b8a2065e2616439c513)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/orangepi/orangepi-lite2/readme.txt      | 2 +-
- board/orangepi/orangepi-one-plus/readme.txt   | 2 +-
- board/orangepi/orangepi-zero-plus2/readme.txt | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/vim/vim.hash | 6 +++---
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/orangepi/orangepi-lite2/readme.txt b/board/orangepi/orangepi-lite2/readme.txt
-index bed561b562..7f88250418 100644
---- a/board/orangepi/orangepi-lite2/readme.txt
-+++ b/board/orangepi/orangepi-lite2/readme.txt
-@@ -6,7 +6,7 @@ buildroot environment for the Orangepi Lite2. With the current configuration
- it will bring-up the board, and allow access through the serial console.
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 26bc913b8a..024c014bc9 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c2bddf283a19c8714d7b21716e0a6a3214f9edb60b080f233cce4143fe228ff3  vim-9.0.1414.tar.gz
+-sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
+-sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
++sha256  ba769f8513f2f75d71518f817f945809a5cb1310fd58cd86daca96e658cccf7d  vim-9.0.1903.tar.gz
++sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
++sha256  b475d5d3f8c855dc1a84813bbe45c44054d7f7aee20c800950bf89d5958873de  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index bb6d4a8d27..b8b50cb91a 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Orangepi Lite2 link:
--http://www.orangepi.org/Orange%20Pi%20Lite%202/
-+http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Lite-2.html
- 
- Wiki link:
- https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Lite2
-diff --git a/board/orangepi/orangepi-one-plus/readme.txt b/board/orangepi/orangepi-one-plus/readme.txt
-index 87f6de8510..547f874288 100644
---- a/board/orangepi/orangepi-one-plus/readme.txt
-+++ b/board/orangepi/orangepi-one-plus/readme.txt
-@@ -6,7 +6,7 @@ buildroot environment for the Orangepi One Plus. With the current configuration
- it will bring-up the board, and allow access through the serial console.
- 
- Orangepi One Plus link:
--http://www.orangepi.org/OrangePiOneplus/
-+http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-One-Plus.html
- 
- Wiki link:
- https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+One+Plus
-diff --git a/board/orangepi/orangepi-zero-plus2/readme.txt b/board/orangepi/orangepi-zero-plus2/readme.txt
-index 322ba0e12a..2df6dd9b11 100644
---- a/board/orangepi/orangepi-zero-plus2/readme.txt
-+++ b/board/orangepi/orangepi-zero-plus2/readme.txt
-@@ -6,7 +6,7 @@ buildroot environment for the Orangepi Zero Plus2. With the current configuratio
- it will bring-up the board, and allow access through the serial console.
- 
- Orangepi Zero Plus2 link:
--http://www.orangepi.org/OrangePiZeroPlus2/
-+http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-Plus-2.html
- 
- Wiki link:
- https://openedev.amarulasolutions.com/display/ODWIKI/Orangepi+Zero+Plus2
+-VIM_VERSION = 9.0.1414
++VIM_VERSION = 9.0.1903
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
