@@ -4,53 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31278CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55662CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:18:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDCA940982;
-	Sun, 24 Sep 2023 21:18:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCA940982
+	by smtp4.osuosl.org (Postfix) with ESMTP id F039441740;
+	Sun, 24 Sep 2023 21:18:50 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F039441740
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id eMpuk_WRD7oI; Sun, 24 Sep 2023 21:18:31 +0000 (UTC)
+	with ESMTP id lbRCQhzViafr; Sun, 24 Sep 2023 21:18:50 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DE304087A;
-	Sun, 24 Sep 2023 21:18:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DE304087A
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D5E511BF2CC
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:18:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05FAA4168F;
+	Sun, 24 Sep 2023 21:18:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05FAA4168F
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 328241BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:18:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF9BC60E5C
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:18:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF9BC60E5C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C61181D0C
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:18:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C61181D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id kMHWodqDeXLX for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 21:18:27 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9842360E1D
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:18:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9842360E1D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E30260002;
- Sun, 24 Sep 2023 21:18:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 01AYI4xezuod for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 21:18:47 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 184FA81CAF
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:18:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 184FA81CAF
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E4E8B240005;
+ Sun, 24 Sep 2023 21:18:40 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qkWUh-001xHZ-Qy; Sun, 24 Sep 2023 23:18:23 +0200
+ id 1qkWUy-001xI5-K1; Sun, 24 Sep 2023 23:18:40 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <ZOy9diJAMsHJaqH6@waldemar-brodkorb.de>
-Date: Sun, 24 Sep 2023 23:18:23 +0200
-In-Reply-To: <ZOy9diJAMsHJaqH6@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Mon, 28 Aug 2023 17:29:58 +0200")
-Message-ID: <87a5tbgti8.fsf@48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230916215301.1498648-1-fontaine.fabrice@gmail.com>
+ <87edixt8rb.fsf@48ers.dk>
+Date: Sun, 24 Sep 2023 23:18:40 +0200
+In-Reply-To: <87edixt8rb.fsf@48ers.dk> (Peter Korsgaard's message of "Sun, 17
+ Sep 2023 12:05:28 +0200")
+Message-ID: <875y3zgthr.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH/next] package/mutt: bump version to 2.2.11
+Subject: Re: [Buildroot] [PATCH 1/1] package/mutt: security bump to version
+ 2.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,16 +64,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > See http://mutt.org/ for any news.
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> Mutt 2.2.12 was released on September 9, 2023. This is a bug-fix
+ >> release, fixing two crash bugs. One is possible by viewing a crafted
+ >> message header, so upgrading is strongly recommended.
+
+ >> Fix CVE-2023-4874: Null pointer dereference when viewing a specially
+ >> crafted email in Mutt >1.5.2 <2.2.12
+
+ >> Fix CVE-2023-4875: Null pointer dereference when composing from a
+ >> specially crafted draft message in Mutt >1.5.2 <2.2.12
+
+ >> http://www.mutt.org/
+
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ > Committed, thanks.
 
 Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
 
