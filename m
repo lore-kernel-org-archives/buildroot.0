@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AA00CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 596B0CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7AA360C15;
-	Sun, 24 Sep 2023 19:08:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7AA360C15
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1791560F26;
+	Sun, 24 Sep 2023 19:09:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1791560F26
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Fqc7AGF6T4yY; Sun, 24 Sep 2023 19:08:59 +0000 (UTC)
+	with ESMTP id U5ZbClM4-iAB; Sun, 24 Sep 2023 19:09:11 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3959460585;
-	Sun, 24 Sep 2023 19:08:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3959460585
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 71CDB1BF2A9
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5435F60E1D;
+	Sun, 24 Sep 2023 19:09:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5435F60E1D
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A2591BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEF90818EC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 88F79417A8
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEF90818EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88F79417A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id i7bB8AO0kPqy for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mhVxxJ0FnWPR for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D290F81AF5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8F20140997
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D290F81AF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F20140997
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C37F1875B0; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
+ id 7302187592; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:03:00 +0200
+Date: Sun, 24 Sep 2023 19:56:47 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: b6354a5744f930870cf7e9eb450cd725ef4b2fb0
-X-Git-Newrev: 9599db51f53db925798fd3b55fbc8faf2d653edf
+X-Git-Oldrev: 9384659d6a9fcd9fb4b982de7b3b169427f11252
+X-Git-Newrev: fa5e2cec8a97d5fdc2e434429d10f27deac05b12
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190552.C37F1875B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libjxl: security
- bump to version 0.8.2
+Message-Id: <20230924190552.7302187592@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x]
+ package/rtl8812au-aircrack-ng: bump to version 2023-07-23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9599db51f53db925798fd3b55fbc8faf2d653edf
+commit: https://git.buildroot.net/buildroot/commit/?id=fa5e2cec8a97d5fdc2e434429d10f27deac05b12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fix CVE-2023-35790: An issue was discovered in dec_patch_dictionary.cc
-in libjxl before 0.8.2. An integer underflow in patch decoding can lead
-to a denial of service, such as an infinite loop.
+This version fix build failure on Linux version < 5.15.
 
-https://github.com/libjxl/libjxl/releases/tag/v0.8.2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Julien Olivain <ju.o@free.fr>
-Tested-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e4572cc705b92f593e87095619b30f016ae507d9)
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5ce78e1909a507e66cb8208f8660752be861fca0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjxl/libjxl.hash | 2 +-
- package/libjxl/libjxl.mk   | 2 +-
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash | 2 +-
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
-index 6b4c9d8d0a..c8f98d10ea 100644
---- a/package/libjxl/libjxl.hash
-+++ b/package/libjxl/libjxl.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56  libjxl-0.8.1.tar.gz
-+sha256  c70916fb3ed43784eb840f82f05d390053a558e2da106e40863919238fa7b420  libjxl-0.8.2.tar.gz
- sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
- sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
-diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index f603327bf6..47c110eb53 100644
---- a/package/libjxl/libjxl.mk
-+++ b/package/libjxl/libjxl.mk
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+index ed75b09816..bd6c87d56e 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3545efb56ecba757e1e27a5479653835e3f5be4f5b49eb9e1e4ff87cbeb6e783  rtl8812au-aircrack-ng-35308f4dd73e77fa572c48867cce737449dd8548.tar.gz
++sha256  78926af85bd1630ff599d0ec174d7c4c130141cb210a187946ea48ac1015809b  rtl8812au-aircrack-ng-04f600ee54a414b871aea509fcd4709838c8c522.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+index a666757449..99d63432a4 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBJXL_VERSION = 0.8.1
-+LIBJXL_VERSION = 0.8.2
- LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
- LIBJXL_LICENSE = BSD-3-Clause
- LIBJXL_LICENSE_FILES = LICENSE PATENTS
+-RTL8812AU_AIRCRACK_NG_VERSION = 35308f4dd73e77fa572c48867cce737449dd8548
++RTL8812AU_AIRCRACK_NG_VERSION = 04f600ee54a414b871aea509fcd4709838c8c522
+ RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
+ RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
+ RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
