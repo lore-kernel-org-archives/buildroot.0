@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A630CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 10:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A22AFCE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 10:35:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E25F941903;
-	Sun, 24 Sep 2023 10:35:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E25F941903
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F0DE4190A;
+	Sun, 24 Sep 2023 10:35:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F0DE4190A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FzqHy1j5HGWT; Sun, 24 Sep 2023 10:35:18 +0000 (UTC)
+	with ESMTP id LpnZGyxfgeZM; Sun, 24 Sep 2023 10:35:32 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CC9D418B9;
-	Sun, 24 Sep 2023 10:35:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CC9D418B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id E01D941900;
+	Sun, 24 Sep 2023 10:35:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E01D941900
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DED7B1BF365
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 10:33:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 83E981BF365
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 10:33:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 921864177D
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0EC34174E
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 10:33:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 921864177D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0EC34174E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6sxh_oVGesIb for <buildroot@lists.busybox.net>;
+ with ESMTP id XLn0hAjr3nLI for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C0744171E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83A2D4176C
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C0744171E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83A2D4176C
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4794987582; Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
+ id 71E2287581; Sun, 24 Sep 2023 10:33:54 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 12:24:54 +0200
+Date: Sun, 24 Sep 2023 12:25:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28c7d826006c14833827c19a6ca493112269cdb1
-X-Git-Newrev: 3ea7e8b80b813424c8b6e103ea48b0872c924f8a
+X-Git-Oldrev: 3e8e2e0b43b557286cf29f99c8923e5a92a6b44d
+X-Git-Newrev: 2314928cf828ff02939b9c0041964c3ee2dd907d
 X-Patchwork-Hint: ignore
-Message-Id: <20230924103354.4794987582@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.21
+Message-Id: <20230924103354.71E2287581@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/open-iscsi: bump to version 2.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,43 +62,218 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ea7e8b80b813424c8b6e103ea48b0872c924f8a
+commit: https://git.buildroot.net/buildroot/commit/?id=2314928cf828ff02939b9c0041964c3ee2dd907d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://dovecot.org/mailman3/archives/list/dovecot-news@dovecot.org/thread/KYDR7WWPEQOBZA3IA4NL5XDSLODZLG6N/
+- Drop patch (already in version)
+- Drop license comment and add REAMDE and libopeniscsiusr/COPYING as
+  license files due to
+  https://github.com/open-iscsi/open-iscsi/commit/10d50ed4bcf9ef6820f7fe544df0c3605ea4144f
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+https://github.com/open-iscsi/open-iscsi/blob/2.1.9/Changelog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore                                |   1 -
+ .../0001-SHA3-is-not-supported-by-libressl.patch   | 144 ---------------------
+ package/open-iscsi/open-iscsi.hash                 |   4 +-
+ package/open-iscsi/open-iscsi.mk                   |   8 +-
+ 4 files changed, 6 insertions(+), 151 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 7036df57a8..e42bb577a8 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  caa832eb968148abdf35ee9d0f534b779fa732c0ce4a913d9ab8c3469b218552  dovecot-2.3.20.tar.gz
-+sha256  05b11093a71c237c2ef309ad587510721cc93bbee6828251549fc1586c36502d  dovecot-2.3.21.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 4b17784f93..2933401cbc 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0250805be1..72fd5ac404 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1023,7 +1023,6 @@ package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch Upstream
+ package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch Upstream
+ package/olsr/S50olsr Indent Shellcheck Variables
+ package/omxplayer/0001-Update-Makefile-to-be-compatible-with-buildroot.patch Upstream
+-package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch Upstream
+ package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch Upstream
+ package/open2300/0001-fix-makefile.patch Upstream
+ package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch Upstream
+diff --git a/package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch b/package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch
+deleted file mode 100644
+index 0423179d93..0000000000
+--- a/package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch
++++ /dev/null
+@@ -1,144 +0,0 @@
+-From 29a4c3a518d13bfc0a07915e7e87fbec2b66597c Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 13 Feb 2023 08:55:11 +0100
+-Subject: [PATCH] SHA3 is not supported by libressl
+-
+-Disable SHA3 with libressl as it is not supported resulting in the
+-following build failure:
+-
+-/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/11.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: iscsid.p/usr_auth.c.o: in function `auth_hash_init':
+-auth.c:(.text+0x7bc): undefined reference to `EVP_sha3_256'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/48a4bddc355956733d712214797350cca8e111d9
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/open-iscsi/open-iscsi/pull/396]
+----
+- libopeniscsiusr/idbm.h |  2 ++
+- usr/auth.c             | 13 ++++++++++++-
+- usr/auth.h             |  4 ++++
+- usr/idbm.c             |  2 ++
+- 4 files changed, 20 insertions(+), 1 deletion(-)
+-
+-diff --git a/libopeniscsiusr/idbm.h b/libopeniscsiusr/idbm.h
+-index be5986f..1043b27 100644
+---- a/libopeniscsiusr/idbm.h
+-+++ b/libopeniscsiusr/idbm.h
+-@@ -56,7 +56,9 @@ enum iscsi_chap_algs {
+- 	ISCSI_AUTH_CHAP_ALG_MD5 = 5,
+- 	ISCSI_AUTH_CHAP_ALG_SHA1 = 6,
+- 	ISCSI_AUTH_CHAP_ALG_SHA256 = 7,
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 	ISCSI_AUTH_CHAP_ALG_SHA3_256 = 8,
+-+#endif
+- 	AUTH_CHAP_ALG_MAX_COUNT = 5,
+- };
+- 
+-diff --git a/usr/auth.c b/usr/auth.c
+-index 46c328e..5f50e26 100644
+---- a/usr/auth.c
+-+++ b/usr/auth.c
+-@@ -181,9 +181,11 @@ static int auth_hash_init(EVP_MD_CTX **context, int chap_alg) {
+- 	case AUTH_CHAP_ALG_SHA256:
+- 		digest = EVP_sha256();
+- 		break;
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 	case AUTH_CHAP_ALG_SHA3_256:
+- 		digest = EVP_sha3_256();
+- 		break;
+-+#endif
+- 	}
+- 
+- 	if (*context == NULL)
+-@@ -298,7 +300,9 @@ static int
+- acl_chk_chap_alg_optn(int chap_algorithm)
+- {
+- 	if (chap_algorithm == AUTH_OPTION_NONE ||
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 	    chap_algorithm == AUTH_CHAP_ALG_SHA3_256 ||
+-+#endif
+- 	    chap_algorithm == AUTH_CHAP_ALG_SHA256 ||
+- 	    chap_algorithm == AUTH_CHAP_ALG_SHA1 ||
+- 	    chap_algorithm == AUTH_CHAP_ALG_MD5)
+-@@ -711,9 +715,11 @@ acl_chk_chap_alg_key(struct iscsi_acl *client)
+- 				case AUTH_CHAP_ALG_SHA256:
+- 					client->chap_challenge_len = AUTH_CHAP_SHA256_RSP_LEN;
+- 					break;
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 				case AUTH_CHAP_ALG_SHA3_256:
+- 					client->chap_challenge_len = AUTH_CHAP_SHA3_256_RSP_LEN;
+- 					break;
+-+#endif
+- 				}
+- 				return;
+- 			}
+-@@ -862,7 +868,10 @@ acl_local_auth(struct iscsi_acl *client)
+- 			client->local_state = AUTH_LOCAL_STATE_ERROR;
+- 			client->dbg_status = AUTH_DBG_STATUS_CHAP_ALG_REJECT;
+- 			break;
+--		} else if ((client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA3_256) &&
+-+		} else if (
+-+#ifndef LIBRESSL_VERSION_NUMBER
+-+			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA3_256) &&
+-+#endif
+- 			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA256) &&
+- 			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA1) &&
+- 			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_MD5)) {
+-@@ -1824,6 +1833,7 @@ acl_init_chap_digests(int *value_list, unsigned *chap_algs, int conf_count) {
+- 				            "SHA256 due to crypto lib configuration");
+- 			}
+- 			break;
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 		case AUTH_CHAP_ALG_SHA3_256:
+- 			if (EVP_DigestInit_ex(context, EVP_sha3_256(), NULL)) {
+- 				value_list[i++] = AUTH_CHAP_ALG_SHA3_256;
+-@@ -1832,6 +1842,7 @@ acl_init_chap_digests(int *value_list, unsigned *chap_algs, int conf_count) {
+- 				            "SHA3-256 due to crypto lib configuration");
+- 			}
+- 			break;
+-+#endif
+- 		case ~0:
+- 			/* unset value in array, just ignore */
+- 			break;
+-diff --git a/usr/auth.h b/usr/auth.h
+-index 16cdb24..9357772 100644
+---- a/usr/auth.h
+-+++ b/usr/auth.h
+-@@ -32,7 +32,9 @@ enum {
+- 	AUTH_CHAP_MD5_RSP_LEN = 16,
+- 	AUTH_CHAP_SHA1_RSP_LEN = 20,
+- 	AUTH_CHAP_SHA256_RSP_LEN = 32,
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 	AUTH_CHAP_SHA3_256_RSP_LEN = 32,
+-+#endif
+- 	AUTH_CHAP_RSP_MAX = 32,
+- };
+- 
+-@@ -67,7 +69,9 @@ enum {
+- 	AUTH_CHAP_ALG_MD5 = 5,
+- 	AUTH_CHAP_ALG_SHA1 = 6,
+- 	AUTH_CHAP_ALG_SHA256 = 7,
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 	AUTH_CHAP_ALG_SHA3_256 = 8,
+-+#endif
+- 	AUTH_CHAP_ALG_MAX_COUNT = 5
+- };
+- 
+-diff --git a/usr/idbm.c b/usr/idbm.c
+-index 90bc142..082e1c6 100644
+---- a/usr/idbm.c
+-+++ b/usr/idbm.c
+-@@ -200,7 +200,9 @@ static struct int_list_tbl {
+- 	{ "MD5", AUTH_CHAP_ALG_MD5 },
+- 	{ "SHA1", AUTH_CHAP_ALG_SHA1 },
+- 	{ "SHA256", AUTH_CHAP_ALG_SHA256 },
+-+#ifndef LIBRESSL_VERSION_NUMBER
+- 	{ "SHA3-256", AUTH_CHAP_ALG_SHA3_256 },
+-+#endif
+- };
+- 
+- static void
+--- 
+-2.39.0
+-
+diff --git a/package/open-iscsi/open-iscsi.hash b/package/open-iscsi/open-iscsi.hash
+index 9fd651cae8..de75cbf1e9 100644
+--- a/package/open-iscsi/open-iscsi.hash
++++ b/package/open-iscsi/open-iscsi.hash
+@@ -1,3 +1,5 @@
+ # Locally calculated
+-sha256  9565bdf6b68b223e1e0d455d9a04d7536724a3f5b5a254e9398d06b2a0c6b6d2  open-iscsi-2.1.8.tar.gz
++sha256  60e2a1e3058a8af7f702e86a5a0511b05b8754d29d3d2df4e0e301399b5cf70a  open-iscsi-2.1.9.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  7e6580de9d99b680697d51ec0c5e88acd9ed329139d181472cc5a592d0684fa5  README
++sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  libopeniscsiusr/COPYING
+diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
+index e5b965b80d..00370a339a 100644
+--- a/package/open-iscsi/open-iscsi.mk
++++ b/package/open-iscsi/open-iscsi.mk
+@@ -4,12 +4,10 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).20
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).21
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-OPEN_ISCSI_VERSION = 2.1.8
++OPEN_ISCSI_VERSION = 2.1.9
+ OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
+-# The COPYING file says GPL-2.0, but there is some GPL-3.0+ code as
+-# well. See https://github.com/open-iscsi/open-iscsi/issues/379
+-OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+
+-OPEN_ISCSI_LICENSE_FILES = COPYING
++OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
++OPEN_ISCSI_LICENSE_FILES = COPYING README libopeniscsiusr/COPYING
+ OPEN_ISCSI_CPE_ID_VENDOR = open-iscsi_project
+ OPEN_ISCSI_DEPENDENCIES = kmod open-isns openssl util-linux
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
