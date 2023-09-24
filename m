@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAC69CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56ABBCE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:22:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B91E417E0;
-	Sun, 24 Sep 2023 21:22:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B91E417E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF861417A5;
+	Sun, 24 Sep 2023 21:22:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF861417A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5AHs_RmhmNqq; Sun, 24 Sep 2023 21:22:43 +0000 (UTC)
+	with ESMTP id rHEzvmjrl8HK; Sun, 24 Sep 2023 21:22:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BB8841833;
-	Sun, 24 Sep 2023 21:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BB8841833
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1436418C1;
+	Sun, 24 Sep 2023 21:22:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1436418C1
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6909B1BF947
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 058CC1BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 41CC541811
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6FD6E41803
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41CC541811
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FD6E41803
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id eKiIZpjzmLz8 for <buildroot@lists.busybox.net>;
+ with ESMTP id b1IcTRZ1faT1 for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 21:21:49 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37CB041803
+ by smtp4.osuosl.org (Postfix) with ESMTP id 379D441600
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:21:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37CB041803
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 379D441600
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2701387580; Sun, 24 Sep 2023 21:21:49 +0000 (UTC)
+ id 1B18587642; Sun, 24 Sep 2023 21:21:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:36:08 +0200
+Date: Sun, 24 Sep 2023 21:27:25 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 4a8ac56ad3561069627df57f0884051337e2609e
-X-Git-Newrev: e6140d2955fee8fbe622a6c2ddd299059509d672
+X-Git-Oldrev: 994f13e280bd840ea47b99deb0cc41e42ad562e6
+X-Git-Newrev: 4a8ac56ad3561069627df57f0884051337e2609e
 X-Patchwork-Hint: ignore
-Message-Id: <20230924212149.2701387580@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/stress-ng: link
- with -latomic when needed
+Message-Id: <20230924212149.1B18587642@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] board/orangepi-zero-plus:
+ update link in readme
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6140d2955fee8fbe622a6c2ddd299059509d672
+commit: https://git.buildroot.net/buildroot/commit/?id=4a8ac56ad3561069627df57f0884051337e2609e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fix the following build failure raised since at least bump to version
-0.15.04 in commit 00553ea186357fd3e2b3c89fa560e9711cc67472:
+Old link is no longer working, so use new link instead.
 
-Fixes:
- - http://autobuild.buildroot.org/results/127ed4c110d99c6453a01ce221f628d40e566dc1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 42f25180233df459cd2bfbc5b9ebf8b95c6b60cb)
+(cherry picked from commit 0612504c4301b3aed4757d9358dd5b5cf09ef1cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stress-ng/stress-ng.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ board/orangepi/orangepi-zero-plus/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 0f204bcf79..a7b57459f1 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -20,6 +20,10 @@ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
- STRESS_NG_DEPENDENCIES += keyutils
- endif
+diff --git a/board/orangepi/orangepi-zero-plus/readme.txt b/board/orangepi/orangepi-zero-plus/readme.txt
+index 5556eae890..1e60e0f825 100644
+--- a/board/orangepi/orangepi-zero-plus/readme.txt
++++ b/board/orangepi/orangepi-zero-plus/readme.txt
+@@ -6,7 +6,7 @@ buildroot environment for the Orangepi Zero Plus. With the current configuration
+ it will bring-up the board, and allow access through the serial console.
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+STRESS_NG_MAKE_FLAGS += LDFLAGS_EXTRA=-latomic
-+endif
-+
- define STRESS_NG_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(STRESS_NG_MAKE_FLAGS)
- endef
+ Orangepi Zero Plus link:
+-http://www.orangepi.org/OrangePiZeroPlus/
++http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-Plus.html
+ 
+ This configuration uses U-Boot mainline and kernel mainline.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
