@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C48CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:07:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20071CE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E983417B9;
-	Sun, 24 Sep 2023 19:07:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E983417B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2D35417D2;
+	Sun, 24 Sep 2023 19:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2D35417D2
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id awZlx2yxARnU; Sun, 24 Sep 2023 19:07:27 +0000 (UTC)
+	with ESMTP id pWINP47Di6Sr; Sun, 24 Sep 2023 19:07:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38EA341860;
-	Sun, 24 Sep 2023 19:07:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38EA341860
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7AADF1BF2A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85C59417F5;
+	Sun, 24 Sep 2023 19:07:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C59417F5
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 952F61BF947
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B14F60ADE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F3D240A15
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B14F60ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F3D240A15
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0x1phvyMsej3 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id UBd3CimzzDfw for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8EC4260585
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CCA4400B9
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EC4260585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CCA4400B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F33080288; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
+ id 8D1AC875B0; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 20:00:04 +0200
+Date: Sun, 24 Sep 2023 20:31:25 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: fa5e2cec8a97d5fdc2e434429d10f27deac05b12
-X-Git-Newrev: 8a0ac6c44db88eb685f833840bc535393028dac3
+X-Git-Oldrev: 0521de0ae18ffbc13701cef72f08c54b537c2b37
+X-Git-Newrev: 98fa3bd9573def995617ca98fd21918356afa853
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190552.7F33080288@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/zbar: add
- ZBAR_CPE_ID_VENDOR
+Message-Id: <20230924190552.8D1AC875B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/openblas: fix
+ some x86 32bit builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a0ac6c44db88eb685f833840bc535393028dac3
+commit: https://git.buildroot.net/buildroot/commit/?id=98fa3bd9573def995617ca98fd21918356afa853
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-cpe:2.3:a:zbar_project:zbar is a valid CPE identifier for this package:
+OpenBLAS Makefile normally needs to explicitly define the CPU
+architecture size (32 or 64bit) in the BINARY macro. See [1].
 
-  https://nvd.nist.gov/products/cpe/detail/438B9E70-F8E2-4318-83B5-46A0DF320CE3
+When an architecture supports both 64 and 32bit, the 32bit support
+is sometimes implemented in OpenBLAS by overriding a fallback to an
+anterior architecture. For example, if the build target architecture
+is x86 Haswell 32bit, OpenBLAS build will override the arch to
+Nehalem. See [2].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 23e774d2de35c42ee13f618dd2a895f9a97a4d1c)
+If the BINARY macro is undefined, the 32bit fallback will not happen,
+sometimes leading to a link failure, with output:
+
+    i686-buildroot-linux-gnu/bin/ar: strmm_kernel_LN.o: No such file or directory
+
+This commit fixes those issues by explicitly defining the BINARY
+macro. This issue has also been discussed upstream in [3] and [4].
+
+Note: this issue was not introduced recently ([3] dates back from 2015),
+and was also see in previous package version, for example in [5].
+
+Fixes:
+http://autobuild.buildroot.net/results/e1e/e1e2034a78799abe1bd28b036fa6f7d13322e42f
+
+[1] https://github.com/xianyi/OpenBLAS/blob/v0.3.24/Makefile.rule#L50
+[2] https://github.com/xianyi/OpenBLAS/blob/v0.3.24/Makefile.system#L113
+[3] https://github.com/xianyi/OpenBLAS/issues/657
+[4] https://github.com/xianyi/OpenBLAS/issues/1106
+[5] http://autobuild.buildroot.net/results/5cd/5cdccd106b1de275ac75c39783e536107a31651f
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit eb4f5a2cbc8f6caf8929495318f5f3dbb11f134a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zbar/zbar.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/openblas/openblas.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-index fb83fa01d5..2c933929cf 100644
---- a/package/zbar/zbar.mk
-+++ b/package/zbar/zbar.mk
-@@ -9,6 +9,7 @@ ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
- ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
- ZBAR_LICENSE = LGPL-2.1+
- ZBAR_LICENSE_FILES = LICENSE.md
-+ZBAR_CPE_ID_VENDOR = zbar_project
- ZBAR_INSTALL_STAGING = YES
- ZBAR_DEPENDENCIES = libv4l jpeg $(TARGET_NLS_DEPENDENCIES)
- # uses C99 features
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index d8fcb4a2c6..86f10442a6 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -49,6 +49,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ OPENBLAS_MAKE_OPTS += NO_SHARED=1
+ endif
+ 
++ifeq ($(BR2_ARCH_IS_64),y)
++OPENBLAS_MAKE_OPTS += BINARY=64
++else
++OPENBLAS_MAKE_OPTS += BINARY=32
++endif
++
+ # binutils version <= 2.23.2 has a bug
+ # (https://sourceware.org/bugzilla/show_bug.cgi?id=14887) where
+ # whitespaces in ARM register specifications such as [ r1, #12 ] or [
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
