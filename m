@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC4C0CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26831CE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:22:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8544B60E96;
-	Sun, 24 Sep 2023 19:22:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8544B60E96
+	by smtp3.osuosl.org (Postfix) with ESMTP id D63FA60ECD;
+	Sun, 24 Sep 2023 19:22:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D63FA60ECD
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cLHdHcVz6T0N; Sun, 24 Sep 2023 19:22:04 +0000 (UTC)
+	with ESMTP id t8QX48p481kp; Sun, 24 Sep 2023 19:22:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AF0660ECD;
-	Sun, 24 Sep 2023 19:22:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AF0660ECD
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B83C11BF2A9
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8F2860ED2;
+	Sun, 24 Sep 2023 19:22:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8F2860ED2
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2541C1BF909
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4249140A95
+ by smtp3.osuosl.org (Postfix) with ESMTP id F3D9C60E1D
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4249140A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3D9C60E1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YCtIfUmlde43 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id LUfZyZFNo-q0 for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 124B9400B9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22999607DE
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 124B9400B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22999607DE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F26DA875BA; Sun, 24 Sep 2023 19:21:35 +0000 (UTC)
+ id 10742875BD; Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:13:25 +0200
+Date: Sun, 24 Sep 2023 21:19:03 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 5944ae28a3181e9bd1397ef9b063d14278b6814c
-X-Git-Newrev: 0d32769db9d7d85abeb2aaca0eb1218b9165606a
+X-Git-Oldrev: 702f3f4fae8e0ac4a3559e0da83778cc74d3a172
+X-Git-Newrev: 1fe0a7fe97dd3f8b12955305496288253301bf76
 X-Patchwork-Hint: ignore
-Message-Id: <20230924192135.F26DA875BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libqb: security
- bump to version 2.0.8
+Message-Id: <20230924192136.10742875BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/freerdp: security
+ bump to version 2.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,130 +63,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d32769db9d7d85abeb2aaca0eb1218b9165606a
+commit: https://git.buildroot.net/buildroot/commit/?id=1fe0a7fe97dd3f8b12955305496288253301bf76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Fix CVE-2023-39976: log_blackbox.c in libqb before 2.0.8 allows a
-  buffer overflow via long log messages because the header size is not
-  considered.
-- Drop patch (already in version) and so autoreconf
+- Fix CVE-2023-39350 to CVE-2023-39354, CVE-2023-39356, CVE-2023-40181,
+  CVE-2023-40186, CVE-2023-40188, CVE-2023-40567, CVE-2023-40569 and
+  CVE-2023-40589
+- Drop fourth patch (already in version)
 
-https://github.com/ClusterLabs/libqb/compare/v2.0.6...v2.0.8
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.7
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.8
+https://github.com/FreeRDP/FreeRDP/releases/tag/2.11.0
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-rrrv-3w42-pffh
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-q9x9-cqjc-rgwq
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-whwr-qcf2-2mvj
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hg53-9j9h-3c8f
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-c3r2-pxxp-f8r6
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-q5v5-qhj5-mh6m
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-mxp4-rx7x-h2g8
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hcj4-3c3r-5j3v
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-9w28-wwj5-p4xq
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-2w9f-8wg4-8jfp
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hm8c-rcjg-c8qp
+https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-gc34-mw6m-g42x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c89d7a2dafcc8f622100d50f11e186e377cde7a8)
+(cherry picked from commit 4ccfb2561f2a1e3ec874301e786f30d85307051d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libqb/0001-Add-disable-tests-option.patch | 62 -----------------------
- package/libqb/libqb.hash                          |  4 +-
- package/libqb/libqb.mk                            |  4 +-
- 3 files changed, 3 insertions(+), 67 deletions(-)
+ ...isable-sha3-and-shake-hashes-for-libressl.patch | 38 ----------------------
+ package/freerdp/freerdp.hash                       |  4 +--
+ package/freerdp/freerdp.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 41 deletions(-)
 
-diff --git a/package/libqb/0001-Add-disable-tests-option.patch b/package/libqb/0001-Add-disable-tests-option.patch
+diff --git a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch b/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
 deleted file mode 100644
-index 1afb05520d..0000000000
---- a/package/libqb/0001-Add-disable-tests-option.patch
+index 14f615e2e7..0000000000
+--- a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
 +++ /dev/null
-@@ -1,62 +0,0 @@
--From 051d9cfe8f365e30affc6476ed79b9e04a6b15ad Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 4 Nov 2022 00:27:50 +0100
--Subject: [PATCH] Add --disable-tests option
+@@ -1,38 +0,0 @@
+-From bd093454fe126163634c00b7484ab7fee6ffe670 Mon Sep 17 00:00:00 2001
+-From: akallabeth <akallabeth@posteo.net>
+-Date: Mon, 20 Feb 2023 16:23:39 +0100
+-Subject: [PATCH] Fix #8702: Disable sha3 and shake hashes for libressl
 -
--Add --disable-tests to allow the user to disable tests. As a
--side-effect, this will avoid the following build failure when check is
--found:
--
--libstat_wrapper.c:11:10: fatal error: gnu/lib-names.h: No such file or directory
--   11 | #include <gnu/lib-names.h>
--      |          ^~~~~~~~~~~~~~~~~
--
--This build failure is raised since version 2.0.5 and
--https://github.com/ClusterLabs/libqb/commit/78df90b180740712d0c90b6d982b78241cc99d72
--
--Fixes:
-- - http://autobuild.buildroot.org/results/450cfc36d4fd6dc71c138bec45f05b5a2d92a08d
--
+-[Retrieved (and backported) from:
+-https://github.com/FreeRDP/FreeRDP/pull/8708/commits/bd093454fe126163634c00b7484ab7fee6ffe670]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/ClusterLabs/libqb/pull/475]
 ----
-- Makefile.am  | 6 +++++-
-- configure.ac | 5 +++++
-- 2 files changed, 10 insertions(+), 1 deletion(-)
+- libfreerdp/crypto/x509_utils.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/Makefile.am b/Makefile.am
--index a08b1d2..6a710a0 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -39,7 +39,11 @@ ACLOCAL_AMFLAGS		= -I m4
-- 
-- dist_doc_DATA		= COPYING INSTALL README.markdown
-- 
---SUBDIRS			= include lib doxygen2man docs tools tests examples
--+SUBDIRS			= include lib doxygen2man docs tools examples
--+
--+if ENABLE_TESTS
--+SUBDIRS			+= tests
--+endif
-- 
-- dist-clean-local:
-- 	rm -f .snapshot-version autoconf automake autoheader
--diff --git a/configure.ac b/configure.ac
--index ac44b7e..4946008 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -562,6 +562,11 @@ AC_ARG_WITH([force-sockets-config-file],
-- 	[ FORCESOCKETSFILE="$withval" ],
-- 	[ FORCESOCKETSFILE="$sysconfdir/libqb/force-filesystem-sockets" ])
-- 
--+AC_ARG_ENABLE([tests],
--+  [AS_HELP_STRING([--disable-tests],[disable tests])],,
--+  [ enable_tests="yes" ])
--+AM_CONDITIONAL([ENABLE_TESTS], [test x$enable_tests = xyes])
--+
-- AC_ARG_ENABLE([install-tests],
--   [AS_HELP_STRING([--enable-install-tests],[install tests])],,
--   [ enable_install_tests="no" ])
---- 
--2.35.1
--
-diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
-index de247c2660..f7006ff10e 100644
---- a/package/libqb/libqb.hash
-+++ b/package/libqb/libqb.hash
+-diff --git a/libfreerdp/crypto/crypto.c b/libfreerdp/crypto/crypto.c
+-index 6e87a88b8d8..62cf2939be7 100644
+---- a/libfreerdp/crypto/crypto.c
+-+++ b/libfreerdp/crypto/crypto.c
+-@@ -748,7 +748,7 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
+- 			return WINPR_MD_SHA512;
+- 		case NID_ripemd160:
+- 			return WINPR_MD_RIPEMD160;
+--#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) || defined(LIBRESSL_VERSION_NUMBER)
+-+#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) && !defined(LIBRESSL_VERSION_NUMBER)
+- 		case NID_sha3_224:
+- 			return WINPR_MD_SHA3_224;
+- 		case NID_sha3_256:
+-@@ -757,11 +757,11 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
+- 			return WINPR_MD_SHA3_384;
+- 		case NID_sha3_512:
+- 			return WINPR_MD_SHA3_512;
+--#endif
+- 		case NID_shake128:
+- 			return WINPR_MD_SHAKE128;
+- 		case NID_shake256:
+- 			return WINPR_MD_SHAKE256;
+-+#endif
+- 		case NID_undef:
+- 		default:
+- 			return WINPR_MD_NONE;
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 55314cfdd3..02268f55ea 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/ClusterLabs/libqb/releases/download/v2.0.6/libqb-2.0.6.sha256
--sha256  f1e744208e8f69934804c14e05d9707668f99d4867de9cccf2f7a6bf4d48331c  libqb-2.0.6.tar.xz
-+# From https://github.com/ClusterLabs/libqb/releases/download/v2.0.8/libqb-2.0.8.sha256
-+sha256  b42531fc20b8ac02f4c6d0a4dc49f7c4a1eef09bdb13af5f6927b7fc49522ee6  libqb-2.0.8.tar.xz
+-# From https://pub.freerdp.com/releases/freerdp-2.10.0.tar.gz.sha256
+-sha256  a673d3fc21911dd9f196834f2f3a23c3ebc7e5e4deab2f7686fcec879279e2c1  freerdp-2.10.0.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.11.0.tar.gz.sha256
++sha256  8d08e638df21e67c3761462b4efb9e596576f58bd6886f902e6021cdd17d396e  freerdp-2.11.0.tar.gz
  
  # Locally calculated
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
-index 65d68181ee..11b5788b45 100644
---- a/package/libqb/libqb.mk
-+++ b/package/libqb/libqb.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 01c511819d..6f71ef796f 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBQB_VERSION = 2.0.6
-+LIBQB_VERSION = 2.0.8
- LIBQB_SOURCE = libqb-$(LIBQB_VERSION).tar.xz
- LIBQB_SITE = \
- 	https://github.com/ClusterLabs/libqb/releases/download/v$(LIBQB_VERSION)
-@@ -12,8 +12,6 @@ LIBQB_LICENSE = LGPL-2.1+
- LIBQB_LICENSE_FILES = COPYING
- LIBQB_CPE_ID_VENDOR = clusterlabs
- LIBQB_INSTALL_STAGING = YES
--# We're patching configure.ac
--LIBQB_AUTORECONF = YES
- LIBQB_CONF_OPTS = --disable-tests
- LIBQB_DEPENDENCIES = libxml2
- 
+-FREERDP_VERSION = 2.10.0
++FREERDP_VERSION = 2.11.0
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
