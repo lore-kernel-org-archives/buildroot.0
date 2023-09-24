@@ -4,65 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99B87CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 16:37:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10581CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 17:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D67841620;
-	Sun, 24 Sep 2023 16:37:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D67841620
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BB4941753;
+	Sun, 24 Sep 2023 17:21:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BB4941753
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id c_w7svopnERk; Sun, 24 Sep 2023 16:37:30 +0000 (UTC)
+	with ESMTP id hg9FUfxqjr5r; Sun, 24 Sep 2023 17:21:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43B4A4156C;
-	Sun, 24 Sep 2023 16:37:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43B4A4156C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C15B41750;
+	Sun, 24 Sep 2023 17:21:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C15B41750
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AB2791BF21A
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:37:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B8BC91BF2B9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 17:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 818624157D
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:37:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 818624157D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D23E41750
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 17:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D23E41750
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id tWFBhu6iSh82 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 16:37:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 98430410E1
- for <buildroot@uclibc.org>; Sun, 24 Sep 2023 16:37:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98430410E1
-Received: by busybox.osuosl.org (Postfix, from userid 81)
- id 8179C87516; Sun, 24 Sep 2023 16:37:26 +0000 (UTC)
-From: bugzilla@busybox.net
+ with ESMTP id 5rfZT4mDLubv for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 17:21:11 +0000 (UTC)
+Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5304A4174F
+ for <buildroot@uclibc.org>; Sun, 24 Sep 2023 17:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5304A4174F
+Received: from list by ciao.gmane.io with local (Exim 4.92)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1qkSn6-0009di-6a
+ for buildroot@uclibc.org; Sun, 24 Sep 2023 19:21:08 +0200
+X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
-Date: Sun, 24 Sep 2023 16:37:26 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: buildroot
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2022.02
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocker
-X-Bugzilla-Who: yann.morin.1998@free.fr
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: FIXED
-X-Bugzilla-Priority: P5
-X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
-X-Bugzilla-Target-Milestone: ---
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: resolution bug_status cc
-Message-ID: <bug-14366-163-FhujN3UIqS@https.bugs.busybox.net/>
-In-Reply-To: <bug-14366-163@https.bugs.busybox.net/>
-References: <bug-14366-163@https.bugs.busybox.net/>
-X-Bugzilla-URL: https://bugs.busybox.net/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-Subject: [Buildroot] [Bug 14366] Nodejs fails with "version `GLIBC_2.34' not
- found" on Ubuntu 20.04
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Sun, 24 Sep 2023 19:20:53 +0200
+Message-ID: <pan$86ec1$f0965aa5$21c4e56d$f81dbe7e@ID-313208.user.individual.net>
+References: <20230924162909.1019467-1-fontaine.fabrice__40740.243210324$1695572981$gmane$org@gmail.com>
+Mime-Version: 1.0
+User-Agent: Pan/0.154 (Izium; 517acf4)
+Subject: Re: [Buildroot] [PATCH 1/1] package/pppd: drop
+ PPPD_DROP_INTERNAL_IF_PPOL2TP_H
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,27 +63,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://bugs.busybox.net/show_bug.cgi?id=14366
+Am Sun, 24 Sep 2023 18:29:09 +0200 schrieb Fabrice Fontaine:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+> PPPD_DROP_INTERNAL_IF_PPOL2TP_H is not needed since bump to version
+> 2.4.6 in commit 49b239ab20e632792a6c61173ba830cdc2128ebf and
+> https://github.com/ppp-project/ppp/commit/
+c41092dd4c49267f232f6cba3d31c6c68bfdf68d
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998@free.fr
+Hi Fabrice,
 
---- Comment #11 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Jens, All,
+your patch is part of my patch bumping pppd to 2.5.0:
+https://patchwork.ozlabs.org/project/buildroot/patch/
+20230726060041.4434-1-bernd@kuhls.net/
 
-Fixed as of commit 278d1db56b.
+Regards, Bernd
 
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
