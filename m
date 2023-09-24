@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CC18CE7A8C
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F204FCE7A8C
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3BA5B417A3;
-	Sun, 24 Sep 2023 21:20:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA5B417A3
+	by smtp4.osuosl.org (Postfix) with ESMTP id 920D241708;
+	Sun, 24 Sep 2023 21:20:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 920D241708
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DWiz7zuGxZSA; Sun, 24 Sep 2023 21:20:44 +0000 (UTC)
+	with ESMTP id UoHSkPR8CzJR; Sun, 24 Sep 2023 21:20:57 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B37A41708;
-	Sun, 24 Sep 2023 21:20:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B37A41708
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 047E91BF2CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CDF341740;
+	Sun, 24 Sep 2023 21:20:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CDF341740
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B2A71BF909
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:20:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE98940320
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5F2D817A2
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:20:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE98940320
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5F2D817A2
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yP-KrcpXQEgk for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 21:20:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id kbJZ5845X6Tw for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 21:20:39 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F3F754012B
+ by smtp1.osuosl.org (Postfix) with ESMTP id C4EF481779
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:20:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3F754012B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4EF481779
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E303B87605; Sun, 24 Sep 2023 21:20:39 +0000 (UTC)
+ id B1B1B87605; Sun, 24 Sep 2023 21:20:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:19:15 +0200
+Date: Sun, 24 Sep 2023 21:27:29 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: dd354c6ce8c4aa173be8d77c40af15eeb0879447
-X-Git-Newrev: 914f72f664c39a9f8c6c81521331232efd29315d
+X-Git-Oldrev: 3291b7d53d390829853eda095293a9264c08010b
+X-Git-Newrev: bb4093b45d6e921ae4bee80b264fb801ba58dc0b
 X-Patchwork-Hint: ignore
-Message-Id: <20230924212039.E303B87605@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/vim: security
- bump to version 9.0.1903
+Message-Id: <20230924212039.B1B1B87605@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] board/orangepi-zero-plus:
+ update link in readme
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=914f72f664c39a9f8c6c81521331232efd29315d
+commit: https://git.buildroot.net/buildroot/commit/?id=bb4093b45d6e921ae4bee80b264fb801ba58dc0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Fix CVE-2023-2426, CVE-2023-2609, CVE-2023-2610, CVE-2023-4733,
-  CVE-2023-4734, CVE-2023-4735, CVE-2023-4736, CVE-2023-4738,
-  CVE-2023-4750, CVE-2023-4752 and CVE-2023-4781
-- Update hash of license file and readme (maintainers updated with
-  https://github.com/vim/vim/commit/e978b4534a5e10471108259118c0ef791106fd92
-  https://github.com/vim/vim/commit/1688938dd5ac78ab67e54299b9d5b93499dba762)
+Old link is no longer working, so use new link instead.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9165262aa0486d9cf9bb1b8a2065e2616439c513)
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0612504c4301b3aed4757d9358dd5b5cf09ef1cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 6 +++---
- package/vim/vim.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ board/orangepi/orangepi-zero-plus/readme.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 26bc913b8a..024c014bc9 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  c2bddf283a19c8714d7b21716e0a6a3214f9edb60b080f233cce4143fe228ff3  vim-9.0.1414.tar.gz
--sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
--sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
-+sha256  ba769f8513f2f75d71518f817f945809a5cb1310fd58cd86daca96e658cccf7d  vim-9.0.1903.tar.gz
-+sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
-+sha256  b475d5d3f8c855dc1a84813bbe45c44054d7f7aee20c800950bf89d5958873de  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index bb6d4a8d27..b8b50cb91a 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/orangepi/orangepi-zero-plus/readme.txt b/board/orangepi/orangepi-zero-plus/readme.txt
+index 5556eae890..1e60e0f825 100644
+--- a/board/orangepi/orangepi-zero-plus/readme.txt
++++ b/board/orangepi/orangepi-zero-plus/readme.txt
+@@ -6,7 +6,7 @@ buildroot environment for the Orangepi Zero Plus. With the current configuration
+ it will bring-up the board, and allow access through the serial console.
  
--VIM_VERSION = 9.0.1414
-+VIM_VERSION = 9.0.1903
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+ Orangepi Zero Plus link:
+-http://www.orangepi.org/OrangePiZeroPlus/
++http://www.orangepi.org/html/hardWare/computerAndMicrocontrollers/details/Orange-Pi-Zero-Plus.html
+ 
+ This configuration uses U-Boot mainline and kernel mainline.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
