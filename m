@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 210EBCE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A517ACE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF1524177D;
-	Sun, 24 Sep 2023 19:05:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF1524177D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5307E41775;
+	Sun, 24 Sep 2023 19:05:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5307E41775
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mkS1nQMOt8G3; Sun, 24 Sep 2023 19:05:09 +0000 (UTC)
+	with ESMTP id uFo8aqt0G7RH; Sun, 24 Sep 2023 19:05:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA1C7417BC;
-	Sun, 24 Sep 2023 19:05:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA1C7417BC
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7B19D1BF337
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7ED82417A9;
+	Sun, 24 Sep 2023 19:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7ED82417A9
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 531DD1BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FF9140C04
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FF9140C04
+ by smtp4.osuosl.org (Postfix) with ESMTP id 379EC417A8
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:04:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 379EC417A8
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Z7ktb-Z6mbUg for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:03:54 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4ECB840AA2
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:03:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ECB840AA2
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0243860003;
- Sun, 24 Sep 2023 19:03:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qkUOU-000FGh-Bm; Sun, 24 Sep 2023 21:03:50 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gInTe4prnx1Q for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:04:42 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2188541803
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2188541803
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0F70D86C41; Sun, 24 Sep 2023 19:04:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230914215606.309735-1-fontaine.fabrice@gmail.com>
-Date: Sun, 24 Sep 2023 21:03:50 +0200
-In-Reply-To: <20230914215606.309735-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 14 Sep 2023 23:56:06 +0200")
-Message-ID: <87pm27ieax.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libjxl: security bump to
- version 0.8.2
+To: buildroot@buildroot.org
+Date: Sun, 24 Sep 2023 21:04:29 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: 589ef7294a2d0c8a67d83ce23fb547d04ae98f2f
+X-Git-Newrev: 79f0c91b7979a84b82344aeffdc0b4727b8b3638
+X-Patchwork-Hint: ignore
+Message-Id: <20230924190442.0F70D86C41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libjxl: security
+ bump to version 0.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,26 +57,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=79f0c91b7979a84b82344aeffdc0b4727b8b3638
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
- > Fix CVE-2023-35790: An issue was discovered in dec_patch_dictionary.cc
- > in libjxl before 0.8.2. An integer underflow in patch decoding can lead
- > to a denial of service, such as an infinite loop.
+Fix CVE-2023-35790: An issue was discovered in dec_patch_dictionary.cc
+in libjxl before 0.8.2. An integer underflow in patch decoding can lead
+to a denial of service, such as an infinite loop.
 
- > https://github.com/libjxl/libjxl/releases/tag/v0.8.2
+https://github.com/libjxl/libjxl/releases/tag/v0.8.2
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+Tested-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit e4572cc705b92f593e87095619b30f016ae507d9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libjxl/libjxl.hash | 2 +-
+ package/libjxl/libjxl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
+index 6b4c9d8d0a..c8f98d10ea 100644
+--- a/package/libjxl/libjxl.hash
++++ b/package/libjxl/libjxl.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56  libjxl-0.8.1.tar.gz
++sha256  c70916fb3ed43784eb840f82f05d390053a558e2da106e40863919238fa7b420  libjxl-0.8.2.tar.gz
+ sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
+ sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
+diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
+index f603327bf6..47c110eb53 100644
+--- a/package/libjxl/libjxl.mk
++++ b/package/libjxl/libjxl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBJXL_VERSION = 0.8.1
++LIBJXL_VERSION = 0.8.2
+ LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
+ LIBJXL_LICENSE = BSD-3-Clause
+ LIBJXL_LICENSE_FILES = LICENSE PATENTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
