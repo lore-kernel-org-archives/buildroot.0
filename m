@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26831CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D08CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D63FA60ECD;
-	Sun, 24 Sep 2023 19:22:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D63FA60ECD
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB63160F07;
+	Sun, 24 Sep 2023 19:22:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB63160F07
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id t8QX48p481kp; Sun, 24 Sep 2023 19:22:17 +0000 (UTC)
+	with ESMTP id b1MB6ltcwEcw; Sun, 24 Sep 2023 19:22:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8F2860ED2;
-	Sun, 24 Sep 2023 19:22:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8F2860ED2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2541C1BF909
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4580760ED2;
+	Sun, 24 Sep 2023 19:22:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4580760ED2
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CB2D01BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3D9C60E1D
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3D9C60E1D
+ by smtp1.osuosl.org (Postfix) with ESMTP id A493E81D18
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A493E81D18
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id LUfZyZFNo-q0 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hMWYXEglrWW5 for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 22999607DE
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22999607DE
+ by smtp1.osuosl.org (Postfix) with ESMTP id D264681B60
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D264681B60
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10742875BD; Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
+ id C20EE875E0; Sun, 24 Sep 2023 19:22:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:19:03 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 702f3f4fae8e0ac4a3559e0da83778cc74d3a172
-X-Git-Newrev: 1fe0a7fe97dd3f8b12955305496288253301bf76
+Date: Sun, 24 Sep 2023 21:17:39 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 1de44f3a0fb8458ee2c629638f9a4a94a0835af2
+X-Git-Newrev: e30f1dfea7725d7e0ec7df4806ecad44176e80ab
 X-Patchwork-Hint: ignore
-Message-Id: <20230924192136.10742875BD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/freerdp: security
- bump to version 2.11.0
+Message-Id: <20230924192240.C20EE875E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/webp: security
+ bump to version 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,107 +63,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fe0a7fe97dd3f8b12955305496288253301bf76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e30f1dfea7725d7e0ec7df4806ecad44176e80ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-- Fix CVE-2023-39350 to CVE-2023-39354, CVE-2023-39356, CVE-2023-40181,
-  CVE-2023-40186, CVE-2023-40188, CVE-2023-40567, CVE-2023-40569 and
-  CVE-2023-40589
-- Drop fourth patch (already in version)
+- security fixes for lossless encoder (#603, chromium: #1420107,
+  #1455619, CVE-2023-1999)
+- security fix for lossless decoder (chromium: #1479274,
+  CVE-2023-4863)
 
-https://github.com/FreeRDP/FreeRDP/releases/tag/2.11.0
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-rrrv-3w42-pffh
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-q9x9-cqjc-rgwq
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-whwr-qcf2-2mvj
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hg53-9j9h-3c8f
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-c3r2-pxxp-f8r6
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-q5v5-qhj5-mh6m
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-mxp4-rx7x-h2g8
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hcj4-3c3r-5j3v
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-9w28-wwj5-p4xq
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-2w9f-8wg4-8jfp
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-hm8c-rcjg-c8qp
-https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-gc34-mw6m-g42x
+https://github.com/webmproject/libwebp/blob/v1.3.2/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4ccfb2561f2a1e3ec874301e786f30d85307051d)
+(cherry picked from commit c88c1d3319dd24fa833455a2e7d96bc4585bab7f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...isable-sha3-and-shake-hashes-for-libressl.patch | 38 ----------------------
- package/freerdp/freerdp.hash                       |  4 +--
- package/freerdp/freerdp.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 41 deletions(-)
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch b/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
-deleted file mode 100644
-index 14f615e2e7..0000000000
---- a/package/freerdp/0004-Fix-8702-Disable-sha3-and-shake-hashes-for-libressl.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From bd093454fe126163634c00b7484ab7fee6ffe670 Mon Sep 17 00:00:00 2001
--From: akallabeth <akallabeth@posteo.net>
--Date: Mon, 20 Feb 2023 16:23:39 +0100
--Subject: [PATCH] Fix #8702: Disable sha3 and shake hashes for libressl
--
--[Retrieved (and backported) from:
--https://github.com/FreeRDP/FreeRDP/pull/8708/commits/bd093454fe126163634c00b7484ab7fee6ffe670]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- libfreerdp/crypto/x509_utils.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/libfreerdp/crypto/crypto.c b/libfreerdp/crypto/crypto.c
--index 6e87a88b8d8..62cf2939be7 100644
----- a/libfreerdp/crypto/crypto.c
--+++ b/libfreerdp/crypto/crypto.c
--@@ -748,7 +748,7 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
-- 			return WINPR_MD_SHA512;
-- 		case NID_ripemd160:
-- 			return WINPR_MD_RIPEMD160;
---#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) || defined(LIBRESSL_VERSION_NUMBER)
--+#if (OPENSSL_VERSION_NUMBER >= 0x1010101fL) && !defined(LIBRESSL_VERSION_NUMBER)
-- 		case NID_sha3_224:
-- 			return WINPR_MD_SHA3_224;
-- 		case NID_sha3_256:
--@@ -757,11 +757,11 @@ WINPR_MD_TYPE x509_utils_get_signature_alg(const X509* xcert)
-- 			return WINPR_MD_SHA3_384;
-- 		case NID_sha3_512:
-- 			return WINPR_MD_SHA3_512;
---#endif
-- 		case NID_shake128:
-- 			return WINPR_MD_SHAKE128;
-- 		case NID_shake256:
-- 			return WINPR_MD_SHAKE256;
--+#endif
-- 		case NID_undef:
-- 		default:
-- 			return WINPR_MD_NONE;
-diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-index 55314cfdd3..02268f55ea 100644
---- a/package/freerdp/freerdp.hash
-+++ b/package/freerdp/freerdp.hash
-@@ -1,5 +1,5 @@
--# From https://pub.freerdp.com/releases/freerdp-2.10.0.tar.gz.sha256
--sha256  a673d3fc21911dd9f196834f2f3a23c3ebc7e5e4deab2f7686fcec879279e2c1  freerdp-2.10.0.tar.gz
-+# From https://pub.freerdp.com/releases/freerdp-2.11.0.tar.gz.sha256
-+sha256  8d08e638df21e67c3761462b4efb9e596576f58bd6886f902e6021cdd17d396e  freerdp-2.11.0.tar.gz
- 
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index 969e4cd3d7..adc543059b 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 01c511819d..6f71ef796f 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
+-sha256  7bf5a8a28cc69bcfa8cb214f2c3095703c6b73ac5fba4d5480c205331d9494df  libwebp-1.2.4.tar.gz
++sha256  2a499607df669e40258e53d0ade8035ba4ec0175244869d1025d460562aa09b4  libwebp-1.3.2.tar.gz
+ sha256  5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 38a1564a63..33cb4bd507 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREERDP_VERSION = 2.10.0
-+FREERDP_VERSION = 2.11.0
- FREERDP_SITE = https://pub.freerdp.com/releases
- FREERDP_DEPENDENCIES = libglib2 openssl zlib
- FREERDP_LICENSE = Apache-2.0
+-WEBP_VERSION = 1.2.4
++WEBP_VERSION = 1.3.2
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
