@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20071CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:07:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E269CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2D35417D2;
-	Sun, 24 Sep 2023 19:07:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2D35417D2
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE373418F0;
+	Sun, 24 Sep 2023 19:07:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE373418F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pWINP47Di6Sr; Sun, 24 Sep 2023 19:07:40 +0000 (UTC)
+	with ESMTP id ULqmussqYJb0; Sun, 24 Sep 2023 19:07:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85C59417F5;
-	Sun, 24 Sep 2023 19:07:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85C59417F5
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 952F61BF947
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6371F41776;
+	Sun, 24 Sep 2023 19:07:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6371F41776
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1CDB31BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6F3D240A15
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D76741860
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F3D240A15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D76741860
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id UBd3CimzzDfw for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id WDQdRHgvGkWY for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CCA4400B9
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CCA4400B9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5123E417E4
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5123E417E4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D1AC875B0; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
+ id 3BFF2875A9; Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 20:31:25 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 0521de0ae18ffbc13701cef72f08c54b537c2b37
-X-Git-Newrev: 98fa3bd9573def995617ca98fd21918356afa853
+Date: Sun, 24 Sep 2023 20:56:57 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 3c4fa086ae36b7ec655dd327f12734eaa5520bb1
+X-Git-Newrev: e2383c821ae4c759783a25a2005da2df52bc1db3
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190552.8D1AC875B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/openblas: fix
- some x86 32bit builds
+Message-Id: <20230924190551.3BFF2875A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/hwloc: bump
+ version to 2.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,63 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98fa3bd9573def995617ca98fd21918356afa853
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e2383c821ae4c759783a25a2005da2df52bc1db3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-OpenBLAS Makefile normally needs to explicitly define the CPU
-architecture size (32 or 64bit) in the BINARY macro. See [1].
+Removed md5 hash.
 
-When an architecture supports both 64 and 32bit, the 32bit support
-is sometimes implemented in OpenBLAS by overriding a fallback to an
-anterior architecture. For example, if the build target architecture
-is x86 Haswell 32bit, OpenBLAS build will override the arch to
-Nehalem. See [2].
+Changelog: https://github.com/open-mpi/hwloc/blob/v2.9/NEWS
 
-If the BINARY macro is undefined, the 32bit fallback will not happen,
-sometimes leading to a link failure, with output:
-
-    i686-buildroot-linux-gnu/bin/ar: strmm_kernel_LN.o: No such file or directory
-
-This commit fixes those issues by explicitly defining the BINARY
-macro. This issue has also been discussed upstream in [3] and [4].
-
-Note: this issue was not introduced recently ([3] dates back from 2015),
-and was also see in previous package version, for example in [5].
-
-Fixes:
-http://autobuild.buildroot.net/results/e1e/e1e2034a78799abe1bd28b036fa6f7d13322e42f
-
-[1] https://github.com/xianyi/OpenBLAS/blob/v0.3.24/Makefile.rule#L50
-[2] https://github.com/xianyi/OpenBLAS/blob/v0.3.24/Makefile.system#L113
-[3] https://github.com/xianyi/OpenBLAS/issues/657
-[4] https://github.com/xianyi/OpenBLAS/issues/1106
-[5] http://autobuild.buildroot.net/results/5cd/5cdccd106b1de275ac75c39783e536107a31651f
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit eb4f5a2cbc8f6caf8929495318f5f3dbb11f134a)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6ca47ce9bdb38f522500e5b5290f75ed09b47bd3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openblas/openblas.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/hwloc/hwloc.hash | 5 ++---
+ package/hwloc/hwloc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index d8fcb4a2c6..86f10442a6 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -49,6 +49,12 @@ ifeq ($(BR2_STATIC_LIBS),y)
- OPENBLAS_MAKE_OPTS += NO_SHARED=1
- endif
+diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
+index 963a1fd930..d40315a3af 100644
+--- a/package/hwloc/hwloc.hash
++++ b/package/hwloc/hwloc.hash
+@@ -1,6 +1,5 @@
+ # From https://www.open-mpi.org/software/hwloc/v2.9/
+-md5  49869a8e19754299db512572abc5eb2b  hwloc-2.9.0.tar.bz2
+-sha1  ee178b64234fdbf70f576b79963459ab80880583  hwloc-2.9.0.tar.bz2
+-sha256  2070e963596a2421b9af8eca43bdec113ee1107aaf7ccb475d4d3767a8856887  hwloc-2.9.0.tar.bz2
++sha1  be2a4f299c0da7670d39724986268bfa3fac6aee  hwloc-2.9.2.tar.bz2
++sha256  0a87fdf677f8b00b567d229b6320bf6b25c693edaa43e0b85268d999d6b060cf  hwloc-2.9.2.tar.bz2
+ # Locally computed
+ sha256  d79a936a42f3c6cb7c8375a023d43f4435f4664d3a5a2ea6b4623cff83c7fc06  COPYING
+diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
+index c97e46999c..6f3b8069e6 100644
+--- a/package/hwloc/hwloc.mk
++++ b/package/hwloc/hwloc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_ARCH_IS_64),y)
-+OPENBLAS_MAKE_OPTS += BINARY=64
-+else
-+OPENBLAS_MAKE_OPTS += BINARY=32
-+endif
-+
- # binutils version <= 2.23.2 has a bug
- # (https://sourceware.org/bugzilla/show_bug.cgi?id=14887) where
- # whitespaces in ARM register specifications such as [ r1, #12 ] or [
+ HWLOC_VERSION_MAJOR = 2.9
+-HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).0
++HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).2
+ HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
+ HWLOC_SITE = https://download.open-mpi.org/release/hwloc/v$(HWLOC_VERSION_MAJOR)
+ HWLOC_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
