@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C95ECE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE963CE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBAF140862;
-	Sun, 24 Sep 2023 19:03:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBAF140862
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0970F40946;
+	Sun, 24 Sep 2023 19:03:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0970F40946
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i6dzMJ5B4Sv6; Sun, 24 Sep 2023 19:03:20 +0000 (UTC)
+	with ESMTP id pD9Ysl0q8i3V; Sun, 24 Sep 2023 19:03:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B587C40946;
-	Sun, 24 Sep 2023 19:03:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B587C40946
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F6621BF337
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13A814097B;
+	Sun, 24 Sep 2023 19:03:33 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13A814097B
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BBEB71BF909
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 84EBC81DFD
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9536540A51
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84EBC81DFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9536540A51
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id wSO4NyxUtLVM for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gHO-02dQuiO2 for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E24881CE1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94F6F400B9
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E24881CE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F6F400B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A00F86B62; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
+ id 7CFCF86B54; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 20:00:08 +0200
+Date: Sun, 24 Sep 2023 19:56:36 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 3e24fcfb15cf6485703c67d2f7d205ecb476f85e
-X-Git-Newrev: e9df0c5363c69668473af45d1c0dc26ea0d1a6e4
+X-Git-Oldrev: 5f09ce4e66b9804522408c65257e1893a2b80fee
+X-Git-Newrev: 3e24fcfb15cf6485703c67d2f7d205ecb476f85e
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190316.8A00F86B62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/zbar: add
- ZBAR_CPE_ID_VENDOR
+Message-Id: <20230924190316.7CFCF86B54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x]
+ package/rtl8812au-aircrack-ng: bump to version 2023-07-23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9df0c5363c69668473af45d1c0dc26ea0d1a6e4
+commit: https://git.buildroot.net/buildroot/commit/?id=3e24fcfb15cf6485703c67d2f7d205ecb476f85e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-cpe:2.3:a:zbar_project:zbar is a valid CPE identifier for this package:
+This version fix build failure on Linux version < 5.15.
 
-  https://nvd.nist.gov/products/cpe/detail/438B9E70-F8E2-4318-83B5-46A0DF320CE3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 23e774d2de35c42ee13f618dd2a895f9a97a4d1c)
+(cherry picked from commit 5ce78e1909a507e66cb8208f8660752be861fca0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zbar/zbar.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash | 2 +-
+ package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
-index fb83fa01d5..2c933929cf 100644
---- a/package/zbar/zbar.mk
-+++ b/package/zbar/zbar.mk
-@@ -9,6 +9,7 @@ ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
- ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
- ZBAR_LICENSE = LGPL-2.1+
- ZBAR_LICENSE_FILES = LICENSE.md
-+ZBAR_CPE_ID_VENDOR = zbar_project
- ZBAR_INSTALL_STAGING = YES
- ZBAR_DEPENDENCIES = libv4l jpeg $(TARGET_NLS_DEPENDENCIES)
- # uses C99 features
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+index ed75b09816..bd6c87d56e 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3545efb56ecba757e1e27a5479653835e3f5be4f5b49eb9e1e4ff87cbeb6e783  rtl8812au-aircrack-ng-35308f4dd73e77fa572c48867cce737449dd8548.tar.gz
++sha256  78926af85bd1630ff599d0ec174d7c4c130141cb210a187946ea48ac1015809b  rtl8812au-aircrack-ng-04f600ee54a414b871aea509fcd4709838c8c522.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+index a666757449..99d63432a4 100644
+--- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
++++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8812AU_AIRCRACK_NG_VERSION = 35308f4dd73e77fa572c48867cce737449dd8548
++RTL8812AU_AIRCRACK_NG_VERSION = 04f600ee54a414b871aea509fcd4709838c8c522
+ RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
+ RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
+ RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
