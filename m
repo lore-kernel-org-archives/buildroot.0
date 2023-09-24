@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE963CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15D39CE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0970F40946;
-	Sun, 24 Sep 2023 19:03:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0970F40946
+	by smtp4.osuosl.org (Postfix) with ESMTP id B7DE941758;
+	Sun, 24 Sep 2023 19:03:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7DE941758
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id pD9Ysl0q8i3V; Sun, 24 Sep 2023 19:03:34 +0000 (UTC)
+	with ESMTP id OLJEJ087KR7t; Sun, 24 Sep 2023 19:03:47 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13A814097B;
-	Sun, 24 Sep 2023 19:03:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13A814097B
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BBEB71BF909
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FBB7417A3;
+	Sun, 24 Sep 2023 19:03:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FBB7417A3
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C8AAC1BF947
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9536540A51
+ by smtp3.osuosl.org (Postfix) with ESMTP id A21B560DF0
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9536540A51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A21B560DF0
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id gHO-02dQuiO2 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id D4GoFZgfsS4U for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94F6F400B9
+ by smtp3.osuosl.org (Postfix) with ESMTP id A7C8D60ADE
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F6F400B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7C8D60ADE
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CFCF86B54; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
+ id 961F186B68; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 19:56:36 +0200
+Date: Sun, 24 Sep 2023 20:00:59 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 5f09ce4e66b9804522408c65257e1893a2b80fee
-X-Git-Newrev: 3e24fcfb15cf6485703c67d2f7d205ecb476f85e
+X-Git-Oldrev: e9df0c5363c69668473af45d1c0dc26ea0d1a6e4
+X-Git-Newrev: 8dd87af9c81599e9ce9cf55ad9c4af6f5af98087
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190316.7CFCF86B54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x]
- package/rtl8812au-aircrack-ng: bump to version 2023-07-23
+Message-Id: <20230924190316.961F186B68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/lldpd: fix
+ CVE-2023-41910
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,42 +63,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e24fcfb15cf6485703c67d2f7d205ecb476f85e
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd87af9c81599e9ce9cf55ad9c4af6f5af98087
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-This version fix build failure on Linux version < 5.15.
+An issue was discovered in lldpd before 1.0.17. By crafting a CDP PDU
+packet with specific CDP_TLV_ADDRESSES TLVs, a malicious actor can
+remotely force the lldpd daemon to perform an out-of-bounds read on heap
+memory. This occurs in cdp_decode in daemon/protocols/cdp.c.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5ce78e1909a507e66cb8208f8660752be861fca0)
+(cherry picked from commit 3557a7b599b5b443730f8d0634a39c1694646ce3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash | 2 +-
- package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-read-overflow-when-parsing-CDP-addresses.patch | 24 ++++++++++++++++++++++
+ package/lldpd/lldpd.mk                             |  3 +++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-index ed75b09816..bd6c87d56e 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3545efb56ecba757e1e27a5479653835e3f5be4f5b49eb9e1e4ff87cbeb6e783  rtl8812au-aircrack-ng-35308f4dd73e77fa572c48867cce737449dd8548.tar.gz
-+sha256  78926af85bd1630ff599d0ec174d7c4c130141cb210a187946ea48ac1015809b  rtl8812au-aircrack-ng-04f600ee54a414b871aea509fcd4709838c8c522.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-index a666757449..99d63432a4 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lldpd/0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch b/package/lldpd/0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch
+new file mode 100644
+index 0000000000..05d882a07a
+--- /dev/null
++++ b/package/lldpd/0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch
+@@ -0,0 +1,24 @@
++From a9aeabdf879c25c584852a0bb5523837632f099b Mon Sep 17 00:00:00 2001
++From: Vincent Bernat <vincent@bernat.ch>
++Date: Wed, 12 Apr 2023 07:38:31 +0200
++Subject: [PATCH] daemon: fix read overflow when parsing CDP addresses
++
++Upstream: https://github.com/lldpd/lldpd/commit/a9aeabdf879c25c584852a0bb5523837632f099b
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ NEWS                       | 4 ++++
++ src/daemon/protocols/cdp.c | 1 +
++ 2 files changed, 5 insertions(+)
++
++diff --git a/src/daemon/protocols/cdp.c b/src/daemon/protocols/cdp.c
++index 8a1be863..42861c0e 100644
++--- a/src/daemon/protocols/cdp.c
+++++ b/src/daemon/protocols/cdp.c
++@@ -466,6 +466,7 @@ cdp_decode(struct lldpd *cfg, char *frame, int s, struct lldpd_hardware *hardwar
++ 					goto malformed;
++ 				}
++ 				PEEK_DISCARD(address_len);
+++				addresses_len -= address_len;
++ 				(void)PEEK_SAVE(pos_next_address);
++ 				/* Next, we go back and try to extract
++ 				   IPv4 address */
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index dd6f8dcf5d..d4abfade81 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -16,6 +16,9 @@ LLDPD_LICENSE = ISC
+ LLDPD_LICENSE_FILES = LICENSE
+ LLDPD_CPE_ID_VENDOR = lldpd_project
  
--RTL8812AU_AIRCRACK_NG_VERSION = 35308f4dd73e77fa572c48867cce737449dd8548
-+RTL8812AU_AIRCRACK_NG_VERSION = 04f600ee54a414b871aea509fcd4709838c8c522
- RTL8812AU_AIRCRACK_NG_SITE = $(call github,aircrack-ng,rtl8812au,$(RTL8812AU_AIRCRACK_NG_VERSION))
- RTL8812AU_AIRCRACK_NG_LICENSE = GPL-2.0
- RTL8812AU_AIRCRACK_NG_LICENSE_FILES = LICENSE
++# 0001-daemon-fix-read-overflow-when-parsing-CDP-addresses.patch
++LLDPD_IGNORE_CVES += CVE-2023-41910
++
+ # Detection of c99 support in configure fails without WCHAR. To enable
+ # automatic detection of c99 support by configure, we need to enable
+ # WCHAR in toolchain. But actually we do not need WCHAR at lldpd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
