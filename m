@@ -4,65 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7391FCE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 11:23:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90F8ECE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 11:25:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D0EE417E5;
-	Sun, 24 Sep 2023 11:23:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D0EE417E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id F29D3401D3;
+	Sun, 24 Sep 2023 11:25:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F29D3401D3
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gjnfluWAKCjr; Sun, 24 Sep 2023 11:23:05 +0000 (UTC)
+	with ESMTP id pGA0U2o36Z6b; Sun, 24 Sep 2023 11:25:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38E19417E0;
-	Sun, 24 Sep 2023 11:23:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38E19417E0
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 901BF1BF33E
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 11:23:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A04F6417DC;
+	Sun, 24 Sep 2023 11:25:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A04F6417DC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A4111BF33E
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 11:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 664364152A
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 11:23:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 664364152A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59DF360BE3
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 11:25:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59DF360BE3
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id pbCLCTtGDec2 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 11:23:01 +0000 (UTC)
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EDD51400EC
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 11:23:00 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDD51400EC
-Received: from fli4l.lan.fli4l (p4fd6c587.dip0.t-ipconnect.de [79.214.197.135])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 9AFEBA4C0555
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 13:22:58 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46232)
- by fli4l.lan.fli4l with esmtp (Exim 4.96)
- (envelope-from <bernd@kuhls.net>) id 1qkNCU-0008VA-1G
- for buildroot@buildroot.org; Sun, 24 Sep 2023 13:22:58 +0200
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id vEYJz_9Ixvqr for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 11:25:18 +0000 (UTC)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A6EF60AE6
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 11:25:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A6EF60AE6
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-405361bba99so42102445e9.2
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 04:25:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695554716; x=1696159516;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8c2EEVosjs7ekZZH1vu9z/mhmKeO7Ne4N9Rn8xFRC/4=;
+ b=WI/uWkp5wJAbEEMEMLAxsCJykbU5B7blPgoW1dWLbmRrD0qVvEqOBQeVg6/zyxEpxl
+ cReL9zmXYqleiboal85Un1QZmbm4wp2lWGpIOp7jQFveB7C96FtCIoBjGSyS4sWxX2jl
+ URQuoo8B13vz3K3T71pf2bH3aXuoTctexr3HV1JWeC9xGE83ztFkUSGiFgrCvkL9ZUtJ
+ ZiZgN35COpVeGOgJvs1PHjeFwouu56Ckrgg/ZQVd9Twzu0Nyksu9Ms3rpLvOImIuD+MU
+ rY9sY0ulPnrR2GWYQ7rImgC3KQWS+dUrtr9379+aAWx/rVCj5QtcKfRiZub5lOqd/B9A
+ YHJw==
+X-Gm-Message-State: AOJu0Yx+2/dAMtcLaztMT6/TnmcRuMeDw++o5yFCRr1a6sfuCAzNELDk
+ 2tuHvWPZzeVhhQDzInSoaAAQYG0sV/o=
+X-Google-Smtp-Source: AGHT+IEvlLRJSyTmLINz3GqeiAmBHD/hzCGh+dlWmzo2fSJeekoVucXWuvGgOnB3NzZ/ha1JS28U9g==
+X-Received: by 2002:a05:600c:3781:b0:405:a30:151e with SMTP id
+ o1-20020a05600c378100b004050a30151emr3242675wmr.12.1695554715374; 
+ Sun, 24 Sep 2023 04:25:15 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ y21-20020a05600c20d500b00403c8dde953sm12043771wmm.22.2023.09.24.04.25.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Sep 2023 04:25:14 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 13:22:58 +0200
-Message-Id: <20230924112258.1114027-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Sun, 24 Sep 2023 13:25:12 +0200
+Message-Id: <20230924112512.4611-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202306131828; t=1695554578;
- bh=SpzKEiyeO0V7gtF02pLBrCJFfcgkDAPyyYOJC6JjKqc=;
- h=From:To:Subject:Date:From;
- b=xX8SMTNYXMw86JHhdl+uqOZmz4bJrqkn5GokRU+m7NeRiraV8Y0l3Aql+frmUPpY8
- /MdJb1pZ+aMC9X9YdmGitUKsiW+K5LiLlGA8n8Ivujt88uM7XlTB4ijjIT7s6lnvuK
- gsqJIxErNWOpQoliPLs+Eq2my3gCFmskoPZzaSxP7yryydV8bU5yVMNsNhrJL3cfIJ
- bt/XjIN4MVq1OKZWIWljB0RrICe21g9lEf0VZAQOO+JlveAtl/knXI8rgpaTKb2epy
- v1/7DmpNLkKxqfFLCCYSFieGy2TWgxGQzLvElVIAIjIVTd3nVrBj05eNmGjVsTQyBh
- PTJUc1BdcFhCw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202306131828 header.b=xX8SMTNY
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.6
+ d=gmail.com; s=20230601; t=1695554716; x=1696159516; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8c2EEVosjs7ekZZH1vu9z/mhmKeO7Ne4N9Rn8xFRC/4=;
+ b=WmJTvbMyXwJdPU+YQzrzkKpfX2MerleagMWEyXcZy4Dk+F5S/Na1h5weXI2flB23zb
+ h6WVjlZRJOdFA5VyIXe9p6PRuaUpk3b6KGMVfeXRUCz7vVyYXlZFsg/NknlaENPOIcGQ
+ 3KhVh+7Eju8IKA3QSBKWdkT6Sa04TdQZp+ZNmtvz7MZRVskcTWhZE+Ze/tvYIo0GF68y
+ /C6JCRw//T2StnA6yKKBdCk2SnLwsP9QbPGa7Jfi5OUjENM3LqjE7qxCMm6OyjirsV//
+ gloxGMKWrPnTUHj2nh45aNJd1Qv4S0okUnxo0YVs9t/m+CWub6BaCD8CCcQGH9wgIJxi
+ c4Mw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=WmJTvbMy
+Subject: [Buildroot] [PATCH 1/1] package/proj: bump to version 9.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,46 +93,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+- Switch to cmake-package as autotools has been removed since version
+  9.0.0
+- This bump will fix the following build failure with gcc 13 thanks to
+  https://github.com/OSGeo/PROJ/pull/3459/commits/b0b8937c56ced8eb0ffef532b9c691a1a5fc8634:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+In file included from proj_json_streaming_writer.cpp:34:
+proj_json_streaming_writer.hpp:42:14: error: 'int64_t' in namespace 'std' does not name a type
+   42 | typedef std::int64_t GIntBig;
+      |              ^~~~~~~
+
+https://github.com/OSGeo/PROJ/blob/9.3.0/NEWS
+
+Fixes:
+ - http://autobuild.buildroot.org/results/68416dcbed1ece589a7438b085f57064fc20f87d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/proj/proj.hash |  6 +++---
+ package/proj/proj.mk   | 19 ++++++++++---------
+ 2 files changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index b6b183c2d1..ccc3c2c205 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.5.tar.gz.sha256sum
--sha256  6957cfd14a29eee7555c52f8387a46f2ce2f5fe7dadf93547f1bc74b1657e119  tor-0.4.8.5.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.6.tar.gz.sha256sum
-+sha256  552d895fcaf66c7cd2b50f5abe63b7884b30fed254115be7bfb9236807355088  tor-0.4.8.6.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index e86fec29f4..8e31ca749b 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index 96d94e458e..22e6a43bf7 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from http://download.osgeo.org/proj/proj-8.1.1.tar.gz.md5
+-md5  f017fd7d35311b0d65b2cf0503844690  proj-8.1.1.tar.gz
++# Fetched from http://download.osgeo.org/proj/proj-9.3.0.tar.gz.md5
++md5  f1d70cb8873bb4429a03c437c65c41c4  proj-9.3.0.tar.gz
+ # Locally calculated
+-sha256  82f1345e5fa530c407cb1fc0752e83f8d08d2b98772941bbdc7820241f7fada2  proj-8.1.1.tar.gz
++sha256  91a3695a004ea28db0448a34460bed4cc3b130e5c7d74339ec999efdab0e547d  proj-9.3.0.tar.gz
+ sha256  6a8f30793e877d32e3f88b972f0970a051a3b5a26cd057d3993cb51e21c43319  COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index bc924b41fb..0e913fa335 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.8.5
-+TOR_VERSION = 0.4.8.6
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-PROJ_VERSION = 8.1.1
++PROJ_VERSION = 9.3.0
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+@@ -19,22 +19,23 @@ PROJ_CFLAGS += -O0
+ PROJ_CXXFLAGS += -O0
+ endif
+ 
+-PROJ_CONF_ENV = \
+-	CFLAGS="$(PROJ_CFLAGS)" \
+-	CXXFLAGS="$(PROJ_CXXFLAGS)"
++PROJ_CONF_OPTS = \
++	-DBUILD_APPS=OFF \
++	-DCMAKE_C_FLAGS="$(PROJ_CFLAGS)" \
++	-DCMAKE_CXX_FLAGS="$(PROJ_CXXFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ PROJ_DEPENDENCIES += libcurl
+-PROJ_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr/bin/curl-config
++PROJ_CONF_OPTS += -DENABLE_CURL=ON
+ else
+-PROJ_CONF_OPTS += --without-curl
++PROJ_CONF_OPTS += -DENABLE_CURL=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ PROJ_DEPENDENCIES += tiff
+-PROJ_CONF_OPTS += --enable-tiff
++PROJ_CONF_OPTS += -DENABLE_TIFF=ON
+ else
+-PROJ_CONF_OPTS += --disable-tiff
++PROJ_CONF_OPTS += -DENABLE_TIFF=OFF
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
-2.39.2
+2.40.1
 
 _______________________________________________
 buildroot mailing list
