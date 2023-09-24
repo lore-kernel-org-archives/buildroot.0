@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAF06CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ADDACE7A8B
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:48:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B47A41734;
-	Sun, 24 Sep 2023 21:47:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B47A41734
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4277408A1;
+	Sun, 24 Sep 2023 21:48:00 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4277408A1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id WirXc-lRLwwc; Sun, 24 Sep 2023 21:47:46 +0000 (UTC)
+	with ESMTP id 9Fkg87cP5-2d; Sun, 24 Sep 2023 21:47:59 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65968418A7;
-	Sun, 24 Sep 2023 21:47:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65968418A7
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1B8571BF2CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DC254174F;
+	Sun, 24 Sep 2023 21:47:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DC254174F
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D6861BF909
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0256281DCA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0205840C10
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0256281DCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0205840C10
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id YbbQj1ohmbv1 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PbOpjS7XBpPm for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2C0D281D5F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 246D340320
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C0D281D5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 246D340320
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C69987691; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
+ id 13A2187690; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:31:38 +0200
+Date: Sun, 24 Sep 2023 23:29:17 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 124023cfd6bbd20451e1d344068a658f894afdbc
-X-Git-Newrev: a7c6525110753642f942b7ef1dc9195178310297
+X-Git-Oldrev: 914f72f664c39a9f8c6c81521331232efd29315d
+X-Git-Newrev: 124023cfd6bbd20451e1d344068a658f894afdbc
 X-Patchwork-Hint: ignore
-Message-Id: <20230924214719.1C69987691@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/asterisk:
- security bump to version 16.30.1
+Message-Id: <20230924214719.13A2187690@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/fstrcmp: fix musl
+ static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7c6525110753642f942b7ef1dc9195178310297
+commit: https://git.buildroot.net/buildroot/commit/?id=124023cfd6bbd20451e1d344068a658f894afdbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fixes the following security vulnerabilities:
+Fix the following musl static build failure raised because host libtool
+is not patched to manage "-static" as "-all-static".
 
-CVE-2022-23537: Heap buffer overflow when decoding STUN message in pjproject
+/home/buildroot/autobuild/instance-2/output-1/host/bin/libtool --mode=link --tag=CC /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -Wall -Wextra -Wshadow -o bin/test_user \
+	test_user/main.lo lib/libfstrcmp.la -static
+chmod a+rx bin/test_prelude
+libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/test_user test_user/main.o  lib/.libs/libfstrcmp.a
+libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/fstrcmp fstrcmp/main.o  lib/.libs/libfstrcmp.a
+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
+/home/buildroot/autobuild/instance-2/output-1/build/host-gcc-final-10.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
 
-Possible buffer overread when parsing a specially crafted STUN message with
-unknown attribute.  The vulnerability affects Asterisk users using ICE
-and/or WebRTC.
+Fixes:
+ - http://autobuild.buildroot.org/results/ffbee12f13e3d6c180d8891a428c6c490163083d
 
-https://github.com/asterisk/asterisk/security/advisories/GHSA-4xjp-22g4-9fxm
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 01ec478cb642dc6d221ab4c2f7f2938d629dcec1)
+(cherry picked from commit 094c76a2bcd301e4aa1e27c9694314079440ce5b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fstrcmp/fstrcmp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 98ee3bdc71..41e1da2962 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  9b93006a87be9c29492299118200e4f66c8369851c66a50fdef5b15dfc4eb2c2  asterisk-16.29.1.tar.gz
-+sha256  ef1ddc07dc02bb0c5f5ba58a5e42e42bcb63e55ac94199be8e3b5d3910f43736  asterisk-16.30.1.tar.gz
+diff --git a/package/fstrcmp/fstrcmp.mk b/package/fstrcmp/fstrcmp.mk
+index 9c42159afb..294104b284 100644
+--- a/package/fstrcmp/fstrcmp.mk
++++ b/package/fstrcmp/fstrcmp.mk
+@@ -15,6 +15,12 @@ FSTRCMP_CONF_ENV = LIBTOOL="$(HOST_DIR)/bin/libtool"
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 22ac0334fd..4f1a80ba8b 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ FSTRCMP_MAKE_OPTS = all-bin libdir/pkgconfig/fstrcmp.pc
  
--ASTERISK_VERSION = 16.29.1
-+ASTERISK_VERSION = 16.30.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
++# fstrcmp does not carry and use the usual ltmain.sh wrappers, so it does not
++# inherit from our libtool patches to make -static behave like -all-static.
++ifeq ($(BR2_STATIC_LIBS),y)
++FSTRCMP_MAKE_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -all-static"
++endif
++
+ # We need to install the package files ourselves due to upstream trying
+ # to install a .lai file which is missing because of rpath removal
+ define FSTRCMP_INSTALL_STAGING_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
