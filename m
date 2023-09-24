@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF489CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E78FCE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:50:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F46C403C1;
-	Sun, 24 Sep 2023 21:49:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F46C403C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08A88404A4;
+	Sun, 24 Sep 2023 21:50:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08A88404A4
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8SjpiSsfaDg7; Sun, 24 Sep 2023 21:49:47 +0000 (UTC)
+	with ESMTP id SphuuI0eKmhy; Sun, 24 Sep 2023 21:50:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AD71404A4;
-	Sun, 24 Sep 2023 21:49:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AD71404A4
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA0A5404CE;
+	Sun, 24 Sep 2023 21:49:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA0A5404CE
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 06D9C1BF2CC
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 126CD1BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1ADDB4150C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3635041811
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ADDB4150C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3635041811
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id SDEj8kJynLTG for <buildroot@lists.busybox.net>;
+ with ESMTP id 8_imyAPouaZQ for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4849D418B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5282C418B9
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4849D418B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5282C418B9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 452DF87694; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
+ id 344B187692; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:33:18 +0200
+Date: Sun, 24 Sep 2023 23:32:11 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: dbd3832f7e805dfded13c526d93f4ed1ad1b3fcd
-X-Git-Newrev: 18e5dc36e410b0f2fdf771ef3da81af641f981a8
+X-Git-Oldrev: 7d7464eea4369bbd77c043a1bca19e20b18340e8
+X-Git-Newrev: 372e4f9723fbb4a22bdf80732328ac736ffe6f5e
 X-Patchwork-Hint: ignore
-Message-Id: <20230924214720.452DF87694@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libraw: fix
- IGNORE_CVES assignment
+Message-Id: <20230924214720.344B187692@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libcurl: security
+ bump to version 8.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18e5dc36e410b0f2fdf771ef3da81af641f981a8
+commit: https://git.buildroot.net/buildroot/commit/?id=372e4f9723fbb4a22bdf80732328ac736ffe6f5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Commit bc4110b0739 ("package/libraw: fix CVE-2023-1729") mistakenly
-added the patch name to IGNORE_CVES instead of the CVE reference. Fix
-that.
+Fixes the following security issue:
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 23166132ebc6cf406f4eac801c8263dabd602127)
+CVE-2023-38039: HTTP headers eat all memory
+
+When curl retrieves an HTTP response, it stores the incoming headers so that
+they can be accessed later via the libcurl headers API.
+
+However, curl did not have a limit on the size or quantity of headers it
+would accept in a response, allowing a malicious server to stream an endless
+series of headers to a client and eventually cause curl to run out of heap
+memory.
+
+https://curl.se/docs/CVE-2023-38039.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 56b066740608e9ca62ce5739fe1a683f7050b605)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libraw/libraw.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index cbd509cfea..63b50e340d 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -19,7 +19,7 @@ LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
- LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 42bf5967e1..371d20a632 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.2.1.tar.xz.asc
++# https://curl.se/download/curl-8.3.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  dd322f6bd0a20e6cebdfd388f69e98c3d183bed792cf4713c8a7ef498cba4894  curl-8.2.1.tar.xz
++sha256  376d627767d6c4f05105ab6d497b0d9aba7111770dd9d995225478209c37ea63  curl-8.3.0.tar.xz
+ sha256  b1d7feb949ea5023552029fbe0bf5db4f23c2f85e9b8e51e18536f0ecbf9c524  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 7a3d6460e9..dd4cf43c6a 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
--LIBRAW_IGNORE_CVES += 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
-+LIBRAW_IGNORE_CVES += CVE-2023-1729
- 
- ifeq ($(BR2_PACKAGE_JASPER),y)
- LIBRAW_CONF_OPTS += --enable-jasper
+-LIBCURL_VERSION = 8.2.1
++LIBCURL_VERSION = 8.3.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
