@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 242B2CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:48:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A409CE7A8B
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:49:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C33A2402A2;
-	Sun, 24 Sep 2023 21:48:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C33A2402A2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2ECC640289;
+	Sun, 24 Sep 2023 21:49:08 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ECC640289
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id leQkrgw1LzIY; Sun, 24 Sep 2023 21:48:53 +0000 (UTC)
+	with ESMTP id KrN2iX15zxeR; Sun, 24 Sep 2023 21:49:07 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92A4940297;
-	Sun, 24 Sep 2023 21:48:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92A4940297
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6572A1BF909
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3B18402CC;
+	Sun, 24 Sep 2023 21:49:05 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3B18402CC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DDA31BF2CC
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D20281D5F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B87C40320
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D20281D5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B87C40320
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id jXZZ8PwORVsZ for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id xkIrcGWBx2M9 for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D86081D7D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DC8A40C01
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D86081D7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DC8A40C01
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E11281379; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
+ id 2E02787693; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:35:34 +0200
+Date: Sun, 24 Sep 2023 23:33:28 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 2fb061ca0fef611c339e59db4eeaefab253208f2
-X-Git-Newrev: 5e75a706f800980d45f8cc42ceb9133b0049ffef
+X-Git-Oldrev: 888f66ede746edf27f3d113d54767b22ea2ee578
+X-Git-Newrev: d6ab433e466bac06b63a196a6bd8ab2ce0373528
 X-Patchwork-Hint: ignore
-Message-Id: <20230924214719.4E11281379@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/strongswan:
- security bump to version 5.9.11
+Message-Id: <20230924214719.2E02787693@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/libraw: fix
+ CVE-2023-1729
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,58 +63,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e75a706f800980d45f8cc42ceb9133b0049ffef
+commit: https://git.buildroot.net/buildroot/commit/?id=d6ab433e466bac06b63a196a6bd8ab2ce0373528
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Fix CVE-2023-26463: strongSwan 5.9.8 and 5.9.9 potentially allows remote
-code execution because it uses a variable named "public" for two
-different purposes within the same function. There is initially
-incorrect access control, later followed by an expired pointer
-dereference. One attack vector is sending an untrusted client
-certificate during EAP-TLS. A server is affected only if it loads
-plugins that implement TLS-based EAP methods (EAP-TLS, EAP-TTLS,
-EAP-PEAP, or EAP-TNC). This is fixed in 5.9.10.
-
-https://github.com/strongswan/strongswan/blob/5.9.11/NEWS
-https://www.strongswan.org/blog/2023/03/02/strongswan-vulnerability-(cve-2023-26463).html
+A flaw was found in LibRaw. A heap-buffer-overflow in raw2image_ex()
+caused by a maliciously crafted file may lead to an application crash.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 78959665b94b412d7a82ee43e3ede14278a5d924)
+(cherry picked from commit bc4110b0739f07436cb8c0ff837b7284835fb9b8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash | 6 +++---
- package/strongswan/strongswan.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-set-shrink-flag-for-3-4-component-images.patch | 24 ++++++++++++++++++++++
+ package/libraw/libraw.mk                           |  3 +++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index 4822f9152f..de8f18747a 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,7 +1,7 @@
--# From http://download.strongswan.org/strongswan-5.9.8.tar.bz2.md5
--md5  f46b0d3e7aed88824650d0721c887443  strongswan-5.9.8.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.9.11.tar.bz2.md5
-+md5  673e194cd256af77b46928179f2c81ad  strongswan-5.9.11.tar.bz2
- # Calculated based on the hash above
--sha256  d3303a43c0bd7b75a12b64855e8edcb53696f06190364f26d1533bde1f2e453c  strongswan-5.9.8.tar.bz2
-+sha256  ddf53f1f26ad26979d5f55e8da95bd389552f5de3682e35593f9a70b2584ed2d  strongswan-5.9.11.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index cae1433e39..6058631696 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch b/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+new file mode 100644
+index 0000000000..ef93e0901b
+--- /dev/null
++++ b/package/libraw/0001-do-not-set-shrink-flag-for-3-4-component-images.patch
+@@ -0,0 +1,24 @@
++From 477e0719ffc07190c89b4f3d12d51b1292e75828 Mon Sep 17 00:00:00 2001
++From: Alex Tutubalin <lexa@lexa.ru>
++Date: Sat, 14 Jan 2023 18:32:59 +0300
++Subject: [PATCH] do not set shrink flag for 3/4 component images
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/LibRaw/LibRaw/commit/477e0719ffc07190c89b4f3d12d51b1292e75828
++---
++ src/preprocessing/raw2image.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/preprocessing/raw2image.cpp b/src/preprocessing/raw2image.cpp
++index e65e2ad7..702cf290 100644
++--- a/src/preprocessing/raw2image.cpp
+++++ b/src/preprocessing/raw2image.cpp
++@@ -43,6 +43,8 @@ void LibRaw::raw2image_start()
++ 
++   // adjust for half mode!
++   IO.shrink =
+++	  !imgdata.rawdata.color4_image && !imgdata.rawdata.color3_image &&
+++	  !imgdata.rawdata.float4_image && !imgdata.rawdata.float3_image &&
++       P1.filters &&
++       (O.half_size || ((O.threshold || O.aber[0] != 1 || O.aber[2] != 1)));
++ 
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index b6616f0c10..cbd509cfea 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -18,6 +18,9 @@ LIBRAW_DEPENDENCIES = host-pkgconf
+ LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
+ LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
  
--STRONGSWAN_VERSION = 5.9.8
-+STRONGSWAN_VERSION = 5.9.11
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPL-2.0+
++# 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
++LIBRAW_IGNORE_CVES += 0001-do-not-set-shrink-flag-for-3-4-component-images.patch
++
+ ifeq ($(BR2_PACKAGE_JASPER),y)
+ LIBRAW_CONF_OPTS += --enable-jasper
+ LIBRAW_DEPENDENCIES += jasper
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
