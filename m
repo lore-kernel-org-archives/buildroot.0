@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FA58CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:07:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3C48CE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F15CF418E2;
-	Sun, 24 Sep 2023 19:07:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F15CF418E2
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E983417B9;
+	Sun, 24 Sep 2023 19:07:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E983417B9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 97hqEWPGbj4e; Sun, 24 Sep 2023 19:07:14 +0000 (UTC)
+	with ESMTP id awZlx2yxARnU; Sun, 24 Sep 2023 19:07:27 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC070418EC;
-	Sun, 24 Sep 2023 19:07:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC070418EC
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A29F1BF909
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38EA341860;
+	Sun, 24 Sep 2023 19:07:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38EA341860
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AADF1BF2A9
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4335E819D2
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4335E819D2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B14F60ADE
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:05:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B14F60ADE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HWvtrQY13bnt for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 0x1phvyMsej3 for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6317F81A12
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6317F81A12
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EC4260585
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8EC4260585
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 54160875B0; Sun, 24 Sep 2023 19:05:51 +0000 (UTC)
+ id 7F33080288; Sun, 24 Sep 2023 19:05:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:02:55 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 7fe9b7eb8fec85f0f49a6a622ca4a4348b9b9ebe
-X-Git-Newrev: 5944ae28a3181e9bd1397ef9b063d14278b6814c
+Date: Sun, 24 Sep 2023 20:00:04 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: fa5e2cec8a97d5fdc2e434429d10f27deac05b12
+X-Git-Newrev: 8a0ac6c44db88eb685f833840bc535393028dac3
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190551.54160875B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libjxl: security
- bump to version 0.8.2
+Message-Id: <20230924190552.7F33080288@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/zbar: add
+ ZBAR_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,49 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5944ae28a3181e9bd1397ef9b063d14278b6814c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8a0ac6c44db88eb685f833840bc535393028dac3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fix CVE-2023-35790: An issue was discovered in dec_patch_dictionary.cc
-in libjxl before 0.8.2. An integer underflow in patch decoding can lead
-to a denial of service, such as an infinite loop.
+cpe:2.3:a:zbar_project:zbar is a valid CPE identifier for this package:
 
-https://github.com/libjxl/libjxl/releases/tag/v0.8.2
+  https://nvd.nist.gov/products/cpe/detail/438B9E70-F8E2-4318-83B5-46A0DF320CE3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Julien Olivain <ju.o@free.fr>
-Tested-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e4572cc705b92f593e87095619b30f016ae507d9)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 23e774d2de35c42ee13f618dd2a895f9a97a4d1c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjxl/libjxl.hash | 2 +-
- package/libjxl/libjxl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zbar/zbar.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
-index 6b4c9d8d0a..c8f98d10ea 100644
---- a/package/libjxl/libjxl.hash
-+++ b/package/libjxl/libjxl.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  60f43921ad3209c9e180563025eda0c0f9b1afac51a2927b9ff59fff3950dc56  libjxl-0.8.1.tar.gz
-+sha256  c70916fb3ed43784eb840f82f05d390053a558e2da106e40863919238fa7b420  libjxl-0.8.2.tar.gz
- sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
- sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
-diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index f603327bf6..47c110eb53 100644
---- a/package/libjxl/libjxl.mk
-+++ b/package/libjxl/libjxl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBJXL_VERSION = 0.8.1
-+LIBJXL_VERSION = 0.8.2
- LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
- LIBJXL_LICENSE = BSD-3-Clause
- LIBJXL_LICENSE_FILES = LICENSE PATENTS
+diff --git a/package/zbar/zbar.mk b/package/zbar/zbar.mk
+index fb83fa01d5..2c933929cf 100644
+--- a/package/zbar/zbar.mk
++++ b/package/zbar/zbar.mk
+@@ -9,6 +9,7 @@ ZBAR_SOURCE = zbar-$(ZBAR_VERSION).tar.bz2
+ ZBAR_SITE = https://www.linuxtv.org/downloads/zbar
+ ZBAR_LICENSE = LGPL-2.1+
+ ZBAR_LICENSE_FILES = LICENSE.md
++ZBAR_CPE_ID_VENDOR = zbar_project
+ ZBAR_INSTALL_STAGING = YES
+ ZBAR_DEPENDENCIES = libv4l jpeg $(TARGET_NLS_DEPENDENCIES)
+ # uses C99 features
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
