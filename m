@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27BC5CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:21:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3897DCE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:21:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CDC8960E50;
-	Sun, 24 Sep 2023 19:21:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDC8960E50
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDADD60EF8;
+	Sun, 24 Sep 2023 19:21:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDADD60EF8
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 91B1fWbUz7BO; Sun, 24 Sep 2023 19:21:25 +0000 (UTC)
+	with ESMTP id laxkhXkChXcp; Sun, 24 Sep 2023 19:21:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E66460E1D;
-	Sun, 24 Sep 2023 19:21:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E66460E1D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DC8F91BF2A9
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EE0F60E1D;
+	Sun, 24 Sep 2023 19:21:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EE0F60E1D
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 35DDA1BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C37A88134F
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C37A88134F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E4BA60E1D
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:21:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E4BA60E1D
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id oBIh8zj_eHAz for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:21:21 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C989D8133C
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:21:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C989D8133C
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AE475FF802;
- Sun, 24 Sep 2023 19:21:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qkUfN-000GfH-VZ; Sun, 24 Sep 2023 21:21:17 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Dy4qqlIQ-X7I for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 302BC60EF8
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 302BC60EF8
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1E754875BE; Sun, 24 Sep 2023 19:21:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230915215859.39831-1-fontaine.fabrice@gmail.com>
-Date: Sun, 24 Sep 2023 21:21:17 +0200
-In-Reply-To: <20230915215859.39831-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 15 Sep 2023 23:58:59 +0200")
-Message-ID: <878r8vidhu.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/mdadm: add MDADM_CPE_ID_VENDOR
+To: buildroot@buildroot.org
+Date: Sun, 24 Sep 2023 21:20:50 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 1fe0a7fe97dd3f8b12955305496288253301bf76
+X-Git-Newrev: 3291b7d53d390829853eda095293a9264c08010b
+X-Patchwork-Hint: ignore
+Message-Id: <20230924192136.1E754875BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/mdadm: add
+ MDADM_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,25 +57,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3291b7d53d390829853eda095293a9264c08010b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > cpe:2.3:a:mdadm_project:mdadm is a valid CPE identifier for this
- > package:
+cpe:2.3:a:mdadm_project:mdadm is a valid CPE identifier for this
+package:
 
- >   https://nvd.nist.gov/products/cpe/detail/A4FAEC6A-3572-48E9-ABB8-C96D8C8B91AF
+  https://nvd.nist.gov/products/cpe/detail/A4FAEC6A-3572-48E9-ABB8-C96D8C8B91AF
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit bdab457768b336a442897137c4f62d4e387b3d10)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mdadm/mdadm.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index c61937306a..ef518cd238 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -9,6 +9,7 @@ MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
+ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
+ MDADM_LICENSE_FILES = COPYING
++MDADM_CPE_ID_VENDOR = mdadm_project
+ 
+ MDADM_CXFLAGS = $(TARGET_CFLAGS)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
