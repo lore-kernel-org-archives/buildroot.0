@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E034DCE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F871CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:49:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92671402BE;
-	Sun, 24 Sep 2023 21:49:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 92671402BE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20FC440346;
+	Sun, 24 Sep 2023 21:49:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20FC440346
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 26aRx3qfGr7H; Sun, 24 Sep 2023 21:49:20 +0000 (UTC)
+	with ESMTP id jO8s7EyftWrK; Sun, 24 Sep 2023 21:49:34 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B2D4402D2;
-	Sun, 24 Sep 2023 21:49:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B2D4402D2
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 17AA51BF2CC
+	by smtp4.osuosl.org (Postfix) with ESMTP id C58B340319;
+	Sun, 24 Sep 2023 21:49:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C58B340319
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B7A551BF909
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5DFD41803
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5DFD41803
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77FA5600C7
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:47:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77FA5600C7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id BNHv44L4ZvGL for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id mbitQR0ELGQz for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 55FB041811
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55FB041811
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30977600BB
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30977600BB
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43DC487641; Sun, 24 Sep 2023 21:47:19 +0000 (UTC)
+ id 20B4287641; Sun, 24 Sep 2023 21:47:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:34:31 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: bf509099058e94f575e483ff58b4b370313a8a4f
-X-Git-Newrev: 2fb061ca0fef611c339e59db4eeaefab253208f2
+Date: Sun, 24 Sep 2023 23:29:07 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 46a015194d6826f28851578145aae98e68f31b7b
+X-Git-Newrev: d3020ad78c9e49d21559b7a5a41a542a88523cba
 X-Patchwork-Hint: ignore
-Message-Id: <20230924214719.43DC487641@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/haproxy: security
- bump to version 2.6.15
+Message-Id: <20230924214720.20B4287641@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/fstrcmp: fix musl
+ static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb061ca0fef611c339e59db4eeaefab253208f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d3020ad78c9e49d21559b7a5a41a542a88523cba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-Fix CVE-2023-40225: HAProxy through 2.0.32, 2.1.x and 2.2.x through
-2.2.30, 2.3.x and 2.4.x through 2.4.23, 2.5.x and 2.6.x before 2.6.15,
-2.7.x before 2.7.10, and 2.8.x before 2.8.2 forwards empty
-Content-Length headers, violating RFC 9110 section 8.6. In uncommon
-cases, an HTTP/1 server behind HAProxy may interpret the payload as an
-extra request.
+Fix the following musl static build failure raised because host libtool
+is not patched to manage "-static" as "-all-static".
 
-https://www.mail-archive.com/haproxy@formilux.org/msg43864.html
+/home/buildroot/autobuild/instance-2/output-1/host/bin/libtool --mode=link --tag=CC /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static -Wall -Wextra -Wshadow -o bin/test_user \
+	test_user/main.lo lib/libfstrcmp.la -static
+chmod a+rx bin/test_prelude
+libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/test_user test_user/main.o  lib/.libs/libfstrcmp.a
+libtool: link: /home/buildroot/autobuild/instance-2/output-1/host/bin/arm-buildroot-linux-musleabihf-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -Wall -Wextra -Wshadow -o bin/fstrcmp fstrcmp/main.o  lib/.libs/libfstrcmp.a
+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: /home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/10.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_ldiv0':
+/home/buildroot/autobuild/instance-2/output-1/build/host-gcc-final-10.3.0/build/arm-buildroot-linux-musleabihf/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499: undefined reference to `raise'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ffbee12f13e3d6c180d8891a428c6c490163083d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8fc24fbd173a3d7565d3b3db4adebcb2244568a5)
+(cherry picked from commit 094c76a2bcd301e4aa1e27c9694314079440ce5b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fstrcmp/fstrcmp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 20048da7ec..74390c2ff5 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.14.tar.gz.sha256
--sha256  bd3dd9fa60391ca09e1225e1ac3163e45be83c3f54f2fd76a30af289cc6e4fd4  haproxy-2.6.14.tar.gz
-+# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.15.tar.gz.sha256
-+sha256  41f8e1695e92fafdffe39690a68993f1a0f5f7f06931a99e9a153f749ea39cfd  haproxy-2.6.15.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 2b8920efa6..63a92090f3 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/fstrcmp/fstrcmp.mk b/package/fstrcmp/fstrcmp.mk
+index 9c42159afb..294104b284 100644
+--- a/package/fstrcmp/fstrcmp.mk
++++ b/package/fstrcmp/fstrcmp.mk
+@@ -15,6 +15,12 @@ FSTRCMP_CONF_ENV = LIBTOOL="$(HOST_DIR)/bin/libtool"
  
- HAPROXY_VERSION_MAJOR = 2.6
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).14
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).15
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ FSTRCMP_MAKE_OPTS = all-bin libdir/pkgconfig/fstrcmp.pc
+ 
++# fstrcmp does not carry and use the usual ltmain.sh wrappers, so it does not
++# inherit from our libtool patches to make -static behave like -all-static.
++ifeq ($(BR2_STATIC_LIBS),y)
++FSTRCMP_MAKE_OPTS += LDFLAGS="$(TARGET_LDFLAGS) -all-static"
++endif
++
+ # We need to install the package files ourselves due to upstream trying
+ # to install a .lai file which is missing because of rpath removal
+ define FSTRCMP_INSTALL_STAGING_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
