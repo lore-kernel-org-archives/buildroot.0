@@ -4,119 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22E60CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 15:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A96CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 15:45:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC1424051F;
-	Sun, 24 Sep 2023 15:14:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC1424051F
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC352400D7;
+	Sun, 24 Sep 2023 15:45:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC352400D7
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3nfleJv214Lx; Sun, 24 Sep 2023 15:14:37 +0000 (UTC)
+	with ESMTP id ixJL7h6BwZmQ; Sun, 24 Sep 2023 15:45:19 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB90241566;
-	Sun, 24 Sep 2023 15:14:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB90241566
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8EF1140913;
+	Sun, 24 Sep 2023 15:45:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8EF1140913
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D38D1BF3E8
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:13:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1C6B01BF3E8
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:45:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6642F81E28
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:13:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6642F81E28
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9B4C80E8C
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:45:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9B4C80E8C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rhdgMKseZxaN for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 15:13:31 +0000 (UTC)
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam04on20616.outbound.protection.outlook.com
- [IPv6:2a01:111:f400:7e8b::616])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5004881E26
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 15:13:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5004881E26
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EHGRoUeq72iHXt/+o+FR5OBrAKlNxjG3+SysvWgTXKCc1GB9cu2raKBy7Hy440U0icV5k29ugpqLvD3l9oKRAeISIleTMSefSGkIw3h4crs7EaLRD6Rbb5AxkqNvQcyUhA9mw4X00Zgt6QcYHebfQUHN6l7FMnWUt+IcJLnT5zvOvwcGG2eKhoYNoGsDgxhzpEBhWOWJeRuMXurEQtRc/X4E7robV/qe23y3ga04OHbMiLPj9LnbkjHWGgiPayKTDlXc/6QbfHlgYJutz8JOxFkaDp3AIxAYHOeXaZSE5AsKxrYQTDneGiMHgaCE3pMH6bl01lUZKqS/gzDjwA7/AA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rztjbgwRa9R6s1Pbt785rF0/u6/K1C1gpfrHqSrXs+o=;
- b=bTLDVBoeLbaHqVmtk2GZF9YryXhtfE+AxWzyqrmEb0QXq/wW4l53x5LP9Sq3Yj/Zdo0kjzoqlNuan4H1vuVPQFnN036Jo3vmLDbs0scYhKauE7PV2AUt5HyUt50hiEpmi0x9Kw3avU6n+u4m8nIn+mZhlTpGzQAURws7t5If5yE0jTdVI3MKb8JCjWiCINytYpzjF2ddTtBHa49PCXFjmIHpY/02n0R6A96jBA1mbJBgsFxWjieQB0J2Jil3oCVIrMiXiQSlrbVAnI5FB7QsfK+vDRvZxxOP/mQPTsoppWcgw2gEWvQIPJDM4yqsfwo3vuEW5lrv1avyhgQFAHb1jA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-Received: from BN9PR03CA0455.namprd03.prod.outlook.com (2603:10b6:408:139::10)
- by SJ2PR12MB7963.namprd12.prod.outlook.com (2603:10b6:a03:4c1::6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.27; Sun, 24 Sep
- 2023 15:13:24 +0000
-Received: from DS2PEPF0000343F.namprd02.prod.outlook.com
- (2603:10b6:408:139:cafe::fb) by BN9PR03CA0455.outlook.office365.com
- (2603:10b6:408:139::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
- Transport; Sun, 24 Sep 2023 15:13:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DS2PEPF0000343F.mail.protection.outlook.com (10.167.18.42) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.14 via Frontend Transport; Sun, 24 Sep 2023 15:13:23 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 24 Sep
- 2023 10:13:22 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 24 Sep
- 2023 10:13:22 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
- Transport; Sun, 24 Sep 2023 10:13:21 -0500
-To: <buildroot@buildroot.org>
-Date: Sun, 24 Sep 2023 16:12:05 +0100
-Message-ID: <20230924151205.2099293-10-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230924151205.2099293-1-neal.frager@amd.com>
-References: <20230924151205.2099293-1-neal.frager@amd.com>
+ with ESMTP id HkkqQMdTLqPH for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 15:45:15 +0000 (UTC)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3C14F80E87
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 15:45:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C14F80E87
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-401187f8071so33989735e9.0
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 08:45:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695570313; x=1696175113;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=G2lQaEqMqJwjfDE5zcQINC7+AyE/IoMTNjLsw+ptVwg=;
+ b=ZXBD7yK9a5Pj9uTOkpLC1m5izVcsQxl1idiBPWGAJLn0eJFNAQ22wi4P1WXW0Pj4tk
+ w7HyXVovBYnrqhHQEbqhFDiG8NA1gtLeGIqcnr9Bome9SQ3tmYt+4mzDOsFljMk+J79M
+ 77qVwpqrLQa6neyiYQ3EY7ZdllDbaOiaN7yZ86NARMEWWo8zmTaaPBj4s6Uwp5Ko9dnl
+ tcTw7USCwLBY8ZnBu/WhZJ1oqd0d5GmdpA9KTdSTdd0CeLoyNYWyKHfcHTNFbGeYHzin
+ o7plDBTw+0cX5zlt45QWmOxYUdEYvBrcWE1DM5o1JwNk8o13IrtJ6Rm33yvb6puOdjrS
+ UFhA==
+X-Gm-Message-State: AOJu0YwbHuwW+hvBaUX1DQr34+WNoHTMf1GALyTRLJ+WPY273GdRq4cY
+ ruRY8InbBfUT2gwHwMbsFDYIcyqJmy4=
+X-Google-Smtp-Source: AGHT+IFg4kJ9k38wW9DY5I7fzJuDhWBKpY0x8mEIdAt3UiNS5MzZxTw2TPOedUSrvVGLj/g8vpH7ag==
+X-Received: by 2002:a05:600c:cf:b0:401:609f:7f9a with SMTP id
+ u15-20020a05600c00cf00b00401609f7f9amr5809019wmm.8.1695570312540; 
+ Sun, 24 Sep 2023 08:45:12 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ m15-20020a7bce0f000000b003fed4fa0c19sm12745003wmc.5.2023.09.24.08.45.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Sep 2023 08:45:11 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 24 Sep 2023 17:45:06 +0200
+Message-Id: <20230924154506.830383-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF0000343F:EE_|SJ2PR12MB7963:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6db10269-a5f4-4f24-7593-08dbbd10cb79
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /iivzZCy3IodBBGYRska36HwuBi9bRcLxpiesi6f2krANrFl3pfzoj1iBsdN7r7tGt5awyYCzwedkBhHWwd2BFDgtj+I8usCwfcPtGDnnR9DjLmeZsG22vlgn1UizUU9m9W4uSyBmzD5JaC1l9QBXg3EfvzHbdn0OMmK5ZZVXAAmas7FhVH7NyrK6ve0XT2qw1ZZHAxzl+uESgMosWSyXV0nW1nbCj02uWkboqAyLk8lXultRkrBSOmTuPNYW60fzfVm7+m9d5jqGnKXXxSJL+oLSRYMkZZmVCItHoFUnGb7HOcQjkZX4HwD12/Wtjy3J9AEm1deTv/+KVXlgcqkfsz8STNda675jB+y8mtyPBEQ6+gjHKdkPgYmKceLlC7ba309Dx2eB0zpi7ws7rZOP/HO3BG7AnnunBd9fdesmCA39XHtN+oUHOinCCMAzKOAbaev5v5UgTRJGOCiHfDqa1PaCG0VsxgZ61969bBvNhe8e7bAFVNAm38Li6vKbJ84XAq8vgEDNtzqw6b3m6eIqYOiR6auicgZlGYIB20gxLHAXfBdx8nL6fMRSIFYuHLMOd/63G4Pn9akkyYsqPWSaJRbmVdVGyL2osHB1ikFFrwtKS6mIJIIT1wRPk/bFbKzVcAZhc7xgIPPg9bVgjTz2ikRkdXpPTGC5NayYuluouqgP6Emc0pLSXhz2gFojOEziRUkZOzm4csknXIKb7L2YrLDPHurF3xjmUOZ2820uHJMHnwLRtUwGLyszLiUzWy3JMFfvWOpOEDIdP9yWL95aA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230031)(4636009)(39860400002)(376002)(396003)(136003)(346002)(230922051799003)(82310400011)(186009)(451199024)(1800799009)(46966006)(36840700001)(40470700004)(316002)(54906003)(41300700001)(8936002)(70586007)(70206006)(6916009)(40480700001)(8676002)(4326008)(2906002)(44832011)(478600001)(40460700003)(6666004)(26005)(5660300002)(36860700001)(47076005)(83380400001)(36756003)(336012)(426003)(966005)(1076003)(2616005)(86362001)(82740400003)(81166007)(356005)(36900700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2023 15:13:23.2980 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6db10269-a5f4-4f24-7593-08dbbd10cb79
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF0000343F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7963
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rztjbgwRa9R6s1Pbt785rF0/u6/K1C1gpfrHqSrXs+o=;
- b=P9rjQauLh0fIM15YjmMfGjiyr3S05emMbJ96A54YM9FYM4V20Eur5989iV0vGntP4bEKEoAz1iECYXYZ0tSjcjeazQfmuqg09V1i17zPtuy7OSfTuWLrbuD+gio6L9kzi0KxQE4vL70vqemj2qV+49xUu+ybcbSerHHixfZXO34=
+ d=gmail.com; s=20230601; t=1695570313; x=1696175113; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=G2lQaEqMqJwjfDE5zcQINC7+AyE/IoMTNjLsw+ptVwg=;
+ b=BK5Ib2tm3DuXePNU4hyyyp/lnv4woX/77Y2iyHLQ9PX0rh/fvB9Io/TwaTmUSJL9bJ
+ vf05OEwyh/zr+R0OcCQlOpkN8zhZnMjRKwKqGlK0FLWS9H48XTR0svt1ekEPDHyfjfwG
+ W44Of1IplNlg5PA7NAFDw4xio7YJOOQPRuUMrra1R8Bhj4o7R6U7AqdbeGvugUolVs2z
+ FaCSAwyLzsTkGMKzGvGrjjeu9t/bkX8uHB+u4Kwd2WHPqPoLWnkRUeYg23y+xRXwwSxN
+ mDcUsWgQBTGR6IAdygheC0BZ0vqJVil0Os1XJsc6kQzAtCdY+qxIeLHo0HZxJOhD9nIj
+ TF2A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=P9rjQauL
-Subject: [Buildroot] [PATCH v4 10/10] package/versal-firmware: remove package
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=BK5Ib2tm
+Subject: [Buildroot] [PATCH 1/1] package/liburcu: bump to version 0.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -128,112 +93,318 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
- michal.simek@amd.com
+Cc: Philippe Proulx <eeppeliteloop@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Alexander Egorenkov <egorenar-dev@posteo.net>,
+ Joris Lijssens <joris.lijssens@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch removes the package/versal-firmware as this package is replaced
-by the boot/versal-firmware target boot firmware package for versal.
+- Drop second and third patches (already in version)
+- C++ is mandatory since
+  https://github.com/urcu/userspace-rcu/commit/153b081a9b007aad7bece415dc3bf1125edd2da3
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+https://github.com/urcu/userspace-rcu/blob/v0.14.0/ChangeLog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                                 |  1 -
- package/Config.in                          |  1 -
- package/versal-firmware/Config.in          | 24 ----------------------
- package/versal-firmware/versal-firmware.mk | 21 -------------------
- 4 files changed, 47 deletions(-)
- delete mode 100644 package/versal-firmware/Config.in
- delete mode 100644 package/versal-firmware/versal-firmware.mk
+ .checkpackageignore                           |  2 -
+ ...ix-don-t-use-C-thread_local-on-MacOs.patch | 41 --------------
+ ...-Thread-local-storage-except-on-MSVC.patch | 53 -------------------
+ package/liburcu/Config.in                     |  6 ++-
+ package/liburcu/liburcu.hash                  |  4 +-
+ package/liburcu/liburcu.mk                    |  2 +-
+ package/lttng-libust/Config.in                |  6 ++-
+ package/lttng-tools/Config.in                 |  6 ++-
+ package/multipath-tools/Config.in             |  6 ++-
+ package/netsniff-ng/Config.in                 |  4 +-
+ package/xfsprogs/Config.in                    |  6 ++-
+ 11 files changed, 26 insertions(+), 110 deletions(-)
+ delete mode 100644 package/liburcu/0002-fix-don-t-use-C-thread_local-on-MacOs.patch
+ delete mode 100644 package/liburcu/0003-Always-use-__thread-for-Thread-local-storage-except-on-MSVC.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1c66659b19..1c05a3e17f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2190,7 +2190,6 @@ F:	package/binutils-bare-metal/
- F:	package/bootgen/
- F:	package/gcc-bare-metal/
- F:	package/newlib-bare-metal/
--F:	package/versal-firmware/
- F:	toolchain/toolchain-bare-metal/
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8ca197df63..0a6e1672c6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -786,8 +786,6 @@ package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.pa
+ package/libuhttpd/0001-add-compatibility-for-wolfssl-5-0.patch Upstream
+ package/libuio/0001-configure.ac-set-automake-strictness-to-foreign.patch Upstream
+ package/liburcu/0001-Only-blacklist-ARM-gcc-4.8.0-and-4.8.1.patch Upstream
+-package/liburcu/0002-fix-don-t-use-C-thread_local-on-MacOs.patch Upstream
+-package/liburcu/0003-Always-use-__thread-for-Thread-local-storage-except-on-MSVC.patch Upstream
+ package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch Upstream
+ package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch Upstream
+ package/libuwsc/0002-fix-bad-indentation.patch Upstream
+diff --git a/package/liburcu/0002-fix-don-t-use-C-thread_local-on-MacOs.patch b/package/liburcu/0002-fix-don-t-use-C-thread_local-on-MacOs.patch
+deleted file mode 100644
+index 002df34d70..0000000000
+--- a/package/liburcu/0002-fix-don-t-use-C-thread_local-on-MacOs.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From e915ab84fd0c02d37504f3eb1e1f3be93ea6dc37 Mon Sep 17 00:00:00 2001
+-From: Michael Jeanson <mjeanson@efficios.com>
+-Date: Thu, 9 Sep 2021 12:11:16 -0400
+-Subject: [PATCH] fix: don't use C++ thread_local on MacOs
+-
+-Recent versions of Apple's clang++ do support 'thread_local' but the
+-implementation generates additional helper symbols. This is a problem
+-when accessing an extern TLS variable in a C++ compile unit that is
+-provided by a C library that doesn't have those extra symbols.
+-
+-Fallback to using '__thread' on MacOs.
+-
+-Change-Id: I87cb5b3c9293f7bf66f7115f453b546dd793a449
+-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+-
+-[Retrieved from:
+-https://github.com/urcu/userspace-rcu/commit/e915ab84fd0c02d37504f3eb1e1f3be93ea6dc37]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- include/urcu/tls-compat.h | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/include/urcu/tls-compat.h b/include/urcu/tls-compat.h
+-index 24ef1b9a..25cf375a 100644
+---- a/include/urcu/tls-compat.h
+-+++ b/include/urcu/tls-compat.h
+-@@ -34,7 +34,12 @@ extern "C" {
+- 
+- #ifdef CONFIG_RCU_TLS
+- 
+--#if defined (__cplusplus) && (__cplusplus >= 201103L)
+-+/*
+-+ * Don't use C++ 'thread_local' on MacOs, the implementation is incompatible
+-+ * with C and will result in a link error when accessing an extern variable
+-+ * provided by the C library from C++ code.
+-+ */
+-+#if defined (__cplusplus) && (__cplusplus >= 201103L) && !defined(__APPLE__)
+- # define URCU_TLS_STORAGE_CLASS	thread_local
+- #elif defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+- # define URCU_TLS_STORAGE_CLASS	_Thread_local
+diff --git a/package/liburcu/0003-Always-use-__thread-for-Thread-local-storage-except-on-MSVC.patch b/package/liburcu/0003-Always-use-__thread-for-Thread-local-storage-except-on-MSVC.patch
+deleted file mode 100644
+index aa71cf2f20..0000000000
+--- a/package/liburcu/0003-Always-use-__thread-for-Thread-local-storage-except-on-MSVC.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 2e359284497c361e3208501fc70d49b2c54dc4ef Mon Sep 17 00:00:00 2001
+-From: Michael Jeanson <mjeanson@efficios.com>
+-Date: Tue, 14 Sep 2021 10:41:08 -0400
+-Subject: [PATCH] Always use '__thread' for Thread local storage except on MSVC
+-
+-Use the GCC extension '__thread' [1] for Thread local storage on all C
+-and C++ compilers except MSVC.
+-
+-While C11 and C++11 respectively offer '_Thread_local' and
+-'thread_local' as potentialy faster implementations, they offer no
+-guarantees of compatibility when used in a library interface which might
+-be used by both C and C++ client code.
+-
+-[1] https://gcc.gnu.org/onlinedocs/gcc/Thread-Local.html
+-
+-Change-Id: If4fe8bcdbda24b21dedf382112bd5c5f836c00c8
+-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+-
+-[Retrieved from:
+-https://github.com/urcu/userspace-rcu/commit/2e359284497c361e3208501fc70d49b2c54dc4ef]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- include/urcu/tls-compat.h | 15 +++++++--------
+- 1 file changed, 7 insertions(+), 8 deletions(-)
+-
+-diff --git a/include/urcu/tls-compat.h b/include/urcu/tls-compat.h
+-index 25cf375a..a2c94ded 100644
+---- a/include/urcu/tls-compat.h
+-+++ b/include/urcu/tls-compat.h
+-@@ -35,15 +35,14 @@ extern "C" {
+- #ifdef CONFIG_RCU_TLS
+- 
+- /*
+-- * Don't use C++ 'thread_local' on MacOs, the implementation is incompatible
+-- * with C and will result in a link error when accessing an extern variable
+-- * provided by the C library from C++ code.
+-+ * Default to '__thread' on all C and C++ compilers except MSVC. While C11 has
+-+ * '_Thread_local' and C++11 has 'thread_local', only '__thread' seems to have
+-+ * a compatible implementation when linking public extern symbols across
+-+ * language boundaries.
+-+ *
+-+ * For more details, see 'https://gcc.gnu.org/onlinedocs/gcc/Thread-Local.html'.
+-  */
+--#if defined (__cplusplus) && (__cplusplus >= 201103L) && !defined(__APPLE__)
+--# define URCU_TLS_STORAGE_CLASS	thread_local
+--#elif defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+--# define URCU_TLS_STORAGE_CLASS	_Thread_local
+--#elif defined (_MSC_VER)
+-+#if defined(_MSC_VER)
+- # define URCU_TLS_STORAGE_CLASS	__declspec(thread)
+- #else
+- # define URCU_TLS_STORAGE_CLASS	__thread
+diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+index 5dc8528971..5e8fd6060f 100644
+--- a/package/liburcu/Config.in
++++ b/package/liburcu/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_LIBURCU
+ 	bool "liburcu"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Userspace implementation of the Read-Copy-Update (RCU)
+ 	  synchronization mechanism. This library is mainly used by
+@@ -25,6 +26,7 @@ config BR2_PACKAGE_LIBURCU
  
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index e8dbadadf3..55316edc7c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -448,7 +448,6 @@ menu "Firmware"
- 	source "package/sunxi-boards/Config.in"
- 	source "package/ts4900-fpga/Config.in"
- 	source "package/ux500-firmware/Config.in"
--	source "package/versal-firmware/Config.in"
- 	source "package/wilc-firmware/Config.in"
- 	source "package/wilink-bt-firmware/Config.in"
- 	source "package/zd1211-firmware/Config.in"
-diff --git a/package/versal-firmware/Config.in b/package/versal-firmware/Config.in
-deleted file mode 100644
-index 01daefd204..0000000000
---- a/package/versal-firmware/Config.in
-+++ /dev/null
-@@ -1,24 +0,0 @@
--config BR2_PACKAGE_VERSAL_FIRMWARE
--	bool "versal-firmware"
--	depends on BR2_aarch64
--	help
--	  Pre-built firmware files for Xilinx Versal boards.
--
--	  https://github.com/Xilinx/soc-prebuilt-firmware
--
--if BR2_PACKAGE_VERSAL_FIRMWARE
--
--config BR2_PACKAGE_VERSAL_FIRMWARE_VERSION
--	string "firmware version"
--	default "xilinx_v2023.1"
--	help
--	  Release version of Versal firmware.
--
--config BR2_PACKAGE_VERSAL_FIRMWARE_BOARD
--	string "board name"
--	default "vck190"
--	help
--	  Name of Versal target board.
--	  Used for installing the appropriate firmware.
--
--endif # BR2_PACKAGE_VERSAL_FIRMWARE
-diff --git a/package/versal-firmware/versal-firmware.mk b/package/versal-firmware/versal-firmware.mk
-deleted file mode 100644
-index 1ced259be1..0000000000
---- a/package/versal-firmware/versal-firmware.mk
-+++ /dev/null
-@@ -1,21 +0,0 @@
--################################################################################
--#
--# versal-firmware
--#
--################################################################################
--
--VERSAL_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_VERSAL_FIRMWARE_VERSION))
--VERSAL_FIRMWARE_SITE = $(call github,Xilinx,soc-prebuilt-firmware,$(VERSAL_FIRMWARE_VERSION))
--VERSAL_FIRMWARE_LICENSE = MIT
--VERSAL_FIRMWARE_LICENSE_FILES = LICENSE
--VERSAL_FIRMWARE_INSTALL_TARGET = NO
--VERSAL_FIRMWARE_INSTALL_IMAGES = YES
--
--define VERSAL_FIRMWARE_INSTALL_IMAGES_CMDS
--	$(foreach f,plm.elf psmfw.elf vpl_gen_fixed.pdi,\
--		$(INSTALL) -D -m 0755 $(@D)/$(BR2_PACKAGE_VERSAL_FIRMWARE_BOARD)-versal/$(f) \
--			$(BINARIES_DIR)/$(f)
--	)
--endef
--
--$(eval $(generic-package))
+ 	  http://lttng.org/urcu
+ 
+-comment "liburcu needs a toolchain w/ threads"
++comment "liburcu needs a toolchain w/ threads, C++"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+index bed765dd6f..a78b196ef6 100644
+--- a/package/liburcu/liburcu.hash
++++ b/package/liburcu/liburcu.hash
+@@ -1,5 +1,5 @@
+-# http://www.lttng.org/files/urcu/userspace-rcu-0.13.2.tar.bz2.sha256
+-sha256  1213fd9f1b0b74da7de2bb74335b76098db9738fec5d3cdc07c0c524f34fc032  userspace-rcu-0.13.2.tar.bz2
++# http://www.lttng.org/files/urcu/userspace-rcu-0.14.0.tar.bz2.sha256
++sha256  ca43bf261d4d392cff20dfae440836603bf009fce24fdc9b2697d837a2239d4f  userspace-rcu-0.14.0.tar.bz2
+ 
+ # Hash for license files
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  lgpl-2.1.txt
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index d7776c61ec..bb5e2c0ec7 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURCU_VERSION = 0.13.2
++LIBURCU_VERSION = 0.14.0
+ LIBURCU_SITE = http://lttng.org/files/urcu
+ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPL-2.1+ (library), MIT-like (few source files listed in LICENSE), GPL-2.0+ (test), GPL-3.0 (few *.m4 files)
+diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
+index 8472cab7bb..88e1164f97 100644
+--- a/package/lttng-libust/Config.in
++++ b/package/lttng-libust/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -16,6 +17,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
+ 
+ 	  http://lttng.org
+ 
+-comment "lttng-libust needs a toolchain w/ dynamic library, wchar, threads"
++comment "lttng-libust needs a toolchain w/ dynamic library, wchar, threads, C++"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index 9c86cc2646..5750c5c4e0 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # uses dlfcn
++	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_POPT
+@@ -27,6 +28,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 
+ 	  http://lttng.org
+ 
+-comment "lttng-tools needs a toolchain w/ threads, dynamic library"
++comment "lttng-tools needs a toolchain w/ threads, dynamic library, C++"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/multipath-tools/Config.in b/package/multipath-tools/Config.in
+index 4c648a6abb..bc0f67190d 100644
+--- a/package/multipath-tools/Config.in
++++ b/package/multipath-tools/Config.in
+@@ -1,8 +1,9 @@
+-comment "multipath-tools needs udev and a toolchain w/ threads, dynamic library"
++comment "multipath-tools needs udev and a toolchain w/ threads, dynamic library, C++"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP
+ 
+ config BR2_PACKAGE_MULTIPATH_TOOLS
+ 	bool "multipath-tools"
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_MULTIPATH_TOOLS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+ 	select BR2_PACKAGE_JSON_C
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_LIBAIO
+diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
+index 9ad3628f14..489d0b6f9a 100644
+--- a/package/netsniff-ng/Config.in
++++ b/package/netsniff-ng/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_NETSNIFF_NG
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_spin_lock
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+ 	select BR2_PACKAGE_LIBURCU
+@@ -28,7 +29,8 @@ comment "mausezahn needs glibc or musl toolchain"
+ 
+ endif
+ 
+-comment "netsniff-ng needs a toolchain w/ NPTL, headers >= 3.0"
++comment "netsniff-ng needs a toolchain w/ NPTL, C++, headers >= 3.0"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		!BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/xfsprogs/Config.in b/package/xfsprogs/Config.in
+index a382b63ff8..d14c3d4698 100644
+--- a/package/xfsprogs/Config.in
++++ b/package/xfsprogs/Config.in
+@@ -1,13 +1,15 @@
+-comment "xfsprogs needs a toolchain w/ threads"
++comment "xfsprogs needs a toolchain w/ threads, C++"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
+ 
+ config BR2_PACKAGE_XFSPROGS
+ 	bool "xfsprogs"
+ 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP # liburcu
+ 	select BR2_PACKAGE_INIH
+ 	select BR2_PACKAGE_LIBURCU
+ 	select BR2_PACKAGE_UTIL_LINUX
 -- 
-2.25.1
+2.40.1
 
 _______________________________________________
 buildroot mailing list
