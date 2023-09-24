@@ -1,87 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1A80CE7A88
-	for <buildroot@archiver.kernel.org>; Sat, 23 Sep 2023 20:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E269CCE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 08:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71F8740646;
-	Sat, 23 Sep 2023 20:54:47 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71F8740646
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CBAE81F3F;
+	Sun, 24 Sep 2023 08:43:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CBAE81F3F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
-	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yIHZ_44rSuYH; Sat, 23 Sep 2023 20:54:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Ngik3N1gZOwH; Sun, 24 Sep 2023 08:43:39 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74D6A414BF;
-	Sat, 23 Sep 2023 20:54:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74D6A414BF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 331EC1BF292
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:54:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 993CF81F91;
+	Sun, 24 Sep 2023 08:43:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 993CF81F91
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CD8FC1BF408
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 08:43:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BE55414BF
- for <buildroot@lists.busybox.net>; Sat, 23 Sep 2023 20:54:44 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BE55414BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6AA960B9A
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 08:43:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6AA960B9A
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id uNoe9wIZFh5r for <buildroot@lists.busybox.net>;
- Sat, 23 Sep 2023 20:54:42 +0000 (UTC)
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8E41040646
- for <buildroot@buildroot.org>; Sat, 23 Sep 2023 20:54:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E41040646
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-3231eff8aecso131442f8f.1
- for <buildroot@buildroot.org>; Sat, 23 Sep 2023 13:54:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695502480; x=1696107280;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FgrWDBu1KnwRF/fpPR++xlJ9Dzfn4jKzRqVuQGTod14=;
- b=I1oD0ZAvzfdZGjkq7v+Q/vlwdqkf+di0rIico+g1MTnnijWTyyQOcaY3VbhpLm8g1B
- mM3XMsHp8HILepZpNcblE0wFZL2P5EMC07ZQfh3YdrfepZOvlWOwei8uDU1kQcAVlwRm
- JVhrk7+pnP9ViB47jkiu9EyMZMtPwLV/EBXwnWtbuI27ek6WjlRz0zAEbMwAI7AlMna4
- IH/VXc4g2/5+cnu85RSqOhjOV6wNWl1JCDElxeaIZreSNc9LAz/KYcZV2WewsWKXIz0u
- EMwRSzdn5PyMciv+0A4iVCoRfVh1iOixEdBEtPXKcJMzr8pr01YYp/SN+3l/axFAhvAk
- xIaA==
-X-Gm-Message-State: AOJu0YwT1F/ZjiaGcvRHmo16U2UgNX/dnCcSEW4sjOh0EsgMmcD+bk+g
- ofXiew9qtF9Vckn9qduatLUyqjtUZI4=
-X-Google-Smtp-Source: AGHT+IExb2/6m74Qaa9SrMTK/q45CqE5QbNZseTxqOJAaWqptZPaVlPkNJ7M/d54m01hfYZkKZNaBg==
-X-Received: by 2002:a5d:49cc:0:b0:31c:7ada:5e05 with SMTP id
- t12-20020a5d49cc000000b0031c7ada5e05mr2566780wrs.51.1695502480060; 
- Sat, 23 Sep 2023 13:54:40 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- d6-20020adff2c6000000b003217af3f530sm7845775wrp.0.2023.09.23.13.54.39
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Sep 2023 13:54:39 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 23 Sep 2023 22:54:37 +0200
-Message-Id: <20230923205437.259708-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yITIvCDbFEJk for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 08:43:35 +0000 (UTC)
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
+ [60.248.80.70])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4EB6B60B1C
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 08:43:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EB6B60B1C
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+ by Atcsqr.andestech.com with ESMTP id 38O8hSmN086483;
+ Sun, 24 Sep 2023 16:43:28 +0800 (+08)
+ (envelope-from peterlin@andestech.com)
+Received: from APC323 (10.0.12.98) by ATCPCS16.andestech.com (10.0.1.222) with
+ Microsoft SMTP Server id 14.3.498.0; Sun, 24 Sep 2023 16:43:25 +0800
+Date: Sun, 24 Sep 2023 16:43:20 +0800
+From: Yu-Chien Peter Lin <peterlin@andestech.com>
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <ZQ_2qDPzM5Rtdc18@APC323>
+References: <20230923153522.1903628-1-peterlin@andestech.com>
+ <27236247f795d4836c8c041835c6899e@free.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695502480; x=1696107280; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FgrWDBu1KnwRF/fpPR++xlJ9Dzfn4jKzRqVuQGTod14=;
- b=W8VNIKD0kcJYk2v2Nl/M1Q8x5yStdnESYGO3MjdGTgzMI/WbbmlLtnR4UIEyVWpY6b
- NuqdV+s3E9sXF6jYaxeaL8BjYryibCPZ7l76fsk2qJM3pQxJipyXRTUOIvvSPQQDy5VA
- iI/3kywlJYykym3gvbNfv7aD44eDdwTbohkVodHCrPpVt9Y3C1QoFO4Stq8A2eUvSaaI
- tj/wG37BbDGaqC0VaiJ3fgASe0si2nIp5AtkD0y9xXceVfYfEMgWkBfmAlhjRyD23JXZ
- 9BqIIlxGGSPH+KX8vQtdsePd1fxt75Y4n1BOkWvIXUNWBamseKVPuxRsiTLDHJtACS7R
- 1X6A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=W8VNIKD0
-Subject: [Buildroot] [PATCH 1/1] package/open-iscsi: bump to version 2.1.9
+Content-Disposition: inline
+In-Reply-To: <27236247f795d4836c8c041835c6899e@free.fr>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Originating-IP: [10.0.12.98]
+X-DNSRBL: 
+X-MAIL: Atcsqr.andestech.com 38O8hSmN086483
+Subject: Re: [Buildroot] [PATCH] package/openblas: Add support for RISC-V
+ architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,225 +67,169 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Drop patch (already in version)
-- Drop license comment and add REAMDE and libopeniscsiusr/COPYING as
-  license files due to
-  https://github.com/open-iscsi/open-iscsi/commit/10d50ed4bcf9ef6820f7fe544df0c3605ea4144f
+Hi Julien,
 
-https://github.com/open-iscsi/open-iscsi/blob/2.1.9/Changelog
+On Sat, Sep 23, 2023 at 09:27:34PM +0200, Julien Olivain wrote:
+> Hi Yu,
+> 
+> Thanks for the patch!
+> 
+> On 23/09/2023 17:35, Yu Chien Peter Lin wrote:
+> > The current version of OpenBLAS (v0.3.24) supports the
+> > RV64 architecture. With this update, we can install
+> > the library and packages such as GNU Octave on RISC-V
+> > platforms.
+> 
+> I think it would be better to record in the commit log when the RISC-V
+> support was added. For example:
+> 
+> OpenBLAS RISC-V 64bit support was added in [1] and was renamed to
+> "RISCV64_GENERIC" in [2]. Those commits were first included in
+> OpenBLAS release v0.3.13. This support can now be enabled. With this
+> commit, we can install the library and packages such as GNU Octave on
+> RISC-V platforms.
+> 
+> [1] https://github.com/OpenMathLib/OpenBLAS/commit/c167a3d6f41ed2f5680c2a72846b4c9b5d416543
+> [2] https://github.com/OpenMathLib/OpenBLAS/commit/265ab484c89d10dfff2d5df678221918d7a880e3
+> 
+> If you can, please send a v2 updated patch.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .checkpackageignore                           |   1 -
- ...01-SHA3-is-not-supported-by-libressl.patch | 144 ------------------
- package/open-iscsi/open-iscsi.hash            |   4 +-
- package/open-iscsi/open-iscsi.mk              |   8 +-
- 4 files changed, 6 insertions(+), 151 deletions(-)
- delete mode 100644 package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch
+Sure, no problem. Thank you for locating the commits for me.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8acd9558eb..b9f06a7c11 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1025,7 +1025,6 @@ package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch Upstream
- package/olsr/0005-lib-pud-src-gpsdclient.c-drop-handling-of-gpsdata-fi.patch Upstream
- package/olsr/S50olsr Indent Shellcheck Variables
- package/omxplayer/0001-Update-Makefile-to-be-compatible-with-buildroot.patch Upstream
--package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch Upstream
- package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch Upstream
- package/open2300/0001-fix-makefile.patch Upstream
- package/openjdk/17.0.8+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch Upstream
-diff --git a/package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch b/package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch
-deleted file mode 100644
-index 0423179d93..0000000000
---- a/package/open-iscsi/0001-SHA3-is-not-supported-by-libressl.patch
-+++ /dev/null
-@@ -1,144 +0,0 @@
--From 29a4c3a518d13bfc0a07915e7e87fbec2b66597c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 13 Feb 2023 08:55:11 +0100
--Subject: [PATCH] SHA3 is not supported by libressl
--
--Disable SHA3 with libressl as it is not supported resulting in the
--following build failure:
--
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/or1k-buildroot-linux-gnu/11.3.0/../../../../or1k-buildroot-linux-gnu/bin/ld: iscsid.p/usr_auth.c.o: in function `auth_hash_init':
--auth.c:(.text+0x7bc): undefined reference to `EVP_sha3_256'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/48a4bddc355956733d712214797350cca8e111d9
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/open-iscsi/open-iscsi/pull/396]
-----
-- libopeniscsiusr/idbm.h |  2 ++
-- usr/auth.c             | 13 ++++++++++++-
-- usr/auth.h             |  4 ++++
-- usr/idbm.c             |  2 ++
-- 4 files changed, 20 insertions(+), 1 deletion(-)
--
--diff --git a/libopeniscsiusr/idbm.h b/libopeniscsiusr/idbm.h
--index be5986f..1043b27 100644
----- a/libopeniscsiusr/idbm.h
--+++ b/libopeniscsiusr/idbm.h
--@@ -56,7 +56,9 @@ enum iscsi_chap_algs {
-- 	ISCSI_AUTH_CHAP_ALG_MD5 = 5,
-- 	ISCSI_AUTH_CHAP_ALG_SHA1 = 6,
-- 	ISCSI_AUTH_CHAP_ALG_SHA256 = 7,
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 	ISCSI_AUTH_CHAP_ALG_SHA3_256 = 8,
--+#endif
-- 	AUTH_CHAP_ALG_MAX_COUNT = 5,
-- };
-- 
--diff --git a/usr/auth.c b/usr/auth.c
--index 46c328e..5f50e26 100644
----- a/usr/auth.c
--+++ b/usr/auth.c
--@@ -181,9 +181,11 @@ static int auth_hash_init(EVP_MD_CTX **context, int chap_alg) {
-- 	case AUTH_CHAP_ALG_SHA256:
-- 		digest = EVP_sha256();
-- 		break;
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 	case AUTH_CHAP_ALG_SHA3_256:
-- 		digest = EVP_sha3_256();
-- 		break;
--+#endif
-- 	}
-- 
-- 	if (*context == NULL)
--@@ -298,7 +300,9 @@ static int
-- acl_chk_chap_alg_optn(int chap_algorithm)
-- {
-- 	if (chap_algorithm == AUTH_OPTION_NONE ||
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 	    chap_algorithm == AUTH_CHAP_ALG_SHA3_256 ||
--+#endif
-- 	    chap_algorithm == AUTH_CHAP_ALG_SHA256 ||
-- 	    chap_algorithm == AUTH_CHAP_ALG_SHA1 ||
-- 	    chap_algorithm == AUTH_CHAP_ALG_MD5)
--@@ -711,9 +715,11 @@ acl_chk_chap_alg_key(struct iscsi_acl *client)
-- 				case AUTH_CHAP_ALG_SHA256:
-- 					client->chap_challenge_len = AUTH_CHAP_SHA256_RSP_LEN;
-- 					break;
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 				case AUTH_CHAP_ALG_SHA3_256:
-- 					client->chap_challenge_len = AUTH_CHAP_SHA3_256_RSP_LEN;
-- 					break;
--+#endif
-- 				}
-- 				return;
-- 			}
--@@ -862,7 +868,10 @@ acl_local_auth(struct iscsi_acl *client)
-- 			client->local_state = AUTH_LOCAL_STATE_ERROR;
-- 			client->dbg_status = AUTH_DBG_STATUS_CHAP_ALG_REJECT;
-- 			break;
---		} else if ((client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA3_256) &&
--+		} else if (
--+#ifndef LIBRESSL_VERSION_NUMBER
--+			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA3_256) &&
--+#endif
-- 			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA256) &&
-- 			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_SHA1) &&
-- 			   (client->negotiated_chap_alg != AUTH_CHAP_ALG_MD5)) {
--@@ -1824,6 +1833,7 @@ acl_init_chap_digests(int *value_list, unsigned *chap_algs, int conf_count) {
-- 				            "SHA256 due to crypto lib configuration");
-- 			}
-- 			break;
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 		case AUTH_CHAP_ALG_SHA3_256:
-- 			if (EVP_DigestInit_ex(context, EVP_sha3_256(), NULL)) {
-- 				value_list[i++] = AUTH_CHAP_ALG_SHA3_256;
--@@ -1832,6 +1842,7 @@ acl_init_chap_digests(int *value_list, unsigned *chap_algs, int conf_count) {
-- 				            "SHA3-256 due to crypto lib configuration");
-- 			}
-- 			break;
--+#endif
-- 		case ~0:
-- 			/* unset value in array, just ignore */
-- 			break;
--diff --git a/usr/auth.h b/usr/auth.h
--index 16cdb24..9357772 100644
----- a/usr/auth.h
--+++ b/usr/auth.h
--@@ -32,7 +32,9 @@ enum {
-- 	AUTH_CHAP_MD5_RSP_LEN = 16,
-- 	AUTH_CHAP_SHA1_RSP_LEN = 20,
-- 	AUTH_CHAP_SHA256_RSP_LEN = 32,
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 	AUTH_CHAP_SHA3_256_RSP_LEN = 32,
--+#endif
-- 	AUTH_CHAP_RSP_MAX = 32,
-- };
-- 
--@@ -67,7 +69,9 @@ enum {
-- 	AUTH_CHAP_ALG_MD5 = 5,
-- 	AUTH_CHAP_ALG_SHA1 = 6,
-- 	AUTH_CHAP_ALG_SHA256 = 7,
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 	AUTH_CHAP_ALG_SHA3_256 = 8,
--+#endif
-- 	AUTH_CHAP_ALG_MAX_COUNT = 5
-- };
-- 
--diff --git a/usr/idbm.c b/usr/idbm.c
--index 90bc142..082e1c6 100644
----- a/usr/idbm.c
--+++ b/usr/idbm.c
--@@ -200,7 +200,9 @@ static struct int_list_tbl {
-- 	{ "MD5", AUTH_CHAP_ALG_MD5 },
-- 	{ "SHA1", AUTH_CHAP_ALG_SHA1 },
-- 	{ "SHA256", AUTH_CHAP_ALG_SHA256 },
--+#ifndef LIBRESSL_VERSION_NUMBER
-- 	{ "SHA3-256", AUTH_CHAP_ALG_SHA3_256 },
--+#endif
-- };
-- 
-- static void
---- 
--2.39.0
--
-diff --git a/package/open-iscsi/open-iscsi.hash b/package/open-iscsi/open-iscsi.hash
-index 9fd651cae8..de75cbf1e9 100644
---- a/package/open-iscsi/open-iscsi.hash
-+++ b/package/open-iscsi/open-iscsi.hash
-@@ -1,3 +1,5 @@
- # Locally calculated
--sha256  9565bdf6b68b223e1e0d455d9a04d7536724a3f5b5a254e9398d06b2a0c6b6d2  open-iscsi-2.1.8.tar.gz
-+sha256  60e2a1e3058a8af7f702e86a5a0511b05b8754d29d3d2df4e0e301399b5cf70a  open-iscsi-2.1.9.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  7e6580de9d99b680697d51ec0c5e88acd9ed329139d181472cc5a592d0684fa5  README
-+sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  libopeniscsiusr/COPYING
-diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
-index e5b965b80d..00370a339a 100644
---- a/package/open-iscsi/open-iscsi.mk
-+++ b/package/open-iscsi/open-iscsi.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
- 
--OPEN_ISCSI_VERSION = 2.1.8
-+OPEN_ISCSI_VERSION = 2.1.9
- OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
--# The COPYING file says GPL-2.0, but there is some GPL-3.0+ code as
--# well. See https://github.com/open-iscsi/open-iscsi/issues/379
--OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+
--OPEN_ISCSI_LICENSE_FILES = COPYING
-+OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
-+OPEN_ISCSI_LICENSE_FILES = COPYING README libopeniscsiusr/COPYING
- OPEN_ISCSI_CPE_ID_VENDOR = open-iscsi_project
- OPEN_ISCSI_DEPENDENCIES = kmod open-isns openssl util-linux
- 
--- 
-2.40.1
+Best regards,
+Peter Lin
 
+> > This patch also adjusts the alignment for adding
+> > "RISCV64_GENERIC" in Config.in.
+> 
+> I also successfully tested this patch on branch master at
+> commit 20c023a, by adding in qemu_riscv64_virt_defconfig a Bootlin
+> toolchain and OpenBLAS with its tests. So you can also add:
+> 
+> Reviewed-by: Julien Olivain <ju.o@free.fr>
+> Tested-by: Julien Olivain <ju.o@free.fr>
+> 
+> > Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+> > ---
+> >  package/openblas/Config.in | 73 +++++++++++++++++++-------------------
+> >  1 file changed, 37 insertions(+), 36 deletions(-)
+> > 
+> > diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+> > index 58976e657a..26a76d29fb 100644
+> > --- a/package/openblas/Config.in
+> > +++ b/package/openblas/Config.in
+> > @@ -1,55 +1,56 @@
+> >  config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+> >  	string
+> > -	default "P2"           if BR2_x86_pentium2
+> > -	default "KATMAI"       if BR2_x86_pentium3
+> > -	default "NORTHWOOD"    if BR2_x86_pentium4
+> > -	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
+> > -	default "BANIAS"       if BR2_x86_pentium_m
+> > -	default "CORE2"        if BR2_x86_core2
+> > -	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont ||
+> > BR2_x86_westmere
+> > -	default "SANDYBRIDGE"  if BR2_x86_corei7_avx
+> > -	default "HASWELL"      if BR2_x86_core_avx2
+> > -	default "ATOM"         if BR2_x86_atom
+> > -	default "ATHLON"       if BR2_x86_athlon || BR2_x86_athlon_4
+> > -	default "OPTERON"      if BR2_x86_opteron
+> > -	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
+> > -	default "BARCELONA"    if BR2_x86_barcelona
+> > -	default "BOBCAT"       if BR2_x86_jaguar
+> > -	default "STEAMROLLER"  if BR2_x86_steamroller
+> > -	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
+> > -	default "POWER4"       if BR2_powerpc_power4
+> > -	default "POWER5"       if BR2_powerpc_power5
+> > -	default "POWER6"       if BR2_powerpc_power6
+> > -	default "POWER7"       if BR2_powerpc_power7
+> > -	default "POWER8"       if BR2_powerpc_power8
+> > -	default "PPCG4"        if BR2_powerpc_7400 || BR2_powerpc_7450
+> > -	default "PPC970"       if BR2_powerpc_970
+> > -	default "PPC440"       if BR2_powerpc_440
+> > -	default "PPC440FP2"    if BR2_powerpc_440fp
+> > +	default "P2"              if BR2_x86_pentium2
+> > +	default "KATMAI"          if BR2_x86_pentium3
+> > +	default "NORTHWOOD"       if BR2_x86_pentium4
+> > +	default "PRESCOTT"        if BR2_x86_prescott || BR2_x86_nocona
+> > +	default "BANIAS"          if BR2_x86_pentium_m
+> > +	default "CORE2"           if BR2_x86_core2
+> > +	default "NEHALEM"         if BR2_x86_corei7 || BR2_x86_silvermont ||
+> > BR2_x86_westmere
+> > +	default "SANDYBRIDGE"     if BR2_x86_corei7_avx
+> > +	default "HASWELL"         if BR2_x86_core_avx2
+> > +	default "ATOM"            if BR2_x86_atom
+> > +	default "ATHLON"          if BR2_x86_athlon || BR2_x86_athlon_4
+> > +	default "OPTERON"         if BR2_x86_opteron
+> > +	default "OPTERON_SSE3"    if BR2_x86_opteron_sse3
+> > +	default "BARCELONA"       if BR2_x86_barcelona
+> > +	default "BOBCAT"          if BR2_x86_jaguar
+> > +	default "STEAMROLLER"     if BR2_x86_steamroller
+> > +	default "VIAC3"           if BR2_x86_c3 || BR2_x86_c32
+> > +	default "POWER4"          if BR2_powerpc_power4
+> > +	default "POWER5"          if BR2_powerpc_power5
+> > +	default "POWER6"          if BR2_powerpc_power6
+> > +	default "POWER7"          if BR2_powerpc_power7
+> > +	default "POWER8"          if BR2_powerpc_power8
+> > +	default "PPCG4"           if BR2_powerpc_7400 || BR2_powerpc_7450
+> > +	default "PPC970"          if BR2_powerpc_970
+> > +	default "PPC440"          if BR2_powerpc_440
+> > +	default "PPC440FP2"       if BR2_powerpc_440fp
+> >  	# P5600 is built with MSA support which is only available in Codescape
+> > toolchains
+> > -	default "P5600"        if BR2_mips_p5600 &&
+> > BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+> > -	default "SICORTEX"     if BR2_MIPS_CPU_MIPS64
+> > +	default "P5600"           if BR2_mips_p5600 &&
+> > BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+> > +	default "SICORTEX"        if BR2_MIPS_CPU_MIPS64
+> >  	# I6400 is built with MSA support which is only available in Codescape
+> > toolchains
+> > -	default "I6400"        if BR2_mips_i6400 &&
+> > BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+> > +	default "I6400"           if BR2_mips_i6400 &&
+> > BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+> >  	# OpenBLAS assumes SPARC=Sparc v9
+> > -	default "SPARC"        if BR2_sparc_v9
+> > +	default "SPARC"           if BR2_sparc_v9
+> >  	# Cortex-A15 always have a VFPv4
+> > -	default "CORTEXA15"    if (BR2_cortex_a15 && BR2_ARM_EABIHF)
+> > +	default "CORTEXA15"       if (BR2_cortex_a15 && BR2_ARM_EABIHF)
+> >  	# Cortex-A9 have an optional VFPv3, so we need to make sure it
+> >  	# is available
+> > -	default "CORTEXA9"     if (BR2_cortex_a9 && BR2_ARM_EABIHF && \
+> > +	default "CORTEXA9"        if (BR2_cortex_a9 && BR2_ARM_EABIHF && \
+> >  				   BR2_ARM_CPU_HAS_VFPV3)
+> > -	default "ARMV5"        if BR2_ARM_CPU_ARMV5
+> > +	default "ARMV5"           if BR2_ARM_CPU_ARMV5
+> >  	# On ARMv6, OpenBLAS assumes that a VFP is available, and
+> >  	# EABIhf is used
+> > -	default "ARMV6"        if (BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && \
+> > +	default "ARMV6"           if (BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF && \
+> >  				   BR2_ARM_CPU_HAS_VFPV2)
+> >  	# On ARMv7, OpenBLAS assumes that a full VFPv3+ is available
+> >  	# (and not the more limited D16 variant), and that EABIhf is
+> >  	# used.
+> > -	default "ARMV7"        if (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF && \
+> > +	default "ARMV7"           if (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF &&
+> > \
+> >  				   BR2_ARM_CPU_HAS_VFPV3)
+> > -	default "ARMV8"        if BR2_aarch64 || BR2_aarch64_be
+> > +	default "ARMV8"           if BR2_aarch64 || BR2_aarch64_be
+> > +	default "RISCV64_GENERIC" if BR2_RISCV_64
+> >  	help
+> >  	  OpenBLAS target CPU. See TargetList.txt in the source tree for
+> >  	  the possible target strings. A possible value is set
+> 
+> Best regards,
+> 
+> Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
