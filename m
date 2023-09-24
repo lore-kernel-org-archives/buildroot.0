@@ -1,59 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7FA4CE7A8C
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:07:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27428CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8362560E5D;
-	Sun, 24 Sep 2023 21:07:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8362560E5D
+	by smtp4.osuosl.org (Postfix) with ESMTP id B155941701;
+	Sun, 24 Sep 2023 21:10:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B155941701
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
-	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id d4jSxMba8kV9; Sun, 24 Sep 2023 21:07:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dNJCInB3wW1F; Sun, 24 Sep 2023 21:10:22 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2B6960E19;
-	Sun, 24 Sep 2023 21:07:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2B6960E19
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C577C1BF2CC
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:07:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3AC3E41708;
+	Sun, 24 Sep 2023 21:10:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AC3E41708
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BCB61BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F44640320
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:07:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F44640320
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D54341708
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:10:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D54341708
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NmVYoiA56ugv for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 21:07:32 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B9A6F4012B
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:07:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9A6F4012B
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1C016C0002;
- Sun, 24 Sep 2023 21:07:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qkWK7-001wdM-GO; Sun, 24 Sep 2023 23:07:27 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Yanghao Cheng <yanghaobillcheng@gmail.com>
-References: <20230915172458.3388709-1-yanghaobillcheng@gmail.com>
- <20230915222711.899079-1-yanghaobillcheng@gmail.com>
- <20230915222711.899079-2-yanghaobillcheng@gmail.com>
-Date: Sun, 24 Sep 2023 23:07:27 +0200
-In-Reply-To: <20230915222711.899079-2-yanghaobillcheng@gmail.com> (Yanghao
- Cheng's message of "Fri, 15 Sep 2023 15:27:11 -0700")
-Message-ID: <87msxbgu0g.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id PdPMzFHSHQso for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 21:10:18 +0000 (UTC)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 042AF41701
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:10:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 042AF41701
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-32157c8e4c7so5132322f8f.1
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 14:10:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695589815; x=1696194615;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=lZ6apZneYhmVpaWOgHGWV4IR+KbBretgc4UZcodNMFY=;
+ b=nhj8JTDhD2QIL2luo1fG2tHHebAfxbEO6q181HfwfeJH/G6ptmJadmCC6zuw+MQPz+
+ AhVvnWh3mSuFSeTEhgpKbXnF7xtRZYU2yKFaEHFmvLEXzbLKxKELGE02FPk6vY4WEZSO
+ 0chNPUbeSYoNO/lMIRqvYfTuvNZIuKIt7eB8Xph6GxrqW9tyYRm28el1U+I2m686acm2
+ a+FcVTZK+7Ds3U1XkN6OkGHN4Y4hkwztzbhw1xoql5PvQM4Jr8gPfOB4n65dqFoDqE0b
+ 7nL+5A+4Nejd4Es8VIcxoUR0ai6OtIlpg+V1wQvGdRLznOx73k+tE32fea5+t4BZvqhw
+ dlOQ==
+X-Gm-Message-State: AOJu0Yz4R/jz1349wgtwvFpNlKSTuAPgnJmzCW1qFloJCsgr5clROZb4
+ awd05jk/gqd/2/A7ibWvLFj/xCqRcLM=
+X-Google-Smtp-Source: AGHT+IE9o5gGol1YwJ3D5nlBNFi2TjwGctVw2uV8JZGpQpL04/L2axqAYk9U+OF50a1x08FZQ5K7Ng==
+X-Received: by 2002:adf:f903:0:b0:321:6f5f:78ab with SMTP id
+ b3-20020adff903000000b003216f5f78abmr3959824wrr.56.1695589815318; 
+ Sun, 24 Sep 2023 14:10:15 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
+ [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
+ c10-20020a5d4f0a000000b0031f3ad17b2csm10085073wru.52.2023.09.24.14.10.14
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 24 Sep 2023 14:10:14 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 24 Sep 2023 23:10:12 +0200
+Message-Id: <20230924211012.1572880-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v3 2/2] package/xserver_xorg-server: Add
- condition in xserver_xorg-server.mk
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1695589815; x=1696194615; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lZ6apZneYhmVpaWOgHGWV4IR+KbBretgc4UZcodNMFY=;
+ b=fNjfCryhaW/M6DLdkPSDAQMtw81pegXWhI2w1lmDG/Y7kSG7uELjgxJ2eEVeX4hLou
+ R98VREmc4RFTb0bXEgRNQ832C1ydubyznsne1OToRL3ndl4H3t4bo0UEiKlcgJsLw+Uc
+ 46/q0MCaj79FPsNGhY1wVACLBjnNDgZK5bp9VmaKq+h/LH2Qw/0ZWgq+EupyaWHZqHCq
+ 4WFx6DT+pq23dOiqxihnCbfry6faqXhpCubnmmsF1+7QmbZHWB6B4P8vLKQsAboymnkR
+ FkBpknj/X1Set4iVhnd2b9Gb4GqDYK1QoFkbRB9QQ1xXSJ+fdmp69+MiL6qpTDRcTFFK
+ SbKA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=fNjfCryh
+Subject: [Buildroot] [PATCH 1/1] package/brotli: bump to version 1.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +93,261 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Yanghao Cheng <yanghao.cheng@aioi-atg.com>, buildroot@buildroot.org
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yanghao" == Yanghao Cheng <yanghaobillcheng@gmail.com> writes:
+Drop patches (already in version)
 
- > From: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
- > Does not install systemd unit if nodm or xdm is enabled.
+https://github.com/google/brotli/releases/tag/v1.1.0
 
- > Signed-off-by: Yanghao Cheng <yanghao.cheng@aioi-atg.com>
- > ---
- > Changes v1 -> v2:
- >     - Simplify the condition per Thomas's suggestion
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .checkpackageignore                           |   2 -
+ ...g-BUILD_SHARED_LIBS-to-choose-static.patch | 130 ------------------
+ ...time-linker-path-to-pkg-config-files.patch |  51 -------
+ package/brotli/brotli.hash                    |   2 +-
+ package/brotli/brotli.mk                      |   2 +-
+ 5 files changed, 2 insertions(+), 185 deletions(-)
+ delete mode 100644 package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
+ delete mode 100644 package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch
 
- > Changes v2 -> v3: (Suggested by Yann)
- > 	- Revert indent added in original patch
- > 	- Keep the original number of patches
-
-Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 31e229997f..c11a9cf840 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -221,8 +221,6 @@ package/bridge-utils/0001-fix-build-on-musl.patch Upstream
+ package/brltty/0001-Fix-linking-error-on-mips64el.patch Upstream
+ package/brltty/0002-shell-prologue-runProgramTerminationCommands-used-a-.patch Upstream
+ package/brltty/S10brltty Indent Shellcheck Variables
+-package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch Upstream
+-package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch Upstream
+ package/bsdiff/0001-Add-missing-header-for-u_char.patch Upstream
+ package/bustle/0001-Makefile-fix-pcap-config-call.patch Upstream
+ package/busybox/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch Upstream
+diff --git a/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
+deleted file mode 100644
+index 2a3204fc34..0000000000
+--- a/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
++++ /dev/null
+@@ -1,130 +0,0 @@
+-From 6cb16322decd643fed9de332d9cda77f7738b7af Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Mon, 7 Sep 2020 12:14:22 +0300
+-Subject: [PATCH] CMake: Allow using BUILD_SHARED_LIBS to choose static/shared
+- libs
+-
+-By convention projects using CMake which can build either static or
+-shared libraries use a BUILD_SHARED_LIBS flag to allow selecting between
+-both: the add_library() command automatically switches between both using
+-this variable when the library kind is not passed to add_library(). It
+-is also usual to expose the BUILD_SHARED_LIBS as an user-facing setting
+-with the option() command.
+-
+-This way, the following will both work as expected:
+-
+-   % cmake -DBUILD_SHARED_LIBS=OFF ...
+-   % cmake -DBUILS_SHARED_LIBS=ON ...
+-
+-This is helpful for distributions which need (or want) to build only
+-static libraries.
+-
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[Upstream status: https://github.com/google/brotli/pull/655]
+----
+- CMakeLists.txt        | 46 ++++++++++++++-----------------------------
+- c/fuzz/test_fuzzer.sh |  6 +++---
+- 2 files changed, 18 insertions(+), 34 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 4ff3401..f889311 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 2.8.6)
+- 
+- project(brotli C)
+- 
+-+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+-+
+- if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+-   message(STATUS "Setting build type to Release as none was specified.")
+-   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
+-@@ -137,10 +139,6 @@ set(BROTLI_LIBRARIES_CORE brotlienc brotlidec brotlicommon)
+- set(BROTLI_LIBRARIES ${BROTLI_LIBRARIES_CORE} ${LIBM_LIBRARY})
+- mark_as_advanced(BROTLI_LIBRARIES)
+- 
+--set(BROTLI_LIBRARIES_CORE_STATIC brotlienc-static brotlidec-static brotlicommon-static)
+--set(BROTLI_LIBRARIES_STATIC ${BROTLI_LIBRARIES_CORE_STATIC} ${LIBM_LIBRARY})
+--mark_as_advanced(BROTLI_LIBRARIES_STATIC)
+--
+- if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+-   add_definitions(-DOS_LINUX)
+- elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+-@@ -161,29 +159,25 @@ transform_sources_list("scripts/sources.lst" "${CMAKE_CURRENT_BINARY_DIR}/source
+- include("${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
+- 
+- if(BROTLI_EMSCRIPTEN)
+--  set(BROTLI_SHARED_LIBS "")
+--else()
+--  set(BROTLI_SHARED_LIBS brotlicommon brotlidec brotlienc)
+--  add_library(brotlicommon SHARED ${BROTLI_COMMON_C})
+--  add_library(brotlidec SHARED ${BROTLI_DEC_C})
+--  add_library(brotlienc SHARED ${BROTLI_ENC_C})
+-+  set(BUILD_SHARED_LIBS OFF)
+- endif()
+- 
+--set(BROTLI_STATIC_LIBS brotlicommon-static brotlidec-static brotlienc-static)
+--add_library(brotlicommon-static STATIC ${BROTLI_COMMON_C})
+--add_library(brotlidec-static STATIC ${BROTLI_DEC_C})
+--add_library(brotlienc-static STATIC ${BROTLI_ENC_C})
+-+add_library(brotlicommon ${BROTLI_COMMON_C})
+-+add_library(brotlidec ${BROTLI_DEC_C})
+-+add_library(brotlienc ${BROTLI_ENC_C})
+- 
+- # Older CMake versions does not understand INCLUDE_DIRECTORIES property.
+- include_directories(${BROTLI_INCLUDE_DIRS})
+- 
+--foreach(lib IN LISTS BROTLI_SHARED_LIBS)
+--  target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
+--  string(TOUPPER "${lib}" LIB)
+--  set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION")
+--endforeach()
+-+if(BUILD_SHARED_LIBS)
+-+  foreach(lib brotlicommon brotlidec brotlienc)
+-+    target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
+-+    string(TOUPPER "${lib}" LIB)
+-+    set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION")
+-+  endforeach()
+-+endif()
+- 
+--foreach(lib IN LISTS BROTLI_SHARED_LIBS BROTLI_STATIC_LIBS)
+-+foreach(lib brotlicommon brotlidec brotlienc)
+-   target_link_libraries(${lib} ${LIBM_LIBRARY})
+-   set_property(TARGET ${lib} APPEND PROPERTY INCLUDE_DIRECTORIES ${BROTLI_INCLUDE_DIRS})
+-   set_target_properties(${lib} PROPERTIES
+-@@ -200,9 +194,6 @@ target_link_libraries(brotlidec brotlicommon)
+- target_link_libraries(brotlienc brotlicommon)
+- endif()
+- 
+--target_link_libraries(brotlidec-static brotlicommon-static)
+--target_link_libraries(brotlienc-static brotlicommon-static)
+--
+- # For projects stuck on older versions of CMake, this will set the
+- # BROTLI_INCLUDE_DIRS and BROTLI_LIBRARIES variables so they still
+- # have a relatively easy way to use Brotli:
+-@@ -216,7 +207,7 @@ endif()
+- 
+- # Build the brotli executable
+- add_executable(brotli ${BROTLI_CLI_C})
+--target_link_libraries(brotli ${BROTLI_LIBRARIES_STATIC})
+-+target_link_libraries(brotli ${BROTLI_LIBRARIES})
+- 
+- # Installation
+- if(NOT BROTLI_EMSCRIPTEN)
+-@@ -233,13 +224,6 @@ if(NOT BROTLI_BUNDLED_MODE)
+-     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+-   )
+- 
+--  install(
+--    TARGETS ${BROTLI_LIBRARIES_CORE_STATIC}
+--    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+--    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+--    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+--  )
+--
+-   install(
+-     DIRECTORY ${BROTLI_INCLUDE_DIRS}/brotli
+-     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+--- 
+-2.28.0
+-
+diff --git a/package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch b/package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch
+deleted file mode 100644
+index 892aa1da15..0000000000
+--- a/package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 09b0992b6acb7faa6fd3b23f9bc036ea117230fc Mon Sep 17 00:00:00 2001
+-From: Eugene Kliuchnikov <eustas.ru@gmail.com>
+-Date: Wed, 2 Sep 2020 11:38:26 +0200
+-Subject: [PATCH] Revert "Add runtime linker path to pkg-config files (#740)"
+- (#838)
+-
+-This reverts commit 31754d4ffce14153b5c2addf7a11019ec23f51c1.
+-[Retrieved from:
+-https://github.com/google/brotli/commit/09b0992b6acb7faa6fd3b23f9bc036ea117230fc]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- scripts/libbrotlicommon.pc.in | 2 +-
+- scripts/libbrotlidec.pc.in    | 2 +-
+- scripts/libbrotlienc.pc.in    | 2 +-
+- 3 files changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/scripts/libbrotlicommon.pc.in b/scripts/libbrotlicommon.pc.in
+-index 10ca969e..2a8cf7a3 100644
+---- a/scripts/libbrotlicommon.pc.in
+-+++ b/scripts/libbrotlicommon.pc.in
+-@@ -7,5 +7,5 @@ Name: libbrotlicommon
+- URL: https://github.com/google/brotli
+- Description: Brotli common dictionary library
+- Version: @PACKAGE_VERSION@
+--Libs: -L${libdir} -R${libdir} -lbrotlicommon
+-+Libs: -L${libdir} -lbrotlicommon
+- Cflags: -I${includedir}
+-diff --git a/scripts/libbrotlidec.pc.in b/scripts/libbrotlidec.pc.in
+-index e7c3124f..6f8ef2e4 100644
+---- a/scripts/libbrotlidec.pc.in
+-+++ b/scripts/libbrotlidec.pc.in
+-@@ -7,6 +7,6 @@ Name: libbrotlidec
+- URL: https://github.com/google/brotli
+- Description: Brotli decoder library
+- Version: @PACKAGE_VERSION@
+--Libs: -L${libdir} -R${libdir} -lbrotlidec
+-+Libs: -L${libdir} -lbrotlidec
+- Requires.private: libbrotlicommon >= 1.0.2
+- Cflags: -I${includedir}
+-diff --git a/scripts/libbrotlienc.pc.in b/scripts/libbrotlienc.pc.in
+-index 4dd0811b..2098afe2 100644
+---- a/scripts/libbrotlienc.pc.in
+-+++ b/scripts/libbrotlienc.pc.in
+-@@ -7,6 +7,6 @@ Name: libbrotlienc
+- URL: https://github.com/google/brotli
+- Description: Brotli encoder library
+- Version: @PACKAGE_VERSION@
+--Libs: -L${libdir} -R${libdir} -lbrotlienc
+-+Libs: -L${libdir} -lbrotlienc
+- Requires.private: libbrotlicommon >= 1.0.2
+- Cflags: -I${includedir}
+diff --git a/package/brotli/brotli.hash b/package/brotli/brotli.hash
+index 22f894c403..145467c420 100644
+--- a/package/brotli/brotli.hash
++++ b/package/brotli/brotli.hash
+@@ -1,5 +1,5 @@
+ # Locally generated:
+-sha512  b8e2df955e8796ac1f022eb4ebad29532cb7e3aa6a4b6aee91dbd2c7d637eee84d9a144d3e878895bb5e62800875c2c01c8f737a1261020c54feacf9f676b5f5  v1.0.9.tar.gz
++sha512  6eb280d10d8e1b43d22d00fa535435923c22ce8448709419d676ff47d4a644102ea04f488fc65a179c6c09fee12380992e9335bad8dfebd5d1f20908d10849d9  v1.1.0.tar.gz
+ 
+ # Hash for license files:
+ sha512  bae78184c2f50f86d8c727826d3982c469454c42b9af81f4ef007e39036434fa894cf5be3bf5fc65b7de2301f0a72d067a8186e303327db8a96bd14867e0a3a8  LICENSE
+diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
+index ac49fe664f..80aa2566b5 100644
+--- a/package/brotli/brotli.mk
++++ b/package/brotli/brotli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BROTLI_VERSION = 1.0.9
++BROTLI_VERSION = 1.1.0
+ BROTLI_SOURCE = v$(BROTLI_VERSION).tar.gz
+ BROTLI_SITE = https://github.com/google/brotli/archive
+ BROTLI_LICENSE = MIT
 -- 
-Bye, Peter Korsgaard
+2.40.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
