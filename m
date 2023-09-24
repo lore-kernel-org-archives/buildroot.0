@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7DA7CE7A8F
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:25:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F38ABCE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:26:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 735E5417B0;
-	Sun, 24 Sep 2023 21:25:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 735E5417B0
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D4FD41944;
+	Sun, 24 Sep 2023 21:26:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D4FD41944
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id jELugPLiMh-W; Sun, 24 Sep 2023 21:25:50 +0000 (UTC)
+	with ESMTP id zLPxSomnHiSa; Sun, 24 Sep 2023 21:26:03 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BDF841924;
-	Sun, 24 Sep 2023 21:25:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BDF841924
+	by smtp4.osuosl.org (Postfix) with ESMTP id 864224190C;
+	Sun, 24 Sep 2023 21:26:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 864224190C
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B8911BF909
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5E8401BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EBE681D47
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EBE681D47
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31ED381D0C
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31ED381D0C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ux4n15IhaD78 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
+ with ESMTP id VEvGcOi8j4cO for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 21:21:51 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5E36B81D0C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8DCC481D73
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E36B81D0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DCC481D73
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F0F684212; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
+ id 8780C87644; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:35:54 +0200
+Date: Sun, 24 Sep 2023 23:17:07 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 90df3c558b6a30a878197dbebd06fb4aff76412c
-X-Git-Newrev: 934e95457d1126d5f8486f0d6089410923835d98
+X-Git-Oldrev: 775d2ef83e165291ed6e9e562944b645f3272eff
+X-Git-Newrev: 81203379dfa669a93bb588a5c6a38c094bcb8cfa
 X-Patchwork-Hint: ignore
-Message-Id: <20230924212150.4F0F684212@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/stress-ng: link
- with -latomic when needed
+Message-Id: <20230924212150.8780C87644@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/mutt: bump
+ version to 2.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +63,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=934e95457d1126d5f8486f0d6089410923835d98
+commit: https://git.buildroot.net/buildroot/commit/?id=81203379dfa669a93bb588a5c6a38c094bcb8cfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix the following build failure raised since at least bump to version
-0.15.04 in commit 00553ea186357fd3e2b3c89fa560e9711cc67472:
+See http://mutt.org/ for any news.
 
-Fixes:
- - http://autobuild.buildroot.org/results/127ed4c110d99c6453a01ce221f628d40e566dc1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 42f25180233df459cd2bfbc5b9ebf8b95c6b60cb)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e79533c751188383a2d08220841aabf02286cc60)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stress-ng/stress-ng.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 0f204bcf79..a7b57459f1 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -20,6 +20,10 @@ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
- STRESS_NG_DEPENDENCIES += keyutils
- endif
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index c475641ab5..78bce76585 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fa531b231d58fe1f30ceda0ed626683ea9ebdfb76ce47ef8bb27c2f77422cffb  mutt-2.2.9.tar.gz
++sha256  12325cf66d5ff8ac4bd87fac8db52c869de52dd278fc301cfd57d5a1f9f465cc  mutt-2.2.11.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 5cf1b6bad2..c5e4e4a14e 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+STRESS_NG_MAKE_FLAGS += LDFLAGS_EXTRA=-latomic
-+endif
-+
- define STRESS_NG_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(STRESS_NG_MAKE_FLAGS)
- endef
+-MUTT_VERSION = 2.2.9
++MUTT_VERSION = 2.2.11
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
