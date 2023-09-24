@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D418CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC0D4CE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:24:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4621D60EEE;
-	Sun, 24 Sep 2023 19:23:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4621D60EEE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7676D60F76;
+	Sun, 24 Sep 2023 19:24:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7676D60F76
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XFVmyEZwzgNm; Sun, 24 Sep 2023 19:23:58 +0000 (UTC)
+	with ESMTP id caAwQD_17BiD; Sun, 24 Sep 2023 19:24:10 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 409B860F1A;
-	Sun, 24 Sep 2023 19:23:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 409B860F1A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C54F60F8C;
+	Sun, 24 Sep 2023 19:24:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C54F60F8C
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 07ECB1BF2A9
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0BF471BF2A9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA36440294
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA36440294
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBC59410BA
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:22:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBC59410BA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KBszoTm0pd0w for <buildroot@lists.busybox.net>;
+ with ESMTP id L00zs501q4Ue for <buildroot@lists.busybox.net>;
  Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C5DD410BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id D05CD410C4
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C5DD410BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D05CD410C4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8BF7987522; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
+ id BDBC887522; Sun, 24 Sep 2023 19:22:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 21:14:08 +0200
+Date: Sun, 24 Sep 2023 21:20:32 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 79f0c91b7979a84b82344aeffdc0b4727b8b3638
-X-Git-Newrev: 2d138272ef3804fa6a9476c2145ddc57df5c694c
+X-Git-Oldrev: 1ff517bd9a844cedaa2bafc0068bc50691b0de2f
+X-Git-Newrev: 3e87fa6c67d3f6d8c2f1657e273e31794ad89da9
 X-Patchwork-Hint: ignore
-Message-Id: <20230924192241.8BF7987522@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/libqb: security
- bump to version 2.0.8
+Message-Id: <20230924192241.BDBC887522@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/mdadm: add
+ MDADM_CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,142 +63,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d138272ef3804fa6a9476c2145ddc57df5c694c
+commit: https://git.buildroot.net/buildroot/commit/?id=3e87fa6c67d3f6d8c2f1657e273e31794ad89da9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-- Fix CVE-2023-39976: log_blackbox.c in libqb before 2.0.8 allows a
-  buffer overflow via long log messages because the header size is not
-  considered.
-- Drop patch (already in version) and so autoreconf
+cpe:2.3:a:mdadm_project:mdadm is a valid CPE identifier for this
+package:
 
-https://github.com/ClusterLabs/libqb/compare/v2.0.6...v2.0.8
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.7
-https://github.com/ClusterLabs/libqb/releases/tag/v2.0.8
+  https://nvd.nist.gov/products/cpe/detail/A4FAEC6A-3572-48E9-ABB8-C96D8C8B91AF
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c89d7a2dafcc8f622100d50f11e186e377cde7a8)
+(cherry picked from commit bdab457768b336a442897137c4f62d4e387b3d10)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                               |  1 -
- package/libqb/0001-Add-disable-tests-option.patch | 62 -----------------------
- package/libqb/libqb.hash                          |  4 +-
- package/libqb/libqb.mk                            |  4 +-
- 4 files changed, 3 insertions(+), 68 deletions(-)
+ package/mdadm/mdadm.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 67529ed0d4..4a61d39f79 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -760,7 +760,6 @@ package/libpjsip/0002-Merge-pull-request-from-GHSA-cxwq-5g9x-x7fr.patch Upstream
- package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch Upstream
- package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch Upstream
- package/libpthsem/0001-fix-build-on-linux-3.x-host.patch Upstream
--package/libqb/0001-Add-disable-tests-option.patch Upstream
- package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch Upstream
- package/libroxml/0001-src-roxml_mem.h-add-missing-extern.patch Upstream
- package/librsvg/0001-gdk-pixbuf-loader-Makefile.am-set-GDK_PIXBUF_MODULED.patch Upstream
-diff --git a/package/libqb/0001-Add-disable-tests-option.patch b/package/libqb/0001-Add-disable-tests-option.patch
-deleted file mode 100644
-index 1afb05520d..0000000000
---- a/package/libqb/0001-Add-disable-tests-option.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--From 051d9cfe8f365e30affc6476ed79b9e04a6b15ad Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 4 Nov 2022 00:27:50 +0100
--Subject: [PATCH] Add --disable-tests option
--
--Add --disable-tests to allow the user to disable tests. As a
--side-effect, this will avoid the following build failure when check is
--found:
--
--libstat_wrapper.c:11:10: fatal error: gnu/lib-names.h: No such file or directory
--   11 | #include <gnu/lib-names.h>
--      |          ^~~~~~~~~~~~~~~~~
--
--This build failure is raised since version 2.0.5 and
--https://github.com/ClusterLabs/libqb/commit/78df90b180740712d0c90b6d982b78241cc99d72
--
--Fixes:
-- - http://autobuild.buildroot.org/results/450cfc36d4fd6dc71c138bec45f05b5a2d92a08d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/ClusterLabs/libqb/pull/475]
-----
-- Makefile.am  | 6 +++++-
-- configure.ac | 5 +++++
-- 2 files changed, 10 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index a08b1d2..6a710a0 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -39,7 +39,11 @@ ACLOCAL_AMFLAGS		= -I m4
-- 
-- dist_doc_DATA		= COPYING INSTALL README.markdown
-- 
---SUBDIRS			= include lib doxygen2man docs tools tests examples
--+SUBDIRS			= include lib doxygen2man docs tools examples
--+
--+if ENABLE_TESTS
--+SUBDIRS			+= tests
--+endif
-- 
-- dist-clean-local:
-- 	rm -f .snapshot-version autoconf automake autoheader
--diff --git a/configure.ac b/configure.ac
--index ac44b7e..4946008 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -562,6 +562,11 @@ AC_ARG_WITH([force-sockets-config-file],
-- 	[ FORCESOCKETSFILE="$withval" ],
-- 	[ FORCESOCKETSFILE="$sysconfdir/libqb/force-filesystem-sockets" ])
-- 
--+AC_ARG_ENABLE([tests],
--+  [AS_HELP_STRING([--disable-tests],[disable tests])],,
--+  [ enable_tests="yes" ])
--+AM_CONDITIONAL([ENABLE_TESTS], [test x$enable_tests = xyes])
--+
-- AC_ARG_ENABLE([install-tests],
--   [AS_HELP_STRING([--enable-install-tests],[install tests])],,
--   [ enable_install_tests="no" ])
---- 
--2.35.1
--
-diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
-index de247c2660..f7006ff10e 100644
---- a/package/libqb/libqb.hash
-+++ b/package/libqb/libqb.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ClusterLabs/libqb/releases/download/v2.0.6/libqb-2.0.6.sha256
--sha256  f1e744208e8f69934804c14e05d9707668f99d4867de9cccf2f7a6bf4d48331c  libqb-2.0.6.tar.xz
-+# From https://github.com/ClusterLabs/libqb/releases/download/v2.0.8/libqb-2.0.8.sha256
-+sha256  b42531fc20b8ac02f4c6d0a4dc49f7c4a1eef09bdb13af5f6927b7fc49522ee6  libqb-2.0.8.tar.xz
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index c61937306a..ef518cd238 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -9,6 +9,7 @@ MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
+ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
+ MDADM_LICENSE_FILES = COPYING
++MDADM_CPE_ID_VENDOR = mdadm_project
  
- # Locally calculated
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
-index 65d68181ee..11b5788b45 100644
---- a/package/libqb/libqb.mk
-+++ b/package/libqb/libqb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQB_VERSION = 2.0.6
-+LIBQB_VERSION = 2.0.8
- LIBQB_SOURCE = libqb-$(LIBQB_VERSION).tar.xz
- LIBQB_SITE = \
- 	https://github.com/ClusterLabs/libqb/releases/download/v$(LIBQB_VERSION)
-@@ -12,8 +12,6 @@ LIBQB_LICENSE = LGPL-2.1+
- LIBQB_LICENSE_FILES = COPYING
- LIBQB_CPE_ID_VENDOR = clusterlabs
- LIBQB_INSTALL_STAGING = YES
--# We're patching configure.ac
--LIBQB_AUTORECONF = YES
- LIBQB_CONF_OPTS = --disable-tests
- LIBQB_DEPENDENCIES = libxml2
+ MDADM_CXFLAGS = $(TARGET_CFLAGS)
  
 _______________________________________________
 buildroot mailing list
