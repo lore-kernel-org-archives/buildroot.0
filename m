@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92E57CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB3BCE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 345DD417B5;
-	Sun, 24 Sep 2023 19:04:29 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 345DD417B5
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA93B40988;
+	Sun, 24 Sep 2023 19:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA93B40988
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id uFTy5O4iTgJs; Sun, 24 Sep 2023 19:04:28 +0000 (UTC)
+	with ESMTP id yUNkKfsufBxY; Sun, 24 Sep 2023 19:04:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E3A3540998;
-	Sun, 24 Sep 2023 19:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3A3540998
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2E1241BF337
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80199417A8;
+	Sun, 24 Sep 2023 19:04:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80199417A8
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B4B171BF337
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EA80481DFD
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA80481DFD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B9A760ADE
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B9A760ADE
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id sUvDgLbO3iN8 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:03:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id oQ14CgGUPiDj for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD12481D19
+ by smtp3.osuosl.org (Postfix) with ESMTP id BD48460D90
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD12481D19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD48460D90
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C88B186C38; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
+ id ABD7686B54; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 20:45:26 +0200
+Date: Sun, 24 Sep 2023 20:37:24 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 9d5c4d4cb56f123cd822c46e35d417da0ffd8ffa
-X-Git-Newrev: 589ef7294a2d0c8a67d83ce23fb547d04ae98f2f
+X-Git-Oldrev: 500723f9fcfb3eff404c8ae1d1e188bbde3f67c4
+X-Git-Newrev: d67bab287325ccbc38e6c3cce8d6fe9884e43a9c
 X-Patchwork-Hint: ignore
-Message-Id: <20230924190316.C88B186C38@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/hwloc: security
- bump to version 2.9.3
+Message-Id: <20230924190316.ABD7686B54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/libjxl: fix riscv
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,56 +58,107 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3817679604018855301=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=589ef7294a2d0c8a67d83ce23fb547d04ae98f2f
+--===============3817679604018855301==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d67bab287325ccbc38e6c3cce8d6fe9884e43a9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-Fix CVE-2022-47022: An issue was discovered in open-mpi hwloc 2.1.0
-allows attackers to cause a denial of service or other unspecified
-impacts via glibc-cpuset in topology-linux.c.
+libjxl was failing to build for riscv targets, since commit ff7c37e57
+"package/libjxl: security bump to version 0.8.1". Build was failing with
+output:
 
-https://github.com/open-mpi/hwloc/blob/hwloc-2.9.3/NEWS
-https://github.com/open-mpi/hwloc/compare/hwloc-2.9.2...hwloc-2.9.3
+    /build/libjxl-0.8.1/lib/jxl/enc_xyb.cc: In function 'jxl::Image3F jxl::N_SCALAR::TransformToLinearRGB(const jxl::Image3F&, const jxl::ColorEncoding&, float, const JxlCmsInterface&, jxl::ThreadPool*)':
+    /build/libjxl-0.8.1/lib/jxl/enc_xyb.cc:223:21: error: variable 'std::atomic<bool> ok' has initializer but incomplete type
+      223 |   std::atomic<bool> ok{true};
+          |                     ^~
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This build failure was due to a missing <atomic> header inclusion. For
+some reason, the build failure was observed only with RISC-V toolchains.
+
+This commit fixes the issue by adding an upstream commit, not yet in a
+package release. See [1].
+
+Fixes:
+http://autobuild.buildroot.org/results/121/12107bc7aea7afae1d2fb935d31b44eee6ea1501
+
+[1] https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7a85e0797f67a21140eab5f667156c816ff4a6ef)
+(cherry picked from commit de45aea47bfaffaa3ccef02b247f94ab78ab1add)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hwloc/hwloc.hash | 4 ++--
- package/hwloc/hwloc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-atomic-content-to-fix-gcc-compilation-fo.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/hwloc/hwloc.hash b/package/hwloc/hwloc.hash
-index d40315a3af..8010b857f0 100644
---- a/package/hwloc/hwloc.hash
-+++ b/package/hwloc/hwloc.hash
-@@ -1,5 +1,5 @@
- # From https://www.open-mpi.org/software/hwloc/v2.9/
--sha1  be2a4f299c0da7670d39724986268bfa3fac6aee  hwloc-2.9.2.tar.bz2
--sha256  0a87fdf677f8b00b567d229b6320bf6b25c693edaa43e0b85268d999d6b060cf  hwloc-2.9.2.tar.bz2
-+sha1  76b49087619b46d71e18bd1131d35a5ccf5de791  hwloc-2.9.3.tar.bz2
-+sha256  5c4062ce556f6d3451fc177ffb8673a2120f81df6835dea6a21a90fbdfff0dec  hwloc-2.9.3.tar.bz2
- # Locally computed
- sha256  d79a936a42f3c6cb7c8375a023d43f4435f4664d3a5a2ea6b4623cff83c7fc06  COPYING
-diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
-index 6f3b8069e6..8fe9e648a7 100644
---- a/package/hwloc/hwloc.mk
-+++ b/package/hwloc/hwloc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HWLOC_VERSION_MAJOR = 2.9
--HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).2
-+HWLOC_VERSION = $(HWLOC_VERSION_MAJOR).3
- HWLOC_SOURCE = hwloc-$(HWLOC_VERSION).tar.bz2
- HWLOC_SITE = https://download.open-mpi.org/release/hwloc/v$(HWLOC_VERSION_MAJOR)
- HWLOC_LICENSE = BSD-3-Clause
+diff --git a/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch b/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch
+new file mode 100644
+index 0000000000..b856b00728
+--- /dev/null
++++ b/package/libjxl/0002-Add-missing-atomic-content-to-fix-gcc-compilation-fo.patch
+@@ -0,0 +1,47 @@
++From 42e944a471672dae8522fbcf161941895ba16632 Mon Sep 17 00:00:00 2001
++From: Eastdong <31920925+IEAST@users.noreply.github.com>
++Date: Thu, 23 Feb 2023 06:08:36 +0800
++Subject: [PATCH] Add missing <atomic> content to fix gcc compilation for RISCV
++ architecture. (#2211)
++
++* Add missing <atomic> content to fix gcc compilation for RISCV architecture.
++
++* add name to AUTHORS
++
++* lint fix
++
++Co-authored-by: Moritz Firsching <firsching@google.com>
++Upstream: https://github.com/libjxl/libjxl/commit/22d12d74e7bc56b09cfb1973aa89ec8d714fa3fc
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ AUTHORS            | 1 +
++ lib/jxl/enc_xyb.cc | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/AUTHORS b/AUTHORS
++index 44dcc409..3340422d 100644
++--- a/AUTHORS
+++++ b/AUTHORS
++@@ -30,6 +30,7 @@ Daniel Novomeský <dnovomesky@gmail.com>
++ David Burnett <vargolsoft@gmail.com>
++ Dirk Lemstra <dirk@lemstra.org>
++ Don Olmstead <don.j.olmstead@gmail.com>
+++Dong Xu <xdong181@gmail.com>
++ Even Rouault <even.rouault@spatialys.com>
++ Fred Brennan <copypaste@kittens.ph>
++ Heiko Becker <heirecka@exherbo.org>
++diff --git a/lib/jxl/enc_xyb.cc b/lib/jxl/enc_xyb.cc
++index c7310765..2fd5d025 100644
++--- a/lib/jxl/enc_xyb.cc
+++++ b/lib/jxl/enc_xyb.cc
++@@ -6,6 +6,7 @@
++ #include "lib/jxl/enc_xyb.h"
++ 
++ #include <algorithm>
+++#include <atomic>
++ #include <cstdlib>
++ 
++ #undef HWY_TARGET_INCLUDE
++-- 
++2.41.0
++
+
+--===============3817679604018855301==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3817679604018855301==--
