@@ -4,47 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8080CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 16:31:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1412CE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 16:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 65F8D4091E;
-	Sun, 24 Sep 2023 16:31:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65F8D4091E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E6604139E;
+	Sun, 24 Sep 2023 16:36:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E6604139E
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0DCzoGV9_oOl; Sun, 24 Sep 2023 16:31:31 +0000 (UTC)
+	with ESMTP id JLEBwnsDDGHG; Sun, 24 Sep 2023 16:36:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2356D410B2;
-	Sun, 24 Sep 2023 16:31:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2356D410B2
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E02EA1BF21A
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:31:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0CA294156C;
+	Sun, 24 Sep 2023 16:36:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CA294156C
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A1151BF21A
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B9D4060A99
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:31:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9D4060A99
+ by smtp2.osuosl.org (Postfix) with ESMTP id 704F2405B9
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:36:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 704F2405B9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id h2h_hA_1_iN8 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 16:31:27 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86799606A9
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 16:31:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86799606A9
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7374B875B1; Sun, 24 Sep 2023 16:31:27 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 18:21:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2314928cf828ff02939b9c0041964c3ee2dd907d
-X-Git-Newrev: 278d1db56becb4c6b5784c9bb9a0c452ea73ae16
-X-Patchwork-Hint: ignore
-Message-Id: <20230924163127.7374B875B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: fix cross-compile builds
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ZQ-KymS1v477 for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 16:36:12 +0000 (UTC)
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2A4AD400D7
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 16:36:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A4AD400D7
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8b44:b00:2d77:ae6d:70e:6233])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id C134319F5BA;
+ Sun, 24 Sep 2023 18:36:04 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 24 Sep 2023 18:36:04 +0200
+Date: Sun, 24 Sep 2023 18:36:04 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Jens Maus <mail@jens-maus.de>
+Message-ID: <20230924163604.GP1469982@scaer>
+References: <20230923105932.1865002-1-mail@jens-maus.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20230923105932.1865002-1-mail@jens-maus.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1695573369;
+ bh=X2R65ZxIQXiup56bDBGctCxbStMxCCz5eqMS4SGssAw=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=PmyU6pY2EJegjhbMvF/eAqvRdpPZAtw9atK05c1fVfg6vSotDalkQTJ6XOS4oriqd
+ oKFkoDX/LE6CRpnOm2aFpUartUaPaFmi5PtLFyIeHEhyyNBldOQ/nIT6TY9+R/8jbo
+ LhqSuAxEkyOUmjoUS9D4bqDIVuXZPXh0pju4Vz2ME3SGoT1XvRGqVL7LWk6+TLMK65
+ ZShNCR5smE5ZRLz6FFJvz6rfdjC5hYSmqC6sUXawgymdtpaGDX6TRqkcs5wGah+3+w
+ A0aZiXVRB78sqQmUymFgB8SWBmfdzUY0/U6HTSaqEnW/OSD2i9ef454KJlU8jRXB00
+ keeJOR8o/h/ow==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PmyU6pY2
+Subject: Re: [Buildroot] [PATCH 1/1] package/nodejs: fix cross-compile builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,138 +75,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Daniel Price <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=278d1db56becb4c6b5784c9bb9a0c452ea73ae16
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Jens, All,
 
-When nodejs is build, a qemu wrapper script is used to execute some
-programs built for the target in user-mode emulation. However, when the
-target and build machines are similar (e.g. x86_74), running those
-programs fails, with errors such as:
+On 2023-09-23 12:59 +0200, Jens Maus via buildroot spake thusly:
+> When nodejs is build a qemu wrapper script is used to execute
+> some programs built for the target in user-mode emulation. However, in
+> some constellations this causes the build to fail because libraries from
+> the build host are used rather than from the target staging directory.
+> This has been already reported [1] and throughoutly investigate [2].
+> A commonly used fix for this issue is to explicitly use LD_LIBRARY_PATH
+> to make sure that the correct runtime libraries are preferred rather
+> than using libraries from the build host.
 
-    cd ../../tools/v8_gypfiles; python ../../deps/v8/tools/run.py ../../out/Release/v8-qemu-wrapper ../../out/Release/bytecode_builtins_list_generator ../../out/Release/obj.host/gen/generate-bytecode-output-root/builtins-generated/bytecodes-builtins-list.h
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    ../../out/Release/bytecode_builtins_list_generator: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by ../../out/Release/bytecode_builtins_list_generator)
-    Return code is 1
+Compared to the in-depth analysis that Thomas did, the above was very,
+very light. It did not even explain the core of the issue ("in some
+constellations" is very vague, when Thomas explaned exactly what is
+going on).
 
-So the question is: why the heck does Qemu use the host C library?
+For such a difficult issue, we do want to carry the explanations in the
+repository, when a remote URL may disapear any time.
 
-To answer this question, we first have to look at how the -L option of
-Qemu is implemented. This option is documented as such:
+So, I did duplicate most of Thomas analysis, and just tweaked it ever so
+slightly so that it fits better as a commit log.
 
-    -L path     QEMU_LD_PREFIX   set the elf interpreter prefix to 'path'
+Applied to master, thanks.
 
-The v8-qemu-wrapper script makes this option point to $(STAGING_DIR),
-so that the ELF interpreter used is the one in $(STAGING_DIR).
+Regards,
+Yann E. MORIN.
 
-However, contrary to what the option documentation says, this option
-does much more than setting the ELF interpreter prefix: it is going to
-affect how *all* system calls manipulating files (open, etc.) are
-going to work.
+> [1] https://bugs.busybox.net/show_bug.cgi?id=14366
+> [2] https://lore.kernel.org/buildroot/20221031213926.50d3c778@windsurf/
+> 
+> Signed-off-by: Jens Maus <mail@jens-maus.de>
+> ---
+>  package/nodejs/v8-qemu-wrapper.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/nodejs/v8-qemu-wrapper.in b/package/nodejs/v8-qemu-wrapper.in
+> index e1083f47f7..48222d089b 100644
+> --- a/package/nodejs/v8-qemu-wrapper.in
+> +++ b/package/nodejs/v8-qemu-wrapper.in
+> @@ -5,5 +5,6 @@
+>  exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
+>      @QEMU_USERMODE_ARGS@ \
+>     -L "${STAGING_DIR}/" \
+> +   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
+>      "$@"
+>  
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-When this option is passed, the function init_paths() in
-https://git.qemu.org/?p=qemu.git;a=blob;f=util/path.c is called at
-initialization time, and essentially its sets the global "base"
-variable to point to the directory passed as -L argument.
-
-Then, for every single syscall that manipulates a path, this path will
-be passed through the path() function in the same file. This function
-will first attempt to resolve the path with "base" as a prefix, and if
-not, return the unprefixed path.
-
-After adding some traces into this function, I was able to understand
-what happens:
-
-(1) -L$(STAGING_DIR) is passed, causing "base" to point to
-$(STAGING_DIR)
-
-(2) The target ELF interpreter from $(STAGING_DIR) is properly invoked
-
-(3) When this ELF interpreter then resolves the libc.so.6 library, it
-    first looks for /etc/ld.so.cache.
-
-(4) Qemu first looks for /etc/ld.so.cache with the -L prefix, i.e
-    $(STAGING_DIR)/etc/ld.so.cache, but it does not exist. So, the Qemu
-    system call emulation falls back to /etc/ld.so.cache, which means
-    the target ELF interpreter reads the /etc/ld.so.cache of the host
-    system.
-
-(5) This /etc/ld.so.cache of the host system says that libc.so.6 is in
-    /lib/x86_64-linux-gnu/
-
-(6) The target ELF interpreter therefore tries to use
-    /lib/x86_64-linux-gnu/libc.so.6. The Qemu system call emulation
-    first tries $(STAGING_DIR)/lib/x86_64-linux-gnu/libc.so.6, but
-    this library does not exist (it is in
-    $(STAGING_DIR)/lib/libc.so.6), so the Qemu system call emulation
-    falls back to /lib/x86_64-linux-gnu/libc.so.6 of the host system,
-    which exist... but is too old compared to the target C library.
-    Indeed, results from ld.so.cache take precedence over the simple
-    resolution of library paths in /usr/lib and /lib.
-
-We see 3 possible ideas to resolve this problem:
-
-(A) Change the behavior of Qemu to not fallback to unprefixed paths:
-    when -L is passed, all path-related system calls should see the
-    paths prefixed by the -L option.
-
-    Issue with this is that this change is unlikely to get accepted by
-    Qemu upstream. And there might be some side effects we have not
-    really identified.
-
-(B) Create an empty $(STAGING_DIR)/etc/ld.so.cache. We have tested
-    this solution and it works: it gets used instead of the host
-    /etc/ld.so.cache. Because $(STAGING_DIR)/etc/ld.so.cache is empty,
-    there's no libc.so.6 match, so the target ELF interpreter goes
-    through its normal library location resolution logic, which falls
-    back to trying in /usr/lib and /lib, which works as those paths
-    ends up being prefixed with $(STAGING_DIR) by Qemu.
-
-(C) Pass LD_LIBRARY_PATH pointing to $(STAGING_DIR)/lib and
-    $(STAGING_DIR)/usr/lib in the Qemu wrapper. This works because
-    LD_LIBRARY_PATH paths have precedence over paths given by
-    ld.so.cache.
-
-    This is the solution already used by the GOI qemu wrapper in
-    package/gobject-introspection/g-ir-scanner-qemuwrapper.in.
-
-We chose to go with the third option, because it has been proven to work
-for the GOI wrapper, and has been reported to solve #14366. Even though
-the first option would be the best, it is also the one that has the
-least chances to land any time soon (if ever); the second has not been
-exercised, and the impact is not fully understood either (e.g what about
-non-glibc toolchains?).
-
-Fixes: #14366
-
-Signed-off-by: Jens Maus <mail@jens-maus.de>
-[yann.morin.1998@free.fr:
-  - add whole analsys done by Thomas in:
-    https://lore.kernel.org/buildroot/20221031213926.50d3c778@windsurf/
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/nodejs/v8-qemu-wrapper.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/nodejs/v8-qemu-wrapper.in b/package/nodejs/v8-qemu-wrapper.in
-index e1083f47f7..48222d089b 100644
---- a/package/nodejs/v8-qemu-wrapper.in
-+++ b/package/nodejs/v8-qemu-wrapper.in
-@@ -5,5 +5,6 @@
- exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
-     @QEMU_USERMODE_ARGS@ \
-    -L "${STAGING_DIR}/" \
-+   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
-     "$@"
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
