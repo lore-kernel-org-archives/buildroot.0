@@ -4,84 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4279CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 15:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65B51CE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 15:12:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 59D94400D7;
-	Sun, 24 Sep 2023 15:10:59 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59D94400D7
+	by smtp2.osuosl.org (Postfix) with ESMTP id 04D294044F;
+	Sun, 24 Sep 2023 15:12:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04D294044F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 3dMDB9r-hJ0K; Sun, 24 Sep 2023 15:10:58 +0000 (UTC)
+	with ESMTP id FOwbFoEnyvNj; Sun, 24 Sep 2023 15:12:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B14D40232;
-	Sun, 24 Sep 2023 15:10:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B14D40232
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9E4201BF3E8
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:10:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1812640232;
+	Sun, 24 Sep 2023 15:12:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1812640232
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 99E7E1BF3E8
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DA92417BC
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:10:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DA92417BC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 539F660A93
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 15:12:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 539F660A93
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 4eC3NvnQO2vQ for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 15:10:53 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A736417B5
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 15:10:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A736417B5
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-404314388ceso54688715e9.2
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 08:10:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1695568251; x=1696173051;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=JZ2tcaPdnmy2wjkbjXQQNxBAsD1dUKRqgBnUtBGBXBI=;
- b=YuGlxLMd+XWm91exyrWan82A+LJ1eZ+R09a6mco73WeKBsubn7303f2bDEwiCl/UzA
- l4377VonNgziO+eHrCuuhk6Kz49FzPGeA7iWuDSLI9iACorBV6mTdeQj6zVAo4w+ytqA
- v0aRtiSRfcnSsXYevv9+yQV03LwyJ6l9KmW/0OJ5KypumCLf4fbjYxN2Ud0YqNvbFy/Q
- 9k6kHDnFDQzHAuKMAh0XpOhVueCOJFkQXT+NMfiJnV0Ikn3//5oUnyFrBT7L/82IluYT
- X4h+bRe+Bx9MzgjEYPVz4pMz4eGdfRRfppCSY1Ra0suvSmRiVjQ7b4aWuVvPX31kSkXE
- UITA==
-X-Gm-Message-State: AOJu0Yz8yG7bEwcdBUAUVH0w2L9ECFTNAtZmYfzl2e0Q2+ptFbIUt6hL
- quX0EJHdDbKt4ZxNHcC2UWeKQknzG+8=
-X-Google-Smtp-Source: AGHT+IEGihW4XXsxfTh0FyrNZ06eMz4Hx8enUo7zGnkMUVVGikSH5s5SRGzcka32rJu19+50AgMABQ==
-X-Received: by 2002:a7b:c34c:0:b0:401:d803:6243 with SMTP id
- l12-20020a7bc34c000000b00401d8036243mr3588537wmj.32.1695568250501; 
- Sun, 24 Sep 2023 08:10:50 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-787-165.w83-197.abo.wanadoo.fr.
- [83.197.114.165]) by smtp.gmail.com with ESMTPSA id
- e15-20020a05600c218f00b00402ff8d6086sm9779120wme.18.2023.09.24.08.10.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Sep 2023 08:10:50 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 17:09:26 +0200
-Message-Id: <20230924150926.385304-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.40.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id TIOHXYddRpbV for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 15:12:39 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on2061c.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7eab::61c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D953660595
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 15:12:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D953660595
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j4ojbMm7ftq/oCdkCmN9sdKivlGfDp0knnRxUX21OoQYChfdeShAL4xguvD2rZCbYuh4A1T9OkM5GgwEEoQHNVjBS2nap4pqAz4oslPLmp9vXMDFJvSem3e8so7OFQaFFt5GzscfvOBb4IV/TYeHzzKE5okrTUMjiFdBmjLgpXztamoqcqfiVVGYxY+SHxh29yrBKqdbAzqg42oRxyNh9PbWQ2mcnguRqE0xzNtVSEavMuMVJ4wI0T93gc2HJ6YM6X8hNWfoqhnFPcLdRQHOJLIXaLbJheLhfw0gPJAPn3tPhT8eXv3zAFOTdXFYIrZ2ALcz+4LwiUdeCDrUIursJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r9PlJ8RIFHYbzWZPsfTfgGhfs5K7jCBU8PiMxQcfa/I=;
+ b=ne22brx9MsG6/xrGRi6DsfduufS+Hz8dIQ0Y9Slz3KGZq5A+z3CIMMuFMbNXCUbGHrESOzI4HGDztdxzeCuojmCpsSmWs7/SAksN+oqRXxZsccyjh8bPiyg+zttSBMufY2DTRpGWGbq9SGWGEaMFwnsBy3yjiLhRFbh6w5zzy97T/CI/OyMsVAZRPi5F/1tU5R5C9bnXMO+3cXRWIor/GBpxHn25V4Qo9uNy5iIiUle60kuovTp2Y6Pibi4JR7KTn1N1hwNzRApGe6FNtOQ+piyWqa6XSf2uil7aRN5Dwb53TfYFfMbeWgQdKymhBFyZFxKjeCc8JdoMrsg4wzdE2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+Received: from BLAPR03CA0090.namprd03.prod.outlook.com (2603:10b6:208:329::35)
+ by PH0PR12MB8175.namprd12.prod.outlook.com (2603:10b6:510:291::5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.25; Sun, 24 Sep
+ 2023 15:12:31 +0000
+Received: from BL02EPF0001A0FE.namprd03.prod.outlook.com
+ (2603:10b6:208:329:cafe::57) by BLAPR03CA0090.outlook.office365.com
+ (2603:10b6:208:329::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
+ Transport; Sun, 24 Sep 2023 15:12:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A0FE.mail.protection.outlook.com (10.167.242.105) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.14 via Frontend Transport; Sun, 24 Sep 2023 15:12:29 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sun, 24 Sep
+ 2023 10:12:17 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Sun, 24 Sep 2023 10:12:16 -0500
+To: <buildroot@buildroot.org>
+Date: Sun, 24 Sep 2023 16:11:56 +0100
+Message-ID: <20230924151205.2099293-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FE:EE_|PH0PR12MB8175:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5fd02672-f887-4ad1-aef2-08dbbd10ab18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9enYycnBnya1Zw3rtp66UYJST+xj7+4vWmlshXXQ0fV0vHwQeltOGKUKpbLcgdNaG0KDqC/pnIeQOeJJJClg56hIySyYQe/fiQbuWIBITtfmQYJY+CTW1gZelit9FjV44p9XO81vujRkR+MM9khWj0rXyjCzfZW8oOEJZFUuO2ym1xObsbCYO1ATcZ0EVATT4NFRUuL0dvWgtoAnk4yQL9GdfIdl33LcLN6Q+5LHC73+BJoEHMc6QkZ3MI9dXqXPS+7XCSgz2EX9DIPD7liFAhOyjMrEOE28h/SG8M1Cw6CL+N0AFdo9xOVcTniZSULA0xPLch+r6bVwJD84fyBDaoN36h2bRRMUJHUPwiuMI/aZNnmJ1ObCgiqYj041hRxZSucqIuTvAtz0/hfriqcVqtYSCsaDGRBRWpeP/uZUBbVrKc66kWyn7uCXJ7SCG1RegNMFUcEkl93AnxOPyw/AylWf9tL54u7syaj4I4ENTTMpJg2oRMyNX2X/0nJVaGeo6EEELNyvOGo4BYYv8r/mDgfeIxkJqngs1WFtAmmTTzeNCpInM24SCJrYwWn109T2+wkNSp5E9prGbD6wCmnXEyGmYABlu9u2pwU9WUS4T1SglICshyPeOjSb50M5a9FKdM/Sb+U9Re/5Z5cWzlP9kbWTj/o7+ArDrNLpib/VuIQyV7U8+uLWV8hom3tlcAVQ4IW2hkDTWbpHDN+O6ugrbBOuyhpx0mPJQzVrWu1eOXbzWTR3E3WUYgnnCOeImKexf37K7EKdUFLz9vWaV9owBVq2CL1XmvaFKvY3XlKeLlI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230031)(4636009)(136003)(39860400002)(396003)(376002)(346002)(230922051799003)(82310400011)(186009)(1800799009)(451199024)(46966006)(36840700001)(40470700004)(2906002)(5660300002)(41300700001)(44832011)(4326008)(8676002)(8936002)(54906003)(70586007)(316002)(426003)(26005)(336012)(966005)(1076003)(6916009)(70206006)(40460700003)(478600001)(66574015)(6666004)(82740400003)(81166007)(2616005)(83380400001)(36756003)(47076005)(36860700001)(40480700001)(356005)(86362001)(36900700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2023 15:12:29.0392 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5fd02672-f887-4ad1-aef2-08dbbd10ab18
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0001A0FE.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8175
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1695568251; x=1696173051; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JZ2tcaPdnmy2wjkbjXQQNxBAsD1dUKRqgBnUtBGBXBI=;
- b=J1h/Y6hF/Vp8A3AAwYmuJ7k2b6H+FXgChRZbbd4qb49r0n8DFfNNcdzmiRqIR/zISE
- GuqFu2nHIROU+K36cZM8ZsBeXxSulk6TMvxHOdIiMccYp5G0Mgk9IcmfPgwK7ae/sdak
- QGdA1U7dhXExA77zdu3nvA1tEIq6aPOP9WMCb0fEA+v4ABSgOBSpcemBvpZcfUFZyj24
- 8xiFKNSbPbBEh3y4ZhOldDbCTJKsFEFmJJmhvxdU/6wym0wzxtdhAXCDJC008riRrPto
- lNksT4OpJvUei+7q4HBdsO4EWT5C7/yXYYlj2gOxVT1xX+1aJkt6l9UF39VHsRe02elM
- PNng==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=J1h/Y6hF
-Subject: [Buildroot] [PATCH 1/1] package/memcached: bump to version 1.6.21
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r9PlJ8RIFHYbzWZPsfTfgGhfs5K7jCBU8PiMxQcfa/I=;
+ b=v3CQHdAxk0lcqZtWUVpLoRTlUQ4XS+W003ZynV0WwEhy9ZoBCkeqIw9aHKkOzZ8j/84prZRndfIHJx1xih8W3zuzo/IWOgGUJERvo8r8h5/+pG2VPkSrYrHRxSWvXadczjTQFSkizymzrv+fB/hRWjopJnFJ6tnAR7hN9gAXiAQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=v3CQHdAx
+Subject: [Buildroot] [PATCH v4 01/10] package/binutils-bare-metal: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,227 +123,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
+ michal.simek@amd.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Send first patch upstream
-- Drop second and third patches (already in version) and so drop
-  autoreconf
-
-https://github.com/memcached/memcached/wiki/ReleaseNotes1618
-https://github.com/memcached/memcached/wiki/ReleaseNotes1619
-https://github.com/memcached/memcached/wiki/ReleaseNotes1620
-https://github.com/memcached/memcached/wiki/ReleaseNotes1621
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .checkpackageignore                           |  3 -
- .../0001-logger.c-initialize-rport.patch      |  2 +-
- .../memcached/0002-check-for-sys-auxv.h.patch | 50 --------------
- ...0003-configure.ac-add-disable-werror.patch | 65 -------------------
- package/memcached/memcached.hash              |  6 +-
- package/memcached/memcached.mk                |  4 +-
- 6 files changed, 5 insertions(+), 125 deletions(-)
- delete mode 100644 package/memcached/0002-check-for-sys-auxv.h.patch
- delete mode 100644 package/memcached/0003-configure.ac-add-disable-werror.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5d088d5efc..8ca197df63 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -884,9 +884,6 @@ package/matchbox/0001-defaulttheme.patch Upstream
- package/matchbox/0002-src-Fix-build-with-gcc-10.patch Upstream
- package/mediastreamer/0001-src-videofilters-nowebcam.c-fix-build-without-ffmpeg.patch Upstream
- package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch Upstream
--package/memcached/0001-logger.c-initialize-rport.patch Upstream
--package/memcached/0002-check-for-sys-auxv.h.patch Upstream
--package/memcached/0003-configure.ac-add-disable-werror.patch Upstream
- package/memstat/0001-PATH_MAX.patch Upstream
- package/mender-connect/S43mender-connect Shellcheck
- package/menu-cache/0001-Support-gcc10-compilation.patch Upstream
-diff --git a/package/memcached/0001-logger.c-initialize-rport.patch b/package/memcached/0001-logger.c-initialize-rport.patch
-index 5fb13d5eee..002a689601 100644
---- a/package/memcached/0001-logger.c-initialize-rport.patch
-+++ b/package/memcached/0001-logger.c-initialize-rport.patch
-@@ -23,7 +23,7 @@ Fixes:
-  - http://autobuild.buildroot.org/results/7a46ac38d10b1859034017e0294961daa8f48dd2
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not sent yet]
-+Upstream: https://github.com/memcached/memcached/pull/1077
- ---
-  logger.c | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-diff --git a/package/memcached/0002-check-for-sys-auxv.h.patch b/package/memcached/0002-check-for-sys-auxv.h.patch
-deleted file mode 100644
-index a7d0dfdd00..0000000000
---- a/package/memcached/0002-check-for-sys-auxv.h.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 58b6de2135c10b64918f25c48f69f144d08a9c0d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 3 Jun 2022 19:10:15 +0200
--Subject: [PATCH] check for sys/auxv.h
--
--Check for sys/auxv.h to avoid the following uclibc build failure on
--aarch64:
--
--crc32c.c:277:10: fatal error: sys/auxv.h: No such file or directory
--  277 | #include <sys/auxv.h>
--      |          ^~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/08591fbf9677ff126492c50c15170c641bcab56a
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not sent yet]
-----
-- configure.ac | 1 +
-- crc32c.c     | 2 +-
-- 2 files changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 0985f07..3337fe7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -516,6 +516,7 @@ AH_BOTTOM([#ifdef HAVE_INTTYPES_H
-- #include <inttypes.h>
-- #endif
-- ])
--+AC_CHECK_HEADERS([sys/auxv.h])
-- 
-- dnl **********************************************************************
-- dnl Figure out if this system has the stupid sasl_callback_ft
--diff --git a/crc32c.c b/crc32c.c
--index 26df879..05e61ff 100644
----- a/crc32c.c
--+++ b/crc32c.c
--@@ -273,7 +273,7 @@ void crc32c_init(void) {
-- }
-- 
-- #elif defined(__aarch64__) && (defined(__linux__) || defined(__APPLE__))
---#if defined(__linux__)
--+#if defined(__linux__) && defined(HAVE_SYS_AUX_H)
-- #include <sys/auxv.h>
-- #elif defined(__APPLE__)
-- #include <sys/sysctl.h>
---- 
--2.35.1
--
-diff --git a/package/memcached/0003-configure.ac-add-disable-werror.patch b/package/memcached/0003-configure.ac-add-disable-werror.patch
-deleted file mode 100644
-index dab9b8835d..0000000000
---- a/package/memcached/0003-configure.ac-add-disable-werror.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From 8497f7ed38146378a988bc22800b3a5eba38b0fd Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 13 Jun 2022 16:29:38 +0200
--Subject: [PATCH] configure.ac: add --disable-werror
--
--Allow the user to disable -Werror to avoid the following build failure:
--
--In file included from hash.c:7:
--xxhash.h:2667:5: error: #warning is a GCC extension [-Werror]
-- 2667 | #   warning "XXH3 is highly inefficient without ARM or Thumb-2."
--      |     ^~~~~~~
--xxhash.h:2667:5: error: #warning "XXH3 is highly inefficient without ARM or Thumb-2." [-Werror=cpp]
--
--Fixes:
-- - http://autobuild.buildroot.org/results/3124bae73c207f1a118e57e41e222ef464ccb297
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/memcached/memcached/pull/926]
-----
-- configure.ac | 11 +++++++++--
-- 1 file changed, 9 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 3337fe7..7683b8f 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -114,6 +114,9 @@ AC_ARG_ENABLE(static,
-- AC_ARG_ENABLE(unix_socket,
--   [AS_HELP_STRING([--disable-unix-socket], [Disable unix domain socket])])
-- 
--+AC_ARG_ENABLE(werror,
--+  [AS_HELP_STRING([--disable-werror], [Disable -Werror])])
--+
-- dnl **********************************************************************
-- dnl DETECT_SASL_CB_GETCONF
-- dnl
--@@ -783,6 +786,10 @@ AM_CONDITIONAL([BUILD_SPECIFICATIONS],
--                [test "x$enable_docs" != "xno" -a "x$XML2RFC" != "xno" -a "x$XSLTPROC" != "xno"])
-- 
-- 
--+if test "x$enable_werror" != "xno"; then
--+   CFLAGS="$CFLAGS -Werror"
--+fi
--+
-- dnl Let the compiler be a bit more picky. Please note that you cannot
-- dnl specify these flags to the compiler before AC_CHECK_FUNCS, because
-- dnl the test program will generate a compilation warning and hence fail
--@@ -790,12 +797,12 @@ dnl to detect the function ;-)
-- if test "$ICC" = "yes"
-- then
--    dnl ICC trying to be gcc.
---   CFLAGS="$CFLAGS -diag-disable 187 -Wall -Werror"
--+   CFLAGS="$CFLAGS -diag-disable 187 -Wall"
--    AC_DEFINE([_GNU_SOURCE],[1],[make sure IOV_MAX is defined])
-- elif test "$GCC" = "yes"
-- then
--   GCC_VERSION=`$CC -dumpversion`
---  CFLAGS="$CFLAGS -Wall -Werror -pedantic -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls"
--+  CFLAGS="$CFLAGS -Wall -pedantic -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls"
--   if test "x$enable_asan" = "xyes"; then
--     CFLAGS="$CFLAGS -fsanitize=address"
--   fi
---- 
--2.35.1
--
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 78875dde66..c223a14bac 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.6.17.tar.gz.sha1
--sha1  e25639473e15f1bd9516b915fb7e03ab8209030f  memcached-1.6.17.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.21.tar.gz.sha1
-+sha1  6d899680b4ba4b76b6c92120143cf87630ee984a  memcached-1.6.21.tar.gz
- 
- # Locally computed
--sha256  2055e373613d8fc21529aff9f0adce3e23b9ce01ba0478d30e7941d9f2bd1224  memcached-1.6.17.tar.gz
-+sha256  c788980efc417dd5d93c442b1c8b8769fb2018896c29de3887d22a2f143da2ee  memcached-1.6.21.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 7183da6c14..2ebc672d1c 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.6.17
-+MEMCACHED_VERSION = 1.6.21
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-@@ -13,8 +13,6 @@ MEMCACHED_LICENSE = BSD-3-Clause
- MEMCACHED_LICENSE_FILES = COPYING
- MEMCACHED_CPE_ID_VENDOR = memcached
- MEMCACHED_SELINUX_MODULES = memcached
--# We're patching configure.ac
--MEMCACHED_AUTORECONF = YES
- 
- ifeq ($(BR2_ENDIAN),"BIG")
- MEMCACHED_CONF_ENV += ac_cv_c_endian=big
--- 
-2.40.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBwYXRjaCBhZGRzIGEgbmV3IHBhY2thZ2UgZm9yIGJ1aWxkaW5nIGJpbnV0aWxzIGZvciBh
+IGJhcmUtbWV0YWwgdG9vbGNoYWluLgpUaGUgY3B1IGFyY2hpdGVjdHVyZSBpcyBkZWZpbmVkIGJ5
+IGEgdG9vbGNoYWluLWJhcmUtbWV0YWwgdmlydHVhbCBwYWNrYWdlLgpXaGlsZSBhbnkgY3B1IGFy
+Y2hpdGVjdHVyZSBjb3VsZCBiZSB1c2VkLCB0aGUgZGVmYXVsdCBjb25maWd1cmF0aW9uIHdpbGwg
+YmUgYQpYaWxpbnggbWljcm9ibGF6ZSBsaXR0bGUgZW5kaWFuIGFyY2hpdGVjdHVyZSwgc28gdGhh
+dCBidWlsZHJvb3Qgd2lsbCBiZSBhYmxlCnRvIGJ1aWxkIHRoZSBtaWNyb2JsYXplIGZpcm13YXJl
+IGFwcGxpY2F0aW9ucyBmb3IgenlucW1wIGFuZCB2ZXJzYWwuCgpXaGVuIGNvbmZpZ3VyZWQgZm9y
+IHRoZSBYaWxpbnggbWljcm9ibGF6ZSBhcmNoaXRlY3R1cmUsIGFsbCBvZiB0aGUgYmludXRpbHMK
+cGF0Y2hlcyB0aGF0IGFyZSBhcHBsaWVkIHRvIHRoZSBYaWxpbnggZGlzdHJpYnV0ZWQgdG9vbGNo
+YWluIHdpbGwgYmUgYXBwbGllZAppbiBvcmRlciB0byBnZW5lcmF0ZSBhIHRvb2xjaGFpbiB0aGF0
+IGlzIGVxdWl2YWxlbnQgdG8gd2hhdCBYaWxpbnggZGlzdHJpYnV0ZXMuCgpTaWduZWQtb2ZmLWJ5
+OiBJYmFpIEVya2lhZ2EtRWxvcnphIDxpYmFpLmVya2lhZ2EtZWxvcnphQGFtZC5jb20+ClNpZ25l
+ZC1vZmYtYnk6IE5lYWwgRnJhZ2VyIDxuZWFsLmZyYWdlckBhbWQuY29tPgotLS0KVjEtPlYyOgog
+LSByZW1vdmVkIGRlZmF1bHQgZW5hYmxlIHRvIGJlIHJlcGxhY2VkIHdpdGggdG9vbGNoYWluIHNl
+bGVjdCBjb25maWcKVjItPlYzOgogLSBubyBjaGFuZ2VzClYzLT5WNDoKIC0gc3BsaXQgdGFyIGlu
+c3RydWN0aW9uIGludG8gbXVsdGlwbGUgbGluZXMKIC0gcmVwbGFjZWQgdW5uZWNlc3NhcnkgPT8g
+d2l0aCA9IGZvciBhc3NpZ25tZW50cwogLSBjaGFuZ2VkIHhsbngtcmVsLXYyMDIzLjEudGFyLmd6
+IGhhc2ggdG8gc2hhMjU2CiAtIGltcHJvdmVkIG1lbnVjb25maWcgaGVscCBjb21tZW50Ci0tLQog
+REVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDQgKysKIHBh
+Y2thZ2UvYmludXRpbHMtYmFyZS1tZXRhbC9Db25maWcuaW4uaG9zdCAgICB8IDEyICsrKysKIC4u
+Li9iaW51dGlscy1iYXJlLW1ldGFsLmhhc2ggICAgICAgICAgICAgICAgICB8ICA3ICsrKwogLi4u
+L2JpbnV0aWxzLWJhcmUtbWV0YWwubWsgICAgICAgICAgICAgICAgICAgIHwgNTYgKysrKysrKysr
+KysrKysrKysrKwogNCBmaWxlcyBjaGFuZ2VkLCA3OSBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9k
+ZSAxMDA2NDQgcGFja2FnZS9iaW51dGlscy1iYXJlLW1ldGFsL0NvbmZpZy5pbi5ob3N0CiBjcmVh
+dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9iaW51dGlscy1iYXJlLW1ldGFsL2JpbnV0aWxzLWJhcmUt
+bWV0YWwuaGFzaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvYmludXRpbHMtYmFyZS1tZXRh
+bC9iaW51dGlscy1iYXJlLW1ldGFsLm1rCgpkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVM
+T1BFUlMKaW5kZXggZThiNzhhOGQ0Ni4uMDQ2ZjhmNzg3NCAxMDA2NDQKLS0tIGEvREVWRUxPUEVS
+UworKysgYi9ERVZFTE9QRVJTCkBAIC0xMzUwLDYgKzEzNTAsOSBAQCBGOglwYWNrYWdlL21ycC8K
+IE46CUlhbiBIYXlsb2NrIDxoYXlsb2NraUB5YWhvby5jby51az4KIEY6CXBhY2thZ2UvcHl0aG9u
+LXJwaS1ncGlvLwogCitOOglJYmFpIEVya2lhZ2EtRWxvcnphIDxpYmFpLmVya2lhZ2EtZWxvcnph
+QGFtZC5jb20+CitGOglwYWNrYWdlL2JpbnV0aWxzLWJhcmUtbWV0YWwvCisKIE46CUlnbmFjeSBH
+YXfEmWR6a2kgPGlnbmFjeS5nYXdlZHpraUBncmVlbi1jb21tdW5pY2F0aW9ucy5mcj4KIEY6CXBh
+Y2thZ2UvYW5ndWxhcmpzLwogCkBAIC0yMTc4LDYgKzIxODEsNyBAQCBGOgljb25maWdzL3p5bnFf
+emM3MDZfZGVmY29uZmlnCiBGOgljb25maWdzL3p5bnFtcF9rcmlhX2t2MjYwX2RlZmNvbmZpZwog
+RjoJY29uZmlncy96eW5xbXBfemN1MTAyX2RlZmNvbmZpZwogRjoJY29uZmlncy96eW5xbXBfemN1
+MTA2X2RlZmNvbmZpZworRjoJcGFja2FnZS9iaW51dGlscy1iYXJlLW1ldGFsLwogRjoJcGFja2Fn
+ZS9ib290Z2VuLwogRjoJcGFja2FnZS92ZXJzYWwtZmlybXdhcmUvCiAKZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvYmludXRpbHMtYmFyZS1tZXRhbC9Db25maWcuaW4uaG9zdCBiL3BhY2thZ2UvYmludXRp
+bHMtYmFyZS1tZXRhbC9Db25maWcuaW4uaG9zdApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAw
+MDAwMDAwMDAwLi4zYTY4YzFlMDJkCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9iaW51dGls
+cy1iYXJlLW1ldGFsL0NvbmZpZy5pbi5ob3N0CkBAIC0wLDAgKzEsMTIgQEAKK2NvbmZpZyBCUjJf
+UEFDS0FHRV9IT1NUX0JJTlVUSUxTX0JBUkVfTUVUQUwKKwlib29sICJob3N0IGJpbnV0aWxzLWJh
+cmUtbWV0YWwiCisJaGVscAorCSAgQnVpbGQgR05VIGJpbnV0aWxzIGZvciBhIGJhcmUtbWV0YWwg
+dG9vbGNoYWluCisKK2lmIEJSMl9QQUNLQUdFX0hPU1RfQklOVVRJTFNfQkFSRV9NRVRBTAorCitj
+b25maWcgQlIyX1BBQ0tBR0VfSE9TVF9CSU5VVElMU19CQVJFX01FVEFMX1ZFUlNJT04KKwlzdHJp
+bmcKKwlkZWZhdWx0ICIyLjM5IgorCitlbmRpZiAjQlIyX1BBQ0tBR0VfSE9TVF9CSU5VVElMU19C
+QVJFX01FVEFMCmRpZmYgLS1naXQgYS9wYWNrYWdlL2JpbnV0aWxzLWJhcmUtbWV0YWwvYmludXRp
+bHMtYmFyZS1tZXRhbC5oYXNoIGIvcGFja2FnZS9iaW51dGlscy1iYXJlLW1ldGFsL2JpbnV0aWxz
+LWJhcmUtbWV0YWwuaGFzaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5j
+NTA0NDNlODM3Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9iaW51dGlscy1iYXJlLW1ldGFs
+L2JpbnV0aWxzLWJhcmUtbWV0YWwuaGFzaApAQCAtMCwwICsxLDcgQEAKKyMgRnJvbSBodHRwczov
+L2djYy5nbnUub3JnL3B1Yi9iaW51dGlscy9yZWxlYXNlcy9zaGE1MTIuc3VtCitzaGE1MTIgIDY4
+ZTAzOGYzMzlhOGMyMWZhYTE5YTU3YmJjNDQ3YTUxYzgxN2Y0N2MyZTA2ZDc0MDg0N2M2ZTljYzMz
+OTZjMDI1ZDM1ZDUzNjlmYThjM2Y4YjcwNDE0NzU3Yzg5ZjBlNTc3OTM5ZGRjMGQ3MGYyODMxODI1
+MDQ5MjBmNTNiMGEzICBiaW51dGlscy0yLjM5LnRhci54egorCisjIGxvY2FsbHkgY2FsY3VsYXRl
+ZAorc2hhMjU2ICA1OTkyY2U2ODY1NDY4NTM3Yjg0MzcyNDgwZjc1OTMxMjVkYjc1NGY2NzNkY2Nh
+ZTFlY2Y2ZDZhN2M3NGVkODhlICB4bG54LXJlbC12MjAyMy4xLnRhci5negorc2hhMjU2ICA4Y2Vi
+NGI5ZWU1YWRlZGRlNDdiMzFlOTc1YzFkOTBjNzNhZDI3YjZiMTY1YTFkY2Q4MGM3YzU0NWViNjVi
+OTAzICBDT1BZSU5HMworc2hhMjU2ICA1NmJkZWE3M2I2MTQ1ZWY2YWM1MjU5YjNkYTM5MGI5ODFk
+ODQwYzI0Y2IwM2I4ZTFjYmM2NzhkZTdlY2ZhMThkICBDT1BZSU5HLkxJQgpkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9iaW51dGlscy1iYXJlLW1ldGFsL2JpbnV0aWxzLWJhcmUtbWV0YWwubWsgYi9wYWNr
+YWdlL2JpbnV0aWxzLWJhcmUtbWV0YWwvYmludXRpbHMtYmFyZS1tZXRhbC5tawpuZXcgZmlsZSBt
+b2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5kZThkZGNjOWU5Ci0tLSAvZGV2L251bGwKKysr
+IGIvcGFja2FnZS9iaW51dGlscy1iYXJlLW1ldGFsL2JpbnV0aWxzLWJhcmUtbWV0YWwubWsKQEAg
+LTAsMCArMSw1NiBAQAorIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKKyMKKyMgYmludXRpbHMtYmFy
+ZS1tZXRhbAorIworIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKKworSE9TVF9CSU5VVElMU19CQVJF
+X01FVEFMX1ZFUlNJT04gPSAkKGNhbGwgcXN0cmlwLCQoQlIyX1BBQ0tBR0VfSE9TVF9CSU5VVElM
+U19CQVJFX01FVEFMX1ZFUlNJT04pKQoraWZlcSAoJChIT1NUX0JJTlVUSUxTX0JBUkVfTUVUQUxf
+VkVSU0lPTiksKQorSE9TVF9CSU5VVElMU19CQVJFX01FVEFMX1ZFUlNJT04gPSAyLjM5CitlbmRp
+ZiAjIEJJTlVUSUxTX1ZFUlNJT04gIAorCitIT1NUX0JJTlVUSUxTX0JBUkVfTUVUQUxfU0lURSA9
+ICQoQlIyX0dOVV9NSVJST1IpL2JpbnV0aWxzCitIT1NUX0JJTlVUSUxTX0JBUkVfTUVUQUxfU09V
+UkNFID0gYmludXRpbHMtJChIT1NUX0JJTlVUSUxTX0JBUkVfTUVUQUxfVkVSU0lPTikudGFyLnh6
+CisKK0hPU1RfQklOVVRJTFNfQkFSRV9NRVRBTF9MSUNFTlNFID0gR1BMLTMuMCssIGxpYmliZXJ0
+eSBMR1BMLTIuMSsKK0hPU1RfQklOVVRJTFNfQkFSRV9NRVRBTF9MSUNFTlNFX0ZJTEVTID0gQ09Q
+WUlORzMgQ09QWUlORy5MSUIKK0hPU1RfQklOVVRJTFNfQkFSRV9NRVRBTF9DUEVfSURfVkVORE9S
+ID0gZ251CisKK0hPU1RfQklOVVRJTFNfQkFSRV9NRVRBTF9ERVBFTkRFTkNJRVMgPSBob3N0LXps
+aWIKKworIyBpZiB0b29sY2hhaW4gaXMgZm9yIG1pY3JvYmxhemVlbC14aWxpbngsIGFwcGx5IFhp
+bGlueCBwYXRjaCBzZXQKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfSE9TVF9UT09MQ0hBSU5fQkFSRV9N
+RVRBTF9BUkNIKSwibWljcm9ibGF6ZWVsLXhpbGlueCIpCitIT1NUX0JJTlVUSUxTX0JBUkVfTUVU
+QUxfRVhUUkFfRE9XTkxPQURTID0gaHR0cHM6Ly9naXRodWIuY29tL1hpbGlueC9tZXRhLXhpbGlu
+eC9hcmNoaXZlL3JlZnMvdGFncy94bG54LXJlbC12MjAyMy4xLnRhci5negorCitkZWZpbmUgSE9T
+VF9CSU5VVElMU19CQVJFX01FVEFMX0VYVFJBQ1RfUEFUQ0hFUworICBta2RpciAtcCAkKEBEKS9w
+YXRjaGVzCisgIHRhciAteGYgJChIT1NUX0JJTlVUSUxTX0JBUkVfTUVUQUxfRExfRElSKS94bG54
+LXJlbC12MjAyMy4xLnRhci5neiBcCisgICAgICAtLXN0cmlwLWNvbXBvbmVudHM9NSBcCisgICAg
+ICAtQyAkKEBEKS9wYXRjaGVzIFwKKyAgICAgIG1ldGEteGlsaW54LXhsbngtcmVsLXYyMDIzLjEv
+bWV0YS1taWNyb2JsYXplL3JlY2lwZXMtZGV2dG9vbHMvYmludXRpbHMvYmludXRpbHMKK2VuZGVm
+CitIT1NUX0JJTlVUSUxTX0JBUkVfTUVUQUxfUE9TVF9FWFRSQUNUX0hPT0tTICs9IEhPU1RfQklO
+VVRJTFNfQkFSRV9NRVRBTF9FWFRSQUNUX1BBVENIRVMKKworZGVmaW5lIEhPU1RfQklOVVRJTFNf
+QkFSRV9NRVRBTF9BUFBMWV9MT0NBTF9QQVRDSEVTCisJJChBUFBMWV9QQVRDSEVTKSAkKEBEKSAk
+KEBEKS9wYXRjaGVzICoucGF0Y2g7CitlbmRlZgorSE9TVF9CSU5VVElMU19CQVJFX01FVEFMX1BP
+U1RfUEFUQ0hfSE9PS1MgKz0gSE9TVF9CSU5VVElMU19CQVJFX01FVEFMX0FQUExZX0xPQ0FMX1BB
+VENIRVMKK2VuZGlmICNpZmVxICgkKEJSMl9QQUNLQUdFX0hPU1RfVE9PTENIQUlOX0JBUkVfTUVU
+QUxfQVJDSCksIm1pY3JvYmxhemVlbC14aWxpbngiKQorCisjIERvbid0IGJ1aWxkIGRvY3VtZW50
+YXRpb24uIEl0IHRha2VzIHVwIGV4dHJhIHNwYWNlIC8gYnVpbGQgdGltZSwKKyMgYW5kIHNvbWV0
+aW1lcyBuZWVkcyBzcGVjaWZpYyBtYWtlaW5mbyB2ZXJzaW9ucyB0byB3b3JrCitIT1NUX0JJTlVU
+SUxTX0JBUkVfTUVUQUxfQ09ORl9FTlYgKz0gTUFLRUlORk89dHJ1ZQorSE9TVF9CSU5VVElMU19C
+QVJFX01FVEFMX01BS0VfT1BUUyArPSBNQUtFSU5GTz10cnVlCitIT1NUX0JJTlVUSUxTX0JBUkVf
+TUVUQUxfSU5TVEFMTF9PUFRTICs9IE1BS0VJTkZPPXRydWUgaW5zdGFsbAorCitIT1NUX0JJTlVU
+SUxTX0JBUkVfTUVUQUxfQ09ORl9PUFRTID0gXAorCS0tdGFyZ2V0PSQoQlIyX1BBQ0tBR0VfSE9T
+VF9UT09MQ0hBSU5fQkFSRV9NRVRBTF9BUkNIKS1lbGYgXAorCS0tZGlzYWJsZS1ncHJvZiBcCisJ
+LS1kaXNhYmxlLXNoYXJlZCBcCisJLS1lbmFibGUtbHRvIFwKKwktLWVuYWJsZS1zdGF0aWMgXAor
+CS0tZGlzYWJsZS1pbml0ZmluaS1hcnJheSBcCisJLS1kaXNhYmxlLW11bHRpbGliIFwKKwktLWRp
+c2FibGUtd2Vycm9yCisKKyQoZXZhbCAkKGhvc3QtYXV0b3Rvb2xzLXBhY2thZ2UpKQotLSAKMi4y
+NS4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
+ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
