@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C27CE7A8C
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:25:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73208CE7A8C
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 21:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6CFE417F5;
-	Sun, 24 Sep 2023 21:25:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6CFE417F5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2097F4193C;
+	Sun, 24 Sep 2023 21:25:38 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2097F4193C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id vp1kdDK651Oy; Sun, 24 Sep 2023 21:25:23 +0000 (UTC)
+	with ESMTP id qLPEwgPjCd6G; Sun, 24 Sep 2023 21:25:37 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 981D44190C;
-	Sun, 24 Sep 2023 21:25:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 981D44190C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D8FD41934;
+	Sun, 24 Sep 2023 21:25:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D8FD41934
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7A0E51BF2CC
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7EA9C1BF909
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 144C681CAF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 336EB81CEF
  for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 21:21:52 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 144C681CAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 336EB81CEF
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rMnEkb618Cq2 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 21:21:51 +0000 (UTC)
+ with ESMTP id i2oSEvzUDFyJ for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A79F781DCA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 741D681D47
  for <buildroot@buildroot.org>; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A79F781DCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 741D681D47
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A578787642; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
+ id 727C587643; Sun, 24 Sep 2023 21:21:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 23:19:03 +0200
+Date: Sun, 24 Sep 2023 23:14:49 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 58b385e557789a316db76b6553a8dba8bc63e11d
-X-Git-Newrev: 2f529f1f9c9b190fd59b992d975211cf08e3d865
+X-Git-Oldrev: 1147afc11771161534988a5b5af082876fe0f8fd
+X-Git-Newrev: a04464807afcb461d5e6960da06f446f6393596f
 X-Patchwork-Hint: ignore
-Message-Id: <20230924212150.A578787642@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/vim: security
- bump to version 9.0.1903
+Message-Id: <20230924212150.727C587643@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/conmon: fix
+ libseccomp shared build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,50 +63,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f529f1f9c9b190fd59b992d975211cf08e3d865
+commit: https://git.buildroot.net/buildroot/commit/?id=a04464807afcb461d5e6960da06f446f6393596f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-- Fix CVE-2023-2426, CVE-2023-2609, CVE-2023-2610, CVE-2023-4733,
-  CVE-2023-4734, CVE-2023-4735, CVE-2023-4736, CVE-2023-4738,
-  CVE-2023-4750, CVE-2023-4752 and CVE-2023-4781
-- Update hash of license file and readme (maintainers updated with
-  https://github.com/vim/vim/commit/e978b4534a5e10471108259118c0ef791106fd92
-  https://github.com/vim/vim/commit/1688938dd5ac78ab67e54299b9d5b93499dba762)
+Drop patch and disable libseccomp when building statically to avoid the
+following build failure raised since commit
+29834d8a12d984e8efe05398c5aaa6a61f7880e0:
+
+src/seccomp_notify.c: In function 'seccomp_notify_plugins_load':
+src/seccomp_notify.c:136:42: warning: implicit declaration of function 'dlopen'; did you mean 'popen'? [-Wimplicit-function-declaration]
+  136 |                 ctx->plugins[s].handle = dlopen(it, RTLD_NOW);
+      |                                          ^~~~~~
+      |                                          popen
+src/seccomp_notify.c:136:53: error: 'RTLD_NOW' undeclared (first use in this function)
+  136 |                 ctx->plugins[s].handle = dlopen(it, RTLD_NOW);
+      |                                                     ^~~~~~~~
+
+Fixes:
+ - http://autobuild.buildroot.org/results/13d3b46990720bba8621c922b5dce54ab650e96d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9165262aa0486d9cf9bb1b8a2065e2616439c513)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8144dd1b4cca2d5c89e329b0497f49f512c9caed)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 6 +++---
- package/vim/vim.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-remove-unused-dlfcn.h-header-file.patch   | 26 ----------------------
+ package/conmon/conmon.mk                           |  2 +-
+ 2 files changed, 1 insertion(+), 27 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 26bc913b8a..024c014bc9 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  c2bddf283a19c8714d7b21716e0a6a3214f9edb60b080f233cce4143fe228ff3  vim-9.0.1414.tar.gz
--sha256  0bcab3b635dd39208c42b496568d1e8171dad247cf3da5bab3d750c9d5883499  LICENSE
--sha256  d187aff219161f37138479257f82d687ea10b2cdd17d58b53a3ec9b79d6dc870  README.txt
-+sha256  ba769f8513f2f75d71518f817f945809a5cb1310fd58cd86daca96e658cccf7d  vim-9.0.1903.tar.gz
-+sha256  0b3f1f330cb1b179bb17c7c687d4cec601e0aa3462bc7f890ad4c3888d37d720  LICENSE
-+sha256  b475d5d3f8c855dc1a84813bbe45c44054d7f7aee20c800950bf89d5958873de  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index bb6d4a8d27..b8b50cb91a 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch b/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch
+deleted file mode 100644
+index 14f817942e..0000000000
+--- a/package/conmon/0001-remove-unused-dlfcn.h-header-file.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From e28634a0e847a14c58482f962bc9b1d69937387f Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Sat, 12 Aug 2023 12:53:37 +0200
+-Subject: [PATCH] remove unused dlfcn.h header file
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://github.com/containers/conmon/issues/443
+----
+- src/seccomp_notify.c | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/src/seccomp_notify.c b/src/seccomp_notify.c
+-index 8d34d9d..2a8371d 100644
+---- a/src/seccomp_notify.c
+-+++ b/src/seccomp_notify.c
+-@@ -7,7 +7,6 @@
+- 
+- #include <errno.h>
+- #include <sys/ioctl.h>
+--#include <dlfcn.h>
+- #include <sys/wait.h>
+- #include <sys/mount.h>
+- #include <signal.h>
+--- 
+-2.39.2
+-
+diff --git a/package/conmon/conmon.mk b/package/conmon/conmon.mk
+index 29deb2af47..50807f8c6a 100644
+--- a/package/conmon/conmon.mk
++++ b/package/conmon/conmon.mk
+@@ -11,7 +11,7 @@ CONMON_LICENSE_FILES = LICENSE
  
--VIM_VERSION = 9.0.1414
-+VIM_VERSION = 9.0.1903
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
+ CONMON_DEPENDENCIES = host-pkgconf libglib2
+ 
+-ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++ifeq ($(BR2_PACKAGE_LIBSECCOMP):$(BR2_STATIC_LIBS),y:)
+ CONMON_DISABLE_SECCOMP = 0
+ CONMON_DEPENDENCIES += libseccomp
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
