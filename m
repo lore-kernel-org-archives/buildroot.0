@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09F8FCE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 16:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F07BCE7A8A
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 16:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A73C241710;
-	Sun, 24 Sep 2023 16:07:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A73C241710
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47C2241600;
+	Sun, 24 Sep 2023 16:07:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C2241600
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id aDYO4aw8GwX9; Sun, 24 Sep 2023 16:07:05 +0000 (UTC)
+	with ESMTP id Trw4OGb0tkBa; Sun, 24 Sep 2023 16:07:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7179E416A2;
-	Sun, 24 Sep 2023 16:07:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7179E416A2
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C118C1BF947
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:06:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46D5041775;
+	Sun, 24 Sep 2023 16:07:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46D5041775
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 550EA1BF3BB
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A89A140962
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:06:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A89A140962
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BE1D60760
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 16:07:37 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BE1D60760
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id RxUrFIvfRIlC for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 16:06:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id ti80cwTNDAyX for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 16:07:36 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99E8740A52
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 16:06:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99E8740A52
+ by smtp3.osuosl.org (Postfix) with ESMTP id 65CC960759
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 16:07:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65CC960759
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87C8887594; Sun, 24 Sep 2023 16:06:27 +0000 (UTC)
+ id 561E6875AB; Sun, 24 Sep 2023 16:07:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 17:56:15 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 53b78df10fc7e9adaff597ed74487df3313ec5ba
-X-Git-Newrev: 424a575cde64fe4d594930d5ef62e6f79b97b5c4
+Date: Sun, 24 Sep 2023 17:58:48 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: d3c18718c1b44bfbffc85a56ec71fd86d56796c8
+X-Git-Newrev: 76a487ac946848833dda268e3d89784a9031d223
 X-Patchwork-Hint: ignore
-Message-Id: <20230924160627.87C8887594@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] support/download/git:
+Message-Id: <20230924160736.561E6875AB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] support/download/git:
  properly catch failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=424a575cde64fe4d594930d5ef62e6f79b97b5c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=76a487ac946848833dda268e3d89784a9031d223
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
 Since commit b7efb43e86da (download/git: try to recover from
 utterly-broken repositories), we catch errors through an ERR
