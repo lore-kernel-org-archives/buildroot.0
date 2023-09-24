@@ -4,48 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6BA4CE7A88
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 210EBCE7A88
+	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 19:05:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55BD241828;
-	Sun, 24 Sep 2023 19:04:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55BD241828
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF1524177D;
+	Sun, 24 Sep 2023 19:05:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF1524177D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id kUFYdNCmj1vT; Sun, 24 Sep 2023 19:04:55 +0000 (UTC)
+	with ESMTP id mkS1nQMOt8G3; Sun, 24 Sep 2023 19:05:09 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F108E4177D;
-	Sun, 24 Sep 2023 19:04:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F108E4177D
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3D6F11BF337
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA1C7417BC;
+	Sun, 24 Sep 2023 19:05:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA1C7417BC
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B19D1BF337
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 088E281CE1
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 088E281CE1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FF9140C04
+ for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 19:03:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FF9140C04
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id KSTZpoY2wqSc for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C586381D18
- for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C586381D18
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B59FD86B62; Sun, 24 Sep 2023 19:03:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Z7ktb-Z6mbUg for <buildroot@lists.busybox.net>;
+ Sun, 24 Sep 2023 19:03:54 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4ECB840AA2
+ for <buildroot@buildroot.org>; Sun, 24 Sep 2023 19:03:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4ECB840AA2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0243860003;
+ Sun, 24 Sep 2023 19:03:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qkUOU-000FGh-Bm; Sun, 24 Sep 2023 21:03:50 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 24 Sep 2023 20:38:50 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: d67bab287325ccbc38e6c3cce8d6fe9884e43a9c
-X-Git-Newrev: 122e3258b9e9c9d352f9a2b50f298461fec00dc1
-X-Patchwork-Hint: ignore
-Message-Id: <20230924190316.B59FD86B62@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/irssi: bump to
- version 1.4.4
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230914215606.309735-1-fontaine.fabrice@gmail.com>
+Date: Sun, 24 Sep 2023 21:03:50 +0200
+In-Reply-To: <20230914215606.309735-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 14 Sep 2023 23:56:06 +0200")
+Message-ID: <87pm27ieax.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/libjxl: security bump to
+ version 0.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +63,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=122e3258b9e9c9d352f9a2b50f298461fec00dc1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix CVE-2023-29132: Irssi 1.3.x and 1.4.x before 1.4.4 has a
-use-after-free because of use of a stale special collector reference.
-This occurs when printing of a non-formatted line is concurrent with
-printing of a formatted line.
+ > Fix CVE-2023-35790: An issue was discovered in dec_patch_dictionary.cc
+ > in libjxl before 0.8.2. An integer underflow in patch decoding can lead
+ > to a denial of service, such as an infinite loop.
 
-https://irssi.org/NEWS/#news-v1-4-4
-https://irssi.org/NEWS/#news-v1-4-3
+ > https://github.com/libjxl/libjxl/releases/tag/v0.8.2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7637e25d637801cb1a3a0bd72823fea72931c537)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index ecd339d83d..df72ee4d76 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  79a4765d2dfe153c440a1775b074d5d0682b96814c7cf92325b5e15ce50e26a8  irssi-1.4.2.tar.xz
-+sha256  fefe9ec8c7b1475449945c934a2360ab12693454892be47a6d288c63eb107ead  irssi-1.4.4.tar.xz
- # Locally calculated
- sha256  a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index c2d02289ad..6790bf0c96 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRSSI_VERSION = 1.4.2
-+IRSSI_VERSION = 1.4.4
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- IRSSI_SITE = https://codeberg.org/irssi/irssi/releases/download/$(IRSSI_VERSION)
- IRSSI_LICENSE = GPL-2.0+
+Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
