@@ -4,53 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAB8ACE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 12:02:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D6D3CE7A94
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 12:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CB0961019;
-	Mon, 25 Sep 2023 12:02:12 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CB0961019
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EB346100F;
+	Mon, 25 Sep 2023 12:02:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EB346100F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ACNlHIHuZ5nr; Mon, 25 Sep 2023 12:02:11 +0000 (UTC)
+	with ESMTP id wreG2BBZZRRQ; Mon, 25 Sep 2023 12:02:56 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1EAB6101D;
-	Mon, 25 Sep 2023 12:02:10 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1EAB6101D
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B8E011BF2C9
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:02:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E80260F1D;
+	Mon, 25 Sep 2023 12:02:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E80260F1D
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 88FEC1BF2C9
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:02:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F0366101D
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:02:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F0366101D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FF6540B2F
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:02:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FF6540B2F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Rit--MlawHwq for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 12:02:05 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 497F360F1D
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 12:02:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 497F360F1D
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1132BFF80B;
- Mon, 25 Sep 2023 12:02:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qkkHn-002aUW-Vf; Mon, 25 Sep 2023 14:02:00 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Zxfphpf-Y4i0 for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 12:02:52 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ADA9B40162
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 12:02:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADA9B40162
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9AA6A87746; Mon, 25 Sep 2023 12:02:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230918204405.2654720-1-fontaine.fabrice@gmail.com>
-Date: Mon, 25 Sep 2023 14:01:59 +0200
-In-Reply-To: <20230918204405.2654720-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 18 Sep 2023 22:44:05 +0200")
-Message-ID: <87h6nicvgo.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: needs headers >= 4.16
+To: buildroot@buildroot.org
+Date: Mon, 25 Sep 2023 13:53:49 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: a199417dd8d2c19dc046efa5f85b62ce21b828aa
+X-Git-Newrev: bd82856138cf60f6117496c0a7296cc15a295dc8
+X-Patchwork-Hint: ignore
+Message-Id: <20230925120252.9AA6A87746@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/fail2ban: drop
+ CVE-2021-32749 from IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,35 +57,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bd82856138cf60f6117496c0a7296cc15a295dc8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > NLMSGERR_ATTR_MAX has been added in kernel 4.16 with
- > https://github.com/torvalds/linux/commit/dc2b9f19e3bdaa87a7c3d123b8bba8a42d96d942
- > resulting in the following build failure since bump to version 2.6.4 in
- > commit a46ac2346558d05afe405dda3730169df4b677d2 and
- > https://github.com/OpenVPN/openvpn/commit/e34437c26b764851555e4acbe2ccca6bec235c7e:
+CVE-2021-32749 affects fail2ban <= 0.9.7, 0.10.0 through 0.10.6, and
+0.11.0 through 0.11.2.
+The mentioned patch was removed in 76853089 when bumping to 1.0.1.
 
- > dco_linux.c: In function 'ovpn_nl_cb_error':
- > dco_linux.c:303:27: error: 'NLMSGERR_ATTR_MAX' undeclared (first use in this function); did you mean '__CTRL_ATTR_MAX'?
- >      struct nlattr *tb_msg[NLMSGERR_ATTR_MAX + 1];
- >                            ^~~~~~~~~~~~~~~~~
- >                            __CTRL_ATTR_MAX
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a01a6b8dc840eb99528d3c876d18e1f8952d2a58)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fail2ban/fail2ban.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/69b9737913ac0b5cd2c117d526602874da3ee487
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+index 7ad22d02d1..34f2341d33 100644
+--- a/package/fail2ban/fail2ban.mk
++++ b/package/fail2ban/fail2ban.mk
+@@ -12,9 +12,6 @@ FAIL2BAN_CPE_ID_VENDOR = fail2ban
+ FAIL2BAN_SELINUX_MODULES = fail2ban
+ FAIL2BAN_SETUP_TYPE = distutils
+ 
+-# 0001-fixed-possible-RCE-vulnerability-unset-escape-variable.patch
+-FAIL2BAN_IGNORE_CVES += CVE-2021-32749
+-
+ define FAIL2BAN_PYTHON_2TO3
+ 	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
