@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D32ECE7A94
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E3A1CE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34AC88129B;
-	Mon, 25 Sep 2023 14:05:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34AC88129B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56D1F8202D;
+	Mon, 25 Sep 2023 14:05:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56D1F8202D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rVgHf3bCzEY1; Mon, 25 Sep 2023 14:05:18 +0000 (UTC)
+	with ESMTP id ylKE6UWlA_Mh; Mon, 25 Sep 2023 14:05:30 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77B2F82037;
-	Mon, 25 Sep 2023 14:05:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77B2F82037
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5BEA61BF35F
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB2358201C;
+	Mon, 25 Sep 2023 14:05:29 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB2358201C
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 830761BF94D
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 427CB4011A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6973D416D9
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 427CB4011A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6973D416D9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0b7mefdSiJ-1 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id t8tLkIXN0vE7 for <buildroot@lists.busybox.net>;
  Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A66A41592
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7553C41938
  for <buildroot@buildroot.org>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A66A41592
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7553C41938
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59C608779D; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
+ id 64DDE8779F; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 15:49:35 +0200
+Date: Mon, 25 Sep 2023 15:50:43 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 7b18c5c56be1b2ca68272a8b0d6a7a65f0923ea1
-X-Git-Newrev: 536f39e88fcc3474bb57d723378492e44707b785
+X-Git-Oldrev: 536f39e88fcc3474bb57d723378492e44707b785
+X-Git-Newrev: 2b78eab251ba080f33ffd3a698dcdb0b17befc89
 X-Patchwork-Hint: ignore
-Message-Id: <20230925140426.59C608779D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/ne10: install
- shared libraries only when built
+Message-Id: <20230925140426.64DDE8779F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/sysstat: drop
+ CVE-2022-39377 from IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=536f39e88fcc3474bb57d723378492e44707b785
+commit: https://git.buildroot.net/buildroot/commit/?id=2b78eab251ba080f33ffd3a698dcdb0b17befc89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-The install to staging commands of the ne10 package are careful to
-install the shared libraries only if they are built, but we forgot to
-use the same care for the install to target commands, causing a build
-failure on BR2_STATIC_LIBS=y configurations as no shared library was
-built:
+As off 2022-11-22 CVE-2022-39377 is listed as affecting sysstat
+< 2.16.1 instead of < 2.17.1. The text is not updated, but the CPE info
+is.
 
-cp: cannot stat '/home/autobuild/autobuild/instance-15/output-1/build/ne10-1.2.1/modules/libNE10*.so*': No such file or directory
-
-This commit fixes this by guarding the target installation commands to
-BR2_STATIC_LIBS being empty.
-
-The problem exists since the package was introduced in commit
-318f3db0dcc052aa770ca57c143b5f7bc40cdaf3 ("ne10: new package"), a good
-10 years ago. Most likely it was not seen for many years as this
-package is only available for ARM with NEON and AArch64, and we were
-not testing fully static builds, except for ARMv5 that don't have
-NEON. Now that we are doing more random testing, the problem started
-being visible.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/45b2c1af052271bc2f1bb96544f138d29e4f7dfd/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 0b764a7d1e6961cb7baa0b3a74de1167bf47a6dd)
+(cherry picked from commit 6425e0b8482e53d5ab5ff2d655628ba7d4be3960)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ne10/ne10.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/sysstat/sysstat.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index 3946605556..ce0f7e7b77 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -42,8 +42,10 @@ define NE10_INSTALL_STAGING_CMDS
- 	$(NE10_INSTALL_STAGING_SHARED_LIB)
- endef
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index eaf505dc49..377396d986 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -14,9 +14,6 @@ SYSSTAT_LICENSE_FILES = COPYING
+ SYSSTAT_CPE_ID_VENDOR = sysstat_project
+ SYSSTAT_SELINUX_MODULES = sysstat
  
-+ifeq ($(BR2_STATIC_LIBS),)
- define NE10_INSTALL_TARGET_CMDS
- 	cp -dpf $(@D)/modules/libNE10*.so* $(TARGET_DIR)/usr/lib/
- endef
-+endif
- 
- $(eval $(cmake-package))
+-# NVD is not up-to-date; 12.6.1 includes c1e631eddc50, which fixes the issue
+-SYSSTAT_IGNORE_CVES += CVE-2022-39377
+-
+ ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
+ SYSSTAT_DEPENDENCIES += lm-sensors
+ SYSSTAT_CONF_OPTS += --enable-sensors
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
