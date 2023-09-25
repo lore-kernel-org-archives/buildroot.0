@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B92CECE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 11:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396E1CE7A94
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 11:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7192060BE0;
-	Mon, 25 Sep 2023 11:48:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7192060BE0
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAE1261144;
+	Mon, 25 Sep 2023 11:49:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAE1261144
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sHDVI_4010jW; Mon, 25 Sep 2023 11:48:50 +0000 (UTC)
+	with ESMTP id 0GR_sFwB0-AM; Mon, 25 Sep 2023 11:49:02 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60050610A3;
-	Mon, 25 Sep 2023 11:48:49 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60050610A3
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 27C9F1BF2C9
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE76B61089;
+	Mon, 25 Sep 2023 11:49:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE76B61089
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E4EB1BF947
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 11:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D9E061089
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 11:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D9E061089
+ by smtp4.osuosl.org (Postfix) with ESMTP id 347A340293
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 11:48:24 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 347A340293
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 0sD68_1Q3qVh for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 8S0GdVTMUluG for <buildroot@lists.busybox.net>;
  Mon, 25 Sep 2023 11:48:22 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1265461096
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3F0D40272
  for <buildroot@buildroot.org>; Mon, 25 Sep 2023 11:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1265461096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3F0D40272
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01AF687727; Mon, 25 Sep 2023 11:48:22 +0000 (UTC)
+ id 9325B87727; Mon, 25 Sep 2023 11:48:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 09:40:50 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 1effeee51ebf84c16697924c6fa108418a552118
-X-Git-Newrev: cf901e414f55a874a898ae14638568888fa7acda
+Date: Mon, 25 Sep 2023 09:40:13 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 2d9540e248ff07eb372a220a4d3b6720b9ac7e13
+X-Git-Newrev: 48b0011c67ff941ada8c33d886308e677a8f3961
 X-Patchwork-Hint: ignore
-Message-Id: <20230925114822.01AF687727@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/netatalk:
+Message-Id: <20230925114822.9325B87727@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/netatalk:
  security bump to version 3.1.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf901e414f55a874a898ae14638568888fa7acda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=48b0011c67ff941ada8c33d886308e677a8f3961
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
 - Drop patches (already in version) and so autoreconf
 - Update COPYING hash (gpl mailing address updated with
@@ -91,12 +91,26 @@ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 (cherry picked from commit d170cde0272401fd79b0bd100b72da25b2a13e5c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ .checkpackageignore                                |  2 -
  ...setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch | 48 ----------------------
  ...enssl_compat.h-fix-build-with-libressl-2..patch | 43 -------------------
  package/netatalk/netatalk.hash                     | 10 ++---
  package/netatalk/netatalk.mk                       |  8 ++--
- 4 files changed, 8 insertions(+), 101 deletions(-)
+ 5 files changed, 8 insertions(+), 103 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0249db3233..a315f37e27 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1032,8 +1032,6 @@ package/neard/S53neard Indent Shellcheck Variables
+ package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch Upstream
+ package/neon/0001-Revert-Advertise-TS_SSL-feature-with-OpenSSL-1.1.0.patch Upstream
+ package/neon/0002-configure.ac-fix-autoreconf.patch Upstream
+-package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch Upstream
+-package/netatalk/0002-etc-uams-openssl_compat.h-fix-build-with-libressl-2..patch Upstream
+ package/netatalk/S50netatalk EmptyLastLine Indent Variables
+ package/netcat/0001-signed-bit-counting.patch Sob Upstream
+ package/netopeer2/S52netopeer2 Shellcheck Variables
 diff --git a/package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch b/package/netatalk/0001-Fix-setting-of-LD_LIBRARY_FLAGS-shlibpath_var.patch
 deleted file mode 100644
 index 01d5776596..0000000000
