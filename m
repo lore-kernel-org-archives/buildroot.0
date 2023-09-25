@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF7A2CE7A89
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 06:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B68CCE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 06:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 827E14094F;
-	Mon, 25 Sep 2023 06:43:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 827E14094F
+	by smtp2.osuosl.org (Postfix) with ESMTP id D87594021C;
+	Mon, 25 Sep 2023 06:43:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D87594021C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
 	by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VOSEz_WRM7he; Mon, 25 Sep 2023 06:43:07 +0000 (UTC)
+	with ESMTP id yxunn_2C9cav; Mon, 25 Sep 2023 06:43:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CB93F401DD;
-	Mon, 25 Sep 2023 06:43:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB93F401DD
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1AA2D40A73;
+	Mon, 25 Sep 2023 06:43:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AA2D40A73
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BED721BF308
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 06:43:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 92AB11BF308
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 06:43:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97EB360F69
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC83260F75
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 06:43:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97EB360F69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC83260F75
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id C1fBxk5uLbU1 for <buildroot@lists.busybox.net>;
+ with ESMTP id 9rKYhmAWbM7q for <buildroot@lists.busybox.net>;
  Mon, 25 Sep 2023 06:43:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C63A060DF9
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFC5F60EDC
  for <buildroot@buildroot.org>; Mon, 25 Sep 2023 06:43:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C63A060DF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFC5F60EDC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3E77876E6; Mon, 25 Sep 2023 06:43:03 +0000 (UTC)
+ id BD976876E7; Mon, 25 Sep 2023 06:43:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 08:39:02 +0200
+Date: Mon, 25 Sep 2023 08:39:20 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 263c07fb964c2b6fd223a0284f4e165c8a81d494
-X-Git-Newrev: e1cbd0808b0a541bc48424d9b45e7e71a3224aa4
+X-Git-Oldrev: e1cbd0808b0a541bc48424d9b45e7e71a3224aa4
+X-Git-Newrev: cd75458a17aaafe623d9dc8da74569586a32e4e1
 X-Patchwork-Hint: ignore
-Message-Id: <20230925064303.B3E77876E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/cpio: drop
- CVE-2021-38185 from IGNORE_CVES
+Message-Id: <20230925064303.BD976876E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/e2fsprogs: drop
+ CVE-2022-1304
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,35 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1cbd0808b0a541bc48424d9b45e7e71a3224aa4
+commit: https://git.buildroot.net/buildroot/commit/?id=cd75458a17aaafe623d9dc8da74569586a32e4e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-CVE-2021-38185 affects cpio <= 2.13.
-The mentioned patches were removed in b0306d94 when bumping to 2.14.
+CVE-2022-1304 only affects e2fsprogs 1.46.5.
+The mentioned patch was removed in 6a21733f when bumping to 1.47.0.
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 880e03ba7519597e813e910543b87b5a077c906c)
+(cherry picked from commit dc0c7552735d299107385458c1889c7dc4633864)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cpio/cpio.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-index 19224000bb..911d16822b 100644
---- a/package/cpio/cpio.mk
-+++ b/package/cpio/cpio.mk
-@@ -12,10 +12,6 @@ CPIO_LICENSE = GPL-3.0+
- CPIO_LICENSE_FILES = COPYING
- CPIO_CPE_ID_VENDOR = gnu
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 80090621bf..7491f4c067 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -12,9 +12,6 @@ E2FSPROGS_LICENSE_FILES = NOTICE lib/ss/mit-sipb-copyright.h lib/et/internal.h
+ E2FSPROGS_CPE_ID_VENDOR = e2fsprogs_project
+ E2FSPROGS_INSTALL_STAGING = YES
  
--# 0002-Rewrite-dynamic-string-support.patch
--# 0003-Fix-previous-commit.patch
--CPIO_IGNORE_CVES += CVE-2021-38185
+-# 0001-libext2fs-add-sanity-check-to-extent-manipulation.patch
+-E2FSPROGS_IGNORE_CVES += CVE-2022-1304
 -
- # cpio uses argp.h which is not provided by uclibc or musl by default.
- # Use the argp-standalone package to provide this.
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ # Use libblkid and libuuid from util-linux for host and target packages.
+ # This prevents overriding them with e2fsprogs' ones, which may cause
+ # problems for other packages.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
