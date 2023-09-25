@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A61CCE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 05:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31787CE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 05:41:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA38881EA6;
-	Mon, 25 Sep 2023 05:41:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA38881EA6
+	by smtp1.osuosl.org (Postfix) with ESMTP id E07F581EBC;
+	Mon, 25 Sep 2023 05:41:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E07F581EBC
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id G_iq-M5Hw-Y8; Mon, 25 Sep 2023 05:41:07 +0000 (UTC)
+	with ESMTP id C9KEqDOlwfZx; Mon, 25 Sep 2023 05:41:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2B6B81E8D;
-	Mon, 25 Sep 2023 05:41:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2B6B81E8D
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1499481EC1;
+	Mon, 25 Sep 2023 05:41:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1499481EC1
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 648731BF3BB
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2050C1BF3BB
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D14381E99
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:35 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D14381E99
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B67281E8D
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:36 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B67281E8D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id PtOC0bo_flmT for <buildroot@lists.busybox.net>;
+ with ESMTP id SKxgU3KggYKA for <buildroot@lists.busybox.net>;
  Mon, 25 Sep 2023 05:40:34 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B9A3481E8D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D16281E1F
  for <buildroot@buildroot.org>; Mon, 25 Sep 2023 05:40:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9A3481E8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D16281E1F
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A329A876B5; Mon, 25 Sep 2023 05:40:34 +0000 (UTC)
+ id 84E87876B2; Mon, 25 Sep 2023 05:40:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 07:40:02 +0200
+Date: Mon, 25 Sep 2023 07:25:10 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 32d380cad8b0489ae5c7eed5fa7f65facccf6069
-X-Git-Newrev: 723a64154389e79f8527da2d6698bffbdba28c3c
+X-Git-Oldrev: 5e75a706f800980d45f8cc42ceb9133b0049ffef
+X-Git-Newrev: 9fba48c8dfcdd969a77272ccfe327d0349d8ce0d
 X-Patchwork-Hint: ignore
-Message-Id: <20230925054034.A329A876B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/ghostscript:
- security bump to version 10.02.0
+Message-Id: <20230925054034.84E87876B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/tcl: add
+ mandatory dependency to zlib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,98 +63,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=723a64154389e79f8527da2d6698bffbdba28c3c
+commit: https://git.buildroot.net/buildroot/commit/?id=9fba48c8dfcdd969a77272ccfe327d0349d8ce0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-- Fix CVE-2023-36664: Artifex Ghostscript through 10.01.2 mishandles
-  permission validation for pipe devices (with the %pipe% prefix or the |
-  pipe character prefix).
-- Fix CVE-2023-38559: A buffer overflow flaw was found in
-  base/gdevdevn.c:1973 in devn_pcx_write_rle() in ghostscript. This
-  issue may allow a local attacker to cause a denial of service via
-  outputting a crafted PDF file for a DEVN device with gs.
-- Fix CVE-2023-38560: An integer overflow flaw was found in
-  pcl/pl/plfont.c:418 in pl_glyph_name in ghostscript. This issue may
-  allow a local attacker to cause a denial of service via transforming a
-  crafted PCL file to PDF format.
+Tcl changed its zlib handling in upstream commit [1]. Before this
+commit, the HAVE_ZLIB macro was defined only if a zlib headers/library
+was found. After that commit, the HAVE_ZLIB macro is unconditionally
+defined. The only change is that: if a working zlib library is found
+in the toolchain sysroot, it is used. Otherwise, the package will use
+a shipped version in [2]. See also [3] and [4].
 
-https://ghostscript.readthedocs.io/en/gs10.02.0/News.html
+This tcl commit is included in Buildroot since commit 7fda943b43
+"tcl: bump to version 8.6.1".
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In Buildroot, we prefer to not use bundled libraries wherever possible,
+so add an unconditional dependency to zlib.
+
+Further notes:
+
+This behavior leads to runtime failures, when the package is compiled
+with toolchains including zlib in their sysroot. This is because at
+configuration time, the package will detect zlib in the sysroot and
+link against it, but the library files won't be installed on target.
+
+This happen to be the case with Bootlin toolchains such as [5], as they
+also contaions gdbserver, and since 3341ceb1e585 (package/gdb: zlib is
+mandatory, not optional), we also build zlib even if only gdbserver is
+built (gdbserver does not use zlib, so that's a bug in our gdb
+packaging).
+
+This toolchain also happen to be the one used in basic configurations
+of the runtime test infrastructure (this issue was found while
+attempting to write a runtime test for tcl).
+
+In such cases, running "tclsh" command fails with error message:
+
+    tclsh: error while loading shared libraries: libz.so.1: cannot open shared object file: No such file or directory
+
+libtcl library also miss its dependency.
+
+    ldd /usr/lib/libtcl8.6.so
+	    libz.so.1 => not found
+	    libm.so.6 => /lib/libm.so.6 (0xb6dad000)
+	    libc.so.6 => /lib/libc.so.6 (0xb6c65000)
+	    /lib/ld-linux.so.3 (0xb6f6c000)
+
+[1] https://github.com/tcltk/tcl/commit/6f3dea45cee94f12ffa0b2acbbdb3eedbc01807b
+[2] https://github.com/tcltk/tcl/tree/core-8-6-13/compat/zlib
+[3] https://github.com/tcltk/tcl/blob/core-8-6-13/unix/configure.in#L172
+[4] https://github.com/tcltk/tcl/blob/core-8-6-13/unix/Makefile.in#L240
+[5] https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/tarballs/armv5-eabi--glibc--stable-2023.08-1.tar.bz2
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 93ef6997aeef443336651dab46b31ff87be07860)
+(cherry picked from commit 7af8dee3a8a0559c2685237ec24f817f37669efc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-build-without-BUILD_PDF.patch         | 34 ++++++++++++++++++++++
- package/ghostscript/ghostscript.hash               |  4 +--
- package/ghostscript/ghostscript.mk                 |  2 +-
- 3 files changed, 37 insertions(+), 3 deletions(-)
+ package/tcl/Config.in | 1 +
+ package/tcl/tcl.mk    | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch b/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch
-new file mode 100644
-index 0000000000..af69cd3670
---- /dev/null
-+++ b/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch
-@@ -0,0 +1,34 @@
-+From 088f3cd6e58cff5fa51e072d1829f7691a5f6681 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 20 Sep 2023 13:44:28 +0100
-+Subject: [PATCH] Fix build without BUILD_PDF
-+
-+The PDFSetParams PostScript extension operator was missing a stub function definition
-+when the PDF interpreter is not built in.
-+
-+ Author:    Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=088f3cd6e58cff5fa51e072d1829f7691a5f6681
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ psi/zpdfops.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/psi/zpdfops.c b/psi/zpdfops.c
-+index e7e0a42ee..271687a18 100644
-+--- a/psi/zpdfops.c
-++++ b/psi/zpdfops.c
-+@@ -1507,6 +1507,11 @@ static int zPDFdrawannots(i_ctx_t *i_ctx_p)
-+     return_error(gs_error_undefined);
-+ }
-+ 
-++static int zPDFSetParams(i_ctx_t *i_ctx_p)
-++{
-++    return_error(gs_error_undefined);
-++}
-++
-+ static int zPDFInit(i_ctx_t *i_ctx_p)
-+ {
-+     return_error(gs_error_undefined);
-+-- 
-+2.34.1
-+
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 2e4b6ac750..77c8faccbe 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10012/SHA512SUMS
--sha512  ee20f0e12f553a3d04578e71a0d45defebc71117ce4dc2c14043985bfe7348ad7f8b2fe98fc9b4f5b935ecb32e50dc340be67d6ef58190542ec6d0f9da1de380  ghostscript-10.01.2.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10020/SHA512SUMS
-+sha512  c49344151063e915add55a0a842c2a645d8362a5cbca663bd07638f4bd3699a08cade37a9efe905ad5a41e014353e5e1b1268b7925e43128ad30d5b031396b71  ghostscript-10.02.0.tar.xz
+diff --git a/package/tcl/Config.in b/package/tcl/Config.in
+index f1fa0541a1..adb9f22488 100644
+--- a/package/tcl/Config.in
++++ b/package/tcl/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_TCL
+ 	# See this mailing list thread:
+ 	# http://lists.busybox.net/pipermail/buildroot/2015-March/121198.html
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  TCL (Tool Command Language) is a simple textual language.
  
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index bd3eec1e45..41d87fa7ee 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 97754b63d0..0d8fe17c0e 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -75,7 +75,8 @@ TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_EXTRA
  
--GHOSTSCRIPT_VERSION = 10.01.2
-+GHOSTSCRIPT_VERSION = 10.02.0
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+ TCL_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite) \
+ 	$(if $(BR2_PACKAGE_MYSQL),mysql) \
+-	$(if $(BR2_PACKAGE_POSTGRESQL),postgresql)
++	$(if $(BR2_PACKAGE_POSTGRESQL),postgresql) \
++	zlib
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
