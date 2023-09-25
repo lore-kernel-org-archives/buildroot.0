@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1E1ACE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 07:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8180CE7A89
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 07:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3AD0F818EC;
-	Mon, 25 Sep 2023 07:55:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AD0F818EC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4648381F23;
+	Mon, 25 Sep 2023 07:56:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4648381F23
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id SQkLl-g7HP9V; Mon, 25 Sep 2023 07:55:08 +0000 (UTC)
+	with ESMTP id Edf9uLfXIW1l; Mon, 25 Sep 2023 07:56:44 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88D9B81815;
-	Mon, 25 Sep 2023 07:55:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88D9B81815
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5B6AA1BF397
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 07:55:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B97A81F1B;
+	Mon, 25 Sep 2023 07:56:43 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B97A81F1B
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 886751BF397
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 07:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2EA6B4013D
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 07:55:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EA6B4013D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F0FF418A7
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 07:56:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F0FF418A7
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OzL-4ECiEctD for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 07:55:05 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 011BD401DD
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 07:55:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 011BD401DD
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 408211C0002;
- Mon, 25 Sep 2023 07:55:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id i9iA6tr6Ts6T for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 07:56:40 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 64333409C3
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 07:56:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64333409C3
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B363BFF806;
+ Mon, 25 Sep 2023 07:56:36 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1qkgQk-002YaA-TN; Mon, 25 Sep 2023 09:54:58 +0200
+ id 1qkgSI-002YdT-6v; Mon, 25 Sep 2023 09:56:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230919205058.446156-1-fontaine.fabrice@gmail.com>
-Date: Mon, 25 Sep 2023 09:54:58 +0200
-In-Reply-To: <20230919205058.446156-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 19 Sep 2023 22:50:58 +0200")
-Message-ID: <87v8byd6wd.fsf@48ers.dk>
+References: <20230919204910.444965-1-fontaine.fabrice@gmail.com>
+Date: Mon, 25 Sep 2023 09:56:34 +0200
+In-Reply-To: <20230919204910.444965-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 19 Sep 2023 22:49:10 +0200")
+Message-ID: <87r0mmd6tp.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2,
- 1/1] package/netatalk: security bump to version 3.1.17
+Subject: Re: [Buildroot] [PATCH 1/1] package/opensc: fix CVE-2023-2977
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,30 +70,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Drop patches (already in version) and so autoreconf
- > - Update COPYING hash (gpl mailing address updated with
- >   https://github.com/Netatalk/netatalk/commit/9bd45cc06e02e9bbfe8156bb1e5e2843b7727a51
- >   https://github.com/Netatalk/netatalk/commit/6a5997fbd64d6cd5a5400ea6a0a930d005ed89df)
- > - Fix CVE-2022-43634: This vulnerability allows remote attackers to
- >   execute arbitrary code on affected installations of Netatalk.
- >   Authentication is not required to exploit this vulnerability. The
- >   specific flaw exists within the dsi_writeinit function. The issue
- >   results from the lack of proper validation of the length of
- >   user-supplied data prior to copying it to a fixed-length heap-based
- >   buffer. An attacker can leverage this vulnerability to execute code in
- >   the context of root. Was ZDI-CAN-17646.
- > - Fix CVE-2022-45188: Netatalk through 3.1.13 has an afp_getappl
- >   heap-based buffer overflow resulting in code execution via a crafted
- >   .appl file. This provides remote root access on some platforms such as
- >   FreeBSD (used for TrueNAS).
- > - Fix CVE-2023-42464: Validate data type in dalloc_value_for_key()
-
- > https://github.com/Netatalk/netatalk/blob/netatalk-3-1-17/NEWS
+ > A vulnerability was found in OpenSC. This security flaw cause a buffer
+ > overrun vulnerability in pkcs15 cardos_have_verifyrc_package. The
+ > attacker can supply a smart card package with malformed ASN1 context.
+ > The cardos_have_verifyrc_package function scans the ASN1 buffer for 2
+ > tags, where remaining length is wrongly caculated due to moved starting
+ > pointer. This leads to possible heap-based buffer oob read. In cases
+ > where ASAN is enabled while compiling this causes a crash. Further info
+ > leak or more damage is possible.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Update .checkpackageignore
 
 Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
 
