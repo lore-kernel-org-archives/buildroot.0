@@ -4,48 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 872C4CE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 11:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F45CCE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 11:56:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4269A607A1;
-	Mon, 25 Sep 2023 11:49:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4269A607A1
+	by smtp3.osuosl.org (Postfix) with ESMTP id C2A9860B05;
+	Mon, 25 Sep 2023 11:56:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2A9860B05
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id gkReHWna2AcQ; Mon, 25 Sep 2023 11:49:27 +0000 (UTC)
+	with ESMTP id 6_xKn1XZwmwb; Mon, 25 Sep 2023 11:56:18 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E14761038;
-	Mon, 25 Sep 2023 11:49:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E14761038
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 04B111BF2C9
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 11:48:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D10A60F77;
+	Mon, 25 Sep 2023 11:56:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D10A60F77
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CA2731BF2C9
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 11:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FEC961096
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 11:48:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FEC961096
+ by smtp4.osuosl.org (Postfix) with ESMTP id A291B417FF
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 11:56:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A291B417FF
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 62bCWSJC6b0d for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 11:48:22 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ABEC96106C
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 11:48:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABEC96106C
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C18C87729; Mon, 25 Sep 2023 11:48:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id yp7cUpmg2wcb for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 11:56:14 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 72D02417A9
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 11:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72D02417A9
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C307D60009;
+ Mon, 25 Sep 2023 11:56:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+ (envelope-from <peter@korsgaard.com>)
+ id 1qkkC8-002a1I-6m; Mon, 25 Sep 2023 13:56:08 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 13:36:47 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 48b0011c67ff941ada8c33d886308e677a8f3961
-X-Git-Newrev: 276c7d50da98bf1f379a78c0bad412e788191256
-X-Patchwork-Hint: ignore
-Message-Id: <20230925114822.9C18C87729@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/agentpp: fix
- build with gcc 4.8
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20230919195216.136460-1-fontaine.fabrice@gmail.com>
+Date: Mon, 25 Sep 2023 13:56:07 +0200
+In-Reply-To: <20230919195216.136460-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 19 Sep 2023 21:52:16 +0200")
+Message-ID: <8734z2eaaw.fsf@48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/zxing-cpp: fix python build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,55 +62,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=276c7d50da98bf1f379a78c0bad412e788191256
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix the following build failure with gcc 4.8 raised since bump of snmppp
-to version 3.5.0 in commit e011fa0415883b9d44df616cfaf6956e1a11da88:
+ > Fix the following build failures raised since bump to version 1.4.0 in
+ > commit 456a7398316655ad0b669635f580e4887c24a700:
 
-configure: error: Cannot find suitable libsnmp++ library
+ > -- Found PythonInterp: /usr/bin/python3.6 (found suitable version "3.6.9", minimum required is "3.6")
+ > CMake Error at /home/buildroot/autobuild/run/instance-3/output-1/host/sparc64-buildroot-linux-gnu/sysroot/usr/share/cmake/pybind11/FindPythonLibsNew.cmake:147 (message):
+ >   Python config failure:
 
-[...]
+ >   Traceback (most recent call last):
 
-configure:9496: checking if libsnmp++ can be linked with flags from pkg-config
-configure:9528: /home/buildroot/autobuild/run/instance-1/output-1/host/bin/arm-none-linux-gnueabi-g++ -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=1 -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_XOPEN_SOURCE=XPG6  conftest.cpp -L/home/buildroot/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-gnueabi/sysroot/usr/lib -lsnmp++ >&5
-In file included from /home/buildroot/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/snmp_pp/snmp_pp.h:71:0,
-                 from conftest.cpp:92:
-/home/buildroot/autobuild/run/instance-1/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/snmp_pp/uxsnmp.h:628:35: error: 'nullptr' was not declared in this scope
-      CSNMPMessage *snmp_message = nullptr);
-                                   ^
+ >     File "<string>", line 6, in <module>
 
-Fixes:
- - http://autobuild.buildroot.org/results/f272473e7b588f5390b183072935a0217290ee4e
+ >   ImportError: cannot import name 'sysconfig'
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7c6c018ad45c952a47e7f0e707da0d797cdbe4c3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/agentpp/agentpp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > and
 
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-index 0ef549426e..7616d3eb0c 100644
---- a/package/agentpp/agentpp.mk
-+++ b/package/agentpp/agentpp.mk
-@@ -11,6 +11,7 @@ AGENTPP_LICENSE = Apache-2.0
- AGENTPP_LICENSE_FILES = LICENSE-2_0.txt
- AGENTPP_INSTALL_STAGING = YES
- AGENTPP_DEPENDENCIES = host-pkgconf snmppp
-+AGENTPP_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- AGENTPP_CONF_OPTS += \
- 	--disable-proxy \
- 	--disable-forwarder \
+ > In file included from /home/buildroot/autobuild/instance-1/output-1/host/include/python3.11/Python.h:38,
+ >                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/common.h:266,
+ >                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/attr.h:13,
+ >                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/detail/class.h:12,
+ >                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/pybind11.h:13,
+ >                  from /home/buildroot/autobuild/instance-1/output-1/host/sh4-buildroot-linux-gnu/sysroot/usr/include/pybind11/numpy.h:12,
+ >                  from /home/buildroot/autobuild/instance-1/output-1/build/zxing-cpp-2.1.0/wrappers/python/zxing.cpp:18:
+ > /home/buildroot/autobuild/instance-1/output-1/host/include/python3.11/pyport.h:601:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+ >   601 | #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+ >       |  ^~~~~
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/665b246a4bb14480152ee59050672a7469148a5b
+ >  - http://autobuild.buildroot.org/results/0502b05020de57e4910125c699c4264047187c51
+ >  - http://autobuild.buildroot.org/results/c5e7fe83d46c704e05800e3ae62bf476458c7b71
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
