@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A65C3CE7A94
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80860CE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:04:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B02C81501;
-	Mon, 25 Sep 2023 14:03:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B02C81501
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37C0780BBA;
+	Mon, 25 Sep 2023 14:04:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37C0780BBA
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id yMEsaOiLXNeL; Mon, 25 Sep 2023 14:03:57 +0000 (UTC)
+	with ESMTP id qaaWHxlt6Md2; Mon, 25 Sep 2023 14:04:29 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E48882011;
-	Mon, 25 Sep 2023 14:03:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E48882011
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2BE201BF5B4
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:03:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FA2C80B90;
+	Mon, 25 Sep 2023 14:04:28 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FA2C80B90
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A0AD41BF35F
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 05B21611DF
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:03:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05B21611DF
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8805381F50
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8805381F50
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id u5NzDGD0Fzot for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 14:03:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id smOm5RtJS9HH for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCEA161188
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 14:03:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCEA161188
+ by smtp1.osuosl.org (Postfix) with ESMTP id A55B581AAC
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A55B581AAC
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB3C187723; Mon, 25 Sep 2023 14:03:04 +0000 (UTC)
+ id 9563B8779D; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 15:59:23 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 4bec4ef23ff94e864550234af66de39e495a0cae
-X-Git-Newrev: 20ffaad8b6ad7e961b33bae0e4124049b82adef8
+Date: Mon, 25 Sep 2023 15:49:40 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: a1f6dbd031e0dc2769163f2a4b971acb60da34d9
+X-Git-Newrev: 44368be1373daf946ec14d28d7652a6d5a2c6bfa
 X-Patchwork-Hint: ignore
-Message-Id: <20230925140304.BB3C187723@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/expect: update
- Kconfig package URL
+Message-Id: <20230925140425.9563B8779D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/ne10: install
+ shared libraries only when built
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20ffaad8b6ad7e961b33bae0e4124049b82adef8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=44368be1373daf946ec14d28d7652a6d5a2c6bfa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The old expect homepage URL [1] is now redirecting to [2]. This commit
-updates the URL to the new one.
+The install to staging commands of the ne10 package are careful to
+install the shared libraries only if they are built, but we forgot to
+use the same care for the install to target commands, causing a build
+failure on BR2_STATIC_LIBS=y configurations as no shared library was
+built:
 
-[1] http://expect.sourceforge.net/
-[2] https://core.tcl.tk/expect/
+cp: cannot stat '/home/autobuild/autobuild/instance-15/output-1/build/ne10-1.2.1/modules/libNE10*.so*': No such file or directory
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+This commit fixes this by guarding the target installation commands to
+BR2_STATIC_LIBS being empty.
+
+The problem exists since the package was introduced in commit
+318f3db0dcc052aa770ca57c143b5f7bc40cdaf3 ("ne10: new package"), a good
+10 years ago. Most likely it was not seen for many years as this
+package is only available for ARM with NEON and AArch64, and we were
+not testing fully static builds, except for ARMv5 that don't have
+NEON. Now that we are doing more random testing, the problem started
+being visible.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/45b2c1af052271bc2f1bb96544f138d29e4f7dfd/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 579896c2f240c927767b68979b12bf4747199a16)
+(cherry picked from commit 0b764a7d1e6961cb7baa0b3a74de1167bf47a6dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expect/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ne10/ne10.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/expect/Config.in b/package/expect/Config.in
-index 5557f4aee6..67dfe643b2 100644
---- a/package/expect/Config.in
-+++ b/package/expect/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_EXPECT
- 	  Expect is a tool for automating interactive applications
- 	  such as telnet, ftp, passwd, fsck, rlogin, ssh, tip, etc.
+diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
+index 3946605556..ce0f7e7b77 100644
+--- a/package/ne10/ne10.mk
++++ b/package/ne10/ne10.mk
+@@ -42,8 +42,10 @@ define NE10_INSTALL_STAGING_CMDS
+ 	$(NE10_INSTALL_STAGING_SHARED_LIB)
+ endef
  
--	  http://expect.sourceforge.net/
-+	  https://core.tcl.tk/expect/
++ifeq ($(BR2_STATIC_LIBS),)
+ define NE10_INSTALL_TARGET_CMDS
+ 	cp -dpf $(@D)/modules/libNE10*.so* $(TARGET_DIR)/usr/lib/
+ endef
++endif
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
