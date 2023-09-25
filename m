@@ -4,48 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48850CE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBFCDCE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F259582060;
-	Mon, 25 Sep 2023 14:05:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F259582060
+	by smtp1.osuosl.org (Postfix) with ESMTP id 831E781AC1;
+	Mon, 25 Sep 2023 14:21:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 831E781AC1
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0KmiTQhkvnxk; Mon, 25 Sep 2023 14:05:55 +0000 (UTC)
+	with ESMTP id oAY-jfU_lTeh; Mon, 25 Sep 2023 14:21:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 209B582061;
-	Mon, 25 Sep 2023 14:05:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 209B582061
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C6BA1BF969
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C30D581BB4;
+	Mon, 25 Sep 2023 14:21:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C30D581BB4
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DDA11BF35F
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:21:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73E5E611C9
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73E5E611C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4143E81B17
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:21:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4143E81B17
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id yYdnAbsLfC02 for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 831AA6118F
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 831AA6118F
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73035877A0; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 15:54:31 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 2b78eab251ba080f33ffd3a698dcdb0b17befc89
-X-Git-Newrev: 7caf2e66287d4b7005480c733b792f143e1aafb4
-X-Patchwork-Hint: ignore
-Message-Id: <20230925140426.73035877A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/tcl: fix package
- patch
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id gMF59IWP7Efj for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 14:21:07 +0000 (UTC)
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
+ [IPv6:2a00:1450:4864:20::22c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8EB948176F
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 14:21:06 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EB948176F
+Received: by mail-lj1-x22c.google.com with SMTP id
+ 38308e7fff4ca-2c007d6159aso105174831fa.3
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 07:21:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1695651664; x=1696256464;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Zz2NRl448rps+FuxqGiqiRhGqw3RiY2J6wQTgpR4NUw=;
+ b=KF0Zv7y90pQuol+bN6bzIwPuto8ffDyYrNQjGDLWWAPnwt9C6VCdJusazUP5fs1CCX
+ kmkevFsjO7UeReMX6q452RXWt5347PbSgIAskn9eZEPsfoXqkfIz4/FJQfuzWf66S557
+ iXda1XD46Xv+aQYg3bWYVAChrNqO2nSyuRJqXhse1HA1Fn28E+ZokAztFHlda5DlxvXc
+ 3RPtzT8CTDKN/OJFwnynzGYXFqx7USeil5LBV4b/xdtXt041JtHKF0A0rIE0DR8oWF6u
+ uHerV1IinNnkC7crJ1SyyZIbg+la0YMxFY6sfM69l6FX+GKsYXY07GzezhG3Jq6CQmGj
+ zHWg==
+X-Gm-Message-State: AOJu0Yxu1yfipnybthf6455Xp6QBZuWOaQoWk6RcDqDd2fL0QP+NNoOC
+ WvaoPCZEuZ97/CWoHECIJ2UCtg==
+X-Google-Smtp-Source: AGHT+IHFMnXZUrhiklqVDe4kTxE7DLZBACRCi4hG7mrJ/KUblxrabGmnW13Xv4sT+GVKGSWiocUudQ==
+X-Received: by 2002:a2e:9802:0:b0:2bf:fb49:6619 with SMTP id
+ a2-20020a2e9802000000b002bffb496619mr6075076ljj.23.1695651664078; 
+ Mon, 25 Sep 2023 07:21:04 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf?
+ (ptr-9fplejq23yjvo6iq027.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:d490:c3e3:649d:eccf])
+ by smtp.gmail.com with ESMTPSA id
+ r21-20020aa7c155000000b005227e53cec2sm5611950edp.50.2023.09.25.07.21.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 25 Sep 2023 07:21:03 -0700 (PDT)
+Message-ID: <58fa7a78-c095-a3d7-32d4-9a39d0482988@mind.be>
+Date: Mon, 25 Sep 2023 16:21:01 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-GB
+To: Peter Korsgaard <peter@korsgaard.com>,
+ Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+References: <20230918194519.68987-1-ju.o@free.fr>
+ <337d9023-7587-ef8f-3e61-f7bd16f333ff@mind.be> <87zg1abbk5.fsf@48ers.dk>
+In-Reply-To: <87zg1abbk5.fsf@48ers.dk>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1695651664; x=1696256464; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:references:cc:to
+ :content-language:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Zz2NRl448rps+FuxqGiqiRhGqw3RiY2J6wQTgpR4NUw=;
+ b=Q4fCD1+V94A6UCB3F44947ie0APifliTQCsaWr/aVGT7bbOfFKb4OMpr+8wnXJD9i7
+ kR3hLJQM1D7uvW6eAlQWc/PIZG1qFfVwvvztjMLeGSVJFYEB0R7deuxo5a3Aw99f9hDY
+ ivOq0R9i4Fhg5SVD0rE/Vlza+B5Q+MA5UvUybEhP/NPjRf8/5G7JBFQS1G/3FjnjszQX
+ Vtrd10PDP7uIeAArCKt2VtrUOo4TWRImPveb4PDGqy3zuXjogHmWzOW7cy3TMTW0yAas
+ vXi22WdRYHkINZ7DQpPETCWMStNadmKHWbOSryP4hQKC8KKQXQslxMbvSq/PsR0uj0uJ
+ WthA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Q4fCD1+V
+Subject: Re: [Buildroot] [PATCH 1/1] package/tcl: fix package patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,104 +101,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7caf2e66287d4b7005480c733b792f143e1aafb4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-The commit 4e365d1768 "package/tcl: bump to version 8.6.13" did NOT
-refreshed the package patch, because the patch was still applying
-correctly and the package was working as expected.
 
-It was refreshed in the previous bump, in commit 9cf314745a
-"package/tcl: bump to version 8.6.12". This was part of 2022.02.
+On 25/09/2023 15:57, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
+> 
+>   > On 18/09/2023 21:45, Julien Olivain wrote:
+>   >> The commit 4e365d1768 "package/tcl: bump to version 8.6.13" did NOT
+>   >> refreshed the package patch, because the patch was still applying
+>   >> correctly and the package was working as expected.
+>   >> It was refreshed in the previous bump, in commit 9cf314745a
+>   >> "package/tcl: bump to version 8.6.12".
+> 
+>   >  I've added here that this commit was part of 2022.02, to make it
+>   >  easier for Peter to know that it should be backported.
+> 
+>   >  It was my original mistake to commit that incorrect change, so I've
+>   >  committed the fix as well :-)
+> 
+>   >  Applied to master, thanks.
+> 
+> So this presumably means it needs to be backported even though it
+> apparently worked (or built at least) without / with the dummy patch?
 
-Looking closer at the patch content, the -/+ lines are exactly the
-same. So this patch does not change anything. Since the file was kept
-and the commit log mention a patch refresh, the intent was more
-likely to carry over the old patch (which was declaring all libc
-functions as "unbroken".
+  Yes, it was a runtime issue that was fixed by the patch.
 
-This commit actually refreshes this patch. It was regenerated with
-git format-patch. Since the patch is renamed due to git format-patch,
-the .checkpackageignore is updated accordingly.
+  Regards,
+  Arnout
 
-Note:
-This ancient patch will be removed soon, as an upstream commit [1],
-not yet in a release, cleaned up and removed those old parts.
-
-[1] https://github.com/tcltk/tcl/commit/04d66a25716cb7738dad3170cca4d0a4683db08a
-
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit ec8a9cc5189d41cf751e872f5c13da3fdc9187ee)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .checkpackageignore                                      |  2 +-
- ...patch => 0001-Disable-tcl-compatibility-layers.patch} | 16 +++++++++++++---
- 2 files changed, 14 insertions(+), 4 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a315f37e27..6adc54891d 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1493,7 +1493,7 @@ package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch Upstr
- package/taskd/0002-Use-correct-variables-for-GnuTLS-detection.patch Upstream
- package/taskd/0003-CMakeLists-use-pkg-config-uuid-detection.patch Upstream
- package/tcf-agent/S55tcf-agent Shellcheck Variables
--package/tcl/0001-dont-build-compat.patch Upstream
-+package/tcl/0001-Disable-tcl-compatibility-layers.patch Upstream
- package/tesseract-ocr/0001-Check-if-platform-supports-feenableexcept.patch Upstream
- package/tesseract-ocr/0002-configure.ac-fix-build-on-aarch64_be.patch Upstream
- package/tftpd/0001-Use-extern-qualifier-to-fix-gcc-10.x-build.patch Upstream
-diff --git a/package/tcl/0001-dont-build-compat.patch b/package/tcl/0001-Disable-tcl-compatibility-layers.patch
-similarity index 61%
-rename from package/tcl/0001-dont-build-compat.patch
-rename to package/tcl/0001-Disable-tcl-compatibility-layers.patch
-index 7a7d959cd2..b7b776ad5d 100644
---- a/package/tcl/0001-dont-build-compat.patch
-+++ b/package/tcl/0001-Disable-tcl-compatibility-layers.patch
-@@ -1,4 +1,6 @@
-+From c829552921f0c7c8e522f911135ee100742b441b Mon Sep 17 00:00:00 2001
- From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-+Date: Tue, 8 Apr 2014 15:54:04 -0500
- Subject: [PATCH] Disable tcl compatibility layers
- 
- Turn off building compatibility layers for old/broken versions of
-@@ -9,17 +11,25 @@ to not have broken behavior.
- Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
- [Fabrice: Update for 8.6.12]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Julien: Update for 8.6.13]
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
- ---
-+ unix/tcl.m4 | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/unix/tcl.m4 b/unix/tcl.m4
-+index ca94abd4ad..42eb58d384 100644
- --- a/unix/tcl.m4
- +++ b/unix/tcl.m4
--@@ -2725,7 +2725,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
-+@@ -2646,7 +2646,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
-  #include <stdlib.h>
-  #include <string.h>
-  int main() {]$2[}]]])],[tcl_cv_$1_unbroken=ok],
- -		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=unknown]))
--+		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=unknown]))
--	if test ["$tcl_cv_]$1[_unbroken"] = "ok"; then
-++		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=ok]))
-+ 	if test ["$tcl_cv_]$1[_unbroken"] = "ok"; then
-  	    tcl_ok=1
-  	else
-+-- 
-+2.41.0
-+
+> 
+> Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
