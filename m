@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1880CE7A94
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 12:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45319CE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 12:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1F3D6118C;
-	Mon, 25 Sep 2023 12:05:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1F3D6118C
+	by smtp3.osuosl.org (Postfix) with ESMTP id D830B61221;
+	Mon, 25 Sep 2023 12:06:09 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D830B61221
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DhLOm8DUwJdu; Mon, 25 Sep 2023 12:05:55 +0000 (UTC)
+	with ESMTP id cF4Etjvm9r6D; Mon, 25 Sep 2023 12:06:08 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9CA6611CE;
-	Mon, 25 Sep 2023 12:05:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9CA6611CE
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 450AF1BF2C9
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:04:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CD5161203;
+	Mon, 25 Sep 2023 12:06:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CD5161203
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E239F1BF947
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28EEF82016
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:04:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28EEF82016
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABB5B4157F
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:04:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABB5B4157F
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id ySbdkDDOw5wW for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 12:04:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id U-I2tQoCUPY7 for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 12:04:18 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D18481FFC
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 12:04:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D18481FFC
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9B55415A4
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 12:04:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9B55415A4
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B63D8776E; Mon, 25 Sep 2023 12:04:15 +0000 (UTC)
+ id 7630987771; Mon, 25 Sep 2023 12:04:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 13:59:51 +0200
-X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: f461cbde021c156c695baa24b7de0c967c2e2ea7
-X-Git-Newrev: 3de9a93b4268de257afc8c2a7df47cdf8eca35e8
+Date: Mon, 25 Sep 2023 13:58:51 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 2a385a7625c070040594aed098720319b9a15c75
+X-Git-Newrev: d2ed3df411c653778bf7aedbfd35fbaa09340f2d
 X-Patchwork-Hint: ignore
-Message-Id: <20230925120415.6B63D8776E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/tar: drop
- CVE-2007-4476 from IGNORE_CVES
+Message-Id: <20230925120414.7630987771@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/python3: drop
+ CVE-2022-45061 from IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,33 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3de9a93b4268de257afc8c2a7df47cdf8eca35e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d2ed3df411c653778bf7aedbfd35fbaa09340f2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-As off 2021-05-17 NVD added 1.19 as the first version that isn't
-affected by CVE-2007-4476.
+CVE-2022-45061 affects python <= 3.7.15, 3.8.0 through 3.8.15,
+3.9.0 through 3.9.15, 3.10.0 through 3.10.8
+The mentioned patch was removed in c38de813 when bumping to 3.11.1.
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 487c12a1f29140bf61abcf4cc575bd83b1fc933b)
+(cherry picked from commit 43dbfe4670c3283ea1b2f9a884a09ea6f8f9dcb9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tar/tar.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/python3/python3.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 80d7495b00..690a5952ba 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -13,8 +13,6 @@ TAR_CONF_OPTS = --exec-prefix=/
- TAR_LICENSE = GPL-3.0+
- TAR_LICENSE_FILES = COPYING
- TAR_CPE_ID_VENDOR = gnu
--# only tar <= 1.16
--TAR_IGNORE_CVES += CVE-2007-4476
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 5f8fa5b58d..cfe5e1ee6e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -13,9 +13,6 @@ PYTHON3_LICENSE_FILES = LICENSE
+ PYTHON3_CPE_ID_VENDOR = python
+ PYTHON3_CPE_ID_PRODUCT = python
  
- ifeq ($(BR2_PACKAGE_ACL),y)
- TAR_DEPENDENCIES += acl
+-# 0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+-PYTHON3_IGNORE_CVES += CVE-2022-45061
+-
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
