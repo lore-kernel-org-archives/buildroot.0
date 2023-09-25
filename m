@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46206CE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 05:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720AFCE7A89
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 05:42:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2AF281EAC;
-	Mon, 25 Sep 2023 05:42:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2AF281EAC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E4ED81F20;
+	Mon, 25 Sep 2023 05:42:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E4ED81F20
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RtQVa3dif3LS; Mon, 25 Sep 2023 05:42:43 +0000 (UTC)
+	with ESMTP id aGNIKP6e5W_j; Mon, 25 Sep 2023 05:42:55 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 182D581EF9;
-	Mon, 25 Sep 2023 05:42:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 182D581EF9
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A98DB1BF3BB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67B5D81F28;
+	Mon, 25 Sep 2023 05:42:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67B5D81F28
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B72CA1BF95D
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:42:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BACB781EC1
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BACB781EC1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8ED3741828
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:42:04 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ED3741828
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id zM9PrkniExFt for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 05:42:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id dlrh6_y5oUw7 for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 05:42:03 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D86D181EB4
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 05:42:02 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D86D181EB4
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACBEF416D0
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 05:42:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACBEF416D0
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C416D876D7; Mon, 25 Sep 2023 05:42:02 +0000 (UTC)
+ id 99A9C876D6; Mon, 25 Sep 2023 05:42:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 07:39:47 +0200
-X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: 4ff31e411d484114c8aceb4f016175da017fc022
-X-Git-Newrev: 08659a7fb56f504b80b9fe28049636aea522d67e
+Date: Mon, 25 Sep 2023 07:27:42 +0200
+X-Git-Refname: refs/heads/2023.08.x
+X-Git-Oldrev: e7213929ba3c349a748d7523d2b6e477197486d7
+X-Git-Newrev: a0aad25941796a88fc0d5d98b2294c0c4e98a80b
 X-Patchwork-Hint: ignore
-Message-Id: <20230925054202.C416D876D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/ghostscript:
- security bump to version 10.02.0
+Message-Id: <20230925054203.99A9C876D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/petitboot: fix
+ HOST_PROG_SHUTDOWN value
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,98 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08659a7fb56f504b80b9fe28049636aea522d67e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a0aad25941796a88fc0d5d98b2294c0c4e98a80b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-- Fix CVE-2023-36664: Artifex Ghostscript through 10.01.2 mishandles
-  permission validation for pipe devices (with the %pipe% prefix or the |
-  pipe character prefix).
-- Fix CVE-2023-38559: A buffer overflow flaw was found in
-  base/gdevdevn.c:1973 in devn_pcx_write_rle() in ghostscript. This
-  issue may allow a local attacker to cause a denial of service via
-  outputting a crafted PDF file for a DEVN device with gs.
-- Fix CVE-2023-38560: An integer overflow flaw was found in
-  pcl/pl/plfont.c:418 in pl_glyph_name in ghostscript. This issue may
-  allow a local attacker to cause a denial of service via transforming a
-  crafted PCL file to PDF format.
+HOST_PROG_SHUTDOWN currently references a file that doesn't exist. Fix
+by setting it to /usr/libexec/petitboot/bb-kexec-reboot, which this
+package already installs but doesn't use.
 
-https://ghostscript.readthedocs.io/en/gs10.02.0/News.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 93ef6997aeef443336651dab46b31ff87be07860)
+Signed-off-by: Reza Arbab <arbab@linux.ibm.com>
+Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit ab91ddd8a8ebdc10fa26a6d9541cf5e50e297973)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-build-without-BUILD_PDF.patch         | 34 ++++++++++++++++++++++
- package/ghostscript/ghostscript.hash               |  4 +--
- package/ghostscript/ghostscript.mk                 |  2 +-
- 3 files changed, 37 insertions(+), 3 deletions(-)
+ package/petitboot/petitboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch b/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch
-new file mode 100644
-index 0000000000..af69cd3670
---- /dev/null
-+++ b/package/ghostscript/0001-Fix-build-without-BUILD_PDF.patch
-@@ -0,0 +1,34 @@
-+From 088f3cd6e58cff5fa51e072d1829f7691a5f6681 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 20 Sep 2023 13:44:28 +0100
-+Subject: [PATCH] Fix build without BUILD_PDF
-+
-+The PDFSetParams PostScript extension operator was missing a stub function definition
-+when the PDF interpreter is not built in.
-+
-+ Author:    Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=088f3cd6e58cff5fa51e072d1829f7691a5f6681
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ psi/zpdfops.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/psi/zpdfops.c b/psi/zpdfops.c
-+index e7e0a42ee..271687a18 100644
-+--- a/psi/zpdfops.c
-++++ b/psi/zpdfops.c
-+@@ -1507,6 +1507,11 @@ static int zPDFdrawannots(i_ctx_t *i_ctx_p)
-+     return_error(gs_error_undefined);
-+ }
-+ 
-++static int zPDFSetParams(i_ctx_t *i_ctx_p)
-++{
-++    return_error(gs_error_undefined);
-++}
-++
-+ static int zPDFInit(i_ctx_t *i_ctx_p)
-+ {
-+     return_error(gs_error_undefined);
-+-- 
-+2.34.1
-+
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 2e4b6ac750..77c8faccbe 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10012/SHA512SUMS
--sha512  ee20f0e12f553a3d04578e71a0d45defebc71117ce4dc2c14043985bfe7348ad7f8b2fe98fc9b4f5b935ecb32e50dc340be67d6ef58190542ec6d0f9da1de380  ghostscript-10.01.2.tar.xz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs10020/SHA512SUMS
-+sha512  c49344151063e915add55a0a842c2a645d8362a5cbca663bd07638f4bd3699a08cade37a9efe905ad5a41e014353e5e1b1268b7925e43128ad30d5b031396b71  ghostscript-10.02.0.tar.xz
+diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
+index 8b4c14207e..8d220f88f4 100644
+--- a/package/petitboot/petitboot.mk
++++ b/package/petitboot/petitboot.mk
+@@ -21,7 +21,7 @@ PETITBOOT_CONF_OPTS = \
+ 	--without-twin-x11 \
+ 	$(if $(BR2_PACKAGE_BUSYBOX),--enable-busybox,--disable-busybox) \
+ 	HOST_PROG_KEXEC=/usr/sbin/kexec \
+-	HOST_PROG_SHUTDOWN=/usr/sbin/kexec-restart
++	HOST_PROG_SHUTDOWN=/usr/libexec/petitboot/bb-kexec-reboot
  
- # Hash for license file:
- sha256  8ce064f423b7c24a011b6ebf9431b8bf9861a5255e47c84bfb23fc526d030a8b  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 8a39d4b695..161521f970 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GHOSTSCRIPT_VERSION = 10.01.2
-+GHOSTSCRIPT_VERSION = 10.02.0
- GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
+ # HPA and Busybox tftp are supported. HPA tftp is part of Buildroot's tftpd
+ # package.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
