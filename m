@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7499CE7A94
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02ADDCE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FEF380B2F;
-	Mon, 25 Sep 2023 14:04:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FEF380B2F
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB703813A5;
+	Mon, 25 Sep 2023 14:04:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB703813A5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 20yyXFu2H67R; Mon, 25 Sep 2023 14:04:41 +0000 (UTC)
+	with ESMTP id razT3iW7IyWc; Mon, 25 Sep 2023 14:04:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1323813D7;
-	Mon, 25 Sep 2023 14:04:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1323813D7
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C14FE1BF94D
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD76D817AB;
+	Mon, 25 Sep 2023 14:04:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD76D817AB
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C3C0C1BF95F
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B7F241595
+ by smtp4.osuosl.org (Postfix) with ESMTP id A419F41966
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B7F241595
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A419F41966
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id JVOJKtd6GwBq for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 1IhQoTI42sH1 for <buildroot@lists.busybox.net>;
  Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB4574011A
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3A99416D9
  for <buildroot@buildroot.org>; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB4574011A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3A99416D9
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AAED7877A0; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
+ id A14548779F; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 15:55:04 +0200
+Date: Mon, 25 Sep 2023 15:50:35 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: e7d51fa99f82e0d988aefd5ab09c83c2576c6e24
-X-Git-Newrev: 34fee661ef1e34cc19d861713ce3257c728ba2e1
+X-Git-Oldrev: 44368be1373daf946ec14d28d7652a6d5a2c6bfa
+X-Git-Newrev: e7d51fa99f82e0d988aefd5ab09c83c2576c6e24
 X-Patchwork-Hint: ignore
-Message-Id: <20230925140425.AAED7877A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/tcl: fix package
- patch
+Message-Id: <20230925140425.A14548779F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/sysstat: drop
+ CVE-2022-39377 from IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,84 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34fee661ef1e34cc19d861713ce3257c728ba2e1
+commit: https://git.buildroot.net/buildroot/commit/?id=e7d51fa99f82e0d988aefd5ab09c83c2576c6e24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The commit 4e365d1768 "package/tcl: bump to version 8.6.13" did NOT
-refreshed the package patch, because the patch was still applying
-correctly and the package was working as expected.
+As off 2022-11-22 CVE-2022-39377 is listed as affecting sysstat
+< 2.16.1 instead of < 2.17.1. The text is not updated, but the CPE info
+is.
 
-It was refreshed in the previous bump, in commit 9cf314745a
-"package/tcl: bump to version 8.6.12". This was part of 2022.02.
-
-Looking closer at the patch content, the -/+ lines are exactly the
-same. So this patch does not change anything. Since the file was kept
-and the commit log mention a patch refresh, the intent was more
-likely to carry over the old patch (which was declaring all libc
-functions as "unbroken".
-
-This commit actually refreshes this patch. It was regenerated with
-git format-patch. Since the patch is renamed due to git format-patch,
-the .checkpackageignore is updated accordingly.
-
-Note:
-This ancient patch will be removed soon, as an upstream commit [1],
-not yet in a release, cleaned up and removed those old parts.
-
-[1] https://github.com/tcltk/tcl/commit/04d66a25716cb7738dad3170cca4d0a4683db08a
-
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit ec8a9cc5189d41cf751e872f5c13da3fdc9187ee)
+(cherry picked from commit 6425e0b8482e53d5ab5ff2d655628ba7d4be3960)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...patch => 0001-Disable-tcl-compatibility-layers.patch} | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ package/sysstat/sysstat.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/tcl/0001-dont-build-compat.patch b/package/tcl/0001-Disable-tcl-compatibility-layers.patch
-similarity index 61%
-rename from package/tcl/0001-dont-build-compat.patch
-rename to package/tcl/0001-Disable-tcl-compatibility-layers.patch
-index 7a7d959cd2..b7b776ad5d 100644
---- a/package/tcl/0001-dont-build-compat.patch
-+++ b/package/tcl/0001-Disable-tcl-compatibility-layers.patch
-@@ -1,4 +1,6 @@
-+From c829552921f0c7c8e522f911135ee100742b441b Mon Sep 17 00:00:00 2001
- From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-+Date: Tue, 8 Apr 2014 15:54:04 -0500
- Subject: [PATCH] Disable tcl compatibility layers
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index eaf505dc49..377396d986 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -14,9 +14,6 @@ SYSSTAT_LICENSE_FILES = COPYING
+ SYSSTAT_CPE_ID_VENDOR = sysstat_project
+ SYSSTAT_SELINUX_MODULES = sysstat
  
- Turn off building compatibility layers for old/broken versions of
-@@ -9,17 +11,25 @@ to not have broken behavior.
- Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
- [Fabrice: Update for 8.6.12]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Julien: Update for 8.6.13]
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
- ---
-+ unix/tcl.m4 | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/unix/tcl.m4 b/unix/tcl.m4
-+index ca94abd4ad..42eb58d384 100644
- --- a/unix/tcl.m4
- +++ b/unix/tcl.m4
--@@ -2725,7 +2725,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
-+@@ -2646,7 +2646,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
-  #include <stdlib.h>
-  #include <string.h>
-  int main() {]$2[}]]])],[tcl_cv_$1_unbroken=ok],
- -		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=unknown]))
--+		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=unknown]))
--	if test ["$tcl_cv_]$1[_unbroken"] = "ok"; then
-++		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=ok]))
-+ 	if test ["$tcl_cv_]$1[_unbroken"] = "ok"; then
-  	    tcl_ok=1
-  	else
-+-- 
-+2.41.0
-+
+-# NVD is not up-to-date; 12.6.1 includes c1e631eddc50, which fixes the issue
+-SYSSTAT_IGNORE_CVES += CVE-2022-39377
+-
+ ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
+ SYSSTAT_DEPENDENCIES += lm-sensors
+ SYSSTAT_CONF_OPTS += --enable-sensors
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
