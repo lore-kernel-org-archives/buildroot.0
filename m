@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F60CE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 12:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1B6DCE7A95
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 12:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 064D8611F1;
-	Mon, 25 Sep 2023 12:05:22 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 064D8611F1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AEC2611F0;
+	Mon, 25 Sep 2023 12:05:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AEC2611F0
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0DXVAlCbw95k; Mon, 25 Sep 2023 12:05:21 +0000 (UTC)
+	with ESMTP id CWOPpmaMOiRL; Mon, 25 Sep 2023 12:05:31 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F0B8610AD;
-	Mon, 25 Sep 2023 12:05:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F0B8610AD
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 99D041BF947
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:04:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FF7D611F5;
+	Mon, 25 Sep 2023 12:05:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FF7D611F5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 129561BF2C9
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:04:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73B1D60F5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECBF340864
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 12:04:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73B1D60F5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECBF340864
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id OZKsd2NCPvsy for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id GbxWXlbLr0TU for <buildroot@lists.busybox.net>;
  Mon, 25 Sep 2023 12:04:15 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 882E460A94
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7187F41910
  for <buildroot@buildroot.org>; Mon, 25 Sep 2023 12:04:15 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 882E460A94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7187F41910
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77DF48776F; Mon, 25 Sep 2023 12:04:15 +0000 (UTC)
+ id 5FA7A87771; Mon, 25 Sep 2023 12:04:15 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 14:00:51 +0200
+Date: Mon, 25 Sep 2023 13:58:37 +0200
 X-Git-Refname: refs/heads/2023.08.x
-X-Git-Oldrev: 3de9a93b4268de257afc8c2a7df47cdf8eca35e8
-X-Git-Newrev: 0919c5de1938709bbe4b5d55ed1258e1b4ea007a
+X-Git-Oldrev: f93719851202e26853da59076690439996185d08
+X-Git-Newrev: f461cbde021c156c695baa24b7de0c967c2e2ea7
 X-Patchwork-Hint: ignore
-Message-Id: <20230925120415.77DF48776F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.08.x] package/openvpn: dco
- needs headers >= 4.16
+Message-Id: <20230925120415.5FA7A87771@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.08.x] package/python3: drop
+ CVE-2022-45061 from IGNORE_CVES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0919c5de1938709bbe4b5d55ed1258e1b4ea007a
+commit: https://git.buildroot.net/buildroot/commit/?id=f461cbde021c156c695baa24b7de0c967c2e2ea7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.08.x
 
-NLMSGERR_ATTR_MAX has been added in kernel 4.16 with
-https://github.com/torvalds/linux/commit/dc2b9f19e3bdaa87a7c3d123b8bba8a42d96d942
-resulting in the following build failure since bump to version 2.6.4 in
-commit a46ac2346558d05afe405dda3730169df4b677d2 and
-https://github.com/OpenVPN/openvpn/commit/e34437c26b764851555e4acbe2ccca6bec235c7e:
+CVE-2022-45061 affects python <= 3.7.15, 3.8.0 through 3.8.15,
+3.9.0 through 3.9.15, 3.10.0 through 3.10.8
+The mentioned patch was removed in c38de813 when bumping to 3.11.1.
 
-dco_linux.c: In function 'ovpn_nl_cb_error':
-dco_linux.c:303:27: error: 'NLMSGERR_ATTR_MAX' undeclared (first use in this function); did you mean '__CTRL_ATTR_MAX'?
-     struct nlattr *tb_msg[NLMSGERR_ATTR_MAX + 1];
-                           ^~~~~~~~~~~~~~~~~
-                           __CTRL_ATTR_MAX
-
-Fixes:
- - http://autobuild.buildroot.org/results/69b9737913ac0b5cd2c117d526602874da3ee487
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 45c41098ef50e50c4b0aa426e90e5758bf7bc330)
+(cherry picked from commit 43dbfe4670c3283ea1b2f9a884a09ea6f8f9dcb9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/openvpn.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python3/python3.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 7c2506870e..2d27fdab45 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -16,7 +16,7 @@ OPENVPN_CONF_OPTS = \
- 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
- OPENVPN_CONF_ENV = NETSTAT=/bin/netstat
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 5f8fa5b58d..cfe5e1ee6e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -13,9 +13,6 @@ PYTHON3_LICENSE_FILES = LICENSE
+ PYTHON3_CPE_ID_VENDOR = python
+ PYTHON3_CPE_ID_PRODUCT = python
  
--ifeq ($(BR2_PACKAGE_LIBNL),y)
-+ifeq ($(BR2_PACKAGE_LIBNL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16),yy)
- OPENVPN_CONF_OPTS += --enable-dco
- OPENVPN_DEPENDENCIES += libnl
- else
+-# 0033-3.11-gh-98433-Fix-quadratic-time-idna-decoding.-GH-9.patch
+-PYTHON3_IGNORE_CVES += CVE-2022-45061
+-
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
