@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80860CE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:04:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7499CE7A94
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 14:04:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37C0780BBA;
-	Mon, 25 Sep 2023 14:04:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37C0780BBA
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FEF380B2F;
+	Mon, 25 Sep 2023 14:04:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FEF380B2F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id qaaWHxlt6Md2; Mon, 25 Sep 2023 14:04:29 +0000 (UTC)
+	with ESMTP id 20yyXFu2H67R; Mon, 25 Sep 2023 14:04:41 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FA2C80B90;
-	Mon, 25 Sep 2023 14:04:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FA2C80B90
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A0AD41BF35F
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1323813D7;
+	Mon, 25 Sep 2023 14:04:40 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1323813D7
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C14FE1BF94D
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8805381F50
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B7F241595
  for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 14:04:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8805381F50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B7F241595
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id smOm5RtJS9HH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id JVOJKtd6GwBq for <buildroot@lists.busybox.net>;
  Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A55B581AAC
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB4574011A
  for <buildroot@buildroot.org>; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A55B581AAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB4574011A
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9563B8779D; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
+ id AAED7877A0; Mon, 25 Sep 2023 14:04:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 25 Sep 2023 15:49:40 +0200
+Date: Mon, 25 Sep 2023 15:55:04 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: a1f6dbd031e0dc2769163f2a4b971acb60da34d9
-X-Git-Newrev: 44368be1373daf946ec14d28d7652a6d5a2c6bfa
+X-Git-Oldrev: e7d51fa99f82e0d988aefd5ab09c83c2576c6e24
+X-Git-Newrev: 34fee661ef1e34cc19d861713ce3257c728ba2e1
 X-Patchwork-Hint: ignore
-Message-Id: <20230925140425.9563B8779D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/ne10: install
- shared libraries only when built
+Message-Id: <20230925140425.AAED7877A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/tcl: fix package
+ patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,55 +63,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44368be1373daf946ec14d28d7652a6d5a2c6bfa
+commit: https://git.buildroot.net/buildroot/commit/?id=34fee661ef1e34cc19d861713ce3257c728ba2e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-The install to staging commands of the ne10 package are careful to
-install the shared libraries only if they are built, but we forgot to
-use the same care for the install to target commands, causing a build
-failure on BR2_STATIC_LIBS=y configurations as no shared library was
-built:
+The commit 4e365d1768 "package/tcl: bump to version 8.6.13" did NOT
+refreshed the package patch, because the patch was still applying
+correctly and the package was working as expected.
 
-cp: cannot stat '/home/autobuild/autobuild/instance-15/output-1/build/ne10-1.2.1/modules/libNE10*.so*': No such file or directory
+It was refreshed in the previous bump, in commit 9cf314745a
+"package/tcl: bump to version 8.6.12". This was part of 2022.02.
 
-This commit fixes this by guarding the target installation commands to
-BR2_STATIC_LIBS being empty.
+Looking closer at the patch content, the -/+ lines are exactly the
+same. So this patch does not change anything. Since the file was kept
+and the commit log mention a patch refresh, the intent was more
+likely to carry over the old patch (which was declaring all libc
+functions as "unbroken".
 
-The problem exists since the package was introduced in commit
-318f3db0dcc052aa770ca57c143b5f7bc40cdaf3 ("ne10: new package"), a good
-10 years ago. Most likely it was not seen for many years as this
-package is only available for ARM with NEON and AArch64, and we were
-not testing fully static builds, except for ARMv5 that don't have
-NEON. Now that we are doing more random testing, the problem started
-being visible.
+This commit actually refreshes this patch. It was regenerated with
+git format-patch. Since the patch is renamed due to git format-patch,
+the .checkpackageignore is updated accordingly.
 
-Fixes:
+Note:
+This ancient patch will be removed soon, as an upstream commit [1],
+not yet in a release, cleaned up and removed those old parts.
 
-  http://autobuild.buildroot.net/results/45b2c1af052271bc2f1bb96544f138d29e4f7dfd/
+[1] https://github.com/tcltk/tcl/commit/04d66a25716cb7738dad3170cca4d0a4683db08a
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 0b764a7d1e6961cb7baa0b3a74de1167bf47a6dd)
+(cherry picked from commit ec8a9cc5189d41cf751e872f5c13da3fdc9187ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ne10/ne10.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ ...patch => 0001-Disable-tcl-compatibility-layers.patch} | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index 3946605556..ce0f7e7b77 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -42,8 +42,10 @@ define NE10_INSTALL_STAGING_CMDS
- 	$(NE10_INSTALL_STAGING_SHARED_LIB)
- endef
+diff --git a/package/tcl/0001-dont-build-compat.patch b/package/tcl/0001-Disable-tcl-compatibility-layers.patch
+similarity index 61%
+rename from package/tcl/0001-dont-build-compat.patch
+rename to package/tcl/0001-Disable-tcl-compatibility-layers.patch
+index 7a7d959cd2..b7b776ad5d 100644
+--- a/package/tcl/0001-dont-build-compat.patch
++++ b/package/tcl/0001-Disable-tcl-compatibility-layers.patch
+@@ -1,4 +1,6 @@
++From c829552921f0c7c8e522f911135ee100742b441b Mon Sep 17 00:00:00 2001
+ From: Andrew Ruder <andrew.ruder@elecsyscorp.com>
++Date: Tue, 8 Apr 2014 15:54:04 -0500
+ Subject: [PATCH] Disable tcl compatibility layers
  
-+ifeq ($(BR2_STATIC_LIBS),)
- define NE10_INSTALL_TARGET_CMDS
- 	cp -dpf $(@D)/modules/libNE10*.so* $(TARGET_DIR)/usr/lib/
- endef
-+endif
+ Turn off building compatibility layers for old/broken versions of
+@@ -9,17 +11,25 @@ to not have broken behavior.
+ Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+ [Fabrice: Update for 8.6.12]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Julien: Update for 8.6.13]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
++ unix/tcl.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
  
- $(eval $(cmake-package))
+ diff --git a/unix/tcl.m4 b/unix/tcl.m4
++index ca94abd4ad..42eb58d384 100644
+ --- a/unix/tcl.m4
+ +++ b/unix/tcl.m4
+-@@ -2725,7 +2725,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
++@@ -2646,7 +2646,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
+  #include <stdlib.h>
+  #include <string.h>
+  int main() {]$2[}]]])],[tcl_cv_$1_unbroken=ok],
+ -		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=unknown]))
+-+		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=unknown]))
+-	if test ["$tcl_cv_]$1[_unbroken"] = "ok"; then
+++		[tcl_cv_$1_unbroken=broken],[tcl_cv_$1_unbroken=ok]))
++ 	if test ["$tcl_cv_]$1[_unbroken"] = "ok"; then
+  	    tcl_ok=1
+  	else
++-- 
++2.41.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
