@@ -4,64 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9FEACE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 13:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4438BCE7A81
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 13:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CAE781F4B;
-	Mon, 25 Sep 2023 13:42:42 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CAE781F4B
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA21981EB5;
+	Mon, 25 Sep 2023 13:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA21981EB5
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id C48YtXa9AsMV; Mon, 25 Sep 2023 13:42:41 +0000 (UTC)
+	with ESMTP id GFl4sH5Lahnq; Mon, 25 Sep 2023 13:47:12 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DEC7481EE5;
-	Mon, 25 Sep 2023 13:42:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEC7481EE5
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3FE351BF381
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 13:42:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C7B881EE5;
+	Mon, 25 Sep 2023 13:47:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C7B881EE5
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BFC8A1BF381
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 13:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C014A81EE5
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 13:42:38 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C014A81EE5
+ by smtp4.osuosl.org (Postfix) with ESMTP id A435741AE9
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 13:47:10 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A435741AE9
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id T85yAqgM-uLa for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 13:42:37 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 89B3281EE4
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 13:42:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89B3281EE4
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8CFD91C000A;
- Mon, 25 Sep 2023 13:42:33 +0000 (UTC)
-Date: Mon, 25 Sep 2023 15:42:32 +0200
-To: <yann.morin@orange.com>
-Message-ID: <20230925154232.69fdc4bd@windsurf>
-In-Reply-To: <85bdd1b26ba56471330e98465095d943b54e3e74.1695644947.git.yann.morin@orange.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id amq6uDA4R6LH for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 13:47:08 +0000 (UTC)
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1BDC341769
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 13:47:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BDC341769
+Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 25 Sep 2023 15:47:05 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Sep 2023 15:47:05 +0200
+Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 25 Sep 2023 15:47:03 +0200
+Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
+ Mon, 25 Sep 2023 15:47:03 +0200
+From: yann.morin@orange.com
+X-IronPort-AV: E=Sophos;i="6.03,175,1694728800"; d="scan'208";a="44305937"
+Date: Mon, 25 Sep 2023 15:47:03 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZRGPV+O+bz1rN3jF@tl-lnx-nyma7486-2>
 References: <85bdd1b26ba56471330e98465095d943b54e3e74.1695644947.git.yann.morin@orange.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+ <20230925154232.69fdc4bd@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+Content-Disposition: inline
+In-Reply-To: <20230925154232.69fdc4bd@windsurf>
+X-Originating-IP: [10.115.26.51]
+X-ClientProxiedBy: OPE16NORMBX503.corporate.adroot.infra.ftgroup
+ (10.115.26.27) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1695649354;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tCQaWS0j/lkVzM3hnoccMSKf+R1Q09jMsd4+/RbLxS0=;
- b=Lw+xG45REd7TLeaUSjap/MYBQI8U6+vTIW1nrbtaTneRtUrcIGqxekV2zrALiXihgOtqkd
- TV57erPE8FqNX/AT3fuAW8m2GoCgwsbzDUouzaSJ8vWzKEEJkCuT97IEqdDkSOzEUgE9yt
- skdjdgD3bIcR+owWiF3lS+5rutjlsrIhI42rlOcP0+FNIzxuHuUVWXaP+ZzJJ7gbg6PvVe
- GAEaTbbXba53wlaMHVw2hhGD9CfpOxAO1CQxMfpvbqSHpSne2FjtOrzTeqUXIsT0YIRGrJ
- 1vjlxzkT8V944vfUTb38oy6ewcYktTCShhlwU66r3Bzo2Pn9HyuYsavCXMqKhQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Lw+xG45R
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1695649628; x=1727185628;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=zIngJDueSXSofdNJtfzb2b5IqDRGqmhzE0hmTfKwB4M=;
+ b=NYDdWvaC/gfaVwjgzIZhJdhG1KJRObqA4nS2Ud2Ijf4Jo1et0e2goSMP
+ LkqOyE0ESA10vpKEkSwkzbt5yyGMuNyW8k3/uSk8eVLxDIVdmAczE9z5w
+ YgnOKleN/r6o36WWcdCDIISN0B9FtGe7uB26rUgzH/cRZA86ar19VqEva
+ uM1iNudqlAY+B4m7uNuPSVnk5BGZNu6lYsZQOpSPJ+zN4gynR6jnC1PNU
+ Saiwbnso0a0Wg2PxZjVx+GE2MWMHUqfekVcdm6F7YlhjhJI68WpYr1Gfu
+ gQZVNyyDZlE+MYMqVnteqowUiX3dTLoOB0P+7kn1fvNlTSIUyAuOMHBGQ
+ A==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=NYDdWvaC
 Subject: Re: [Buildroot] [PATCHv2] package/go: cgo for the target needs the
  toolchain
 X-BeenThere: buildroot@buildroot.org
@@ -75,8 +89,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
  buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
@@ -84,40 +96,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 25 Sep 2023 14:29:15 +0200
-<yann.morin@orange.com> wrote:
+Thomas, All,
 
-> From: "Yann E. MORIN" <yann.morin@orange.com>
+On 2023-09-25 15:42 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 25 Sep 2023 14:29:15 +0200
+> <yann.morin@orange.com> wrote:
+> > From: "Yann E. MORIN" <yann.morin@orange.com>
+> So if you're the author...
+> > When the target is not supported by go, then there is obviously no need
+> > to depend on the toolchain (even if we unconditionally enable cgo
+> > support in only-for-the-host host-go).
+> > 
+> > Signed-off-by: Christian Stewart <christian@aperture.us>
+> Christian should not be the first Signed-off-by, but you should be.
 
-So if you're the author...
+Indeed, I forgot to fixup authorship when working on the patch...
 
-> When the target is not supported by go, then there is obviously no need
-> to depend on the toolchain (even if we unconditionally enable cgo
-> support in only-for-the-host host-go).
+> I believe this was originally written by Christian, and you extended
+> the commit log/improved the patch, so I guess Christian should be kept
+> as the author.
+
+Absolutely, yes.
+
+Regards,
+Yann E. MORIN.
+
+> > [yann.morin@orange.com:
+> >   - only add the toolchain dependency for target cgo
+> >   - reword commit log
+> > ]
+> > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Anisse Astier <anisse@astier.eu>
 > 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 
-Christian should not be the first Signed-off-by, but you should be.
-
-I believe this was originally written by Christian, and you extended
-the commit log/improved the patch, so I guess Christian should be kept
-as the author.
-
-> [yann.morin@orange.com:
->   - only add the toolchain dependency for target cgo
->   - reword commit log
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Anisse Astier <anisse@astier.eu>
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
