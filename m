@@ -4,54 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A016CE7A81
-	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 05:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 582ABCE7A89
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 05:40:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D67B281E7A;
-	Mon, 25 Sep 2023 05:40:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D67B281E7A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 052AD81EA9;
+	Mon, 25 Sep 2023 05:40:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 052AD81EA9
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
 	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id J6lqAk8Y6ZBS; Mon, 25 Sep 2023 05:40:28 +0000 (UTC)
+	with ESMTP id pJXuimnSApIg; Mon, 25 Sep 2023 05:40:43 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38787817D3;
-	Mon, 25 Sep 2023 05:40:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38787817D3
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 729021BF3BB
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5439281E9C;
+	Mon, 25 Sep 2023 05:40:42 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5439281E9C
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BBCFD1BF3BB
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C2934013D
- for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C2934013D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8AA3081E9E
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 05:40:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AA3081E9E
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id Gf5t2ozcJQUu for <buildroot@lists.busybox.net>;
- Mon, 25 Sep 2023 05:40:24 +0000 (UTC)
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4475B40136
- for <buildroot@buildroot.org>; Mon, 25 Sep 2023 05:40:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4475B40136
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 06FE940005;
- Mon, 25 Sep 2023 05:40:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1qkeKS-002FCE-Ee; Mon, 25 Sep 2023 07:40:20 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id njNLmIOZZ7CN for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 05:40:34 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A2CFE81E86
+ for <buildroot@buildroot.org>; Mon, 25 Sep 2023 05:40:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2CFE81E86
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8E63B876B3; Mon, 25 Sep 2023 05:40:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20230920170711.3901-1-fontaine.fabrice@gmail.com>
-Date: Mon, 25 Sep 2023 07:40:20 +0200
-In-Reply-To: <20230920170711.3901-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 20 Sep 2023 19:07:11 +0200")
-Message-ID: <87il7yerp7.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/ghostscript: security bump to
- version 10.02.0
+To: buildroot@buildroot.org
+Date: Mon, 25 Sep 2023 07:30:27 +0200
+X-Git-Refname: refs/heads/2023.02.x
+X-Git-Oldrev: 9fba48c8dfcdd969a77272ccfe327d0349d8ce0d
+X-Git-Newrev: 5b9debd5681fd3d3c5fa798114688716a5832078
+X-Patchwork-Hint: ignore
+Message-Id: <20230925054034.8E63B876B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/wireshark:
+ security bump to version 4.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,34 +57,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5b9debd5681fd3d3c5fa798114688716a5832078
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
- > - Fix CVE-2023-36664: Artifex Ghostscript through 10.01.2 mishandles
- >   permission validation for pipe devices (with the %pipe% prefix or the |
- >   pipe character prefix).
- > - Fix CVE-2023-38559: A buffer overflow flaw was found in
- >   base/gdevdevn.c:1973 in devn_pcx_write_rle() in ghostscript. This
- >   issue may allow a local attacker to cause a denial of service via
- >   outputting a crafted PDF file for a DEVN device with gs.
- > - Fix CVE-2023-38560: An integer overflow flaw was found in
- >   pcl/pl/plfont.c:418 in pl_glyph_name in ghostscript. This issue may
- >   allow a local attacker to cause a denial of service via transforming a
- >   crafted PCL file to PDF format.
+Fix CVE-2023-3648 and CVE-2023-3649
 
- > https://ghostscript.readthedocs.io/en/gs10.02.0/News.html
+https://www.wireshark.org/security/wnpa-sec-2023-21
+https://www.wireshark.org/security/wnpa-sec-2023-22
+https://www.wireshark.org/security/wnpa-sec-2023-23
+https://www.wireshark.org/security/wnpa-sec-2023-24
+https://www.wireshark.org/security/wnpa-sec-2023-25
+https://www.wireshark.org/security/wnpa-sec-2023-26
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.7.html
+https://www.wireshark.org/docs/relnotes/wireshark-4.0.8.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit de0f8c66adae6f60914bf2144e9b88eeee21718e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 6598f51f53..f044f99483 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.6.txt
+-sha1  a60b6f8063df2a711932ba869ae86e6476087cf0  wireshark-4.0.6.tar.xz
+-sha256  0079097a1b17ebc7250a73563f984c13327dac5016b7d53165810fbcca4bd884  wireshark-4.0.6.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.0.8.txt
++sha1  8ca1cc4471d0cb835cd5216833c393fa23bc154f  wireshark-4.0.8.tar.xz
++sha256  16663585c0ffefd5593a6628d4a20cc8241b9703b11283cfe71ead2b750888c8  wireshark-4.0.8.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 80a986cfa3..500bdbb77a 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 4.0.6
++WIRESHARK_VERSION = 4.0.8
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
