@@ -4,68 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 522D4CE7A8A
-	for <buildroot@archiver.kernel.org>; Sun, 24 Sep 2023 18:20:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F18A4CE79A5
+	for <buildroot@archiver.kernel.org>; Mon, 25 Sep 2023 22:02:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCD984030E;
-	Sun, 24 Sep 2023 18:20:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCD984030E
+	by smtp4.osuosl.org (Postfix) with ESMTP id 716C641D6D;
+	Mon, 25 Sep 2023 22:02:18 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 716C641D6D
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
 	by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Z050HY6RyBuj; Sun, 24 Sep 2023 18:20:07 +0000 (UTC)
+	with ESMTP id fMfnEQqQCzRC; Mon, 25 Sep 2023 22:02:17 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F9374030F;
-	Sun, 24 Sep 2023 18:20:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F9374030F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CDDB41D6A;
+	Mon, 25 Sep 2023 22:02:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CDDB41D6A
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 555A21BF337
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 18:20:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD7B11BF2F7
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 22:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39DD14030E
- for <buildroot@lists.busybox.net>; Sun, 24 Sep 2023 18:20:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39DD14030E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8246541D6A
+ for <buildroot@lists.busybox.net>; Mon, 25 Sep 2023 22:02:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8246541D6A
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 6CqDnnTEX9A9 for <buildroot@lists.busybox.net>;
- Sun, 24 Sep 2023 18:20:03 +0000 (UTC)
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A64FC40305
- for <buildroot@uclibc.org>; Sun, 24 Sep 2023 18:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A64FC40305
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8b44:b00:2d77:ae6d:70e:6233])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 5CDD919F57B;
- Sun, 24 Sep 2023 20:19:58 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 24 Sep 2023 20:19:58 +0200
-Date: Sun, 24 Sep 2023 20:19:58 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20230924181958.GQ1469982@scaer>
-References: <20230924162909.1019467-1-fontaine.fabrice@gmail.com>
- <pan$86ec1$f0965aa5$21c4e56d$f81dbe7e@ID-313208.user.individual.net>
+ with ESMTP id fGCmjnf3xDR6 for <buildroot@lists.busybox.net>;
+ Mon, 25 Sep 2023 22:02:11 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94ACE41D69
+ for <buildroot@uclibc.org>; Mon, 25 Sep 2023 22:02:11 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94ACE41D69
+Received: by busybox.osuosl.org (Postfix, from userid 81)
+ id 800B786502; Mon, 25 Sep 2023 22:02:11 +0000 (UTC)
+From: bugzilla@busybox.net
+To: buildroot@uclibc.org
+Date: Mon, 25 Sep 2023 22:02:11 +0000
+X-Bugzilla-Reason: CC
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: buildroot
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2023.05.2
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: paul@modernsubject.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P5
+X-Bugzilla-Assigned-To: unassigned@buildroot.uclibc.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ target_milestone attachments.created
+Message-ID: <bug-15805-163@https.bugs.busybox.net/>
+X-Bugzilla-URL: https://bugs.busybox.net/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <pan$86ec1$f0965aa5$21c4e56d$f81dbe7e@ID-313208.user.individual.net>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1695579600;
- bh=gi3ObD7bb9+z2GQmW2EPYvgju/UeVYiS9jGzUZV4gKE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=gUaLE8eukeNPjEbuui68jCV4adRDeUr6L1y0jcD3akBmbCjemBiBSnU8StC4KTEVd
- M7+kE78JzQoNIWSWtD7uk7qfeKJ2R+Hb1mlbldGctfom6FcjHWEM/EU46rnHPtkhdO
- zjTRRYqM6tH8aP57LvWsTCYItnO0nmopGvXSUJZwAKATC9yNvmapJj1rCzLLN6dNE/
- qJFJHuyGpJRCB/cUW4cRoEuSUgI5DQQeER/2R0INOwmEj4o2JQMe9+3v4q24eGU1oe
- 7MPmKFLYyTxt4WL6cRsJMlEr/RwcyrOK3NJ/ziDUu0bWYk4RHFJg7W8xRD6I0pwCUa
- 8i+6/T5toPJ/A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gUaLE8eu
-Subject: Re: [Buildroot] [PATCH 1/1] package/pppd: drop
- PPPD_DROP_INTERNAL_IF_PPOL2TP_H
+Subject: [Buildroot] [Bug 15805] New: Unable to build with ccache enabled.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,42 +73,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@uclibc.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bernd, All,
+https://bugs.busybox.net/show_bug.cgi?id=15805
 
-On 2023-09-24 19:20 +0200, Bernd Kuhls spake thusly:
-> Am Sun, 24 Sep 2023 18:29:09 +0200 schrieb Fabrice Fontaine:
-> 
-> > PPPD_DROP_INTERNAL_IF_PPOL2TP_H is not needed since bump to version
-> > 2.4.6 in commit 49b239ab20e632792a6c61173ba830cdc2128ebf and
-> > https://github.com/ppp-project/ppp/commit/
-> c41092dd4c49267f232f6cba3d31c6c68bfdf68d
-> 
-> Hi Fabrice,
-> 
-> your patch is part of my patch bumping pppd to 2.5.0:
-> https://patchwork.ozlabs.org/project/buildroot/patch/
-> 20230726060041.4434-1-bernd@kuhls.net/
+            Bug ID: 15805
+           Summary: Unable to build with ccache enabled.
+           Product: buildroot
+           Version: 2023.05.2
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned@buildroot.uclibc.org
+          Reporter: paul@modernsubject.com
+                CC: buildroot@uclibc.org
+  Target Milestone: ---
 
-But the hooks is already not needed for 2.4.9, so it is not related to
-the bump from 2.4.9 to 2.5.0, so we want it as a separate change
-(because it can then be backported if needed).
+Created attachment 9643
+  --> https://bugs.busybox.net/attachment.cgi?id=9643&action=edit
+cmake error log
 
-Regards,
-Yann E. MORIN.
+When building with ccache enabled, I get the following error during the ccache
+build:
+
+"
+... snip
+-- Ccache version: 4.7.4                                                        
+-- Ccache dev mode: OFF                                                         
+-- Performing Test std_atomic_without_libatomic                                 
+-- Performing Test std_atomic_without_libatomic - Success                       
+-- Performing Test std_filesystem_without_libfs                                 
+-- Performing Test std_filesystem_without_libfs - Failed                        
+-- Performing Test std_filesystem_with_libfs                                    
+-- Performing Test std_filesystem_with_libfs - Failed                           
+CMake Error at cmake/StdFilesystem.cmake:22 (message):                          
+  Toolchain doesn't support std::filesystem with nor without -lstdc++fs         
+Call Stack (most recent call first):                                            
+  cmake/StandardSettings.cmake:57 (include)                                     
+  CMakeLists.txt:70 (include)                                                   
+
+
+-- Configuring incomplete, errors occurred!                                     
+See also
+"/home/paul/src/pi2/buildroot/build/host-ccache-4.7.4/CMakeFiles/CMakeOutput.lo 
+g".                                                                             
+See also
+"/home/paul/src/pi2/buildroot/build/host-ccache-4.7.4/CMakeFiles/CMakeError.log 
+".                                                                              
+make[1]: *** [package/pkg-generic.mk:283:
+/home/paul/src/pi2/buildroot/build/host-ccache 
+-4.7.4/.stamp_configured] Error 1                                               
+make: *** [Makefile:23: _all] Error 2 
+"
+
+Disabling ccache, everything builds properly.  Also 2023.02.4 builds properly
+with ccache.  I also tried building with "BR2_FORCE_HOST_BUILD=y" -- no change.
+
+Environment:
+- openSUSE Leap 15.5
+
+Target:
+- Raspberry Pi 2
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
