@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B09BE7D26A
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 09:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0AD9E7D26B
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 09:02:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E20D16121E;
-	Tue, 26 Sep 2023 09:02:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E20D16121E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B46461471;
+	Tue, 26 Sep 2023 09:02:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B46461471
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id weui90Id5nkr; Tue, 26 Sep 2023 09:02:33 +0000 (UTC)
+	with ESMTP id U6dB6nHDoKfb; Tue, 26 Sep 2023 09:02:45 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27DDF60DDF;
-	Tue, 26 Sep 2023 09:02:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27DDF60DDF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 619381BF2FA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DCD261408;
+	Tue, 26 Sep 2023 09:02:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DCD261408
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9ACBD1BF2FA
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AF9740189
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7114D41E50
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:02:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3AF9740189
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7114D41E50
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id K8_bRR4gGg0E for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 7sby65pOJUbZ for <buildroot@lists.busybox.net>;
  Tue, 26 Sep 2023 09:02:30 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BAB9400EF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B1AC41E4B
  for <buildroot@buildroot.org>; Tue, 26 Sep 2023 09:02:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BAB9400EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B1AC41E4B
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69E1D80DC9; Tue, 26 Sep 2023 09:02:30 +0000 (UTC)
+ id 58DDD80DA8; Tue, 26 Sep 2023 09:02:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 10:51:16 +0200
+Date: Tue, 26 Sep 2023 10:01:09 +0200
 X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 243ea6eb2927bdb689efbd3e61a1076e887944f3
-X-Git-Newrev: c132c520872ca3435e7c4218da498358fe0e3053
+X-Git-Oldrev: 7da37962ced51497d9060c845b9f215fc67ec070
+X-Git-Newrev: 939ff67d15b7db28d67473b1503d1870578a83ca
 X-Patchwork-Hint: ignore
-Message-Id: <20230926090230.69E1D80DC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/nodejs: fix
- parallel build
+Message-Id: <20230926090230.58DDD80DA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.02.x] package/nut: package/nut:
+ specify --with-user/group when building NUT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,52 +63,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c132c520872ca3435e7c4218da498358fe0e3053
+commit: https://git.buildroot.net/buildroot/commit/?id=939ff67d15b7db28d67473b1503d1870578a83ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
 
-Unless told otherwise, ninja will spawn as many jobs as there are CPU
-(plus 2). Nodejs is built with ninja, but it is a generic package, so
-there is no variable (like with cmake-package) that passes the proper
-number of parallel jobs as configured by the user.
-
-As a consequence, the nodejs build will use as many CPU as are
-available, possibly overcommitting the rsources the user expected to be
-used.
-
-Set the JOBS variableto limit that number.
+This commit fixes a problem where the NUT package couldn't be
+used as a NUT server due to the fact that the default group for
+nobody is "nogroup" and not "nobody" like the internal default
+of NUT. Thus, when starting a NUT server daemon the daemon starts
+with incorrect group permissions. This commit fixes this
+shortcoming by introducing a dedicated 'nut' user and 'nut' group
+to drop priviledges to it.
 
 Signed-off-by: Jens Maus <mail@jens-maus.de>
-[yann.morin.1998@free.fr: reword commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 84c24ab1b5a7d38b481b37a759480ff2273b499d)
+(cherry picked from commit cd46e1b1439e854dc9e4c016795d6e5276e4c573)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/nut/nut.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 225b371786..ff32ae6c13 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -46,14 +46,16 @@ HOST_NODEJS_MAKE_OPTS = \
- 	CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
- 	LDFLAGS.host="$(HOST_LDFLAGS)" \
- 	NO_LOAD=cctest.target.mk \
--	PATH=$(@D)/bin:$(BR_PATH)
-+	PATH=$(@D)/bin:$(BR_PATH) \
-+	JOBS=$(BR2_JLEVEL)
+diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+index fb98ba04f0..4c322aeb85 100644
+--- a/package/nut/nut.mk
++++ b/package/nut/nut.mk
+@@ -24,7 +24,9 @@ NUT_POST_PATCH_HOOKS += NUT_FIX_CONFIGURE
+ NUT_CONF_OPTS = \
+ 	--with-altpidpath=/var/run/upsd \
+ 	--with-dev \
+-	--without-doc
++	--without-doc \
++	--with-user=nut \
++	--with-group=nut
  
- NODEJS_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	NO_LOAD=cctest.target.mk \
- 	PATH=$(@D)/bin:$(BR_PATH) \
- 	LDFLAGS="$(NODEJS_LDFLAGS)" \
--	LD="$(TARGET_CXX)"
-+	LD="$(TARGET_CXX)" \
-+	JOBS=$(BR2_JLEVEL)
+ NUT_CONF_ENV = \
+ 	ax_cv_check_cflags__Werror__Wno_unknown_warning_option=no \
+@@ -34,6 +36,10 @@ NUT_CONF_ENV = \
+ 	ac_cv_func_strncasecmp=yes \
+ 	ax_cv__printf_string_null=yes
  
- # nodejs's build system uses python which can be a symlink to an unsupported
- # python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
++define NUT_USERS
++	nut -1 nut -1 * - - - NUT user
++endef
++
+ ifeq ($(call qstrip,$(BR2_PACKAGE_NUT_DRIVERS)),)
+ NUT_CONF_OPTS += --with-drivers=auto
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
