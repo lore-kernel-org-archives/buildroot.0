@@ -1,57 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAE4E7D268
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 08:53:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54D1CE7D26B
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 09:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BD38822B1;
-	Tue, 26 Sep 2023 08:53:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BD38822B1
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6A3260E55;
+	Tue, 26 Sep 2023 09:01:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6A3260E55
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
-	by localhost (smtp1.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id i08mI8qId0rh; Tue, 26 Sep 2023 08:53:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 02DrhGyE3HCW; Tue, 26 Sep 2023 09:01:16 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E041E822AF;
-	Tue, 26 Sep 2023 08:53:25 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E041E822AF
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 563E91BF296
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 08:53:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F53B60BFC;
+	Tue, 26 Sep 2023 09:01:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F53B60BFC
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DE451BF2BA
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:01:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3692B405AF
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 08:53:24 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3692B405AF
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8409E60BFC
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:01:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8409E60BFC
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id IVK9NNF-naS7 for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 08:53:23 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4A3B1400EF
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 08:53:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A3B1400EF
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2594B24000A;
- Tue, 26 Sep 2023 08:53:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
- (envelope-from <peter@korsgaard.com>)
- id 1ql3oi-0033B1-Qt; Tue, 26 Sep 2023 10:53:16 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id Vj7VEdaHmPVb for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 09:01:12 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3961560BA6
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 09:01:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3961560BA6
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 255BA806AE; Tue, 26 Sep 2023 09:01:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20230923160411.3662885-1-mail@jens-maus.de>
- <20230924095619.GG1469982@scaer>
-Date: Tue, 26 Sep 2023 10:53:16 +0200
-In-Reply-To: <20230924095619.GG1469982@scaer> (Yann E. MORIN's message of
- "Sun, 24 Sep 2023 11:56:19 +0200")
-Message-ID: <87msx9uxhf.fsf@48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/nodejs: fix parallel build
+To: buildroot@buildroot.org
+Date: Tue, 26 Sep 2023 10:51:09 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: 33f7d66c90c9c80683804f3cba61f9d863d82868
+X-Git-Newrev: bc6771657fcb8f7042450567360333f18d980b99
+X-Patchwork-Hint: ignore
+Message-Id: <20230926090112.255BA806AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/nodejs: fix
+ parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,38 +57,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org, Daniel Price <daniel.price@gmail.com>,
- Jens Maus <mail@jens-maus.de>, Martin Bark <martin@barkynet.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bc6771657fcb8f7042450567360333f18d980b99
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
- > Jens, All,
- > On 2023-09-23 18:04 +0200, Jens Maus via buildroot spake thusly:
- >> In ninja-based nodejs builds performing parallel builds using "make -jX"
- >> is not working during buildroot initiated builds because the JOBS
- >> variable is not set in the MAKE_OPTS variables in nodejs.mk. This commit
- >> remedies the issue by setting JOBS to BR2_JLEVEL.
+Unless told otherwise, ninja will spawn as many jobs as there are CPU
+(plus 2). Nodejs is built with ninja, but it is a generic package, so
+there is no variable (like with cmake-package) that passes the proper
+number of parallel jobs as configured by the user.
 
- > I was very confused that nodejs would not build in parallel; that would
- > have made for very, very,very long builds. And indeed, it does build in
- > parallel, in fact.
+As a consequence, the nodejs build will use as many CPU as are
+available, possibly overcommitting the rsources the user expected to be
+used.
 
- > However, what it does, is use as many CPUs as are available, without
- > accounting for the value set by the user in BR2_JLEVEL, thus
- > overshooting the limits set by the user.
+Set the JOBS variableto limit that number.
 
- > So, I reworded the whoe commit log to explain that.
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+[yann.morin.1998@free.fr: reword commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 84c24ab1b5a7d38b481b37a759480ff2273b499d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- > Applied to master, thanks.
-
-Committed to 2023.02.x, 2023.05.x and 2023.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index fe629ada21..4e70bd71a3 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -46,14 +46,16 @@ HOST_NODEJS_MAKE_OPTS = \
+ 	CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
+ 	LDFLAGS.host="$(HOST_LDFLAGS)" \
+ 	NO_LOAD=cctest.target.mk \
+-	PATH=$(@D)/bin:$(BR_PATH)
++	PATH=$(@D)/bin:$(BR_PATH) \
++	JOBS=$(BR2_JLEVEL)
+ 
+ NODEJS_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	NO_LOAD=cctest.target.mk \
+ 	PATH=$(@D)/bin:$(BR_PATH) \
+ 	LDFLAGS="$(NODEJS_LDFLAGS)" \
+-	LD="$(TARGET_CXX)"
++	LD="$(TARGET_CXX)" \
++	JOBS=$(BR2_JLEVEL)
+ 
+ # nodejs's build system uses python which can be a symlink to an unsupported
+ # python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
