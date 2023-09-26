@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3EF8E8181F
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:13:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82CB3E8181F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F5326142C;
-	Tue, 26 Sep 2023 06:13:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F5326142C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 418066141F;
+	Tue, 26 Sep 2023 06:13:55 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 418066141F
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id VqJihetcReOf; Tue, 26 Sep 2023 06:13:40 +0000 (UTC)
+	with ESMTP id mZOEB-82Q2x3; Tue, 26 Sep 2023 06:13:54 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF36061438;
-	Tue, 26 Sep 2023 06:13:39 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF36061438
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DBF481BF30B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B6EB6147F;
+	Tue, 26 Sep 2023 06:13:53 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B6EB6147F
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 12F401BF969
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B698141782
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECE1861406
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B698141782
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECE1861406
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id S57RRPz11Edb for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id fXeSlsCGaSvk for <buildroot@lists.busybox.net>;
  Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06E8440545
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1BA0460BD6
  for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06E8440545
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BA0460BD6
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB1C787814; Tue, 26 Sep 2023 06:12:19 +0000 (UTC)
+ id 0C4BA87816; Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 08:07:47 +0200
+Date: Tue, 26 Sep 2023 08:09:51 +0200
 X-Git-Refname: refs/heads/2023.05.x
-X-Git-Oldrev: bd5eaa7df8025a3d5afa94c495c1c4b34ad53bee
-X-Git-Newrev: b391628d40f88537d2e2376656b51bcb76a32a97
+X-Git-Oldrev: 2ee25de5ab13b196b2fd4ac12128ba4f34ec5388
+X-Git-Newrev: 2144ce4f3a7990d89a8414d3d83819ab182f7f1b
 X-Patchwork-Hint: ignore
-Message-Id: <20230926061219.EB1C787814@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.05.x] package/libssh: ignore
- CVE-2023-3603
+Message-Id: <20230926061220.0C4BA87816@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libcoap: ignore
+ CVE-2023-35862
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,45 +63,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b391628d40f88537d2e2376656b51bcb76a32a97
+commit: https://git.buildroot.net/buildroot/commit/?id=2144ce4f3a7990d89a8414d3d83819ab182f7f1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
 
-The affected code isn't present in any release, see [0].
+According to a collaborator [0] the affected code isn't in 4.3.1
 
-[0]: https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
-
-The CPE entry for this CVE is
-  cpe:2.3:a:libssh:libssh:-:*:*:*:*:*:*:*
-We interpret the "-" as matching any version. It actually means
-"unspecified version", which is the cop-out in case there is nothing
-useful to match. We can't really make our infrastructure ignore "-"
-entirely, because for all we know our version is an unreleased commit
-sha which _is_ vulnerable. Thus, the only way out is an exclusion which
-we'll never be able to remove.
+[0]: https://github.com/obgm/libcoap/issues/1117
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit a34a370f4ea27981be43df817f49320a59088e68)
+(cherry picked from commit 20c023a3b1363f914a18652a79f83648af2cf1e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libssh/libssh.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libcoap/libcoap.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index e770d2b924..ff4cddaf91 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -17,6 +17,10 @@ LIBSSH_CONF_OPTS = \
- 	-DWITH_STACK_PROTECTOR=OFF \
- 	-DWITH_EXAMPLES=OFF
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index 3773ad293c..94bfc59702 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -16,6 +16,8 @@ LIBCOAP_CONF_OPTS = \
+ LIBCOAP_AUTORECONF = YES
+ # 0001-Backport-fix-for-CVE-2023-30362.patch
+ LIBCOAP_IGNORE_CVES += CVE-2023-30362
++# Doesn't affect 4.3.1, see https://github.com/obgm/libcoap/issues/1117
++LIBCOAP_IGNORE_CVES += CVE-2023-35862
  
-+# Not part of any release
-+# https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
-+LIBSSH_IGNORE_CVES += CVE-2023-3603
-+
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- LIBSSH_CONF_OPTS += -DWITH_STACK_CLASH_PROTECTION=OFF
- endif
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LIBCOAP_DEPENDENCIES += gnutls
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
