@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE622E7D26A
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 09:12:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0CFEE7D26B
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 09:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7486360E97;
-	Tue, 26 Sep 2023 09:12:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7486360E97
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8C1960A81;
+	Tue, 26 Sep 2023 09:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8C1960A81
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id D7BgpsdlnKcp; Tue, 26 Sep 2023 09:12:07 +0000 (UTC)
+	with ESMTP id 6aZ7Isy4ilDP; Tue, 26 Sep 2023 09:12:20 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA74F60A81;
-	Tue, 26 Sep 2023 09:12:06 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA74F60A81
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CBD571BF2A6
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:12:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C7C161449;
+	Tue, 26 Sep 2023 09:12:19 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C7C161449
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 039F01BF969
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:12:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B25CA40538
+ by smtp3.osuosl.org (Postfix) with ESMTP id D10A060A81
  for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 09:12:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B25CA40538
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D10A060A81
 X-Virus-Scanned: amavisd-new at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 7YlwdFle676b for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 09:12:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id 9A-8D9q4t1HI for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 09:12:03 +0000 (UTC)
 Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 96AB54042D
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 09:12:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96AB54042D
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 484E3607C0
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 09:12:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 484E3607C0
 Received: from localhost.localdomain ([146.241.127.78])
  by Aruba Outgoing Smtp  with ESMTPSA
- id l46pqeQaNDAHrl46qqH9UW; Tue, 26 Sep 2023 11:12:00 +0200
+ id l46pqeQaNDAHrl46qqH9VE; Tue, 26 Sep 2023 11:12:00 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 11:11:57 +0200
-Message-Id: <20230926091158.3767645-3-giulio.benetti@benettiengineering.com>
+Date: Tue, 26 Sep 2023 11:11:58 +0200
+Message-Id: <20230926091158.3767645-4-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230926091158.3767645-1-giulio.benetti@benettiengineering.com>
 References: <20230926091158.3767645-1-giulio.benetti@benettiengineering.com>
@@ -51,18 +51,18 @@ X-CMAE-Envelope: MS4xfOv1FuaCKyh6FlXHwcAkBphtIY7i6wu2Ny3O/TuDIEiTKTqbM30VwVvPdKd
  0k+rvAe4PGp6yqun38Y4iHZQP8984p566nZ+yrTAFCIOVKobFwHJsVU/6ntJyf4gTmjvLdWxL1wejklA5PSijymS+45Qtg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1695719520; bh=11H0+T7S4X6PrvZGCfe+Yk5G2f5dOaUlq2t3RMg6rYE=;
+ t=1695719521; bh=wnno1KTWOQxelG2beB5M0HK+cpnj0e7M8TMI348hSPI=;
  h=From:To:Subject:Date:MIME-Version;
- b=GzUXGFr520E2hxs4yLbpU3VndtlyVDfbBHiNvLgsaliV6IAAJFGiiwIiLwyrp8Aqw
- wiwnxuzJkPEqyQq7SwQXXaBRUp25cEkoqR1aHyaTYFfz2JCd7w427RLF6OmcoL0riV
- Dc71CtcF5O+V6WIDbON0UArTYYc7UNPbz7u1+FBnQfryDc0oCcH51Q4njcDteFl8Ut
- VCKFhT70ckNg90UxC+105E3f5oCwNAdVb1C0OkUAtkPm5HvqWofLM6B1Pm/hGKzqJW
- O0AidAfWBYDzg0kaCe5e2j0sEEHV4LIdh9c9014zmM91+G27XwNiRdHU9N10VmrfxZ
- qnozDb/s1wTJg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=DRlc12HOjom78I/lQI6/raBJKHLOaT6tQg+bTFwVdiixa3auNrV2MM2rAQtNUX3yX
+ WPCwTl66256HZQl6UsDZJiB42QfwLy1pwHkGrTEUauckF18FsEipbl8aTn4y/xD0cS
+ kFKXwCSIAFfBISy1vn/HRVct6rPBzJJd38lNrKcfDnIGZ5+sgLwTq8xWbQA349KSb+
+ N+mt/pJh4kCeYqETy3eiUWcpgtqlWV5ipQg1g6Da/b4LLOfKCSDid9s8mhc1lHxibu
+ nlIXSfzE4u+wvUsI7j/l2R/ESkDyzDy9kzfFshWpIx4IyiPGlTwrRvKPwJwNJbBrG1
+ D/fac2+54Qxow==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=GzUXGFr5
-Subject: [Buildroot] [PATCH v2 3/4] package/linux-tools: add rtla
+ header.a=rsa-sha256 header.s=a1 header.b=DRlc12HO
+Subject: [Buildroot] [PATCH v2 4/4] package/trace-cmd: bump to 3.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,104 +86,78 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-The RealTime Linux Analysis tool includes a set of commands that relies
-on the osnoise and timerlat tracers from the ftrace kernel subsystem,
-allowing to analyze the lantency sources coming from the hardware and
-the kernel itself.
+trace-cmd's dependencies 'libtracefs' and 'libtraceevent' were split
+into dedicated projects, maintained outside of trace-cmd.
 
-This tool was introduced in v5.17, and relies on libtracefs and
-libtraceevent, although libtraceevent itself is already a dependency for
-libtracefs.
+This release, on top of bumping the version, adds this new dependencies.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-[Giulio: fix install with recent Linux versions]
+[Giulio: bump to version 3.1.7]
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 Giulio:
 V1->V2:
-* fix install with recent Linux versions
+* bump to version 3.1.7
 ---
- DEVELOPERS                                |  1 +
- package/linux-tools/Config.in             | 10 +++++++
- package/linux-tools/linux-tool-rtla.mk.in | 36 +++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
- create mode 100644 package/linux-tools/linux-tool-rtla.mk.in
+ package/trace-cmd/Config.in      | 2 ++
+ package/trace-cmd/trace-cmd.hash | 2 +-
+ package/trace-cmd/trace-cmd.mk   | 6 ++++--
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 835c269461..31bfc67c8a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2099,6 +2099,7 @@ F:	package/timescaledb/
- N:	Maxime Chevallier <maxime.chevallier@bootlin.com>
- F:	package/libtraceevent/
- F:	package/libtracefs
-+F:	package/linux-tools/linux-tool-rtla.mk.in
+diff --git a/package/trace-cmd/Config.in b/package/trace-cmd/Config.in
+index 2d0accd7ae..00b9ebbd9a 100644
+--- a/package/trace-cmd/Config.in
++++ b/package/trace-cmd/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_TRACE_CMD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen()
++	select BR2_PACKAGE_LIBTRACEEVENT
++	select BR2_PACKAGE_LIBTRACEFS
+ 	help
+ 	  Command line reader for ftrace.
  
- N:	Michael Durrant <mdurrant@arcturusnetworks.com>
- F:	board/arcturus/
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 451b0eeff5..63e2796e45 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -102,6 +102,16 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF_NEEDS_HOST_PYTHON3
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index 4d39e4d5ea..6edcaf0e1c 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  a74d9ade2633b88d0ad199360d51996427e23f4835594133e456cd6e3bd3a651  trace-cmd-v2.9.7.tar.gz
++sha256  e496d41e599f8ef3c9a74675da05f86be0d8d48d524f0182c73ab98cd16da0b0  trace-cmd-v3.1.7.tar.gz
+ sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+ sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 52bb99036c..3d4d88c964 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
  
+-TRACE_CMD_VERSION = 2.9.7
++TRACE_CMD_VERSION = 3.1.7
+ TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
+ TRACE_CMD_SITE = \
+ 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
+ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB LICENSES/GPL-2.0 LICENSES/LGPL-2.1
+ 
+-TRACE_CMD_DEPENDENCIES = host-pkgconf
++TRACE_CMD_DEPENDENCIES = host-pkgconf libtracefs libtraceevent
+ TRACE_CMD_MAKE_OPTS = prefix=/usr etcdir=/etc
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+@@ -34,6 +34,8 @@ ifeq ($(BR2_sparc64),y)
+ TRACE_CMD_CFLAGS += -fPIC
  endif
  
-+config BR2_PACKAGE_LINUX_TOOLS_RTLA
-+	bool "rtla"
-+	select BR2_PACKAGE_LINUX_TOOLS
-+	select BR2_PACKAGE_LIBTRACEFS
-+	help
-+	  Linux 5.17 and later has 2 new tracers, osnoise and timerlat.
-+	  There tracers allow performing latency analysis, for which
-+	  the rtla tool provides wrapper commands to visualize and
-+	  extrace latency traces and reports.
++TRACE_CMD_CFLAGS += $($(HOST_DIR)/bin/pkg-config --cflags libtracefs)
 +
- config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	bool"selftests"
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
-diff --git a/package/linux-tools/linux-tool-rtla.mk.in b/package/linux-tools/linux-tool-rtla.mk.in
-new file mode 100644
-index 0000000000..a14571bb1c
---- /dev/null
-+++ b/package/linux-tools/linux-tool-rtla.mk.in
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# rtla
-+#
-+################################################################################
-+
-+LINUX_TOOLS += rtla
-+
-+RTLA_DEPENDENCIES = host-pkgconf libtracefs
-+RTLA_MAKE_OPTS = $(LINUX_MAKE_FLAGS) \
-+	CC=$(TARGET_CC) \
-+	LDFLAGS="$(TARGET_LDFLAGS)" \
-+	PKG_CONFIG_PATH=$(STAGING_DIR)/usr/lib/pkgconfig
-+
-+define RTLA_BUILD_CMDS
-+	$(Q)if ! grep install $(LINUX_DIR)/tools/tracing/rtla/Makefile >/dev/null 2>&1 ; then \
-+		echo "Your kernel version is too old and does not implement the rtla tool." ; \
-+		echo "At least kernel 5.17 must be used." ; \
-+		exit 1 ; \
-+	fi
-+
-+	$(TARGET_MAKE_ENV) \
-+	$(MAKE) $(RTLA_MAKE_OPTS) \
-+	-C $(LINUX_DIR)/tools/tracing rtla
-+endef
-+
-+# make rtla_install build and install by default documentation using rst2man
-+# but it's not available in Buildroot and we don't want manual files in target
-+# folder so let's simply install the resulting rtla binary and create symlinks
-+# like Linux does in its tools/tracing/rtla/Makefile
-+define RTLA_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(LINUX_DIR)/tools/tracing/rtla/rtla $(TARGET_DIR)/usr/bin
-+	ln -sf rtla $(TARGET_DIR)/usr/bin/osnoise
-+	ln -sf rtla $(TARGET_DIR)/usr/bin/hwnoise
-+	ln -sf rtla $(TARGET_DIR)/usr/bin/timerlat
-+endef
+ # trace-cmd use CPPFLAGS to add some extra flags.
+ # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
+ # that causes build problems.
 -- 
 2.34.1
 
