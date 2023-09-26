@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02C74EE020C
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3EF8E8181F
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B470C60BD6;
-	Tue, 26 Sep 2023 06:13:30 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B470C60BD6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F5326142C;
+	Tue, 26 Sep 2023 06:13:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F5326142C
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id EYpfIuAL7rgf; Tue, 26 Sep 2023 06:13:28 +0000 (UTC)
+	with ESMTP id VqJihetcReOf; Tue, 26 Sep 2023 06:13:40 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BC5961449;
-	Tue, 26 Sep 2023 06:13:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BC5961449
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF36061438;
+	Tue, 26 Sep 2023 06:13:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF36061438
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EF4901BF30B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DBF481BF30B
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FC3040207
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:11:11 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FC3040207
+ by smtp2.osuosl.org (Postfix) with ESMTP id B698141782
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B698141782
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id rVPGHoELFe1A for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
+ with ESMTP id S57RRPz11Edb for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 936A7408CB
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 936A7408CB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06E8440545
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:12:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06E8440545
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80BE8877EC; Tue, 26 Sep 2023 06:11:09 +0000 (UTC)
+ id EB1C787814; Tue, 26 Sep 2023 06:12:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 26 Sep 2023 08:10:01 +0200
-X-Git-Refname: refs/heads/2023.02.x
-X-Git-Oldrev: 55e991660218e459b61d464cf801bf7121fd4ad0
-X-Git-Newrev: 0e2c1f75d54bb99d039baf6bb35ae561a0ccb0ed
+Date: Tue, 26 Sep 2023 08:07:47 +0200
+X-Git-Refname: refs/heads/2023.05.x
+X-Git-Oldrev: bd5eaa7df8025a3d5afa94c495c1c4b34ad53bee
+X-Git-Newrev: b391628d40f88537d2e2376656b51bcb76a32a97
 X-Patchwork-Hint: ignore
-Message-Id: <20230926061109.80BE8877EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2023.02.x] package/libcoap: fix
- CVE-2023-30362
+Message-Id: <20230926061219.EB1C787814@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2023.05.x] package/libssh: ignore
+ CVE-2023-3603
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,96 +63,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e2c1f75d54bb99d039baf6bb35ae561a0ccb0ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b391628d40f88537d2e2376656b51bcb76a32a97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2023.05.x
+
+The affected code isn't present in any release, see [0].
+
+[0]: https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
+
+The CPE entry for this CVE is
+  cpe:2.3:a:libssh:libssh:-:*:*:*:*:*:*:*
+We interpret the "-" as matching any version. It actually means
+"unspecified version", which is the cop-out in case there is nothing
+useful to match. We can't really make our infrastructure ignore "-"
+entirely, because for all we know our version is an unreleased commit
+sha which _is_ vulnerable. Thus, the only way out is an exclusion which
+we'll never be able to remove.
 
 Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 868be6f6ae8db1090b97b618d7dca4ec4d9799ed)
+(cherry picked from commit a34a370f4ea27981be43df817f49320a59088e68)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Backport-fix-for-CVE-2023-30362.patch     | 59 ++++++++++++++++++++++
- package/libcoap/libcoap.mk                         |  2 +
- 2 files changed, 61 insertions(+)
+ package/libssh/libssh.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libcoap/0001-Backport-fix-for-CVE-2023-30362.patch b/package/libcoap/0001-Backport-fix-for-CVE-2023-30362.patch
-new file mode 100644
-index 0000000000..ddc5329299
---- /dev/null
-+++ b/package/libcoap/0001-Backport-fix-for-CVE-2023-30362.patch
-@@ -0,0 +1,59 @@
-+From c63ecbdc6b38cc7e571a72964fe9ca63834dcc89 Mon Sep 17 00:00:00 2001
-+From: Jon Shallow <supjps-libcoap@jpshallow.com>
-+Date: Wed, 6 Sep 2023 21:38:13 +0200
-+Subject: [PATCH] Backport fix for CVE-2023-30362
-+
-+Upstream: https://github.com/obgm/libcoap/issues/1063#issuecomment-1626962307
-+Signed-off-by: Daniel Lang <dalang@gmx.at>
-+---
-+ src/net.c | 34 +++++++++++++++++++++-------------
-+ 1 file changed, 21 insertions(+), 13 deletions(-)
-+
-+diff --git a/src/net.c b/src/net.c
-+index 98859443..e259ab00 100644
-+--- a/src/net.c
-++++ b/src/net.c
-+@@ -1305,19 +1305,27 @@ coap_send_internal(coap_session_t *session, coap_pdu_t *pdu) {
-+ 
-+       /* Need to check that we are not seeing this proxy in the return loop */
-+       if (pdu->data && opt == NULL) {
-+-        if (pdu->used_size + 1 <= pdu->max_size) {
-+-          char *a_match;
-+-          size_t data_len = pdu->used_size - (pdu->data - pdu->token);
-+-          pdu->data[data_len] = '\000';
-+-          a_match = strstr((char*)pdu->data, cp);
-+-          if (a_match && (a_match == (char*)pdu->data || a_match[-1] == ' ') &&
-+-              ((size_t)(a_match - (char*)pdu->data + len) == data_len ||
-+-               a_match[len] == ' ')) {
-+-            coap_log(LOG_WARNING, "Proxy loop detected '%s'\n",
-+-                     (char*)pdu->data);
-+-            coap_delete_pdu(pdu);
-+-            return (coap_mid_t)COAP_DROPPED_RESPONSE;
-+-          }
-++        char *a_match;
-++        size_t data_len;
-++
-++        if (pdu->used_size + 1 > pdu->max_size) {
-++          /* No space */
-++          return (coap_mid_t)COAP_DROPPED_RESPONSE;
-++        }
-++        if (!coap_pdu_resize(pdu, pdu->used_size + 1)) {
-++          /* Internal error */
-++          return (coap_mid_t)COAP_DROPPED_RESPONSE;
-++        }
-++        data_len = pdu->used_size - (pdu->data - pdu->token);
-++        pdu->data[data_len] = '\000';
-++        a_match = strstr((char*)pdu->data, cp);
-++        if (a_match && (a_match == (char*)pdu->data || a_match[-1] == ' ') &&
-++            ((size_t)(a_match - (char*)pdu->data + len) == data_len ||
-++             a_match[len] == ' ')) {
-++          coap_log(LOG_WARNING, "Proxy loop detected '%s'\n",
-++                   (char*)pdu->data);
-++          coap_delete_pdu(pdu);
-++          return (coap_mid_t)COAP_DROPPED_RESPONSE;
-+         }
-+       }
-+       if (pdu->used_size + len + 1 <= pdu->max_size) {
-+-- 
-+2.42.0
-+
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index 4b536d8117..3773ad293c 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -14,6 +14,8 @@ LIBCOAP_DEPENDENCIES = host-pkgconf
- LIBCOAP_CONF_OPTS = \
- 	--disable-examples --disable-examples-source --without-tinydtls
- LIBCOAP_AUTORECONF = YES
-+# 0001-Backport-fix-for-CVE-2023-30362.patch
-+LIBCOAP_IGNORE_CVES += CVE-2023-30362
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index e770d2b924..ff4cddaf91 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -17,6 +17,10 @@ LIBSSH_CONF_OPTS = \
+ 	-DWITH_STACK_PROTECTOR=OFF \
+ 	-DWITH_EXAMPLES=OFF
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBCOAP_DEPENDENCIES += gnutls
++# Not part of any release
++# https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
++LIBSSH_IGNORE_CVES += CVE-2023-3603
++
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBSSH_CONF_OPTS += -DWITH_STACK_CLASH_PROTECTION=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
