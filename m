@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E865E7D0C5
-	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:08:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B196EE020C
+	for <buildroot@archiver.kernel.org>; Tue, 26 Sep 2023 06:11:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAEA061406;
-	Tue, 26 Sep 2023 06:08:57 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAEA061406
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D8C361343;
+	Tue, 26 Sep 2023 06:11:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D8C361343
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
 	by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id zVORvGNqgge0; Tue, 26 Sep 2023 06:08:57 +0000 (UTC)
+	with ESMTP id YYIsqwwaL4f1; Tue, 26 Sep 2023 06:11:00 +0000 (UTC)
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5679560EF2;
-	Tue, 26 Sep 2023 06:08:56 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5679560EF2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A79160BD6;
+	Tue, 26 Sep 2023 06:10:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A79160BD6
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AF1F71BF30B
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:08:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 086841BF30B
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:10:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8603F60EF2
- for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:08:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8603F60EF2
+ by smtp3.osuosl.org (Postfix) with ESMTP id D742B60BD6
+ for <buildroot@lists.busybox.net>; Tue, 26 Sep 2023 06:10:57 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D742B60BD6
 X-Virus-Scanned: amavisd-new at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5GCOLBnAZQCD for <buildroot@lists.busybox.net>;
- Tue, 26 Sep 2023 06:08:53 +0000 (UTC)
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7024E60BD6
- for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:08:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7024E60BD6
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C170C60006;
- Tue, 26 Sep 2023 06:08:49 +0000 (UTC)
+ with ESMTP id ZE8K_NZTP_q6 for <buildroot@lists.busybox.net>;
+ Tue, 26 Sep 2023 06:10:57 +0000 (UTC)
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E5A5160B99
+ for <buildroot@buildroot.org>; Tue, 26 Sep 2023 06:10:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5A5160B99
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 85B6C40007;
+ Tue, 26 Sep 2023 06:10:53 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
  (envelope-from <peter@korsgaard.com>)
- id 1ql1FZ-002yse-58; Tue, 26 Sep 2023 08:08:49 +0200
+ id 1ql1HY-002z3w-Sb; Tue, 26 Sep 2023 08:10:52 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Daniel Lang <dalang@gmx.at>
-References: <20230906200929.291410-1-dalang@gmx.at>
-Date: Tue, 26 Sep 2023 08:08:49 +0200
-In-Reply-To: <20230906200929.291410-1-dalang@gmx.at> (Daniel Lang's message of
- "Wed, 6 Sep 2023 22:09:27 +0200")
-Message-ID: <87a5t9bh5a.fsf@48ers.dk>
+References: <20230906194420.279926-2-dalang@gmx.at>
+Date: Tue, 26 Sep 2023 08:10:52 +0200
+In-Reply-To: <20230906194420.279926-2-dalang@gmx.at> (Daniel Lang's message of
+ "Wed, 6 Sep 2023 21:44:17 +0200")
+Message-ID: <875y3xbh1v.fsf@48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/libssh: ignore CVE-2023-3603
+Subject: Re: [Buildroot] [PATCH 1/2] package/libcoap: fix CVE-2023-30362
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,17 +62,13 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Joris Lijssens <joris.lijssens@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Daniel" == Daniel Lang <dalang@gmx.at> writes:
-
- > The affected code isn't present in any release, see [0].
- > [0]:
- > https://www.libssh.org/2023/07/14/cve-2023-3603-potential-null-dereference-in-libsshs-sftp-server/
 
  > Signed-off-by: Daniel Lang <dalang@gmx.at>
 
